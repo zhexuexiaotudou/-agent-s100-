@@ -6,6 +6,31 @@
 
 它不是官方文档的重复整理，而是“官方手册 + 本地实测 + agent 执行记录”的可复用知识库。
 
+## 如果你刚拿到 S100P
+
+建议按下面的顺序使用这个 repo，不要一上来直接让 agent 跑 YOLO。
+
+1. 先打开并阅读 [docs/01_s100p_bringup.md](docs/01_s100p_bringup.md)。
+   这一步解决拿到板子后的基础问题：烧录系统、确认 `eth1` 网口、设置 Windows 静态 IP、确认电脑能 ping 通 S100P、确认 SSH 能连上。
+
+2. 网络和 SSH 打通后，再把整个 repo 喂给 Codex。
+   推荐把仓库作为 Codex 的工作目录打开，或者把下面这段话发给 Codex：
+
+```text
+请阅读这个 repo 的 README、docs/01_s100p_bringup.md、docs/02_codex_yolo_workflow.md、
+docs/agent_operation.md 和 skills 目录。我的目标是从一块刚烧录好的 RDK S100P 开始，
+打通电脑直连、RDK Studio 接入，并在 S100P 上用本地图片跑通 YOLO 目标检测。
+请先检查当前处在哪一步，再按 repo 里的流程执行，不要跳过网络和 SSH 验证。
+```
+
+3. 如果已经能 SSH 到板子，再让 Codex 按 [docs/02_codex_yolo_workflow.md](docs/02_codex_yolo_workflow.md) 跑 YOLO。
+   这一步会上传图片、在 S100P 上执行 YOLO、生成渲染结果图，并告诉你应该打开哪个结果网址。
+
+4. 如果卡住，先查 [docs/troubleshooting.md](docs/troubleshooting.md)。
+   排错时把错误截图、命令输出、板端 IP 和当前步骤告诉 Codex，让它按仓库里的检查项继续定位。
+
+一句话版本：新手先读 `docs/01_s100p_bringup.md`，把网络和 SSH 打通；然后把整个 repo 交给 Codex，让 Codex 按文档和 `skills/` 目录继续执行。
+
 ## 状态和范围
 
 状态：实验性，已在一台 RDK S100P 和一台 Windows 主机上跑通。
@@ -53,11 +78,13 @@
 ```text
 .
 ├─ README.md
+├─ CONTRIBUTING.md
 ├─ docs/
 │  ├─ 01_s100p_bringup.md
 │  ├─ 02_codex_yolo_workflow.md
 │  ├─ 03_offline_tros_install.md
 │  ├─ agent_operation.md
+│  ├─ review_checklist.md
 │  └─ troubleshooting.md
 ├─ skills/
 │  ├─ s100p_burn_os/SKILL.md

@@ -2,6 +2,23 @@
 
 本文定义 Codex 这类 agent 使用本仓库时的操作边界和证据标准。
 
+## 0. 新会话入口
+
+如果用户刚拿到 S100P，agent 不应直接进入 YOLO 运行步骤。正确路径是：
+
+1. 先阅读仓库根目录的 `README.md`。
+2. 再阅读 `docs/01_s100p_bringup.md`，确认烧录、网线连接、Windows 静态 IP、ping 和 SSH 是否完成。
+3. 只有在 `<BOARD_IP>` 已确认、SSH 可连通后，才进入 `docs/02_codex_yolo_workflow.md`。
+4. 如果用户说“我已经把 repo 喂给 Codex”，agent 应先询问或检查当前阶段，而不是默认所有前置条件都满足。
+
+推荐用户给 Codex 的启动提示词：
+
+```text
+请把这个 repo 当作 S100P 上手和 YOLO 跑通的操作手册。先阅读 README、
+docs/01_s100p_bringup.md、docs/02_codex_yolo_workflow.md、docs/agent_operation.md
+和 skills 目录。请先判断我现在处在哪一步，再继续执行；不要跳过网络和 SSH 验证。
+```
+
 ## 1. 角色分工
 
 人负责：
