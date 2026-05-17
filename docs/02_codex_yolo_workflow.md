@@ -7,15 +7,15 @@
 电脑和 S100P 已经通过网线直连，并且 SSH 可用：
 
 ```text
-S100P IP：192.168.127.10
-用户名：sunrise
-密码：sunrise
+S100P IP：<BOARD_IP>，本次实测常见值为 `192.168.127.10`
+用户名：<BOARD_USER>，本次实测为 `sunrise`
+密码：默认口令仅用于首次本地实验，跑通后应修改或改用 SSH key
 ```
 
 Windows 侧验证：
 
 ```powershell
-Test-NetConnection 192.168.127.10 -Port 22
+Test-NetConnection <BOARD_IP> -Port 22
 ```
 
 ## 2. Codex 做的第一轮探测
@@ -73,6 +73,8 @@ find /opt/hobot/model /app/model -maxdepth 5 -type f 2>/dev/null | grep -Ei "yol
 ## 4. 补齐 TogetheROS.Bot YOLO 示例环境
 
 板端直连电脑时没有默认网关和 DNS，无法直接从板端 apt 拉包。因此 Codex 使用电脑下载官方 arm64 包，再传到 S100P 离线安装。
+
+可复现的离线安装步骤见：[03. 离线补齐 TogetheROS.Bot YOLO 示例环境](03_offline_tros_install.md)。
 
 关键包包括：
 
@@ -218,7 +220,7 @@ python3 -m http.server 9000 --bind 0.0.0.0
 电脑浏览器打开：
 
 ```text
-http://192.168.127.10:9000/render_feedback_0_0.jpeg
+http://<BOARD_IP>:9000/render_feedback_0_0.jpeg
 ```
 
 如果为了避免缓存，可以复制成新的文件名：
@@ -230,8 +232,10 @@ cp render_feedback_0_0.jpeg render_test_result.jpeg
 然后打开：
 
 ```text
-http://192.168.127.10:9000/render_test_result.jpeg
+http://<BOARD_IP>:9000/render_test_result.jpeg
 ```
+
+`--bind 0.0.0.0` 只建议用于本地直连实验。用完后停止 HTTP 服务。
 
 ## 8. 跑用户上传图片
 
@@ -258,7 +262,7 @@ cp render_feedback_0_0.jpeg render_test2_result.jpeg
 查看：
 
 ```text
-http://192.168.127.10:9000/render_test2_result.jpeg
+http://<BOARD_IP>:9000/render_test2_result.jpeg
 ```
 
 本次 `test2.jpg` 实测检测到：
@@ -298,5 +302,32 @@ cp render_feedback_0_0.jpeg render_test_result.jpeg
 浏览器：
 
 ```text
-http://192.168.127.10:9000/render_test_result.jpeg
+http://<BOARD_IP>:9000/render_test_result.jpeg
+```
+
+## 11. 脚本化工作流
+
+Windows 侧检查网络：
+
+```powershell
+.\scripts\check_s100p_network.ps1 -BoardIp <BOARD_IP>
+```
+
+把待检测图片上传到板端：
+
+```powershell
+scp .\test.jpg sunrise@<BOARD_IP>:/home/sunrise/yolo_s100p_run/test.jpg
+```
+
+板端运行：
+
+```bash
+cd <repo>
+bash scripts/run_yolo_image.sh test.jpg render_test_result.jpeg
+```
+
+Windows 侧拉取：
+
+```powershell
+.\scripts\fetch_yolo_result.ps1 -BoardIp <BOARD_IP> -RemoteFile render_test_result.jpeg -Force
 ```

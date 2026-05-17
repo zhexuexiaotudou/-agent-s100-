@@ -9,10 +9,22 @@ https://d-robotics.github.io/rdk_doc/rdk_s/Quick_start/install_os/rdk_s100/instr
 本次跑通路线：
 
 - 板卡：RDK S100P
+- 主机：Windows 电脑，需要管理员权限修改网卡 IPv4
+- 线缆：USB Type-C 线、以太网线
+- 辅助工具：XBurn、MobaXterm、RDK Studio
 - 连接：USB Type-C 连接电脑
 - 下载模式：`DFU + Fastboot`
 - 工具：XBurn
 - 过程：严格按照官方页面执行
+
+默认账号只用于本地首次上手：
+
+```text
+sunrise / sunrise
+root / root
+```
+
+完成链路打通后应修改默认密码或改用 SSH key。
 
 烧录阶段不要自行修改官方流程。agent 只需要确认工具、镜像、下载模式和板卡识别状态。
 
@@ -48,7 +60,7 @@ ifconfig -a
 192.168.127.10
 ```
 
-如果你的板子不是这个 IP，以 `ifconfig -a` 显示为准。
+如果你的板子不是这个 IP，以 `ifconfig -a` 显示为准。下文用 `<BOARD_IP>` 代表实际板端 IP。
 
 默认账号通常是：
 
@@ -68,7 +80,7 @@ root / root
 -> 更改适配器设置
 ```
 
-找到“以太网连接了一个未知设备”的网卡。
+找到“以太网连接了一个未知设备”的网卡。修改前建议截图或记录原设置；如果该网卡之后要恢复联网，改回自动获取 IP。
 
 进入：
 
@@ -98,7 +110,7 @@ DNS：留空
 Windows CMD 或 PowerShell：
 
 ```powershell
-ping 192.168.127.10
+ping <BOARD_IP>
 ```
 
 如果有回复，说明链路通。
@@ -106,7 +118,7 @@ ping 192.168.127.10
 进一步检查 SSH：
 
 ```powershell
-Test-NetConnection 192.168.127.10 -Port 22
+Test-NetConnection <BOARD_IP> -Port 22
 ```
 
 看到：
@@ -130,7 +142,7 @@ SSH 网络连接
 填写：
 
 ```text
-IP：192.168.127.10
+IP：<BOARD_IP>
 用户名：sunrise
 密码：sunrise
 ```
@@ -144,7 +156,29 @@ IP：192.168.127.10
 - RDK Studio 能以 SSH 网络连接添加设备。
 - RDK Studio 终端能进入板端 shell。
 
-## 8. 常见误区
+## 8. Agent 可验证项
+
+烧录和接线需要人操作，agent 主要验证下面这些证据：
+
+```bash
+ifconfig -a
+cat /etc/os-release | head
+uname -a
+```
+
+Windows 侧：
+
+```powershell
+Test-NetConnection <BOARD_IP> -Port 22
+```
+
+期望：
+
+```text
+TcpTestSucceeded : True
+```
+
+## 9. 常见误区
 
 - 网线接错口：本次跑通的是右侧网口，对应 `eth1`。
 - Windows 网卡没有配静态 IP：只插线不配置同网段 IP，通常不能直接访问。
