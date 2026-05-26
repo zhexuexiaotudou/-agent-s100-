@@ -1,0 +1,50 @@
+name: Experiment
+description: Track exploratory work that is not part of the stable baseline yet
+title: "[Experiment] "
+labels: ["experiment", "codex-track"]
+body:
+  - type: textarea
+    id: question
+    attributes:
+      label: Research question
+      description: What are we trying to learn?
+    validations:
+      required: true
+  - type: textarea
+    id: hypothesis
+    attributes:
+      label: Hypothesis
+      description: What do we expect to happen?
+    validations:
+      required: true
+  - type: textarea
+    id: method
+    attributes:
+      label: Method
+      value: |
+        1.
+        2.
+        3.
+    validations:
+      required: true
+  - type: textarea
+    id: stop_rules
+    attributes:
+      label: Stop rules
+      value: |
+        Stop if:
+        - It requires public Gateway exposure.
+        - It needs whole-NAS access.
+        - It risks uncontrolled robot motion.
+        - It consumes too much time without evidence.
+    validations:
+      required: true
+  - type: textarea
+    id: evidence
+    attributes:
+      label: Evidence
+      value: |
+        Result:
+        Logs:
+        Screenshots:
+        Decision:

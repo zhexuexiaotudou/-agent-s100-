@@ -1,0 +1,89 @@
+name: Baseline task
+description: Track one OpenClaw S100P/NAS baseline task
+title: "[Baseline] "
+labels: ["codex-track"]
+body:
+  - type: dropdown
+    id: baseline
+    attributes:
+      label: Baseline
+      options:
+        - A - S100P PC parity
+        - B - AI NAS homework
+        - Security
+        - Infrastructure
+    validations:
+      required: true
+  - type: textarea
+    id: goal
+    attributes:
+      label: Goal
+      description: One sentence describing what this task proves.
+    validations:
+      required: true
+  - type: textarea
+    id: scope
+    attributes:
+      label: Scope
+      value: |
+        In:
+        - 
+
+        Out:
+        - 
+    validations:
+      required: true
+  - type: textarea
+    id: hardware
+    attributes:
+      label: Hardware and environment
+      value: |
+        S100P:
+        TS-264C:
+        PC:
+        Network:
+    validations:
+      required: true
+  - type: textarea
+    id: steps
+    attributes:
+      label: Steps
+      value: |
+        1.
+        2.
+        3.
+    validations:
+      required: true
+  - type: checkboxes
+    id: acceptance
+    attributes:
+      label: Acceptance criteria
+      options:
+        - label: Reproducible from documented steps
+        - label: Survives reboot or documents why not
+        - label: Writes logs or artifacts to NAS when applicable
+        - label: Respects security_model.md
+        - label: Has clear failure output
+  - type: textarea
+    id: codex
+    attributes:
+      label: Codex instructions
+      value: |
+        Please modify or add the necessary scripts, docs, and checks.
+        Do not expose tokens.
+        Do not expand NAS access beyond the OpenClaw workspace.
+        Do not enable non-allowlisted robot control actions.
+    validations:
+      required: true
+  - type: textarea
+    id: evidence
+    attributes:
+      label: Evidence
+      value: |
+        Command output:
+
+        Screenshot:
+
+        Log path:
+
+        PR:

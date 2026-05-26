@@ -84,6 +84,10 @@ docs/agent_operation.md 和 skills 目录。我的目标是从一块刚烧录好
 │  ├─ 02_codex_yolo_workflow.md
 │  ├─ 03_offline_tros_install.md
 │  ├─ agent_operation.md
+│  ├─ openclaw_s100p_nas_baseline.md
+│  ├─ baseline_tracking.md
+│  ├─ pro_model_handoff.md
+│  ├─ security_model.md
 │  ├─ review_checklist.md
 │  └─ troubleshooting.md
 ├─ skills/
@@ -96,6 +100,28 @@ docs/agent_operation.md 和 skills 目录。我的目标是从一块刚烧录好
    ├─ run_yolo_image.sh
    └─ fetch_yolo_result.ps1
 ```
+
+## OpenClaw + NAS Baseline
+
+S100P 跑通基础链路后，下一阶段目标是把它作为 OpenClaw 主上位机，并把 TS-264C NAS 作为 workspace、memory、logs、数据集和备份中心。
+
+这部分按两个角度建立 baseline：
+
+1. S100P 能否实现 PC 上 OpenClaw 的类似效果。
+2. 高价位 AI NAS / OpenClaw NAS 的产品功能，哪些可以用 S100P + TS-264C 抄作业。
+
+入口文档：
+
+- [docs/openclaw_s100p_nas_baseline.md](docs/openclaw_s100p_nas_baseline.md)：baseline 定义和落地顺序。
+- [docs/baseline_tracking.md](docs/baseline_tracking.md)：Codex 跟踪任务矩阵。
+- [docs/security_model.md](docs/security_model.md)：Gateway、NAS、token、机器人控制的安全边界。
+- [docs/pro_model_handoff.md](docs/pro_model_handoff.md)：给 GPT Pro 做阶段性复审的提示词模板。
+
+协作方式：
+
+- Codex 负责实机执行、GitHub issue、脚本、文档和证据。
+- GPT Pro 负责阶段性架构复审、baseline 拆分和高风险判断。
+- Pro 的建议必须由 Codex 实测或标记为假设后才能写入稳定 baseline。
 
 ## 复现路径
 
