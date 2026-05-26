@@ -317,6 +317,7 @@ New OpenClaw + NAS baseline artifacts:
 - [docs/github_workflow_runbook.md](docs/github_workflow_runbook.md): local readiness workflow for issue -> branch -> PR -> review.
 - [docs/baseline_progress_2026-05-27_github_workflow.md](docs/baseline_progress_2026-05-27_github_workflow.md): B-006 local GitHub/Codex workflow readiness evidence.
 - [docs/github_remote_issue.md](docs/github_remote_issue.md): remote GitHub issue evidence for B-006.
+- [docs/github_remote_pr.md](docs/github_remote_pr.md): remote draft PR and Codex review evidence for B-006.
 - [docs/stability_snapshot_runbook.md](docs/stability_snapshot_runbook.md): point-in-time stability sampling for A-010.
 - [docs/baseline_progress_2026-05-27_stability_snapshot.md](docs/baseline_progress_2026-05-27_stability_snapshot.md): A-010 local stability snapshot evidence.
 - [scripts/install_stability_sampler.sh](scripts/install_stability_sampler.sh): operator-only systemd timer installer for repeated A-010 stability snapshots.

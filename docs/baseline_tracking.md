@@ -36,7 +36,7 @@
 | B-003 | 图片 caption baseline | todo | 对图片生成 caption，支持文本搜索 |
 | B-004 | 机器人数据集 card | doing | 每次采集自动生成 dataset card |
 | B-005 | 日志分析助手 | doing | 给定日志目录，输出失败摘要、关键错误、建议命令 |
-| B-006 | GitHub/Codex workflow | doing | issue -> branch -> PR -> Codex review 链路可走；本地 readiness、origin reachability 和远端 issue `#2` 已验证 |
+| B-006 | GitHub/Codex workflow | verified | issue -> branch -> PR -> Codex review 链路已走通；远端 issue `#2`、branch `baseline/s100p-nas-baselines`、draft PR `#3` 和 Codex review `4367946668` 已验证 |
 | B-007 | 周报/实验报告生成 | doing | 从 NAS 日志和数据集生成 Markdown 周报；本地 workspace fallback 已通过 runner 和 OpenClaw 插件验证 |
 | B-008 | Home Assistant / 设备只读状态 | todo | 只查询状态，不做控制 |
 | B-009 | 低风险自动化控制 | doing | 白名单 + 二次确认 + 审计日志；本地 policy/audit preflight 已通过 runner 和 OpenClaw 插件验证，尚未开放实际执行 |
@@ -302,8 +302,31 @@ Working tree: warn, 52 changed or untracked paths
 PR readiness: blocked, create a scoped commit before PR
 ```
 
-Tracking status: B-006 remains `doing` until a scoped branch, pushed draft PR,
-and review evidence exist.
+Draft PR evidence:
+
+```text
+branch: baseline/s100p-nas-baselines
+commit: cd93e0a8ca094a80161a362d6288c190260282bb
+pull_request: #3
+url: https://github.com/zhexuexiaotudou/-agent-s100-/pull/3
+state: open
+draft: true
+review_id: 4367946668
+review_type: Codex COMMENT review
+```
+
+Updated readiness report:
+
+```text
+report: reports/github-workflow/github_workflow_20260527-063039.md
+Remote issue marker: pass
+Remote PR marker: pass
+Working tree: warn, 5 changed or untracked paths before recording this marker commit
+```
+
+Tracking status: B-006 is now `verified` for the issue -> branch -> draft PR ->
+Codex review workflow. The PR remains draft and unmerged while the broader
+baseline still has NAS, stability, and service-policy blockers.
 
 ## 2026-05-27 A-010 Update
 

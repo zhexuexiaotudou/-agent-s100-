@@ -90,6 +90,18 @@ if (Test-Path $remoteIssuePath) {
     }
 }
 
+$remotePrPath = Join-Path $repoRoot "docs/github_remote_pr.md"
+$remotePrStatus = if (Test-Path $remotePrPath) { "pass" } else { "warn" }
+$remotePrDetail = "docs/github_remote_pr.md missing"
+if (Test-Path $remotePrPath) {
+    $remotePrText = Get-Content -Path $remotePrPath -Raw
+    if ($remotePrText -match "https://github.com/\S+/pull/\d+") {
+        $remotePrDetail = $Matches[0]
+    } else {
+        $remotePrDetail = "docs/github_remote_pr.md exists"
+    }
+}
+
 $userName = (Run-Git -GitArgs @("config", "--get", "user.name")).Output.Trim()
 $userEmail = (Run-Git -GitArgs @("config", "--get", "user.email")).Output.Trim()
 $identityStatus = if ($userName -and $userEmail) { "pass" } else { "warn" }
@@ -131,6 +143,7 @@ $markdown = @"
 | Git identity | $identityStatus | $(Escape-Md $identityDetail) |
 | Issue seed | $issueSeedStatus | $(Escape-Md $issueSeedDetail) |
 | Remote issue marker | $remoteIssueStatus | $(Escape-Md $remoteIssueDetail) |
+| Remote PR marker | $remotePrStatus | $(Escape-Md $remotePrDetail) |
 | Working tree | $(if ($dirtyCount -eq 0) { "pass" } else { "warn" }) | $dirtyCount changed or untracked paths |
 | PR readiness | $prReadiness | $(Escape-Md $prDetail) |
 
