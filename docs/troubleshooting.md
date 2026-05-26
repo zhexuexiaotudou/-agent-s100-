@@ -5,8 +5,11 @@
 | 现象 | 可能原因 | 检查命令 | 期望输出 | 修复动作 |
 | --- | --- | --- | --- | --- |
 | RDK Studio 添加设备失败 | 网线接错口或 Windows IP 不在同一网段 | `ping <BOARD_IP>` | 有回复 | 确认连接 S100P 右侧 `eth1`，Windows IPv4 配到 `192.168.127.x/24` |
+| Windows 共享网络后 RDK Studio 连不上 | Windows ICS 把网段改成 `192.168.137.x` | `Test-NetConnection 192.168.137.10 -Port 22` | `TcpTestSucceeded : True` | RDK Studio 设备 IP 改为 `192.168.137.10` |
 | ping 通但 SSH 不通 | SSH 服务或 IP 错误 | `Test-NetConnection <BOARD_IP> -Port 22` | `TcpTestSucceeded : True` | 确认板端 IP，必要时重启板端或检查 ssh 服务 |
 | 板端不能 apt install | 直连网络没有网关/DNS | `ip route`、`cat /etc/resolv.conf` | 可能没有默认路由 | 使用离线安装，见 `docs/03_offline_tros_install.md` |
+| OpenClaw 部署提示 `node`/`npm` 不存在 | 板端缺 Node.js/NPM | `node -v && npm -v` | 输出版本号 | 参考 `docs/04_openclaw_windows_ics_deploy.md` 安装 Node.js arm64 tarball |
+| `node -v` OOM 或 core dumped | apt 源 Node 12 与当前环境不兼容 | `node -v` | 不崩溃 | 使用官方 `node-v20.19.2-linux-arm64.tar.xz`，并修正 `/usr/bin/node` 链接 |
 | `ros2` 找不到 | 未 source ROS 环境 | `which ros2` | `/opt/ros/humble/bin/ros2` | `source /opt/ros/humble/setup.bash` |
 | `dnn_node_example` 找不到 | TROS 示例包未安装或未 source | `ros2 pkg prefix dnn_node_example` | `/opt/tros/humble` | 安装/修复 TROS，执行 `source /opt/tros/humble/setup.bash` |
 | YOLO 配置文件找不到 | 使用了源码仓库路径而不是安装版路径 | `ls config/yolov8workconfig.json` | 文件存在 | 安装版使用 `config/yolov8workconfig.json` |

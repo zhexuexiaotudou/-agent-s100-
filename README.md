@@ -83,6 +83,7 @@ docs/agent_operation.md 和 skills 目录。我的目标是从一块刚烧录好
 │  ├─ 01_s100p_bringup.md
 │  ├─ 02_codex_yolo_workflow.md
 │  ├─ 03_offline_tros_install.md
+│  ├─ 04_openclaw_windows_ics_deploy.md
 │  ├─ agent_operation.md
 │  ├─ openclaw_s100p_nas_baseline.md
 │  ├─ baseline_tracking.md
@@ -117,6 +118,7 @@ S100P 跑通基础链路后，下一阶段目标是把它作为 OpenClaw 主上�
 - [docs/security_model.md](docs/security_model.md)：Gateway、NAS、token、机器人控制的安全边界。
 - [docs/pro_model_handoff.md](docs/pro_model_handoff.md)：给 GPT Pro 做阶段性复审的提示词模板。
 - [docs/github_issue_seed.md](docs/github_issue_seed.md)：GitHub issue 顶层入口草稿。
+- [docs/04_openclaw_windows_ics_deploy.md](docs/04_openclaw_windows_ics_deploy.md)：Windows 共享网络部署 OpenClaw 的实战记录。
 
 协作方式：
 

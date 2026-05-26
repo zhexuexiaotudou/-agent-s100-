@@ -16,8 +16,8 @@
 
 | ID | 标题 | 状态 | DoD |
 | --- | --- | --- | --- |
-| A-001 | S100P 硬件/系统盘点 | doing | 记录 Ubuntu、kernel、架构、磁盘、网络、Node/npm、OpenClaw 状态 |
-| A-002 | RDK Studio 部署 OpenClaw Gateway | doing | Gateway 可启动，Control UI 可访问，重启后恢复 |
+| A-001 | S100P 硬件/系统盘点 | verified | 记录 Ubuntu、kernel、架构、磁盘、网络、Node/npm、OpenClaw 状态 |
+| A-002 | RDK Studio 部署 OpenClaw Gateway | verified | Gateway 可启动，Control UI 可访问，重启后恢复 |
 | A-003 | NAS workspace 挂载到 S100P | todo | S100P 可读写 NAS，重启后自动挂载 |
 | A-004 | WebChat/Telegram smoke test | todo | 消息能触发命令并返回状态 |
 | A-005 | 工具执行 allowlist | todo | 只允许执行 `scripts/` 下白名单脚本 |
@@ -46,7 +46,9 @@
 
 - Windows 共享网络已使 S100P 通过 `192.168.137.10` 上网。
 - S100P 已手动安装 Node.js `v20.19.2` arm64 tarball，并修正 `/usr/bin/node` 链接后 `node -v` 成功。
-- 下一步应回到 RDK Studio，用 `root@192.168.137.10:22` 重新连接并部署 OpenClaw。
+- RDK Studio 已通过 `root@192.168.137.10:22` 重新连接 S100P。
+- RDK Studio 页面已显示 OpenClaw 部署成功。
+- 实战记录见 `docs/04_openclaw_windows_ics_deploy.md`。
 
 ## Codex 每次更新 issue 时应补充
 
