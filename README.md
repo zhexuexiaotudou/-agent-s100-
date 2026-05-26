@@ -98,6 +98,7 @@ docs/agent_operation.md 和 skills 目录。我的目标是从一块刚烧录好
 │  └─ s100p_yolo_detection/SKILL.md
 └─ scripts/
    ├─ check_s100p_network.ps1
+   ├─ run_allowlisted_tool.sh
    ├─ run_yolo_image.sh
    └─ fetch_yolo_result.ps1
 ```
@@ -115,6 +116,10 @@ S100P 跑通基础链路后，下一阶段目标是把它作为 OpenClaw 主上�
 
 - [docs/openclaw_s100p_nas_baseline.md](docs/openclaw_s100p_nas_baseline.md)：baseline 定义和落地顺序。
 - [docs/baseline_tracking.md](docs/baseline_tracking.md)：Codex 跟踪任务矩阵。
+- [docs/nas_workspace_spec.md](docs/nas_workspace_spec.md)：TS-264C 专用 workspace 目录规范和验收命令。
+- [docs/nas_mount_runbook.md](docs/nas_mount_runbook.md)：TS-264C 挂载到 S100P 的预检、挂载和自动恢复流程。
+- [docs/tool_allowlist.md](docs/tool_allowlist.md)：OpenClaw 可触发脚本的白名单边界。
+- [docs/document_index_runbook.md](docs/document_index_runbook.md)：NAS 文档索引的白名单执行流程。
 - [docs/security_model.md](docs/security_model.md)：Gateway、NAS、token、机器人控制的安全边界。
 - [docs/pro_model_handoff.md](docs/pro_model_handoff.md)：给 GPT Pro 做阶段性复审的提示词模板。
 - [docs/github_issue_seed.md](docs/github_issue_seed.md)：GitHub issue 顶层入口草稿。
@@ -272,3 +277,82 @@ agent 每次执行后应记录：
 - 结果图或失败截图。
 
 License: MIT.
+
+## 2026-05-27 Baseline Additions
+
+New OpenClaw + NAS baseline artifacts:
+
+- [docs/ros2_status_runbook.md](docs/ros2_status_runbook.md): read-only ROS2/TROS status probe workflow.
+- [docs/baseline_progress_2026-05-27_ros2_status.md](docs/baseline_progress_2026-05-27_ros2_status.md): board validation evidence for A-008.
+- [docs/openclaw_exec_approvals_runbook.md](docs/openclaw_exec_approvals_runbook.md): OpenClaw exec approvals policy for A-005.
+- [docs/baseline_progress_2026-05-27_exec_policy.md](docs/baseline_progress_2026-05-27_exec_policy.md): A-005 positive and negative validation evidence.
+- [docs/baseline_status_runbook.md](docs/baseline_status_runbook.md): roll-up status report workflow for both baseline tracks.
+- [docs/baseline_progress_2026-05-27_baseline_status.md](docs/baseline_progress_2026-05-27_baseline_status.md): status dashboard progress evidence.
+- [docs/nas_discovery_runbook.md](docs/nas_discovery_runbook.md): passive NAS readiness discovery before credentials are available.
+- [docs/baseline_progress_2026-05-27_nas_discovery.md](docs/baseline_progress_2026-05-27_nas_discovery.md): A-003 passive NAS discovery progress.
+- [docs/baseline_progress_2026-05-27_nas_mount_helper.md](docs/baseline_progress_2026-05-27_nas_mount_helper.md): A-003 dry-run mount helper evidence.
+- [docs/baseline_progress_2026-05-27_docs_logs_plugin.md](docs/baseline_progress_2026-05-27_docs_logs_plugin.md): B-002/B-005 local fallback evidence through the narrow OpenClaw plugin.
+- [docs/sandbox_status_runbook.md](docs/sandbox_status_runbook.md): read-only Docker/Podman/sandbox status probe workflow.
+- [docs/baseline_progress_2026-05-27_sandbox_status.md](docs/baseline_progress_2026-05-27_sandbox_status.md): A-006 status evidence and runtime blocker.
+- [docs/browser_smoke_runbook.md](docs/browser_smoke_runbook.md): headless Chromium local page screenshot workflow.
+- [docs/baseline_progress_2026-05-27_browser_smoke.md](docs/baseline_progress_2026-05-27_browser_smoke.md): A-007 local browser smoke evidence.
+- [docs/rosbag_snapshot_runbook.md](docs/rosbag_snapshot_runbook.md): bounded ROS bag snapshot workflow.
+- [docs/baseline_progress_2026-05-27_rosbag_snapshot.md](docs/baseline_progress_2026-05-27_rosbag_snapshot.md): A-009 local ROS bag snapshot evidence.
+- [docs/rosbag_session_runbook.md](docs/rosbag_session_runbook.md): start/status/stop ROS bag self-test workflow.
+- [docs/baseline_progress_2026-05-27_rosbag_session.md](docs/baseline_progress_2026-05-27_rosbag_session.md): A-009 local ROS bag session evidence.
+- [docs/dataset_card_runbook.md](docs/dataset_card_runbook.md): dataset card format for robot captures.
+- [docs/baseline_progress_2026-05-27_dataset_card.md](docs/baseline_progress_2026-05-27_dataset_card.md): B-004 local dataset card evidence.
+- [docs/image_caption_runbook.md](docs/image_caption_runbook.md): deterministic metadata caption and JSONL index workflow for B-003.
+- [docs/baseline_progress_2026-05-27_image_caption.md](docs/baseline_progress_2026-05-27_image_caption.md): B-003 local image caption/index progress.
+- [docs/home_assistant_status_runbook.md](docs/home_assistant_status_runbook.md): read-only Home Assistant/device-state preflight for B-008.
+- [docs/baseline_progress_2026-05-27_home_assistant_status.md](docs/baseline_progress_2026-05-27_home_assistant_status.md): B-008 read-only status progress.
+- [docs/control_action_policy_runbook.md](docs/control_action_policy_runbook.md): low-risk control allowlist and audit preflight for B-009.
+- [docs/baseline_progress_2026-05-27_control_action_policy.md](docs/baseline_progress_2026-05-27_control_action_policy.md): B-009 policy preflight progress.
+- [docs/experiment_report_runbook.md](docs/experiment_report_runbook.md): experiment report generation from existing workspace artifacts.
+- [docs/baseline_progress_2026-05-27_experiment_report.md](docs/baseline_progress_2026-05-27_experiment_report.md): B-007 local experiment report evidence.
+- [docs/security_audit_runbook.md](docs/security_audit_runbook.md): redacted Gateway, plugin, listener, NAS, and secret metadata audit workflow.
+- [docs/baseline_progress_2026-05-27_security_audit.md](docs/baseline_progress_2026-05-27_security_audit.md): B-010 local security audit evidence.
+- [docs/service_hardening_plan_runbook.md](docs/service_hardening_plan_runbook.md): read-only dry-run command plan for B-010 service hardening.
+- [docs/baseline_progress_2026-05-27_service_hardening_plan.md](docs/baseline_progress_2026-05-27_service_hardening_plan.md): B-010 service hardening plan progress.
+- [docs/github_workflow_runbook.md](docs/github_workflow_runbook.md): local readiness workflow for issue -> branch -> PR -> review.
+- [docs/baseline_progress_2026-05-27_github_workflow.md](docs/baseline_progress_2026-05-27_github_workflow.md): B-006 local GitHub/Codex workflow readiness evidence.
+- [docs/github_remote_issue.md](docs/github_remote_issue.md): remote GitHub issue evidence for B-006.
+- [docs/stability_snapshot_runbook.md](docs/stability_snapshot_runbook.md): point-in-time stability sampling for A-010.
+- [docs/baseline_progress_2026-05-27_stability_snapshot.md](docs/baseline_progress_2026-05-27_stability_snapshot.md): A-010 local stability snapshot evidence.
+- [scripts/install_stability_sampler.sh](scripts/install_stability_sampler.sh): operator-only systemd timer installer for repeated A-010 stability snapshots.
+- [docs/s100p_allowlisted_plugin_runbook.md](docs/s100p_allowlisted_plugin_runbook.md): narrow OpenClaw plugin plan for approved S100P probes.
+- [scripts/probes/ros2_status_probe.sh](scripts/probes/ros2_status_probe.sh): collects ROS2 command, node, topic, service, and package status.
+- [scripts/probes/sandbox_status_probe.sh](scripts/probes/sandbox_status_probe.sh): collects container runtime, namespace, and cgroup status.
+- [scripts/probes/browser_smoke_probe.sh](scripts/probes/browser_smoke_probe.sh): captures a local browser smoke screenshot and report.
+- [scripts/probes/rosbag_snapshot_probe.sh](scripts/probes/rosbag_snapshot_probe.sh): records a bounded ROS bag snapshot and report.
+- [scripts/probes/rosbag_session_probe.sh](scripts/probes/rosbag_session_probe.sh): runs a bounded start/status/stop ROS bag self-test.
+- [scripts/probes/experiment_report_probe.sh](scripts/probes/experiment_report_probe.sh): summarizes workspace reports and datasets into a Markdown experiment report.
+- [scripts/probes/security_audit_probe.sh](scripts/probes/security_audit_probe.sh): writes a redacted security audit report.
+- [scripts/probes/service_policy_probe.sh](scripts/probes/service_policy_probe.sh): writes a read-only keep/disable/firewall policy plan for exposed services.
+- [scripts/probes/service_hardening_plan_probe.sh](scripts/probes/service_hardening_plan_probe.sh): writes a dry-run hardening command plan without changing services.
+- [scripts/probes/github_workflow_probe.ps1](scripts/probes/github_workflow_probe.ps1): writes a local GitHub/Codex readiness report.
+- [scripts/probes/stability_snapshot_probe.sh](scripts/probes/stability_snapshot_probe.sh): writes a point-in-time uptime/resource/log stability snapshot.
+- [scripts/probes/stability_summary_probe.sh](scripts/probes/stability_summary_probe.sh): aggregates A-010 stability snapshots into a trend and acceptance-gap report.
+- [scripts/probes/image_caption_probe.sh](scripts/probes/image_caption_probe.sh): writes deterministic image metadata captions and JSONL search records.
+- [scripts/probes/home_assistant_status_probe.sh](scripts/probes/home_assistant_status_probe.sh): writes a read-only Home Assistant status preflight report.
+- [scripts/probes/control_action_policy_probe.sh](scripts/probes/control_action_policy_probe.sh): writes a read-only low-risk control policy and audit preflight report.
+- [scripts/probes/baseline_status_probe.sh](scripts/probes/baseline_status_probe.sh): writes a read-only roll-up status report for both baseline tracks.
+- [scripts/probes/nas_discovery_probe.sh](scripts/probes/nas_discovery_probe.sh): writes passive NAS mount/network/tooling readiness evidence.
+- [scripts/mount_openclaw_nas.sh](scripts/mount_openclaw_nas.sh): dry-run first NAS mount helper for `/mnt/nas/openclaw`.
+
+The allowlist runner now includes:
+
+```bash
+scripts/run_allowlisted_tool.sh ros2_status_probe
+scripts/run_allowlisted_tool.sh experiment_report_probe
+scripts/run_allowlisted_tool.sh security_audit_probe
+scripts/run_allowlisted_tool.sh service_policy_probe
+scripts/run_allowlisted_tool.sh service_hardening_plan_probe
+scripts/run_allowlisted_tool.sh stability_snapshot_probe
+scripts/run_allowlisted_tool.sh stability_summary_probe
+scripts/run_allowlisted_tool.sh image_caption_probe
+scripts/run_allowlisted_tool.sh home_assistant_status_probe
+scripts/run_allowlisted_tool.sh control_action_policy_probe
+scripts/run_allowlisted_tool.sh baseline_status_probe
+scripts/run_allowlisted_tool.sh nas_discovery_probe
+```
