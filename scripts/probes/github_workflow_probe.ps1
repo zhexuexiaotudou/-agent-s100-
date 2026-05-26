@@ -125,6 +125,28 @@ $statusPreview = if ($statusShort.Trim() -eq "") {
     ($statusShort -split "`n" | Select-Object -First 80) -join "`n"
 }
 
+$b006Verdict = "B-006 is ready for local workflow planning, but not verified end-to-end yet."
+$b006Blockers = @()
+if ($ghStatus -ne "pass") {
+    $b006Blockers += "- `gh` CLI is not installed or not on PATH; GitHub connector or web UI is required for remote operations."
+}
+if ($dirtyCount -ne 0) {
+    $b006Blockers += "- The working tree has uncommitted/untracked baseline work, so a clean scoped branch/commit is needed before PR creation."
+}
+if ($remoteIssueStatus -ne "pass") {
+    $b006Blockers += "- Remote issue marker is missing."
+}
+if ($remotePrStatus -ne "pass") {
+    $b006Blockers += "- Remote draft PR marker is missing."
+}
+if ($remoteIssueStatus -eq "pass" -and $remotePrStatus -eq "pass" -and $dirtyCount -eq 0) {
+    $b006Verdict = "B-006 has a verified remote issue, pushed branch, draft PR marker, and a clean local working tree."
+    if ($b006Blockers.Count -eq 1 -and $b006Blockers[0] -like "- ``gh`` CLI*") {
+        $b006Blockers = @("- No B-006 workflow blocker remains when using the GitHub connector; `gh` is optional.")
+    }
+}
+$b006BlockersText = if ($b006Blockers.Count -gt 0) { $b006Blockers -join "`n" } else { "- None." }
+
 $markdown = @"
 # GitHub/Codex Workflow Readiness
 
@@ -179,12 +201,11 @@ gh pr create --draft --base main --head baseline/b-006-github-workflow --title "
 
 ## Current B-006 Verdict
 
-B-006 is ready for local workflow planning, but not verified end-to-end yet.
+$b006Verdict
 
 The current blockers are:
 
-- `gh` CLI is not installed or not on PATH.
-- The working tree has uncommitted/untracked baseline work, so a clean scoped branch/commit is needed before PR creation.
+$b006BlockersText
 "@
 
 Set-Content -Path $reportPath -Value $markdown -Encoding UTF8
