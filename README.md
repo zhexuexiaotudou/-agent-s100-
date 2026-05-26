@@ -116,6 +116,7 @@ S100P 跑通基础链路后，下一阶段目标是把它作为 OpenClaw 主上�
 - [docs/baseline_tracking.md](docs/baseline_tracking.md)：Codex 跟踪任务矩阵。
 - [docs/security_model.md](docs/security_model.md)：Gateway、NAS、token、机器人控制的安全边界。
 - [docs/pro_model_handoff.md](docs/pro_model_handoff.md)：给 GPT Pro 做阶段性复审的提示词模板。
+- [docs/github_issue_seed.md](docs/github_issue_seed.md)：GitHub issue 顶层入口草稿。
 
 协作方式：
 
