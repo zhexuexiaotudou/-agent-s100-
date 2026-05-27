@@ -21,5 +21,5 @@ Scope:
 - Does not create a branch, commit, PR, or review by itself.
 - Conversation was locked after an unrelated spam comment appeared.
 
-B-006 remains `doing` until a scoped branch, pushed draft PR, and review
-evidence exist.
+B-006 now has a real tracking issue. Draft PR and review evidence are recorded
+in `docs/github_remote_pr.md`.

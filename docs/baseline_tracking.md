@@ -18,7 +18,7 @@
 | --- | --- | --- | --- |
 | A-001 | S100P 硬件/系统盘点 | verified | 记录 Ubuntu、kernel、架构、磁盘、网络、Node/npm、OpenClaw 状态 |
 | A-002 | RDK Studio 部署 OpenClaw Gateway | verified | Gateway 可启动，Control UI 可访问，重启后恢复 |
-| A-003 | NAS workspace 挂载到 S100P | blocked | S100P 可读写 NAS，重启后自动挂载 |
+| A-003 | NAS workspace 挂载到 S100P | doing | NFS 运行时挂载和写入已验证；`/etc/fstab` 与重启后自动挂载仍待验证 |
 | A-004 | WebChat/Feishu smoke test | verified | 消息能触发命令并返回状态 |
 | A-005 | 工具执行 allowlist | doing | 只允许执行 `scripts/` 下白名单脚本 |
 | A-006 | Docker / sandbox 验证 | blocked | 非主会话不能写宿主机敏感路径 |
@@ -38,7 +38,7 @@
 | B-005 | 日志分析助手 | doing | 给定日志目录，输出失败摘要、关键错误、建议命令 |
 | B-006 | GitHub/Codex workflow | verified | issue -> branch -> PR -> Codex review 链路已走通；远端 issue `#2`、branch `baseline/s100p-nas-baselines`、draft PR `#3` 和 Codex review `4367946668` 已验证 |
 | B-007 | 周报/实验报告生成 | doing | 从 NAS 日志和数据集生成 Markdown 周报；本地 workspace fallback 已通过 runner 和 OpenClaw 插件验证 |
-| B-008 | Home Assistant / 设备只读状态 | todo | 只查询状态，不做控制 |
+| B-008 | Home Assistant / 设备只读状态 | doing | 只查询状态，不做控制；本地 read-only preflight 已通过 runner 和 OpenClaw 插件验证，真实读取需要 HA URL/token |
 | B-009 | 低风险自动化控制 | doing | 白名单 + 二次确认 + 审计日志；本地 policy/audit preflight 已通过 runner 和 OpenClaw 插件验证，尚未开放实际执行 |
 | B-010 | 安全审计清单 | doing | 检查 token、NAS 权限、Gateway 暴露、sandbox；本地 workspace fallback 已通过 runner 和 OpenClaw 插件验证 |
 
@@ -59,7 +59,7 @@
 | 飞书私聊/群聊入口 | verified | Gateway 日志显示 Feishu WebSocket ready、群消息 received、dispatching to agent、dispatch complete |
 | 飞书群聊策略 | verified | OpenClaw 配置为 `groupPolicy=open`、`requireMention=true`，群里需要 `@小土豆` |
 | 联网搜索 | verified | OpenClaw 搜索源已从 DuckDuckGo 切到 Tavily，agent 联网查询 RDK S100P 返回来源结果 |
-| NAS 挂载 | blocked | 板端当前无 `/mnt/nas` 和 `/mnt/nas/openclaw`，需要 TS-264C 共享地址、账号和挂载方式 |
+| NAS 挂载 | doing | QNAP `169.254.110.209:/OpenClawWorkspace` 已通过 NFS v4.1 运行时挂载到 `/mnt/nas/openclaw`；开机自动挂载仍待验证 |
 | NAS 挂载预检 | doing | `check_nas_mount_inputs.sh` 已通过板端 smoke test，危险挂载点被拒绝；`mount_openclaw_nas.sh` 已补齐 dry-run/显式 apply 的挂载入口；`cifs-utils` 已安装，`mount.cifs=ok` |
 | 飞书联系人权限 | follow-up | 日志仍提示缺少 `contact:contact.base:readonly`，当前不阻塞消息和搜索，但建议在飞书开放平台补权限并发布 |
 | 工具白名单 | doing | `run_allowlisted_tool.sh` 和 `s100p-allowlisted-tools` 已通过板端验证：OpenClaw 可触发 7 个白名单 tool_id；但 broad exec 负向测试仍失败 |
@@ -176,8 +176,9 @@ mount.nfs: ok
 Neighbor entries: 1
 ```
 
-Tracking status: verified for passive local discovery. A-003 remains blocked for
-actual mount until the TS-264C host/share/account details are available.
+Tracking status: verified for passive local discovery. 后续已经拿到 TS-264C
+host/share/account 信息，并通过 NFS 完成运行时挂载；见本文末尾 QNAP NAS
+直连与 NFS 挂载更新。
 
 ## 2026-05-27 B-010 Service Hardening Plan Update
 
@@ -525,3 +526,35 @@ verdict: ok
 ```
 
 Tracking status: A-009 remains `doing` until NAS-backed session output is validated and a policy is chosen for longer named capture sessions.
+
+## 2026-05-27 QNAP NAS 直连与 NFS 挂载更新
+
+新增审阅记录：
+
+```text
+docs/baseline_progress_2026-05-27_qnap_nfs_mount.md
+```
+
+当前已验证状态：
+
+```text
+S100P eth1: 192.168.137.10/24，默认路由走 Windows ICS 192.168.137.1
+S100P eth0: 169.254.8.10/16，不设置默认路由
+QNAP NAS: 169.254.110.209
+QNAP share/export: /OpenClawWorkspace
+S100P mountpoint: /mnt/nas/openclaw
+选定协议: NFS v4.1
+运行时挂载: verified
+NAS 写入测试: verified
+```
+
+关键发现：
+
+```text
+SMB 登录和写入测试可用，但 SMB 内核挂载被阻塞，因为 S100P 当前内核没有
+cifs 模块。A-003 的可用挂载路径是 NFS。
+```
+
+Tracking status: A-003 已从 `blocked` 调整为 `doing`。暂时不能标成完整
+`verified`，因为 `/etc/fstab`
+尚未写入，也还没有验证重启后自动挂载。

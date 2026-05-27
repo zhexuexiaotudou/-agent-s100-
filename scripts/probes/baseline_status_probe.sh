@@ -97,6 +97,41 @@ latest_rosbag_session="$(latest_file "$workspace/logs/probes/rosbag_session_*.md
 latest_home_assistant="$(latest_file "$workspace/logs/probes/home_assistant_status_*.md")"
 latest_control_policy="$(latest_file "$workspace/logs/probes/control_action_policy_*.md")"
 
+github_issue_marker="missing"
+github_issue_detail="no remote issue marker"
+if [[ -f "$workspace/docs/github_remote_issue.md" ]]; then
+  github_issue_url="$(grep -Eo 'https://github.com/[^ ]+/issues/[0-9]+' "$workspace/docs/github_remote_issue.md" | head -1 || true)"
+  if [[ -n "$github_issue_url" ]]; then
+    github_issue_marker="present"
+    github_issue_detail="$github_issue_url"
+  else
+    github_issue_marker="present"
+    github_issue_detail="$workspace/docs/github_remote_issue.md"
+  fi
+fi
+
+github_pr_marker="missing"
+github_pr_detail="no remote PR marker"
+if [[ -f "$workspace/docs/github_remote_pr.md" ]]; then
+  github_pr_url="$(grep -Eo 'https://github.com/[^ ]+/pull/[0-9]+' "$workspace/docs/github_remote_pr.md" | head -1 || true)"
+  github_review_id="$(awk -F': ' '$1 == "review_id" {print $2; exit}' "$workspace/docs/github_remote_pr.md" 2>/dev/null || true)"
+  if [[ -n "$github_pr_url" ]]; then
+    github_pr_marker="present"
+    github_pr_detail="$github_pr_url"
+    [[ -n "$github_review_id" ]] && github_pr_detail="$github_pr_detail review_id=$github_review_id"
+  else
+    github_pr_marker="present"
+    github_pr_detail="$workspace/docs/github_remote_pr.md"
+  fi
+fi
+
+b006_current="GitHub readiness report exists."
+b006_gap="Needs real issue, branch, draft PR, and review path."
+if [[ "$github_issue_marker" == "present" && "$github_pr_marker" == "present" ]]; then
+  b006_current="Remote issue and draft PR markers exist; Codex review evidence is recorded."
+  b006_gap="Workflow verified; PR remains draft/unmerged while broader baseline blockers remain."
+fi
+
 {
   echo "# OpenClaw + NAS Baseline Status"
   echo
@@ -143,6 +178,8 @@ latest_control_policy="$(latest_file "$workspace/logs/probes/control_action_poli
   echo "| ROS bag session | ${latest_rosbag_session:-missing} |"
   echo "| Home Assistant status | ${latest_home_assistant:-missing} |"
   echo "| Control action policy | ${latest_control_policy:-missing} |"
+  echo "| GitHub remote issue | $github_issue_detail |"
+  echo "| GitHub remote PR | $github_pr_detail |"
   echo
   echo "## Baseline Status Snapshot"
   echo
@@ -156,7 +193,7 @@ latest_control_policy="$(latest_file "$workspace/logs/probes/control_action_poli
   echo "| A-010 | Timer and summary are running locally. | Needs 7 days of clean samples and NAS-backed output. |"
   echo "| B-002/B-005 | Document index and log diagnosis work locally. | Needs NAS-backed documents/logs. |"
   echo "| B-003 | Metadata caption and JSONL image index work locally. | Needs NAS-backed photos and semantic-caption decision. |"
-  echo "| B-006 | GitHub readiness report exists. | Needs real issue, branch, draft PR, and review path. |"
+  echo "| B-006 | $b006_current | $b006_gap |"
   echo "| B-007 | Experiment report works locally. | Needs NAS-backed source reports/datasets. |"
   echo "| B-008 | Home Assistant read-only preflight exists when a status report is present. | Needs HA URL/token and a successful read-only /api/states check. |"
   echo "| B-009 | Low-risk control policy preflight exists when a control policy report is present. | Needs reviewed allowlist, two-step approval path, and execution audit before any control action. |"

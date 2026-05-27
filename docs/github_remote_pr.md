@@ -5,14 +5,16 @@ This file records the B-006 branch, draft PR, and Codex review evidence.
 ```text
 repository: zhexuexiaotudou/-agent-s100-
 branch: baseline/s100p-nas-baselines
-commit: cd93e0a8ca094a80161a362d6288c190260282bb
+initial_baseline_commit: cd93e0a8ca094a80161a362d6288c190260282bb
+evidence_marker_commit: 4a13945
+readiness_fix_commit: 479ccb6
 pull_request: #3
 url: https://github.com/zhexuexiaotudou/-agent-s100-/pull/3
 title: Add OpenClaw S100P baseline probes
 state: open
 draft: true
 created_at_utc: 2026-05-26T22:28:56Z
-review_id: 4367946668
+review_id: 4367969950
 review_type: Codex COMMENT review
 ```
 

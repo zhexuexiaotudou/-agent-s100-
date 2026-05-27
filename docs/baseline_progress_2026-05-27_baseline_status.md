@@ -86,6 +86,20 @@ Progress docs: 17
 NAS workspace: not_mounted
 ```
 
+After adding the GitHub remote issue/PR markers and the B-008/B-009 preflight
+tools, the roll-up was regenerated:
+
+```text
+report: /root/.openclaw/workspace/reports/baseline-status/baseline_status_20260527-063604.md
+Allowlisted tool count: 19
+Progress docs: 19
+GitHub remote issue: https://github.com/zhexuexiaotudou/-agent-s100-/issues/2
+GitHub remote PR: https://github.com/zhexuexiaotudou/-agent-s100-/pull/3 review_id=4367969950
+B-006: Workflow verified; PR remains draft/unmerged while broader baseline blockers remain.
+B-008: Home Assistant read-only preflight exists; HA URL/token still needed for real state read.
+NAS workspace: not_mounted
+```
+
 ## Current Next Actions
 
 The generated report lists the next best actions as:
@@ -95,4 +109,6 @@ The generated report lists the next best actions as:
 2. Keep A-010 timer running until 7 days of stability samples exist.
 3. Decide service policy for NFS/RPC, x11vnc, and iiod from the B-010 report.
 4. Decide whether B-003 should stay metadata-only or add semantic vision captioning.
+5. Provide Home Assistant URL/token only if B-008 should read real device states.
+6. Create and review a disabled B-009 control action policy before implementing any control execution path.
 ```
