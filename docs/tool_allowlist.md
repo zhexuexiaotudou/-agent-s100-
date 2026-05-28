@@ -346,6 +346,46 @@ metadata_exists: yes
 verdict: ok
 ```
 
+### B-010 service convergence decision pack
+
+Additional allowlisted tool:
+
+```text
+service_convergence_decision_probe  Read-only B-010 service convergence decision pack
+```
+
+Approved runner entry:
+
+```bash
+scripts/run_allowlisted_tool.sh service_convergence_decision_probe \
+  /mnt/nas/openclaw/logs/probes \
+  /mnt/nas/openclaw/reports/security
+```
+
+Safety boundary:
+
+```text
+mode: read-only decision pack
+service_changes: no
+firewall_changes: no
+rollback_commands: report-only until approved
+```
+
+Board validation:
+
+```text
+runner report: /mnt/nas/openclaw/reports/security/service_convergence_decision_20260528-235327.md
+OpenClaw report: /root/.openclaw/workspace/reports/security/service_convergence_decision_20260528-234753.md
+Gateway: keep-loopback
+SSH: keep-trusted-management
+NFS/RPC: disable-if-client-only
+x11vnc: disable-if-unused
+iiod: keep-or-firewall
+```
+
+This gives B-010 a concrete review pack without changing services or firewall
+rules. Execution still requires an operator decision followed by a fresh audit.
+
 ### Image caption index
 
 Additional allowlisted tool:

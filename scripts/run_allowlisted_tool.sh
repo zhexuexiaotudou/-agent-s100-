@@ -12,6 +12,7 @@ Usage:
   scripts/run_allowlisted_tool.sh security_audit_probe [output_dir]
   scripts/run_allowlisted_tool.sh service_policy_probe [output_dir]
   scripts/run_allowlisted_tool.sh service_hardening_plan_probe [output_dir]
+  scripts/run_allowlisted_tool.sh service_convergence_decision_probe [input_dir] [report_dir]
   scripts/run_allowlisted_tool.sh stability_snapshot_probe [output_dir]
   scripts/run_allowlisted_tool.sh stability_summary_probe [input_dir] [report_dir]
   scripts/run_allowlisted_tool.sh image_caption_probe [photos_dir] [report_dir]
@@ -56,6 +57,7 @@ sandbox_status_probe   Read-only Docker/Podman/sandbox capability status report
 security_audit_probe   Read-only OpenClaw/S100P security baseline audit report
 service_policy_probe   Read-only service keep/disable/firewall policy plan
 service_hardening_plan_probe  Read-only dry-run hardening command plan
+service_convergence_decision_probe  Read-only B-010 service convergence decision pack
 stability_snapshot_probe  Read-only uptime/resource/log snapshot for A-010
 stability_summary_probe  Read-only aggregate summary for A-010 stability snapshots
 image_caption_probe  Read-only image metadata caption and JSONL index for B-003
@@ -121,6 +123,11 @@ EOF
     shift
     tool_path="$repo_dir/scripts/probes/service_hardening_plan_probe.sh"
     max_args=1
+    ;;
+  service_convergence_decision_probe)
+    shift
+    tool_path="$repo_dir/scripts/probes/service_convergence_decision_probe.sh"
+    max_args=2
     ;;
   stability_snapshot_probe)
     shift
@@ -272,6 +279,23 @@ if [[ "$tool_id" == "service_hardening_plan_probe" ]]; then
     ""|/tmp/*|/mnt/nas/openclaw/logs/probes|/mnt/nas/openclaw/logs/probes/*|/root/.openclaw/workspace/logs/probes|/root/.openclaw/workspace/logs/probes/*) ;;
     *)
       echo "Refusing output path outside approved probe directories: ${1:-}" >&2
+      exit 2
+      ;;
+  esac
+fi
+
+if [[ "$tool_id" == "service_convergence_decision_probe" ]]; then
+  case "${1:-}" in
+    ""|/tmp/*|/mnt/nas/openclaw/logs/probes|/mnt/nas/openclaw/logs/probes/*|/root/.openclaw/workspace/logs/probes|/root/.openclaw/workspace/logs/probes/*) ;;
+    *)
+      echo "Refusing input path outside approved probe directories: ${1:-}" >&2
+      exit 2
+      ;;
+  esac
+  case "${2:-}" in
+    ""|/tmp/*|/mnt/nas/openclaw/reports|/mnt/nas/openclaw/reports/*|/root/.openclaw/workspace/reports|/root/.openclaw/workspace/reports/*) ;;
+    *)
+      echo "Refusing output path outside approved report directories: ${2:-}" >&2
       exit 2
       ;;
   esac

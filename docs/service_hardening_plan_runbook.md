@@ -62,3 +62,29 @@ Local readiness is verified when:
 
 B-010 is still not complete until an operator confirms which services to keep,
 disable, or firewall, and the post-change security audit is clean.
+
+## Service Convergence Decision Pack
+
+Use this read-only follow-up when the security audit, service policy, and
+hardening dry-run already exist and the operator needs one consolidated review
+document:
+
+```bash
+scripts/run_allowlisted_tool.sh service_convergence_decision_probe \
+  /mnt/nas/openclaw/logs/probes \
+  /mnt/nas/openclaw/reports/security
+```
+
+The pack records the current listener/service signals, recommended
+keep/disable/firewall decisions, candidate commands, rollback commands, and
+post-change verification commands. It does not execute any of those commands.
+
+Current 2026-05-28 recommendations:
+
+```text
+OpenClaw Gateway: keep-loopback
+SSH: keep-trusted-management
+NFS/RPC server stack: disable-if-client-only
+x11vnc: disable-if-unused
+iiod: keep-or-firewall
+```

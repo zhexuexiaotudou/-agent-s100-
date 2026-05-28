@@ -28,16 +28,22 @@ sandbox_status_probe
 security_audit_probe
 service_policy_probe
 service_hardening_plan_probe
+service_convergence_decision_probe
 stability_snapshot_probe
 stability_summary_probe
 image_caption_probe
+vision_caption_readiness_probe
+home_assistant_status_probe
+control_action_policy_probe
 browser_smoke_probe
 rosbag_snapshot_probe
 rosbag_session_probe
+rosbag_capture_policy_probe
 experiment_report_probe
 baseline_status_probe
 log_diagnose
 index_documents
+document_daily_summary_probe
 ```
 
 The plugin internally calls:
@@ -156,16 +162,22 @@ sandbox_status_probe
 security_audit_probe
 service_policy_probe
 service_hardening_plan_probe
+service_convergence_decision_probe
 stability_snapshot_probe
 stability_summary_probe
 image_caption_probe
+vision_caption_readiness_probe
+home_assistant_status_probe
+control_action_policy_probe
 browser_smoke_probe
 rosbag_snapshot_probe
 rosbag_session_probe
+rosbag_capture_policy_probe
 experiment_report_probe
 baseline_status_probe
 log_diagnose
 index_documents
+document_daily_summary_probe
 ```
 
 Board evidence through real `s100p_run_probe` tool calls:
@@ -579,3 +591,39 @@ semantic runtime: no
 This verifies the narrow tool path for B-003 semantic readiness. It does not
 verify semantic caption generation; the board has no detected local vision model
 files yet.
+
+## 2026-05-28 B-010 Service Convergence Decision Extension
+
+The plugin was extended with:
+
+```text
+service_convergence_decision_probe
+```
+
+Board evidence through the allowlist runner:
+
+```text
+report: /mnt/nas/openclaw/reports/security/service_convergence_decision_20260528-235327.md
+Gateway: keep-loopback
+SSH: keep-trusted-management
+NFS/RPC: disable-if-client-only
+x11vnc: disable-if-unused
+iiod: keep-or-firewall
+```
+
+After updating the actual loaded extension copy at
+`/root/.openclaw/extensions/s100p-allowlisted-tools/index.js` and restarting
+`openclaw-gateway.service`, board evidence through a real OpenClaw agent turn:
+
+```text
+tool_id: service_convergence_decision_probe
+report: /root/.openclaw/workspace/reports/security/service_convergence_decision_20260528-234753.md
+Gateway: keep-loopback
+SSH: keep-trusted-management
+NFS/RPC: disable-if-client-only
+x11vnc: disable-if-unused
+iiod: keep-or-firewall
+```
+
+This verifies the narrow tool path for the B-010 decision pack. It deliberately
+does not stop services or edit firewall rules.

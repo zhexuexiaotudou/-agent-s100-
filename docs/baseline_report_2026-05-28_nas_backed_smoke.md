@@ -15,7 +15,7 @@ Date: 2026-05-28
 - S100P 能常驻 OpenClaw Gateway，飞书入口可用，能通过白名单工具执行探针。
 - TS-264C 已通过 NFS v4.1 持久化挂载到 `/mnt/nas/openclaw`，重启后 automount 和写入验证通过。
 - 文档索引、日志诊断、浏览器截图、ROS bag session、300 秒命名采集、dataset card、实验报告、稳定性采样、安全审计都已经能写入 NAS。
-- 仍未完成的是 7 天稳定性、sandbox runtime、服务收敛策略、Home Assistant 真实配置、控制动作策略和真实业务数据填充。
+- 仍未完成的是 7 天稳定性、sandbox runtime、服务收敛执行、Home Assistant 真实配置、控制动作策略和真实业务数据填充。
 
 ## Baseline A：S100P 能否接近 PC OpenClaw 效果
 
@@ -30,7 +30,7 @@ Date: 2026-05-28
 | 浏览器自动化 | verified | Headless Chromium 打开本地页面并截图到 NAS，PNG 校验通过。 |
 | ROS2 状态查询 | verified | 可读取 node/topic/service 状态。 |
 | ROS bag 采集 | verified | NAS-backed start/status/stop self-test 已通过；命名采集 policy 已生成；一次人工批准的 300 秒 named capture 已完成，`record_exit=0`、`metadata_exists=yes`。 |
-| 稳定性采样 | doing | systemd timer 与 overnight runner 均已写 NAS；当前 13 个 snapshot、5.29h，仍需 168 小时样本。 |
+| 稳定性采样 | doing | systemd timer 与 overnight runner 均已写 NAS；当前 14 个 snapshot、5.63h，仍需 168 小时样本。 |
 | 工具白名单 | verified | narrow plugin/runner 可用；2026-05-28 负向复测中 agent 拒绝非白名单 `/usr/bin/touch`，marker 未创建。 |
 | Sandbox | blocked | S100P 当前无 Docker/Podman/runc runtime。 |
 
@@ -57,7 +57,7 @@ Date: 2026-05-28
 | 机器人数据集管理 | ROS bag session 和 300 秒 named capture 写 NAS，并生成 `DATASET_CARD.md` | verified |
 | 实验/周报 | 从 NAS logs、reports、datasets 汇总 Markdown 报告 | verified |
 | 稳定性报告 | NAS-backed snapshot + summary，timer 自动采样 | doing |
-| 安全审计 | Gateway 暴露、NAS mount、secret scan、服务监听审计 | doing |
+| 安全审计 | Gateway 暴露、NAS mount、secret scan、服务监听审计和 service convergence decision pack | doing |
 | 设备只读状态 | Home Assistant read-only preflight 已有 | doing |
 | 低风险控制 | disabled-by-default policy/audit preflight 已有，启用动作数为 0，未开放执行 | doing |
 
@@ -65,8 +65,8 @@ Date: 2026-05-28
 
 ```text
 NAS workspace: /mnt/nas/openclaw
-Baseline roll-up: /mnt/nas/openclaw/reports/baseline-status/baseline_status_20260528-234036.md
-Stability summary: /mnt/nas/openclaw/reports/stability/stability_summary_20260528-234035.md
+Baseline roll-up: /mnt/nas/openclaw/reports/baseline-status/baseline_status_20260528-235400.md
+Stability summary: /mnt/nas/openclaw/reports/stability/stability_summary_20260528-235359.md
 Experiment report: /mnt/nas/openclaw/reports/experiments/experiment_report_20260528-184444.md
 Document index: /mnt/nas/openclaw/reports/document_index_20260528-182111.md
 Document daily summary: /mnt/nas/openclaw/reports/daily-summary/document_daily_summary_20260528-184329.md
@@ -78,8 +78,9 @@ ROS bag capture policy: /mnt/nas/openclaw/logs/probes/rosbag_capture_policy_2026
 Log diagnosis: /mnt/nas/openclaw/logs/probes/log_diagnosis_20260528-181546.md
 Image caption index: /mnt/nas/openclaw/reports/image-captions/image_caption_index_20260528-182530.md
 Vision caption readiness: /mnt/nas/openclaw/reports/image-captions/vision_caption_readiness_20260528-230810.md
-Security audit: /mnt/nas/openclaw/logs/probes/security_audit_20260528-232101.md
+Security audit: /mnt/nas/openclaw/logs/probes/security_audit_20260528-232340.md
 Service policy: /mnt/nas/openclaw/logs/probes/service_policy_20260528-232101.md
+Service convergence decision: /mnt/nas/openclaw/reports/security/service_convergence_decision_20260528-235327.md
 Control action policy: /mnt/nas/openclaw/logs/probes/control_action_policy_20260528-225702.md
 Overnight runner: /mnt/nas/openclaw/logs/overnight/overnight_baseline_20260528-232330.jsonl
 ```
@@ -102,7 +103,7 @@ S100P + NAS 的价值主要体现在四点：
 - B-003：当前 metadata caption 已验证，语义 caption readiness 结论是 `blocked_no_semantic_runtime`，原因是没有检测到本地视觉模型文件。
 - B-008：需要 Home Assistant URL/token 才能读取真实设备状态。
 - B-009：disabled-by-default policy 已通过预检；需要真实 reviewed action、二次确认文案和 request/approve/execute 审计，才能开放执行。
-- B-010：是否关闭 NFS/RPC、x11vnc、iiod 或改防火墙，需要确认不会影响 RDK Studio/硬件工具。
+- B-010：service convergence decision pack 已给出 `keep-loopback`、`keep-trusted-management`、`disable-if-client-only`、`disable-if-unused`、`keep-or-firewall` 建议；是否关闭 NFS/RPC、x11vnc、iiod 或改防火墙，需要确认不会影响 RDK Studio/硬件工具。
 - 飞书 `99991672`：contact scope 权限需要在飞书开放平台申请，不阻塞消息收发。
 
 ## 下一步建议
@@ -112,7 +113,7 @@ S100P + NAS 的价值主要体现在四点：
 1. 让 A-010 自动采样继续跑，累计 168 小时后生成稳定性验收报告。
 2. 用真实文档、真实图片、真实机器人数据替换 smoke 数据，再重跑 experiment report。
 3. 明确 B-003 是否保持 metadata-only，还是安装/挂载本地语义视觉模型。
-4. 决策 B-010 服务收敛策略，只在确认后执行 disable/firewall。
+4. 按 B-010 decision pack 决策服务收敛策略，只在确认后执行 disable/firewall。
 5. 如果要做智能家居/设备联动，再补 Home Assistant URL/token 和 B-009 控制 allowlist。
 
 当前可汇报结论：S100P + NAS 已经跑通了一个可恢复、可观察、可写 NAS 的 OpenClaw 常驻 baseline；它已经能覆盖 PC OpenClaw 的一部分核心功能，并且开始具备 AI NAS 的日志、数据集、报告和审计雏形。

@@ -129,6 +129,22 @@
       "description": "Generate a dry-run service hardening command plan without changing services or firewall rules."
     },
     {
+      "id": "service_convergence_decision_probe",
+      "script": "scripts/probes/service_convergence_decision_probe.sh",
+      "mode": "readonly",
+      "approvedInputPrefixes": [
+        "/tmp/",
+        "/mnt/nas/openclaw/logs/probes/",
+        "/root/.openclaw/workspace/logs/probes/"
+      ],
+      "approvedOutputPrefixes": [
+        "/tmp/",
+        "/mnt/nas/openclaw/reports/",
+        "/root/.openclaw/workspace/reports/"
+      ],
+      "description": "Generate a read-only B-010 service convergence decision pack with preconditions, candidate commands, rollback, and verification steps."
+    },
+    {
       "id": "stability_snapshot_probe",
       "script": "scripts/probes/stability_snapshot_probe.sh",
       "mode": "readonly",

@@ -24,8 +24,8 @@
 | A-006 | Docker / sandbox 验证 | blocked | 非主会话不能写宿主机敏感路径 |
 | A-007 | Browser automation smoke test | verified | Headless Chromium 能打开测试网页、截图并保存到 NAS，PNG 校验通过 |
 | A-008 | ROS2 status 工具 | verified | OpenClaw 能查询 ROS2 node/topic/service |
-| A-009 | ROS bag 采集工具 | doing | NAS-backed start/status/stop self-test 和命名采集 policy 均已通过；还需一次人工批准的 named capture 才能最终 verified |
-| A-010 | 7x24 稳定性测试 | doing | systemd timer 已切到 NAS-backed 输出；当前 10 个 snapshot、4.29h、verdict=`collecting` |
+| A-009 | ROS bag 采集工具 | verified | NAS-backed start/status/stop self-test、命名采集 policy 和一次人工批准的 300 秒 named capture 均已通过 |
+| A-010 | 7x24 稳定性测试 | doing | systemd timer 已切到 NAS-backed 输出；当前 14 个 snapshot、5.63h、verdict=`collecting` |
 
 ## Epic B：AI NAS Homework
 
@@ -40,7 +40,7 @@
 | B-007 | 周报/实验报告生成 | verified | 已从 NAS logs/probes、文档索引、浏览器截图、ROS bag 和 dataset card 生成 Markdown 实验报告 |
 | B-008 | Home Assistant / 设备只读状态 | doing | NAS-backed read-only preflight 已生成，未调用控制 API；真实读取需要 HA URL/token |
 | B-009 | 低风险自动化控制 | doing | disabled-by-default policy 已生成并通过 NAS/OpenClaw preflight；启用动作数为 0，仍需真实 reviewed action 和 request/approve/execute audit |
-| B-010 | 安全审计清单 | doing | NAS-backed security audit、service policy、hardening dry-run 已生成；服务收敛策略未定 |
+| B-010 | 安全审计清单 | doing | NAS-backed security audit、service policy、hardening dry-run 和 service convergence decision pack 已生成；执行 disable/firewall 前仍需 operator 确认 |
 
 ## 当前最近事实
 
@@ -978,3 +978,26 @@ verdict: ok
 
 Tracking status: A-009 is verified for baseline capture mechanics. Future real
 captures still need reviewed topic selection and retention-cleanup approval.
+
+## 2026-05-28 B-010 Service Convergence Decision Update
+
+`service_convergence_decision_probe` was added to consolidate the latest
+security audit, service policy, hardening dry-run, listener snapshot, and
+service snapshot into one read-only decision pack.
+
+Evidence:
+
+```text
+NAS runner report: /mnt/nas/openclaw/reports/security/service_convergence_decision_20260528-235327.md
+OpenClaw tool report: /root/.openclaw/workspace/reports/security/service_convergence_decision_20260528-234753.md
+Gateway: keep-loopback
+SSH: keep-trusted-management
+NFS/RPC: disable-if-client-only
+x11vnc: disable-if-unused
+iiod: keep-or-firewall
+```
+
+Tracking status: B-010 remains `doing`. The review pack is now available from
+both the runner and the OpenClaw tool path, but no service or firewall changes
+have been executed. Execution still needs confirmation that S100P is
+NFS-client-only, x11vnc is unused, and iiod is not required by hardware tooling.

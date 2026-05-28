@@ -94,7 +94,7 @@
     \item S100P 可以覆盖 PC OpenClaw 的核心链路，但定位不是完整替代 PC，而是常驻入口、机器人边缘执行节点和数据落盘节点。
     \item NAS 的价值已经体现：日志、报告、数据集、截图、索引和恢复证据都从 PC 本地迁移到统一 workspace。
     \item AI NAS 常见的资料库、数据集管理、日志诊断、实验报告和安全审计能力，已经有可复现的 smoke baseline。
-    \item 未完成项集中在长期稳定性、sandbox runtime、服务收敛、Home Assistant 真实配置、控制策略和真实业务数据填充。
+    \item 未完成项集中在长期稳定性、sandbox runtime、服务收敛执行、Home Assistant 真实配置、控制策略和真实业务数据填充。
   \end{itemize}
 
   \vfill
@@ -121,7 +121,7 @@ NAS workspace & verified & \texttt{169.254.110.209:/OpenClawWorkspace} 持久化
 浏览器自动化 & verified & Headless Chromium 打开本地页面，截图写入 NAS，PNG magic 校验通过。 \\
 ROS2 状态查询 & verified & 可读取 node/topic/service 状态。 \\
 ROS bag 采集 & verified & NAS-backed start/status/stop self-test 通过；命名采集 policy 已生成；一次人工批准的 300 秒 named capture 已完成，\texttt{record\_exit=0}、\texttt{metadata\_exists=yes}。 \\
-稳定性采样 & doing & systemd timer 与 overnight runner 均已写 NAS；当前 13 个 snapshot、5.29h，仍需 168 小时样本。 \\
+稳定性采样 & doing & systemd timer 与 overnight runner 均已写 NAS；当前 14 个 snapshot、5.63h，仍需 168 小时样本。 \\
 工具白名单 & verified & narrow plugin/runner 可用；2026-05-28 负向复测中 agent 拒绝非白名单 \texttt{/usr/bin/touch}，marker 未创建。 \\
 Sandbox & blocked & S100P 当前无 Docker/Podman/runc runtime。 \\
 \bottomrule
@@ -154,7 +154,7 @@ AI NAS 常见能力 & S100P + NAS 当前实现 & 状态 \\
 机器人数据集管理 & ROS bag session 和 300 秒 named capture 写 NAS，并生成 \texttt{DATASET\_CARD.md} & verified \\
 实验/周报 & 从 NAS logs、reports、datasets 汇总 Markdown 报告 & verified \\
 稳定性报告 & NAS-backed snapshot + summary，timer 自动采样 & doing \\
-安全审计 & Gateway 暴露、NAS mount、secret scan、服务监听审计 & doing \\
+安全审计 & Gateway 暴露、NAS mount、secret scan、服务监听审计和 service convergence decision pack & doing \\
 设备只读状态 & Home Assistant read-only preflight 已有 & doing \\
 低风险控制 & disabled-by-default policy/audit preflight 已有，启用动作数为 0，未开放执行 & doing \\
 \bottomrule
@@ -168,8 +168,8 @@ AI NAS 常见能力 & S100P + NAS 当前实现 & 状态 \\
 \rowcolor{tablehead}
 项目 & 路径 \\
 \midrule
-Baseline roll-up & \path{/mnt/nas/openclaw/reports/baseline-status/baseline_status_20260528-234036.md} \\
-Stability summary & \path{/mnt/nas/openclaw/reports/stability/stability_summary_20260528-234035.md} \\
+Baseline roll-up & \path{/mnt/nas/openclaw/reports/baseline-status/baseline_status_20260528-235400.md} \\
+Stability summary & \path{/mnt/nas/openclaw/reports/stability/stability_summary_20260528-235359.md} \\
 Experiment report & \path{/mnt/nas/openclaw/reports/experiments/experiment_report_20260528-184444.md} \\
 Document index & \path{/mnt/nas/openclaw/reports/document_index_20260528-182111.md} \\
 Document daily summary & \path{/mnt/nas/openclaw/reports/daily-summary/document_daily_summary_20260528-184329.md} \\
@@ -181,8 +181,9 @@ ROS bag capture policy & \path{/mnt/nas/openclaw/logs/probes/rosbag_capture_poli
 Log diagnosis & \path{/mnt/nas/openclaw/logs/probes/log_diagnosis_20260528-181546.md} \\
 Image caption index & \path{/mnt/nas/openclaw/reports/image-captions/image_caption_index_20260528-182530.md} \\
 Vision caption readiness & \path{/mnt/nas/openclaw/reports/image-captions/vision_caption_readiness_20260528-230810.md} \\
-Security audit & \path{/mnt/nas/openclaw/logs/probes/security_audit_20260528-232101.md} \\
+Security audit & \path{/mnt/nas/openclaw/logs/probes/security_audit_20260528-232340.md} \\
 Service policy & \path{/mnt/nas/openclaw/logs/probes/service_policy_20260528-232101.md} \\
+Service convergence decision & \path{/mnt/nas/openclaw/reports/security/service_convergence_decision_20260528-235327.md} \\
 Control action policy & \path{/mnt/nas/openclaw/logs/probes/control_action_policy_20260528-225702.md} \\
 Overnight runner & \path{/mnt/nas/openclaw/logs/overnight/overnight_baseline_20260528-232330.jsonl} \\
 \bottomrule
@@ -201,7 +202,7 @@ A-006 Sandbox & 无 Docker/Podman/runc & 决定安装 runtime 或从第一版 ba
 B-003 图片 caption & metadata caption 已验证；语义 readiness 结论为缺本地语义模型 & 决定是否保持 metadata-only，或安装/挂载本地语义视觉模型。 \\
 B-008 设备状态 & 缺 Home Assistant URL/token & 用户提供配置后仅调用 \texttt{GET /api/} 和 \texttt{GET /api/states}。 \\
 B-009 控制动作 & disabled policy 已通过预检 & 补真实 reviewed action、二次确认文案和 request/approve/execute 审计。 \\
-B-010 服务收敛 & 需确认 NFS/RPC、x11vnc、iiod 是否可关 & 只在确认后执行 disable/firewall。 \\
+B-010 服务收敛 & decision pack 已给出建议；需确认 NFS/RPC、x11vnc、iiod 是否可关 & 只在确认后执行 disable/firewall，并在执行后重跑 security audit。 \\
 \bottomrule
 \end{longtable}
 
@@ -209,6 +210,6 @@ B-010 服务收敛 & 需确认 NFS/RPC、x11vnc、iiod 是否可关 & 只在确�
 
 当前可以汇报：S100P + NAS 已经跑通一个可恢复、可观察、可写 NAS 的 OpenClaw 常驻 baseline。它已经能覆盖 PC OpenClaw 的常驻入口、消息触发、工具执行、浏览器截图、ROS 数据采集、日志诊断和报告汇总的一部分核心能力；同时，它也开始具备 AI NAS 的资料库、日志、数据集、日报/周报和安全审计雏形。
 
-下一阶段不应继续堆 smoke demo，而应把真实文档、真实图片、真实机器人数据和 7 天稳定性样本接入同一套 NAS-backed 报告链路，并在服务收敛和控制策略确认后再进入更接近产品化的验收。
+下一阶段不应继续堆 smoke demo，而应把真实文档、真实图片、真实机器人数据和 7 天稳定性样本接入同一套 NAS-backed 报告链路，并在服务收敛执行和控制策略确认后再进入更接近产品化的验收。
 
 \end{document}

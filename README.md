@@ -347,6 +347,7 @@ New OpenClaw + NAS baseline artifacts:
 - [docs/baseline_progress_2026-05-28_b009_disabled_policy.md](docs/baseline_progress_2026-05-28_b009_disabled_policy.md): B-009 disabled-by-default control policy and no-execution preflight evidence.
 - [docs/baseline_progress_2026-05-28_a010_nas_sampler.md](docs/baseline_progress_2026-05-28_a010_nas_sampler.md): A-010 stability sampler moved to NAS-backed output.
 - [docs/baseline_progress_2026-05-28_service_policy_nas.md](docs/baseline_progress_2026-05-28_service_policy_nas.md): NAS-backed service policy and hardening dry-run evidence.
+- [docs/baseline_progress_2026-05-28_b010_service_convergence_decision.md](docs/baseline_progress_2026-05-28_b010_service_convergence_decision.md): B-010 service convergence decision pack evidence.
 - [docs/baseline_report_2026-05-28_nas_backed_smoke.md](docs/baseline_report_2026-05-28_nas_backed_smoke.md): current teacher-facing summary for the two baseline questions.
 - [reports/teacher/openclaw_s100p_nas_baseline_20260528.tex](reports/teacher/openclaw_s100p_nas_baseline_20260528.tex) and [reports/teacher/openclaw_s100p_nas_baseline_20260528.pdf](reports/teacher/openclaw_s100p_nas_baseline_20260528.pdf): LaTeX source and compiled teacher-facing PDF report for the PC OpenClaw vs S100P+NAS baseline comparison.
 - [docs/baseline_progress_2026-05-28_document_daily_summary.md](docs/baseline_progress_2026-05-28_document_daily_summary.md): B-002 NAS-backed deterministic document daily summary evidence.
@@ -370,6 +371,7 @@ scripts/run_allowlisted_tool.sh experiment_report_probe
 scripts/run_allowlisted_tool.sh security_audit_probe
 scripts/run_allowlisted_tool.sh service_policy_probe
 scripts/run_allowlisted_tool.sh service_hardening_plan_probe
+scripts/run_allowlisted_tool.sh service_convergence_decision_probe
 scripts/run_allowlisted_tool.sh stability_snapshot_probe
 scripts/run_allowlisted_tool.sh stability_summary_probe
 scripts/run_allowlisted_tool.sh image_caption_probe
