@@ -334,6 +334,8 @@ New OpenClaw + NAS baseline artifacts:
 - [scripts/probes/github_workflow_probe.ps1](scripts/probes/github_workflow_probe.ps1): writes a local GitHub/Codex readiness report.
 - [scripts/probes/stability_snapshot_probe.sh](scripts/probes/stability_snapshot_probe.sh): writes a point-in-time uptime/resource/log stability snapshot.
 - [scripts/probes/stability_summary_probe.sh](scripts/probes/stability_summary_probe.sh): aggregates A-010 stability snapshots into a trend and acceptance-gap report.
+- [scripts/startup_link_check/](scripts/startup_link_check/): Windows tray startup checker for the PC -> S100P -> NAS -> OpenClaw/Feishu chain.
+- [docs/baseline_progress_2026-05-28_startup_self_heal.md](docs/baseline_progress_2026-05-28_startup_self_heal.md): startup self-heal evidence for A-003/A-004/A-010 and B-005/B-010.
 - [scripts/probes/image_caption_probe.sh](scripts/probes/image_caption_probe.sh): writes deterministic image metadata captions and JSONL search records.
 - [scripts/probes/home_assistant_status_probe.sh](scripts/probes/home_assistant_status_probe.sh): writes a read-only Home Assistant status preflight report.
 - [scripts/probes/control_action_policy_probe.sh](scripts/probes/control_action_policy_probe.sh): writes a read-only low-risk control policy and audit preflight report.

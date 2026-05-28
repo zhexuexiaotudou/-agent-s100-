@@ -60,6 +60,7 @@
 | 飞书群聊策略 | verified | OpenClaw 配置为 `groupPolicy=open`、`requireMention=true`，群里需要 `@小土豆` |
 | 联网搜索 | verified | OpenClaw 搜索源已从 DuckDuckGo 切到 Tavily，agent 联网查询 RDK S100P 返回来源结果 |
 | NAS 挂载 | doing | QNAP `169.254.110.209:/OpenClawWorkspace` 已通过 NFS v4.1 运行时挂载到 `/mnt/nas/openclaw`；开机自动挂载仍待验证 |
+| 开机自恢复链路 | doing | Windows 托盘工具已验证登录后自动检查 `PC -> S100P -> NAS -> OpenClaw/飞书`，并确认 Windows 双 IP、S100P 双网段、NAS NFS 可写、Gateway active 和飞书消息日志；见 `docs/baseline_progress_2026-05-28_startup_self_heal.md` |
 | NAS 挂载预检 | doing | `check_nas_mount_inputs.sh` 已通过板端 smoke test，危险挂载点被拒绝；`mount_openclaw_nas.sh` 已补齐 dry-run/显式 apply 的挂载入口；`cifs-utils` 已安装，`mount.cifs=ok` |
 | 飞书联系人权限 | follow-up | 日志仍提示缺少 `contact:contact.base:readonly`，当前不阻塞消息和搜索，但建议在飞书开放平台补权限并发布 |
 | 工具白名单 | doing | `run_allowlisted_tool.sh` 和 `s100p-allowlisted-tools` 已通过板端验证：OpenClaw 可触发 7 个白名单 tool_id；但 broad exec 负向测试仍失败 |
@@ -77,6 +78,42 @@
 2. A-005：在 NAS workspace 和本仓库 `scripts/` 下建立工具白名单，只允许执行经过审计的脚本。
 3. B-002/B-005：在 NAS 目录可写后，先做文档索引/日志分析，不急着做图片 caption。
 4. A-008/A-009：ROS2 status 和 ROS bag 采集依赖 NAS 落盘，放在 NAS 挂载之后。
+
+## 2026-05-28 Startup Self-Heal Update
+
+Windows 侧新增开机自启动托盘工具：
+
+```text
+scripts/startup_link_check/
+task: S100P-NAS-OpenClaw-LinkCheck
+mode: hidden PowerShell + tray resident UI
+```
+
+实测日志：
+
+```text
+F:\Project\Digua\logs\link-check\2026-05-28.jsonl
+```
+
+关键证据：
+
+```text
+run_start: startInTray=true, useStartupDelay=true
+Windows: 192.168.127.2/24 and 192.168.137.1/24 OK
+PC -> S100P: ping and SSH key OK
+S100P: eth1 dual IP, default route, DNS, open.feishu.cn OK
+NAS: 169.254.110.209:/OpenClawWorkspace mounted at /mnt/nas/openclaw and writable
+OpenClaw/Feishu: openclaw-gateway.service active, received message, dispatch complete
+run_end: status=OK, windowsOk=true, sshOk=true, networkOk=true, nasOk=true, openclawOk=true
+```
+
+Tracking impact:
+
+- A-003 remains `doing`: NFS runtime mount and startup self-heal are verified, but S100P reboot-time persistent mount is still not proven.
+- A-004 remains `verified`: Feishu message receive/dispatch is repeatedly observed.
+- A-010 remains `doing`: PC login recovery is verified, but the 7-day stability criterion is still collecting.
+- B-005 remains `doing`: link-check JSONL is now a structured input source for future log diagnosis.
+- B-010 remains `doing`: the tool redacts local logs and keeps Feishu `99991672` as non-blocking, but service hardening is not finalized.
 
 ## Codex 每次更新 issue 时应补充
 
