@@ -14,7 +14,7 @@ Date: 2026-05-28
 
 - S100P 能常驻 OpenClaw Gateway，飞书入口可用，能通过白名单工具执行探针。
 - TS-264C 已通过 NFS v4.1 持久化挂载到 `/mnt/nas/openclaw`，重启后 automount 和写入验证通过。
-- 文档索引、日志诊断、浏览器截图、ROS bag session、dataset card、实验报告、稳定性采样、安全审计都已经能写入 NAS。
+- 文档索引、日志诊断、浏览器截图、ROS bag session、300 秒命名采集、dataset card、实验报告、稳定性采样、安全审计都已经能写入 NAS。
 - 仍未完成的是 7 天稳定性、sandbox runtime、服务收敛策略、Home Assistant 真实配置、控制动作策略和真实业务数据填充。
 
 ## Baseline A：S100P 能否接近 PC OpenClaw 效果
@@ -29,8 +29,8 @@ Date: 2026-05-28
 | NAS workspace | verified | `169.254.110.209:/OpenClawWorkspace` 持久化挂载到 `/mnt/nas/openclaw`，重启后可写。 |
 | 浏览器自动化 | verified | Headless Chromium 打开本地页面并截图到 NAS，PNG 校验通过。 |
 | ROS2 状态查询 | verified | 可读取 node/topic/service 状态。 |
-| ROS bag 采集 | doing | NAS-backed start/status/stop self-test 已通过；命名采集 policy 已生成，还需一次人工批准的 named capture。 |
-| 稳定性采样 | doing | systemd timer 已切到 NAS 输出；当前 10 个 snapshot、4.29h，仍需 168 小时样本。 |
+| ROS bag 采集 | verified | NAS-backed start/status/stop self-test 已通过；命名采集 policy 已生成；一次人工批准的 300 秒 named capture 已完成，`record_exit=0`、`metadata_exists=yes`。 |
+| 稳定性采样 | doing | systemd timer 与 overnight runner 均已写 NAS；当前 12 个 snapshot、5.13h，仍需 168 小时样本。 |
 | 工具白名单 | verified | narrow plugin/runner 可用；2026-05-28 负向复测中 agent 拒绝非白名单 `/usr/bin/touch`，marker 未创建。 |
 | Sandbox | blocked | S100P 当前无 Docker/Podman/runc runtime。 |
 
@@ -52,9 +52,9 @@ Date: 2026-05-28
 | --- | --- | --- |
 | 统一 workspace | TS-264C NFS `/OpenClawWorkspace` 挂到 S100P | verified |
 | 文档索引/每日摘要 | 对 NAS 文档生成 Markdown 索引、hash、preview 和 deterministic daily summary | verified |
-| 图片 caption / 搜索 | 对 NAS 图片生成 metadata caption 和 JSONL index | doing |
+| 图片 caption / 搜索 | 对 NAS 图片生成 metadata caption 和 JSONL index；语义 caption readiness 已确认缺本地视觉模型 | doing |
 | 日志诊断 | 从 NAS logs 输出错误摘要、关键匹配、建议命令 | verified |
-| 机器人数据集管理 | ROS bag session 写 NAS，并生成 `DATASET_CARD.md` | verified |
+| 机器人数据集管理 | ROS bag session 和 300 秒 named capture 写 NAS，并生成 `DATASET_CARD.md` | verified |
 | 实验/周报 | 从 NAS logs、reports、datasets 汇总 Markdown 报告 | verified |
 | 稳定性报告 | NAS-backed snapshot + summary，timer 自动采样 | doing |
 | 安全审计 | Gateway 暴露、NAS mount、secret scan、服务监听审计 | doing |
@@ -65,20 +65,23 @@ Date: 2026-05-28
 
 ```text
 NAS workspace: /mnt/nas/openclaw
-Baseline roll-up: /mnt/nas/openclaw/reports/baseline-status/baseline_status_20260528-225904.md
-Stability summary: /mnt/nas/openclaw/reports/stability/stability_summary_20260528-223427.md
+Baseline roll-up: /mnt/nas/openclaw/reports/baseline-status/baseline_status_20260528-233032.md
+Stability summary: /mnt/nas/openclaw/reports/stability/stability_summary_20260528-232339.md
 Experiment report: /mnt/nas/openclaw/reports/experiments/experiment_report_20260528-184444.md
 Document index: /mnt/nas/openclaw/reports/document_index_20260528-182111.md
 Document daily summary: /mnt/nas/openclaw/reports/daily-summary/document_daily_summary_20260528-184329.md
 Browser screenshot: /mnt/nas/openclaw/reports/browser-smoke/browser_smoke_20260528-182111.png
 ROS bag dataset: /mnt/nas/openclaw/robot_datasets/rosbag_session_20260528-182117/
-Dataset card: /mnt/nas/openclaw/robot_datasets/rosbag_session_20260528-182117/DATASET_CARD.md
+ROS bag named capture: /mnt/nas/openclaw/logs/probes/rosbag_named_capture_20260528-231319.md
+Dataset card: /mnt/nas/openclaw/robot_datasets/approved_named_capture_20260528-231319/DATASET_CARD.md
 ROS bag capture policy: /mnt/nas/openclaw/logs/probes/rosbag_capture_policy_20260528-224523.md
 Log diagnosis: /mnt/nas/openclaw/logs/probes/log_diagnosis_20260528-181546.md
 Image caption index: /mnt/nas/openclaw/reports/image-captions/image_caption_index_20260528-182530.md
-Security audit: /mnt/nas/openclaw/logs/probes/security_audit_20260528-182530.md
-Service policy: /mnt/nas/openclaw/logs/probes/service_policy_20260528-183619.md
+Vision caption readiness: /mnt/nas/openclaw/reports/image-captions/vision_caption_readiness_20260528-230810.md
+Security audit: /mnt/nas/openclaw/logs/probes/security_audit_20260528-232101.md
+Service policy: /mnt/nas/openclaw/logs/probes/service_policy_20260528-232101.md
 Control action policy: /mnt/nas/openclaw/logs/probes/control_action_policy_20260528-225702.md
+Overnight runner: /mnt/nas/openclaw/logs/overnight/overnight_baseline_20260528-232330.jsonl
 ```
 
 ## S100P + NAS 对这件事的帮助
@@ -95,7 +98,8 @@ S100P + NAS 的价值主要体现在四点：
 这些项需要用户或外部平台决策，当前只记录不自动改：
 
 - A-006：是否安装 Docker/Podman/runc，或第一版明确不做 sandbox。
-- A-010：需要持续运行满 168 小时，不能用单次 smoke 替代。
+- A-010：需要持续运行满 168 小时，不能用单次 smoke 替代；当前 overnight runner 正在继续补证据。
+- B-003：当前 metadata caption 已验证，语义 caption readiness 结论是 `blocked_no_semantic_runtime`，原因是没有检测到本地视觉模型文件。
 - B-008：需要 Home Assistant URL/token 才能读取真实设备状态。
 - B-009：disabled-by-default policy 已通过预检；需要真实 reviewed action、二次确认文案和 request/approve/execute 审计，才能开放执行。
 - B-010：是否关闭 NFS/RPC、x11vnc、iiod 或改防火墙，需要确认不会影响 RDK Studio/硬件工具。
@@ -107,7 +111,7 @@ S100P + NAS 的价值主要体现在四点：
 
 1. 让 A-010 自动采样继续跑，累计 168 小时后生成稳定性验收报告。
 2. 用真实文档、真实图片、真实机器人数据替换 smoke 数据，再重跑 experiment report。
-3. 明确 B-003 是否只做 metadata caption，还是接入语义视觉模型。
+3. 明确 B-003 是否保持 metadata-only，还是安装/挂载本地语义视觉模型。
 4. 决策 B-010 服务收敛策略，只在确认后执行 disable/firewall。
 5. 如果要做智能家居/设备联动，再补 Home Assistant URL/token 和 B-009 控制 allowlist。
 
