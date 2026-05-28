@@ -9,7 +9,7 @@ smoke baseline，哪些必须等用户或外部平台决策。
 ## Output
 
 ```text
-/mnt/nas/openclaw/reports/baseline-status/baseline_status_20260528-182846.md
+/mnt/nas/openclaw/reports/baseline-status/baseline_status_20260528-183114.md
 ```
 
 脚本修正：
@@ -28,8 +28,8 @@ Stability sampler timer: active
 NAS workspace: mounted
 Allowlisted tool count: 19
 Progress docs: 19
-Probe reports: 11
-Workspace reports: 10
+Probe reports: 13
+Workspace reports: 12
 Dataset cards: 1
 Image caption JSONL indexes: 1
 Stability snapshots: 1
@@ -50,6 +50,8 @@ ROS bag session: /mnt/nas/openclaw/logs/probes/rosbag_session_20260528-182117.md
 Dataset card: /mnt/nas/openclaw/robot_datasets/rosbag_session_20260528-182117/DATASET_CARD.md
 GitHub issue: https://github.com/zhexuexiaotudou/-agent-s100-/issues/2
 GitHub PR: https://github.com/zhexuexiaotudou/-agent-s100-/pull/3 review_id=4367969950
+Home Assistant status: /mnt/nas/openclaw/logs/probes/home_assistant_status_20260528-183050.md
+Control action policy: /mnt/nas/openclaw/logs/probes/control_action_policy_20260528-183050.md
 ```
 
 ## Roll-up Meaning
@@ -65,6 +67,8 @@ GitHub PR: https://github.com/zhexuexiaotudou/-agent-s100-/pull/3 review_id=4367
 - B-004 dataset card
 - B-005 log diagnosis
 - B-007 experiment report
+- B-008 Home Assistant read-only preflight
+- B-009 control action policy preflight
 - B-010 security audit
 
 仍需要后续决策或外部信息的项：

@@ -38,8 +38,8 @@
 | B-005 | 日志分析助手 | verified | 已从 NAS 日志目录读取 Windows link-check JSONL，输出失败摘要、关键错误和建议命令 |
 | B-006 | GitHub/Codex workflow | verified | issue -> branch -> PR -> Codex review 链路已走通；远端 issue `#2`、branch `baseline/s100p-nas-baselines`、draft PR `#3` 和 Codex review `4367969950` 已验证 |
 | B-007 | 周报/实验报告生成 | verified | 已从 NAS logs/probes、文档索引、浏览器截图、ROS bag 和 dataset card 生成 Markdown 实验报告 |
-| B-008 | Home Assistant / 设备只读状态 | doing | 只查询状态，不做控制；本地 read-only preflight 已通过 runner 和 OpenClaw 插件验证，真实读取需要 HA URL/token |
-| B-009 | 低风险自动化控制 | doing | 白名单 + 二次确认 + 审计日志；本地 policy/audit preflight 已通过 runner 和 OpenClaw 插件验证，尚未开放实际执行 |
+| B-008 | Home Assistant / 设备只读状态 | doing | NAS-backed read-only preflight 已生成，未调用控制 API；真实读取需要 HA URL/token |
+| B-009 | 低风险自动化控制 | doing | NAS-backed policy/audit preflight 已生成，未执行控制动作；需要控制 allowlist 和二次确认策略 |
 | B-010 | 安全审计清单 | doing | NAS-backed security audit 已生成；Gateway loopback-only、NAS mounted、secret scan pass，服务收敛策略未定 |
 
 ## 当前最近事实
@@ -787,3 +787,37 @@ Stability snapshots=1
 - B-008 Home Assistant URL/token
 - B-009 控制动作策略
 - B-010 服务 keep/disable/firewall 策略
+
+## 2026-05-28 NAS Home Assistant And Control Preflight Update
+
+新增审阅记录：
+
+```text
+docs/baseline_progress_2026-05-28_ha_control_preflight_nas.md
+```
+
+NAS-backed 预检结果：
+
+```text
+B-008 Home Assistant:
+  /mnt/nas/openclaw/logs/probes/home_assistant_status_20260528-183050.md
+  mode=read-only
+  control_api_called=no
+  services_api_called=no
+  Verdict=blocked_no_config
+
+B-009 Control policy:
+  /mnt/nas/openclaw/logs/probes/control_action_policy_20260528-183050.md
+  action_executed=no
+  control_endpoint_called=no
+  Policy status=missing
+  Verdict=blocked_no_policy
+
+Updated roll-up:
+  /mnt/nas/openclaw/reports/baseline-status/baseline_status_20260528-183114.md
+```
+
+Tracking impact:
+
+- B-008 remains `doing`: 工具链已可写 NAS，但没有 HA URL/token。
+- B-009 remains `doing`: policy/audit 预检已可写 NAS，但没有控制 allowlist，且未开放执行。
