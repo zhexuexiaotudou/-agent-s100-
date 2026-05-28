@@ -336,6 +336,7 @@ New OpenClaw + NAS baseline artifacts:
 - [scripts/probes/stability_summary_probe.sh](scripts/probes/stability_summary_probe.sh): aggregates A-010 stability snapshots into a trend and acceptance-gap report.
 - [scripts/startup_link_check/](scripts/startup_link_check/): Windows tray startup checker for the PC -> S100P -> NAS -> OpenClaw/Feishu chain.
 - [docs/baseline_progress_2026-05-28_startup_self_heal.md](docs/baseline_progress_2026-05-28_startup_self_heal.md): startup self-heal evidence for A-003/A-004/A-010 and B-005/B-010.
+- [docs/baseline_progress_2026-05-28_a005_negative_retest.md](docs/baseline_progress_2026-05-28_a005_negative_retest.md): A-005 current OpenClaw agent-policy negative exec retest evidence.
 - [docs/baseline_progress_2026-05-28_a003_persistent_nfs.md](docs/baseline_progress_2026-05-28_a003_persistent_nfs.md): A-003 reboot-verified persistent NFS automount evidence.
 - [docs/baseline_progress_2026-05-28_nas_backed_reports.md](docs/baseline_progress_2026-05-28_nas_backed_reports.md): NAS-backed B-005 log diagnosis, B-007 experiment report, and A-010 stability collection evidence.
 - [docs/baseline_progress_2026-05-28_nas_core_artifacts.md](docs/baseline_progress_2026-05-28_nas_core_artifacts.md): NAS-backed document index, browser screenshot, ROS bag session, dataset card, and experiment report evidence.

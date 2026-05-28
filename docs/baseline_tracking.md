@@ -20,7 +20,7 @@
 | A-002 | RDK Studio 部署 OpenClaw Gateway | verified | Gateway 可启动，Control UI 可访问，重启后恢复 |
 | A-003 | NAS workspace 挂载到 S100P | verified | NFS v4.1 运行时挂载、`/etc/fstab` 持久化、S100P 重启后 systemd automount 和写入测试均已验证 |
 | A-004 | WebChat/Feishu smoke test | verified | 消息能触发命令并返回状态 |
-| A-005 | 工具执行 allowlist | doing | 只允许执行 `scripts/` 下白名单脚本 |
+| A-005 | 工具执行 allowlist | verified | 只允许执行白名单探针；2026-05-28 负向测试中 agent 拒绝非白名单 `/usr/bin/touch`，marker 未创建 |
 | A-006 | Docker / sandbox 验证 | blocked | 非主会话不能写宿主机敏感路径 |
 | A-007 | Browser automation smoke test | verified | Headless Chromium 能打开测试网页、截图并保存到 NAS，PNG 校验通过 |
 | A-008 | ROS2 status 工具 | verified | OpenClaw 能查询 ROS2 node/topic/service |
@@ -63,7 +63,7 @@
 | 开机自恢复链路 | doing | Windows 托盘工具已验证登录后自动检查 `PC -> S100P -> NAS -> OpenClaw/飞书`，并确认 Windows 双 IP、S100P 双网段、NAS NFS 可写、Gateway active 和飞书消息日志；见 `docs/baseline_progress_2026-05-28_startup_self_heal.md` |
 | NAS 挂载预检 | doing | `check_nas_mount_inputs.sh` 已通过板端 smoke test，危险挂载点被拒绝；`mount_openclaw_nas.sh` 已补齐 dry-run/显式 apply 的挂载入口；`cifs-utils` 已安装，`mount.cifs=ok` |
 | 飞书联系人权限 | follow-up | 日志仍提示缺少 `contact:contact.base:readonly`，当前不阻塞消息和搜索，但建议在飞书开放平台补权限并发布 |
-| 工具白名单 | doing | `run_allowlisted_tool.sh` 和 `s100p-allowlisted-tools` 已通过板端验证：OpenClaw 可触发 7 个白名单 tool_id；但 broad exec 负向测试仍失败 |
+| 工具白名单 | verified | `run_allowlisted_tool.sh` 和 `s100p-allowlisted-tools` 已通过板端验证；2026-05-28 broad exec 负向复测拒绝非白名单 `/usr/bin/touch` |
 | Sandbox 状态探针 | blocked | `sandbox_status_probe` 已通过 runner 和 OpenClaw 插件验证，报告 `runtime_available: no`、`isolation_verdict: blocked`；板端当前无 Docker/Podman/runc |
 | Browser smoke | doing | `browser_smoke_probe` 已通过 runner 和 OpenClaw 插件验证，能打开本地测试页并截图到 `/root/.openclaw/workspace/reports/browser-smoke`；NAS 挂载后需复测 NAS 输出 |
 | ROS2 状态工具 | verified | `s100p_run_probe` 真实调用 `ros2_status_probe`，报告写入 `/root/.openclaw/workspace/logs/probes`，当前 nodes=0、topics=2 |
@@ -781,7 +781,6 @@ Stability snapshots=1
 
 仍未解除的主阻塞：
 
-- A-005 broad exec 负向阻断证据
 - A-006 sandbox runtime 或 drop 决策
 - A-010 168 小时稳定性样本
 - B-008 Home Assistant URL/token

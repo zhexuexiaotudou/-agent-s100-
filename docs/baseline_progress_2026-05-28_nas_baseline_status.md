@@ -7,7 +7,7 @@ Date: 2026-05-28
 ## Latest Output
 
 ```text
-/mnt/nas/openclaw/reports/baseline-status/baseline_status_20260528-223438.md
+/mnt/nas/openclaw/reports/baseline-status/baseline_status_20260528-223903.md
 ```
 
 Script fixes already in place:
@@ -25,7 +25,7 @@ NAS workspace: mounted
 Allowlisted tool count: 20
 Progress docs: 19
 Probe reports: 24
-Workspace reports: 22
+Workspace reports: 23
 Dataset cards: 1
 Image caption JSONL indexes: 1
 Document daily summaries: 1
@@ -72,7 +72,6 @@ Already backed by NAS evidence:
 
 Still requiring later decisions or external information:
 
-- A-005 broad exec platform-level blocking evidence
 - A-006 Docker/Podman/runc sandbox runtime or explicit drop decision
 - A-009 longer named capture policy
 - A-010 168-hour stability sample window

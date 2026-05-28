@@ -284,7 +284,7 @@ fi
   echo "| ID | Current evidence | Remaining gap |"
   echo "| --- | --- | --- |"
   echo "| A-003 | $a003_current | $a003_gap |"
-  echo "| A-005 | Narrow allowlisted OpenClaw plugin is installed. | Broad exec path still needs platform-level blocking evidence. |"
+  echo "| A-005 | Narrow allowlisted OpenClaw plugin is installed, and the current agent path refused a non-allowlisted /usr/bin/touch negative test. | Keep treating this as an OpenClaw agent-policy boundary, not a kernel sandbox; rerun negative tests after config/plugin changes. |"
   echo "| A-006 | Sandbox probe shows runtime unavailable. | Needs sandbox runtime or explicit decision to keep blocked. |"
   echo "| A-007 | $a007_current | $a007_gap |"
   echo "| A-009 | $a009_current | $a009_gap |"

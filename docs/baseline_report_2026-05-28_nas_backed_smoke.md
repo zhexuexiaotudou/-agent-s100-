@@ -31,7 +31,7 @@ Date: 2026-05-28
 | ROS2 状态查询 | verified | 可读取 node/topic/service 状态。 |
 | ROS bag 采集 | doing | NAS-backed start/status/stop self-test 已通过；长时间命名采集策略未定。 |
 | 稳定性采样 | doing | systemd timer 已切到 NAS 输出；当前 2 个 snapshot，仍需 168 小时样本。 |
-| 工具白名单 | doing | narrow plugin/runner 可用；broad exec 平台级阻断仍未完全验证。 |
+| 工具白名单 | verified | narrow plugin/runner 可用；2026-05-28 负向复测中 agent 拒绝非白名单 `/usr/bin/touch`，marker 未创建。 |
 | Sandbox | blocked | S100P 当前无 Docker/Podman/runc runtime。 |
 
 ### 关键差异
@@ -65,7 +65,8 @@ Date: 2026-05-28
 
 ```text
 NAS workspace: /mnt/nas/openclaw
-Baseline roll-up: /mnt/nas/openclaw/reports/baseline-status/baseline_status_20260528-184444.md
+Baseline roll-up: /mnt/nas/openclaw/reports/baseline-status/baseline_status_20260528-223903.md
+Stability summary: /mnt/nas/openclaw/reports/stability/stability_summary_20260528-223427.md
 Experiment report: /mnt/nas/openclaw/reports/experiments/experiment_report_20260528-184444.md
 Document index: /mnt/nas/openclaw/reports/document_index_20260528-182111.md
 Document daily summary: /mnt/nas/openclaw/reports/daily-summary/document_daily_summary_20260528-184329.md
