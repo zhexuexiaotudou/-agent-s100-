@@ -9,7 +9,7 @@ smoke baseline，哪些必须等用户或外部平台决策。
 ## Output
 
 ```text
-/mnt/nas/openclaw/reports/baseline-status/baseline_status_20260528-183114.md
+/mnt/nas/openclaw/reports/baseline-status/baseline_status_20260528-183640.md
 ```
 
 脚本修正：
@@ -28,8 +28,8 @@ Stability sampler timer: active
 NAS workspace: mounted
 Allowlisted tool count: 19
 Progress docs: 19
-Probe reports: 13
-Workspace reports: 12
+Probe reports: 16
+Workspace reports: 16
 Dataset cards: 1
 Image caption JSONL indexes: 1
 Stability snapshots: 1
@@ -46,6 +46,8 @@ Log diagnosis: /mnt/nas/openclaw/logs/probes/log_diagnosis_20260528-181546.md
 Image caption index: /mnt/nas/openclaw/reports/image-captions/image_caption_index_20260528-182530.md
 Experiment report: /mnt/nas/openclaw/reports/experiments/experiment_report_20260528-182242.md
 Security audit: /mnt/nas/openclaw/logs/probes/security_audit_20260528-182530.md
+Service policy: /mnt/nas/openclaw/logs/probes/service_policy_20260528-183619.md
+Service hardening plan: /mnt/nas/openclaw/logs/probes/service_hardening_plan_20260528-183619.md
 ROS bag session: /mnt/nas/openclaw/logs/probes/rosbag_session_20260528-182117.md
 Dataset card: /mnt/nas/openclaw/robot_datasets/rosbag_session_20260528-182117/DATASET_CARD.md
 GitHub issue: https://github.com/zhexuexiaotudou/-agent-s100-/issues/2

@@ -40,7 +40,7 @@
 | B-007 | 周报/实验报告生成 | verified | 已从 NAS logs/probes、文档索引、浏览器截图、ROS bag 和 dataset card 生成 Markdown 实验报告 |
 | B-008 | Home Assistant / 设备只读状态 | doing | NAS-backed read-only preflight 已生成，未调用控制 API；真实读取需要 HA URL/token |
 | B-009 | 低风险自动化控制 | doing | NAS-backed policy/audit preflight 已生成，未执行控制动作；需要控制 allowlist 和二次确认策略 |
-| B-010 | 安全审计清单 | doing | NAS-backed security audit 已生成；Gateway loopback-only、NAS mounted、secret scan pass，服务收敛策略未定 |
+| B-010 | 安全审计清单 | doing | NAS-backed security audit、service policy、hardening dry-run 已生成；服务收敛策略未定 |
 
 ## 当前最近事实
 
@@ -859,3 +859,33 @@ Verdict=collecting
 Tracking impact:
 
 - A-010 remains `doing`: 已进入 NAS-backed 自动采样，但离 168 小时验收还早。
+
+## 2026-05-28 NAS Service Policy Update
+
+新增审阅记录：
+
+```text
+docs/baseline_progress_2026-05-28_service_policy_nas.md
+```
+
+NAS-backed 输出：
+
+```text
+/mnt/nas/openclaw/logs/probes/service_policy_20260528-183619.md
+/mnt/nas/openclaw/logs/probes/service_hardening_plan_20260528-183619.md
+/mnt/nas/openclaw/reports/baseline-status/baseline_status_20260528-183640.md
+```
+
+当前策略建议：
+
+```text
+OpenClaw Gateway: keep-loopback
+SSH: keep-trusted-management
+NFS/RPC server stack: disable-if-client-only
+x11vnc: disable-if-unused
+iiod: keep-or-firewall
+```
+
+Tracking impact:
+
+- B-010 remains `doing`: 计划和证据已 NAS-backed，但没有用户确认前不实际停服务或改防火墙。
