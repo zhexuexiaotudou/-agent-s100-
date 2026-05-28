@@ -30,7 +30,7 @@ Date: 2026-05-28
 | 浏览器自动化 | verified | Headless Chromium 打开本地页面并截图到 NAS，PNG 校验通过。 |
 | ROS2 状态查询 | verified | 可读取 node/topic/service 状态。 |
 | ROS bag 采集 | verified | NAS-backed start/status/stop self-test 已通过；命名采集 policy 已生成；一次人工批准的 300 秒 named capture 已完成，`record_exit=0`、`metadata_exists=yes`。 |
-| 稳定性采样 | doing | systemd timer 与 overnight runner 均已写 NAS；当前 12 个 snapshot、5.13h，仍需 168 小时样本。 |
+| 稳定性采样 | doing | systemd timer 与 overnight runner 均已写 NAS；当前 13 个 snapshot、5.29h，仍需 168 小时样本。 |
 | 工具白名单 | verified | narrow plugin/runner 可用；2026-05-28 负向复测中 agent 拒绝非白名单 `/usr/bin/touch`，marker 未创建。 |
 | Sandbox | blocked | S100P 当前无 Docker/Podman/runc runtime。 |
 
@@ -65,8 +65,8 @@ Date: 2026-05-28
 
 ```text
 NAS workspace: /mnt/nas/openclaw
-Baseline roll-up: /mnt/nas/openclaw/reports/baseline-status/baseline_status_20260528-233032.md
-Stability summary: /mnt/nas/openclaw/reports/stability/stability_summary_20260528-232339.md
+Baseline roll-up: /mnt/nas/openclaw/reports/baseline-status/baseline_status_20260528-234036.md
+Stability summary: /mnt/nas/openclaw/reports/stability/stability_summary_20260528-234035.md
 Experiment report: /mnt/nas/openclaw/reports/experiments/experiment_report_20260528-184444.md
 Document index: /mnt/nas/openclaw/reports/document_index_20260528-182111.md
 Document daily summary: /mnt/nas/openclaw/reports/daily-summary/document_daily_summary_20260528-184329.md
