@@ -212,19 +212,19 @@ function Test-PCToS100P {
 function Get-NetplanYaml {
   $dnsLines = ($Config.s100p.dns | ForEach-Object { "          - $_" }) -join "`n"
   $addresses = ($Config.s100p.requiredIPv4 | ForEach-Object { "        - `"$_`"" }) -join "`n"
+  $nasIface = if ($Config.s100p.nasInterface) { $Config.s100p.nasInterface } else { 'eth0' }
+  $nasAddress = if ($Config.s100p.nasInterfaceIPv4) { $Config.s100p.nasInterfaceIPv4 } else { '169.254.8.10/16' }
   $yaml = @'
 network:
   version: 2
   renderer: NetworkManager
   ethernets:
-    eth0:
-      nameservers:
-        addresses:
-          - 10.9.1.2
-          - 8.8.8.8
-          - 8.8.4.4
-      dhcp4: true
-      dhcp6: true
+    __NAS_IFACE__:
+      addresses:
+        - "__NAS_ADDRESS__"
+      dhcp4: false
+      dhcp6: false
+      link-local: []
       macaddress: "__MAC_ETH0__"
     __IFACE__:
       addresses:
@@ -238,6 +238,8 @@ __ADDRESSES__
 __DNS_LINES__
       macaddress: "__MAC_ETH1__"
 '@
+  $yaml = $yaml.Replace('__NAS_IFACE__', $nasIface)
+  $yaml = $yaml.Replace('__NAS_ADDRESS__', $nasAddress)
   $yaml = $yaml.Replace('__MAC_ETH0__', $Config.s100p.netplanMacEth0)
   $yaml = $yaml.Replace('__IFACE__', $Config.s100p.interface)
   $yaml = $yaml.Replace('__ADDRESSES__', $addresses)
@@ -250,6 +252,9 @@ __DNS_LINES__
 
 function Ensure-S100PNetwork {
   $iface = $Config.s100p.interface
+  $nasIface = if ($Config.s100p.nasInterface) { $Config.s100p.nasInterface } else { 'eth0' }
+  $nasAddress = if ($Config.s100p.nasInterfaceIPv4) { $Config.s100p.nasInterfaceIPv4 } else { '169.254.8.10/16' }
+  $nasIp = $Config.nas.ip
   $dns = ($Config.s100p.dns -join ' ')
   $addrCommands = @()
   foreach ($cidr in $Config.s100p.requiredIPv4) {
@@ -260,6 +265,10 @@ function Ensure-S100PNetwork {
   $cmd = @'
 set -e
 __ADDR_COMMANDS__
+sudo -n ip link set __NAS_IFACE__ up
+ip -4 addr show dev __NAS_IFACE__ | grep -q '__NAS_ADDRESS__' || sudo -n ip addr add __NAS_ADDRESS__ dev __NAS_IFACE__
+sudo -n ip route replace 169.254.0.0/16 dev __NAS_IFACE__ src __NAS_SRC__ metric 101
+ip route get __NAS_IP__
 sudo -n ip route replace default via __GATEWAY__ dev __IFACE__ metric __METRIC__
 sudo -n resolvectl dns __IFACE__ __DNS__ || true
 sudo -n resolvectl domain __IFACE__ '~.' || true
@@ -268,6 +277,10 @@ ip -4 addr show dev __IFACE__
 ip route
 '@
   $cmd = $cmd.Replace('__ADDR_COMMANDS__', ($addrCommands -join "`n"))
+  $cmd = $cmd.Replace('__NAS_IFACE__', $nasIface)
+  $cmd = $cmd.Replace('__NAS_ADDRESS__', $nasAddress)
+  $cmd = $cmd.Replace('__NAS_SRC__', ($nasAddress -replace '/.*$', ''))
+  $cmd = $cmd.Replace('__NAS_IP__', $nasIp)
   $cmd = $cmd.Replace('__GATEWAY__', $Config.s100p.defaultGateway)
   $cmd = $cmd.Replace('__IFACE__', $iface)
   $cmd = $cmd.Replace('__METRIC__', [string]$Config.s100p.defaultRouteMetric)
@@ -687,15 +700,4 @@ try {
   $notifyIcon.Visible = $false
   $notifyIcon.Dispose()
 }
-
-
-
-
-
-
-
-
-
-
-
 

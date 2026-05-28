@@ -18,7 +18,7 @@
 | --- | --- | --- | --- |
 | A-001 | S100P 硬件/系统盘点 | verified | 记录 Ubuntu、kernel、架构、磁盘、网络、Node/npm、OpenClaw 状态 |
 | A-002 | RDK Studio 部署 OpenClaw Gateway | verified | Gateway 可启动，Control UI 可访问，重启后恢复 |
-| A-003 | NAS workspace 挂载到 S100P | doing | NFS 运行时挂载和写入已验证；`/etc/fstab` 与重启后自动挂载仍待验证 |
+| A-003 | NAS workspace 挂载到 S100P | verified | NFS v4.1 运行时挂载、`/etc/fstab` 持久化、S100P 重启后 systemd automount 和写入测试均已验证 |
 | A-004 | WebChat/Feishu smoke test | verified | 消息能触发命令并返回状态 |
 | A-005 | 工具执行 allowlist | doing | 只允许执行 `scripts/` 下白名单脚本 |
 | A-006 | Docker / sandbox 验证 | blocked | 非主会话不能写宿主机敏感路径 |
@@ -59,7 +59,7 @@
 | 飞书私聊/群聊入口 | verified | Gateway 日志显示 Feishu WebSocket ready、群消息 received、dispatching to agent、dispatch complete |
 | 飞书群聊策略 | verified | OpenClaw 配置为 `groupPolicy=open`、`requireMention=true`，群里需要 `@小土豆` |
 | 联网搜索 | verified | OpenClaw 搜索源已从 DuckDuckGo 切到 Tavily，agent 联网查询 RDK S100P 返回来源结果 |
-| NAS 挂载 | doing | QNAP `169.254.110.209:/OpenClawWorkspace` 已通过 NFS v4.1 运行时挂载到 `/mnt/nas/openclaw`；开机自动挂载仍待验证 |
+| NAS 挂载 | verified | QNAP `169.254.110.209:/OpenClawWorkspace` 已通过 NFS v4.1 持久化挂载到 `/mnt/nas/openclaw`；S100P 重启后 automount 和写入测试通过 |
 | 开机自恢复链路 | doing | Windows 托盘工具已验证登录后自动检查 `PC -> S100P -> NAS -> OpenClaw/飞书`，并确认 Windows 双 IP、S100P 双网段、NAS NFS 可写、Gateway active 和飞书消息日志；见 `docs/baseline_progress_2026-05-28_startup_self_heal.md` |
 | NAS 挂载预检 | doing | `check_nas_mount_inputs.sh` 已通过板端 smoke test，危险挂载点被拒绝；`mount_openclaw_nas.sh` 已补齐 dry-run/显式 apply 的挂载入口；`cifs-utils` 已安装，`mount.cifs=ok` |
 | 飞书联系人权限 | follow-up | 日志仍提示缺少 `contact:contact.base:readonly`，当前不阻塞消息和搜索，但建议在飞书开放平台补权限并发布 |
@@ -109,7 +109,7 @@ run_end: status=OK, windowsOk=true, sshOk=true, networkOk=true, nasOk=true, open
 
 Tracking impact:
 
-- A-003 remains `doing`: NFS runtime mount and startup self-heal are verified, but S100P reboot-time persistent mount is still not proven.
+- A-003 is now superseded by the 2026-05-28 persistent NFS evidence below.
 - A-004 remains `verified`: Feishu message receive/dispatch is repeatedly observed.
 - A-010 remains `doing`: PC login recovery is verified, but the 7-day stability criterion is still collecting.
 - B-005 remains `doing`: link-check JSONL is now a structured input source for future log diagnosis.
@@ -595,3 +595,32 @@ cifs 模块。A-003 的可用挂载路径是 NFS。
 Tracking status: A-003 已从 `blocked` 调整为 `doing`。暂时不能标成完整
 `verified`，因为 `/etc/fstab`
 尚未写入，也还没有验证重启后自动挂载。
+
+## 2026-05-28 A-003 Persistent NFS Update
+
+新增审阅记录：
+
+```text
+docs/baseline_progress_2026-05-28_a003_persistent_nfs.md
+```
+
+当前已验证状态：
+
+```text
+S100P eth0: 169.254.8.10/16, static netplan, NAS-only route
+S100P eth1: 192.168.127.10/24 and 192.168.137.10/24, default via 192.168.137.1
+NAS: 169.254.110.209
+NFS export: /OpenClawWorkspace
+fstab: 169.254.110.209:/OpenClawWorkspace /mnt/nas/openclaw nfs4 defaults,nofail,x-systemd.automount,_netdev 0 0
+reboot validation: findmnt shows autofs + nfs4, write test passed
+```
+
+关键修复：
+
+```text
+重启后 NAS 路由一度错误走 eth1，因为 netplan 把 eth0 配成 DHCP。
+已改为 eth0 固定 169.254.8.10/16，并同步修复 Windows startup_link_check 工具，
+避免后续自恢复程序再次把 eth0 写回 DHCP。
+```
+
+Tracking status: A-003 is now `verified`.
