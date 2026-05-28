@@ -68,6 +68,18 @@ latest_files() {
   fi
 }
 
+count_rosbag_datasets() {
+  local dir="$1"
+  if [[ -d "$dir" ]]; then
+    (
+      find "$dir" -maxdepth 1 -type d -name 'rosbag_snapshot_*' 2>/dev/null
+      find "$dir" -maxdepth 1 -type d -name 'rosbag_session_*' 2>/dev/null
+    ) | wc -l | tr -d ' '
+  else
+    echo 0
+  fi
+}
+
 extract_field() {
   local file="$1"
   local field="$2"
@@ -75,6 +87,23 @@ extract_field() {
     grep -E "^- ${field}:" "$file" 2>/dev/null | head -1 | sed "s/^- ${field}: //" || true
   fi
 }
+
+probe_count="$(count_files "$probe_dir" '*.md')"
+experiment_count="$(count_files "$reports_dir/experiments" 'experiment_report_*.md')"
+browser_count="$(count_files "$reports_dir/browser-smoke" '*.png')"
+document_index_count="$(count_files "$reports_dir" 'document_index_*.md')"
+rosbag_count="$(count_rosbag_datasets "$datasets_dir")"
+dataset_card_count="$(count_files "$datasets_dir" 'DATASET_CARD.md')"
+
+nas_core_artifacts="no"
+if [[ "$nas_mode" == "verified" ]] \
+  && (( probe_count > 0 )) \
+  && (( browser_count > 0 )) \
+  && (( document_index_count > 0 )) \
+  && (( rosbag_count > 0 )) \
+  && (( dataset_card_count > 0 )); then
+  nas_core_artifacts="yes"
+fi
 
 {
   echo "# OpenClaw S100P Experiment Report"
@@ -88,12 +117,12 @@ extract_field() {
   echo
   echo "| Artifact | Count |"
   echo "| --- | ---: |"
-  echo "| Probe reports | $(count_files "$probe_dir" '*.md') |"
-  echo "| Experiment reports | $(count_files "$reports_dir/experiments" 'experiment_report_*.md') |"
-  echo "| Browser smoke screenshots | $(count_files "$reports_dir/browser-smoke" '*.png') |"
-  echo "| Document indexes | $(count_files "$reports_dir" 'document_index_*.md') |"
-  echo "| ROS bag datasets | $(count_dirs "$datasets_dir" 'rosbag_snapshot_*') |"
-  echo "| Dataset cards | $(count_files "$datasets_dir" 'DATASET_CARD.md') |"
+  echo "| Probe reports | $probe_count |"
+  echo "| Experiment reports | $experiment_count |"
+  echo "| Browser smoke screenshots | $browser_count |"
+  echo "| Document indexes | $document_index_count |"
+  echo "| ROS bag datasets | $rosbag_count |"
+  echo "| Dataset cards | $dataset_card_count |"
   echo
   echo "## Latest Probe Reports"
   echo
@@ -133,7 +162,9 @@ extract_field() {
   echo
   echo "## Current Blockers"
   echo
-  if [[ "$nas_mode" == "verified" ]]; then
+  if [[ "$nas_core_artifacts" == "yes" ]]; then
+    echo "- NAS-backed core report artifacts are present: logs/probes, document index, browser screenshot, ROS bag session, and dataset card."
+  elif [[ "$nas_mode" == "verified" ]]; then
     echo "- NAS-backed report generation is verified; remaining acceptance needs richer NAS artifacts from B-002, A-007, A-009, and B-004."
   else
     echo "- NAS-backed acceptance is pending until /mnt/nas/openclaw is mounted and this probe is rerun with OPENCLAW_WORKSPACE_DIR=/mnt/nas/openclaw."
@@ -143,7 +174,9 @@ extract_field() {
   echo
   echo "## Suggested Next Actions"
   echo
-  if [[ "$nas_mode" == "verified" ]]; then
+  if [[ "$nas_core_artifacts" == "yes" ]]; then
+    echo "1. Replace smoke artifacts with real weekly operating data, then rerun this report as the weekly baseline summary."
+  elif [[ "$nas_mode" == "verified" ]]; then
     echo "1. Populate the NAS workspace with document indexes, browser screenshots, ROS bag sessions, and dataset cards, then rerun this report."
   else
     echo "1. Mount TS-264C workspace and rerun B-002/B-005/B-007/A-007/A-009 against NAS paths."

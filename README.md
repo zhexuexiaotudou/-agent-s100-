@@ -338,6 +338,7 @@ New OpenClaw + NAS baseline artifacts:
 - [docs/baseline_progress_2026-05-28_startup_self_heal.md](docs/baseline_progress_2026-05-28_startup_self_heal.md): startup self-heal evidence for A-003/A-004/A-010 and B-005/B-010.
 - [docs/baseline_progress_2026-05-28_a003_persistent_nfs.md](docs/baseline_progress_2026-05-28_a003_persistent_nfs.md): A-003 reboot-verified persistent NFS automount evidence.
 - [docs/baseline_progress_2026-05-28_nas_backed_reports.md](docs/baseline_progress_2026-05-28_nas_backed_reports.md): NAS-backed B-005 log diagnosis, B-007 experiment report, and A-010 stability collection evidence.
+- [docs/baseline_progress_2026-05-28_nas_core_artifacts.md](docs/baseline_progress_2026-05-28_nas_core_artifacts.md): NAS-backed document index, browser screenshot, ROS bag session, dataset card, and experiment report evidence.
 - [scripts/probes/image_caption_probe.sh](scripts/probes/image_caption_probe.sh): writes deterministic image metadata captions and JSONL search records.
 - [scripts/probes/home_assistant_status_probe.sh](scripts/probes/home_assistant_status_probe.sh): writes a read-only Home Assistant status preflight report.
 - [scripts/probes/control_action_policy_probe.sh](scripts/probes/control_action_policy_probe.sh): writes a read-only low-risk control policy and audit preflight report.

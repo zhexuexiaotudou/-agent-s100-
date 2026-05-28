@@ -22,7 +22,7 @@
 | A-004 | WebChat/Feishu smoke test | verified | 消息能触发命令并返回状态 |
 | A-005 | 工具执行 allowlist | doing | 只允许执行 `scripts/` 下白名单脚本 |
 | A-006 | Docker / sandbox 验证 | blocked | 非主会话不能写宿主机敏感路径 |
-| A-007 | Browser automation smoke test | doing | 能打开测试网页、截图、保存到 NAS |
+| A-007 | Browser automation smoke test | verified | Headless Chromium 能打开测试网页、截图并保存到 NAS，PNG 校验通过 |
 | A-008 | ROS2 status 工具 | verified | OpenClaw 能查询 ROS2 node/topic/service |
 | A-009 | ROS bag 采集工具 | doing | 聊天命令能开始/停止采集，并写入 NAS；本地 start/status/stop self-test 已通过 runner 和 OpenClaw 插件验证 |
 | A-010 | 7x24 稳定性测试 | doing | 连续运行 7 天，记录重启、内存、磁盘、日志；NAS-backed snapshot/summary 已开始采集，当前 verdict 为 `collecting` |
@@ -34,10 +34,10 @@
 | B-001 | NAS 资料库目录规范 | verified | 定义 documents/photos/videos/robot_datasets/logs/reports |
 | B-002 | 文档索引和摘要 | doing | 对 NAS 文档生成索引和每日摘要 |
 | B-003 | 图片 caption baseline | todo | 对图片生成 caption，支持文本搜索 |
-| B-004 | 机器人数据集 card | doing | 每次采集自动生成 dataset card |
+| B-004 | 机器人数据集 card | verified | NAS-backed ROS bag session 已自动生成 `DATASET_CARD.md` |
 | B-005 | 日志分析助手 | verified | 已从 NAS 日志目录读取 Windows link-check JSONL，输出失败摘要、关键错误和建议命令 |
 | B-006 | GitHub/Codex workflow | verified | issue -> branch -> PR -> Codex review 链路已走通；远端 issue `#2`、branch `baseline/s100p-nas-baselines`、draft PR `#3` 和 Codex review `4367946668` 已验证 |
-| B-007 | 周报/实验报告生成 | doing | 已在 NAS workspace 生成 Markdown 报告；完整周报验收仍需补齐文档索引、浏览器截图、ROS bag 和 dataset card |
+| B-007 | 周报/实验报告生成 | verified | 已从 NAS logs/probes、文档索引、浏览器截图、ROS bag 和 dataset card 生成 Markdown 实验报告 |
 | B-008 | Home Assistant / 设备只读状态 | doing | 只查询状态，不做控制；本地 read-only preflight 已通过 runner 和 OpenClaw 插件验证，真实读取需要 HA URL/token |
 | B-009 | 低风险自动化控制 | doing | 白名单 + 二次确认 + 审计日志；本地 policy/audit preflight 已通过 runner 和 OpenClaw 插件验证，尚未开放实际执行 |
 | B-010 | 安全审计清单 | doing | 检查 token、NAS 权限、Gateway 暴露、sandbox；本地 workspace fallback 已通过 runner 和 OpenClaw 插件验证 |
@@ -664,3 +664,52 @@ Tracking impact:
 - B-005 is now `verified`: NAS 日志目录输入、失败摘要、关键错误和建议命令均已跑通。
 - B-007 remains `doing`: NAS-backed report 生成链路已跑通，但还需要填充 B-002/A-007/A-009/B-004 产物。
 - A-010 remains `doing`: NAS-backed 采样与 summary 已开始，7x24 样本仍在 collecting。
+
+## 2026-05-28 NAS Core Artifacts Update
+
+新增审阅记录：
+
+```text
+docs/baseline_progress_2026-05-28_nas_core_artifacts.md
+```
+
+NAS-backed core artifact 复测结果：
+
+```text
+B-002 document index:
+  /mnt/nas/openclaw/reports/document_index_20260528-182111.md
+  indexed_files=1
+
+A-007 browser smoke:
+  /mnt/nas/openclaw/reports/browser-smoke/browser_smoke_20260528-182111.md
+  /mnt/nas/openclaw/reports/browser-smoke/browser_smoke_20260528-182111.png
+  visible_marker=yes
+  screenshot_status=captured
+  png_magic=89504e470d0a1a0a
+  verdict=ok
+
+A-009/B-004 ROS bag session:
+  /mnt/nas/openclaw/logs/probes/rosbag_session_20260528-182117.md
+  /mnt/nas/openclaw/robot_datasets/rosbag_session_20260528-182117/DATASET_CARD.md
+  start_status=started
+  status_after_start=running
+  stop_status=sent_sigint
+  metadata_exists=yes
+  verdict=ok
+
+B-007 experiment report:
+  /mnt/nas/openclaw/reports/experiments/experiment_report_20260528-182242.md
+  Probe reports=3
+  Browser smoke screenshots=1
+  Document indexes=1
+  ROS bag datasets=1
+  Dataset cards=1
+```
+
+Tracking impact:
+
+- A-007 is now `verified`: 浏览器自动化截图已经保存到 NAS。
+- B-004 is now `verified`: NAS-backed ROS bag session 自动生成 dataset card。
+- B-007 is now `verified`: NAS-backed Markdown 实验报告已经汇总核心产物。
+- B-002 remains `doing`: 文档索引已跑通，但每日摘要未做。
+- A-009 remains `doing`: start/status/stop self-test 已写入 NAS，但长时间命名采集策略未定。
