@@ -11,6 +11,7 @@ baseline tracks while Codex or the PC can be left unattended.
 scripts/overnight_baseline_runner.sh
 scripts/start_overnight_baseline_runner.sh
 scripts/check_overnight_baseline_runner.sh
+scripts/summarize_overnight_baseline_runner.sh
 ```
 
 Default behavior:
@@ -30,6 +31,7 @@ The first iteration and every fourth iteration also run:
 
 - `openclaw_status_probe`
 - `security_audit_probe`
+- `service_convergence_decision_probe`
 
 The runner does not install packages, change services, change firewall rules, or
 delete data.
@@ -72,15 +74,31 @@ It summarizes whether the process is still running, how many iterations are
 visible in JSONL, when the next iteration is expected, latest events by action,
 and whether any failed events have been recorded.
 
+The summary helper writes a higher-level interim or final acceptance summary
+under:
+
+```text
+/mnt/nas/openclaw/reports/baseline-status/overnight_baseline_YYYYmmdd-HHMMSS_summary.md
+```
+
+It records the latest stability summary, baseline roll-up, security audit,
+B-010 service convergence decision, event counts, failure counts, and whether
+the run is still `collecting` or has finished without failed events.
+
 Current status-check evidence:
 
 ```text
 status_report: /mnt/nas/openclaw/reports/baseline-status/overnight_baseline_20260528-232330_status.md
+summary_report: /mnt/nas/openclaw/reports/baseline-status/overnight_baseline_20260528-232330_summary.md
 pid: 72079
 process_status: running
-completed_iterations_observed: 1
-event_count: 8
+completed_iterations_observed: 2
+event_count: 13
 failed_event_count: 0
+summary_verdict: collecting
+latest_stability_summary: /mnt/nas/openclaw/reports/stability/stability_summary_20260528-235359.md
+latest_baseline_status: /mnt/nas/openclaw/reports/baseline-status/baseline_status_20260528-235400.md
+latest_service_convergence_decision: /mnt/nas/openclaw/reports/security/service_convergence_decision_20260528-235327.md
 last_event_action: iteration_end
 last_event_status: ok
 schedule_status: waiting_for_next_interval

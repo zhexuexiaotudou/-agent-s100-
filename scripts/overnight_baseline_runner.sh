@@ -53,7 +53,7 @@ fi
 
 started_stamp="$(date +%Y%m%d-%H%M%S)"
 out_dir="$nas_root/logs/overnight"
-mkdir -p "$out_dir" "$nas_root/logs/probes" "$nas_root/reports/stability" "$nas_root/reports/baseline-status"
+mkdir -p "$out_dir" "$nas_root/logs/probes" "$nas_root/reports/stability" "$nas_root/reports/baseline-status" "$nas_root/reports/security"
 jsonl="$out_dir/overnight_baseline_$started_stamp.jsonl"
 report="$out_dir/overnight_baseline_$started_stamp.md"
 pid_file="$out_dir/overnight_baseline_$started_stamp.pid"
@@ -127,6 +127,7 @@ while (( $(date +%s) < end_epoch )); do
   if (( iteration == 1 || iteration % 4 == 0 )); then
     run_tool "openclaw_status" openclaw_status_probe "$nas_root/logs/probes" >/dev/null || true
     run_tool "security_audit" security_audit_probe "$nas_root/logs/probes" >/dev/null || true
+    run_tool "service_convergence_decision" service_convergence_decision_probe "$nas_root/logs/probes" "$nas_root/reports/security" >/dev/null || true
   fi
 
   log_event "info" "iteration_end" "ok" "iteration=$iteration"
@@ -139,6 +140,7 @@ done
 
 latest_stability="$(find "$nas_root/reports/stability" -type f -name 'stability_summary_*.md' -printf '%T@ %p\n' 2>/dev/null | sort -nr | awk 'NR==1 {$1=""; sub(/^ /, ""); print}')"
 latest_baseline="$(find "$nas_root/reports/baseline-status" -type f -name 'baseline_status_*.md' -printf '%T@ %p\n' 2>/dev/null | sort -nr | awk 'NR==1 {$1=""; sub(/^ /, ""); print}')"
+latest_convergence="$(find "$nas_root/reports/security" -type f -name 'service_convergence_decision_*.md' -printf '%T@ %p\n' 2>/dev/null | sort -nr | awk 'NR==1 {$1=""; sub(/^ /, ""); print}')"
 
 {
   echo
@@ -148,9 +150,10 @@ latest_baseline="$(find "$nas_root/reports/baseline-status" -type f -name 'basel
   echo "- iterations: $iteration"
   echo "- latest_stability_summary: ${latest_stability:-missing}"
   echo "- latest_baseline_status: ${latest_baseline:-missing}"
+  echo "- latest_service_convergence_decision: ${latest_convergence:-missing}"
   echo "- jsonl: $jsonl"
 } >> "$report"
 
-log_event "info" "runner_finish" "ok" "iterations=$iteration latest_stability=${latest_stability:-missing} latest_baseline=${latest_baseline:-missing}"
+log_event "info" "runner_finish" "ok" "iterations=$iteration latest_stability=${latest_stability:-missing} latest_baseline=${latest_baseline:-missing} latest_convergence=${latest_convergence:-missing}"
 
 echo "$report"
