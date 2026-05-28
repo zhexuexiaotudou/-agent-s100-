@@ -33,14 +33,14 @@
 | --- | --- | --- | --- |
 | B-001 | NAS 资料库目录规范 | verified | 定义 documents/photos/videos/robot_datasets/logs/reports |
 | B-002 | 文档索引和摘要 | doing | 对 NAS 文档生成索引和每日摘要 |
-| B-003 | 图片 caption baseline | todo | 对图片生成 caption，支持文本搜索 |
+| B-003 | 图片 caption baseline | doing | NAS-backed metadata caption 和 JSONL index 已跑通；semantic vision caption 仍未做 |
 | B-004 | 机器人数据集 card | verified | NAS-backed ROS bag session 已自动生成 `DATASET_CARD.md` |
 | B-005 | 日志分析助手 | verified | 已从 NAS 日志目录读取 Windows link-check JSONL，输出失败摘要、关键错误和建议命令 |
 | B-006 | GitHub/Codex workflow | verified | issue -> branch -> PR -> Codex review 链路已走通；远端 issue `#2`、branch `baseline/s100p-nas-baselines`、draft PR `#3` 和 Codex review `4367946668` 已验证 |
 | B-007 | 周报/实验报告生成 | verified | 已从 NAS logs/probes、文档索引、浏览器截图、ROS bag 和 dataset card 生成 Markdown 实验报告 |
 | B-008 | Home Assistant / 设备只读状态 | doing | 只查询状态，不做控制；本地 read-only preflight 已通过 runner 和 OpenClaw 插件验证，真实读取需要 HA URL/token |
 | B-009 | 低风险自动化控制 | doing | 白名单 + 二次确认 + 审计日志；本地 policy/audit preflight 已通过 runner 和 OpenClaw 插件验证，尚未开放实际执行 |
-| B-010 | 安全审计清单 | doing | 检查 token、NAS 权限、Gateway 暴露、sandbox；本地 workspace fallback 已通过 runner 和 OpenClaw 插件验证 |
+| B-010 | 安全审计清单 | doing | NAS-backed security audit 已生成；Gateway loopback-only、NAS mounted、secret scan pass，服务收敛策略未定 |
 
 ## 当前最近事实
 
@@ -713,3 +713,35 @@ Tracking impact:
 - B-007 is now `verified`: NAS-backed Markdown 实验报告已经汇总核心产物。
 - B-002 remains `doing`: 文档索引已跑通，但每日摘要未做。
 - A-009 remains `doing`: start/status/stop self-test 已写入 NAS，但长时间命名采集策略未定。
+
+## 2026-05-28 NAS Image Caption And Security Audit Update
+
+新增审阅记录：
+
+```text
+docs/baseline_progress_2026-05-28_image_security_nas.md
+```
+
+NAS-backed 复测结果：
+
+```text
+B-003 image caption:
+  /mnt/nas/openclaw/reports/image-captions/image_caption_index_20260528-182530.md
+  /mnt/nas/openclaw/reports/image-captions/image_caption_index_20260528-182530.jsonl
+  Image records=1
+  dimensions=780x493
+  mode=deterministic metadata captions
+
+B-010 security audit:
+  /mnt/nas/openclaw/logs/probes/security_audit_20260528-182530.md
+  OpenClaw config validation=pass
+  Gateway exposure=pass, loopback only
+  NAS workspace mount=pass, mounted
+  Workspace secret scan=pass
+  Non-loopback listeners=warn, 19
+```
+
+Tracking impact:
+
+- B-003 moves from `todo` to `doing`: metadata caption 和 JSONL index 已可写入 NAS。
+- B-010 remains `doing`: audit 已 NAS-backed，但 NFS/RPC、x11vnc、iiod、SSH 的 keep/disable/firewall 策略未定。
