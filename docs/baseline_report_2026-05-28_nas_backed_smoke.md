@@ -30,7 +30,7 @@ Date: 2026-05-28
 | 浏览器自动化 | verified | Headless Chromium 打开本地页面并截图到 NAS，PNG 校验通过。 |
 | ROS2 状态查询 | verified | 可读取 node/topic/service 状态。 |
 | ROS bag 采集 | doing | NAS-backed start/status/stop self-test 已通过；长时间命名采集策略未定。 |
-| 稳定性采样 | doing | systemd timer 已切到 NAS 输出；当前 2 个 snapshot，仍需 168 小时样本。 |
+| 稳定性采样 | doing | systemd timer 已切到 NAS 输出；当前 10 个 snapshot、4.29h，仍需 168 小时样本。 |
 | 工具白名单 | verified | narrow plugin/runner 可用；2026-05-28 负向复测中 agent 拒绝非白名单 `/usr/bin/touch`，marker 未创建。 |
 | Sandbox | blocked | S100P 当前无 Docker/Podman/runc runtime。 |
 

@@ -25,7 +25,7 @@
 | A-007 | Browser automation smoke test | verified | Headless Chromium 能打开测试网页、截图并保存到 NAS，PNG 校验通过 |
 | A-008 | ROS2 status 工具 | verified | OpenClaw 能查询 ROS2 node/topic/service |
 | A-009 | ROS bag 采集工具 | doing | 聊天命令能开始/停止采集，并写入 NAS；本地 start/status/stop self-test 已通过 runner 和 OpenClaw 插件验证 |
-| A-010 | 7x24 稳定性测试 | doing | systemd timer 已切到 NAS-backed 输出；当前 2 个 snapshot、0.29h、verdict=`collecting` |
+| A-010 | 7x24 稳定性测试 | doing | systemd timer 已切到 NAS-backed 输出；当前 10 个 snapshot、4.29h、verdict=`collecting` |
 
 ## Epic B：AI NAS Homework
 
@@ -60,24 +60,25 @@
 | 飞书群聊策略 | verified | OpenClaw 配置为 `groupPolicy=open`、`requireMention=true`，群里需要 `@小土豆` |
 | 联网搜索 | verified | OpenClaw 搜索源已从 DuckDuckGo 切到 Tavily，agent 联网查询 RDK S100P 返回来源结果 |
 | NAS 挂载 | verified | QNAP `169.254.110.209:/OpenClawWorkspace` 已通过 NFS v4.1 持久化挂载到 `/mnt/nas/openclaw`；S100P 重启后 automount 和写入测试通过 |
-| 开机自恢复链路 | doing | Windows 托盘工具已验证登录后自动检查 `PC -> S100P -> NAS -> OpenClaw/飞书`，并确认 Windows 双 IP、S100P 双网段、NAS NFS 可写、Gateway active 和飞书消息日志；见 `docs/baseline_progress_2026-05-28_startup_self_heal.md` |
-| NAS 挂载预检 | doing | `check_nas_mount_inputs.sh` 已通过板端 smoke test，危险挂载点被拒绝；`mount_openclaw_nas.sh` 已补齐 dry-run/显式 apply 的挂载入口；`cifs-utils` 已安装，`mount.cifs=ok` |
+| 开机自恢复链路 | verified | Windows 托盘工具已验证登录后自动检查 `PC -> S100P -> NAS -> OpenClaw/飞书`，并确认 Windows 双 IP、S100P 双网段、NAS NFS 可写、Gateway active 和飞书消息日志；见 `docs/baseline_progress_2026-05-28_startup_self_heal.md` |
+| NAS 挂载预检 | verified | `check_nas_mount_inputs.sh` 已通过板端 smoke test，危险挂载点被拒绝；`mount_openclaw_nas.sh` 已补齐 dry-run/显式 apply 的挂载入口；NFS v4.1 automount 和写入测试已通过 |
 | 飞书联系人权限 | follow-up | 日志仍提示缺少 `contact:contact.base:readonly`，当前不阻塞消息和搜索，但建议在飞书开放平台补权限并发布 |
 | 工具白名单 | verified | `run_allowlisted_tool.sh` 和 `s100p-allowlisted-tools` 已通过板端验证；2026-05-28 broad exec 负向复测拒绝非白名单 `/usr/bin/touch` |
 | Sandbox 状态探针 | blocked | `sandbox_status_probe` 已通过 runner 和 OpenClaw 插件验证，报告 `runtime_available: no`、`isolation_verdict: blocked`；板端当前无 Docker/Podman/runc |
-| Browser smoke | doing | `browser_smoke_probe` 已通过 runner 和 OpenClaw 插件验证，能打开本地测试页并截图到 `/root/.openclaw/workspace/reports/browser-smoke`；NAS 挂载后需复测 NAS 输出 |
+| Browser smoke | verified | `browser_smoke_probe` 已通过 NAS-backed runner 验证，能打开本地测试页并截图到 `/mnt/nas/openclaw/reports/browser-smoke`，PNG magic 校验通过 |
 | ROS2 状态工具 | verified | `s100p_run_probe` 真实调用 `ros2_status_probe`，报告写入 `/root/.openclaw/workspace/logs/probes`，当前 nodes=0、topics=2 |
-| ROS bag snapshot | doing | `rosbag_snapshot_probe` 已通过 runner 和 OpenClaw 插件验证，能短时记录 `/rosout`、`/parameter_events` 到 `/root/.openclaw/workspace/robot_datasets`；完整 start/stop 和 NAS 输出仍待做 |
-| Dataset card | doing | `rosbag_snapshot_probe` 已能在本地 workspace fallback 下为每次 snapshot 生成 `DATASET_CARD.md`；NAS 挂载后需复测 NAS 目录 |
-| 日志诊断 | doing | `log_diagnose` 已通过板端 smoke test，并通过 OpenClaw 插件写入 `/root/.openclaw/workspace/logs/probes/log_diagnosis_20260527-034730.md`；NAS 挂载后需复测 NAS 路径 |
-| 文档索引 | doing | `index_documents` 已通过板端 smoke test，并通过 OpenClaw 插件写入 `/root/.openclaw/workspace/reports/document_index_20260527-034707.md`；NAS 挂载后需复测 NAS 路径 |
+| ROS bag session | verified | NAS-backed `rosbag_session_probe` 已完成 start/status/stop self-test，并生成 dataset card；长时间命名采集策略仍归 A-009 后续增强 |
+| Dataset card | verified | NAS-backed ROS bag session 已在 `/mnt/nas/openclaw/robot_datasets/.../DATASET_CARD.md` 生成数据集卡片 |
+| 日志诊断 | verified | `log_diagnose` 已从 NAS logs 输出 `/mnt/nas/openclaw/logs/probes/log_diagnosis_20260528-181546.md` |
+| 文档索引 | verified | `index_documents` 和 `document_daily_summary_probe` 已生成 NAS-backed 文档索引与每日摘要 |
 
 ## 下一步推进顺序
 
-1. A-003：拿到 TS-264C 共享信息后，先挂载只限 `/OpenClawWorkspace` 的专用共享到 `/mnt/nas/openclaw`，并验证重启后自动挂载。
-2. A-005：在 NAS workspace 和本仓库 `scripts/` 下建立工具白名单，只允许执行经过审计的脚本。
-3. B-002/B-005：在 NAS 目录可写后，先做文档索引/日志分析，不急着做图片 caption。
-4. A-008/A-009：ROS2 status 和 ROS bag 采集依赖 NAS 落盘，放在 NAS 挂载之后。
+1. A-010：保持 systemd timer 运行到 168 小时，再生成最终稳定性验收摘要。
+2. A-006：决定是否安装 Docker/Podman/runc，或把 sandbox runtime 明确移出第一版 baseline。
+3. A-009：若要进入真实机器人数据采集，补长时间命名采集策略和保留/清理规则。
+4. B-003：决定图片能力第一版是否只保留 metadata caption，还是接语义视觉模型。
+5. B-008/B-009/B-010：等待 Home Assistant token、控制 allowlist 和服务收敛策略，不在无人值守时修改。
 
 ## 2026-05-28 Startup Self-Heal Update
 
