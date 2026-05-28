@@ -345,6 +345,7 @@ New OpenClaw + NAS baseline artifacts:
 - [docs/baseline_progress_2026-05-28_a010_nas_sampler.md](docs/baseline_progress_2026-05-28_a010_nas_sampler.md): A-010 stability sampler moved to NAS-backed output.
 - [docs/baseline_progress_2026-05-28_service_policy_nas.md](docs/baseline_progress_2026-05-28_service_policy_nas.md): NAS-backed service policy and hardening dry-run evidence.
 - [docs/baseline_report_2026-05-28_nas_backed_smoke.md](docs/baseline_report_2026-05-28_nas_backed_smoke.md): current teacher-facing summary for the two baseline questions.
+- [reports/teacher/openclaw_s100p_nas_baseline_20260528.tex](reports/teacher/openclaw_s100p_nas_baseline_20260528.tex) and [reports/teacher/openclaw_s100p_nas_baseline_20260528.pdf](reports/teacher/openclaw_s100p_nas_baseline_20260528.pdf): LaTeX source and compiled teacher-facing PDF report for the PC OpenClaw vs S100P+NAS baseline comparison.
 - [docs/baseline_progress_2026-05-28_document_daily_summary.md](docs/baseline_progress_2026-05-28_document_daily_summary.md): B-002 NAS-backed deterministic document daily summary evidence.
 - [scripts/probes/image_caption_probe.sh](scripts/probes/image_caption_probe.sh): writes deterministic image metadata captions and JSONL search records.
 - [scripts/probes/document_daily_summary_probe.sh](scripts/probes/document_daily_summary_probe.sh): writes deterministic NAS document daily summaries.
