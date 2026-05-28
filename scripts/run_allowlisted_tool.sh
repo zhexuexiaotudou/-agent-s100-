@@ -23,6 +23,7 @@ Usage:
   scripts/run_allowlisted_tool.sh experiment_report_probe [report_dir]
   scripts/run_allowlisted_tool.sh log_diagnose [log_dir] [output_dir]
   scripts/run_allowlisted_tool.sh index_documents [documents_dir] [report_dir]
+  scripts/run_allowlisted_tool.sh document_daily_summary_probe [documents_dir] [report_dir]
   scripts/run_allowlisted_tool.sh baseline_status_probe [workspace_dir] [report_dir]
 
 Only explicitly allowlisted tool IDs can be executed. This script never accepts
@@ -46,6 +47,7 @@ openclaw_status_probe  Read-only OpenClaw/network/NAS status probe
 nas_discovery_probe  Read-only passive NAS/network discovery for A-003
 log_diagnose           Read-only log error summary report
 index_documents        Read-only document index report
+document_daily_summary_probe  Read-only deterministic daily document summary
 ros2_status_probe      Read-only ROS2/TROS node/topic/service status report
 sandbox_status_probe   Read-only Docker/Podman/sandbox capability status report
 security_audit_probe   Read-only OpenClaw/S100P security baseline audit report
@@ -82,6 +84,11 @@ EOF
   index_documents)
     shift
     tool_path="$repo_dir/scripts/probes/index_documents.sh"
+    max_args=2
+    ;;
+  document_daily_summary_probe)
+    shift
+    tool_path="$repo_dir/scripts/probes/document_daily_summary_probe.sh"
     max_args=2
     ;;
   ros2_status_probe)
@@ -406,6 +413,23 @@ if [[ "$tool_id" == "baseline_status_probe" ]]; then
     ""|/root/.openclaw/workspace|/root/.openclaw/workspace/*|/mnt/nas/openclaw|/mnt/nas/openclaw/*) ;;
     *)
       echo "Refusing workspace outside approved baseline directories: ${1:-}" >&2
+      exit 2
+      ;;
+  esac
+  case "${2:-}" in
+    ""|/tmp/*|/mnt/nas/openclaw/reports|/mnt/nas/openclaw/reports/*|/root/.openclaw/workspace/reports|/root/.openclaw/workspace/reports/*) ;;
+    *)
+      echo "Refusing output path outside approved report directories: ${2:-}" >&2
+      exit 2
+      ;;
+  esac
+fi
+
+if [[ "$tool_id" == "document_daily_summary_probe" ]]; then
+  case "${1:-}" in
+    ""|/tmp/*|/mnt/nas/openclaw/documents|/mnt/nas/openclaw/documents/*|/root/.openclaw/workspace/documents|/root/.openclaw/workspace/documents/*) ;;
+    *)
+      echo "Refusing input path outside approved document directories: ${1:-}" >&2
       exit 2
       ;;
   esac

@@ -345,7 +345,9 @@ New OpenClaw + NAS baseline artifacts:
 - [docs/baseline_progress_2026-05-28_a010_nas_sampler.md](docs/baseline_progress_2026-05-28_a010_nas_sampler.md): A-010 stability sampler moved to NAS-backed output.
 - [docs/baseline_progress_2026-05-28_service_policy_nas.md](docs/baseline_progress_2026-05-28_service_policy_nas.md): NAS-backed service policy and hardening dry-run evidence.
 - [docs/baseline_report_2026-05-28_nas_backed_smoke.md](docs/baseline_report_2026-05-28_nas_backed_smoke.md): current teacher-facing summary for the two baseline questions.
+- [docs/baseline_progress_2026-05-28_document_daily_summary.md](docs/baseline_progress_2026-05-28_document_daily_summary.md): B-002 NAS-backed deterministic document daily summary evidence.
 - [scripts/probes/image_caption_probe.sh](scripts/probes/image_caption_probe.sh): writes deterministic image metadata captions and JSONL search records.
+- [scripts/probes/document_daily_summary_probe.sh](scripts/probes/document_daily_summary_probe.sh): writes deterministic NAS document daily summaries.
 - [scripts/probes/home_assistant_status_probe.sh](scripts/probes/home_assistant_status_probe.sh): writes a read-only Home Assistant status preflight report.
 - [scripts/probes/control_action_policy_probe.sh](scripts/probes/control_action_policy_probe.sh): writes a read-only low-risk control policy and audit preflight report.
 - [scripts/probes/baseline_status_probe.sh](scripts/probes/baseline_status_probe.sh): writes a read-only roll-up status report for both baseline tracks.
@@ -363,6 +365,7 @@ scripts/run_allowlisted_tool.sh service_hardening_plan_probe
 scripts/run_allowlisted_tool.sh stability_snapshot_probe
 scripts/run_allowlisted_tool.sh stability_summary_probe
 scripts/run_allowlisted_tool.sh image_caption_probe
+scripts/run_allowlisted_tool.sh document_daily_summary_probe
 scripts/run_allowlisted_tool.sh home_assistant_status_probe
 scripts/run_allowlisted_tool.sh control_action_policy_probe
 scripts/run_allowlisted_tool.sh baseline_status_probe

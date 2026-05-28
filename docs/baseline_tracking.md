@@ -32,7 +32,7 @@
 | ID | 标题 | 状态 | DoD |
 | --- | --- | --- | --- |
 | B-001 | NAS 资料库目录规范 | verified | 定义 documents/photos/videos/robot_datasets/logs/reports |
-| B-002 | 文档索引和摘要 | doing | 对 NAS 文档生成索引和每日摘要 |
+| B-002 | 文档索引和摘要 | verified | NAS-backed 文档索引和 deterministic 每日摘要均已生成 |
 | B-003 | 图片 caption baseline | doing | NAS-backed metadata caption 和 JSONL index 已跑通；semantic vision caption 仍未做 |
 | B-004 | 机器人数据集 card | verified | NAS-backed ROS bag session 已自动生成 `DATASET_CARD.md` |
 | B-005 | 日志分析助手 | verified | 已从 NAS 日志目录读取 Windows link-check JSONL，输出失败摘要、关键错误和建议命令 |
@@ -889,3 +889,50 @@ iiod: keep-or-firewall
 Tracking impact:
 
 - B-010 remains `doing`: 计划和证据已 NAS-backed，但没有用户确认前不实际停服务或改防火墙。
+
+## 2026-05-28 B-002 Document Daily Summary Update
+
+新增审阅记录：
+
+```text
+docs/baseline_progress_2026-05-28_document_daily_summary.md
+```
+
+新增探针：
+
+```text
+scripts/probes/document_daily_summary_probe.sh
+tool_id=document_daily_summary_probe
+```
+
+NAS-backed 输出：
+
+```text
+/mnt/nas/openclaw/reports/daily-summary/document_daily_summary_20260528-184329.md
+/mnt/nas/openclaw/reports/daily-summary/document_daily_summary_20260528-184329.json
+```
+
+验证结果：
+
+```text
+Total documents=1
+Modified last 24h=1
+Top directory=baseline_reports
+File type=.md
+Refusing input path outside approved document directories: /root
+Tool is not allowlisted: ../../etc/passwd
+```
+
+更新后的汇总：
+
+```text
+/mnt/nas/openclaw/reports/experiments/experiment_report_20260528-184444.md
+/mnt/nas/openclaw/reports/baseline-status/baseline_status_20260528-184444.md
+Allowlisted tool count=20
+Document daily summaries=1
+```
+
+Tracking impact:
+
+- B-002 is now `verified` for deterministic metadata summary.
+- 如果后续要语义/LLM 摘要，可作为增强项，不阻塞当前 baseline。

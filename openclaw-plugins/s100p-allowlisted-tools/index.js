@@ -10,6 +10,7 @@ const logsDir = "/root/.openclaw/workspace/logs";
 const documentsDir = "/root/.openclaw/workspace/documents";
 const photosDir = "/root/.openclaw/workspace/photos";
 const reportsDir = "/root/.openclaw/workspace/reports";
+const dailySummaryReportsDir = "/root/.openclaw/workspace/reports/daily-summary";
 const stabilityReportsDir = "/root/.openclaw/workspace/reports/stability";
 const imageCaptionReportsDir = "/root/.openclaw/workspace/reports/image-captions";
 const browserReportsDir = "/root/.openclaw/workspace/reports/browser-smoke";
@@ -33,7 +34,8 @@ const allowedTools = new Map([
   ["experiment_report_probe", [`${reportsDir}/experiments`]],
   ["baseline_status_probe", ["/root/.openclaw/workspace", `${reportsDir}/baseline-status`]],
   ["log_diagnose", [logsDir, probeOutDir]],
-  ["index_documents", [documentsDir, reportsDir]]
+  ["index_documents", [documentsDir, reportsDir]],
+  ["document_daily_summary_probe", [documentsDir, dailySummaryReportsDir]]
 ]);
 
 function jsonResult(payload) {
@@ -51,7 +53,7 @@ function jsonResult(payload) {
 function readToolId(rawParams) {
   const value = rawParams?.tool_id;
   if (typeof value !== "string" || !allowedTools.has(value)) {
-    throw new Error("tool_id must be one of: openclaw_status_probe, nas_discovery_probe, ros2_status_probe, sandbox_status_probe, security_audit_probe, service_policy_probe, service_hardening_plan_probe, stability_snapshot_probe, stability_summary_probe, image_caption_probe, home_assistant_status_probe, control_action_policy_probe, browser_smoke_probe, rosbag_snapshot_probe, rosbag_session_probe, experiment_report_probe, baseline_status_probe, log_diagnose, index_documents");
+    throw new Error("tool_id must be one of: openclaw_status_probe, nas_discovery_probe, ros2_status_probe, sandbox_status_probe, security_audit_probe, service_policy_probe, service_hardening_plan_probe, stability_snapshot_probe, stability_summary_probe, image_caption_probe, home_assistant_status_probe, control_action_policy_probe, browser_smoke_probe, rosbag_snapshot_probe, rosbag_session_probe, experiment_report_probe, baseline_status_probe, log_diagnose, index_documents, document_daily_summary_probe");
   }
   return value;
 }
@@ -88,7 +90,7 @@ const S100pRunProbeSchema = {
   properties: {
     tool_id: {
       type: "string",
-      enum: ["openclaw_status_probe", "nas_discovery_probe", "ros2_status_probe", "sandbox_status_probe", "security_audit_probe", "service_policy_probe", "service_hardening_plan_probe", "stability_snapshot_probe", "stability_summary_probe", "image_caption_probe", "home_assistant_status_probe", "control_action_policy_probe", "browser_smoke_probe", "rosbag_snapshot_probe", "rosbag_session_probe", "experiment_report_probe", "baseline_status_probe", "log_diagnose", "index_documents"],
+      enum: ["openclaw_status_probe", "nas_discovery_probe", "ros2_status_probe", "sandbox_status_probe", "security_audit_probe", "service_policy_probe", "service_hardening_plan_probe", "stability_snapshot_probe", "stability_summary_probe", "image_caption_probe", "home_assistant_status_probe", "control_action_policy_probe", "browser_smoke_probe", "rosbag_snapshot_probe", "rosbag_session_probe", "experiment_report_probe", "baseline_status_probe", "log_diagnose", "index_documents", "document_daily_summary_probe"],
       description: "Allowlisted S100P probe ID to run."
     }
   },

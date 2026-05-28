@@ -93,9 +93,11 @@ probe_report_count="$(count_files "$workspace/logs/probes/*")"
 report_count="$(count_files "$workspace/reports/*/*")"
 dataset_card_count="$(count_files "$workspace/robot_datasets/*/DATASET_CARD.md")"
 image_jsonl_count="$(count_files "$workspace/reports/image-captions/*.jsonl")"
+document_summary_count="$(count_files "$workspace/reports/daily-summary/document_daily_summary_*.md")"
 stability_snapshot_count="$(count_files "$workspace/logs/probes/stability_snapshot_*.md")"
 
 latest_document_index="$(latest_file "$workspace/reports/document_index_*.md")"
+latest_document_summary="$(latest_file "$workspace/reports/daily-summary/document_daily_summary_*.md")"
 latest_browser_smoke="$(latest_file "$workspace/reports/browser-smoke/browser_smoke_*.md")"
 latest_log_diagnosis="$(latest_file "$workspace/logs/probes/log_diagnosis_*.md")"
 latest_stability="$(latest_file "$workspace/logs/probes/stability_snapshot_*.md")"
@@ -179,7 +181,10 @@ fi
 
 b002_current="No NAS-backed document index found."
 b002_gap="Run document index and add daily summary."
-if [[ -n "$latest_document_index" ]]; then
+if [[ -n "$latest_document_index" && -n "$latest_document_summary" ]]; then
+  b002_current="NAS-backed document index and daily summary exist: $latest_document_index; $latest_document_summary."
+  b002_gap="Verified for deterministic metadata summary; replace with semantic/LLM summary later if required."
+elif [[ -n "$latest_document_index" ]]; then
   b002_current="NAS-backed document index exists: $latest_document_index."
   b002_gap="Daily summary remains pending."
 fi
@@ -240,6 +245,7 @@ fi
   echo "| Workspace reports | $report_count |"
   echo "| Dataset cards | $dataset_card_count |"
   echo "| Image caption JSONL indexes | $image_jsonl_count |"
+  echo "| Document daily summaries | $document_summary_count |"
   echo "| Stability snapshots | $stability_snapshot_count |"
   echo
   echo "## Allowlisted Tools"
@@ -259,6 +265,7 @@ fi
   echo "| Stability snapshot | ${latest_stability:-missing} |"
   echo "| Stability summary | ${latest_stability_summary:-missing} |"
   echo "| Document index | ${latest_document_index:-missing} |"
+  echo "| Document daily summary | ${latest_document_summary:-missing} |"
   echo "| Browser smoke | ${latest_browser_smoke:-missing} |"
   echo "| Log diagnosis | ${latest_log_diagnosis:-missing} |"
   echo "| Image caption index | ${latest_image_caption:-missing} |"

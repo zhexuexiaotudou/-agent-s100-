@@ -58,6 +58,22 @@
       "description": "Create a Markdown index for text-like documents with size, mtime, hash, and preview."
     },
     {
+      "id": "document_daily_summary_probe",
+      "script": "scripts/probes/document_daily_summary_probe.sh",
+      "mode": "readonly",
+      "approvedInputPrefixes": [
+        "/tmp/",
+        "/mnt/nas/openclaw/documents/",
+        "/root/.openclaw/workspace/documents/"
+      ],
+      "approvedOutputPrefixes": [
+        "/tmp/",
+        "/mnt/nas/openclaw/reports/",
+        "/root/.openclaw/workspace/reports/"
+      ],
+      "description": "Generate a deterministic daily Markdown and JSON summary for text-like documents without calling external models."
+    },
+    {
       "id": "ros2_status_probe",
       "script": "scripts/probes/ros2_status_probe.sh",
       "mode": "readonly",

@@ -51,7 +51,7 @@ Date: 2026-05-28
 | AI NAS 常见能力 | S100P + NAS 当前实现 | 状态 |
 | --- | --- | --- |
 | 统一 workspace | TS-264C NFS `/OpenClawWorkspace` 挂到 S100P | verified |
-| 文档索引 | 对 NAS 文档生成 Markdown 索引、hash、preview | doing |
+| 文档索引/每日摘要 | 对 NAS 文档生成 Markdown 索引、hash、preview 和 deterministic daily summary | verified |
 | 图片 caption / 搜索 | 对 NAS 图片生成 metadata caption 和 JSONL index | doing |
 | 日志诊断 | 从 NAS logs 输出错误摘要、关键匹配、建议命令 | verified |
 | 机器人数据集管理 | ROS bag session 写 NAS，并生成 `DATASET_CARD.md` | verified |
@@ -65,9 +65,10 @@ Date: 2026-05-28
 
 ```text
 NAS workspace: /mnt/nas/openclaw
-Baseline roll-up: /mnt/nas/openclaw/reports/baseline-status/baseline_status_20260528-183640.md
-Experiment report: /mnt/nas/openclaw/reports/experiments/experiment_report_20260528-182242.md
+Baseline roll-up: /mnt/nas/openclaw/reports/baseline-status/baseline_status_20260528-184444.md
+Experiment report: /mnt/nas/openclaw/reports/experiments/experiment_report_20260528-184444.md
 Document index: /mnt/nas/openclaw/reports/document_index_20260528-182111.md
+Document daily summary: /mnt/nas/openclaw/reports/daily-summary/document_daily_summary_20260528-184329.md
 Browser screenshot: /mnt/nas/openclaw/reports/browser-smoke/browser_smoke_20260528-182111.png
 ROS bag dataset: /mnt/nas/openclaw/robot_datasets/rosbag_session_20260528-182117/
 Dataset card: /mnt/nas/openclaw/robot_datasets/rosbag_session_20260528-182117/DATASET_CARD.md

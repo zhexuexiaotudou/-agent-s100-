@@ -23,6 +23,7 @@ scripts/robot/
 | `scripts/probes/openclaw_status_probe.sh` | 只读 | `/tmp/openclaw-probes`，NAS 挂载后优先 `/mnt/nas/openclaw/logs/probes` | 采集 OpenClaw、网络、Feishu/Tavily 配置摘要和 NAS 挂载状态 |
 | `scripts/probes/log_diagnose.sh` | 只读 | `/tmp/openclaw-probes`，NAS 挂载后优先 `/mnt/nas/openclaw/logs/probes` | 从日志目录生成错误摘要、关键匹配和建议检查命令 |
 | `scripts/probes/index_documents.sh` | 只读 | `/tmp/openclaw-probes`，NAS 挂载后优先 `/mnt/nas/openclaw/reports` | 对文本类文档生成路径、大小、修改时间、SHA256 和 preview 索引 |
+| `scripts/probes/document_daily_summary_probe.sh` | 只读 | `/mnt/nas/openclaw/reports/daily-summary` | 对 NAS 文档生成每日 metadata summary 和 JSON 摘要 |
 | `scripts/probes/sandbox_status_probe.sh` | 只读 | `/tmp/openclaw-probes`，NAS 挂载后优先 `/mnt/nas/openclaw/logs/probes` | 采集 Docker/Podman/runc、服务、包、namespace 和 cgroup 状态 |
 | `scripts/probes/image_caption_probe.sh` | 只读 | `/root/.openclaw/workspace/reports/image-captions`，NAS 挂载后优先 `/mnt/nas/openclaw/reports` | 对图片生成 metadata caption、尺寸、hash 和 JSONL 索引 |
 | `scripts/probes/browser_smoke_probe.sh` | 只读 | `/root/.openclaw/workspace/reports/browser-smoke`，NAS 挂载后优先 `/mnt/nas/openclaw/reports` | 打开本地测试页、截图并生成浏览器 smoke 报告 |
@@ -43,6 +44,7 @@ scripts/run_allowlisted_tool.sh openclaw_status_probe
 scripts/run_allowlisted_tool.sh openclaw_status_probe /tmp/openclaw-probe-test
 scripts/run_allowlisted_tool.sh log_diagnose /tmp/openclaw
 scripts/run_allowlisted_tool.sh index_documents /mnt/nas/openclaw/documents /mnt/nas/openclaw/reports
+scripts/run_allowlisted_tool.sh document_daily_summary_probe /mnt/nas/openclaw/documents /mnt/nas/openclaw/reports/daily-summary
 scripts/run_allowlisted_tool.sh sandbox_status_probe /root/.openclaw/workspace/logs/probes
 scripts/run_allowlisted_tool.sh image_caption_probe /root/.openclaw/workspace/photos /root/.openclaw/workspace/reports/image-captions
 scripts/run_allowlisted_tool.sh baseline_status_probe /root/.openclaw/workspace /root/.openclaw/workspace/reports/baseline-status

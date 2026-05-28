@@ -92,6 +92,7 @@ probe_count="$(count_files "$probe_dir" '*.md')"
 experiment_count="$(count_files "$reports_dir/experiments" 'experiment_report_*.md')"
 browser_count="$(count_files "$reports_dir/browser-smoke" '*.png')"
 document_index_count="$(count_files "$reports_dir" 'document_index_*.md')"
+document_summary_count="$(count_files "$reports_dir/daily-summary" 'document_daily_summary_*.md')"
 rosbag_count="$(count_rosbag_datasets "$datasets_dir")"
 dataset_card_count="$(count_files "$datasets_dir" 'DATASET_CARD.md')"
 
@@ -100,6 +101,7 @@ if [[ "$nas_mode" == "verified" ]] \
   && (( probe_count > 0 )) \
   && (( browser_count > 0 )) \
   && (( document_index_count > 0 )) \
+  && (( document_summary_count > 0 )) \
   && (( rosbag_count > 0 )) \
   && (( dataset_card_count > 0 )); then
   nas_core_artifacts="yes"
@@ -121,6 +123,7 @@ fi
   echo "| Experiment reports | $experiment_count |"
   echo "| Browser smoke screenshots | $browser_count |"
   echo "| Document indexes | $document_index_count |"
+  echo "| Document daily summaries | $document_summary_count |"
   echo "| ROS bag datasets | $rosbag_count |"
   echo "| Dataset cards | $dataset_card_count |"
   echo
@@ -160,10 +163,19 @@ fi
     echo "- \`$file\`${indexed:+ indexed_files=$indexed}"
   done
   echo
+  echo "## Latest Document Daily Summaries"
+  echo
+  latest_files "$reports_dir/daily-summary" 'document_daily_summary_*.md' 5 | while read -r file; do
+    [[ -n "$file" ]] || continue
+    total="$(extract_field "$file" "Total documents")"
+    modified="$(extract_field "$file" "Modified last 24h")"
+    echo "- \`$file\`${total:+ total_documents=$total}${modified:+ modified_last_24h=$modified}"
+  done
+  echo
   echo "## Current Blockers"
   echo
   if [[ "$nas_core_artifacts" == "yes" ]]; then
-    echo "- NAS-backed core report artifacts are present: logs/probes, document index, browser screenshot, ROS bag session, and dataset card."
+    echo "- NAS-backed core report artifacts are present: logs/probes, document index, document daily summary, browser screenshot, ROS bag session, and dataset card."
   elif [[ "$nas_mode" == "verified" ]]; then
     echo "- NAS-backed report generation is verified; remaining acceptance needs richer NAS artifacts from B-002, A-007, A-009, and B-004."
   else

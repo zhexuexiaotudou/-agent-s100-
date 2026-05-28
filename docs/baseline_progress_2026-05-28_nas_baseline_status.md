@@ -9,7 +9,7 @@ smoke baseline，哪些必须等用户或外部平台决策。
 ## Output
 
 ```text
-/mnt/nas/openclaw/reports/baseline-status/baseline_status_20260528-183640.md
+/mnt/nas/openclaw/reports/baseline-status/baseline_status_20260528-184444.md
 ```
 
 脚本修正：
@@ -29,9 +29,10 @@ NAS workspace: mounted
 Allowlisted tool count: 19
 Progress docs: 19
 Probe reports: 16
-Workspace reports: 16
+Workspace reports: 20
 Dataset cards: 1
 Image caption JSONL indexes: 1
+Document daily summaries: 1
 Stability snapshots: 1
 ```
 
@@ -41,10 +42,11 @@ Stability snapshots: 1
 Stability snapshot: /mnt/nas/openclaw/logs/probes/stability_snapshot_20260528-181546.md
 Stability summary: /mnt/nas/openclaw/reports/stability/stability_summary_20260528-181555.md
 Document index: /mnt/nas/openclaw/reports/document_index_20260528-182111.md
+Document daily summary: /mnt/nas/openclaw/reports/daily-summary/document_daily_summary_20260528-184329.md
 Browser smoke: /mnt/nas/openclaw/reports/browser-smoke/browser_smoke_20260528-182111.md
 Log diagnosis: /mnt/nas/openclaw/logs/probes/log_diagnosis_20260528-181546.md
 Image caption index: /mnt/nas/openclaw/reports/image-captions/image_caption_index_20260528-182530.md
-Experiment report: /mnt/nas/openclaw/reports/experiments/experiment_report_20260528-182242.md
+Experiment report: /mnt/nas/openclaw/reports/experiments/experiment_report_20260528-184444.md
 Security audit: /mnt/nas/openclaw/logs/probes/security_audit_20260528-182530.md
 Service policy: /mnt/nas/openclaw/logs/probes/service_policy_20260528-183619.md
 Service hardening plan: /mnt/nas/openclaw/logs/probes/service_hardening_plan_20260528-183619.md
@@ -65,6 +67,7 @@ Control action policy: /mnt/nas/openclaw/logs/probes/control_action_policy_20260
 - A-009 bounded ROS bag session
 - A-010 stability snapshot/summary collection
 - B-002 document index
+- B-002 document daily summary
 - B-003 metadata image caption index
 - B-004 dataset card
 - B-005 log diagnosis
