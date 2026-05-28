@@ -227,6 +227,18 @@ if [[ -n "$latest_experiment" ]]; then
   b007_gap="Verified for smoke baseline; replace with real weekly operating data."
 fi
 
+b009_current="No NAS-backed control policy preflight found."
+b009_gap="Create a disabled policy and rerun read-only preflight."
+if [[ -n "$latest_control_policy" ]]; then
+  if grep -q 'policy_ready_no_execution' "$latest_control_policy" 2>/dev/null; then
+    b009_current="Disabled-by-default control policy preflight is ready and executed no actions: $latest_control_policy."
+    b009_gap="Needs reviewed real entity/action entries plus request/approve/execute audit before any control execution path."
+  else
+    b009_current="NAS-backed control policy preflight exists: $latest_control_policy."
+    b009_gap="Needs valid disabled policy, reviewed allowlist, two-step approval path, and execution audit before any control action."
+  fi
+fi
+
 b010_current="No NAS-backed security audit found."
 b010_gap="Run security audit to NAS and decide service policy."
 if [[ -n "$latest_security" ]]; then
@@ -307,7 +319,7 @@ fi
   echo "| B-006 | $b006_current | $b006_gap |"
   echo "| B-007 | $b007_current | $b007_gap |"
   echo "| B-008 | Home Assistant read-only preflight exists when a status report is present. | Needs HA URL/token and a successful read-only /api/states check. |"
-  echo "| B-009 | Low-risk control policy preflight exists when a control policy report is present. | Needs reviewed allowlist, two-step approval path, and execution audit before any control action. |"
+  echo "| B-009 | $b009_current | $b009_gap |"
   echo "| B-010 | $b010_current | $b010_gap |"
   echo
   echo "## Next Best Actions"
@@ -317,7 +329,7 @@ fi
   echo "3. Decide service policy for NFS/RPC, x11vnc, and iiod from the B-010 report."
   echo "4. Decide whether B-003 should stay metadata-only or add semantic vision captioning."
   echo "5. Provide Home Assistant URL/token only if B-008 should read real device states."
-  echo "6. Create and review a disabled B-009 control action policy before implementing any control execution path."
+  echo "6. Replace the disabled B-009 template with reviewed real entity/action entries only after the approval wording is agreed."
 } > "$report"
 
 echo "$report"

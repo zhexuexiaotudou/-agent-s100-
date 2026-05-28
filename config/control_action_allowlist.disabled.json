@@ -1,0 +1,30 @@
+{
+  "version": 1,
+  "policy_state": "disabled_template",
+  "description": "Disabled-by-default B-009 control policy template. It is safe to validate, but it must not execute actions.",
+  "audit": {
+    "directory": "/root/.openclaw/workspace/logs/control-audit",
+    "retention_days": 30,
+    "records": [
+      "requested",
+      "approved",
+      "executed",
+      "rejected"
+    ]
+  },
+  "actions": [
+    {
+      "id": "ha.light.turn_on.example",
+      "enabled": false,
+      "mode": "manual-only",
+      "target": "home_assistant",
+      "domain": "light",
+      "service": "turn_on",
+      "entity_id": "light.example",
+      "requires_approval": true,
+      "confirm_phrase": "CONFIRM ha.light.turn_on.example",
+      "risk": "low",
+      "notes": "Template only. Replace entity_id after Home Assistant is configured and reviewed."
+    }
+  ]
+}

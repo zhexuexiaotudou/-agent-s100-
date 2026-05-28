@@ -39,7 +39,7 @@
 | B-006 | GitHub/Codex workflow | verified | issue -> branch -> PR -> Codex review 链路已走通；远端 issue `#2`、branch `baseline/s100p-nas-baselines`、draft PR `#3` 和 Codex review `4367969950` 已验证 |
 | B-007 | 周报/实验报告生成 | verified | 已从 NAS logs/probes、文档索引、浏览器截图、ROS bag 和 dataset card 生成 Markdown 实验报告 |
 | B-008 | Home Assistant / 设备只读状态 | doing | NAS-backed read-only preflight 已生成，未调用控制 API；真实读取需要 HA URL/token |
-| B-009 | 低风险自动化控制 | doing | NAS-backed policy/audit preflight 已生成，未执行控制动作；需要控制 allowlist 和二次确认策略 |
+| B-009 | 低风险自动化控制 | doing | disabled-by-default policy 已生成并通过 NAS/OpenClaw preflight；启用动作数为 0，仍需真实 reviewed action 和 request/approve/execute audit |
 | B-010 | 安全审计清单 | doing | NAS-backed security audit、service policy、hardening dry-run 已生成；服务收敛策略未定 |
 
 ## 当前最近事实

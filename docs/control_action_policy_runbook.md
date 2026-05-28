@@ -28,6 +28,25 @@ Expected board-side path:
 /root/.openclaw/workspace/config/control_action_allowlist.json
 ```
 
+Repository template:
+
+```bash
+config/control_action_allowlist.disabled.json
+```
+
+The template is intentionally disabled by default. It may be copied to the board
+for validation, but it must not be treated as approval to execute any action.
+
+Current board validation:
+
+```text
+/mnt/nas/openclaw/logs/probes/control_action_policy_20260528-225702.md
+verdict: policy_ready_no_execution
+enabled action count: 0
+action_executed: no
+control_endpoint_called: no
+```
+
 Minimal shape:
 
 ```json

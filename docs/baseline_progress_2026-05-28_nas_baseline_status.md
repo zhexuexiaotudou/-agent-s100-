@@ -7,7 +7,7 @@ Date: 2026-05-28
 ## Latest Output
 
 ```text
-/mnt/nas/openclaw/reports/baseline-status/baseline_status_20260528-224733.md
+/mnt/nas/openclaw/reports/baseline-status/baseline_status_20260528-225904.md
 ```
 
 Script fixes already in place:
@@ -25,7 +25,7 @@ NAS workspace: mounted
 Allowlisted tool count: 21
 Progress docs: 19
 Probe reports: 26
-Workspace reports: 24
+Workspace reports: 26
 Dataset cards: 1
 Image caption JSONL indexes: 1
 Document daily summaries: 1
@@ -49,7 +49,7 @@ ROS bag session: /mnt/nas/openclaw/logs/probes/rosbag_session_20260528-182117.md
 ROS bag capture policy: /mnt/nas/openclaw/logs/probes/rosbag_capture_policy_20260528-224523.md
 Dataset card: /mnt/nas/openclaw/robot_datasets/rosbag_session_20260528-182117/DATASET_CARD.md
 Home Assistant status: /mnt/nas/openclaw/logs/probes/home_assistant_status_20260528-183050.md
-Control action policy: /mnt/nas/openclaw/logs/probes/control_action_policy_20260528-183050.md
+Control action policy: /mnt/nas/openclaw/logs/probes/control_action_policy_20260528-225702.md
 GitHub issue: https://github.com/zhexuexiaotudou/-agent-s100-/issues/2
 GitHub PR: https://github.com/zhexuexiaotudou/-agent-s100-/pull/3 review_id=4367969950
 ```
@@ -69,7 +69,7 @@ Already backed by NAS evidence:
 - B-005 log diagnosis
 - B-007 experiment report
 - B-008 Home Assistant read-only preflight
-- B-009 control action policy preflight
+- B-009 disabled-by-default control action policy preflight
 - B-010 security audit and service policy plan
 
 Still requiring later decisions or external information:
@@ -79,7 +79,7 @@ Still requiring later decisions or external information:
 - A-010 168-hour stability sample window
 - B-003 whether semantic vision captioning belongs in the first baseline
 - B-008 Home Assistant URL/token
-- B-009 control action allowlist, second confirmation, and audit policy
+- B-009 reviewed real entity/action entries plus request/approve/execute audit
 - B-010 NFS/RPC, x11vnc, iiod, and SSH keep/disable/firewall decisions
 
 ## Current Use

@@ -59,13 +59,13 @@ Date: 2026-05-28
 | 稳定性报告 | NAS-backed snapshot + summary，timer 自动采样 | doing |
 | 安全审计 | Gateway 暴露、NAS mount、secret scan、服务监听审计 | doing |
 | 设备只读状态 | Home Assistant read-only preflight 已有 | doing |
-| 低风险控制 | control policy/audit preflight 已有，未开放执行 | doing |
+| 低风险控制 | disabled-by-default policy/audit preflight 已有，启用动作数为 0，未开放执行 | doing |
 
 ### 当前 NAS-backed 证据总览
 
 ```text
 NAS workspace: /mnt/nas/openclaw
-Baseline roll-up: /mnt/nas/openclaw/reports/baseline-status/baseline_status_20260528-224733.md
+Baseline roll-up: /mnt/nas/openclaw/reports/baseline-status/baseline_status_20260528-225904.md
 Stability summary: /mnt/nas/openclaw/reports/stability/stability_summary_20260528-223427.md
 Experiment report: /mnt/nas/openclaw/reports/experiments/experiment_report_20260528-184444.md
 Document index: /mnt/nas/openclaw/reports/document_index_20260528-182111.md
@@ -78,6 +78,7 @@ Log diagnosis: /mnt/nas/openclaw/logs/probes/log_diagnosis_20260528-181546.md
 Image caption index: /mnt/nas/openclaw/reports/image-captions/image_caption_index_20260528-182530.md
 Security audit: /mnt/nas/openclaw/logs/probes/security_audit_20260528-182530.md
 Service policy: /mnt/nas/openclaw/logs/probes/service_policy_20260528-183619.md
+Control action policy: /mnt/nas/openclaw/logs/probes/control_action_policy_20260528-225702.md
 ```
 
 ## S100P + NAS 对这件事的帮助
@@ -96,7 +97,7 @@ S100P + NAS 的价值主要体现在四点：
 - A-006：是否安装 Docker/Podman/runc，或第一版明确不做 sandbox。
 - A-010：需要持续运行满 168 小时，不能用单次 smoke 替代。
 - B-008：需要 Home Assistant URL/token 才能读取真实设备状态。
-- B-009：需要控制动作 allowlist、二次确认文案和审计策略，才能开放执行。
+- B-009：disabled-by-default policy 已通过预检；需要真实 reviewed action、二次确认文案和 request/approve/execute 审计，才能开放执行。
 - B-010：是否关闭 NFS/RPC、x11vnc、iiod 或改防火墙，需要确认不会影响 RDK Studio/硬件工具。
 - 飞书 `99991672`：contact scope 权限需要在飞书开放平台申请，不阻塞消息收发。
 

@@ -156,7 +156,7 @@ AI NAS 常见能力 & S100P + NAS 当前实现 & 状态 \\
 稳定性报告 & NAS-backed snapshot + summary，timer 自动采样 & doing \\
 安全审计 & Gateway 暴露、NAS mount、secret scan、服务监听审计 & doing \\
 设备只读状态 & Home Assistant read-only preflight 已有 & doing \\
-低风险控制 & control policy/audit preflight 已有，未开放执行 & doing \\
+低风险控制 & disabled-by-default policy/audit preflight 已有，启用动作数为 0，未开放执行 & doing \\
 \bottomrule
 \end{longtable}
 
@@ -168,7 +168,7 @@ AI NAS 常见能力 & S100P + NAS 当前实现 & 状态 \\
 \rowcolor{tablehead}
 项目 & 路径 \\
 \midrule
-Baseline roll-up & \path{/mnt/nas/openclaw/reports/baseline-status/baseline_status_20260528-224733.md} \\
+Baseline roll-up & \path{/mnt/nas/openclaw/reports/baseline-status/baseline_status_20260528-225904.md} \\
 Stability summary & \path{/mnt/nas/openclaw/reports/stability/stability_summary_20260528-223427.md} \\
 Experiment report & \path{/mnt/nas/openclaw/reports/experiments/experiment_report_20260528-184444.md} \\
 Document index & \path{/mnt/nas/openclaw/reports/document_index_20260528-182111.md} \\
@@ -181,6 +181,7 @@ Log diagnosis & \path{/mnt/nas/openclaw/logs/probes/log_diagnosis_20260528-18154
 Image caption index & \path{/mnt/nas/openclaw/reports/image-captions/image_caption_index_20260528-182530.md} \\
 Security audit & \path{/mnt/nas/openclaw/logs/probes/security_audit_20260528-182530.md} \\
 Service policy & \path{/mnt/nas/openclaw/logs/probes/service_policy_20260528-183619.md} \\
+Control action policy & \path{/mnt/nas/openclaw/logs/probes/control_action_policy_20260528-225702.md} \\
 \bottomrule
 \end{longtable}
 \normalsize
@@ -196,7 +197,7 @@ A-010 稳定性 & 需要 168 小时样本 & timer 已在 NAS 采样，等待时�
 A-006 Sandbox & 无 Docker/Podman/runc & 决定安装 runtime 或从第一版 baseline drop。 \\
 B-003 图片 caption & 当前是 metadata caption & 决定是否接语义视觉模型。 \\
 B-008 设备状态 & 缺 Home Assistant URL/token & 用户提供配置后仅调用 \texttt{GET /api/} 和 \texttt{GET /api/states}。 \\
-B-009 控制动作 & 缺 allowlist 与二次确认策略 & 先创建 disabled policy，再审阅 request/approve/execute。 \\
+B-009 控制动作 & disabled policy 已通过预检 & 补真实 reviewed action、二次确认文案和 request/approve/execute 审计。 \\
 B-010 服务收敛 & 需确认 NFS/RPC、x11vnc、iiod 是否可关 & 只在确认后执行 disable/firewall。 \\
 \bottomrule
 \end{longtable}

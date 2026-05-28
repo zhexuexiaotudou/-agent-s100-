@@ -94,9 +94,9 @@ fi
 
 if [[ -d "$audit_dir" ]]; then
   audit_log_count="$(find "$audit_dir" -type f -name '*.jsonl' 2>/dev/null | wc -l | tr -d ' ')"
-  pending_count="$(grep -Rhs '"status"[[:space:]]*:[[:space:]]*"pending"' "$audit_dir"/*.jsonl 2>/dev/null | wc -l | tr -d ' ')"
-  approved_count="$(grep -Rhs '"status"[[:space:]]*:[[:space:]]*"approved"' "$audit_dir"/*.jsonl 2>/dev/null | wc -l | tr -d ' ')"
-  executed_count="$(grep -Rhs '"status"[[:space:]]*:[[:space:]]*"executed"' "$audit_dir"/*.jsonl 2>/dev/null | wc -l | tr -d ' ')"
+  pending_count="$({ grep -Rhs '"status"[[:space:]]*:[[:space:]]*"pending"' "$audit_dir"/*.jsonl 2>/dev/null || true; } | wc -l | tr -d ' ')"
+  approved_count="$({ grep -Rhs '"status"[[:space:]]*:[[:space:]]*"approved"' "$audit_dir"/*.jsonl 2>/dev/null || true; } | wc -l | tr -d ' ')"
+  executed_count="$({ grep -Rhs '"status"[[:space:]]*:[[:space:]]*"executed"' "$audit_dir"/*.jsonl 2>/dev/null || true; } | wc -l | tr -d ' ')"
 fi
 
 {
