@@ -25,7 +25,7 @@
 | A-007 | Browser automation smoke test | verified | Headless Chromium 能打开测试网页、截图并保存到 NAS，PNG 校验通过 |
 | A-008 | ROS2 status 工具 | verified | OpenClaw 能查询 ROS2 node/topic/service |
 | A-009 | ROS bag 采集工具 | doing | 聊天命令能开始/停止采集，并写入 NAS；本地 start/status/stop self-test 已通过 runner 和 OpenClaw 插件验证 |
-| A-010 | 7x24 稳定性测试 | doing | 连续运行 7 天，记录重启、内存、磁盘、日志；NAS-backed snapshot/summary 已开始采集，当前 verdict 为 `collecting` |
+| A-010 | 7x24 稳定性测试 | doing | systemd timer 已切到 NAS-backed 输出；当前 2 个 snapshot、0.29h、verdict=`collecting` |
 
 ## Epic B：AI NAS Homework
 
@@ -821,3 +821,41 @@ Tracking impact:
 
 - B-008 remains `doing`: 工具链已可写 NAS，但没有 HA URL/token。
 - B-009 remains `doing`: policy/audit 预检已可写 NAS，但没有控制 allowlist，且未开放执行。
+
+## 2026-05-28 A-010 NAS Sampler Update
+
+新增审阅记录：
+
+```text
+docs/baseline_progress_2026-05-28_a010_nas_sampler.md
+```
+
+定时器输出已从本地切到 NAS：
+
+```text
+Environment=OPENCLAW_PROBE_DIR=/mnt/nas/openclaw/logs/probes
+ExecStart=... stability_snapshot_probe.sh /mnt/nas/openclaw/logs/probes
+openclaw-stability-sampler.timer=active
+```
+
+立即执行证据：
+
+```text
+/mnt/nas/openclaw/logs/probes/stability_snapshot_20260528-183318.md
+service exit=status=0/SUCCESS
+```
+
+最新 summary：
+
+```text
+/mnt/nas/openclaw/reports/stability/stability_summary_20260528-183432.md
+Snapshot count=2
+Elapsed hours=0.29
+Gateway statuses=2 active-listening
+NAS statuses=2 mounted
+Verdict=collecting
+```
+
+Tracking impact:
+
+- A-010 remains `doing`: 已进入 NAS-backed 自动采样，但离 168 小时验收还早。

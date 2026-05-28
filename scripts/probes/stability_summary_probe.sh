@@ -165,7 +165,11 @@ fi
   echo
   echo "- This report summarizes existing snapshot evidence."
   echo "- A-010 is not a verified 7x24 pass until elapsed hours is at least 168 and the trend remains clean."
-  echo "- NAS-backed acceptance additionally requires summaries under /mnt/nas/openclaw/reports after A-003 is mounted."
+  if [[ "$report" == /mnt/nas/openclaw/reports/* && "$input_dir" == /mnt/nas/openclaw/logs/probes* ]]; then
+    echo "- NAS-backed stability collection is active; continue collecting until the 168-hour threshold is reached."
+  else
+    echo "- NAS-backed acceptance additionally requires summaries under /mnt/nas/openclaw/reports after A-003 is mounted."
+  fi
 } > "$report"
 
 echo "$report"
