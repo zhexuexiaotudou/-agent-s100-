@@ -46,6 +46,8 @@ if [[ ! -x "$runner" ]]; then
   exit 4
 fi
 
+summary_helper="$workspace/scripts/summarize_overnight_baseline_runner.sh"
+
 if ! mountpoint -q "$nas_root" 2>/dev/null; then
   echo "NAS root is not mounted: $nas_root" >&2
   exit 5
@@ -85,6 +87,22 @@ run_tool() {
   local status="ok"
   set +e
   output="$("$runner" "$@" 2>&1)"
+  local rc=$?
+  set -e
+  if [[ "$rc" -ne 0 ]]; then
+    status="failed_rc_$rc"
+  fi
+  log_event "info" "$action" "$status" "$output"
+  printf '%s\n' "$output"
+}
+
+run_helper() {
+  local action="$1"
+  shift
+  local output
+  local status="ok"
+  set +e
+  output="$("$@" 2>&1)"
   local rc=$?
   set -e
   if [[ "$rc" -ne 0 ]]; then
@@ -155,5 +173,11 @@ latest_convergence="$(find "$nas_root/reports/security" -type f -name 'service_c
 } >> "$report"
 
 log_event "info" "runner_finish" "ok" "iterations=$iteration latest_stability=${latest_stability:-missing} latest_baseline=${latest_baseline:-missing} latest_convergence=${latest_convergence:-missing}"
+
+if [[ -x "$summary_helper" ]]; then
+  run_helper "overnight_summary" "$summary_helper" "$out_dir" "$nas_root/reports/baseline-status" "$nas_root" >/dev/null || true
+else
+  log_event "warn" "overnight_summary" "missing_helper" "$summary_helper"
+fi
 
 echo "$report"

@@ -85,6 +85,9 @@ It records the latest stability summary, baseline roll-up, security audit,
 B-010 service convergence decision, event counts, failure counts, and whether
 the run is still `collecting` or has finished without failed events.
 
+The runner now calls this summary helper once more at finish, so a completed
+overnight run leaves both the raw JSONL and a final human-readable summary.
+
 Current status-check evidence:
 
 ```text
