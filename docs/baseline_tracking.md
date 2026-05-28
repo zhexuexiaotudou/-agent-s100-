@@ -936,3 +936,45 @@ Tracking impact:
 
 - B-002 is now `verified` for deterministic metadata summary.
 - 如果后续要语义/LLM 摘要，可作为增强项，不阻塞当前 baseline。
+## 2026-05-28 B-003 Semantic Vision Readiness Update
+
+`vision_caption_readiness_probe` was added to separate deterministic metadata
+image indexing from true semantic vision captioning.
+
+Evidence:
+
+```text
+NAS runner report: /mnt/nas/openclaw/reports/image-captions/vision_caption_readiness_20260528-230810.md
+OpenClaw tool report: /root/.openclaw/workspace/reports/image-captions/vision_caption_readiness_20260528-230826.md
+verdict: blocked_no_semantic_runtime
+image files: 1
+local model-like files: 0
+semantic runtime: no
+```
+
+Tracking status: B-003 remains `doing`. Metadata caption and JSONL indexing are
+verified, but semantic image captioning is not verified because no local vision
+model files were found. The next decision is either to install/mount a local
+vision caption model or scope B-003 v1 as metadata-only.
+
+## 2026-05-28 A-009 Operator-Approved Named Capture Update
+
+`rosbag_named_capture_probe` was added for the first approved named capture
+under the A-009 policy.
+
+Evidence:
+
+```text
+report: /mnt/nas/openclaw/logs/probes/rosbag_named_capture_20260528-231319.md
+session_id: approved_named_capture_20260528-231319
+bag_dir: /mnt/nas/openclaw/robot_datasets/approved_named_capture_20260528-231319
+duration_seconds: 300
+topics_requested: /rosout /parameter_events
+record_exit: 0
+metadata_exists: yes
+dataset_card: /mnt/nas/openclaw/robot_datasets/approved_named_capture_20260528-231319/DATASET_CARD.md
+verdict: ok
+```
+
+Tracking status: A-009 is verified for baseline capture mechanics. Future real
+captures still need reviewed topic selection and retention-cleanup approval.

@@ -358,6 +358,8 @@ New OpenClaw + NAS baseline artifacts:
 - [scripts/probes/baseline_status_probe.sh](scripts/probes/baseline_status_probe.sh): writes a read-only roll-up status report for both baseline tracks.
 - [scripts/probes/nas_discovery_probe.sh](scripts/probes/nas_discovery_probe.sh): writes passive NAS mount/network/tooling readiness evidence.
 - [scripts/mount_openclaw_nas.sh](scripts/mount_openclaw_nas.sh): dry-run first NAS mount helper for `/mnt/nas/openclaw`.
+- [scripts/overnight_baseline_runner.sh](scripts/overnight_baseline_runner.sh): read-only overnight sampler that keeps writing stability and baseline roll-up evidence to NAS.
+- [scripts/start_overnight_baseline_runner.sh](scripts/start_overnight_baseline_runner.sh): bounded launcher for the overnight sampler.
 
 The allowlist runner now includes:
 
@@ -370,10 +372,12 @@ scripts/run_allowlisted_tool.sh service_hardening_plan_probe
 scripts/run_allowlisted_tool.sh stability_snapshot_probe
 scripts/run_allowlisted_tool.sh stability_summary_probe
 scripts/run_allowlisted_tool.sh image_caption_probe
+scripts/run_allowlisted_tool.sh vision_caption_readiness_probe
 scripts/run_allowlisted_tool.sh document_daily_summary_probe
 scripts/run_allowlisted_tool.sh home_assistant_status_probe
 scripts/run_allowlisted_tool.sh control_action_policy_probe
 scripts/run_allowlisted_tool.sh baseline_status_probe
 scripts/run_allowlisted_tool.sh nas_discovery_probe
 scripts/run_allowlisted_tool.sh rosbag_capture_policy_probe
+scripts/run_allowlisted_tool.sh rosbag_named_capture_probe
 ```

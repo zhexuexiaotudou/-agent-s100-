@@ -15,12 +15,14 @@ Usage:
   scripts/run_allowlisted_tool.sh stability_snapshot_probe [output_dir]
   scripts/run_allowlisted_tool.sh stability_summary_probe [input_dir] [report_dir]
   scripts/run_allowlisted_tool.sh image_caption_probe [photos_dir] [report_dir]
+  scripts/run_allowlisted_tool.sh vision_caption_readiness_probe [photos_dir] [report_dir]
   scripts/run_allowlisted_tool.sh home_assistant_status_probe [output_dir]
   scripts/run_allowlisted_tool.sh control_action_policy_probe [output_dir]
   scripts/run_allowlisted_tool.sh browser_smoke_probe [report_dir]
   scripts/run_allowlisted_tool.sh rosbag_snapshot_probe [dataset_dir] [report_dir]
   scripts/run_allowlisted_tool.sh rosbag_session_probe [dataset_dir] [report_dir]
   scripts/run_allowlisted_tool.sh rosbag_capture_policy_probe [output_dir]
+  scripts/run_allowlisted_tool.sh rosbag_named_capture_probe [dataset_dir] [report_dir]
   scripts/run_allowlisted_tool.sh experiment_report_probe [report_dir]
   scripts/run_allowlisted_tool.sh log_diagnose [log_dir] [output_dir]
   scripts/run_allowlisted_tool.sh index_documents [documents_dir] [report_dir]
@@ -57,12 +59,14 @@ service_hardening_plan_probe  Read-only dry-run hardening command plan
 stability_snapshot_probe  Read-only uptime/resource/log snapshot for A-010
 stability_summary_probe  Read-only aggregate summary for A-010 stability snapshots
 image_caption_probe  Read-only image metadata caption and JSONL index for B-003
+vision_caption_readiness_probe  Read-only local semantic vision caption readiness for B-003
 home_assistant_status_probe  Read-only Home Assistant API status preflight for B-008
 control_action_policy_probe  Read-only low-risk control policy and audit preflight for B-009
 browser_smoke_probe    Headless Chromium local page screenshot smoke test
 rosbag_snapshot_probe  Bounded ROS bag snapshot for low-risk topics
 rosbag_session_probe   Start/status/stop ROS bag self-test for low-risk topics
 rosbag_capture_policy_probe  Read-only named ROS bag capture policy and topic classification
+rosbag_named_capture_probe  Operator-approved bounded named ROS bag capture
 experiment_report_probe  Generate a Markdown summary from workspace reports and datasets
 baseline_status_probe  Read-only roll-up status report for the two baseline tracks
 EOF
@@ -133,6 +137,11 @@ EOF
     tool_path="$repo_dir/scripts/probes/image_caption_probe.sh"
     max_args=2
     ;;
+  vision_caption_readiness_probe)
+    shift
+    tool_path="$repo_dir/scripts/probes/vision_caption_readiness_probe.sh"
+    max_args=2
+    ;;
   home_assistant_status_probe)
     shift
     tool_path="$repo_dir/scripts/probes/home_assistant_status_probe.sh"
@@ -162,6 +171,11 @@ EOF
     shift
     tool_path="$repo_dir/scripts/probes/rosbag_capture_policy_probe.sh"
     max_args=1
+    ;;
+  rosbag_named_capture_probe)
+    shift
+    tool_path="$repo_dir/scripts/probes/rosbag_named_capture_probe.sh"
+    max_args=2
     ;;
   experiment_report_probe)
     shift
@@ -307,6 +321,23 @@ if [[ "$tool_id" == "image_caption_probe" ]]; then
   esac
 fi
 
+if [[ "$tool_id" == "vision_caption_readiness_probe" ]]; then
+  case "${1:-}" in
+    ""|/tmp/*|/mnt/nas/openclaw/photos|/mnt/nas/openclaw/photos/*|/root/.openclaw/workspace/photos|/root/.openclaw/workspace/photos/*) ;;
+    *)
+      echo "Refusing input path outside approved photo directories: ${1:-}" >&2
+      exit 2
+      ;;
+  esac
+  case "${2:-}" in
+    ""|/tmp/*|/mnt/nas/openclaw/reports|/mnt/nas/openclaw/reports/*|/root/.openclaw/workspace/reports|/root/.openclaw/workspace/reports/*) ;;
+    *)
+      echo "Refusing output path outside approved report directories: ${2:-}" >&2
+      exit 2
+      ;;
+  esac
+fi
+
 if [[ "$tool_id" == "home_assistant_status_probe" ]]; then
   case "${1:-}" in
     ""|/tmp/*|/mnt/nas/openclaw/logs/probes|/mnt/nas/openclaw/logs/probes/*|/root/.openclaw/workspace/logs/probes|/root/.openclaw/workspace/logs/probes/*) ;;
@@ -376,6 +407,23 @@ if [[ "$tool_id" == "rosbag_capture_policy_probe" ]]; then
     ""|/tmp/*|/mnt/nas/openclaw/logs/probes|/mnt/nas/openclaw/logs/probes/*|/root/.openclaw/workspace/logs/probes|/root/.openclaw/workspace/logs/probes/*) ;;
     *)
       echo "Refusing output path outside approved probe directories: ${1:-}" >&2
+      exit 2
+      ;;
+  esac
+fi
+
+if [[ "$tool_id" == "rosbag_named_capture_probe" ]]; then
+  case "${1:-}" in
+    ""|/tmp/*|/mnt/nas/openclaw/robot_datasets|/mnt/nas/openclaw/robot_datasets/*|/root/.openclaw/workspace/robot_datasets|/root/.openclaw/workspace/robot_datasets/*) ;;
+    *)
+      echo "Refusing dataset path outside approved robot dataset directories: ${1:-}" >&2
+      exit 2
+      ;;
+  esac
+  case "${2:-}" in
+    ""|/tmp/*|/mnt/nas/openclaw/logs/probes|/mnt/nas/openclaw/logs/probes/*|/root/.openclaw/workspace/logs/probes|/root/.openclaw/workspace/logs/probes/*) ;;
+    *)
+      echo "Refusing report path outside approved probe directories: ${2:-}" >&2
       exit 2
       ;;
   esac

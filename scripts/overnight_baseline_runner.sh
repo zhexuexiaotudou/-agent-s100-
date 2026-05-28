@@ -1,0 +1,156 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+workspace="${OPENCLAW_WORKSPACE:-/root/.openclaw/workspace}"
+nas_root="${OPENCLAW_NAS_ROOT:-/mnt/nas/openclaw}"
+duration_hours="${OVERNIGHT_BASELINE_HOURS:-10}"
+interval_seconds="${OVERNIGHT_BASELINE_INTERVAL_SECONDS:-1800}"
+
+case "$workspace" in
+  /root/.openclaw/workspace|/root/.openclaw/workspace/*) ;;
+  *)
+    echo "Refusing workspace outside /root/.openclaw/workspace: $workspace" >&2
+    exit 2
+    ;;
+esac
+
+case "$nas_root" in
+  /mnt/nas/openclaw|/mnt/nas/openclaw/*) ;;
+  *)
+    echo "Refusing NAS root outside /mnt/nas/openclaw: $nas_root" >&2
+    exit 2
+    ;;
+esac
+
+case "$duration_hours" in
+  ''|*[!0-9]*) echo "OVERNIGHT_BASELINE_HOURS must be an integer" >&2; exit 2 ;;
+esac
+
+case "$interval_seconds" in
+  ''|*[!0-9]*) echo "OVERNIGHT_BASELINE_INTERVAL_SECONDS must be an integer" >&2; exit 2 ;;
+esac
+
+if (( duration_hours < 1 || duration_hours > 24 )); then
+  echo "OVERNIGHT_BASELINE_HOURS must be between 1 and 24" >&2
+  exit 2
+fi
+
+if (( interval_seconds < 300 || interval_seconds > 7200 )); then
+  echo "OVERNIGHT_BASELINE_INTERVAL_SECONDS must be between 300 and 7200" >&2
+  exit 2
+fi
+
+runner="$workspace/scripts/run_allowlisted_tool.sh"
+if [[ ! -x "$runner" ]]; then
+  echo "Allowlist runner is missing or not executable: $runner" >&2
+  exit 4
+fi
+
+if ! mountpoint -q "$nas_root" 2>/dev/null; then
+  echo "NAS root is not mounted: $nas_root" >&2
+  exit 5
+fi
+
+started_stamp="$(date +%Y%m%d-%H%M%S)"
+out_dir="$nas_root/logs/overnight"
+mkdir -p "$out_dir" "$nas_root/logs/probes" "$nas_root/reports/stability" "$nas_root/reports/baseline-status"
+jsonl="$out_dir/overnight_baseline_$started_stamp.jsonl"
+report="$out_dir/overnight_baseline_$started_stamp.md"
+pid_file="$out_dir/overnight_baseline_$started_stamp.pid"
+
+echo "$$" > "$pid_file"
+
+end_epoch=$(( $(date +%s) + duration_hours * 3600 ))
+iteration=0
+
+json_escape() {
+  python3 -c 'import json,sys; print(json.dumps(sys.stdin.read())[1:-1])'
+}
+
+log_event() {
+  local level="$1"
+  local action="$2"
+  local status="$3"
+  local detail="$4"
+  local escaped
+  escaped="$(printf '%s' "$detail" | json_escape)"
+  printf '{"time":"%s","iteration":%s,"level":"%s","action":"%s","status":"%s","detail":"%s"}\n' \
+    "$(date -Is)" "$iteration" "$level" "$action" "$status" "$escaped" >> "$jsonl"
+}
+
+run_tool() {
+  local action="$1"
+  shift
+  local output
+  local status="ok"
+  set +e
+  output="$("$runner" "$@" 2>&1)"
+  local rc=$?
+  set -e
+  if [[ "$rc" -ne 0 ]]; then
+    status="failed_rc_$rc"
+  fi
+  log_event "info" "$action" "$status" "$output"
+  printf '%s\n' "$output"
+}
+
+{
+  echo "# Overnight Baseline Runner"
+  echo
+  echo "- started_at: $(date -Is)"
+  echo "- pid: $$"
+  echo "- workspace: $workspace"
+  echo "- nas_root: $nas_root"
+  echo "- duration_hours: $duration_hours"
+  echo "- interval_seconds: $interval_seconds"
+  echo "- jsonl: $jsonl"
+  echo "- pid_file: $pid_file"
+  echo "- mode: read-only probes and reports"
+  echo
+  echo "## Initial Status"
+  echo
+  echo '```text'
+  echo "starting"
+  echo '```'
+} > "$report"
+
+log_event "info" "runner_start" "ok" "pid=$$ duration_hours=$duration_hours interval_seconds=$interval_seconds"
+
+while (( $(date +%s) < end_epoch )); do
+  iteration=$((iteration + 1))
+  log_event "info" "iteration_start" "ok" "iteration=$iteration"
+
+  run_tool "stability_snapshot" stability_snapshot_probe "$nas_root/logs/probes" >/dev/null || true
+  run_tool "stability_summary" stability_summary_probe "$nas_root/logs/probes" "$nas_root/reports/stability" >/dev/null || true
+  run_tool "baseline_status" baseline_status_probe "$nas_root" "$nas_root/reports/baseline-status" >/dev/null || true
+
+  if (( iteration == 1 || iteration % 4 == 0 )); then
+    run_tool "openclaw_status" openclaw_status_probe "$nas_root/logs/probes" >/dev/null || true
+    run_tool "security_audit" security_audit_probe "$nas_root/logs/probes" >/dev/null || true
+  fi
+
+  log_event "info" "iteration_end" "ok" "iteration=$iteration"
+
+  if (( $(date +%s) + interval_seconds >= end_epoch )); then
+    break
+  fi
+  sleep "$interval_seconds"
+done
+
+latest_stability="$(find "$nas_root/reports/stability" -type f -name 'stability_summary_*.md' -printf '%T@ %p\n' 2>/dev/null | sort -nr | awk 'NR==1 {$1=""; sub(/^ /, ""); print}')"
+latest_baseline="$(find "$nas_root/reports/baseline-status" -type f -name 'baseline_status_*.md' -printf '%T@ %p\n' 2>/dev/null | sort -nr | awk 'NR==1 {$1=""; sub(/^ /, ""); print}')"
+
+{
+  echo
+  echo "## Final Status"
+  echo
+  echo "- finished_at: $(date -Is)"
+  echo "- iterations: $iteration"
+  echo "- latest_stability_summary: ${latest_stability:-missing}"
+  echo "- latest_baseline_status: ${latest_baseline:-missing}"
+  echo "- jsonl: $jsonl"
+} >> "$report"
+
+log_event "info" "runner_finish" "ok" "iterations=$iteration latest_stability=${latest_stability:-missing} latest_baseline=${latest_baseline:-missing}"
+
+echo "$report"

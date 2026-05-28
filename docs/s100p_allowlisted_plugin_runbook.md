@@ -545,3 +545,37 @@ command-like topics detected: none
 ```
 
 This closes the A-009 named-capture policy gap without launching a long recording. Final A-009 verification still needs one operator-approved named capture under this policy.
+
+## 2026-05-28 B-003 Semantic Vision Readiness Extension
+
+The plugin was extended with:
+
+```text
+vision_caption_readiness_probe
+```
+
+Board evidence through the allowlist runner:
+
+```text
+report: /mnt/nas/openclaw/reports/image-captions/vision_caption_readiness_20260528-230810.md
+verdict: blocked_no_semantic_runtime
+image files: 1
+local model-like files: 0
+semantic runtime: no
+```
+
+After restarting `openclaw-gateway.service`, board evidence through a real
+OpenClaw agent turn:
+
+```text
+tool_id: vision_caption_readiness_probe
+report: /root/.openclaw/workspace/reports/image-captions/vision_caption_readiness_20260528-230826.md
+verdict: blocked_no_semantic_runtime
+image count: 1
+local model-like file count: 0
+semantic runtime: no
+```
+
+This verifies the narrow tool path for B-003 semantic readiness. It does not
+verify semantic caption generation; the board has no detected local vision model
+files yet.

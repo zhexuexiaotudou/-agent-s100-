@@ -42,6 +42,7 @@ Document daily summary: /mnt/nas/openclaw/reports/daily-summary/document_daily_s
 Browser smoke: /mnt/nas/openclaw/reports/browser-smoke/browser_smoke_20260528-182111.md
 Log diagnosis: /mnt/nas/openclaw/logs/probes/log_diagnosis_20260528-181546.md
 Image caption index: /mnt/nas/openclaw/reports/image-captions/image_caption_index_20260528-182530.md
+Vision caption readiness: /mnt/nas/openclaw/reports/image-captions/vision_caption_readiness_20260528-230810.md
 Experiment report: /mnt/nas/openclaw/reports/experiments/experiment_report_20260528-184444.md
 Security audit: /mnt/nas/openclaw/logs/probes/security_audit_20260528-182530.md
 Service policy: /mnt/nas/openclaw/logs/probes/service_policy_20260528-183619.md
@@ -78,6 +79,8 @@ Still requiring later decisions or external information:
 - A-009 one operator-approved named capture under the policy
 - A-010 168-hour stability sample window
 - B-003 whether semantic vision captioning belongs in the first baseline
+  - latest readiness verdict: `blocked_no_semantic_runtime`
+  - reason: runtime libraries exist, but no local model-like files were found
 - B-008 Home Assistant URL/token
 - B-009 reviewed real entity/action entries plus request/approve/execute audit
 - B-010 NFS/RPC, x11vnc, iiod, and SSH keep/disable/firewall decisions

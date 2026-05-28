@@ -21,6 +21,7 @@ Use the allowlist runner:
 ```bash
 scripts/run_allowlisted_tool.sh rosbag_session_probe [dataset_dir] [report_dir]
 scripts/run_allowlisted_tool.sh rosbag_capture_policy_probe [output_dir]
+scripts/run_allowlisted_tool.sh rosbag_named_capture_probe [dataset_dir] [report_dir]
 ```
 
 OpenClaw plugin:
@@ -106,3 +107,31 @@ The current NAS-backed policy evidence is:
 ```
 
 It detected `/rosout` and `/parameter_events` as approved topics and found no command-like topics to exclude.
+
+## Operator-Approved Named Capture
+
+After the policy exists, run exactly one approved named capture from the runner:
+
+```bash
+ROSBAG_NAMED_CAPTURE_SECONDS=300 \
+scripts/run_allowlisted_tool.sh rosbag_named_capture_probe \
+  /mnt/nas/openclaw/robot_datasets \
+  /mnt/nas/openclaw/logs/probes
+```
+
+Current evidence:
+
+```text
+report: /mnt/nas/openclaw/logs/probes/rosbag_named_capture_20260528-231319.md
+session_id: approved_named_capture_20260528-231319
+bag_dir: /mnt/nas/openclaw/robot_datasets/approved_named_capture_20260528-231319
+duration_seconds: 300
+topics_requested: /rosout /parameter_events
+record_exit: 0
+metadata_exists: yes
+dataset_card: /mnt/nas/openclaw/robot_datasets/approved_named_capture_20260528-231319/DATASET_CARD.md
+verdict: ok
+```
+
+This verifies the A-009 baseline capture mechanics. Future real experiment
+captures still need reviewed topic selection and retention cleanup approval.

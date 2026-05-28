@@ -172,6 +172,22 @@
       "description": "Generate deterministic image metadata captions and a JSONL index for B-003."
     },
     {
+      "id": "vision_caption_readiness_probe",
+      "script": "scripts/probes/vision_caption_readiness_probe.sh",
+      "mode": "readonly",
+      "approvedInputPrefixes": [
+        "/tmp/",
+        "/mnt/nas/openclaw/photos/",
+        "/root/.openclaw/workspace/photos/"
+      ],
+      "approvedOutputPrefixes": [
+        "/tmp/",
+        "/mnt/nas/openclaw/reports/",
+        "/root/.openclaw/workspace/reports/"
+      ],
+      "description": "Check local semantic vision caption model/runtime readiness for B-003 without calling external APIs."
+    },
+    {
       "id": "home_assistant_status_probe",
       "script": "scripts/probes/home_assistant_status_probe.sh",
       "mode": "readonly",
@@ -243,6 +259,22 @@
         "/root/.openclaw/workspace/logs/probes/"
       ],
       "description": "Generate a read-only named ROS bag capture policy, topic classification, and retention plan for A-009."
+    },
+    {
+      "id": "rosbag_named_capture_probe",
+      "script": "scripts/probes/rosbag_named_capture_probe.sh",
+      "mode": "bounded-capture",
+      "approvedInputPrefixes": [
+        "/tmp/",
+        "/mnt/nas/openclaw/robot_datasets/",
+        "/root/.openclaw/workspace/robot_datasets/"
+      ],
+      "approvedOutputPrefixes": [
+        "/tmp/",
+        "/mnt/nas/openclaw/logs/probes/",
+        "/root/.openclaw/workspace/logs/probes/"
+      ],
+      "description": "Run one operator-approved bounded named ROS bag capture for A-009 using approved status topics only."
     },
     {
       "id": "experiment_report_probe",

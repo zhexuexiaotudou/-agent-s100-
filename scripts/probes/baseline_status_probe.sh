@@ -103,11 +103,13 @@ latest_log_diagnosis="$(latest_file "$workspace/logs/probes/log_diagnosis_*.md")
 latest_stability="$(latest_file "$workspace/logs/probes/stability_snapshot_*.md")"
 latest_stability_summary="$(latest_file "$workspace/reports/stability/stability_summary_*.md")"
 latest_image_caption="$(latest_file "$workspace/reports/image-captions/image_caption_index_*.md")"
+latest_vision_readiness="$(latest_file "$workspace/reports/image-captions/vision_caption_readiness_*.md")"
 latest_experiment="$(latest_file "$workspace/reports/experiments/experiment_report_*.md")"
 latest_security="$(latest_file "$workspace/logs/probes/security_audit_*.md")"
 latest_service_policy="$(latest_file "$workspace/logs/probes/service_policy_*.md")"
 latest_rosbag_session="$(latest_file "$workspace/logs/probes/rosbag_session_*.md")"
 latest_rosbag_policy="$(latest_file "$workspace/logs/probes/rosbag_capture_policy_*.md")"
+latest_rosbag_named_capture="$(latest_file "$workspace/logs/probes/rosbag_named_capture_*.md")"
 latest_dataset_card="$(latest_file "$workspace/robot_datasets/*/DATASET_CARD.md")"
 latest_home_assistant="$(latest_file "$workspace/logs/probes/home_assistant_status_*.md")"
 latest_control_policy="$(latest_file "$workspace/logs/probes/control_action_policy_*.md")"
@@ -181,6 +183,15 @@ if [[ -n "$latest_rosbag_policy" ]]; then
     a009_gap="Run a bounded session and then one operator-approved named capture."
   fi
 fi
+if [[ -n "$latest_rosbag_named_capture" ]]; then
+  if grep -q 'verdict: ok' "$latest_rosbag_named_capture" 2>/dev/null; then
+    a009_current="NAS-backed self-test, named capture policy, and one operator-approved named capture exist: ${latest_rosbag_session:-missing}; ${latest_rosbag_policy:-missing}; $latest_rosbag_named_capture."
+    a009_gap="Verified for approved bounded capture mechanics; replace smoke topics with real reviewed capture topics only when needed."
+  else
+    a009_current="$a009_current Operator-approved named capture report exists but needs review: $latest_rosbag_named_capture."
+    a009_gap="Review named capture verdict and bag metadata before marking A-009 verified."
+  fi
+fi
 
 a010_current="No NAS-backed stability snapshot found."
 a010_gap="Collect 7 days of clean snapshots."
@@ -204,6 +215,18 @@ b003_gap="Run image caption index and decide semantic captioning."
 if [[ -n "$latest_image_caption" ]]; then
   b003_current="NAS-backed image metadata caption index exists: $latest_image_caption."
   b003_gap="Semantic vision caption remains pending or needs to be scoped out."
+fi
+if [[ -n "$latest_vision_readiness" ]]; then
+  if grep -q 'blocked_no_semantic_runtime' "$latest_vision_readiness" 2>/dev/null; then
+    b003_current="$b003_current Semantic readiness probe shows no local vision model/runtime candidate: $latest_vision_readiness."
+    b003_gap="Metadata caption is verified; semantic captioning requires an installed or mounted local vision model, or an explicit metadata-only scope decision."
+  elif grep -q 'candidate_semantic_caption_ready' "$latest_vision_readiness" 2>/dev/null; then
+    b003_current="$b003_current Semantic readiness probe found a candidate local runtime/model: $latest_vision_readiness."
+    b003_gap="Run one semantic caption smoke test before marking semantic captioning verified."
+  else
+    b003_current="$b003_current Semantic readiness probe exists: $latest_vision_readiness."
+    b003_gap="Review the readiness verdict before deciding metadata-only versus semantic caption scope."
+  fi
 fi
 
 b004_current="No NAS-backed dataset card found."
@@ -291,11 +314,13 @@ fi
   echo "| Browser smoke | ${latest_browser_smoke:-missing} |"
   echo "| Log diagnosis | ${latest_log_diagnosis:-missing} |"
   echo "| Image caption index | ${latest_image_caption:-missing} |"
+  echo "| Vision caption readiness | ${latest_vision_readiness:-missing} |"
   echo "| Experiment report | ${latest_experiment:-missing} |"
   echo "| Security audit | ${latest_security:-missing} |"
   echo "| Service policy | ${latest_service_policy:-missing} |"
   echo "| ROS bag session | ${latest_rosbag_session:-missing} |"
   echo "| ROS bag capture policy | ${latest_rosbag_policy:-missing} |"
+  echo "| ROS bag named capture | ${latest_rosbag_named_capture:-missing} |"
   echo "| Dataset card | ${latest_dataset_card:-missing} |"
   echo "| Home Assistant status | ${latest_home_assistant:-missing} |"
   echo "| Control action policy | ${latest_control_policy:-missing} |"
