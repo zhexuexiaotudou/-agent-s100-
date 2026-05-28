@@ -69,8 +69,8 @@ The status checker writes a Markdown report under:
 ```
 
 It summarizes whether the process is still running, how many iterations are
-visible in JSONL, latest events by action, and whether any failed events have
-been recorded.
+visible in JSONL, when the next iteration is expected, latest events by action,
+and whether any failed events have been recorded.
 
 Current status-check evidence:
 
@@ -83,6 +83,7 @@ event_count: 8
 failed_event_count: 0
 last_event_action: iteration_end
 last_event_status: ok
+schedule_status: waiting_for_next_interval
 ```
 
 ## How To Stop

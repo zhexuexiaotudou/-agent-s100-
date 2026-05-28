@@ -49,9 +49,10 @@ fi
 
 python3 - "$latest_jsonl" "$summary" "$pid" "$process_status" "$process_line" <<'PY'
 import json
+import re
 import sys
 from collections import Counter
-from datetime import datetime
+from datetime import datetime, timedelta
 from pathlib import Path
 
 jsonl, summary, pid, process_status, process_line = sys.argv[1:6]
@@ -72,6 +73,42 @@ action_counts = Counter(e.get("action", "unknown") for e in events)
 failed = [e for e in events if str(e.get("status", "")).startswith("failed") or e.get("level") == "error"]
 last = events[-1] if events else {}
 
+def parse_event_time(value):
+    if not value or value == "unknown":
+        return None
+    try:
+        return datetime.fromisoformat(value)
+    except ValueError:
+        return None
+
+runner_start = next((e for e in events if e.get("action") == "runner_start"), {})
+interval_seconds = None
+match = re.search(r"interval_seconds=(\d+)", str(runner_start.get("detail", "")))
+if match:
+    interval_seconds = int(match.group(1))
+
+last_iteration_end = None
+for event in events:
+    if event.get("action") == "iteration_end":
+        last_iteration_end = event
+
+now = datetime.now().astimezone()
+last_iteration_time = parse_event_time(last_iteration_end.get("time")) if last_iteration_end else None
+next_iteration_after = None
+seconds_until_next = None
+staleness = "unknown"
+if interval_seconds and last_iteration_time:
+    next_iteration_after = last_iteration_time + timedelta(seconds=interval_seconds)
+    seconds_until_next = int((next_iteration_after - now).total_seconds())
+    if process_status == "running" and seconds_until_next >= 0:
+        staleness = "waiting_for_next_interval"
+    elif process_status == "running" and abs(seconds_until_next) <= max(300, interval_seconds // 2):
+        staleness = "due_or_running_now"
+    elif process_status == "running":
+        staleness = "late_check_runner"
+    else:
+        staleness = "not_running"
+
 latest_by_action = {}
 for e in events:
     latest_by_action[e.get("action", "unknown")] = e
@@ -90,6 +127,10 @@ with open(summary, "w", encoding="utf-8") as out:
     out.write(f"- last_event_time: {last.get('time', 'missing')}\n")
     out.write(f"- last_event_action: {last.get('action', 'missing')}\n")
     out.write(f"- last_event_status: {last.get('status', 'missing')}\n")
+    out.write(f"- interval_seconds: {interval_seconds if interval_seconds else 'unknown'}\n")
+    out.write(f"- next_iteration_after: {next_iteration_after.isoformat() if next_iteration_after else 'unknown'}\n")
+    out.write(f"- seconds_until_next_iteration: {seconds_until_next if seconds_until_next is not None else 'unknown'}\n")
+    out.write(f"- schedule_status: {staleness}\n")
     out.write(f"- failed_event_count: {len(failed)}\n\n")
 
     out.write("## Status Counts\n\n")
