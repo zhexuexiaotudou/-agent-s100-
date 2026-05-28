@@ -29,7 +29,7 @@ Date: 2026-05-28
 | NAS workspace | verified | `169.254.110.209:/OpenClawWorkspace` 持久化挂载到 `/mnt/nas/openclaw`，重启后可写。 |
 | 浏览器自动化 | verified | Headless Chromium 打开本地页面并截图到 NAS，PNG 校验通过。 |
 | ROS2 状态查询 | verified | 可读取 node/topic/service 状态。 |
-| ROS bag 采集 | doing | NAS-backed start/status/stop self-test 已通过；长时间命名采集策略未定。 |
+| ROS bag 采集 | doing | NAS-backed start/status/stop self-test 已通过；命名采集 policy 已生成，还需一次人工批准的 named capture。 |
 | 稳定性采样 | doing | systemd timer 已切到 NAS 输出；当前 10 个 snapshot、4.29h，仍需 168 小时样本。 |
 | 工具白名单 | verified | narrow plugin/runner 可用；2026-05-28 负向复测中 agent 拒绝非白名单 `/usr/bin/touch`，marker 未创建。 |
 | Sandbox | blocked | S100P 当前无 Docker/Podman/runc runtime。 |
@@ -65,7 +65,7 @@ Date: 2026-05-28
 
 ```text
 NAS workspace: /mnt/nas/openclaw
-Baseline roll-up: /mnt/nas/openclaw/reports/baseline-status/baseline_status_20260528-223903.md
+Baseline roll-up: /mnt/nas/openclaw/reports/baseline-status/baseline_status_20260528-224733.md
 Stability summary: /mnt/nas/openclaw/reports/stability/stability_summary_20260528-223427.md
 Experiment report: /mnt/nas/openclaw/reports/experiments/experiment_report_20260528-184444.md
 Document index: /mnt/nas/openclaw/reports/document_index_20260528-182111.md
@@ -73,6 +73,7 @@ Document daily summary: /mnt/nas/openclaw/reports/daily-summary/document_daily_s
 Browser screenshot: /mnt/nas/openclaw/reports/browser-smoke/browser_smoke_20260528-182111.png
 ROS bag dataset: /mnt/nas/openclaw/robot_datasets/rosbag_session_20260528-182117/
 Dataset card: /mnt/nas/openclaw/robot_datasets/rosbag_session_20260528-182117/DATASET_CARD.md
+ROS bag capture policy: /mnt/nas/openclaw/logs/probes/rosbag_capture_policy_20260528-224523.md
 Log diagnosis: /mnt/nas/openclaw/logs/probes/log_diagnosis_20260528-181546.md
 Image caption index: /mnt/nas/openclaw/reports/image-captions/image_caption_index_20260528-182530.md
 Security audit: /mnt/nas/openclaw/logs/probes/security_audit_20260528-182530.md

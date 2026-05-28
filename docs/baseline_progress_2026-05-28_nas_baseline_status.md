@@ -7,7 +7,7 @@ Date: 2026-05-28
 ## Latest Output
 
 ```text
-/mnt/nas/openclaw/reports/baseline-status/baseline_status_20260528-223903.md
+/mnt/nas/openclaw/reports/baseline-status/baseline_status_20260528-224733.md
 ```
 
 Script fixes already in place:
@@ -22,10 +22,10 @@ Script fixes already in place:
 OpenClaw Gateway: active-listening
 Stability sampler timer: active
 NAS workspace: mounted
-Allowlisted tool count: 20
+Allowlisted tool count: 21
 Progress docs: 19
-Probe reports: 24
-Workspace reports: 23
+Probe reports: 26
+Workspace reports: 24
 Dataset cards: 1
 Image caption JSONL indexes: 1
 Document daily summaries: 1
@@ -46,6 +46,7 @@ Experiment report: /mnt/nas/openclaw/reports/experiments/experiment_report_20260
 Security audit: /mnt/nas/openclaw/logs/probes/security_audit_20260528-182530.md
 Service policy: /mnt/nas/openclaw/logs/probes/service_policy_20260528-183619.md
 ROS bag session: /mnt/nas/openclaw/logs/probes/rosbag_session_20260528-182117.md
+ROS bag capture policy: /mnt/nas/openclaw/logs/probes/rosbag_capture_policy_20260528-224523.md
 Dataset card: /mnt/nas/openclaw/robot_datasets/rosbag_session_20260528-182117/DATASET_CARD.md
 Home Assistant status: /mnt/nas/openclaw/logs/probes/home_assistant_status_20260528-183050.md
 Control action policy: /mnt/nas/openclaw/logs/probes/control_action_policy_20260528-183050.md
@@ -60,6 +61,7 @@ Already backed by NAS evidence:
 - A-003 NAS workspace mount
 - A-007 browser smoke screenshot
 - A-009 bounded ROS bag session
+- A-009 named capture policy
 - A-010 stability snapshot and summary collection
 - B-002 document index and deterministic daily summary
 - B-003 metadata image caption index
@@ -73,7 +75,7 @@ Already backed by NAS evidence:
 Still requiring later decisions or external information:
 
 - A-006 Docker/Podman/runc sandbox runtime or explicit drop decision
-- A-009 longer named capture policy
+- A-009 one operator-approved named capture under the policy
 - A-010 168-hour stability sample window
 - B-003 whether semantic vision captioning belongs in the first baseline
 - B-008 Home Assistant URL/token

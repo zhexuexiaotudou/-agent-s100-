@@ -20,6 +20,7 @@ Use the allowlist runner:
 
 ```bash
 scripts/run_allowlisted_tool.sh rosbag_session_probe [dataset_dir] [report_dir]
+scripts/run_allowlisted_tool.sh rosbag_capture_policy_probe [output_dir]
 ```
 
 OpenClaw plugin:
@@ -38,6 +39,23 @@ The self-test records these topics when available:
 ```
 
 It does not command robot movement.
+
+## Named Capture Policy
+
+Before running longer named captures, generate the read-only policy report:
+
+```bash
+scripts/run_allowlisted_tool.sh rosbag_capture_policy_probe /mnt/nas/openclaw/logs/probes
+```
+
+The policy report defines:
+
+- session name regex: `^[a-z0-9][a-z0-9_-]{2,63}$`
+- default duration: 300 seconds
+- maximum duration: 1800 seconds
+- approved topics: `/rosout`, `/parameter_events`, `/tf`, `/tf_static`, `/joint_states`, `/diagnostics`
+- retention: 14 days or 20 GB, report-only cleanup until approved
+- safety boundary: capture only, never robot motion
 
 ## Output
 
@@ -80,3 +98,11 @@ NAS-backed acceptance still requires re-running under:
 ```
 
 after A-003 is complete.
+
+The current NAS-backed policy evidence is:
+
+```text
+/mnt/nas/openclaw/logs/probes/rosbag_capture_policy_20260528-224523.md
+```
+
+It detected `/rosout` and `/parameter_events` as approved topics and found no command-like topics to exclude.

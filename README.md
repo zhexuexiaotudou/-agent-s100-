@@ -327,6 +327,7 @@ New OpenClaw + NAS baseline artifacts:
 - [scripts/probes/browser_smoke_probe.sh](scripts/probes/browser_smoke_probe.sh): captures a local browser smoke screenshot and report.
 - [scripts/probes/rosbag_snapshot_probe.sh](scripts/probes/rosbag_snapshot_probe.sh): records a bounded ROS bag snapshot and report.
 - [scripts/probes/rosbag_session_probe.sh](scripts/probes/rosbag_session_probe.sh): runs a bounded start/status/stop ROS bag self-test.
+- [scripts/probes/rosbag_capture_policy_probe.sh](scripts/probes/rosbag_capture_policy_probe.sh): writes a read-only named ROS bag capture policy and topic classification report.
 - [scripts/probes/experiment_report_probe.sh](scripts/probes/experiment_report_probe.sh): summarizes workspace reports and datasets into a Markdown experiment report.
 - [scripts/probes/security_audit_probe.sh](scripts/probes/security_audit_probe.sh): writes a redacted security audit report.
 - [scripts/probes/service_policy_probe.sh](scripts/probes/service_policy_probe.sh): writes a read-only keep/disable/firewall policy plan for exposed services.
@@ -372,4 +373,5 @@ scripts/run_allowlisted_tool.sh home_assistant_status_probe
 scripts/run_allowlisted_tool.sh control_action_policy_probe
 scripts/run_allowlisted_tool.sh baseline_status_probe
 scripts/run_allowlisted_tool.sh nas_discovery_probe
+scripts/run_allowlisted_tool.sh rosbag_capture_policy_probe
 ```

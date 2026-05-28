@@ -107,6 +107,7 @@ latest_experiment="$(latest_file "$workspace/reports/experiments/experiment_repo
 latest_security="$(latest_file "$workspace/logs/probes/security_audit_*.md")"
 latest_service_policy="$(latest_file "$workspace/logs/probes/service_policy_*.md")"
 latest_rosbag_session="$(latest_file "$workspace/logs/probes/rosbag_session_*.md")"
+latest_rosbag_policy="$(latest_file "$workspace/logs/probes/rosbag_capture_policy_*.md")"
 latest_dataset_card="$(latest_file "$workspace/robot_datasets/*/DATASET_CARD.md")"
 latest_home_assistant="$(latest_file "$workspace/logs/probes/home_assistant_status_*.md")"
 latest_control_policy="$(latest_file "$workspace/logs/probes/control_action_policy_*.md")"
@@ -169,7 +170,16 @@ a009_current="No NAS-backed ROS bag session found."
 a009_gap="Run rosbag_session_probe to NAS and decide longer-session policy."
 if [[ -n "$latest_rosbag_session" ]]; then
   a009_current="NAS-backed ROS bag session exists: $latest_rosbag_session."
-  a009_gap="Bounded self-test verified; longer named capture policy remains."
+  a009_gap="Bounded self-test verified; named capture policy remains."
+fi
+if [[ -n "$latest_rosbag_policy" ]]; then
+  if [[ -n "$latest_rosbag_session" ]]; then
+    a009_current="NAS-backed ROS bag session and named capture policy exist: $latest_rosbag_session; $latest_rosbag_policy."
+    a009_gap="Needs one operator-approved named capture under the policy before final verification."
+  else
+    a009_current="NAS-backed named capture policy exists: $latest_rosbag_policy."
+    a009_gap="Run a bounded session and then one operator-approved named capture."
+  fi
 fi
 
 a010_current="No NAS-backed stability snapshot found."
@@ -273,6 +283,7 @@ fi
   echo "| Security audit | ${latest_security:-missing} |"
   echo "| Service policy | ${latest_service_policy:-missing} |"
   echo "| ROS bag session | ${latest_rosbag_session:-missing} |"
+  echo "| ROS bag capture policy | ${latest_rosbag_policy:-missing} |"
   echo "| Dataset card | ${latest_dataset_card:-missing} |"
   echo "| Home Assistant status | ${latest_home_assistant:-missing} |"
   echo "| Control action policy | ${latest_control_policy:-missing} |"

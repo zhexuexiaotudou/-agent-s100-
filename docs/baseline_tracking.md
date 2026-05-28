@@ -24,7 +24,7 @@
 | A-006 | Docker / sandbox 验证 | blocked | 非主会话不能写宿主机敏感路径 |
 | A-007 | Browser automation smoke test | verified | Headless Chromium 能打开测试网页、截图并保存到 NAS，PNG 校验通过 |
 | A-008 | ROS2 status 工具 | verified | OpenClaw 能查询 ROS2 node/topic/service |
-| A-009 | ROS bag 采集工具 | doing | 聊天命令能开始/停止采集，并写入 NAS；本地 start/status/stop self-test 已通过 runner 和 OpenClaw 插件验证 |
+| A-009 | ROS bag 采集工具 | doing | NAS-backed start/status/stop self-test 和命名采集 policy 均已通过；还需一次人工批准的 named capture 才能最终 verified |
 | A-010 | 7x24 稳定性测试 | doing | systemd timer 已切到 NAS-backed 输出；当前 10 个 snapshot、4.29h、verdict=`collecting` |
 
 ## Epic B：AI NAS Homework
@@ -67,7 +67,7 @@
 | Sandbox 状态探针 | blocked | `sandbox_status_probe` 已通过 runner 和 OpenClaw 插件验证，报告 `runtime_available: no`、`isolation_verdict: blocked`；板端当前无 Docker/Podman/runc |
 | Browser smoke | verified | `browser_smoke_probe` 已通过 NAS-backed runner 验证，能打开本地测试页并截图到 `/mnt/nas/openclaw/reports/browser-smoke`，PNG magic 校验通过 |
 | ROS2 状态工具 | verified | `s100p_run_probe` 真实调用 `ros2_status_probe`，报告写入 `/root/.openclaw/workspace/logs/probes`，当前 nodes=0、topics=2 |
-| ROS bag session | verified | NAS-backed `rosbag_session_probe` 已完成 start/status/stop self-test，并生成 dataset card；长时间命名采集策略仍归 A-009 后续增强 |
+| ROS bag session | verified | NAS-backed `rosbag_session_probe` 已完成 start/status/stop self-test，并生成 dataset card；`rosbag_capture_policy_probe` 已生成命名采集策略 |
 | Dataset card | verified | NAS-backed ROS bag session 已在 `/mnt/nas/openclaw/robot_datasets/.../DATASET_CARD.md` 生成数据集卡片 |
 | 日志诊断 | verified | `log_diagnose` 已从 NAS logs 输出 `/mnt/nas/openclaw/logs/probes/log_diagnosis_20260528-181546.md` |
 | 文档索引 | verified | `index_documents` 和 `document_daily_summary_probe` 已生成 NAS-backed 文档索引与每日摘要 |
@@ -76,7 +76,7 @@
 
 1. A-010：保持 systemd timer 运行到 168 小时，再生成最终稳定性验收摘要。
 2. A-006：决定是否安装 Docker/Podman/runc，或把 sandbox runtime 明确移出第一版 baseline。
-3. A-009：若要进入真实机器人数据采集，补长时间命名采集策略和保留/清理规则。
+3. A-009：若要进入真实机器人数据采集，执行一次人工批准的 named capture，并按现有 policy 做保留/清理。
 4. B-003：决定图片能力第一版是否只保留 metadata caption，还是接语义视觉模型。
 5. B-008/B-009/B-010：等待 Home Assistant token、控制 allowlist 和服务收敛策略，不在无人值守时修改。
 

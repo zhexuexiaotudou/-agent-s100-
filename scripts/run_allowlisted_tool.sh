@@ -20,6 +20,7 @@ Usage:
   scripts/run_allowlisted_tool.sh browser_smoke_probe [report_dir]
   scripts/run_allowlisted_tool.sh rosbag_snapshot_probe [dataset_dir] [report_dir]
   scripts/run_allowlisted_tool.sh rosbag_session_probe [dataset_dir] [report_dir]
+  scripts/run_allowlisted_tool.sh rosbag_capture_policy_probe [output_dir]
   scripts/run_allowlisted_tool.sh experiment_report_probe [report_dir]
   scripts/run_allowlisted_tool.sh log_diagnose [log_dir] [output_dir]
   scripts/run_allowlisted_tool.sh index_documents [documents_dir] [report_dir]
@@ -61,6 +62,7 @@ control_action_policy_probe  Read-only low-risk control policy and audit preflig
 browser_smoke_probe    Headless Chromium local page screenshot smoke test
 rosbag_snapshot_probe  Bounded ROS bag snapshot for low-risk topics
 rosbag_session_probe   Start/status/stop ROS bag self-test for low-risk topics
+rosbag_capture_policy_probe  Read-only named ROS bag capture policy and topic classification
 experiment_report_probe  Generate a Markdown summary from workspace reports and datasets
 baseline_status_probe  Read-only roll-up status report for the two baseline tracks
 EOF
@@ -155,6 +157,11 @@ EOF
     shift
     tool_path="$repo_dir/scripts/probes/rosbag_session_probe.sh"
     max_args=2
+    ;;
+  rosbag_capture_policy_probe)
+    shift
+    tool_path="$repo_dir/scripts/probes/rosbag_capture_policy_probe.sh"
+    max_args=1
     ;;
   experiment_report_probe)
     shift
@@ -359,6 +366,16 @@ if [[ "$tool_id" == "rosbag_session_probe" ]]; then
     ""|/tmp/*|/mnt/nas/openclaw/logs/probes|/mnt/nas/openclaw/logs/probes/*|/root/.openclaw/workspace/logs/probes|/root/.openclaw/workspace/logs/probes/*) ;;
     *)
       echo "Refusing report path outside approved probe directories: ${2:-}" >&2
+      exit 2
+      ;;
+  esac
+fi
+
+if [[ "$tool_id" == "rosbag_capture_policy_probe" ]]; then
+  case "${1:-}" in
+    ""|/tmp/*|/mnt/nas/openclaw/logs/probes|/mnt/nas/openclaw/logs/probes/*|/root/.openclaw/workspace/logs/probes|/root/.openclaw/workspace/logs/probes/*) ;;
+    *)
+      echo "Refusing output path outside approved probe directories: ${1:-}" >&2
       exit 2
       ;;
   esac

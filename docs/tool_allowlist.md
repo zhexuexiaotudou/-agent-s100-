@@ -457,3 +457,35 @@ OpenClaw report: /root/.openclaw/workspace/logs/probes/control_action_policy_202
 verdict: blocked_no_policy
 action_executed: no
 ```
+
+### ROS bag named capture policy
+
+Additional allowlisted tool:
+
+```text
+rosbag_capture_policy_probe  Read-only named ROS bag capture policy and topic classification
+```
+
+Approved runner entry:
+
+```bash
+scripts/run_allowlisted_tool.sh rosbag_capture_policy_probe /mnt/nas/openclaw/logs/probes
+```
+
+Safety boundary:
+
+```text
+mode: read-only policy and topic classification
+robot_motion: never sends commands; capture only
+retention_cleanup: report-only until approved
+```
+
+Board validation:
+
+```text
+runner report: /mnt/nas/openclaw/logs/probes/rosbag_capture_policy_20260528-224523.md
+policy_json: /mnt/nas/openclaw/logs/probes/rosbag_capture_policy_20260528-224523.json
+Approved Topics Detected Now: /rosout, /parameter_events
+Command-like Topics Detected And Excluded: none
+verdict: draft_policy_ready
+```

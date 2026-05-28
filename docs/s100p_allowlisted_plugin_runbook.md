@@ -515,3 +515,33 @@ Verdict: collecting
 ```
 
 This verifies the A-009 local start/status/stop self-test path. It is still bounded and limited to low-risk ROS status topics.
+
+## 2026-05-28 ROS Bag Capture Policy Extension
+
+The plugin was extended with:
+
+```text
+rosbag_capture_policy_probe
+```
+
+Board evidence through the allowlist runner:
+
+```text
+report: /mnt/nas/openclaw/logs/probes/rosbag_capture_policy_20260528-224523.md
+policy_json: /mnt/nas/openclaw/logs/probes/rosbag_capture_policy_20260528-224523.json
+verdict: draft_policy_ready
+approved topics detected: /rosout, /parameter_events
+command-like topics detected: none
+```
+
+After restarting `openclaw-gateway.service`, board evidence through a real OpenClaw agent turn:
+
+```text
+tool_id: rosbag_capture_policy_probe
+report: /root/.openclaw/workspace/logs/probes/rosbag_capture_policy_20260528-224912.md
+verdict: draft_policy_ready
+approved topics detected: /rosout, /parameter_events
+command-like topics detected: none
+```
+
+This closes the A-009 named-capture policy gap without launching a long recording. Final A-009 verification still needs one operator-approved named capture under this policy.

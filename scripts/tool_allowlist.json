@@ -233,6 +233,18 @@
       "description": "Run a start/status/stop ROS bag capture self-test for low-risk topics and write a metadata report."
     },
     {
+      "id": "rosbag_capture_policy_probe",
+      "script": "scripts/probes/rosbag_capture_policy_probe.sh",
+      "mode": "readonly",
+      "approvedInputPrefixes": [],
+      "approvedOutputPrefixes": [
+        "/tmp/",
+        "/mnt/nas/openclaw/logs/probes/",
+        "/root/.openclaw/workspace/logs/probes/"
+      ],
+      "description": "Generate a read-only named ROS bag capture policy, topic classification, and retention plan for A-009."
+    },
+    {
       "id": "experiment_report_probe",
       "script": "scripts/probes/experiment_report_probe.sh",
       "mode": "readonly",
