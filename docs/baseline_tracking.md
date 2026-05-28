@@ -25,7 +25,7 @@
 | A-007 | Browser automation smoke test | doing | 能打开测试网页、截图、保存到 NAS |
 | A-008 | ROS2 status 工具 | verified | OpenClaw 能查询 ROS2 node/topic/service |
 | A-009 | ROS bag 采集工具 | doing | 聊天命令能开始/停止采集，并写入 NAS；本地 start/status/stop self-test 已通过 runner 和 OpenClaw 插件验证 |
-| A-010 | 7x24 稳定性测试 | doing | 连续运行 7 天，记录重启、内存、磁盘、日志；本地 snapshot probe 已通过 runner 和 OpenClaw 插件验证 |
+| A-010 | 7x24 稳定性测试 | doing | 连续运行 7 天，记录重启、内存、磁盘、日志；NAS-backed snapshot/summary 已开始采集，当前 verdict 为 `collecting` |
 
 ## Epic B：AI NAS Homework
 
@@ -35,9 +35,9 @@
 | B-002 | 文档索引和摘要 | doing | 对 NAS 文档生成索引和每日摘要 |
 | B-003 | 图片 caption baseline | todo | 对图片生成 caption，支持文本搜索 |
 | B-004 | 机器人数据集 card | doing | 每次采集自动生成 dataset card |
-| B-005 | 日志分析助手 | doing | 给定日志目录，输出失败摘要、关键错误、建议命令 |
+| B-005 | 日志分析助手 | verified | 已从 NAS 日志目录读取 Windows link-check JSONL，输出失败摘要、关键错误和建议命令 |
 | B-006 | GitHub/Codex workflow | verified | issue -> branch -> PR -> Codex review 链路已走通；远端 issue `#2`、branch `baseline/s100p-nas-baselines`、draft PR `#3` 和 Codex review `4367946668` 已验证 |
-| B-007 | 周报/实验报告生成 | doing | 从 NAS 日志和数据集生成 Markdown 周报；本地 workspace fallback 已通过 runner 和 OpenClaw 插件验证 |
+| B-007 | 周报/实验报告生成 | doing | 已在 NAS workspace 生成 Markdown 报告；完整周报验收仍需补齐文档索引、浏览器截图、ROS bag 和 dataset card |
 | B-008 | Home Assistant / 设备只读状态 | doing | 只查询状态，不做控制；本地 read-only preflight 已通过 runner 和 OpenClaw 插件验证，真实读取需要 HA URL/token |
 | B-009 | 低风险自动化控制 | doing | 白名单 + 二次确认 + 审计日志；本地 policy/audit preflight 已通过 runner 和 OpenClaw 插件验证，尚未开放实际执行 |
 | B-010 | 安全审计清单 | doing | 检查 token、NAS 权限、Gateway 暴露、sandbox；本地 workspace fallback 已通过 runner 和 OpenClaw 插件验证 |
@@ -624,3 +624,43 @@ reboot validation: findmnt shows autofs + nfs4, write test passed
 ```
 
 Tracking status: A-003 is now `verified`.
+
+## 2026-05-28 NAS-backed Reports Update
+
+新增审阅记录：
+
+```text
+docs/baseline_progress_2026-05-28_nas_backed_reports.md
+```
+
+NAS-backed 复测结果：
+
+```text
+B-005 log diagnosis:
+  /mnt/nas/openclaw/logs/probes/log_diagnosis_20260528-181546.md
+  total_matches=14
+  top patterns: permission denied/contact scope, generic failed, timeout
+
+A-010 stability snapshot:
+  /mnt/nas/openclaw/logs/probes/stability_snapshot_20260528-181546.md
+  Gateway status=active-listening
+  NAS workspace=mounted
+  Kernel OOM last 24h=0
+  Gateway error-like logs last 24h=0
+
+A-010 stability summary:
+  /mnt/nas/openclaw/reports/stability/stability_summary_20260528-181555.md
+  Snapshot count=1
+  Verdict=collecting
+
+B-007 experiment report:
+  /mnt/nas/openclaw/reports/experiments/experiment_report_20260528-181734.md
+  workspace=/mnt/nas/openclaw
+  nas_backed_mode=verified
+```
+
+Tracking impact:
+
+- B-005 is now `verified`: NAS 日志目录输入、失败摘要、关键错误和建议命令均已跑通。
+- B-007 remains `doing`: NAS-backed report 生成链路已跑通，但还需要填充 B-002/A-007/A-009/B-004 产物。
+- A-010 remains `doing`: NAS-backed 采样与 summary 已开始，7x24 样本仍在 collecting。

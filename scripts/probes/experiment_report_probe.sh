@@ -29,6 +29,12 @@ probe_dir="$workspace/logs/probes"
 reports_dir="$workspace/reports"
 datasets_dir="$workspace/robot_datasets"
 
+if [[ "$workspace" == "/mnt/nas/openclaw" ]]; then
+  nas_mode="verified"
+else
+  nas_mode="fallback"
+fi
+
 count_files() {
   local dir="$1"
   local pattern="$2"
@@ -75,6 +81,7 @@ extract_field() {
   echo
   echo "- generated_at: $(date -Is)"
   echo "- workspace: $workspace"
+  echo "- nas_backed_mode: $nas_mode"
   echo "- output: $report"
   echo
   echo "## Summary"
@@ -126,15 +133,23 @@ extract_field() {
   echo
   echo "## Current Blockers"
   echo
-  echo "- NAS-backed acceptance is pending until /mnt/nas/openclaw is mounted."
+  if [[ "$nas_mode" == "verified" ]]; then
+    echo "- NAS-backed report generation is verified; remaining acceptance needs richer NAS artifacts from B-002, A-007, A-009, and B-004."
+  else
+    echo "- NAS-backed acceptance is pending until /mnt/nas/openclaw is mounted and this probe is rerun with OPENCLAW_WORKSPACE_DIR=/mnt/nas/openclaw."
+  fi
   echo "- A-005 broad exec remains unverified until non-allowlisted command execution is blocked."
   echo "- A-006 sandbox isolation is blocked until Docker/Podman/runc runtime is installed or the item is dropped from baseline."
   echo
   echo "## Suggested Next Actions"
   echo
-  echo "1. Mount TS-264C workspace and rerun B-002/B-005/B-007/A-007/A-009 against NAS paths."
+  if [[ "$nas_mode" == "verified" ]]; then
+    echo "1. Populate the NAS workspace with document indexes, browser screenshots, ROS bag sessions, and dataset cards, then rerun this report."
+  else
+    echo "1. Mount TS-264C workspace and rerun B-002/B-005/B-007/A-007/A-009 against NAS paths."
+  fi
   echo "2. Decide whether A-006 needs Docker/Podman on S100P or should be excluded from the first baseline."
-  echo "3. Extend ROS bag capture from bounded snapshot to explicit start/stop after NAS output is available."
+  echo "3. Extend ROS bag capture from bounded snapshot to explicit start/stop with NAS output."
 } > "$report"
 
 echo "$report"
