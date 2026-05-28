@@ -10,6 +10,7 @@ baseline tracks while Codex or the PC can be left unattended.
 ```text
 scripts/overnight_baseline_runner.sh
 scripts/start_overnight_baseline_runner.sh
+scripts/check_overnight_baseline_runner.sh
 ```
 
 Default behavior:
@@ -58,6 +59,30 @@ security_audit: /mnt/nas/openclaw/logs/probes/security_audit_20260528-232340.md
 ```bash
 sudo ps -p 72079 -o pid=,etime=,cmd=
 sudo tail -n 20 /mnt/nas/openclaw/logs/overnight/overnight_baseline_20260528-232330.jsonl
+sudo /root/.openclaw/workspace/scripts/check_overnight_baseline_runner.sh
+```
+
+The status checker writes a Markdown report under:
+
+```text
+/mnt/nas/openclaw/reports/baseline-status/overnight_baseline_YYYYmmdd-HHMMSS_status.md
+```
+
+It summarizes whether the process is still running, how many iterations are
+visible in JSONL, latest events by action, and whether any failed events have
+been recorded.
+
+Current status-check evidence:
+
+```text
+status_report: /mnt/nas/openclaw/reports/baseline-status/overnight_baseline_20260528-232330_status.md
+pid: 72079
+process_status: running
+completed_iterations_observed: 1
+event_count: 8
+failed_event_count: 0
+last_event_action: iteration_end
+last_event_status: ok
 ```
 
 ## How To Stop

@@ -360,6 +360,7 @@ New OpenClaw + NAS baseline artifacts:
 - [scripts/mount_openclaw_nas.sh](scripts/mount_openclaw_nas.sh): dry-run first NAS mount helper for `/mnt/nas/openclaw`.
 - [scripts/overnight_baseline_runner.sh](scripts/overnight_baseline_runner.sh): read-only overnight sampler that keeps writing stability and baseline roll-up evidence to NAS.
 - [scripts/start_overnight_baseline_runner.sh](scripts/start_overnight_baseline_runner.sh): bounded launcher for the overnight sampler.
+- [scripts/check_overnight_baseline_runner.sh](scripts/check_overnight_baseline_runner.sh): read-only status report for the latest overnight sampler JSONL and PID.
 
 The allowlist runner now includes:
 
