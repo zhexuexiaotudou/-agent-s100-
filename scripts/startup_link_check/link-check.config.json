@@ -1,0 +1,49 @@
+{
+  "windows": {
+    "interfaceAlias": "以太网",
+    "requiredIPv4": [
+      { "ip": "192.168.127.2", "prefixLength": 24 },
+      { "ip": "192.168.137.1", "prefixLength": 24 }
+    ],
+    "startupDelaySeconds": 45,
+    "autoCloseSuccessSeconds": 5,
+    "autoCloseFixedSeconds": 10
+  },
+  "s100p": {
+    "host": "192.168.127.10",
+    "user": "sunrise",
+    "sshKey": "C:\\Users\\zhexu\\.ssh\\s100p_linkcheck_ed25519",
+    "sshConnectTimeoutSeconds": 8,
+    "interface": "eth1",
+    "requiredIPv4": [
+      "192.168.127.10/24",
+      "192.168.137.10/24"
+    ],
+    "defaultGateway": "192.168.137.1",
+    "defaultRouteMetric": 50,
+    "dns": [
+      "223.5.5.5",
+      "8.8.8.8",
+      "8.8.4.4"
+    ],
+    "netplanPath": "/etc/netplan/99-hobot-net.yaml",
+    "netplanMacEth0": "6e:75:df:40:9c:bc",
+    "netplanMacEth1": "3e:a5:ed:ba:5b:b2"
+  },
+  "nas": {
+    "ip": "169.254.110.209",
+    "nfsExport": "/OpenClawWorkspace",
+    "mountPoint": "/mnt/nas/openclaw",
+    "parentDir": "/mnt/nas",
+    "probeDir": "/mnt/nas/openclaw/tmp"
+  },
+  "openclaw": {
+    "serviceName": "openclaw-gateway.service",
+    "rootUserRuntimeDir": "/run/user/0",
+    "logFile": "/tmp/openclaw/openclaw-2026-05-28.log",
+    "feishuHost": "open.feishu.cn"
+  },
+  "logging": {
+    "localDir": "F:\\Project\\Digua\\logs\\link-check"
+  }
+}
