@@ -204,6 +204,17 @@
       "description": "Check local semantic vision caption model/runtime readiness for B-003 without calling external APIs."
     },
     {
+      "id": "dream7b_readiness_probe",
+      "script": "scripts/probes/dream7b_readiness_probe.sh",
+      "mode": "readonly",
+      "approvedOutputPrefixes": [
+        "/tmp/",
+        "/mnt/nas/openclaw/reports/",
+        "/root/.openclaw/workspace/reports/"
+      ],
+      "description": "Check Dream 7B / local DLM deployment readiness without downloading models, calling external APIs, or starting a model server."
+    },
+    {
       "id": "home_assistant_status_probe",
       "script": "scripts/probes/home_assistant_status_probe.sh",
       "mode": "readonly",

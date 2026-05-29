@@ -33,7 +33,7 @@
 | --- | --- | --- | --- |
 | B-001 | NAS 资料库目录规范 | verified | 定义 documents/photos/videos/robot_datasets/logs/reports |
 | B-002 | 文档索引和摘要 | verified | NAS-backed 文档索引和 deterministic 每日摘要均已生成 |
-| B-003 | 图片 caption baseline | doing | NAS-backed metadata caption 和 JSONL index 已跑通；semantic vision caption 仍未做 |
+| B-003 | 图片 caption / Dream 7B readiness baseline | doing | NAS-backed metadata caption 和 JSONL index 已跑通；semantic vision caption 未跑通；Dream 7B readiness 证实 runtime 存在但缺模型文件 |
 | B-004 | 机器人数据集 card | verified | NAS-backed ROS bag session 已自动生成 `DATASET_CARD.md` |
 | B-005 | 日志分析助手 | verified | 已从 NAS 日志目录读取 Windows link-check JSONL，输出失败摘要、关键错误和建议命令 |
 | B-006 | GitHub/Codex workflow | verified | issue -> branch -> PR -> Codex review 链路已走通；远端 issue `#2`、branch `baseline/s100p-nas-baselines`、draft PR `#3` 和 Codex review `4367969950` 已验证 |
@@ -77,7 +77,7 @@
 1. A-010：保持 systemd timer 运行到 168 小时，再生成最终稳定性验收摘要。
 2. A-006：决定是否安装 Docker/Podman/runc，或把 sandbox runtime 明确移出第一版 baseline。
 3. A-009：若要进入真实机器人数据采集，执行一次人工批准的 named capture，并按现有 policy 做保留/清理。
-4. B-003：决定图片能力第一版是否只保留 metadata caption，还是接语义视觉模型。
+4. B-003：决定第一版是否只保留 metadata caption，还是安装/挂载语义视觉模型或 Dream 7B 模型文件。
 5. B-008/B-009/B-010：等待 Home Assistant token、控制 allowlist 和服务收敛策略，不在无人值守时修改。
 
 ## 2026-05-28 Startup Self-Heal Update
@@ -956,6 +956,46 @@ Tracking status: B-003 remains `doing`. Metadata caption and JSONL indexing are
 verified, but semantic image captioning is not verified because no local vision
 model files were found. The next decision is either to install/mount a local
 vision caption model or scope B-003 v1 as metadata-only.
+
+## 2026-05-29 B-003 Dream 7B / Local DLM Readiness Update
+
+`dream7b_readiness_probe` was added to separate "S100P can run OpenClaw
+gateway/tools" from "S100P can host a local 7B DLM".
+
+Board evidence through the allowlist runner:
+
+```text
+report: /mnt/nas/openclaw/reports/models/dream7b_readiness_20260529-155315.md
+verdict: blocked_no_model
+memory total: 21.3 GiB
+runtime summary: llama.cpp,torch-transformers
+model-like files: 0
+dream-named files: 0
+```
+
+OpenClaw agent evidence through `s100p_run_probe`:
+
+```text
+report: /root/.openclaw/workspace/reports/models/dream7b_readiness_20260529-160626.md
+verdict: blocked_no_model
+runtime summary: llama.cpp, torch-transformers
+model file count: 0
+memory total: 21.3 GiB
+```
+
+NAS baseline roll-up:
+
+```text
+report: /mnt/nas/openclaw/reports/baseline-status/baseline_status_20260529-160424.md
+B-003: Dream 7B/local DLM readiness has runtime evidence but no model files
+remaining gap: mount/install Dream 7B model files or explicitly keep local DLM out of first baseline
+```
+
+Tracking status: B-003 remains `doing`. The S100P has runtime candidates
+(`llama_cpp` Python module plus `torch`/`transformers`), but there are no Dream
+7B or model-like files under the approved model directories. No Dream 7B
+deployment or inference claim should be made until model files are installed or
+mounted and a bounded local smoke test passes.
 
 ## 2026-05-28 A-009 Operator-Approved Named Capture Update
 

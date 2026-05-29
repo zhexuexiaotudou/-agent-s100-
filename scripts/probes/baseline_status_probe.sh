@@ -104,6 +104,7 @@ latest_stability="$(latest_file "$workspace/logs/probes/stability_snapshot_*.md"
 latest_stability_summary="$(latest_file "$workspace/reports/stability/stability_summary_*.md")"
 latest_image_caption="$(latest_file "$workspace/reports/image-captions/image_caption_index_*.md")"
 latest_vision_readiness="$(latest_file "$workspace/reports/image-captions/vision_caption_readiness_*.md")"
+latest_dream7b_readiness="$(latest_file "$workspace/reports/models/dream7b_readiness_*.md")"
 latest_experiment="$(latest_file "$workspace/reports/experiments/experiment_report_*.md")"
 latest_security="$(latest_file "$workspace/logs/probes/security_audit_*.md")"
 latest_service_policy="$(latest_file "$workspace/logs/probes/service_policy_*.md")"
@@ -229,6 +230,21 @@ if [[ -n "$latest_vision_readiness" ]]; then
     b003_gap="Review the readiness verdict before deciding metadata-only versus semantic caption scope."
   fi
 fi
+if [[ -n "$latest_dream7b_readiness" ]]; then
+  if grep -q 'candidate_runtime_and_model_present' "$latest_dream7b_readiness" 2>/dev/null; then
+    b003_current="$b003_current Dream 7B/local DLM readiness found both model and runtime candidates: $latest_dream7b_readiness."
+    b003_gap="Run one bounded local inference smoke test before claiming Dream 7B deployment."
+  elif grep -q 'blocked_no_model' "$latest_dream7b_readiness" 2>/dev/null; then
+    b003_current="$b003_current Dream 7B/local DLM readiness has runtime evidence but no model files: $latest_dream7b_readiness."
+    b003_gap="Mount/install Dream 7B model files or explicitly keep local DLM out of first baseline."
+  elif grep -q 'blocked_no_runtime' "$latest_dream7b_readiness" 2>/dev/null; then
+    b003_current="$b003_current Dream 7B/local DLM readiness has model-like files but no runtime: $latest_dream7b_readiness."
+    b003_gap="Install or configure a local runtime before any Dream 7B smoke test."
+  else
+    b003_current="$b003_current Dream 7B/local DLM readiness exists: $latest_dream7b_readiness."
+    b003_gap="Review local DLM readiness verdict before making any Dream 7B deployment claim."
+  fi
+fi
 
 b004_current="No NAS-backed dataset card found."
 b004_gap="Generate dataset card beside each robot dataset."
@@ -320,6 +336,7 @@ fi
   echo "| Log diagnosis | ${latest_log_diagnosis:-missing} |"
   echo "| Image caption index | ${latest_image_caption:-missing} |"
   echo "| Vision caption readiness | ${latest_vision_readiness:-missing} |"
+  echo "| Dream 7B readiness | ${latest_dream7b_readiness:-missing} |"
   echo "| Experiment report | ${latest_experiment:-missing} |"
   echo "| Security audit | ${latest_security:-missing} |"
   echo "| Service policy | ${latest_service_policy:-missing} |"

@@ -33,6 +33,7 @@ stability_snapshot_probe
 stability_summary_probe
 image_caption_probe
 vision_caption_readiness_probe
+dream7b_readiness_probe
 home_assistant_status_probe
 control_action_policy_probe
 browser_smoke_probe
@@ -167,6 +168,7 @@ stability_snapshot_probe
 stability_summary_probe
 image_caption_probe
 vision_caption_readiness_probe
+dream7b_readiness_probe
 home_assistant_status_probe
 control_action_policy_probe
 browser_smoke_probe
@@ -591,6 +593,40 @@ semantic runtime: no
 This verifies the narrow tool path for B-003 semantic readiness. It does not
 verify semantic caption generation; the board has no detected local vision model
 files yet.
+
+## 2026-05-29 Dream 7B / Local DLM Readiness Extension
+
+The plugin was extended with:
+
+```text
+dream7b_readiness_probe
+```
+
+Board evidence through the allowlist runner:
+
+```text
+report: /mnt/nas/openclaw/reports/models/dream7b_readiness_20260529-155315.md
+verdict: blocked_no_model
+memory total: 21.3 GiB
+runtime summary: llama.cpp,torch-transformers
+model-like files: 0
+dream-named files: 0
+```
+
+Board evidence through a real OpenClaw agent turn:
+
+```text
+tool_id: dream7b_readiness_probe
+report: /root/.openclaw/workspace/reports/models/dream7b_readiness_20260529-160626.md
+verdict: blocked_no_model
+runtime summary: llama.cpp, torch-transformers
+model file count: 0
+memory total: 21.3 GiB
+```
+
+This verifies the narrow tool path for the Dream 7B deployment gate. It does not
+verify Dream 7B deployment or inference; model files are absent from the approved
+model directories.
 
 ## 2026-05-28 B-010 Service Convergence Decision Extension
 

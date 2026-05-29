@@ -567,6 +567,50 @@ semantic runtime: no
 This keeps B-003 honest: metadata captioning is verified, but semantic captions
 are blocked until a local vision model is installed or mounted.
 
+### Dream 7B / local DLM readiness
+
+Additional allowlisted tool:
+
+```text
+dream7b_readiness_probe  Read-only Dream 7B / local DLM deployment readiness
+```
+
+Approved runner entry:
+
+```bash
+scripts/run_allowlisted_tool.sh dream7b_readiness_probe /mnt/nas/openclaw/reports/models
+```
+
+Safety boundary:
+
+```text
+mode: read-only
+model_download: no
+external_api_called: no
+model_server_started: no
+package_install: no
+```
+
+This separates Dream 7B deployment readiness from the existing metadata image
+caption baseline. A deployment claim requires both model files and a runnable
+local inference runtime, followed by a bounded smoke test.
+
+Board validation:
+
+```text
+runner report: /mnt/nas/openclaw/reports/models/dream7b_readiness_20260529-155315.md
+OpenClaw report: /root/.openclaw/workspace/reports/models/dream7b_readiness_20260529-160626.md
+verdict: blocked_no_model
+memory total: 21.3 GiB
+runtime summary: llama.cpp,torch-transformers
+model-like files: 0
+dream-named files: 0
+```
+
+This means S100P currently has local runtime candidates for a 7B model path, but
+the Dream 7B deployment itself is still blocked until model files are mounted or
+installed under an approved model directory.
+
 ### Operator-approved ROS bag named capture
 
 Additional allowlisted tool:
