@@ -25,7 +25,7 @@
 | A-007 | Browser automation smoke test | verified | Headless Chromium 能打开测试网页、截图并保存到 NAS，PNG 校验通过 |
 | A-008 | ROS2 status 工具 | verified | OpenClaw 能查询 ROS2 node/topic/service |
 | A-009 | ROS bag 采集工具 | verified | NAS-backed start/status/stop self-test、命名采集 policy 和一次人工批准的 300 秒 named capture 均已通过 |
-| A-010 | 7x24 稳定性测试 | doing | systemd timer 已切到 NAS-backed 输出；当前 65 个 snapshot、21.80h、verdict=`collecting` |
+| A-010 | 7x24 稳定性测试 | doing | systemd timer 已切到 NAS-backed 输出；当前 66 个 snapshot、22.13h、verdict=`collecting`；新一轮 10h overnight runner 已启动 |
 
 ## Epic B：AI NAS Homework
 
@@ -1065,3 +1065,46 @@ verdict: collecting
 
 Tracking status: A-010 remains `doing`. The trend is clean so far, but it is
 not a 7x24 pass until the elapsed time reaches at least 168 hours.
+
+## 2026-05-29 Overnight Runner Restart
+
+The previous overnight runner completed cleanly and a new 10-hour read-only
+runner was started to keep collecting baseline evidence.
+
+Previous runner:
+
+```text
+summary: /mnt/nas/openclaw/reports/baseline-status/overnight_baseline_20260528-232330_summary.md
+pid: 72079
+process_status: not_running
+verdict: complete_no_failed_events
+completed_iterations_observed: 20
+event_count: 114
+failed_event_count: 0
+```
+
+New runner:
+
+```text
+pid: 278801
+launch_log: /mnt/nas/openclaw/logs/overnight/overnight_launch_20260529-162329.out
+status_report: /mnt/nas/openclaw/reports/baseline-status/overnight_baseline_20260529-162329_status.md
+process_status: running
+completed_iterations_observed: 1
+failed_event_count: 0
+next_iteration_after: 2026-05-29T16:53:51+08:00
+```
+
+Latest A-010 evidence after restart:
+
+```text
+summary: /mnt/nas/openclaw/reports/stability/stability_summary_20260529-162339.md
+snapshot count: 66
+elapsed hours: 22.13
+gateway statuses: 66 active-listening
+NAS statuses: 66 mounted
+verdict: collecting
+```
+
+Tracking status: A-010 remains `doing`. This keeps the evidence stream alive
+but still does not satisfy the 168-hour acceptance gate.
