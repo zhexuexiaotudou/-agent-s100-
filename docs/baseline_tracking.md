@@ -1300,3 +1300,25 @@ source_count: 2
 latest_overall: not_ready
 changed_items: none
 ```
+
+## 2026-05-29 Evidence Manifest Update
+
+Added a read-only evidence manifest:
+
+```text
+script: scripts/probes/baseline_evidence_manifest_probe.sh
+tool_id: baseline_evidence_manifest_probe
+output: /mnt/nas/openclaw/reports/baseline-status/baseline_evidence_manifest_*.md
+```
+
+Tracking impact: the current acceptance, trend, teacher briefing, stability, model, HA, control, security, document, image, experiment, browser, and ROS evidence files can now be hashed and recorded in a single manifest for later review.
+
+Evidence:
+
+```text
+runner manifest: /mnt/nas/openclaw/reports/baseline-status/baseline_evidence_manifest_20260529-204913.md
+OpenClaw manifest: /root/.openclaw/workspace/reports/baseline-status/baseline_evidence_manifest_20260529-205038.md
+runner entry_count: 35
+OpenClaw entry_count: 36
+missing_count: 0
+```

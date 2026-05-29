@@ -144,6 +144,7 @@ while (( $(date +%s) < end_epoch )); do
   run_tool "baseline_gap_decision" baseline_gap_decision_probe "$nas_root" "$nas_root/reports/baseline-status" >/dev/null || true
   run_tool "baseline_acceptance" baseline_acceptance_probe "$nas_root" "$nas_root/reports/baseline-status" >/dev/null || true
   run_tool "baseline_acceptance_trend" baseline_acceptance_trend_probe "$nas_root" "$nas_root/reports/baseline-status" >/dev/null || true
+  run_tool "baseline_evidence_manifest" baseline_evidence_manifest_probe "$nas_root" "$nas_root/reports/baseline-status" >/dev/null || true
   run_tool "teacher_baseline_briefing" teacher_baseline_briefing_probe "$nas_root" "$nas_root/reports/teacher" >/dev/null || true
 
   if (( iteration == 1 || iteration % 4 == 0 )); then
@@ -166,6 +167,7 @@ latest_baseline="$(find "$nas_root/reports/baseline-status" -type f -name 'basel
 latest_gap="$(find "$nas_root/reports/baseline-status" -type f -name 'baseline_gap_decision_*.md' -printf '%T@ %p\n' 2>/dev/null | sort -nr | awk 'NR==1 {$1=""; sub(/^ /, ""); print}')"
 latest_acceptance="$(find "$nas_root/reports/baseline-status" -type f -name 'baseline_acceptance_[0-9]*.md' -printf '%T@ %p\n' 2>/dev/null | sort -nr | awk 'NR==1 {$1=""; sub(/^ /, ""); print}')"
 latest_acceptance_trend="$(find "$nas_root/reports/baseline-status" -type f -name 'baseline_acceptance_trend_*.md' -printf '%T@ %p\n' 2>/dev/null | sort -nr | awk 'NR==1 {$1=""; sub(/^ /, ""); print}')"
+latest_manifest="$(find "$nas_root/reports/baseline-status" -type f -name 'baseline_evidence_manifest_*.md' -printf '%T@ %p\n' 2>/dev/null | sort -nr | awk 'NR==1 {$1=""; sub(/^ /, ""); print}')"
 latest_teacher="$(find "$nas_root/reports/teacher" -type f -name 'teacher_baseline_briefing_*.md' -printf '%T@ %p\n' 2>/dev/null | sort -nr | awk 'NR==1 {$1=""; sub(/^ /, ""); print}')"
 latest_convergence="$(find "$nas_root/reports/security" -type f -name 'service_convergence_decision_*.md' -printf '%T@ %p\n' 2>/dev/null | sort -nr | awk 'NR==1 {$1=""; sub(/^ /, ""); print}')"
 
@@ -180,12 +182,13 @@ latest_convergence="$(find "$nas_root/reports/security" -type f -name 'service_c
   echo "- latest_baseline_gap_decision: ${latest_gap:-missing}"
   echo "- latest_baseline_acceptance: ${latest_acceptance:-missing}"
   echo "- latest_baseline_acceptance_trend: ${latest_acceptance_trend:-missing}"
+  echo "- latest_baseline_evidence_manifest: ${latest_manifest:-missing}"
   echo "- latest_teacher_baseline_briefing: ${latest_teacher:-missing}"
   echo "- latest_service_convergence_decision: ${latest_convergence:-missing}"
   echo "- jsonl: $jsonl"
 } >> "$report"
 
-log_event "info" "runner_finish" "ok" "iterations=$iteration latest_stability=${latest_stability:-missing} latest_baseline=${latest_baseline:-missing} latest_gap=${latest_gap:-missing} latest_acceptance=${latest_acceptance:-missing} latest_acceptance_trend=${latest_acceptance_trend:-missing} latest_teacher=${latest_teacher:-missing} latest_convergence=${latest_convergence:-missing}"
+log_event "info" "runner_finish" "ok" "iterations=$iteration latest_stability=${latest_stability:-missing} latest_baseline=${latest_baseline:-missing} latest_gap=${latest_gap:-missing} latest_acceptance=${latest_acceptance:-missing} latest_acceptance_trend=${latest_acceptance_trend:-missing} latest_manifest=${latest_manifest:-missing} latest_teacher=${latest_teacher:-missing} latest_convergence=${latest_convergence:-missing}"
 
 if [[ -x "$summary_helper" ]]; then
   run_helper "overnight_summary" "$summary_helper" "$out_dir" "$nas_root/reports/baseline-status" "$nas_root" >/dev/null || true

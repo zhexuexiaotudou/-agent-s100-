@@ -417,6 +417,22 @@
       "description": "Generate a read-only trend report across saved baseline acceptance snapshots."
     },
     {
+      "id": "baseline_evidence_manifest_probe",
+      "script": "scripts/probes/baseline_evidence_manifest_probe.sh",
+      "mode": "readonly",
+      "approvedInputPrefixes": [
+        "/tmp/",
+        "/mnt/nas/openclaw/",
+        "/root/.openclaw/workspace/"
+      ],
+      "approvedOutputPrefixes": [
+        "/tmp/",
+        "/mnt/nas/openclaw/reports/",
+        "/root/.openclaw/workspace/reports/"
+      ],
+      "description": "Generate a read-only SHA256 evidence manifest for current baseline proof files."
+    },
+    {
       "id": "teacher_baseline_briefing_probe",
       "script": "scripts/probes/teacher_baseline_briefing_probe.sh",
       "mode": "readonly",

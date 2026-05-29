@@ -35,6 +35,7 @@ Usage:
   scripts/run_allowlisted_tool.sh baseline_gap_decision_probe [nas_root] [report_dir]
   scripts/run_allowlisted_tool.sh baseline_acceptance_probe [nas_root] [report_dir]
   scripts/run_allowlisted_tool.sh baseline_acceptance_trend_probe [nas_root] [report_dir]
+  scripts/run_allowlisted_tool.sh baseline_evidence_manifest_probe [nas_root] [report_dir]
   scripts/run_allowlisted_tool.sh teacher_baseline_briefing_probe [nas_root] [report_dir]
 
 Only explicitly allowlisted tool IDs can be executed. This script never accepts
@@ -84,6 +85,7 @@ baseline_status_probe  Read-only roll-up status report for the two baseline trac
 baseline_gap_decision_probe  Read-only remaining-gap and next-decision report
 baseline_acceptance_probe  Read-only pass/collecting/blocked acceptance gate for all baseline IDs
 baseline_acceptance_trend_probe  Read-only trend report across baseline acceptance snapshots
+baseline_evidence_manifest_probe  Read-only SHA256 manifest for current baseline evidence files
 teacher_baseline_briefing_probe  Read-only teacher-facing briefing package for the two baseline tracks
 EOF
     exit 0
@@ -236,6 +238,11 @@ EOF
   baseline_acceptance_trend_probe)
     shift
     tool_path="$repo_dir/scripts/probes/baseline_acceptance_trend_probe.sh"
+    max_args=2
+    ;;
+  baseline_evidence_manifest_probe)
+    shift
+    tool_path="$repo_dir/scripts/probes/baseline_evidence_manifest_probe.sh"
     max_args=2
     ;;
   teacher_baseline_briefing_probe)
@@ -642,6 +649,23 @@ if [[ "$tool_id" == "baseline_acceptance_probe" ]]; then
 fi
 
 if [[ "$tool_id" == "baseline_acceptance_trend_probe" ]]; then
+  case "${1:-}" in
+    ""|/root/.openclaw/workspace|/root/.openclaw/workspace/*|/mnt/nas/openclaw|/mnt/nas/openclaw/*|/tmp/*) ;;
+    *)
+      echo "Refusing NAS/workspace root outside approved baseline directories: ${1:-}" >&2
+      exit 2
+      ;;
+  esac
+  case "${2:-}" in
+    ""|/tmp/*|/mnt/nas/openclaw/reports|/mnt/nas/openclaw/reports/*|/root/.openclaw/workspace/reports|/root/.openclaw/workspace/reports/*) ;;
+    *)
+      echo "Refusing output path outside approved report directories: ${2:-}" >&2
+      exit 2
+      ;;
+  esac
+fi
+
+if [[ "$tool_id" == "baseline_evidence_manifest_probe" ]]; then
   case "${1:-}" in
     ""|/root/.openclaw/workspace|/root/.openclaw/workspace/*|/mnt/nas/openclaw|/mnt/nas/openclaw/*|/tmp/*) ;;
     *)

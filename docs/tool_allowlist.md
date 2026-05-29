@@ -801,6 +801,30 @@ latest_overall: not_ready
 changed_items: none
 ```
 
+### Baseline evidence manifest
+
+Additional allowlisted tool:
+
+```text
+baseline_evidence_manifest_probe  Read-only SHA256 manifest for current baseline evidence files
+```
+
+Approved runner entry:
+
+```bash
+scripts/run_allowlisted_tool.sh baseline_evidence_manifest_probe \
+  /mnt/nas/openclaw \
+  /mnt/nas/openclaw/reports/baseline-status
+```
+
+Board validation:
+
+```text
+runner report: /mnt/nas/openclaw/reports/baseline-status/baseline_evidence_manifest_20260529-204913.md
+OpenClaw report: /root/.openclaw/workspace/reports/baseline-status/baseline_evidence_manifest_20260529-205038.md
+missing_count: 0
+```
+
 ### Operator-approved ROS bag named capture
 
 Additional allowlisted tool:

@@ -741,6 +741,33 @@ source_count: 2
 latest_overall: not_ready
 ```
 
+## 2026-05-29 Baseline Evidence Manifest Extension
+
+The plugin was extended with:
+
+```text
+baseline_evidence_manifest_probe
+```
+
+This hashes the current baseline evidence files and writes a read-only manifest
+with file size, mtime, path, and SHA256. It is intended for review traceability,
+not for moving or copying the evidence bundle.
+
+Board evidence through the allowlist runner:
+
+```text
+report: /mnt/nas/openclaw/reports/baseline-status/baseline_evidence_manifest_20260529-204913.md
+missing_count: 0
+```
+
+Board evidence through a real OpenClaw agent turn:
+
+```text
+tool_id: baseline_evidence_manifest_probe
+report: /root/.openclaw/workspace/reports/baseline-status/baseline_evidence_manifest_20260529-205038.md
+missing_count: 0
+```
+
 ## 2026-05-28 B-010 Service Convergence Decision Extension
 
 The plugin was extended with:

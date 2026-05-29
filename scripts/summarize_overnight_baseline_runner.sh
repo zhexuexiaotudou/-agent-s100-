@@ -67,12 +67,13 @@ latest_baseline="$(latest_file "$nas_root/reports/baseline-status" 'baseline_sta
 latest_gap="$(latest_file "$nas_root/reports/baseline-status" 'baseline_gap_decision_*.md')"
 latest_acceptance="$(latest_file "$nas_root/reports/baseline-status" 'baseline_acceptance_[0-9]*.md')"
 latest_acceptance_trend="$(latest_file "$nas_root/reports/baseline-status" 'baseline_acceptance_trend_*.md')"
+latest_manifest="$(latest_file "$nas_root/reports/baseline-status" 'baseline_evidence_manifest_*.md')"
 latest_teacher="$(latest_file "$nas_root/reports/teacher" 'teacher_baseline_briefing_*.md')"
 latest_security="$(latest_file "$nas_root/logs/probes" 'security_audit_*.md')"
 latest_convergence="$(latest_file "$nas_root/reports/security" 'service_convergence_decision_*.md')"
 latest_execution_preflight="$(latest_file "$nas_root/reports/security" 'service_execution_preflight_*.md')"
 
-python3 - "$latest_jsonl" "$summary" "$pid" "$process_status" "$process_line" "$latest_stability" "$latest_baseline" "$latest_gap" "$latest_acceptance" "$latest_acceptance_trend" "$latest_teacher" "$latest_security" "$latest_convergence" "$latest_execution_preflight" <<'PY'
+python3 - "$latest_jsonl" "$summary" "$pid" "$process_status" "$process_line" "$latest_stability" "$latest_baseline" "$latest_gap" "$latest_acceptance" "$latest_acceptance_trend" "$latest_manifest" "$latest_teacher" "$latest_security" "$latest_convergence" "$latest_execution_preflight" <<'PY'
 import json
 import re
 import sys
@@ -91,11 +92,12 @@ from pathlib import Path
     latest_gap,
     latest_acceptance,
     latest_acceptance_trend,
+    latest_manifest,
     latest_teacher,
     latest_security,
     latest_convergence,
     latest_execution_preflight,
-) = sys.argv[1:15]
+) = sys.argv[1:16]
 
 events = []
 with open(jsonl, encoding="utf-8") as fh:
@@ -183,6 +185,7 @@ with open(summary, "w", encoding="utf-8") as out:
     out.write(f"| latest_baseline_gap_decision | {latest_gap or 'missing'} |\n")
     out.write(f"| latest_baseline_acceptance | {latest_acceptance or 'missing'} |\n")
     out.write(f"| latest_baseline_acceptance_trend | {latest_acceptance_trend or 'missing'} |\n")
+    out.write(f"| latest_baseline_evidence_manifest | {latest_manifest or 'missing'} |\n")
     out.write(f"| latest_teacher_baseline_briefing | {latest_teacher or 'missing'} |\n")
     out.write(f"| gateway_status | {gateway_status} |\n")
     out.write(f"| nas_status | {nas_status} |\n")
@@ -210,6 +213,7 @@ with open(summary, "w", encoding="utf-8") as out:
         "baseline_gap_decision",
         "baseline_acceptance",
         "baseline_acceptance_trend",
+        "baseline_evidence_manifest",
         "teacher_baseline_briefing",
         "openclaw_status",
         "security_audit",
