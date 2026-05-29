@@ -29,6 +29,7 @@ security_audit_probe
 service_policy_probe
 service_hardening_plan_probe
 service_convergence_decision_probe
+service_execution_preflight_probe
 stability_snapshot_probe
 stability_summary_probe
 image_caption_probe
@@ -165,6 +166,7 @@ security_audit_probe
 service_policy_probe
 service_hardening_plan_probe
 service_convergence_decision_probe
+service_execution_preflight_probe
 stability_snapshot_probe
 stability_summary_probe
 image_caption_probe

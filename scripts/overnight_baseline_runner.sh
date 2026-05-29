@@ -147,6 +147,7 @@ while (( $(date +%s) < end_epoch )); do
     run_tool "openclaw_status" openclaw_status_probe "$nas_root/logs/probes" >/dev/null || true
     run_tool "security_audit" security_audit_probe "$nas_root/logs/probes" >/dev/null || true
     run_tool "service_convergence_decision" service_convergence_decision_probe "$nas_root/logs/probes" "$nas_root/reports/security" >/dev/null || true
+    run_tool "service_execution_preflight" service_execution_preflight_probe "$nas_root/reports/security" >/dev/null || true
   fi
 
   log_event "info" "iteration_end" "ok" "iteration=$iteration"

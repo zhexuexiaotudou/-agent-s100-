@@ -332,6 +332,7 @@ New OpenClaw + NAS baseline artifacts:
 - [scripts/probes/security_audit_probe.sh](scripts/probes/security_audit_probe.sh): writes a redacted security audit report.
 - [scripts/probes/service_policy_probe.sh](scripts/probes/service_policy_probe.sh): writes a read-only keep/disable/firewall policy plan for exposed services.
 - [scripts/probes/service_hardening_plan_probe.sh](scripts/probes/service_hardening_plan_probe.sh): writes a dry-run hardening command plan without changing services.
+- [scripts/probes/service_execution_preflight_probe.sh](scripts/probes/service_execution_preflight_probe.sh): writes a read-only B-010 confirmation-gate preflight without changing services or firewall rules.
 - [scripts/probes/github_workflow_probe.ps1](scripts/probes/github_workflow_probe.ps1): writes a local GitHub/Codex readiness report.
 - [scripts/probes/stability_snapshot_probe.sh](scripts/probes/stability_snapshot_probe.sh): writes a point-in-time uptime/resource/log stability snapshot.
 - [scripts/probes/stability_summary_probe.sh](scripts/probes/stability_summary_probe.sh): aggregates A-010 stability snapshots into a trend and acceptance-gap report.
@@ -359,6 +360,7 @@ New OpenClaw + NAS baseline artifacts:
 - [scripts/probes/home_assistant_status_probe.sh](scripts/probes/home_assistant_status_probe.sh): writes a read-only Home Assistant status preflight report.
 - [scripts/probes/control_action_policy_probe.sh](scripts/probes/control_action_policy_probe.sh): writes a read-only low-risk control policy and audit preflight report.
 - [config/control_action_allowlist.disabled.json](config/control_action_allowlist.disabled.json): disabled-by-default B-009 control policy template.
+- [config/service_convergence_confirmations.disabled.json](config/service_convergence_confirmations.disabled.json): disabled-by-default B-010 service convergence confirmation template.
 - [scripts/probes/baseline_status_probe.sh](scripts/probes/baseline_status_probe.sh): writes a read-only roll-up status report for both baseline tracks.
 - [scripts/probes/baseline_gap_decision_probe.sh](scripts/probes/baseline_gap_decision_probe.sh): writes a read-only remaining-gap and next-decision report for both baseline tracks.
 - [scripts/probes/nas_discovery_probe.sh](scripts/probes/nas_discovery_probe.sh): writes passive NAS mount/network/tooling readiness evidence.
@@ -377,6 +379,7 @@ scripts/run_allowlisted_tool.sh security_audit_probe
 scripts/run_allowlisted_tool.sh service_policy_probe
 scripts/run_allowlisted_tool.sh service_hardening_plan_probe
 scripts/run_allowlisted_tool.sh service_convergence_decision_probe
+scripts/run_allowlisted_tool.sh service_execution_preflight_probe
 scripts/run_allowlisted_tool.sh stability_snapshot_probe
 scripts/run_allowlisted_tool.sh stability_summary_probe
 scripts/run_allowlisted_tool.sh image_caption_probe

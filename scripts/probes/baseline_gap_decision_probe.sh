@@ -73,6 +73,7 @@ latest_dream = latest("reports/models/dream7b_readiness_*.md")
 latest_ha = latest("logs/probes/home_assistant_status_*.md")
 latest_control = latest("logs/probes/control_action_policy_*.md")
 latest_service_decision = latest("reports/security/service_convergence_decision_*.md")
+latest_service_preflight = latest("reports/security/service_execution_preflight_*.md")
 latest_security = latest("logs/probes/security_audit_*.md")
 
 stability_text = read(latest_stability)
@@ -83,6 +84,7 @@ dream_text = read(latest_dream)
 ha_text = read(latest_ha)
 control_text = read(latest_control)
 service_text = read(latest_service_decision)
+service_preflight_text = read(latest_service_preflight)
 
 snapshot_count = table_value(stability_text, "Snapshot count")
 elapsed_hours = table_value(stability_text, "Elapsed hours")
@@ -147,7 +149,12 @@ elif control_verdict == "policy_ready_no_execution":
 else:
     b009_decision = "fix_control_policy"
 
+service_preflight_verdict = meta_value(service_preflight_text, "verdict")
 b010_decision = "operator_service_confirmation_required" if latest_service_decision else "rerun_service_decision_pack"
+if service_preflight_verdict == "ready_for_manual_execution_review":
+    b010_decision = "manual_execution_review_ready"
+elif service_preflight_verdict and service_preflight_verdict != "missing":
+    b010_decision = service_preflight_verdict
 
 automation_safe = [
     ("A-010", "continue sampler and overnight runner; refresh summaries", a010_decision),
@@ -179,6 +186,7 @@ with report.open("w", encoding="utf-8") as out:
     out.write(f"| Home Assistant | {latest_ha or 'missing'} | verdict={ha_verdict}; URL={ha_url}; token={ha_token}; entities={ha_entities} |\n")
     out.write(f"| Control policy | {latest_control or 'missing'} | verdict={control_verdict}; actions={control_actions}; enabled={control_enabled}; executed={control_executed} |\n")
     out.write(f"| Service convergence | {latest_service_decision or 'missing'} | decision_pack={'present' if latest_service_decision else 'missing'} |\n")
+    out.write(f"| Service execution preflight | {latest_service_preflight or 'missing'} | verdict={service_preflight_verdict} |\n")
     out.write(f"| Security audit | {latest_security or 'missing'} | audit={'present' if latest_security else 'missing'} |\n\n")
 
     out.write("## Automation-Safe Next Actions\n\n")

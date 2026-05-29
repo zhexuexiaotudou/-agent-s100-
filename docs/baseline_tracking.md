@@ -40,7 +40,7 @@
 | B-007 | 周报/实验报告生成 | verified | 已从 NAS logs/probes、文档索引、浏览器截图、ROS bag 和 dataset card 生成 Markdown 实验报告 |
 | B-008 | Home Assistant / 设备只读状态 | doing | NAS-backed read-only preflight 已生成，未调用控制 API；真实读取需要 HA URL/token |
 | B-009 | 低风险自动化控制 | doing | disabled-by-default policy 已生成并通过 NAS/OpenClaw preflight；启用动作数为 0，仍需真实 reviewed action 和 request/approve/execute audit |
-| B-010 | 安全审计清单 | doing | NAS-backed security audit、service policy、hardening dry-run 和 service convergence decision pack 已生成；执行 disable/firewall 前仍需 operator 确认 |
+| B-010 | 安全审计清单 | doing | NAS-backed security audit、service policy、hardening dry-run、service convergence decision pack 和 execution preflight 已生成；执行 disable/firewall 前仍需填写确认门 |
 
 ## 当前最近事实
 
@@ -1139,3 +1139,40 @@ external inputs: B-003 model files; B-008 HA URL/token; B-009 reviewed action al
 Tracking impact: the baseline is not generally stuck. A-010 can continue
 collecting automatically, while B-003/B-008/B-009/B-010 need explicit external
 inputs or operator decisions before they can be closed.
+
+## 2026-05-29 B-010 Service Execution Preflight Update
+
+`service_execution_preflight_probe` was added as a read-only confirmation gate
+for service convergence execution. It validates whether the operator has
+confirmed Gateway loopback, SSH management need, NFS/RPC client-only status,
+x11vnc usage, and iiod handling.
+
+Evidence:
+
+```text
+report: /mnt/nas/openclaw/reports/security/service_execution_preflight_20260529-191608.md
+verdict: blocked_no_confirmations
+config status: missing
+missing confirmations: gateway_loopback_only, ssh_management_required, nfs_rpc_client_only, x11vnc_unused, iiod_unused_or_firewall
+service/firewall changes executed: no
+```
+
+OpenClaw agent evidence:
+
+```text
+report: /root/.openclaw/workspace/reports/security/service_execution_preflight_20260529-192933.md
+verdict: blocked_no_confirmations
+service/firewall changes executed: none
+```
+
+Gap roll-up evidence:
+
+```text
+report: /mnt/nas/openclaw/reports/baseline-status/baseline_gap_decision_20260529-191625.md
+Service execution preflight: /mnt/nas/openclaw/reports/security/service_execution_preflight_20260529-191608.md
+B-010 classification: blocked_no_confirmations
+```
+
+Tracking impact: B-010 remains `doing`, but the next step is now concrete and
+auditable: fill and review `service_convergence_confirmations.json`, then rerun
+the preflight before any manual service or firewall command is considered.

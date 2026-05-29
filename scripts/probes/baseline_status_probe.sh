@@ -110,6 +110,7 @@ latest_experiment="$(latest_file "$workspace/reports/experiments/experiment_repo
 latest_security="$(latest_file "$workspace/logs/probes/security_audit_*.md")"
 latest_service_policy="$(latest_file "$workspace/logs/probes/service_policy_*.md")"
 latest_service_convergence="$(latest_file "$workspace/reports/security/service_convergence_decision_*.md")"
+latest_service_execution_preflight="$(latest_file "$workspace/reports/security/service_execution_preflight_*.md")"
 latest_rosbag_session="$(latest_file "$workspace/logs/probes/rosbag_session_*.md")"
 latest_rosbag_policy="$(latest_file "$workspace/logs/probes/rosbag_capture_policy_*.md")"
 latest_rosbag_named_capture="$(latest_file "$workspace/logs/probes/rosbag_named_capture_*.md")"
@@ -290,6 +291,10 @@ if [[ -n "$latest_service_convergence" ]]; then
   b010_current="$b010_current Service convergence decision pack exists: $latest_service_convergence."
   b010_gap="Operator still needs to confirm NFS/RPC client-only status, x11vnc usage, and iiod dependency before any disable/firewall execution."
 fi
+if [[ -n "$latest_service_execution_preflight" ]]; then
+  b010_current="$b010_current Service execution preflight exists: $latest_service_execution_preflight."
+  b010_gap="Fill reviewed service convergence confirmations before any manual service/firewall execution."
+fi
 
 {
   echo "# OpenClaw + NAS Baseline Status"
@@ -343,6 +348,7 @@ fi
   echo "| Security audit | ${latest_security:-missing} |"
   echo "| Service policy | ${latest_service_policy:-missing} |"
   echo "| Service convergence decision | ${latest_service_convergence:-missing} |"
+  echo "| Service execution preflight | ${latest_service_execution_preflight:-missing} |"
   echo "| ROS bag session | ${latest_rosbag_session:-missing} |"
   echo "| ROS bag capture policy | ${latest_rosbag_policy:-missing} |"
   echo "| ROS bag named capture | ${latest_rosbag_named_capture:-missing} |"

@@ -386,6 +386,42 @@ iiod: keep-or-firewall
 This gives B-010 a concrete review pack without changing services or firewall
 rules. Execution still requires an operator decision followed by a fresh audit.
 
+### B-010 service execution preflight
+
+Additional allowlisted tool:
+
+```text
+service_execution_preflight_probe  Read-only B-010 service execution confirmation gate
+```
+
+Approved runner entry:
+
+```bash
+scripts/run_allowlisted_tool.sh service_execution_preflight_probe \
+  /mnt/nas/openclaw/reports/security
+```
+
+Safety boundary:
+
+```text
+systemctl_called: no
+firewall_changed: no
+service_changes_executed: no
+```
+
+Board validation:
+
+```text
+runner report: /mnt/nas/openclaw/reports/security/service_execution_preflight_20260529-191608.md
+OpenClaw report: /root/.openclaw/workspace/reports/security/service_execution_preflight_20260529-192933.md
+verdict: blocked_no_confirmations
+missing confirmations: gateway_loopback_only, ssh_management_required, nfs_rpc_client_only, x11vnc_unused, iiod_unused_or_firewall
+service/firewall changes executed: none
+```
+
+This turns B-010 execution from an informal operator note into a structured
+confirmation gate, while still leaving all service/firewall changes manual.
+
 ### Image caption index
 
 Additional allowlisted tool:

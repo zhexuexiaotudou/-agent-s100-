@@ -67,8 +67,9 @@ latest_baseline="$(latest_file "$nas_root/reports/baseline-status" 'baseline_sta
 latest_gap="$(latest_file "$nas_root/reports/baseline-status" 'baseline_gap_decision_*.md')"
 latest_security="$(latest_file "$nas_root/logs/probes" 'security_audit_*.md')"
 latest_convergence="$(latest_file "$nas_root/reports/security" 'service_convergence_decision_*.md')"
+latest_execution_preflight="$(latest_file "$nas_root/reports/security" 'service_execution_preflight_*.md')"
 
-python3 - "$latest_jsonl" "$summary" "$pid" "$process_status" "$process_line" "$latest_stability" "$latest_baseline" "$latest_gap" "$latest_security" "$latest_convergence" <<'PY'
+python3 - "$latest_jsonl" "$summary" "$pid" "$process_status" "$process_line" "$latest_stability" "$latest_baseline" "$latest_gap" "$latest_security" "$latest_convergence" "$latest_execution_preflight" <<'PY'
 import json
 import re
 import sys
@@ -87,7 +88,8 @@ from pathlib import Path
     latest_gap,
     latest_security,
     latest_convergence,
-) = sys.argv[1:11]
+    latest_execution_preflight,
+) = sys.argv[1:12]
 
 events = []
 with open(jsonl, encoding="utf-8") as fh:
@@ -178,6 +180,7 @@ with open(summary, "w", encoding="utf-8") as out:
     out.write(f"| allowlisted_tool_count | {allowlisted_count} |\n")
     out.write(f"| latest_security_audit | {latest_security or 'missing'} |\n")
     out.write(f"| latest_service_convergence_decision | {latest_convergence or 'missing'} |\n")
+    out.write(f"| latest_service_execution_preflight | {latest_execution_preflight or 'missing'} |\n")
 
     out.write("\n## Action Counts\n\n")
     out.write("| Action | Count |\n| --- | --- |\n")
@@ -199,6 +202,7 @@ with open(summary, "w", encoding="utf-8") as out:
         "openclaw_status",
         "security_audit",
         "service_convergence_decision",
+        "service_execution_preflight",
         "runner_finish",
     ]:
         detail = latest_detail(action).replace("|", "\\|") or "missing"

@@ -145,6 +145,22 @@
       "description": "Generate a read-only B-010 service convergence decision pack with preconditions, candidate commands, rollback, and verification steps."
     },
     {
+      "id": "service_execution_preflight_probe",
+      "script": "scripts/probes/service_execution_preflight_probe.sh",
+      "mode": "readonly",
+      "approvedInputPrefixes": [
+        "/tmp/",
+        "/mnt/nas/openclaw/config/",
+        "/root/.openclaw/workspace/config/"
+      ],
+      "approvedOutputPrefixes": [
+        "/tmp/",
+        "/mnt/nas/openclaw/reports/",
+        "/root/.openclaw/workspace/reports/"
+      ],
+      "description": "Validate B-010 service convergence confirmations and write a read-only execution preflight; never changes services or firewall rules."
+    },
+    {
       "id": "stability_snapshot_probe",
       "script": "scripts/probes/stability_snapshot_probe.sh",
       "mode": "readonly",

@@ -13,6 +13,7 @@ Usage:
   scripts/run_allowlisted_tool.sh service_policy_probe [output_dir]
   scripts/run_allowlisted_tool.sh service_hardening_plan_probe [output_dir]
   scripts/run_allowlisted_tool.sh service_convergence_decision_probe [input_dir] [report_dir]
+  scripts/run_allowlisted_tool.sh service_execution_preflight_probe [report_dir] [config_file]
   scripts/run_allowlisted_tool.sh stability_snapshot_probe [output_dir]
   scripts/run_allowlisted_tool.sh stability_summary_probe [input_dir] [report_dir]
   scripts/run_allowlisted_tool.sh image_caption_probe [photos_dir] [report_dir]
@@ -60,6 +61,7 @@ security_audit_probe   Read-only OpenClaw/S100P security baseline audit report
 service_policy_probe   Read-only service keep/disable/firewall policy plan
 service_hardening_plan_probe  Read-only dry-run hardening command plan
 service_convergence_decision_probe  Read-only B-010 service convergence decision pack
+service_execution_preflight_probe  Read-only B-010 service execution confirmation gate
 stability_snapshot_probe  Read-only uptime/resource/log snapshot for A-010
 stability_summary_probe  Read-only aggregate summary for A-010 stability snapshots
 image_caption_probe  Read-only image metadata caption and JSONL index for B-003
@@ -131,6 +133,11 @@ EOF
   service_convergence_decision_probe)
     shift
     tool_path="$repo_dir/scripts/probes/service_convergence_decision_probe.sh"
+    max_args=2
+    ;;
+  service_execution_preflight_probe)
+    shift
+    tool_path="$repo_dir/scripts/probes/service_execution_preflight_probe.sh"
     max_args=2
     ;;
   stability_snapshot_probe)
@@ -310,6 +317,23 @@ if [[ "$tool_id" == "service_convergence_decision_probe" ]]; then
     ""|/tmp/*|/mnt/nas/openclaw/reports|/mnt/nas/openclaw/reports/*|/root/.openclaw/workspace/reports|/root/.openclaw/workspace/reports/*) ;;
     *)
       echo "Refusing output path outside approved report directories: ${2:-}" >&2
+      exit 2
+      ;;
+  esac
+fi
+
+if [[ "$tool_id" == "service_execution_preflight_probe" ]]; then
+  case "${1:-}" in
+    ""|/tmp/*|/mnt/nas/openclaw/reports|/mnt/nas/openclaw/reports/*|/root/.openclaw/workspace/reports|/root/.openclaw/workspace/reports/*) ;;
+    *)
+      echo "Refusing output path outside approved report directories: ${1:-}" >&2
+      exit 2
+      ;;
+  esac
+  case "${2:-}" in
+    ""|/root/.openclaw/workspace/config/service_convergence_confirmations.json|/mnt/nas/openclaw/config/service_convergence_confirmations.json|/tmp/service_convergence_confirmations.json) ;;
+    *)
+      echo "Refusing confirmation config outside approved paths: ${2:-}" >&2
       exit 2
       ;;
   esac
