@@ -351,6 +351,7 @@ New OpenClaw + NAS baseline artifacts:
 - [docs/baseline_progress_2026-05-29_gap_decision.md](docs/baseline_progress_2026-05-29_gap_decision.md): read-only gap decision evidence for remaining baseline blockers.
 - [docs/baseline_progress_2026-05-29_external_input_templates.md](docs/baseline_progress_2026-05-29_external_input_templates.md): handoff templates for Dream 7B smoke, Home Assistant config, B-009 control policy, and B-010 service confirmations.
 - [docs/baseline_progress_2026-05-29_teacher_briefing_probe.md](docs/baseline_progress_2026-05-29_teacher_briefing_probe.md): read-only generator for teacher-facing two-baseline briefing packages.
+- [docs/baseline_progress_2026-05-29_overnight_teacher_briefing.md](docs/baseline_progress_2026-05-29_overnight_teacher_briefing.md): overnight runner update that includes teacher-facing briefing output in the NAS evidence loop.
 - [docs/baseline_progress_2026-05-28_service_policy_nas.md](docs/baseline_progress_2026-05-28_service_policy_nas.md): NAS-backed service policy and hardening dry-run evidence.
 - [docs/baseline_progress_2026-05-28_b010_service_convergence_decision.md](docs/baseline_progress_2026-05-28_b010_service_convergence_decision.md): B-010 service convergence decision pack evidence.
 - [docs/baseline_report_2026-05-28_nas_backed_smoke.md](docs/baseline_report_2026-05-28_nas_backed_smoke.md): current teacher-facing summary for the two baseline questions.

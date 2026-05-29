@@ -1231,3 +1231,21 @@ OpenClaw report: /root/.openclaw/workspace/reports/teacher/teacher_baseline_brie
 A-010: 80 snapshots, 25.66h, collecting
 Dream 7B: readiness=blocked_no_model; smoke=blocked_no_config
 ```
+
+## 2026-05-29 Overnight Teacher Briefing Update
+
+The future overnight runner loop now includes `teacher_baseline_briefing_probe`
+after `baseline_gap_decision_probe`, and the summary helper surfaces
+`latest_teacher_baseline_briefing`.
+
+Evidence:
+
+```text
+manual teacher briefing: /mnt/nas/openclaw/reports/teacher/teacher_baseline_briefing_20260529-201154.md
+overnight summary: /mnt/nas/openclaw/reports/baseline-status/overnight_baseline_20260529-162329_summary.md
+latest_teacher_baseline_briefing: /mnt/nas/openclaw/reports/teacher/teacher_baseline_briefing_20260529-201154.md
+completed_iterations_observed: 8
+failed_event_count: 0
+```
+
+Tracking impact: future overnight evidence will include a refreshed supervisor-facing report in the same NAS-backed evidence stream as A-010 stability and baseline gap reports.
