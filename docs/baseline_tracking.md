@@ -25,7 +25,7 @@
 | A-007 | Browser automation smoke test | verified | Headless Chromium 能打开测试网页、截图并保存到 NAS，PNG 校验通过 |
 | A-008 | ROS2 status 工具 | verified | OpenClaw 能查询 ROS2 node/topic/service |
 | A-009 | ROS bag 采集工具 | verified | NAS-backed start/status/stop self-test、命名采集 policy 和一次人工批准的 300 秒 named capture 均已通过 |
-| A-010 | 7x24 稳定性测试 | doing | systemd timer 已切到 NAS-backed 输出；当前 14 个 snapshot、5.63h、verdict=`collecting` |
+| A-010 | 7x24 稳定性测试 | doing | systemd timer 已切到 NAS-backed 输出；当前 65 个 snapshot、21.80h、verdict=`collecting` |
 
 ## Epic B：AI NAS Homework
 
@@ -1041,3 +1041,27 @@ Tracking status: B-010 remains `doing`. The review pack is now available from
 both the runner and the OpenClaw tool path, but no service or firewall changes
 have been executed. Execution still needs confirmation that S100P is
 NFS-client-only, x11vnc is unused, and iiod is not required by hardware tooling.
+
+## 2026-05-29 A-010 Stability Refresh
+
+The NAS-backed stability collector is still running and the summary was
+refreshed after the Dream 7B readiness work.
+
+Evidence:
+
+```text
+summary: /mnt/nas/openclaw/reports/stability/stability_summary_20260529-161307.md
+baseline roll-up: /mnt/nas/openclaw/reports/baseline-status/baseline_status_20260529-161308.md
+snapshot count: 65
+first snapshot: 2026-05-28T18:15:46+08:00
+last snapshot: 2026-05-29T16:03:36+08:00
+elapsed hours: 21.80
+gateway statuses: 65 active-listening
+NAS statuses: 65 mounted
+kernel OOM matches in last 24h: 0
+gateway error-like matches in last 24h: 0
+verdict: collecting
+```
+
+Tracking status: A-010 remains `doing`. The trend is clean so far, but it is
+not a 7x24 pass until the elapsed time reaches at least 168 hours.
