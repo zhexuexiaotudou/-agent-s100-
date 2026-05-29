@@ -19,6 +19,7 @@ Usage:
   scripts/run_allowlisted_tool.sh image_caption_probe [photos_dir] [report_dir]
   scripts/run_allowlisted_tool.sh vision_caption_readiness_probe [photos_dir] [report_dir]
   scripts/run_allowlisted_tool.sh dream7b_readiness_probe [report_dir]
+  scripts/run_allowlisted_tool.sh dream7b_smoke_probe [report_dir] [config_file]
   scripts/run_allowlisted_tool.sh home_assistant_status_probe [output_dir]
   scripts/run_allowlisted_tool.sh control_action_policy_probe [output_dir]
   scripts/run_allowlisted_tool.sh browser_smoke_probe [report_dir]
@@ -67,6 +68,7 @@ stability_summary_probe  Read-only aggregate summary for A-010 stability snapsho
 image_caption_probe  Read-only image metadata caption and JSONL index for B-003
 vision_caption_readiness_probe  Read-only local semantic vision caption readiness for B-003
 dream7b_readiness_probe  Read-only Dream 7B / local DLM deployment readiness
+dream7b_smoke_probe  Bounded local Dream 7B smoke test, only when explicit config and local model files exist
 home_assistant_status_probe  Read-only Home Assistant API status preflight for B-008
 control_action_policy_probe  Read-only low-risk control policy and audit preflight for B-009
 browser_smoke_probe    Headless Chromium local page screenshot smoke test
@@ -164,6 +166,11 @@ EOF
     shift
     tool_path="$repo_dir/scripts/probes/dream7b_readiness_probe.sh"
     max_args=1
+    ;;
+  dream7b_smoke_probe)
+    shift
+    tool_path="$repo_dir/scripts/probes/dream7b_smoke_probe.sh"
+    max_args=2
     ;;
   home_assistant_status_probe)
     shift
@@ -405,6 +412,23 @@ if [[ "$tool_id" == "dream7b_readiness_probe" ]]; then
     ""|/tmp/*|/mnt/nas/openclaw/reports|/mnt/nas/openclaw/reports/*|/root/.openclaw/workspace/reports|/root/.openclaw/workspace/reports/*) ;;
     *)
       echo "Refusing output path outside approved report directories: ${1:-}" >&2
+      exit 2
+      ;;
+  esac
+fi
+
+if [[ "$tool_id" == "dream7b_smoke_probe" ]]; then
+  case "${1:-}" in
+    ""|/tmp/*|/mnt/nas/openclaw/reports|/mnt/nas/openclaw/reports/*|/root/.openclaw/workspace/reports|/root/.openclaw/workspace/reports/*) ;;
+    *)
+      echo "Refusing output path outside approved report directories: ${1:-}" >&2
+      exit 2
+      ;;
+  esac
+  case "${2:-}" in
+    ""|/root/.openclaw/workspace/config/dream7b_deployment.json|/mnt/nas/openclaw/config/dream7b_deployment.json|/tmp/dream7b_deployment.json) ;;
+    *)
+      echo "Refusing Dream 7B config outside approved paths: ${2:-}" >&2
       exit 2
       ;;
   esac

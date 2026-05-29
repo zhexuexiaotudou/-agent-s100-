@@ -632,6 +632,35 @@ This verifies the narrow tool path for the Dream 7B deployment gate. It does not
 verify Dream 7B deployment or inference; model files are absent from the approved
 model directories.
 
+## 2026-05-29 Dream 7B Smoke Gate Extension
+
+The plugin and allowlist runner now include:
+
+```text
+dream7b_smoke_probe
+```
+
+This is the second gate after readiness. It requires
+`/root/.openclaw/workspace/config/dream7b_deployment.json` or another approved
+config path, and the configured model must live under an approved local model
+root. It runs one bounded local inference and writes a report; if config/model
+files are missing, it reports a blocked state and does not download anything.
+
+Board evidence through the allowlist runner:
+
+```text
+report: /mnt/nas/openclaw/reports/models/dream7b_smoke_20260529-195131.md
+verdict: blocked_no_config
+```
+
+Board evidence through a real OpenClaw agent turn:
+
+```text
+tool_id: dream7b_smoke_probe
+report: /root/.openclaw/workspace/reports/models/dream7b_smoke_20260529-195337.md
+verdict: blocked_no_config
+```
+
 ## 2026-05-28 B-010 Service Convergence Decision Extension
 
 The plugin was extended with:

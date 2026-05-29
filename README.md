@@ -349,6 +349,7 @@ New OpenClaw + NAS baseline artifacts:
 - [docs/baseline_progress_2026-05-28_a010_nas_sampler.md](docs/baseline_progress_2026-05-28_a010_nas_sampler.md): A-010 stability sampler moved to NAS-backed output.
 - [docs/baseline_progress_2026-05-29_overnight_runner_restart.md](docs/baseline_progress_2026-05-29_overnight_runner_restart.md): second overnight runner launch evidence and A-010 stability refresh.
 - [docs/baseline_progress_2026-05-29_gap_decision.md](docs/baseline_progress_2026-05-29_gap_decision.md): read-only gap decision evidence for remaining baseline blockers.
+- [docs/baseline_progress_2026-05-29_external_input_templates.md](docs/baseline_progress_2026-05-29_external_input_templates.md): handoff templates for Dream 7B smoke, Home Assistant config, B-009 control policy, and B-010 service confirmations.
 - [docs/baseline_progress_2026-05-28_service_policy_nas.md](docs/baseline_progress_2026-05-28_service_policy_nas.md): NAS-backed service policy and hardening dry-run evidence.
 - [docs/baseline_progress_2026-05-28_b010_service_convergence_decision.md](docs/baseline_progress_2026-05-28_b010_service_convergence_decision.md): B-010 service convergence decision pack evidence.
 - [docs/baseline_report_2026-05-28_nas_backed_smoke.md](docs/baseline_report_2026-05-28_nas_backed_smoke.md): current teacher-facing summary for the two baseline questions.
@@ -357,11 +358,14 @@ New OpenClaw + NAS baseline artifacts:
 - [docs/baseline_progress_2026-05-28_document_daily_summary.md](docs/baseline_progress_2026-05-28_document_daily_summary.md): B-002 NAS-backed deterministic document daily summary evidence.
 - [scripts/probes/image_caption_probe.sh](scripts/probes/image_caption_probe.sh): writes deterministic image metadata captions and JSONL search records.
 - [scripts/probes/dream7b_readiness_probe.sh](scripts/probes/dream7b_readiness_probe.sh): writes a read-only Dream 7B / local DLM deployment readiness report.
+- [scripts/probes/dream7b_smoke_probe.sh](scripts/probes/dream7b_smoke_probe.sh): runs one bounded local Dream 7B smoke test only after an explicit local model config exists.
 - [scripts/probes/document_daily_summary_probe.sh](scripts/probes/document_daily_summary_probe.sh): writes deterministic NAS document daily summaries.
 - [scripts/probes/home_assistant_status_probe.sh](scripts/probes/home_assistant_status_probe.sh): writes a read-only Home Assistant status preflight report.
 - [scripts/probes/control_action_policy_probe.sh](scripts/probes/control_action_policy_probe.sh): writes a read-only low-risk control policy and audit preflight report.
 - [config/control_action_allowlist.disabled.json](config/control_action_allowlist.disabled.json): disabled-by-default B-009 control policy template.
 - [config/service_convergence_confirmations.disabled.json](config/service_convergence_confirmations.disabled.json): disabled-by-default B-010 service convergence confirmation template.
+- [config/dream7b_deployment.example.json](config/dream7b_deployment.example.json): Dream 7B local model path and bounded smoke-test config template.
+- [config/home_assistant.env.example](config/home_assistant.env.example): read-only Home Assistant URL/token environment template.
 - [scripts/probes/baseline_status_probe.sh](scripts/probes/baseline_status_probe.sh): writes a read-only roll-up status report for both baseline tracks.
 - [scripts/probes/baseline_gap_decision_probe.sh](scripts/probes/baseline_gap_decision_probe.sh): writes a read-only remaining-gap and next-decision report for both baseline tracks.
 - [scripts/probes/nas_discovery_probe.sh](scripts/probes/nas_discovery_probe.sh): writes passive NAS mount/network/tooling readiness evidence.
@@ -386,6 +390,7 @@ scripts/run_allowlisted_tool.sh stability_summary_probe
 scripts/run_allowlisted_tool.sh image_caption_probe
 scripts/run_allowlisted_tool.sh vision_caption_readiness_probe
 scripts/run_allowlisted_tool.sh dream7b_readiness_probe
+scripts/run_allowlisted_tool.sh dream7b_smoke_probe
 scripts/run_allowlisted_tool.sh document_daily_summary_probe
 scripts/run_allowlisted_tool.sh home_assistant_status_probe
 scripts/run_allowlisted_tool.sh control_action_policy_probe

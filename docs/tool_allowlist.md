@@ -677,6 +677,45 @@ This means S100P currently has local runtime candidates for a 7B model path, but
 the Dream 7B deployment itself is still blocked until model files are mounted or
 installed under an approved model directory.
 
+### Dream 7B bounded smoke gate
+
+Additional allowlisted tool:
+
+```text
+dream7b_smoke_probe  Bounded local Dream 7B smoke test, only when explicit config and local model files exist
+```
+
+Approved runner entry:
+
+```bash
+scripts/run_allowlisted_tool.sh dream7b_smoke_probe \
+  /mnt/nas/openclaw/reports/models \
+  /root/.openclaw/workspace/config/dream7b_deployment.json
+```
+
+Safety boundary:
+
+```text
+model_download: no
+external_api_called: no
+model_server_started: no
+service_or_firewall_change: no
+timeout: bounded, max 180 seconds
+model_path_roots: /mnt/nas/openclaw/models, /root/.openclaw/workspace/models, /home/sunrise/models
+```
+
+If `dream7b_deployment.json` or model files are missing, this writes a blocked
+report instead of trying to fetch anything. A Dream 7B deployment claim requires
+`dream7b_readiness_probe` plus `dream7b_smoke_probe` with `verdict: ok_smoke`.
+
+Board validation:
+
+```text
+runner report: /mnt/nas/openclaw/reports/models/dream7b_smoke_20260529-195131.md
+OpenClaw report: /root/.openclaw/workspace/reports/models/dream7b_smoke_20260529-195337.md
+verdict: blocked_no_config
+```
+
 ### Operator-approved ROS bag named capture
 
 Additional allowlisted tool:

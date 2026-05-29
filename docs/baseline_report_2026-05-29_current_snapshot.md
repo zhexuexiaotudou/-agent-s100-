@@ -1,6 +1,6 @@
 # S100P + NAS + OpenClaw Baseline 当前快照
 
-Date: 2026-05-29 19:34 CST
+Date: 2026-05-29 19:55 CST
 
 本文面向导师汇报，按两个问题回答当前进展：
 
@@ -14,12 +14,12 @@ S100P + NAS 已经跑通了一个可恢复、可观测、可写 NAS 的 OpenClaw
 当前最新证据：
 
 ```text
-overnight runner: running, pid=278801, completed_iterations=7, failed_event_count=0
-A-010 stability: 78 snapshots, 25.15h, verdict=collecting
+overnight runner: running, pid=278801, completed_iterations=8, failed_event_count=0
+A-010 stability: 80 snapshots, 25.66h, verdict=collecting
 Gateway: active-listening
 NAS: mounted
-Allowlisted tools: 27
-Gap report: /mnt/nas/openclaw/reports/baseline-status/baseline_gap_decision_20260529-193407.md
+Allowlisted tools: 28
+Gap report: /mnt/nas/openclaw/reports/baseline-status/baseline_gap_decision_20260529-195554.md
 ```
 
 ## Baseline A：S100P 接近 PC OpenClaw 的程度
@@ -33,7 +33,7 @@ Gap report: /mnt/nas/openclaw/reports/baseline-status/baseline_gap_decision_2026
 | ROS2 状态查询 | verified | 可读 node/topic/service 状态。 |
 | ROS bag 采集 | verified | start/status/stop self-test、命名采集 policy、一次 300 秒人工批准 named capture 均已通过。 |
 | 浏览器自动化 smoke | verified | Headless Chromium 截图写入 NAS，PNG 校验通过。 |
-| 稳定性采样 | doing | 78 snapshots、25.15h、0 failed runner events；仍需达到 168h。 |
+| 稳定性采样 | doing | 80 snapshots、25.66h、0 failed runner events；仍需达到 168h。 |
 | Sandbox/runtime 隔离 | blocked | 当前无 Docker/Podman/runc runtime，需要安装或明确排除第一版 baseline。 |
 
 结论：S100P 当前适合替代 PC 的“常驻入口、工具执行和机器人/NAS 侧自动化”角色，不适合作为 PC 桌面体验的完全替代。它的价值在于低功耗常驻、断电/重启后恢复、靠近机器人数据源、把证据持续写入 NAS。
@@ -45,7 +45,7 @@ Gap report: /mnt/nas/openclaw/reports/baseline-status/baseline_gap_decision_2026
 | 统一 workspace | `/mnt/nas/openclaw` 作为报告、日志、数据集、索引根目录 | verified |
 | 文档索引/每日摘要 | deterministic document index + daily summary | verified |
 | 图片检索/caption | metadata caption + JSONL index；semantic vision readiness 仍缺本地模型 | doing |
-| Dream 7B / 本地 DLM | runtime 候选存在，但 model files 为 0 | blocked_no_model |
+| Dream 7B / 本地 DLM | readiness 证实 runtime 候选存在但 model files 为 0；smoke gate 已接入但缺 deployment config | blocked_no_model / blocked_no_config |
 | 日志诊断 | 从 NAS logs 生成错误摘要、关键匹配和建议 | verified |
 | 机器人数据集管理 | ROS bag + `DATASET_CARD.md` 已写 NAS | verified |
 | 实验/周报生成 | 从 NAS reports/logs/datasets 汇总 Markdown report | verified |
@@ -58,18 +58,25 @@ Gap report: /mnt/nas/openclaw/reports/baseline-status/baseline_gap_decision_2026
 ```text
 Stability summary:
 /mnt/nas/openclaw/reports/stability/stability_summary_20260529-192504.md
+/mnt/nas/openclaw/reports/stability/stability_summary_20260529-195515.md
 
 Overnight summary:
 /mnt/nas/openclaw/reports/baseline-status/overnight_baseline_20260529-162329_summary.md
 
 Gap decision:
 /mnt/nas/openclaw/reports/baseline-status/baseline_gap_decision_20260529-193407.md
+/mnt/nas/openclaw/reports/baseline-status/baseline_gap_decision_20260529-195554.md
 
 Baseline roll-up:
 /mnt/nas/openclaw/reports/baseline-status/baseline_status_20260529-193407.md
+/mnt/nas/openclaw/reports/baseline-status/baseline_status_20260529-195517.md
 
 Dream 7B readiness:
 /mnt/nas/openclaw/reports/models/dream7b_readiness_20260529-155315.md
+
+Dream 7B smoke gate:
+/mnt/nas/openclaw/reports/models/dream7b_smoke_20260529-195131.md
+/root/.openclaw/workspace/reports/models/dream7b_smoke_20260529-195337.md
 
 B-010 execution preflight:
 /mnt/nas/openclaw/reports/security/service_execution_preflight_20260529-191608.md
@@ -77,8 +84,8 @@ B-010 execution preflight:
 
 ## 不能夸大的点
 
-- A-010 还没有 7x24 验收，只是 25.15h 的 clean collecting。
-- Dream 7B 还没有部署成功；当前结论是有 runtime 候选但没有模型文件。
+- A-010 还没有 7x24 验收，只是 25.66h 的 clean collecting。
+- Dream 7B 还没有部署成功；当前结论是有 runtime 候选但没有模型文件，且 smoke gate 缺 `dream7b_deployment.json`。
 - B-008 没有真实 Home Assistant 状态读取，因为缺 URL/token。
 - B-009 没有执行任何控制动作，因为没有 reviewed action allowlist 和审批记录。
 - B-010 没有执行服务关闭或防火墙修改，因为 confirmation config 仍缺失。

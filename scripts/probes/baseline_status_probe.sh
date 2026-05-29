@@ -106,6 +106,7 @@ latest_baseline_gap="$(latest_file "$workspace/reports/baseline-status/baseline_
 latest_image_caption="$(latest_file "$workspace/reports/image-captions/image_caption_index_*.md")"
 latest_vision_readiness="$(latest_file "$workspace/reports/image-captions/vision_caption_readiness_*.md")"
 latest_dream7b_readiness="$(latest_file "$workspace/reports/models/dream7b_readiness_*.md")"
+latest_dream7b_smoke="$(latest_file "$workspace/reports/models/dream7b_smoke_*.md")"
 latest_experiment="$(latest_file "$workspace/reports/experiments/experiment_report_*.md")"
 latest_security="$(latest_file "$workspace/logs/probes/security_audit_*.md")"
 latest_service_policy="$(latest_file "$workspace/logs/probes/service_policy_*.md")"
@@ -247,6 +248,18 @@ if [[ -n "$latest_dream7b_readiness" ]]; then
     b003_gap="Review local DLM readiness verdict before making any Dream 7B deployment claim."
   fi
 fi
+if [[ -n "$latest_dream7b_smoke" ]]; then
+  if grep -q 'verdict: ok_smoke' "$latest_dream7b_smoke" 2>/dev/null; then
+    b003_current="$b003_current Dream 7B bounded smoke test passed: $latest_dream7b_smoke."
+    b003_gap="Dream 7B smoke is verified for one bounded local inference; decide whether to expose it as a service or keep it as batch inference."
+  elif grep -q 'verdict: blocked_no_config' "$latest_dream7b_smoke" 2>/dev/null; then
+    b003_current="$b003_current Dream 7B smoke gate exists but no deployment config is present: $latest_dream7b_smoke."
+    b003_gap="Create dream7b_deployment.json after model files are available, then rerun bounded smoke."
+  else
+    b003_current="$b003_current Dream 7B smoke gate report exists: $latest_dream7b_smoke."
+    b003_gap="Review smoke verdict before making any Dream 7B deployment claim."
+  fi
+fi
 
 b004_current="No NAS-backed dataset card found."
 b004_gap="Generate dataset card beside each robot dataset."
@@ -344,6 +357,7 @@ fi
   echo "| Image caption index | ${latest_image_caption:-missing} |"
   echo "| Vision caption readiness | ${latest_vision_readiness:-missing} |"
   echo "| Dream 7B readiness | ${latest_dream7b_readiness:-missing} |"
+  echo "| Dream 7B smoke | ${latest_dream7b_smoke:-missing} |"
   echo "| Experiment report | ${latest_experiment:-missing} |"
   echo "| Security audit | ${latest_security:-missing} |"
   echo "| Service policy | ${latest_service_policy:-missing} |"

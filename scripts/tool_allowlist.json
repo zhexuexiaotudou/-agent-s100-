@@ -231,6 +231,25 @@
       "description": "Check Dream 7B / local DLM deployment readiness without downloading models, calling external APIs, or starting a model server."
     },
     {
+      "id": "dream7b_smoke_probe",
+      "script": "scripts/probes/dream7b_smoke_probe.sh",
+      "mode": "bounded-local-inference",
+      "approvedInputPrefixes": [
+        "/root/.openclaw/workspace/config/dream7b_deployment.json",
+        "/mnt/nas/openclaw/config/dream7b_deployment.json",
+        "/tmp/dream7b_deployment.json",
+        "/mnt/nas/openclaw/models/",
+        "/root/.openclaw/workspace/models/",
+        "/home/sunrise/models/"
+      ],
+      "approvedOutputPrefixes": [
+        "/tmp/",
+        "/mnt/nas/openclaw/reports/",
+        "/root/.openclaw/workspace/reports/"
+      ],
+      "description": "Run one bounded local Dream 7B smoke test from an explicit config and local model path; never downloads models or starts a persistent server."
+    },
+    {
       "id": "home_assistant_status_probe",
       "script": "scripts/probes/home_assistant_status_probe.sh",
       "mode": "readonly",

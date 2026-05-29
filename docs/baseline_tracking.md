@@ -1176,3 +1176,35 @@ B-010 classification: blocked_no_confirmations
 Tracking impact: B-010 remains `doing`, but the next step is now concrete and
 auditable: fill and review `service_convergence_confirmations.json`, then rerun
 the preflight before any manual service or firewall command is considered.
+
+## 2026-05-29 External Input Template Update
+
+Added deterministic templates for blockers that require private or operator
+inputs:
+
+```text
+config/dream7b_deployment.example.json
+config/home_assistant.env.example
+scripts/probes/dream7b_smoke_probe.sh
+docs/baseline_progress_2026-05-29_external_input_templates.md
+```
+
+Evidence:
+
+```text
+runner smoke report: /mnt/nas/openclaw/reports/models/dream7b_smoke_20260529-195131.md
+OpenClaw smoke report: /root/.openclaw/workspace/reports/models/dream7b_smoke_20260529-195337.md
+verdict: blocked_no_config
+allowlisted tool count: 28
+latest baseline status: /mnt/nas/openclaw/reports/baseline-status/baseline_status_20260529-195217.md
+latest gap decision: /mnt/nas/openclaw/reports/baseline-status/baseline_gap_decision_20260529-195218.md
+```
+
+Tracking impact:
+
+- B-003 remains `doing`, but Dream 7B now has a two-step gate: readiness first,
+  then bounded smoke after model files and config exist.
+- B-008 remains `doing`; the required HA URL/token shape is documented without
+  committing secrets.
+- B-009 and B-010 remain disabled-by-default; no action, service, or firewall
+  execution is enabled by this update.

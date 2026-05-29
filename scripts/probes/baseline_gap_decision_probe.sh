@@ -70,6 +70,7 @@ latest_baseline = latest("reports/baseline-status/baseline_status_*.md")
 latest_overnight_status = latest("reports/baseline-status/overnight_baseline_*_status.md")
 latest_overnight_summary = latest("reports/baseline-status/overnight_baseline_*_summary.md")
 latest_dream = latest("reports/models/dream7b_readiness_*.md")
+latest_dream_smoke = latest("reports/models/dream7b_smoke_*.md")
 latest_ha = latest("logs/probes/home_assistant_status_*.md")
 latest_control = latest("logs/probes/control_action_policy_*.md")
 latest_service_decision = latest("reports/security/service_convergence_decision_*.md")
@@ -81,6 +82,7 @@ baseline_text = read(latest_baseline)
 overnight_status_text = read(latest_overnight_status)
 overnight_summary_text = read(latest_overnight_summary)
 dream_text = read(latest_dream)
+dream_smoke_text = read(latest_dream_smoke)
 ha_text = read(latest_ha)
 control_text = read(latest_control)
 service_text = read(latest_service_decision)
@@ -103,6 +105,8 @@ dream_verdict = meta_value(dream_text, "verdict")
 dream_runtime = table_value(dream_text, "Runtime summary")
 dream_model_count = table_value(dream_text, "Candidate model-like files")
 dream_memory = table_value(dream_text, "Memory total GiB")
+dream_smoke_verdict = meta_value(dream_smoke_text, "verdict")
+dream_smoke_runtime = table_value(dream_smoke_text, "Runtime")
 
 ha_verdict = table_value(ha_text, "Verdict")
 ha_url = table_value(ha_text, "URL configured")
@@ -132,6 +136,12 @@ elif dream_verdict == "blocked_no_runtime":
     b003_decision = "runtime_install_required"
 else:
     b003_decision = "review_dream_readiness"
+if dream_smoke_verdict == "ok_smoke":
+    b003_decision = "dream7b_bounded_smoke_verified"
+elif dream_smoke_verdict == "blocked_no_config":
+    b003_decision = "dream7b_config_required_after_model_files"
+elif dream_smoke_verdict and dream_smoke_verdict != "missing":
+    b003_decision = f"review_dream7b_smoke_{dream_smoke_verdict}"
 
 if ha_verdict == "ok_readonly":
     b008_decision = "readonly_state_verified"
@@ -183,6 +193,7 @@ with report.open("w", encoding="utf-8") as out:
     out.write(f"| Overnight runner | {latest_overnight_status or 'missing'} | process={overnight_process}; iterations={overnight_iterations}; failed={overnight_failed}; next={overnight_next}; last_summary={overnight_summary_verdict} |\n")
     out.write(f"| Baseline roll-up | {latest_baseline or 'missing'} | gateway={gateway_status}; NAS={nas_status}; allowlisted_tools={allowlisted_count} |\n")
     out.write(f"| Dream 7B readiness | {latest_dream or 'missing'} | verdict={dream_verdict}; runtime={dream_runtime}; model_files={dream_model_count}; memory={dream_memory} GiB |\n")
+    out.write(f"| Dream 7B smoke | {latest_dream_smoke or 'missing'} | verdict={dream_smoke_verdict}; runtime={dream_smoke_runtime} |\n")
     out.write(f"| Home Assistant | {latest_ha or 'missing'} | verdict={ha_verdict}; URL={ha_url}; token={ha_token}; entities={ha_entities} |\n")
     out.write(f"| Control policy | {latest_control or 'missing'} | verdict={control_verdict}; actions={control_actions}; enabled={control_enabled}; executed={control_executed} |\n")
     out.write(f"| Service convergence | {latest_service_decision or 'missing'} | decision_pack={'present' if latest_service_decision else 'missing'} |\n")
