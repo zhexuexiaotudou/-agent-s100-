@@ -1275,3 +1275,28 @@ pass count: 14
 A-010 latest: 82 snapshots, 26.16h, collecting
 not ready: A-006, A-010, B-003, B-008, B-009, B-010
 ```
+
+## 2026-05-29 Acceptance Trend Update
+
+Added a read-only trend report over saved acceptance snapshots:
+
+```text
+script: scripts/probes/baseline_acceptance_trend_probe.sh
+tool_id: baseline_acceptance_trend_probe
+output: /mnt/nas/openclaw/reports/baseline-status/baseline_acceptance_trend_*.md
+```
+
+Tracking impact: long-running A-010 evidence can now show not only the latest
+gate status, but whether any item changed between acceptance snapshots. Future
+overnight runner launches will generate both acceptance and acceptance-trend
+reports per iteration.
+
+Evidence:
+
+```text
+runner trend report: /mnt/nas/openclaw/reports/baseline-status/baseline_acceptance_trend_20260529-203510.md
+OpenClaw trend report: /root/.openclaw/workspace/reports/baseline-status/baseline_acceptance_trend_20260529-203703.md
+source_count: 2
+latest_overall: not_ready
+changed_items: none
+```

@@ -712,6 +712,35 @@ report: /root/.openclaw/workspace/reports/baseline-status/baseline_acceptance_20
 overall: not_ready
 ```
 
+## 2026-05-29 Baseline Acceptance Trend Extension
+
+The plugin was extended with:
+
+```text
+baseline_acceptance_trend_probe
+```
+
+This reads saved acceptance JSON snapshots and reports whether any A/B baseline
+item changed status across time. It is read-only and intended for long-running
+A-010 monitoring.
+
+Board evidence through the allowlist runner:
+
+```text
+report: /mnt/nas/openclaw/reports/baseline-status/baseline_acceptance_trend_20260529-203510.md
+source_count: 2
+latest_overall: not_ready
+```
+
+Board evidence through a real OpenClaw agent turn:
+
+```text
+tool_id: baseline_acceptance_trend_probe
+report: /root/.openclaw/workspace/reports/baseline-status/baseline_acceptance_trend_20260529-203703.md
+source_count: 2
+latest_overall: not_ready
+```
+
 ## 2026-05-28 B-010 Service Convergence Decision Extension
 
 The plugin was extended with:

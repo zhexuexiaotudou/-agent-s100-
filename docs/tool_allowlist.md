@@ -775,6 +775,32 @@ overall: not_ready
 not ready: A-006, A-010, B-003, B-008, B-009, B-010
 ```
 
+### Baseline acceptance trend
+
+Additional allowlisted tool:
+
+```text
+baseline_acceptance_trend_probe  Read-only trend report across baseline acceptance snapshots
+```
+
+Approved runner entry:
+
+```bash
+scripts/run_allowlisted_tool.sh baseline_acceptance_trend_probe \
+  /mnt/nas/openclaw \
+  /mnt/nas/openclaw/reports/baseline-status
+```
+
+Board validation:
+
+```text
+runner report: /mnt/nas/openclaw/reports/baseline-status/baseline_acceptance_trend_20260529-203510.md
+OpenClaw report: /root/.openclaw/workspace/reports/baseline-status/baseline_acceptance_trend_20260529-203703.md
+source_count: 2
+latest_overall: not_ready
+changed_items: none
+```
+
 ### Operator-approved ROS bag named capture
 
 Additional allowlisted tool:
