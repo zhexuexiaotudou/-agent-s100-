@@ -716,6 +716,29 @@ OpenClaw report: /root/.openclaw/workspace/reports/models/dream7b_smoke_20260529
 verdict: blocked_no_config
 ```
 
+### Teacher baseline briefing
+
+Additional allowlisted tool:
+
+```text
+teacher_baseline_briefing_probe  Read-only teacher-facing briefing package for the two baseline tracks
+```
+
+Approved runner entry:
+
+```bash
+scripts/run_allowlisted_tool.sh teacher_baseline_briefing_probe \
+  /mnt/nas/openclaw \
+  /mnt/nas/openclaw/reports/teacher
+```
+
+Board validation:
+
+```text
+runner report: /mnt/nas/openclaw/reports/teacher/teacher_baseline_briefing_20260529-200427.md
+OpenClaw report: /root/.openclaw/workspace/reports/teacher/teacher_baseline_briefing_20260529-200724.md
+```
+
 ### Operator-approved ROS bag named capture
 
 Additional allowlisted tool:

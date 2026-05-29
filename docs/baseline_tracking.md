@@ -1208,3 +1208,26 @@ Tracking impact:
   committing secrets.
 - B-009 and B-010 remain disabled-by-default; no action, service, or firewall
   execution is enabled by this update.
+
+## 2026-05-29 Teacher Briefing Probe Update
+
+Added a read-only generator for the teacher-facing two-baseline briefing:
+
+```text
+script: scripts/probes/teacher_baseline_briefing_probe.sh
+tool_id: teacher_baseline_briefing_probe
+output: /mnt/nas/openclaw/reports/teacher/teacher_baseline_briefing_*.md
+```
+
+Tracking impact: this does not close any blocked external-input gate, but it
+turns the latest NAS evidence into a repeatable report that directly answers
+the two supervisor questions without hand-editing the snapshot each time.
+
+Evidence:
+
+```text
+runner report: /mnt/nas/openclaw/reports/teacher/teacher_baseline_briefing_20260529-200427.md
+OpenClaw report: /root/.openclaw/workspace/reports/teacher/teacher_baseline_briefing_20260529-200724.md
+A-010: 80 snapshots, 25.66h, collecting
+Dream 7B: readiness=blocked_no_model; smoke=blocked_no_config
+```

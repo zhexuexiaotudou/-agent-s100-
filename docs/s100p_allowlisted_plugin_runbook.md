@@ -661,6 +661,30 @@ report: /root/.openclaw/workspace/reports/models/dream7b_smoke_20260529-195337.m
 verdict: blocked_no_config
 ```
 
+## 2026-05-29 Teacher Briefing Extension
+
+The plugin was extended with:
+
+```text
+teacher_baseline_briefing_probe
+```
+
+Board evidence through the allowlist runner:
+
+```text
+report: /mnt/nas/openclaw/reports/teacher/teacher_baseline_briefing_20260529-200427.md
+```
+
+Board evidence through a real OpenClaw agent turn:
+
+```text
+tool_id: teacher_baseline_briefing_probe
+report: /root/.openclaw/workspace/reports/teacher/teacher_baseline_briefing_20260529-200724.md
+```
+
+This verifies the narrow tool path for regenerating a teacher-facing two-baseline
+briefing from the latest NAS evidence.
+
 ## 2026-05-28 B-010 Service Convergence Decision Extension
 
 The plugin was extended with:

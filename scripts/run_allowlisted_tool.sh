@@ -33,6 +33,7 @@ Usage:
   scripts/run_allowlisted_tool.sh document_daily_summary_probe [documents_dir] [report_dir]
   scripts/run_allowlisted_tool.sh baseline_status_probe [workspace_dir] [report_dir]
   scripts/run_allowlisted_tool.sh baseline_gap_decision_probe [nas_root] [report_dir]
+  scripts/run_allowlisted_tool.sh teacher_baseline_briefing_probe [nas_root] [report_dir]
 
 Only explicitly allowlisted tool IDs can be executed. This script never accepts
 arbitrary script paths.
@@ -79,6 +80,7 @@ rosbag_named_capture_probe  Operator-approved bounded named ROS bag capture
 experiment_report_probe  Generate a Markdown summary from workspace reports and datasets
 baseline_status_probe  Read-only roll-up status report for the two baseline tracks
 baseline_gap_decision_probe  Read-only remaining-gap and next-decision report
+teacher_baseline_briefing_probe  Read-only teacher-facing briefing package for the two baseline tracks
 EOF
     exit 0
     ;;
@@ -220,6 +222,11 @@ EOF
   baseline_gap_decision_probe)
     shift
     tool_path="$repo_dir/scripts/probes/baseline_gap_decision_probe.sh"
+    max_args=2
+    ;;
+  teacher_baseline_briefing_probe)
+    shift
+    tool_path="$repo_dir/scripts/probes/teacher_baseline_briefing_probe.sh"
     max_args=2
     ;;
   -h|--help|help)
@@ -587,6 +594,23 @@ if [[ "$tool_id" == "baseline_status_probe" ]]; then
 fi
 
 if [[ "$tool_id" == "baseline_gap_decision_probe" ]]; then
+  case "${1:-}" in
+    ""|/root/.openclaw/workspace|/root/.openclaw/workspace/*|/mnt/nas/openclaw|/mnt/nas/openclaw/*|/tmp/*) ;;
+    *)
+      echo "Refusing NAS/workspace root outside approved baseline directories: ${1:-}" >&2
+      exit 2
+      ;;
+  esac
+  case "${2:-}" in
+    ""|/tmp/*|/mnt/nas/openclaw/reports|/mnt/nas/openclaw/reports/*|/root/.openclaw/workspace/reports|/root/.openclaw/workspace/reports/*) ;;
+    *)
+      echo "Refusing output path outside approved report directories: ${2:-}" >&2
+      exit 2
+      ;;
+  esac
+fi
+
+if [[ "$tool_id" == "teacher_baseline_briefing_probe" ]]; then
   case "${1:-}" in
     ""|/root/.openclaw/workspace|/root/.openclaw/workspace/*|/mnt/nas/openclaw|/mnt/nas/openclaw/*|/tmp/*) ;;
     *)
