@@ -435,6 +435,36 @@ Progress docs: 15
 NAS workspace status: not_mounted
 ```
 
+### Baseline gap decision
+
+Additional allowlisted tool:
+
+```text
+baseline_gap_decision_probe  Read-only remaining-gap and next-decision report
+```
+
+Approved runner entry:
+
+```bash
+scripts/run_allowlisted_tool.sh baseline_gap_decision_probe \
+  /mnt/nas/openclaw \
+  /mnt/nas/openclaw/reports/baseline-status
+```
+
+Board validation:
+
+```text
+runner report: /mnt/nas/openclaw/reports/baseline-status/baseline_gap_decision_20260529-184105.md
+OpenClaw report: /root/.openclaw/workspace/reports/baseline-status/baseline_gap_decision_20260529-184923.md
+A-010 elapsed hours: 24.15
+overnight process: running
+failed event count: 0
+external inputs: B-003 model files; B-008 HA URL/token; B-009 reviewed action allowlist; B-010 service confirmations
+```
+
+This report does not execute any action. It only separates automation-safe
+refresh work from decisions that need external inputs.
+
 ### Home Assistant read-only status
 
 Additional allowlisted tool:

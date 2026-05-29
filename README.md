@@ -347,6 +347,7 @@ New OpenClaw + NAS baseline artifacts:
 - [docs/baseline_progress_2026-05-28_b009_disabled_policy.md](docs/baseline_progress_2026-05-28_b009_disabled_policy.md): B-009 disabled-by-default control policy and no-execution preflight evidence.
 - [docs/baseline_progress_2026-05-28_a010_nas_sampler.md](docs/baseline_progress_2026-05-28_a010_nas_sampler.md): A-010 stability sampler moved to NAS-backed output.
 - [docs/baseline_progress_2026-05-29_overnight_runner_restart.md](docs/baseline_progress_2026-05-29_overnight_runner_restart.md): second overnight runner launch evidence and A-010 stability refresh.
+- [docs/baseline_progress_2026-05-29_gap_decision.md](docs/baseline_progress_2026-05-29_gap_decision.md): read-only gap decision evidence for remaining baseline blockers.
 - [docs/baseline_progress_2026-05-28_service_policy_nas.md](docs/baseline_progress_2026-05-28_service_policy_nas.md): NAS-backed service policy and hardening dry-run evidence.
 - [docs/baseline_progress_2026-05-28_b010_service_convergence_decision.md](docs/baseline_progress_2026-05-28_b010_service_convergence_decision.md): B-010 service convergence decision pack evidence.
 - [docs/baseline_report_2026-05-28_nas_backed_smoke.md](docs/baseline_report_2026-05-28_nas_backed_smoke.md): current teacher-facing summary for the two baseline questions.
@@ -359,6 +360,7 @@ New OpenClaw + NAS baseline artifacts:
 - [scripts/probes/control_action_policy_probe.sh](scripts/probes/control_action_policy_probe.sh): writes a read-only low-risk control policy and audit preflight report.
 - [config/control_action_allowlist.disabled.json](config/control_action_allowlist.disabled.json): disabled-by-default B-009 control policy template.
 - [scripts/probes/baseline_status_probe.sh](scripts/probes/baseline_status_probe.sh): writes a read-only roll-up status report for both baseline tracks.
+- [scripts/probes/baseline_gap_decision_probe.sh](scripts/probes/baseline_gap_decision_probe.sh): writes a read-only remaining-gap and next-decision report for both baseline tracks.
 - [scripts/probes/nas_discovery_probe.sh](scripts/probes/nas_discovery_probe.sh): writes passive NAS mount/network/tooling readiness evidence.
 - [scripts/mount_openclaw_nas.sh](scripts/mount_openclaw_nas.sh): dry-run first NAS mount helper for `/mnt/nas/openclaw`.
 - [scripts/overnight_baseline_runner.sh](scripts/overnight_baseline_runner.sh): read-only overnight sampler that keeps writing stability and baseline roll-up evidence to NAS.
@@ -384,6 +386,7 @@ scripts/run_allowlisted_tool.sh document_daily_summary_probe
 scripts/run_allowlisted_tool.sh home_assistant_status_probe
 scripts/run_allowlisted_tool.sh control_action_policy_probe
 scripts/run_allowlisted_tool.sh baseline_status_probe
+scripts/run_allowlisted_tool.sh baseline_gap_decision_probe
 scripts/run_allowlisted_tool.sh nas_discovery_probe
 scripts/run_allowlisted_tool.sh rosbag_capture_policy_probe
 scripts/run_allowlisted_tool.sh rosbag_named_capture_probe

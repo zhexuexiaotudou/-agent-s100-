@@ -42,6 +42,7 @@ rosbag_session_probe
 rosbag_capture_policy_probe
 experiment_report_probe
 baseline_status_probe
+baseline_gap_decision_probe
 log_diagnose
 index_documents
 document_daily_summary_probe
@@ -177,6 +178,7 @@ rosbag_session_probe
 rosbag_capture_policy_probe
 experiment_report_probe
 baseline_status_probe
+baseline_gap_decision_probe
 log_diagnose
 index_documents
 document_daily_summary_probe

@@ -141,6 +141,7 @@ while (( $(date +%s) < end_epoch )); do
   run_tool "stability_snapshot" stability_snapshot_probe "$nas_root/logs/probes" >/dev/null || true
   run_tool "stability_summary" stability_summary_probe "$nas_root/logs/probes" "$nas_root/reports/stability" >/dev/null || true
   run_tool "baseline_status" baseline_status_probe "$nas_root" "$nas_root/reports/baseline-status" >/dev/null || true
+  run_tool "baseline_gap_decision" baseline_gap_decision_probe "$nas_root" "$nas_root/reports/baseline-status" >/dev/null || true
 
   if (( iteration == 1 || iteration % 4 == 0 )); then
     run_tool "openclaw_status" openclaw_status_probe "$nas_root/logs/probes" >/dev/null || true
@@ -158,6 +159,7 @@ done
 
 latest_stability="$(find "$nas_root/reports/stability" -type f -name 'stability_summary_*.md' -printf '%T@ %p\n' 2>/dev/null | sort -nr | awk 'NR==1 {$1=""; sub(/^ /, ""); print}')"
 latest_baseline="$(find "$nas_root/reports/baseline-status" -type f -name 'baseline_status_*.md' -printf '%T@ %p\n' 2>/dev/null | sort -nr | awk 'NR==1 {$1=""; sub(/^ /, ""); print}')"
+latest_gap="$(find "$nas_root/reports/baseline-status" -type f -name 'baseline_gap_decision_*.md' -printf '%T@ %p\n' 2>/dev/null | sort -nr | awk 'NR==1 {$1=""; sub(/^ /, ""); print}')"
 latest_convergence="$(find "$nas_root/reports/security" -type f -name 'service_convergence_decision_*.md' -printf '%T@ %p\n' 2>/dev/null | sort -nr | awk 'NR==1 {$1=""; sub(/^ /, ""); print}')"
 
 {
@@ -168,11 +170,12 @@ latest_convergence="$(find "$nas_root/reports/security" -type f -name 'service_c
   echo "- iterations: $iteration"
   echo "- latest_stability_summary: ${latest_stability:-missing}"
   echo "- latest_baseline_status: ${latest_baseline:-missing}"
+  echo "- latest_baseline_gap_decision: ${latest_gap:-missing}"
   echo "- latest_service_convergence_decision: ${latest_convergence:-missing}"
   echo "- jsonl: $jsonl"
 } >> "$report"
 
-log_event "info" "runner_finish" "ok" "iterations=$iteration latest_stability=${latest_stability:-missing} latest_baseline=${latest_baseline:-missing} latest_convergence=${latest_convergence:-missing}"
+log_event "info" "runner_finish" "ok" "iterations=$iteration latest_stability=${latest_stability:-missing} latest_baseline=${latest_baseline:-missing} latest_gap=${latest_gap:-missing} latest_convergence=${latest_convergence:-missing}"
 
 if [[ -x "$summary_helper" ]]; then
   run_helper "overnight_summary" "$summary_helper" "$out_dir" "$nas_root/reports/baseline-status" "$nas_root" >/dev/null || true

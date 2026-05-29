@@ -38,6 +38,7 @@ const allowedTools = new Map([
   ["rosbag_capture_policy_probe", [probeOutDir]],
   ["experiment_report_probe", [`${reportsDir}/experiments`]],
   ["baseline_status_probe", ["/root/.openclaw/workspace", `${reportsDir}/baseline-status`]],
+  ["baseline_gap_decision_probe", ["/mnt/nas/openclaw", `${reportsDir}/baseline-status`]],
   ["log_diagnose", [logsDir, probeOutDir]],
   ["index_documents", [documentsDir, reportsDir]],
   ["document_daily_summary_probe", [documentsDir, dailySummaryReportsDir]]
@@ -58,7 +59,7 @@ function jsonResult(payload) {
 function readToolId(rawParams) {
   const value = rawParams?.tool_id;
   if (typeof value !== "string" || !allowedTools.has(value)) {
-    throw new Error("tool_id must be one of: openclaw_status_probe, nas_discovery_probe, ros2_status_probe, sandbox_status_probe, security_audit_probe, service_policy_probe, service_hardening_plan_probe, service_convergence_decision_probe, stability_snapshot_probe, stability_summary_probe, image_caption_probe, vision_caption_readiness_probe, dream7b_readiness_probe, home_assistant_status_probe, control_action_policy_probe, browser_smoke_probe, rosbag_snapshot_probe, rosbag_session_probe, rosbag_capture_policy_probe, experiment_report_probe, baseline_status_probe, log_diagnose, index_documents, document_daily_summary_probe");
+    throw new Error("tool_id must be one of: openclaw_status_probe, nas_discovery_probe, ros2_status_probe, sandbox_status_probe, security_audit_probe, service_policy_probe, service_hardening_plan_probe, service_convergence_decision_probe, stability_snapshot_probe, stability_summary_probe, image_caption_probe, vision_caption_readiness_probe, dream7b_readiness_probe, home_assistant_status_probe, control_action_policy_probe, browser_smoke_probe, rosbag_snapshot_probe, rosbag_session_probe, rosbag_capture_policy_probe, experiment_report_probe, baseline_status_probe, baseline_gap_decision_probe, log_diagnose, index_documents, document_daily_summary_probe");
   }
   return value;
 }
@@ -95,7 +96,7 @@ const S100pRunProbeSchema = {
   properties: {
     tool_id: {
       type: "string",
-      enum: ["openclaw_status_probe", "nas_discovery_probe", "ros2_status_probe", "sandbox_status_probe", "security_audit_probe", "service_policy_probe", "service_hardening_plan_probe", "service_convergence_decision_probe", "stability_snapshot_probe", "stability_summary_probe", "image_caption_probe", "vision_caption_readiness_probe", "dream7b_readiness_probe", "home_assistant_status_probe", "control_action_policy_probe", "browser_smoke_probe", "rosbag_snapshot_probe", "rosbag_session_probe", "rosbag_capture_policy_probe", "experiment_report_probe", "baseline_status_probe", "log_diagnose", "index_documents", "document_daily_summary_probe"],
+      enum: ["openclaw_status_probe", "nas_discovery_probe", "ros2_status_probe", "sandbox_status_probe", "security_audit_probe", "service_policy_probe", "service_hardening_plan_probe", "service_convergence_decision_probe", "stability_snapshot_probe", "stability_summary_probe", "image_caption_probe", "vision_caption_readiness_probe", "dream7b_readiness_probe", "home_assistant_status_probe", "control_action_policy_probe", "browser_smoke_probe", "rosbag_snapshot_probe", "rosbag_session_probe", "rosbag_capture_policy_probe", "experiment_report_probe", "baseline_status_probe", "baseline_gap_decision_probe", "log_diagnose", "index_documents", "document_daily_summary_probe"],
       description: "Allowlisted S100P probe ID to run."
     }
   },

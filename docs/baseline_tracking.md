@@ -25,7 +25,7 @@
 | A-007 | Browser automation smoke test | verified | Headless Chromium 能打开测试网页、截图并保存到 NAS，PNG 校验通过 |
 | A-008 | ROS2 status 工具 | verified | OpenClaw 能查询 ROS2 node/topic/service |
 | A-009 | ROS bag 采集工具 | verified | NAS-backed start/status/stop self-test、命名采集 policy 和一次人工批准的 300 秒 named capture 均已通过 |
-| A-010 | 7x24 稳定性测试 | doing | systemd timer 已切到 NAS-backed 输出；当前 66 个 snapshot、22.13h、verdict=`collecting`；新一轮 10h overnight runner 已启动 |
+| A-010 | 7x24 稳定性测试 | doing | systemd timer 已切到 NAS-backed 输出；当前 74 个 snapshot、24.15h、verdict=`collecting`；新一轮 10h overnight runner 正在运行 |
 
 ## Epic B：AI NAS Homework
 
@@ -1108,3 +1108,34 @@ verdict: collecting
 
 Tracking status: A-010 remains `doing`. This keeps the evidence stream alive
 but still does not satisfy the 168-hour acceptance gate.
+
+## 2026-05-29 Baseline Gap Decision Update
+
+`baseline_gap_decision_probe` was added as a read-only decision summary for the
+two baseline tracks. It classifies the remaining work into automation-safe next
+actions versus external inputs or operator decisions.
+
+NAS runner evidence:
+
+```text
+report: /mnt/nas/openclaw/reports/baseline-status/baseline_gap_decision_20260529-184105.md
+A-010: 74 snapshots, 24.15 elapsed hours, verdict=collecting
+overnight runner: running, iterations=5, failed=0
+Dream 7B: blocked_no_model
+Home Assistant: blocked_no_config
+Control policy: policy_ready_no_execution, enabled=0, executed=0
+```
+
+OpenClaw agent evidence:
+
+```text
+report: /root/.openclaw/workspace/reports/baseline-status/baseline_gap_decision_20260529-184923.md
+A-010 elapsed hours: 24.15
+overnight process status: running
+failed event count: 0
+external inputs: B-003 model files; B-008 HA URL/token; B-009 reviewed action allowlist; B-010 service confirmations
+```
+
+Tracking impact: the baseline is not generally stuck. A-010 can continue
+collecting automatically, while B-003/B-008/B-009/B-010 need explicit external
+inputs or operator decisions before they can be closed.

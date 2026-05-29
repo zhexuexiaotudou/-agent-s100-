@@ -64,10 +64,11 @@ latest_file() {
 
 latest_stability="$(latest_file "$nas_root/reports/stability" 'stability_summary_*.md')"
 latest_baseline="$(latest_file "$nas_root/reports/baseline-status" 'baseline_status_*.md')"
+latest_gap="$(latest_file "$nas_root/reports/baseline-status" 'baseline_gap_decision_*.md')"
 latest_security="$(latest_file "$nas_root/logs/probes" 'security_audit_*.md')"
 latest_convergence="$(latest_file "$nas_root/reports/security" 'service_convergence_decision_*.md')"
 
-python3 - "$latest_jsonl" "$summary" "$pid" "$process_status" "$process_line" "$latest_stability" "$latest_baseline" "$latest_security" "$latest_convergence" <<'PY'
+python3 - "$latest_jsonl" "$summary" "$pid" "$process_status" "$process_line" "$latest_stability" "$latest_baseline" "$latest_gap" "$latest_security" "$latest_convergence" <<'PY'
 import json
 import re
 import sys
@@ -83,9 +84,10 @@ from pathlib import Path
     process_line,
     latest_stability,
     latest_baseline,
+    latest_gap,
     latest_security,
     latest_convergence,
-) = sys.argv[1:10]
+) = sys.argv[1:11]
 
 events = []
 with open(jsonl, encoding="utf-8") as fh:
@@ -170,6 +172,7 @@ with open(summary, "w", encoding="utf-8") as out:
     out.write(f"| snapshot_count | {snapshot_count} |\n")
     out.write(f"| elapsed_hours | {elapsed_hours} |\n")
     out.write(f"| latest_baseline_status | {latest_baseline or 'missing'} |\n")
+    out.write(f"| latest_baseline_gap_decision | {latest_gap or 'missing'} |\n")
     out.write(f"| gateway_status | {gateway_status} |\n")
     out.write(f"| nas_status | {nas_status} |\n")
     out.write(f"| allowlisted_tool_count | {allowlisted_count} |\n")
@@ -192,6 +195,7 @@ with open(summary, "w", encoding="utf-8") as out:
         "stability_snapshot",
         "stability_summary",
         "baseline_status",
+        "baseline_gap_decision",
         "openclaw_status",
         "security_audit",
         "service_convergence_decision",

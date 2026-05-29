@@ -332,6 +332,22 @@
         "/root/.openclaw/workspace/reports/"
       ],
       "description": "Generate a read-only roll-up status report for the S100P PC parity and AI NAS homework baselines."
+    },
+    {
+      "id": "baseline_gap_decision_probe",
+      "script": "scripts/probes/baseline_gap_decision_probe.sh",
+      "mode": "readonly",
+      "approvedInputPrefixes": [
+        "/tmp/",
+        "/mnt/nas/openclaw/",
+        "/root/.openclaw/workspace/"
+      ],
+      "approvedOutputPrefixes": [
+        "/tmp/",
+        "/mnt/nas/openclaw/reports/",
+        "/root/.openclaw/workspace/reports/"
+      ],
+      "description": "Generate a read-only remaining-gap and next-decision report for the S100P PC parity and AI NAS homework baselines."
     }
   ]
 }
