@@ -1322,3 +1322,33 @@ runner entry_count: 35
 OpenClaw entry_count: 36
 missing_count: 0
 ```
+
+## 2026-05-29 Overnight Runner Queue Update
+
+Added a bounded queue so the next updated overnight runner starts only after
+the currently running sampler exits. This avoids concurrent sampler processes
+while ensuring future iterations include the newer acceptance, trend, evidence
+manifest, and teacher briefing probes.
+
+Evidence:
+
+```text
+script: scripts/queue_next_overnight_baseline_runner.sh
+status script: scripts/check_overnight_queue.sh
+remote install: /root/.openclaw/workspace/scripts
+bash syntax: pass
+current runner pid: 278801
+current runner status: running
+current runner completed iterations: 10
+current runner failed events: 0
+queue pid: 362168
+queue status report: /mnt/nas/openclaw/reports/baseline-status/overnight_queue_status_20260529-210410.md
+latest queue status report: /mnt/nas/openclaw/reports/baseline-status/overnight_queue_status_20260529-211239.md
+queue log: /mnt/nas/openclaw/logs/overnight/overnight_queue_20260529-210322.log
+queue status: running, waiting_for_pid=278801
+duplicate queue attempt: refused, existing pid=362168
+```
+
+Tracking impact: A-010 remains `doing`. The collection stream is now protected
+against a gap after the old runner exits, and the next 10-hour runner will use
+the updated evidence loop.

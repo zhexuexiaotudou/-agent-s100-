@@ -355,6 +355,7 @@ New OpenClaw + NAS baseline artifacts:
 - [docs/baseline_progress_2026-05-29_acceptance_gate.md](docs/baseline_progress_2026-05-29_acceptance_gate.md): read-only pass/collecting/blocked acceptance matrix for every A/B baseline item.
 - [docs/baseline_progress_2026-05-29_acceptance_trend.md](docs/baseline_progress_2026-05-29_acceptance_trend.md): read-only trend report across saved baseline acceptance snapshots.
 - [docs/baseline_progress_2026-05-29_evidence_manifest.md](docs/baseline_progress_2026-05-29_evidence_manifest.md): read-only SHA256 manifest for the current baseline evidence files.
+- [docs/baseline_progress_2026-05-29_overnight_runner_queue.md](docs/baseline_progress_2026-05-29_overnight_runner_queue.md): bounded queue for starting the next updated overnight runner after the currently running sampler exits.
 - [docs/baseline_progress_2026-05-28_service_policy_nas.md](docs/baseline_progress_2026-05-28_service_policy_nas.md): NAS-backed service policy and hardening dry-run evidence.
 - [docs/baseline_progress_2026-05-28_b010_service_convergence_decision.md](docs/baseline_progress_2026-05-28_b010_service_convergence_decision.md): B-010 service convergence decision pack evidence.
 - [docs/baseline_report_2026-05-28_nas_backed_smoke.md](docs/baseline_report_2026-05-28_nas_backed_smoke.md): current teacher-facing summary for the two baseline questions.
@@ -383,6 +384,8 @@ New OpenClaw + NAS baseline artifacts:
 - [scripts/start_overnight_baseline_runner.sh](scripts/start_overnight_baseline_runner.sh): bounded launcher for the overnight sampler.
 - [scripts/check_overnight_baseline_runner.sh](scripts/check_overnight_baseline_runner.sh): read-only status report for the latest overnight sampler JSONL and PID.
 - [scripts/summarize_overnight_baseline_runner.sh](scripts/summarize_overnight_baseline_runner.sh): read-only interim/final summary for the latest overnight sampler run.
+- [scripts/queue_next_overnight_baseline_runner.sh](scripts/queue_next_overnight_baseline_runner.sh): waits for the current overnight sampler PID to exit, then launches the next updated sampler without running two samplers concurrently.
+- [scripts/check_overnight_queue.sh](scripts/check_overnight_queue.sh): read-only status report for the latest queued overnight sampler launcher.
 
 The allowlist runner now includes:
 
