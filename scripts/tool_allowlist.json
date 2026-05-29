@@ -385,6 +385,22 @@
       "description": "Generate a read-only remaining-gap and next-decision report for the S100P PC parity and AI NAS homework baselines."
     },
     {
+      "id": "baseline_acceptance_probe",
+      "script": "scripts/probes/baseline_acceptance_probe.sh",
+      "mode": "readonly",
+      "approvedInputPrefixes": [
+        "/tmp/",
+        "/mnt/nas/openclaw/",
+        "/root/.openclaw/workspace/"
+      ],
+      "approvedOutputPrefixes": [
+        "/tmp/",
+        "/mnt/nas/openclaw/reports/",
+        "/root/.openclaw/workspace/reports/"
+      ],
+      "description": "Generate a read-only pass/collecting/blocked acceptance gate matrix for all A/B baseline IDs."
+    },
+    {
       "id": "teacher_baseline_briefing_probe",
       "script": "scripts/probes/teacher_baseline_briefing_probe.sh",
       "mode": "readonly",

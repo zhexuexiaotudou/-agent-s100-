@@ -352,6 +352,7 @@ New OpenClaw + NAS baseline artifacts:
 - [docs/baseline_progress_2026-05-29_external_input_templates.md](docs/baseline_progress_2026-05-29_external_input_templates.md): handoff templates for Dream 7B smoke, Home Assistant config, B-009 control policy, and B-010 service confirmations.
 - [docs/baseline_progress_2026-05-29_teacher_briefing_probe.md](docs/baseline_progress_2026-05-29_teacher_briefing_probe.md): read-only generator for teacher-facing two-baseline briefing packages.
 - [docs/baseline_progress_2026-05-29_overnight_teacher_briefing.md](docs/baseline_progress_2026-05-29_overnight_teacher_briefing.md): overnight runner update that includes teacher-facing briefing output in the NAS evidence loop.
+- [docs/baseline_progress_2026-05-29_acceptance_gate.md](docs/baseline_progress_2026-05-29_acceptance_gate.md): read-only pass/collecting/blocked acceptance matrix for every A/B baseline item.
 - [docs/baseline_progress_2026-05-28_service_policy_nas.md](docs/baseline_progress_2026-05-28_service_policy_nas.md): NAS-backed service policy and hardening dry-run evidence.
 - [docs/baseline_progress_2026-05-28_b010_service_convergence_decision.md](docs/baseline_progress_2026-05-28_b010_service_convergence_decision.md): B-010 service convergence decision pack evidence.
 - [docs/baseline_report_2026-05-28_nas_backed_smoke.md](docs/baseline_report_2026-05-28_nas_backed_smoke.md): current teacher-facing summary for the two baseline questions.
@@ -370,6 +371,7 @@ New OpenClaw + NAS baseline artifacts:
 - [config/home_assistant.env.example](config/home_assistant.env.example): read-only Home Assistant URL/token environment template.
 - [scripts/probes/baseline_status_probe.sh](scripts/probes/baseline_status_probe.sh): writes a read-only roll-up status report for both baseline tracks.
 - [scripts/probes/baseline_gap_decision_probe.sh](scripts/probes/baseline_gap_decision_probe.sh): writes a read-only remaining-gap and next-decision report for both baseline tracks.
+- [scripts/probes/baseline_acceptance_probe.sh](scripts/probes/baseline_acceptance_probe.sh): writes a read-only acceptance gate matrix for all A/B baseline IDs.
 - [scripts/probes/teacher_baseline_briefing_probe.sh](scripts/probes/teacher_baseline_briefing_probe.sh): writes a Chinese teacher-facing Markdown/JSON briefing from latest NAS evidence.
 - [scripts/probes/nas_discovery_probe.sh](scripts/probes/nas_discovery_probe.sh): writes passive NAS mount/network/tooling readiness evidence.
 - [scripts/mount_openclaw_nas.sh](scripts/mount_openclaw_nas.sh): dry-run first NAS mount helper for `/mnt/nas/openclaw`.
@@ -399,6 +401,7 @@ scripts/run_allowlisted_tool.sh home_assistant_status_probe
 scripts/run_allowlisted_tool.sh control_action_policy_probe
 scripts/run_allowlisted_tool.sh baseline_status_probe
 scripts/run_allowlisted_tool.sh baseline_gap_decision_probe
+scripts/run_allowlisted_tool.sh baseline_acceptance_probe
 scripts/run_allowlisted_tool.sh teacher_baseline_briefing_probe
 scripts/run_allowlisted_tool.sh nas_discovery_probe
 scripts/run_allowlisted_tool.sh rosbag_capture_policy_probe

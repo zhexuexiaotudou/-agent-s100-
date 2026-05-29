@@ -1249,3 +1249,29 @@ failed_event_count: 0
 ```
 
 Tracking impact: future overnight evidence will include a refreshed supervisor-facing report in the same NAS-backed evidence stream as A-010 stability and baseline gap reports.
+
+## 2026-05-29 Acceptance Gate Update
+
+Added a read-only acceptance matrix:
+
+```text
+script: scripts/probes/baseline_acceptance_probe.sh
+tool_id: baseline_acceptance_probe
+output: /mnt/nas/openclaw/reports/baseline-status/baseline_acceptance_*.md
+```
+
+Tracking impact: final baseline completion is now auditable item by item. The
+gate keeps A-010 as `collecting`, B-003 as externally blocked by missing model
+files/config, B-008 as blocked by missing HA config, B-009 as blocked by missing
+reviewed action approval, and B-010 as blocked by missing service confirmations.
+
+Evidence:
+
+```text
+runner report: /mnt/nas/openclaw/reports/baseline-status/baseline_acceptance_20260529-202537.md
+OpenClaw report: /root/.openclaw/workspace/reports/baseline-status/baseline_acceptance_20260529-202642.md
+overall: not_ready
+pass count: 14
+A-010 latest: 82 snapshots, 26.16h, collecting
+not ready: A-006, A-010, B-003, B-008, B-009, B-010
+```

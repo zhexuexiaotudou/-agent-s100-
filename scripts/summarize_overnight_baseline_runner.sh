@@ -65,12 +65,13 @@ latest_file() {
 latest_stability="$(latest_file "$nas_root/reports/stability" 'stability_summary_*.md')"
 latest_baseline="$(latest_file "$nas_root/reports/baseline-status" 'baseline_status_*.md')"
 latest_gap="$(latest_file "$nas_root/reports/baseline-status" 'baseline_gap_decision_*.md')"
+latest_acceptance="$(latest_file "$nas_root/reports/baseline-status" 'baseline_acceptance_*.md')"
 latest_teacher="$(latest_file "$nas_root/reports/teacher" 'teacher_baseline_briefing_*.md')"
 latest_security="$(latest_file "$nas_root/logs/probes" 'security_audit_*.md')"
 latest_convergence="$(latest_file "$nas_root/reports/security" 'service_convergence_decision_*.md')"
 latest_execution_preflight="$(latest_file "$nas_root/reports/security" 'service_execution_preflight_*.md')"
 
-python3 - "$latest_jsonl" "$summary" "$pid" "$process_status" "$process_line" "$latest_stability" "$latest_baseline" "$latest_gap" "$latest_teacher" "$latest_security" "$latest_convergence" "$latest_execution_preflight" <<'PY'
+python3 - "$latest_jsonl" "$summary" "$pid" "$process_status" "$process_line" "$latest_stability" "$latest_baseline" "$latest_gap" "$latest_acceptance" "$latest_teacher" "$latest_security" "$latest_convergence" "$latest_execution_preflight" <<'PY'
 import json
 import re
 import sys
@@ -87,11 +88,12 @@ from pathlib import Path
     latest_stability,
     latest_baseline,
     latest_gap,
+    latest_acceptance,
     latest_teacher,
     latest_security,
     latest_convergence,
     latest_execution_preflight,
-) = sys.argv[1:13]
+) = sys.argv[1:14]
 
 events = []
 with open(jsonl, encoding="utf-8") as fh:
@@ -177,6 +179,7 @@ with open(summary, "w", encoding="utf-8") as out:
     out.write(f"| elapsed_hours | {elapsed_hours} |\n")
     out.write(f"| latest_baseline_status | {latest_baseline or 'missing'} |\n")
     out.write(f"| latest_baseline_gap_decision | {latest_gap or 'missing'} |\n")
+    out.write(f"| latest_baseline_acceptance | {latest_acceptance or 'missing'} |\n")
     out.write(f"| latest_teacher_baseline_briefing | {latest_teacher or 'missing'} |\n")
     out.write(f"| gateway_status | {gateway_status} |\n")
     out.write(f"| nas_status | {nas_status} |\n")
@@ -202,6 +205,7 @@ with open(summary, "w", encoding="utf-8") as out:
         "stability_summary",
         "baseline_status",
         "baseline_gap_decision",
+        "baseline_acceptance",
         "teacher_baseline_briefing",
         "openclaw_status",
         "security_audit",

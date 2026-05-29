@@ -685,6 +685,33 @@ report: /root/.openclaw/workspace/reports/teacher/teacher_baseline_briefing_2026
 This verifies the narrow tool path for regenerating a teacher-facing two-baseline
 briefing from the latest NAS evidence.
 
+## 2026-05-29 Baseline Acceptance Extension
+
+The plugin was extended with:
+
+```text
+baseline_acceptance_probe
+```
+
+This produces a read-only acceptance matrix for every A/B baseline item. It is
+intended for final completion audits and does not execute controls, service
+changes, firewall changes, or model inference.
+
+Board evidence through the allowlist runner:
+
+```text
+report: /mnt/nas/openclaw/reports/baseline-status/baseline_acceptance_20260529-202537.md
+overall: not_ready
+```
+
+Board evidence through a real OpenClaw agent turn:
+
+```text
+tool_id: baseline_acceptance_probe
+report: /root/.openclaw/workspace/reports/baseline-status/baseline_acceptance_20260529-202642.md
+overall: not_ready
+```
+
 ## 2026-05-28 B-010 Service Convergence Decision Extension
 
 The plugin was extended with:

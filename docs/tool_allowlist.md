@@ -739,6 +739,42 @@ runner report: /mnt/nas/openclaw/reports/teacher/teacher_baseline_briefing_20260
 OpenClaw report: /root/.openclaw/workspace/reports/teacher/teacher_baseline_briefing_20260529-200724.md
 ```
 
+### Baseline acceptance gate
+
+Additional allowlisted tool:
+
+```text
+baseline_acceptance_probe  Read-only pass/collecting/blocked acceptance gate for all baseline IDs
+```
+
+Approved runner entry:
+
+```bash
+scripts/run_allowlisted_tool.sh baseline_acceptance_probe \
+  /mnt/nas/openclaw \
+  /mnt/nas/openclaw/reports/baseline-status
+```
+
+Safety boundary:
+
+```text
+mode: read-only
+system_changes: no
+service_changes: no
+firewall_changes: no
+control_actions: no
+model_inference: no
+```
+
+Board validation:
+
+```text
+runner report: /mnt/nas/openclaw/reports/baseline-status/baseline_acceptance_20260529-202537.md
+OpenClaw report: /root/.openclaw/workspace/reports/baseline-status/baseline_acceptance_20260529-202642.md
+overall: not_ready
+not ready: A-006, A-010, B-003, B-008, B-009, B-010
+```
+
 ### Operator-approved ROS bag named capture
 
 Additional allowlisted tool:
