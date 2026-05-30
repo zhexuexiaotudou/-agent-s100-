@@ -1376,3 +1376,25 @@ diagnose-openclaw: openclaw-gateway.service active, loopback gateway listener
 Tracking impact: this does not close any baseline acceptance item directly,
 but it gives future A-010/B-track checks a stable Windows command boundary and
 keeps routine S100P operations behind a bounded action set.
+
+## 2026-05-30 NAS Hold
+
+NAS recovery is intentionally paused because the operator is away from the
+physical NAS and cannot reboot it or inspect the Ethernet port.
+
+Evidence:
+
+```text
+PC -> S100P: ok
+S100P eth0: UP, 169.254.8.10/16
+S100P internet/DNS: ok
+OpenClaw gateway: active
+NAS target: 169.254.110.209
+NAS neighbor: FAILED / INCOMPLETE
+NAS ping: 0 received
+```
+
+Tracking impact: A-003/A-010 and NAS-backed B-track evidence collection cannot
+be completed while NAS has no L2/ARP response. Resume from
+`docs/baseline_progress_2026-05-30_nas_blocked_hold.md` after checking NAS
+power, Ethernet port/cable, and static IP.

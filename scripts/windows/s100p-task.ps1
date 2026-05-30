@@ -89,19 +89,20 @@ function ConvertTo-CommandLineArgument {
 function Invoke-S100PBash {
   param(
     [Parameter(Mandatory)][string]$Script,
-    [int]$Timeout = 90
+    [int]$Timeout = 90,
+    [switch]$RunAsRoot
   )
   $cfg = Read-Config
   $ssh = 'C:\Windows\System32\OpenSSH\ssh.exe'
   $target = '{0}@{1}' -f $cfg.s100p.user, $cfg.s100p.host
+  $remoteShell = if ($RunAsRoot) { @('sudo', '-n', 'bash', '-s') } else { @('bash', '-s') }
   $args = @(
     '-i', $cfg.s100p.sshKey,
     '-o', 'BatchMode=yes',
     '-o', ('ConnectTimeout={0}' -f $cfg.s100p.sshConnectTimeoutSeconds),
     '-o', 'StrictHostKeyChecking=accept-new',
-    $target,
-    'bash', '-s'
-  )
+    $target
+  ) + $remoteShell
   return Invoke-External -FilePath $ssh -Arguments $args -StandardInput $Script -Timeout $Timeout
 }
 
@@ -193,9 +194,9 @@ ss -ltnp 2>/dev/null | grep -E '18789|3000|8080|22' || true
     'check-overnight' {
       return @'
 set +e
-bash /root/.openclaw/workspace/scripts/check_overnight_baseline_runner.sh || true
-bash /root/.openclaw/workspace/scripts/check_overnight_queue.sh || true
-bash /root/.openclaw/workspace/scripts/summarize_overnight_baseline_runner.sh || true
+timeout 20 bash /root/.openclaw/workspace/scripts/check_overnight_baseline_runner.sh || echo check_overnight_baseline_runner_timeout_or_failed
+timeout 20 bash /root/.openclaw/workspace/scripts/check_overnight_queue.sh || echo check_overnight_queue_timeout_or_failed
+timeout 20 bash /root/.openclaw/workspace/scripts/summarize_overnight_baseline_runner.sh || echo summarize_overnight_baseline_runner_timeout_or_failed
 echo '--- processes'
 ps -eo pid,etime,cmd | grep -E 'overnight_baseline_runner|queue_next_overnight|start_overnight' | grep -v grep || true
 '@
@@ -204,18 +205,23 @@ ps -eo pid,etime,cmd | grep -E 'overnight_baseline_runner|queue_next_overnight|s
       return @'
 set -e
 cd /root/.openclaw/workspace
-bash scripts/run_allowlisted_tool.sh baseline_gap_decision_probe
-bash scripts/run_allowlisted_tool.sh baseline_acceptance_probe
-bash scripts/run_allowlisted_tool.sh baseline_acceptance_trend_probe
-bash scripts/run_allowlisted_tool.sh baseline_evidence_manifest_probe
-bash scripts/run_allowlisted_tool.sh teacher_baseline_briefing_probe
-bash scripts/summarize_overnight_baseline_runner.sh
+timeout 45 bash scripts/run_allowlisted_tool.sh baseline_gap_decision_probe
+timeout 45 bash scripts/run_allowlisted_tool.sh baseline_acceptance_probe
+timeout 45 bash scripts/run_allowlisted_tool.sh baseline_acceptance_trend_probe
+timeout 45 bash scripts/run_allowlisted_tool.sh baseline_evidence_manifest_probe
+timeout 45 bash scripts/run_allowlisted_tool.sh teacher_baseline_briefing_probe
+timeout 30 bash scripts/summarize_overnight_baseline_runner.sh
 '@
     }
     default {
       throw "Unsupported remote script: $Name"
     }
   }
+}
+
+function Test-RootAction {
+  param([string]$Name)
+  return @('check-overnight', 'refresh-baseline-readonly') -contains $Name
 }
 
 if ($Action -eq 'run-startup-link-check') {
@@ -230,5 +236,5 @@ if ($Action -eq 'run-startup-link-check') {
 }
 
 $remoteScript = Get-RemoteScript -Name $Action
-$remoteResult = Invoke-S100PBash -Script $remoteScript -Timeout $TimeoutSeconds
+$remoteResult = Invoke-S100PBash -Script $remoteScript -Timeout $TimeoutSeconds -RunAsRoot:(Test-RootAction -Name $Action)
 Write-Result $remoteResult

@@ -357,6 +357,7 @@ New OpenClaw + NAS baseline artifacts:
 - [docs/baseline_progress_2026-05-29_evidence_manifest.md](docs/baseline_progress_2026-05-29_evidence_manifest.md): read-only SHA256 manifest for the current baseline evidence files.
 - [docs/baseline_progress_2026-05-29_overnight_runner_queue.md](docs/baseline_progress_2026-05-29_overnight_runner_queue.md): bounded queue for starting the next updated overnight runner after the currently running sampler exits.
 - [docs/baseline_progress_2026-05-30_windows_s100p_entrypoint.md](docs/baseline_progress_2026-05-30_windows_s100p_entrypoint.md): fixed Windows PowerShell entrypoint for routine S100P SSH diagnostics and read-only baseline refreshes.
+- [docs/baseline_progress_2026-05-30_nas_blocked_hold.md](docs/baseline_progress_2026-05-30_nas_blocked_hold.md): current NAS physical/IP reachability hold, evidence, and resume steps.
 - [docs/baseline_progress_2026-05-28_service_policy_nas.md](docs/baseline_progress_2026-05-28_service_policy_nas.md): NAS-backed service policy and hardening dry-run evidence.
 - [docs/baseline_progress_2026-05-28_b010_service_convergence_decision.md](docs/baseline_progress_2026-05-28_b010_service_convergence_decision.md): B-010 service convergence decision pack evidence.
 - [docs/baseline_report_2026-05-28_nas_backed_smoke.md](docs/baseline_report_2026-05-28_nas_backed_smoke.md): current teacher-facing summary for the two baseline questions.
