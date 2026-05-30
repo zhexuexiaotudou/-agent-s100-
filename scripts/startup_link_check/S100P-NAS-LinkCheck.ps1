@@ -336,14 +336,40 @@ echo S100P_INTERNET_OK
 
 function Ensure-NasLink {
   $cmd = @'
-set -e
-ping -c 1 -W 2 __NAS_IP__
-sudo -n chmod 755 __PARENT__ || true
-if ! findmnt -T __MOUNT__ >/dev/null 2>&1; then
-  sudo -n mkdir -p __MOUNT__
-  sudo -n mount -t nfs4 __NAS_IP__:__EXPORT__ __MOUNT__
+set +e
+echo NAS_DIAG_START
+ip -br link show __NAS_IFACE__ || true
+ip -4 addr show dev __NAS_IFACE__ || true
+ip route get __NAS_IP__ || true
+sudo -n ip neigh flush dev __NAS_IFACE__ >/dev/null 2>&1 || true
+ping -c 1 -W 2 -I __NAS_IFACE__ __NAS_IP__
+ping_status=$?
+if [ "$ping_status" -ne 0 ]; then
+  echo NAS_PING_FAILED_BEFORE_RESET
+  ip neigh show dev __NAS_IFACE__ || true
+  sudo -n ip link set __NAS_IFACE__ down || true
+  sleep 2
+  sudo -n ip link set __NAS_IFACE__ up || true
+  sleep 4
+  sudo -n ip addr replace __NAS_ADDRESS__ dev __NAS_IFACE__ || true
+  sudo -n ip route replace 169.254.0.0/16 dev __NAS_IFACE__ src __NAS_SRC__ metric 101 || true
+  ip route get __NAS_IP__ || true
+  ping -c 2 -W 1 -I __NAS_IFACE__ __NAS_IP__
+  ping_status=$?
 fi
-findmnt -T __MOUNT__
+if [ "$ping_status" -ne 0 ]; then
+  echo NAS_L2_UNREACHABLE
+  ip neigh show dev __NAS_IFACE__ || true
+  echo "Check NAS power, NAS boot state, NAS Ethernet port/cable, or whether NAS IP changed from __NAS_IP__."
+  exit 42
+fi
+set -e
+sudo -n chmod 755 __PARENT__ || true
+if ! timeout 5 findmnt -T __MOUNT__ >/dev/null 2>&1; then
+  sudo -n mkdir -p __MOUNT__
+  timeout 20 sudo -n mount -t nfs4 __NAS_IP__:__EXPORT__ __MOUNT__
+fi
+timeout 5 findmnt -T __MOUNT__
 test -d __MOUNT__
 test -w __MOUNT__
 mkdir -p __PROBE__
@@ -352,18 +378,27 @@ echo linkcheck > "$f"
 ls -l "$f"
 echo NAS_LINK_OK
 '@
-  $cmd = $cmd.Replace('__NAS_IP__', $Config.nas.ip).
+  $nasIface = if ($Config.s100p.nasInterface) { $Config.s100p.nasInterface } else { 'eth0' }
+  $nasAddress = if ($Config.s100p.nasInterfaceIPv4) { $Config.s100p.nasInterfaceIPv4 } else { '169.254.8.10/16' }
+  $cmd = $cmd.Replace('__NAS_IFACE__', $nasIface).
+    Replace('__NAS_ADDRESS__', $nasAddress).
+    Replace('__NAS_SRC__', ($nasAddress -replace '/.*$', '')).
+    Replace('__NAS_IP__', $Config.nas.ip).
     Replace('__PARENT__', $Config.nas.parentDir).
     Replace('__MOUNT__', $Config.nas.mountPoint).
     Replace('__EXPORT__', $Config.nas.nfsExport).
     Replace('__PROBE__', $Config.nas.probeDir)
-  $result = Invoke-S100P -Command $cmd -TimeoutSeconds 35
+  $result = Invoke-S100P -Command $cmd -TimeoutSeconds 55
   $combined = "$($result.Output)`n$($result.Error)"
   if ($result.ExitCode -eq 0 -and $combined -match 'NAS_LINK_OK') {
     Add-Step 'S100P -> NAS/NFS' 'OK' 'NAS 可达、NFS 已挂载且可写' $combined
     return $true
   }
-  Add-Step 'S100P -> NAS/NFS' 'FAIL' 'NAS 链路或 NFS 可写检查失败' $combined
+  if ($combined -match 'NAS_L2_UNREACHABLE') {
+    Add-Step 'S100P -> NAS/NFS' 'FAIL' 'NAS 在 eth0 上无 ARP/ICMP 响应；请检查 NAS 电源、启动状态、NAS 网口/网线，或 NAS IP 是否不再是 169.254.110.209' $combined
+    return $false
+  }
+  Add-Step 'S100P -> NAS/NFS' 'FAIL' 'NAS 可达性、NFS 挂载或可写检查失败' $combined
   return $false
 }
 
