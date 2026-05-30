@@ -1352,3 +1352,27 @@ duplicate queue attempt: refused, existing pid=362168
 Tracking impact: A-010 remains `doing`. The collection stream is now protected
 against a gap after the old runner exits, and the next 10-hour runner will use
 the updated evidence loop.
+
+## 2026-05-30 Windows S100P Entrypoint Update
+
+Added a fixed Windows-side PowerShell entrypoint to reduce repeated approval
+prompts from changing ad-hoc SSH command strings:
+
+```text
+script: scripts/windows/s100p-task.ps1
+docs: scripts/windows/README.md
+progress doc: docs/baseline_progress_2026-05-30_windows_s100p_entrypoint.md
+stable prefix: powershell.exe -ExecutionPolicy Bypass -File .\scripts\windows\s100p-task.ps1
+```
+
+Validated actions:
+
+```text
+ssh-smoke: S100P_SSH_OK, ubuntu, sunrise
+diagnose-nas: eth0 UP, 169.254.8.10/16, 169.254.110.209 neighbor FAILED
+diagnose-openclaw: openclaw-gateway.service active, loopback gateway listener
+```
+
+Tracking impact: this does not close any baseline acceptance item directly,
+but it gives future A-010/B-track checks a stable Windows command boundary and
+keeps routine S100P operations behind a bounded action set.
