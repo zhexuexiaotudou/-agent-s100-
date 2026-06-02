@@ -49,6 +49,9 @@ diffusion-loop report: /mnt/nas/openclaw/reports/models/dream7b_bpu_diffusion_lo
 strategy-aware diffusion-loop report: /mnt/nas/openclaw/reports/models/dream7b_bpu_diffusion_loop_20260603-031016/summary.md
 cpu-quality-gate command: /usr/local/bin/dream7b-bpu-cpu-quality-gate-probe
 cpu-quality-gate report: /mnt/nas/openclaw/reports/models/dream7b_bpu_cpu_quality_gate_20260603-033101/summary.md
+hbm-cache-perf command: /usr/local/bin/dream7b-bpu-hbm-cache-perf-probe
+hbm-cache-perf report: /mnt/nas/openclaw/reports/models/dream7b_bpu_hbm_cache_perf_20260603-034629/summary.md
+local-cache loop report: /mnt/nas/openclaw/reports/models/dream7b_bpu_diffusion_loop_20260603-034939/summary.md
 ```
 
 Observed one-frame infer times:
@@ -95,6 +98,7 @@ scripts/dream7b-bpu-text-forward.sh
 scripts/probes/dream7b_bpu_diffusion_step_probe.sh
 scripts/probes/dream7b_bpu_diffusion_loop_probe.sh
 scripts/probes/dream7b_bpu_cpu_quality_gate_probe.sh
+scripts/probes/dream7b_bpu_hbm_cache_perf_probe.sh
 ```
 
 The smoke probe can be run on S100P:
@@ -292,14 +296,52 @@ cpu_output: I
 bpu_summary: /mnt/nas/openclaw/reports/models/dream7b_bpu_diffusion_loop_20260603-033112/summary.md
 ```
 
+The deployed HBM cache performance probe is:
+
+```bash
+dream7b-bpu-hbm-cache-perf-probe /mnt/nas/openclaw/reports/models
+```
+
+It syncs the NAS HBM segments into the S100P local cache path and compares one full seq16 forward from NAS versus local cache:
+
+```text
+local cache: /home/sunrise/.cache/openclaw/dream7b-hbm/segments6
+report: /mnt/nas/openclaw/reports/models/dream7b_bpu_hbm_cache_perf_20260603-034629/summary.md
+NAS wall: 66510.049 ms
+NAS HBM load: 65212.480 ms
+local wall: 25203.805 ms
+local HBM load: 23933.206 ms
+local-vs-NAS load speedup: 2.725x
+local-vs-NAS wall speedup: 2.639x
+```
+
+The same local cache path works for the diffusion loop:
+
+```bash
+DREAM7B_BPU_HBM_DIR=/home/sunrise/.cache/openclaw/dream7b-hbm/segments6 \
+  dream7b-bpu-diffusion-loop-probe \
+  /mnt/nas/openclaw/reports/models \
+  'Explain why S100P BPU matters for Dream 7B in OpenClaw.'
+```
+
+Verified local-cache loop output:
+
+```text
+report: /mnt/nas/openclaw/reports/models/dream7b_bpu_diffusion_loop_20260603-034939/summary.md
+verdict: ok_dream7b_bpu_diffusion_loop_probe
+hbm_dir: /home/sunrise/.cache/openclaw/dream7b-hbm/segments6
+remaining_mask_positions: []
+```
+
 ## Current Boundary
 
-This is real BPU execution for real Dream 7B weights, including a complete seq16 forward chain from prompt text or token ids to logits plus verified one-step and strategy-aware bounded multi-step Dream diffusion bridges over masked positions. The path now also has a CPU/BPU quality coverage gate that records current divergence against the existing CPU Dream text path. The Python prototype uses `HB_HBMRuntime`, dequantizes each S16 segment output back to F32, and explicitly releases each HBM before loading the next one to stay inside S100P BPU/ION memory limits. It is not yet a complete text-generation service.
+This is real BPU execution for real Dream 7B weights, including a complete seq16 forward chain from prompt text or token ids to logits plus verified one-step and strategy-aware bounded multi-step Dream diffusion bridges over masked positions. The path now also has a CPU/BPU quality coverage gate that records current divergence against the existing CPU Dream text path, plus an HBM cache performance gate that quantifies NAS versus S100P-local HBM load cost. The Python prototype uses `HB_HBMRuntime`, dequantizes each S16 segment output back to F32, and explicitly releases each HBM before loading the next one to stay inside S100P BPU/ION memory limits. It is not yet a complete text-generation service.
 
 Remaining engineering work:
 
 - turn the verified Python forward prototype into the production host-side segment orchestrator;
-- reduce or remove S16->F32 dump handoff overhead between segments;
+- reduce or remove per-step HBM load/release overhead; local cache helps but does not remove the bottleneck;
+- reduce or remove S16->F32 handoff overhead between segments;
 - add quality gates against the existing CPU Dream output path and decide acceptable divergence for seq16 BPU probes;
 - benchmark with production prompt/token settings, not only dummy seq16 smoke input.
 
