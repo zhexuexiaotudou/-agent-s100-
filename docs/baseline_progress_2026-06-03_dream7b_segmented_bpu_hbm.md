@@ -47,6 +47,8 @@ diffusion-step report: /mnt/nas/openclaw/reports/models/dream7b_bpu_diffusion_st
 diffusion-loop command: /usr/local/bin/dream7b-bpu-diffusion-loop-probe
 diffusion-loop report: /mnt/nas/openclaw/reports/models/dream7b_bpu_diffusion_loop_20260603-030011/summary.md
 strategy-aware diffusion-loop report: /mnt/nas/openclaw/reports/models/dream7b_bpu_diffusion_loop_20260603-031016/summary.md
+cpu-quality-gate command: /usr/local/bin/dream7b-bpu-cpu-quality-gate-probe
+cpu-quality-gate report: /mnt/nas/openclaw/reports/models/dream7b_bpu_cpu_quality_gate_20260603-033101/summary.md
 ```
 
 Observed one-frame infer times:
@@ -92,6 +94,7 @@ scripts/dream7b-bpu-forward.sh
 scripts/dream7b-bpu-text-forward.sh
 scripts/probes/dream7b_bpu_diffusion_step_probe.sh
 scripts/probes/dream7b_bpu_diffusion_loop_probe.sh
+scripts/probes/dream7b_bpu_cpu_quality_gate_probe.sh
 ```
 
 The smoke probe can be run on S100P:
@@ -269,9 +272,29 @@ entropy_threshold: 1.5
 remaining_mask_positions: []
 ```
 
+The deployed CPU/BPU quality coverage gate is:
+
+```bash
+dream7b-bpu-cpu-quality-gate-probe \
+  /mnt/nas/openclaw/reports/models \
+  'Explain why BPU matters.'
+```
+
+It runs a bounded CPU Dream sample through `dream7b-text`, runs the BPU diffusion loop probe for the same prompt, and records the comparison without treating current seq16 divergence as a deployment failure.
+
+Verified quality-gate output:
+
+```text
+report: /mnt/nas/openclaw/reports/models/dream7b_bpu_cpu_quality_gate_20260603-033101/summary.md
+verdict: ok_dream7b_bpu_cpu_quality_gate_recorded
+quality_status: diverged_expected_for_seq16_probe
+cpu_output: I
+bpu_summary: /mnt/nas/openclaw/reports/models/dream7b_bpu_diffusion_loop_20260603-033112/summary.md
+```
+
 ## Current Boundary
 
-This is real BPU execution for real Dream 7B weights, including a complete seq16 forward chain from prompt text or token ids to logits plus verified one-step and strategy-aware bounded multi-step Dream diffusion bridges over masked positions. The Python prototype uses `HB_HBMRuntime`, dequantizes each S16 segment output back to F32, and explicitly releases each HBM before loading the next one to stay inside S100P BPU/ION memory limits. It is not yet a complete text-generation service.
+This is real BPU execution for real Dream 7B weights, including a complete seq16 forward chain from prompt text or token ids to logits plus verified one-step and strategy-aware bounded multi-step Dream diffusion bridges over masked positions. The path now also has a CPU/BPU quality coverage gate that records current divergence against the existing CPU Dream text path. The Python prototype uses `HB_HBMRuntime`, dequantizes each S16 segment output back to F32, and explicitly releases each HBM before loading the next one to stay inside S100P BPU/ION memory limits. It is not yet a complete text-generation service.
 
 Remaining engineering work:
 
