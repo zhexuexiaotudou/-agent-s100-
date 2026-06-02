@@ -26,10 +26,13 @@ S100P smoke evidence:
 ```text
 model_info: all six segments loaded successfully on S100P
 infer: all six segments ran one dummy frame successfully on S100P
+chain: six segments chained token -> hidden -> logits with dequantized F32 hidden handoff
 runtime: /usr/hobot/bin/hrt_model_exec
 NAS path: /mnt/nas/openclaw/models/dream7b-hbm
 manifest: /mnt/nas/openclaw/models/dream7b-hbm/segments6/manifest.sha256
 smoke outputs: /mnt/nas/openclaw/models/dream7b-hbm/smoke_outputs
+smoke report: /mnt/nas/openclaw/reports/models/dream7b_segmented_hbm_smoke_20260603-015519/summary.md
+chain report: /mnt/nas/openclaw/reports/models/dream7b_segmented_hbm_chain_20260603-021025/summary.md
 ```
 
 Observed one-frame infer times:
@@ -79,14 +82,22 @@ bash scripts/probes/dream7b_segmented_hbm_smoke_probe.sh \
   /mnt/nas/openclaw/models/dream7b-hbm/segments6
 ```
 
+The chained forward proof can be run on S100P:
+
+```bash
+bash scripts/probes/dream7b_segmented_hbm_chain_probe.sh \
+  /mnt/nas/openclaw/reports/models \
+  /mnt/nas/openclaw/models/dream7b-hbm/segments6
+```
+
 ## Current Boundary
 
-This is real BPU execution for real Dream 7B weights, but it is not yet a complete text-generation service.
+This is real BPU execution for real Dream 7B weights, including a complete seq16 forward chain from token ids to logits. It is not yet a complete text-generation service.
 
 Remaining engineering work:
 
-- build the host-side segment orchestrator;
-- dequantize S16 hidden outputs back to F32 inputs between segments, or recompile segment interfaces to avoid unnecessary conversions;
+- replace the CLI chain proof with a production host-side segment orchestrator;
+- reduce or remove S16->F32 dump handoff overhead between segments;
 - connect Dream diffusion sampling to the segmented BPU forward path;
 - add quality checks against the existing CPU Dream output path;
 - benchmark with production prompt/token settings, not only dummy seq16 smoke input.
