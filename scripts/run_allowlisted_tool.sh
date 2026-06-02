@@ -454,7 +454,7 @@ if [[ "$tool_id" == "dream7b_smoke_probe" ]]; then
       ;;
   esac
   case "${2:-}" in
-    ""|/root/.openclaw/workspace/config/dream7b_deployment.json|/mnt/nas/openclaw/config/dream7b_deployment.json|/tmp/dream7b_deployment.json) ;;
+    ""|/root/.openclaw/workspace/config/dream7b_deployment.json|/mnt/nas/openclaw/config/dream7b_deployment.json|/mnt/nas/openclaw/models/dream7b/dream7b_deployment.json|/tmp/dream7b_deployment.json) ;;
     *)
       echo "Refusing Dream 7B config outside approved paths: ${2:-}" >&2
       exit 2

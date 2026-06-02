@@ -13,7 +13,7 @@ case "$report_dir" in
 esac
 
 case "$config_file" in
-  /root/.openclaw/workspace/config/dream7b_deployment.json|/mnt/nas/openclaw/config/dream7b_deployment.json|/tmp/dream7b_deployment.json) ;;
+  /root/.openclaw/workspace/config/dream7b_deployment.json|/mnt/nas/openclaw/config/dream7b_deployment.json|/mnt/nas/openclaw/models/dream7b/dream7b_deployment.json|/tmp/dream7b_deployment.json) ;;
   *)
     echo "Refusing config path outside approved locations: $config_file" >&2
     exit 2
@@ -152,11 +152,13 @@ except Exception as exc:
     raise SystemExit(0)
 
 model_cfg = config.get("model", {})
+runtime_cfg = config.get("runtime", {})
 smoke_cfg = config.get("smoke_test", {})
 model_path = Path(str(model_cfg.get("path", "")))
 payload["model_path"] = str(model_path)
 runtime = str(model_cfg.get("runtime", "auto"))
 prompt = str(smoke_cfg.get("prompt", "Respond with exactly: OK"))
+expected_substring = str(smoke_cfg.get("expected_substring", "")).strip()
 max_new_tokens = max(1, min(int(smoke_cfg.get("max_new_tokens", 16)), 64))
 timeout_seconds = max(15, min(int(smoke_cfg.get("timeout_seconds", 120)), 180))
 
@@ -178,9 +180,15 @@ payload["model_digest"] = model_digest(model_path)
 
 has_llama = shutil.which("llama-cli") is not None
 has_transformers = importlib.util.find_spec("transformers") is not None and importlib.util.find_spec("torch") is not None
+has_dream7b_text = shutil.which("dream7b-text") is not None
 selected = runtime
 if runtime == "auto":
-    selected = "llama-cli" if model_path.is_file() and model_path.suffix.lower() == ".gguf" and has_llama else "transformers"
+    if model_path.is_file() and model_path.suffix.lower() == ".gguf" and has_dream7b_text:
+        selected = "diffuse-cpp"
+    elif model_path.is_file() and model_path.suffix.lower() == ".gguf" and has_llama:
+        selected = "llama-cli"
+    else:
+        selected = "transformers"
 
 start = time.monotonic()
 try:
@@ -199,7 +207,46 @@ try:
             proc = subprocess.run(cmd, text=True, capture_output=True, timeout=timeout_seconds + 10)
             payload["stdout_preview"] = redact(proc.stdout)
             payload["stderr_preview"] = redact(proc.stderr)
-            payload["verdict"] = "ok_smoke" if proc.returncode == 0 and proc.stdout.strip() else f"blocked_runtime_exit_{proc.returncode}"
+            if proc.returncode == 0 and proc.stdout.strip() and (not expected_substring or expected_substring in proc.stdout):
+                payload["verdict"] = "ok_smoke"
+            elif proc.returncode == 0 and expected_substring:
+                payload["verdict"] = "blocked_expected_substring_missing"
+            else:
+                payload["verdict"] = f"blocked_runtime_exit_{proc.returncode}"
+    elif selected == "diffuse-cpp":
+        wrapper = str(runtime_cfg.get("text_wrapper") or shutil.which("dream7b-text") or "")
+        runtime_path = str(runtime_cfg.get("path") or "/mnt/nas/openclaw/runtimes/diffuse-cpp")
+        tokenizer_path = str(runtime_cfg.get("tokenizer_path") or "/mnt/nas/openclaw/models/dream7b/tokenizer")
+        tokenizer_venv = str(runtime_cfg.get("tokenizer_venv") or "/mnt/nas/openclaw/runtimes/dream7b-tokenizer-venv")
+        if not wrapper or not Path(wrapper).exists():
+            payload["verdict"] = "blocked_runtime_missing"
+            payload["runtime"] = "diffuse-cpp"
+            payload["notes"].append("dream7b-text wrapper is required for diffuse-cpp text smoke.")
+        else:
+            payload["runtime"] = "diffuse-cpp"
+            env = os.environ.copy()
+            env["DREAM7B_MODEL"] = str(model_path)
+            env["DREAM7B_RUNTIME"] = runtime_path
+            env["DREAM7B_TOKENIZER"] = tokenizer_path
+            env["DREAM7B_TOKENIZER_VENV"] = tokenizer_venv
+            env["DREAM7B_THREADS"] = str(runtime_cfg.get("threads", env.get("DREAM7B_THREADS", "8")))
+            env["DREAM7B_STEPS"] = str(runtime_cfg.get("steps", env.get("DREAM7B_STEPS", "16")))
+            env["DREAM7B_MAX_TOKENS"] = str(runtime_cfg.get("max_tokens", max_new_tokens))
+            proc = subprocess.run(
+                ["timeout", str(timeout_seconds), wrapper, prompt],
+                text=True,
+                capture_output=True,
+                timeout=timeout_seconds + 10,
+                env=env,
+            )
+            payload["stdout_preview"] = redact(proc.stdout)
+            payload["stderr_preview"] = redact(proc.stderr)
+            if proc.returncode == 0 and proc.stdout.strip() and (not expected_substring or expected_substring in proc.stdout):
+                payload["verdict"] = "ok_smoke"
+            elif proc.returncode == 0 and expected_substring:
+                payload["verdict"] = "blocked_expected_substring_missing"
+            else:
+                payload["verdict"] = f"blocked_runtime_exit_{proc.returncode}"
     elif selected == "transformers":
         if not has_transformers:
             payload["verdict"] = "blocked_runtime_missing"
@@ -223,11 +270,16 @@ try:
                 output = model.generate(**inputs, max_new_tokens=max_new_tokens, do_sample=False)
             text = tokenizer.decode(output[0], skip_special_tokens=True)
             payload["stdout_preview"] = redact(text)
-            payload["verdict"] = "ok_smoke" if text.strip() else "blocked_empty_generation"
+            if text.strip() and (not expected_substring or expected_substring in text):
+                payload["verdict"] = "ok_smoke"
+            elif expected_substring:
+                payload["verdict"] = "blocked_expected_substring_missing"
+            else:
+                payload["verdict"] = "blocked_empty_generation"
     else:
         payload["runtime"] = selected
         payload["verdict"] = "blocked_unknown_runtime"
-        payload["notes"].append("Supported runtimes: auto, llama-cli, transformers.")
+        payload["notes"].append("Supported runtimes: auto, diffuse-cpp, llama-cli, transformers.")
 except subprocess.TimeoutExpired as exc:
     payload["runtime"] = selected
     payload["verdict"] = "blocked_timeout"
