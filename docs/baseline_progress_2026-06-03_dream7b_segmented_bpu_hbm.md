@@ -54,6 +54,10 @@ hbm-cache-perf report: /mnt/nas/openclaw/reports/models/dream7b_bpu_hbm_cache_pe
 local-cache loop report: /mnt/nas/openclaw/reports/models/dream7b_bpu_diffusion_loop_20260603-034939/summary.md
 residency command: /usr/local/bin/dream7b-bpu-residency-probe
 residency report: /mnt/nas/openclaw/reports/models/dream7b_bpu_residency_20260603-035939/summary.md
+fine 26:28 HBM: /mnt/nas/openclaw/models/dream7b-hbm/fine-seq16/seg26_28/dream7b_segment_26_28_seq16_q8.hbm
+fine 24:26 HBM: /mnt/nas/openclaw/models/dream7b-hbm/fine-seq16/seg24_26/dream7b_segment_24_26_seq16_q8.hbm
+fine-residency command: /usr/local/bin/dream7b-bpu-fine-residency-probe
+fine-residency report: /mnt/nas/openclaw/reports/models/dream7b_bpu_fine_residency_20260603-043338/summary.md
 ```
 
 Observed one-frame infer times:
@@ -102,6 +106,8 @@ scripts/probes/dream7b_bpu_diffusion_loop_probe.sh
 scripts/probes/dream7b_bpu_cpu_quality_gate_probe.sh
 scripts/probes/dream7b_bpu_hbm_cache_perf_probe.sh
 scripts/probes/dream7b_bpu_residency_probe.sh
+scripts/probes/compile_dream_segments_seq16_fine.sh
+scripts/probes/dream7b_bpu_fine_residency_probe.sh
 ```
 
 The smoke probe can be run on S100P:
@@ -362,15 +368,51 @@ This rules out a simple all-segment resident orchestrator for the current six-se
 - find an official HBRT/HBDK mechanism for explicit release or streaming residency;
 - keep local HBM cache as the current practical improvement while preserving correctness gates.
 
+## Fine Split Residency
+
+The first fine-split follow-up targeted the original large tail segment `24:28`.
+
+Compiled fine HBM artifacts:
+
+```text
+/mnt/nas/openclaw/models/dream7b-hbm/fine-seq16/seg24_26/dream7b_segment_24_26_seq16_q8.hbm
+/mnt/nas/openclaw/models/dream7b-hbm/fine-seq16/seg26_28/dream7b_segment_26_28_seq16_q8.hbm
+```
+
+S100P model-load evidence:
+
+```text
+seg24_26 model_info: dream_segment_24_26, input (16,3584) F32 + (16) S32, output (16,3584) S16, DDR load 2182.22 ms
+seg26_28 model_info: dream_segment_26_28, input (16,3584) F32 + (16) S32, output (1,16,152064) S16, DDR load 3680.37 ms
+```
+
+Verified fine-residency output:
+
+```text
+report: /mnt/nas/openclaw/reports/models/dream7b_bpu_fine_residency_20260603-043338/summary.md
+verdict: ok_dream7b_bpu_fine_residency_probe
+seg24_26: ok, 2136.729 ms
+seg26_28: ok, 3794.899 ms
+seg24_26 + seg26_28: ok, 5193.884 ms
+seg21_24 + seg24_26: ok, 4244.338 ms
+seg04_07 + seg26_28: ok, 5913.907 ms
+seg21_24 + seg26_28: ok, 5929.724 ms
+seg21_24 + seg24_26 + seg26_28: failed, memory alloc failed
+seg04_07 + seg21_24 + seg26_28: failed, memory alloc failed
+seg24_28 + seg26_28: failed, memory alloc failed
+```
+
+This proves the fine-split direction is useful: replacing `24:28` with `24:26 + 26:28` reduces pair residency pressure enough for adjacent tail residency. It does not yet solve all-resident orchestration, because three tail/small segments still exceed the board's current load-residency limit. The next compile target should be the remaining large segments, starting with `0:2 + 2:4`, `7:10 + 10:14`, and `14:17 + 17:21`, then rerun the same fine-residency gate.
+
 ## Current Boundary
 
-This is real BPU execution for real Dream 7B weights, including a complete seq16 forward chain from prompt text or token ids to logits plus verified one-step and strategy-aware bounded multi-step Dream diffusion bridges over masked positions. The path now also has a CPU/BPU quality coverage gate that records current divergence against the existing CPU Dream text path, an HBM cache performance gate that quantifies NAS versus S100P-local HBM load cost, and a residency gate proving that the current six-segment split cannot be made all-resident. The Python prototype uses `HB_HBMRuntime`, dequantizes each S16 segment output back to F32, and explicitly releases each HBM before loading the next one to stay inside S100P BPU/ION memory limits. It is not yet a complete text-generation service.
+This is real BPU execution for real Dream 7B weights, including a complete seq16 forward chain from prompt text or token ids to logits plus verified one-step and strategy-aware bounded multi-step Dream diffusion bridges over masked positions. The path now also has a CPU/BPU quality coverage gate that records current divergence against the existing CPU Dream text path, an HBM cache performance gate that quantifies NAS versus S100P-local HBM load cost, a residency gate proving that the current six-segment split cannot be made all-resident, and a fine-residency gate proving that smaller tail segments reduce residency pressure. The Python prototype uses `HB_HBMRuntime`, dequantizes each S16 segment output back to F32, and explicitly releases each HBM before loading the next one to stay inside S100P BPU/ION memory limits. It is not yet a complete text-generation service.
 
 Remaining engineering work:
 
 - turn the verified Python forward prototype into the production host-side segment orchestrator;
 - reduce or remove per-step HBM load/release overhead; local cache helps but does not remove the bottleneck;
-- do not assume all-segment residency is viable with the current split; residency probe shows only `seg04_07 + seg21_24` can coexist;
+- do not assume all-segment residency is viable yet; current fine split makes `seg24_26 + seg26_28` viable, but three-segment tail residency still fails;
 - reduce or remove S16->F32 handoff overhead between segments;
 - add quality gates against the existing CPU Dream output path and decide acceptable divergence for seq16 BPU probes;
 - benchmark with production prompt/token settings, not only dummy seq16 smoke input.
