@@ -44,6 +44,8 @@ text-forward logits: /mnt/nas/openclaw/reports/models/dream7b_bpu_forward_202606
 top-k report: /mnt/nas/openclaw/reports/models/dream7b_bpu_forward_20260603-024533/summary.json
 diffusion-step command: /usr/local/bin/dream7b-bpu-diffusion-step-probe
 diffusion-step report: /mnt/nas/openclaw/reports/models/dream7b_bpu_diffusion_step_20260603-025304/summary.md
+diffusion-loop command: /usr/local/bin/dream7b-bpu-diffusion-loop-probe
+diffusion-loop report: /mnt/nas/openclaw/reports/models/dream7b_bpu_diffusion_loop_20260603-030011/summary.md
 ```
 
 Observed one-frame infer times:
@@ -88,6 +90,7 @@ scripts/probes/dream7b_segmented_hbm_python_forward.py
 scripts/dream7b-bpu-forward.sh
 scripts/dream7b-bpu-text-forward.sh
 scripts/probes/dream7b_bpu_diffusion_step_probe.sh
+scripts/probes/dream7b_bpu_diffusion_loop_probe.sh
 ```
 
 The smoke probe can be run on S100P:
@@ -221,15 +224,36 @@ mask_positions: [12, 13, 14, 15]
 selected_token_ids: 279, 279, 279, 279
 ```
 
+The deployed bounded diffusion loop probe is:
+
+```bash
+dream7b-bpu-diffusion-loop-probe \
+  /mnt/nas/openclaw/reports/models \
+  'Explain why S100P BPU matters for Dream 7B in OpenClaw.'
+```
+
+It repeatedly calls the deployed BPU forward command, applies the Dream logits shift before selecting mask positions, and transfers a bounded number of mask tokens per step. The default verification loop uses two BPU forward calls over the seq16 graph.
+
+Verified diffusion-loop output:
+
+```text
+report: /mnt/nas/openclaw/reports/models/dream7b_bpu_diffusion_loop_20260603-030011/summary.md
+verdict: ok_dream7b_bpu_diffusion_loop_probe
+steps: 2
+remaining_mask_positions: []
+step0_transferred: 1 token
+step1_transferred: 3 tokens
+```
+
 ## Current Boundary
 
-This is real BPU execution for real Dream 7B weights, including a complete seq16 forward chain from prompt text or token ids to logits plus a verified one-step Dream diffusion bridge over masked positions. The Python prototype uses `HB_HBMRuntime`, dequantizes each S16 segment output back to F32, and explicitly releases each HBM before loading the next one to stay inside S100P BPU/ION memory limits. It is not yet a complete text-generation service.
+This is real BPU execution for real Dream 7B weights, including a complete seq16 forward chain from prompt text or token ids to logits plus verified one-step and bounded multi-step Dream diffusion bridges over masked positions. The Python prototype uses `HB_HBMRuntime`, dequantizes each S16 segment output back to F32, and explicitly releases each HBM before loading the next one to stay inside S100P BPU/ION memory limits. It is not yet a complete text-generation service.
 
 Remaining engineering work:
 
 - turn the verified Python forward prototype into the production host-side segment orchestrator;
 - reduce or remove S16->F32 dump handoff overhead between segments;
-- extend the one-step Dream diffusion bridge into a bounded multi-step sampling loop;
+- replace the deterministic probe transfer policy with the production Dream sampling policy and quality gates;
 - add quality checks against the existing CPU Dream output path;
 - benchmark with production prompt/token settings, not only dummy seq16 smoke input.
 
