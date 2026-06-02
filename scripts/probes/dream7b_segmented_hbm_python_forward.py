@@ -25,6 +25,7 @@ def parse_args():
     parser.add_argument("--hbm-dir", default="/mnt/nas/openclaw/models/dream7b-hbm/segments6")
     parser.add_argument("--output-dir", default="/mnt/nas/openclaw/reports/models/dream7b_python_forward")
     parser.add_argument("--tokens-bin", default="", help="Optional int32 token-id binary with shape [1, seq_len].")
+    parser.add_argument("--tokens", default="", help="Optional comma or whitespace separated token ids with length seq_len.")
     parser.add_argument("--seq-len", type=int, default=16)
     parser.add_argument("--hidden-size", type=int, default=3584)
     parser.add_argument("--vocab-size", type=int, default=152064)
@@ -32,14 +33,34 @@ def parse_args():
     return parser.parse_args()
 
 
-def load_tokens(path: str, seq_len: int) -> np.ndarray:
-    if not path:
-        return np.zeros((1, seq_len), dtype=np.int32)
-    data = np.fromfile(path, dtype=np.int32)
+def parse_token_values(text: str) -> np.ndarray:
+    parts = [part for part in text.replace(",", " ").split() if part]
+    if not parts:
+        raise ValueError("--tokens was set but no token ids were parsed")
+    try:
+        values = [int(part, 0) for part in parts]
+    except ValueError as exc:
+        raise ValueError(f"Invalid token id in --tokens: {text}") from exc
+    return np.asarray(values, dtype=np.int32)
+
+
+def load_tokens(path: str, token_text: str, seq_len: int) -> tuple[np.ndarray, str]:
+    if path and token_text:
+        raise ValueError("Use either --tokens-bin or --tokens, not both.")
+    if token_text:
+        data = parse_token_values(token_text)
+        source = "tokens_arg"
+    elif path:
+        data = np.fromfile(path, dtype=np.int32)
+        source = path
+    else:
+        data = np.zeros(seq_len, dtype=np.int32)
+        source = "zero_tokens"
+
     expected = seq_len
     if data.size != expected:
-        raise ValueError(f"Expected {expected} int32 token ids, got {data.size}: {path}")
-    return data.reshape(1, seq_len)
+        raise ValueError(f"Expected {expected} int32 token ids, got {data.size}: {source}")
+    return data.reshape(1, seq_len), source
 
 
 def first_scale(runtime: HB_HBMRuntime, model_name: str, output_name: str) -> float:
@@ -82,7 +103,7 @@ def main():
     output_dir = Path(args.output_dir)
     output_dir.mkdir(parents=True, exist_ok=True)
 
-    tokens = load_tokens(args.tokens_bin, args.seq_len)
+    tokens, tokens_source = load_tokens(args.tokens_bin, args.tokens, args.seq_len)
     position_ids = np.arange(args.seq_len, dtype=np.int32)
     hidden = None
     segment_results = []
@@ -110,8 +131,10 @@ def main():
     if hidden.shape != expected_logits:
         raise ValueError(f"Expected final logits shape {expected_logits}, got {hidden.shape}")
 
+    logits_path = ""
     if args.save_logits:
-        np.save(output_dir / "logits.npy", hidden)
+        logits_path = str(output_dir / "logits.npy")
+        np.save(logits_path, hidden)
 
     summary = {
         "generated_at": datetime.now().astimezone().isoformat(),
@@ -119,7 +142,9 @@ def main():
         "hbm_dir": str(hbm_dir),
         "output_dir": str(output_dir),
         "runtime_version": HB_HBMRuntime.version,
-        "tokens_bin": args.tokens_bin or "zero_tokens",
+        "tokens_source": tokens_source,
+        "tokens_bin": args.tokens_bin or "",
+        "logits_npy": logits_path,
         "final_shape": list(hidden.shape),
         "final_dtype": str(hidden.dtype),
         "final_bytes": int(hidden.nbytes),

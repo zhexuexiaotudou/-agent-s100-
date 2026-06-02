@@ -36,6 +36,8 @@ chain report: /mnt/nas/openclaw/reports/models/dream7b_segmented_hbm_chain_20260
 python forward report: /mnt/nas/openclaw/reports/models/dream7b_python_forward_20260603-verified/summary.json
 deployed command: /usr/local/bin/dream7b-bpu-forward
 deployed command report: /mnt/nas/openclaw/reports/models/dream7b_bpu_forward_20260603-022912/summary.json
+token-arg report: /mnt/nas/openclaw/reports/models/dream7b_bpu_forward_20260603-023557/summary.json
+token-arg logits: /mnt/nas/openclaw/reports/models/dream7b_bpu_forward_20260603-023557/logits.npy
 ```
 
 Observed one-frame infer times:
@@ -139,6 +141,23 @@ The deployed command was verified on S100P and wrote:
 
 ```text
 /mnt/nas/openclaw/reports/models/dream7b_bpu_forward_20260603-022912/summary.json
+```
+
+It also accepts explicit seq16 token ids and can write final logits:
+
+```bash
+dream7b-bpu-forward \
+  --tokens '1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16' \
+  --save-logits
+```
+
+Verified token-arg output:
+
+```text
+verdict: ok_dream7b_segmented_hbm_python_forward
+tokens_source: tokens_arg
+logits_npy: /mnt/nas/openclaw/reports/models/dream7b_bpu_forward_20260603-023557/logits.npy
+final_shape: [1, 16, 152064]
 ```
 
 ## Current Boundary
