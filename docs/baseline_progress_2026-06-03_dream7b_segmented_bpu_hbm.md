@@ -38,6 +38,9 @@ deployed command: /usr/local/bin/dream7b-bpu-forward
 deployed command report: /mnt/nas/openclaw/reports/models/dream7b_bpu_forward_20260603-022912/summary.json
 token-arg report: /mnt/nas/openclaw/reports/models/dream7b_bpu_forward_20260603-023557/summary.json
 token-arg logits: /mnt/nas/openclaw/reports/models/dream7b_bpu_forward_20260603-023557/logits.npy
+text-forward command: /usr/local/bin/dream7b-bpu-text-forward
+text-forward report: /mnt/nas/openclaw/reports/models/dream7b_bpu_forward_20260603-024218/summary.json
+text-forward logits: /mnt/nas/openclaw/reports/models/dream7b_bpu_forward_20260603-024218/logits.npy
 ```
 
 Observed one-frame infer times:
@@ -80,6 +83,7 @@ scripts/probes/dream7b_segmented_hbm_smoke_probe.sh
 scripts/probes/dream7b_segmented_hbm_chain_probe.sh
 scripts/probes/dream7b_segmented_hbm_python_forward.py
 scripts/dream7b-bpu-forward.sh
+scripts/dream7b-bpu-text-forward.sh
 ```
 
 The smoke probe can be run on S100P:
@@ -160,9 +164,27 @@ logits_npy: /mnt/nas/openclaw/reports/models/dream7b_bpu_forward_20260603-023557
 final_shape: [1, 16, 152064]
 ```
 
+The deployed text-to-BPU entrypoint is:
+
+```bash
+dream7b-bpu-text-forward --fit truncate-left --save-logits \
+  'Explain in one sentence why S100P BPU execution matters for Dream 7B deployment in OpenClaw.'
+```
+
+Default prompt fitting is `exact`, so non-seq16 prompts are rejected unless a probe explicitly chooses `--fit truncate-left` or `--fit pad-right`. This avoids silently changing the input shape while the available HBM artifacts are fixed at seq16.
+
+Verified text-forward output:
+
+```text
+verdict: ok_dream7b_segmented_hbm_python_forward
+tokens_source: tokens_arg
+logits_npy: /mnt/nas/openclaw/reports/models/dream7b_bpu_forward_20260603-024218/logits.npy
+final_shape: [1, 16, 152064]
+```
+
 ## Current Boundary
 
-This is real BPU execution for real Dream 7B weights, including a complete seq16 forward chain from token ids to logits. The Python prototype uses `HB_HBMRuntime`, dequantizes each S16 segment output back to F32, and explicitly releases each HBM before loading the next one to stay inside S100P BPU/ION memory limits. It is not yet a complete text-generation service.
+This is real BPU execution for real Dream 7B weights, including a complete seq16 forward chain from prompt text or token ids to logits. The Python prototype uses `HB_HBMRuntime`, dequantizes each S16 segment output back to F32, and explicitly releases each HBM before loading the next one to stay inside S100P BPU/ION memory limits. It is not yet a complete text-generation service.
 
 Remaining engineering work:
 
@@ -177,7 +199,7 @@ Remaining engineering work:
 The path still uses Dream 7B, not a substitute model. The current route is now:
 
 ```text
-Dream HF weights -> WSL1 AVX build host -> segmented S100 HBM -> NAS storage -> S100P BPU runtime -> deployed S100P command
+Dream HF weights -> WSL1 AVX build host -> segmented S100 HBM -> NAS storage -> S100P tokenizer/runtime -> deployed S100P commands
 ```
 
 The earlier official cached prefill/decode skeleton remains unsuitable for Dream in the short term because Dream is diffusion-based and the direct official skeleton conversion crashed on real Dream graphs.
