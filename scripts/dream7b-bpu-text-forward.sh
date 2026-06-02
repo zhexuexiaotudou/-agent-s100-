@@ -9,7 +9,7 @@ forward_args=()
 
 usage() {
   cat >&2 <<'USAGE'
-usage: dream7b-bpu-text-forward [--fit exact|truncate-left|pad-right] [--save-logits] [--output-dir DIR] [--] prompt text
+usage: dream7b-bpu-text-forward [--fit exact|truncate-left|pad-right] [--save-logits] [--top-k N] [--output-dir DIR] [--] prompt text
 
 Encodes a Dream 7B prompt locally on S100P, then runs dream7b-bpu-forward.
 Current HBM artifacts are compiled for seq16, so exact token length is the
@@ -36,7 +36,7 @@ while [[ $# -gt 0 ]]; do
       forward_args+=("$1")
       shift
       ;;
-    --output-dir|--hbm-dir)
+    --output-dir|--hbm-dir|--top-k)
       [[ $# -ge 2 ]] || { usage; exit 2; }
       forward_args+=("$1" "$2")
       shift 2

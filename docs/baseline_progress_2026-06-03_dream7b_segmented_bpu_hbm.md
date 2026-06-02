@@ -41,6 +41,7 @@ token-arg logits: /mnt/nas/openclaw/reports/models/dream7b_bpu_forward_20260603-
 text-forward command: /usr/local/bin/dream7b-bpu-text-forward
 text-forward report: /mnt/nas/openclaw/reports/models/dream7b_bpu_forward_20260603-024218/summary.json
 text-forward logits: /mnt/nas/openclaw/reports/models/dream7b_bpu_forward_20260603-024218/logits.npy
+top-k report: /mnt/nas/openclaw/reports/models/dream7b_bpu_forward_20260603-024533/summary.json
 ```
 
 Observed one-frame infer times:
@@ -180,6 +181,21 @@ verdict: ok_dream7b_segmented_hbm_python_forward
 tokens_source: tokens_arg
 logits_npy: /mnt/nas/openclaw/reports/models/dream7b_bpu_forward_20260603-024218/logits.npy
 final_shape: [1, 16, 152064]
+```
+
+The forward script also supports a lightweight top-k summary for the final position:
+
+```bash
+dream7b-bpu-text-forward --fit truncate-left --top-k 5 \
+  'Explain in one sentence why S100P BPU execution matters for Dream 7B deployment in OpenClaw.'
+```
+
+Verified top-k output:
+
+```text
+report: /mnt/nas/openclaw/reports/models/dream7b_bpu_forward_20260603-024533/summary.json
+top_k: 5
+topk_last_position: token ids 279, 11, 315, 13, 374
 ```
 
 ## Current Boundary

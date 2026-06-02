@@ -30,6 +30,7 @@ def parse_args():
     parser.add_argument("--hidden-size", type=int, default=3584)
     parser.add_argument("--vocab-size", type=int, default=152064)
     parser.add_argument("--save-logits", action="store_true", help="Write final float32 logits as logits.npy.")
+    parser.add_argument("--top-k", type=int, default=0, help="Include top-k ids from the last position logits in summary.json.")
     return parser.parse_args()
 
 
@@ -97,6 +98,18 @@ def run_segment(model_file: Path, model_name: str, inputs: dict[str, np.ndarray]
     return dequantized, result
 
 
+def topk_last_position(logits: np.ndarray, top_k: int) -> list[dict[str, float | int]]:
+    if top_k <= 0:
+        return []
+    last = logits[0, -1].astype(np.float32, copy=False)
+    k = min(int(top_k), int(last.shape[0]))
+    if k <= 0:
+        return []
+    indices = np.argpartition(last, -k)[-k:]
+    indices = indices[np.argsort(last[indices])[::-1]]
+    return [{"token_id": int(idx), "score": float(last[idx])} for idx in indices]
+
+
 def main():
     args = parse_args()
     hbm_dir = Path(args.hbm_dir)
@@ -135,6 +148,7 @@ def main():
     if args.save_logits:
         logits_path = str(output_dir / "logits.npy")
         np.save(logits_path, hidden)
+    topk_last = topk_last_position(hidden, args.top_k)
 
     summary = {
         "generated_at": datetime.now().astimezone().isoformat(),
@@ -145,6 +159,8 @@ def main():
         "tokens_source": tokens_source,
         "tokens_bin": args.tokens_bin or "",
         "logits_npy": logits_path,
+        "top_k": int(args.top_k),
+        "topk_last_position": topk_last,
         "final_shape": list(hidden.shape),
         "final_dtype": str(hidden.dtype),
         "final_bytes": int(hidden.nbytes),
