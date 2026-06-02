@@ -55,6 +55,8 @@ run_dir = Path(sys.argv[3])
 combo_timeout = int(sys.argv[4])
 
 segments = {
+    "seg00_02": fine_hbm_dir / "seg00_02" / "dream7b_segment_0_2_seq16_q8.hbm",
+    "seg02_04": fine_hbm_dir / "seg02_04" / "dream7b_segment_2_4_seq16_q8.hbm",
     "seg04_07": base_hbm_dir / "dream7b_segment_4_7_seq16_q8.hbm",
     "seg21_24": base_hbm_dir / "dream7b_segment_21_24_seq16_q8.hbm",
     "seg24_28": base_hbm_dir / "dream7b_segment_24_28_seq16_q8.hbm",
@@ -67,6 +69,10 @@ for segment_id, path in segments.items():
         raise SystemExit(f"missing HBM segment {segment_id}: {path}")
 
 combos = [
+    ["seg00_02"],
+    ["seg02_04"],
+    ["seg00_02", "seg02_04"],
+    ["seg02_04", "seg04_07"],
     ["seg24_26"],
     ["seg26_28"],
     ["seg24_26", "seg26_28"],
@@ -161,6 +167,8 @@ results = [run_combo(combo) for combo in combos]
 ok_results = [item for item in results if item["ok"]]
 failed_results = [item for item in results if not item["ok"]]
 critical_pairs = {
+    tuple(["seg00_02", "seg02_04"]),
+    tuple(["seg02_04", "seg04_07"]),
     tuple(["seg24_26", "seg26_28"]),
     tuple(["seg21_24", "seg24_26"]),
     tuple(["seg04_07", "seg26_28"]),

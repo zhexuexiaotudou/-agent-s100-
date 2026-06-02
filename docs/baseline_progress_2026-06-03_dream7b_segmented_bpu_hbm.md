@@ -56,8 +56,10 @@ residency command: /usr/local/bin/dream7b-bpu-residency-probe
 residency report: /mnt/nas/openclaw/reports/models/dream7b_bpu_residency_20260603-035939/summary.md
 fine 26:28 HBM: /mnt/nas/openclaw/models/dream7b-hbm/fine-seq16/seg26_28/dream7b_segment_26_28_seq16_q8.hbm
 fine 24:26 HBM: /mnt/nas/openclaw/models/dream7b-hbm/fine-seq16/seg24_26/dream7b_segment_24_26_seq16_q8.hbm
+fine 0:2 HBM: /mnt/nas/openclaw/models/dream7b-hbm/fine-seq16/seg00_02/dream7b_segment_0_2_seq16_q8.hbm
+fine 2:4 HBM: /mnt/nas/openclaw/models/dream7b-hbm/fine-seq16/seg02_04/dream7b_segment_2_4_seq16_q8.hbm
 fine-residency command: /usr/local/bin/dream7b-bpu-fine-residency-probe
-fine-residency report: /mnt/nas/openclaw/reports/models/dream7b_bpu_fine_residency_20260603-043338/summary.md
+fine-residency report: /mnt/nas/openclaw/reports/models/dream7b_bpu_fine_residency_20260603-045205/summary.md
 ```
 
 Observed one-frame infer times:
@@ -370,13 +372,15 @@ This rules out a simple all-segment resident orchestrator for the current six-se
 
 ## Fine Split Residency
 
-The first fine-split follow-up targeted the original large tail segment `24:28`.
+The first fine-split follow-up targeted the original large tail segment `24:28`; the next pass split the original large front segment `0:4`.
 
 Compiled fine HBM artifacts:
 
 ```text
 /mnt/nas/openclaw/models/dream7b-hbm/fine-seq16/seg24_26/dream7b_segment_24_26_seq16_q8.hbm
 /mnt/nas/openclaw/models/dream7b-hbm/fine-seq16/seg26_28/dream7b_segment_26_28_seq16_q8.hbm
+/mnt/nas/openclaw/models/dream7b-hbm/fine-seq16/seg00_02/dream7b_segment_0_2_seq16_q8.hbm
+/mnt/nas/openclaw/models/dream7b-hbm/fine-seq16/seg02_04/dream7b_segment_2_4_seq16_q8.hbm
 ```
 
 S100P model-load evidence:
@@ -384,25 +388,31 @@ S100P model-load evidence:
 ```text
 seg24_26 model_info: dream_segment_24_26, input (16,3584) F32 + (16) S32, output (16,3584) S16, DDR load 2182.22 ms
 seg26_28 model_info: dream_segment_26_28, input (16,3584) F32 + (16) S32, output (1,16,152064) S16, DDR load 3680.37 ms
+seg00_02 model_info: dream_segment_00_02, input (1,16) S32 + (16) S32, output (16,3584) S16, DDR load 4065.79 ms
+seg02_04 model_info: dream_segment_02_04, input (16,3584) F32 + (16) S32, output (16,3584) S16, DDR load 5658.17 ms
 ```
 
 Verified fine-residency output:
 
 ```text
-report: /mnt/nas/openclaw/reports/models/dream7b_bpu_fine_residency_20260603-043338/summary.md
+report: /mnt/nas/openclaw/reports/models/dream7b_bpu_fine_residency_20260603-045205/summary.md
 verdict: ok_dream7b_bpu_fine_residency_probe
-seg24_26: ok, 2136.729 ms
-seg26_28: ok, 3794.899 ms
-seg24_26 + seg26_28: ok, 5193.884 ms
-seg21_24 + seg24_26: ok, 4244.338 ms
-seg04_07 + seg26_28: ok, 5913.907 ms
-seg21_24 + seg26_28: ok, 5929.724 ms
+seg00_02: ok, 3822.477 ms
+seg02_04: ok, 2635.441 ms
+seg00_02 + seg02_04: ok, 5346.157 ms
+seg02_04 + seg04_07: ok, 4398.460 ms
+seg24_26: ok, 2135.680 ms
+seg26_28: ok, 3800.040 ms
+seg24_26 + seg26_28: ok, 5191.182 ms
+seg21_24 + seg24_26: ok, 4250.282 ms
+seg04_07 + seg26_28: ok, 5905.456 ms
+seg21_24 + seg26_28: ok, 6041.128 ms
 seg21_24 + seg24_26 + seg26_28: failed, memory alloc failed
 seg04_07 + seg21_24 + seg26_28: failed, memory alloc failed
 seg24_28 + seg26_28: failed, memory alloc failed
 ```
 
-This proves the fine-split direction is useful: replacing `24:28` with `24:26 + 26:28` reduces pair residency pressure enough for adjacent tail residency. It does not yet solve all-resident orchestration, because three tail/small segments still exceed the board's current load-residency limit. The next compile target should be the remaining large segments, starting with `0:2 + 2:4`, `7:10 + 10:14`, and `14:17 + 17:21`, then rerun the same fine-residency gate.
+This proves the fine-split direction is useful: replacing `24:28` with `24:26 + 26:28` reduces pair residency pressure enough for adjacent tail residency, and replacing `0:4` with `0:2 + 2:4` also preserves adjacent front residency. It does not yet solve all-resident orchestration, because three tail/small segments still exceed the board's current load-residency limit. The next compile target should be the remaining large middle segments, starting with `7:10 + 10:14` and `14:17 + 17:21`, then rerun the same fine-residency gate.
 
 ## Current Boundary
 
@@ -412,7 +422,7 @@ Remaining engineering work:
 
 - turn the verified Python forward prototype into the production host-side segment orchestrator;
 - reduce or remove per-step HBM load/release overhead; local cache helps but does not remove the bottleneck;
-- do not assume all-segment residency is viable yet; current fine split makes `seg24_26 + seg26_28` viable, but three-segment tail residency still fails;
+- do not assume all-segment residency is viable yet; current fine split makes `seg00_02 + seg02_04` and `seg24_26 + seg26_28` viable, but three-segment tail residency still fails;
 - reduce or remove S16->F32 handoff overhead between segments;
 - add quality gates against the existing CPU Dream output path and decide acceptable divergence for seq16 BPU probes;
 - benchmark with production prompt/token settings, not only dummy seq16 smoke input.
