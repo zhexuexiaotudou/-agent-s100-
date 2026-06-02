@@ -33,6 +33,7 @@ manifest: /mnt/nas/openclaw/models/dream7b-hbm/segments6/manifest.sha256
 smoke outputs: /mnt/nas/openclaw/models/dream7b-hbm/smoke_outputs
 smoke report: /mnt/nas/openclaw/reports/models/dream7b_segmented_hbm_smoke_20260603-015519/summary.md
 chain report: /mnt/nas/openclaw/reports/models/dream7b_segmented_hbm_chain_20260603-021025/summary.md
+python forward report: /mnt/nas/openclaw/reports/models/dream7b_python_forward_20260603-verified/summary.json
 ```
 
 Observed one-frame infer times:
@@ -72,6 +73,8 @@ The six-segment split keeps every load under the board's observed runtime limit.
 scripts/probes/compile_dream_segmented_full_forward.py
 scripts/probes/compile_dream_segments_seq16.sh
 scripts/probes/dream7b_segmented_hbm_smoke_probe.sh
+scripts/probes/dream7b_segmented_hbm_chain_probe.sh
+scripts/probes/dream7b_segmented_hbm_python_forward.py
 ```
 
 The smoke probe can be run on S100P:
@@ -90,13 +93,37 @@ bash scripts/probes/dream7b_segmented_hbm_chain_probe.sh \
   /mnt/nas/openclaw/models/dream7b-hbm/segments6
 ```
 
+The reusable Python forward prototype can be run after building/installing the board-provided `hbm_runtime` pybind package into:
+
+```text
+/mnt/nas/openclaw/runtimes/hbm-runtime-venv
+```
+
+Run:
+
+```bash
+. /mnt/nas/openclaw/runtimes/hbm-runtime-venv/bin/activate
+python scripts/probes/dream7b_segmented_hbm_python_forward.py \
+  --hbm-dir /mnt/nas/openclaw/models/dream7b-hbm/segments6 \
+  --output-dir /mnt/nas/openclaw/reports/models/dream7b_python_forward
+```
+
+Verified output:
+
+```text
+verdict: ok_dream7b_segmented_hbm_python_forward
+runtime_version: 3.13.6_(4.7.5 HBRT)
+final_shape: [1, 16, 152064]
+final_dtype: float32
+```
+
 ## Current Boundary
 
-This is real BPU execution for real Dream 7B weights, including a complete seq16 forward chain from token ids to logits. It is not yet a complete text-generation service.
+This is real BPU execution for real Dream 7B weights, including a complete seq16 forward chain from token ids to logits. The Python prototype uses `HB_HBMRuntime`, dequantizes each S16 segment output back to F32, and explicitly releases each HBM before loading the next one to stay inside S100P BPU/ION memory limits. It is not yet a complete text-generation service.
 
 Remaining engineering work:
 
-- replace the CLI chain proof with a production host-side segment orchestrator;
+- turn the verified Python forward prototype into the production host-side segment orchestrator;
 - reduce or remove S16->F32 dump handoff overhead between segments;
 - connect Dream diffusion sampling to the segmented BPU forward path;
 - add quality checks against the existing CPU Dream output path;
