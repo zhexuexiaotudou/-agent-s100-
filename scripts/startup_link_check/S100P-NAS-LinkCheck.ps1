@@ -84,6 +84,102 @@ function Add-Step {
   }
 }
 
+function Ensure-WindowsIcsSharing {
+  param([switch]$ForceReset)
+
+  $publicName = 'WLAN'
+  $privateName = $Config.windows.interfaceAlias
+
+  if (-not (Test-IsAdmin)) {
+    Add-Step 'Windows ICS 共享' 'WARN' '当前进程不是管理员，无法自动修复 WLAN -> 以太网 共享上网' ''
+    return $false
+  }
+
+  try {
+    $netShare = New-Object -ComObject HNetCfg.HNetShare
+    $connections = @($netShare.EnumEveryConnection())
+    $publicConn = $null
+    $privateConn = $null
+    $states = New-Object System.Collections.Generic.List[string]
+
+    foreach ($conn in $connections) {
+      $props = $netShare.NetConnectionProps($conn)
+      $cfg = $netShare.INetSharingConfigurationForINetConnection($conn)
+      $states.Add(("name={0}; enabled={1}; type={2}" -f $props.Name, $cfg.SharingEnabled, $cfg.SharingConnectionType))
+      if ($props.Name -eq $publicName) { $publicConn = $conn }
+      if ($props.Name -eq $privateName) { $privateConn = $conn }
+    }
+
+    if ($null -eq $publicConn -or $null -eq $privateConn) {
+      Add-Step 'Windows ICS 共享' 'FAIL' ("找不到共享网卡：public={0}, private={1}" -f $publicName, $privateName) ($states -join "`n")
+      return $false
+    }
+
+    $publicCfg = $netShare.INetSharingConfigurationForINetConnection($publicConn)
+    $privateCfg = $netShare.INetSharingConfigurationForINetConnection($privateConn)
+    $alreadyOk = $publicCfg.SharingEnabled -and $publicCfg.SharingConnectionType -eq 0 -and
+      $privateCfg.SharingEnabled -and $privateCfg.SharingConnectionType -eq 1
+
+    if ($alreadyOk -and -not $ForceReset.IsPresent) {
+      Add-Step 'Windows ICS 共享' 'OK' ("{0} 已共享到 {1}" -f $publicName, $privateName) ($states -join "`n")
+      return $true
+    }
+
+    foreach ($conn in $connections) {
+      $cfg = $netShare.INetSharingConfigurationForINetConnection($conn)
+      if ($cfg.SharingEnabled) {
+        $cfg.DisableSharing()
+      }
+    }
+
+    if ($ForceReset.IsPresent) {
+      try {
+        Restart-Service -Name SharedAccess -Force -ErrorAction Stop
+        Start-Sleep -Seconds 3
+        $netShare = New-Object -ComObject HNetCfg.HNetShare
+        $connections = @($netShare.EnumEveryConnection())
+        $publicConn = $null
+        $privateConn = $null
+        foreach ($conn in $connections) {
+          $props = $netShare.NetConnectionProps($conn)
+          if ($props.Name -eq $publicName) { $publicConn = $conn }
+          if ($props.Name -eq $privateName) { $privateConn = $conn }
+        }
+        if ($null -eq $publicConn -or $null -eq $privateConn) {
+          throw "Network connection disappeared after SharedAccess restart"
+        }
+        $publicCfg = $netShare.INetSharingConfigurationForINetConnection($publicConn)
+        $privateCfg = $netShare.INetSharingConfigurationForINetConnection($privateConn)
+      } catch {
+        Add-Step 'Windows ICS 共享' 'FAIL' '重启 SharedAccess 后重新获取共享网卡失败' $_.Exception.ToString()
+        return $false
+      }
+    }
+
+    $publicCfg.EnableSharing(0)
+    Start-Sleep -Seconds 1
+    $privateCfg.EnableSharing(1)
+    Start-Sleep -Seconds 8
+
+    $after = New-Object System.Collections.Generic.List[string]
+    foreach ($conn in @($netShare.EnumEveryConnection())) {
+      $props = $netShare.NetConnectionProps($conn)
+      $cfg = $netShare.INetSharingConfigurationForINetConnection($conn)
+      $after.Add(("name={0}; enabled={1}; type={2}" -f $props.Name, $cfg.SharingEnabled, $cfg.SharingConnectionType))
+    }
+    $message = if ($ForceReset.IsPresent) {
+      "已重启 SharedAccess 并重新启用 ${publicName} -> ${privateName} 共享上网"
+    } else {
+      "已启用 ${publicName} -> ${privateName} 共享上网"
+    }
+    Add-Step 'Windows ICS 共享' 'FIXED' $message ($after -join "`n")
+    return $true
+  } catch {
+    Add-Step 'Windows ICS 共享' 'FAIL' '修复 WLAN -> 以太网 共享上网失败' $_.Exception.ToString()
+    return $false
+  }
+}
+
 function ConvertTo-WindowsCommandLineArgument {
   param([AllowNull()][string]$Argument)
   if ($null -eq $Argument) { return '""' }
@@ -338,11 +434,12 @@ function Ensure-NasLink {
   $cmd = @'
 set +e
 echo NAS_DIAG_START
+nas_ip=__NAS_IP__
 ip -br link show __NAS_IFACE__ || true
 ip -4 addr show dev __NAS_IFACE__ || true
-ip route get __NAS_IP__ || true
+ip route get "$nas_ip" || true
 sudo -n ip neigh flush dev __NAS_IFACE__ >/dev/null 2>&1 || true
-ping -c 1 -W 2 -I __NAS_IFACE__ __NAS_IP__
+ping -c 1 -W 2 -I __NAS_IFACE__ "$nas_ip"
 ping_status=$?
 if [ "$ping_status" -ne 0 ]; then
   echo NAS_PING_FAILED_BEFORE_RESET
@@ -353,26 +450,112 @@ if [ "$ping_status" -ne 0 ]; then
   sleep 4
   sudo -n ip addr replace __NAS_ADDRESS__ dev __NAS_IFACE__ || true
   sudo -n ip route replace 169.254.0.0/16 dev __NAS_IFACE__ src __NAS_SRC__ metric 101 || true
-  ip route get __NAS_IP__ || true
-  ping -c 2 -W 1 -I __NAS_IFACE__ __NAS_IP__
+  ip route get "$nas_ip" || true
+  ping -c 2 -W 1 -I __NAS_IFACE__ "$nas_ip"
   ping_status=$?
+fi
+if [ "$ping_status" -ne 0 ]; then
+  echo NAS_CONFIGURED_IP_UNREACHABLE
+  ip neigh show dev __NAS_IFACE__ || true
+  echo "Configured NAS IP did not respond: $nas_ip"
+  echo NAS_DISCOVERY_START
+  discovered="$(
+    sudo -n python3 - <<'PY'
+import socket, struct, fcntl, time, select
+iface='__NAS_IFACE__'
+source_ip='__NAS_SRC__'
+export='__EXPORT__'
+ranges=[]
+for base in ['169.254.110.', '169.254.8.', '169.254.100.', '169.254.1.']:
+    ranges.extend(base+str(i) for i in range(1,255))
+seen=set(ranges)
+for b in range(0,256):
+    for c in range(1,255):
+        ip=f'169.254.{b}.{c}'
+        if ip not in seen:
+            ranges.append(ip)
+            seen.add(ip)
+ranges=[ip for ip in ranges if ip != source_ip]
+def if_mac(name):
+    s=socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+    info=fcntl.ioctl(s.fileno(), 0x8927, struct.pack('256s', name[:15].encode()))
+    return info[18:24]
+def ip_bytes(ip):
+    return socket.inet_aton(ip)
+mac=if_mac(iface)
+src_ip=ip_bytes(source_ip)
+sock=socket.socket(socket.AF_PACKET, socket.SOCK_RAW, socket.htons(0x0806))
+sock.bind((iface,0))
+sock.setblocking(False)
+found={}
+bcast=b'\xff'*6
+eth_type=b'\x08\x06'
+arp_hdr=struct.pack('!HHBBH',1,0x0800,6,4,1)
+for idx, target in enumerate(ranges, 1):
+    packet=bcast+mac+eth_type+arp_hdr+mac+src_ip+(b'\x00'*6)+ip_bytes(target)
+    try:
+        sock.send(packet)
+    except OSError:
+        pass
+    if idx % 512 == 0:
+        end=time.time()+0.03
+        while time.time()<end:
+            r,_,_=select.select([sock],[],[],0.005)
+            if not r:
+                continue
+            data=sock.recv(65535)
+            if len(data) >= 42 and data[12:14] == b'\x08\x06' and data[20:22] == b'\x00\x02':
+                found[socket.inet_ntoa(data[28:32])]=':'.join(f'{x:02x}' for x in data[22:28])
+end=time.time()+4
+while time.time()<end:
+    r,_,_=select.select([sock],[],[],0.1)
+    if not r:
+        continue
+    data=sock.recv(65535)
+    if len(data) >= 42 and data[12:14] == b'\x08\x06' and data[20:22] == b'\x00\x02':
+        found[socket.inet_ntoa(data[28:32])]=':'.join(f'{x:02x}' for x in data[22:28])
+for ip, macaddr in sorted(found.items(), key=lambda kv: tuple(map(int, kv[0].split('.')))):
+    print(f'{ip} {macaddr}')
+PY
+  )"
+  if [ -n "$discovered" ]; then
+    echo "$discovered" | sed 's/^/NAS_DISCOVERY_CANDIDATE /'
+    while read -r candidate _mac; do
+      [ -z "$candidate" ] && continue
+      if timeout 6 showmount -e "$candidate" 2>/dev/null | grep -q "__EXPORT__"; then
+        nas_ip="$candidate"
+        echo "NAS_DISCOVERED_IP=$nas_ip"
+        ping -c 1 -W 1 -I __NAS_IFACE__ "$nas_ip" || true
+        ping_status=0
+        break
+      fi
+    done <<EOF
+$discovered
+EOF
+  fi
 fi
 if [ "$ping_status" -ne 0 ]; then
   echo NAS_L2_UNREACHABLE
   ip neigh show dev __NAS_IFACE__ || true
-  echo "Check NAS power, NAS boot state, NAS Ethernet port/cable, or whether NAS IP changed from __NAS_IP__."
+  echo "Check NAS power, NAS boot state, NAS Ethernet port/cable, or whether NAS IP changed from $nas_ip."
   exit 42
 fi
 set -e
 sudo -n chmod 755 __PARENT__ || true
-if ! timeout 5 findmnt -T __MOUNT__ >/dev/null 2>&1; then
-  sudo -n mkdir -p __MOUNT__
-  timeout 20 sudo -n mount -t nfs4 __NAS_IP__:__EXPORT__ __MOUNT__
-fi
-timeout 5 findmnt -T __MOUNT__
-test -d __MOUNT__
-test -w __MOUNT__
+sudo -n sed -i "s#[0-9][0-9.]*:__EXPORT__#${nas_ip}:__EXPORT__#g" /etc/fstab || true
+sudo -n systemctl daemon-reload || true
+sudo -n systemctl reset-failed mnt-nas-openclaw.mount || true
+sudo -n systemctl restart mnt-nas-openclaw.automount || true
 mkdir -p __PROBE__
+if ! timeout 10 findmnt -T __PROBE__ | grep -q 'nfs'; then
+  sudo -n mkdir -p __MOUNT__
+  timeout 20 sudo -n mount -t nfs4 "${nas_ip}:__EXPORT__" __MOUNT__ || true
+fi
+timeout 10 ls -ld __PROBE__
+timeout 10 findmnt -T __PROBE__
+timeout 10 findmnt -T __PROBE__ | grep -q 'nfs'
+test -d __PROBE__
+test -w __PROBE__
 f=__PROBE__/pc_startup_linkcheck_$(date +%Y%m%d_%H%M%S).txt
 echo linkcheck > "$f"
 ls -l "$f"
@@ -388,14 +571,21 @@ echo NAS_LINK_OK
     Replace('__MOUNT__', $Config.nas.mountPoint).
     Replace('__EXPORT__', $Config.nas.nfsExport).
     Replace('__PROBE__', $Config.nas.probeDir)
-  $result = Invoke-S100P -Command $cmd -TimeoutSeconds 55
+  $result = Invoke-S100P -Command $cmd -TimeoutSeconds 90
   $combined = "$($result.Output)`n$($result.Error)"
+  $discovered = [regex]::Match($combined, 'NAS_DISCOVERED_IP=([0-9]+\.[0-9]+\.[0-9]+\.[0-9]+)')
+  if ($discovered.Success -and $discovered.Groups[1].Value -ne $Config.nas.ip) {
+    $oldNasIp = [string]$Config.nas.ip
+    $Config.nas.ip = $discovered.Groups[1].Value
+    $Config | ConvertTo-Json -Depth 8 | Set-Content -LiteralPath $ConfigPath -Encoding UTF8
+    Add-Step 'NAS IP 自动发现' 'FIXED' ("NAS IP 已从 {0} 更新为 {1}" -f $oldNasIp, $Config.nas.ip) $combined
+  }
   if ($result.ExitCode -eq 0 -and $combined -match 'NAS_LINK_OK') {
     Add-Step 'S100P -> NAS/NFS' 'OK' 'NAS 可达、NFS 已挂载且可写' $combined
     return $true
   }
   if ($combined -match 'NAS_L2_UNREACHABLE') {
-    Add-Step 'S100P -> NAS/NFS' 'FAIL' 'NAS 在 eth0 上无 ARP/ICMP 响应；请检查 NAS 电源、启动状态、NAS 网口/网线，或 NAS IP 是否不再是 169.254.110.209' $combined
+    Add-Step 'S100P -> NAS/NFS' 'FAIL' ("NAS 在 eth0 上无 ARP/ICMP 响应；请检查 NAS 电源、启动状态、NAS 网口/网线，或 NAS IP 是否不再是 {0}" -f $Config.nas.ip) $combined
     return $false
   }
   Add-Step 'S100P -> NAS/NFS' 'FAIL' 'NAS 可达性、NFS 挂载或可写检查失败' $combined
@@ -405,41 +595,43 @@ echo NAS_LINK_OK
 function Ensure-OpenClawFeishu {
   param([bool]$NetworkWasTouched)
   $service = $Config.openclaw.serviceName
-  $check = @'
+  $checkScriptPath = Join-Path $ScriptRoot 'check_openclaw_feishu.sh'
+  if (Test-Path -LiteralPath $checkScriptPath) {
+    $check = Get-Content -LiteralPath $checkScriptPath -Raw -Encoding UTF8
+  } else {
+    $check = @'
+#!/usr/bin/env bash
 set +e
-state=$(sudo -n env XDG_RUNTIME_DIR=__RUNTIME_DIR__ systemctl --user is-active __SERVICE__ 2>/dev/null || true)
-echo SERVICE_STATE=$state
-sudo -n env XDG_RUNTIME_DIR=__RUNTIME_DIR__ systemctl --user status __SERVICE__ --no-pager -l 2>&1 |
-  grep -Ei 'ws client ready|received message|dispatch complete|EAI_AGAIN|open.feishu.cn|__SERVICE__|99991672|Active:' |
-  tail -80 || true
+state="$(timeout 5 sudo -n env XDG_RUNTIME_DIR=/run/user/0 systemctl --user is-active openclaw-gateway.service 2>/dev/null || true)"
+echo "SERVICE_STATE=$state"
+log="/tmp/openclaw/openclaw-$(date +%F).log"
+ready="$(timeout 5 sudo -n grep 'ws client ready' "$log" 2>/dev/null | tail -20 || true)"
+echo "$ready"
+if [ "$state" = "active" ] && [ -n "$ready" ]; then
+  echo OPENCLAW_READY
+  exit 0
+fi
+exit 1
 '@
-  $check = $check.Replace('__RUNTIME_DIR__', $Config.openclaw.rootUserRuntimeDir)
-  $check = $check.Replace('__SERVICE__', $service)
+  }
   $before = Invoke-S100P -Command $check -TimeoutSeconds 20
   $beforeText = "$($before.Output)`n$($before.Error)"
   $needsRestart = $NetworkWasTouched -or ($beforeText -match 'inactive|failed|EAI_AGAIN')
   if ($needsRestart) {
-    $restart = @'
-sudo -n env XDG_RUNTIME_DIR=__RUNTIME_DIR__ systemctl --user restart __SERVICE__
-sleep 8
-state=$(sudo -n env XDG_RUNTIME_DIR=__RUNTIME_DIR__ systemctl --user is-active __SERVICE__ 2>/dev/null || true)
-echo SERVICE_STATE=$state
-sudo -n env XDG_RUNTIME_DIR=__RUNTIME_DIR__ systemctl --user status __SERVICE__ --no-pager -l 2>&1 |
-  grep -Ei 'ws client ready|received message|dispatch complete|EAI_AGAIN|open.feishu.cn|99991672|Active:' |
-  tail -80 || true
-'@
-    $restart = $restart.Replace('__RUNTIME_DIR__', $Config.openclaw.rootUserRuntimeDir)
-    $restart = $restart.Replace('__SERVICE__', $service)
-    $after = Invoke-S100P -Command $restart -TimeoutSeconds 35
+    $restartHeader = @"
+timeout 10 sudo -n env XDG_RUNTIME_DIR=$($Config.openclaw.rootUserRuntimeDir) systemctl --user restart $service || true
+sleep 18
+"@
+    $after = Invoke-S100P -Command ($restartHeader + "`n" + $check) -TimeoutSeconds 45
     $afterText = "$($after.Output)`n$($after.Error)"
-    if ($after.ExitCode -eq 0 -and $afterText -match 'SERVICE_STATE=active' -and $afterText -match 'ws client ready') {
+    if ($after.ExitCode -eq 0 -and $afterText -match 'OPENCLAW_READY') {
       Add-Step 'OpenClaw/飞书' 'FIXED' '已重启 gateway，飞书 WebSocket ready' $afterText
       return $true
     }
     Add-Step 'OpenClaw/飞书' 'FAIL' '重启 gateway 后仍未确认飞书 ready' $afterText
     return $false
   }
-  if ($beforeText -match 'SERVICE_STATE=active' -and ($beforeText -match 'ws client ready|received message|dispatch complete')) {
+  if ($before.ExitCode -eq 0 -and $beforeText -match 'OPENCLAW_READY') {
     Add-Step 'OpenClaw/飞书' 'OK' 'gateway active，飞书链路近期有 ready 或消息记录' $beforeText
     return $true
   }
@@ -486,6 +678,10 @@ function Run-LinkCheck {
   }
 
   $windowsOk = Ensure-WindowsNetwork
+  if ($windowsOk) {
+    [void](Ensure-WindowsIcsSharing -ForceReset)
+    $windowsOk = Ensure-WindowsNetwork
+  }
   $sshOk = $false
   if ($windowsOk) { $sshOk = Test-PCToS100P }
   $netOk = $false
@@ -494,7 +690,8 @@ function Run-LinkCheck {
   if ($sshOk) {
     $netOk = Ensure-S100PNetwork
     $nasOk = Ensure-NasLink
-    $openclawOk = Ensure-OpenClawFeishu -NetworkWasTouched:($Global:FixesApplied.Count -gt 0)
+    $networkTouchingFixes = @($Global:FixesApplied | Where-Object { $_ -ne 'NAS IP 自动发现' })
+    $openclawOk = Ensure-OpenClawFeishu -NetworkWasTouched:($networkTouchingFixes.Count -gt 0)
   }
 
   $status = if ($Global:Failures.Count -gt 0) { 'FAIL' } elseif ($Global:FixesApplied.Count -gt 0) { 'FIXED' } else { 'OK' }
