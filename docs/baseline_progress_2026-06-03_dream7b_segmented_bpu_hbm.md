@@ -79,9 +79,11 @@ fine-batch-forward probe command: /usr/local/bin/dream7b-bpu-fine-batch-forward-
 fine-batch-forward probe report: /mnt/nas/openclaw/reports/models/dream7b_bpu_fine_batch_forward_20260603-183625/fine_batch_forward_probe.md
 batch-queue-runner command: /usr/local/bin/dream7b-bpu-batch-queue-runner
 batch-queue-runner probe command: /usr/local/bin/dream7b-bpu-batch-queue-runner-probe
-batch-queue-runner probe report: /mnt/nas/openclaw/reports/models/dream7b_bpu_batch_queue_runner_20260603-185701/batch_queue_runner_probe.md
+batch-queue-runner probe report: /mnt/nas/openclaw/reports/models/dream7b_bpu_batch_queue_runner_20260603-191243/batch_queue_runner_probe.md
 batch-queue-drain probe command: /usr/local/bin/dream7b-bpu-batch-queue-drain-probe
-batch-queue-drain probe report: /mnt/nas/openclaw/reports/models/dream7b_bpu_batch_queue_drain_20260603-185739/batch_queue_drain_probe.md
+batch-queue-drain probe report: /mnt/nas/openclaw/reports/models/dream7b_bpu_batch_queue_drain_20260603-191323/batch_queue_drain_probe.md
+batch-queue-control probe command: /usr/local/bin/dream7b-bpu-batch-queue-control-probe
+batch-queue-control probe report: /mnt/nas/openclaw/reports/models/dream7b_bpu_batch_queue_control_20260603-190959/batch_queue_control_probe.md
 post-batch fine-forward compatibility report: /mnt/nas/openclaw/reports/models/dream7b_bpu_fine_forward_20260603-183906/fine_forward_probe.md
 fine-forward diffusion-loop report: /mnt/nas/openclaw/reports/models/dream7b_bpu_diffusion_loop_20260603-175030/summary.md
 fine-forward quality-gate report: /mnt/nas/openclaw/reports/models/dream7b_bpu_cpu_quality_gate_20260603-160405/summary.md
@@ -147,6 +149,7 @@ scripts/dream7b-bpu-batch-queue-runner.sh
 scripts/dream7b_bpu_batch_queue_runner.py
 scripts/probes/dream7b_bpu_batch_queue_runner_probe.sh
 scripts/probes/dream7b_bpu_batch_queue_drain_probe.sh
+scripts/probes/dream7b_bpu_batch_queue_control_probe.sh
 ```
 
 The smoke probe can be run on S100P:
@@ -721,8 +724,8 @@ The service-level JSONL queue runner for independent seq16 requests is:
 
 ```bash
 dream7b-bpu-batch-queue-runner \
-  /mnt/nas/openclaw/reports/models/dream7b_bpu_batch_queue_runner_20260603-185701/requests.jsonl \
-  /mnt/nas/openclaw/reports/models/dream7b_bpu_batch_queue_runner_20260603-185701 \
+  /mnt/nas/openclaw/reports/models/dream7b_bpu_batch_queue_runner_20260603-191243/requests.jsonl \
+  /mnt/nas/openclaw/reports/models/dream7b_bpu_batch_queue_runner_20260603-191243 \
   --max-batch-size 3 \
   --top-k 3
 ```
@@ -732,15 +735,26 @@ Request JSONL keys:
 ```text
 request_id
 tokens
+cancelled
+not_after_epoch_ms
 ```
 
-The runner accepts up to `--max-batch-size` requests, writes `tokens_batch.json`, calls `dream7b-bpu-fine-batch-forward`, records `results`, and records overflow request IDs in `deferred_request_ids`.
+The runner accepts up to `--max-batch-size` requests, writes `tokens_batch.json`, calls `dream7b-bpu-fine-batch-forward`, records `results`, records overflow request IDs in `deferred_request_ids`, skips `cancelled` or expired `not_after_epoch_ms` requests, and writes durable state JSONL files under `durable_state`.
+
+Durable state files:
+
+```text
+accepted_requests.jsonl
+deferred_requests.jsonl
+skipped_requests.jsonl
+results.jsonl
+```
 
 Verified batch-queue output:
 
 ```text
-report: /mnt/nas/openclaw/reports/models/dream7b_bpu_batch_queue_runner_20260603-185701/batch_queue_runner_probe.md
-summary: /mnt/nas/openclaw/reports/models/dream7b_bpu_batch_queue_runner_20260603-185701/queue_summary.json
+report: /mnt/nas/openclaw/reports/models/dream7b_bpu_batch_queue_runner_20260603-191243/batch_queue_runner_probe.md
+summary: /mnt/nas/openclaw/reports/models/dream7b_bpu_batch_queue_runner_20260603-191243/queue_summary.json
 verdict: ok_dream7b_bpu_batch_queue_runner_probe
 accepted_count: 3
 deferred_count: 1
@@ -749,8 +763,8 @@ execution_mode: pair_window_batch
 window_execution_mode: window-batch
 child_process_count: 0
 batch_count: 3
-wall_ms: 24678.598
-amortized_wall_ms_per_forward: 8226.199
+total_wall_ms: 28208.322
+amortized_wall_ms_per_processed_request: 9402.774
 result_count: 3
 ```
 
@@ -758,8 +772,8 @@ The multi-batch drain path is:
 
 ```bash
 dream7b-bpu-batch-queue-runner \
-  /mnt/nas/openclaw/reports/models/dream7b_bpu_batch_queue_drain_20260603-185739/requests.jsonl \
-  /mnt/nas/openclaw/reports/models/dream7b_bpu_batch_queue_drain_20260603-185739 \
+  /mnt/nas/openclaw/reports/models/dream7b_bpu_batch_queue_drain_20260603-191323/requests.jsonl \
+  /mnt/nas/openclaw/reports/models/dream7b_bpu_batch_queue_drain_20260603-191323 \
   --max-batch-size 3 \
   --top-k 3 \
   --drain-all
@@ -768,8 +782,8 @@ dream7b-bpu-batch-queue-runner \
 Verified drain-all output:
 
 ```text
-report: /mnt/nas/openclaw/reports/models/dream7b_bpu_batch_queue_drain_20260603-185739/batch_queue_drain_probe.md
-summary: /mnt/nas/openclaw/reports/models/dream7b_bpu_batch_queue_drain_20260603-185739/queue_summary.json
+report: /mnt/nas/openclaw/reports/models/dream7b_bpu_batch_queue_drain_20260603-191323/batch_queue_drain_probe.md
+summary: /mnt/nas/openclaw/reports/models/dream7b_bpu_batch_queue_drain_20260603-191323/queue_summary.json
 verdict: ok_dream7b_bpu_batch_queue_drain_probe
 drain_all: True
 request_count: 5
@@ -778,8 +792,29 @@ deferred_count: 0
 batch_run_count: 2
 batch_counts: [3, 2]
 result_count: 5
-total_wall_ms: 48896.07
-amortized_wall_ms_per_processed_request: 9779.214
+total_wall_ms: 48896.748
+amortized_wall_ms_per_processed_request: 9779.35
+```
+
+The cancellation, expiration, and durable-state control path is:
+
+```bash
+dream7b-bpu-batch-queue-control-probe /mnt/nas/openclaw/reports/models
+```
+
+Verified queue-control output:
+
+```text
+report: /mnt/nas/openclaw/reports/models/dream7b_bpu_batch_queue_control_20260603-190959/batch_queue_control_probe.md
+summary: /mnt/nas/openclaw/reports/models/dream7b_bpu_batch_queue_control_20260603-190959/queue_summary.json
+verdict: ok_dream7b_bpu_batch_queue_control_probe
+request_count: 4
+runnable_count: 2
+processed_count: 2
+skipped_count: 2
+deferred_count: 0
+result_request_ids: ['control-001', 'control-002']
+skipped_requests: [{'request_id': 'control-cancelled', 'line_number': 2, 'reason': 'cancelled'}, {'request_id': 'control-expired', 'line_number': 3, 'reason': 'expired', 'not_after_epoch_ms': 1, 'now_epoch_ms': 1780485000056}]
 ```
 
 The default single-input fine-forward path was re-verified after adding `--tokens-batch-json`, `--window-execution-mode window-batch`, and timing fields:
@@ -837,12 +872,12 @@ bpu remaining_mask_positions: []
 
 ## Current Boundary
 
-This is real BPU execution for real Dream 7B weights, including a complete seq16 forward chain from prompt text or token ids to logits plus verified one-step and strategy-aware bounded multi-step Dream diffusion bridges over masked positions. The path now also has a CPU/BPU quality coverage gate that records current divergence against the existing CPU Dream text path, an HBM cache performance gate that quantifies NAS versus S100P-local HBM load cost, a residency gate proving that the current six-segment split cannot be made all-resident, a fine-residency gate proving that every adjacent two-segment window can be resident, a deployed fine in-process pair forward command that runs the 10-segment fine plan to logits with 0 child processes, a 3-run repeat probe for the default in-process path, a window-batch throughput probe for concurrent independent seq16 inputs, a reusable `dream7b-bpu-fine-batch-forward` wrapper for JSON token batches, a bounded `dream7b-bpu-batch-queue-runner` JSONL service bridge with verified multi-batch `--drain-all`, and fine-forward coverage in the multi-step diffusion loop plus CPU/BPU quality gate. It is not yet a complete text-generation service.
+This is real BPU execution for real Dream 7B weights, including a complete seq16 forward chain from prompt text or token ids to logits plus verified one-step and strategy-aware bounded multi-step Dream diffusion bridges over masked positions. The path now also has a CPU/BPU quality coverage gate that records current divergence against the existing CPU Dream text path, an HBM cache performance gate that quantifies NAS versus S100P-local HBM load cost, a residency gate proving that the current six-segment split cannot be made all-resident, a fine-residency gate proving that every adjacent two-segment window can be resident, a deployed fine in-process pair forward command that runs the 10-segment fine plan to logits with 0 child processes, a 3-run repeat probe for the default in-process path, a window-batch throughput probe for concurrent independent seq16 inputs, a reusable `dream7b-bpu-fine-batch-forward` wrapper for JSON token batches, a bounded `dream7b-bpu-batch-queue-runner` JSONL service bridge with verified multi-batch `--drain-all`, verified `cancelled` and `not_after_epoch_ms` control semantics, durable queue state JSONL outputs, and fine-forward coverage in the multi-step diffusion loop plus CPU/BPU quality gate. It is not yet a complete text-generation service.
 
 Remaining engineering work:
 
 - continue reducing per-window HBM reload overhead in `dream7b-bpu-fine-forward`; in-process pair mode removed child-process overhead but still reloads HBM per resident pair;
-- replace `dream7b-bpu-batch-queue-runner` with a long-lived service only after queue durability, timeout, and cancellation semantics are specified and verified; do not treat this as a single-request Dream diffusion speedup;
+- replace `dream7b-bpu-batch-queue-runner` with a long-lived single-flight service after directory watch, daemon supervision, and BPU concurrency locking are specified and verified; do not treat this as a single-request Dream diffusion speedup;
 - keep all-segment residency out of the plan unless HBRT/HBDK exposes stronger release or streaming APIs; current fine split makes every adjacent two-segment window viable, but three-segment residency still fails;
 - reduce or remove S16->F32 handoff overhead between segments;
 - add quality gates against the existing CPU Dream output path and decide acceptable divergence for seq16 BPU probes;

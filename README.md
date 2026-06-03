@@ -287,6 +287,7 @@ Current project reference entrypoints:
 - [docs/baseline_progress_2026-06-03_dream7b_segmented_bpu_hbm.md](docs/baseline_progress_2026-06-03_dream7b_segmented_bpu_hbm.md): current Dream 7B segmented S100 BPU HBM evidence.
 - [scripts/dream7b-bpu-fine-batch-forward.sh](scripts/dream7b-bpu-fine-batch-forward.sh): reusable Dream 7B fine-split BPU batch forward wrapper for independent seq16 token batches.
 - [scripts/dream7b-bpu-batch-queue-runner.sh](scripts/dream7b-bpu-batch-queue-runner.sh): service-level JSONL queue runner that batches independent seq16 requests into `dream7b-bpu-fine-batch-forward`.
+- [scripts/probes/dream7b_bpu_batch_queue_control_probe.sh](scripts/probes/dream7b_bpu_batch_queue_control_probe.sh): verifies queue `cancelled`, `not_after_epoch_ms`, skipped request, and durable JSONL state behavior.
 - [scripts/probes/project_docs_consistency_probe.sh](scripts/probes/project_docs_consistency_probe.sh): repeatable documentation consistency probe.
 
 Documentation rule:

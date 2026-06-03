@@ -3,6 +3,7 @@ import argparse
 import json
 import subprocess
 import sys
+import time
 from datetime import datetime
 from pathlib import Path
 
@@ -51,6 +52,8 @@ def read_requests(path: Path, seq_len: int):
             raise ValueError(f"line {line_number}: missing tokens")
         request_id = item["request_id"]
         tokens = item["tokens"]
+        cancelled = item.get("cancelled", False)
+        not_after_epoch_ms = item.get("not_after_epoch_ms", None)
         if not isinstance(request_id, str) or not request_id:
             raise ValueError(f"line {line_number}: request_id must be a non-empty string")
         if request_id in request_ids:
@@ -59,11 +62,17 @@ def read_requests(path: Path, seq_len: int):
             raise ValueError(f"line {line_number}: tokens must be a JSON list")
         if len(tokens) != seq_len:
             raise ValueError(f"line {line_number}: expected {seq_len} token ids, got {len(tokens)}")
+        if not isinstance(cancelled, bool):
+            raise ValueError(f"line {line_number}: cancelled must be a JSON boolean")
+        if not_after_epoch_ms is not None and not isinstance(not_after_epoch_ms, int):
+            raise ValueError(f"line {line_number}: not_after_epoch_ms must be an integer")
         request_ids.add(request_id)
         rows.append(
             {
                 "request_id": request_id,
                 "tokens": [int(token) for token in tokens],
+                "cancelled": cancelled,
+                "not_after_epoch_ms": not_after_epoch_ms,
                 "line_number": line_number,
             }
         )
@@ -77,6 +86,39 @@ def topk_by_batch(forward_summary: dict) -> dict[int, list]:
     for item in forward_summary.get("topk_last_position_by_batch", []):
         indexed[int(item["batch_index"])] = item.get("topk_last_position", [])
     return indexed
+
+
+def split_runnable_requests(requests: list[dict], now_epoch_ms: int):
+    runnable = []
+    skipped = []
+    for item in requests:
+        if item.get("cancelled") is True:
+            skipped.append(
+                {
+                    "request_id": item["request_id"],
+                    "line_number": item["line_number"],
+                    "reason": "cancelled",
+                }
+            )
+            continue
+        not_after_epoch_ms = item.get("not_after_epoch_ms")
+        if not_after_epoch_ms is not None and not_after_epoch_ms < now_epoch_ms:
+            skipped.append(
+                {
+                    "request_id": item["request_id"],
+                    "line_number": item["line_number"],
+                    "reason": "expired",
+                    "not_after_epoch_ms": not_after_epoch_ms,
+                    "now_epoch_ms": now_epoch_ms,
+                }
+            )
+            continue
+        runnable.append(item)
+    return runnable, skipped
+
+
+def write_jsonl(path: Path, rows: list[dict]):
+    path.write_text("".join(json.dumps(item, ensure_ascii=False) + "\n" for item in rows), encoding="utf-8")
 
 
 def run_forward_batch(args, output_dir: Path, accepted: list[dict], batch_run_index: int):
@@ -156,12 +198,14 @@ def main():
 
     output_dir.mkdir(parents=True, exist_ok=True)
     requests = read_requests(request_jsonl, args.seq_len)
+    now_epoch_ms = int(time.time() * 1000)
+    runnable_requests, skipped_requests = split_runnable_requests(requests, now_epoch_ms)
     if args.drain_all:
-        request_batches = [requests[index:index + args.max_batch_size] for index in range(0, len(requests), args.max_batch_size)]
+        request_batches = [runnable_requests[index:index + args.max_batch_size] for index in range(0, len(runnable_requests), args.max_batch_size)]
         deferred = []
     else:
-        request_batches = [requests[: args.max_batch_size]]
-        deferred = requests[args.max_batch_size :]
+        request_batches = [runnable_requests[: args.max_batch_size]]
+        deferred = runnable_requests[args.max_batch_size :]
     batch_runs = []
     results = []
     for batch_run_index, accepted in enumerate(request_batches):
@@ -202,6 +246,40 @@ def main():
     total_load_ms = round(sum(float(item["metrics"].get("load_ms") or 0.0) for item in batch_runs), 3)
     total_run_ms = round(sum(float(item["metrics"].get("run_ms") or 0.0) for item in batch_runs), 3)
     processed_count = len(results)
+    durable_dir = output_dir / "durable_state"
+    durable_dir.mkdir(parents=True, exist_ok=True)
+    accepted_rows = [
+        {
+            "request_id": result["request_id"],
+            "batch_run_index": result["batch_run_index"],
+            "batch_index": result["batch_index"],
+            "global_batch_index": result["global_batch_index"],
+        }
+        for result in results
+    ]
+    deferred_rows = [
+        {
+            "request_id": item["request_id"],
+            "line_number": item["line_number"],
+            "reason": "deferred",
+        }
+        for item in deferred
+    ]
+    result_rows = [
+        {
+            "request_id": result["request_id"],
+            "batch_run_index": result["batch_run_index"],
+            "batch_index": result["batch_index"],
+            "global_batch_index": result["global_batch_index"],
+            "final_shape": result["final_shape"],
+            "topk_last_position": result["topk_last_position"],
+        }
+        for result in results
+    ]
+    write_jsonl(durable_dir / "accepted_requests.jsonl", accepted_rows)
+    write_jsonl(durable_dir / "deferred_requests.jsonl", deferred_rows)
+    write_jsonl(durable_dir / "skipped_requests.jsonl", skipped_requests)
+    write_jsonl(durable_dir / "results.jsonl", result_rows)
 
     payload = {
         "generated_at": datetime.now().astimezone().isoformat(),
@@ -212,12 +290,21 @@ def main():
         "drain_all": bool(args.drain_all),
         "max_batch_size": args.max_batch_size,
         "request_count": len(requests),
+        "runnable_count": len(runnable_requests),
         "processed_count": processed_count,
         "accepted_count": processed_count,
         "deferred_count": len(deferred),
         "deferred_request_ids": [item["request_id"] for item in deferred],
+        "skipped_count": len(skipped_requests),
+        "skipped_requests": skipped_requests,
         "batch_run_count": len(compact_batch_runs),
         "batch_runs": compact_batch_runs,
+        "durable_state": {
+            "accepted_requests_jsonl": str(durable_dir / "accepted_requests.jsonl"),
+            "deferred_requests_jsonl": str(durable_dir / "deferred_requests.jsonl"),
+            "skipped_requests_jsonl": str(durable_dir / "skipped_requests.jsonl"),
+            "results_jsonl": str(durable_dir / "results.jsonl"),
+        },
         "results": results,
         "forward_metrics": {
             "total_wall_ms": total_wall_ms,
@@ -240,9 +327,11 @@ def main():
         f"- drain_all: {payload['drain_all']}",
         f"- max_batch_size: {payload['max_batch_size']}",
         f"- request_count: {payload['request_count']}",
+        f"- runnable_count: {payload['runnable_count']}",
         f"- processed_count: {payload['processed_count']}",
         f"- accepted_count: {payload['accepted_count']}",
         f"- deferred_count: {payload['deferred_count']}",
+        f"- skipped_count: {payload['skipped_count']}",
         f"- batch_run_count: {payload['batch_run_count']}",
         f"- total_wall_ms: {payload['forward_metrics']['total_wall_ms']}",
         f"- amortized_wall_ms_per_processed_request: {payload['forward_metrics']['amortized_wall_ms_per_processed_request']}",
@@ -270,6 +359,11 @@ def main():
     lines.extend(["", "## Deferred", ""])
     if deferred:
         lines.extend(f"- {item['request_id']}" for item in deferred)
+    else:
+        lines.append("- none")
+    lines.extend(["", "## Skipped", ""])
+    if skipped_requests:
+        lines.extend(f"- {item['request_id']}: {item['reason']}" for item in skipped_requests)
     else:
         lines.append("- none")
     summary_md.write_text("\n".join(lines) + "\n", encoding="utf-8")

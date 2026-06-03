@@ -31,6 +31,7 @@ required_files=(
   "scripts/probes/dream7b_bpu_fine_batch_forward_probe.sh"
   "scripts/probes/dream7b_bpu_batch_queue_runner_probe.sh"
   "scripts/probes/dream7b_bpu_batch_queue_drain_probe.sh"
+  "scripts/probes/dream7b_bpu_batch_queue_control_probe.sh"
   "scripts/startup_link_check/link-check.config.json"
   "scripts/tool_allowlist.json"
 )
@@ -58,6 +59,13 @@ required_reference_strings=(
   "--drain-all"
   "request_id"
   "tokens"
+  "cancelled"
+  "not_after_epoch_ms"
+  "durable_state"
+  "accepted_requests.jsonl"
+  "deferred_requests.jsonl"
+  "skipped_requests.jsonl"
+  "results.jsonl"
   "scripts/startup_link_check/link-check.config.json"
   "scripts/tool_allowlist.json"
   "docs/baseline_progress_2026-06-03_dream7b_segmented_bpu_hbm.md"
@@ -66,8 +74,9 @@ required_reference_strings=(
   "/mnt/nas/openclaw/reports/models/dream7b_bpu_fine_forward_repeat_20260603-180108/summary.md"
   "/mnt/nas/openclaw/reports/models/dream7b_bpu_fine_forward_window_batch_20260603-181131/summary.md"
   "/mnt/nas/openclaw/reports/models/dream7b_bpu_fine_batch_forward_20260603-183625/fine_batch_forward_probe.md"
-  "/mnt/nas/openclaw/reports/models/dream7b_bpu_batch_queue_runner_20260603-185701/batch_queue_runner_probe.md"
-  "/mnt/nas/openclaw/reports/models/dream7b_bpu_batch_queue_drain_20260603-185739/batch_queue_drain_probe.md"
+  "/mnt/nas/openclaw/reports/models/dream7b_bpu_batch_queue_runner_20260603-191243/batch_queue_runner_probe.md"
+  "/mnt/nas/openclaw/reports/models/dream7b_bpu_batch_queue_drain_20260603-191323/batch_queue_drain_probe.md"
+  "/mnt/nas/openclaw/reports/models/dream7b_bpu_batch_queue_control_20260603-190959/batch_queue_control_probe.md"
   "/mnt/nas/openclaw/reports/models/dream7b_bpu_fine_forward_20260603-183906/fine_forward_probe.md"
   "/mnt/nas/openclaw/reports/models/dream7b_bpu_diffusion_loop_20260603-175030/summary.md"
 )
@@ -141,6 +150,15 @@ if [[ -f scripts/dream7b_bpu_batch_queue_runner.py ]]; then
   fi
   if ! grep -F -- "--drain-all" scripts/dream7b_bpu_batch_queue_runner.py >/dev/null; then
     errors+=("dream7b_bpu_batch_queue_runner.py missing --drain-all")
+  fi
+  if ! grep -F -- "cancelled" scripts/dream7b_bpu_batch_queue_runner.py >/dev/null; then
+    errors+=("dream7b_bpu_batch_queue_runner.py missing cancelled")
+  fi
+  if ! grep -F -- "not_after_epoch_ms" scripts/dream7b_bpu_batch_queue_runner.py >/dev/null; then
+    errors+=("dream7b_bpu_batch_queue_runner.py missing not_after_epoch_ms")
+  fi
+  if ! grep -F -- "durable_state" scripts/dream7b_bpu_batch_queue_runner.py >/dev/null; then
+    errors+=("dream7b_bpu_batch_queue_runner.py missing durable_state")
   fi
 fi
 
