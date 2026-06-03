@@ -65,12 +65,12 @@ fine 17:21 HBM: /mnt/nas/openclaw/models/dream7b-hbm/fine-seq16/seg17_21/dream7b
 fine-residency command: /usr/local/bin/dream7b-bpu-fine-residency-probe
 fine-residency report: /mnt/nas/openclaw/reports/models/dream7b_bpu_fine_residency_20260603-054031/summary.md
 fine-forward command: /usr/local/bin/dream7b-bpu-fine-forward
-fine-forward report: /mnt/nas/openclaw/reports/models/dream7b_bpu_fine_forward_20260603-171052/summary.json
+fine-forward report: /mnt/nas/openclaw/reports/models/dream7b_bpu_fine_forward_20260603-174608/summary.json
 fine-forward probe command: /usr/local/bin/dream7b-bpu-fine-forward-probe
-fine-forward probe report: /mnt/nas/openclaw/reports/models/dream7b_bpu_fine_forward_20260603-171052/fine_forward_probe.md
+fine-forward probe report: /mnt/nas/openclaw/reports/models/dream7b_bpu_fine_forward_20260603-174608/fine_forward_probe.md
 fine-forward perf command: /usr/local/bin/dream7b-bpu-fine-forward-perf-probe
-fine-forward perf report: /mnt/nas/openclaw/reports/models/dream7b_bpu_fine_forward_perf_20260603-171203/summary.md
-fine-forward diffusion-loop report: /mnt/nas/openclaw/reports/models/dream7b_bpu_diffusion_loop_20260603-171725/summary.md
+fine-forward perf report: /mnt/nas/openclaw/reports/models/dream7b_bpu_fine_forward_perf_20260603-174745/summary.md
+fine-forward diffusion-loop report: /mnt/nas/openclaw/reports/models/dream7b_bpu_diffusion_loop_20260603-175030/summary.md
 fine-forward quality-gate report: /mnt/nas/openclaw/reports/models/dream7b_bpu_cpu_quality_gate_20260603-160405/summary.md
 default-forward compatibility report: /mnt/nas/openclaw/reports/models/dream7b_bpu_forward_20260603-151711/summary.json
 ```
@@ -479,25 +479,27 @@ segment_plan: fine-adjacent
 residency_window_size: 2
 child_window_mode: pair
 child_runtime_mode: packed
+window_execution_mode: in-process
 base_hbm_dir: /home/sunrise/.cache/openclaw/dream7b-hbm/segments6
 fine_hbm_dir: /home/sunrise/.cache/openclaw/dream7b-hbm/fine-seq16
 ```
 
-Because `HB_HBMRuntime` does not expose an explicit release/close API, the first in-process two-segment attempt failed after the first segment with an ION allocation error while loading `seg04_07`. The working implementation uses child processes as BPU/ION release boundaries.
+Because `HB_HBMRuntime` does not expose an explicit release/close API, the first in-process two-segment attempt failed after the first segment with an ION allocation error while loading `seg04_07`. The working implementation now deletes output array/runtime references and calls `gc.collect()` between resident pair windows.
 
-The first working mode was `sliding`, with one child per segment. The current default is `pair`: each child loads two adjacent resident segments, runs both segments in order, writes the dequantized output to `.npy`, and exits. The current default child runtime mode is `packed`, so each pair-child constructs one `HB_HBMRuntime` from both resident HBM files instead of constructing two separate runtimes. This keeps the two-segment residency invariant while reducing the forward from 10 child processes to 5.
+The first working mode was `sliding`, with one child per segment. The next working mode was `pair_child_process`, which reduced the forward from 10 child processes to 5. The current default is `pair_in_process`: each resident pair constructs one packed `HB_HBMRuntime`, runs both adjacent segments in order, then releases references before the next pair. This keeps the two-segment residency invariant while reducing the forward from 5 child processes to 0.
 
-Verified fine sliding-forward output:
+Verified fine in-process forward output:
 
 ```text
-report: /mnt/nas/openclaw/reports/models/dream7b_bpu_fine_forward_20260603-171052/summary.json
+report: /mnt/nas/openclaw/reports/models/dream7b_bpu_fine_forward_20260603-174608/summary.json
 verdict: ok_dream7b_segmented_hbm_python_forward
 segment_plan: fine-adjacent
 residency_window_size: 2
 child_window_mode: pair
 child_runtime_mode: packed
-execution_mode: pair_child_process
-child_process_count: 5
+window_execution_mode: in-process
+execution_mode: pair_in_process
+child_process_count: 0
 segments: 10
 final_shape: [1, 16, 152064]
 top_k: 5
@@ -553,6 +555,23 @@ packed_vs_separate_pair_load_speedup: 1.002x
 packed_vs_separate_pair_wall_speedup: 1.008x
 ```
 
+The in-process pair release update was verified with:
+
+```text
+report: /mnt/nas/openclaw/reports/models/dream7b_bpu_fine_forward_perf_20260603-174745/summary.md
+verdict: ok_dream7b_bpu_fine_forward_perf_probe
+segments6: execution_mode=in_process, child_process_count=0, wall_ms=26698.544, load_ms=24260.385, run_ms=173.340
+fine_sliding_child: execution_mode=sliding_child_process, window_execution_mode=child-process, child_window_mode=sliding, child_runtime_mode=separate, child_process_count=10, wall_ms=62042.823, load_ms=30972.421, run_ms=185.000
+fine_pair_child_packed: execution_mode=pair_child_process, window_execution_mode=child-process, child_window_mode=pair, child_runtime_mode=packed, child_process_count=5, wall_ms=32218.834, load_ms=27023.825, run_ms=179.515
+fine_pair_in_process_packed: execution_mode=pair_in_process, window_execution_mode=in-process, child_window_mode=pair, child_runtime_mode=packed, child_process_count=0, wall_ms=25459.392, load_ms=24159.358, run_ms=176.133
+pair_vs_sliding_child_process_reduction: 5
+pair_vs_sliding_load_speedup: 1.146x
+pair_vs_sliding_wall_speedup: 1.926x
+in_process_vs_child_pair_child_process_reduction: 5
+in_process_vs_child_pair_load_speedup: 1.119x
+in_process_vs_child_pair_wall_speedup: 1.265x
+```
+
 The same deployed Python script remains compatible with the existing six-segment entrypoint:
 
 ```text
@@ -574,14 +593,15 @@ dream7b-bpu-fine-forward-probe /mnt/nas/openclaw/reports/models
 Verified probe output:
 
 ```text
-report: /mnt/nas/openclaw/reports/models/dream7b_bpu_fine_forward_20260603-171052/fine_forward_probe.md
+report: /mnt/nas/openclaw/reports/models/dream7b_bpu_fine_forward_20260603-174608/fine_forward_probe.md
 verdict: ok_dream7b_bpu_fine_forward_probe
 segment_plan: fine-adjacent
 residency_window_size: 2
 child_window_mode: pair
 child_runtime_mode: packed
-execution_mode: pair_child_process
-child_process_count: 5
+window_execution_mode: in-process
+execution_mode: pair_in_process
+child_process_count: 0
 final_shape: [1, 16, 152064]
 segment_count: 10
 ```
@@ -598,13 +618,13 @@ DREAM7B_BPU_FORWARD_CMD=dream7b-bpu-fine-forward \
 Verified fine-forward diffusion-loop output:
 
 ```text
-report: /mnt/nas/openclaw/reports/models/dream7b_bpu_diffusion_loop_20260603-171725/summary.md
+report: /mnt/nas/openclaw/reports/models/dream7b_bpu_diffusion_loop_20260603-175030/summary.md
 verdict: ok_dream7b_bpu_diffusion_loop_probe
 forward_command: dream7b-bpu-fine-forward
 steps: 2
 remaining_mask_positions: []
-step0 forward: segment_plan=fine-adjacent, residency_window_size=2, child_window_mode=pair, child_runtime_mode=packed, execution_mode=pair_child_process, child_process_count=5, final_shape=[1, 16, 152064]
-step1 forward: segment_plan=fine-adjacent, residency_window_size=2, child_window_mode=pair, child_runtime_mode=packed, execution_mode=pair_child_process, child_process_count=5, final_shape=[1, 16, 152064]
+step0 forward: segment_plan=fine-adjacent, residency_window_size=2, window_execution_mode=in-process, child_window_mode=pair, child_runtime_mode=packed, execution_mode=pair_in_process, child_process_count=0, final_shape=[1, 16, 152064]
+step1 forward: segment_plan=fine-adjacent, residency_window_size=2, window_execution_mode=in-process, child_window_mode=pair, child_runtime_mode=packed, execution_mode=pair_in_process, child_process_count=0, final_shape=[1, 16, 152064]
 ```
 
 The CPU/BPU quality gate can now record the fine-forward path with:
@@ -629,11 +649,11 @@ bpu remaining_mask_positions: []
 
 ## Current Boundary
 
-This is real BPU execution for real Dream 7B weights, including a complete seq16 forward chain from prompt text or token ids to logits plus verified one-step and strategy-aware bounded multi-step Dream diffusion bridges over masked positions. The path now also has a CPU/BPU quality coverage gate that records current divergence against the existing CPU Dream text path, an HBM cache performance gate that quantifies NAS versus S100P-local HBM load cost, a residency gate proving that the current six-segment split cannot be made all-resident, a fine-residency gate proving that every adjacent two-segment window can be resident, a deployed fine pair-child forward command that runs the 10-segment fine plan to logits with 5 child processes, and fine-forward coverage in the multi-step diffusion loop plus CPU/BPU quality gate. It is not yet a complete text-generation service.
+This is real BPU execution for real Dream 7B weights, including a complete seq16 forward chain from prompt text or token ids to logits plus verified one-step and strategy-aware bounded multi-step Dream diffusion bridges over masked positions. The path now also has a CPU/BPU quality coverage gate that records current divergence against the existing CPU Dream text path, an HBM cache performance gate that quantifies NAS versus S100P-local HBM load cost, a residency gate proving that the current six-segment split cannot be made all-resident, a fine-residency gate proving that every adjacent two-segment window can be resident, a deployed fine in-process pair forward command that runs the 10-segment fine plan to logits with 0 child processes, and fine-forward coverage in the multi-step diffusion loop plus CPU/BPU quality gate. It is not yet a complete text-generation service.
 
 Remaining engineering work:
 
-- continue reducing child-process and per-window HBM reload overhead in `dream7b-bpu-fine-forward`; pair-child reduced child count from 10 to 5 but still reloads HBM per pair;
+- continue reducing per-window HBM reload overhead in `dream7b-bpu-fine-forward`; in-process pair mode removed child-process overhead but still reloads HBM per resident pair;
 - keep all-segment residency out of the plan unless HBRT/HBDK exposes stronger release or streaming APIs; current fine split makes every adjacent two-segment window viable, but three-segment residency still fails;
 - reduce or remove S16->F32 handoff overhead between segments;
 - add quality gates against the existing CPU Dream output path and decide acceptable divergence for seq16 BPU probes;

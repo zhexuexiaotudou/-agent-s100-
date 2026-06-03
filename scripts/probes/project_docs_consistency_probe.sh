@@ -39,11 +39,15 @@ required_reference_strings=(
   "dream7b-bpu-text-forward"
   "dream7b-bpu-diffusion-loop-probe"
   "DREAM7B_BPU_FINE_CHILD_RUNTIME_MODE"
+  "DREAM7B_BPU_FINE_WINDOW_EXECUTION_MODE"
   "--child-runtime-mode"
+  "--window-execution-mode"
   "scripts/startup_link_check/link-check.config.json"
   "scripts/tool_allowlist.json"
   "docs/baseline_progress_2026-06-03_dream7b_segmented_bpu_hbm.md"
-  "/mnt/nas/openclaw/reports/models/dream7b_bpu_diffusion_loop_20260603-171725/summary.md"
+  "/mnt/nas/openclaw/reports/models/dream7b_bpu_fine_forward_20260603-174608/fine_forward_probe.md"
+  "/mnt/nas/openclaw/reports/models/dream7b_bpu_fine_forward_perf_20260603-174745/summary.md"
+  "/mnt/nas/openclaw/reports/models/dream7b_bpu_diffusion_loop_20260603-175030/summary.md"
 )
 
 errors=()
@@ -74,11 +78,17 @@ if [[ -f scripts/probes/dream7b_segmented_hbm_python_forward.py ]]; then
   if ! grep -F -- "--child-runtime-mode" scripts/probes/dream7b_segmented_hbm_python_forward.py >/dev/null; then
     errors+=("dream7b_segmented_hbm_python_forward.py missing --child-runtime-mode")
   fi
+  if ! grep -F -- "--window-execution-mode" scripts/probes/dream7b_segmented_hbm_python_forward.py >/dev/null; then
+    errors+=("dream7b_segmented_hbm_python_forward.py missing --window-execution-mode")
+  fi
 fi
 
 if [[ -f scripts/dream7b-bpu-fine-forward.sh ]]; then
   if ! grep -F -- "DREAM7B_BPU_FINE_CHILD_RUNTIME_MODE" scripts/dream7b-bpu-fine-forward.sh >/dev/null; then
     errors+=("dream7b-bpu-fine-forward.sh missing DREAM7B_BPU_FINE_CHILD_RUNTIME_MODE")
+  fi
+  if ! grep -F -- "DREAM7B_BPU_FINE_WINDOW_EXECUTION_MODE" scripts/dream7b-bpu-fine-forward.sh >/dev/null; then
+    errors+=("dream7b-bpu-fine-forward.sh missing DREAM7B_BPU_FINE_WINDOW_EXECUTION_MODE")
   fi
 fi
 

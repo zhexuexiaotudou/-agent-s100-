@@ -43,13 +43,15 @@ if data.get("segment_plan") != "fine-adjacent":
     errors.append(f"unexpected segment_plan: {data.get('segment_plan')}")
 if data.get("residency_window_size") != 2:
     errors.append(f"unexpected residency_window_size: {data.get('residency_window_size')}")
-if data.get("execution_mode") != "pair_child_process":
+if data.get("execution_mode") != "pair_in_process":
     errors.append(f"unexpected execution_mode: {data.get('execution_mode')}")
+if data.get("window_execution_mode") != "in-process":
+    errors.append(f"unexpected window_execution_mode: {data.get('window_execution_mode')}")
 if data.get("child_window_mode") != "pair":
     errors.append(f"unexpected child_window_mode: {data.get('child_window_mode')}")
 if data.get("child_runtime_mode") != "packed":
     errors.append(f"unexpected child_runtime_mode: {data.get('child_runtime_mode')}")
-if data.get("child_process_count") != 5:
+if data.get("child_process_count") != 0:
     errors.append(f"unexpected child_process_count: {data.get('child_process_count')}")
 if data.get("final_shape") != [1, 16, 152064]:
     errors.append(f"unexpected final_shape: {data.get('final_shape')}")
@@ -67,6 +69,7 @@ payload = {
         "segment_plan": data.get("segment_plan"),
         "residency_window_size": data.get("residency_window_size"),
         "execution_mode": data.get("execution_mode"),
+        "window_execution_mode": data.get("window_execution_mode"),
         "child_window_mode": data.get("child_window_mode"),
         "child_runtime_mode": data.get("child_runtime_mode"),
         "child_process_count": data.get("child_process_count"),
@@ -84,6 +87,7 @@ payload = {
         f"- segment_plan: {payload['checked']['segment_plan']}",
         f"- residency_window_size: {payload['checked']['residency_window_size']}",
         f"- execution_mode: {payload['checked']['execution_mode']}",
+        f"- window_execution_mode: {payload['checked']['window_execution_mode']}",
         f"- child_window_mode: {payload['checked']['child_window_mode']}",
         f"- child_runtime_mode: {payload['checked']['child_runtime_mode']}",
         f"- child_process_count: {payload['checked']['child_process_count']}",

@@ -89,6 +89,7 @@ payload = {
     "residency_window_size": data.get("residency_window_size", 0),
     "child_window_mode": data.get("child_window_mode", ""),
     "child_runtime_mode": data.get("child_runtime_mode", ""),
+    "window_execution_mode": data.get("window_execution_mode", ""),
     "execution_mode": data.get("execution_mode", ""),
     "child_process_count": data.get("child_process_count", 0),
     "segment_count": len(segments),
@@ -99,11 +100,11 @@ PY
 }
 
 segments6_result="$(run_case segments6 dream7b-bpu-forward --hbm-dir "$base_hbm_dir")"
-fine_sliding_result="$(run_case fine_sliding dream7b-bpu-fine-forward --hbm-dir "$base_hbm_dir" --fine-hbm-dir "$fine_hbm_dir" --child-window-mode sliding --child-runtime-mode separate)"
-fine_pair_separate_result="$(run_case fine_pair_separate dream7b-bpu-fine-forward --hbm-dir "$base_hbm_dir" --fine-hbm-dir "$fine_hbm_dir" --child-window-mode pair --child-runtime-mode separate)"
-fine_pair_packed_result="$(run_case fine_pair_packed dream7b-bpu-fine-forward --hbm-dir "$base_hbm_dir" --fine-hbm-dir "$fine_hbm_dir" --child-window-mode pair --child-runtime-mode packed)"
+fine_sliding_child_result="$(run_case fine_sliding_child dream7b-bpu-fine-forward --hbm-dir "$base_hbm_dir" --fine-hbm-dir "$fine_hbm_dir" --child-window-mode sliding --child-runtime-mode separate --window-execution-mode child-process)"
+fine_pair_child_packed_result="$(run_case fine_pair_child_packed dream7b-bpu-fine-forward --hbm-dir "$base_hbm_dir" --fine-hbm-dir "$fine_hbm_dir" --child-window-mode pair --child-runtime-mode packed --window-execution-mode child-process)"
+fine_pair_in_process_packed_result="$(run_case fine_pair_in_process_packed dream7b-bpu-fine-forward --hbm-dir "$base_hbm_dir" --fine-hbm-dir "$fine_hbm_dir" --child-window-mode pair --child-runtime-mode packed --window-execution-mode in-process)"
 
-python3 - "$run_dir" "$segments6_result" "$fine_sliding_result" "$fine_pair_separate_result" "$fine_pair_packed_result" <<'PY'
+python3 - "$run_dir" "$segments6_result" "$fine_sliding_child_result" "$fine_pair_child_packed_result" "$fine_pair_in_process_packed_result" <<'PY'
 import json
 import sys
 from datetime import datetime
@@ -118,23 +119,27 @@ for item in results:
         errors.append(f"{item['label']} failed")
     if item["final_shape"] != [1, 16, 152064]:
         errors.append(f"{item['label']} unexpected final_shape={item['final_shape']}")
-if by_label["fine_pair_packed"]["execution_mode"] != "pair_child_process":
-    errors.append("fine_pair_packed did not use pair_child_process")
-if by_label["fine_pair_packed"]["child_process_count"] != 5:
-    errors.append(f"fine_pair_packed child_process_count={by_label['fine_pair_packed']['child_process_count']}")
-if by_label["fine_pair_packed"]["child_runtime_mode"] != "packed":
-    errors.append(f"fine_pair_packed child_runtime_mode={by_label['fine_pair_packed']['child_runtime_mode']}")
-if by_label["fine_pair_separate"]["child_runtime_mode"] != "separate":
-    errors.append(f"fine_pair_separate child_runtime_mode={by_label['fine_pair_separate']['child_runtime_mode']}")
-if by_label["fine_sliding"]["child_process_count"] not in (0, 10):
-    errors.append(f"fine_sliding child_process_count={by_label['fine_sliding']['child_process_count']}")
+if by_label["fine_pair_child_packed"]["execution_mode"] != "pair_child_process":
+    errors.append("fine_pair_child_packed did not use pair_child_process")
+if by_label["fine_pair_child_packed"]["child_process_count"] != 5:
+    errors.append(f"fine_pair_child_packed child_process_count={by_label['fine_pair_child_packed']['child_process_count']}")
+if by_label["fine_pair_child_packed"]["child_runtime_mode"] != "packed":
+    errors.append(f"fine_pair_child_packed child_runtime_mode={by_label['fine_pair_child_packed']['child_runtime_mode']}")
+if by_label["fine_pair_in_process_packed"]["execution_mode"] != "pair_in_process":
+    errors.append("fine_pair_in_process_packed did not use pair_in_process")
+if by_label["fine_pair_in_process_packed"]["child_process_count"] != 0:
+    errors.append(f"fine_pair_in_process_packed child_process_count={by_label['fine_pair_in_process_packed']['child_process_count']}")
+if by_label["fine_pair_in_process_packed"]["window_execution_mode"] != "in-process":
+    errors.append(f"fine_pair_in_process_packed window_execution_mode={by_label['fine_pair_in_process_packed']['window_execution_mode']}")
+if by_label["fine_sliding_child"]["child_process_count"] != 10:
+    errors.append(f"fine_sliding_child child_process_count={by_label['fine_sliding_child']['child_process_count']}")
 
-sliding_load = by_label["fine_sliding"]["load_ms"]
-pair_load = by_label["fine_pair_packed"]["load_ms"]
-sliding_wall = by_label["fine_sliding"]["wall_ms"]
-pair_wall = by_label["fine_pair_packed"]["wall_ms"]
-separate_pair_load = by_label["fine_pair_separate"]["load_ms"]
-separate_pair_wall = by_label["fine_pair_separate"]["wall_ms"]
+sliding_load = by_label["fine_sliding_child"]["load_ms"]
+pair_load = by_label["fine_pair_child_packed"]["load_ms"]
+sliding_wall = by_label["fine_sliding_child"]["wall_ms"]
+pair_wall = by_label["fine_pair_child_packed"]["wall_ms"]
+in_process_load = by_label["fine_pair_in_process_packed"]["load_ms"]
+in_process_wall = by_label["fine_pair_in_process_packed"]["wall_ms"]
 payload = {
     "generated_at": datetime.now().astimezone().isoformat(),
     "verdict": "ok_dream7b_bpu_fine_forward_perf_probe" if not errors else "failed_dream7b_bpu_fine_forward_perf_probe",
@@ -142,23 +147,24 @@ payload = {
     "errors": errors,
     "results": results,
     "pair_vs_sliding": {
-        "child_process_reduction": by_label["fine_sliding"]["child_process_count"] - by_label["fine_pair_packed"]["child_process_count"],
+        "child_process_reduction": by_label["fine_sliding_child"]["child_process_count"] - by_label["fine_pair_child_packed"]["child_process_count"],
         "load_ms_delta": round(sliding_load - pair_load, 3),
         "load_speedup": round(sliding_load / pair_load, 3) if pair_load else None,
         "wall_ms_delta": round(sliding_wall - pair_wall, 3),
         "wall_speedup": round(sliding_wall / pair_wall, 3) if pair_wall else None,
     },
-    "packed_vs_separate_pair": {
-        "load_ms_delta": round(separate_pair_load - pair_load, 3),
-        "load_speedup": round(separate_pair_load / pair_load, 3) if pair_load else None,
-        "wall_ms_delta": round(separate_pair_wall - pair_wall, 3),
-        "wall_speedup": round(separate_pair_wall / pair_wall, 3) if pair_wall else None,
+    "in_process_vs_child_pair": {
+        "child_process_reduction": by_label["fine_pair_child_packed"]["child_process_count"] - by_label["fine_pair_in_process_packed"]["child_process_count"],
+        "load_ms_delta": round(pair_load - in_process_load, 3),
+        "load_speedup": round(pair_load / in_process_load, 3) if in_process_load else None,
+        "wall_ms_delta": round(pair_wall - in_process_wall, 3),
+        "wall_speedup": round(pair_wall / in_process_wall, 3) if in_process_wall else None,
     },
     "notes": [
         "This is a regression/performance probe over fixed seq16 token input.",
-        "It compares the deployed six-segment forward, fine sliding-child forward, separate pair-child forward, and packed pair-child forward.",
+        "It compares the deployed six-segment forward, fine sliding-child forward, packed pair-child forward, and packed in-process pair forward.",
         "Pair-child is expected to keep the two-segment residency invariant while reducing child process count.",
-        "Packed pair-child uses one HB_HBMRuntime constructed from both resident HBM files.",
+        "In-process pair mode uses Python object destruction and gc.collect between resident pair windows.",
     ],
 }
 (run_dir / "summary.json").write_text(json.dumps(payload, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
@@ -172,17 +178,18 @@ lines = [
     f"- pair_vs_sliding_child_process_reduction: {payload['pair_vs_sliding']['child_process_reduction']}",
     f"- pair_vs_sliding_load_speedup: {payload['pair_vs_sliding']['load_speedup']}",
     f"- pair_vs_sliding_wall_speedup: {payload['pair_vs_sliding']['wall_speedup']}",
-    f"- packed_vs_separate_pair_load_speedup: {payload['packed_vs_separate_pair']['load_speedup']}",
-    f"- packed_vs_separate_pair_wall_speedup: {payload['packed_vs_separate_pair']['wall_speedup']}",
+    f"- in_process_vs_child_pair_child_process_reduction: {payload['in_process_vs_child_pair']['child_process_reduction']}",
+    f"- in_process_vs_child_pair_load_speedup: {payload['in_process_vs_child_pair']['load_speedup']}",
+    f"- in_process_vs_child_pair_wall_speedup: {payload['in_process_vs_child_pair']['wall_speedup']}",
     "",
     "## Results",
     "",
-    "| Case | OK | Exec mode | Child mode | Runtime mode | Child count | Segments | Wall ms | Load ms | Run ms |",
-    "| --- | --- | --- | --- | --- | ---: | ---: | ---: | ---: | ---: |",
+    "| Case | OK | Exec mode | Window exec | Child mode | Runtime mode | Child count | Segments | Wall ms | Load ms | Run ms |",
+    "| --- | --- | --- | --- | --- | --- | ---: | ---: | ---: | ---: | ---: |",
 ]
 for item in results:
     lines.append(
-        f"| {item['label']} | {item['ok']} | {item['execution_mode']} | {item['child_window_mode']} | {item['child_runtime_mode']} | "
+        f"| {item['label']} | {item['ok']} | {item['execution_mode']} | {item['window_execution_mode']} | {item['child_window_mode']} | {item['child_runtime_mode']} | "
         f"{item['child_process_count']} | {item['segment_count']} | {item['wall_ms']:.3f} | {item['load_ms']:.3f} | {item['run_ms']:.3f} |"
     )
 lines.extend([

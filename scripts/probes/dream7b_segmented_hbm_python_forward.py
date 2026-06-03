@@ -152,6 +152,12 @@ def parse_args():
         default="separate",
         help="With residency-window-size > 1, load resident HBM files as separate runtimes or one packed runtime.",
     )
+    parser.add_argument(
+        "--window-execution-mode",
+        choices=("child-process", "in-process"),
+        default="child-process",
+        help="With residency-window-size > 1, run resident windows in child processes or in the current Python process.",
+    )
     parser.add_argument("--output-dir", default="/mnt/nas/openclaw/reports/models/dream7b_python_forward")
     parser.add_argument("--tokens-bin", default="", help="Optional int32 token-id binary with shape [1, seq_len].")
     parser.add_argument("--tokens", default="", help="Optional comma or whitespace separated token ids with length seq_len.")
@@ -358,6 +364,122 @@ def run_window_child_segments(
     return final, segment_results, child_process_count
 
 
+def run_window_in_process_segments(
+    segments,
+    tokens: np.ndarray,
+    position_ids: np.ndarray,
+    residency_window_size: int,
+    child_window_mode: str,
+    child_runtime_mode: str,
+):
+    current_input = tokens
+    segment_results = []
+
+    index = 0
+    while index < len(segments):
+        if child_window_mode == "pair":
+            run_count = min(residency_window_size, len(segments) - index)
+            next_index = index + run_count
+        else:
+            run_count = 1
+            next_index = index + 1
+
+        resident_specs = []
+        for resident_index in range(index, min(len(segments), index + residency_window_size)):
+            resident_segment_id, resident_source, resident_model_file, resident_model_name, resident_input_kind = segments[resident_index]
+            if not resident_model_file.exists():
+                raise FileNotFoundError(resident_model_file)
+            resident_specs.append(
+                {
+                    "segment": resident_segment_id,
+                    "source": resident_source,
+                    "model_file": resident_model_file,
+                    "model_name": resident_model_name,
+                    "input_kind": resident_input_kind,
+                }
+            )
+
+        runtimes = []
+        load_events = []
+        if child_runtime_mode == "packed":
+            model_files = [str(item["model_file"]) for item in resident_specs]
+            t0 = time.perf_counter()
+            runtime = HB_HBMRuntime(model_files)
+            t1 = time.perf_counter()
+            load_ms = round((t1 - t0) * 1000, 3)
+            runtimes = [runtime for _ in resident_specs]
+            for event_index, spec in enumerate(resident_specs):
+                load_events.append(
+                    {
+                        "segment": spec["segment"],
+                        "model_file": str(spec["model_file"]),
+                        "load_ms": load_ms if event_index == 0 else 0.0,
+                        "packed_load_ms": load_ms,
+                        "child_runtime_mode": child_runtime_mode,
+                    }
+                )
+        else:
+            for spec in resident_specs:
+                t0 = time.perf_counter()
+                runtime = HB_HBMRuntime(str(spec["model_file"]))
+                t1 = time.perf_counter()
+                runtimes.append(runtime)
+                load_events.append(
+                    {
+                        "segment": spec["segment"],
+                        "model_file": str(spec["model_file"]),
+                        "load_ms": round((t1 - t0) * 1000, 3),
+                        "child_runtime_mode": child_runtime_mode,
+                    }
+                )
+
+        try:
+            for run_index in range(run_count):
+                current = resident_specs[run_index]
+                runtime = runtimes[run_index]
+                inputs = {"_input_0": current_input, "_input_1": position_ids}
+                t0 = time.perf_counter()
+                output = runtime.run(inputs, model_name=current["model_name"])
+                t1 = time.perf_counter()
+                output_name = runtime.output_names[current["model_name"]][0]
+                arr = output[current["model_name"]][output_name]
+                scale = first_scale(runtime, current["model_name"], output_name)
+                current_input = arr.astype(np.float32) * scale
+                segment_results.append(
+                    {
+                        "segment": current["segment"],
+                        "source": current["source"],
+                        "input_kind": current["input_kind"],
+                        "model_name": current["model_name"],
+                        "model_file": str(current["model_file"]),
+                        "output_name": output_name,
+                        "output_shape": list(arr.shape),
+                        "output_dtype": str(arr.dtype),
+                        "output_scale": scale,
+                        "load_ms": load_events[run_index]["load_ms"],
+                        "packed_load_ms": load_events[run_index].get("packed_load_ms", 0.0),
+                        "preload_events": load_events,
+                        "run_ms": round((t1 - t0) * 1000, 3),
+                        "resident_segments": [item["segment"] for item in resident_specs],
+                        "resident_count": len(resident_specs),
+                        "child_runtime_mode": child_runtime_mode,
+                        "window_execution_mode": "in-process",
+                    }
+                )
+                del output, arr
+        finally:
+            try:
+                del runtime
+            except NameError:
+                pass
+            del runtimes
+            gc.collect()
+
+        index = next_index
+
+    return current_input, segment_results, 0
+
+
 def main():
     args = parse_args()
     if args.residency_window_size < 1:
@@ -370,12 +492,21 @@ def main():
 
     tokens, tokens_source = load_tokens(args.tokens_bin, args.tokens, args.seq_len)
     position_ids = np.arange(args.seq_len, dtype=np.int32)
-    if args.residency_window_size > 1:
+    if args.residency_window_size > 1 and args.window_execution_mode == "child-process":
         hidden, segment_results, child_process_count = run_window_child_segments(
             segments,
             tokens,
             position_ids,
             output_dir,
+            args.residency_window_size,
+            args.child_window_mode,
+            args.child_runtime_mode,
+        )
+    elif args.residency_window_size > 1 and args.window_execution_mode == "in-process":
+        hidden, segment_results, child_process_count = run_window_in_process_segments(
+            segments,
+            tokens,
+            position_ids,
             args.residency_window_size,
             args.child_window_mode,
             args.child_runtime_mode,
@@ -444,7 +575,8 @@ def main():
         "residency_window_size": args.residency_window_size,
         "child_window_mode": args.child_window_mode if args.residency_window_size > 1 else "",
         "child_runtime_mode": args.child_runtime_mode if args.residency_window_size > 1 else "",
-        "execution_mode": f"{args.child_window_mode}_child_process" if args.residency_window_size > 1 else "in_process",
+        "window_execution_mode": args.window_execution_mode if args.residency_window_size > 1 else "in_process",
+        "execution_mode": f"{args.child_window_mode}_{args.window_execution_mode.replace('-', '_')}" if args.residency_window_size > 1 else "in_process",
         "child_process_count": child_process_count if args.residency_window_size > 1 else 0,
         "hbm_dir": str(hbm_dir),
         "fine_hbm_dir": str(fine_hbm_dir),

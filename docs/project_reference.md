@@ -85,6 +85,7 @@ Forwarded options recognized by `scripts/probes/dream7b_segmented_hbm_python_for
 --residency-window-size
 --child-window-mode
 --child-runtime-mode
+--window-execution-mode
 --output-dir
 --tokens-bin
 --tokens
@@ -107,6 +108,7 @@ DREAM7B_BPU_FINE_HBM_DIR
 DREAM7B_BPU_FINE_WINDOW_SIZE
 DREAM7B_BPU_FINE_CHILD_WINDOW_MODE
 DREAM7B_BPU_FINE_CHILD_RUNTIME_MODE
+DREAM7B_BPU_FINE_WINDOW_EXECUTION_MODE
 ```
 
 Default values copied from the script:
@@ -117,6 +119,7 @@ Default values copied from the script:
 2
 pair
 packed
+in-process
 ```
 
 Default arguments injected by the wrapper when they are absent:
@@ -128,6 +131,7 @@ Default arguments injected by the wrapper when they are absent:
 --residency-window-size 2
 --child-window-mode pair
 --child-runtime-mode packed
+--window-execution-mode in-process
 ```
 
 ### `dream7b-bpu-text-forward`
@@ -201,7 +205,7 @@ DREAM7B_BPU_FORWARD_CMD=dream7b-bpu-fine-forward \
 Latest recorded report:
 
 ```text
-/mnt/nas/openclaw/reports/models/dream7b_bpu_diffusion_loop_20260603-171725/summary.md
+/mnt/nas/openclaw/reports/models/dream7b_bpu_diffusion_loop_20260603-175030/summary.md
 ```
 
 ### Documentation Consistency Probe
@@ -362,16 +366,16 @@ Evidence report:
 /mnt/nas/openclaw/reports/models/dream7b_bpu_fine_residency_20260603-054031/summary.md
 ```
 
-### Use `pair` plus `packed`
+### Use `pair` plus `packed` plus `in-process`
 
-Decision: default `dream7b-bpu-fine-forward` to `--child-window-mode pair` and `--child-runtime-mode packed`.
+Decision: default `dream7b-bpu-fine-forward` to `--child-window-mode pair`, `--child-runtime-mode packed`, and `--window-execution-mode in-process`.
 
 Evidence reports:
 
 ```text
-/mnt/nas/openclaw/reports/models/dream7b_bpu_fine_forward_20260603-171052/fine_forward_probe.md
-/mnt/nas/openclaw/reports/models/dream7b_bpu_fine_forward_perf_20260603-171203/summary.md
-/mnt/nas/openclaw/reports/models/dream7b_bpu_diffusion_loop_20260603-171725/summary.md
+/mnt/nas/openclaw/reports/models/dream7b_bpu_fine_forward_20260603-174608/fine_forward_probe.md
+/mnt/nas/openclaw/reports/models/dream7b_bpu_fine_forward_perf_20260603-174745/summary.md
+/mnt/nas/openclaw/reports/models/dream7b_bpu_diffusion_loop_20260603-175030/summary.md
 ```
 
 ### Do not claim production text service yet
@@ -404,15 +408,16 @@ docs/baseline_progress_2026-06-03_dream7b_segmented_bpu_hbm.md
 - Verified `dream7b-bpu-fine-forward-probe` report at `/mnt/nas/openclaw/reports/models/dream7b_bpu_fine_forward_20260603-171052/fine_forward_probe.md`.
 - Verified `dream7b-bpu-fine-forward-perf-probe` report at `/mnt/nas/openclaw/reports/models/dream7b_bpu_fine_forward_perf_20260603-171203/summary.md`.
 - Verified `dream7b-bpu-diffusion-loop-probe` report at `/mnt/nas/openclaw/reports/models/dream7b_bpu_diffusion_loop_20260603-171725/summary.md`.
-- Verified a manual in-process pair release experiment on S100P with final shape `[1, 16, 152064]`; this must be turned into repository code and a repeatable probe before it is treated as a project feature.
+- Verified `dream7b-bpu-fine-forward-probe` report at `/mnt/nas/openclaw/reports/models/dream7b_bpu_fine_forward_20260603-174608/fine_forward_probe.md`.
+- Verified `dream7b-bpu-fine-forward-perf-probe` report at `/mnt/nas/openclaw/reports/models/dream7b_bpu_fine_forward_perf_20260603-174745/summary.md`.
+- Verified `dream7b-bpu-diffusion-loop-probe` report at `/mnt/nas/openclaw/reports/models/dream7b_bpu_diffusion_loop_20260603-175030/summary.md`.
+- Promoted the manual in-process pair release experiment into repository code through `--window-execution-mode in-process`.
 
 ## TODO
 
-- Turn the manual in-process pair release experiment into a repository-supported mode or probe.
-- Compare in-process pair release against `pair_child_process` using the same `tokens` and report root.
-- If in-process pair release is stable, update `dream7b-bpu-fine-forward` defaults only after a S100P probe proves `final_shape = [1, 16, 152064]` and diffusion-loop compatibility.
-- Keep the current `pair_child_process` path as fallback until the in-process mode has regression coverage.
-- Add documentation consistency checking to the standard post-task checklist through `scripts/probes/project_docs_consistency_probe.sh`.
+- Keep `--window-execution-mode child-process` as the fallback path until repeated-run evidence proves `--window-execution-mode in-process` is stable across longer runs.
+- Add repeated-run performance evidence for `fine_pair_in_process_packed`.
+- Run documentation consistency checking through `scripts/probes/project_docs_consistency_probe.sh` after each task.
 - Continue quality gates against the CPU Dream path before describing the BPU route as production text generation.
 
 ## Post-Task Documentation Check
