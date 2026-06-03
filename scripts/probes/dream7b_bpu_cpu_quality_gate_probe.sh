@@ -10,6 +10,7 @@ cpu_max_tokens="${DREAM7B_CPU_QUALITY_MAX_TOKENS:-8}"
 bpu_timeout="${DREAM7B_BPU_QUALITY_TIMEOUT:-900}"
 bpu_steps="${DREAM7B_BPU_QUALITY_STEPS:-2}"
 bpu_remasking="${DREAM7B_BPU_QUALITY_REMASKING:-entropy_exit}"
+bpu_forward_cmd="${DREAM7B_BPU_QUALITY_FORWARD_CMD:-}"
 
 case "$report_root" in
   /tmp/*|/mnt/nas/openclaw/reports|/mnt/nas/openclaw/reports/*|/root/.openclaw/workspace/reports|/root/.openclaw/workspace/reports/*) ;;
@@ -49,11 +50,12 @@ cpu_rc=$?
 
 DREAM7B_BPU_DIFFUSION_STEPS="$bpu_steps" \
 DREAM7B_BPU_REMASKING="$bpu_remasking" \
+DREAM7B_BPU_FORWARD_CMD="${bpu_forward_cmd:-dream7b-bpu-forward}" \
 timeout "$bpu_timeout" dream7b-bpu-diffusion-loop-probe "$report_root" "$prompt" > "$bpu_stdout" 2> "$bpu_stderr"
 bpu_rc=$?
 set -e
 
-python3 - "$prompt" "$cpu_rc" "$bpu_rc" "$cpu_steps" "$cpu_max_tokens" "$bpu_steps" "$bpu_remasking" "$cpu_stdout" "$cpu_stderr" "$bpu_stdout" "$bpu_stderr" "$summary_json" "$summary_md" <<'PY'
+python3 - "$prompt" "$cpu_rc" "$bpu_rc" "$cpu_steps" "$cpu_max_tokens" "$bpu_steps" "$bpu_remasking" "${bpu_forward_cmd:-dream7b-bpu-forward}" "$cpu_stdout" "$cpu_stderr" "$bpu_stdout" "$bpu_stderr" "$summary_json" "$summary_md" <<'PY'
 import json
 import re
 import sys
@@ -68,13 +70,14 @@ from pathlib import Path
     cpu_max_tokens_text,
     bpu_steps_text,
     bpu_remasking,
+    bpu_forward_cmd,
     cpu_stdout,
     cpu_stderr,
     bpu_stdout,
     bpu_stderr,
     summary_json,
     summary_md,
-) = sys.argv[1:14]
+) = sys.argv[1:15]
 
 cpu_stdout_path = Path(cpu_stdout)
 cpu_stderr_path = Path(cpu_stderr)
@@ -128,6 +131,7 @@ payload = {
     },
     "bpu": {
         "command": "dream7b-bpu-diffusion-loop-probe",
+        "forward_command": bpu_forward_cmd,
         "returncode": int(bpu_rc_text),
         "steps": int(bpu_steps_text),
         "remasking": bpu_remasking,
@@ -159,6 +163,7 @@ lines = [
     f"- generated_at: {payload['generated_at']}",
     f"- verdict: {verdict}",
     f"- quality_status: {quality_status}",
+    f"- bpu_forward_command: {bpu_forward_cmd}",
     f"- prompt: {prompt}",
     "",
     "## CPU Output",

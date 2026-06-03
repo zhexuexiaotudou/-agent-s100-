@@ -15,6 +15,7 @@ remasking="${DREAM7B_BPU_REMASKING:-entropy_exit}"
 temperature="${DREAM7B_BPU_TEMP:-0}"
 seed="${DREAM7B_BPU_SEED:-42}"
 entropy_threshold="${DREAM7B_BPU_ENTROPY_THRESHOLD:-1.5}"
+forward_cmd="${DREAM7B_BPU_FORWARD_CMD:-dream7b-bpu-forward}"
 
 case "$report_root" in
   /tmp/*|/mnt/nas/openclaw/reports|/mnt/nas/openclaw/reports/*|/root/.openclaw/workspace/reports|/root/.openclaw/workspace/reports/*) ;;
@@ -34,8 +35,8 @@ if [[ ! -d "$tokenizer_dir" ]]; then
   exit 4
 fi
 
-if ! command -v dream7b-bpu-forward >/dev/null 2>&1; then
-  echo "Missing deployed S100P command: dream7b-bpu-forward" >&2
+if ! command -v "$forward_cmd" >/dev/null 2>&1; then
+  echo "Missing deployed S100P command: $forward_cmd" >&2
   exit 4
 fi
 
@@ -44,7 +45,7 @@ stamp="$(date +%Y%m%d-%H%M%S)"
 run_dir="$report_root/dream7b_bpu_diffusion_loop_$stamp"
 mkdir -p "$run_dir"
 
-"$tokenizer_venv/bin/python" - "$tokenizer_dir" "$prompt" "$run_dir" "$seq_len" "$min_mask_count" "$steps" "$top_k" "$eps" "$remasking" "$temperature" "$seed" "$entropy_threshold" <<'PY'
+"$tokenizer_venv/bin/python" - "$tokenizer_dir" "$prompt" "$run_dir" "$seq_len" "$min_mask_count" "$steps" "$top_k" "$eps" "$remasking" "$temperature" "$seed" "$entropy_threshold" "$forward_cmd" <<'PY'
 import json
 import subprocess
 import sys
@@ -67,7 +68,8 @@ from transformers import AutoTokenizer
     temperature_text,
     seed_text,
     entropy_threshold_text,
-) = sys.argv[1:13]
+    forward_cmd,
+) = sys.argv[1:14]
 run_dir = Path(run_dir_text)
 seq_len = int(seq_len_text)
 min_mask_count = int(min_mask_count_text)
@@ -147,7 +149,7 @@ for step in range(steps):
     np.asarray(tokens, dtype=np.int32).tofile(tokens_bin)
 
     cmd = [
-        "dream7b-bpu-forward",
+        forward_cmd,
         "--tokens-bin", str(tokens_bin),
         "--output-dir", str(forward_dir),
         "--save-logits",
@@ -229,6 +231,7 @@ summary = {
     "temperature": temperature,
     "seed": seed,
     "entropy_threshold": entropy_threshold,
+    "forward_command": forward_cmd,
     "fit_mode": fit_mode,
     "prompt_token_count": len(prompt_ids),
     "prefix_token_count": len(prefix_ids),
@@ -256,6 +259,7 @@ lines = [
     f"- seq_len: {seq_len}",
     f"- steps: {steps}",
     f"- remasking: {remasking}",
+    f"- forward_command: {forward_cmd}",
     f"- temperature: {temperature}",
     f"- entropy_threshold: {entropy_threshold}",
     f"- prompt_token_count: {len(prompt_ids)}",

@@ -68,6 +68,8 @@ fine-forward command: /usr/local/bin/dream7b-bpu-fine-forward
 fine-forward report: /mnt/nas/openclaw/reports/models/dream7b_bpu_forward_20260603-154303/summary.json
 fine-forward probe command: /usr/local/bin/dream7b-bpu-fine-forward-probe
 fine-forward probe report: /mnt/nas/openclaw/reports/models/dream7b_bpu_fine_forward_20260603-154831/fine_forward_probe.md
+fine-forward diffusion-loop report: /mnt/nas/openclaw/reports/models/dream7b_bpu_diffusion_loop_20260603-155512/summary.md
+fine-forward quality-gate report: /mnt/nas/openclaw/reports/models/dream7b_bpu_cpu_quality_gate_20260603-160405/summary.md
 default-forward compatibility report: /mnt/nas/openclaw/reports/models/dream7b_bpu_forward_20260603-151711/summary.json
 ```
 
@@ -521,9 +523,50 @@ final_shape: [1, 16, 152064]
 segment_count: 10
 ```
 
+The deployed diffusion loop can now select the forward backend with:
+
+```bash
+DREAM7B_BPU_FORWARD_CMD=dream7b-bpu-fine-forward \
+  dream7b-bpu-diffusion-loop-probe \
+  /mnt/nas/openclaw/reports/models \
+  'Explain why S100P BPU matters for Dream 7B in OpenClaw.'
+```
+
+Verified fine-forward diffusion-loop output:
+
+```text
+report: /mnt/nas/openclaw/reports/models/dream7b_bpu_diffusion_loop_20260603-155512/summary.md
+verdict: ok_dream7b_bpu_diffusion_loop_probe
+forward_command: dream7b-bpu-fine-forward
+steps: 2
+remaining_mask_positions: []
+step0 forward: segment_plan=fine-adjacent, residency_window_size=2, execution_mode=window_child_process, final_shape=[1, 16, 152064]
+step1 forward: segment_plan=fine-adjacent, residency_window_size=2, execution_mode=window_child_process, final_shape=[1, 16, 152064]
+```
+
+The CPU/BPU quality gate can now record the fine-forward path with:
+
+```bash
+DREAM7B_BPU_QUALITY_FORWARD_CMD=dream7b-bpu-fine-forward \
+  dream7b-bpu-cpu-quality-gate-probe \
+  /mnt/nas/openclaw/reports/models \
+  'Explain why BPU matters.'
+```
+
+Verified fine-forward quality-gate output:
+
+```text
+report: /mnt/nas/openclaw/reports/models/dream7b_bpu_cpu_quality_gate_20260603-160405/summary.md
+verdict: ok_dream7b_bpu_cpu_quality_gate_recorded
+quality_status: diverged_expected_for_seq16_probe
+bpu_forward_command: dream7b-bpu-fine-forward
+bpu loop verdict: ok_dream7b_bpu_diffusion_loop_probe
+bpu remaining_mask_positions: []
+```
+
 ## Current Boundary
 
-This is real BPU execution for real Dream 7B weights, including a complete seq16 forward chain from prompt text or token ids to logits plus verified one-step and strategy-aware bounded multi-step Dream diffusion bridges over masked positions. The path now also has a CPU/BPU quality coverage gate that records current divergence against the existing CPU Dream text path, an HBM cache performance gate that quantifies NAS versus S100P-local HBM load cost, a residency gate proving that the current six-segment split cannot be made all-resident, a fine-residency gate proving that every adjacent two-segment window can be resident, and a deployed fine sliding-forward command that runs the 10-segment fine plan to logits. It is not yet a complete text-generation service.
+This is real BPU execution for real Dream 7B weights, including a complete seq16 forward chain from prompt text or token ids to logits plus verified one-step and strategy-aware bounded multi-step Dream diffusion bridges over masked positions. The path now also has a CPU/BPU quality coverage gate that records current divergence against the existing CPU Dream text path, an HBM cache performance gate that quantifies NAS versus S100P-local HBM load cost, a residency gate proving that the current six-segment split cannot be made all-resident, a fine-residency gate proving that every adjacent two-segment window can be resident, a deployed fine sliding-forward command that runs the 10-segment fine plan to logits, and fine-forward coverage in the multi-step diffusion loop plus CPU/BPU quality gate. It is not yet a complete text-generation service.
 
 Remaining engineering work:
 
