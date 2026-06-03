@@ -30,6 +30,7 @@ required_files=(
   "scripts/probes/dream7b_bpu_fine_forward_window_batch_probe.sh"
   "scripts/probes/dream7b_bpu_fine_batch_forward_probe.sh"
   "scripts/probes/dream7b_bpu_batch_queue_runner_probe.sh"
+  "scripts/probes/dream7b_bpu_batch_queue_drain_probe.sh"
   "scripts/startup_link_check/link-check.config.json"
   "scripts/tool_allowlist.json"
 )
@@ -54,6 +55,7 @@ required_reference_strings=(
   "--child-runtime-mode"
   "--window-execution-mode"
   "--tokens-batch-json"
+  "--drain-all"
   "request_id"
   "tokens"
   "scripts/startup_link_check/link-check.config.json"
@@ -64,7 +66,8 @@ required_reference_strings=(
   "/mnt/nas/openclaw/reports/models/dream7b_bpu_fine_forward_repeat_20260603-180108/summary.md"
   "/mnt/nas/openclaw/reports/models/dream7b_bpu_fine_forward_window_batch_20260603-181131/summary.md"
   "/mnt/nas/openclaw/reports/models/dream7b_bpu_fine_batch_forward_20260603-183625/fine_batch_forward_probe.md"
-  "/mnt/nas/openclaw/reports/models/dream7b_bpu_batch_queue_runner_20260603-184659/batch_queue_runner_probe.md"
+  "/mnt/nas/openclaw/reports/models/dream7b_bpu_batch_queue_runner_20260603-185701/batch_queue_runner_probe.md"
+  "/mnt/nas/openclaw/reports/models/dream7b_bpu_batch_queue_drain_20260603-185739/batch_queue_drain_probe.md"
   "/mnt/nas/openclaw/reports/models/dream7b_bpu_fine_forward_20260603-183906/fine_forward_probe.md"
   "/mnt/nas/openclaw/reports/models/dream7b_bpu_diffusion_loop_20260603-175030/summary.md"
 )
@@ -135,6 +138,9 @@ if [[ -f scripts/dream7b_bpu_batch_queue_runner.py ]]; then
   fi
   if ! grep -F -- "tokens" scripts/dream7b_bpu_batch_queue_runner.py >/dev/null; then
     errors+=("dream7b_bpu_batch_queue_runner.py missing tokens")
+  fi
+  if ! grep -F -- "--drain-all" scripts/dream7b_bpu_batch_queue_runner.py >/dev/null; then
+    errors+=("dream7b_bpu_batch_queue_runner.py missing --drain-all")
   fi
 fi
 

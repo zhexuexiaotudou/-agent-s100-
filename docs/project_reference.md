@@ -224,6 +224,7 @@ Optional arguments copied from `scripts/dream7b_bpu_batch_queue_runner.py`:
 --seq-len
 --top-k
 --forward-cmd
+--drain-all
 ```
 
 Default values copied from `scripts/dream7b_bpu_batch_queue_runner.py`:
@@ -249,12 +250,15 @@ verdict
 request_jsonl
 output_dir
 forward_command
-forward_summary
-tokens_batch_json
+drain_all
 max_batch_size
+request_count
+processed_count
 accepted_count
 deferred_count
 deferred_request_ids
+batch_run_count
+batch_runs
 results
 forward_metrics
 errors
@@ -263,7 +267,7 @@ errors
 Latest recorded probe:
 
 ```text
-/mnt/nas/openclaw/reports/models/dream7b_bpu_batch_queue_runner_20260603-184659/batch_queue_runner_probe.md
+/mnt/nas/openclaw/reports/models/dream7b_bpu_batch_queue_runner_20260603-185701/batch_queue_runner_probe.md
 ```
 
 ### `dream7b-bpu-text-forward`
@@ -435,7 +439,23 @@ dream7b-bpu-batch-queue-runner-probe /mnt/nas/openclaw/reports/models
 Latest recorded report:
 
 ```text
-/mnt/nas/openclaw/reports/models/dream7b_bpu_batch_queue_runner_20260603-184659/batch_queue_runner_probe.md
+/mnt/nas/openclaw/reports/models/dream7b_bpu_batch_queue_runner_20260603-185701/batch_queue_runner_probe.md
+```
+
+### `dream7b-bpu-batch-queue-drain-probe`
+
+Source file: `scripts/probes/dream7b_bpu_batch_queue_drain_probe.sh`
+
+Run:
+
+```bash
+dream7b-bpu-batch-queue-drain-probe /mnt/nas/openclaw/reports/models
+```
+
+Latest recorded report:
+
+```text
+/mnt/nas/openclaw/reports/models/dream7b_bpu_batch_queue_drain_20260603-185739/batch_queue_drain_probe.md
 ```
 
 ## Configuration Interfaces
@@ -588,19 +608,21 @@ Evidence reports:
 /mnt/nas/openclaw/reports/models/dream7b_bpu_fine_forward_repeat_20260603-180108/summary.md
 /mnt/nas/openclaw/reports/models/dream7b_bpu_fine_forward_window_batch_20260603-181131/summary.md
 /mnt/nas/openclaw/reports/models/dream7b_bpu_fine_batch_forward_20260603-183625/fine_batch_forward_probe.md
-/mnt/nas/openclaw/reports/models/dream7b_bpu_batch_queue_runner_20260603-184659/batch_queue_runner_probe.md
+/mnt/nas/openclaw/reports/models/dream7b_bpu_batch_queue_runner_20260603-185701/batch_queue_runner_probe.md
+/mnt/nas/openclaw/reports/models/dream7b_bpu_batch_queue_drain_20260603-185739/batch_queue_drain_probe.md
 /mnt/nas/openclaw/reports/models/dream7b_bpu_fine_forward_20260603-183906/fine_forward_probe.md
 /mnt/nas/openclaw/reports/models/dream7b_bpu_diffusion_loop_20260603-175030/summary.md
 ```
 
 ### Use JSONL queue batching for independent seq16 requests
 
-Decision: use `dream7b-bpu-batch-queue-runner` as the service-level batching bridge for independent seq16 token requests. It reads `request_id` and `tokens` from JSONL, accepts up to `--max-batch-size`, records deferred request IDs, and calls `dream7b-bpu-fine-batch-forward`.
+Decision: use `dream7b-bpu-batch-queue-runner` as the service-level batching bridge for independent seq16 token requests. It reads `request_id` and `tokens` from JSONL, accepts up to `--max-batch-size`, records deferred request IDs by default, supports `--drain-all` for multiple batch runs, and calls `dream7b-bpu-fine-batch-forward`.
 
 Evidence report:
 
 ```text
-/mnt/nas/openclaw/reports/models/dream7b_bpu_batch_queue_runner_20260603-184659/batch_queue_runner_probe.md
+/mnt/nas/openclaw/reports/models/dream7b_bpu_batch_queue_runner_20260603-185701/batch_queue_runner_probe.md
+/mnt/nas/openclaw/reports/models/dream7b_bpu_batch_queue_drain_20260603-185739/batch_queue_drain_probe.md
 ```
 
 Boundary: this is a service-level throughput bridge for independent requests. It is not a single-request Dream diffusion acceleration path.
@@ -645,13 +667,15 @@ docs/baseline_progress_2026-06-03_dream7b_segmented_bpu_hbm.md
 - Verified `dream7b-bpu-fine-batch-forward-probe` report at `/mnt/nas/openclaw/reports/models/dream7b_bpu_fine_batch_forward_20260603-183625/fine_batch_forward_probe.md`.
 - Re-verified `dream7b-bpu-fine-forward-probe` report at `/mnt/nas/openclaw/reports/models/dream7b_bpu_fine_forward_20260603-183906/fine_forward_probe.md` after adding `--tokens-batch-json`, `--window-execution-mode window-batch`, and timing fields.
 - Added `dream7b-bpu-batch-queue-runner` for service-level JSONL request batching.
-- Verified `dream7b-bpu-batch-queue-runner-probe` report at `/mnt/nas/openclaw/reports/models/dream7b_bpu_batch_queue_runner_20260603-184659/batch_queue_runner_probe.md`.
+- Verified `dream7b-bpu-batch-queue-runner-probe` report at `/mnt/nas/openclaw/reports/models/dream7b_bpu_batch_queue_runner_20260603-185701/batch_queue_runner_probe.md`.
+- Added `--drain-all` multi-batch scheduling to `dream7b-bpu-batch-queue-runner`.
+- Verified `dream7b-bpu-batch-queue-drain-probe` report at `/mnt/nas/openclaw/reports/models/dream7b_bpu_batch_queue_drain_20260603-185739/batch_queue_drain_probe.md`.
 
 ## TODO
 
 - Keep `--window-execution-mode child-process` as the fallback path until longer-run evidence proves `--window-execution-mode in-process` is stable beyond the current 3-run probe.
 - Add longer repeated-run performance evidence for `fine_pair_in_process_packed`.
-- Replace the bounded JSONL queue runner with a long-lived service only after queue durability, timeout, cancellation, and multi-batch scheduling semantics are specified and verified.
+- Replace the bounded JSONL queue runner with a long-lived service only after queue durability, timeout, and cancellation semantics are specified and verified.
 - Run documentation consistency checking through `scripts/probes/project_docs_consistency_probe.sh` after each task.
 - Continue quality gates against the CPU Dream path before describing the BPU route as production text generation.
 

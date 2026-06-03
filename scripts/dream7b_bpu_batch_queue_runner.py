@@ -24,6 +24,7 @@ def parse_args():
     parser.add_argument("--seq-len", type=int, default=16)
     parser.add_argument("--top-k", type=int, default=3)
     parser.add_argument("--forward-cmd", default="dream7b-bpu-fine-batch-forward")
+    parser.add_argument("--drain-all", action="store_true", help="Process all requests in multiple batches instead of deferring overflow.")
     return parser.parse_args()
 
 
@@ -78,6 +79,68 @@ def topk_by_batch(forward_summary: dict) -> dict[int, list]:
     return indexed
 
 
+def run_forward_batch(args, output_dir: Path, accepted: list[dict], batch_run_index: int):
+    batch_dir = output_dir / f"batch_{batch_run_index:03d}"
+    batch_dir.mkdir(parents=True, exist_ok=True)
+    tokens_batch_json = batch_dir / "tokens_batch.json"
+    tokens_batch_json.write_text(json.dumps([item["tokens"] for item in accepted], ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
+
+    forward_dir = batch_dir / "forward"
+    cmd = [
+        args.forward_cmd,
+        "--tokens-batch-json",
+        str(tokens_batch_json),
+        "--top-k",
+        str(args.top_k),
+        "--output-dir",
+        str(forward_dir),
+    ]
+    proc = subprocess.run(cmd, text=True, capture_output=True, timeout=240)
+    (batch_dir / "forward.stdout").write_text(proc.stdout, encoding="utf-8")
+    (batch_dir / "forward.stderr").write_text(proc.stderr, encoding="utf-8")
+    if proc.returncode != 0:
+        raise RuntimeError(f"forward command failed with exit code {proc.returncode}: {batch_dir / 'forward.stderr'}")
+
+    forward_summary_path = forward_dir / "summary.json"
+    forward_summary = json.loads(forward_summary_path.read_text(encoding="utf-8"))
+    indexed_topk = topk_by_batch(forward_summary)
+    final_shapes = forward_summary.get("final_shapes", [])
+    results = []
+    for batch_index, item in enumerate(accepted):
+        final_shape = final_shapes[batch_index] if batch_index < len(final_shapes) else None
+        results.append(
+            {
+                "request_id": item["request_id"],
+                "line_number": item["line_number"],
+                "batch_run_index": batch_run_index,
+                "batch_index": batch_index,
+                "global_batch_index": None,
+                "final_shape": final_shape,
+                "topk_last_position": indexed_topk.get(batch_index, []),
+            }
+        )
+
+    return {
+        "batch_run_index": batch_run_index,
+        "request_ids": [item["request_id"] for item in accepted],
+        "tokens_batch_json": str(tokens_batch_json),
+        "forward_summary": str(forward_summary_path),
+        "metrics": {
+            "execution_mode": forward_summary.get("execution_mode"),
+            "window_execution_mode": forward_summary.get("window_execution_mode"),
+            "child_process_count": forward_summary.get("child_process_count"),
+            "batch_count": forward_summary.get("batch_count"),
+            "wall_ms": forward_summary.get("wall_ms"),
+            "load_ms": forward_summary.get("load_ms"),
+            "run_ms": forward_summary.get("run_ms"),
+            "amortized_wall_ms_per_forward": forward_summary.get("amortized_wall_ms_per_forward"),
+            "amortized_load_ms_per_forward": forward_summary.get("amortized_load_ms_per_forward"),
+        },
+        "forward_summary_payload": forward_summary,
+        "results": results,
+    }
+
+
 def main():
     args = parse_args()
     if args.max_batch_size <= 0:
@@ -93,54 +156,52 @@ def main():
 
     output_dir.mkdir(parents=True, exist_ok=True)
     requests = read_requests(request_jsonl, args.seq_len)
-    accepted = requests[: args.max_batch_size]
-    deferred = requests[args.max_batch_size :]
-    tokens_batch_json = output_dir / "tokens_batch.json"
-    tokens_batch_json.write_text(json.dumps([item["tokens"] for item in accepted], ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
-
-    forward_dir = output_dir / "forward"
-    cmd = [
-        args.forward_cmd,
-        "--tokens-batch-json",
-        str(tokens_batch_json),
-        "--top-k",
-        str(args.top_k),
-        "--output-dir",
-        str(forward_dir),
-    ]
-    proc = subprocess.run(cmd, text=True, capture_output=True, timeout=240)
-    (output_dir / "forward.stdout").write_text(proc.stdout, encoding="utf-8")
-    (output_dir / "forward.stderr").write_text(proc.stderr, encoding="utf-8")
-    if proc.returncode != 0:
-        raise RuntimeError(f"forward command failed with exit code {proc.returncode}: {output_dir / 'forward.stderr'}")
-
-    forward_summary_path = forward_dir / "summary.json"
-    forward_summary = json.loads(forward_summary_path.read_text(encoding="utf-8"))
-    indexed_topk = topk_by_batch(forward_summary)
-    final_shapes = forward_summary.get("final_shapes", [])
+    if args.drain_all:
+        request_batches = [requests[index:index + args.max_batch_size] for index in range(0, len(requests), args.max_batch_size)]
+        deferred = []
+    else:
+        request_batches = [requests[: args.max_batch_size]]
+        deferred = requests[args.max_batch_size :]
+    batch_runs = []
     results = []
-    for batch_index, item in enumerate(accepted):
-        final_shape = final_shapes[batch_index] if batch_index < len(final_shapes) else None
-        results.append(
-            {
-                "request_id": item["request_id"],
-                "line_number": item["line_number"],
-                "batch_index": batch_index,
-                "final_shape": final_shape,
-                "topk_last_position": indexed_topk.get(batch_index, []),
-            }
-        )
+    for batch_run_index, accepted in enumerate(request_batches):
+        if not accepted:
+            continue
+        batch_run = run_forward_batch(args, output_dir, accepted, batch_run_index)
+        batch_runs.append(batch_run)
+        results.extend(batch_run["results"])
+
+    for global_batch_index, result in enumerate(results):
+        result["global_batch_index"] = global_batch_index
 
     errors = []
-    if forward_summary.get("verdict") != "ok_dream7b_segmented_hbm_python_forward":
-        errors.append(f"unexpected forward verdict: {forward_summary.get('verdict')}")
-    if forward_summary.get("execution_mode") != "pair_window_batch":
-        errors.append(f"unexpected execution_mode: {forward_summary.get('execution_mode')}")
-    if forward_summary.get("batch_count") != len(accepted):
-        errors.append(f"unexpected batch_count: {forward_summary.get('batch_count')}")
+    for batch_run in batch_runs:
+        forward_summary = batch_run["forward_summary_payload"]
+        metrics = batch_run["metrics"]
+        if forward_summary.get("verdict") != "ok_dream7b_segmented_hbm_python_forward":
+            errors.append(f"unexpected forward verdict in batch {batch_run['batch_run_index']}: {forward_summary.get('verdict')}")
+        if metrics.get("execution_mode") != "pair_window_batch":
+            errors.append(f"unexpected execution_mode in batch {batch_run['batch_run_index']}: {metrics.get('execution_mode')}")
+        if metrics.get("batch_count") != len(batch_run["request_ids"]):
+            errors.append(f"unexpected batch_count in batch {batch_run['batch_run_index']}: {metrics.get('batch_count')}")
     for result in results:
         if result["final_shape"] != [1, args.seq_len, 152064]:
             errors.append(f"unexpected final_shape for {result['request_id']}: {result['final_shape']}")
+    compact_batch_runs = []
+    for batch_run in batch_runs:
+        compact_batch_runs.append(
+            {
+                "batch_run_index": batch_run["batch_run_index"],
+                "request_ids": batch_run["request_ids"],
+                "tokens_batch_json": batch_run["tokens_batch_json"],
+                "forward_summary": batch_run["forward_summary"],
+                "metrics": batch_run["metrics"],
+            }
+        )
+    total_wall_ms = round(sum(float(item["metrics"].get("wall_ms") or 0.0) for item in batch_runs), 3)
+    total_load_ms = round(sum(float(item["metrics"].get("load_ms") or 0.0) for item in batch_runs), 3)
+    total_run_ms = round(sum(float(item["metrics"].get("run_ms") or 0.0) for item in batch_runs), 3)
+    processed_count = len(results)
 
     payload = {
         "generated_at": datetime.now().astimezone().isoformat(),
@@ -148,23 +209,21 @@ def main():
         "request_jsonl": str(request_jsonl),
         "output_dir": str(output_dir),
         "forward_command": args.forward_cmd,
-        "forward_summary": str(forward_summary_path),
-        "tokens_batch_json": str(tokens_batch_json),
+        "drain_all": bool(args.drain_all),
         "max_batch_size": args.max_batch_size,
-        "accepted_count": len(accepted),
+        "request_count": len(requests),
+        "processed_count": processed_count,
+        "accepted_count": processed_count,
         "deferred_count": len(deferred),
         "deferred_request_ids": [item["request_id"] for item in deferred],
+        "batch_run_count": len(compact_batch_runs),
+        "batch_runs": compact_batch_runs,
         "results": results,
         "forward_metrics": {
-            "execution_mode": forward_summary.get("execution_mode"),
-            "window_execution_mode": forward_summary.get("window_execution_mode"),
-            "child_process_count": forward_summary.get("child_process_count"),
-            "batch_count": forward_summary.get("batch_count"),
-            "wall_ms": forward_summary.get("wall_ms"),
-            "load_ms": forward_summary.get("load_ms"),
-            "run_ms": forward_summary.get("run_ms"),
-            "amortized_wall_ms_per_forward": forward_summary.get("amortized_wall_ms_per_forward"),
-            "amortized_load_ms_per_forward": forward_summary.get("amortized_load_ms_per_forward"),
+            "total_wall_ms": total_wall_ms,
+            "total_load_ms": total_load_ms,
+            "total_run_ms": total_run_ms,
+            "amortized_wall_ms_per_processed_request": round(total_wall_ms / processed_count, 3) if processed_count else 0.0,
         },
         "errors": errors,
     }
@@ -178,23 +237,36 @@ def main():
         f"- verdict: {payload['verdict']}",
         f"- request_jsonl: {payload['request_jsonl']}",
         f"- forward_command: {payload['forward_command']}",
-        f"- forward_summary: {payload['forward_summary']}",
+        f"- drain_all: {payload['drain_all']}",
         f"- max_batch_size: {payload['max_batch_size']}",
+        f"- request_count: {payload['request_count']}",
+        f"- processed_count: {payload['processed_count']}",
         f"- accepted_count: {payload['accepted_count']}",
         f"- deferred_count: {payload['deferred_count']}",
-        f"- execution_mode: {payload['forward_metrics']['execution_mode']}",
-        f"- window_execution_mode: {payload['forward_metrics']['window_execution_mode']}",
-        f"- child_process_count: {payload['forward_metrics']['child_process_count']}",
-        f"- wall_ms: {payload['forward_metrics']['wall_ms']}",
-        f"- amortized_wall_ms_per_forward: {payload['forward_metrics']['amortized_wall_ms_per_forward']}",
+        f"- batch_run_count: {payload['batch_run_count']}",
+        f"- total_wall_ms: {payload['forward_metrics']['total_wall_ms']}",
+        f"- amortized_wall_ms_per_processed_request: {payload['forward_metrics']['amortized_wall_ms_per_processed_request']}",
+        "",
+        "## Batch Runs",
+        "",
+        "| batch_run_index | request_ids | forward_summary | wall_ms |",
+        "| ---: | --- | --- | ---: |",
+    ]
+    for batch_run in compact_batch_runs:
+        lines.append(
+            f"| {batch_run['batch_run_index']} | {batch_run['request_ids']} | {batch_run['forward_summary']} | {batch_run['metrics'].get('wall_ms')} |"
+        )
+    lines.extend([
         "",
         "## Results",
         "",
-        "| request_id | batch_index | final_shape |",
-        "| --- | ---: | --- |",
-    ]
+        "| request_id | batch_run_index | batch_index | global_batch_index | final_shape |",
+        "| --- | ---: | ---: | ---: | --- |",
+    ])
     for result in results:
-        lines.append(f"| {result['request_id']} | {result['batch_index']} | {result['final_shape']} |")
+        lines.append(
+            f"| {result['request_id']} | {result['batch_run_index']} | {result['batch_index']} | {result['global_batch_index']} | {result['final_shape']} |"
+        )
     lines.extend(["", "## Deferred", ""])
     if deferred:
         lines.extend(f"- {item['request_id']}" for item in deferred)

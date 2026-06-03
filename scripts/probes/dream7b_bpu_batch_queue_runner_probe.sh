@@ -54,16 +54,20 @@ if data.get("deferred_count") != 1:
     errors.append(f"unexpected deferred_count: {data.get('deferred_count')}")
 if data.get("deferred_request_ids") != ["req-004"]:
     errors.append(f"unexpected deferred_request_ids: {data.get('deferred_request_ids')}")
+if data.get("batch_run_count") != 1:
+    errors.append(f"unexpected batch_run_count: {data.get('batch_run_count')}")
+batch_runs = data.get("batch_runs", [])
+first_metrics = batch_runs[0].get("metrics", {}) if batch_runs else {}
+if first_metrics.get("execution_mode") != "pair_window_batch":
+    errors.append(f"unexpected execution_mode: {first_metrics.get('execution_mode')}")
+if first_metrics.get("window_execution_mode") != "window-batch":
+    errors.append(f"unexpected window_execution_mode: {first_metrics.get('window_execution_mode')}")
+if first_metrics.get("child_process_count") != 0:
+    errors.append(f"unexpected child_process_count: {first_metrics.get('child_process_count')}")
+if first_metrics.get("batch_count") != 3:
+    errors.append(f"unexpected batch_count: {first_metrics.get('batch_count')}")
 metrics = data.get("forward_metrics", {})
-if metrics.get("execution_mode") != "pair_window_batch":
-    errors.append(f"unexpected execution_mode: {metrics.get('execution_mode')}")
-if metrics.get("window_execution_mode") != "window-batch":
-    errors.append(f"unexpected window_execution_mode: {metrics.get('window_execution_mode')}")
-if metrics.get("child_process_count") != 0:
-    errors.append(f"unexpected child_process_count: {metrics.get('child_process_count')}")
-if metrics.get("batch_count") != 3:
-    errors.append(f"unexpected batch_count: {metrics.get('batch_count')}")
-for metric in ("wall_ms", "load_ms", "run_ms", "amortized_wall_ms_per_forward", "amortized_load_ms_per_forward"):
+for metric in ("total_wall_ms", "total_load_ms", "total_run_ms", "amortized_wall_ms_per_processed_request"):
     value = metrics.get(metric)
     if not isinstance(value, (int, float)) or value <= 0:
         errors.append(f"unexpected {metric}: {value}")
@@ -85,12 +89,13 @@ payload = {
         "accepted_count": data.get("accepted_count"),
         "deferred_count": data.get("deferred_count"),
         "deferred_request_ids": data.get("deferred_request_ids"),
-        "execution_mode": metrics.get("execution_mode"),
-        "window_execution_mode": metrics.get("window_execution_mode"),
-        "child_process_count": metrics.get("child_process_count"),
-        "batch_count": metrics.get("batch_count"),
-        "wall_ms": metrics.get("wall_ms"),
-        "amortized_wall_ms_per_forward": metrics.get("amortized_wall_ms_per_forward"),
+        "batch_run_count": data.get("batch_run_count"),
+        "execution_mode": first_metrics.get("execution_mode"),
+        "window_execution_mode": first_metrics.get("window_execution_mode"),
+        "child_process_count": first_metrics.get("child_process_count"),
+        "batch_count": first_metrics.get("batch_count"),
+        "total_wall_ms": metrics.get("total_wall_ms"),
+        "amortized_wall_ms_per_processed_request": metrics.get("amortized_wall_ms_per_processed_request"),
         "result_count": len(results),
     },
 }
@@ -104,12 +109,13 @@ payload = {
         f"- accepted_count: {payload['checked']['accepted_count']}",
         f"- deferred_count: {payload['checked']['deferred_count']}",
         f"- deferred_request_ids: {payload['checked']['deferred_request_ids']}",
+        f"- batch_run_count: {payload['checked']['batch_run_count']}",
         f"- execution_mode: {payload['checked']['execution_mode']}",
         f"- window_execution_mode: {payload['checked']['window_execution_mode']}",
         f"- child_process_count: {payload['checked']['child_process_count']}",
         f"- batch_count: {payload['checked']['batch_count']}",
-        f"- wall_ms: {payload['checked']['wall_ms']}",
-        f"- amortized_wall_ms_per_forward: {payload['checked']['amortized_wall_ms_per_forward']}",
+        f"- total_wall_ms: {payload['checked']['total_wall_ms']}",
+        f"- amortized_wall_ms_per_processed_request: {payload['checked']['amortized_wall_ms_per_processed_request']}",
         f"- result_count: {payload['checked']['result_count']}",
         "",
     ]) + "\n",
