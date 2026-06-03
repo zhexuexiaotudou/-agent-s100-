@@ -32,6 +32,7 @@ required_files=(
   "scripts/probes/dream7b_bpu_batch_queue_runner_probe.sh"
   "scripts/probes/dream7b_bpu_batch_queue_drain_probe.sh"
   "scripts/probes/dream7b_bpu_batch_queue_control_probe.sh"
+  "scripts/probes/dream7b_bpu_batch_queue_lock_probe.sh"
   "scripts/startup_link_check/link-check.config.json"
   "scripts/tool_allowlist.json"
 )
@@ -57,11 +58,14 @@ required_reference_strings=(
   "--window-execution-mode"
   "--tokens-batch-json"
   "--drain-all"
+  "--bpu-lock-path"
+  "--bpu-lock-timeout-sec"
   "request_id"
   "tokens"
   "cancelled"
   "not_after_epoch_ms"
   "durable_state"
+  "bpu_lock"
   "accepted_requests.jsonl"
   "deferred_requests.jsonl"
   "skipped_requests.jsonl"
@@ -74,9 +78,10 @@ required_reference_strings=(
   "/mnt/nas/openclaw/reports/models/dream7b_bpu_fine_forward_repeat_20260603-180108/summary.md"
   "/mnt/nas/openclaw/reports/models/dream7b_bpu_fine_forward_window_batch_20260603-181131/summary.md"
   "/mnt/nas/openclaw/reports/models/dream7b_bpu_fine_batch_forward_20260603-183625/fine_batch_forward_probe.md"
-  "/mnt/nas/openclaw/reports/models/dream7b_bpu_batch_queue_runner_20260603-191243/batch_queue_runner_probe.md"
-  "/mnt/nas/openclaw/reports/models/dream7b_bpu_batch_queue_drain_20260603-191323/batch_queue_drain_probe.md"
-  "/mnt/nas/openclaw/reports/models/dream7b_bpu_batch_queue_control_20260603-190959/batch_queue_control_probe.md"
+  "/mnt/nas/openclaw/reports/models/dream7b_bpu_batch_queue_runner_20260603-193243/batch_queue_runner_probe.md"
+  "/mnt/nas/openclaw/reports/models/dream7b_bpu_batch_queue_drain_20260603-193309/batch_queue_drain_probe.md"
+  "/mnt/nas/openclaw/reports/models/dream7b_bpu_batch_queue_control_20260603-193400/batch_queue_control_probe.md"
+  "/mnt/nas/openclaw/reports/models/dream7b_bpu_batch_queue_lock_20260603-193209/batch_queue_lock_probe.md"
   "/mnt/nas/openclaw/reports/models/dream7b_bpu_fine_forward_20260603-183906/fine_forward_probe.md"
   "/mnt/nas/openclaw/reports/models/dream7b_bpu_diffusion_loop_20260603-175030/summary.md"
 )
@@ -159,6 +164,15 @@ if [[ -f scripts/dream7b_bpu_batch_queue_runner.py ]]; then
   fi
   if ! grep -F -- "durable_state" scripts/dream7b_bpu_batch_queue_runner.py >/dev/null; then
     errors+=("dream7b_bpu_batch_queue_runner.py missing durable_state")
+  fi
+  if ! grep -F -- "--bpu-lock-path" scripts/dream7b_bpu_batch_queue_runner.py >/dev/null; then
+    errors+=("dream7b_bpu_batch_queue_runner.py missing --bpu-lock-path")
+  fi
+  if ! grep -F -- "--bpu-lock-timeout-sec" scripts/dream7b_bpu_batch_queue_runner.py >/dev/null; then
+    errors+=("dream7b_bpu_batch_queue_runner.py missing --bpu-lock-timeout-sec")
+  fi
+  if ! grep -F -- "bpu_lock" scripts/dream7b_bpu_batch_queue_runner.py >/dev/null; then
+    errors+=("dream7b_bpu_batch_queue_runner.py missing bpu_lock")
   fi
 fi
 

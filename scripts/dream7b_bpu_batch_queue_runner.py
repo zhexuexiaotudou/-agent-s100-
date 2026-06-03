@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 import argparse
+import fcntl
 import json
 import subprocess
 import sys
@@ -16,6 +17,15 @@ APPROVED_OUTPUT_PREFIXES = (
     "/root/.openclaw/workspace/reports/",
 )
 
+APPROVED_LOCK_PREFIXES = (
+    "/tmp/",
+    "/run/lock/",
+    "/mnt/nas/openclaw/reports",
+    "/mnt/nas/openclaw/reports/",
+    "/root/.openclaw/workspace/reports",
+    "/root/.openclaw/workspace/reports/",
+)
+
 
 def parse_args():
     parser = argparse.ArgumentParser(description="Batch independent Dream 7B seq16 token requests through S100 BPU.")
@@ -26,12 +36,47 @@ def parse_args():
     parser.add_argument("--top-k", type=int, default=3)
     parser.add_argument("--forward-cmd", default="dream7b-bpu-fine-batch-forward")
     parser.add_argument("--drain-all", action="store_true", help="Process all requests in multiple batches instead of deferring overflow.")
+    parser.add_argument("--bpu-lock-path", default="/tmp/dream7b_bpu_batch_queue_runner.lock")
+    parser.add_argument("--bpu-lock-timeout-sec", type=float, default=600.0)
     return parser.parse_args()
 
 
 def is_approved_output_dir(path: Path) -> bool:
     text = str(path)
     return any(text == prefix.rstrip("/") or text.startswith(prefix) for prefix in APPROVED_OUTPUT_PREFIXES)
+
+
+def is_approved_lock_path(path: Path) -> bool:
+    text = str(path)
+    return any(text == prefix.rstrip("/") or text.startswith(prefix) for prefix in APPROVED_LOCK_PREFIXES)
+
+
+def acquire_bpu_lock(path: Path, timeout_sec: float):
+    path.parent.mkdir(parents=True, exist_ok=True)
+    lock_file = path.open("a+", encoding="utf-8")
+    started = time.monotonic()
+    while True:
+        try:
+            fcntl.flock(lock_file.fileno(), fcntl.LOCK_EX | fcntl.LOCK_NB)
+            wait_ms = round((time.monotonic() - started) * 1000, 3)
+            lock_file.seek(0)
+            lock_file.truncate()
+            lock_file.write(json.dumps({"acquired_at_epoch_ms": int(time.time() * 1000)}, ensure_ascii=False) + "\n")
+            lock_file.flush()
+            return lock_file, wait_ms
+        except BlockingIOError:
+            elapsed = time.monotonic() - started
+            if elapsed >= timeout_sec:
+                lock_file.close()
+                raise TimeoutError(f"timed out waiting for BPU lock: {path}")
+            time.sleep(min(0.25, max(0.0, timeout_sec - elapsed)))
+
+
+def release_bpu_lock(lock_file):
+    if lock_file is None:
+        return
+    fcntl.flock(lock_file.fileno(), fcntl.LOCK_UN)
+    lock_file.close()
 
 
 def read_requests(path: Path, seq_len: int):
@@ -189,12 +234,17 @@ def main():
         raise ValueError("--max-batch-size must be positive")
     if args.seq_len <= 0:
         raise ValueError("--seq-len must be positive")
+    if args.bpu_lock_timeout_sec < 0:
+        raise ValueError("--bpu-lock-timeout-sec must be non-negative")
     request_jsonl = Path(args.request_jsonl)
     output_dir = Path(args.output_dir)
+    bpu_lock_path = Path(args.bpu_lock_path)
     if not request_jsonl.is_file():
         raise FileNotFoundError(request_jsonl)
     if not is_approved_output_dir(output_dir):
         raise ValueError(f"Refusing output path outside approved report directories: {output_dir}")
+    if not is_approved_lock_path(bpu_lock_path):
+        raise ValueError(f"Refusing lock path outside approved lock directories: {bpu_lock_path}")
 
     output_dir.mkdir(parents=True, exist_ok=True)
     requests = read_requests(request_jsonl, args.seq_len)
@@ -208,12 +258,21 @@ def main():
         deferred = runnable_requests[args.max_batch_size :]
     batch_runs = []
     results = []
-    for batch_run_index, accepted in enumerate(request_batches):
-        if not accepted:
-            continue
-        batch_run = run_forward_batch(args, output_dir, accepted, batch_run_index)
-        batch_runs.append(batch_run)
-        results.extend(batch_run["results"])
+    lock_file = None
+    lock_wait_ms = None
+    lock_acquired = False
+    try:
+        if any(request_batches):
+            lock_file, lock_wait_ms = acquire_bpu_lock(bpu_lock_path, args.bpu_lock_timeout_sec)
+            lock_acquired = True
+        for batch_run_index, accepted in enumerate(request_batches):
+            if not accepted:
+                continue
+            batch_run = run_forward_batch(args, output_dir, accepted, batch_run_index)
+            batch_runs.append(batch_run)
+            results.extend(batch_run["results"])
+    finally:
+        release_bpu_lock(lock_file)
 
     for global_batch_index, result in enumerate(results):
         result["global_batch_index"] = global_batch_index
@@ -289,6 +348,12 @@ def main():
         "forward_command": args.forward_cmd,
         "drain_all": bool(args.drain_all),
         "max_batch_size": args.max_batch_size,
+        "bpu_lock": {
+            "path": str(bpu_lock_path),
+            "timeout_sec": args.bpu_lock_timeout_sec,
+            "acquired": lock_acquired,
+            "wait_ms": lock_wait_ms,
+        },
         "request_count": len(requests),
         "runnable_count": len(runnable_requests),
         "processed_count": processed_count,
@@ -326,6 +391,9 @@ def main():
         f"- forward_command: {payload['forward_command']}",
         f"- drain_all: {payload['drain_all']}",
         f"- max_batch_size: {payload['max_batch_size']}",
+        f"- bpu_lock_path: {payload['bpu_lock']['path']}",
+        f"- bpu_lock_acquired: {payload['bpu_lock']['acquired']}",
+        f"- bpu_lock_wait_ms: {payload['bpu_lock']['wait_ms']}",
         f"- request_count: {payload['request_count']}",
         f"- runnable_count: {payload['runnable_count']}",
         f"- processed_count: {payload['processed_count']}",
