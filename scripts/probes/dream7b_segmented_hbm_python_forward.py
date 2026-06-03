@@ -68,27 +68,40 @@ for segment in payload["resident_segments"]:
         "load_ms": round((t1 - t0) * 1000, 3),
     })
 
-current = payload["resident_segments"][0]
-runtime = runtimes[0]
-inputs = {"_input_0": input_0, "_input_1": position_ids}
-t0 = time.perf_counter()
-output = runtime.run(inputs, model_name=current["model_name"])
-t1 = time.perf_counter()
-output_name = runtime.output_names[current["model_name"]][0]
-arr = output[current["model_name"]][output_name]
-scale = first_scale(runtime, current["model_name"], output_name)
-dequantized = arr.astype(np.float32) * scale
+run_count = int(payload.get("run_count", 1))
+results = []
+dequantized = input_0
+for run_index in range(run_count):
+    current = payload["resident_segments"][run_index]
+    runtime = runtimes[run_index]
+    inputs = {"_input_0": dequantized, "_input_1": position_ids}
+    t0 = time.perf_counter()
+    output = runtime.run(inputs, model_name=current["model_name"])
+    t1 = time.perf_counter()
+    output_name = runtime.output_names[current["model_name"]][0]
+    arr = output[current["model_name"]][output_name]
+    scale = first_scale(runtime, current["model_name"], output_name)
+    dequantized = arr.astype(np.float32) * scale
+    results.append({
+        "segment": current["segment"],
+        "source": current["source"],
+        "input_kind": current["input_kind"],
+        "model_name": current["model_name"],
+        "model_file": current["model_file"],
+        "output_name": output_name,
+        "output_shape": list(arr.shape),
+        "output_dtype": str(arr.dtype),
+        "output_scale": scale,
+        "load_ms": load_events[run_index]["load_ms"],
+        "preload_events": load_events,
+        "run_ms": round((t1 - t0) * 1000, 3),
+        "resident_segments": [item["segment"] for item in payload["resident_segments"]],
+        "resident_count": len(payload["resident_segments"]),
+    })
 np.save(payload["output_path"], dequantized)
 print(json.dumps({
-    "model_name": current["model_name"],
-    "model_file": current["model_file"],
-    "output_name": output_name,
-    "output_shape": list(arr.shape),
-    "output_dtype": str(arr.dtype),
-    "output_scale": scale,
-    "load_ms": load_events[0]["load_ms"],
-    "preload_events": load_events,
-    "run_ms": round((t1 - t0) * 1000, 3),
+    "segments": results,
+    "run_count": run_count,
     "resident_segments": [item["segment"] for item in payload["resident_segments"]],
     "resident_count": len(payload["resident_segments"]),
 }, ensure_ascii=False))
@@ -105,6 +118,12 @@ def parse_args():
         type=int,
         default=1,
         help="Keep this many adjacent HBM runtimes loaded. Use 2 with --segment-plan fine-adjacent.",
+    )
+    parser.add_argument(
+        "--child-window-mode",
+        choices=("sliding", "pair"),
+        default="sliding",
+        help="With residency-window-size > 1, run one segment per child (sliding) or run each resident pair in one child (pair).",
     )
     parser.add_argument("--output-dir", default="/mnt/nas/openclaw/reports/models/dream7b_python_forward")
     parser.add_argument("--tokens-bin", default="", help="Optional int32 token-id binary with shape [1, seq_len].")
@@ -226,6 +245,7 @@ def run_window_child_segments(
     position_ids: np.ndarray,
     output_dir: Path,
     residency_window_size: int,
+    child_window_mode: str,
 ):
     work_dir = output_dir / "window_child_io"
     work_dir.mkdir(parents=True, exist_ok=True)
@@ -235,21 +255,33 @@ def run_window_child_segments(
     np.save(current_input_path, tokens)
     segment_results = []
 
-    for index, (segment_id, source, model_file, model_name, input_kind) in enumerate(segments):
+    index = 0
+    child_process_count = 0
+    while index < len(segments):
+        segment_id, source, model_file, model_name, input_kind = segments[index]
+        if child_window_mode == "pair":
+            run_count = min(residency_window_size, len(segments) - index)
+            next_index = index + run_count
+        else:
+            run_count = 1
+            next_index = index + 1
         resident_specs = []
         for resident_index in range(index, min(len(segments), index + residency_window_size)):
-            resident_segment_id, _, resident_model_file, resident_model_name, _ = segments[resident_index]
+            resident_segment_id, resident_source, resident_model_file, resident_model_name, resident_input_kind = segments[resident_index]
             if not resident_model_file.exists():
                 raise FileNotFoundError(resident_model_file)
             resident_specs.append(
                 {
                     "segment": resident_segment_id,
+                    "source": resident_source,
                     "model_file": str(resident_model_file),
                     "model_name": resident_model_name,
+                    "input_kind": resident_input_kind,
                 }
             )
 
-        output_path = work_dir / f"{segment_id}_output.npy"
+        label = "__".join(item["segment"] for item in resident_specs[:run_count])
+        output_path = work_dir / f"{label}_output.npy"
         payload = {
             "segment": segment_id,
             "source": source,
@@ -260,6 +292,7 @@ def run_window_child_segments(
             "position_path": str(position_path),
             "output_path": str(output_path),
             "resident_segments": resident_specs,
+            "run_count": run_count,
         }
         proc = subprocess.run(
             [sys.executable, "-c", WINDOW_CHILD_CODE],
@@ -268,12 +301,13 @@ def run_window_child_segments(
             capture_output=True,
             timeout=180,
         )
-        stdout_path = work_dir / f"{segment_id}.stdout"
-        stderr_path = work_dir / f"{segment_id}.stderr"
+        child_process_count += 1
+        stdout_path = work_dir / f"{label}.stdout"
+        stderr_path = work_dir / f"{label}.stderr"
         stdout_path.write_text(proc.stdout, encoding="utf-8")
         stderr_path.write_text(proc.stderr, encoding="utf-8")
         if proc.returncode != 0:
-            raise RuntimeError(f"Window child failed for {segment_id}; stderr={stderr_path}")
+            raise RuntimeError(f"Window child failed for {label}; stderr={stderr_path}")
         parsed = None
         for line in proc.stdout.splitlines()[::-1]:
             line = line.strip()
@@ -281,17 +315,18 @@ def run_window_child_segments(
                 parsed = json.loads(line)
                 break
         if parsed is None:
-            raise RuntimeError(f"Window child did not emit JSON for {segment_id}; stdout={stdout_path}")
-        parsed["segment"] = segment_id
-        parsed["source"] = source
-        parsed["input_kind"] = input_kind
-        parsed["stdout"] = str(stdout_path)
-        parsed["stderr"] = str(stderr_path)
-        segment_results.append(parsed)
+            raise RuntimeError(f"Window child did not emit JSON for {label}; stdout={stdout_path}")
+        for result in parsed["segments"]:
+            result["stdout"] = str(stdout_path)
+            result["stderr"] = str(stderr_path)
+            result["child_label"] = label
+            result["child_run_count"] = run_count
+            segment_results.append(result)
         current_input_path = output_path
+        index = next_index
 
     final = np.load(current_input_path)
-    return final, segment_results
+    return final, segment_results, child_process_count
 
 
 def main():
@@ -307,12 +342,13 @@ def main():
     tokens, tokens_source = load_tokens(args.tokens_bin, args.tokens, args.seq_len)
     position_ids = np.arange(args.seq_len, dtype=np.int32)
     if args.residency_window_size > 1:
-        hidden, segment_results = run_window_child_segments(
+        hidden, segment_results, child_process_count = run_window_child_segments(
             segments,
             tokens,
             position_ids,
             output_dir,
             args.residency_window_size,
+            args.child_window_mode,
         )
     else:
         hidden = None
@@ -376,7 +412,9 @@ def main():
         "verdict": "ok_dream7b_segmented_hbm_python_forward",
         "segment_plan": args.segment_plan,
         "residency_window_size": args.residency_window_size,
-        "execution_mode": "window_child_process" if args.residency_window_size > 1 else "in_process",
+        "child_window_mode": args.child_window_mode if args.residency_window_size > 1 else "",
+        "execution_mode": f"{args.child_window_mode}_child_process" if args.residency_window_size > 1 else "in_process",
+        "child_process_count": child_process_count if args.residency_window_size > 1 else 0,
         "hbm_dir": str(hbm_dir),
         "fine_hbm_dir": str(fine_hbm_dir),
         "output_dir": str(output_dir),

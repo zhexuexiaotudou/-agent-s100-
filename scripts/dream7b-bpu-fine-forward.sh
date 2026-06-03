@@ -4,18 +4,21 @@ set -euo pipefail
 base_hbm_dir="${DREAM7B_BPU_HBM_DIR:-/home/sunrise/.cache/openclaw/dream7b-hbm/segments6}"
 fine_hbm_dir="${DREAM7B_BPU_FINE_HBM_DIR:-/home/sunrise/.cache/openclaw/dream7b-hbm/fine-seq16}"
 window_size="${DREAM7B_BPU_FINE_WINDOW_SIZE:-2}"
+child_window_mode="${DREAM7B_BPU_FINE_CHILD_WINDOW_MODE:-pair}"
 
 args=("$@")
 has_hbm_dir=0
 has_fine_hbm_dir=0
 has_segment_plan=0
 has_window_size=0
+has_child_window_mode=0
 
 for arg in "${args[@]}"; do
   [[ "$arg" == "--hbm-dir" || "$arg" == --hbm-dir=* ]] && has_hbm_dir=1
   [[ "$arg" == "--fine-hbm-dir" || "$arg" == --fine-hbm-dir=* ]] && has_fine_hbm_dir=1
   [[ "$arg" == "--segment-plan" || "$arg" == --segment-plan=* ]] && has_segment_plan=1
   [[ "$arg" == "--residency-window-size" || "$arg" == --residency-window-size=* ]] && has_window_size=1
+  [[ "$arg" == "--child-window-mode" || "$arg" == --child-window-mode=* ]] && has_child_window_mode=1
 done
 
 if [[ "$has_hbm_dir" -eq 0 ]]; then
@@ -32,6 +35,10 @@ fi
 
 if [[ "$has_window_size" -eq 0 ]]; then
   args=(--residency-window-size "$window_size" "${args[@]}")
+fi
+
+if [[ "$has_child_window_mode" -eq 0 ]]; then
+  args=(--child-window-mode "$child_window_mode" "${args[@]}")
 fi
 
 exec dream7b-bpu-forward "${args[@]}"

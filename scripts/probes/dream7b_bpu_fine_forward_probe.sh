@@ -43,8 +43,12 @@ if data.get("segment_plan") != "fine-adjacent":
     errors.append(f"unexpected segment_plan: {data.get('segment_plan')}")
 if data.get("residency_window_size") != 2:
     errors.append(f"unexpected residency_window_size: {data.get('residency_window_size')}")
-if data.get("execution_mode") != "window_child_process":
+if data.get("execution_mode") != "pair_child_process":
     errors.append(f"unexpected execution_mode: {data.get('execution_mode')}")
+if data.get("child_window_mode") != "pair":
+    errors.append(f"unexpected child_window_mode: {data.get('child_window_mode')}")
+if data.get("child_process_count") != 5:
+    errors.append(f"unexpected child_process_count: {data.get('child_process_count')}")
 if data.get("final_shape") != [1, 16, 152064]:
     errors.append(f"unexpected final_shape: {data.get('final_shape')}")
 if len(data.get("segments", [])) != 10:
@@ -61,6 +65,8 @@ payload = {
         "segment_plan": data.get("segment_plan"),
         "residency_window_size": data.get("residency_window_size"),
         "execution_mode": data.get("execution_mode"),
+        "child_window_mode": data.get("child_window_mode"),
+        "child_process_count": data.get("child_process_count"),
         "final_shape": data.get("final_shape"),
         "segment_count": len(data.get("segments", [])),
     },
@@ -75,6 +81,8 @@ payload = {
         f"- segment_plan: {payload['checked']['segment_plan']}",
         f"- residency_window_size: {payload['checked']['residency_window_size']}",
         f"- execution_mode: {payload['checked']['execution_mode']}",
+        f"- child_window_mode: {payload['checked']['child_window_mode']}",
+        f"- child_process_count: {payload['checked']['child_process_count']}",
         f"- final_shape: {payload['checked']['final_shape']}",
         f"- segment_count: {payload['checked']['segment_count']}",
         "",
