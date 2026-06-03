@@ -21,12 +21,15 @@ required_files=(
   "scripts/dream7b-bpu-forward.sh"
   "scripts/dream7b-bpu-fine-forward.sh"
   "scripts/dream7b-bpu-fine-batch-forward.sh"
+  "scripts/dream7b-bpu-batch-queue-runner.sh"
+  "scripts/dream7b_bpu_batch_queue_runner.py"
   "scripts/dream7b-bpu-text-forward.sh"
   "scripts/probes/dream7b_segmented_hbm_python_forward.py"
   "scripts/probes/dream7b_bpu_diffusion_loop_probe.sh"
   "scripts/probes/dream7b_bpu_fine_forward_repeat_probe.sh"
   "scripts/probes/dream7b_bpu_fine_forward_window_batch_probe.sh"
   "scripts/probes/dream7b_bpu_fine_batch_forward_probe.sh"
+  "scripts/probes/dream7b_bpu_batch_queue_runner_probe.sh"
   "scripts/startup_link_check/link-check.config.json"
   "scripts/tool_allowlist.json"
 )
@@ -41,14 +44,18 @@ required_reference_strings=(
   "dream7b-bpu-forward"
   "dream7b-bpu-fine-forward"
   "dream7b-bpu-fine-batch-forward"
+  "dream7b-bpu-batch-queue-runner"
   "dream7b-bpu-text-forward"
   "dream7b-bpu-diffusion-loop-probe"
   "DREAM7B_BPU_FINE_CHILD_RUNTIME_MODE"
   "DREAM7B_BPU_FINE_WINDOW_EXECUTION_MODE"
   "DREAM7B_BPU_FINE_BATCH_WINDOW_EXECUTION_MODE"
+  "DREAM7B_BPU_BATCH_QUEUE_RUNNER_SCRIPT"
   "--child-runtime-mode"
   "--window-execution-mode"
   "--tokens-batch-json"
+  "request_id"
+  "tokens"
   "scripts/startup_link_check/link-check.config.json"
   "scripts/tool_allowlist.json"
   "docs/baseline_progress_2026-06-03_dream7b_segmented_bpu_hbm.md"
@@ -57,6 +64,7 @@ required_reference_strings=(
   "/mnt/nas/openclaw/reports/models/dream7b_bpu_fine_forward_repeat_20260603-180108/summary.md"
   "/mnt/nas/openclaw/reports/models/dream7b_bpu_fine_forward_window_batch_20260603-181131/summary.md"
   "/mnt/nas/openclaw/reports/models/dream7b_bpu_fine_batch_forward_20260603-183625/fine_batch_forward_probe.md"
+  "/mnt/nas/openclaw/reports/models/dream7b_bpu_batch_queue_runner_20260603-184659/batch_queue_runner_probe.md"
   "/mnt/nas/openclaw/reports/models/dream7b_bpu_fine_forward_20260603-183906/fine_forward_probe.md"
   "/mnt/nas/openclaw/reports/models/dream7b_bpu_diffusion_loop_20260603-175030/summary.md"
 )
@@ -112,6 +120,21 @@ if [[ -f scripts/dream7b-bpu-fine-batch-forward.sh ]]; then
   fi
   if ! grep -F -- "DREAM7B_BPU_TOKENS_BATCH_JSON" scripts/dream7b-bpu-fine-batch-forward.sh >/dev/null; then
     errors+=("dream7b-bpu-fine-batch-forward.sh missing DREAM7B_BPU_TOKENS_BATCH_JSON")
+  fi
+fi
+
+if [[ -f scripts/dream7b-bpu-batch-queue-runner.sh ]]; then
+  if ! grep -F -- "DREAM7B_BPU_BATCH_QUEUE_RUNNER_SCRIPT" scripts/dream7b-bpu-batch-queue-runner.sh >/dev/null; then
+    errors+=("dream7b-bpu-batch-queue-runner.sh missing DREAM7B_BPU_BATCH_QUEUE_RUNNER_SCRIPT")
+  fi
+fi
+
+if [[ -f scripts/dream7b_bpu_batch_queue_runner.py ]]; then
+  if ! grep -F -- "request_id" scripts/dream7b_bpu_batch_queue_runner.py >/dev/null; then
+    errors+=("dream7b_bpu_batch_queue_runner.py missing request_id")
+  fi
+  if ! grep -F -- "tokens" scripts/dream7b_bpu_batch_queue_runner.py >/dev/null; then
+    errors+=("dream7b_bpu_batch_queue_runner.py missing tokens")
   fi
 fi
 
