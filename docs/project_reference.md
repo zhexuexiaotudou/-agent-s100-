@@ -228,6 +228,28 @@ Approved output roots:
 /root/.openclaw/workspace/reports/
 ```
 
+### `dream7b-bpu-fine-forward-repeat-probe`
+
+Source file: `scripts/probes/dream7b_bpu_fine_forward_repeat_probe.sh`
+
+Run:
+
+```bash
+dream7b-bpu-fine-forward-repeat-probe /mnt/nas/openclaw/reports/models
+```
+
+Default `repeat_count` copied from the script:
+
+```text
+3
+```
+
+Latest recorded report:
+
+```text
+/mnt/nas/openclaw/reports/models/dream7b_bpu_fine_forward_repeat_20260603-180108/summary.md
+```
+
 ## Configuration Interfaces
 
 ### Startup Link Check
@@ -375,6 +397,7 @@ Evidence reports:
 ```text
 /mnt/nas/openclaw/reports/models/dream7b_bpu_fine_forward_20260603-174608/fine_forward_probe.md
 /mnt/nas/openclaw/reports/models/dream7b_bpu_fine_forward_perf_20260603-174745/summary.md
+/mnt/nas/openclaw/reports/models/dream7b_bpu_fine_forward_repeat_20260603-180108/summary.md
 /mnt/nas/openclaw/reports/models/dream7b_bpu_diffusion_loop_20260603-175030/summary.md
 ```
 
@@ -412,11 +435,12 @@ docs/baseline_progress_2026-06-03_dream7b_segmented_bpu_hbm.md
 - Verified `dream7b-bpu-fine-forward-perf-probe` report at `/mnt/nas/openclaw/reports/models/dream7b_bpu_fine_forward_perf_20260603-174745/summary.md`.
 - Verified `dream7b-bpu-diffusion-loop-probe` report at `/mnt/nas/openclaw/reports/models/dream7b_bpu_diffusion_loop_20260603-175030/summary.md`.
 - Promoted the manual in-process pair release experiment into repository code through `--window-execution-mode in-process`.
+- Verified `dream7b-bpu-fine-forward-repeat-probe` report at `/mnt/nas/openclaw/reports/models/dream7b_bpu_fine_forward_repeat_20260603-180108/summary.md`.
 
 ## TODO
 
-- Keep `--window-execution-mode child-process` as the fallback path until repeated-run evidence proves `--window-execution-mode in-process` is stable across longer runs.
-- Add repeated-run performance evidence for `fine_pair_in_process_packed`.
+- Keep `--window-execution-mode child-process` as the fallback path until longer-run evidence proves `--window-execution-mode in-process` is stable beyond the current 3-run probe.
+- Add longer repeated-run performance evidence for `fine_pair_in_process_packed`.
 - Run documentation consistency checking through `scripts/probes/project_docs_consistency_probe.sh` after each task.
 - Continue quality gates against the CPU Dream path before describing the BPU route as production text generation.
 

@@ -70,6 +70,8 @@ fine-forward probe command: /usr/local/bin/dream7b-bpu-fine-forward-probe
 fine-forward probe report: /mnt/nas/openclaw/reports/models/dream7b_bpu_fine_forward_20260603-174608/fine_forward_probe.md
 fine-forward perf command: /usr/local/bin/dream7b-bpu-fine-forward-perf-probe
 fine-forward perf report: /mnt/nas/openclaw/reports/models/dream7b_bpu_fine_forward_perf_20260603-174745/summary.md
+fine-forward repeat command: /usr/local/bin/dream7b-bpu-fine-forward-repeat-probe
+fine-forward repeat report: /mnt/nas/openclaw/reports/models/dream7b_bpu_fine_forward_repeat_20260603-180108/summary.md
 fine-forward diffusion-loop report: /mnt/nas/openclaw/reports/models/dream7b_bpu_diffusion_loop_20260603-175030/summary.md
 fine-forward quality-gate report: /mnt/nas/openclaw/reports/models/dream7b_bpu_cpu_quality_gate_20260603-160405/summary.md
 default-forward compatibility report: /mnt/nas/openclaw/reports/models/dream7b_bpu_forward_20260603-151711/summary.json
@@ -126,6 +128,7 @@ scripts/probes/dream7b_bpu_fine_residency_probe.sh
 scripts/dream7b-bpu-fine-forward.sh
 scripts/probes/dream7b_bpu_fine_forward_probe.sh
 scripts/probes/dream7b_bpu_fine_forward_perf_probe.sh
+scripts/probes/dream7b_bpu_fine_forward_repeat_probe.sh
 ```
 
 The smoke probe can be run on S100P:
@@ -606,6 +609,26 @@ final_shape: [1, 16, 152064]
 segment_count: 10
 ```
 
+The deployed fine-forward repeat check is:
+
+```bash
+dream7b-bpu-fine-forward-repeat-probe /mnt/nas/openclaw/reports/models
+```
+
+Verified repeat output:
+
+```text
+report: /mnt/nas/openclaw/reports/models/dream7b_bpu_fine_forward_repeat_20260603-180108/summary.md
+verdict: ok_dream7b_bpu_fine_forward_repeat_probe
+repeat_count: 3
+median_wall_ms: 25477.291
+median_load_ms: 24051.374
+median_run_ms: 176.018
+run_01: execution_mode=pair_in_process, window_execution_mode=in-process, child_process_count=0, final_shape=[1, 16, 152064], wall_ms=26215.101
+run_02: execution_mode=pair_in_process, window_execution_mode=in-process, child_process_count=0, final_shape=[1, 16, 152064], wall_ms=25344.291
+run_03: execution_mode=pair_in_process, window_execution_mode=in-process, child_process_count=0, final_shape=[1, 16, 152064], wall_ms=25477.291
+```
+
 The deployed diffusion loop can now select the forward backend with:
 
 ```bash
@@ -649,7 +672,7 @@ bpu remaining_mask_positions: []
 
 ## Current Boundary
 
-This is real BPU execution for real Dream 7B weights, including a complete seq16 forward chain from prompt text or token ids to logits plus verified one-step and strategy-aware bounded multi-step Dream diffusion bridges over masked positions. The path now also has a CPU/BPU quality coverage gate that records current divergence against the existing CPU Dream text path, an HBM cache performance gate that quantifies NAS versus S100P-local HBM load cost, a residency gate proving that the current six-segment split cannot be made all-resident, a fine-residency gate proving that every adjacent two-segment window can be resident, a deployed fine in-process pair forward command that runs the 10-segment fine plan to logits with 0 child processes, and fine-forward coverage in the multi-step diffusion loop plus CPU/BPU quality gate. It is not yet a complete text-generation service.
+This is real BPU execution for real Dream 7B weights, including a complete seq16 forward chain from prompt text or token ids to logits plus verified one-step and strategy-aware bounded multi-step Dream diffusion bridges over masked positions. The path now also has a CPU/BPU quality coverage gate that records current divergence against the existing CPU Dream text path, an HBM cache performance gate that quantifies NAS versus S100P-local HBM load cost, a residency gate proving that the current six-segment split cannot be made all-resident, a fine-residency gate proving that every adjacent two-segment window can be resident, a deployed fine in-process pair forward command that runs the 10-segment fine plan to logits with 0 child processes, a 3-run repeat probe for the default in-process path, and fine-forward coverage in the multi-step diffusion loop plus CPU/BPU quality gate. It is not yet a complete text-generation service.
 
 Remaining engineering work:
 

@@ -23,6 +23,7 @@ required_files=(
   "scripts/dream7b-bpu-text-forward.sh"
   "scripts/probes/dream7b_segmented_hbm_python_forward.py"
   "scripts/probes/dream7b_bpu_diffusion_loop_probe.sh"
+  "scripts/probes/dream7b_bpu_fine_forward_repeat_probe.sh"
   "scripts/startup_link_check/link-check.config.json"
   "scripts/tool_allowlist.json"
 )
@@ -47,6 +48,7 @@ required_reference_strings=(
   "docs/baseline_progress_2026-06-03_dream7b_segmented_bpu_hbm.md"
   "/mnt/nas/openclaw/reports/models/dream7b_bpu_fine_forward_20260603-174608/fine_forward_probe.md"
   "/mnt/nas/openclaw/reports/models/dream7b_bpu_fine_forward_perf_20260603-174745/summary.md"
+  "/mnt/nas/openclaw/reports/models/dream7b_bpu_fine_forward_repeat_20260603-180108/summary.md"
   "/mnt/nas/openclaw/reports/models/dream7b_bpu_diffusion_loop_20260603-175030/summary.md"
 )
 
