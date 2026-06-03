@@ -5,6 +5,7 @@ base_hbm_dir="${DREAM7B_BPU_HBM_DIR:-/home/sunrise/.cache/openclaw/dream7b-hbm/s
 fine_hbm_dir="${DREAM7B_BPU_FINE_HBM_DIR:-/home/sunrise/.cache/openclaw/dream7b-hbm/fine-seq16}"
 window_size="${DREAM7B_BPU_FINE_WINDOW_SIZE:-2}"
 child_window_mode="${DREAM7B_BPU_FINE_CHILD_WINDOW_MODE:-pair}"
+child_runtime_mode="${DREAM7B_BPU_FINE_CHILD_RUNTIME_MODE:-packed}"
 
 args=("$@")
 has_hbm_dir=0
@@ -12,6 +13,7 @@ has_fine_hbm_dir=0
 has_segment_plan=0
 has_window_size=0
 has_child_window_mode=0
+has_child_runtime_mode=0
 
 for arg in "${args[@]}"; do
   [[ "$arg" == "--hbm-dir" || "$arg" == --hbm-dir=* ]] && has_hbm_dir=1
@@ -19,6 +21,7 @@ for arg in "${args[@]}"; do
   [[ "$arg" == "--segment-plan" || "$arg" == --segment-plan=* ]] && has_segment_plan=1
   [[ "$arg" == "--residency-window-size" || "$arg" == --residency-window-size=* ]] && has_window_size=1
   [[ "$arg" == "--child-window-mode" || "$arg" == --child-window-mode=* ]] && has_child_window_mode=1
+  [[ "$arg" == "--child-runtime-mode" || "$arg" == --child-runtime-mode=* ]] && has_child_runtime_mode=1
 done
 
 if [[ "$has_hbm_dir" -eq 0 ]]; then
@@ -39,6 +42,10 @@ fi
 
 if [[ "$has_child_window_mode" -eq 0 ]]; then
   args=(--child-window-mode "$child_window_mode" "${args[@]}")
+fi
+
+if [[ "$has_child_runtime_mode" -eq 0 ]]; then
+  args=(--child-runtime-mode "$child_runtime_mode" "${args[@]}")
 fi
 
 exec dream7b-bpu-forward "${args[@]}"

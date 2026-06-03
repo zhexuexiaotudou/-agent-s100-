@@ -55,18 +55,36 @@ def first_scale(runtime, model_name, output_name):
 payload = json.loads(sys.stdin.read())
 position_ids = np.load(payload["position_path"])
 input_0 = np.load(payload["input_path"])
+child_runtime_mode = payload.get("child_runtime_mode", "separate")
 runtimes = []
 load_events = []
-for segment in payload["resident_segments"]:
+if child_runtime_mode == "packed":
+    model_files = [segment["model_file"] for segment in payload["resident_segments"]]
     t0 = time.perf_counter()
-    runtime = HB_HBMRuntime(segment["model_file"])
+    runtime = HB_HBMRuntime(model_files)
     t1 = time.perf_counter()
-    runtimes.append(runtime)
-    load_events.append({
-        "segment": segment["segment"],
-        "model_file": segment["model_file"],
-        "load_ms": round((t1 - t0) * 1000, 3),
-    })
+    load_ms = round((t1 - t0) * 1000, 3)
+    runtimes = [runtime for _ in payload["resident_segments"]]
+    for index, segment in enumerate(payload["resident_segments"]):
+        load_events.append({
+            "segment": segment["segment"],
+            "model_file": segment["model_file"],
+            "load_ms": load_ms if index == 0 else 0.0,
+            "packed_load_ms": load_ms,
+            "child_runtime_mode": child_runtime_mode,
+        })
+else:
+    for segment in payload["resident_segments"]:
+        t0 = time.perf_counter()
+        runtime = HB_HBMRuntime(segment["model_file"])
+        t1 = time.perf_counter()
+        runtimes.append(runtime)
+        load_events.append({
+            "segment": segment["segment"],
+            "model_file": segment["model_file"],
+            "load_ms": round((t1 - t0) * 1000, 3),
+            "child_runtime_mode": child_runtime_mode,
+        })
 
 run_count = int(payload.get("run_count", 1))
 results = []
@@ -93,10 +111,12 @@ for run_index in range(run_count):
         "output_dtype": str(arr.dtype),
         "output_scale": scale,
         "load_ms": load_events[run_index]["load_ms"],
+        "packed_load_ms": load_events[run_index].get("packed_load_ms", 0.0),
         "preload_events": load_events,
         "run_ms": round((t1 - t0) * 1000, 3),
         "resident_segments": [item["segment"] for item in payload["resident_segments"]],
         "resident_count": len(payload["resident_segments"]),
+        "child_runtime_mode": child_runtime_mode,
     })
 np.save(payload["output_path"], dequantized)
 print(json.dumps({
@@ -104,6 +124,7 @@ print(json.dumps({
     "run_count": run_count,
     "resident_segments": [item["segment"] for item in payload["resident_segments"]],
     "resident_count": len(payload["resident_segments"]),
+    "child_runtime_mode": child_runtime_mode,
 }, ensure_ascii=False))
 """
 
@@ -124,6 +145,12 @@ def parse_args():
         choices=("sliding", "pair"),
         default="sliding",
         help="With residency-window-size > 1, run one segment per child (sliding) or run each resident pair in one child (pair).",
+    )
+    parser.add_argument(
+        "--child-runtime-mode",
+        choices=("separate", "packed"),
+        default="separate",
+        help="With residency-window-size > 1, load resident HBM files as separate runtimes or one packed runtime.",
     )
     parser.add_argument("--output-dir", default="/mnt/nas/openclaw/reports/models/dream7b_python_forward")
     parser.add_argument("--tokens-bin", default="", help="Optional int32 token-id binary with shape [1, seq_len].")
@@ -246,6 +273,7 @@ def run_window_child_segments(
     output_dir: Path,
     residency_window_size: int,
     child_window_mode: str,
+    child_runtime_mode: str,
 ):
     work_dir = output_dir / "window_child_io"
     work_dir.mkdir(parents=True, exist_ok=True)
@@ -293,6 +321,7 @@ def run_window_child_segments(
             "output_path": str(output_path),
             "resident_segments": resident_specs,
             "run_count": run_count,
+            "child_runtime_mode": child_runtime_mode,
         }
         proc = subprocess.run(
             [sys.executable, "-c", WINDOW_CHILD_CODE],
@@ -349,6 +378,7 @@ def main():
             output_dir,
             args.residency_window_size,
             args.child_window_mode,
+            args.child_runtime_mode,
         )
     else:
         hidden = None
@@ -413,6 +443,7 @@ def main():
         "segment_plan": args.segment_plan,
         "residency_window_size": args.residency_window_size,
         "child_window_mode": args.child_window_mode if args.residency_window_size > 1 else "",
+        "child_runtime_mode": args.child_runtime_mode if args.residency_window_size > 1 else "",
         "execution_mode": f"{args.child_window_mode}_child_process" if args.residency_window_size > 1 else "in_process",
         "child_process_count": child_process_count if args.residency_window_size > 1 else 0,
         "hbm_dir": str(hbm_dir),
