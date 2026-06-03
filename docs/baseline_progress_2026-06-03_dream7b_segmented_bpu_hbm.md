@@ -64,6 +64,11 @@ fine 14:17 HBM: /mnt/nas/openclaw/models/dream7b-hbm/fine-seq16/seg14_17/dream7b
 fine 17:21 HBM: /mnt/nas/openclaw/models/dream7b-hbm/fine-seq16/seg17_21/dream7b_segment_17_21_seq16_q8.hbm
 fine-residency command: /usr/local/bin/dream7b-bpu-fine-residency-probe
 fine-residency report: /mnt/nas/openclaw/reports/models/dream7b_bpu_fine_residency_20260603-054031/summary.md
+fine-forward command: /usr/local/bin/dream7b-bpu-fine-forward
+fine-forward report: /mnt/nas/openclaw/reports/models/dream7b_bpu_forward_20260603-154303/summary.json
+fine-forward probe command: /usr/local/bin/dream7b-bpu-fine-forward-probe
+fine-forward probe report: /mnt/nas/openclaw/reports/models/dream7b_bpu_fine_forward_20260603-154831/fine_forward_probe.md
+default-forward compatibility report: /mnt/nas/openclaw/reports/models/dream7b_bpu_forward_20260603-151711/summary.json
 ```
 
 Observed one-frame infer times:
@@ -114,6 +119,8 @@ scripts/probes/dream7b_bpu_hbm_cache_perf_probe.sh
 scripts/probes/dream7b_bpu_residency_probe.sh
 scripts/probes/compile_dream_segments_seq16_fine.sh
 scripts/probes/dream7b_bpu_fine_residency_probe.sh
+scripts/dream7b-bpu-fine-forward.sh
+scripts/probes/dream7b_bpu_fine_forward_probe.sh
 ```
 
 The smoke probe can be run on S100P:
@@ -448,17 +455,80 @@ This proves the fine-split direction is useful: every adjacent window in the fin
 24:26 + 26:28
 ```
 
-It does not yet solve all-resident orchestration, because three-segment combinations still exceed the board's current load-residency limit. The next engineering target should be a sliding two-segment resident orchestrator over the fine split, not an all-segment resident orchestrator.
+It does not solve all-resident orchestration, because three-segment combinations still exceed the board's current load-residency limit. The next engineering target is a lower-overhead sliding two-segment resident orchestrator over the fine split, not an all-segment resident orchestrator.
+
+## Fine Sliding Forward
+
+The deployed fine forward entrypoint is:
+
+```bash
+dream7b-bpu-fine-forward \
+  --tokens '1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16' \
+  --top-k 5
+```
+
+It wraps `dream7b-bpu-forward` with:
+
+```text
+segment_plan: fine-adjacent
+residency_window_size: 2
+base_hbm_dir: /home/sunrise/.cache/openclaw/dream7b-hbm/segments6
+fine_hbm_dir: /home/sunrise/.cache/openclaw/dream7b-hbm/fine-seq16
+```
+
+Because `HB_HBMRuntime` does not expose an explicit release/close API, the first in-process two-segment attempt failed after the first segment with an ION allocation error while loading `seg04_07`. The working implementation uses a child process per adjacent window: each child loads the current segment plus the next segment, runs the current segment with both resident, writes the dequantized output to `.npy`, and exits so the process boundary releases BPU/ION allocations.
+
+Verified fine sliding-forward output:
+
+```text
+report: /mnt/nas/openclaw/reports/models/dream7b_bpu_forward_20260603-154303/summary.json
+verdict: ok_dream7b_segmented_hbm_python_forward
+segment_plan: fine-adjacent
+residency_window_size: 2
+execution_mode: window_child_process
+segments: 10
+final_shape: [1, 16, 152064]
+top_k: 5
+```
+
+The same deployed Python script remains compatible with the existing six-segment entrypoint:
+
+```text
+report: /mnt/nas/openclaw/reports/models/dream7b_bpu_forward_20260603-151711/summary.json
+verdict: ok_dream7b_segmented_hbm_python_forward
+segment_plan: segments6
+residency_window_size: 1
+execution_mode: in_process
+segments: 6
+final_shape: [1, 16, 152064]
+```
+
+The deployed fine-forward check probe is:
+
+```bash
+dream7b-bpu-fine-forward-probe /mnt/nas/openclaw/reports/models
+```
+
+Verified probe output:
+
+```text
+report: /mnt/nas/openclaw/reports/models/dream7b_bpu_fine_forward_20260603-154831/fine_forward_probe.md
+verdict: ok_dream7b_bpu_fine_forward_probe
+segment_plan: fine-adjacent
+residency_window_size: 2
+execution_mode: window_child_process
+final_shape: [1, 16, 152064]
+segment_count: 10
+```
 
 ## Current Boundary
 
-This is real BPU execution for real Dream 7B weights, including a complete seq16 forward chain from prompt text or token ids to logits plus verified one-step and strategy-aware bounded multi-step Dream diffusion bridges over masked positions. The path now also has a CPU/BPU quality coverage gate that records current divergence against the existing CPU Dream text path, an HBM cache performance gate that quantifies NAS versus S100P-local HBM load cost, a residency gate proving that the current six-segment split cannot be made all-resident, and a fine-residency gate proving that smaller tail segments reduce residency pressure. The Python prototype uses `HB_HBMRuntime`, dequantizes each S16 segment output back to F32, and explicitly releases each HBM before loading the next one to stay inside S100P BPU/ION memory limits. It is not yet a complete text-generation service.
+This is real BPU execution for real Dream 7B weights, including a complete seq16 forward chain from prompt text or token ids to logits plus verified one-step and strategy-aware bounded multi-step Dream diffusion bridges over masked positions. The path now also has a CPU/BPU quality coverage gate that records current divergence against the existing CPU Dream text path, an HBM cache performance gate that quantifies NAS versus S100P-local HBM load cost, a residency gate proving that the current six-segment split cannot be made all-resident, a fine-residency gate proving that every adjacent two-segment window can be resident, and a deployed fine sliding-forward command that runs the 10-segment fine plan to logits. It is not yet a complete text-generation service.
 
 Remaining engineering work:
 
-- turn the verified Python forward prototype into the production host-side segment orchestrator;
-- reduce or remove per-step HBM load/release overhead; local cache helps but does not remove the bottleneck;
-- do not assume all-segment residency is viable yet; current fine split makes every adjacent two-segment window viable, but three-segment residency still fails;
+- reduce the child-process and per-window HBM reload overhead in `dream7b-bpu-fine-forward`;
+- keep all-segment residency out of the plan unless HBRT/HBDK exposes stronger release or streaming APIs; current fine split makes every adjacent two-segment window viable, but three-segment residency still fails;
 - reduce or remove S16->F32 handoff overhead between segments;
 - add quality gates against the existing CPU Dream output path and decide acceptable divergence for seq16 BPU probes;
 - benchmark with production prompt/token settings, not only dummy seq16 smoke input.

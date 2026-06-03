@@ -1,0 +1,37 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+base_hbm_dir="${DREAM7B_BPU_HBM_DIR:-/home/sunrise/.cache/openclaw/dream7b-hbm/segments6}"
+fine_hbm_dir="${DREAM7B_BPU_FINE_HBM_DIR:-/home/sunrise/.cache/openclaw/dream7b-hbm/fine-seq16}"
+window_size="${DREAM7B_BPU_FINE_WINDOW_SIZE:-2}"
+
+args=("$@")
+has_hbm_dir=0
+has_fine_hbm_dir=0
+has_segment_plan=0
+has_window_size=0
+
+for arg in "${args[@]}"; do
+  [[ "$arg" == "--hbm-dir" || "$arg" == --hbm-dir=* ]] && has_hbm_dir=1
+  [[ "$arg" == "--fine-hbm-dir" || "$arg" == --fine-hbm-dir=* ]] && has_fine_hbm_dir=1
+  [[ "$arg" == "--segment-plan" || "$arg" == --segment-plan=* ]] && has_segment_plan=1
+  [[ "$arg" == "--residency-window-size" || "$arg" == --residency-window-size=* ]] && has_window_size=1
+done
+
+if [[ "$has_hbm_dir" -eq 0 ]]; then
+  args=(--hbm-dir "$base_hbm_dir" "${args[@]}")
+fi
+
+if [[ "$has_fine_hbm_dir" -eq 0 ]]; then
+  args=(--fine-hbm-dir "$fine_hbm_dir" "${args[@]}")
+fi
+
+if [[ "$has_segment_plan" -eq 0 ]]; then
+  args=(--segment-plan fine-adjacent "${args[@]}")
+fi
+
+if [[ "$has_window_size" -eq 0 ]]; then
+  args=(--residency-window-size "$window_size" "${args[@]}")
+fi
+
+exec dream7b-bpu-forward "${args[@]}"
