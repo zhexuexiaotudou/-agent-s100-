@@ -278,6 +278,27 @@ agent 每次执行后应记录：
 
 License: MIT.
 
+## Project Reference And Documentation Audit
+
+Current project reference entrypoints:
+
+- [docs/project_reference.md](docs/project_reference.md): command interfaces, configuration keys, architecture, decisions, development log, requirements, and TODOs.
+- [docs/documentation_audit_runbook.md](docs/documentation_audit_runbook.md): post-task documentation verification workflow.
+- [docs/baseline_progress_2026-06-03_dream7b_segmented_bpu_hbm.md](docs/baseline_progress_2026-06-03_dream7b_segmented_bpu_hbm.md): current Dream 7B segmented S100 BPU HBM evidence.
+- [scripts/probes/project_docs_consistency_probe.sh](scripts/probes/project_docs_consistency_probe.sh): repeatable documentation consistency probe.
+
+Documentation rule:
+
+- Do not guess identifiers such as command names, JSON keys, environment variables, paths, fields, services, or model names.
+- Before writing an identifier, read the related source file, config file, runtime report, or log and copy the exact spelling.
+- After each task that changes code, scripts, config, reports, decisions, or requirements, run:
+
+```bash
+bash scripts/probes/project_docs_consistency_probe.sh /tmp/project_docs_consistency
+```
+
+If the check is not run, the task note must say why.
+
 ## 2026-05-27 Baseline Additions
 
 New OpenClaw + NAS baseline artifacts:
