@@ -74,6 +74,10 @@ fine-forward repeat command: /usr/local/bin/dream7b-bpu-fine-forward-repeat-prob
 fine-forward repeat report: /mnt/nas/openclaw/reports/models/dream7b_bpu_fine_forward_repeat_20260603-180108/summary.md
 fine-forward window-batch command: /usr/local/bin/dream7b-bpu-fine-forward-window-batch-probe
 fine-forward window-batch report: /mnt/nas/openclaw/reports/models/dream7b_bpu_fine_forward_window_batch_20260603-181131/summary.md
+fine-batch-forward command: /usr/local/bin/dream7b-bpu-fine-batch-forward
+fine-batch-forward probe command: /usr/local/bin/dream7b-bpu-fine-batch-forward-probe
+fine-batch-forward probe report: /mnt/nas/openclaw/reports/models/dream7b_bpu_fine_batch_forward_20260603-183625/fine_batch_forward_probe.md
+post-batch fine-forward compatibility report: /mnt/nas/openclaw/reports/models/dream7b_bpu_fine_forward_20260603-183906/fine_forward_probe.md
 fine-forward diffusion-loop report: /mnt/nas/openclaw/reports/models/dream7b_bpu_diffusion_loop_20260603-175030/summary.md
 fine-forward quality-gate report: /mnt/nas/openclaw/reports/models/dream7b_bpu_cpu_quality_gate_20260603-160405/summary.md
 default-forward compatibility report: /mnt/nas/openclaw/reports/models/dream7b_bpu_forward_20260603-151711/summary.json
@@ -132,6 +136,8 @@ scripts/probes/dream7b_bpu_fine_forward_probe.sh
 scripts/probes/dream7b_bpu_fine_forward_perf_probe.sh
 scripts/probes/dream7b_bpu_fine_forward_repeat_probe.sh
 scripts/probes/dream7b_bpu_fine_forward_window_batch_probe.sh
+scripts/dream7b-bpu-fine-batch-forward.sh
+scripts/probes/dream7b_bpu_fine_batch_forward_probe.sh
 ```
 
 The smoke probe can be run on S100P:
@@ -659,6 +665,61 @@ final_shapes: [[1, 16, 152064], [1, 16, 152064], [1, 16, 152064]]
 
 This proves a throughput direction for concurrent independent seq16 inputs: load each resident pair once, run that pair for multiple inputs, then release the runtime. It does not reduce reload cost for a single dependent Dream diffusion request.
 
+The reusable batch wrapper for that path is:
+
+```bash
+dream7b-bpu-fine-batch-forward \
+  --tokens-batch-json /mnt/nas/openclaw/reports/models/dream7b_bpu_fine_batch_forward_20260603-183625/tokens_batch.json \
+  --top-k 3 \
+  --output-dir /mnt/nas/openclaw/reports/models/dream7b_bpu_fine_batch_forward_20260603-183625
+```
+
+It wraps `dream7b-bpu-forward` with:
+
+```text
+segment_plan: fine-adjacent
+residency_window_size: 2
+child_window_mode: pair
+child_runtime_mode: packed
+window_execution_mode: window-batch
+tokens_batch_json: /mnt/nas/openclaw/reports/models/dream7b_bpu_fine_batch_forward_20260603-183625/tokens_batch.json
+```
+
+Verified fine batch-forward output:
+
+```text
+report: /mnt/nas/openclaw/reports/models/dream7b_bpu_fine_batch_forward_20260603-183625/fine_batch_forward_probe.md
+summary: /mnt/nas/openclaw/reports/models/dream7b_bpu_fine_batch_forward_20260603-183625/summary.json
+verdict: ok_dream7b_bpu_fine_batch_forward_probe
+segment_plan: fine-adjacent
+residency_window_size: 2
+execution_mode: pair_window_batch
+window_execution_mode: window-batch
+child_window_mode: pair
+child_runtime_mode: packed
+child_process_count: 0
+batch_count: 3
+wall_ms: 24495.731
+load_ms: 23776.245
+run_ms: 522.62
+amortized_wall_ms_per_forward: 8165.244
+amortized_load_ms_per_forward: 7925.415
+final_shapes: [[1, 16, 152064], [1, 16, 152064], [1, 16, 152064]]
+segment_event_count: 30
+```
+
+The default single-input fine-forward path was re-verified after adding `--tokens-batch-json`, `--window-execution-mode window-batch`, and timing fields:
+
+```text
+report: /mnt/nas/openclaw/reports/models/dream7b_bpu_fine_forward_20260603-183906/fine_forward_probe.md
+verdict: ok_dream7b_bpu_fine_forward_probe
+execution_mode: pair_in_process
+window_execution_mode: in-process
+child_process_count: 0
+final_shape: [1, 16, 152064]
+segment_count: 10
+```
+
 The deployed diffusion loop can now select the forward backend with:
 
 ```bash
@@ -702,12 +763,12 @@ bpu remaining_mask_positions: []
 
 ## Current Boundary
 
-This is real BPU execution for real Dream 7B weights, including a complete seq16 forward chain from prompt text or token ids to logits plus verified one-step and strategy-aware bounded multi-step Dream diffusion bridges over masked positions. The path now also has a CPU/BPU quality coverage gate that records current divergence against the existing CPU Dream text path, an HBM cache performance gate that quantifies NAS versus S100P-local HBM load cost, a residency gate proving that the current six-segment split cannot be made all-resident, a fine-residency gate proving that every adjacent two-segment window can be resident, a deployed fine in-process pair forward command that runs the 10-segment fine plan to logits with 0 child processes, a 3-run repeat probe for the default in-process path, a window-batch throughput probe for concurrent independent seq16 inputs, and fine-forward coverage in the multi-step diffusion loop plus CPU/BPU quality gate. It is not yet a complete text-generation service.
+This is real BPU execution for real Dream 7B weights, including a complete seq16 forward chain from prompt text or token ids to logits plus verified one-step and strategy-aware bounded multi-step Dream diffusion bridges over masked positions. The path now also has a CPU/BPU quality coverage gate that records current divergence against the existing CPU Dream text path, an HBM cache performance gate that quantifies NAS versus S100P-local HBM load cost, a residency gate proving that the current six-segment split cannot be made all-resident, a fine-residency gate proving that every adjacent two-segment window can be resident, a deployed fine in-process pair forward command that runs the 10-segment fine plan to logits with 0 child processes, a 3-run repeat probe for the default in-process path, a window-batch throughput probe for concurrent independent seq16 inputs, a reusable `dream7b-bpu-fine-batch-forward` wrapper for JSON token batches, and fine-forward coverage in the multi-step diffusion loop plus CPU/BPU quality gate. It is not yet a complete text-generation service.
 
 Remaining engineering work:
 
 - continue reducing per-window HBM reload overhead in `dream7b-bpu-fine-forward`; in-process pair mode removed child-process overhead but still reloads HBM per resident pair;
-- use `dream7b-bpu-fine-forward-window-batch-probe` evidence for concurrent independent-request batching, but do not treat it as a single-request Dream diffusion speedup;
+- wire `dream7b-bpu-fine-batch-forward` into a service-level batching design for concurrent independent seq16 inputs, but do not treat it as a single-request Dream diffusion speedup;
 - keep all-segment residency out of the plan unless HBRT/HBDK exposes stronger release or streaming APIs; current fine split makes every adjacent two-segment window viable, but three-segment residency still fails;
 - reduce or remove S16->F32 handoff overhead between segments;
 - add quality gates against the existing CPU Dream output path and decide acceptable divergence for seq16 BPU probes;

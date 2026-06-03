@@ -20,11 +20,13 @@ required_files=(
   "docs/baseline_progress_2026-06-03_dream7b_segmented_bpu_hbm.md"
   "scripts/dream7b-bpu-forward.sh"
   "scripts/dream7b-bpu-fine-forward.sh"
+  "scripts/dream7b-bpu-fine-batch-forward.sh"
   "scripts/dream7b-bpu-text-forward.sh"
   "scripts/probes/dream7b_segmented_hbm_python_forward.py"
   "scripts/probes/dream7b_bpu_diffusion_loop_probe.sh"
   "scripts/probes/dream7b_bpu_fine_forward_repeat_probe.sh"
   "scripts/probes/dream7b_bpu_fine_forward_window_batch_probe.sh"
+  "scripts/probes/dream7b_bpu_fine_batch_forward_probe.sh"
   "scripts/startup_link_check/link-check.config.json"
   "scripts/tool_allowlist.json"
 )
@@ -38,12 +40,15 @@ required_readme_strings=(
 required_reference_strings=(
   "dream7b-bpu-forward"
   "dream7b-bpu-fine-forward"
+  "dream7b-bpu-fine-batch-forward"
   "dream7b-bpu-text-forward"
   "dream7b-bpu-diffusion-loop-probe"
   "DREAM7B_BPU_FINE_CHILD_RUNTIME_MODE"
   "DREAM7B_BPU_FINE_WINDOW_EXECUTION_MODE"
+  "DREAM7B_BPU_FINE_BATCH_WINDOW_EXECUTION_MODE"
   "--child-runtime-mode"
   "--window-execution-mode"
+  "--tokens-batch-json"
   "scripts/startup_link_check/link-check.config.json"
   "scripts/tool_allowlist.json"
   "docs/baseline_progress_2026-06-03_dream7b_segmented_bpu_hbm.md"
@@ -51,6 +56,8 @@ required_reference_strings=(
   "/mnt/nas/openclaw/reports/models/dream7b_bpu_fine_forward_perf_20260603-174745/summary.md"
   "/mnt/nas/openclaw/reports/models/dream7b_bpu_fine_forward_repeat_20260603-180108/summary.md"
   "/mnt/nas/openclaw/reports/models/dream7b_bpu_fine_forward_window_batch_20260603-181131/summary.md"
+  "/mnt/nas/openclaw/reports/models/dream7b_bpu_fine_batch_forward_20260603-183625/fine_batch_forward_probe.md"
+  "/mnt/nas/openclaw/reports/models/dream7b_bpu_fine_forward_20260603-183906/fine_forward_probe.md"
   "/mnt/nas/openclaw/reports/models/dream7b_bpu_diffusion_loop_20260603-175030/summary.md"
 )
 
@@ -85,6 +92,9 @@ if [[ -f scripts/probes/dream7b_segmented_hbm_python_forward.py ]]; then
   if ! grep -F -- "--window-execution-mode" scripts/probes/dream7b_segmented_hbm_python_forward.py >/dev/null; then
     errors+=("dream7b_segmented_hbm_python_forward.py missing --window-execution-mode")
   fi
+  if ! grep -F -- "--tokens-batch-json" scripts/probes/dream7b_segmented_hbm_python_forward.py >/dev/null; then
+    errors+=("dream7b_segmented_hbm_python_forward.py missing --tokens-batch-json")
+  fi
 fi
 
 if [[ -f scripts/dream7b-bpu-fine-forward.sh ]]; then
@@ -93,6 +103,15 @@ if [[ -f scripts/dream7b-bpu-fine-forward.sh ]]; then
   fi
   if ! grep -F -- "DREAM7B_BPU_FINE_WINDOW_EXECUTION_MODE" scripts/dream7b-bpu-fine-forward.sh >/dev/null; then
     errors+=("dream7b-bpu-fine-forward.sh missing DREAM7B_BPU_FINE_WINDOW_EXECUTION_MODE")
+  fi
+fi
+
+if [[ -f scripts/dream7b-bpu-fine-batch-forward.sh ]]; then
+  if ! grep -F -- "DREAM7B_BPU_FINE_BATCH_WINDOW_EXECUTION_MODE" scripts/dream7b-bpu-fine-batch-forward.sh >/dev/null; then
+    errors+=("dream7b-bpu-fine-batch-forward.sh missing DREAM7B_BPU_FINE_BATCH_WINDOW_EXECUTION_MODE")
+  fi
+  if ! grep -F -- "DREAM7B_BPU_TOKENS_BATCH_JSON" scripts/dream7b-bpu-fine-batch-forward.sh >/dev/null; then
+    errors+=("dream7b-bpu-fine-batch-forward.sh missing DREAM7B_BPU_TOKENS_BATCH_JSON")
   fi
 fi
 

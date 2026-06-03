@@ -89,6 +89,7 @@ Forwarded options recognized by `scripts/probes/dream7b_segmented_hbm_python_for
 --output-dir
 --tokens-bin
 --tokens
+--tokens-batch-json
 --seq-len
 --hidden-size
 --vocab-size
@@ -132,6 +133,63 @@ Default arguments injected by the wrapper when they are absent:
 --child-window-mode pair
 --child-runtime-mode packed
 --window-execution-mode in-process
+```
+
+### `dream7b-bpu-fine-batch-forward`
+
+Source file: `scripts/dream7b-bpu-fine-batch-forward.sh`
+
+Environment variables copied from the script:
+
+```text
+DREAM7B_BPU_HBM_DIR
+DREAM7B_BPU_FINE_HBM_DIR
+DREAM7B_BPU_FINE_BATCH_WINDOW_SIZE
+DREAM7B_BPU_FINE_BATCH_CHILD_WINDOW_MODE
+DREAM7B_BPU_FINE_BATCH_CHILD_RUNTIME_MODE
+DREAM7B_BPU_FINE_BATCH_WINDOW_EXECUTION_MODE
+DREAM7B_BPU_TOKENS_BATCH_JSON
+```
+
+Default values copied from the script:
+
+```text
+/home/sunrise/.cache/openclaw/dream7b-hbm/segments6
+/home/sunrise/.cache/openclaw/dream7b-hbm/fine-seq16
+2
+pair
+packed
+window-batch
+```
+
+Default arguments injected by the wrapper when they are absent:
+
+```text
+--hbm-dir
+--fine-hbm-dir
+--segment-plan fine-adjacent
+--residency-window-size 2
+--child-window-mode pair
+--child-runtime-mode packed
+--window-execution-mode window-batch
+```
+
+Conditional argument injected by the wrapper when `DREAM7B_BPU_TOKENS_BATCH_JSON` is set and `--tokens-batch-json` is absent:
+
+```text
+--tokens-batch-json
+```
+
+Input schema for `--tokens-batch-json` copied from `scripts/probes/dream7b_segmented_hbm_python_forward.py`:
+
+```text
+JSON list containing one or more token-id lists, each with seq_len entries.
+```
+
+Latest recorded probe:
+
+```text
+/mnt/nas/openclaw/reports/models/dream7b_bpu_fine_batch_forward_20260603-183625/fine_batch_forward_probe.md
 ```
 
 ### `dream7b-bpu-text-forward`
@@ -273,6 +331,22 @@ Latest recorded report:
 ```
 
 Boundary: this is a throughput probe for independent seq16 inputs. It does not reduce reload cost for a single dependent Dream diffusion request.
+
+### `dream7b-bpu-fine-batch-forward-probe`
+
+Source file: `scripts/probes/dream7b_bpu_fine_batch_forward_probe.sh`
+
+Run:
+
+```bash
+dream7b-bpu-fine-batch-forward-probe /mnt/nas/openclaw/reports/models
+```
+
+Latest recorded report:
+
+```text
+/mnt/nas/openclaw/reports/models/dream7b_bpu_fine_batch_forward_20260603-183625/fine_batch_forward_probe.md
+```
 
 ## Configuration Interfaces
 
@@ -423,6 +497,8 @@ Evidence reports:
 /mnt/nas/openclaw/reports/models/dream7b_bpu_fine_forward_perf_20260603-174745/summary.md
 /mnt/nas/openclaw/reports/models/dream7b_bpu_fine_forward_repeat_20260603-180108/summary.md
 /mnt/nas/openclaw/reports/models/dream7b_bpu_fine_forward_window_batch_20260603-181131/summary.md
+/mnt/nas/openclaw/reports/models/dream7b_bpu_fine_batch_forward_20260603-183625/fine_batch_forward_probe.md
+/mnt/nas/openclaw/reports/models/dream7b_bpu_fine_forward_20260603-183906/fine_forward_probe.md
 /mnt/nas/openclaw/reports/models/dream7b_bpu_diffusion_loop_20260603-175030/summary.md
 ```
 
@@ -462,12 +538,15 @@ docs/baseline_progress_2026-06-03_dream7b_segmented_bpu_hbm.md
 - Promoted the manual in-process pair release experiment into repository code through `--window-execution-mode in-process`.
 - Verified `dream7b-bpu-fine-forward-repeat-probe` report at `/mnt/nas/openclaw/reports/models/dream7b_bpu_fine_forward_repeat_20260603-180108/summary.md`.
 - Verified `dream7b-bpu-fine-forward-window-batch-probe` report at `/mnt/nas/openclaw/reports/models/dream7b_bpu_fine_forward_window_batch_20260603-181131/summary.md`.
+- Promoted the window-batch throughput path into `dream7b-bpu-fine-batch-forward`.
+- Verified `dream7b-bpu-fine-batch-forward-probe` report at `/mnt/nas/openclaw/reports/models/dream7b_bpu_fine_batch_forward_20260603-183625/fine_batch_forward_probe.md`.
+- Re-verified `dream7b-bpu-fine-forward-probe` report at `/mnt/nas/openclaw/reports/models/dream7b_bpu_fine_forward_20260603-183906/fine_forward_probe.md` after adding `--tokens-batch-json`, `--window-execution-mode window-batch`, and timing fields.
 
 ## TODO
 
 - Keep `--window-execution-mode child-process` as the fallback path until longer-run evidence proves `--window-execution-mode in-process` is stable beyond the current 3-run probe.
 - Add longer repeated-run performance evidence for `fine_pair_in_process_packed`.
-- Convert the window-batch throughput proof into a service-level batching design only for independent concurrent seq16 inputs.
+- Wire `dream7b-bpu-fine-batch-forward` into a service-level batching design only for independent concurrent seq16 inputs.
 - Run documentation consistency checking through `scripts/probes/project_docs_consistency_probe.sh` after each task.
 - Continue quality gates against the CPU Dream path before describing the BPU route as production text generation.
 

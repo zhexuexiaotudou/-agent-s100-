@@ -285,6 +285,7 @@ Current project reference entrypoints:
 - [docs/project_reference.md](docs/project_reference.md): command interfaces, configuration keys, architecture, decisions, development log, requirements, and TODOs.
 - [docs/documentation_audit_runbook.md](docs/documentation_audit_runbook.md): post-task documentation verification workflow.
 - [docs/baseline_progress_2026-06-03_dream7b_segmented_bpu_hbm.md](docs/baseline_progress_2026-06-03_dream7b_segmented_bpu_hbm.md): current Dream 7B segmented S100 BPU HBM evidence.
+- [scripts/dream7b-bpu-fine-batch-forward.sh](scripts/dream7b-bpu-fine-batch-forward.sh): reusable Dream 7B fine-split BPU batch forward wrapper for independent seq16 token batches.
 - [scripts/probes/project_docs_consistency_probe.sh](scripts/probes/project_docs_consistency_probe.sh): repeatable documentation consistency probe.
 
 Documentation rule:

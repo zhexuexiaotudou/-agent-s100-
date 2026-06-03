@@ -62,9 +62,11 @@ Use these files before changing documentation:
 ```text
 scripts/dream7b-bpu-forward.sh
 scripts/dream7b-bpu-fine-forward.sh
+scripts/dream7b-bpu-fine-batch-forward.sh
 scripts/dream7b-bpu-text-forward.sh
 scripts/probes/dream7b_segmented_hbm_python_forward.py
 scripts/probes/dream7b_bpu_diffusion_loop_probe.sh
+scripts/probes/dream7b_bpu_fine_batch_forward_probe.sh
 scripts/startup_link_check/link-check.config.json
 scripts/tool_allowlist.json
 docs/baseline_progress_2026-06-03_dream7b_segmented_bpu_hbm.md

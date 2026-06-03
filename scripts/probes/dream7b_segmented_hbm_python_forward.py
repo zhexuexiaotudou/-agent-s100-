@@ -154,13 +154,14 @@ def parse_args():
     )
     parser.add_argument(
         "--window-execution-mode",
-        choices=("child-process", "in-process"),
+        choices=("child-process", "in-process", "window-batch"),
         default="child-process",
-        help="With residency-window-size > 1, run resident windows in child processes or in the current Python process.",
+        help="With residency-window-size > 1, run resident windows in child processes, in the current Python process, or in window-major batch mode.",
     )
     parser.add_argument("--output-dir", default="/mnt/nas/openclaw/reports/models/dream7b_python_forward")
     parser.add_argument("--tokens-bin", default="", help="Optional int32 token-id binary with shape [1, seq_len].")
     parser.add_argument("--tokens", default="", help="Optional comma or whitespace separated token ids with length seq_len.")
+    parser.add_argument("--tokens-batch-json", default="", help="Optional JSON file containing a list of seq_len token-id lists.")
     parser.add_argument("--seq-len", type=int, default=16)
     parser.add_argument("--hidden-size", type=int, default=3584)
     parser.add_argument("--vocab-size", type=int, default=152064)
@@ -195,9 +196,29 @@ def parse_token_values(text: str) -> np.ndarray:
     return np.asarray(values, dtype=np.int32)
 
 
-def load_tokens(path: str, token_text: str, seq_len: int) -> tuple[np.ndarray, str]:
-    if path and token_text:
-        raise ValueError("Use either --tokens-bin or --tokens, not both.")
+def load_tokens_batch_json(path: str, seq_len: int) -> np.ndarray:
+    payload = json.loads(Path(path).read_text(encoding="utf-8"))
+    if not isinstance(payload, list):
+        raise ValueError("--tokens-batch-json must contain a JSON list")
+    rows = []
+    for index, row in enumerate(payload):
+        if not isinstance(row, list):
+            raise ValueError(f"--tokens-batch-json row {index} is not a JSON list")
+        if len(row) != seq_len:
+            raise ValueError(f"--tokens-batch-json row {index} expected {seq_len} token ids, got {len(row)}")
+        rows.append([int(item) for item in row])
+    if not rows:
+        raise ValueError("--tokens-batch-json must contain at least one token row")
+    return np.asarray(rows, dtype=np.int32)
+
+
+def load_tokens(path: str, token_text: str, tokens_batch_json: str, seq_len: int) -> tuple[np.ndarray, str, int]:
+    input_count = sum(1 for item in (path, token_text, tokens_batch_json) if item)
+    if input_count > 1:
+        raise ValueError("Use only one of --tokens-bin, --tokens, or --tokens-batch-json.")
+    if tokens_batch_json:
+        data = load_tokens_batch_json(tokens_batch_json, seq_len)
+        return data, tokens_batch_json, int(data.shape[0])
     if token_text:
         data = parse_token_values(token_text)
         source = "tokens_arg"
@@ -211,7 +232,7 @@ def load_tokens(path: str, token_text: str, seq_len: int) -> tuple[np.ndarray, s
     expected = seq_len
     if data.size != expected:
         raise ValueError(f"Expected {expected} int32 token ids, got {data.size}: {source}")
-    return data.reshape(1, seq_len), source
+    return data.reshape(1, seq_len), source, 1
 
 
 def first_scale(runtime: HB_HBMRuntime, model_name: str, output_name: str) -> float:
@@ -480,6 +501,89 @@ def run_window_in_process_segments(
     return current_input, segment_results, 0
 
 
+def run_window_batch_in_process_segments(
+    segments,
+    tokens_batch: np.ndarray,
+    position_ids: np.ndarray,
+    residency_window_size: int,
+    child_window_mode: str,
+    child_runtime_mode: str,
+):
+    if child_window_mode != "pair":
+        raise ValueError("--window-execution-mode window-batch requires --child-window-mode pair")
+    if child_runtime_mode != "packed":
+        raise ValueError("--window-execution-mode window-batch requires --child-runtime-mode packed")
+    current_inputs = [tokens_batch[index].reshape(1, position_ids.shape[0]).copy() for index in range(tokens_batch.shape[0])]
+    segment_results = []
+
+    index = 0
+    while index < len(segments):
+        run_count = min(residency_window_size, len(segments) - index)
+        next_index = index + run_count
+        resident_specs = []
+        for resident_index in range(index, next_index):
+            resident_segment_id, resident_source, resident_model_file, resident_model_name, resident_input_kind = segments[resident_index]
+            if not resident_model_file.exists():
+                raise FileNotFoundError(resident_model_file)
+            resident_specs.append(
+                {
+                    "segment": resident_segment_id,
+                    "source": resident_source,
+                    "model_file": resident_model_file,
+                    "model_name": resident_model_name,
+                    "input_kind": resident_input_kind,
+                }
+            )
+
+        model_files = [str(item["model_file"]) for item in resident_specs]
+        t0 = time.perf_counter()
+        runtime = HB_HBMRuntime(model_files)
+        t1 = time.perf_counter()
+        packed_load_ms = round((t1 - t0) * 1000, 3)
+        try:
+            for batch_index, current_input in enumerate(current_inputs):
+                dequantized = current_input
+                for run_index, current in enumerate(resident_specs):
+                    inputs = {"_input_0": dequantized, "_input_1": position_ids}
+                    t2 = time.perf_counter()
+                    output = runtime.run(inputs, model_name=current["model_name"])
+                    t3 = time.perf_counter()
+                    output_name = runtime.output_names[current["model_name"]][0]
+                    arr = output[current["model_name"]][output_name]
+                    scale = first_scale(runtime, current["model_name"], output_name)
+                    dequantized = arr.astype(np.float32) * scale
+                    segment_results.append(
+                        {
+                            "batch_index": batch_index,
+                            "segment": current["segment"],
+                            "source": current["source"],
+                            "input_kind": current["input_kind"],
+                            "model_name": current["model_name"],
+                            "model_file": str(current["model_file"]),
+                            "output_name": output_name,
+                            "output_shape": list(arr.shape),
+                            "output_dtype": str(arr.dtype),
+                            "output_scale": scale,
+                            "load_ms": packed_load_ms if batch_index == 0 and run_index == 0 else 0.0,
+                            "packed_load_ms": packed_load_ms,
+                            "run_ms": round((t3 - t2) * 1000, 3),
+                            "resident_segments": [item["segment"] for item in resident_specs],
+                            "resident_count": len(resident_specs),
+                            "child_runtime_mode": child_runtime_mode,
+                            "window_execution_mode": "window-batch",
+                        }
+                    )
+                    del output, arr
+                current_inputs[batch_index] = dequantized
+        finally:
+            del runtime
+            gc.collect()
+
+        index = next_index
+
+    return current_inputs, segment_results, 0
+
+
 def main():
     args = parse_args()
     if args.residency_window_size < 1:
@@ -490,8 +594,14 @@ def main():
     output_dir.mkdir(parents=True, exist_ok=True)
     segments = resolve_segments(args.segment_plan, hbm_dir, fine_hbm_dir)
 
-    tokens, tokens_source = load_tokens(args.tokens_bin, args.tokens, args.seq_len)
+    tokens, tokens_source, batch_count = load_tokens(args.tokens_bin, args.tokens, args.tokens_batch_json, args.seq_len)
     position_ids = np.arange(args.seq_len, dtype=np.int32)
+    batch_outputs = None
+    if args.window_execution_mode == "window-batch" and args.residency_window_size <= 1:
+        raise ValueError("--window-execution-mode window-batch requires --residency-window-size greater than 1")
+    if args.window_execution_mode != "window-batch" and batch_count != 1:
+        raise ValueError("--tokens-batch-json requires --window-execution-mode window-batch")
+    forward_start_ns = time.perf_counter_ns()
     if args.residency_window_size > 1 and args.window_execution_mode == "child-process":
         hidden, segment_results, child_process_count = run_window_child_segments(
             segments,
@@ -511,6 +621,16 @@ def main():
             args.child_window_mode,
             args.child_runtime_mode,
         )
+    elif args.residency_window_size > 1 and args.window_execution_mode == "window-batch":
+        batch_outputs, segment_results, child_process_count = run_window_batch_in_process_segments(
+            segments,
+            tokens,
+            position_ids,
+            args.residency_window_size,
+            args.child_window_mode,
+            args.child_runtime_mode,
+        )
+        hidden = batch_outputs[0]
     else:
         hidden = None
         segment_results = []
@@ -558,15 +678,47 @@ def main():
         for index in list(runtime_cache):
             evict(index)
 
+    forward_end_ns = time.perf_counter_ns()
     expected_logits = (1, args.seq_len, args.vocab_size)
-    if hidden.shape != expected_logits:
+    if batch_outputs is not None:
+        for batch_index, item in enumerate(batch_outputs):
+            if item.shape != expected_logits:
+                raise ValueError(f"Expected final logits shape {expected_logits} for batch {batch_index}, got {item.shape}")
+    elif hidden.shape != expected_logits:
         raise ValueError(f"Expected final logits shape {expected_logits}, got {hidden.shape}")
 
     logits_path = ""
     if args.save_logits:
-        logits_path = str(output_dir / "logits.npy")
-        np.save(logits_path, hidden)
+        if batch_outputs is None:
+            logits_path = str(output_dir / "logits.npy")
+            np.save(logits_path, hidden)
+        else:
+            logits_paths = []
+            for batch_index, item in enumerate(batch_outputs):
+                item_path = output_dir / f"logits_batch_{batch_index:03d}.npy"
+                np.save(item_path, item)
+                logits_paths.append(str(item_path))
+            logits_path = json.dumps(logits_paths, ensure_ascii=False)
     topk_last = topk_last_position(hidden, args.top_k)
+    topk_last_by_batch = []
+    if batch_outputs is not None and args.top_k > 0:
+        topk_last_by_batch = [
+            {
+                "batch_index": batch_index,
+                "topk_last_position": topk_last_position(item, args.top_k),
+            }
+            for batch_index, item in enumerate(batch_outputs)
+        ]
+    final_shapes = [list(item.shape) for item in batch_outputs] if batch_outputs is not None else [list(hidden.shape)]
+    if args.residency_window_size > 1 and args.window_execution_mode == "window-batch":
+        execution_mode = "pair_window_batch"
+    elif args.residency_window_size > 1:
+        execution_mode = f"{args.child_window_mode}_{args.window_execution_mode.replace('-', '_')}"
+    else:
+        execution_mode = "in_process"
+    wall_ms = round((forward_end_ns - forward_start_ns) / 1_000_000.0, 3)
+    load_ms = round(sum(float(item.get("load_ms", 0.0)) for item in segment_results), 3)
+    run_ms = round(sum(float(item.get("run_ms", 0.0)) for item in segment_results), 3)
 
     summary = {
         "generated_at": datetime.now().astimezone().isoformat(),
@@ -576,7 +728,7 @@ def main():
         "child_window_mode": args.child_window_mode if args.residency_window_size > 1 else "",
         "child_runtime_mode": args.child_runtime_mode if args.residency_window_size > 1 else "",
         "window_execution_mode": args.window_execution_mode if args.residency_window_size > 1 else "in_process",
-        "execution_mode": f"{args.child_window_mode}_{args.window_execution_mode.replace('-', '_')}" if args.residency_window_size > 1 else "in_process",
+        "execution_mode": execution_mode,
         "child_process_count": child_process_count if args.residency_window_size > 1 else 0,
         "hbm_dir": str(hbm_dir),
         "fine_hbm_dir": str(fine_hbm_dir),
@@ -584,12 +736,22 @@ def main():
         "runtime_version": HB_HBMRuntime.version,
         "tokens_source": tokens_source,
         "tokens_bin": args.tokens_bin or "",
+        "tokens_batch_json": args.tokens_batch_json or "",
+        "batch_count": batch_count,
+        "wall_ms": wall_ms,
+        "load_ms": load_ms,
+        "run_ms": run_ms,
+        "amortized_wall_ms_per_forward": round(wall_ms / batch_count, 3),
+        "amortized_load_ms_per_forward": round(load_ms / batch_count, 3),
+        "amortized_run_ms_per_forward": round(run_ms / batch_count, 3),
         "logits_npy": logits_path,
         "top_k": int(args.top_k),
         "topk_last_position": topk_last,
+        "topk_last_position_by_batch": topk_last_by_batch,
         "final_shape": list(hidden.shape),
+        "final_shapes": final_shapes,
         "final_dtype": str(hidden.dtype),
-        "final_bytes": int(hidden.nbytes),
+        "final_bytes": int(sum(item.nbytes for item in batch_outputs)) if batch_outputs is not None else int(hidden.nbytes),
         "segments": segment_results,
     }
     with (output_dir / "summary.json").open("w", encoding="utf-8") as fh:
