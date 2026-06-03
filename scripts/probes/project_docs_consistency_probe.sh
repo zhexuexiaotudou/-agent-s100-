@@ -23,6 +23,8 @@ required_files=(
   "scripts/dream7b-bpu-fine-batch-forward.sh"
   "scripts/dream7b-bpu-batch-queue-runner.sh"
   "scripts/dream7b_bpu_batch_queue_runner.py"
+  "scripts/dream7b-bpu-batch-queue-service.sh"
+  "scripts/dream7b_bpu_batch_queue_service.py"
   "scripts/dream7b-bpu-text-forward.sh"
   "scripts/probes/dream7b_segmented_hbm_python_forward.py"
   "scripts/probes/dream7b_bpu_diffusion_loop_probe.sh"
@@ -33,6 +35,7 @@ required_files=(
   "scripts/probes/dream7b_bpu_batch_queue_drain_probe.sh"
   "scripts/probes/dream7b_bpu_batch_queue_control_probe.sh"
   "scripts/probes/dream7b_bpu_batch_queue_lock_probe.sh"
+  "scripts/probes/dream7b_bpu_batch_queue_service_probe.sh"
   "scripts/startup_link_check/link-check.config.json"
   "scripts/tool_allowlist.json"
 )
@@ -48,12 +51,14 @@ required_reference_strings=(
   "dream7b-bpu-fine-forward"
   "dream7b-bpu-fine-batch-forward"
   "dream7b-bpu-batch-queue-runner"
+  "dream7b-bpu-batch-queue-service"
   "dream7b-bpu-text-forward"
   "dream7b-bpu-diffusion-loop-probe"
   "DREAM7B_BPU_FINE_CHILD_RUNTIME_MODE"
   "DREAM7B_BPU_FINE_WINDOW_EXECUTION_MODE"
   "DREAM7B_BPU_FINE_BATCH_WINDOW_EXECUTION_MODE"
   "DREAM7B_BPU_BATCH_QUEUE_RUNNER_SCRIPT"
+  "DREAM7B_BPU_BATCH_QUEUE_SERVICE_SCRIPT"
   "--child-runtime-mode"
   "--window-execution-mode"
   "--tokens-batch-json"
@@ -66,6 +71,10 @@ required_reference_strings=(
   "not_after_epoch_ms"
   "durable_state"
   "bpu_lock"
+  "pending"
+  "processing"
+  "done"
+  "failed"
   "accepted_requests.jsonl"
   "deferred_requests.jsonl"
   "skipped_requests.jsonl"
@@ -82,6 +91,8 @@ required_reference_strings=(
   "/mnt/nas/openclaw/reports/models/dream7b_bpu_batch_queue_drain_20260603-193309/batch_queue_drain_probe.md"
   "/mnt/nas/openclaw/reports/models/dream7b_bpu_batch_queue_control_20260603-193400/batch_queue_control_probe.md"
   "/mnt/nas/openclaw/reports/models/dream7b_bpu_batch_queue_lock_20260603-193209/batch_queue_lock_probe.md"
+  "/mnt/nas/openclaw/reports/models/dream7b_bpu_batch_queue_service_20260603-194437/batch_queue_service_probe.md"
+  "/mnt/nas/openclaw/reports/models/dream7b_bpu_batch_queue_service_real_scp_20260603-194827/output/service_summary.md"
   "/mnt/nas/openclaw/reports/models/dream7b_bpu_fine_forward_20260603-183906/fine_forward_probe.md"
   "/mnt/nas/openclaw/reports/models/dream7b_bpu_diffusion_loop_20260603-175030/summary.md"
 )
@@ -146,6 +157,12 @@ if [[ -f scripts/dream7b-bpu-batch-queue-runner.sh ]]; then
   fi
 fi
 
+if [[ -f scripts/dream7b-bpu-batch-queue-service.sh ]]; then
+  if ! grep -F -- "DREAM7B_BPU_BATCH_QUEUE_SERVICE_SCRIPT" scripts/dream7b-bpu-batch-queue-service.sh >/dev/null; then
+    errors+=("dream7b-bpu-batch-queue-service.sh missing DREAM7B_BPU_BATCH_QUEUE_SERVICE_SCRIPT")
+  fi
+fi
+
 if [[ -f scripts/dream7b_bpu_batch_queue_runner.py ]]; then
   if ! grep -F -- "request_id" scripts/dream7b_bpu_batch_queue_runner.py >/dev/null; then
     errors+=("dream7b_bpu_batch_queue_runner.py missing request_id")
@@ -173,6 +190,24 @@ if [[ -f scripts/dream7b_bpu_batch_queue_runner.py ]]; then
   fi
   if ! grep -F -- "bpu_lock" scripts/dream7b_bpu_batch_queue_runner.py >/dev/null; then
     errors+=("dream7b_bpu_batch_queue_runner.py missing bpu_lock")
+  fi
+fi
+
+if [[ -f scripts/dream7b_bpu_batch_queue_service.py ]]; then
+  if ! grep -F -- "pending" scripts/dream7b_bpu_batch_queue_service.py >/dev/null; then
+    errors+=("dream7b_bpu_batch_queue_service.py missing pending")
+  fi
+  if ! grep -F -- "processing" scripts/dream7b_bpu_batch_queue_service.py >/dev/null; then
+    errors+=("dream7b_bpu_batch_queue_service.py missing processing")
+  fi
+  if ! grep -F -- "done" scripts/dream7b_bpu_batch_queue_service.py >/dev/null; then
+    errors+=("dream7b_bpu_batch_queue_service.py missing done")
+  fi
+  if ! grep -F -- "failed" scripts/dream7b_bpu_batch_queue_service.py >/dev/null; then
+    errors+=("dream7b_bpu_batch_queue_service.py missing failed")
+  fi
+  if ! grep -F -- "service_summary.json" scripts/dream7b_bpu_batch_queue_service.py >/dev/null; then
+    errors+=("dream7b_bpu_batch_queue_service.py missing service_summary.json")
   fi
 fi
 

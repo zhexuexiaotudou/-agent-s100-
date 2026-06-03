@@ -65,6 +65,8 @@ scripts/dream7b-bpu-fine-forward.sh
 scripts/dream7b-bpu-fine-batch-forward.sh
 scripts/dream7b-bpu-batch-queue-runner.sh
 scripts/dream7b_bpu_batch_queue_runner.py
+scripts/dream7b-bpu-batch-queue-service.sh
+scripts/dream7b_bpu_batch_queue_service.py
 scripts/dream7b-bpu-text-forward.sh
 scripts/probes/dream7b_segmented_hbm_python_forward.py
 scripts/probes/dream7b_bpu_diffusion_loop_probe.sh
@@ -73,6 +75,7 @@ scripts/probes/dream7b_bpu_batch_queue_runner_probe.sh
 scripts/probes/dream7b_bpu_batch_queue_drain_probe.sh
 scripts/probes/dream7b_bpu_batch_queue_control_probe.sh
 scripts/probes/dream7b_bpu_batch_queue_lock_probe.sh
+scripts/probes/dream7b_bpu_batch_queue_service_probe.sh
 scripts/startup_link_check/link-check.config.json
 scripts/tool_allowlist.json
 docs/baseline_progress_2026-06-03_dream7b_segmented_bpu_hbm.md

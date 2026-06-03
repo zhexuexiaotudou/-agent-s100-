@@ -318,6 +318,97 @@ Forwarded options copied from the script:
 --top-k
 ```
 
+### `dream7b-bpu-batch-queue-service`
+
+Source file: `scripts/dream7b-bpu-batch-queue-service.sh`
+
+Python implementation: `scripts/dream7b_bpu_batch_queue_service.py`
+
+Environment variable copied from the wrapper:
+
+```text
+DREAM7B_BPU_BATCH_QUEUE_SERVICE_SCRIPT
+```
+
+Default value copied from the wrapper:
+
+```text
+/mnt/nas/openclaw/runtimes/dream7b-bpu-forward/dream7b_bpu_batch_queue_service.py
+```
+
+Positional arguments copied from `scripts/dream7b_bpu_batch_queue_service.py`:
+
+```text
+queue_dir
+output_dir
+```
+
+Optional arguments copied from `scripts/dream7b_bpu_batch_queue_service.py`:
+
+```text
+--runner-cmd
+--max-batch-size
+--seq-len
+--top-k
+--forward-cmd
+--bpu-lock-path
+--bpu-lock-timeout-sec
+--poll-interval-sec
+--max-iterations
+--once
+--drain-all
+```
+
+Default values copied from `scripts/dream7b_bpu_batch_queue_service.py`:
+
+```text
+runner_cmd = dream7b-bpu-batch-queue-runner
+max_batch_size = 4
+seq_len = 16
+top_k = 3
+forward_cmd = dream7b-bpu-fine-batch-forward
+bpu_lock_path = /tmp/dream7b_bpu_batch_queue_runner.lock
+bpu_lock_timeout_sec = 600.0
+poll_interval_sec = 1.0
+max_iterations = 0
+```
+
+Queue subdirectories copied from `scripts/dream7b_bpu_batch_queue_service.py`:
+
+```text
+pending
+processing
+done
+failed
+```
+
+Output summary keys copied from `scripts/dream7b_bpu_batch_queue_service.py`:
+
+```text
+verdict
+queue_dir
+output_dir
+runner_command
+processed_job_count
+failed_job_count
+iteration_count
+queue_paths
+jobs
+errors
+```
+
+Latest recorded service probe:
+
+```text
+/mnt/nas/openclaw/reports/models/dream7b_bpu_batch_queue_service_20260603-194437/batch_queue_service_probe.md
+```
+
+Latest recorded real BPU service one-shot:
+
+```text
+/mnt/nas/openclaw/reports/models/dream7b_bpu_batch_queue_service_real_scp_20260603-194827/output/service_summary.md
+```
+
 ### `dream7b-bpu-diffusion-loop-probe`
 
 Source file: `scripts/probes/dream7b_bpu_diffusion_loop_probe.sh`
@@ -510,6 +601,22 @@ Latest recorded report:
 /mnt/nas/openclaw/reports/models/dream7b_bpu_batch_queue_lock_20260603-193209/batch_queue_lock_probe.md
 ```
 
+### `dream7b-bpu-batch-queue-service-probe`
+
+Source file: `scripts/probes/dream7b_bpu_batch_queue_service_probe.sh`
+
+Run:
+
+```bash
+dream7b-bpu-batch-queue-service-probe /mnt/nas/openclaw/reports/models
+```
+
+Latest recorded report:
+
+```text
+/mnt/nas/openclaw/reports/models/dream7b_bpu_batch_queue_service_20260603-194437/batch_queue_service_probe.md
+```
+
 ## Configuration Interfaces
 
 ### Startup Link Check
@@ -664,6 +771,8 @@ Evidence reports:
 /mnt/nas/openclaw/reports/models/dream7b_bpu_batch_queue_drain_20260603-193309/batch_queue_drain_probe.md
 /mnt/nas/openclaw/reports/models/dream7b_bpu_batch_queue_control_20260603-193400/batch_queue_control_probe.md
 /mnt/nas/openclaw/reports/models/dream7b_bpu_batch_queue_lock_20260603-193209/batch_queue_lock_probe.md
+/mnt/nas/openclaw/reports/models/dream7b_bpu_batch_queue_service_20260603-194437/batch_queue_service_probe.md
+/mnt/nas/openclaw/reports/models/dream7b_bpu_batch_queue_service_real_scp_20260603-194827/output/service_summary.md
 /mnt/nas/openclaw/reports/models/dream7b_bpu_fine_forward_20260603-183906/fine_forward_probe.md
 /mnt/nas/openclaw/reports/models/dream7b_bpu_diffusion_loop_20260603-175030/summary.md
 ```
@@ -682,6 +791,19 @@ Evidence report:
 ```
 
 Boundary: this is a service-level throughput bridge for independent requests. It is not a single-request Dream diffusion acceleration path.
+
+### Use directory-backed service queue for reusable operation
+
+Decision: use `dream7b-bpu-batch-queue-service` as the reusable directory-backed service loop. It consumes `*.jsonl` jobs from `pending`, moves active jobs to `processing`, moves successful jobs to `done`, moves failed jobs to `failed`, writes `service_summary.json`, and calls `dream7b-bpu-batch-queue-runner` for each job so the existing `durable_state` and `bpu_lock` behavior remains authoritative.
+
+Evidence reports:
+
+```text
+/mnt/nas/openclaw/reports/models/dream7b_bpu_batch_queue_service_20260603-194437/batch_queue_service_probe.md
+/mnt/nas/openclaw/reports/models/dream7b_bpu_batch_queue_service_real_scp_20260603-194827/output/service_summary.md
+```
+
+Boundary: this is a long-running-capable command loop. It is not yet installed as a systemd unit.
 
 ### Do not claim production text service yet
 
@@ -730,12 +852,15 @@ docs/baseline_progress_2026-06-03_dream7b_segmented_bpu_hbm.md
 - Verified `dream7b-bpu-batch-queue-control-probe` report at `/mnt/nas/openclaw/reports/models/dream7b_bpu_batch_queue_control_20260603-193400/batch_queue_control_probe.md`.
 - Added default single-flight `bpu_lock` handling to `dream7b-bpu-batch-queue-runner`.
 - Verified `dream7b-bpu-batch-queue-lock-probe` report at `/mnt/nas/openclaw/reports/models/dream7b_bpu_batch_queue_lock_20260603-193209/batch_queue_lock_probe.md`.
+- Added `dream7b-bpu-batch-queue-service` for directory-backed `pending` / `processing` / `done` / `failed` queue operation.
+- Verified `dream7b-bpu-batch-queue-service-probe` report at `/mnt/nas/openclaw/reports/models/dream7b_bpu_batch_queue_service_20260603-194437/batch_queue_service_probe.md`.
+- Verified real BPU one-shot service report at `/mnt/nas/openclaw/reports/models/dream7b_bpu_batch_queue_service_real_scp_20260603-194827/output/service_summary.md`.
 
 ## TODO
 
 - Keep `--window-execution-mode child-process` as the fallback path until longer-run evidence proves `--window-execution-mode in-process` is stable beyond the current 3-run probe.
 - Add longer repeated-run performance evidence for `fine_pair_in_process_packed`.
-- Replace the bounded JSONL queue runner with a long-lived service after directory watch and daemon supervision are specified and verified.
+- Add daemon supervision for `dream7b-bpu-batch-queue-service` after the desired queue root and restart policy are selected.
 - Run documentation consistency checking through `scripts/probes/project_docs_consistency_probe.sh` after each task.
 - Continue quality gates against the CPU Dream path before describing the BPU route as production text generation.
 
