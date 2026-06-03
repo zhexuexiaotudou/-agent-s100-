@@ -68,6 +68,8 @@ fine-forward command: /usr/local/bin/dream7b-bpu-fine-forward
 fine-forward report: /mnt/nas/openclaw/reports/models/dream7b_bpu_fine_forward_20260603-162214/summary.json
 fine-forward probe command: /usr/local/bin/dream7b-bpu-fine-forward-probe
 fine-forward probe report: /mnt/nas/openclaw/reports/models/dream7b_bpu_fine_forward_20260603-162214/fine_forward_probe.md
+fine-forward perf command: /usr/local/bin/dream7b-bpu-fine-forward-perf-probe
+fine-forward perf report: /mnt/nas/openclaw/reports/models/dream7b_bpu_fine_forward_perf_20260603-164445/summary.md
 fine-forward diffusion-loop report: /mnt/nas/openclaw/reports/models/dream7b_bpu_diffusion_loop_20260603-162831/summary.md
 fine-forward quality-gate report: /mnt/nas/openclaw/reports/models/dream7b_bpu_cpu_quality_gate_20260603-160405/summary.md
 default-forward compatibility report: /mnt/nas/openclaw/reports/models/dream7b_bpu_forward_20260603-151711/summary.json
@@ -123,6 +125,7 @@ scripts/probes/compile_dream_segments_seq16_fine.sh
 scripts/probes/dream7b_bpu_fine_residency_probe.sh
 scripts/dream7b-bpu-fine-forward.sh
 scripts/probes/dream7b_bpu_fine_forward_probe.sh
+scripts/probes/dream7b_bpu_fine_forward_perf_probe.sh
 ```
 
 The smoke probe can be run on S100P:
@@ -509,6 +512,27 @@ pair-child report: /mnt/nas/openclaw/reports/models/dream7b_bpu_fine_forward_202
 pair-child child_process_count: 5
 pair-child summed load_ms: 27021.312
 pair-child summed run_ms: 179.693
+```
+
+The deployed fine-forward performance regression probe is:
+
+```bash
+dream7b-bpu-fine-forward-perf-probe /mnt/nas/openclaw/reports/models
+```
+
+It runs the deployed six-segment forward, fine sliding-child forward, and fine pair-child forward against the same seq16 token input. This is a regression/performance probe, not a full throughput benchmark.
+
+Verified performance probe output:
+
+```text
+report: /mnt/nas/openclaw/reports/models/dream7b_bpu_fine_forward_perf_20260603-164445/summary.md
+verdict: ok_dream7b_bpu_fine_forward_perf_probe
+segments6: execution_mode=in_process, child_process_count=0, wall_ms=26359.864, load_ms=24034.035, run_ms=173.134
+fine_sliding: execution_mode=sliding_child_process, child_window_mode=sliding, child_process_count=10, wall_ms=62410.354, load_ms=30704.095, run_ms=185.360
+fine_pair: execution_mode=pair_child_process, child_window_mode=pair, child_process_count=5, wall_ms=32836.161, load_ms=27688.528, run_ms=179.260
+pair_vs_sliding_child_process_reduction: 5
+pair_vs_sliding_load_speedup: 1.109x
+pair_vs_sliding_wall_speedup: 1.901x
 ```
 
 The same deployed Python script remains compatible with the existing six-segment entrypoint:
