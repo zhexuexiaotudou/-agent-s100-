@@ -17,6 +17,7 @@ Environment:
   DREAM7B_BPU_QUEUE_TOP_K              Runner top-k output. Default: 3.
   DREAM7B_BPU_QUEUE_LOCK_PATH          Runner BPU lock path. Default: /run/lock/dream7b_bpu_batch_queue_runner.lock.
   DREAM7B_BPU_QUEUE_REPO_DIR           Runtime workspace for systemd WorkingDirectory. Default: /mnt/nas/openclaw.
+  DREAM7B_BPU_QUEUE_DRAIN_ALL          Pass --drain-all to the runner. Accepted true values: 1,true,yes,on. Accepted false values: 0,false,no,off. Default: 1.
 EOF
 }
 
@@ -39,6 +40,7 @@ poll_interval_sec="${DREAM7B_BPU_QUEUE_POLL_INTERVAL_SEC:-1}"
 max_batch_size="${DREAM7B_BPU_QUEUE_MAX_BATCH_SIZE:-4}"
 top_k="${DREAM7B_BPU_QUEUE_TOP_K:-3}"
 bpu_lock_path="${DREAM7B_BPU_QUEUE_LOCK_PATH:-/run/lock/dream7b_bpu_batch_queue_runner.lock}"
+drain_all="${DREAM7B_BPU_QUEUE_DRAIN_ALL:-1}"
 
 validate_queue_dir() {
   case "$1" in
@@ -83,6 +85,23 @@ validate_number() {
   fi
 }
 
+normalize_bool() {
+  local name="$1"
+  local value="$2"
+  case "$value" in
+    1|true|TRUE|yes|YES|on|ON)
+      echo "true"
+      ;;
+    0|false|FALSE|no|NO|off|OFF)
+      echo "false"
+      ;;
+    *)
+      echo "$name must be one of 1,true,yes,on,0,false,no,off." >&2
+      exit 2
+      ;;
+  esac
+}
+
 require_root_for_mutation() {
   if [[ "$(id -u)" != "0" ]]; then
     echo "This action must run as root because it writes systemd unit files." >&2
@@ -113,6 +132,7 @@ poll_interval_sec: $poll_interval_sec
 max_batch_size: $max_batch_size
 top_k: $top_k
 bpu_lock_path: $bpu_lock_path
+drain_all: $drain_all_enabled
 working_directory: $repo_dir
 
 The service is long-running and consumes JSONL jobs from queue_dir/pending.
@@ -126,6 +146,11 @@ validate_repo_dir "$repo_dir"
 validate_number "DREAM7B_BPU_QUEUE_POLL_INTERVAL_SEC" "$poll_interval_sec"
 validate_number "DREAM7B_BPU_QUEUE_MAX_BATCH_SIZE" "$max_batch_size"
 validate_number "DREAM7B_BPU_QUEUE_TOP_K" "$top_k"
+drain_all_enabled="$(normalize_bool "DREAM7B_BPU_QUEUE_DRAIN_ALL" "$drain_all")"
+exec_start="/usr/local/bin/dream7b-bpu-batch-queue-service $queue_dir $output_dir --poll-interval-sec $poll_interval_sec --max-batch-size $max_batch_size --top-k $top_k --bpu-lock-path $bpu_lock_path"
+if [[ "$drain_all_enabled" == "true" ]]; then
+  exec_start="$exec_start --drain-all"
+fi
 
 case "$action" in
   plan)
@@ -149,7 +174,7 @@ Type=simple
 WorkingDirectory=$repo_dir
 Environment=DREAM7B_BPU_QUEUE_DIR=$queue_dir
 Environment=DREAM7B_BPU_QUEUE_OUTPUT_DIR=$output_dir
-ExecStart=/usr/local/bin/dream7b-bpu-batch-queue-service $queue_dir $output_dir --poll-interval-sec $poll_interval_sec --max-batch-size $max_batch_size --top-k $top_k --bpu-lock-path $bpu_lock_path
+ExecStart=$exec_start
 Restart=always
 RestartSec=5
 Nice=5
