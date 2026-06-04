@@ -123,6 +123,8 @@ required_reference_strings=(
   "/mnt/nas/openclaw/reports/models/dream7b_bpu_batch_queue_systemd_20260604-174953/systemd_probe.md"
   "/mnt/nas/openclaw/reports/models/dream7b_bpu_batch_queue_systemd_drain_20260604-174953/systemd_drain_probe.md"
   "/mnt/nas/openclaw/reports/models/dream7b_bpu_batch_queue_service_systemd/jobs/systemd_drain_20260604-174953/queue_summary.json"
+  "/mnt/nas/openclaw/reports/models/dream7b_bpu_batch_queue_systemd_drain_20260604-180557/systemd_drain_probe.md"
+  "/mnt/nas/openclaw/reports/models/dream7b_bpu_batch_queue_service_systemd/jobs/systemd_drain_20260604-180557/queue_summary.json"
   "/etc/systemd/system/dream7b-bpu-batch-queue.service"
   "/mnt/nas/openclaw/queues/dream7b-bpu"
   "/mnt/nas/openclaw/reports/models/dream7b_bpu_batch_queue_service_systemd"

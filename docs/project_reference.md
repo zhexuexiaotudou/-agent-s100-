@@ -726,6 +726,18 @@ Latest recorded drain job summary:
 /mnt/nas/openclaw/reports/models/dream7b_bpu_batch_queue_service_systemd/jobs/systemd_drain_20260604-174953/queue_summary.json
 ```
 
+Latest recorded full-batch drain report:
+
+```text
+/mnt/nas/openclaw/reports/models/dream7b_bpu_batch_queue_systemd_drain_20260604-180557/systemd_drain_probe.md
+```
+
+Latest recorded full-batch drain job summary:
+
+```text
+/mnt/nas/openclaw/reports/models/dream7b_bpu_batch_queue_service_systemd/jobs/systemd_drain_20260604-180557/queue_summary.json
+```
+
 ### `dream7b-bpu-diffusion-loop-probe`
 
 Source file: `scripts/probes/dream7b_bpu_diffusion_loop_probe.sh`
@@ -1142,6 +1154,8 @@ Evidence reports:
 /mnt/nas/openclaw/reports/models/dream7b_bpu_batch_queue_systemd_20260604-174953/systemd_probe.md
 /mnt/nas/openclaw/reports/models/dream7b_bpu_batch_queue_systemd_drain_20260604-174953/systemd_drain_probe.md
 /mnt/nas/openclaw/reports/models/dream7b_bpu_batch_queue_service_systemd/jobs/systemd_drain_20260604-174953/queue_summary.json
+/mnt/nas/openclaw/reports/models/dream7b_bpu_batch_queue_systemd_drain_20260604-180557/systemd_drain_probe.md
+/mnt/nas/openclaw/reports/models/dream7b_bpu_batch_queue_service_systemd/jobs/systemd_drain_20260604-180557/queue_summary.json
 ```
 
 Verified job fields copied from `queue_summary.json`:
@@ -1213,6 +1227,29 @@ total_wall_ms: 49773.849
 amortized_wall_ms_per_processed_request: 9954.77
 ```
 
+Verified full-batch drain-all systemd fields copied from `systemd_drain_probe.json`:
+
+```text
+verdict: ok_dream7b_bpu_batch_queue_systemd_drain_probe
+job_name: systemd_drain_20260604-180557.jsonl
+job_status: done
+request_count: 8
+expected_batch_counts: [4, 4]
+drain_all: True
+max_batch_size: 4
+processed_count: 8
+accepted_count: 8
+deferred_count: 0
+batch_run_count: 2
+batch_counts: [4, 4]
+result_count: 8
+execution_modes: ['pair_window_batch', 'pair_window_batch']
+window_execution_modes: ['window-batch', 'window-batch']
+child_process_counts: [0, 0]
+total_wall_ms: 49509.638
+amortized_wall_ms_per_processed_request: 6188.705
+```
+
 ### Do not claim production text service yet
 
 Decision: current Dream 7B BPU route is a verified seq16 BPU logits and bounded diffusion-loop path, not a complete production text-generation service.
@@ -1282,6 +1319,8 @@ docs/baseline_progress_2026-06-03_dream7b_segmented_bpu_hbm.md
 - Reinstalled and restarted `dream7b-bpu-batch-queue.service`; verified `ExecStart` includes `--drain-all` at `/mnt/nas/openclaw/reports/models/dream7b_bpu_batch_queue_systemd_20260604-174953/systemd_probe.md`.
 - Verified `dream7b-bpu-batch-queue-systemd-drain-probe` report at `/mnt/nas/openclaw/reports/models/dream7b_bpu_batch_queue_systemd_drain_20260604-174953/systemd_drain_probe.md`.
 - Verified the five-request drain-all job summary at `/mnt/nas/openclaw/reports/models/dream7b_bpu_batch_queue_service_systemd/jobs/systemd_drain_20260604-174953/queue_summary.json`.
+- Verified an eight-request full-batch drain-all report at `/mnt/nas/openclaw/reports/models/dream7b_bpu_batch_queue_systemd_drain_20260604-180557/systemd_drain_probe.md`.
+- Verified the eight-request full-batch drain-all job summary at `/mnt/nas/openclaw/reports/models/dream7b_bpu_batch_queue_service_systemd/jobs/systemd_drain_20260604-180557/queue_summary.json`.
 
 ## TODO
 
