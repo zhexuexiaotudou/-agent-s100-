@@ -79,6 +79,7 @@ scripts/probes/dream7b_bpu_batch_queue_lock_probe.sh
 scripts/probes/dream7b_bpu_batch_queue_service_probe.sh
 scripts/probes/dream7b_bpu_batch_queue_systemd_probe.sh
 scripts/probes/dream7b_bpu_batch_queue_systemd_soak_probe.sh
+scripts/probes/dream7b_bpu_batch_queue_systemd_batch_probe.sh
 scripts/startup_link_check/link-check.config.json
 scripts/tool_allowlist.json
 docs/baseline_progress_2026-06-03_dream7b_segmented_bpu_hbm.md

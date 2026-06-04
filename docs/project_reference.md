@@ -581,6 +581,74 @@ Latest recorded job summaries:
 /mnt/nas/openclaw/reports/models/dream7b_bpu_batch_queue_service_systemd/jobs/systemd_soak_20260604-131223_002/queue_summary.json
 ```
 
+### `dream7b-bpu-batch-queue-systemd-batch-probe`
+
+Source file: `scripts/probes/dream7b_bpu_batch_queue_systemd_batch_probe.sh`
+
+Installed command on S100P:
+
+```text
+/usr/local/bin/dream7b-bpu-batch-queue-systemd-batch-probe
+```
+
+Default arguments copied from the script:
+
+```text
+report_root = /mnt/nas/openclaw/reports/models
+service_name = dream7b-bpu-batch-queue.service
+queue_dir = /mnt/nas/openclaw/queues/dream7b-bpu
+output_dir = /mnt/nas/openclaw/reports/models/dream7b_bpu_batch_queue_service_systemd
+```
+
+Environment variables copied from the script:
+
+```text
+DREAM7B_BPU_SYSTEMD_BATCH_REQUEST_COUNT
+DREAM7B_BPU_SYSTEMD_BATCH_TIMEOUT_SEC
+DREAM7B_BPU_SYSTEMD_BATCH_POLL_INTERVAL_SEC
+```
+
+Default values copied from the script:
+
+```text
+request_count = 4
+timeout_sec = 420
+poll_interval_sec = 2
+```
+
+Checked fields copied from the script:
+
+```text
+service_status_before
+service_enabled_before
+service_status_after
+service_enabled_after
+job_status
+request_count
+processed_count
+accepted_count
+deferred_count
+batch_count
+result_count
+final_shape
+bpu_lock.path
+execution_mode
+window_execution_mode
+child_process_count
+```
+
+Latest recorded report:
+
+```text
+/mnt/nas/openclaw/reports/models/dream7b_bpu_batch_queue_systemd_batch_20260604-133034/systemd_batch_probe.md
+```
+
+Latest recorded batch job summary:
+
+```text
+/mnt/nas/openclaw/reports/models/dream7b_bpu_batch_queue_service_systemd/jobs/systemd_batch_20260604-133034/queue_summary.json
+```
+
 ### `dream7b-bpu-diffusion-loop-probe`
 
 Source file: `scripts/probes/dream7b_bpu_diffusion_loop_probe.sh`
@@ -992,6 +1060,8 @@ Evidence reports:
 /mnt/nas/openclaw/reports/models/dream7b_bpu_batch_queue_systemd_soak_20260604-131223/systemd_soak_probe.md
 /mnt/nas/openclaw/reports/models/dream7b_bpu_batch_queue_service_systemd/jobs/systemd_soak_20260604-131223_001/queue_summary.json
 /mnt/nas/openclaw/reports/models/dream7b_bpu_batch_queue_service_systemd/jobs/systemd_soak_20260604-131223_002/queue_summary.json
+/mnt/nas/openclaw/reports/models/dream7b_bpu_batch_queue_systemd_batch_20260604-133034/systemd_batch_probe.md
+/mnt/nas/openclaw/reports/models/dream7b_bpu_batch_queue_service_systemd/jobs/systemd_batch_20260604-133034/queue_summary.json
 ```
 
 Verified job fields copied from `queue_summary.json`:
@@ -1019,6 +1089,25 @@ failed_job_count: 0
 processed_request_count: 2
 total_wall_ms: 49192.894
 amortized_wall_ms_per_processed_request: 24596.447
+```
+
+Verified batch fields copied from `systemd_batch_probe.json`:
+
+```text
+verdict: ok_dream7b_bpu_batch_queue_systemd_batch_probe
+job_name: systemd_batch_20260604-133034.jsonl
+job_status: done
+request_count: 4
+processed_count: 4
+accepted_count: 4
+deferred_count: 0
+batch_count: 4
+result_count: 4
+execution_mode: pair_window_batch
+window_execution_mode: window-batch
+child_process_count: 0
+total_wall_ms: 24977.437
+amortized_wall_ms_per_processed_request: 6244.359
 ```
 
 ### Do not claim production text service yet
@@ -1078,6 +1167,9 @@ docs/baseline_progress_2026-06-03_dream7b_segmented_bpu_hbm.md
 - Added `dream7b-bpu-batch-queue-systemd-soak-probe` for multi-job service verification.
 - Verified `dream7b-bpu-batch-queue-systemd-soak-probe` report at `/mnt/nas/openclaw/reports/models/dream7b_bpu_batch_queue_systemd_soak_20260604-131223/systemd_soak_probe.md`.
 - Verified two real systemd-queued BPU job summaries at `/mnt/nas/openclaw/reports/models/dream7b_bpu_batch_queue_service_systemd/jobs/systemd_soak_20260604-131223_001/queue_summary.json` and `/mnt/nas/openclaw/reports/models/dream7b_bpu_batch_queue_service_systemd/jobs/systemd_soak_20260604-131223_002/queue_summary.json`.
+- Added `dream7b-bpu-batch-queue-systemd-batch-probe` for one JSONL job with four requests.
+- Verified `dream7b-bpu-batch-queue-systemd-batch-probe` report at `/mnt/nas/openclaw/reports/models/dream7b_bpu_batch_queue_systemd_batch_20260604-133034/systemd_batch_probe.md`.
+- Verified the four-request batch job summary at `/mnt/nas/openclaw/reports/models/dream7b_bpu_batch_queue_service_systemd/jobs/systemd_batch_20260604-133034/queue_summary.json`.
 
 ## TODO
 

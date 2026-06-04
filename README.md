@@ -291,6 +291,7 @@ Current project reference entrypoints:
 - [scripts/install_dream7b_bpu_queue_service.sh](scripts/install_dream7b_bpu_queue_service.sh): installs and manages `dream7b-bpu-batch-queue.service` for the NAS-backed Dream 7B BPU queue on S100P.
 - [scripts/probes/dream7b_bpu_batch_queue_systemd_probe.sh](scripts/probes/dream7b_bpu_batch_queue_systemd_probe.sh): verifies `dream7b-bpu-batch-queue.service` is active, enabled, and points at the expected NAS queue and report directories.
 - [scripts/probes/dream7b_bpu_batch_queue_systemd_soak_probe.sh](scripts/probes/dream7b_bpu_batch_queue_systemd_soak_probe.sh): submits multiple JSONL jobs through the NAS-backed systemd queue and verifies real BPU completion.
+- [scripts/probes/dream7b_bpu_batch_queue_systemd_batch_probe.sh](scripts/probes/dream7b_bpu_batch_queue_systemd_batch_probe.sh): submits one multi-request JSONL job through the NAS-backed systemd queue and verifies `batch_count`.
 - [scripts/probes/dream7b_bpu_batch_queue_control_probe.sh](scripts/probes/dream7b_bpu_batch_queue_control_probe.sh): verifies queue `cancelled`, `not_after_epoch_ms`, skipped request, and durable JSONL state behavior.
 - [scripts/probes/dream7b_bpu_batch_queue_lock_probe.sh](scripts/probes/dream7b_bpu_batch_queue_lock_probe.sh): verifies queue runner `bpu_lock` single-flight behavior without calling the real BPU.
 - [scripts/probes/project_docs_consistency_probe.sh](scripts/probes/project_docs_consistency_probe.sh): repeatable documentation consistency probe.

@@ -39,6 +39,7 @@ required_files=(
   "scripts/probes/dream7b_bpu_batch_queue_service_probe.sh"
   "scripts/probes/dream7b_bpu_batch_queue_systemd_probe.sh"
   "scripts/probes/dream7b_bpu_batch_queue_systemd_soak_probe.sh"
+  "scripts/probes/dream7b_bpu_batch_queue_systemd_batch_probe.sh"
   "scripts/startup_link_check/link-check.config.json"
   "scripts/tool_allowlist.json"
 )
@@ -58,6 +59,7 @@ required_reference_strings=(
   "install-dream7b-bpu-queue-service"
   "dream7b-bpu-batch-queue-systemd-probe"
   "dream7b-bpu-batch-queue-systemd-soak-probe"
+  "dream7b-bpu-batch-queue-systemd-batch-probe"
   "dream7b-bpu-batch-queue.service"
   "dream7b-bpu-text-forward"
   "dream7b-bpu-diffusion-loop-probe"
@@ -107,6 +109,8 @@ required_reference_strings=(
   "/mnt/nas/openclaw/reports/models/dream7b_bpu_batch_queue_systemd_soak_20260604-131223/systemd_soak_probe.md"
   "/mnt/nas/openclaw/reports/models/dream7b_bpu_batch_queue_service_systemd/jobs/systemd_soak_20260604-131223_001/queue_summary.json"
   "/mnt/nas/openclaw/reports/models/dream7b_bpu_batch_queue_service_systemd/jobs/systemd_soak_20260604-131223_002/queue_summary.json"
+  "/mnt/nas/openclaw/reports/models/dream7b_bpu_batch_queue_systemd_batch_20260604-133034/systemd_batch_probe.md"
+  "/mnt/nas/openclaw/reports/models/dream7b_bpu_batch_queue_service_systemd/jobs/systemd_batch_20260604-133034/queue_summary.json"
   "/etc/systemd/system/dream7b-bpu-batch-queue.service"
   "/mnt/nas/openclaw/queues/dream7b-bpu"
   "/mnt/nas/openclaw/reports/models/dream7b_bpu_batch_queue_service_systemd"
@@ -276,6 +280,27 @@ if [[ -f scripts/probes/dream7b_bpu_batch_queue_systemd_soak_probe.sh ]]; then
   fi
   if ! grep -F -- "/run/lock/dream7b_bpu_batch_queue_runner.lock" scripts/probes/dream7b_bpu_batch_queue_systemd_soak_probe.sh >/dev/null; then
     errors+=("dream7b_bpu_batch_queue_systemd_soak_probe.sh missing /run/lock/dream7b_bpu_batch_queue_runner.lock")
+  fi
+fi
+
+if [[ -f scripts/probes/dream7b_bpu_batch_queue_systemd_batch_probe.sh ]]; then
+  if ! grep -F -- "DREAM7B_BPU_SYSTEMD_BATCH_REQUEST_COUNT" scripts/probes/dream7b_bpu_batch_queue_systemd_batch_probe.sh >/dev/null; then
+    errors+=("dream7b_bpu_batch_queue_systemd_batch_probe.sh missing DREAM7B_BPU_SYSTEMD_BATCH_REQUEST_COUNT")
+  fi
+  if ! grep -F -- "batch_count" scripts/probes/dream7b_bpu_batch_queue_systemd_batch_probe.sh >/dev/null; then
+    errors+=("dream7b_bpu_batch_queue_systemd_batch_probe.sh missing batch_count")
+  fi
+  if ! grep -F -- "accepted_count" scripts/probes/dream7b_bpu_batch_queue_systemd_batch_probe.sh >/dev/null; then
+    errors+=("dream7b_bpu_batch_queue_systemd_batch_probe.sh missing accepted_count")
+  fi
+  if ! grep -F -- "deferred_count" scripts/probes/dream7b_bpu_batch_queue_systemd_batch_probe.sh >/dev/null; then
+    errors+=("dream7b_bpu_batch_queue_systemd_batch_probe.sh missing deferred_count")
+  fi
+  if ! grep -F -- "amortized_wall_ms_per_processed_request" scripts/probes/dream7b_bpu_batch_queue_systemd_batch_probe.sh >/dev/null; then
+    errors+=("dream7b_bpu_batch_queue_systemd_batch_probe.sh missing amortized_wall_ms_per_processed_request")
+  fi
+  if ! grep -F -- "/run/lock/dream7b_bpu_batch_queue_runner.lock" scripts/probes/dream7b_bpu_batch_queue_systemd_batch_probe.sh >/dev/null; then
+    errors+=("dream7b_bpu_batch_queue_systemd_batch_probe.sh missing /run/lock/dream7b_bpu_batch_queue_runner.lock")
   fi
 fi
 
