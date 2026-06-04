@@ -1,0 +1,331 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+report_root="${1:-/mnt/nas/openclaw/reports/models}"
+service_name="${2:-dream7b-bpu-batch-queue.service}"
+queue_dir="${3:-/mnt/nas/openclaw/queues/dream7b-bpu}"
+output_dir="${4:-/mnt/nas/openclaw/reports/models/dream7b_bpu_batch_queue_service_systemd}"
+job_count="${DREAM7B_BPU_SYSTEMD_SOAK_JOB_COUNT:-2}"
+timeout_sec="${DREAM7B_BPU_SYSTEMD_SOAK_TIMEOUT_SEC:-420}"
+poll_interval_sec="${DREAM7B_BPU_SYSTEMD_SOAK_POLL_INTERVAL_SEC:-2}"
+
+case "$report_root" in
+  /tmp/*|/mnt/nas/openclaw/reports|/mnt/nas/openclaw/reports/*|/root/.openclaw/workspace/reports|/root/.openclaw/workspace/reports/*) ;;
+  *)
+    echo "Refusing output path outside approved report directories: $report_root" >&2
+    exit 2
+    ;;
+esac
+
+case "$queue_dir" in
+  /tmp/*|/mnt/nas/openclaw/queues|/mnt/nas/openclaw/queues/*|/root/.openclaw/workspace/queues|/root/.openclaw/workspace/queues/*) ;;
+  *)
+    echo "Refusing queue path outside approved queue directories: $queue_dir" >&2
+    exit 2
+    ;;
+esac
+
+case "$output_dir" in
+  /tmp/*|/mnt/nas/openclaw/reports|/mnt/nas/openclaw/reports/*|/root/.openclaw/workspace/reports|/root/.openclaw/workspace/reports/*) ;;
+  *)
+    echo "Refusing service output path outside approved report directories: $output_dir" >&2
+    exit 2
+    ;;
+esac
+
+if ! [[ "$job_count" =~ ^[0-9]+$ ]] || (( job_count < 1 )); then
+  echo "DREAM7B_BPU_SYSTEMD_SOAK_JOB_COUNT must be a positive integer." >&2
+  exit 2
+fi
+if ! [[ "$timeout_sec" =~ ^[0-9]+$ ]] || (( timeout_sec < 1 )); then
+  echo "DREAM7B_BPU_SYSTEMD_SOAK_TIMEOUT_SEC must be a positive integer." >&2
+  exit 2
+fi
+if ! [[ "$poll_interval_sec" =~ ^[0-9]+$ ]] || (( poll_interval_sec < 1 )); then
+  echo "DREAM7B_BPU_SYSTEMD_SOAK_POLL_INTERVAL_SEC must be a positive integer." >&2
+  exit 2
+fi
+
+if (( EUID == 0 )); then
+  sudo_cmd=()
+else
+  sudo_cmd=(sudo -n)
+fi
+
+mkdir -p "$report_root"
+stamp="$(date +%Y%m%d-%H%M%S)"
+run_dir="$report_root/dream7b_bpu_batch_queue_systemd_soak_$stamp"
+mkdir -p "$run_dir/jobs"
+
+service_status_before="$(systemctl is-active "$service_name" 2>/dev/null || true)"
+service_enabled_before="$(systemctl is-enabled "$service_name" 2>/dev/null || true)"
+unit_path="$(systemctl show "$service_name" -p FragmentPath --value 2>/dev/null || true)"
+exec_start="$(systemctl show "$service_name" -p ExecStart --value 2>/dev/null || true)"
+systemctl --no-pager --full status "$service_name" > "$run_dir/systemctl_status_before.txt" 2>&1 || true
+
+if [[ "$service_status_before" != "active" ]]; then
+  echo "Service is not active before soak: $service_status_before" >&2
+  exit 3
+fi
+
+"${sudo_cmd[@]}" mkdir -p "$queue_dir/pending" "$queue_dir/processing" "$queue_dir/done" "$queue_dir/failed"
+
+python3 - "$run_dir/jobs" "$stamp" "$job_count" <<'PY'
+import json
+import sys
+from pathlib import Path
+
+jobs_dir = Path(sys.argv[1])
+stamp = sys.argv[2]
+job_count = int(sys.argv[3])
+base_tokens = [
+    [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16],
+    [16, 15, 14, 13, 12, 11, 10, 9, 8, 7, 6, 5, 4, 3, 2, 1],
+    [101, 102, 103, 104, 105, 106, 107, 108, 109, 110, 111, 112, 113, 114, 115, 116],
+]
+for index in range(job_count):
+    job_name = f"systemd_soak_{stamp}_{index + 1:03d}.jsonl"
+    request = {
+        "request_id": f"systemd-soak-{stamp}-{index + 1:03d}",
+        "tokens": base_tokens[index % len(base_tokens)],
+    }
+    (jobs_dir / job_name).write_text(json.dumps(request, ensure_ascii=False) + "\n", encoding="utf-8")
+PY
+
+submitted_jobs=()
+for job_path in "$run_dir"/jobs/*.jsonl; do
+  job_name="$(basename "$job_path")"
+  submitted_jobs+=("$job_name")
+  "${sudo_cmd[@]}" test ! -e "$queue_dir/pending/$job_name"
+  "${sudo_cmd[@]}" test ! -e "$queue_dir/processing/$job_name"
+  "${sudo_cmd[@]}" test ! -e "$queue_dir/done/$job_name"
+  "${sudo_cmd[@]}" test ! -e "$queue_dir/failed/$job_name"
+  "${sudo_cmd[@]}" install -m 0644 "$job_path" "$queue_dir/pending/$job_name.upload"
+  "${sudo_cmd[@]}" mv "$queue_dir/pending/$job_name.upload" "$queue_dir/pending/$job_name"
+done
+
+deadline=$((SECONDS + timeout_sec))
+while (( SECONDS < deadline )); do
+  all_finished=1
+  for job_name in "${submitted_jobs[@]}"; do
+    if "${sudo_cmd[@]}" test -f "$queue_dir/done/$job_name"; then
+      continue
+    fi
+    if "${sudo_cmd[@]}" test -f "$queue_dir/failed/$job_name"; then
+      continue
+    fi
+    all_finished=0
+    break
+  done
+  if (( all_finished == 1 )); then
+    break
+  fi
+  sleep "$poll_interval_sec"
+done
+
+service_status_after="$(systemctl is-active "$service_name" 2>/dev/null || true)"
+service_enabled_after="$(systemctl is-enabled "$service_name" 2>/dev/null || true)"
+systemctl --no-pager --full status "$service_name" > "$run_dir/systemctl_status_after.txt" 2>&1 || true
+
+job_status_json="$run_dir/job_status.json"
+python3 - "$job_status_json" "$queue_dir" "$output_dir" "${submitted_jobs[@]}" <<'PY'
+import json
+import sys
+from pathlib import Path
+
+out_path = Path(sys.argv[1])
+queue_dir = Path(sys.argv[2])
+output_dir = Path(sys.argv[3])
+jobs = sys.argv[4:]
+rows = []
+for job_name in jobs:
+    stem = Path(job_name).stem
+    status = "missing"
+    for candidate in ("done", "failed", "processing", "pending"):
+        if (queue_dir / candidate / job_name).is_file():
+            status = candidate
+            break
+    summary_path = output_dir / "jobs" / stem / "queue_summary.json"
+    summary = None
+    if summary_path.is_file():
+        summary = json.loads(summary_path.read_text(encoding="utf-8"))
+    rows.append(
+        {
+            "job_name": job_name,
+            "status": status,
+            "summary_path": str(summary_path),
+            "summary": summary,
+        }
+    )
+out_path.write_text(json.dumps(rows, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
+PY
+
+python3 - \
+  "$run_dir" \
+  "$service_name" \
+  "$queue_dir" \
+  "$output_dir" \
+  "$job_count" \
+  "$timeout_sec" \
+  "$poll_interval_sec" \
+  "$service_status_before" \
+  "$service_enabled_before" \
+  "$service_status_after" \
+  "$service_enabled_after" \
+  "$unit_path" \
+  "$exec_start" \
+  "$job_status_json" <<'PY'
+import json
+import sys
+from datetime import datetime
+from pathlib import Path
+
+run_dir = Path(sys.argv[1])
+service_name = sys.argv[2]
+queue_dir = sys.argv[3]
+output_dir = sys.argv[4]
+job_count = int(sys.argv[5])
+timeout_sec = int(sys.argv[6])
+poll_interval_sec = int(sys.argv[7])
+service_status_before = sys.argv[8]
+service_enabled_before = sys.argv[9]
+service_status_after = sys.argv[10]
+service_enabled_after = sys.argv[11]
+unit_path = sys.argv[12]
+exec_start = sys.argv[13]
+job_rows = json.loads(Path(sys.argv[14]).read_text(encoding="utf-8"))
+
+errors = []
+if service_status_before != "active":
+    errors.append(f"unexpected service_status_before: {service_status_before}")
+if service_enabled_before != "enabled":
+    errors.append(f"unexpected service_enabled_before: {service_enabled_before}")
+if service_status_after != "active":
+    errors.append(f"unexpected service_status_after: {service_status_after}")
+if service_enabled_after != "enabled":
+    errors.append(f"unexpected service_enabled_after: {service_enabled_after}")
+if not unit_path.endswith("/dream7b-bpu-batch-queue.service"):
+    errors.append(f"unexpected unit_path: {unit_path}")
+for text in ("dream7b-bpu-batch-queue-service", "/mnt/nas/openclaw/queues/dream7b-bpu", "/mnt/nas/openclaw/reports/models/dream7b_bpu_batch_queue_service_systemd", "/run/lock/dream7b_bpu_batch_queue_runner.lock"):
+    if text not in exec_start:
+        errors.append(f"ExecStart missing {text}: {exec_start}")
+
+completed_job_count = 0
+failed_job_count = 0
+processed_request_count = 0
+total_wall_ms = 0.0
+for row in job_rows:
+    summary = row.get("summary")
+    if row.get("status") == "done":
+        completed_job_count += 1
+    elif row.get("status") == "failed":
+        failed_job_count += 1
+    else:
+        errors.append(f"job did not finish: {row.get('job_name')} status={row.get('status')}")
+    if not isinstance(summary, dict):
+        errors.append(f"missing queue_summary.json for {row.get('job_name')}: {row.get('summary_path')}")
+        continue
+    if summary.get("verdict") != "ok_dream7b_bpu_batch_queue_runner":
+        errors.append(f"unexpected runner verdict for {row.get('job_name')}: {summary.get('verdict')}")
+    if summary.get("processed_count") != 1:
+        errors.append(f"unexpected processed_count for {row.get('job_name')}: {summary.get('processed_count')}")
+    lock = summary.get("bpu_lock") or {}
+    if lock.get("path") != "/run/lock/dream7b_bpu_batch_queue_runner.lock":
+        errors.append(f"unexpected bpu_lock.path for {row.get('job_name')}: {lock.get('path')}")
+    batch_runs = summary.get("batch_runs") or []
+    metrics = batch_runs[0].get("metrics", {}) if batch_runs else {}
+    if metrics.get("execution_mode") != "pair_window_batch":
+        errors.append(f"unexpected execution_mode for {row.get('job_name')}: {metrics.get('execution_mode')}")
+    if metrics.get("window_execution_mode") != "window-batch":
+        errors.append(f"unexpected window_execution_mode for {row.get('job_name')}: {metrics.get('window_execution_mode')}")
+    if metrics.get("child_process_count") != 0:
+        errors.append(f"unexpected child_process_count for {row.get('job_name')}: {metrics.get('child_process_count')}")
+    results = summary.get("results") or []
+    if len(results) != 1:
+        errors.append(f"unexpected result count for {row.get('job_name')}: {len(results)}")
+    elif results[0].get("final_shape") != [1, 16, 152064]:
+        errors.append(f"unexpected final_shape for {row.get('job_name')}: {results[0].get('final_shape')}")
+    processed_request_count += int(summary.get("processed_count") or 0)
+    total_wall_ms += float((summary.get("forward_metrics") or {}).get("total_wall_ms") or 0.0)
+
+if completed_job_count != job_count:
+    errors.append(f"unexpected completed_job_count: {completed_job_count}")
+if failed_job_count != 0:
+    errors.append(f"unexpected failed_job_count: {failed_job_count}")
+if processed_request_count != job_count:
+    errors.append(f"unexpected processed_request_count: {processed_request_count}")
+
+payload = {
+    "generated_at": datetime.now().astimezone().isoformat(),
+    "verdict": "ok_dream7b_bpu_batch_queue_systemd_soak_probe" if not errors else "failed_dream7b_bpu_batch_queue_systemd_soak_probe",
+    "service_name": service_name,
+    "queue_dir": queue_dir,
+    "output_dir": output_dir,
+    "job_count": job_count,
+    "timeout_sec": timeout_sec,
+    "poll_interval_sec": poll_interval_sec,
+    "service_status_before": service_status_before,
+    "service_enabled_before": service_enabled_before,
+    "service_status_after": service_status_after,
+    "service_enabled_after": service_enabled_after,
+    "unit_path": unit_path,
+    "exec_start": exec_start,
+    "completed_job_count": completed_job_count,
+    "failed_job_count": failed_job_count,
+    "processed_request_count": processed_request_count,
+    "total_wall_ms": round(total_wall_ms, 3),
+    "amortized_wall_ms_per_processed_request": round(total_wall_ms / processed_request_count, 3) if processed_request_count else 0.0,
+    "jobs": [
+        {
+            "job_name": row.get("job_name"),
+            "status": row.get("status"),
+            "summary_path": row.get("summary_path"),
+            "runner_verdict": row.get("summary", {}).get("verdict") if isinstance(row.get("summary"), dict) else None,
+            "processed_count": row.get("summary", {}).get("processed_count") if isinstance(row.get("summary"), dict) else None,
+        }
+        for row in job_rows
+    ],
+    "errors": errors,
+}
+(run_dir / "systemd_soak_probe.json").write_text(json.dumps(payload, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
+error_lines = [f"- {item}" for item in errors] if errors else ["- none"]
+job_lines = [
+    f"| {item['job_name']} | {item['status']} | {item['runner_verdict']} | {item['processed_count']} | {item['summary_path']} |"
+    for item in payload["jobs"]
+]
+(run_dir / "systemd_soak_probe.md").write_text(
+    "\n".join([
+        "# Dream 7B BPU Batch Queue Systemd Soak Probe",
+        "",
+        f"- generated_at: {payload['generated_at']}",
+        f"- verdict: {payload['verdict']}",
+        f"- service_name: {payload['service_name']}",
+        f"- queue_dir: {payload['queue_dir']}",
+        f"- output_dir: {payload['output_dir']}",
+        f"- job_count: {payload['job_count']}",
+        f"- service_status_before: {payload['service_status_before']}",
+        f"- service_status_after: {payload['service_status_after']}",
+        f"- completed_job_count: {payload['completed_job_count']}",
+        f"- failed_job_count: {payload['failed_job_count']}",
+        f"- processed_request_count: {payload['processed_request_count']}",
+        f"- total_wall_ms: {payload['total_wall_ms']}",
+        f"- amortized_wall_ms_per_processed_request: {payload['amortized_wall_ms_per_processed_request']}",
+        f"- exec_start: {payload['exec_start']}",
+        "",
+        "## Jobs",
+        "",
+        "| job_name | status | runner_verdict | processed_count | summary_path |",
+        "| --- | --- | --- | ---: | --- |",
+        *job_lines,
+        "",
+        "## Errors",
+        "",
+        *error_lines,
+        "",
+    ]) + "\n",
+    encoding="utf-8",
+)
+print(run_dir / "systemd_soak_probe.md")
+if errors:
+    raise SystemExit("; ".join(errors))
+PY

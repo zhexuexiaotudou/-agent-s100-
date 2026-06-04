@@ -97,6 +97,10 @@ batch-queue systemd probe report: /mnt/nas/openclaw/reports/models/dream7b_bpu_b
 batch-queue systemd service summary: /mnt/nas/openclaw/reports/models/dream7b_bpu_batch_queue_service_systemd/service_summary.md
 batch-queue systemd real BPU job summary: /mnt/nas/openclaw/reports/models/dream7b_bpu_batch_queue_service_systemd/jobs/systemd_job_20260603_220710/queue_summary.json
 batch-queue systemd BPU lock path: /run/lock/dream7b_bpu_batch_queue_runner.lock
+batch-queue systemd soak probe command: /usr/local/bin/dream7b-bpu-batch-queue-systemd-soak-probe
+batch-queue systemd soak report: /mnt/nas/openclaw/reports/models/dream7b_bpu_batch_queue_systemd_soak_20260604-131223/systemd_soak_probe.md
+batch-queue systemd soak job 001 summary: /mnt/nas/openclaw/reports/models/dream7b_bpu_batch_queue_service_systemd/jobs/systemd_soak_20260604-131223_001/queue_summary.json
+batch-queue systemd soak job 002 summary: /mnt/nas/openclaw/reports/models/dream7b_bpu_batch_queue_service_systemd/jobs/systemd_soak_20260604-131223_002/queue_summary.json
 post-batch fine-forward compatibility report: /mnt/nas/openclaw/reports/models/dream7b_bpu_fine_forward_20260603-183906/fine_forward_probe.md
 fine-forward diffusion-loop report: /mnt/nas/openclaw/reports/models/dream7b_bpu_diffusion_loop_20260603-175030/summary.md
 fine-forward quality-gate report: /mnt/nas/openclaw/reports/models/dream7b_bpu_cpu_quality_gate_20260603-160405/summary.md
@@ -169,6 +173,7 @@ scripts/dream7b_bpu_batch_queue_service.py
 scripts/probes/dream7b_bpu_batch_queue_service_probe.sh
 scripts/install_dream7b_bpu_queue_service.sh
 scripts/probes/dream7b_bpu_batch_queue_systemd_probe.sh
+scripts/probes/dream7b_bpu_batch_queue_systemd_soak_probe.sh
 ```
 
 The smoke probe can be run on S100P:
@@ -944,6 +949,28 @@ window_execution_mode: window-batch
 child_process_count: 0
 ```
 
+Verified real systemd-queued BPU soak output:
+
+```text
+report: /mnt/nas/openclaw/reports/models/dream7b_bpu_batch_queue_systemd_soak_20260604-131223/systemd_soak_probe.md
+verdict: ok_dream7b_bpu_batch_queue_systemd_soak_probe
+job_count: 2
+service_status_before: active
+service_status_after: active
+completed_job_count: 2
+failed_job_count: 0
+processed_request_count: 2
+total_wall_ms: 49192.894
+amortized_wall_ms_per_processed_request: 24596.447
+job_001_summary: /mnt/nas/openclaw/reports/models/dream7b_bpu_batch_queue_service_systemd/jobs/systemd_soak_20260604-131223_001/queue_summary.json
+job_002_summary: /mnt/nas/openclaw/reports/models/dream7b_bpu_batch_queue_service_systemd/jobs/systemd_soak_20260604-131223_002/queue_summary.json
+job verdicts: ok_dream7b_bpu_batch_queue_runner, ok_dream7b_bpu_batch_queue_runner
+job final_shapes: [1, 16, 152064], [1, 16, 152064]
+job execution_mode: pair_window_batch
+job window_execution_mode: window-batch
+job child_process_count: 0
+```
+
 The default single-input fine-forward path was re-verified after adding `--tokens-batch-json`, `--window-execution-mode window-batch`, and timing fields:
 
 ```text
@@ -999,7 +1026,7 @@ bpu remaining_mask_positions: []
 
 ## Current Boundary
 
-This is real BPU execution for real Dream 7B weights, including a complete seq16 forward chain from prompt text or token ids to logits plus verified one-step and strategy-aware bounded multi-step Dream diffusion bridges over masked positions. The path now also has a CPU/BPU quality coverage gate that records current divergence against the existing CPU Dream text path, an HBM cache performance gate that quantifies NAS versus S100P-local HBM load cost, a residency gate proving that the current six-segment split cannot be made all-resident, a fine-residency gate proving that every adjacent two-segment window can be resident, a deployed fine in-process pair forward command that runs the 10-segment fine plan to logits with 0 child processes, a 3-run repeat probe for the default in-process path, a window-batch throughput probe for concurrent independent seq16 inputs, a reusable `dream7b-bpu-fine-batch-forward` wrapper for JSON token batches, a bounded `dream7b-bpu-batch-queue-runner` JSONL service bridge with verified multi-batch `--drain-all`, verified `cancelled` and `not_after_epoch_ms` control semantics, durable queue state JSONL outputs, default queue-runner single-flight `bpu_lock`, a directory-backed `dream7b-bpu-batch-queue-service` loop with verified real BPU one-shot operation, and a NAS-backed `dream7b-bpu-batch-queue.service` systemd unit with verified real BPU queued job execution. It is not yet a complete text-generation service.
+This is real BPU execution for real Dream 7B weights, including a complete seq16 forward chain from prompt text or token ids to logits plus verified one-step and strategy-aware bounded multi-step Dream diffusion bridges over masked positions. The path now also has a CPU/BPU quality coverage gate that records current divergence against the existing CPU Dream text path, an HBM cache performance gate that quantifies NAS versus S100P-local HBM load cost, a residency gate proving that the current six-segment split cannot be made all-resident, a fine-residency gate proving that every adjacent two-segment window can be resident, a deployed fine in-process pair forward command that runs the 10-segment fine plan to logits with 0 child processes, a 3-run repeat probe for the default in-process path, a window-batch throughput probe for concurrent independent seq16 inputs, a reusable `dream7b-bpu-fine-batch-forward` wrapper for JSON token batches, a bounded `dream7b-bpu-batch-queue-runner` JSONL service bridge with verified multi-batch `--drain-all`, verified `cancelled` and `not_after_epoch_ms` control semantics, durable queue state JSONL outputs, default queue-runner single-flight `bpu_lock`, a directory-backed `dream7b-bpu-batch-queue-service` loop with verified real BPU one-shot operation, and a NAS-backed `dream7b-bpu-batch-queue.service` systemd unit with verified single-job and 2-job real BPU queued execution. It is not yet a complete text-generation service.
 
 Remaining engineering work:
 
