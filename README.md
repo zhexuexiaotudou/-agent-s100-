@@ -286,6 +286,7 @@ Current project reference entrypoints:
 - [docs/documentation_audit_runbook.md](docs/documentation_audit_runbook.md): post-task documentation verification workflow.
 - [docs/baseline_progress_2026-06-03_dream7b_segmented_bpu_hbm.md](docs/baseline_progress_2026-06-03_dream7b_segmented_bpu_hbm.md): current Dream 7B segmented S100 BPU HBM evidence.
 - [scripts/dream7b-bpu-fine-batch-forward.sh](scripts/dream7b-bpu-fine-batch-forward.sh): reusable Dream 7B fine-split BPU batch forward wrapper for independent seq16 token batches.
+- [scripts/probes/dream7b_bpu_fine_batch_size_sweep_probe.sh](scripts/probes/dream7b_bpu_fine_batch_size_sweep_probe.sh): runs a bounded Dream 7B BPU batch-size sweep for `dream7b-bpu-fine-batch-forward` and records HBM load amortization.
 - [scripts/dream7b-bpu-batch-queue-runner.sh](scripts/dream7b-bpu-batch-queue-runner.sh): service-level JSONL queue runner that batches independent seq16 requests into `dream7b-bpu-fine-batch-forward`.
 - [scripts/dream7b-bpu-batch-queue-service.sh](scripts/dream7b-bpu-batch-queue-service.sh): directory-backed Dream 7B BPU queue service loop over `pending`, `processing`, `done`, and `failed` job directories.
 - [scripts/install_dream7b_bpu_queue_service.sh](scripts/install_dream7b_bpu_queue_service.sh): installs and manages `dream7b-bpu-batch-queue.service` for the NAS-backed Dream 7B BPU queue on S100P.

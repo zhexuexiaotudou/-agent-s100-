@@ -192,6 +192,67 @@ Latest recorded probe:
 /mnt/nas/openclaw/reports/models/dream7b_bpu_fine_batch_forward_20260603-183625/fine_batch_forward_probe.md
 ```
 
+### `dream7b-bpu-fine-batch-size-sweep-probe`
+
+Source file: `scripts/probes/dream7b_bpu_fine_batch_size_sweep_probe.sh`
+
+Installed command on S100P:
+
+```text
+/usr/local/bin/dream7b-bpu-fine-batch-size-sweep-probe
+```
+
+Environment variables copied from the script:
+
+```text
+DREAM7B_BPU_FINE_BATCH_SWEEP_COUNTS
+DREAM7B_BPU_FINE_BATCH_SWEEP_TIMEOUT_SEC
+DREAM7B_BPU_FINE_BATCH_SWEEP_TOP_K
+```
+
+Default values copied from the script:
+
+```text
+counts_text = 1 2 4 8
+timeout_sec = 720
+top_k = 3
+```
+
+Checked fields copied from the script:
+
+```text
+verdict
+segment_plan
+residency_window_size
+execution_mode
+window_execution_mode
+child_process_count
+batch_count
+final_shapes
+wall_ms
+load_ms
+run_ms
+amortized_wall_ms_per_forward
+amortized_load_ms_per_forward
+amortized_run_ms_per_forward
+load_share
+```
+
+Latest recorded report:
+
+```text
+/mnt/nas/openclaw/reports/models/dream7b_bpu_fine_batch_size_sweep_20260604-181429/batch_size_sweep_probe.md
+```
+
+Latest recorded summaries:
+
+```text
+/mnt/nas/openclaw/reports/models/dream7b_bpu_fine_batch_size_sweep_20260604-181429/batch_1/forward/summary.json
+/mnt/nas/openclaw/reports/models/dream7b_bpu_fine_batch_size_sweep_20260604-181429/batch_2/forward/summary.json
+/mnt/nas/openclaw/reports/models/dream7b_bpu_fine_batch_size_sweep_20260604-181429/batch_4/forward/summary.json
+/mnt/nas/openclaw/reports/models/dream7b_bpu_fine_batch_size_sweep_20260604-181429/batch_8/forward/summary.json
+```
+
 ### `dream7b-bpu-batch-queue-runner`
 
 Source file: `scripts/dream7b-bpu-batch-queue-runner.sh`
@@ -1096,6 +1157,7 @@ Evidence reports:
 /mnt/nas/openclaw/reports/models/dream7b_bpu_fine_forward_repeat_20260603-180108/summary.md
 /mnt/nas/openclaw/reports/models/dream7b_bpu_fine_forward_window_batch_20260603-181131/summary.md
 /mnt/nas/openclaw/reports/models/dream7b_bpu_fine_batch_forward_20260603-183625/fine_batch_forward_probe.md
+/mnt/nas/openclaw/reports/models/dream7b_bpu_fine_batch_size_sweep_20260604-181429/batch_size_sweep_probe.md
 /mnt/nas/openclaw/reports/models/dream7b_bpu_batch_queue_runner_20260603-193243/batch_queue_runner_probe.md
 /mnt/nas/openclaw/reports/models/dream7b_bpu_batch_queue_drain_20260603-193309/batch_queue_drain_probe.md
 /mnt/nas/openclaw/reports/models/dream7b_bpu_batch_queue_control_20260603-193400/batch_queue_control_probe.md
@@ -1104,6 +1166,25 @@ Evidence reports:
 /mnt/nas/openclaw/reports/models/dream7b_bpu_batch_queue_service_real_scp_20260603-194827/output/service_summary.md
 /mnt/nas/openclaw/reports/models/dream7b_bpu_fine_forward_20260603-183906/fine_forward_probe.md
 /mnt/nas/openclaw/reports/models/dream7b_bpu_diffusion_loop_20260603-175030/summary.md
+```
+
+Verified batch-size sweep fields copied from `batch_size_sweep_probe.json`:
+
+```text
+verdict: ok_dream7b_bpu_fine_batch_size_sweep_probe
+counts: [1, 2, 4, 8]
+batch_count 1 amortized_wall_ms_per_forward: 24562.798
+batch_count 1 amortized_load_ms_per_forward: 24198.434
+batch_count 1 amortized_run_ms_per_forward: 175.949
+batch_count 2 amortized_wall_ms_per_forward: 12293.305
+batch_count 2 amortized_load_ms_per_forward: 12022.294
+batch_count 2 amortized_run_ms_per_forward: 175.037
+batch_count 4 amortized_wall_ms_per_forward: 6336.077
+batch_count 4 amortized_load_ms_per_forward: 6111.385
+batch_count 4 amortized_run_ms_per_forward: 173.981
+batch_count 8 amortized_wall_ms_per_forward: 3175.416
+batch_count 8 amortized_load_ms_per_forward: 2974.35
+batch_count 8 amortized_run_ms_per_forward: 173.565
 ```
 
 ### Use JSONL queue batching for independent seq16 requests
@@ -1321,6 +1402,8 @@ docs/baseline_progress_2026-06-03_dream7b_segmented_bpu_hbm.md
 - Verified the five-request drain-all job summary at `/mnt/nas/openclaw/reports/models/dream7b_bpu_batch_queue_service_systemd/jobs/systemd_drain_20260604-174953/queue_summary.json`.
 - Verified an eight-request full-batch drain-all report at `/mnt/nas/openclaw/reports/models/dream7b_bpu_batch_queue_systemd_drain_20260604-180557/systemd_drain_probe.md`.
 - Verified the eight-request full-batch drain-all job summary at `/mnt/nas/openclaw/reports/models/dream7b_bpu_batch_queue_service_systemd/jobs/systemd_drain_20260604-180557/queue_summary.json`.
+- Added `dream7b-bpu-fine-batch-size-sweep-probe` for batch-count load amortization evidence.
+- Verified `dream7b-bpu-fine-batch-size-sweep-probe` report at `/mnt/nas/openclaw/reports/models/dream7b_bpu_fine_batch_size_sweep_20260604-181429/batch_size_sweep_probe.md`.
 
 ## TODO
 

@@ -32,6 +32,7 @@ required_files=(
   "scripts/probes/dream7b_bpu_fine_forward_repeat_probe.sh"
   "scripts/probes/dream7b_bpu_fine_forward_window_batch_probe.sh"
   "scripts/probes/dream7b_bpu_fine_batch_forward_probe.sh"
+  "scripts/probes/dream7b_bpu_fine_batch_size_sweep_probe.sh"
   "scripts/probes/dream7b_bpu_batch_queue_runner_probe.sh"
   "scripts/probes/dream7b_bpu_batch_queue_drain_probe.sh"
   "scripts/probes/dream7b_bpu_batch_queue_control_probe.sh"
@@ -57,6 +58,7 @@ required_reference_strings=(
   "dream7b-bpu-fine-batch-forward"
   "dream7b-bpu-batch-queue-runner"
   "dream7b-bpu-batch-queue-service"
+  "dream7b-bpu-fine-batch-size-sweep-probe"
   "install-dream7b-bpu-queue-service"
   "dream7b-bpu-batch-queue-systemd-probe"
   "dream7b-bpu-batch-queue-systemd-soak-probe"
@@ -68,6 +70,9 @@ required_reference_strings=(
   "DREAM7B_BPU_FINE_CHILD_RUNTIME_MODE"
   "DREAM7B_BPU_FINE_WINDOW_EXECUTION_MODE"
   "DREAM7B_BPU_FINE_BATCH_WINDOW_EXECUTION_MODE"
+  "DREAM7B_BPU_FINE_BATCH_SWEEP_COUNTS"
+  "DREAM7B_BPU_FINE_BATCH_SWEEP_TIMEOUT_SEC"
+  "DREAM7B_BPU_FINE_BATCH_SWEEP_TOP_K"
   "DREAM7B_BPU_BATCH_QUEUE_RUNNER_SCRIPT"
   "DREAM7B_BPU_BATCH_QUEUE_SERVICE_SCRIPT"
   "DREAM7B_BPU_QUEUE_DRAIN_ALL"
@@ -89,6 +94,10 @@ required_reference_strings=(
   "drain_all"
   "batch_run_count"
   "batch_counts"
+  "amortized_wall_ms_per_forward"
+  "amortized_load_ms_per_forward"
+  "amortized_run_ms_per_forward"
+  "load_share"
   "/run/lock/dream7b_bpu_batch_queue_runner.lock"
   "pending"
   "processing"
@@ -106,6 +115,11 @@ required_reference_strings=(
   "/mnt/nas/openclaw/reports/models/dream7b_bpu_fine_forward_repeat_20260603-180108/summary.md"
   "/mnt/nas/openclaw/reports/models/dream7b_bpu_fine_forward_window_batch_20260603-181131/summary.md"
   "/mnt/nas/openclaw/reports/models/dream7b_bpu_fine_batch_forward_20260603-183625/fine_batch_forward_probe.md"
+  "/mnt/nas/openclaw/reports/models/dream7b_bpu_fine_batch_size_sweep_20260604-181429/batch_size_sweep_probe.md"
+  "/mnt/nas/openclaw/reports/models/dream7b_bpu_fine_batch_size_sweep_20260604-181429/batch_1/forward/summary.json"
+  "/mnt/nas/openclaw/reports/models/dream7b_bpu_fine_batch_size_sweep_20260604-181429/batch_2/forward/summary.json"
+  "/mnt/nas/openclaw/reports/models/dream7b_bpu_fine_batch_size_sweep_20260604-181429/batch_4/forward/summary.json"
+  "/mnt/nas/openclaw/reports/models/dream7b_bpu_fine_batch_size_sweep_20260604-181429/batch_8/forward/summary.json"
   "/mnt/nas/openclaw/reports/models/dream7b_bpu_batch_queue_runner_20260603-193243/batch_queue_runner_probe.md"
   "/mnt/nas/openclaw/reports/models/dream7b_bpu_batch_queue_drain_20260603-193309/batch_queue_drain_probe.md"
   "/mnt/nas/openclaw/reports/models/dream7b_bpu_batch_queue_control_20260603-193400/batch_queue_control_probe.md"
@@ -348,6 +362,30 @@ if [[ -f scripts/probes/dream7b_bpu_batch_queue_systemd_drain_probe.sh ]]; then
   fi
   if ! grep -F -- "/run/lock/dream7b_bpu_batch_queue_runner.lock" scripts/probes/dream7b_bpu_batch_queue_systemd_drain_probe.sh >/dev/null; then
     errors+=("dream7b_bpu_batch_queue_systemd_drain_probe.sh missing /run/lock/dream7b_bpu_batch_queue_runner.lock")
+  fi
+fi
+
+if [[ -f scripts/probes/dream7b_bpu_fine_batch_size_sweep_probe.sh ]]; then
+  if ! grep -F -- "DREAM7B_BPU_FINE_BATCH_SWEEP_COUNTS" scripts/probes/dream7b_bpu_fine_batch_size_sweep_probe.sh >/dev/null; then
+    errors+=("dream7b_bpu_fine_batch_size_sweep_probe.sh missing DREAM7B_BPU_FINE_BATCH_SWEEP_COUNTS")
+  fi
+  if ! grep -F -- "DREAM7B_BPU_FINE_BATCH_SWEEP_TIMEOUT_SEC" scripts/probes/dream7b_bpu_fine_batch_size_sweep_probe.sh >/dev/null; then
+    errors+=("dream7b_bpu_fine_batch_size_sweep_probe.sh missing DREAM7B_BPU_FINE_BATCH_SWEEP_TIMEOUT_SEC")
+  fi
+  if ! grep -F -- "DREAM7B_BPU_FINE_BATCH_SWEEP_TOP_K" scripts/probes/dream7b_bpu_fine_batch_size_sweep_probe.sh >/dev/null; then
+    errors+=("dream7b_bpu_fine_batch_size_sweep_probe.sh missing DREAM7B_BPU_FINE_BATCH_SWEEP_TOP_K")
+  fi
+  if ! grep -F -- "amortized_wall_ms_per_forward" scripts/probes/dream7b_bpu_fine_batch_size_sweep_probe.sh >/dev/null; then
+    errors+=("dream7b_bpu_fine_batch_size_sweep_probe.sh missing amortized_wall_ms_per_forward")
+  fi
+  if ! grep -F -- "amortized_load_ms_per_forward" scripts/probes/dream7b_bpu_fine_batch_size_sweep_probe.sh >/dev/null; then
+    errors+=("dream7b_bpu_fine_batch_size_sweep_probe.sh missing amortized_load_ms_per_forward")
+  fi
+  if ! grep -F -- "amortized_run_ms_per_forward" scripts/probes/dream7b_bpu_fine_batch_size_sweep_probe.sh >/dev/null; then
+    errors+=("dream7b_bpu_fine_batch_size_sweep_probe.sh missing amortized_run_ms_per_forward")
+  fi
+  if ! grep -F -- "load_share" scripts/probes/dream7b_bpu_fine_batch_size_sweep_probe.sh >/dev/null; then
+    errors+=("dream7b_bpu_fine_batch_size_sweep_probe.sh missing load_share")
   fi
 fi
 

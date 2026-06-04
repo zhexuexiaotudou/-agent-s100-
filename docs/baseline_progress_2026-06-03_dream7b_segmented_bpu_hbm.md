@@ -77,6 +77,8 @@ fine-forward window-batch report: /mnt/nas/openclaw/reports/models/dream7b_bpu_f
 fine-batch-forward command: /usr/local/bin/dream7b-bpu-fine-batch-forward
 fine-batch-forward probe command: /usr/local/bin/dream7b-bpu-fine-batch-forward-probe
 fine-batch-forward probe report: /mnt/nas/openclaw/reports/models/dream7b_bpu_fine_batch_forward_20260603-183625/fine_batch_forward_probe.md
+fine-batch-size-sweep probe command: /usr/local/bin/dream7b-bpu-fine-batch-size-sweep-probe
+fine-batch-size-sweep report: /mnt/nas/openclaw/reports/models/dream7b_bpu_fine_batch_size_sweep_20260604-181429/batch_size_sweep_probe.md
 batch-queue-runner command: /usr/local/bin/dream7b-bpu-batch-queue-runner
 batch-queue-runner probe command: /usr/local/bin/dream7b-bpu-batch-queue-runner-probe
 batch-queue-runner probe report: /mnt/nas/openclaw/reports/models/dream7b_bpu_batch_queue_runner_20260603-193243/batch_queue_runner_probe.md
@@ -170,6 +172,7 @@ scripts/probes/dream7b_bpu_fine_forward_repeat_probe.sh
 scripts/probes/dream7b_bpu_fine_forward_window_batch_probe.sh
 scripts/dream7b-bpu-fine-batch-forward.sh
 scripts/probes/dream7b_bpu_fine_batch_forward_probe.sh
+scripts/probes/dream7b_bpu_fine_batch_size_sweep_probe.sh
 scripts/dream7b-bpu-batch-queue-runner.sh
 scripts/dream7b_bpu_batch_queue_runner.py
 scripts/probes/dream7b_bpu_batch_queue_runner_probe.sh
@@ -754,6 +757,35 @@ final_shapes: [[1, 16, 152064], [1, 16, 152064], [1, 16, 152064]]
 segment_event_count: 30
 ```
 
+The fine-batch-size sweep path is:
+
+```bash
+dream7b-bpu-fine-batch-size-sweep-probe /mnt/nas/openclaw/reports/models
+```
+
+Verified fine-batch-size sweep output:
+
+```text
+report: /mnt/nas/openclaw/reports/models/dream7b_bpu_fine_batch_size_sweep_20260604-181429/batch_size_sweep_probe.md
+verdict: ok_dream7b_bpu_fine_batch_size_sweep_probe
+counts: [1, 2, 4, 8]
+batch_count 1 amortized_wall_ms_per_forward: 24562.798
+batch_count 1 amortized_load_ms_per_forward: 24198.434
+batch_count 1 amortized_run_ms_per_forward: 175.949
+batch_count 2 amortized_wall_ms_per_forward: 12293.305
+batch_count 2 amortized_load_ms_per_forward: 12022.294
+batch_count 2 amortized_run_ms_per_forward: 175.037
+batch_count 4 amortized_wall_ms_per_forward: 6336.077
+batch_count 4 amortized_load_ms_per_forward: 6111.385
+batch_count 4 amortized_run_ms_per_forward: 173.981
+batch_count 8 amortized_wall_ms_per_forward: 3175.416
+batch_count 8 amortized_load_ms_per_forward: 2974.35
+batch_count 8 amortized_run_ms_per_forward: 173.565
+execution_mode: pair_window_batch
+window_execution_mode: window-batch
+child_process_count: 0
+```
+
 The service-level JSONL queue runner for independent seq16 requests is:
 
 ```bash
@@ -1124,7 +1156,7 @@ bpu remaining_mask_positions: []
 
 ## Current Boundary
 
-This is real BPU execution for real Dream 7B weights, including a complete seq16 forward chain from prompt text or token ids to logits plus verified one-step and strategy-aware bounded multi-step Dream diffusion bridges over masked positions. The path now also has a CPU/BPU quality coverage gate that records current divergence against the existing CPU Dream text path, an HBM cache performance gate that quantifies NAS versus S100P-local HBM load cost, a residency gate proving that the current six-segment split cannot be made all-resident, a fine-residency gate proving that every adjacent two-segment window can be resident, a deployed fine in-process pair forward command that runs the 10-segment fine plan to logits with 0 child processes, a 3-run repeat probe for the default in-process path, a window-batch throughput probe for concurrent independent seq16 inputs, a reusable `dream7b-bpu-fine-batch-forward` wrapper for JSON token batches, a bounded `dream7b-bpu-batch-queue-runner` JSONL service bridge with verified multi-batch `--drain-all`, verified `cancelled` and `not_after_epoch_ms` control semantics, durable queue state JSONL outputs, default queue-runner single-flight `bpu_lock`, a directory-backed `dream7b-bpu-batch-queue-service` loop with verified real BPU one-shot operation, and a NAS-backed `dream7b-bpu-batch-queue.service` systemd unit with verified single-job, 2-job, one-job 4-request `batch_count=4`, one-job 5-request default `--drain-all` `[4, 1]`, and one-job 8-request full-batch `--drain-all` `[4, 4]` real BPU queued execution. It is not yet a complete text-generation service.
+This is real BPU execution for real Dream 7B weights, including a complete seq16 forward chain from prompt text or token ids to logits plus verified one-step and strategy-aware bounded multi-step Dream diffusion bridges over masked positions. The path now also has a CPU/BPU quality coverage gate that records current divergence against the existing CPU Dream text path, an HBM cache performance gate that quantifies NAS versus S100P-local HBM load cost, a residency gate proving that the current six-segment split cannot be made all-resident, a fine-residency gate proving that every adjacent two-segment window can be resident, a deployed fine in-process pair forward command that runs the 10-segment fine plan to logits with 0 child processes, a 3-run repeat probe for the default in-process path, a window-batch throughput probe for concurrent independent seq16 inputs, a batch-size sweep proving amortized wall time drops from `24562.798` ms at batch 1 to `3175.416` ms at batch 8, a reusable `dream7b-bpu-fine-batch-forward` wrapper for JSON token batches, a bounded `dream7b-bpu-batch-queue-runner` JSONL service bridge with verified multi-batch `--drain-all`, verified `cancelled` and `not_after_epoch_ms` control semantics, durable queue state JSONL outputs, default queue-runner single-flight `bpu_lock`, a directory-backed `dream7b-bpu-batch-queue-service` loop with verified real BPU one-shot operation, and a NAS-backed `dream7b-bpu-batch-queue.service` systemd unit with verified single-job, 2-job, one-job 4-request `batch_count=4`, one-job 5-request default `--drain-all` `[4, 1]`, and one-job 8-request full-batch `--drain-all` `[4, 4]` real BPU queued execution. It is not yet a complete text-generation service.
 
 Remaining engineering work:
 
