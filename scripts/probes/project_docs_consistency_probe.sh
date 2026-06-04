@@ -82,13 +82,16 @@ required_reference_strings=(
   "DREAM7B_BPU_TELEMETRY_TIMEOUT_SEC"
   "DREAM7B_BPU_BATCH_QUEUE_RUNNER_SCRIPT"
   "DREAM7B_BPU_BATCH_QUEUE_SERVICE_SCRIPT"
+  "DREAM7B_BPU_QUEUE_MAX_BATCH_SIZE"
   "DREAM7B_BPU_QUEUE_DRAIN_ALL"
+  "DREAM7B_BPU_SYSTEMD_BATCH_REQUEST_COUNT"
   "DREAM7B_BPU_SYSTEMD_DRAIN_REQUEST_COUNT"
   "DREAM7B_BPU_SYSTEMD_DRAIN_TIMEOUT_SEC"
   "DREAM7B_BPU_SYSTEMD_DRAIN_POLL_INTERVAL_SEC"
   "--child-runtime-mode"
   "--window-execution-mode"
   "--tokens-batch-json"
+  "--max-batch-size 8"
   "--drain-all"
   "--bpu-lock-path"
   "--bpu-lock-timeout-sec"
@@ -153,6 +156,11 @@ required_reference_strings=(
   "/mnt/nas/openclaw/reports/models/dream7b_bpu_batch_queue_service_systemd/jobs/systemd_drain_20260604-174953/queue_summary.json"
   "/mnt/nas/openclaw/reports/models/dream7b_bpu_batch_queue_systemd_drain_20260604-180557/systemd_drain_probe.md"
   "/mnt/nas/openclaw/reports/models/dream7b_bpu_batch_queue_service_systemd/jobs/systemd_drain_20260604-180557/queue_summary.json"
+  "/mnt/nas/openclaw/reports/models/dream7b_bpu_batch_queue_systemd_20260604-233926/systemd_probe.md"
+  "/mnt/nas/openclaw/reports/models/dream7b_bpu_batch_queue_systemd_batch_20260604-235205/systemd_batch_probe.md"
+  "/mnt/nas/openclaw/reports/models/dream7b_bpu_batch_queue_service_systemd/jobs/systemd_batch_20260604-235205/queue_summary.json"
+  "/mnt/nas/openclaw/reports/models/dream7b_bpu_batch_queue_systemd_drain_20260604-235302/systemd_drain_probe.md"
+  "/mnt/nas/openclaw/reports/models/dream7b_bpu_batch_queue_service_systemd/jobs/systemd_drain_20260604-235302/queue_summary.json"
   "/etc/systemd/system/dream7b-bpu-batch-queue.service"
   "/mnt/nas/openclaw/queues/dream7b-bpu"
   "/mnt/nas/openclaw/reports/models/dream7b_bpu_batch_queue_service_systemd"
@@ -293,6 +301,12 @@ if [[ -f scripts/install_dream7b_bpu_queue_service.sh ]]; then
   if ! grep -F -- "DREAM7B_BPU_QUEUE_DRAIN_ALL" scripts/install_dream7b_bpu_queue_service.sh >/dev/null; then
     errors+=("install_dream7b_bpu_queue_service.sh missing DREAM7B_BPU_QUEUE_DRAIN_ALL")
   fi
+  if ! grep -F -- 'DREAM7B_BPU_QUEUE_MAX_BATCH_SIZE:-8' scripts/install_dream7b_bpu_queue_service.sh >/dev/null; then
+    errors+=("install_dream7b_bpu_queue_service.sh missing default DREAM7B_BPU_QUEUE_MAX_BATCH_SIZE:-8")
+  fi
+  if ! grep -F -- "--max-batch-size" scripts/install_dream7b_bpu_queue_service.sh >/dev/null; then
+    errors+=("install_dream7b_bpu_queue_service.sh missing --max-batch-size")
+  fi
   if ! grep -F -- "--drain-all" scripts/install_dream7b_bpu_queue_service.sh >/dev/null; then
     errors+=("install_dream7b_bpu_queue_service.sh missing --drain-all")
   fi
@@ -313,6 +327,9 @@ if [[ -f scripts/probes/dream7b_bpu_batch_queue_systemd_probe.sh ]]; then
   fi
   if ! grep -F -- "--drain-all" scripts/probes/dream7b_bpu_batch_queue_systemd_probe.sh >/dev/null; then
     errors+=("dream7b_bpu_batch_queue_systemd_probe.sh missing --drain-all")
+  fi
+  if ! grep -F -- "--max-batch-size 8" scripts/probes/dream7b_bpu_batch_queue_systemd_probe.sh >/dev/null; then
+    errors+=("dream7b_bpu_batch_queue_systemd_probe.sh missing --max-batch-size 8")
   fi
 fi
 
@@ -338,6 +355,12 @@ if [[ -f scripts/probes/dream7b_bpu_batch_queue_systemd_batch_probe.sh ]]; then
   if ! grep -F -- "DREAM7B_BPU_SYSTEMD_BATCH_REQUEST_COUNT" scripts/probes/dream7b_bpu_batch_queue_systemd_batch_probe.sh >/dev/null; then
     errors+=("dream7b_bpu_batch_queue_systemd_batch_probe.sh missing DREAM7B_BPU_SYSTEMD_BATCH_REQUEST_COUNT")
   fi
+  if ! grep -F -- 'DREAM7B_BPU_SYSTEMD_BATCH_REQUEST_COUNT:-8' scripts/probes/dream7b_bpu_batch_queue_systemd_batch_probe.sh >/dev/null; then
+    errors+=("dream7b_bpu_batch_queue_systemd_batch_probe.sh missing default DREAM7B_BPU_SYSTEMD_BATCH_REQUEST_COUNT:-8")
+  fi
+  if ! grep -F -- "--max-batch-size 8" scripts/probes/dream7b_bpu_batch_queue_systemd_batch_probe.sh >/dev/null; then
+    errors+=("dream7b_bpu_batch_queue_systemd_batch_probe.sh missing --max-batch-size 8")
+  fi
   if ! grep -F -- "batch_count" scripts/probes/dream7b_bpu_batch_queue_systemd_batch_probe.sh >/dev/null; then
     errors+=("dream7b_bpu_batch_queue_systemd_batch_probe.sh missing batch_count")
   fi
@@ -359,6 +382,12 @@ if [[ -f scripts/probes/dream7b_bpu_batch_queue_systemd_drain_probe.sh ]]; then
   if ! grep -F -- "DREAM7B_BPU_SYSTEMD_DRAIN_REQUEST_COUNT" scripts/probes/dream7b_bpu_batch_queue_systemd_drain_probe.sh >/dev/null; then
     errors+=("dream7b_bpu_batch_queue_systemd_drain_probe.sh missing DREAM7B_BPU_SYSTEMD_DRAIN_REQUEST_COUNT")
   fi
+  if ! grep -F -- 'DREAM7B_BPU_SYSTEMD_DRAIN_REQUEST_COUNT:-8' scripts/probes/dream7b_bpu_batch_queue_systemd_drain_probe.sh >/dev/null; then
+    errors+=("dream7b_bpu_batch_queue_systemd_drain_probe.sh missing default DREAM7B_BPU_SYSTEMD_DRAIN_REQUEST_COUNT:-8")
+  fi
+  if ! grep -F -- "expected_max_batch_size=8" scripts/probes/dream7b_bpu_batch_queue_systemd_drain_probe.sh >/dev/null; then
+    errors+=("dream7b_bpu_batch_queue_systemd_drain_probe.sh missing expected_max_batch_size=8")
+  fi
   if ! grep -F -- "expected_batch_counts" scripts/probes/dream7b_bpu_batch_queue_systemd_drain_probe.sh >/dev/null; then
     errors+=("dream7b_bpu_batch_queue_systemd_drain_probe.sh missing expected_batch_counts")
   fi
@@ -373,6 +402,9 @@ if [[ -f scripts/probes/dream7b_bpu_batch_queue_systemd_drain_probe.sh ]]; then
   fi
   if ! grep -F -- "--drain-all" scripts/probes/dream7b_bpu_batch_queue_systemd_drain_probe.sh >/dev/null; then
     errors+=("dream7b_bpu_batch_queue_systemd_drain_probe.sh missing --drain-all")
+  fi
+  if ! grep -F -- "--max-batch-size 8" scripts/probes/dream7b_bpu_batch_queue_systemd_drain_probe.sh >/dev/null; then
+    errors+=("dream7b_bpu_batch_queue_systemd_drain_probe.sh missing --max-batch-size 8")
   fi
   if ! grep -F -- "/run/lock/dream7b_bpu_batch_queue_runner.lock" scripts/probes/dream7b_bpu_batch_queue_systemd_drain_probe.sh >/dev/null; then
     errors+=("dream7b_bpu_batch_queue_systemd_drain_probe.sh missing /run/lock/dream7b_bpu_batch_queue_runner.lock")

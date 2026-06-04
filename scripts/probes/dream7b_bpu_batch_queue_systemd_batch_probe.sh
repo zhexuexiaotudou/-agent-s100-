@@ -5,7 +5,7 @@ report_root="${1:-/mnt/nas/openclaw/reports/models}"
 service_name="${2:-dream7b-bpu-batch-queue.service}"
 queue_dir="${3:-/mnt/nas/openclaw/queues/dream7b-bpu}"
 output_dir="${4:-/mnt/nas/openclaw/reports/models/dream7b_bpu_batch_queue_service_systemd}"
-request_count="${DREAM7B_BPU_SYSTEMD_BATCH_REQUEST_COUNT:-4}"
+request_count="${DREAM7B_BPU_SYSTEMD_BATCH_REQUEST_COUNT:-8}"
 timeout_sec="${DREAM7B_BPU_SYSTEMD_BATCH_TIMEOUT_SEC:-420}"
 poll_interval_sec="${DREAM7B_BPU_SYSTEMD_BATCH_POLL_INTERVAL_SEC:-2}"
 
@@ -33,8 +33,8 @@ case "$output_dir" in
     ;;
 esac
 
-if ! [[ "$request_count" =~ ^[0-9]+$ ]] || (( request_count < 1 || request_count > 4 )); then
-  echo "DREAM7B_BPU_SYSTEMD_BATCH_REQUEST_COUNT must be an integer from 1 to 4." >&2
+if ! [[ "$request_count" =~ ^[0-9]+$ ]] || (( request_count < 1 || request_count > 8 )); then
+  echo "DREAM7B_BPU_SYSTEMD_BATCH_REQUEST_COUNT must be an integer from 1 to 8." >&2
   exit 2
 fi
 if ! [[ "$timeout_sec" =~ ^[0-9]+$ ]] || (( timeout_sec < 1 )); then
@@ -78,18 +78,13 @@ from pathlib import Path
 job_path = Path(sys.argv[1])
 stamp = sys.argv[2]
 request_count = int(sys.argv[3])
-tokens = [
-    [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16],
-    [16, 15, 14, 13, 12, 11, 10, 9, 8, 7, 6, 5, 4, 3, 2, 1],
-    [101, 102, 103, 104, 105, 106, 107, 108, 109, 110, 111, 112, 113, 114, 115, 116],
-    [201, 202, 203, 204, 205, 206, 207, 208, 209, 210, 211, 212, 213, 214, 215, 216],
-]
 rows = []
 for index in range(request_count):
+    base = (index + 1) * 100
     rows.append(
         {
             "request_id": f"systemd-batch-{stamp}-{index + 1:03d}",
-            "tokens": tokens[index],
+            "tokens": [base + offset for offset in range(1, 17)],
         }
     )
 job_path.write_text("".join(json.dumps(row, ensure_ascii=False) + "\n" for row in rows), encoding="utf-8")
@@ -183,7 +178,7 @@ if service_enabled_after != "enabled":
     errors.append(f"unexpected service_enabled_after: {service_enabled_after}")
 if not unit_path.endswith("/dream7b-bpu-batch-queue.service"):
     errors.append(f"unexpected unit_path: {unit_path}")
-for text in ("dream7b-bpu-batch-queue-service", "/mnt/nas/openclaw/queues/dream7b-bpu", "/mnt/nas/openclaw/reports/models/dream7b_bpu_batch_queue_service_systemd", "/run/lock/dream7b_bpu_batch_queue_runner.lock"):
+for text in ("dream7b-bpu-batch-queue-service", "/mnt/nas/openclaw/queues/dream7b-bpu", "/mnt/nas/openclaw/reports/models/dream7b_bpu_batch_queue_service_systemd", "/run/lock/dream7b_bpu_batch_queue_runner.lock", "--max-batch-size 8", "--drain-all"):
     if text not in exec_start:
         errors.append(f"ExecStart missing {text}: {exec_start}")
 if job_status != "done":
@@ -198,6 +193,8 @@ amortized_wall_ms = 0.0
 processed_count = None
 accepted_count = None
 deferred_count = None
+max_batch_size = None
+batch_run_count = None
 result_count = 0
 if isinstance(summary, dict):
     if summary.get("verdict") != "ok_dream7b_bpu_batch_queue_runner":
@@ -205,14 +202,18 @@ if isinstance(summary, dict):
     processed_count = summary.get("processed_count")
     accepted_count = summary.get("accepted_count")
     deferred_count = summary.get("deferred_count")
+    max_batch_size = summary.get("max_batch_size")
+    batch_run_count = summary.get("batch_run_count")
+    if max_batch_size != 8:
+        errors.append(f"unexpected max_batch_size: {max_batch_size}")
     if processed_count != request_count:
         errors.append(f"unexpected processed_count: {processed_count}")
     if accepted_count != request_count:
         errors.append(f"unexpected accepted_count: {accepted_count}")
     if deferred_count != 0:
         errors.append(f"unexpected deferred_count: {deferred_count}")
-    if summary.get("batch_run_count") != 1:
-        errors.append(f"unexpected batch_run_count: {summary.get('batch_run_count')}")
+    if batch_run_count != 1:
+        errors.append(f"unexpected batch_run_count: {batch_run_count}")
     lock = summary.get("bpu_lock") or {}
     if lock.get("path") != "/run/lock/dream7b_bpu_batch_queue_runner.lock":
         errors.append(f"unexpected bpu_lock.path: {lock.get('path')}")
@@ -266,6 +267,8 @@ payload = {
     "processed_count": processed_count,
     "accepted_count": accepted_count,
     "deferred_count": deferred_count,
+    "max_batch_size": max_batch_size,
+    "batch_run_count": batch_run_count,
     "batch_count": batch_count,
     "result_count": result_count,
     "execution_mode": execution_mode,
@@ -293,6 +296,8 @@ error_lines = [f"- {item}" for item in errors] if errors else ["- none"]
         f"- processed_count: {payload['processed_count']}",
         f"- accepted_count: {payload['accepted_count']}",
         f"- deferred_count: {payload['deferred_count']}",
+        f"- max_batch_size: {payload['max_batch_size']}",
+        f"- batch_run_count: {payload['batch_run_count']}",
         f"- batch_count: {payload['batch_count']}",
         f"- result_count: {payload['result_count']}",
         f"- execution_mode: {payload['execution_mode']}",

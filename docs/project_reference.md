@@ -581,7 +581,7 @@ service_path: /etc/systemd/system/dream7b-bpu-batch-queue.service
 queue_dir: /mnt/nas/openclaw/queues/dream7b-bpu
 output_dir: /mnt/nas/openclaw/reports/models/dream7b_bpu_batch_queue_service_systemd
 poll_interval_sec: 1
-max_batch_size: 4
+max_batch_size: 8
 top_k: 3
 bpu_lock_path: /run/lock/dream7b_bpu_batch_queue_runner.lock
 drain_all: true
@@ -597,6 +597,7 @@ RequiresMountsFor=/mnt/nas/openclaw
 WorkingDirectory=/mnt/nas/openclaw
 Restart=always
 RestartSec=5
+ExecStart includes --max-batch-size 8
 ExecStart includes --drain-all
 ```
 
@@ -624,13 +625,14 @@ service_status
 service_enabled
 unit_path
 exec_start
+max_batch_size_required
 drain_all_required
 ```
 
 Latest recorded report:
 
 ```text
-/mnt/nas/openclaw/reports/models/dream7b_bpu_batch_queue_systemd_20260604-174953/systemd_probe.md
+/mnt/nas/openclaw/reports/models/dream7b_bpu_batch_queue_systemd_20260604-233926/systemd_probe.md
 ```
 
 Latest live service summary after a real systemd-queued BPU job:
@@ -742,7 +744,7 @@ DREAM7B_BPU_SYSTEMD_BATCH_POLL_INTERVAL_SEC
 Default values copied from the script:
 
 ```text
-request_count = 4
+request_count = 8
 timeout_sec = 420
 poll_interval_sec = 2
 ```
@@ -759,6 +761,8 @@ request_count
 processed_count
 accepted_count
 deferred_count
+max_batch_size
+batch_run_count
 batch_count
 result_count
 final_shape
@@ -771,13 +775,13 @@ child_process_count
 Latest recorded report:
 
 ```text
-/mnt/nas/openclaw/reports/models/dream7b_bpu_batch_queue_systemd_batch_20260604-133034/systemd_batch_probe.md
+/mnt/nas/openclaw/reports/models/dream7b_bpu_batch_queue_systemd_batch_20260604-235205/systemd_batch_probe.md
 ```
 
 Latest recorded batch job summary:
 
 ```text
-/mnt/nas/openclaw/reports/models/dream7b_bpu_batch_queue_service_systemd/jobs/systemd_batch_20260604-133034/queue_summary.json
+/mnt/nas/openclaw/reports/models/dream7b_bpu_batch_queue_service_systemd/jobs/systemd_batch_20260604-235205/queue_summary.json
 ```
 
 ### `dream7b-bpu-batch-queue-systemd-drain-probe`
@@ -810,10 +814,10 @@ DREAM7B_BPU_SYSTEMD_DRAIN_POLL_INTERVAL_SEC
 Default values copied from the script:
 
 ```text
-request_count = 5
+request_count = 8
 timeout_sec = 600
 poll_interval_sec = 2
-expected_max_batch_size = 4
+expected_max_batch_size = 8
 ```
 
 Checked fields copied from the script:
@@ -844,25 +848,25 @@ child_process_counts
 Latest recorded report:
 
 ```text
-/mnt/nas/openclaw/reports/models/dream7b_bpu_batch_queue_systemd_drain_20260604-174953/systemd_drain_probe.md
+/mnt/nas/openclaw/reports/models/dream7b_bpu_batch_queue_systemd_drain_20260604-235302/systemd_drain_probe.md
 ```
 
 Latest recorded drain job summary:
 
 ```text
-/mnt/nas/openclaw/reports/models/dream7b_bpu_batch_queue_service_systemd/jobs/systemd_drain_20260604-174953/queue_summary.json
+/mnt/nas/openclaw/reports/models/dream7b_bpu_batch_queue_service_systemd/jobs/systemd_drain_20260604-235302/queue_summary.json
 ```
 
 Latest recorded full-batch drain report:
 
 ```text
-/mnt/nas/openclaw/reports/models/dream7b_bpu_batch_queue_systemd_drain_20260604-180557/systemd_drain_probe.md
+/mnt/nas/openclaw/reports/models/dream7b_bpu_batch_queue_systemd_drain_20260604-235302/systemd_drain_probe.md
 ```
 
 Latest recorded full-batch drain job summary:
 
 ```text
-/mnt/nas/openclaw/reports/models/dream7b_bpu_batch_queue_service_systemd/jobs/systemd_drain_20260604-180557/queue_summary.json
+/mnt/nas/openclaw/reports/models/dream7b_bpu_batch_queue_service_systemd/jobs/systemd_drain_20260604-235302/queue_summary.json
 ```
 
 ### `dream7b-bpu-diffusion-loop-probe`
@@ -1306,7 +1310,7 @@ Boundary: this is a long-running-capable command loop. The systemd unit is recor
 
 ### Use systemd supervision for the NAS-backed Dream 7B queue
 
-Decision: install `dream7b-bpu-batch-queue.service` on S100P with `RequiresMountsFor=/mnt/nas/openclaw`, `WorkingDirectory=/mnt/nas/openclaw`, queue directory `/mnt/nas/openclaw/queues/dream7b-bpu`, output directory `/mnt/nas/openclaw/reports/models/dream7b_bpu_batch_queue_service_systemd`, BPU lock path `/run/lock/dream7b_bpu_batch_queue_runner.lock`, and default `--drain-all` enabled through `DREAM7B_BPU_QUEUE_DRAIN_ALL`.
+Decision: install `dream7b-bpu-batch-queue.service` on S100P with `RequiresMountsFor=/mnt/nas/openclaw`, `WorkingDirectory=/mnt/nas/openclaw`, queue directory `/mnt/nas/openclaw/queues/dream7b-bpu`, output directory `/mnt/nas/openclaw/reports/models/dream7b_bpu_batch_queue_service_systemd`, BPU lock path `/run/lock/dream7b_bpu_batch_queue_runner.lock`, default `--max-batch-size 8` through `DREAM7B_BPU_QUEUE_MAX_BATCH_SIZE`, and default `--drain-all` enabled through `DREAM7B_BPU_QUEUE_DRAIN_ALL`.
 
 Reason: the NAS+S100P product path should not depend on the Windows PC. The first queued systemd job exposed a real `/tmp/dream7b_bpu_batch_queue_runner.lock` permission failure, so the systemd default lock path was moved to `/run/lock/dream7b_bpu_batch_queue_runner.lock`, which is allowed by `scripts/dream7b_bpu_batch_queue_runner.py`.
 
@@ -1326,6 +1330,11 @@ Evidence reports:
 /mnt/nas/openclaw/reports/models/dream7b_bpu_batch_queue_service_systemd/jobs/systemd_drain_20260604-174953/queue_summary.json
 /mnt/nas/openclaw/reports/models/dream7b_bpu_batch_queue_systemd_drain_20260604-180557/systemd_drain_probe.md
 /mnt/nas/openclaw/reports/models/dream7b_bpu_batch_queue_service_systemd/jobs/systemd_drain_20260604-180557/queue_summary.json
+/mnt/nas/openclaw/reports/models/dream7b_bpu_batch_queue_systemd_20260604-233926/systemd_probe.md
+/mnt/nas/openclaw/reports/models/dream7b_bpu_batch_queue_systemd_batch_20260604-235205/systemd_batch_probe.md
+/mnt/nas/openclaw/reports/models/dream7b_bpu_batch_queue_service_systemd/jobs/systemd_batch_20260604-235205/queue_summary.json
+/mnt/nas/openclaw/reports/models/dream7b_bpu_batch_queue_systemd_drain_20260604-235302/systemd_drain_probe.md
+/mnt/nas/openclaw/reports/models/dream7b_bpu_batch_queue_service_systemd/jobs/systemd_drain_20260604-235302/queue_summary.json
 ```
 
 Verified job fields copied from `queue_summary.json`:
@@ -1420,6 +1429,56 @@ total_wall_ms: 49509.638
 amortized_wall_ms_per_processed_request: 6188.705
 ```
 
+Verified current max-batch-size-8 systemd fields copied from `systemd_probe.json`:
+
+```text
+verdict: ok_dream7b_bpu_batch_queue_systemd_probe
+service_status: active
+service_enabled: enabled
+max_batch_size_required: 8
+drain_all_required: True
+exec_start includes: --max-batch-size 8
+exec_start includes: --drain-all
+```
+
+Verified current eight-request systemd batch fields copied from `systemd_batch_probe.json`:
+
+```text
+verdict: ok_dream7b_bpu_batch_queue_systemd_batch_probe
+job_name: systemd_batch_20260604-235205.jsonl
+job_status: done
+request_count: 8
+processed_count: 8
+accepted_count: 8
+deferred_count: 0
+max_batch_size: 8
+batch_run_count: 1
+batch_count: 8
+result_count: 8
+total_wall_ms: 25568.117
+amortized_wall_ms_per_processed_request: 3196.015
+```
+
+Verified current eight-request drain-all fields copied from `systemd_drain_probe.json`:
+
+```text
+verdict: ok_dream7b_bpu_batch_queue_systemd_drain_probe
+job_name: systemd_drain_20260604-235302.jsonl
+job_status: done
+request_count: 8
+expected_batch_counts: [8]
+drain_all: True
+max_batch_size: 8
+processed_count: 8
+accepted_count: 8
+deferred_count: 0
+batch_run_count: 1
+batch_counts: [8]
+result_count: 8
+total_wall_ms: 25621.258
+amortized_wall_ms_per_processed_request: 3202.657
+```
+
 ### Do not claim production text service yet
 
 Decision: current Dream 7B BPU route is a verified seq16 BPU logits and bounded diffusion-loop path, not a complete production text-generation service.
@@ -1495,6 +1554,13 @@ docs/baseline_progress_2026-06-03_dream7b_segmented_bpu_hbm.md
 - Verified `dream7b-bpu-fine-batch-size-sweep-probe` report at `/mnt/nas/openclaw/reports/models/dream7b_bpu_fine_batch_size_sweep_20260604-181429/batch_size_sweep_probe.md`.
 - Added `dream7b-bpu-runtime-telemetry-probe` for `hrt_ucp_monitor` BPU loading telemetry during Dream 7B BPU forward.
 - Verified `dream7b-bpu-runtime-telemetry-probe` report at `/mnt/nas/openclaw/reports/models/dream7b_bpu_runtime_telemetry_20260604-225030/runtime_telemetry_probe.md`.
+- Changed `install-dream7b-bpu-queue-service` default `DREAM7B_BPU_QUEUE_MAX_BATCH_SIZE` from 4 to 8 after the batch-size sweep and runtime telemetry proved batch 8 viable.
+- Updated `dream7b-bpu-batch-queue-systemd-probe`, `dream7b-bpu-batch-queue-systemd-batch-probe`, and `dream7b-bpu-batch-queue-systemd-drain-probe` to require `--max-batch-size 8`.
+- Reinstalled and restarted `dream7b-bpu-batch-queue.service`; verified `ExecStart` includes `--max-batch-size 8 --drain-all` at `/mnt/nas/openclaw/reports/models/dream7b_bpu_batch_queue_systemd_20260604-233926/systemd_probe.md`.
+- Verified an eight-request single-run systemd batch report at `/mnt/nas/openclaw/reports/models/dream7b_bpu_batch_queue_systemd_batch_20260604-235205/systemd_batch_probe.md`.
+- Verified the eight-request single-run batch job summary at `/mnt/nas/openclaw/reports/models/dream7b_bpu_batch_queue_service_systemd/jobs/systemd_batch_20260604-235205/queue_summary.json`.
+- Verified the current eight-request drain-all report at `/mnt/nas/openclaw/reports/models/dream7b_bpu_batch_queue_systemd_drain_20260604-235302/systemd_drain_probe.md`.
+- Verified the current eight-request drain-all job summary at `/mnt/nas/openclaw/reports/models/dream7b_bpu_batch_queue_service_systemd/jobs/systemd_drain_20260604-235302/queue_summary.json`.
 
 ## TODO
 

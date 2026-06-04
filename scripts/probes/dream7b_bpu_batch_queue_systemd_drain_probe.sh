@@ -5,10 +5,10 @@ report_root="${1:-/mnt/nas/openclaw/reports/models}"
 service_name="${2:-dream7b-bpu-batch-queue.service}"
 queue_dir="${3:-/mnt/nas/openclaw/queues/dream7b-bpu}"
 output_dir="${4:-/mnt/nas/openclaw/reports/models/dream7b_bpu_batch_queue_service_systemd}"
-request_count="${DREAM7B_BPU_SYSTEMD_DRAIN_REQUEST_COUNT:-5}"
+request_count="${DREAM7B_BPU_SYSTEMD_DRAIN_REQUEST_COUNT:-8}"
 timeout_sec="${DREAM7B_BPU_SYSTEMD_DRAIN_TIMEOUT_SEC:-600}"
 poll_interval_sec="${DREAM7B_BPU_SYSTEMD_DRAIN_POLL_INTERVAL_SEC:-2}"
-expected_max_batch_size=4
+expected_max_batch_size=8
 
 case "$report_root" in
   /tmp/*|/mnt/nas/openclaw/reports|/mnt/nas/openclaw/reports/*|/root/.openclaw/workspace/reports|/root/.openclaw/workspace/reports/*) ;;
@@ -34,8 +34,8 @@ case "$output_dir" in
     ;;
 esac
 
-if ! [[ "$request_count" =~ ^[0-9]+$ ]] || (( request_count < 5 || request_count > 8 )); then
-  echo "DREAM7B_BPU_SYSTEMD_DRAIN_REQUEST_COUNT must be an integer from 5 to 8." >&2
+if ! [[ "$request_count" =~ ^[0-9]+$ ]] || (( request_count < 8 || request_count > 16 )); then
+  echo "DREAM7B_BPU_SYSTEMD_DRAIN_REQUEST_COUNT must be an integer from 8 to 16." >&2
   exit 2
 fi
 if ! [[ "$timeout_sec" =~ ^[0-9]+$ ]] || (( timeout_sec < 1 )); then
@@ -181,7 +181,7 @@ if service_enabled_after != "enabled":
     errors.append(f"unexpected service_enabled_after: {service_enabled_after}")
 if not unit_path.endswith("/dream7b-bpu-batch-queue.service"):
     errors.append(f"unexpected unit_path: {unit_path}")
-for text in ("dream7b-bpu-batch-queue-service", "/mnt/nas/openclaw/queues/dream7b-bpu", "/mnt/nas/openclaw/reports/models/dream7b_bpu_batch_queue_service_systemd", "/run/lock/dream7b_bpu_batch_queue_runner.lock", "--drain-all"):
+for text in ("dream7b-bpu-batch-queue-service", "/mnt/nas/openclaw/queues/dream7b-bpu", "/mnt/nas/openclaw/reports/models/dream7b_bpu_batch_queue_service_systemd", "/run/lock/dream7b_bpu_batch_queue_runner.lock", "--max-batch-size 8", "--drain-all"):
     if text not in exec_start:
         errors.append(f"ExecStart missing {text}: {exec_start}")
 if job_status != "done":
