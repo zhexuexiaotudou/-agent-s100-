@@ -253,6 +253,72 @@ Latest recorded summaries:
 /mnt/nas/openclaw/reports/models/dream7b_bpu_fine_batch_size_sweep_20260604-181429/batch_8/forward/summary.json
 ```
 
+### `dream7b-bpu-runtime-telemetry-probe`
+
+Source file: `scripts/probes/dream7b_bpu_runtime_telemetry_probe.sh`
+
+Installed command on S100P:
+
+```text
+/usr/local/bin/dream7b-bpu-runtime-telemetry-probe
+```
+
+Environment variables copied from the script:
+
+```text
+DREAM7B_BPU_TELEMETRY_BATCH_COUNT
+DREAM7B_BPU_TELEMETRY_MONITOR_DELAY_MS
+DREAM7B_BPU_TELEMETRY_MONITOR_SAMPLE_COUNT
+DREAM7B_BPU_TELEMETRY_TOP_K
+DREAM7B_BPU_TELEMETRY_TIMEOUT_SEC
+```
+
+Default values copied from the script:
+
+```text
+batch_count = 8
+monitor_delay_ms = 100
+monitor_sample_count = 320
+top_k = 3
+timeout_sec = 480
+```
+
+Telemetry commands copied from the script and S100P discovery:
+
+```text
+hrt_ucp_monitor
+hrut_somstatus
+```
+
+Checked fields copied from the script:
+
+```text
+bpu_loading_sample_count
+nonzero_bpu_loading_sample_count
+max_bpu_loading
+avg_bpu_loading
+forward_summary
+wall_ms
+load_ms
+run_ms
+amortized_wall_ms_per_forward
+amortized_load_ms_per_forward
+amortized_run_ms_per_forward
+final_shapes
+```
+
+Latest recorded report:
+
+```text
+/mnt/nas/openclaw/reports/models/dream7b_bpu_runtime_telemetry_20260604-225030/runtime_telemetry_probe.md
+```
+
+Latest recorded forward summary:
+
+```text
+/mnt/nas/openclaw/reports/models/dream7b_bpu_runtime_telemetry_20260604-225030/forward/summary.json
+```
+
 ### `dream7b-bpu-batch-queue-runner`
 
 Source file: `scripts/dream7b-bpu-batch-queue-runner.sh`
@@ -1158,6 +1224,7 @@ Evidence reports:
 /mnt/nas/openclaw/reports/models/dream7b_bpu_fine_forward_window_batch_20260603-181131/summary.md
 /mnt/nas/openclaw/reports/models/dream7b_bpu_fine_batch_forward_20260603-183625/fine_batch_forward_probe.md
 /mnt/nas/openclaw/reports/models/dream7b_bpu_fine_batch_size_sweep_20260604-181429/batch_size_sweep_probe.md
+/mnt/nas/openclaw/reports/models/dream7b_bpu_runtime_telemetry_20260604-225030/runtime_telemetry_probe.md
 /mnt/nas/openclaw/reports/models/dream7b_bpu_batch_queue_runner_20260603-193243/batch_queue_runner_probe.md
 /mnt/nas/openclaw/reports/models/dream7b_bpu_batch_queue_drain_20260603-193309/batch_queue_drain_probe.md
 /mnt/nas/openclaw/reports/models/dream7b_bpu_batch_queue_control_20260603-193400/batch_queue_control_probe.md
@@ -1185,6 +1252,28 @@ batch_count 4 amortized_run_ms_per_forward: 173.981
 batch_count 8 amortized_wall_ms_per_forward: 3175.416
 batch_count 8 amortized_load_ms_per_forward: 2974.35
 batch_count 8 amortized_run_ms_per_forward: 173.565
+```
+
+Verified runtime telemetry fields copied from `runtime_telemetry_probe.json`:
+
+```text
+verdict: ok_dream7b_bpu_runtime_telemetry_probe
+batch_count: 8
+monitor_delay_ms: 100
+monitor_sample_count: 320
+bpu_loading_sample_count: 320
+nonzero_bpu_loading_sample_count: 20
+max_bpu_loading: 100.0
+avg_bpu_loading: 4.369
+forward execution_mode: pair_window_batch
+forward window_execution_mode: window-batch
+forward child_process_count: 0
+forward wall_ms: 24821.269
+forward load_ms: 23209.905
+forward run_ms: 1390.985
+forward amortized_wall_ms_per_forward: 3102.659
+forward amortized_load_ms_per_forward: 2901.238
+forward amortized_run_ms_per_forward: 173.873
 ```
 
 ### Use JSONL queue batching for independent seq16 requests
@@ -1404,6 +1493,8 @@ docs/baseline_progress_2026-06-03_dream7b_segmented_bpu_hbm.md
 - Verified the eight-request full-batch drain-all job summary at `/mnt/nas/openclaw/reports/models/dream7b_bpu_batch_queue_service_systemd/jobs/systemd_drain_20260604-180557/queue_summary.json`.
 - Added `dream7b-bpu-fine-batch-size-sweep-probe` for batch-count load amortization evidence.
 - Verified `dream7b-bpu-fine-batch-size-sweep-probe` report at `/mnt/nas/openclaw/reports/models/dream7b_bpu_fine_batch_size_sweep_20260604-181429/batch_size_sweep_probe.md`.
+- Added `dream7b-bpu-runtime-telemetry-probe` for `hrt_ucp_monitor` BPU loading telemetry during Dream 7B BPU forward.
+- Verified `dream7b-bpu-runtime-telemetry-probe` report at `/mnt/nas/openclaw/reports/models/dream7b_bpu_runtime_telemetry_20260604-225030/runtime_telemetry_probe.md`.
 
 ## TODO
 

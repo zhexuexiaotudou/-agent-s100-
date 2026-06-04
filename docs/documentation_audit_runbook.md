@@ -73,6 +73,7 @@ scripts/probes/dream7b_segmented_hbm_python_forward.py
 scripts/probes/dream7b_bpu_diffusion_loop_probe.sh
 scripts/probes/dream7b_bpu_fine_batch_forward_probe.sh
 scripts/probes/dream7b_bpu_fine_batch_size_sweep_probe.sh
+scripts/probes/dream7b_bpu_runtime_telemetry_probe.sh
 scripts/probes/dream7b_bpu_batch_queue_runner_probe.sh
 scripts/probes/dream7b_bpu_batch_queue_drain_probe.sh
 scripts/probes/dream7b_bpu_batch_queue_control_probe.sh

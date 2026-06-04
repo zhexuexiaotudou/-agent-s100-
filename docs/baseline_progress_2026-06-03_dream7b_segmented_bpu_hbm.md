@@ -79,6 +79,8 @@ fine-batch-forward probe command: /usr/local/bin/dream7b-bpu-fine-batch-forward-
 fine-batch-forward probe report: /mnt/nas/openclaw/reports/models/dream7b_bpu_fine_batch_forward_20260603-183625/fine_batch_forward_probe.md
 fine-batch-size-sweep probe command: /usr/local/bin/dream7b-bpu-fine-batch-size-sweep-probe
 fine-batch-size-sweep report: /mnt/nas/openclaw/reports/models/dream7b_bpu_fine_batch_size_sweep_20260604-181429/batch_size_sweep_probe.md
+runtime telemetry probe command: /usr/local/bin/dream7b-bpu-runtime-telemetry-probe
+runtime telemetry report: /mnt/nas/openclaw/reports/models/dream7b_bpu_runtime_telemetry_20260604-225030/runtime_telemetry_probe.md
 batch-queue-runner command: /usr/local/bin/dream7b-bpu-batch-queue-runner
 batch-queue-runner probe command: /usr/local/bin/dream7b-bpu-batch-queue-runner-probe
 batch-queue-runner probe report: /mnt/nas/openclaw/reports/models/dream7b_bpu_batch_queue_runner_20260603-193243/batch_queue_runner_probe.md
@@ -173,6 +175,7 @@ scripts/probes/dream7b_bpu_fine_forward_window_batch_probe.sh
 scripts/dream7b-bpu-fine-batch-forward.sh
 scripts/probes/dream7b_bpu_fine_batch_forward_probe.sh
 scripts/probes/dream7b_bpu_fine_batch_size_sweep_probe.sh
+scripts/probes/dream7b_bpu_runtime_telemetry_probe.sh
 scripts/dream7b-bpu-batch-queue-runner.sh
 scripts/dream7b_bpu_batch_queue_runner.py
 scripts/probes/dream7b_bpu_batch_queue_runner_probe.sh
@@ -786,6 +789,37 @@ window_execution_mode: window-batch
 child_process_count: 0
 ```
 
+The runtime telemetry path is:
+
+```bash
+dream7b-bpu-runtime-telemetry-probe /mnt/nas/openclaw/reports/models
+```
+
+Verified runtime telemetry output:
+
+```text
+report: /mnt/nas/openclaw/reports/models/dream7b_bpu_runtime_telemetry_20260604-225030/runtime_telemetry_probe.md
+verdict: ok_dream7b_bpu_runtime_telemetry_probe
+batch_count: 8
+monitor_delay_ms: 100
+monitor_sample_count: 320
+bpu_loading_sample_count: 320
+nonzero_bpu_loading_sample_count: 20
+max_bpu_loading: 100.0
+avg_bpu_loading: 4.369
+forward_summary: /mnt/nas/openclaw/reports/models/dream7b_bpu_runtime_telemetry_20260604-225030/forward/summary.json
+forward execution_mode: pair_window_batch
+forward window_execution_mode: window-batch
+forward child_process_count: 0
+forward wall_ms: 24821.269
+forward load_ms: 23209.905
+forward run_ms: 1390.985
+forward amortized_wall_ms_per_forward: 3102.659
+forward amortized_load_ms_per_forward: 2901.238
+forward amortized_run_ms_per_forward: 173.873
+final_shapes: [1, 16, 152064] x 8
+```
+
 The service-level JSONL queue runner for independent seq16 requests is:
 
 ```bash
@@ -1156,7 +1190,7 @@ bpu remaining_mask_positions: []
 
 ## Current Boundary
 
-This is real BPU execution for real Dream 7B weights, including a complete seq16 forward chain from prompt text or token ids to logits plus verified one-step and strategy-aware bounded multi-step Dream diffusion bridges over masked positions. The path now also has a CPU/BPU quality coverage gate that records current divergence against the existing CPU Dream text path, an HBM cache performance gate that quantifies NAS versus S100P-local HBM load cost, a residency gate proving that the current six-segment split cannot be made all-resident, a fine-residency gate proving that every adjacent two-segment window can be resident, a deployed fine in-process pair forward command that runs the 10-segment fine plan to logits with 0 child processes, a 3-run repeat probe for the default in-process path, a window-batch throughput probe for concurrent independent seq16 inputs, a batch-size sweep proving amortized wall time drops from `24562.798` ms at batch 1 to `3175.416` ms at batch 8, a reusable `dream7b-bpu-fine-batch-forward` wrapper for JSON token batches, a bounded `dream7b-bpu-batch-queue-runner` JSONL service bridge with verified multi-batch `--drain-all`, verified `cancelled` and `not_after_epoch_ms` control semantics, durable queue state JSONL outputs, default queue-runner single-flight `bpu_lock`, a directory-backed `dream7b-bpu-batch-queue-service` loop with verified real BPU one-shot operation, and a NAS-backed `dream7b-bpu-batch-queue.service` systemd unit with verified single-job, 2-job, one-job 4-request `batch_count=4`, one-job 5-request default `--drain-all` `[4, 1]`, and one-job 8-request full-batch `--drain-all` `[4, 4]` real BPU queued execution. It is not yet a complete text-generation service.
+This is real BPU execution for real Dream 7B weights, including a complete seq16 forward chain from prompt text or token ids to logits plus verified one-step and strategy-aware bounded multi-step Dream diffusion bridges over masked positions. The path now also has a CPU/BPU quality coverage gate that records current divergence against the existing CPU Dream text path, an HBM cache performance gate that quantifies NAS versus S100P-local HBM load cost, a residency gate proving that the current six-segment split cannot be made all-resident, a fine-residency gate proving that every adjacent two-segment window can be resident, a deployed fine in-process pair forward command that runs the 10-segment fine plan to logits with 0 child processes, a 3-run repeat probe for the default in-process path, a window-batch throughput probe for concurrent independent seq16 inputs, a batch-size sweep proving amortized wall time drops from `24562.798` ms at batch 1 to `3175.416` ms at batch 8, runtime telemetry with `hrt_ucp_monitor` showing `max_bpu_loading: 100.0` during Dream 7B BPU forward, a reusable `dream7b-bpu-fine-batch-forward` wrapper for JSON token batches, a bounded `dream7b-bpu-batch-queue-runner` JSONL service bridge with verified multi-batch `--drain-all`, verified `cancelled` and `not_after_epoch_ms` control semantics, durable queue state JSONL outputs, default queue-runner single-flight `bpu_lock`, a directory-backed `dream7b-bpu-batch-queue-service` loop with verified real BPU one-shot operation, and a NAS-backed `dream7b-bpu-batch-queue.service` systemd unit with verified single-job, 2-job, one-job 4-request `batch_count=4`, one-job 5-request default `--drain-all` `[4, 1]`, and one-job 8-request full-batch `--drain-all` `[4, 4]` real BPU queued execution. It is not yet a complete text-generation service.
 
 Remaining engineering work:
 
