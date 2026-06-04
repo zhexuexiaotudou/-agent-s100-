@@ -163,6 +163,33 @@ def write_summary(output_dir: Path, payload: dict):
     return summary_md
 
 
+def build_summary_payload(args, queue_dir: Path, output_dir: Path, queue_paths: dict, jobs: list, errors: list, iteration_count: int):
+    failed_job_count = sum(1 for job in jobs if job["returncode"] != 0 or job.get("runner_verdict") != "ok_dream7b_bpu_batch_queue_runner")
+    return {
+        "generated_at": datetime.now().astimezone().isoformat(),
+        "verdict": "ok_dream7b_bpu_batch_queue_service" if not errors else "failed_dream7b_bpu_batch_queue_service",
+        "queue_dir": str(queue_dir),
+        "output_dir": str(output_dir),
+        "runner_command": args.runner_cmd,
+        "max_batch_size": args.max_batch_size,
+        "seq_len": args.seq_len,
+        "top_k": args.top_k,
+        "forward_command": args.forward_cmd,
+        "drain_all": bool(args.drain_all),
+        "bpu_lock_path": args.bpu_lock_path,
+        "bpu_lock_timeout_sec": args.bpu_lock_timeout_sec,
+        "poll_interval_sec": args.poll_interval_sec,
+        "max_iterations": args.max_iterations,
+        "once": bool(args.once),
+        "iteration_count": iteration_count,
+        "processed_job_count": len(jobs) - failed_job_count,
+        "failed_job_count": failed_job_count,
+        "queue_paths": {name: str(path) for name, path in queue_paths.items()},
+        "jobs": jobs,
+        "errors": errors,
+    }
+
+
 def main():
     args = parse_args()
     if args.max_batch_size <= 0:
@@ -203,36 +230,13 @@ def main():
                 errors.append(f"job exception: {processing}: {exc}")
                 if processing.exists():
                     move_job(processing, queue_paths["failed"], ".jsonl")
+        payload = build_summary_payload(args, queue_dir, output_dir, queue_paths, jobs, errors, iteration_count)
+        summary_md = write_summary(output_dir, payload)
         if max_iterations and iteration_count >= max_iterations:
             break
         if pending is None:
             time.sleep(args.poll_interval_sec)
 
-    failed_job_count = sum(1 for job in jobs if job["returncode"] != 0 or job.get("runner_verdict") != "ok_dream7b_bpu_batch_queue_runner")
-    payload = {
-        "generated_at": datetime.now().astimezone().isoformat(),
-        "verdict": "ok_dream7b_bpu_batch_queue_service" if not errors else "failed_dream7b_bpu_batch_queue_service",
-        "queue_dir": str(queue_dir),
-        "output_dir": str(output_dir),
-        "runner_command": args.runner_cmd,
-        "max_batch_size": args.max_batch_size,
-        "seq_len": args.seq_len,
-        "top_k": args.top_k,
-        "forward_command": args.forward_cmd,
-        "drain_all": bool(args.drain_all),
-        "bpu_lock_path": args.bpu_lock_path,
-        "bpu_lock_timeout_sec": args.bpu_lock_timeout_sec,
-        "poll_interval_sec": args.poll_interval_sec,
-        "max_iterations": args.max_iterations,
-        "once": bool(args.once),
-        "iteration_count": iteration_count,
-        "processed_job_count": len(jobs) - failed_job_count,
-        "failed_job_count": failed_job_count,
-        "queue_paths": {name: str(path) for name, path in queue_paths.items()},
-        "jobs": jobs,
-        "errors": errors,
-    }
-    summary_md = write_summary(output_dir, payload)
     print(summary_md)
     if errors:
         raise SystemExit("; ".join(errors))

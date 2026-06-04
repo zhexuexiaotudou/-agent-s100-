@@ -409,6 +409,111 @@ Latest recorded real BPU service one-shot:
 /mnt/nas/openclaw/reports/models/dream7b_bpu_batch_queue_service_real_scp_20260603-194827/output/service_summary.md
 ```
 
+Runtime behavior copied from `scripts/dream7b_bpu_batch_queue_service.py`:
+
+```text
+service_summary.json is refreshed during each service loop iteration
+service_summary.md is refreshed during each service loop iteration
+```
+
+### `install-dream7b-bpu-queue-service`
+
+Source file: `scripts/install_dream7b_bpu_queue_service.sh`
+
+Installed command on S100P:
+
+```text
+/usr/local/bin/install-dream7b-bpu-queue-service
+```
+
+Actions copied from the script:
+
+```text
+plan
+install
+status
+uninstall
+```
+
+Environment variables copied from the script:
+
+```text
+DREAM7B_BPU_QUEUE_POLL_INTERVAL_SEC
+DREAM7B_BPU_QUEUE_MAX_BATCH_SIZE
+DREAM7B_BPU_QUEUE_TOP_K
+DREAM7B_BPU_QUEUE_LOCK_PATH
+DREAM7B_BPU_QUEUE_REPO_DIR
+```
+
+Default values copied from the script and verified by `install-dream7b-bpu-queue-service plan` on S100P:
+
+```text
+service: dream7b-bpu-batch-queue.service
+service_path: /etc/systemd/system/dream7b-bpu-batch-queue.service
+queue_dir: /mnt/nas/openclaw/queues/dream7b-bpu
+output_dir: /mnt/nas/openclaw/reports/models/dream7b_bpu_batch_queue_service_systemd
+poll_interval_sec: 1
+max_batch_size: 4
+top_k: 3
+bpu_lock_path: /run/lock/dream7b_bpu_batch_queue_runner.lock
+working_directory: /mnt/nas/openclaw
+```
+
+Unit fields copied from `/etc/systemd/system/dream7b-bpu-batch-queue.service`:
+
+```text
+Description=Dream 7B BPU batch queue service
+Documentation=file:///usr/local/bin/install-dream7b-bpu-queue-service
+RequiresMountsFor=/mnt/nas/openclaw
+WorkingDirectory=/mnt/nas/openclaw
+Restart=always
+RestartSec=5
+```
+
+### `dream7b-bpu-batch-queue-systemd-probe`
+
+Source file: `scripts/probes/dream7b_bpu_batch_queue_systemd_probe.sh`
+
+Installed command on S100P:
+
+```text
+/usr/local/bin/dream7b-bpu-batch-queue-systemd-probe
+```
+
+Default arguments copied from the script:
+
+```text
+report_root = /mnt/nas/openclaw/reports/models
+service_name = dream7b-bpu-batch-queue.service
+```
+
+Checked fields copied from the script:
+
+```text
+service_status
+service_enabled
+unit_path
+exec_start
+```
+
+Latest recorded report:
+
+```text
+/mnt/nas/openclaw/reports/models/dream7b_bpu_batch_queue_systemd_20260603-221324/systemd_probe.md
+```
+
+Latest live service summary after a real systemd-queued BPU job:
+
+```text
+/mnt/nas/openclaw/reports/models/dream7b_bpu_batch_queue_service_systemd/service_summary.md
+```
+
+Latest real systemd-queued BPU job summary:
+
+```text
+/mnt/nas/openclaw/reports/models/dream7b_bpu_batch_queue_service_systemd/jobs/systemd_job_20260603_220710/queue_summary.json
+```
+
 ### `dream7b-bpu-diffusion-loop-probe`
 
 Source file: `scripts/probes/dream7b_bpu_diffusion_loop_probe.sh`
@@ -794,7 +899,7 @@ Boundary: this is a service-level throughput bridge for independent requests. It
 
 ### Use directory-backed service queue for reusable operation
 
-Decision: use `dream7b-bpu-batch-queue-service` as the reusable directory-backed service loop. It consumes `*.jsonl` jobs from `pending`, moves active jobs to `processing`, moves successful jobs to `done`, moves failed jobs to `failed`, writes `service_summary.json`, and calls `dream7b-bpu-batch-queue-runner` for each job so the existing `durable_state` and `bpu_lock` behavior remains authoritative.
+Decision: use `dream7b-bpu-batch-queue-service` as the reusable directory-backed service loop. It consumes `*.jsonl` jobs from `pending`, moves active jobs to `processing`, moves successful jobs to `done`, moves failed jobs to `failed`, refreshes `service_summary.json` and `service_summary.md` during each loop iteration, and calls `dream7b-bpu-batch-queue-runner` for each job so the existing `durable_state` and `bpu_lock` behavior remains authoritative.
 
 Evidence reports:
 
@@ -804,6 +909,33 @@ Evidence reports:
 ```
 
 Boundary: this is a long-running-capable command loop. It is not yet installed as a systemd unit.
+
+### Use systemd supervision for the NAS-backed Dream 7B queue
+
+Decision: install `dream7b-bpu-batch-queue.service` on S100P with `RequiresMountsFor=/mnt/nas/openclaw`, `WorkingDirectory=/mnt/nas/openclaw`, queue directory `/mnt/nas/openclaw/queues/dream7b-bpu`, output directory `/mnt/nas/openclaw/reports/models/dream7b_bpu_batch_queue_service_systemd`, and BPU lock path `/run/lock/dream7b_bpu_batch_queue_runner.lock`.
+
+Reason: the NAS+S100P product path should not depend on the Windows PC. The first queued systemd job exposed a real `/tmp/dream7b_bpu_batch_queue_runner.lock` permission failure, so the systemd default lock path was moved to `/run/lock/dream7b_bpu_batch_queue_runner.lock`, which is allowed by `scripts/dream7b_bpu_batch_queue_runner.py`.
+
+Evidence reports:
+
+```text
+/mnt/nas/openclaw/reports/models/dream7b_bpu_batch_queue_systemd_20260603-221324/systemd_probe.md
+/mnt/nas/openclaw/reports/models/dream7b_bpu_batch_queue_service_systemd/service_summary.md
+/mnt/nas/openclaw/reports/models/dream7b_bpu_batch_queue_service_systemd/jobs/systemd_job_20260603_220710/queue_summary.json
+```
+
+Verified job fields copied from `queue_summary.json`:
+
+```text
+verdict: ok_dream7b_bpu_batch_queue_runner
+request_id: systemd-req-001
+processed_count: 1
+final_shape: [1, 16, 152064]
+bpu_lock.path: /run/lock/dream7b_bpu_batch_queue_runner.lock
+execution_mode: pair_window_batch
+window_execution_mode: window-batch
+child_process_count: 0
+```
 
 ### Do not claim production text service yet
 
@@ -855,12 +987,16 @@ docs/baseline_progress_2026-06-03_dream7b_segmented_bpu_hbm.md
 - Added `dream7b-bpu-batch-queue-service` for directory-backed `pending` / `processing` / `done` / `failed` queue operation.
 - Verified `dream7b-bpu-batch-queue-service-probe` report at `/mnt/nas/openclaw/reports/models/dream7b_bpu_batch_queue_service_20260603-194437/batch_queue_service_probe.md`.
 - Verified real BPU one-shot service report at `/mnt/nas/openclaw/reports/models/dream7b_bpu_batch_queue_service_real_scp_20260603-194827/output/service_summary.md`.
+- Added `install-dream7b-bpu-queue-service` and `dream7b-bpu-batch-queue-systemd-probe`.
+- Installed and restarted `dream7b-bpu-batch-queue.service` at `/etc/systemd/system/dream7b-bpu-batch-queue.service`.
+- Verified `dream7b-bpu-batch-queue-systemd-probe` report at `/mnt/nas/openclaw/reports/models/dream7b_bpu_batch_queue_systemd_20260603-221324/systemd_probe.md`.
+- Verified a real systemd-queued BPU job at `/mnt/nas/openclaw/reports/models/dream7b_bpu_batch_queue_service_systemd/jobs/systemd_job_20260603_220710/queue_summary.json`.
 
 ## TODO
 
 - Keep `--window-execution-mode child-process` as the fallback path until longer-run evidence proves `--window-execution-mode in-process` is stable beyond the current 3-run probe.
 - Add longer repeated-run performance evidence for `fine_pair_in_process_packed`.
-- Add daemon supervision for `dream7b-bpu-batch-queue-service` after the desired queue root and restart policy are selected.
+- Add service-level cleanup or archival policy for failed queue test files under `/mnt/nas/openclaw/queues/dream7b-bpu/failed`.
 - Run documentation consistency checking through `scripts/probes/project_docs_consistency_probe.sh` after each task.
 - Continue quality gates against the CPU Dream path before describing the BPU route as production text generation.
 

@@ -25,6 +25,7 @@ required_files=(
   "scripts/dream7b_bpu_batch_queue_runner.py"
   "scripts/dream7b-bpu-batch-queue-service.sh"
   "scripts/dream7b_bpu_batch_queue_service.py"
+  "scripts/install_dream7b_bpu_queue_service.sh"
   "scripts/dream7b-bpu-text-forward.sh"
   "scripts/probes/dream7b_segmented_hbm_python_forward.py"
   "scripts/probes/dream7b_bpu_diffusion_loop_probe.sh"
@@ -36,6 +37,7 @@ required_files=(
   "scripts/probes/dream7b_bpu_batch_queue_control_probe.sh"
   "scripts/probes/dream7b_bpu_batch_queue_lock_probe.sh"
   "scripts/probes/dream7b_bpu_batch_queue_service_probe.sh"
+  "scripts/probes/dream7b_bpu_batch_queue_systemd_probe.sh"
   "scripts/startup_link_check/link-check.config.json"
   "scripts/tool_allowlist.json"
 )
@@ -52,6 +54,9 @@ required_reference_strings=(
   "dream7b-bpu-fine-batch-forward"
   "dream7b-bpu-batch-queue-runner"
   "dream7b-bpu-batch-queue-service"
+  "install-dream7b-bpu-queue-service"
+  "dream7b-bpu-batch-queue-systemd-probe"
+  "dream7b-bpu-batch-queue.service"
   "dream7b-bpu-text-forward"
   "dream7b-bpu-diffusion-loop-probe"
   "DREAM7B_BPU_FINE_CHILD_RUNTIME_MODE"
@@ -71,6 +76,7 @@ required_reference_strings=(
   "not_after_epoch_ms"
   "durable_state"
   "bpu_lock"
+  "/run/lock/dream7b_bpu_batch_queue_runner.lock"
   "pending"
   "processing"
   "done"
@@ -93,6 +99,12 @@ required_reference_strings=(
   "/mnt/nas/openclaw/reports/models/dream7b_bpu_batch_queue_lock_20260603-193209/batch_queue_lock_probe.md"
   "/mnt/nas/openclaw/reports/models/dream7b_bpu_batch_queue_service_20260603-194437/batch_queue_service_probe.md"
   "/mnt/nas/openclaw/reports/models/dream7b_bpu_batch_queue_service_real_scp_20260603-194827/output/service_summary.md"
+  "/mnt/nas/openclaw/reports/models/dream7b_bpu_batch_queue_systemd_20260603-221324/systemd_probe.md"
+  "/mnt/nas/openclaw/reports/models/dream7b_bpu_batch_queue_service_systemd/service_summary.md"
+  "/mnt/nas/openclaw/reports/models/dream7b_bpu_batch_queue_service_systemd/jobs/systemd_job_20260603_220710/queue_summary.json"
+  "/etc/systemd/system/dream7b-bpu-batch-queue.service"
+  "/mnt/nas/openclaw/queues/dream7b-bpu"
+  "/mnt/nas/openclaw/reports/models/dream7b_bpu_batch_queue_service_systemd"
   "/mnt/nas/openclaw/reports/models/dream7b_bpu_fine_forward_20260603-183906/fine_forward_probe.md"
   "/mnt/nas/openclaw/reports/models/dream7b_bpu_diffusion_loop_20260603-175030/summary.md"
 )
@@ -208,6 +220,39 @@ if [[ -f scripts/dream7b_bpu_batch_queue_service.py ]]; then
   fi
   if ! grep -F -- "service_summary.json" scripts/dream7b_bpu_batch_queue_service.py >/dev/null; then
     errors+=("dream7b_bpu_batch_queue_service.py missing service_summary.json")
+  fi
+  if ! grep -F -- "build_summary_payload" scripts/dream7b_bpu_batch_queue_service.py >/dev/null; then
+    errors+=("dream7b_bpu_batch_queue_service.py missing build_summary_payload")
+  fi
+fi
+
+if [[ -f scripts/install_dream7b_bpu_queue_service.sh ]]; then
+  if ! grep -F -- "dream7b-bpu-batch-queue.service" scripts/install_dream7b_bpu_queue_service.sh >/dev/null; then
+    errors+=("install_dream7b_bpu_queue_service.sh missing dream7b-bpu-batch-queue.service")
+  fi
+  if ! grep -F -- "/mnt/nas/openclaw/queues/dream7b-bpu" scripts/install_dream7b_bpu_queue_service.sh >/dev/null; then
+    errors+=("install_dream7b_bpu_queue_service.sh missing /mnt/nas/openclaw/queues/dream7b-bpu")
+  fi
+  if ! grep -F -- "/mnt/nas/openclaw/reports/models/dream7b_bpu_batch_queue_service_systemd" scripts/install_dream7b_bpu_queue_service.sh >/dev/null; then
+    errors+=("install_dream7b_bpu_queue_service.sh missing systemd output directory")
+  fi
+  if ! grep -F -- "/run/lock/dream7b_bpu_batch_queue_runner.lock" scripts/install_dream7b_bpu_queue_service.sh >/dev/null; then
+    errors+=("install_dream7b_bpu_queue_service.sh missing /run/lock/dream7b_bpu_batch_queue_runner.lock")
+  fi
+fi
+
+if [[ -f scripts/probes/dream7b_bpu_batch_queue_systemd_probe.sh ]]; then
+  if ! grep -F -- "dream7b-bpu-batch-queue.service" scripts/probes/dream7b_bpu_batch_queue_systemd_probe.sh >/dev/null; then
+    errors+=("dream7b_bpu_batch_queue_systemd_probe.sh missing dream7b-bpu-batch-queue.service")
+  fi
+  if ! grep -F -- "service_status" scripts/probes/dream7b_bpu_batch_queue_systemd_probe.sh >/dev/null; then
+    errors+=("dream7b_bpu_batch_queue_systemd_probe.sh missing service_status")
+  fi
+  if ! grep -F -- "service_enabled" scripts/probes/dream7b_bpu_batch_queue_systemd_probe.sh >/dev/null; then
+    errors+=("dream7b_bpu_batch_queue_systemd_probe.sh missing service_enabled")
+  fi
+  if ! grep -F -- "/run/lock/dream7b_bpu_batch_queue_runner.lock" scripts/probes/dream7b_bpu_batch_queue_systemd_probe.sh >/dev/null; then
+    errors+=("dream7b_bpu_batch_queue_systemd_probe.sh missing /run/lock/dream7b_bpu_batch_queue_runner.lock")
   fi
 fi
 
