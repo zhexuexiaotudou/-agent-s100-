@@ -1296,6 +1296,7 @@ DREAM7B_BPU_ACCEPTANCE_MIN_BATCH_CAPACITY
 DREAM7B_BPU_ACCEPTANCE_MIN_SYSTEMD_BATCH_REQUESTS
 DREAM7B_BPU_ACCEPTANCE_MIN_SYSTEMD_TELEMETRY_REQUESTS
 DREAM7B_BPU_ACCEPTANCE_MIN_LONG_REPEAT_COUNT
+DREAM7B_BPU_ACCEPTANCE_MAX_LONG_REPEAT_WALL_SPREAD_RATIO
 ```
 
 Default values copied from the script:
@@ -1305,6 +1306,7 @@ min_batch_capacity = 16
 min_systemd_batch_requests = 16
 min_systemd_telemetry_requests = 48
 min_long_repeat_count = 6
+max_long_repeat_wall_spread_ratio = 0.10
 ```
 
 Report globs copied from the script:
@@ -1346,6 +1348,7 @@ min_batch_capacity
 min_systemd_batch_requests
 min_systemd_telemetry_requests
 min_long_repeat_count
+max_long_repeat_wall_spread_ratio
 check_count
 passed_check_count
 checks
@@ -1359,6 +1362,7 @@ Latest recorded report:
 /mnt/nas/openclaw/reports/models/dream7b_bpu_deployment_acceptance_20260605-143759/deployment_acceptance_probe.md
 /mnt/nas/openclaw/reports/models/dream7b_bpu_deployment_acceptance_20260605-153747/deployment_acceptance_probe.md
 /mnt/nas/openclaw/reports/models/dream7b_bpu_deployment_acceptance_20260605-161000/deployment_acceptance_probe.md
+/mnt/nas/openclaw/reports/models/dream7b_bpu_deployment_acceptance_20260605-172156/deployment_acceptance_probe.md
 ```
 
 Latest recorded JSON:
@@ -1367,6 +1371,7 @@ Latest recorded JSON:
 /mnt/nas/openclaw/reports/models/dream7b_bpu_deployment_acceptance_20260605-143759/deployment_acceptance_probe.json
 /mnt/nas/openclaw/reports/models/dream7b_bpu_deployment_acceptance_20260605-153747/deployment_acceptance_probe.json
 /mnt/nas/openclaw/reports/models/dream7b_bpu_deployment_acceptance_20260605-161000/deployment_acceptance_probe.json
+/mnt/nas/openclaw/reports/models/dream7b_bpu_deployment_acceptance_20260605-172156/deployment_acceptance_probe.json
 ```
 
 Verified deployment acceptance fields copied from `deployment_acceptance_probe.json`:
@@ -1379,6 +1384,7 @@ min_batch_capacity: 16
 min_systemd_batch_requests: 16
 min_systemd_telemetry_requests: 48
 min_long_repeat_count: 6
+max_long_repeat_wall_spread_ratio: 0.1
 warnings: []
 errors: []
 systemd_service.ok: True
@@ -1513,7 +1519,7 @@ Default values copied from the script:
 
 ```text
 repeat_count = 6
-max_wall_spread_ratio = 0
+max_wall_spread_ratio = 0.10
 ```
 
 Checked fields copied from the script:
@@ -1529,6 +1535,7 @@ median_run_ms
 min_wall_ms
 max_wall_ms
 wall_spread_ratio
+max_wall_spread_ratio
 execution_mode
 window_execution_mode
 child_process_count
@@ -1540,18 +1547,21 @@ Latest recorded report:
 
 ```text
 /mnt/nas/openclaw/reports/models/dream7b_bpu_fine_forward_long_repeat_20260605-140733/long_repeat_probe.md
+/mnt/nas/openclaw/reports/models/dream7b_bpu_fine_forward_long_repeat_20260605-163343/long_repeat_probe.md
 ```
 
 Latest recorded JSON:
 
 ```text
 /mnt/nas/openclaw/reports/models/dream7b_bpu_fine_forward_long_repeat_20260605-140733/long_repeat_probe.json
+/mnt/nas/openclaw/reports/models/dream7b_bpu_fine_forward_long_repeat_20260605-163343/long_repeat_probe.json
 ```
 
 Latest recorded child repeat summary:
 
 ```text
 /mnt/nas/openclaw/reports/models/dream7b_bpu_fine_forward_long_repeat_20260605-140733/repeat/dream7b_bpu_fine_forward_repeat_20260605-140733/summary.json
+/mnt/nas/openclaw/reports/models/dream7b_bpu_fine_forward_long_repeat_20260605-163343/repeat/dream7b_bpu_fine_forward_repeat_20260605-163343/summary.json
 ```
 
 ### `dream7b-bpu-fine-forward-window-batch-probe`
@@ -2252,13 +2262,13 @@ verdict: ok_dream7b_bpu_fine_forward_long_repeat_probe
 repeat_count: 6
 repeat_status: 0
 failure_count: 0
-median_wall_ms: 25486.779
-median_load_ms: 24109.348
-median_run_ms: 175.934
-min_wall_ms: 25281.031
-max_wall_ms: 26394.78
-wall_spread_ratio: 0.043699
-max_wall_spread_ratio: 0.0
+median_wall_ms: 25253.389
+median_load_ms: 24134.596
+median_run_ms: 176.056
+min_wall_ms: 24998.927
+max_wall_ms: 26168.34
+wall_spread_ratio: 0.046307
+max_wall_spread_ratio: 0.1
 execution_mode: pair_in_process
 window_execution_mode: in-process
 child_process_count: 0
@@ -2270,8 +2280,8 @@ errors: []
 Verified deployment acceptance fields copied from `deployment_acceptance_probe.json`:
 
 ```text
-acceptance_report: /mnt/nas/openclaw/reports/models/dream7b_bpu_deployment_acceptance_20260605-161000/deployment_acceptance_probe.md
-acceptance_json: /mnt/nas/openclaw/reports/models/dream7b_bpu_deployment_acceptance_20260605-161000/deployment_acceptance_probe.json
+acceptance_report: /mnt/nas/openclaw/reports/models/dream7b_bpu_deployment_acceptance_20260605-172156/deployment_acceptance_probe.md
+acceptance_json: /mnt/nas/openclaw/reports/models/dream7b_bpu_deployment_acceptance_20260605-172156/deployment_acceptance_probe.json
 verdict: ok_dream7b_bpu_deployment_acceptance_probe
 check_count: 9
 passed_check_count: 9
@@ -2279,6 +2289,7 @@ min_batch_capacity: 16
 min_systemd_batch_requests: 16
 min_systemd_telemetry_requests: 48
 min_long_repeat_count: 6
+max_long_repeat_wall_spread_ratio: 0.1
 systemd_service.ok: True
 batch_capacity.ok: True
 hbm_artifact_inventory.ok: True
@@ -2406,11 +2417,15 @@ docs/baseline_progress_2026-06-03_dream7b_segmented_bpu_hbm.md
 - Verified HBM artifact inventory report at `/mnt/nas/openclaw/reports/models/dream7b_bpu_hbm_artifact_inventory_20260605-160050/hbm_artifact_inventory_probe.md` with `expected_artifact_count: 14`, `size_match_count: 14`, and `manifest_verified_count: 12`.
 - Updated `dream7b-bpu-deployment-acceptance-probe` to include `hbm_artifact_inventory`.
 - Verified updated deployment acceptance report at `/mnt/nas/openclaw/reports/models/dream7b_bpu_deployment_acceptance_20260605-161000/deployment_acceptance_probe.md` with `check_count: 9` and `passed_check_count: 9`.
+- Changed `dream7b-bpu-fine-forward-long-repeat-probe` default `DREAM7B_BPU_FINE_FORWARD_LONG_REPEAT_MAX_WALL_SPREAD_RATIO` from `0` to `0.10`.
+- Verified gated six-run long repeat report at `/mnt/nas/openclaw/reports/models/dream7b_bpu_fine_forward_long_repeat_20260605-163343/long_repeat_probe.md` with `wall_spread_ratio: 0.046307`, `max_wall_spread_ratio: 0.1`, and `errors: []`.
+- Updated `dream7b-bpu-deployment-acceptance-probe` to require gated long-repeat spread evidence through `DREAM7B_BPU_ACCEPTANCE_MAX_LONG_REPEAT_WALL_SPREAD_RATIO`.
+- Verified gated deployment acceptance report at `/mnt/nas/openclaw/reports/models/dream7b_bpu_deployment_acceptance_20260605-172156/deployment_acceptance_probe.md` with `check_count: 9`, `passed_check_count: 9`, and `max_long_repeat_wall_spread_ratio: 0.1`.
 
 ## TODO
 
-- Keep `--window-execution-mode child-process` as the fallback path until longer-run evidence proves `--window-execution-mode in-process` is stable beyond the current 3-run probe.
-- Add an explicit `DREAM7B_BPU_FINE_FORWARD_LONG_REPEAT_MAX_WALL_SPREAD_RATIO` gate only after an acceptable wall-time spread threshold is chosen from repeated evidence.
+- Keep `--window-execution-mode child-process` as the fallback path until more long-run evidence extends beyond the current gated 6-run `--window-execution-mode in-process` probe.
+- Continue collecting long-repeat reports before tightening the current `DREAM7B_BPU_FINE_FORWARD_LONG_REPEAT_MAX_WALL_SPREAD_RATIO` default of `0.10`.
 - Keep queue cleanup report-only until an explicit apply mode and archive directory migration rule are approved.
 - Re-run `dream7b-bpu-deployment-acceptance-probe` after every Dream 7B BPU service, batching, telemetry, or retention change.
 - Run documentation consistency checking through `scripts/probes/project_docs_consistency_probe.sh` after each task.

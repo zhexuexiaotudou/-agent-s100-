@@ -131,6 +131,7 @@ required_reference_strings=(
   "DREAM7B_BPU_ACCEPTANCE_MIN_SYSTEMD_BATCH_REQUESTS"
   "DREAM7B_BPU_ACCEPTANCE_MIN_SYSTEMD_TELEMETRY_REQUESTS"
   "DREAM7B_BPU_ACCEPTANCE_MIN_LONG_REPEAT_COUNT"
+  "DREAM7B_BPU_ACCEPTANCE_MAX_LONG_REPEAT_WALL_SPREAD_RATIO"
   "--child-runtime-mode"
   "--window-execution-mode"
   "--tokens-batch-json"
@@ -198,9 +199,9 @@ required_reference_strings=(
   "/mnt/nas/openclaw/reports/models/dream7b_bpu_fine_forward_20260603-174608/fine_forward_probe.md"
   "/mnt/nas/openclaw/reports/models/dream7b_bpu_fine_forward_perf_20260603-174745/summary.md"
   "/mnt/nas/openclaw/reports/models/dream7b_bpu_fine_forward_repeat_20260603-180108/summary.md"
-  "/mnt/nas/openclaw/reports/models/dream7b_bpu_fine_forward_long_repeat_20260605-140733/long_repeat_probe.md"
-  "/mnt/nas/openclaw/reports/models/dream7b_bpu_fine_forward_long_repeat_20260605-140733/long_repeat_probe.json"
-  "/mnt/nas/openclaw/reports/models/dream7b_bpu_fine_forward_long_repeat_20260605-140733/repeat/dream7b_bpu_fine_forward_repeat_20260605-140733/summary.json"
+  "/mnt/nas/openclaw/reports/models/dream7b_bpu_fine_forward_long_repeat_20260605-163343/long_repeat_probe.md"
+  "/mnt/nas/openclaw/reports/models/dream7b_bpu_fine_forward_long_repeat_20260605-163343/long_repeat_probe.json"
+  "/mnt/nas/openclaw/reports/models/dream7b_bpu_fine_forward_long_repeat_20260605-163343/repeat/dream7b_bpu_fine_forward_repeat_20260605-163343/summary.json"
   "/mnt/nas/openclaw/reports/models/dream7b_bpu_fine_forward_window_batch_20260603-181131/summary.md"
   "/mnt/nas/openclaw/reports/models/dream7b_bpu_fine_batch_forward_20260603-183625/fine_batch_forward_probe.md"
   "/mnt/nas/openclaw/reports/models/dream7b_bpu_fine_batch_size_sweep_20260604-181429/batch_size_sweep_probe.md"
@@ -263,6 +264,8 @@ required_reference_strings=(
   "/mnt/nas/openclaw/reports/models/dream7b_bpu_deployment_acceptance_20260605-153747/deployment_acceptance_probe.json"
   "/mnt/nas/openclaw/reports/models/dream7b_bpu_deployment_acceptance_20260605-161000/deployment_acceptance_probe.md"
   "/mnt/nas/openclaw/reports/models/dream7b_bpu_deployment_acceptance_20260605-161000/deployment_acceptance_probe.json"
+  "/mnt/nas/openclaw/reports/models/dream7b_bpu_deployment_acceptance_20260605-172156/deployment_acceptance_probe.md"
+  "/mnt/nas/openclaw/reports/models/dream7b_bpu_deployment_acceptance_20260605-172156/deployment_acceptance_probe.json"
   "/etc/systemd/system/dream7b-bpu-batch-queue.service"
   "/mnt/nas/openclaw/queues/dream7b-bpu"
   "/mnt/nas/openclaw/reports/models/dream7b_bpu_batch_queue_service_systemd"
@@ -631,6 +634,9 @@ if [[ -f scripts/probes/dream7b_bpu_fine_forward_long_repeat_probe.sh ]]; then
   if ! grep -F -- "DREAM7B_BPU_FINE_FORWARD_LONG_REPEAT_MAX_WALL_SPREAD_RATIO" scripts/probes/dream7b_bpu_fine_forward_long_repeat_probe.sh >/dev/null; then
     errors+=("dream7b_bpu_fine_forward_long_repeat_probe.sh missing DREAM7B_BPU_FINE_FORWARD_LONG_REPEAT_MAX_WALL_SPREAD_RATIO")
   fi
+  if ! grep -F -- 'DREAM7B_BPU_FINE_FORWARD_LONG_REPEAT_MAX_WALL_SPREAD_RATIO:-0.10' scripts/probes/dream7b_bpu_fine_forward_long_repeat_probe.sh >/dev/null; then
+    errors+=("dream7b_bpu_fine_forward_long_repeat_probe.sh missing default DREAM7B_BPU_FINE_FORWARD_LONG_REPEAT_MAX_WALL_SPREAD_RATIO:-0.10")
+  fi
   if ! grep -F -- "dream7b-bpu-fine-forward-repeat-probe" scripts/probes/dream7b_bpu_fine_forward_long_repeat_probe.sh >/dev/null; then
     errors+=("dream7b_bpu_fine_forward_long_repeat_probe.sh missing dream7b-bpu-fine-forward-repeat-probe")
   fi
@@ -793,6 +799,12 @@ if [[ -f scripts/probes/dream7b_bpu_deployment_acceptance_probe.sh ]]; then
   if ! grep -F -- 'DREAM7B_BPU_ACCEPTANCE_MIN_LONG_REPEAT_COUNT:-6' scripts/probes/dream7b_bpu_deployment_acceptance_probe.sh >/dev/null; then
     errors+=("dream7b_bpu_deployment_acceptance_probe.sh missing default DREAM7B_BPU_ACCEPTANCE_MIN_LONG_REPEAT_COUNT:-6")
   fi
+  if ! grep -F -- "DREAM7B_BPU_ACCEPTANCE_MAX_LONG_REPEAT_WALL_SPREAD_RATIO" scripts/probes/dream7b_bpu_deployment_acceptance_probe.sh >/dev/null; then
+    errors+=("dream7b_bpu_deployment_acceptance_probe.sh missing DREAM7B_BPU_ACCEPTANCE_MAX_LONG_REPEAT_WALL_SPREAD_RATIO")
+  fi
+  if ! grep -F -- 'DREAM7B_BPU_ACCEPTANCE_MAX_LONG_REPEAT_WALL_SPREAD_RATIO:-0.10' scripts/probes/dream7b_bpu_deployment_acceptance_probe.sh >/dev/null; then
+    errors+=("dream7b_bpu_deployment_acceptance_probe.sh missing default DREAM7B_BPU_ACCEPTANCE_MAX_LONG_REPEAT_WALL_SPREAD_RATIO:-0.10")
+  fi
   for text in \
     "dream7b_bpu_batch_queue_systemd_*/systemd_probe.json" \
     "dream7b_bpu_batch_capacity_*/batch_capacity_probe.json" \
@@ -811,6 +823,8 @@ if [[ -f scripts/probes/dream7b_bpu_deployment_acceptance_probe.sh ]]; then
     "systemd_canary" \
     "systemd_telemetry" \
     "long_repeat" \
+    "max_long_repeat_wall_spread_ratio" \
+    "max_wall_spread_ratio" \
     "queue_retention" \
     "deployment_acceptance_probe.json" \
     "deployment_acceptance_probe.md" \

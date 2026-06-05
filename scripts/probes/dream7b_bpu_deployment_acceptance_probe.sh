@@ -6,6 +6,7 @@ min_batch_capacity="${DREAM7B_BPU_ACCEPTANCE_MIN_BATCH_CAPACITY:-16}"
 min_systemd_batch_requests="${DREAM7B_BPU_ACCEPTANCE_MIN_SYSTEMD_BATCH_REQUESTS:-16}"
 min_systemd_telemetry_requests="${DREAM7B_BPU_ACCEPTANCE_MIN_SYSTEMD_TELEMETRY_REQUESTS:-48}"
 min_long_repeat_count="${DREAM7B_BPU_ACCEPTANCE_MIN_LONG_REPEAT_COUNT:-6}"
+max_long_repeat_wall_spread_ratio="${DREAM7B_BPU_ACCEPTANCE_MAX_LONG_REPEAT_WALL_SPREAD_RATIO:-0.10}"
 
 case "$report_root" in
   /tmp/*|/mnt/nas/openclaw/reports|/mnt/nas/openclaw/reports/*|/root/.openclaw/workspace/reports|/root/.openclaw/workspace/reports/*) ;;
@@ -31,6 +32,10 @@ if ! [[ "$min_long_repeat_count" =~ ^[1-9][0-9]*$ ]]; then
   echo "DREAM7B_BPU_ACCEPTANCE_MIN_LONG_REPEAT_COUNT must be a positive integer." >&2
   exit 2
 fi
+if ! [[ "$max_long_repeat_wall_spread_ratio" =~ ^[0-9]+([.][0-9]+)?$ ]]; then
+  echo "DREAM7B_BPU_ACCEPTANCE_MAX_LONG_REPEAT_WALL_SPREAD_RATIO must be a non-negative number." >&2
+  exit 2
+fi
 
 mkdir -p "$report_root"
 stamp="$(date +%Y%m%d-%H%M%S)"
@@ -43,7 +48,8 @@ python3 - \
   "$min_batch_capacity" \
   "$min_systemd_batch_requests" \
   "$min_systemd_telemetry_requests" \
-  "$min_long_repeat_count" <<'PY'
+  "$min_long_repeat_count" \
+  "$max_long_repeat_wall_spread_ratio" <<'PY'
 import glob
 import json
 import sys
@@ -56,6 +62,7 @@ min_batch_capacity = int(sys.argv[3])
 min_systemd_batch_requests = int(sys.argv[4])
 min_systemd_telemetry_requests = int(sys.argv[5])
 min_long_repeat_count = int(sys.argv[6])
+max_long_repeat_wall_spread_ratio = float(sys.argv[7])
 errors = []
 warnings = []
 checks = []
@@ -302,11 +309,16 @@ if long_repeat is None:
     add_check("long_repeat", long_repeat_path, False, {"reason": "missing long_repeat_probe.json"})
 else:
     results = long_repeat.get("results") or []
+    wall_spread_ratio = float(long_repeat.get("wall_spread_ratio") or 0.0)
+    report_max_wall_spread_ratio = float(long_repeat.get("max_wall_spread_ratio") or 0.0)
     ok = (
         long_repeat.get("verdict") == "ok_dream7b_bpu_fine_forward_long_repeat_probe"
         and int(long_repeat.get("repeat_count") or 0) >= min_long_repeat_count
         and long_repeat.get("repeat_status") == 0
         and long_repeat.get("failure_count") == 0
+        and report_max_wall_spread_ratio > 0.0
+        and report_max_wall_spread_ratio <= max_long_repeat_wall_spread_ratio
+        and wall_spread_ratio <= max_long_repeat_wall_spread_ratio
         and all(item.get("execution_mode") == "pair_in_process" for item in results)
         and all(item.get("window_execution_mode") == "in-process" for item in results)
         and all(item.get("child_process_count") == 0 for item in results)
@@ -324,6 +336,7 @@ else:
             "failure_count": long_repeat.get("failure_count"),
             "median_wall_ms": long_repeat.get("median_wall_ms"),
             "wall_spread_ratio": long_repeat.get("wall_spread_ratio"),
+            "max_wall_spread_ratio": long_repeat.get("max_wall_spread_ratio"),
         },
     )
 
@@ -362,6 +375,7 @@ payload = {
     "min_systemd_batch_requests": min_systemd_batch_requests,
     "min_systemd_telemetry_requests": min_systemd_telemetry_requests,
     "min_long_repeat_count": min_long_repeat_count,
+    "max_long_repeat_wall_spread_ratio": max_long_repeat_wall_spread_ratio,
     "check_count": len(checks),
     "passed_check_count": sum(1 for item in checks if item["ok"]),
     "checks": checks,
@@ -389,6 +403,7 @@ error_lines = [f"- {item}" for item in errors] if errors else ["- none"]
         f"- min_systemd_batch_requests: {payload['min_systemd_batch_requests']}",
         f"- min_systemd_telemetry_requests: {payload['min_systemd_telemetry_requests']}",
         f"- min_long_repeat_count: {payload['min_long_repeat_count']}",
+        f"- max_long_repeat_wall_spread_ratio: {payload['max_long_repeat_wall_spread_ratio']}",
         "",
         "## Checks",
         "",

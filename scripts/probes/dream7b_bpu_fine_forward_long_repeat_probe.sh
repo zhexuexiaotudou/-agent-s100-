@@ -4,7 +4,7 @@ set -euo pipefail
 report_root="${1:-/mnt/nas/openclaw/reports/models}"
 tokens="${2:-1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16}"
 repeat_count="${DREAM7B_BPU_FINE_FORWARD_LONG_REPEAT_COUNT:-6}"
-max_wall_spread_ratio="${DREAM7B_BPU_FINE_FORWARD_LONG_REPEAT_MAX_WALL_SPREAD_RATIO:-0}"
+max_wall_spread_ratio="${DREAM7B_BPU_FINE_FORWARD_LONG_REPEAT_MAX_WALL_SPREAD_RATIO:-0.10}"
 
 case "$report_root" in
   /tmp/*|/mnt/nas/openclaw/reports|/mnt/nas/openclaw/reports/*|/root/.openclaw/workspace/reports|/root/.openclaw/workspace/reports/*) ;;
