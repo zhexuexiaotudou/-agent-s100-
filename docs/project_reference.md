@@ -1101,6 +1101,118 @@ Latest recorded JSON:
 /mnt/nas/openclaw/reports/models/dream7b_bpu_batch_queue_retention_20260605-135448/queue_retention_probe.json
 ```
 
+### `dream7b-bpu-deployment-acceptance-probe`
+
+Source file: `scripts/probes/dream7b_bpu_deployment_acceptance_probe.sh`
+
+Installed command on S100P:
+
+```text
+/usr/local/bin/dream7b-bpu-deployment-acceptance-probe
+```
+
+Default argument copied from the script:
+
+```text
+report_root = /mnt/nas/openclaw/reports/models
+```
+
+Environment variables copied from the script:
+
+```text
+DREAM7B_BPU_ACCEPTANCE_MIN_BATCH_CAPACITY
+DREAM7B_BPU_ACCEPTANCE_MIN_SYSTEMD_BATCH_REQUESTS
+DREAM7B_BPU_ACCEPTANCE_MIN_SYSTEMD_TELEMETRY_REQUESTS
+DREAM7B_BPU_ACCEPTANCE_MIN_LONG_REPEAT_COUNT
+```
+
+Default values copied from the script:
+
+```text
+min_batch_capacity = 16
+min_systemd_batch_requests = 16
+min_systemd_telemetry_requests = 48
+min_long_repeat_count = 6
+```
+
+Report globs copied from the script:
+
+```text
+dream7b_bpu_batch_queue_systemd_*/systemd_probe.json
+dream7b_bpu_batch_capacity_*/batch_capacity_probe.json
+dream7b_bpu_batch_queue_systemd_batch_*/systemd_batch_probe.json
+dream7b_bpu_batch_queue_systemd_drain_*/systemd_drain_probe.json
+dream7b_bpu_batch_queue_systemd_telemetry_*/systemd_telemetry_probe.json
+dream7b_bpu_fine_forward_long_repeat_*/long_repeat_probe.json
+dream7b_bpu_batch_queue_retention_*/queue_retention_probe.json
+```
+
+Check names copied from the script:
+
+```text
+systemd_service
+batch_capacity
+systemd_batch
+systemd_drain
+systemd_telemetry
+long_repeat
+queue_retention
+```
+
+Output fields copied from the script:
+
+```text
+generated_at
+verdict
+report_root
+run_dir
+min_batch_capacity
+min_systemd_batch_requests
+min_systemd_telemetry_requests
+min_long_repeat_count
+check_count
+passed_check_count
+checks
+warnings
+errors
+```
+
+Latest recorded report:
+
+```text
+/mnt/nas/openclaw/reports/models/dream7b_bpu_deployment_acceptance_20260605-143759/deployment_acceptance_probe.md
+```
+
+Latest recorded JSON:
+
+```text
+/mnt/nas/openclaw/reports/models/dream7b_bpu_deployment_acceptance_20260605-143759/deployment_acceptance_probe.json
+```
+
+Verified deployment acceptance fields copied from `deployment_acceptance_probe.json`:
+
+```text
+verdict: ok_dream7b_bpu_deployment_acceptance_probe
+check_count: 7
+passed_check_count: 7
+min_batch_capacity: 16
+min_systemd_batch_requests: 16
+min_systemd_telemetry_requests: 48
+min_long_repeat_count: 6
+warnings: []
+errors: []
+systemd_service.ok: True
+batch_capacity.ok: True
+systemd_batch.ok: True
+systemd_drain.ok: True
+systemd_telemetry.ok: True
+long_repeat.ok: True
+queue_retention.ok: True
+systemd_telemetry.details.max_bpu_loading: 100.0
+systemd_telemetry.details.avg_bpu_loading: 9.616
+queue_retention.details.queue_counts: {'pending': 0, 'processing': 0, 'done': 13, 'failed': 1}
+```
+
 ### `dream7b-bpu-diffusion-loop-probe`
 
 Source file: `scripts/probes/dream7b_bpu_diffusion_loop_probe.sh`
@@ -1916,6 +2028,29 @@ final_shape: [1, 16, 152064]
 errors: []
 ```
 
+Verified deployment acceptance fields copied from `deployment_acceptance_probe.json`:
+
+```text
+acceptance_report: /mnt/nas/openclaw/reports/models/dream7b_bpu_deployment_acceptance_20260605-143759/deployment_acceptance_probe.md
+acceptance_json: /mnt/nas/openclaw/reports/models/dream7b_bpu_deployment_acceptance_20260605-143759/deployment_acceptance_probe.json
+verdict: ok_dream7b_bpu_deployment_acceptance_probe
+check_count: 7
+passed_check_count: 7
+min_batch_capacity: 16
+min_systemd_batch_requests: 16
+min_systemd_telemetry_requests: 48
+min_long_repeat_count: 6
+systemd_service.ok: True
+batch_capacity.ok: True
+systemd_batch.ok: True
+systemd_drain.ok: True
+systemd_telemetry.ok: True
+long_repeat.ok: True
+queue_retention.ok: True
+warnings: []
+errors: []
+```
+
 ### Do not claim production text service yet
 
 Decision: current Dream 7B BPU route is a verified seq16 BPU logits and bounded diffusion-loop path, not a complete production text-generation service.
@@ -2020,12 +2155,15 @@ docs/baseline_progress_2026-06-03_dream7b_segmented_bpu_hbm.md
 - Verified current NAS queue retention report at `/mnt/nas/openclaw/reports/models/dream7b_bpu_batch_queue_retention_20260605-135448/queue_retention_probe.md`.
 - Added `dream7b-bpu-fine-forward-long-repeat-probe` for longer `pair_in_process` repeated-run evidence over the existing fine-forward repeat path.
 - Verified six-run long repeat report at `/mnt/nas/openclaw/reports/models/dream7b_bpu_fine_forward_long_repeat_20260605-140733/long_repeat_probe.md`.
+- Added `dream7b-bpu-deployment-acceptance-probe` as a report-only deployment acceptance gate over the latest Dream 7B BPU service, batch capacity, systemd batch/drain/telemetry, long-repeat, and queue-retention reports.
+- Verified deployment acceptance report at `/mnt/nas/openclaw/reports/models/dream7b_bpu_deployment_acceptance_20260605-143759/deployment_acceptance_probe.md` with `check_count: 7` and `passed_check_count: 7`.
 
 ## TODO
 
 - Keep `--window-execution-mode child-process` as the fallback path until longer-run evidence proves `--window-execution-mode in-process` is stable beyond the current 3-run probe.
 - Add an explicit `DREAM7B_BPU_FINE_FORWARD_LONG_REPEAT_MAX_WALL_SPREAD_RATIO` gate only after an acceptable wall-time spread threshold is chosen from repeated evidence.
 - Keep queue cleanup report-only until an explicit apply mode and archive directory migration rule are approved.
+- Re-run `dream7b-bpu-deployment-acceptance-probe` after every Dream 7B BPU service, batching, telemetry, or retention change.
 - Run documentation consistency checking through `scripts/probes/project_docs_consistency_probe.sh` after each task.
 - Continue quality gates against the CPU Dream path before describing the BPU route as production text generation.
 

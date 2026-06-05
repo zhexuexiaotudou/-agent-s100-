@@ -47,6 +47,7 @@ required_files=(
   "scripts/probes/dream7b_bpu_batch_queue_systemd_drain_probe.sh"
   "scripts/probes/dream7b_bpu_batch_queue_systemd_telemetry_probe.sh"
   "scripts/probes/dream7b_bpu_batch_queue_retention_probe.sh"
+  "scripts/probes/dream7b_bpu_deployment_acceptance_probe.sh"
   "scripts/startup_link_check/link-check.config.json"
   "scripts/tool_allowlist.json"
 )
@@ -74,6 +75,7 @@ required_reference_strings=(
   "dream7b-bpu-batch-queue-systemd-drain-probe"
   "dream7b-bpu-batch-queue-systemd-telemetry-probe"
   "dream7b-bpu-batch-queue-retention-probe"
+  "dream7b-bpu-deployment-acceptance-probe"
   "dream7b-bpu-batch-queue.service"
   "dream7b-bpu-text-forward"
   "dream7b-bpu-diffusion-loop-probe"
@@ -112,6 +114,10 @@ required_reference_strings=(
   "DREAM7B_BPU_QUEUE_RETENTION_PENDING_STALE_MINUTES"
   "DREAM7B_BPU_QUEUE_RETENTION_PROCESSING_STALE_MINUTES"
   "DREAM7B_BPU_QUEUE_RETENTION_MAX_LIST"
+  "DREAM7B_BPU_ACCEPTANCE_MIN_BATCH_CAPACITY"
+  "DREAM7B_BPU_ACCEPTANCE_MIN_SYSTEMD_BATCH_REQUESTS"
+  "DREAM7B_BPU_ACCEPTANCE_MIN_SYSTEMD_TELEMETRY_REQUESTS"
+  "DREAM7B_BPU_ACCEPTANCE_MIN_LONG_REPEAT_COUNT"
   "--child-runtime-mode"
   "--window-execution-mode"
   "--tokens-batch-json"
@@ -144,6 +150,15 @@ required_reference_strings=(
   "processing_stale_count"
   "done_archive_candidate_count"
   "failed_archive_candidate_count"
+  "deployment_acceptance_probe"
+  "passed_check_count"
+  "systemd_service"
+  "batch_capacity"
+  "systemd_batch"
+  "systemd_drain"
+  "systemd_telemetry"
+  "long_repeat"
+  "queue_retention"
   "/run/lock/dream7b_bpu_batch_queue_runner.lock"
   "pending"
   "processing"
@@ -213,6 +228,8 @@ required_reference_strings=(
   "/mnt/nas/openclaw/reports/models/dream7b_bpu_batch_queue_service_systemd/jobs/systemd_telemetry_20260605-133919_003/queue_summary.json"
   "/mnt/nas/openclaw/reports/models/dream7b_bpu_batch_queue_retention_20260605-135448/queue_retention_probe.md"
   "/mnt/nas/openclaw/reports/models/dream7b_bpu_batch_queue_retention_20260605-135448/queue_retention_probe.json"
+  "/mnt/nas/openclaw/reports/models/dream7b_bpu_deployment_acceptance_20260605-143759/deployment_acceptance_probe.md"
+  "/mnt/nas/openclaw/reports/models/dream7b_bpu_deployment_acceptance_20260605-143759/deployment_acceptance_probe.json"
   "/etc/systemd/system/dream7b-bpu-batch-queue.service"
   "/mnt/nas/openclaw/queues/dream7b-bpu"
   "/mnt/nas/openclaw/reports/models/dream7b_bpu_batch_queue_service_systemd"
@@ -647,6 +664,58 @@ if [[ -f scripts/probes/dream7b_bpu_batch_queue_retention_probe.sh ]]; then
   if ! grep -F -- "failed_archive_candidate_count" scripts/probes/dream7b_bpu_batch_queue_retention_probe.sh >/dev/null; then
     errors+=("dream7b_bpu_batch_queue_retention_probe.sh missing failed_archive_candidate_count")
   fi
+fi
+
+if [[ -f scripts/probes/dream7b_bpu_deployment_acceptance_probe.sh ]]; then
+  if ! grep -F -- "DREAM7B_BPU_ACCEPTANCE_MIN_BATCH_CAPACITY" scripts/probes/dream7b_bpu_deployment_acceptance_probe.sh >/dev/null; then
+    errors+=("dream7b_bpu_deployment_acceptance_probe.sh missing DREAM7B_BPU_ACCEPTANCE_MIN_BATCH_CAPACITY")
+  fi
+  if ! grep -F -- 'DREAM7B_BPU_ACCEPTANCE_MIN_BATCH_CAPACITY:-16' scripts/probes/dream7b_bpu_deployment_acceptance_probe.sh >/dev/null; then
+    errors+=("dream7b_bpu_deployment_acceptance_probe.sh missing default DREAM7B_BPU_ACCEPTANCE_MIN_BATCH_CAPACITY:-16")
+  fi
+  if ! grep -F -- "DREAM7B_BPU_ACCEPTANCE_MIN_SYSTEMD_BATCH_REQUESTS" scripts/probes/dream7b_bpu_deployment_acceptance_probe.sh >/dev/null; then
+    errors+=("dream7b_bpu_deployment_acceptance_probe.sh missing DREAM7B_BPU_ACCEPTANCE_MIN_SYSTEMD_BATCH_REQUESTS")
+  fi
+  if ! grep -F -- 'DREAM7B_BPU_ACCEPTANCE_MIN_SYSTEMD_BATCH_REQUESTS:-16' scripts/probes/dream7b_bpu_deployment_acceptance_probe.sh >/dev/null; then
+    errors+=("dream7b_bpu_deployment_acceptance_probe.sh missing default DREAM7B_BPU_ACCEPTANCE_MIN_SYSTEMD_BATCH_REQUESTS:-16")
+  fi
+  if ! grep -F -- "DREAM7B_BPU_ACCEPTANCE_MIN_SYSTEMD_TELEMETRY_REQUESTS" scripts/probes/dream7b_bpu_deployment_acceptance_probe.sh >/dev/null; then
+    errors+=("dream7b_bpu_deployment_acceptance_probe.sh missing DREAM7B_BPU_ACCEPTANCE_MIN_SYSTEMD_TELEMETRY_REQUESTS")
+  fi
+  if ! grep -F -- 'DREAM7B_BPU_ACCEPTANCE_MIN_SYSTEMD_TELEMETRY_REQUESTS:-48' scripts/probes/dream7b_bpu_deployment_acceptance_probe.sh >/dev/null; then
+    errors+=("dream7b_bpu_deployment_acceptance_probe.sh missing default DREAM7B_BPU_ACCEPTANCE_MIN_SYSTEMD_TELEMETRY_REQUESTS:-48")
+  fi
+  if ! grep -F -- "DREAM7B_BPU_ACCEPTANCE_MIN_LONG_REPEAT_COUNT" scripts/probes/dream7b_bpu_deployment_acceptance_probe.sh >/dev/null; then
+    errors+=("dream7b_bpu_deployment_acceptance_probe.sh missing DREAM7B_BPU_ACCEPTANCE_MIN_LONG_REPEAT_COUNT")
+  fi
+  if ! grep -F -- 'DREAM7B_BPU_ACCEPTANCE_MIN_LONG_REPEAT_COUNT:-6' scripts/probes/dream7b_bpu_deployment_acceptance_probe.sh >/dev/null; then
+    errors+=("dream7b_bpu_deployment_acceptance_probe.sh missing default DREAM7B_BPU_ACCEPTANCE_MIN_LONG_REPEAT_COUNT:-6")
+  fi
+  for text in \
+    "dream7b_bpu_batch_queue_systemd_*/systemd_probe.json" \
+    "dream7b_bpu_batch_capacity_*/batch_capacity_probe.json" \
+    "dream7b_bpu_batch_queue_systemd_batch_*/systemd_batch_probe.json" \
+    "dream7b_bpu_batch_queue_systemd_drain_*/systemd_drain_probe.json" \
+    "dream7b_bpu_batch_queue_systemd_telemetry_*/systemd_telemetry_probe.json" \
+    "dream7b_bpu_fine_forward_long_repeat_*/long_repeat_probe.json" \
+    "dream7b_bpu_batch_queue_retention_*/queue_retention_probe.json" \
+    "systemd_service" \
+    "batch_capacity" \
+    "systemd_batch" \
+    "systemd_drain" \
+    "systemd_telemetry" \
+    "long_repeat" \
+    "queue_retention" \
+    "deployment_acceptance_probe.json" \
+    "deployment_acceptance_probe.md" \
+    "ok_dream7b_bpu_deployment_acceptance_probe" \
+    "passed_check_count" \
+    "check_count" \
+    "max_bpu_loading"; do
+    if ! grep -F -- "$text" scripts/probes/dream7b_bpu_deployment_acceptance_probe.sh >/dev/null; then
+      errors+=("dream7b_bpu_deployment_acceptance_probe.sh missing $text")
+    fi
+  done
 fi
 
 summary_json="$report_root/summary.json"
