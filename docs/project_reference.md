@@ -924,6 +924,87 @@ Latest recorded full-batch drain job summary:
 /mnt/nas/openclaw/reports/models/dream7b_bpu_batch_queue_service_systemd/jobs/systemd_drain_20260605-131621/queue_summary.json
 ```
 
+### `dream7b-bpu-batch-queue-systemd-canary-probe`
+
+Source file: `scripts/probes/dream7b_bpu_batch_queue_systemd_canary_probe.sh`
+
+Installed command on S100P:
+
+```text
+/usr/local/bin/dream7b-bpu-batch-queue-systemd-canary-probe
+```
+
+Default arguments copied from the script:
+
+```text
+report_root = /mnt/nas/openclaw/reports/models
+service_name = dream7b-bpu-batch-queue.service
+queue_dir = /mnt/nas/openclaw/queues/dream7b-bpu
+output_dir = /mnt/nas/openclaw/reports/models/dream7b_bpu_batch_queue_service_systemd
+```
+
+Environment variables copied from the script:
+
+```text
+DREAM7B_BPU_SYSTEMD_CANARY_REQUEST_COUNT
+DREAM7B_BPU_SYSTEMD_CANARY_TIMEOUT_SEC
+DREAM7B_BPU_SYSTEMD_CANARY_POLL_INTERVAL_SEC
+```
+
+Default values copied from the script:
+
+```text
+request_count = 1
+timeout_sec = 180
+poll_interval_sec = 2
+```
+
+Checked fields copied from the script:
+
+```text
+service_status_before
+service_enabled_before
+service_status_after
+service_enabled_after
+unit_path
+exec_start
+job_status
+drain_all
+max_batch_size
+processed_count
+accepted_count
+deferred_count
+skipped_count
+batch_run_count
+batch_count
+result_count
+execution_mode
+window_execution_mode
+child_process_count
+bpu_lock_path
+final_shapes
+total_wall_ms
+amortized_wall_ms_per_processed_request
+```
+
+Latest recorded report:
+
+```text
+/mnt/nas/openclaw/reports/models/dream7b_bpu_batch_queue_systemd_canary_20260605-151715/systemd_canary_probe.md
+```
+
+Latest recorded JSON:
+
+```text
+/mnt/nas/openclaw/reports/models/dream7b_bpu_batch_queue_systemd_canary_20260605-151715/systemd_canary_probe.json
+```
+
+Latest recorded canary job summary:
+
+```text
+/mnt/nas/openclaw/reports/models/dream7b_bpu_batch_queue_service_systemd/jobs/systemd_canary_20260605-151715/queue_summary.json
+```
+
 ### `dream7b-bpu-batch-queue-systemd-telemetry-probe`
 
 Source file: `scripts/probes/dream7b_bpu_batch_queue_systemd_telemetry_probe.sh`
@@ -1142,6 +1223,7 @@ dream7b_bpu_batch_queue_systemd_*/systemd_probe.json
 dream7b_bpu_batch_capacity_*/batch_capacity_probe.json
 dream7b_bpu_batch_queue_systemd_batch_*/systemd_batch_probe.json
 dream7b_bpu_batch_queue_systemd_drain_*/systemd_drain_probe.json
+dream7b_bpu_batch_queue_systemd_canary_*/systemd_canary_probe.json
 dream7b_bpu_batch_queue_systemd_telemetry_*/systemd_telemetry_probe.json
 dream7b_bpu_fine_forward_long_repeat_*/long_repeat_probe.json
 dream7b_bpu_batch_queue_retention_*/queue_retention_probe.json
@@ -1154,6 +1236,7 @@ systemd_service
 batch_capacity
 systemd_batch
 systemd_drain
+systemd_canary
 systemd_telemetry
 long_repeat
 queue_retention
@@ -1181,20 +1264,22 @@ Latest recorded report:
 
 ```text
 /mnt/nas/openclaw/reports/models/dream7b_bpu_deployment_acceptance_20260605-143759/deployment_acceptance_probe.md
+/mnt/nas/openclaw/reports/models/dream7b_bpu_deployment_acceptance_20260605-153747/deployment_acceptance_probe.md
 ```
 
 Latest recorded JSON:
 
 ```text
 /mnt/nas/openclaw/reports/models/dream7b_bpu_deployment_acceptance_20260605-143759/deployment_acceptance_probe.json
+/mnt/nas/openclaw/reports/models/dream7b_bpu_deployment_acceptance_20260605-153747/deployment_acceptance_probe.json
 ```
 
 Verified deployment acceptance fields copied from `deployment_acceptance_probe.json`:
 
 ```text
 verdict: ok_dream7b_bpu_deployment_acceptance_probe
-check_count: 7
-passed_check_count: 7
+check_count: 8
+passed_check_count: 8
 min_batch_capacity: 16
 min_systemd_batch_requests: 16
 min_systemd_telemetry_requests: 48
@@ -1205,9 +1290,14 @@ systemd_service.ok: True
 batch_capacity.ok: True
 systemd_batch.ok: True
 systemd_drain.ok: True
+systemd_canary.ok: True
 systemd_telemetry.ok: True
 long_repeat.ok: True
 queue_retention.ok: True
+systemd_canary.details.job_status: done
+systemd_canary.details.request_count: 1
+systemd_canary.details.processed_count: 1
+systemd_canary.details.final_shapes: [[1, 16, 152064]]
 systemd_telemetry.details.max_bpu_loading: 100.0
 systemd_telemetry.details.avg_bpu_loading: 9.616
 queue_retention.details.queue_counts: {'pending': 0, 'processing': 0, 'done': 13, 'failed': 1}
@@ -1960,6 +2050,35 @@ total_wall_ms: 27248.799
 amortized_wall_ms_per_processed_request: 1703.05
 ```
 
+Verified lightweight systemd canary fields copied from `systemd_canary_probe.json`:
+
+```text
+canary_report: /mnt/nas/openclaw/reports/models/dream7b_bpu_batch_queue_systemd_canary_20260605-151715/systemd_canary_probe.md
+canary_json: /mnt/nas/openclaw/reports/models/dream7b_bpu_batch_queue_systemd_canary_20260605-151715/systemd_canary_probe.json
+verdict: ok_dream7b_bpu_batch_queue_systemd_canary_probe
+service_name: dream7b-bpu-batch-queue.service
+job_name: systemd_canary_20260605-151715.jsonl
+job_status: done
+request_count: 1
+processed_count: 1
+accepted_count: 1
+deferred_count: 0
+skipped_count: 0
+drain_all: True
+max_batch_size: 16
+batch_run_count: 1
+batch_count: 1
+result_count: 1
+execution_mode: pair_window_batch
+window_execution_mode: window-batch
+child_process_count: 0
+bpu_lock_path: /run/lock/dream7b_bpu_batch_queue_runner.lock
+final_shapes: [[1, 16, 152064]]
+total_wall_ms: 24073.138
+amortized_wall_ms_per_processed_request: 24073.138
+errors: []
+```
+
 Verified current sustained systemd telemetry fields copied from `systemd_telemetry_probe.json`:
 
 ```text
@@ -2031,11 +2150,11 @@ errors: []
 Verified deployment acceptance fields copied from `deployment_acceptance_probe.json`:
 
 ```text
-acceptance_report: /mnt/nas/openclaw/reports/models/dream7b_bpu_deployment_acceptance_20260605-143759/deployment_acceptance_probe.md
-acceptance_json: /mnt/nas/openclaw/reports/models/dream7b_bpu_deployment_acceptance_20260605-143759/deployment_acceptance_probe.json
+acceptance_report: /mnt/nas/openclaw/reports/models/dream7b_bpu_deployment_acceptance_20260605-153747/deployment_acceptance_probe.md
+acceptance_json: /mnt/nas/openclaw/reports/models/dream7b_bpu_deployment_acceptance_20260605-153747/deployment_acceptance_probe.json
 verdict: ok_dream7b_bpu_deployment_acceptance_probe
-check_count: 7
-passed_check_count: 7
+check_count: 8
+passed_check_count: 8
 min_batch_capacity: 16
 min_systemd_batch_requests: 16
 min_systemd_telemetry_requests: 48
@@ -2044,6 +2163,7 @@ systemd_service.ok: True
 batch_capacity.ok: True
 systemd_batch.ok: True
 systemd_drain.ok: True
+systemd_canary.ok: True
 systemd_telemetry.ok: True
 long_repeat.ok: True
 queue_retention.ok: True
@@ -2157,6 +2277,10 @@ docs/baseline_progress_2026-06-03_dream7b_segmented_bpu_hbm.md
 - Verified six-run long repeat report at `/mnt/nas/openclaw/reports/models/dream7b_bpu_fine_forward_long_repeat_20260605-140733/long_repeat_probe.md`.
 - Added `dream7b-bpu-deployment-acceptance-probe` as a report-only deployment acceptance gate over the latest Dream 7B BPU service, batch capacity, systemd batch/drain/telemetry, long-repeat, and queue-retention reports.
 - Verified deployment acceptance report at `/mnt/nas/openclaw/reports/models/dream7b_bpu_deployment_acceptance_20260605-143759/deployment_acceptance_probe.md` with `check_count: 7` and `passed_check_count: 7`.
+- Added `dream7b-bpu-batch-queue-systemd-canary-probe` as a lightweight real BPU canary through the NAS-backed `dream7b-bpu-batch-queue.service`.
+- Verified canary report at `/mnt/nas/openclaw/reports/models/dream7b_bpu_batch_queue_systemd_canary_20260605-151715/systemd_canary_probe.md` with `request_count: 1`, `processed_count: 1`, `final_shapes: [[1, 16, 152064]]`, and `errors: []`.
+- Updated `dream7b-bpu-deployment-acceptance-probe` to include `systemd_canary`.
+- Verified updated deployment acceptance report at `/mnt/nas/openclaw/reports/models/dream7b_bpu_deployment_acceptance_20260605-153747/deployment_acceptance_probe.md` with `check_count: 8` and `passed_check_count: 8`.
 
 ## TODO
 

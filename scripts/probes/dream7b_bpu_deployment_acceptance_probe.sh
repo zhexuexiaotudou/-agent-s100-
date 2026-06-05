@@ -197,6 +197,48 @@ else:
         },
     )
 
+systemd_canary_path, systemd_canary = latest_json("dream7b_bpu_batch_queue_systemd_canary_*/systemd_canary_probe.json")
+if systemd_canary is None:
+    add_check("systemd_canary", systemd_canary_path, False, {"reason": "missing systemd_canary_probe.json"})
+else:
+    ok = (
+        systemd_canary.get("verdict") == "ok_dream7b_bpu_batch_queue_systemd_canary_probe"
+        and systemd_canary.get("service_status_before") == "active"
+        and systemd_canary.get("service_enabled_before") == "enabled"
+        and systemd_canary.get("service_status_after") == "active"
+        and systemd_canary.get("service_enabled_after") == "enabled"
+        and systemd_canary.get("job_status") == "done"
+        and int(systemd_canary.get("request_count") or 0) >= 1
+        and systemd_canary.get("request_count") == systemd_canary.get("processed_count")
+        and systemd_canary.get("request_count") == systemd_canary.get("accepted_count")
+        and systemd_canary.get("deferred_count") == 0
+        and systemd_canary.get("skipped_count") == 0
+        and systemd_canary.get("drain_all") is True
+        and systemd_canary.get("max_batch_size") == 16
+        and systemd_canary.get("batch_run_count") == 1
+        and systemd_canary.get("batch_count") == systemd_canary.get("request_count")
+        and systemd_canary.get("result_count") == systemd_canary.get("request_count")
+        and systemd_canary.get("execution_mode") == "pair_window_batch"
+        and systemd_canary.get("window_execution_mode") == "window-batch"
+        and systemd_canary.get("child_process_count") == 0
+        and systemd_canary.get("bpu_lock_path") == "/run/lock/dream7b_bpu_batch_queue_runner.lock"
+        and all(item == [1, 16, 152064] for item in (systemd_canary.get("final_shapes") or []))
+        and not systemd_canary.get("errors")
+    )
+    add_check(
+        "systemd_canary",
+        systemd_canary_path,
+        ok,
+        {
+            "verdict": systemd_canary.get("verdict"),
+            "job_status": systemd_canary.get("job_status"),
+            "request_count": systemd_canary.get("request_count"),
+            "processed_count": systemd_canary.get("processed_count"),
+            "final_shapes": systemd_canary.get("final_shapes"),
+            "amortized_wall_ms_per_processed_request": systemd_canary.get("amortized_wall_ms_per_processed_request"),
+        },
+    )
+
 systemd_telemetry_path, systemd_telemetry = latest_json("dream7b_bpu_batch_queue_systemd_telemetry_*/systemd_telemetry_probe.json")
 if systemd_telemetry is None:
     add_check("systemd_telemetry", systemd_telemetry_path, False, {"reason": "missing systemd_telemetry_probe.json"})
