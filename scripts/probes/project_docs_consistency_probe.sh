@@ -44,6 +44,7 @@ required_files=(
   "scripts/probes/dream7b_bpu_batch_queue_systemd_soak_probe.sh"
   "scripts/probes/dream7b_bpu_batch_queue_systemd_batch_probe.sh"
   "scripts/probes/dream7b_bpu_batch_queue_systemd_drain_probe.sh"
+  "scripts/probes/dream7b_bpu_batch_queue_systemd_telemetry_probe.sh"
   "scripts/startup_link_check/link-check.config.json"
   "scripts/tool_allowlist.json"
 )
@@ -68,6 +69,7 @@ required_reference_strings=(
   "dream7b-bpu-batch-queue-systemd-soak-probe"
   "dream7b-bpu-batch-queue-systemd-batch-probe"
   "dream7b-bpu-batch-queue-systemd-drain-probe"
+  "dream7b-bpu-batch-queue-systemd-telemetry-probe"
   "dream7b-bpu-batch-queue.service"
   "dream7b-bpu-text-forward"
   "dream7b-bpu-diffusion-loop-probe"
@@ -93,6 +95,12 @@ required_reference_strings=(
   "DREAM7B_BPU_SYSTEMD_DRAIN_REQUEST_COUNT"
   "DREAM7B_BPU_SYSTEMD_DRAIN_TIMEOUT_SEC"
   "DREAM7B_BPU_SYSTEMD_DRAIN_POLL_INTERVAL_SEC"
+  "DREAM7B_BPU_SYSTEMD_TELEMETRY_JOB_COUNT"
+  "DREAM7B_BPU_SYSTEMD_TELEMETRY_REQUEST_COUNT"
+  "DREAM7B_BPU_SYSTEMD_TELEMETRY_TIMEOUT_SEC"
+  "DREAM7B_BPU_SYSTEMD_TELEMETRY_POLL_INTERVAL_SEC"
+  "DREAM7B_BPU_SYSTEMD_TELEMETRY_MONITOR_DELAY_MS"
+  "DREAM7B_BPU_SYSTEMD_TELEMETRY_MONITOR_SAMPLE_COUNT"
   "--child-runtime-mode"
   "--window-execution-mode"
   "--tokens-batch-json"
@@ -177,6 +185,11 @@ required_reference_strings=(
   "/mnt/nas/openclaw/reports/models/dream7b_bpu_batch_queue_service_systemd/jobs/systemd_batch_20260605-131550/queue_summary.json"
   "/mnt/nas/openclaw/reports/models/dream7b_bpu_batch_queue_systemd_drain_20260605-131621/systemd_drain_probe.md"
   "/mnt/nas/openclaw/reports/models/dream7b_bpu_batch_queue_service_systemd/jobs/systemd_drain_20260605-131621/queue_summary.json"
+  "/mnt/nas/openclaw/reports/models/dream7b_bpu_batch_queue_systemd_telemetry_20260605-133919/systemd_telemetry_probe.md"
+  "/mnt/nas/openclaw/reports/models/dream7b_bpu_batch_queue_systemd_telemetry_20260605-133919/systemd_telemetry_probe.json"
+  "/mnt/nas/openclaw/reports/models/dream7b_bpu_batch_queue_service_systemd/jobs/systemd_telemetry_20260605-133919_001/queue_summary.json"
+  "/mnt/nas/openclaw/reports/models/dream7b_bpu_batch_queue_service_systemd/jobs/systemd_telemetry_20260605-133919_002/queue_summary.json"
+  "/mnt/nas/openclaw/reports/models/dream7b_bpu_batch_queue_service_systemd/jobs/systemd_telemetry_20260605-133919_003/queue_summary.json"
   "/etc/systemd/system/dream7b-bpu-batch-queue.service"
   "/mnt/nas/openclaw/queues/dream7b-bpu"
   "/mnt/nas/openclaw/reports/models/dream7b_bpu_batch_queue_service_systemd"
@@ -499,6 +512,45 @@ if [[ -f scripts/probes/dream7b_bpu_runtime_telemetry_probe.sh ]]; then
   fi
   if ! grep -F -- "max_bpu_loading" scripts/probes/dream7b_bpu_runtime_telemetry_probe.sh >/dev/null; then
     errors+=("dream7b_bpu_runtime_telemetry_probe.sh missing max_bpu_loading")
+  fi
+fi
+
+if [[ -f scripts/probes/dream7b_bpu_batch_queue_systemd_telemetry_probe.sh ]]; then
+  if ! grep -F -- "DREAM7B_BPU_SYSTEMD_TELEMETRY_JOB_COUNT" scripts/probes/dream7b_bpu_batch_queue_systemd_telemetry_probe.sh >/dev/null; then
+    errors+=("dream7b_bpu_batch_queue_systemd_telemetry_probe.sh missing DREAM7B_BPU_SYSTEMD_TELEMETRY_JOB_COUNT")
+  fi
+  if ! grep -F -- 'DREAM7B_BPU_SYSTEMD_TELEMETRY_JOB_COUNT:-3' scripts/probes/dream7b_bpu_batch_queue_systemd_telemetry_probe.sh >/dev/null; then
+    errors+=("dream7b_bpu_batch_queue_systemd_telemetry_probe.sh missing default DREAM7B_BPU_SYSTEMD_TELEMETRY_JOB_COUNT:-3")
+  fi
+  if ! grep -F -- "DREAM7B_BPU_SYSTEMD_TELEMETRY_REQUEST_COUNT" scripts/probes/dream7b_bpu_batch_queue_systemd_telemetry_probe.sh >/dev/null; then
+    errors+=("dream7b_bpu_batch_queue_systemd_telemetry_probe.sh missing DREAM7B_BPU_SYSTEMD_TELEMETRY_REQUEST_COUNT")
+  fi
+  if ! grep -F -- 'DREAM7B_BPU_SYSTEMD_TELEMETRY_REQUEST_COUNT:-16' scripts/probes/dream7b_bpu_batch_queue_systemd_telemetry_probe.sh >/dev/null; then
+    errors+=("dream7b_bpu_batch_queue_systemd_telemetry_probe.sh missing default DREAM7B_BPU_SYSTEMD_TELEMETRY_REQUEST_COUNT:-16")
+  fi
+  if ! grep -F -- "DREAM7B_BPU_SYSTEMD_TELEMETRY_TIMEOUT_SEC" scripts/probes/dream7b_bpu_batch_queue_systemd_telemetry_probe.sh >/dev/null; then
+    errors+=("dream7b_bpu_batch_queue_systemd_telemetry_probe.sh missing DREAM7B_BPU_SYSTEMD_TELEMETRY_TIMEOUT_SEC")
+  fi
+  if ! grep -F -- "DREAM7B_BPU_SYSTEMD_TELEMETRY_POLL_INTERVAL_SEC" scripts/probes/dream7b_bpu_batch_queue_systemd_telemetry_probe.sh >/dev/null; then
+    errors+=("dream7b_bpu_batch_queue_systemd_telemetry_probe.sh missing DREAM7B_BPU_SYSTEMD_TELEMETRY_POLL_INTERVAL_SEC")
+  fi
+  if ! grep -F -- "DREAM7B_BPU_SYSTEMD_TELEMETRY_MONITOR_DELAY_MS" scripts/probes/dream7b_bpu_batch_queue_systemd_telemetry_probe.sh >/dev/null; then
+    errors+=("dream7b_bpu_batch_queue_systemd_telemetry_probe.sh missing DREAM7B_BPU_SYSTEMD_TELEMETRY_MONITOR_DELAY_MS")
+  fi
+  if ! grep -F -- "DREAM7B_BPU_SYSTEMD_TELEMETRY_MONITOR_SAMPLE_COUNT" scripts/probes/dream7b_bpu_batch_queue_systemd_telemetry_probe.sh >/dev/null; then
+    errors+=("dream7b_bpu_batch_queue_systemd_telemetry_probe.sh missing DREAM7B_BPU_SYSTEMD_TELEMETRY_MONITOR_SAMPLE_COUNT")
+  fi
+  if ! grep -F -- "hrt_ucp_monitor" scripts/probes/dream7b_bpu_batch_queue_systemd_telemetry_probe.sh >/dev/null; then
+    errors+=("dream7b_bpu_batch_queue_systemd_telemetry_probe.sh missing hrt_ucp_monitor")
+  fi
+  if ! grep -F -- "batch_counts" scripts/probes/dream7b_bpu_batch_queue_systemd_telemetry_probe.sh >/dev/null; then
+    errors+=("dream7b_bpu_batch_queue_systemd_telemetry_probe.sh missing batch_counts")
+  fi
+  if ! grep -F -- "processed_request_count" scripts/probes/dream7b_bpu_batch_queue_systemd_telemetry_probe.sh >/dev/null; then
+    errors+=("dream7b_bpu_batch_queue_systemd_telemetry_probe.sh missing processed_request_count")
+  fi
+  if ! grep -F -- "max_bpu_loading" scripts/probes/dream7b_bpu_batch_queue_systemd_telemetry_probe.sh >/dev/null; then
+    errors+=("dream7b_bpu_batch_queue_systemd_telemetry_probe.sh missing max_bpu_loading")
   fi
 fi
 

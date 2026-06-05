@@ -924,6 +924,114 @@ Latest recorded full-batch drain job summary:
 /mnt/nas/openclaw/reports/models/dream7b_bpu_batch_queue_service_systemd/jobs/systemd_drain_20260605-131621/queue_summary.json
 ```
 
+### `dream7b-bpu-batch-queue-systemd-telemetry-probe`
+
+Source file: `scripts/probes/dream7b_bpu_batch_queue_systemd_telemetry_probe.sh`
+
+Installed command on S100P:
+
+```text
+/usr/local/bin/dream7b-bpu-batch-queue-systemd-telemetry-probe
+```
+
+Default arguments copied from the script:
+
+```text
+report_root = /mnt/nas/openclaw/reports/models
+service_name = dream7b-bpu-batch-queue.service
+queue_dir = /mnt/nas/openclaw/queues/dream7b-bpu
+output_dir = /mnt/nas/openclaw/reports/models/dream7b_bpu_batch_queue_service_systemd
+```
+
+Environment variables copied from the script:
+
+```text
+DREAM7B_BPU_SYSTEMD_TELEMETRY_JOB_COUNT
+DREAM7B_BPU_SYSTEMD_TELEMETRY_REQUEST_COUNT
+DREAM7B_BPU_SYSTEMD_TELEMETRY_TIMEOUT_SEC
+DREAM7B_BPU_SYSTEMD_TELEMETRY_POLL_INTERVAL_SEC
+DREAM7B_BPU_SYSTEMD_TELEMETRY_MONITOR_DELAY_MS
+DREAM7B_BPU_SYSTEMD_TELEMETRY_MONITOR_SAMPLE_COUNT
+```
+
+Default values copied from the script:
+
+```text
+job_count = 3
+request_count = 16
+timeout_sec = 900
+poll_interval_sec = 2
+monitor_delay_ms = 100
+monitor_sample_count = 1200
+```
+
+Telemetry commands copied from the script:
+
+```text
+hrt_ucp_monitor
+hrut_somstatus
+```
+
+Checked fields copied from the script:
+
+```text
+service_status_before
+service_enabled_before
+service_status_after
+service_enabled_after
+job_count
+request_count
+expected_request_total
+completed_job_count
+failed_job_count
+processed_request_count
+accepted_request_count
+deferred_request_count
+result_count
+batch_counts
+total_wall_ms
+total_load_ms
+total_run_ms
+amortized_wall_ms_per_processed_request
+amortized_load_ms_per_processed_request
+amortized_run_ms_per_processed_request
+bpu_loading_sample_count
+nonzero_bpu_loading_sample_count
+max_bpu_loading
+avg_bpu_loading
+job_name
+status
+summary_path
+runner_verdict
+processed_count
+batch_count
+final_shape
+bpu_lock.path
+execution_mode
+window_execution_mode
+child_process_count
+```
+
+Latest recorded report:
+
+```text
+/mnt/nas/openclaw/reports/models/dream7b_bpu_batch_queue_systemd_telemetry_20260605-133919/systemd_telemetry_probe.md
+```
+
+Latest recorded telemetry JSON:
+
+```text
+/mnt/nas/openclaw/reports/models/dream7b_bpu_batch_queue_systemd_telemetry_20260605-133919/systemd_telemetry_probe.json
+```
+
+Latest recorded queue job summaries:
+
+```text
+/mnt/nas/openclaw/reports/models/dream7b_bpu_batch_queue_service_systemd/jobs/systemd_telemetry_20260605-133919_001/queue_summary.json
+/mnt/nas/openclaw/reports/models/dream7b_bpu_batch_queue_service_systemd/jobs/systemd_telemetry_20260605-133919_002/queue_summary.json
+/mnt/nas/openclaw/reports/models/dream7b_bpu_batch_queue_service_systemd/jobs/systemd_telemetry_20260605-133919_003/queue_summary.json
+```
+
 ### `dream7b-bpu-diffusion-loop-probe`
 
 Source file: `scripts/probes/dream7b_bpu_diffusion_loop_probe.sh`
@@ -1609,6 +1717,35 @@ total_wall_ms: 27248.799
 amortized_wall_ms_per_processed_request: 1703.05
 ```
 
+Verified current sustained systemd telemetry fields copied from `systemd_telemetry_probe.json`:
+
+```text
+verdict: ok_dream7b_bpu_batch_queue_systemd_telemetry_probe
+job_count: 3
+request_count: 16
+expected_request_total: 48
+completed_job_count: 3
+failed_job_count: 0
+processed_request_count: 48
+accepted_request_count: 48
+deferred_request_count: 0
+result_count: 48
+batch_counts: [16, 16, 16]
+total_wall_ms: 79811.376
+total_load_ms: 70702.172
+total_run_ms: 8337.877
+amortized_wall_ms_per_processed_request: 1662.737
+amortized_load_ms_per_processed_request: 1472.962
+amortized_run_ms_per_processed_request: 173.706
+bpu_loading_sample_count: 829
+nonzero_bpu_loading_sample_count: 99
+max_bpu_loading: 100.0
+avg_bpu_loading: 9.616
+service_status_before: active
+service_status_after: active
+errors: []
+```
+
 ### Do not claim production text service yet
 
 Decision: current Dream 7B BPU route is a verified seq16 BPU logits and bounded diffusion-loop path, not a complete production text-generation service.
@@ -1706,6 +1843,9 @@ docs/baseline_progress_2026-06-03_dream7b_segmented_bpu_hbm.md
 - Verified the current sixteen-request drain-all job summary at `/mnt/nas/openclaw/reports/models/dream7b_bpu_batch_queue_service_systemd/jobs/systemd_drain_20260605-131621/queue_summary.json`.
 - Updated `dream7b-bpu-runtime-telemetry-probe` default `DREAM7B_BPU_TELEMETRY_BATCH_COUNT` from 8 to 16.
 - Verified batch 16 runtime telemetry at `/mnt/nas/openclaw/reports/models/dream7b_bpu_runtime_telemetry_20260605-132014/runtime_telemetry_probe.md`.
+- Added `dream7b-bpu-batch-queue-systemd-telemetry-probe` for sustained NAS-backed systemd queue telemetry while sampling `hrt_ucp_monitor`.
+- Verified sustained systemd telemetry report at `/mnt/nas/openclaw/reports/models/dream7b_bpu_batch_queue_systemd_telemetry_20260605-133919/systemd_telemetry_probe.md`.
+- Verified three sixteen-request systemd telemetry queue summaries at `/mnt/nas/openclaw/reports/models/dream7b_bpu_batch_queue_service_systemd/jobs/systemd_telemetry_20260605-133919_001/queue_summary.json`, `/mnt/nas/openclaw/reports/models/dream7b_bpu_batch_queue_service_systemd/jobs/systemd_telemetry_20260605-133919_002/queue_summary.json`, and `/mnt/nas/openclaw/reports/models/dream7b_bpu_batch_queue_service_systemd/jobs/systemd_telemetry_20260605-133919_003/queue_summary.json`.
 
 ## TODO
 
