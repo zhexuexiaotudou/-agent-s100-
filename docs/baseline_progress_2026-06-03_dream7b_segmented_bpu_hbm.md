@@ -51,6 +51,9 @@ cpu-quality-gate command: /usr/local/bin/dream7b-bpu-cpu-quality-gate-probe
 cpu-quality-gate report: /mnt/nas/openclaw/reports/models/dream7b_bpu_cpu_quality_gate_20260603-033101/summary.md
 hbm-cache-perf command: /usr/local/bin/dream7b-bpu-hbm-cache-perf-probe
 hbm-cache-perf report: /mnt/nas/openclaw/reports/models/dream7b_bpu_hbm_cache_perf_20260603-034629/summary.md
+artifact-inventory command: /usr/local/bin/dream7b-bpu-hbm-artifact-inventory-probe
+artifact-inventory report: /mnt/nas/openclaw/reports/models/dream7b_bpu_hbm_artifact_inventory_20260605-160050/hbm_artifact_inventory_probe.md
+artifact-inventory JSON: /mnt/nas/openclaw/reports/models/dream7b_bpu_hbm_artifact_inventory_20260605-160050/hbm_artifact_inventory_probe.json
 local-cache loop report: /mnt/nas/openclaw/reports/models/dream7b_bpu_diffusion_loop_20260603-034939/summary.md
 residency command: /usr/local/bin/dream7b-bpu-residency-probe
 residency report: /mnt/nas/openclaw/reports/models/dream7b_bpu_residency_20260603-035939/summary.md
@@ -131,6 +134,8 @@ deployment acceptance report: /mnt/nas/openclaw/reports/models/dream7b_bpu_deplo
 deployment acceptance JSON: /mnt/nas/openclaw/reports/models/dream7b_bpu_deployment_acceptance_20260605-143759/deployment_acceptance_probe.json
 updated deployment acceptance report: /mnt/nas/openclaw/reports/models/dream7b_bpu_deployment_acceptance_20260605-153747/deployment_acceptance_probe.md
 updated deployment acceptance JSON: /mnt/nas/openclaw/reports/models/dream7b_bpu_deployment_acceptance_20260605-153747/deployment_acceptance_probe.json
+artifact-aware deployment acceptance report: /mnt/nas/openclaw/reports/models/dream7b_bpu_deployment_acceptance_20260605-161000/deployment_acceptance_probe.md
+artifact-aware deployment acceptance JSON: /mnt/nas/openclaw/reports/models/dream7b_bpu_deployment_acceptance_20260605-161000/deployment_acceptance_probe.json
 post-batch fine-forward compatibility report: /mnt/nas/openclaw/reports/models/dream7b_bpu_fine_forward_20260603-183906/fine_forward_probe.md
 fine-forward diffusion-loop report: /mnt/nas/openclaw/reports/models/dream7b_bpu_diffusion_loop_20260603-175030/summary.md
 fine-forward quality-gate report: /mnt/nas/openclaw/reports/models/dream7b_bpu_cpu_quality_gate_20260603-160405/summary.md
@@ -182,6 +187,7 @@ scripts/probes/dream7b_bpu_diffusion_step_probe.sh
 scripts/probes/dream7b_bpu_diffusion_loop_probe.sh
 scripts/probes/dream7b_bpu_cpu_quality_gate_probe.sh
 scripts/probes/dream7b_bpu_hbm_cache_perf_probe.sh
+scripts/probes/dream7b_bpu_hbm_artifact_inventory_probe.sh
 scripts/probes/dream7b_bpu_residency_probe.sh
 scripts/probes/compile_dream_segments_seq16_fine.sh
 scripts/probes/dream7b_bpu_fine_residency_probe.sh
@@ -1301,6 +1307,30 @@ amortized_wall_ms_per_processed_request: 24073.138
 errors: []
 ```
 
+Verified HBM artifact inventory:
+
+```text
+inventory_report: /mnt/nas/openclaw/reports/models/dream7b_bpu_hbm_artifact_inventory_20260605-160050/hbm_artifact_inventory_probe.md
+inventory_json: /mnt/nas/openclaw/reports/models/dream7b_bpu_hbm_artifact_inventory_20260605-160050/hbm_artifact_inventory_probe.json
+inventory_verdict: ok_dream7b_bpu_hbm_artifact_inventory_probe
+forward_script: /mnt/nas/openclaw/runtimes/dream7b-bpu-forward/dream7b_segmented_hbm_python_forward.py
+nas_hbm_dir: /mnt/nas/openclaw/models/dream7b-hbm/segments6
+nas_fine_hbm_dir: /mnt/nas/openclaw/models/dream7b-hbm/fine-seq16
+local_hbm_dir: /home/sunrise/.cache/openclaw/dream7b-hbm/segments6
+local_fine_hbm_dir: /home/sunrise/.cache/openclaw/dream7b-hbm/fine-seq16
+expected_artifact_count: 14
+expected_base_count: 6
+expected_fine_count: 8
+nas_existing_count: 14
+local_existing_count: 14
+size_match_count: 14
+manifest_expected_count: 12
+manifest_verified_count: 12
+required_manifest_expected_count: 12
+warnings: []
+errors: []
+```
+
 Verified batch 16 runtime telemetry:
 
 ```text
@@ -1371,17 +1401,18 @@ errors: []
 Verified report-only deployment acceptance gate:
 
 ```text
-deployment_acceptance_report: /mnt/nas/openclaw/reports/models/dream7b_bpu_deployment_acceptance_20260605-153747/deployment_acceptance_probe.md
-deployment_acceptance_json: /mnt/nas/openclaw/reports/models/dream7b_bpu_deployment_acceptance_20260605-153747/deployment_acceptance_probe.json
+deployment_acceptance_report: /mnt/nas/openclaw/reports/models/dream7b_bpu_deployment_acceptance_20260605-161000/deployment_acceptance_probe.md
+deployment_acceptance_json: /mnt/nas/openclaw/reports/models/dream7b_bpu_deployment_acceptance_20260605-161000/deployment_acceptance_probe.json
 verdict: ok_dream7b_bpu_deployment_acceptance_probe
-check_count: 8
-passed_check_count: 8
+check_count: 9
+passed_check_count: 9
 min_batch_capacity: 16
 min_systemd_batch_requests: 16
 min_systemd_telemetry_requests: 48
 min_long_repeat_count: 6
 systemd_service.ok: True
 batch_capacity.ok: True
+hbm_artifact_inventory.ok: True
 systemd_batch.ok: True
 systemd_drain.ok: True
 systemd_canary.ok: True
@@ -1447,7 +1478,7 @@ bpu remaining_mask_positions: []
 
 ## Current Boundary
 
-This is real BPU execution for real Dream 7B weights, including a complete seq16 forward chain from prompt text or token ids to logits plus verified one-step and strategy-aware bounded multi-step Dream diffusion bridges over masked positions. The path now also has a CPU/BPU quality coverage gate that records current divergence against the existing CPU Dream text path, an HBM cache performance gate that quantifies NAS versus S100P-local HBM load cost, a residency gate proving that the current six-segment split cannot be made all-resident, a fine-residency gate proving that every adjacent two-segment window can be resident, a deployed fine in-process pair forward command that runs the 10-segment fine plan to logits with 0 child processes, a 3-run repeat probe plus a 6-run long-repeat probe for the default in-process path, a window-batch throughput probe for concurrent independent seq16 inputs, a batch-size sweep proving amortized wall time drops from `24562.798` ms at batch 1 to `3175.416` ms at batch 8, a batch-capacity probe proving independent seq16 batch 16 passes with `amortized_wall_ms_per_forward: 1714.647`, runtime telemetry with `hrt_ucp_monitor` showing `max_bpu_loading: 100.0` during Dream 7B BPU forward, a reusable `dream7b-bpu-fine-batch-forward` wrapper for JSON token batches, a bounded `dream7b-bpu-batch-queue-runner` JSONL service bridge with verified multi-batch `--drain-all`, verified `cancelled` and `not_after_epoch_ms` control semantics, durable queue state JSONL outputs, default queue-runner single-flight `bpu_lock`, a directory-backed `dream7b-bpu-batch-queue-service` loop with verified real BPU one-shot operation, and a NAS-backed `dream7b-bpu-batch-queue.service` systemd unit with verified single-job, 2-job, historical `max_batch_size=4` and `max_batch_size=8` reports, current default `--max-batch-size 16 --drain-all` one-job sixteen-request real BPU queued execution with `batch_run_count=1`, `batch_count=16`, and `amortized_wall_ms_per_processed_request` around 1.7 seconds, a lightweight one-request systemd canary showing `verdict: ok_dream7b_bpu_batch_queue_systemd_canary_probe`, `job_status: done`, `final_shapes: [[1, 16, 152064]]`, and `errors: []`, sustained service telemetry over three sixteen-request jobs showing `processed_request_count: 48`, `batch_counts: [16, 16, 16]`, `max_bpu_loading: 100.0`, and `amortized_wall_ms_per_processed_request: 1662.737`, a report-only queue retention probe showing the current NAS queue has no stale `pending` or `processing` jobs and no current archive candidates, plus a report-only deployment acceptance gate showing `check_count: 8`, `passed_check_count: 8`, and `verdict: ok_dream7b_bpu_deployment_acceptance_probe` across service, capacity, batch, drain, canary, telemetry, long-repeat, and retention evidence. It is not yet a complete text-generation service.
+This is real BPU execution for real Dream 7B weights, including a complete seq16 forward chain from prompt text or token ids to logits plus verified one-step and strategy-aware bounded multi-step Dream diffusion bridges over masked positions. The path now also has a CPU/BPU quality coverage gate that records current divergence against the existing CPU Dream text path, an HBM cache performance gate that quantifies NAS versus S100P-local HBM load cost, a HBM artifact inventory gate showing `expected_artifact_count: 14`, `nas_existing_count: 14`, `local_existing_count: 14`, `size_match_count: 14`, and `manifest_verified_count: 12`, a residency gate proving that the current six-segment split cannot be made all-resident, a fine-residency gate proving that every adjacent two-segment window can be resident, a deployed fine in-process pair forward command that runs the 10-segment fine plan to logits with 0 child processes, a 3-run repeat probe plus a 6-run long-repeat probe for the default in-process path, a window-batch throughput probe for concurrent independent seq16 inputs, a batch-size sweep proving amortized wall time drops from `24562.798` ms at batch 1 to `3175.416` ms at batch 8, a batch-capacity probe proving independent seq16 batch 16 passes with `amortized_wall_ms_per_forward: 1714.647`, runtime telemetry with `hrt_ucp_monitor` showing `max_bpu_loading: 100.0` during Dream 7B BPU forward, a reusable `dream7b-bpu-fine-batch-forward` wrapper for JSON token batches, a bounded `dream7b-bpu-batch-queue-runner` JSONL service bridge with verified multi-batch `--drain-all`, verified `cancelled` and `not_after_epoch_ms` control semantics, durable queue state JSONL outputs, default queue-runner single-flight `bpu_lock`, a directory-backed `dream7b-bpu-batch-queue-service` loop with verified real BPU one-shot operation, and a NAS-backed `dream7b-bpu-batch-queue.service` systemd unit with verified single-job, 2-job, historical `max_batch_size=4` and `max_batch_size=8` reports, current default `--max-batch-size 16 --drain-all` one-job sixteen-request real BPU queued execution with `batch_run_count=1`, `batch_count=16`, and `amortized_wall_ms_per_processed_request` around 1.7 seconds, a lightweight one-request systemd canary showing `verdict: ok_dream7b_bpu_batch_queue_systemd_canary_probe`, `job_status: done`, `final_shapes: [[1, 16, 152064]]`, and `errors: []`, sustained service telemetry over three sixteen-request jobs showing `processed_request_count: 48`, `batch_counts: [16, 16, 16]`, `max_bpu_loading: 100.0`, and `amortized_wall_ms_per_processed_request: 1662.737`, a report-only queue retention probe showing the current NAS queue has no stale `pending` or `processing` jobs and no current archive candidates, plus a report-only deployment acceptance gate showing `check_count: 9`, `passed_check_count: 9`, and `verdict: ok_dream7b_bpu_deployment_acceptance_probe` across service, capacity, HBM inventory, batch, drain, canary, telemetry, long-repeat, and retention evidence. It is not yet a complete text-generation service.
 
 Remaining engineering work:
 

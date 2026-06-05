@@ -374,6 +374,97 @@ Latest recorded forward summary:
 /mnt/nas/openclaw/reports/models/dream7b_bpu_runtime_telemetry_20260605-132014/forward/summary.json
 ```
 
+### `dream7b-bpu-hbm-artifact-inventory-probe`
+
+Source file: `scripts/probes/dream7b_bpu_hbm_artifact_inventory_probe.sh`
+
+Installed command on S100P:
+
+```text
+/usr/local/bin/dream7b-bpu-hbm-artifact-inventory-probe
+```
+
+Default argument copied from the script:
+
+```text
+report_root = /mnt/nas/openclaw/reports/models
+```
+
+Environment variables copied from the script:
+
+```text
+DREAM7B_BPU_ARTIFACT_INVENTORY_FORWARD_SCRIPT
+DREAM7B_BPU_ARTIFACT_INVENTORY_NAS_HBM_DIR
+DREAM7B_BPU_ARTIFACT_INVENTORY_NAS_FINE_HBM_DIR
+DREAM7B_BPU_ARTIFACT_INVENTORY_LOCAL_HBM_DIR
+DREAM7B_BPU_ARTIFACT_INVENTORY_LOCAL_FINE_HBM_DIR
+DREAM7B_BPU_ARTIFACT_INVENTORY_VERIFY_MANIFEST
+```
+
+Default values copied from the script:
+
+```text
+forward_script = /mnt/nas/openclaw/runtimes/dream7b-bpu-forward/dream7b_segmented_hbm_python_forward.py
+nas_hbm_dir = /mnt/nas/openclaw/models/dream7b-hbm/segments6
+nas_fine_hbm_dir = /mnt/nas/openclaw/models/dream7b-hbm/fine-seq16
+local_hbm_dir = /home/sunrise/.cache/openclaw/dream7b-hbm/segments6
+local_fine_hbm_dir = /home/sunrise/.cache/openclaw/dream7b-hbm/fine-seq16
+verify_manifest = 1
+```
+
+Segment constants parsed by the script:
+
+```text
+SEGMENTS6
+FINE_ADJACENT_SEGMENTS
+```
+
+Checked fields copied from the script:
+
+```text
+expected_artifact_count
+expected_base_count
+expected_fine_count
+nas_existing_count
+local_existing_count
+size_match_count
+manifest_expected_count
+manifest_verified_count
+required_manifest_expected_count
+inventory
+warnings
+errors
+```
+
+Latest recorded report:
+
+```text
+/mnt/nas/openclaw/reports/models/dream7b_bpu_hbm_artifact_inventory_20260605-160050/hbm_artifact_inventory_probe.md
+```
+
+Latest recorded JSON:
+
+```text
+/mnt/nas/openclaw/reports/models/dream7b_bpu_hbm_artifact_inventory_20260605-160050/hbm_artifact_inventory_probe.json
+```
+
+Verified artifact inventory fields copied from `hbm_artifact_inventory_probe.json`:
+
+```text
+verdict: ok_dream7b_bpu_hbm_artifact_inventory_probe
+expected_artifact_count: 14
+expected_base_count: 6
+expected_fine_count: 8
+nas_existing_count: 14
+local_existing_count: 14
+size_match_count: 14
+manifest_expected_count: 12
+manifest_verified_count: 12
+required_manifest_expected_count: 12
+warnings: []
+errors: []
+```
+
 ### `dream7b-bpu-batch-queue-runner`
 
 Source file: `scripts/dream7b-bpu-batch-queue-runner.sh`
@@ -1221,6 +1312,7 @@ Report globs copied from the script:
 ```text
 dream7b_bpu_batch_queue_systemd_*/systemd_probe.json
 dream7b_bpu_batch_capacity_*/batch_capacity_probe.json
+dream7b_bpu_hbm_artifact_inventory_*/hbm_artifact_inventory_probe.json
 dream7b_bpu_batch_queue_systemd_batch_*/systemd_batch_probe.json
 dream7b_bpu_batch_queue_systemd_drain_*/systemd_drain_probe.json
 dream7b_bpu_batch_queue_systemd_canary_*/systemd_canary_probe.json
@@ -1234,6 +1326,7 @@ Check names copied from the script:
 ```text
 systemd_service
 batch_capacity
+hbm_artifact_inventory
 systemd_batch
 systemd_drain
 systemd_canary
@@ -1265,6 +1358,7 @@ Latest recorded report:
 ```text
 /mnt/nas/openclaw/reports/models/dream7b_bpu_deployment_acceptance_20260605-143759/deployment_acceptance_probe.md
 /mnt/nas/openclaw/reports/models/dream7b_bpu_deployment_acceptance_20260605-153747/deployment_acceptance_probe.md
+/mnt/nas/openclaw/reports/models/dream7b_bpu_deployment_acceptance_20260605-161000/deployment_acceptance_probe.md
 ```
 
 Latest recorded JSON:
@@ -1272,14 +1366,15 @@ Latest recorded JSON:
 ```text
 /mnt/nas/openclaw/reports/models/dream7b_bpu_deployment_acceptance_20260605-143759/deployment_acceptance_probe.json
 /mnt/nas/openclaw/reports/models/dream7b_bpu_deployment_acceptance_20260605-153747/deployment_acceptance_probe.json
+/mnt/nas/openclaw/reports/models/dream7b_bpu_deployment_acceptance_20260605-161000/deployment_acceptance_probe.json
 ```
 
 Verified deployment acceptance fields copied from `deployment_acceptance_probe.json`:
 
 ```text
 verdict: ok_dream7b_bpu_deployment_acceptance_probe
-check_count: 8
-passed_check_count: 8
+check_count: 9
+passed_check_count: 9
 min_batch_capacity: 16
 min_systemd_batch_requests: 16
 min_systemd_telemetry_requests: 48
@@ -1288,6 +1383,7 @@ warnings: []
 errors: []
 systemd_service.ok: True
 batch_capacity.ok: True
+hbm_artifact_inventory.ok: True
 systemd_batch.ok: True
 systemd_drain.ok: True
 systemd_canary.ok: True
@@ -1298,6 +1394,11 @@ systemd_canary.details.job_status: done
 systemd_canary.details.request_count: 1
 systemd_canary.details.processed_count: 1
 systemd_canary.details.final_shapes: [[1, 16, 152064]]
+hbm_artifact_inventory.details.expected_artifact_count: 14
+hbm_artifact_inventory.details.nas_existing_count: 14
+hbm_artifact_inventory.details.local_existing_count: 14
+hbm_artifact_inventory.details.size_match_count: 14
+hbm_artifact_inventory.details.manifest_verified_count: 12
 systemd_telemetry.details.max_bpu_loading: 100.0
 systemd_telemetry.details.avg_bpu_loading: 9.616
 queue_retention.details.queue_counts: {'pending': 0, 'processing': 0, 'done': 13, 'failed': 1}
@@ -2079,6 +2180,25 @@ amortized_wall_ms_per_processed_request: 24073.138
 errors: []
 ```
 
+Verified HBM artifact inventory fields copied from `hbm_artifact_inventory_probe.json`:
+
+```text
+inventory_report: /mnt/nas/openclaw/reports/models/dream7b_bpu_hbm_artifact_inventory_20260605-160050/hbm_artifact_inventory_probe.md
+inventory_json: /mnt/nas/openclaw/reports/models/dream7b_bpu_hbm_artifact_inventory_20260605-160050/hbm_artifact_inventory_probe.json
+verdict: ok_dream7b_bpu_hbm_artifact_inventory_probe
+expected_artifact_count: 14
+expected_base_count: 6
+expected_fine_count: 8
+nas_existing_count: 14
+local_existing_count: 14
+size_match_count: 14
+manifest_expected_count: 12
+manifest_verified_count: 12
+required_manifest_expected_count: 12
+warnings: []
+errors: []
+```
+
 Verified current sustained systemd telemetry fields copied from `systemd_telemetry_probe.json`:
 
 ```text
@@ -2150,17 +2270,18 @@ errors: []
 Verified deployment acceptance fields copied from `deployment_acceptance_probe.json`:
 
 ```text
-acceptance_report: /mnt/nas/openclaw/reports/models/dream7b_bpu_deployment_acceptance_20260605-153747/deployment_acceptance_probe.md
-acceptance_json: /mnt/nas/openclaw/reports/models/dream7b_bpu_deployment_acceptance_20260605-153747/deployment_acceptance_probe.json
+acceptance_report: /mnt/nas/openclaw/reports/models/dream7b_bpu_deployment_acceptance_20260605-161000/deployment_acceptance_probe.md
+acceptance_json: /mnt/nas/openclaw/reports/models/dream7b_bpu_deployment_acceptance_20260605-161000/deployment_acceptance_probe.json
 verdict: ok_dream7b_bpu_deployment_acceptance_probe
-check_count: 8
-passed_check_count: 8
+check_count: 9
+passed_check_count: 9
 min_batch_capacity: 16
 min_systemd_batch_requests: 16
 min_systemd_telemetry_requests: 48
 min_long_repeat_count: 6
 systemd_service.ok: True
 batch_capacity.ok: True
+hbm_artifact_inventory.ok: True
 systemd_batch.ok: True
 systemd_drain.ok: True
 systemd_canary.ok: True
@@ -2281,6 +2402,10 @@ docs/baseline_progress_2026-06-03_dream7b_segmented_bpu_hbm.md
 - Verified canary report at `/mnt/nas/openclaw/reports/models/dream7b_bpu_batch_queue_systemd_canary_20260605-151715/systemd_canary_probe.md` with `request_count: 1`, `processed_count: 1`, `final_shapes: [[1, 16, 152064]]`, and `errors: []`.
 - Updated `dream7b-bpu-deployment-acceptance-probe` to include `systemd_canary`.
 - Verified updated deployment acceptance report at `/mnt/nas/openclaw/reports/models/dream7b_bpu_deployment_acceptance_20260605-153747/deployment_acceptance_probe.md` with `check_count: 8` and `passed_check_count: 8`.
+- Added `dream7b-bpu-hbm-artifact-inventory-probe` for Dream 7B base/fine HBM artifact inventory, NAS/local-cache size matching, and base `manifest.sha256` verification.
+- Verified HBM artifact inventory report at `/mnt/nas/openclaw/reports/models/dream7b_bpu_hbm_artifact_inventory_20260605-160050/hbm_artifact_inventory_probe.md` with `expected_artifact_count: 14`, `size_match_count: 14`, and `manifest_verified_count: 12`.
+- Updated `dream7b-bpu-deployment-acceptance-probe` to include `hbm_artifact_inventory`.
+- Verified updated deployment acceptance report at `/mnt/nas/openclaw/reports/models/dream7b_bpu_deployment_acceptance_20260605-161000/deployment_acceptance_probe.md` with `check_count: 9` and `passed_check_count: 9`.
 
 ## TODO
 

@@ -138,6 +138,37 @@ else:
         },
     )
 
+hbm_inventory_path, hbm_inventory = latest_json("dream7b_bpu_hbm_artifact_inventory_*/hbm_artifact_inventory_probe.json")
+if hbm_inventory is None:
+    add_check("hbm_artifact_inventory", hbm_inventory_path, False, {"reason": "missing hbm_artifact_inventory_probe.json"})
+else:
+    ok = (
+        hbm_inventory.get("verdict") == "ok_dream7b_bpu_hbm_artifact_inventory_probe"
+        and hbm_inventory.get("expected_artifact_count") == 14
+        and hbm_inventory.get("expected_base_count") == 6
+        and hbm_inventory.get("expected_fine_count") == 8
+        and hbm_inventory.get("nas_existing_count") == 14
+        and hbm_inventory.get("local_existing_count") == 14
+        and hbm_inventory.get("size_match_count") == 14
+        and hbm_inventory.get("manifest_expected_count") == 12
+        and hbm_inventory.get("manifest_verified_count") == 12
+        and hbm_inventory.get("required_manifest_expected_count") == 12
+        and not hbm_inventory.get("errors")
+    )
+    add_check(
+        "hbm_artifact_inventory",
+        hbm_inventory_path,
+        ok,
+        {
+            "verdict": hbm_inventory.get("verdict"),
+            "expected_artifact_count": hbm_inventory.get("expected_artifact_count"),
+            "nas_existing_count": hbm_inventory.get("nas_existing_count"),
+            "local_existing_count": hbm_inventory.get("local_existing_count"),
+            "size_match_count": hbm_inventory.get("size_match_count"),
+            "manifest_verified_count": hbm_inventory.get("manifest_verified_count"),
+        },
+    )
+
 systemd_batch_path, systemd_batch = latest_json("dream7b_bpu_batch_queue_systemd_batch_*/systemd_batch_probe.json")
 if systemd_batch is None:
     add_check("systemd_batch", systemd_batch_path, False, {"reason": "missing systemd_batch_probe.json"})

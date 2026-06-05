@@ -36,6 +36,7 @@ required_files=(
   "scripts/probes/dream7b_bpu_fine_batch_size_sweep_probe.sh"
   "scripts/probes/dream7b_bpu_batch_capacity_probe.sh"
   "scripts/probes/dream7b_bpu_runtime_telemetry_probe.sh"
+  "scripts/probes/dream7b_bpu_hbm_artifact_inventory_probe.sh"
   "scripts/probes/dream7b_bpu_batch_queue_runner_probe.sh"
   "scripts/probes/dream7b_bpu_batch_queue_drain_probe.sh"
   "scripts/probes/dream7b_bpu_batch_queue_control_probe.sh"
@@ -69,6 +70,7 @@ required_reference_strings=(
   "dream7b-bpu-fine-forward-long-repeat-probe"
   "dream7b-bpu-batch-capacity-probe"
   "dream7b-bpu-runtime-telemetry-probe"
+  "dream7b-bpu-hbm-artifact-inventory-probe"
   "install-dream7b-bpu-queue-service"
   "dream7b-bpu-batch-queue-systemd-probe"
   "dream7b-bpu-batch-queue-systemd-soak-probe"
@@ -97,6 +99,12 @@ required_reference_strings=(
   "DREAM7B_BPU_TELEMETRY_MONITOR_SAMPLE_COUNT"
   "DREAM7B_BPU_TELEMETRY_TOP_K"
   "DREAM7B_BPU_TELEMETRY_TIMEOUT_SEC"
+  "DREAM7B_BPU_ARTIFACT_INVENTORY_FORWARD_SCRIPT"
+  "DREAM7B_BPU_ARTIFACT_INVENTORY_NAS_HBM_DIR"
+  "DREAM7B_BPU_ARTIFACT_INVENTORY_NAS_FINE_HBM_DIR"
+  "DREAM7B_BPU_ARTIFACT_INVENTORY_LOCAL_HBM_DIR"
+  "DREAM7B_BPU_ARTIFACT_INVENTORY_LOCAL_FINE_HBM_DIR"
+  "DREAM7B_BPU_ARTIFACT_INVENTORY_VERIFY_MANIFEST"
   "DREAM7B_BPU_BATCH_QUEUE_RUNNER_SCRIPT"
   "DREAM7B_BPU_BATCH_QUEUE_SERVICE_SCRIPT"
   "DREAM7B_BPU_QUEUE_MAX_BATCH_SIZE"
@@ -148,6 +156,16 @@ required_reference_strings=(
   "nonzero_bpu_loading_sample_count"
   "max_bpu_loading"
   "avg_bpu_loading"
+  "hbm_artifact_inventory"
+  "expected_artifact_count"
+  "expected_base_count"
+  "expected_fine_count"
+  "nas_existing_count"
+  "local_existing_count"
+  "size_match_count"
+  "manifest_expected_count"
+  "manifest_verified_count"
+  "required_manifest_expected_count"
   "policy_mode"
   "apply_supported"
   "archive_plan"
@@ -198,6 +216,8 @@ required_reference_strings=(
   "/mnt/nas/openclaw/reports/models/dream7b_bpu_runtime_telemetry_20260604-225030/forward/summary.json"
   "/mnt/nas/openclaw/reports/models/dream7b_bpu_runtime_telemetry_20260605-132014/runtime_telemetry_probe.md"
   "/mnt/nas/openclaw/reports/models/dream7b_bpu_runtime_telemetry_20260605-132014/forward/summary.json"
+  "/mnt/nas/openclaw/reports/models/dream7b_bpu_hbm_artifact_inventory_20260605-160050/hbm_artifact_inventory_probe.md"
+  "/mnt/nas/openclaw/reports/models/dream7b_bpu_hbm_artifact_inventory_20260605-160050/hbm_artifact_inventory_probe.json"
   "/mnt/nas/openclaw/reports/models/dream7b_bpu_batch_queue_runner_20260603-193243/batch_queue_runner_probe.md"
   "/mnt/nas/openclaw/reports/models/dream7b_bpu_batch_queue_drain_20260603-193309/batch_queue_drain_probe.md"
   "/mnt/nas/openclaw/reports/models/dream7b_bpu_batch_queue_control_20260603-193400/batch_queue_control_probe.md"
@@ -241,6 +261,8 @@ required_reference_strings=(
   "/mnt/nas/openclaw/reports/models/dream7b_bpu_deployment_acceptance_20260605-143759/deployment_acceptance_probe.json"
   "/mnt/nas/openclaw/reports/models/dream7b_bpu_deployment_acceptance_20260605-153747/deployment_acceptance_probe.md"
   "/mnt/nas/openclaw/reports/models/dream7b_bpu_deployment_acceptance_20260605-153747/deployment_acceptance_probe.json"
+  "/mnt/nas/openclaw/reports/models/dream7b_bpu_deployment_acceptance_20260605-161000/deployment_acceptance_probe.md"
+  "/mnt/nas/openclaw/reports/models/dream7b_bpu_deployment_acceptance_20260605-161000/deployment_acceptance_probe.json"
   "/etc/systemd/system/dream7b-bpu-batch-queue.service"
   "/mnt/nas/openclaw/queues/dream7b-bpu"
   "/mnt/nas/openclaw/reports/models/dream7b_bpu_batch_queue_service_systemd"
@@ -566,6 +588,39 @@ if [[ -f scripts/probes/dream7b_bpu_runtime_telemetry_probe.sh ]]; then
   fi
 fi
 
+if [[ -f scripts/probes/dream7b_bpu_hbm_artifact_inventory_probe.sh ]]; then
+  for text in \
+    "DREAM7B_BPU_ARTIFACT_INVENTORY_FORWARD_SCRIPT" \
+    "DREAM7B_BPU_ARTIFACT_INVENTORY_NAS_HBM_DIR" \
+    "DREAM7B_BPU_ARTIFACT_INVENTORY_NAS_FINE_HBM_DIR" \
+    "DREAM7B_BPU_ARTIFACT_INVENTORY_LOCAL_HBM_DIR" \
+    "DREAM7B_BPU_ARTIFACT_INVENTORY_LOCAL_FINE_HBM_DIR" \
+    "DREAM7B_BPU_ARTIFACT_INVENTORY_VERIFY_MANIFEST" \
+    "/mnt/nas/openclaw/runtimes/dream7b-bpu-forward/dream7b_segmented_hbm_python_forward.py" \
+    "/mnt/nas/openclaw/models/dream7b-hbm/segments6" \
+    "/mnt/nas/openclaw/models/dream7b-hbm/fine-seq16" \
+    "/home/sunrise/.cache/openclaw/dream7b-hbm/segments6" \
+    "/home/sunrise/.cache/openclaw/dream7b-hbm/fine-seq16" \
+    "SEGMENTS6" \
+    "FINE_ADJACENT_SEGMENTS" \
+    "hbm_artifact_inventory_probe.json" \
+    "hbm_artifact_inventory_probe.md" \
+    "ok_dream7b_bpu_hbm_artifact_inventory_probe" \
+    "expected_artifact_count" \
+    "expected_base_count" \
+    "expected_fine_count" \
+    "nas_existing_count" \
+    "local_existing_count" \
+    "size_match_count" \
+    "manifest_expected_count" \
+    "manifest_verified_count" \
+    "required_manifest_expected_count"; do
+    if ! grep -F -- "$text" scripts/probes/dream7b_bpu_hbm_artifact_inventory_probe.sh >/dev/null; then
+      errors+=("dream7b_bpu_hbm_artifact_inventory_probe.sh missing $text")
+    fi
+  done
+fi
+
 if [[ -f scripts/probes/dream7b_bpu_fine_forward_long_repeat_probe.sh ]]; then
   if ! grep -F -- "DREAM7B_BPU_FINE_FORWARD_LONG_REPEAT_COUNT" scripts/probes/dream7b_bpu_fine_forward_long_repeat_probe.sh >/dev/null; then
     errors+=("dream7b_bpu_fine_forward_long_repeat_probe.sh missing DREAM7B_BPU_FINE_FORWARD_LONG_REPEAT_COUNT")
@@ -741,6 +796,7 @@ if [[ -f scripts/probes/dream7b_bpu_deployment_acceptance_probe.sh ]]; then
   for text in \
     "dream7b_bpu_batch_queue_systemd_*/systemd_probe.json" \
     "dream7b_bpu_batch_capacity_*/batch_capacity_probe.json" \
+    "dream7b_bpu_hbm_artifact_inventory_*/hbm_artifact_inventory_probe.json" \
     "dream7b_bpu_batch_queue_systemd_batch_*/systemd_batch_probe.json" \
     "dream7b_bpu_batch_queue_systemd_drain_*/systemd_drain_probe.json" \
     "dream7b_bpu_batch_queue_systemd_canary_*/systemd_canary_probe.json" \
@@ -749,6 +805,7 @@ if [[ -f scripts/probes/dream7b_bpu_deployment_acceptance_probe.sh ]]; then
     "dream7b_bpu_batch_queue_retention_*/queue_retention_probe.json" \
     "systemd_service" \
     "batch_capacity" \
+    "hbm_artifact_inventory" \
     "systemd_batch" \
     "systemd_drain" \
     "systemd_canary" \
