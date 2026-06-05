@@ -1189,6 +1189,68 @@ Latest recorded report:
 /mnt/nas/openclaw/reports/models/dream7b_bpu_fine_forward_repeat_20260603-180108/summary.md
 ```
 
+### `dream7b-bpu-fine-forward-long-repeat-probe`
+
+Source file: `scripts/probes/dream7b_bpu_fine_forward_long_repeat_probe.sh`
+
+Installed command on S100P:
+
+```text
+/usr/local/bin/dream7b-bpu-fine-forward-long-repeat-probe
+```
+
+Environment variables copied from the script:
+
+```text
+DREAM7B_BPU_FINE_FORWARD_LONG_REPEAT_COUNT
+DREAM7B_BPU_FINE_FORWARD_LONG_REPEAT_MAX_WALL_SPREAD_RATIO
+```
+
+Default values copied from the script:
+
+```text
+repeat_count = 6
+max_wall_spread_ratio = 0
+```
+
+Checked fields copied from the script:
+
+```text
+repeat_status
+repeat_summary_md
+repeat_summary_json
+failure_count
+median_wall_ms
+median_load_ms
+median_run_ms
+min_wall_ms
+max_wall_ms
+wall_spread_ratio
+execution_mode
+window_execution_mode
+child_process_count
+segment_count
+final_shape
+```
+
+Latest recorded report:
+
+```text
+/mnt/nas/openclaw/reports/models/dream7b_bpu_fine_forward_long_repeat_20260605-140733/long_repeat_probe.md
+```
+
+Latest recorded JSON:
+
+```text
+/mnt/nas/openclaw/reports/models/dream7b_bpu_fine_forward_long_repeat_20260605-140733/long_repeat_probe.json
+```
+
+Latest recorded child repeat summary:
+
+```text
+/mnt/nas/openclaw/reports/models/dream7b_bpu_fine_forward_long_repeat_20260605-140733/repeat/dream7b_bpu_fine_forward_repeat_20260605-140733/summary.json
+```
+
 ### `dream7b-bpu-fine-forward-window-batch-probe`
 
 Source file: `scripts/probes/dream7b_bpu_fine_forward_window_batch_probe.sh`
@@ -1832,6 +1894,28 @@ warnings: []
 errors: []
 ```
 
+Verified long repeat fields copied from `long_repeat_probe.json`:
+
+```text
+verdict: ok_dream7b_bpu_fine_forward_long_repeat_probe
+repeat_count: 6
+repeat_status: 0
+failure_count: 0
+median_wall_ms: 25486.779
+median_load_ms: 24109.348
+median_run_ms: 175.934
+min_wall_ms: 25281.031
+max_wall_ms: 26394.78
+wall_spread_ratio: 0.043699
+max_wall_spread_ratio: 0.0
+execution_mode: pair_in_process
+window_execution_mode: in-process
+child_process_count: 0
+segment_count: 10
+final_shape: [1, 16, 152064]
+errors: []
+```
+
 ### Do not claim production text service yet
 
 Decision: current Dream 7B BPU route is a verified seq16 BPU logits and bounded diffusion-loop path, not a complete production text-generation service.
@@ -1934,11 +2018,13 @@ docs/baseline_progress_2026-06-03_dream7b_segmented_bpu_hbm.md
 - Verified three sixteen-request systemd telemetry queue summaries at `/mnt/nas/openclaw/reports/models/dream7b_bpu_batch_queue_service_systemd/jobs/systemd_telemetry_20260605-133919_001/queue_summary.json`, `/mnt/nas/openclaw/reports/models/dream7b_bpu_batch_queue_service_systemd/jobs/systemd_telemetry_20260605-133919_002/queue_summary.json`, and `/mnt/nas/openclaw/reports/models/dream7b_bpu_batch_queue_service_systemd/jobs/systemd_telemetry_20260605-133919_003/queue_summary.json`.
 - Added `dream7b-bpu-batch-queue-retention-probe` for report-only Dream 7B BPU queue retention, stale-file, and archive-candidate checks.
 - Verified current NAS queue retention report at `/mnt/nas/openclaw/reports/models/dream7b_bpu_batch_queue_retention_20260605-135448/queue_retention_probe.md`.
+- Added `dream7b-bpu-fine-forward-long-repeat-probe` for longer `pair_in_process` repeated-run evidence over the existing fine-forward repeat path.
+- Verified six-run long repeat report at `/mnt/nas/openclaw/reports/models/dream7b_bpu_fine_forward_long_repeat_20260605-140733/long_repeat_probe.md`.
 
 ## TODO
 
 - Keep `--window-execution-mode child-process` as the fallback path until longer-run evidence proves `--window-execution-mode in-process` is stable beyond the current 3-run probe.
-- Add longer repeated-run performance evidence for `fine_pair_in_process_packed`.
+- Add an explicit `DREAM7B_BPU_FINE_FORWARD_LONG_REPEAT_MAX_WALL_SPREAD_RATIO` gate only after an acceptable wall-time spread threshold is chosen from repeated evidence.
 - Keep queue cleanup report-only until an explicit apply mode and archive directory migration rule are approved.
 - Run documentation consistency checking through `scripts/probes/project_docs_consistency_probe.sh` after each task.
 - Continue quality gates against the CPU Dream path before describing the BPU route as production text generation.

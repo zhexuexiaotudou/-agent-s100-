@@ -30,6 +30,7 @@ required_files=(
   "scripts/probes/dream7b_segmented_hbm_python_forward.py"
   "scripts/probes/dream7b_bpu_diffusion_loop_probe.sh"
   "scripts/probes/dream7b_bpu_fine_forward_repeat_probe.sh"
+  "scripts/probes/dream7b_bpu_fine_forward_long_repeat_probe.sh"
   "scripts/probes/dream7b_bpu_fine_forward_window_batch_probe.sh"
   "scripts/probes/dream7b_bpu_fine_batch_forward_probe.sh"
   "scripts/probes/dream7b_bpu_fine_batch_size_sweep_probe.sh"
@@ -63,6 +64,7 @@ required_reference_strings=(
   "dream7b-bpu-batch-queue-runner"
   "dream7b-bpu-batch-queue-service"
   "dream7b-bpu-fine-batch-size-sweep-probe"
+  "dream7b-bpu-fine-forward-long-repeat-probe"
   "dream7b-bpu-batch-capacity-probe"
   "dream7b-bpu-runtime-telemetry-probe"
   "install-dream7b-bpu-queue-service"
@@ -81,6 +83,8 @@ required_reference_strings=(
   "DREAM7B_BPU_FINE_BATCH_SWEEP_COUNTS"
   "DREAM7B_BPU_FINE_BATCH_SWEEP_TIMEOUT_SEC"
   "DREAM7B_BPU_FINE_BATCH_SWEEP_TOP_K"
+  "DREAM7B_BPU_FINE_FORWARD_LONG_REPEAT_COUNT"
+  "DREAM7B_BPU_FINE_FORWARD_LONG_REPEAT_MAX_WALL_SPREAD_RATIO"
   "DREAM7B_BPU_BATCH_CAPACITY_COUNTS"
   "DREAM7B_BPU_BATCH_CAPACITY_TIMEOUT_SEC"
   "DREAM7B_BPU_BATCH_CAPACITY_TOP_K"
@@ -155,6 +159,9 @@ required_reference_strings=(
   "/mnt/nas/openclaw/reports/models/dream7b_bpu_fine_forward_20260603-174608/fine_forward_probe.md"
   "/mnt/nas/openclaw/reports/models/dream7b_bpu_fine_forward_perf_20260603-174745/summary.md"
   "/mnt/nas/openclaw/reports/models/dream7b_bpu_fine_forward_repeat_20260603-180108/summary.md"
+  "/mnt/nas/openclaw/reports/models/dream7b_bpu_fine_forward_long_repeat_20260605-140733/long_repeat_probe.md"
+  "/mnt/nas/openclaw/reports/models/dream7b_bpu_fine_forward_long_repeat_20260605-140733/long_repeat_probe.json"
+  "/mnt/nas/openclaw/reports/models/dream7b_bpu_fine_forward_long_repeat_20260605-140733/repeat/dream7b_bpu_fine_forward_repeat_20260605-140733/summary.json"
   "/mnt/nas/openclaw/reports/models/dream7b_bpu_fine_forward_window_batch_20260603-181131/summary.md"
   "/mnt/nas/openclaw/reports/models/dream7b_bpu_fine_batch_forward_20260603-183625/fine_batch_forward_probe.md"
   "/mnt/nas/openclaw/reports/models/dream7b_bpu_fine_batch_size_sweep_20260604-181429/batch_size_sweep_probe.md"
@@ -528,6 +535,30 @@ if [[ -f scripts/probes/dream7b_bpu_runtime_telemetry_probe.sh ]]; then
   fi
   if ! grep -F -- "max_bpu_loading" scripts/probes/dream7b_bpu_runtime_telemetry_probe.sh >/dev/null; then
     errors+=("dream7b_bpu_runtime_telemetry_probe.sh missing max_bpu_loading")
+  fi
+fi
+
+if [[ -f scripts/probes/dream7b_bpu_fine_forward_long_repeat_probe.sh ]]; then
+  if ! grep -F -- "DREAM7B_BPU_FINE_FORWARD_LONG_REPEAT_COUNT" scripts/probes/dream7b_bpu_fine_forward_long_repeat_probe.sh >/dev/null; then
+    errors+=("dream7b_bpu_fine_forward_long_repeat_probe.sh missing DREAM7B_BPU_FINE_FORWARD_LONG_REPEAT_COUNT")
+  fi
+  if ! grep -F -- 'DREAM7B_BPU_FINE_FORWARD_LONG_REPEAT_COUNT:-6' scripts/probes/dream7b_bpu_fine_forward_long_repeat_probe.sh >/dev/null; then
+    errors+=("dream7b_bpu_fine_forward_long_repeat_probe.sh missing default DREAM7B_BPU_FINE_FORWARD_LONG_REPEAT_COUNT:-6")
+  fi
+  if ! grep -F -- "DREAM7B_BPU_FINE_FORWARD_LONG_REPEAT_MAX_WALL_SPREAD_RATIO" scripts/probes/dream7b_bpu_fine_forward_long_repeat_probe.sh >/dev/null; then
+    errors+=("dream7b_bpu_fine_forward_long_repeat_probe.sh missing DREAM7B_BPU_FINE_FORWARD_LONG_REPEAT_MAX_WALL_SPREAD_RATIO")
+  fi
+  if ! grep -F -- "dream7b-bpu-fine-forward-repeat-probe" scripts/probes/dream7b_bpu_fine_forward_long_repeat_probe.sh >/dev/null; then
+    errors+=("dream7b_bpu_fine_forward_long_repeat_probe.sh missing dream7b-bpu-fine-forward-repeat-probe")
+  fi
+  if ! grep -F -- "failure_count" scripts/probes/dream7b_bpu_fine_forward_long_repeat_probe.sh >/dev/null; then
+    errors+=("dream7b_bpu_fine_forward_long_repeat_probe.sh missing failure_count")
+  fi
+  if ! grep -F -- "wall_spread_ratio" scripts/probes/dream7b_bpu_fine_forward_long_repeat_probe.sh >/dev/null; then
+    errors+=("dream7b_bpu_fine_forward_long_repeat_probe.sh missing wall_spread_ratio")
+  fi
+  if ! grep -F -- "repeat_summary_json" scripts/probes/dream7b_bpu_fine_forward_long_repeat_probe.sh >/dev/null; then
+    errors+=("dream7b_bpu_fine_forward_long_repeat_probe.sh missing repeat_summary_json")
   fi
 fi
 

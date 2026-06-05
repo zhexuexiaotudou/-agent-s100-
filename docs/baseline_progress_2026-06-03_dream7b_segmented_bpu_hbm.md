@@ -72,6 +72,8 @@ fine-forward perf command: /usr/local/bin/dream7b-bpu-fine-forward-perf-probe
 fine-forward perf report: /mnt/nas/openclaw/reports/models/dream7b_bpu_fine_forward_perf_20260603-174745/summary.md
 fine-forward repeat command: /usr/local/bin/dream7b-bpu-fine-forward-repeat-probe
 fine-forward repeat report: /mnt/nas/openclaw/reports/models/dream7b_bpu_fine_forward_repeat_20260603-180108/summary.md
+fine-forward long-repeat command: /usr/local/bin/dream7b-bpu-fine-forward-long-repeat-probe
+fine-forward long-repeat report: /mnt/nas/openclaw/reports/models/dream7b_bpu_fine_forward_long_repeat_20260605-140733/long_repeat_probe.md
 fine-forward window-batch command: /usr/local/bin/dream7b-bpu-fine-forward-window-batch-probe
 fine-forward window-batch report: /mnt/nas/openclaw/reports/models/dream7b_bpu_fine_forward_window_batch_20260603-181131/summary.md
 fine-batch-forward command: /usr/local/bin/dream7b-bpu-fine-batch-forward
@@ -178,6 +180,7 @@ scripts/dream7b-bpu-fine-forward.sh
 scripts/probes/dream7b_bpu_fine_forward_probe.sh
 scripts/probes/dream7b_bpu_fine_forward_perf_probe.sh
 scripts/probes/dream7b_bpu_fine_forward_repeat_probe.sh
+scripts/probes/dream7b_bpu_fine_forward_long_repeat_probe.sh
 scripts/probes/dream7b_bpu_fine_forward_window_batch_probe.sh
 scripts/dream7b-bpu-fine-batch-forward.sh
 scripts/probes/dream7b_bpu_fine_batch_forward_probe.sh
@@ -697,6 +700,29 @@ median_run_ms: 176.018
 run_01: execution_mode=pair_in_process, window_execution_mode=in-process, child_process_count=0, final_shape=[1, 16, 152064], wall_ms=26215.101
 run_02: execution_mode=pair_in_process, window_execution_mode=in-process, child_process_count=0, final_shape=[1, 16, 152064], wall_ms=25344.291
 run_03: execution_mode=pair_in_process, window_execution_mode=in-process, child_process_count=0, final_shape=[1, 16, 152064], wall_ms=25477.291
+```
+
+Verified longer repeat output:
+
+```text
+long_repeat_report: /mnt/nas/openclaw/reports/models/dream7b_bpu_fine_forward_long_repeat_20260605-140733/long_repeat_probe.md
+long_repeat_verdict: ok_dream7b_bpu_fine_forward_long_repeat_probe
+repeat_count: 6
+repeat_status: 0
+failure_count: 0
+median_wall_ms: 25486.779
+median_load_ms: 24109.348
+median_run_ms: 175.934
+min_wall_ms: 25281.031
+max_wall_ms: 26394.78
+wall_spread_ratio: 0.043699
+max_wall_spread_ratio: 0.0
+run_01: execution_mode=pair_in_process, window_execution_mode=in-process, child_process_count=0, segment_count=10, final_shape=[1, 16, 152064], wall_ms=25331.453
+run_02: execution_mode=pair_in_process, window_execution_mode=in-process, child_process_count=0, segment_count=10, final_shape=[1, 16, 152064], wall_ms=25620.995
+run_03: execution_mode=pair_in_process, window_execution_mode=in-process, child_process_count=0, segment_count=10, final_shape=[1, 16, 152064], wall_ms=25643.31
+run_04: execution_mode=pair_in_process, window_execution_mode=in-process, child_process_count=0, segment_count=10, final_shape=[1, 16, 152064], wall_ms=26394.78
+run_05: execution_mode=pair_in_process, window_execution_mode=in-process, child_process_count=0, segment_count=10, final_shape=[1, 16, 152064], wall_ms=25281.031
+run_06: execution_mode=pair_in_process, window_execution_mode=in-process, child_process_count=0, segment_count=10, final_shape=[1, 16, 152064], wall_ms=25352.563
 ```
 
 The deployed window-batch throughput probe is:
@@ -1356,7 +1382,7 @@ bpu remaining_mask_positions: []
 
 ## Current Boundary
 
-This is real BPU execution for real Dream 7B weights, including a complete seq16 forward chain from prompt text or token ids to logits plus verified one-step and strategy-aware bounded multi-step Dream diffusion bridges over masked positions. The path now also has a CPU/BPU quality coverage gate that records current divergence against the existing CPU Dream text path, an HBM cache performance gate that quantifies NAS versus S100P-local HBM load cost, a residency gate proving that the current six-segment split cannot be made all-resident, a fine-residency gate proving that every adjacent two-segment window can be resident, a deployed fine in-process pair forward command that runs the 10-segment fine plan to logits with 0 child processes, a 3-run repeat probe for the default in-process path, a window-batch throughput probe for concurrent independent seq16 inputs, a batch-size sweep proving amortized wall time drops from `24562.798` ms at batch 1 to `3175.416` ms at batch 8, a batch-capacity probe proving independent seq16 batch 16 passes with `amortized_wall_ms_per_forward: 1714.647`, runtime telemetry with `hrt_ucp_monitor` showing `max_bpu_loading: 100.0` during Dream 7B BPU forward, a reusable `dream7b-bpu-fine-batch-forward` wrapper for JSON token batches, a bounded `dream7b-bpu-batch-queue-runner` JSONL service bridge with verified multi-batch `--drain-all`, verified `cancelled` and `not_after_epoch_ms` control semantics, durable queue state JSONL outputs, default queue-runner single-flight `bpu_lock`, a directory-backed `dream7b-bpu-batch-queue-service` loop with verified real BPU one-shot operation, and a NAS-backed `dream7b-bpu-batch-queue.service` systemd unit with verified single-job, 2-job, historical `max_batch_size=4` and `max_batch_size=8` reports, current default `--max-batch-size 16 --drain-all` one-job sixteen-request real BPU queued execution with `batch_run_count=1`, `batch_count=16`, and `amortized_wall_ms_per_processed_request` around 1.7 seconds, sustained service telemetry over three sixteen-request jobs showing `processed_request_count: 48`, `batch_counts: [16, 16, 16]`, `max_bpu_loading: 100.0`, and `amortized_wall_ms_per_processed_request: 1662.737`, plus a report-only queue retention probe showing the current NAS queue has no stale `pending` or `processing` jobs and no current archive candidates. It is not yet a complete text-generation service.
+This is real BPU execution for real Dream 7B weights, including a complete seq16 forward chain from prompt text or token ids to logits plus verified one-step and strategy-aware bounded multi-step Dream diffusion bridges over masked positions. The path now also has a CPU/BPU quality coverage gate that records current divergence against the existing CPU Dream text path, an HBM cache performance gate that quantifies NAS versus S100P-local HBM load cost, a residency gate proving that the current six-segment split cannot be made all-resident, a fine-residency gate proving that every adjacent two-segment window can be resident, a deployed fine in-process pair forward command that runs the 10-segment fine plan to logits with 0 child processes, a 3-run repeat probe plus a 6-run long-repeat probe for the default in-process path, a window-batch throughput probe for concurrent independent seq16 inputs, a batch-size sweep proving amortized wall time drops from `24562.798` ms at batch 1 to `3175.416` ms at batch 8, a batch-capacity probe proving independent seq16 batch 16 passes with `amortized_wall_ms_per_forward: 1714.647`, runtime telemetry with `hrt_ucp_monitor` showing `max_bpu_loading: 100.0` during Dream 7B BPU forward, a reusable `dream7b-bpu-fine-batch-forward` wrapper for JSON token batches, a bounded `dream7b-bpu-batch-queue-runner` JSONL service bridge with verified multi-batch `--drain-all`, verified `cancelled` and `not_after_epoch_ms` control semantics, durable queue state JSONL outputs, default queue-runner single-flight `bpu_lock`, a directory-backed `dream7b-bpu-batch-queue-service` loop with verified real BPU one-shot operation, and a NAS-backed `dream7b-bpu-batch-queue.service` systemd unit with verified single-job, 2-job, historical `max_batch_size=4` and `max_batch_size=8` reports, current default `--max-batch-size 16 --drain-all` one-job sixteen-request real BPU queued execution with `batch_run_count=1`, `batch_count=16`, and `amortized_wall_ms_per_processed_request` around 1.7 seconds, sustained service telemetry over three sixteen-request jobs showing `processed_request_count: 48`, `batch_counts: [16, 16, 16]`, `max_bpu_loading: 100.0`, and `amortized_wall_ms_per_processed_request: 1662.737`, plus a report-only queue retention probe showing the current NAS queue has no stale `pending` or `processing` jobs and no current archive candidates. It is not yet a complete text-generation service.
 
 Remaining engineering work:
 
