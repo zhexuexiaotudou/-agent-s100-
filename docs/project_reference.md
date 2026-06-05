@@ -1,6 +1,6 @@
 # Project Reference
 
-Last updated: 2026-06-04
+Last updated: 2026-06-05
 
 This document is the project-level reference for API-like command interfaces, configuration keys, architecture, decisions, development log, requirements, and TODOs. All identifiers in this file are copied from repository files or recorded evidence. When a name, key, path, or field is uncertain, read the source file first and do not infer spelling, case, format, or structure.
 
@@ -1032,6 +1032,75 @@ Latest recorded queue job summaries:
 /mnt/nas/openclaw/reports/models/dream7b_bpu_batch_queue_service_systemd/jobs/systemd_telemetry_20260605-133919_003/queue_summary.json
 ```
 
+### `dream7b-bpu-batch-queue-retention-probe`
+
+Source file: `scripts/probes/dream7b_bpu_batch_queue_retention_probe.sh`
+
+Installed command on S100P:
+
+```text
+/usr/local/bin/dream7b-bpu-batch-queue-retention-probe
+```
+
+Default arguments copied from the script:
+
+```text
+report_root = /mnt/nas/openclaw/reports/models
+queue_dir = /mnt/nas/openclaw/queues/dream7b-bpu
+```
+
+Environment variables copied from the script:
+
+```text
+DREAM7B_BPU_QUEUE_RETENTION_DONE_DAYS
+DREAM7B_BPU_QUEUE_RETENTION_FAILED_DAYS
+DREAM7B_BPU_QUEUE_RETENTION_PENDING_STALE_MINUTES
+DREAM7B_BPU_QUEUE_RETENTION_PROCESSING_STALE_MINUTES
+DREAM7B_BPU_QUEUE_RETENTION_MAX_LIST
+```
+
+Default values copied from the script:
+
+```text
+done_retention_days = 14
+failed_retention_days = 30
+pending_stale_minutes = 60
+processing_stale_minutes = 60
+max_list = 50
+policy_mode = report_only
+apply_supported = False
+```
+
+Checked fields copied from the script:
+
+```text
+queue_counts
+queue_size_bytes
+pending_stale_count
+processing_stale_count
+done_archive_candidate_count
+failed_archive_candidate_count
+pending_stale
+processing_stale
+done_archive_candidates
+failed_archive_candidates
+archive_plan
+warnings
+errors
+```
+
+Latest recorded report:
+
+```text
+/mnt/nas/openclaw/reports/models/dream7b_bpu_batch_queue_retention_20260605-135448/queue_retention_probe.md
+```
+
+Latest recorded JSON:
+
+```text
+/mnt/nas/openclaw/reports/models/dream7b_bpu_batch_queue_retention_20260605-135448/queue_retention_probe.json
+```
+
 ### `dream7b-bpu-diffusion-loop-probe`
 
 Source file: `scripts/probes/dream7b_bpu_diffusion_loop_probe.sh`
@@ -1746,6 +1815,23 @@ service_status_after: active
 errors: []
 ```
 
+Verified current queue retention fields copied from `queue_retention_probe.json`:
+
+```text
+verdict: ok_dream7b_bpu_batch_queue_retention_probe
+policy_mode: report_only
+queue_counts: {'pending': 0, 'processing': 0, 'done': 13, 'failed': 1}
+queue_size_bytes: {'pending': 0, 'processing': 0, 'done': 18685, 'failed': 83}
+pending_stale_count: 0
+processing_stale_count: 0
+done_archive_candidate_count: 0
+failed_archive_candidate_count: 0
+archive_root: /mnt/nas/openclaw/queues/dream7b-bpu/archive
+apply_supported: False
+warnings: []
+errors: []
+```
+
 ### Do not claim production text service yet
 
 Decision: current Dream 7B BPU route is a verified seq16 BPU logits and bounded diffusion-loop path, not a complete production text-generation service.
@@ -1846,12 +1932,14 @@ docs/baseline_progress_2026-06-03_dream7b_segmented_bpu_hbm.md
 - Added `dream7b-bpu-batch-queue-systemd-telemetry-probe` for sustained NAS-backed systemd queue telemetry while sampling `hrt_ucp_monitor`.
 - Verified sustained systemd telemetry report at `/mnt/nas/openclaw/reports/models/dream7b_bpu_batch_queue_systemd_telemetry_20260605-133919/systemd_telemetry_probe.md`.
 - Verified three sixteen-request systemd telemetry queue summaries at `/mnt/nas/openclaw/reports/models/dream7b_bpu_batch_queue_service_systemd/jobs/systemd_telemetry_20260605-133919_001/queue_summary.json`, `/mnt/nas/openclaw/reports/models/dream7b_bpu_batch_queue_service_systemd/jobs/systemd_telemetry_20260605-133919_002/queue_summary.json`, and `/mnt/nas/openclaw/reports/models/dream7b_bpu_batch_queue_service_systemd/jobs/systemd_telemetry_20260605-133919_003/queue_summary.json`.
+- Added `dream7b-bpu-batch-queue-retention-probe` for report-only Dream 7B BPU queue retention, stale-file, and archive-candidate checks.
+- Verified current NAS queue retention report at `/mnt/nas/openclaw/reports/models/dream7b_bpu_batch_queue_retention_20260605-135448/queue_retention_probe.md`.
 
 ## TODO
 
 - Keep `--window-execution-mode child-process` as the fallback path until longer-run evidence proves `--window-execution-mode in-process` is stable beyond the current 3-run probe.
 - Add longer repeated-run performance evidence for `fine_pair_in_process_packed`.
-- Add service-level cleanup or archival policy for failed queue test files under `/mnt/nas/openclaw/queues/dream7b-bpu/failed`.
+- Keep queue cleanup report-only until an explicit apply mode and archive directory migration rule are approved.
 - Run documentation consistency checking through `scripts/probes/project_docs_consistency_probe.sh` after each task.
 - Continue quality gates against the CPU Dream path before describing the BPU route as production text generation.
 

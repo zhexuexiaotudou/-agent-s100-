@@ -45,6 +45,7 @@ required_files=(
   "scripts/probes/dream7b_bpu_batch_queue_systemd_batch_probe.sh"
   "scripts/probes/dream7b_bpu_batch_queue_systemd_drain_probe.sh"
   "scripts/probes/dream7b_bpu_batch_queue_systemd_telemetry_probe.sh"
+  "scripts/probes/dream7b_bpu_batch_queue_retention_probe.sh"
   "scripts/startup_link_check/link-check.config.json"
   "scripts/tool_allowlist.json"
 )
@@ -70,6 +71,7 @@ required_reference_strings=(
   "dream7b-bpu-batch-queue-systemd-batch-probe"
   "dream7b-bpu-batch-queue-systemd-drain-probe"
   "dream7b-bpu-batch-queue-systemd-telemetry-probe"
+  "dream7b-bpu-batch-queue-retention-probe"
   "dream7b-bpu-batch-queue.service"
   "dream7b-bpu-text-forward"
   "dream7b-bpu-diffusion-loop-probe"
@@ -101,6 +103,11 @@ required_reference_strings=(
   "DREAM7B_BPU_SYSTEMD_TELEMETRY_POLL_INTERVAL_SEC"
   "DREAM7B_BPU_SYSTEMD_TELEMETRY_MONITOR_DELAY_MS"
   "DREAM7B_BPU_SYSTEMD_TELEMETRY_MONITOR_SAMPLE_COUNT"
+  "DREAM7B_BPU_QUEUE_RETENTION_DONE_DAYS"
+  "DREAM7B_BPU_QUEUE_RETENTION_FAILED_DAYS"
+  "DREAM7B_BPU_QUEUE_RETENTION_PENDING_STALE_MINUTES"
+  "DREAM7B_BPU_QUEUE_RETENTION_PROCESSING_STALE_MINUTES"
+  "DREAM7B_BPU_QUEUE_RETENTION_MAX_LIST"
   "--child-runtime-mode"
   "--window-execution-mode"
   "--tokens-batch-json"
@@ -126,6 +133,13 @@ required_reference_strings=(
   "nonzero_bpu_loading_sample_count"
   "max_bpu_loading"
   "avg_bpu_loading"
+  "policy_mode"
+  "apply_supported"
+  "archive_plan"
+  "pending_stale_count"
+  "processing_stale_count"
+  "done_archive_candidate_count"
+  "failed_archive_candidate_count"
   "/run/lock/dream7b_bpu_batch_queue_runner.lock"
   "pending"
   "processing"
@@ -190,6 +204,8 @@ required_reference_strings=(
   "/mnt/nas/openclaw/reports/models/dream7b_bpu_batch_queue_service_systemd/jobs/systemd_telemetry_20260605-133919_001/queue_summary.json"
   "/mnt/nas/openclaw/reports/models/dream7b_bpu_batch_queue_service_systemd/jobs/systemd_telemetry_20260605-133919_002/queue_summary.json"
   "/mnt/nas/openclaw/reports/models/dream7b_bpu_batch_queue_service_systemd/jobs/systemd_telemetry_20260605-133919_003/queue_summary.json"
+  "/mnt/nas/openclaw/reports/models/dream7b_bpu_batch_queue_retention_20260605-135448/queue_retention_probe.md"
+  "/mnt/nas/openclaw/reports/models/dream7b_bpu_batch_queue_retention_20260605-135448/queue_retention_probe.json"
   "/etc/systemd/system/dream7b-bpu-batch-queue.service"
   "/mnt/nas/openclaw/queues/dream7b-bpu"
   "/mnt/nas/openclaw/reports/models/dream7b_bpu_batch_queue_service_systemd"
@@ -551,6 +567,54 @@ if [[ -f scripts/probes/dream7b_bpu_batch_queue_systemd_telemetry_probe.sh ]]; t
   fi
   if ! grep -F -- "max_bpu_loading" scripts/probes/dream7b_bpu_batch_queue_systemd_telemetry_probe.sh >/dev/null; then
     errors+=("dream7b_bpu_batch_queue_systemd_telemetry_probe.sh missing max_bpu_loading")
+  fi
+fi
+
+if [[ -f scripts/probes/dream7b_bpu_batch_queue_retention_probe.sh ]]; then
+  if ! grep -F -- "DREAM7B_BPU_QUEUE_RETENTION_DONE_DAYS" scripts/probes/dream7b_bpu_batch_queue_retention_probe.sh >/dev/null; then
+    errors+=("dream7b_bpu_batch_queue_retention_probe.sh missing DREAM7B_BPU_QUEUE_RETENTION_DONE_DAYS")
+  fi
+  if ! grep -F -- 'DREAM7B_BPU_QUEUE_RETENTION_DONE_DAYS:-14' scripts/probes/dream7b_bpu_batch_queue_retention_probe.sh >/dev/null; then
+    errors+=("dream7b_bpu_batch_queue_retention_probe.sh missing default DREAM7B_BPU_QUEUE_RETENTION_DONE_DAYS:-14")
+  fi
+  if ! grep -F -- "DREAM7B_BPU_QUEUE_RETENTION_FAILED_DAYS" scripts/probes/dream7b_bpu_batch_queue_retention_probe.sh >/dev/null; then
+    errors+=("dream7b_bpu_batch_queue_retention_probe.sh missing DREAM7B_BPU_QUEUE_RETENTION_FAILED_DAYS")
+  fi
+  if ! grep -F -- 'DREAM7B_BPU_QUEUE_RETENTION_FAILED_DAYS:-30' scripts/probes/dream7b_bpu_batch_queue_retention_probe.sh >/dev/null; then
+    errors+=("dream7b_bpu_batch_queue_retention_probe.sh missing default DREAM7B_BPU_QUEUE_RETENTION_FAILED_DAYS:-30")
+  fi
+  if ! grep -F -- "DREAM7B_BPU_QUEUE_RETENTION_PENDING_STALE_MINUTES" scripts/probes/dream7b_bpu_batch_queue_retention_probe.sh >/dev/null; then
+    errors+=("dream7b_bpu_batch_queue_retention_probe.sh missing DREAM7B_BPU_QUEUE_RETENTION_PENDING_STALE_MINUTES")
+  fi
+  if ! grep -F -- "DREAM7B_BPU_QUEUE_RETENTION_PROCESSING_STALE_MINUTES" scripts/probes/dream7b_bpu_batch_queue_retention_probe.sh >/dev/null; then
+    errors+=("dream7b_bpu_batch_queue_retention_probe.sh missing DREAM7B_BPU_QUEUE_RETENTION_PROCESSING_STALE_MINUTES")
+  fi
+  if ! grep -F -- "DREAM7B_BPU_QUEUE_RETENTION_MAX_LIST" scripts/probes/dream7b_bpu_batch_queue_retention_probe.sh >/dev/null; then
+    errors+=("dream7b_bpu_batch_queue_retention_probe.sh missing DREAM7B_BPU_QUEUE_RETENTION_MAX_LIST")
+  fi
+  if ! grep -F -- "policy_mode" scripts/probes/dream7b_bpu_batch_queue_retention_probe.sh >/dev/null; then
+    errors+=("dream7b_bpu_batch_queue_retention_probe.sh missing policy_mode")
+  fi
+  if ! grep -F -- "report_only" scripts/probes/dream7b_bpu_batch_queue_retention_probe.sh >/dev/null; then
+    errors+=("dream7b_bpu_batch_queue_retention_probe.sh missing report_only")
+  fi
+  if ! grep -F -- "apply_supported" scripts/probes/dream7b_bpu_batch_queue_retention_probe.sh >/dev/null; then
+    errors+=("dream7b_bpu_batch_queue_retention_probe.sh missing apply_supported")
+  fi
+  if ! grep -F -- "archive_plan" scripts/probes/dream7b_bpu_batch_queue_retention_probe.sh >/dev/null; then
+    errors+=("dream7b_bpu_batch_queue_retention_probe.sh missing archive_plan")
+  fi
+  if ! grep -F -- "pending_stale_count" scripts/probes/dream7b_bpu_batch_queue_retention_probe.sh >/dev/null; then
+    errors+=("dream7b_bpu_batch_queue_retention_probe.sh missing pending_stale_count")
+  fi
+  if ! grep -F -- "processing_stale_count" scripts/probes/dream7b_bpu_batch_queue_retention_probe.sh >/dev/null; then
+    errors+=("dream7b_bpu_batch_queue_retention_probe.sh missing processing_stale_count")
+  fi
+  if ! grep -F -- "done_archive_candidate_count" scripts/probes/dream7b_bpu_batch_queue_retention_probe.sh >/dev/null; then
+    errors+=("dream7b_bpu_batch_queue_retention_probe.sh missing done_archive_candidate_count")
+  fi
+  if ! grep -F -- "failed_archive_candidate_count" scripts/probes/dream7b_bpu_batch_queue_retention_probe.sh >/dev/null; then
+    errors+=("dream7b_bpu_batch_queue_retention_probe.sh missing failed_archive_candidate_count")
   fi
 fi
 
