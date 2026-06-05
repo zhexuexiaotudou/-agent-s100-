@@ -2,7 +2,7 @@
 set -euo pipefail
 
 report_root="${1:-/mnt/nas/openclaw/reports/models}"
-batch_count="${DREAM7B_BPU_TELEMETRY_BATCH_COUNT:-8}"
+batch_count="${DREAM7B_BPU_TELEMETRY_BATCH_COUNT:-16}"
 monitor_delay_ms="${DREAM7B_BPU_TELEMETRY_MONITOR_DELAY_MS:-100}"
 monitor_sample_count="${DREAM7B_BPU_TELEMETRY_MONITOR_SAMPLE_COUNT:-320}"
 top_k="${DREAM7B_BPU_TELEMETRY_TOP_K:-3}"
@@ -16,8 +16,8 @@ case "$report_root" in
     ;;
 esac
 
-if ! [[ "$batch_count" =~ ^[1-9][0-9]*$ ]] || (( batch_count > 8 )); then
-  echo "DREAM7B_BPU_TELEMETRY_BATCH_COUNT must be an integer from 1 to 8." >&2
+if ! [[ "$batch_count" =~ ^[1-9][0-9]*$ ]] || (( batch_count > 16 )); then
+  echo "DREAM7B_BPU_TELEMETRY_BATCH_COUNT must be an integer from 1 to 16." >&2
   exit 2
 fi
 if ! [[ "$monitor_delay_ms" =~ ^[0-9]+$ ]] || (( monitor_delay_ms < 100 || monitor_delay_ms > 10000 )); then

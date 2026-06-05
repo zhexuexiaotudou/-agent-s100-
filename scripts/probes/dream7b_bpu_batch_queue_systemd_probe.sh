@@ -42,7 +42,7 @@ if service_enabled != "enabled":
     errors.append(f"unexpected service_enabled: {service_enabled}")
 if not unit_path.endswith("/dream7b-bpu-batch-queue.service"):
     errors.append(f"unexpected unit_path: {unit_path}")
-for text in ("dream7b-bpu-batch-queue-service", "/mnt/nas/openclaw/queues/dream7b-bpu", "/mnt/nas/openclaw/reports/models/dream7b_bpu_batch_queue_service_systemd", "/run/lock/dream7b_bpu_batch_queue_runner.lock", "--max-batch-size 8", "--drain-all"):
+for text in ("dream7b-bpu-batch-queue-service", "/mnt/nas/openclaw/queues/dream7b-bpu", "/mnt/nas/openclaw/reports/models/dream7b_bpu_batch_queue_service_systemd", "/run/lock/dream7b_bpu_batch_queue_runner.lock", "--max-batch-size 16", "--drain-all"):
     if text not in exec_start:
         errors.append(f"ExecStart missing {text}: {exec_start}")
 
@@ -54,7 +54,7 @@ payload = {
     "service_enabled": service_enabled,
     "unit_path": unit_path,
     "exec_start": exec_start,
-    "max_batch_size_required": 8,
+    "max_batch_size_required": 16,
     "drain_all_required": True,
     "errors": errors,
 }

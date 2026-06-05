@@ -5,7 +5,7 @@ report_root="${1:-/mnt/nas/openclaw/reports/models}"
 service_name="${2:-dream7b-bpu-batch-queue.service}"
 queue_dir="${3:-/mnt/nas/openclaw/queues/dream7b-bpu}"
 output_dir="${4:-/mnt/nas/openclaw/reports/models/dream7b_bpu_batch_queue_service_systemd}"
-request_count="${DREAM7B_BPU_SYSTEMD_BATCH_REQUEST_COUNT:-8}"
+request_count="${DREAM7B_BPU_SYSTEMD_BATCH_REQUEST_COUNT:-16}"
 timeout_sec="${DREAM7B_BPU_SYSTEMD_BATCH_TIMEOUT_SEC:-420}"
 poll_interval_sec="${DREAM7B_BPU_SYSTEMD_BATCH_POLL_INTERVAL_SEC:-2}"
 
@@ -33,8 +33,8 @@ case "$output_dir" in
     ;;
 esac
 
-if ! [[ "$request_count" =~ ^[0-9]+$ ]] || (( request_count < 1 || request_count > 8 )); then
-  echo "DREAM7B_BPU_SYSTEMD_BATCH_REQUEST_COUNT must be an integer from 1 to 8." >&2
+if ! [[ "$request_count" =~ ^[0-9]+$ ]] || (( request_count < 1 || request_count > 16 )); then
+  echo "DREAM7B_BPU_SYSTEMD_BATCH_REQUEST_COUNT must be an integer from 1 to 16." >&2
   exit 2
 fi
 if ! [[ "$timeout_sec" =~ ^[0-9]+$ ]] || (( timeout_sec < 1 )); then
@@ -178,7 +178,7 @@ if service_enabled_after != "enabled":
     errors.append(f"unexpected service_enabled_after: {service_enabled_after}")
 if not unit_path.endswith("/dream7b-bpu-batch-queue.service"):
     errors.append(f"unexpected unit_path: {unit_path}")
-for text in ("dream7b-bpu-batch-queue-service", "/mnt/nas/openclaw/queues/dream7b-bpu", "/mnt/nas/openclaw/reports/models/dream7b_bpu_batch_queue_service_systemd", "/run/lock/dream7b_bpu_batch_queue_runner.lock", "--max-batch-size 8", "--drain-all"):
+for text in ("dream7b-bpu-batch-queue-service", "/mnt/nas/openclaw/queues/dream7b-bpu", "/mnt/nas/openclaw/reports/models/dream7b_bpu_batch_queue_service_systemd", "/run/lock/dream7b_bpu_batch_queue_runner.lock", "--max-batch-size 16", "--drain-all"):
     if text not in exec_start:
         errors.append(f"ExecStart missing {text}: {exec_start}")
 if job_status != "done":
@@ -204,7 +204,7 @@ if isinstance(summary, dict):
     deferred_count = summary.get("deferred_count")
     max_batch_size = summary.get("max_batch_size")
     batch_run_count = summary.get("batch_run_count")
-    if max_batch_size != 8:
+    if max_batch_size != 16:
         errors.append(f"unexpected max_batch_size: {max_batch_size}")
     if processed_count != request_count:
         errors.append(f"unexpected processed_count: {processed_count}")

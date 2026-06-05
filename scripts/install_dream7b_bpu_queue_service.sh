@@ -13,7 +13,7 @@ Installs a systemd service for the Dream 7B BPU directory-backed queue loop.
 
 Environment:
   DREAM7B_BPU_QUEUE_POLL_INTERVAL_SEC  Poll interval in seconds. Default: 1.
-  DREAM7B_BPU_QUEUE_MAX_BATCH_SIZE     Runner max batch size. Default: 8.
+  DREAM7B_BPU_QUEUE_MAX_BATCH_SIZE     Runner max batch size. Default: 16.
   DREAM7B_BPU_QUEUE_TOP_K              Runner top-k output. Default: 3.
   DREAM7B_BPU_QUEUE_LOCK_PATH          Runner BPU lock path. Default: /run/lock/dream7b_bpu_batch_queue_runner.lock.
   DREAM7B_BPU_QUEUE_REPO_DIR           Runtime workspace for systemd WorkingDirectory. Default: /mnt/nas/openclaw.
@@ -37,7 +37,7 @@ default_output_dir="/mnt/nas/openclaw/reports/models/dream7b_bpu_batch_queue_ser
 queue_dir="${1:-$default_queue_dir}"
 output_dir="${2:-$default_output_dir}"
 poll_interval_sec="${DREAM7B_BPU_QUEUE_POLL_INTERVAL_SEC:-1}"
-max_batch_size="${DREAM7B_BPU_QUEUE_MAX_BATCH_SIZE:-8}"
+max_batch_size="${DREAM7B_BPU_QUEUE_MAX_BATCH_SIZE:-16}"
 top_k="${DREAM7B_BPU_QUEUE_TOP_K:-3}"
 bpu_lock_path="${DREAM7B_BPU_QUEUE_LOCK_PATH:-/run/lock/dream7b_bpu_batch_queue_runner.lock}"
 drain_all="${DREAM7B_BPU_QUEUE_DRAIN_ALL:-1}"
