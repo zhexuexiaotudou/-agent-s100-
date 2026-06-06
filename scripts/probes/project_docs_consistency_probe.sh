@@ -55,6 +55,7 @@ required_files=(
   "scripts/probes/dream7b_bpu_batch_queue_systemd_telemetry_probe.sh"
   "scripts/probes/dream7b_bpu_diffusion_generate_telemetry_probe.sh"
   "scripts/probes/dream7b_bpu_diffusion_batch_generate_telemetry_probe.sh"
+  "scripts/probes/dream7b_bpu_diffusion_batch_generate_sustained_probe.sh"
   "scripts/probes/dream7b_bpu_batch_queue_retention_probe.sh"
   "scripts/probes/dream7b_bpu_deployment_acceptance_probe.sh"
   "scripts/startup_link_check/link-check.config.json"
@@ -71,6 +72,7 @@ required_readme_strings=(
   "scripts/dream7b-bpu-diffusion-batch-generate.sh"
   "scripts/probes/dream7b_bpu_diffusion_generate_telemetry_probe.sh"
   "scripts/probes/dream7b_bpu_diffusion_batch_generate_telemetry_probe.sh"
+  "scripts/probes/dream7b_bpu_diffusion_batch_generate_sustained_probe.sh"
   "dream7b_bpu_text_queue_systemd_probe.sh"
 )
 
@@ -99,6 +101,7 @@ required_reference_strings=(
   "dream7b-bpu-batch-queue-systemd-telemetry-probe"
   "dream7b-bpu-diffusion-generate-telemetry-probe"
   "dream7b-bpu-diffusion-batch-generate-telemetry-probe"
+  "dream7b-bpu-diffusion-batch-generate-sustained-probe"
   "dream7b-bpu-batch-queue-retention-probe"
   "dream7b-bpu-deployment-acceptance-probe"
   "dream7b-bpu-batch-queue.service"
@@ -179,6 +182,12 @@ required_reference_strings=(
   "DREAM7B_BPU_DIFFUSION_BATCH_GENERATE_TELEMETRY_MONITOR_DELAY_MS"
   "DREAM7B_BPU_DIFFUSION_BATCH_GENERATE_TELEMETRY_MONITOR_SAMPLE_COUNT"
   "DREAM7B_BPU_DIFFUSION_BATCH_GENERATE_TELEMETRY_TIMEOUT_SEC"
+  "DREAM7B_BPU_DIFFUSION_BATCH_GENERATE_SUSTAINED_ROUND_COUNT"
+  "DREAM7B_BPU_DIFFUSION_BATCH_GENERATE_SUSTAINED_BATCH_COUNT"
+  "DREAM7B_BPU_DIFFUSION_BATCH_GENERATE_SUSTAINED_CMD"
+  "DREAM7B_BPU_DIFFUSION_BATCH_GENERATE_SUSTAINED_MONITOR_DELAY_MS"
+  "DREAM7B_BPU_DIFFUSION_BATCH_GENERATE_SUSTAINED_MONITOR_SAMPLE_COUNT"
+  "DREAM7B_BPU_DIFFUSION_BATCH_GENERATE_SUSTAINED_TIMEOUT_SEC"
   "DREAM7B_BPU_QUEUE_RETENTION_DONE_DAYS"
   "DREAM7B_BPU_QUEUE_RETENTION_FAILED_DAYS"
   "DREAM7B_BPU_QUEUE_RETENTION_PENDING_STALE_MINUTES"
@@ -188,6 +197,7 @@ required_reference_strings=(
   "DREAM7B_BPU_ACCEPTANCE_MIN_SYSTEMD_BATCH_REQUESTS"
   "DREAM7B_BPU_ACCEPTANCE_MIN_SYSTEMD_TELEMETRY_REQUESTS"
   "DREAM7B_BPU_ACCEPTANCE_MIN_BATCH_GENERATE_COUNT"
+  "DREAM7B_BPU_ACCEPTANCE_MIN_BATCH_GENERATE_SUSTAINED_ROUND_COUNT"
   "DREAM7B_BPU_ACCEPTANCE_MIN_LONG_REPEAT_COUNT"
   "DREAM7B_BPU_ACCEPTANCE_MAX_LONG_REPEAT_WALL_SPREAD_RATIO"
   "--child-runtime-mode"
@@ -244,10 +254,14 @@ required_reference_strings=(
   "diffusion_generate"
   "diffusion_generate_telemetry"
   "diffusion_batch_generate_telemetry"
+  "diffusion_batch_generate_sustained"
   "ok_dream7b_bpu_diffusion_generate"
   "ok_dream7b_bpu_diffusion_generate_telemetry_probe"
   "ok_dream7b_bpu_diffusion_batch_generate"
   "ok_dream7b_bpu_diffusion_batch_generate_telemetry_probe"
+  "ok_dream7b_bpu_diffusion_batch_generate_sustained_probe"
+  "batch_generation_sustained_probe.json"
+  "batch_generation_sustained_probe.md"
   "generation_telemetry_probe.json"
   "generation_telemetry_probe.md"
   "batch_generation.json"
@@ -885,6 +899,46 @@ if [[ -f scripts/probes/dream7b_bpu_diffusion_batch_generate_telemetry_probe.sh 
   fi
 fi
 
+if [[ -f scripts/probes/dream7b_bpu_diffusion_batch_generate_sustained_probe.sh ]]; then
+  for text in \
+    "DREAM7B_BPU_DIFFUSION_BATCH_GENERATE_SUSTAINED_ROUND_COUNT" \
+    "DREAM7B_BPU_DIFFUSION_BATCH_GENERATE_SUSTAINED_BATCH_COUNT" \
+    "DREAM7B_BPU_DIFFUSION_BATCH_GENERATE_SUSTAINED_CMD" \
+    "DREAM7B_BPU_DIFFUSION_BATCH_GENERATE_SUSTAINED_MONITOR_DELAY_MS" \
+    "DREAM7B_BPU_DIFFUSION_BATCH_GENERATE_SUSTAINED_MONITOR_SAMPLE_COUNT" \
+    "DREAM7B_BPU_DIFFUSION_BATCH_GENERATE_SUSTAINED_TIMEOUT_SEC" \
+    "dream7b-bpu-diffusion-batch-generate" \
+    "hrt_ucp_monitor" \
+    "batch_generation_sustained_probe.json" \
+    "batch_generation_sustained_probe.md" \
+    "ok_dream7b_bpu_diffusion_batch_generate_sustained_probe" \
+    "ok_dream7b_bpu_diffusion_batch_generate" \
+    "round_count" \
+    "successful_generation_count" \
+    "expected_total_batch_items" \
+    "actual_total_batch_items" \
+    "generation_statuses" \
+    "generation_batch_counts" \
+    "generation_forward_batch_counts_by_round" \
+    "total_forward_call_count" \
+    "bpu_loading_sample_count" \
+    "nonzero_bpu_loading_sample_count" \
+    "max_bpu_loading" \
+    "avg_bpu_loading" \
+    "forward_batch_count" \
+    "bounded_seq16_batch_generation_entrypoint_not_complete_production_text_service"; do
+    if ! grep -F -- "$text" scripts/probes/dream7b_bpu_diffusion_batch_generate_sustained_probe.sh >/dev/null; then
+      errors+=("dream7b_bpu_diffusion_batch_generate_sustained_probe.sh missing $text")
+    fi
+  done
+  if ! grep -F -- 'DREAM7B_BPU_DIFFUSION_BATCH_GENERATE_SUSTAINED_ROUND_COUNT:-3' scripts/probes/dream7b_bpu_diffusion_batch_generate_sustained_probe.sh >/dev/null; then
+    errors+=("dream7b_bpu_diffusion_batch_generate_sustained_probe.sh missing default DREAM7B_BPU_DIFFUSION_BATCH_GENERATE_SUSTAINED_ROUND_COUNT:-3")
+  fi
+  if ! grep -F -- 'DREAM7B_BPU_DIFFUSION_BATCH_GENERATE_SUSTAINED_BATCH_COUNT:-16' scripts/probes/dream7b_bpu_diffusion_batch_generate_sustained_probe.sh >/dev/null; then
+    errors+=("dream7b_bpu_diffusion_batch_generate_sustained_probe.sh missing default DREAM7B_BPU_DIFFUSION_BATCH_GENERATE_SUSTAINED_BATCH_COUNT:-16")
+  fi
+fi
+
 if [[ -f scripts/probes/dream7b_bpu_batch_queue_retention_probe.sh ]]; then
   if ! grep -F -- "DREAM7B_BPU_QUEUE_RETENTION_DONE_DAYS" scripts/probes/dream7b_bpu_batch_queue_retention_probe.sh >/dev/null; then
     errors+=("dream7b_bpu_batch_queue_retention_probe.sh missing DREAM7B_BPU_QUEUE_RETENTION_DONE_DAYS")
@@ -1186,6 +1240,12 @@ if [[ -f scripts/probes/dream7b_bpu_deployment_acceptance_probe.sh ]]; then
   if ! grep -F -- 'DREAM7B_BPU_ACCEPTANCE_MIN_BATCH_GENERATE_COUNT:-16' scripts/probes/dream7b_bpu_deployment_acceptance_probe.sh >/dev/null; then
     errors+=("dream7b_bpu_deployment_acceptance_probe.sh missing default DREAM7B_BPU_ACCEPTANCE_MIN_BATCH_GENERATE_COUNT:-16")
   fi
+  if ! grep -F -- "DREAM7B_BPU_ACCEPTANCE_MIN_BATCH_GENERATE_SUSTAINED_ROUND_COUNT" scripts/probes/dream7b_bpu_deployment_acceptance_probe.sh >/dev/null; then
+    errors+=("dream7b_bpu_deployment_acceptance_probe.sh missing DREAM7B_BPU_ACCEPTANCE_MIN_BATCH_GENERATE_SUSTAINED_ROUND_COUNT")
+  fi
+  if ! grep -F -- 'DREAM7B_BPU_ACCEPTANCE_MIN_BATCH_GENERATE_SUSTAINED_ROUND_COUNT:-3' scripts/probes/dream7b_bpu_deployment_acceptance_probe.sh >/dev/null; then
+    errors+=("dream7b_bpu_deployment_acceptance_probe.sh missing default DREAM7B_BPU_ACCEPTANCE_MIN_BATCH_GENERATE_SUSTAINED_ROUND_COUNT:-3")
+  fi
   if ! grep -F -- "DREAM7B_BPU_ACCEPTANCE_MIN_LONG_REPEAT_COUNT" scripts/probes/dream7b_bpu_deployment_acceptance_probe.sh >/dev/null; then
     errors+=("dream7b_bpu_deployment_acceptance_probe.sh missing DREAM7B_BPU_ACCEPTANCE_MIN_LONG_REPEAT_COUNT")
   fi
@@ -1210,6 +1270,7 @@ if [[ -f scripts/probes/dream7b_bpu_deployment_acceptance_probe.sh ]]; then
     "dream7b_bpu_diffusion_generate_*/generation.json" \
     "dream7b_bpu_diffusion_generate_telemetry_*/generation_telemetry_probe.json" \
     "dream7b_bpu_diffusion_batch_generate_telemetry_*/batch_generation_telemetry_probe.json" \
+    "dream7b_bpu_diffusion_batch_generate_sustained_*/batch_generation_sustained_probe.json" \
     "dream7b_bpu_batch_queue_systemd_telemetry_*/systemd_telemetry_probe.json" \
     "dream7b_bpu_fine_forward_long_repeat_*/long_repeat_probe.json" \
     "dream7b_bpu_batch_queue_retention_*/queue_retention_probe.json" \
@@ -1224,16 +1285,22 @@ if [[ -f scripts/probes/dream7b_bpu_deployment_acceptance_probe.sh ]]; then
     "diffusion_generate" \
     "diffusion_generate_telemetry" \
     "diffusion_batch_generate_telemetry" \
+    "diffusion_batch_generate_sustained" \
     "ok_dream7b_bpu_diffusion_generate" \
     "ok_dream7b_bpu_diffusion_generate_telemetry_probe" \
     "ok_dream7b_bpu_diffusion_batch_generate" \
     "ok_dream7b_bpu_diffusion_batch_generate_telemetry_probe" \
+    "ok_dream7b_bpu_diffusion_batch_generate_sustained_probe" \
     "generation_metrics" \
     "generation_status" \
     "generate_cmd" \
     "min_batch_generate_count" \
+    "min_batch_generate_sustained_round_count" \
     "batch_count" \
     "forward_batch_counts" \
+    "generation_forward_batch_counts_by_round" \
+    "actual_total_batch_items" \
+    "successful_generation_count" \
     "remaining_mask_positions_by_batch" \
     "decoded_final_by_batch" \
     "decoded_final" \

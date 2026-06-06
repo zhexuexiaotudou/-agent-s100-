@@ -6,6 +6,7 @@ min_batch_capacity="${DREAM7B_BPU_ACCEPTANCE_MIN_BATCH_CAPACITY:-16}"
 min_systemd_batch_requests="${DREAM7B_BPU_ACCEPTANCE_MIN_SYSTEMD_BATCH_REQUESTS:-16}"
 min_systemd_telemetry_requests="${DREAM7B_BPU_ACCEPTANCE_MIN_SYSTEMD_TELEMETRY_REQUESTS:-48}"
 min_batch_generate_count="${DREAM7B_BPU_ACCEPTANCE_MIN_BATCH_GENERATE_COUNT:-16}"
+min_batch_generate_sustained_round_count="${DREAM7B_BPU_ACCEPTANCE_MIN_BATCH_GENERATE_SUSTAINED_ROUND_COUNT:-3}"
 min_long_repeat_count="${DREAM7B_BPU_ACCEPTANCE_MIN_LONG_REPEAT_COUNT:-6}"
 max_long_repeat_wall_spread_ratio="${DREAM7B_BPU_ACCEPTANCE_MAX_LONG_REPEAT_WALL_SPREAD_RATIO:-0.10}"
 
@@ -33,6 +34,10 @@ if ! [[ "$min_batch_generate_count" =~ ^[1-9][0-9]*$ ]]; then
   echo "DREAM7B_BPU_ACCEPTANCE_MIN_BATCH_GENERATE_COUNT must be a positive integer." >&2
   exit 2
 fi
+if ! [[ "$min_batch_generate_sustained_round_count" =~ ^[1-9][0-9]*$ ]]; then
+  echo "DREAM7B_BPU_ACCEPTANCE_MIN_BATCH_GENERATE_SUSTAINED_ROUND_COUNT must be a positive integer." >&2
+  exit 2
+fi
 if ! [[ "$min_long_repeat_count" =~ ^[1-9][0-9]*$ ]]; then
   echo "DREAM7B_BPU_ACCEPTANCE_MIN_LONG_REPEAT_COUNT must be a positive integer." >&2
   exit 2
@@ -54,6 +59,7 @@ python3 - \
   "$min_systemd_batch_requests" \
   "$min_systemd_telemetry_requests" \
   "$min_batch_generate_count" \
+  "$min_batch_generate_sustained_round_count" \
   "$min_long_repeat_count" \
   "$max_long_repeat_wall_spread_ratio" <<'PY'
 import glob
@@ -68,8 +74,9 @@ min_batch_capacity = int(sys.argv[3])
 min_systemd_batch_requests = int(sys.argv[4])
 min_systemd_telemetry_requests = int(sys.argv[5])
 min_batch_generate_count = int(sys.argv[6])
-min_long_repeat_count = int(sys.argv[7])
-max_long_repeat_wall_spread_ratio = float(sys.argv[8])
+min_batch_generate_sustained_round_count = int(sys.argv[7])
+min_long_repeat_count = int(sys.argv[8])
+max_long_repeat_wall_spread_ratio = float(sys.argv[9])
 errors = []
 warnings = []
 checks = []
@@ -558,6 +565,54 @@ else:
         },
     )
 
+diffusion_batch_generate_sustained_path, diffusion_batch_generate_sustained = latest_json("dream7b_bpu_diffusion_batch_generate_sustained_*/batch_generation_sustained_probe.json")
+if diffusion_batch_generate_sustained is None:
+    add_check("diffusion_batch_generate_sustained", diffusion_batch_generate_sustained_path, False, {"reason": "missing batch_generation_sustained_probe.json"})
+else:
+    round_count = int(diffusion_batch_generate_sustained.get("round_count") or 0)
+    batch_count = int(diffusion_batch_generate_sustained.get("batch_count") or 0)
+    generation_statuses = diffusion_batch_generate_sustained.get("generation_statuses") or []
+    generation_batch_counts = diffusion_batch_generate_sustained.get("generation_batch_counts") or []
+    generation_forward_batch_counts_by_round = diffusion_batch_generate_sustained.get("generation_forward_batch_counts_by_round") or []
+    ok = (
+        diffusion_batch_generate_sustained.get("verdict") == "ok_dream7b_bpu_diffusion_batch_generate_sustained_probe"
+        and diffusion_batch_generate_sustained.get("generate_cmd") == "dream7b-bpu-diffusion-batch-generate"
+        and round_count >= min_batch_generate_sustained_round_count
+        and batch_count >= min_batch_generate_count
+        and int(diffusion_batch_generate_sustained.get("successful_generation_count") or 0) >= min_batch_generate_sustained_round_count
+        and int(diffusion_batch_generate_sustained.get("expected_total_batch_items") or 0) == round_count * batch_count
+        and int(diffusion_batch_generate_sustained.get("actual_total_batch_items") or 0) == round_count * batch_count
+        and all(item == 0 for item in generation_statuses)
+        and all(item == batch_count for item in generation_batch_counts)
+        and all(all(count == batch_count for count in (counts or [])) for counts in generation_forward_batch_counts_by_round)
+        and int(diffusion_batch_generate_sustained.get("total_forward_call_count") or 0) >= round_count
+        and float(diffusion_batch_generate_sustained.get("max_bpu_loading") or 0.0) > 0.0
+        and int(diffusion_batch_generate_sustained.get("nonzero_bpu_loading_sample_count") or 0) > 0
+        and not diffusion_batch_generate_sustained.get("errors")
+    )
+    add_check(
+        "diffusion_batch_generate_sustained",
+        diffusion_batch_generate_sustained_path,
+        ok,
+        {
+            "verdict": diffusion_batch_generate_sustained.get("verdict"),
+            "generate_cmd": diffusion_batch_generate_sustained.get("generate_cmd"),
+            "round_count": diffusion_batch_generate_sustained.get("round_count"),
+            "batch_count": diffusion_batch_generate_sustained.get("batch_count"),
+            "successful_generation_count": diffusion_batch_generate_sustained.get("successful_generation_count"),
+            "expected_total_batch_items": diffusion_batch_generate_sustained.get("expected_total_batch_items"),
+            "actual_total_batch_items": diffusion_batch_generate_sustained.get("actual_total_batch_items"),
+            "generation_statuses": generation_statuses,
+            "generation_batch_counts": generation_batch_counts,
+            "generation_executed_step_counts": diffusion_batch_generate_sustained.get("generation_executed_step_counts"),
+            "generation_forward_batch_counts_by_round": generation_forward_batch_counts_by_round,
+            "total_forward_call_count": diffusion_batch_generate_sustained.get("total_forward_call_count"),
+            "max_bpu_loading": diffusion_batch_generate_sustained.get("max_bpu_loading"),
+            "avg_bpu_loading": diffusion_batch_generate_sustained.get("avg_bpu_loading"),
+            "nonzero_bpu_loading_sample_count": diffusion_batch_generate_sustained.get("nonzero_bpu_loading_sample_count"),
+        },
+    )
+
 systemd_telemetry_path, systemd_telemetry = latest_json("dream7b_bpu_batch_queue_systemd_telemetry_*/systemd_telemetry_probe.json")
 if systemd_telemetry is None:
     add_check("systemd_telemetry", systemd_telemetry_path, False, {"reason": "missing systemd_telemetry_probe.json"})
@@ -656,6 +711,7 @@ payload = {
     "min_systemd_batch_requests": min_systemd_batch_requests,
     "min_systemd_telemetry_requests": min_systemd_telemetry_requests,
     "min_batch_generate_count": min_batch_generate_count,
+    "min_batch_generate_sustained_round_count": min_batch_generate_sustained_round_count,
     "min_long_repeat_count": min_long_repeat_count,
     "max_long_repeat_wall_spread_ratio": max_long_repeat_wall_spread_ratio,
     "check_count": len(checks),
@@ -685,6 +741,7 @@ error_lines = [f"- {item}" for item in errors] if errors else ["- none"]
         f"- min_systemd_batch_requests: {payload['min_systemd_batch_requests']}",
         f"- min_systemd_telemetry_requests: {payload['min_systemd_telemetry_requests']}",
         f"- min_batch_generate_count: {payload['min_batch_generate_count']}",
+        f"- min_batch_generate_sustained_round_count: {payload['min_batch_generate_sustained_round_count']}",
         f"- min_long_repeat_count: {payload['min_long_repeat_count']}",
         f"- max_long_repeat_wall_spread_ratio: {payload['max_long_repeat_wall_spread_ratio']}",
         "",

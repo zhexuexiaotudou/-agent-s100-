@@ -1678,6 +1678,7 @@ DREAM7B_BPU_ACCEPTANCE_MIN_BATCH_CAPACITY
 DREAM7B_BPU_ACCEPTANCE_MIN_SYSTEMD_BATCH_REQUESTS
 DREAM7B_BPU_ACCEPTANCE_MIN_SYSTEMD_TELEMETRY_REQUESTS
 DREAM7B_BPU_ACCEPTANCE_MIN_BATCH_GENERATE_COUNT
+DREAM7B_BPU_ACCEPTANCE_MIN_BATCH_GENERATE_SUSTAINED_ROUND_COUNT
 DREAM7B_BPU_ACCEPTANCE_MIN_LONG_REPEAT_COUNT
 DREAM7B_BPU_ACCEPTANCE_MAX_LONG_REPEAT_WALL_SPREAD_RATIO
 ```
@@ -1689,6 +1690,7 @@ min_batch_capacity = 16
 min_systemd_batch_requests = 16
 min_systemd_telemetry_requests = 48
 min_batch_generate_count = 16
+min_batch_generate_sustained_round_count = 3
 min_long_repeat_count = 6
 max_long_repeat_wall_spread_ratio = 0.10
 ```
@@ -1707,6 +1709,7 @@ dream7b_bpu_text_queue_systemd_*/text_queue_systemd_probe.json
 dream7b_bpu_diffusion_generate_*/generation.json
 dream7b_bpu_diffusion_generate_telemetry_*/generation_telemetry_probe.json
 dream7b_bpu_diffusion_batch_generate_telemetry_*/batch_generation_telemetry_probe.json
+dream7b_bpu_diffusion_batch_generate_sustained_*/batch_generation_sustained_probe.json
 dream7b_bpu_batch_queue_systemd_telemetry_*/systemd_telemetry_probe.json
 dream7b_bpu_fine_forward_long_repeat_*/long_repeat_probe.json
 dream7b_bpu_batch_queue_retention_*/queue_retention_probe.json
@@ -1726,6 +1729,7 @@ text_queue_systemd
 diffusion_generate
 diffusion_generate_telemetry
 diffusion_batch_generate_telemetry
+diffusion_batch_generate_sustained
 systemd_telemetry
 long_repeat
 queue_retention
@@ -1742,6 +1746,7 @@ min_batch_capacity
 min_systemd_batch_requests
 min_systemd_telemetry_requests
 min_batch_generate_count
+min_batch_generate_sustained_round_count
 min_long_repeat_count
 max_long_repeat_wall_spread_ratio
 check_count
@@ -1766,6 +1771,7 @@ Latest recorded report:
 /mnt/nas/openclaw/reports/models/dream7b_bpu_deployment_acceptance_20260606-165607/deployment_acceptance_probe.md
 /mnt/nas/openclaw/reports/models/dream7b_bpu_deployment_acceptance_20260606-182851/deployment_acceptance_probe.md
 /mnt/nas/openclaw/reports/models/dream7b_bpu_deployment_acceptance_20260606-184511/deployment_acceptance_probe.md
+/mnt/nas/openclaw/reports/models/dream7b_bpu_deployment_acceptance_20260606-205153/deployment_acceptance_probe.md
 ```
 
 Latest recorded JSON:
@@ -1783,18 +1789,20 @@ Latest recorded JSON:
 /mnt/nas/openclaw/reports/models/dream7b_bpu_deployment_acceptance_20260606-165607/deployment_acceptance_probe.json
 /mnt/nas/openclaw/reports/models/dream7b_bpu_deployment_acceptance_20260606-182851/deployment_acceptance_probe.json
 /mnt/nas/openclaw/reports/models/dream7b_bpu_deployment_acceptance_20260606-184511/deployment_acceptance_probe.json
+/mnt/nas/openclaw/reports/models/dream7b_bpu_deployment_acceptance_20260606-205153/deployment_acceptance_probe.json
 ```
 
 Verified deployment acceptance fields copied from `deployment_acceptance_probe.json`:
 
 ```text
 verdict: ok_dream7b_bpu_deployment_acceptance_probe
-check_count: 14
-passed_check_count: 14
+check_count: 15
+passed_check_count: 15
 min_batch_capacity: 16
 min_systemd_batch_requests: 16
 min_systemd_telemetry_requests: 48
 min_batch_generate_count: 16
+min_batch_generate_sustained_round_count: 3
 min_long_repeat_count: 6
 max_long_repeat_wall_spread_ratio: 0.1
 warnings: []
@@ -1810,6 +1818,7 @@ text_queue_systemd.ok: True
 diffusion_generate.ok: True
 diffusion_generate_telemetry.ok: True
 diffusion_batch_generate_telemetry.ok: True
+diffusion_batch_generate_sustained.ok: True
 systemd_telemetry.ok: True
 long_repeat.ok: True
 queue_retention.ok: True
@@ -1881,6 +1890,22 @@ diffusion_batch_generate_telemetry.details.seq_len: 16
 diffusion_batch_generate_telemetry.details.executed_step_count: 2
 diffusion_batch_generate_telemetry.details.forward_batch_counts: [16, 16]
 diffusion_batch_generate_telemetry.details.boundary: bounded_seq16_batch_generation_entrypoint_not_complete_production_text_service
+diffusion_batch_generate_sustained.path: /mnt/nas/openclaw/reports/models/dream7b_bpu_diffusion_batch_generate_sustained_20260606-190058/batch_generation_sustained_probe.json
+diffusion_batch_generate_sustained.details.verdict: ok_dream7b_bpu_diffusion_batch_generate_sustained_probe
+diffusion_batch_generate_sustained.details.generate_cmd: dream7b-bpu-diffusion-batch-generate
+diffusion_batch_generate_sustained.details.round_count: 3
+diffusion_batch_generate_sustained.details.batch_count: 16
+diffusion_batch_generate_sustained.details.successful_generation_count: 3
+diffusion_batch_generate_sustained.details.expected_total_batch_items: 48
+diffusion_batch_generate_sustained.details.actual_total_batch_items: 48
+diffusion_batch_generate_sustained.details.generation_statuses: [0, 0, 0]
+diffusion_batch_generate_sustained.details.generation_batch_counts: [16, 16, 16]
+diffusion_batch_generate_sustained.details.generation_executed_step_counts: [2, 2, 2]
+diffusion_batch_generate_sustained.details.generation_forward_batch_counts_by_round: [[16, 16], [16, 16], [16, 16]]
+diffusion_batch_generate_sustained.details.total_forward_call_count: 6
+diffusion_batch_generate_sustained.details.max_bpu_loading: 100.0
+diffusion_batch_generate_sustained.details.avg_bpu_loading: 9.022
+diffusion_batch_generate_sustained.details.nonzero_bpu_loading_sample_count: 199
 hbm_artifact_inventory.details.expected_artifact_count: 14
 hbm_artifact_inventory.details.nas_existing_count: 14
 hbm_artifact_inventory.details.local_existing_count: 14
@@ -2433,6 +2458,129 @@ generation_metrics.history_forward_execution_modes: ['pair_window_batch', 'pair_
 generation_metrics.history_forward_window_execution_modes: ['window-batch', 'window-batch']
 generation_metrics.history_forward_child_process_counts: [0, 0]
 generation_metrics.history_forward_batch_counts: [16, 16]
+errors: []
+```
+
+### `dream7b-bpu-diffusion-batch-generate-sustained-probe`
+
+Source file: `scripts/probes/dream7b_bpu_diffusion_batch_generate_sustained_probe.sh`
+
+Installed command on S100P:
+
+```text
+/usr/local/bin/dream7b-bpu-diffusion-batch-generate-sustained-probe
+```
+
+Default argument copied from the script:
+
+```text
+report_root = /mnt/nas/openclaw/reports/models
+```
+
+Environment variables copied from the script:
+
+```text
+DREAM7B_BPU_DIFFUSION_BATCH_GENERATE_SUSTAINED_ROUND_COUNT
+DREAM7B_BPU_DIFFUSION_BATCH_GENERATE_SUSTAINED_BATCH_COUNT
+DREAM7B_BPU_DIFFUSION_BATCH_GENERATE_SUSTAINED_CMD
+DREAM7B_BPU_DIFFUSION_BATCH_GENERATE_SUSTAINED_MONITOR_DELAY_MS
+DREAM7B_BPU_DIFFUSION_BATCH_GENERATE_SUSTAINED_MONITOR_SAMPLE_COUNT
+DREAM7B_BPU_DIFFUSION_BATCH_GENERATE_SUSTAINED_TIMEOUT_SEC
+```
+
+Default values copied from the script:
+
+```text
+round_count = 3
+batch_count = 16
+generate_cmd = dream7b-bpu-diffusion-batch-generate
+monitor_delay_ms = 100
+monitor_sample_count = 2400
+timeout_sec = 900
+```
+
+Output files copied from the script:
+
+```text
+batch_generation_sustained_probe.json
+batch_generation_sustained_probe.md
+hrt_ucp_monitor.stdout
+hrt_ucp_monitor.stderr
+round_status.tsv
+hrut_somstatus_before.txt
+hrut_somstatus_after.txt
+generation_round_01/batch_generation.json
+generation_round_02/batch_generation.json
+generation_round_03/batch_generation.json
+```
+
+Output fields copied from the script:
+
+```text
+generated_at
+verdict
+run_dir
+round_count
+batch_count
+generate_cmd
+monitor_delay_ms
+monitor_sample_count
+timeout_sec
+successful_generation_count
+expected_total_batch_items
+actual_total_batch_items
+generation_statuses
+generation_wall_ms
+generation_batch_counts
+generation_executed_step_counts
+generation_forward_batch_counts_by_round
+total_forward_call_count
+bpu_loading_sample_count
+nonzero_bpu_loading_sample_count
+max_bpu_loading
+avg_bpu_loading
+rounds
+errors
+```
+
+Latest recorded report:
+
+```text
+/mnt/nas/openclaw/reports/models/dream7b_bpu_diffusion_batch_generate_sustained_20260606-190058/batch_generation_sustained_probe.md
+```
+
+Latest recorded JSON:
+
+```text
+/mnt/nas/openclaw/reports/models/dream7b_bpu_diffusion_batch_generate_sustained_20260606-190058/batch_generation_sustained_probe.json
+```
+
+Verified sustained batch generation fields copied from `batch_generation_sustained_probe.json`:
+
+```text
+verdict: ok_dream7b_bpu_diffusion_batch_generate_sustained_probe
+run_dir: /mnt/nas/openclaw/reports/models/dream7b_bpu_diffusion_batch_generate_sustained_20260606-190058
+round_count: 3
+batch_count: 16
+generate_cmd: dream7b-bpu-diffusion-batch-generate
+successful_generation_count: 3
+expected_total_batch_items: 48
+actual_total_batch_items: 48
+generation_statuses: [0, 0, 0]
+generation_wall_ms: [60548, 59410, 59494]
+generation_batch_counts: [16, 16, 16]
+generation_executed_step_counts: [2, 2, 2]
+generation_forward_batch_counts_by_round: [[16, 16], [16, 16], [16, 16]]
+total_forward_call_count: 6
+monitor_delay_ms: 100
+monitor_sample_count: 2400
+bpu_loading_sample_count: 1790
+nonzero_bpu_loading_sample_count: 199
+max_bpu_loading: 100.0
+avg_bpu_loading: 9.022
+rounds[0].verdict: ok_dream7b_bpu_diffusion_batch_generate
+rounds[1].verdict: ok_dream7b_bpu_diffusion_batch_generate
+rounds[2].verdict: ok_dream7b_bpu_diffusion_batch_generate
 errors: []
 ```
 
@@ -3483,6 +3631,10 @@ docs/baseline_progress_2026-06-03_dream7b_segmented_bpu_hbm.md
 - Raised `dream7b-bpu-diffusion-batch-generate`, `dream7b-bpu-diffusion-batch-generate-telemetry-probe`, and `dream7b-bpu-deployment-acceptance-probe` defaults so bounded Dream diffusion batch generation now defaults to `batch_count: 16` and acceptance requires `min_batch_generate_count: 16`.
 - Verified batch generation telemetry report at `/mnt/nas/openclaw/reports/models/dream7b_bpu_diffusion_batch_generate_telemetry_20260606-184316/batch_generation_telemetry_probe.md` with `batch_count: 16`, `forward_batch_counts: [16, 16]`, `nonzero_bpu_loading_sample_count: 68`, `avg_bpu_loading: 8.825`, and `max_bpu_loading: 100.0`.
 - Verified 16-gate deployment acceptance report at `/mnt/nas/openclaw/reports/models/dream7b_bpu_deployment_acceptance_20260606-184511/deployment_acceptance_probe.md` with `check_count: 14`, `passed_check_count: 14`, `min_batch_generate_count: 16`, and `diffusion_batch_generate_telemetry.ok: True`.
+- Added `dream7b-bpu-diffusion-batch-generate-sustained-probe` for repeated bounded seq16 batch Dream diffusion generation while sampling `hrt_ucp_monitor`.
+- Verified sustained batch generation report at `/mnt/nas/openclaw/reports/models/dream7b_bpu_diffusion_batch_generate_sustained_20260606-190058/batch_generation_sustained_probe.md` with `round_count: 3`, `batch_count: 16`, `successful_generation_count: 3`, `actual_total_batch_items: 48`, `total_forward_call_count: 6`, `avg_bpu_loading: 9.022`, and `max_bpu_loading: 100.0`.
+- Updated `dream7b-bpu-deployment-acceptance-probe` to include `diffusion_batch_generate_sustained` and `DREAM7B_BPU_ACCEPTANCE_MIN_BATCH_GENERATE_SUSTAINED_ROUND_COUNT`.
+- Verified sustained-aware deployment acceptance report at `/mnt/nas/openclaw/reports/models/dream7b_bpu_deployment_acceptance_20260606-205153/deployment_acceptance_probe.md` with `check_count: 15`, `passed_check_count: 15`, `min_batch_generate_sustained_round_count: 3`, and `diffusion_batch_generate_sustained.ok: True`.
 
 ## TODO
 
