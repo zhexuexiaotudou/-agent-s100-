@@ -284,6 +284,7 @@ else:
     tokenizer = text_queue_run.get("tokenizer") or {}
     submit = text_queue_run.get("submit") or {}
     topk_last_position = text_queue_run.get("topk_last_position") or []
+    topk_last_position_decoded = text_queue_run.get("topk_last_position_decoded") or []
     ok = (
         text_queue_run.get("verdict") == "ok_dream7b_bpu_text_queue_run"
         and text_queue_run.get("submit_cmd") == "dream7b-bpu-text-queue-submit"
@@ -307,6 +308,8 @@ else:
         and text_queue_run.get("bpu_lock_path") == "/run/lock/dream7b_bpu_batch_queue_runner.lock"
         and text_queue_run.get("final_shape") == [1, 16, 152064]
         and len(topk_last_position) > 0
+        and len(topk_last_position_decoded) == len(topk_last_position)
+        and all("token_id" in item and "token_text" in item for item in topk_last_position_decoded)
         and bool(text_queue_run.get("durable_results_jsonl"))
         and float(text_queue_run.get("total_wall_ms") or 0.0) > 0.0
         and float(text_queue_run.get("amortized_wall_ms_per_processed_request") or 0.0) > 0.0
@@ -333,6 +336,7 @@ else:
             "token_count": tokenizer.get("token_count"),
             "final_shape": text_queue_run.get("final_shape"),
             "topk_last_position": topk_last_position,
+            "topk_last_position_decoded": topk_last_position_decoded,
             "amortized_wall_ms_per_processed_request": text_queue_run.get("amortized_wall_ms_per_processed_request"),
         },
     )
@@ -344,6 +348,7 @@ else:
     tokenizer = text_queue.get("tokenizer") or {}
     submit = text_queue.get("submit") or {}
     topk_last_position = text_queue.get("topk_last_position") or []
+    topk_last_position_decoded = text_queue.get("topk_last_position_decoded") or []
     ok = (
         text_queue.get("verdict") == "ok_dream7b_bpu_text_queue_systemd_probe"
         and text_queue.get("run_cmd") == "dream7b-bpu-text-queue-run"
@@ -376,6 +381,8 @@ else:
         and text_queue.get("bpu_lock_path") == "/run/lock/dream7b_bpu_batch_queue_runner.lock"
         and text_queue.get("final_shape") == [1, 16, 152064]
         and len(topk_last_position) > 0
+        and len(topk_last_position_decoded) == len(topk_last_position)
+        and all("token_id" in item and "token_text" in item for item in topk_last_position_decoded)
         and bool(text_queue.get("durable_results_jsonl"))
         and float(text_queue.get("total_wall_ms") or 0.0) > 0.0
         and float(text_queue.get("amortized_wall_ms_per_processed_request") or 0.0) > 0.0
@@ -404,6 +411,7 @@ else:
             "token_count": tokenizer.get("token_count"),
             "final_shape": text_queue.get("final_shape"),
             "topk_last_position": topk_last_position,
+            "topk_last_position_decoded": topk_last_position_decoded,
             "amortized_wall_ms_per_processed_request": text_queue.get("amortized_wall_ms_per_processed_request"),
         },
     )

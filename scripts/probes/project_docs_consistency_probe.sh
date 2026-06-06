@@ -286,16 +286,16 @@ required_reference_strings=(
   "/mnt/nas/openclaw/reports/models/dream7b_bpu_batch_queue_systemd_canary_20260605-151715/systemd_canary_probe.json"
   "/mnt/nas/openclaw/reports/models/dream7b_bpu_batch_queue_service_systemd/jobs/systemd_canary_20260605-151715/queue_summary.json"
   "/mnt/nas/openclaw/reports/models/dream7b_bpu_text_queue_systemd_20260605-234555/text_queue_systemd_probe.md"
-  "/mnt/nas/openclaw/reports/models/dream7b_bpu_text_queue_run_20260606-144526/text_queue_run.md"
-  "/mnt/nas/openclaw/reports/models/dream7b_bpu_text_queue_run_20260606-144526/text_queue_run.json"
-  "/mnt/nas/openclaw/reports/models/dream7b_bpu_batch_queue_service_systemd/jobs/text_queue_run_20260606-144526/queue_summary.json"
-  "/mnt/nas/openclaw/reports/models/dream7b_bpu_batch_queue_service_systemd/jobs/text_queue_run_20260606-144526/durable_state/results.jsonl"
-  "/mnt/nas/openclaw/reports/models/dream7b_bpu_text_queue_systemd_20260606-144634/text_queue_systemd_probe.md"
-  "/mnt/nas/openclaw/reports/models/dream7b_bpu_text_queue_systemd_20260606-144634/text_queue_systemd_probe.json"
-  "/mnt/nas/openclaw/reports/models/dream7b_bpu_text_queue_systemd_20260606-144634/text_queue_run.json"
-  "/mnt/nas/openclaw/reports/models/dream7b_bpu_text_queue_systemd_20260606-144634/text_queue_submit.json"
-  "/mnt/nas/openclaw/reports/models/dream7b_bpu_batch_queue_service_systemd/jobs/text_queue_systemd_20260606-144634/queue_summary.json"
-  "/mnt/nas/openclaw/reports/models/dream7b_bpu_batch_queue_service_systemd/jobs/text_queue_systemd_20260606-144634/durable_state/results.jsonl"
+  "/mnt/nas/openclaw/reports/models/dream7b_bpu_text_queue_run_20260606-155102/text_queue_run.md"
+  "/mnt/nas/openclaw/reports/models/dream7b_bpu_text_queue_run_20260606-155102/text_queue_run.json"
+  "/mnt/nas/openclaw/reports/models/dream7b_bpu_batch_queue_service_systemd/jobs/text_queue_run_20260606-155102/queue_summary.json"
+  "/mnt/nas/openclaw/reports/models/dream7b_bpu_batch_queue_service_systemd/jobs/text_queue_run_20260606-155102/durable_state/results.jsonl"
+  "/mnt/nas/openclaw/reports/models/dream7b_bpu_text_queue_systemd_20260606-155148/text_queue_systemd_probe.md"
+  "/mnt/nas/openclaw/reports/models/dream7b_bpu_text_queue_systemd_20260606-155148/text_queue_systemd_probe.json"
+  "/mnt/nas/openclaw/reports/models/dream7b_bpu_text_queue_systemd_20260606-155148/text_queue_run.json"
+  "/mnt/nas/openclaw/reports/models/dream7b_bpu_text_queue_systemd_20260606-155148/text_queue_submit.json"
+  "/mnt/nas/openclaw/reports/models/dream7b_bpu_batch_queue_service_systemd/jobs/text_queue_systemd_20260606-155148/queue_summary.json"
+  "/mnt/nas/openclaw/reports/models/dream7b_bpu_batch_queue_service_systemd/jobs/text_queue_systemd_20260606-155148/durable_state/results.jsonl"
   "/mnt/nas/openclaw/reports/models/dream7b_bpu_batch_queue_systemd_telemetry_20260605-133919/systemd_telemetry_probe.md"
   "/mnt/nas/openclaw/reports/models/dream7b_bpu_batch_queue_systemd_telemetry_20260605-133919/systemd_telemetry_probe.json"
   "/mnt/nas/openclaw/reports/models/dream7b_bpu_batch_queue_service_systemd/jobs/systemd_telemetry_20260605-133919_001/queue_summary.json"
@@ -878,6 +878,8 @@ if [[ -f scripts/dream7b-bpu-text-queue-run.sh ]]; then
     "ok_dream7b_bpu_text_queue_run" \
     "ok_dream7b_bpu_text_queue_submit" \
     "topk_last_position" \
+    "topk_last_position_decoded" \
+    "token_text" \
     "durable_results_jsonl" \
     "/run/lock/dream7b_bpu_batch_queue_runner.lock" \
     "/mnt/nas/openclaw/queues/dream7b-bpu" \
@@ -924,6 +926,8 @@ if [[ -f scripts/probes/dream7b_bpu_text_queue_systemd_probe.sh ]]; then
     "--top-k 3" \
     "--drain-all" \
     "topk_last_position" \
+    "topk_last_position_decoded" \
+    "token_text" \
     "durable_results_jsonl" \
     "pair_window_batch" \
     "window-batch"; do
@@ -1002,6 +1006,8 @@ if [[ -f scripts/probes/dream7b_bpu_deployment_acceptance_probe.sh ]]; then
     "check_count" \
     "max_bpu_loading" \
     "topk_last_position" \
+    "topk_last_position_decoded" \
+    "token_text" \
     "tokenizer_dir"; do
     if ! grep -F -- "$text" scripts/probes/dream7b_bpu_deployment_acceptance_probe.sh >/dev/null; then
       errors+=("dream7b_bpu_deployment_acceptance_probe.sh missing $text")

@@ -268,6 +268,14 @@ if isinstance(run_payload, dict):
         errors.append(f"unexpected run submit_cmd: {run_payload.get('submit_cmd')}")
     if run_payload.get("submit_verdict") != "ok_dream7b_bpu_text_queue_submit":
         errors.append(f"unexpected run submit_verdict: {run_payload.get('submit_verdict')}")
+    decoded = run_payload.get("topk_last_position_decoded") or []
+    if not decoded:
+        errors.append("run topk_last_position_decoded is empty")
+    if len(decoded) != len(run_payload.get("topk_last_position") or []):
+        errors.append("run topk_last_position_decoded length mismatch")
+    for item in decoded:
+        if "token_id" not in item or "token_text" not in item:
+            errors.append(f"run topk_last_position_decoded missing token fields: {item}")
     if run_payload.get("errors"):
         errors.append(f"run errors are not empty: {run_payload.get('errors')}")
 
@@ -316,6 +324,7 @@ amortized_wall_ms = 0.0
 bpu_lock_path = None
 final_shape = None
 topk_last_position = []
+topk_last_position_decoded = []
 durable_results_jsonl = None
 
 if isinstance(summary, dict):
@@ -370,10 +379,14 @@ if isinstance(summary, dict):
             errors.append(f"unexpected result request_id: {result.get('request_id')}")
         final_shape = result.get("final_shape")
         topk_last_position = result.get("topk_last_position") or []
+        if isinstance(run_payload, dict):
+            topk_last_position_decoded = run_payload.get("topk_last_position_decoded") or []
         if final_shape != [1, 16, 152064]:
             errors.append(f"unexpected final_shape: {final_shape}")
         if not topk_last_position:
             errors.append("topk_last_position is empty")
+        if not topk_last_position_decoded:
+            errors.append("topk_last_position_decoded is empty")
     forward_metrics = summary.get("forward_metrics") or {}
     total_wall_ms = float(forward_metrics.get("total_wall_ms") or 0.0)
     amortized_wall_ms = float(forward_metrics.get("amortized_wall_ms_per_processed_request") or 0.0)
@@ -436,6 +449,7 @@ payload = {
     "bpu_lock_path": bpu_lock_path,
     "final_shape": final_shape,
     "topk_last_position": topk_last_position,
+    "topk_last_position_decoded": topk_last_position_decoded,
     "durable_results_jsonl": durable_results_jsonl,
     "total_wall_ms": round(total_wall_ms, 3),
     "amortized_wall_ms_per_processed_request": round(amortized_wall_ms, 3),
@@ -475,6 +489,7 @@ error_lines = [f"- {item}" for item in errors] if errors else ["- none"]
         f"- child_process_count: {payload['child_process_count']}",
         f"- final_shape: {payload['final_shape']}",
         f"- topk_last_position: {payload['topk_last_position']}",
+        f"- topk_last_position_decoded: {payload['topk_last_position_decoded']}",
         f"- durable_results_jsonl: {payload['durable_results_jsonl']}",
         f"- total_wall_ms: {payload['total_wall_ms']}",
         f"- amortized_wall_ms_per_processed_request: {payload['amortized_wall_ms_per_processed_request']}",

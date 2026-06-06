@@ -318,6 +318,7 @@ python3 - \
   "$timeout_sec" \
   "$poll_interval_sec" <<'PY'
 import json
+import subprocess
 import sys
 from datetime import datetime
 from pathlib import Path
@@ -398,6 +399,7 @@ child_process_count = None
 bpu_lock_path = None
 final_shape = None
 topk_last_position = []
+topk_last_position_decoded = []
 durable_results_jsonl = None
 total_wall_ms = 0.0
 amortized_wall_ms = 0.0
@@ -462,6 +464,68 @@ if isinstance(summary, dict):
     if not durable_results_jsonl:
         errors.append("missing durable_state.results_jsonl")
 
+if topk_last_position:
+    tokenizer_venv = submit_payload.get("tokenizer_venv") if isinstance(submit_payload, dict) else None
+    decode_tokenizer_dir = tokenizer_payload.get("tokenizer_dir") if isinstance(tokenizer_payload, dict) else None
+    if not tokenizer_venv:
+        errors.append("missing submit tokenizer_venv for topk decode")
+    if not decode_tokenizer_dir:
+        errors.append("missing tokenizer.tokenizer_dir for topk decode")
+    if tokenizer_venv and decode_tokenizer_dir:
+        decode_python = Path(tokenizer_venv) / "bin" / "python"
+        if not decode_python.is_file():
+            errors.append(f"missing tokenizer decode python: {decode_python}")
+        else:
+            token_ids = [int(item.get("token_id")) for item in topk_last_position]
+            decoder = r'''
+import json
+import sys
+from transformers import AutoTokenizer
+
+tokenizer_dir = sys.argv[1]
+token_ids = json.loads(sys.stdin.read())
+tok = AutoTokenizer.from_pretrained(tokenizer_dir, trust_remote_code=True, local_files_only=True)
+decoded = [
+    {"token_id": int(token_id), "token_text": tok.decode([int(token_id)], skip_special_tokens=False)}
+    for token_id in token_ids
+]
+print(json.dumps(decoded, ensure_ascii=False))
+'''
+            proc = subprocess.run(
+                [str(decode_python), "-c", decoder, decode_tokenizer_dir],
+                input=json.dumps(token_ids),
+                text=True,
+                stdout=subprocess.PIPE,
+                stderr=subprocess.PIPE,
+                check=False,
+            )
+            if proc.returncode != 0:
+                errors.append(f"topk decode failed: {proc.stderr.strip()}")
+            else:
+                decoded_rows = None
+                for line in reversed(proc.stdout.splitlines()):
+                    candidate = line.strip()
+                    if not candidate:
+                        continue
+                    try:
+                        decoded_rows = json.loads(candidate)
+                        break
+                    except json.JSONDecodeError:
+                        continue
+                if decoded_rows is None:
+                    errors.append(f"topk decode did not return JSON: {proc.stdout.strip()}")
+                    decoded_rows = []
+                decoded_by_id = {int(item["token_id"]): item.get("token_text", "") for item in decoded_rows}
+                for item in topk_last_position:
+                    enriched = dict(item)
+                    token_id = int(enriched["token_id"])
+                    enriched["token_text"] = decoded_by_id.get(token_id, "")
+                    topk_last_position_decoded.append(enriched)
+                if len(topk_last_position_decoded) != len(topk_last_position):
+                    errors.append(
+                        "topk_last_position_decoded length does not match topk_last_position"
+                    )
+
 payload = {
     "generated_at": datetime.now().astimezone().isoformat(),
     "verdict": "ok_dream7b_bpu_text_queue_run" if not errors else "failed_dream7b_bpu_text_queue_run",
@@ -499,6 +563,7 @@ payload = {
     "bpu_lock_path": bpu_lock_path,
     "final_shape": final_shape,
     "topk_last_position": topk_last_position,
+    "topk_last_position_decoded": topk_last_position_decoded,
     "durable_results_jsonl": durable_results_jsonl,
     "total_wall_ms": round(total_wall_ms, 3),
     "amortized_wall_ms_per_processed_request": round(amortized_wall_ms, 3),
@@ -527,6 +592,7 @@ run_md.write_text(
         f"- batch_count: {payload['batch_count']}",
         f"- final_shape: {payload['final_shape']}",
         f"- topk_last_position: {payload['topk_last_position']}",
+        f"- topk_last_position_decoded: {payload['topk_last_position_decoded']}",
         f"- durable_results_jsonl: {payload['durable_results_jsonl']}",
         f"- total_wall_ms: {payload['total_wall_ms']}",
         f"- amortized_wall_ms_per_processed_request: {payload['amortized_wall_ms_per_processed_request']}",
