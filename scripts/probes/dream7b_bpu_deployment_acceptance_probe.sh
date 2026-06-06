@@ -5,6 +5,7 @@ report_root="${1:-/mnt/nas/openclaw/reports/models}"
 min_batch_capacity="${DREAM7B_BPU_ACCEPTANCE_MIN_BATCH_CAPACITY:-16}"
 min_systemd_batch_requests="${DREAM7B_BPU_ACCEPTANCE_MIN_SYSTEMD_BATCH_REQUESTS:-16}"
 min_systemd_telemetry_requests="${DREAM7B_BPU_ACCEPTANCE_MIN_SYSTEMD_TELEMETRY_REQUESTS:-48}"
+min_batch_generate_count="${DREAM7B_BPU_ACCEPTANCE_MIN_BATCH_GENERATE_COUNT:-8}"
 min_long_repeat_count="${DREAM7B_BPU_ACCEPTANCE_MIN_LONG_REPEAT_COUNT:-6}"
 max_long_repeat_wall_spread_ratio="${DREAM7B_BPU_ACCEPTANCE_MAX_LONG_REPEAT_WALL_SPREAD_RATIO:-0.10}"
 
@@ -28,6 +29,10 @@ if ! [[ "$min_systemd_telemetry_requests" =~ ^[1-9][0-9]*$ ]]; then
   echo "DREAM7B_BPU_ACCEPTANCE_MIN_SYSTEMD_TELEMETRY_REQUESTS must be a positive integer." >&2
   exit 2
 fi
+if ! [[ "$min_batch_generate_count" =~ ^[1-9][0-9]*$ ]]; then
+  echo "DREAM7B_BPU_ACCEPTANCE_MIN_BATCH_GENERATE_COUNT must be a positive integer." >&2
+  exit 2
+fi
 if ! [[ "$min_long_repeat_count" =~ ^[1-9][0-9]*$ ]]; then
   echo "DREAM7B_BPU_ACCEPTANCE_MIN_LONG_REPEAT_COUNT must be a positive integer." >&2
   exit 2
@@ -48,6 +53,7 @@ python3 - \
   "$min_batch_capacity" \
   "$min_systemd_batch_requests" \
   "$min_systemd_telemetry_requests" \
+  "$min_batch_generate_count" \
   "$min_long_repeat_count" \
   "$max_long_repeat_wall_spread_ratio" <<'PY'
 import glob
@@ -61,8 +67,9 @@ report_root = Path(sys.argv[2])
 min_batch_capacity = int(sys.argv[3])
 min_systemd_batch_requests = int(sys.argv[4])
 min_systemd_telemetry_requests = int(sys.argv[5])
-min_long_repeat_count = int(sys.argv[6])
-max_long_repeat_wall_spread_ratio = float(sys.argv[7])
+min_batch_generate_count = int(sys.argv[6])
+min_long_repeat_count = int(sys.argv[7])
+max_long_repeat_wall_spread_ratio = float(sys.argv[8])
 errors = []
 warnings = []
 checks = []
@@ -500,6 +507,57 @@ else:
         },
     )
 
+diffusion_batch_generate_telemetry_path, diffusion_batch_generate_telemetry = latest_json("dream7b_bpu_diffusion_batch_generate_telemetry_*/batch_generation_telemetry_probe.json")
+if diffusion_batch_generate_telemetry is None:
+    add_check("diffusion_batch_generate_telemetry", diffusion_batch_generate_telemetry_path, False, {"reason": "missing batch_generation_telemetry_probe.json"})
+else:
+    metrics = diffusion_batch_generate_telemetry.get("generation_metrics") or {}
+    batch_count = int(metrics.get("batch_count") or 0)
+    ok = (
+        diffusion_batch_generate_telemetry.get("verdict") == "ok_dream7b_bpu_diffusion_batch_generate_telemetry_probe"
+        and diffusion_batch_generate_telemetry.get("generate_cmd") == "dream7b-bpu-diffusion-batch-generate"
+        and diffusion_batch_generate_telemetry.get("generation_status") == 0
+        and int(diffusion_batch_generate_telemetry.get("batch_count") or 0) >= min_batch_generate_count
+        and float(diffusion_batch_generate_telemetry.get("max_bpu_loading") or 0.0) > 0.0
+        and int(diffusion_batch_generate_telemetry.get("nonzero_bpu_loading_sample_count") or 0) > 0
+        and metrics.get("verdict") == "ok_dream7b_bpu_diffusion_batch_generate"
+        and metrics.get("forward_cmd") == "dream7b-bpu-fine-batch-forward"
+        and batch_count >= min_batch_generate_count
+        and metrics.get("seq_len") == 16
+        and int(metrics.get("executed_step_count") or 0) >= 1
+        and all(item == batch_count for item in (metrics.get("forward_batch_counts") or []))
+        and all(not item.get("remaining_mask_positions") for item in (metrics.get("remaining_mask_positions_by_batch") or []))
+        and len(metrics.get("decoded_final_by_batch") or []) == batch_count
+        and metrics.get("boundary") == "bounded_seq16_batch_generation_entrypoint_not_complete_production_text_service"
+        and all(item == "ok_dream7b_segmented_hbm_python_forward" for item in (metrics.get("history_forward_verdicts") or []))
+        and all(item == "pair_window_batch" for item in (metrics.get("history_forward_execution_modes") or []))
+        and all(item == "window-batch" for item in (metrics.get("history_forward_window_execution_modes") or []))
+        and all(item == 0 for item in (metrics.get("history_forward_child_process_counts") or []))
+        and all(item == batch_count for item in (metrics.get("history_forward_batch_counts") or []))
+        and all(item == [[1, 16, 152064] for _ in range(batch_count)] for item in (metrics.get("history_forward_final_shapes") or []))
+        and not diffusion_batch_generate_telemetry.get("errors")
+    )
+    add_check(
+        "diffusion_batch_generate_telemetry",
+        diffusion_batch_generate_telemetry_path,
+        ok,
+        {
+            "verdict": diffusion_batch_generate_telemetry.get("verdict"),
+            "generate_cmd": diffusion_batch_generate_telemetry.get("generate_cmd"),
+            "generation_status": diffusion_batch_generate_telemetry.get("generation_status"),
+            "batch_count": diffusion_batch_generate_telemetry.get("batch_count"),
+            "max_bpu_loading": diffusion_batch_generate_telemetry.get("max_bpu_loading"),
+            "avg_bpu_loading": diffusion_batch_generate_telemetry.get("avg_bpu_loading"),
+            "nonzero_bpu_loading_sample_count": diffusion_batch_generate_telemetry.get("nonzero_bpu_loading_sample_count"),
+            "generation_verdict": metrics.get("verdict"),
+            "forward_cmd": metrics.get("forward_cmd"),
+            "seq_len": metrics.get("seq_len"),
+            "executed_step_count": metrics.get("executed_step_count"),
+            "forward_batch_counts": metrics.get("forward_batch_counts"),
+            "boundary": metrics.get("boundary"),
+        },
+    )
+
 systemd_telemetry_path, systemd_telemetry = latest_json("dream7b_bpu_batch_queue_systemd_telemetry_*/systemd_telemetry_probe.json")
 if systemd_telemetry is None:
     add_check("systemd_telemetry", systemd_telemetry_path, False, {"reason": "missing systemd_telemetry_probe.json"})
@@ -597,6 +655,7 @@ payload = {
     "min_batch_capacity": min_batch_capacity,
     "min_systemd_batch_requests": min_systemd_batch_requests,
     "min_systemd_telemetry_requests": min_systemd_telemetry_requests,
+    "min_batch_generate_count": min_batch_generate_count,
     "min_long_repeat_count": min_long_repeat_count,
     "max_long_repeat_wall_spread_ratio": max_long_repeat_wall_spread_ratio,
     "check_count": len(checks),
@@ -625,6 +684,7 @@ error_lines = [f"- {item}" for item in errors] if errors else ["- none"]
         f"- min_batch_capacity: {payload['min_batch_capacity']}",
         f"- min_systemd_batch_requests: {payload['min_systemd_batch_requests']}",
         f"- min_systemd_telemetry_requests: {payload['min_systemd_telemetry_requests']}",
+        f"- min_batch_generate_count: {payload['min_batch_generate_count']}",
         f"- min_long_repeat_count: {payload['min_long_repeat_count']}",
         f"- max_long_repeat_wall_spread_ratio: {payload['max_long_repeat_wall_spread_ratio']}",
         "",
