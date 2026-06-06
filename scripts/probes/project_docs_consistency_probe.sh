@@ -56,6 +56,7 @@ required_files=(
   "scripts/probes/dream7b_bpu_diffusion_generate_telemetry_probe.sh"
   "scripts/probes/dream7b_bpu_diffusion_batch_generate_telemetry_probe.sh"
   "scripts/probes/dream7b_bpu_diffusion_batch_generate_sustained_probe.sh"
+  "scripts/probes/dream7b_bpu_utilization_gap_probe.sh"
   "scripts/probes/dream7b_bpu_batch_queue_retention_probe.sh"
   "scripts/probes/dream7b_bpu_deployment_acceptance_probe.sh"
   "scripts/startup_link_check/link-check.config.json"
@@ -73,6 +74,7 @@ required_readme_strings=(
   "scripts/probes/dream7b_bpu_diffusion_generate_telemetry_probe.sh"
   "scripts/probes/dream7b_bpu_diffusion_batch_generate_telemetry_probe.sh"
   "scripts/probes/dream7b_bpu_diffusion_batch_generate_sustained_probe.sh"
+  "scripts/probes/dream7b_bpu_utilization_gap_probe.sh"
   "dream7b_bpu_text_queue_systemd_probe.sh"
 )
 
@@ -102,6 +104,7 @@ required_reference_strings=(
   "dream7b-bpu-diffusion-generate-telemetry-probe"
   "dream7b-bpu-diffusion-batch-generate-telemetry-probe"
   "dream7b-bpu-diffusion-batch-generate-sustained-probe"
+  "dream7b-bpu-utilization-gap-probe"
   "dream7b-bpu-batch-queue-retention-probe"
   "dream7b-bpu-deployment-acceptance-probe"
   "dream7b-bpu-batch-queue.service"
@@ -188,6 +191,9 @@ required_reference_strings=(
   "DREAM7B_BPU_DIFFUSION_BATCH_GENERATE_SUSTAINED_MONITOR_DELAY_MS"
   "DREAM7B_BPU_DIFFUSION_BATCH_GENERATE_SUSTAINED_MONITOR_SAMPLE_COUNT"
   "DREAM7B_BPU_DIFFUSION_BATCH_GENERATE_SUSTAINED_TIMEOUT_SEC"
+  "DREAM7B_BPU_UTILIZATION_GAP_MIN_BATCH_COUNT"
+  "DREAM7B_BPU_UTILIZATION_GAP_MIN_SUSTAINED_ROUND_COUNT"
+  "DREAM7B_BPU_UTILIZATION_GAP_MIN_SUSTAINED_TOTAL_ITEMS"
   "DREAM7B_BPU_QUEUE_RETENTION_DONE_DAYS"
   "DREAM7B_BPU_QUEUE_RETENTION_FAILED_DAYS"
   "DREAM7B_BPU_QUEUE_RETENTION_PENDING_STALE_MINUTES"
@@ -225,6 +231,14 @@ required_reference_strings=(
   "nonzero_bpu_loading_sample_count"
   "max_bpu_loading"
   "avg_bpu_loading"
+  "utilization_gap_probe"
+  "ok_dream7b_bpu_utilization_gap_probe"
+  "diagnosis"
+  "next_optimization_target"
+  "load_to_run_ratio"
+  "max_observed_bpu_loading"
+  "avg_observed_bpu_loading_across_reports"
+  "batch_scaling_reference"
   "hbm_artifact_inventory"
   "expected_artifact_count"
   "expected_base_count"
@@ -939,6 +953,48 @@ if [[ -f scripts/probes/dream7b_bpu_diffusion_batch_generate_sustained_probe.sh 
   fi
 fi
 
+if [[ -f scripts/probes/dream7b_bpu_utilization_gap_probe.sh ]]; then
+  for text in \
+    "DREAM7B_BPU_UTILIZATION_GAP_MIN_BATCH_COUNT" \
+    "DREAM7B_BPU_UTILIZATION_GAP_MIN_SUSTAINED_ROUND_COUNT" \
+    "DREAM7B_BPU_UTILIZATION_GAP_MIN_SUSTAINED_TOTAL_ITEMS" \
+    "dream7b_bpu_fine_batch_size_sweep_*/batch_size_sweep_probe.json" \
+    "dream7b_bpu_runtime_telemetry_*/runtime_telemetry_probe.json" \
+    "dream7b_bpu_batch_queue_systemd_telemetry_*/systemd_telemetry_probe.json" \
+    "dream7b_bpu_diffusion_batch_generate_sustained_*/batch_generation_sustained_probe.json" \
+    "dream7b_bpu_diffusion_batch_generate_telemetry_*/batch_generation_telemetry_probe.json" \
+    "utilization_gap_probe.json" \
+    "utilization_gap_probe.md" \
+    "ok_dream7b_bpu_utilization_gap_probe" \
+    "hbm_reload_dominated" \
+    "diagnosis" \
+    "next_optimization_target" \
+    "max_observed_bpu_loading" \
+    "avg_observed_bpu_loading_across_reports" \
+    "load_to_run_ratio" \
+    "batch_scaling_reference" \
+    "max_available_batch_count" \
+    "amortized_load_ms_per_forward" \
+    "amortized_run_ms_per_forward" \
+    "runtime_telemetry" \
+    "systemd_telemetry" \
+    "sustained_generation" \
+    "batch_generate_telemetry"; do
+    if ! grep -F -- "$text" scripts/probes/dream7b_bpu_utilization_gap_probe.sh >/dev/null; then
+      errors+=("dream7b_bpu_utilization_gap_probe.sh missing $text")
+    fi
+  done
+  if ! grep -F -- 'DREAM7B_BPU_UTILIZATION_GAP_MIN_BATCH_COUNT:-16' scripts/probes/dream7b_bpu_utilization_gap_probe.sh >/dev/null; then
+    errors+=("dream7b_bpu_utilization_gap_probe.sh missing default DREAM7B_BPU_UTILIZATION_GAP_MIN_BATCH_COUNT:-16")
+  fi
+  if ! grep -F -- 'DREAM7B_BPU_UTILIZATION_GAP_MIN_SUSTAINED_ROUND_COUNT:-3' scripts/probes/dream7b_bpu_utilization_gap_probe.sh >/dev/null; then
+    errors+=("dream7b_bpu_utilization_gap_probe.sh missing default DREAM7B_BPU_UTILIZATION_GAP_MIN_SUSTAINED_ROUND_COUNT:-3")
+  fi
+  if ! grep -F -- 'DREAM7B_BPU_UTILIZATION_GAP_MIN_SUSTAINED_TOTAL_ITEMS:-48' scripts/probes/dream7b_bpu_utilization_gap_probe.sh >/dev/null; then
+    errors+=("dream7b_bpu_utilization_gap_probe.sh missing default DREAM7B_BPU_UTILIZATION_GAP_MIN_SUSTAINED_TOTAL_ITEMS:-48")
+  fi
+fi
+
 if [[ -f scripts/probes/dream7b_bpu_batch_queue_retention_probe.sh ]]; then
   if ! grep -F -- "DREAM7B_BPU_QUEUE_RETENTION_DONE_DAYS" scripts/probes/dream7b_bpu_batch_queue_retention_probe.sh >/dev/null; then
     errors+=("dream7b_bpu_batch_queue_retention_probe.sh missing DREAM7B_BPU_QUEUE_RETENTION_DONE_DAYS")
@@ -1271,6 +1327,7 @@ if [[ -f scripts/probes/dream7b_bpu_deployment_acceptance_probe.sh ]]; then
     "dream7b_bpu_diffusion_generate_telemetry_*/generation_telemetry_probe.json" \
     "dream7b_bpu_diffusion_batch_generate_telemetry_*/batch_generation_telemetry_probe.json" \
     "dream7b_bpu_diffusion_batch_generate_sustained_*/batch_generation_sustained_probe.json" \
+    "dream7b_bpu_utilization_gap_*/utilization_gap_probe.json" \
     "dream7b_bpu_batch_queue_systemd_telemetry_*/systemd_telemetry_probe.json" \
     "dream7b_bpu_fine_forward_long_repeat_*/long_repeat_probe.json" \
     "dream7b_bpu_batch_queue_retention_*/queue_retention_probe.json" \
@@ -1286,6 +1343,14 @@ if [[ -f scripts/probes/dream7b_bpu_deployment_acceptance_probe.sh ]]; then
     "diffusion_generate_telemetry" \
     "diffusion_batch_generate_telemetry" \
     "diffusion_batch_generate_sustained" \
+    "utilization_gap" \
+    "ok_dream7b_bpu_utilization_gap_probe" \
+    "diagnosis" \
+    "next_optimization_target" \
+    "max_observed_bpu_loading" \
+    "avg_observed_bpu_loading_across_reports" \
+    "runtime_load_to_run_ratio" \
+    "systemd_load_to_run_ratio" \
     "ok_dream7b_bpu_diffusion_generate" \
     "ok_dream7b_bpu_diffusion_generate_telemetry_probe" \
     "ok_dream7b_bpu_diffusion_batch_generate" \

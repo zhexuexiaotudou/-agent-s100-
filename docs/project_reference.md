@@ -1,6 +1,6 @@
 # Project Reference
 
-Last updated: 2026-06-05
+Last updated: 2026-06-06
 
 This document is the project-level reference for API-like command interfaces, configuration keys, architecture, decisions, development log, requirements, and TODOs. All identifiers in this file are copied from repository files or recorded evidence. When a name, key, path, or field is uncertain, read the source file first and do not infer spelling, case, format, or structure.
 
@@ -1655,6 +1655,142 @@ tokenizer.token_count: 16
 errors: []
 ```
 
+### `dream7b-bpu-utilization-gap-probe`
+
+Source file: `scripts/probes/dream7b_bpu_utilization_gap_probe.sh`
+
+Installed command on S100P:
+
+```text
+/usr/local/bin/dream7b-bpu-utilization-gap-probe
+```
+
+Default argument copied from the script:
+
+```text
+report_root = /mnt/nas/openclaw/reports/models
+```
+
+Environment variables copied from the script:
+
+```text
+DREAM7B_BPU_UTILIZATION_GAP_MIN_BATCH_COUNT
+DREAM7B_BPU_UTILIZATION_GAP_MIN_SUSTAINED_ROUND_COUNT
+DREAM7B_BPU_UTILIZATION_GAP_MIN_SUSTAINED_TOTAL_ITEMS
+```
+
+Default values copied from the script:
+
+```text
+min_batch_count = 16
+min_sustained_round_count = 3
+min_sustained_total_items = 48
+```
+
+Report globs copied from the script:
+
+```text
+dream7b_bpu_fine_batch_size_sweep_*/batch_size_sweep_probe.json
+dream7b_bpu_runtime_telemetry_*/runtime_telemetry_probe.json
+dream7b_bpu_batch_queue_systemd_telemetry_*/systemd_telemetry_probe.json
+dream7b_bpu_diffusion_batch_generate_sustained_*/batch_generation_sustained_probe.json
+dream7b_bpu_diffusion_batch_generate_telemetry_*/batch_generation_telemetry_probe.json
+```
+
+Output files copied from the script:
+
+```text
+utilization_gap_probe.json
+utilization_gap_probe.md
+```
+
+Output fields copied from the script:
+
+```text
+generated_at
+verdict
+run_dir
+report_root
+min_batch_count
+min_sustained_round_count
+min_sustained_total_items
+diagnosis
+next_optimization_target
+max_observed_bpu_loading
+avg_observed_bpu_loading_across_reports
+telemetry_avg_bpu_loading_values
+telemetry_max_bpu_loading_values
+batch_scaling_reference
+max_available_batch_count
+amortized_load_ms_per_forward
+amortized_run_ms_per_forward
+load_to_run_ratio
+runtime_telemetry
+systemd_telemetry
+sustained_generation
+batch_generate_telemetry
+warnings
+errors
+```
+
+Latest recorded report:
+
+```text
+/mnt/nas/openclaw/reports/models/dream7b_bpu_utilization_gap_20260606-211927/utilization_gap_probe.md
+```
+
+Latest recorded JSON:
+
+```text
+/mnt/nas/openclaw/reports/models/dream7b_bpu_utilization_gap_20260606-211927/utilization_gap_probe.json
+```
+
+Verified utilization gap fields copied from `utilization_gap_probe.json`:
+
+```text
+verdict: ok_dream7b_bpu_utilization_gap_probe
+diagnosis: hbm_reload_dominated
+next_optimization_target: reduce per-window HBM reload overhead before expecting sustained 128TOPS-level average utilization
+max_observed_bpu_loading: 100.0
+avg_observed_bpu_loading_across_reports: 8.978
+min_batch_count: 16
+min_sustained_round_count: 3
+min_sustained_total_items: 48
+batch_scaling_reference.path: /mnt/nas/openclaw/reports/models/dream7b_bpu_fine_batch_size_sweep_20260604-181429/batch_size_sweep_probe.json
+batch_scaling_reference.max_available_batch_count: 8
+batch_scaling_reference.amortized_load_ms_per_forward: 2974.35
+batch_scaling_reference.amortized_run_ms_per_forward: 173.565
+batch_scaling_reference.load_to_run_ratio: 17.137
+runtime_telemetry.path: /mnt/nas/openclaw/reports/models/dream7b_bpu_runtime_telemetry_20260605-132014/runtime_telemetry_probe.json
+runtime_telemetry.batch_count: 16
+runtime_telemetry.max_bpu_loading: 100.0
+runtime_telemetry.avg_bpu_loading: 8.45
+runtime_telemetry.forward_load_ms: 23336.624
+runtime_telemetry.forward_run_ms: 2778.412
+runtime_telemetry.amortized_load_ms_per_forward: 1458.539
+runtime_telemetry.amortized_run_ms_per_forward: 173.651
+runtime_telemetry.load_to_run_ratio: 8.399
+systemd_telemetry.path: /mnt/nas/openclaw/reports/models/dream7b_bpu_batch_queue_systemd_telemetry_20260605-133919/systemd_telemetry_probe.json
+systemd_telemetry.processed_request_count: 48
+systemd_telemetry.max_bpu_loading: 100.0
+systemd_telemetry.avg_bpu_loading: 9.616
+systemd_telemetry.total_load_ms: 70702.172
+systemd_telemetry.total_run_ms: 8337.877
+systemd_telemetry.load_to_run_ratio: 8.48
+sustained_generation.path: /mnt/nas/openclaw/reports/models/dream7b_bpu_diffusion_batch_generate_sustained_20260606-190058/batch_generation_sustained_probe.json
+sustained_generation.round_count: 3
+sustained_generation.batch_count: 16
+sustained_generation.actual_total_batch_items: 48
+sustained_generation.max_bpu_loading: 100.0
+sustained_generation.avg_bpu_loading: 9.022
+batch_generate_telemetry.path: /mnt/nas/openclaw/reports/models/dream7b_bpu_diffusion_batch_generate_telemetry_20260606-184316/batch_generation_telemetry_probe.json
+batch_generate_telemetry.batch_count: 16
+batch_generate_telemetry.max_bpu_loading: 100.0
+batch_generate_telemetry.avg_bpu_loading: 8.825
+warnings: ['batch_size_sweep max batch_count is below 16; using runtime/systemd/sustained telemetry as the authoritative batch-16 evidence']
+errors: []
+```
+
 ### `dream7b-bpu-deployment-acceptance-probe`
 
 Source file: `scripts/probes/dream7b_bpu_deployment_acceptance_probe.sh`
@@ -1710,6 +1846,7 @@ dream7b_bpu_diffusion_generate_*/generation.json
 dream7b_bpu_diffusion_generate_telemetry_*/generation_telemetry_probe.json
 dream7b_bpu_diffusion_batch_generate_telemetry_*/batch_generation_telemetry_probe.json
 dream7b_bpu_diffusion_batch_generate_sustained_*/batch_generation_sustained_probe.json
+dream7b_bpu_utilization_gap_*/utilization_gap_probe.json
 dream7b_bpu_batch_queue_systemd_telemetry_*/systemd_telemetry_probe.json
 dream7b_bpu_fine_forward_long_repeat_*/long_repeat_probe.json
 dream7b_bpu_batch_queue_retention_*/queue_retention_probe.json
@@ -1730,6 +1867,7 @@ diffusion_generate
 diffusion_generate_telemetry
 diffusion_batch_generate_telemetry
 diffusion_batch_generate_sustained
+utilization_gap
 systemd_telemetry
 long_repeat
 queue_retention
@@ -1772,6 +1910,7 @@ Latest recorded report:
 /mnt/nas/openclaw/reports/models/dream7b_bpu_deployment_acceptance_20260606-182851/deployment_acceptance_probe.md
 /mnt/nas/openclaw/reports/models/dream7b_bpu_deployment_acceptance_20260606-184511/deployment_acceptance_probe.md
 /mnt/nas/openclaw/reports/models/dream7b_bpu_deployment_acceptance_20260606-205153/deployment_acceptance_probe.md
+/mnt/nas/openclaw/reports/models/dream7b_bpu_deployment_acceptance_20260606-212134/deployment_acceptance_probe.md
 ```
 
 Latest recorded JSON:
@@ -1790,14 +1929,15 @@ Latest recorded JSON:
 /mnt/nas/openclaw/reports/models/dream7b_bpu_deployment_acceptance_20260606-182851/deployment_acceptance_probe.json
 /mnt/nas/openclaw/reports/models/dream7b_bpu_deployment_acceptance_20260606-184511/deployment_acceptance_probe.json
 /mnt/nas/openclaw/reports/models/dream7b_bpu_deployment_acceptance_20260606-205153/deployment_acceptance_probe.json
+/mnt/nas/openclaw/reports/models/dream7b_bpu_deployment_acceptance_20260606-212134/deployment_acceptance_probe.json
 ```
 
 Verified deployment acceptance fields copied from `deployment_acceptance_probe.json`:
 
 ```text
 verdict: ok_dream7b_bpu_deployment_acceptance_probe
-check_count: 15
-passed_check_count: 15
+check_count: 16
+passed_check_count: 16
 min_batch_capacity: 16
 min_systemd_batch_requests: 16
 min_systemd_telemetry_requests: 48
@@ -1819,6 +1959,7 @@ diffusion_generate.ok: True
 diffusion_generate_telemetry.ok: True
 diffusion_batch_generate_telemetry.ok: True
 diffusion_batch_generate_sustained.ok: True
+utilization_gap.ok: True
 systemd_telemetry.ok: True
 long_repeat.ok: True
 queue_retention.ok: True
@@ -1906,6 +2047,20 @@ diffusion_batch_generate_sustained.details.total_forward_call_count: 6
 diffusion_batch_generate_sustained.details.max_bpu_loading: 100.0
 diffusion_batch_generate_sustained.details.avg_bpu_loading: 9.022
 diffusion_batch_generate_sustained.details.nonzero_bpu_loading_sample_count: 199
+utilization_gap.path: /mnt/nas/openclaw/reports/models/dream7b_bpu_utilization_gap_20260606-211927/utilization_gap_probe.json
+utilization_gap.details.verdict: ok_dream7b_bpu_utilization_gap_probe
+utilization_gap.details.diagnosis: hbm_reload_dominated
+utilization_gap.details.next_optimization_target: reduce per-window HBM reload overhead before expecting sustained 128TOPS-level average utilization
+utilization_gap.details.max_observed_bpu_loading: 100.0
+utilization_gap.details.avg_observed_bpu_loading_across_reports: 8.978
+utilization_gap.details.runtime_batch_count: 16
+utilization_gap.details.runtime_load_to_run_ratio: 8.399
+utilization_gap.details.systemd_processed_request_count: 48
+utilization_gap.details.systemd_load_to_run_ratio: 8.48
+utilization_gap.details.sustained_round_count: 3
+utilization_gap.details.sustained_actual_total_batch_items: 48
+utilization_gap.details.batch_generate_batch_count: 16
+utilization_gap.details.warnings: ['batch_size_sweep max batch_count is below 16; using runtime/systemd/sustained telemetry as the authoritative batch-16 evidence']
 hbm_artifact_inventory.details.expected_artifact_count: 14
 hbm_artifact_inventory.details.nas_existing_count: 14
 hbm_artifact_inventory.details.local_existing_count: 14
@@ -3635,6 +3790,10 @@ docs/baseline_progress_2026-06-03_dream7b_segmented_bpu_hbm.md
 - Verified sustained batch generation report at `/mnt/nas/openclaw/reports/models/dream7b_bpu_diffusion_batch_generate_sustained_20260606-190058/batch_generation_sustained_probe.md` with `round_count: 3`, `batch_count: 16`, `successful_generation_count: 3`, `actual_total_batch_items: 48`, `total_forward_call_count: 6`, `avg_bpu_loading: 9.022`, and `max_bpu_loading: 100.0`.
 - Updated `dream7b-bpu-deployment-acceptance-probe` to include `diffusion_batch_generate_sustained` and `DREAM7B_BPU_ACCEPTANCE_MIN_BATCH_GENERATE_SUSTAINED_ROUND_COUNT`.
 - Verified sustained-aware deployment acceptance report at `/mnt/nas/openclaw/reports/models/dream7b_bpu_deployment_acceptance_20260606-205153/deployment_acceptance_probe.md` with `check_count: 15`, `passed_check_count: 15`, `min_batch_generate_sustained_round_count: 3`, and `diffusion_batch_generate_sustained.ok: True`.
+- Added `dream7b-bpu-utilization-gap-probe` for report-only Dream 7B BPU utilization diagnosis across batch-size sweep, runtime telemetry, systemd telemetry, sustained generation, and batch-generation telemetry.
+- Verified utilization gap report at `/mnt/nas/openclaw/reports/models/dream7b_bpu_utilization_gap_20260606-211927/utilization_gap_probe.md` with `verdict: ok_dream7b_bpu_utilization_gap_probe`, `diagnosis: hbm_reload_dominated`, `max_observed_bpu_loading: 100.0`, `avg_observed_bpu_loading_across_reports: 8.978`, `runtime_load_to_run_ratio: 8.399`, and `systemd_load_to_run_ratio: 8.48`.
+- Updated `dream7b-bpu-deployment-acceptance-probe` to include `utilization_gap`.
+- Verified utilization-gap-aware deployment acceptance report at `/mnt/nas/openclaw/reports/models/dream7b_bpu_deployment_acceptance_20260606-212134/deployment_acceptance_probe.md` with `check_count: 16`, `passed_check_count: 16`, and `utilization_gap.ok: True`.
 
 ## TODO
 

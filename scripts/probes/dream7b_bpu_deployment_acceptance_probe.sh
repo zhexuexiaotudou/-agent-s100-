@@ -702,6 +702,49 @@ else:
         },
     )
 
+utilization_gap_path, utilization_gap = latest_json("dream7b_bpu_utilization_gap_*/utilization_gap_probe.json")
+if utilization_gap is None:
+    add_check("utilization_gap", utilization_gap_path, False, {"reason": "missing utilization_gap_probe.json"})
+else:
+    runtime_telemetry = utilization_gap.get("runtime_telemetry") or {}
+    systemd_telemetry = utilization_gap.get("systemd_telemetry") or {}
+    sustained_generation = utilization_gap.get("sustained_generation") or {}
+    batch_generate_telemetry = utilization_gap.get("batch_generate_telemetry") or {}
+    ok = (
+        utilization_gap.get("verdict") == "ok_dream7b_bpu_utilization_gap_probe"
+        and int(utilization_gap.get("min_batch_count") or 0) >= min_batch_capacity
+        and int(utilization_gap.get("min_sustained_round_count") or 0) >= min_batch_generate_sustained_round_count
+        and int(utilization_gap.get("min_sustained_total_items") or 0) >= min_systemd_telemetry_requests
+        and runtime_telemetry.get("batch_count") == min_batch_capacity
+        and int(systemd_telemetry.get("processed_request_count") or 0) >= min_systemd_telemetry_requests
+        and int(sustained_generation.get("round_count") or 0) >= min_batch_generate_sustained_round_count
+        and int(sustained_generation.get("batch_count") or 0) >= min_batch_capacity
+        and int(sustained_generation.get("actual_total_batch_items") or 0) >= min_systemd_telemetry_requests
+        and int(batch_generate_telemetry.get("batch_count") or 0) >= min_batch_capacity
+        and float(utilization_gap.get("max_observed_bpu_loading") or 0.0) > 0.0
+        and not utilization_gap.get("errors")
+    )
+    add_check(
+        "utilization_gap",
+        utilization_gap_path,
+        ok,
+        {
+            "verdict": utilization_gap.get("verdict"),
+            "diagnosis": utilization_gap.get("diagnosis"),
+            "next_optimization_target": utilization_gap.get("next_optimization_target"),
+            "max_observed_bpu_loading": utilization_gap.get("max_observed_bpu_loading"),
+            "avg_observed_bpu_loading_across_reports": utilization_gap.get("avg_observed_bpu_loading_across_reports"),
+            "runtime_batch_count": runtime_telemetry.get("batch_count"),
+            "runtime_load_to_run_ratio": runtime_telemetry.get("load_to_run_ratio"),
+            "systemd_processed_request_count": systemd_telemetry.get("processed_request_count"),
+            "systemd_load_to_run_ratio": systemd_telemetry.get("load_to_run_ratio"),
+            "sustained_round_count": sustained_generation.get("round_count"),
+            "sustained_actual_total_batch_items": sustained_generation.get("actual_total_batch_items"),
+            "batch_generate_batch_count": batch_generate_telemetry.get("batch_count"),
+            "warnings": utilization_gap.get("warnings"),
+        },
+    )
+
 payload = {
     "generated_at": datetime.now().astimezone().isoformat(),
     "verdict": "ok_dream7b_bpu_deployment_acceptance_probe" if not errors else "failed_dream7b_bpu_deployment_acceptance_probe",
