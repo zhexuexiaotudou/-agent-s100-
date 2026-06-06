@@ -282,6 +282,9 @@ License: MIT.
 
 Current project reference entrypoints:
 
+- Current Dream 7B S100 BPU status: the bounded seq16 batch-generation path now defaults to `batch_count: 16`, uses `dream7b-bpu-fine-batch-forward` once per diffusion step, and has verified `max_bpu_loading: 100.0` in `/mnt/nas/openclaw/reports/models/dream7b_bpu_diffusion_batch_generate_telemetry_20260606-184316/batch_generation_telemetry_probe.json`.
+- Current Dream 7B deployment acceptance: `/mnt/nas/openclaw/reports/models/dream7b_bpu_deployment_acceptance_20260606-184511/deployment_acceptance_probe.json` reports `check_count: 14`, `passed_check_count: 14`, `min_batch_generate_count: 16`, and `diffusion_batch_generate_telemetry.ok: True`.
+- Current boundary: this is real Dream 7B BPU execution with a bounded seq16 batch-generation bridge; it is still not a complete production text-generation service.
 - [docs/project_reference.md](docs/project_reference.md): command interfaces, configuration keys, architecture, decisions, development log, requirements, and TODOs.
 - [docs/documentation_audit_runbook.md](docs/documentation_audit_runbook.md): post-task documentation verification workflow.
 - [docs/baseline_progress_2026-06-03_dream7b_segmented_bpu_hbm.md](docs/baseline_progress_2026-06-03_dream7b_segmented_bpu_hbm.md): current Dream 7B segmented S100 BPU HBM evidence.

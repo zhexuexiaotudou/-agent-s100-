@@ -880,6 +880,9 @@ if [[ -f scripts/probes/dream7b_bpu_diffusion_batch_generate_telemetry_probe.sh 
       errors+=("dream7b_bpu_diffusion_batch_generate_telemetry_probe.sh missing $text")
     fi
   done
+  if ! grep -F -- 'DREAM7B_BPU_DIFFUSION_BATCH_GENERATE_TELEMETRY_BATCH_COUNT:-16' scripts/probes/dream7b_bpu_diffusion_batch_generate_telemetry_probe.sh >/dev/null; then
+    errors+=("dream7b_bpu_diffusion_batch_generate_telemetry_probe.sh missing default DREAM7B_BPU_DIFFUSION_BATCH_GENERATE_TELEMETRY_BATCH_COUNT:-16")
+  fi
 fi
 
 if [[ -f scripts/probes/dream7b_bpu_batch_queue_retention_probe.sh ]]; then
@@ -1106,6 +1109,9 @@ if [[ -f scripts/dream7b-bpu-diffusion-batch-generate.sh ]]; then
       errors+=("dream7b-bpu-diffusion-batch-generate.sh missing $text")
     fi
   done
+  if ! grep -F -- 'DREAM7B_BPU_DIFFUSION_BATCH_GENERATE_BATCH_COUNT:-16' scripts/dream7b-bpu-diffusion-batch-generate.sh >/dev/null; then
+    errors+=("dream7b-bpu-diffusion-batch-generate.sh missing default DREAM7B_BPU_DIFFUSION_BATCH_GENERATE_BATCH_COUNT:-16")
+  fi
 fi
 
 if [[ -f scripts/probes/dream7b_bpu_text_queue_systemd_probe.sh ]]; then
@@ -1177,8 +1183,8 @@ if [[ -f scripts/probes/dream7b_bpu_deployment_acceptance_probe.sh ]]; then
   if ! grep -F -- "DREAM7B_BPU_ACCEPTANCE_MIN_BATCH_GENERATE_COUNT" scripts/probes/dream7b_bpu_deployment_acceptance_probe.sh >/dev/null; then
     errors+=("dream7b_bpu_deployment_acceptance_probe.sh missing DREAM7B_BPU_ACCEPTANCE_MIN_BATCH_GENERATE_COUNT")
   fi
-  if ! grep -F -- 'DREAM7B_BPU_ACCEPTANCE_MIN_BATCH_GENERATE_COUNT:-8' scripts/probes/dream7b_bpu_deployment_acceptance_probe.sh >/dev/null; then
-    errors+=("dream7b_bpu_deployment_acceptance_probe.sh missing default DREAM7B_BPU_ACCEPTANCE_MIN_BATCH_GENERATE_COUNT:-8")
+  if ! grep -F -- 'DREAM7B_BPU_ACCEPTANCE_MIN_BATCH_GENERATE_COUNT:-16' scripts/probes/dream7b_bpu_deployment_acceptance_probe.sh >/dev/null; then
+    errors+=("dream7b_bpu_deployment_acceptance_probe.sh missing default DREAM7B_BPU_ACCEPTANCE_MIN_BATCH_GENERATE_COUNT:-16")
   fi
   if ! grep -F -- "DREAM7B_BPU_ACCEPTANCE_MIN_LONG_REPEAT_COUNT" scripts/probes/dream7b_bpu_deployment_acceptance_probe.sh >/dev/null; then
     errors+=("dream7b_bpu_deployment_acceptance_probe.sh missing DREAM7B_BPU_ACCEPTANCE_MIN_LONG_REPEAT_COUNT")

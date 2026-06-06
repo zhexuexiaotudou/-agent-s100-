@@ -5,7 +5,7 @@ report_root="${1:-/mnt/nas/openclaw/reports/models}"
 min_batch_capacity="${DREAM7B_BPU_ACCEPTANCE_MIN_BATCH_CAPACITY:-16}"
 min_systemd_batch_requests="${DREAM7B_BPU_ACCEPTANCE_MIN_SYSTEMD_BATCH_REQUESTS:-16}"
 min_systemd_telemetry_requests="${DREAM7B_BPU_ACCEPTANCE_MIN_SYSTEMD_TELEMETRY_REQUESTS:-48}"
-min_batch_generate_count="${DREAM7B_BPU_ACCEPTANCE_MIN_BATCH_GENERATE_COUNT:-8}"
+min_batch_generate_count="${DREAM7B_BPU_ACCEPTANCE_MIN_BATCH_GENERATE_COUNT:-16}"
 min_long_repeat_count="${DREAM7B_BPU_ACCEPTANCE_MIN_LONG_REPEAT_COUNT:-6}"
 max_long_repeat_wall_spread_ratio="${DREAM7B_BPU_ACCEPTANCE_MAX_LONG_REPEAT_WALL_SPREAD_RATIO:-0.10}"
 

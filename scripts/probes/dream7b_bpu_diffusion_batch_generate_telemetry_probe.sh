@@ -2,7 +2,7 @@
 set -euo pipefail
 
 report_root="${1:-/mnt/nas/openclaw/reports/models}"
-batch_count="${DREAM7B_BPU_DIFFUSION_BATCH_GENERATE_TELEMETRY_BATCH_COUNT:-8}"
+batch_count="${DREAM7B_BPU_DIFFUSION_BATCH_GENERATE_TELEMETRY_BATCH_COUNT:-16}"
 generate_cmd="${DREAM7B_BPU_DIFFUSION_BATCH_GENERATE_TELEMETRY_CMD:-dream7b-bpu-diffusion-batch-generate}"
 monitor_delay_ms="${DREAM7B_BPU_DIFFUSION_BATCH_GENERATE_TELEMETRY_MONITOR_DELAY_MS:-100}"
 monitor_sample_count="${DREAM7B_BPU_DIFFUSION_BATCH_GENERATE_TELEMETRY_MONITOR_SAMPLE_COUNT:-900}"
