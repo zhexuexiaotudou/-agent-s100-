@@ -416,6 +416,44 @@ else:
         },
     )
 
+diffusion_generate_path, diffusion_generate = latest_json("dream7b_bpu_diffusion_generate_*/generation.json")
+if diffusion_generate is None:
+    add_check("diffusion_generate", diffusion_generate_path, False, {"reason": "missing generation.json"})
+else:
+    history = diffusion_generate.get("history") or []
+    ok = (
+        diffusion_generate.get("verdict") == "ok_dream7b_bpu_diffusion_generate"
+        and diffusion_generate.get("forward_cmd") == "dream7b-bpu-fine-forward"
+        and diffusion_generate.get("seq_len") == 16
+        and int(diffusion_generate.get("steps") or 0) >= 1
+        and int(diffusion_generate.get("executed_step_count") or 0) == len(history)
+        and int(diffusion_generate.get("executed_step_count") or 0) >= 1
+        and diffusion_generate.get("remaining_mask_positions") == []
+        and bool(diffusion_generate.get("decoded_final"))
+        and diffusion_generate.get("boundary") == "bounded_seq16_generation_entrypoint_not_complete_production_text_service"
+        and all(item.get("forward_verdict") == "ok_dream7b_segmented_hbm_python_forward" for item in history)
+        and all(item.get("forward_execution_mode") == "pair_in_process" for item in history)
+        and all(item.get("forward_window_execution_mode") == "in-process" for item in history)
+        and all(item.get("forward_child_process_count") == 0 for item in history)
+        and all(item.get("forward_final_shape") == [1, 16, 152064] for item in history)
+        and not diffusion_generate.get("errors")
+    )
+    add_check(
+        "diffusion_generate",
+        diffusion_generate_path,
+        ok,
+        {
+            "verdict": diffusion_generate.get("verdict"),
+            "forward_cmd": diffusion_generate.get("forward_cmd"),
+            "seq_len": diffusion_generate.get("seq_len"),
+            "steps": diffusion_generate.get("steps"),
+            "executed_step_count": diffusion_generate.get("executed_step_count"),
+            "remaining_mask_positions": diffusion_generate.get("remaining_mask_positions"),
+            "decoded_final": diffusion_generate.get("decoded_final"),
+            "boundary": diffusion_generate.get("boundary"),
+        },
+    )
+
 systemd_telemetry_path, systemd_telemetry = latest_json("dream7b_bpu_batch_queue_systemd_telemetry_*/systemd_telemetry_probe.json")
 if systemd_telemetry is None:
     add_check("systemd_telemetry", systemd_telemetry_path, False, {"reason": "missing systemd_telemetry_probe.json"})

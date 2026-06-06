@@ -1753,6 +1753,7 @@ Latest recorded report:
 /mnt/nas/openclaw/reports/models/dream7b_bpu_deployment_acceptance_20260606-142559/deployment_acceptance_probe.md
 /mnt/nas/openclaw/reports/models/dream7b_bpu_deployment_acceptance_20260606-144721/deployment_acceptance_probe.md
 /mnt/nas/openclaw/reports/models/dream7b_bpu_deployment_acceptance_20260606-155233/deployment_acceptance_probe.md
+/mnt/nas/openclaw/reports/models/dream7b_bpu_deployment_acceptance_20260606-161252/deployment_acceptance_probe.md
 ```
 
 Latest recorded JSON:
@@ -1766,14 +1767,15 @@ Latest recorded JSON:
 /mnt/nas/openclaw/reports/models/dream7b_bpu_deployment_acceptance_20260606-142559/deployment_acceptance_probe.json
 /mnt/nas/openclaw/reports/models/dream7b_bpu_deployment_acceptance_20260606-144721/deployment_acceptance_probe.json
 /mnt/nas/openclaw/reports/models/dream7b_bpu_deployment_acceptance_20260606-155233/deployment_acceptance_probe.json
+/mnt/nas/openclaw/reports/models/dream7b_bpu_deployment_acceptance_20260606-161252/deployment_acceptance_probe.json
 ```
 
 Verified deployment acceptance fields copied from `deployment_acceptance_probe.json`:
 
 ```text
 verdict: ok_dream7b_bpu_deployment_acceptance_probe
-check_count: 11
-passed_check_count: 11
+check_count: 12
+passed_check_count: 12
 min_batch_capacity: 16
 min_systemd_batch_requests: 16
 min_systemd_telemetry_requests: 48
@@ -1789,6 +1791,7 @@ systemd_drain.ok: True
 systemd_canary.ok: True
 text_queue_run.ok: True
 text_queue_systemd.ok: True
+diffusion_generate.ok: True
 systemd_telemetry.ok: True
 long_repeat.ok: True
 queue_retention.ok: True
@@ -1818,6 +1821,17 @@ text_queue_systemd.details.token_count: 16
 text_queue_systemd.details.final_shape: [1, 16, 152064]
 text_queue_systemd.details.topk_last_position: [{'token_id': 323, 'score': 1.7742547988891602}, {'token_id': 476, 'score': 1.0451929569244385}, {'token_id': 11, 'score': 0.8926413059234619}]
 text_queue_systemd.details.topk_last_position_decoded: [{'token_id': 323, 'score': 1.7742547988891602, 'token_text': ' and'}, {'token_id': 476, 'score': 1.0451929569244385, 'token_text': ' or'}, {'token_id': 11, 'score': 0.8926413059234619, 'token_text': ','}]
+diffusion_generate.details.verdict: ok_dream7b_bpu_diffusion_generate
+diffusion_generate.details.forward_cmd: dream7b-bpu-fine-forward
+diffusion_generate.details.seq_len: 16
+diffusion_generate.details.steps: 2
+diffusion_generate.details.executed_step_count: 2
+diffusion_generate.details.remaining_mask_positions: []
+diffusion_generate.details.decoded_final: <|im_start|>user
+hello<|im_end|>
+<|im_start|>assistant
+osaosa and and and and and
+diffusion_generate.details.boundary: bounded_seq16_generation_entrypoint_not_complete_production_text_service
 hbm_artifact_inventory.details.expected_artifact_count: 14
 hbm_artifact_inventory.details.nas_existing_count: 14
 hbm_artifact_inventory.details.local_existing_count: 14
@@ -1826,6 +1840,166 @@ hbm_artifact_inventory.details.manifest_verified_count: 12
 systemd_telemetry.details.max_bpu_loading: 100.0
 systemd_telemetry.details.avg_bpu_loading: 9.616
 queue_retention.details.queue_counts: {'pending': 0, 'processing': 0, 'done': 13, 'failed': 1}
+```
+
+### `dream7b-bpu-diffusion-generate`
+
+Source file: `scripts/dream7b-bpu-diffusion-generate.sh`
+
+Installed command on S100P:
+
+```text
+/usr/local/bin/dream7b-bpu-diffusion-generate
+```
+
+Environment variables copied from the script:
+
+```text
+DREAM7B_TOKENIZER_VENV
+DREAM7B_TOKENIZER
+DREAM7B_BPU_DIFFUSION_GENERATE_REPORT_ROOT
+DREAM7B_BPU_DIFFUSION_GENERATE_RUN_DIR
+DREAM7B_BPU_DIFFUSION_GENERATE_SEQ_LEN
+DREAM7B_BPU_DIFFUSION_GENERATE_MIN_MASK_COUNT
+DREAM7B_BPU_DIFFUSION_GENERATE_STEPS
+DREAM7B_BPU_DIFFUSION_GENERATE_TOP_K
+DREAM7B_BPU_DIFFUSION_GENERATE_EPS
+DREAM7B_BPU_DIFFUSION_GENERATE_REMASKING
+DREAM7B_BPU_DIFFUSION_GENERATE_TEMP
+DREAM7B_BPU_DIFFUSION_GENERATE_SEED
+DREAM7B_BPU_DIFFUSION_GENERATE_ENTROPY_THRESHOLD
+DREAM7B_BPU_DIFFUSION_GENERATE_FORWARD_CMD
+```
+
+Default values copied from the script:
+
+```text
+tokenizer_venv = /mnt/nas/openclaw/runtimes/dream7b-tokenizer-venv
+tokenizer_dir = /mnt/nas/openclaw/models/dream7b/tokenizer
+report_root = /mnt/nas/openclaw/reports/models
+run_dir_override =
+seq_len = 16
+min_mask_count = 4
+steps = 2
+top_k = 5
+eps = 0.001
+remasking = entropy_exit
+temperature = 0
+seed = 42
+entropy_threshold = 1.5
+forward_cmd = dream7b-bpu-fine-forward
+```
+
+Usage copied from the script:
+
+```text
+dream7b-bpu-diffusion-generate [--report-root DIR] [--run-dir DIR] [--seq-len 16] [--min-mask-count N] [--steps N] [--top-k N] [--eps FLOAT] [--remasking low_confidence|entropy_exit|maskgit_plus|topk_margin|entropy] [--temperature FLOAT] [--seed N] [--entropy-threshold FLOAT] [--forward-cmd CMD] [--prompt TEXT|--prompt-file FILE] [--] prompt text
+```
+
+Supported `DREAM7B_BPU_DIFFUSION_GENERATE_REMASKING` values copied from the script:
+
+```text
+low_confidence
+entropy_exit
+maskgit_plus
+topk_margin
+entropy
+```
+
+Output files copied from the script:
+
+```text
+generation.json
+generation.md
+step_00/forward/summary.json
+step_00/forward/logits.npy
+step_01/forward/summary.json
+step_01/forward/logits.npy
+```
+
+Generation fields copied from the script:
+
+```text
+verdict
+run_dir
+tokenizer_dir
+prompt
+prepared_prompt
+seq_len
+steps
+executed_step_count
+eps
+top_k
+remasking
+temperature
+seed
+entropy_threshold
+forward_cmd
+fit_mode
+prompt_token_count
+prefix_token_count
+mask_token_id
+initial_tokens
+final_tokens
+remaining_mask_positions
+decoded_final
+history
+forward_summary_count
+logits_shift
+boundary
+errors
+```
+
+Latest recorded report:
+
+```text
+/mnt/nas/openclaw/reports/models/dream7b_bpu_diffusion_generate_20260606-161120/generation.md
+```
+
+Latest recorded JSON:
+
+```text
+/mnt/nas/openclaw/reports/models/dream7b_bpu_diffusion_generate_20260606-161120/generation.json
+```
+
+Verified bounded generation fields copied from `generation.json`:
+
+```text
+verdict: ok_dream7b_bpu_diffusion_generate
+forward_cmd: dream7b-bpu-fine-forward
+prompt: hello
+seq_len: 16
+steps: 2
+executed_step_count: 2
+top_k: 5
+remasking: entropy_exit
+temperature: 0.0
+seed: 42
+entropy_threshold: 1.5
+fit_mode: natural_prompt_then_masks
+prompt_token_count: 9
+prefix_token_count: 9
+mask_token_id: 151666
+remaining_mask_positions: []
+decoded_final: <|im_start|>user
+hello<|im_end|>
+<|im_start|>assistant
+osaosa and and and and and
+history[0].forward_verdict: ok_dream7b_segmented_hbm_python_forward
+history[0].forward_summary: /mnt/nas/openclaw/reports/models/dream7b_bpu_diffusion_generate_20260606-161120/step_00/forward/summary.json
+history[0].forward_execution_mode: pair_in_process
+history[0].forward_window_execution_mode: in-process
+history[0].forward_child_process_count: 0
+history[0].forward_final_shape: [1, 16, 152064]
+history[1].forward_verdict: ok_dream7b_segmented_hbm_python_forward
+history[1].forward_summary: /mnt/nas/openclaw/reports/models/dream7b_bpu_diffusion_generate_20260606-161120/step_01/forward/summary.json
+history[1].forward_execution_mode: pair_in_process
+history[1].forward_window_execution_mode: in-process
+history[1].forward_child_process_count: 0
+history[1].forward_final_shape: [1, 16, 152064]
+forward_summary_count: 2
+boundary: bounded_seq16_generation_entrypoint_not_complete_production_text_service
+errors: []
 ```
 
 ### `dream7b-bpu-diffusion-loop-probe`
@@ -2859,6 +3033,10 @@ docs/baseline_progress_2026-06-03_dream7b_segmented_bpu_hbm.md
 - Verified decoded text queue systemd report at `/mnt/nas/openclaw/reports/models/dream7b_bpu_text_queue_systemd_20260606-155148/text_queue_systemd_probe.md` with `run_verdict: ok_dream7b_bpu_text_queue_run`, `topk_last_position_decoded`, `final_shape: [1, 16, 152064]`, and `errors: []`.
 - Updated `dream7b-bpu-deployment-acceptance-probe` to require decoded top-k evidence in both `text_queue_run` and `text_queue_systemd`.
 - Verified decoded deployment acceptance report at `/mnt/nas/openclaw/reports/models/dream7b_bpu_deployment_acceptance_20260606-155233/deployment_acceptance_probe.md` with `check_count: 11`, `passed_check_count: 11`, `text_queue_run.details.topk_last_position_decoded`, and `text_queue_systemd.details.topk_last_position_decoded`.
+- Added reusable `dream7b-bpu-diffusion-generate` for bounded seq16 Dream diffusion generation through `dream7b-bpu-fine-forward`.
+- Verified bounded generation report at `/mnt/nas/openclaw/reports/models/dream7b_bpu_diffusion_generate_20260606-161120/generation.md` with `verdict: ok_dream7b_bpu_diffusion_generate`, `executed_step_count: 2`, `remaining_mask_positions: []`, and `decoded_final`.
+- Updated `dream7b-bpu-deployment-acceptance-probe` to include `diffusion_generate`.
+- Verified generation-aware deployment acceptance report at `/mnt/nas/openclaw/reports/models/dream7b_bpu_deployment_acceptance_20260606-161252/deployment_acceptance_probe.md` with `check_count: 12`, `passed_check_count: 12`, and `diffusion_generate.ok: True`.
 
 ## TODO
 

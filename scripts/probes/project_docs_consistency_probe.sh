@@ -29,6 +29,7 @@ required_files=(
   "scripts/dream7b-bpu-text-forward.sh"
   "scripts/dream7b-bpu-text-queue-submit.sh"
   "scripts/dream7b-bpu-text-queue-run.sh"
+  "scripts/dream7b-bpu-diffusion-generate.sh"
   "scripts/probes/dream7b_segmented_hbm_python_forward.py"
   "scripts/probes/dream7b_bpu_diffusion_loop_probe.sh"
   "scripts/probes/dream7b_bpu_fine_forward_repeat_probe.sh"
@@ -63,6 +64,7 @@ required_readme_strings=(
   "scripts/probes/project_docs_consistency_probe.sh"
   "scripts/dream7b-bpu-text-queue-submit.sh"
   "scripts/dream7b-bpu-text-queue-run.sh"
+  "scripts/dream7b-bpu-diffusion-generate.sh"
   "dream7b_bpu_text_queue_systemd_probe.sh"
 )
 
@@ -85,6 +87,7 @@ required_reference_strings=(
   "dream7b-bpu-batch-queue-systemd-canary-probe"
   "dream7b-bpu-text-queue-submit"
   "dream7b-bpu-text-queue-run"
+  "dream7b-bpu-diffusion-generate"
   "dream7b-bpu-text-queue-systemd-probe"
   "dream7b-bpu-batch-queue-systemd-telemetry-probe"
   "dream7b-bpu-batch-queue-retention-probe"
@@ -205,6 +208,13 @@ required_reference_strings=(
   "systemd_canary"
   "text_queue_run"
   "text_queue_systemd"
+  "diffusion_generate"
+  "ok_dream7b_bpu_diffusion_generate"
+  "generation.json"
+  "generation.md"
+  "decoded_final"
+  "remaining_mask_positions"
+  "bounded_seq16_generation_entrypoint_not_complete_production_text_service"
   "ok_dream7b_bpu_text_queue_submit"
   "submit_cmd"
   "submit_verdict"
@@ -296,6 +306,10 @@ required_reference_strings=(
   "/mnt/nas/openclaw/reports/models/dream7b_bpu_text_queue_systemd_20260606-155148/text_queue_submit.json"
   "/mnt/nas/openclaw/reports/models/dream7b_bpu_batch_queue_service_systemd/jobs/text_queue_systemd_20260606-155148/queue_summary.json"
   "/mnt/nas/openclaw/reports/models/dream7b_bpu_batch_queue_service_systemd/jobs/text_queue_systemd_20260606-155148/durable_state/results.jsonl"
+  "/mnt/nas/openclaw/reports/models/dream7b_bpu_diffusion_generate_20260606-161120/generation.md"
+  "/mnt/nas/openclaw/reports/models/dream7b_bpu_diffusion_generate_20260606-161120/generation.json"
+  "/mnt/nas/openclaw/reports/models/dream7b_bpu_diffusion_generate_20260606-161120/step_00/forward/summary.json"
+  "/mnt/nas/openclaw/reports/models/dream7b_bpu_diffusion_generate_20260606-161120/step_01/forward/summary.json"
   "/mnt/nas/openclaw/reports/models/dream7b_bpu_batch_queue_systemd_telemetry_20260605-133919/systemd_telemetry_probe.md"
   "/mnt/nas/openclaw/reports/models/dream7b_bpu_batch_queue_systemd_telemetry_20260605-133919/systemd_telemetry_probe.json"
   "/mnt/nas/openclaw/reports/models/dream7b_bpu_batch_queue_service_systemd/jobs/systemd_telemetry_20260605-133919_001/queue_summary.json"
@@ -317,6 +331,10 @@ required_reference_strings=(
   "/mnt/nas/openclaw/reports/models/dream7b_bpu_deployment_acceptance_20260606-142559/deployment_acceptance_probe.json"
   "/mnt/nas/openclaw/reports/models/dream7b_bpu_deployment_acceptance_20260606-144721/deployment_acceptance_probe.md"
   "/mnt/nas/openclaw/reports/models/dream7b_bpu_deployment_acceptance_20260606-144721/deployment_acceptance_probe.json"
+  "/mnt/nas/openclaw/reports/models/dream7b_bpu_deployment_acceptance_20260606-155233/deployment_acceptance_probe.md"
+  "/mnt/nas/openclaw/reports/models/dream7b_bpu_deployment_acceptance_20260606-155233/deployment_acceptance_probe.json"
+  "/mnt/nas/openclaw/reports/models/dream7b_bpu_deployment_acceptance_20260606-161252/deployment_acceptance_probe.md"
+  "/mnt/nas/openclaw/reports/models/dream7b_bpu_deployment_acceptance_20260606-161252/deployment_acceptance_probe.json"
   "/etc/systemd/system/dream7b-bpu-batch-queue.service"
   "/mnt/nas/openclaw/queues/dream7b-bpu"
   "/mnt/nas/openclaw/reports/models/dream7b_bpu_batch_queue_service_systemd"
@@ -890,6 +908,42 @@ if [[ -f scripts/dream7b-bpu-text-queue-run.sh ]]; then
   done
 fi
 
+if [[ -f scripts/dream7b-bpu-diffusion-generate.sh ]]; then
+  for text in \
+    "DREAM7B_TOKENIZER_VENV" \
+    "DREAM7B_TOKENIZER" \
+    "DREAM7B_BPU_DIFFUSION_GENERATE_REPORT_ROOT" \
+    "DREAM7B_BPU_DIFFUSION_GENERATE_RUN_DIR" \
+    "DREAM7B_BPU_DIFFUSION_GENERATE_SEQ_LEN" \
+    "DREAM7B_BPU_DIFFUSION_GENERATE_MIN_MASK_COUNT" \
+    "DREAM7B_BPU_DIFFUSION_GENERATE_STEPS" \
+    "DREAM7B_BPU_DIFFUSION_GENERATE_TOP_K" \
+    "DREAM7B_BPU_DIFFUSION_GENERATE_EPS" \
+    "DREAM7B_BPU_DIFFUSION_GENERATE_REMASKING" \
+    "DREAM7B_BPU_DIFFUSION_GENERATE_TEMP" \
+    "DREAM7B_BPU_DIFFUSION_GENERATE_SEED" \
+    "DREAM7B_BPU_DIFFUSION_GENERATE_ENTROPY_THRESHOLD" \
+    "DREAM7B_BPU_DIFFUSION_GENERATE_FORWARD_CMD" \
+    "dream7b-bpu-fine-forward" \
+    "--prompt-file" \
+    "--forward-cmd" \
+    "generation.json" \
+    "generation.md" \
+    "ok_dream7b_bpu_diffusion_generate" \
+    "decoded_final" \
+    "remaining_mask_positions" \
+    "forward_verdict" \
+    "forward_execution_mode" \
+    "forward_window_execution_mode" \
+    "forward_child_process_count" \
+    "forward_final_shape" \
+    "bounded_seq16_generation_entrypoint_not_complete_production_text_service"; do
+    if ! grep -F -- "$text" scripts/dream7b-bpu-diffusion-generate.sh >/dev/null; then
+      errors+=("dream7b-bpu-diffusion-generate.sh missing $text")
+    fi
+  done
+fi
+
 if [[ -f scripts/probes/dream7b_bpu_text_queue_systemd_probe.sh ]]; then
   for text in \
     "DREAM7B_TOKENIZER_VENV" \
@@ -977,6 +1031,7 @@ if [[ -f scripts/probes/dream7b_bpu_deployment_acceptance_probe.sh ]]; then
     "dream7b_bpu_batch_queue_systemd_canary_*/systemd_canary_probe.json" \
     "dream7b_bpu_text_queue_run_*/text_queue_run.json" \
     "dream7b_bpu_text_queue_systemd_*/text_queue_systemd_probe.json" \
+    "dream7b_bpu_diffusion_generate_*/generation.json" \
     "dream7b_bpu_batch_queue_systemd_telemetry_*/systemd_telemetry_probe.json" \
     "dream7b_bpu_fine_forward_long_repeat_*/long_repeat_probe.json" \
     "dream7b_bpu_batch_queue_retention_*/queue_retention_probe.json" \
@@ -988,6 +1043,16 @@ if [[ -f scripts/probes/dream7b_bpu_deployment_acceptance_probe.sh ]]; then
     "systemd_canary" \
     "text_queue_run" \
     "text_queue_systemd" \
+    "diffusion_generate" \
+    "ok_dream7b_bpu_diffusion_generate" \
+    "decoded_final" \
+    "remaining_mask_positions" \
+    "forward_verdict" \
+    "forward_execution_mode" \
+    "forward_window_execution_mode" \
+    "forward_child_process_count" \
+    "forward_final_shape" \
+    "bounded_seq16_generation_entrypoint_not_complete_production_text_service" \
     "systemd_telemetry" \
     "long_repeat" \
     "max_long_repeat_wall_spread_ratio" \
