@@ -12,6 +12,7 @@ fit_mode="${DREAM7B_BPU_TEXT_QUEUE_FIT:-pad-right}"
 seq_len="${DREAM7B_BPU_TEXT_QUEUE_SEQ_LEN:-16}"
 timeout_sec="${DREAM7B_BPU_TEXT_QUEUE_TIMEOUT_SEC:-180}"
 poll_interval_sec="${DREAM7B_BPU_TEXT_QUEUE_POLL_INTERVAL_SEC:-2}"
+submit_cmd="${DREAM7B_BPU_TEXT_QUEUE_SUBMIT_CMD:-dream7b-bpu-text-queue-submit}"
 
 case "$report_root" in
   /tmp/*|/mnt/nas/openclaw/reports|/mnt/nas/openclaw/reports/*|/root/.openclaw/workspace/reports|/root/.openclaw/workspace/reports/*) ;;
@@ -68,6 +69,10 @@ if [[ -z "$prompt" ]]; then
   echo "DREAM7B_BPU_TEXT_QUEUE_PROMPT must not be empty." >&2
   exit 2
 fi
+if ! command -v "$submit_cmd" >/dev/null 2>&1; then
+  echo "Missing deployed command: $submit_cmd" >&2
+  exit 3
+fi
 
 if (( EUID == 0 )); then
   sudo_cmd=()
@@ -83,6 +88,10 @@ job_name="text_queue_systemd_${stamp}.jsonl"
 job_path="$run_dir/$job_name"
 tokenizer_json="$run_dir/tokenizer_input.json"
 request_id="text-queue-${stamp}-001"
+submit_json="$run_dir/text_queue_submit.json"
+submit_md="$run_dir/text_queue_submit.md"
+submit_stdout="$run_dir/text_queue_submit.stdout"
+submit_stderr="$run_dir/text_queue_submit.stderr"
 
 service_status_before="$(systemctl is-active "$service_name" 2>/dev/null || true)"
 service_enabled_before="$(systemctl is-enabled "$service_name" 2>/dev/null || true)"
@@ -95,76 +104,16 @@ if [[ "$service_status_before" != "active" ]]; then
   exit 3
 fi
 
-"$tokenizer_venv/bin/python" - \
-  "$tokenizer_dir" \
-  "$seq_len" \
-  "$fit_mode" \
-  "$prompt" \
-  "$request_id" \
-  "$job_path" \
-  "$tokenizer_json" <<'PY'
-import json
-import sys
-from pathlib import Path
-
-from transformers import AutoTokenizer
-
-tokenizer_dir, seq_len_text, fit_mode, prompt, request_id, job_path, tokenizer_json = sys.argv[1:8]
-seq_len = int(seq_len_text)
-tok = AutoTokenizer.from_pretrained(tokenizer_dir, trust_remote_code=True, local_files_only=True)
-
-if prompt.startswith("<|im_start|>"):
-    prepared = prompt
-else:
-    prepared = f"<|im_start|>user\n{prompt}<|im_end|>\n<|im_start|>assistant\n"
-
-ids = tok.encode(prepared)
-original_token_count = len(ids)
-if fit_mode == "exact":
-    if original_token_count != seq_len:
-        raise SystemExit(f"prompt encoded to {original_token_count} tokens, expected exactly {seq_len}")
-elif fit_mode == "truncate-left":
-    ids = ids[-seq_len:]
-elif fit_mode == "pad-right":
-    ids = ids[:seq_len] + [0] * max(0, seq_len - len(ids))
-    ids = ids[:seq_len]
-else:
-    raise SystemExit(f"unsupported fit mode: {fit_mode}")
-
-if len(ids) != seq_len:
-    raise SystemExit(f"fit mode {fit_mode} produced {len(ids)} tokens, expected {seq_len}")
-
-Path(job_path).write_text(
-    json.dumps({"request_id": request_id, "tokens": [int(item) for item in ids]}, ensure_ascii=False) + "\n",
-    encoding="utf-8",
-)
-Path(tokenizer_json).write_text(
-    json.dumps(
-        {
-            "tokenizer_dir": tokenizer_dir,
-            "prompt": prompt,
-            "prepared_prompt": prepared,
-            "fit_mode": fit_mode,
-            "seq_len": seq_len,
-            "original_token_count": original_token_count,
-            "token_count": len(ids),
-            "tokens": [int(item) for item in ids],
-        },
-        ensure_ascii=False,
-        indent=2,
-    )
-    + "\n",
-    encoding="utf-8",
-)
-PY
-
-"${sudo_cmd[@]}" mkdir -p "$queue_dir/pending" "$queue_dir/processing" "$queue_dir/done" "$queue_dir/failed"
-"${sudo_cmd[@]}" test ! -e "$queue_dir/pending/$job_name"
-"${sudo_cmd[@]}" test ! -e "$queue_dir/processing/$job_name"
-"${sudo_cmd[@]}" test ! -e "$queue_dir/done/$job_name"
-"${sudo_cmd[@]}" test ! -e "$queue_dir/failed/$job_name"
-"${sudo_cmd[@]}" install -m 0644 "$job_path" "$queue_dir/pending/$job_name.upload"
-"${sudo_cmd[@]}" mv "$queue_dir/pending/$job_name.upload" "$queue_dir/pending/$job_name"
+"$submit_cmd" \
+  --queue-dir "$queue_dir" \
+  --report-root "$report_root" \
+  --run-dir "$run_dir" \
+  --job-stem "${job_name%.jsonl}" \
+  --request-id "$request_id" \
+  --fit "$fit_mode" \
+  --seq-len "$seq_len" \
+  --prompt "$prompt" \
+  >"$submit_stdout" 2>"$submit_stderr"
 
 deadline=$((SECONDS + timeout_sec))
 while (( SECONDS < deadline )); do
@@ -209,7 +158,12 @@ python3 - \
   "$service_status_after" \
   "$service_enabled_after" \
   "$unit_path" \
-  "$exec_start" <<'PY'
+  "$exec_start" \
+  "$submit_cmd" \
+  "$submit_json" \
+  "$submit_md" \
+  "$submit_stdout" \
+  "$submit_stderr" <<'PY'
 import json
 import sys
 from datetime import datetime
@@ -234,10 +188,20 @@ service_status_after = sys.argv[16]
 service_enabled_after = sys.argv[17]
 unit_path = sys.argv[18]
 exec_start = sys.argv[19]
+submit_cmd = sys.argv[20]
+submit_json = Path(sys.argv[21])
+submit_md = Path(sys.argv[22])
+submit_stdout = Path(sys.argv[23])
+submit_stderr = Path(sys.argv[24])
 
 errors = []
+submit_payload = None
 tokenizer_payload = None
 summary = None
+if submit_json.is_file():
+    submit_payload = json.loads(submit_json.read_text(encoding="utf-8"))
+else:
+    errors.append(f"missing text_queue_submit.json: {submit_json}")
 if tokenizer_json.is_file():
     tokenizer_payload = json.loads(tokenizer_json.read_text(encoding="utf-8"))
 else:
@@ -270,6 +234,26 @@ for text in (
         errors.append(f"ExecStart missing {text}: {exec_start}")
 if job_status != "done":
     errors.append(f"unexpected job_status: {job_status}")
+
+if isinstance(submit_payload, dict):
+    if submit_payload.get("verdict") != "ok_dream7b_bpu_text_queue_submit":
+        errors.append(f"unexpected submit verdict: {submit_payload.get('verdict')}")
+    if submit_payload.get("job_name") != job_name:
+        errors.append(f"unexpected submit job_name: {submit_payload.get('job_name')}")
+    if submit_payload.get("request_id") != request_id:
+        errors.append(f"unexpected submit request_id: {submit_payload.get('request_id')}")
+    if submit_payload.get("queue_dir") != queue_dir:
+        errors.append(f"unexpected submit queue_dir: {submit_payload.get('queue_dir')}")
+    if submit_payload.get("tokenizer_dir") != tokenizer_dir:
+        errors.append(f"unexpected submit tokenizer_dir: {submit_payload.get('tokenizer_dir')}")
+    if submit_payload.get("tokenizer_json") != str(tokenizer_json):
+        errors.append(f"unexpected submit tokenizer_json: {submit_payload.get('tokenizer_json')}")
+    if submit_payload.get("seq_len") != 16:
+        errors.append(f"unexpected submit seq_len: {submit_payload.get('seq_len')}")
+    if submit_payload.get("fit_mode") not in ("exact", "truncate-left", "pad-right"):
+        errors.append(f"unexpected submit fit_mode: {submit_payload.get('fit_mode')}")
+    if submit_payload.get("errors"):
+        errors.append(f"submit errors are not empty: {submit_payload.get('errors')}")
 
 if isinstance(tokenizer_payload, dict):
     if tokenizer_payload.get("token_count") != 16:
@@ -374,6 +358,13 @@ payload = {
     "job_name": job_name,
     "job_status": job_status,
     "summary_path": str(summary_path),
+    "submit_cmd": submit_cmd,
+    "submit_json": str(submit_json),
+    "submit_md": str(submit_md),
+    "submit_stdout": str(submit_stdout),
+    "submit_stderr": str(submit_stderr),
+    "submit": submit_payload,
+    "submit_verdict": submit_payload.get("verdict") if isinstance(submit_payload, dict) else None,
     "tokenizer_venv": tokenizer_venv,
     "tokenizer_dir": tokenizer_dir,
     "tokenizer_json": str(tokenizer_json),
@@ -421,6 +412,10 @@ error_lines = [f"- {item}" for item in errors] if errors else ["- none"]
         f"- job_name: {payload['job_name']}",
         f"- job_status: {payload['job_status']}",
         f"- summary_path: {payload['summary_path']}",
+        f"- submit_cmd: {payload['submit_cmd']}",
+        f"- submit_verdict: {payload['submit_verdict']}",
+        f"- submit_json: {payload['submit_json']}",
+        f"- submit_md: {payload['submit_md']}",
         f"- tokenizer_venv: {payload['tokenizer_venv']}",
         f"- tokenizer_dir: {payload['tokenizer_dir']}",
         f"- tokenizer_json: {payload['tokenizer_json']}",

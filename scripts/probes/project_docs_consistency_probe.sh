@@ -27,6 +27,7 @@ required_files=(
   "scripts/dream7b_bpu_batch_queue_service.py"
   "scripts/install_dream7b_bpu_queue_service.sh"
   "scripts/dream7b-bpu-text-forward.sh"
+  "scripts/dream7b-bpu-text-queue-submit.sh"
   "scripts/probes/dream7b_segmented_hbm_python_forward.py"
   "scripts/probes/dream7b_bpu_diffusion_loop_probe.sh"
   "scripts/probes/dream7b_bpu_fine_forward_repeat_probe.sh"
@@ -59,6 +60,7 @@ required_readme_strings=(
   "docs/project_reference.md"
   "docs/documentation_audit_runbook.md"
   "scripts/probes/project_docs_consistency_probe.sh"
+  "scripts/dream7b-bpu-text-queue-submit.sh"
   "dream7b_bpu_text_queue_systemd_probe.sh"
 )
 
@@ -79,6 +81,7 @@ required_reference_strings=(
   "dream7b-bpu-batch-queue-systemd-batch-probe"
   "dream7b-bpu-batch-queue-systemd-drain-probe"
   "dream7b-bpu-batch-queue-systemd-canary-probe"
+  "dream7b-bpu-text-queue-submit"
   "dream7b-bpu-text-queue-systemd-probe"
   "dream7b-bpu-batch-queue-systemd-telemetry-probe"
   "dream7b-bpu-batch-queue-retention-probe"
@@ -124,6 +127,10 @@ required_reference_strings=(
   "DREAM7B_BPU_TEXT_QUEUE_SEQ_LEN"
   "DREAM7B_BPU_TEXT_QUEUE_TIMEOUT_SEC"
   "DREAM7B_BPU_TEXT_QUEUE_POLL_INTERVAL_SEC"
+  "DREAM7B_BPU_TEXT_QUEUE_DIR"
+  "DREAM7B_BPU_TEXT_QUEUE_SUBMIT_REPORT_ROOT"
+  "DREAM7B_BPU_TEXT_QUEUE_SUBMIT_RUN_DIR"
+  "DREAM7B_BPU_TEXT_QUEUE_SUBMIT_CMD"
   "DREAM7B_BPU_SYSTEMD_TELEMETRY_JOB_COUNT"
   "DREAM7B_BPU_SYSTEMD_TELEMETRY_REQUEST_COUNT"
   "DREAM7B_BPU_SYSTEMD_TELEMETRY_TIMEOUT_SEC"
@@ -190,6 +197,11 @@ required_reference_strings=(
   "systemd_drain"
   "systemd_canary"
   "text_queue_systemd"
+  "ok_dream7b_bpu_text_queue_submit"
+  "submit_cmd"
+  "submit_verdict"
+  "text_queue_submit.json"
+  "text_queue_submit.md"
   "systemd_telemetry"
   "long_repeat"
   "queue_retention"
@@ -261,10 +273,12 @@ required_reference_strings=(
   "/mnt/nas/openclaw/reports/models/dream7b_bpu_batch_queue_systemd_canary_20260605-151715/systemd_canary_probe.json"
   "/mnt/nas/openclaw/reports/models/dream7b_bpu_batch_queue_service_systemd/jobs/systemd_canary_20260605-151715/queue_summary.json"
   "/mnt/nas/openclaw/reports/models/dream7b_bpu_text_queue_systemd_20260605-234555/text_queue_systemd_probe.md"
-  "/mnt/nas/openclaw/reports/models/dream7b_bpu_text_queue_systemd_20260605-234555/text_queue_systemd_probe.json"
-  "/mnt/nas/openclaw/reports/models/dream7b_bpu_text_queue_systemd_20260605-234555/tokenizer_input.json"
-  "/mnt/nas/openclaw/reports/models/dream7b_bpu_batch_queue_service_systemd/jobs/text_queue_systemd_20260605-234555/queue_summary.json"
-  "/mnt/nas/openclaw/reports/models/dream7b_bpu_batch_queue_service_systemd/jobs/text_queue_systemd_20260605-234555/durable_state/results.jsonl"
+  "/mnt/nas/openclaw/reports/models/dream7b_bpu_text_queue_systemd_20260606-142516/text_queue_systemd_probe.md"
+  "/mnt/nas/openclaw/reports/models/dream7b_bpu_text_queue_systemd_20260606-142516/text_queue_systemd_probe.json"
+  "/mnt/nas/openclaw/reports/models/dream7b_bpu_text_queue_systemd_20260606-142516/text_queue_submit.json"
+  "/mnt/nas/openclaw/reports/models/dream7b_bpu_text_queue_systemd_20260606-142516/tokenizer_input.json"
+  "/mnt/nas/openclaw/reports/models/dream7b_bpu_batch_queue_service_systemd/jobs/text_queue_systemd_20260606-142516/queue_summary.json"
+  "/mnt/nas/openclaw/reports/models/dream7b_bpu_batch_queue_service_systemd/jobs/text_queue_systemd_20260606-142516/durable_state/results.jsonl"
   "/mnt/nas/openclaw/reports/models/dream7b_bpu_batch_queue_systemd_telemetry_20260605-133919/systemd_telemetry_probe.md"
   "/mnt/nas/openclaw/reports/models/dream7b_bpu_batch_queue_systemd_telemetry_20260605-133919/systemd_telemetry_probe.json"
   "/mnt/nas/openclaw/reports/models/dream7b_bpu_batch_queue_service_systemd/jobs/systemd_telemetry_20260605-133919_001/queue_summary.json"
@@ -280,6 +294,10 @@ required_reference_strings=(
   "/mnt/nas/openclaw/reports/models/dream7b_bpu_deployment_acceptance_20260605-161000/deployment_acceptance_probe.json"
   "/mnt/nas/openclaw/reports/models/dream7b_bpu_deployment_acceptance_20260605-172156/deployment_acceptance_probe.md"
   "/mnt/nas/openclaw/reports/models/dream7b_bpu_deployment_acceptance_20260605-172156/deployment_acceptance_probe.json"
+  "/mnt/nas/openclaw/reports/models/dream7b_bpu_deployment_acceptance_20260606-134314/deployment_acceptance_probe.md"
+  "/mnt/nas/openclaw/reports/models/dream7b_bpu_deployment_acceptance_20260606-134314/deployment_acceptance_probe.json"
+  "/mnt/nas/openclaw/reports/models/dream7b_bpu_deployment_acceptance_20260606-142559/deployment_acceptance_probe.md"
+  "/mnt/nas/openclaw/reports/models/dream7b_bpu_deployment_acceptance_20260606-142559/deployment_acceptance_probe.json"
   "/etc/systemd/system/dream7b-bpu-batch-queue.service"
   "/mnt/nas/openclaw/queues/dream7b-bpu"
   "/mnt/nas/openclaw/reports/models/dream7b_bpu_batch_queue_service_systemd"
@@ -788,6 +806,34 @@ if [[ -f scripts/probes/dream7b_bpu_batch_queue_systemd_canary_probe.sh ]]; then
   done
 fi
 
+if [[ -f scripts/dream7b-bpu-text-queue-submit.sh ]]; then
+  for text in \
+    "DREAM7B_TOKENIZER_VENV" \
+    "DREAM7B_TOKENIZER" \
+    "DREAM7B_BPU_TEXT_QUEUE_DIR" \
+    "DREAM7B_BPU_TEXT_QUEUE_SUBMIT_REPORT_ROOT" \
+    "DREAM7B_BPU_TEXT_QUEUE_SUBMIT_RUN_DIR" \
+    "DREAM7B_BPU_TEXT_QUEUE_SEQ_LEN" \
+    "DREAM7B_BPU_TEXT_QUEUE_FIT" \
+    "--queue-dir" \
+    "--report-root" \
+    "--run-dir" \
+    "--job-stem" \
+    "--request-id" \
+    "--prompt-file" \
+    "tokenizer_input.json" \
+    "text_queue_submit.json" \
+    "text_queue_submit.md" \
+    "ok_dream7b_bpu_text_queue_submit" \
+    "queue_pending_path" \
+    "/mnt/nas/openclaw/queues/dream7b-bpu" \
+    "/mnt/nas/openclaw/reports/models"; do
+    if ! grep -F -- "$text" scripts/dream7b-bpu-text-queue-submit.sh >/dev/null; then
+      errors+=("dream7b-bpu-text-queue-submit.sh missing $text")
+    fi
+  done
+fi
+
 if [[ -f scripts/probes/dream7b_bpu_text_queue_systemd_probe.sh ]]; then
   for text in \
     "DREAM7B_TOKENIZER_VENV" \
@@ -797,6 +843,14 @@ if [[ -f scripts/probes/dream7b_bpu_text_queue_systemd_probe.sh ]]; then
     "DREAM7B_BPU_TEXT_QUEUE_SEQ_LEN" \
     "DREAM7B_BPU_TEXT_QUEUE_TIMEOUT_SEC" \
     "DREAM7B_BPU_TEXT_QUEUE_POLL_INTERVAL_SEC" \
+    "DREAM7B_BPU_TEXT_QUEUE_SUBMIT_CMD" \
+    "dream7b-bpu-text-queue-submit" \
+    "text_queue_submit.json" \
+    "text_queue_submit.md" \
+    "ok_dream7b_bpu_text_queue_submit" \
+    "submit_cmd" \
+    "submit_json" \
+    "submit_verdict" \
     "text_queue_systemd_probe.json" \
     "text_queue_systemd_probe.md" \
     "tokenizer_input.json" \
@@ -875,6 +929,9 @@ if [[ -f scripts/probes/dream7b_bpu_deployment_acceptance_probe.sh ]]; then
     "deployment_acceptance_probe.json" \
     "deployment_acceptance_probe.md" \
     "ok_dream7b_bpu_deployment_acceptance_probe" \
+    "ok_dream7b_bpu_text_queue_submit" \
+    "submit_cmd" \
+    "submit_verdict" \
     "passed_check_count" \
     "check_count" \
     "max_bpu_loading" \

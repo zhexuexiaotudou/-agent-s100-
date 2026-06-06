@@ -591,6 +591,76 @@ Forwarded options copied from the script:
 --top-k
 ```
 
+### `dream7b-bpu-text-queue-submit`
+
+Source file: `scripts/dream7b-bpu-text-queue-submit.sh`
+
+Installed command on S100P:
+
+```text
+/usr/local/bin/dream7b-bpu-text-queue-submit
+```
+
+Environment variables copied from the script:
+
+```text
+DREAM7B_TOKENIZER_VENV
+DREAM7B_TOKENIZER
+DREAM7B_BPU_TEXT_QUEUE_DIR
+DREAM7B_BPU_TEXT_QUEUE_SUBMIT_REPORT_ROOT
+DREAM7B_BPU_TEXT_QUEUE_SUBMIT_RUN_DIR
+DREAM7B_BPU_TEXT_QUEUE_SEQ_LEN
+DREAM7B_BPU_TEXT_QUEUE_FIT
+```
+
+Default values copied from the script:
+
+```text
+tokenizer_venv = /mnt/nas/openclaw/runtimes/dream7b-tokenizer-venv
+tokenizer_dir = /mnt/nas/openclaw/models/dream7b/tokenizer
+queue_dir = /mnt/nas/openclaw/queues/dream7b-bpu
+report_root = /mnt/nas/openclaw/reports/models
+run_dir_override =
+seq_len = 16
+fit_mode = pad-right
+```
+
+Usage copied from the script:
+
+```text
+dream7b-bpu-text-queue-submit [--queue-dir DIR] [--report-root DIR] [--run-dir DIR] [--job-stem NAME] [--request-id ID] [--fit exact|truncate-left|pad-right] [--seq-len 16] [--prompt TEXT|--prompt-file FILE] [--] prompt text
+```
+
+Output files copied from the script:
+
+```text
+tokenizer_input.json
+text_queue_submit.json
+text_queue_submit.md
+<job_stem>.jsonl
+```
+
+Submit summary fields copied from the script:
+
+```text
+verdict
+queue_dir
+report_root
+run_dir
+job_name
+job_path
+queue_pending_path
+tokenizer_venv
+tokenizer_dir
+tokenizer_json
+tokenizer
+request_id
+seq_len
+fit_mode
+prompt_file
+errors
+```
+
 ### `dream7b-bpu-batch-queue-service`
 
 Source file: `scripts/dream7b-bpu-batch-queue-service.sh`
@@ -1293,6 +1363,7 @@ DREAM7B_BPU_TEXT_QUEUE_FIT
 DREAM7B_BPU_TEXT_QUEUE_SEQ_LEN
 DREAM7B_BPU_TEXT_QUEUE_TIMEOUT_SEC
 DREAM7B_BPU_TEXT_QUEUE_POLL_INTERVAL_SEC
+DREAM7B_BPU_TEXT_QUEUE_SUBMIT_CMD
 ```
 
 Default values copied from the script:
@@ -1309,6 +1380,7 @@ fit_mode = pad-right
 seq_len = 16
 timeout_sec = 180
 poll_interval_sec = 2
+submit_cmd = dream7b-bpu-text-queue-submit
 ```
 
 Checked fields copied from the script:
@@ -1317,6 +1389,12 @@ Checked fields copied from the script:
 verdict
 job_status
 summary_path
+submit_cmd
+submit_json
+submit_md
+submit_stdout
+submit_stderr
+submit
 tokenizer_venv
 tokenizer_dir
 tokenizer_json
@@ -1343,33 +1421,47 @@ errors
 Latest recorded report:
 
 ```text
-/mnt/nas/openclaw/reports/models/dream7b_bpu_text_queue_systemd_20260605-234555/text_queue_systemd_probe.md
+/mnt/nas/openclaw/reports/models/dream7b_bpu_text_queue_systemd_20260606-142516/text_queue_systemd_probe.md
 ```
 
 Latest recorded JSON:
 
 ```text
-/mnt/nas/openclaw/reports/models/dream7b_bpu_text_queue_systemd_20260605-234555/text_queue_systemd_probe.json
+/mnt/nas/openclaw/reports/models/dream7b_bpu_text_queue_systemd_20260606-142516/text_queue_systemd_probe.json
+```
+
+Latest recorded submit report:
+
+```text
+/mnt/nas/openclaw/reports/models/dream7b_bpu_text_queue_systemd_20260606-142516/text_queue_submit.md
+```
+
+Latest recorded submit JSON:
+
+```text
+/mnt/nas/openclaw/reports/models/dream7b_bpu_text_queue_systemd_20260606-142516/text_queue_submit.json
 ```
 
 Latest recorded tokenizer JSON:
 
 ```text
-/mnt/nas/openclaw/reports/models/dream7b_bpu_text_queue_systemd_20260605-234555/tokenizer_input.json
+/mnt/nas/openclaw/reports/models/dream7b_bpu_text_queue_systemd_20260606-142516/tokenizer_input.json
 ```
 
 Latest recorded queue summary:
 
 ```text
-/mnt/nas/openclaw/reports/models/dream7b_bpu_batch_queue_service_systemd/jobs/text_queue_systemd_20260605-234555/queue_summary.json
+/mnt/nas/openclaw/reports/models/dream7b_bpu_batch_queue_service_systemd/jobs/text_queue_systemd_20260606-142516/queue_summary.json
 ```
 
 Verified text queue systemd fields copied from `text_queue_systemd_probe.json`:
 
 ```text
 verdict: ok_dream7b_bpu_text_queue_systemd_probe
+submit_cmd: dream7b-bpu-text-queue-submit
+submit.verdict: ok_dream7b_bpu_text_queue_submit
 job_status: done
-request_id: text-queue-20260605-234555-001
+request_id: text-queue-20260606-142516-001
 processed_count: 1
 accepted_count: 1
 deferred_count: 0
@@ -1383,9 +1475,9 @@ child_process_count: 0
 bpu_lock_path: /run/lock/dream7b_bpu_batch_queue_runner.lock
 final_shape: [1, 16, 152064]
 topk_last_position: [{'token_id': 323, 'score': 1.7742547988891602}, {'token_id': 476, 'score': 1.0451929569244385}, {'token_id': 11, 'score': 0.8926413059234619}]
-durable_results_jsonl: /mnt/nas/openclaw/reports/models/dream7b_bpu_batch_queue_service_systemd/jobs/text_queue_systemd_20260605-234555/durable_state/results.jsonl
-total_wall_ms: 24449.197
-amortized_wall_ms_per_processed_request: 24449.197
+durable_results_jsonl: /mnt/nas/openclaw/reports/models/dream7b_bpu_batch_queue_service_systemd/jobs/text_queue_systemd_20260606-142516/durable_state/results.jsonl
+total_wall_ms: 24263.421
+amortized_wall_ms_per_processed_request: 24263.421
 tokenizer.tokenizer_dir: /mnt/nas/openclaw/models/dream7b/tokenizer
 tokenizer.fit_mode: pad-right
 tokenizer.seq_len: 16
@@ -1487,6 +1579,7 @@ Latest recorded report:
 /mnt/nas/openclaw/reports/models/dream7b_bpu_deployment_acceptance_20260605-161000/deployment_acceptance_probe.md
 /mnt/nas/openclaw/reports/models/dream7b_bpu_deployment_acceptance_20260605-172156/deployment_acceptance_probe.md
 /mnt/nas/openclaw/reports/models/dream7b_bpu_deployment_acceptance_20260606-134314/deployment_acceptance_probe.md
+/mnt/nas/openclaw/reports/models/dream7b_bpu_deployment_acceptance_20260606-142559/deployment_acceptance_probe.md
 ```
 
 Latest recorded JSON:
@@ -1497,6 +1590,7 @@ Latest recorded JSON:
 /mnt/nas/openclaw/reports/models/dream7b_bpu_deployment_acceptance_20260605-161000/deployment_acceptance_probe.json
 /mnt/nas/openclaw/reports/models/dream7b_bpu_deployment_acceptance_20260605-172156/deployment_acceptance_probe.json
 /mnt/nas/openclaw/reports/models/dream7b_bpu_deployment_acceptance_20260606-134314/deployment_acceptance_probe.json
+/mnt/nas/openclaw/reports/models/dream7b_bpu_deployment_acceptance_20260606-142559/deployment_acceptance_probe.json
 ```
 
 Verified deployment acceptance fields copied from `deployment_acceptance_probe.json`:
@@ -1526,7 +1620,9 @@ systemd_canary.details.job_status: done
 systemd_canary.details.request_count: 1
 systemd_canary.details.processed_count: 1
 systemd_canary.details.final_shapes: [[1, 16, 152064]]
-text_queue_systemd.details.request_id: text-queue-20260605-234555-001
+text_queue_systemd.details.submit_cmd: dream7b-bpu-text-queue-submit
+text_queue_systemd.details.submit_verdict: ok_dream7b_bpu_text_queue_submit
+text_queue_systemd.details.request_id: text-queue-20260606-142516-001
 text_queue_systemd.details.tokenizer_dir: /mnt/nas/openclaw/models/dream7b/tokenizer
 text_queue_systemd.details.fit_mode: pad-right
 text_queue_systemd.details.original_token_count: 9
@@ -2558,6 +2654,11 @@ docs/baseline_progress_2026-06-03_dream7b_segmented_bpu_hbm.md
 - Verified text queue systemd report at `/mnt/nas/openclaw/reports/models/dream7b_bpu_text_queue_systemd_20260605-234555/text_queue_systemd_probe.md` with `token_count: 16`, `final_shape: [1, 16, 152064]`, non-empty `topk_last_position`, and `errors: []`.
 - Updated `dream7b-bpu-deployment-acceptance-probe` to include `text_queue_systemd`.
 - Verified text-queue-aware deployment acceptance report at `/mnt/nas/openclaw/reports/models/dream7b_bpu_deployment_acceptance_20260606-134314/deployment_acceptance_probe.md` with `check_count: 10`, `passed_check_count: 10`, and `text_queue_systemd.ok: True`.
+- Added reusable `dream7b-bpu-text-queue-submit` for Dream 7B prompt tokenizer encoding and atomic NAS-backed queue submission.
+- Updated `dream7b-bpu-text-queue-systemd-probe` to call `dream7b-bpu-text-queue-submit` and preserve `text_queue_submit.json` in the same run directory.
+- Verified submit-aware text queue systemd report at `/mnt/nas/openclaw/reports/models/dream7b_bpu_text_queue_systemd_20260606-142516/text_queue_systemd_probe.md` with `submit_verdict: ok_dream7b_bpu_text_queue_submit`, `token_count: 16`, `final_shape: [1, 16, 152064]`, non-empty `topk_last_position`, and `errors: []`.
+- Updated `dream7b-bpu-deployment-acceptance-probe` to require `submit_cmd` and `submit_verdict` inside `text_queue_systemd`.
+- Verified submit-aware deployment acceptance report at `/mnt/nas/openclaw/reports/models/dream7b_bpu_deployment_acceptance_20260606-142559/deployment_acceptance_probe.md` with `check_count: 10`, `passed_check_count: 10`, `text_queue_systemd.details.submit_cmd: dream7b-bpu-text-queue-submit`, and `text_queue_systemd.details.submit_verdict: ok_dream7b_bpu_text_queue_submit`.
 
 ## TODO
 

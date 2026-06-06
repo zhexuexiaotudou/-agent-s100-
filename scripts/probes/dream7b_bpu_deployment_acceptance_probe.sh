@@ -282,9 +282,20 @@ if text_queue is None:
     add_check("text_queue_systemd", text_queue_path, False, {"reason": "missing text_queue_systemd_probe.json"})
 else:
     tokenizer = text_queue.get("tokenizer") or {}
+    submit = text_queue.get("submit") or {}
     topk_last_position = text_queue.get("topk_last_position") or []
     ok = (
         text_queue.get("verdict") == "ok_dream7b_bpu_text_queue_systemd_probe"
+        and text_queue.get("submit_cmd") == "dream7b-bpu-text-queue-submit"
+        and text_queue.get("submit_verdict") == "ok_dream7b_bpu_text_queue_submit"
+        and submit.get("verdict") == "ok_dream7b_bpu_text_queue_submit"
+        and submit.get("job_name") == text_queue.get("job_name")
+        and submit.get("request_id") == text_queue.get("request_id")
+        and submit.get("queue_dir") == text_queue.get("queue_dir")
+        and submit.get("tokenizer_json") == text_queue.get("tokenizer_json")
+        and submit.get("seq_len") == 16
+        and submit.get("fit_mode") in ("exact", "truncate-left", "pad-right")
+        and not submit.get("errors")
         and text_queue.get("service_status_before") == "active"
         and text_queue.get("service_enabled_before") == "enabled"
         and text_queue.get("service_status_after") == "active"
@@ -319,6 +330,8 @@ else:
         ok,
         {
             "verdict": text_queue.get("verdict"),
+            "submit_cmd": text_queue.get("submit_cmd"),
+            "submit_verdict": text_queue.get("submit_verdict"),
             "job_status": text_queue.get("job_status"),
             "request_id": text_queue.get("request_id"),
             "tokenizer_dir": tokenizer.get("tokenizer_dir"),
