@@ -47,6 +47,7 @@ required_files=(
   "scripts/probes/dream7b_bpu_batch_queue_systemd_batch_probe.sh"
   "scripts/probes/dream7b_bpu_batch_queue_systemd_drain_probe.sh"
   "scripts/probes/dream7b_bpu_batch_queue_systemd_canary_probe.sh"
+  "scripts/probes/dream7b_bpu_text_queue_systemd_probe.sh"
   "scripts/probes/dream7b_bpu_batch_queue_systemd_telemetry_probe.sh"
   "scripts/probes/dream7b_bpu_batch_queue_retention_probe.sh"
   "scripts/probes/dream7b_bpu_deployment_acceptance_probe.sh"
@@ -58,6 +59,7 @@ required_readme_strings=(
   "docs/project_reference.md"
   "docs/documentation_audit_runbook.md"
   "scripts/probes/project_docs_consistency_probe.sh"
+  "dream7b_bpu_text_queue_systemd_probe.sh"
 )
 
 required_reference_strings=(
@@ -77,6 +79,7 @@ required_reference_strings=(
   "dream7b-bpu-batch-queue-systemd-batch-probe"
   "dream7b-bpu-batch-queue-systemd-drain-probe"
   "dream7b-bpu-batch-queue-systemd-canary-probe"
+  "dream7b-bpu-text-queue-systemd-probe"
   "dream7b-bpu-batch-queue-systemd-telemetry-probe"
   "dream7b-bpu-batch-queue-retention-probe"
   "dream7b-bpu-deployment-acceptance-probe"
@@ -116,6 +119,11 @@ required_reference_strings=(
   "DREAM7B_BPU_SYSTEMD_CANARY_REQUEST_COUNT"
   "DREAM7B_BPU_SYSTEMD_CANARY_TIMEOUT_SEC"
   "DREAM7B_BPU_SYSTEMD_CANARY_POLL_INTERVAL_SEC"
+  "DREAM7B_BPU_TEXT_QUEUE_PROMPT"
+  "DREAM7B_BPU_TEXT_QUEUE_FIT"
+  "DREAM7B_BPU_TEXT_QUEUE_SEQ_LEN"
+  "DREAM7B_BPU_TEXT_QUEUE_TIMEOUT_SEC"
+  "DREAM7B_BPU_TEXT_QUEUE_POLL_INTERVAL_SEC"
   "DREAM7B_BPU_SYSTEMD_TELEMETRY_JOB_COUNT"
   "DREAM7B_BPU_SYSTEMD_TELEMETRY_REQUEST_COUNT"
   "DREAM7B_BPU_SYSTEMD_TELEMETRY_TIMEOUT_SEC"
@@ -181,6 +189,7 @@ required_reference_strings=(
   "systemd_batch"
   "systemd_drain"
   "systemd_canary"
+  "text_queue_systemd"
   "systemd_telemetry"
   "long_repeat"
   "queue_retention"
@@ -251,6 +260,11 @@ required_reference_strings=(
   "/mnt/nas/openclaw/reports/models/dream7b_bpu_batch_queue_systemd_canary_20260605-151715/systemd_canary_probe.md"
   "/mnt/nas/openclaw/reports/models/dream7b_bpu_batch_queue_systemd_canary_20260605-151715/systemd_canary_probe.json"
   "/mnt/nas/openclaw/reports/models/dream7b_bpu_batch_queue_service_systemd/jobs/systemd_canary_20260605-151715/queue_summary.json"
+  "/mnt/nas/openclaw/reports/models/dream7b_bpu_text_queue_systemd_20260605-234555/text_queue_systemd_probe.md"
+  "/mnt/nas/openclaw/reports/models/dream7b_bpu_text_queue_systemd_20260605-234555/text_queue_systemd_probe.json"
+  "/mnt/nas/openclaw/reports/models/dream7b_bpu_text_queue_systemd_20260605-234555/tokenizer_input.json"
+  "/mnt/nas/openclaw/reports/models/dream7b_bpu_batch_queue_service_systemd/jobs/text_queue_systemd_20260605-234555/queue_summary.json"
+  "/mnt/nas/openclaw/reports/models/dream7b_bpu_batch_queue_service_systemd/jobs/text_queue_systemd_20260605-234555/durable_state/results.jsonl"
   "/mnt/nas/openclaw/reports/models/dream7b_bpu_batch_queue_systemd_telemetry_20260605-133919/systemd_telemetry_probe.md"
   "/mnt/nas/openclaw/reports/models/dream7b_bpu_batch_queue_systemd_telemetry_20260605-133919/systemd_telemetry_probe.json"
   "/mnt/nas/openclaw/reports/models/dream7b_bpu_batch_queue_service_systemd/jobs/systemd_telemetry_20260605-133919_001/queue_summary.json"
@@ -774,6 +788,36 @@ if [[ -f scripts/probes/dream7b_bpu_batch_queue_systemd_canary_probe.sh ]]; then
   done
 fi
 
+if [[ -f scripts/probes/dream7b_bpu_text_queue_systemd_probe.sh ]]; then
+  for text in \
+    "DREAM7B_TOKENIZER_VENV" \
+    "DREAM7B_TOKENIZER" \
+    "DREAM7B_BPU_TEXT_QUEUE_PROMPT" \
+    "DREAM7B_BPU_TEXT_QUEUE_FIT" \
+    "DREAM7B_BPU_TEXT_QUEUE_SEQ_LEN" \
+    "DREAM7B_BPU_TEXT_QUEUE_TIMEOUT_SEC" \
+    "DREAM7B_BPU_TEXT_QUEUE_POLL_INTERVAL_SEC" \
+    "text_queue_systemd_probe.json" \
+    "text_queue_systemd_probe.md" \
+    "tokenizer_input.json" \
+    "ok_dream7b_bpu_text_queue_systemd_probe" \
+    "dream7b-bpu-batch-queue.service" \
+    "/mnt/nas/openclaw/queues/dream7b-bpu" \
+    "/mnt/nas/openclaw/reports/models/dream7b_bpu_batch_queue_service_systemd" \
+    "/run/lock/dream7b_bpu_batch_queue_runner.lock" \
+    "--max-batch-size 16" \
+    "--top-k 3" \
+    "--drain-all" \
+    "topk_last_position" \
+    "durable_results_jsonl" \
+    "pair_window_batch" \
+    "window-batch"; do
+    if ! grep -F -- "$text" scripts/probes/dream7b_bpu_text_queue_systemd_probe.sh >/dev/null; then
+      errors+=("dream7b_bpu_text_queue_systemd_probe.sh missing $text")
+    fi
+  done
+fi
+
 if [[ -f scripts/probes/dream7b_bpu_deployment_acceptance_probe.sh ]]; then
   if ! grep -F -- "DREAM7B_BPU_ACCEPTANCE_MIN_BATCH_CAPACITY" scripts/probes/dream7b_bpu_deployment_acceptance_probe.sh >/dev/null; then
     errors+=("dream7b_bpu_deployment_acceptance_probe.sh missing DREAM7B_BPU_ACCEPTANCE_MIN_BATCH_CAPACITY")
@@ -812,6 +856,7 @@ if [[ -f scripts/probes/dream7b_bpu_deployment_acceptance_probe.sh ]]; then
     "dream7b_bpu_batch_queue_systemd_batch_*/systemd_batch_probe.json" \
     "dream7b_bpu_batch_queue_systemd_drain_*/systemd_drain_probe.json" \
     "dream7b_bpu_batch_queue_systemd_canary_*/systemd_canary_probe.json" \
+    "dream7b_bpu_text_queue_systemd_*/text_queue_systemd_probe.json" \
     "dream7b_bpu_batch_queue_systemd_telemetry_*/systemd_telemetry_probe.json" \
     "dream7b_bpu_fine_forward_long_repeat_*/long_repeat_probe.json" \
     "dream7b_bpu_batch_queue_retention_*/queue_retention_probe.json" \
@@ -821,6 +866,7 @@ if [[ -f scripts/probes/dream7b_bpu_deployment_acceptance_probe.sh ]]; then
     "systemd_batch" \
     "systemd_drain" \
     "systemd_canary" \
+    "text_queue_systemd" \
     "systemd_telemetry" \
     "long_repeat" \
     "max_long_repeat_wall_spread_ratio" \
@@ -831,7 +877,9 @@ if [[ -f scripts/probes/dream7b_bpu_deployment_acceptance_probe.sh ]]; then
     "ok_dream7b_bpu_deployment_acceptance_probe" \
     "passed_check_count" \
     "check_count" \
-    "max_bpu_loading"; do
+    "max_bpu_loading" \
+    "topk_last_position" \
+    "tokenizer_dir"; do
     if ! grep -F -- "$text" scripts/probes/dream7b_bpu_deployment_acceptance_probe.sh >/dev/null; then
       errors+=("dream7b_bpu_deployment_acceptance_probe.sh missing $text")
     fi

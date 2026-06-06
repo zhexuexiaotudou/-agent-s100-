@@ -277,6 +277,60 @@ else:
         },
     )
 
+text_queue_path, text_queue = latest_json("dream7b_bpu_text_queue_systemd_*/text_queue_systemd_probe.json")
+if text_queue is None:
+    add_check("text_queue_systemd", text_queue_path, False, {"reason": "missing text_queue_systemd_probe.json"})
+else:
+    tokenizer = text_queue.get("tokenizer") or {}
+    topk_last_position = text_queue.get("topk_last_position") or []
+    ok = (
+        text_queue.get("verdict") == "ok_dream7b_bpu_text_queue_systemd_probe"
+        and text_queue.get("service_status_before") == "active"
+        and text_queue.get("service_enabled_before") == "enabled"
+        and text_queue.get("service_status_after") == "active"
+        and text_queue.get("service_enabled_after") == "enabled"
+        and text_queue.get("job_status") == "done"
+        and text_queue.get("processed_count") == 1
+        and text_queue.get("accepted_count") == 1
+        and text_queue.get("deferred_count") == 0
+        and text_queue.get("skipped_count") == 0
+        and text_queue.get("batch_run_count") == 1
+        and text_queue.get("batch_count") == 1
+        and text_queue.get("result_count") == 1
+        and text_queue.get("execution_mode") == "pair_window_batch"
+        and text_queue.get("window_execution_mode") == "window-batch"
+        and text_queue.get("child_process_count") == 0
+        and text_queue.get("bpu_lock_path") == "/run/lock/dream7b_bpu_batch_queue_runner.lock"
+        and text_queue.get("final_shape") == [1, 16, 152064]
+        and len(topk_last_position) > 0
+        and bool(text_queue.get("durable_results_jsonl"))
+        and float(text_queue.get("total_wall_ms") or 0.0) > 0.0
+        and float(text_queue.get("amortized_wall_ms_per_processed_request") or 0.0) > 0.0
+        and tokenizer.get("tokenizer_dir") == "/mnt/nas/openclaw/models/dream7b/tokenizer"
+        and tokenizer.get("fit_mode") in ("exact", "truncate-left", "pad-right")
+        and tokenizer.get("seq_len") == 16
+        and int(tokenizer.get("original_token_count") or 0) > 0
+        and tokenizer.get("token_count") == 16
+        and not text_queue.get("errors")
+    )
+    add_check(
+        "text_queue_systemd",
+        text_queue_path,
+        ok,
+        {
+            "verdict": text_queue.get("verdict"),
+            "job_status": text_queue.get("job_status"),
+            "request_id": text_queue.get("request_id"),
+            "tokenizer_dir": tokenizer.get("tokenizer_dir"),
+            "fit_mode": tokenizer.get("fit_mode"),
+            "original_token_count": tokenizer.get("original_token_count"),
+            "token_count": tokenizer.get("token_count"),
+            "final_shape": text_queue.get("final_shape"),
+            "topk_last_position": topk_last_position,
+            "amortized_wall_ms_per_processed_request": text_queue.get("amortized_wall_ms_per_processed_request"),
+        },
+    )
+
 systemd_telemetry_path, systemd_telemetry = latest_json("dream7b_bpu_batch_queue_systemd_telemetry_*/systemd_telemetry_probe.json")
 if systemd_telemetry is None:
     add_check("systemd_telemetry", systemd_telemetry_path, False, {"reason": "missing systemd_telemetry_probe.json"})
