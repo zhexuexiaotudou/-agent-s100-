@@ -277,6 +277,66 @@ else:
         },
     )
 
+text_queue_run_path, text_queue_run = latest_json("dream7b_bpu_text_queue_run_*/text_queue_run.json")
+if text_queue_run is None:
+    add_check("text_queue_run", text_queue_run_path, False, {"reason": "missing text_queue_run.json"})
+else:
+    tokenizer = text_queue_run.get("tokenizer") or {}
+    submit = text_queue_run.get("submit") or {}
+    topk_last_position = text_queue_run.get("topk_last_position") or []
+    ok = (
+        text_queue_run.get("verdict") == "ok_dream7b_bpu_text_queue_run"
+        and text_queue_run.get("submit_cmd") == "dream7b-bpu-text-queue-submit"
+        and text_queue_run.get("submit_verdict") == "ok_dream7b_bpu_text_queue_submit"
+        and submit.get("verdict") == "ok_dream7b_bpu_text_queue_submit"
+        and submit.get("job_name") == text_queue_run.get("job_name")
+        and submit.get("request_id") == text_queue_run.get("request_id")
+        and submit.get("queue_dir") == text_queue_run.get("queue_dir")
+        and submit.get("tokenizer_json") == text_queue_run.get("tokenizer_json")
+        and text_queue_run.get("job_status") == "done"
+        and text_queue_run.get("processed_count") == 1
+        and text_queue_run.get("accepted_count") == 1
+        and text_queue_run.get("deferred_count") == 0
+        and text_queue_run.get("skipped_count") == 0
+        and text_queue_run.get("batch_run_count") == 1
+        and text_queue_run.get("batch_count") == 1
+        and text_queue_run.get("result_count") == 1
+        and text_queue_run.get("execution_mode") == "pair_window_batch"
+        and text_queue_run.get("window_execution_mode") == "window-batch"
+        and text_queue_run.get("child_process_count") == 0
+        and text_queue_run.get("bpu_lock_path") == "/run/lock/dream7b_bpu_batch_queue_runner.lock"
+        and text_queue_run.get("final_shape") == [1, 16, 152064]
+        and len(topk_last_position) > 0
+        and bool(text_queue_run.get("durable_results_jsonl"))
+        and float(text_queue_run.get("total_wall_ms") or 0.0) > 0.0
+        and float(text_queue_run.get("amortized_wall_ms_per_processed_request") or 0.0) > 0.0
+        and tokenizer.get("tokenizer_dir") == "/mnt/nas/openclaw/models/dream7b/tokenizer"
+        and tokenizer.get("fit_mode") in ("exact", "truncate-left", "pad-right")
+        and tokenizer.get("seq_len") == 16
+        and int(tokenizer.get("original_token_count") or 0) > 0
+        and tokenizer.get("token_count") == 16
+        and not text_queue_run.get("errors")
+    )
+    add_check(
+        "text_queue_run",
+        text_queue_run_path,
+        ok,
+        {
+            "verdict": text_queue_run.get("verdict"),
+            "submit_cmd": text_queue_run.get("submit_cmd"),
+            "submit_verdict": text_queue_run.get("submit_verdict"),
+            "job_status": text_queue_run.get("job_status"),
+            "request_id": text_queue_run.get("request_id"),
+            "tokenizer_dir": tokenizer.get("tokenizer_dir"),
+            "fit_mode": tokenizer.get("fit_mode"),
+            "original_token_count": tokenizer.get("original_token_count"),
+            "token_count": tokenizer.get("token_count"),
+            "final_shape": text_queue_run.get("final_shape"),
+            "topk_last_position": topk_last_position,
+            "amortized_wall_ms_per_processed_request": text_queue_run.get("amortized_wall_ms_per_processed_request"),
+        },
+    )
+
 text_queue_path, text_queue = latest_json("dream7b_bpu_text_queue_systemd_*/text_queue_systemd_probe.json")
 if text_queue is None:
     add_check("text_queue_systemd", text_queue_path, False, {"reason": "missing text_queue_systemd_probe.json"})
@@ -286,6 +346,8 @@ else:
     topk_last_position = text_queue.get("topk_last_position") or []
     ok = (
         text_queue.get("verdict") == "ok_dream7b_bpu_text_queue_systemd_probe"
+        and text_queue.get("run_cmd") == "dream7b-bpu-text-queue-run"
+        and text_queue.get("run_verdict") == "ok_dream7b_bpu_text_queue_run"
         and text_queue.get("submit_cmd") == "dream7b-bpu-text-queue-submit"
         and text_queue.get("submit_verdict") == "ok_dream7b_bpu_text_queue_submit"
         and submit.get("verdict") == "ok_dream7b_bpu_text_queue_submit"
@@ -330,6 +392,8 @@ else:
         ok,
         {
             "verdict": text_queue.get("verdict"),
+            "run_cmd": text_queue.get("run_cmd"),
+            "run_verdict": text_queue.get("run_verdict"),
             "submit_cmd": text_queue.get("submit_cmd"),
             "submit_verdict": text_queue.get("submit_verdict"),
             "job_status": text_queue.get("job_status"),
