@@ -52,6 +52,7 @@ required_files=(
   "scripts/probes/dream7b_bpu_batch_queue_systemd_canary_probe.sh"
   "scripts/probes/dream7b_bpu_text_queue_systemd_probe.sh"
   "scripts/probes/dream7b_bpu_batch_queue_systemd_telemetry_probe.sh"
+  "scripts/probes/dream7b_bpu_diffusion_generate_telemetry_probe.sh"
   "scripts/probes/dream7b_bpu_batch_queue_retention_probe.sh"
   "scripts/probes/dream7b_bpu_deployment_acceptance_probe.sh"
   "scripts/startup_link_check/link-check.config.json"
@@ -65,6 +66,7 @@ required_readme_strings=(
   "scripts/dream7b-bpu-text-queue-submit.sh"
   "scripts/dream7b-bpu-text-queue-run.sh"
   "scripts/dream7b-bpu-diffusion-generate.sh"
+  "scripts/probes/dream7b_bpu_diffusion_generate_telemetry_probe.sh"
   "dream7b_bpu_text_queue_systemd_probe.sh"
 )
 
@@ -90,6 +92,7 @@ required_reference_strings=(
   "dream7b-bpu-diffusion-generate"
   "dream7b-bpu-text-queue-systemd-probe"
   "dream7b-bpu-batch-queue-systemd-telemetry-probe"
+  "dream7b-bpu-diffusion-generate-telemetry-probe"
   "dream7b-bpu-batch-queue-retention-probe"
   "dream7b-bpu-deployment-acceptance-probe"
   "dream7b-bpu-batch-queue.service"
@@ -147,6 +150,11 @@ required_reference_strings=(
   "DREAM7B_BPU_SYSTEMD_TELEMETRY_POLL_INTERVAL_SEC"
   "DREAM7B_BPU_SYSTEMD_TELEMETRY_MONITOR_DELAY_MS"
   "DREAM7B_BPU_SYSTEMD_TELEMETRY_MONITOR_SAMPLE_COUNT"
+  "DREAM7B_BPU_DIFFUSION_GENERATE_TELEMETRY_PROMPT"
+  "DREAM7B_BPU_DIFFUSION_GENERATE_TELEMETRY_CMD"
+  "DREAM7B_BPU_DIFFUSION_GENERATE_TELEMETRY_MONITOR_DELAY_MS"
+  "DREAM7B_BPU_DIFFUSION_GENERATE_TELEMETRY_MONITOR_SAMPLE_COUNT"
+  "DREAM7B_BPU_DIFFUSION_GENERATE_TELEMETRY_TIMEOUT_SEC"
   "DREAM7B_BPU_QUEUE_RETENTION_DONE_DAYS"
   "DREAM7B_BPU_QUEUE_RETENTION_FAILED_DAYS"
   "DREAM7B_BPU_QUEUE_RETENTION_PENDING_STALE_MINUTES"
@@ -209,7 +217,11 @@ required_reference_strings=(
   "text_queue_run"
   "text_queue_systemd"
   "diffusion_generate"
+  "diffusion_generate_telemetry"
   "ok_dream7b_bpu_diffusion_generate"
+  "ok_dream7b_bpu_diffusion_generate_telemetry_probe"
+  "generation_telemetry_probe.json"
+  "generation_telemetry_probe.md"
   "generation.json"
   "generation.md"
   "decoded_final"
@@ -759,6 +771,41 @@ if [[ -f scripts/probes/dream7b_bpu_batch_queue_systemd_telemetry_probe.sh ]]; t
   fi
 fi
 
+if [[ -f scripts/probes/dream7b_bpu_diffusion_generate_telemetry_probe.sh ]]; then
+  for text in \
+    "DREAM7B_BPU_DIFFUSION_GENERATE_TELEMETRY_PROMPT" \
+    "DREAM7B_BPU_DIFFUSION_GENERATE_TELEMETRY_CMD" \
+    "DREAM7B_BPU_DIFFUSION_GENERATE_TELEMETRY_MONITOR_DELAY_MS" \
+    "DREAM7B_BPU_DIFFUSION_GENERATE_TELEMETRY_MONITOR_SAMPLE_COUNT" \
+    "DREAM7B_BPU_DIFFUSION_GENERATE_TELEMETRY_TIMEOUT_SEC" \
+    "dream7b-bpu-diffusion-generate" \
+    "hrt_ucp_monitor" \
+    "--run-dir" \
+    "--prompt" \
+    "generation_telemetry_probe.json" \
+    "generation_telemetry_probe.md" \
+    "ok_dream7b_bpu_diffusion_generate_telemetry_probe" \
+    "ok_dream7b_bpu_diffusion_generate" \
+    "generation_metrics" \
+    "generation_status" \
+    "bpu_loading_sample_count" \
+    "nonzero_bpu_loading_sample_count" \
+    "max_bpu_loading" \
+    "avg_bpu_loading" \
+    "decoded_final" \
+    "remaining_mask_positions" \
+    "forward_verdict" \
+    "forward_execution_mode" \
+    "forward_window_execution_mode" \
+    "forward_child_process_count" \
+    "forward_final_shape" \
+    "bounded_seq16_generation_entrypoint_not_complete_production_text_service"; do
+    if ! grep -F -- "$text" scripts/probes/dream7b_bpu_diffusion_generate_telemetry_probe.sh >/dev/null; then
+      errors+=("dream7b_bpu_diffusion_generate_telemetry_probe.sh missing $text")
+    fi
+  done
+fi
+
 if [[ -f scripts/probes/dream7b_bpu_batch_queue_retention_probe.sh ]]; then
   if ! grep -F -- "DREAM7B_BPU_QUEUE_RETENTION_DONE_DAYS" scripts/probes/dream7b_bpu_batch_queue_retention_probe.sh >/dev/null; then
     errors+=("dream7b_bpu_batch_queue_retention_probe.sh missing DREAM7B_BPU_QUEUE_RETENTION_DONE_DAYS")
@@ -1032,6 +1079,7 @@ if [[ -f scripts/probes/dream7b_bpu_deployment_acceptance_probe.sh ]]; then
     "dream7b_bpu_text_queue_run_*/text_queue_run.json" \
     "dream7b_bpu_text_queue_systemd_*/text_queue_systemd_probe.json" \
     "dream7b_bpu_diffusion_generate_*/generation.json" \
+    "dream7b_bpu_diffusion_generate_telemetry_*/generation_telemetry_probe.json" \
     "dream7b_bpu_batch_queue_systemd_telemetry_*/systemd_telemetry_probe.json" \
     "dream7b_bpu_fine_forward_long_repeat_*/long_repeat_probe.json" \
     "dream7b_bpu_batch_queue_retention_*/queue_retention_probe.json" \
@@ -1044,7 +1092,12 @@ if [[ -f scripts/probes/dream7b_bpu_deployment_acceptance_probe.sh ]]; then
     "text_queue_run" \
     "text_queue_systemd" \
     "diffusion_generate" \
+    "diffusion_generate_telemetry" \
     "ok_dream7b_bpu_diffusion_generate" \
+    "ok_dream7b_bpu_diffusion_generate_telemetry_probe" \
+    "generation_metrics" \
+    "generation_status" \
+    "generate_cmd" \
     "decoded_final" \
     "remaining_mask_positions" \
     "forward_verdict" \

@@ -454,6 +454,52 @@ else:
         },
     )
 
+diffusion_generate_telemetry_path, diffusion_generate_telemetry = latest_json("dream7b_bpu_diffusion_generate_telemetry_*/generation_telemetry_probe.json")
+if diffusion_generate_telemetry is None:
+    add_check("diffusion_generate_telemetry", diffusion_generate_telemetry_path, False, {"reason": "missing generation_telemetry_probe.json"})
+else:
+    metrics = diffusion_generate_telemetry.get("generation_metrics") or {}
+    ok = (
+        diffusion_generate_telemetry.get("verdict") == "ok_dream7b_bpu_diffusion_generate_telemetry_probe"
+        and diffusion_generate_telemetry.get("generate_cmd") == "dream7b-bpu-diffusion-generate"
+        and diffusion_generate_telemetry.get("generation_status") == 0
+        and float(diffusion_generate_telemetry.get("max_bpu_loading") or 0.0) > 0.0
+        and int(diffusion_generate_telemetry.get("nonzero_bpu_loading_sample_count") or 0) > 0
+        and metrics.get("verdict") == "ok_dream7b_bpu_diffusion_generate"
+        and metrics.get("forward_cmd") == "dream7b-bpu-fine-forward"
+        and metrics.get("seq_len") == 16
+        and int(metrics.get("executed_step_count") or 0) >= 1
+        and metrics.get("remaining_mask_positions") == []
+        and bool(metrics.get("decoded_final"))
+        and metrics.get("boundary") == "bounded_seq16_generation_entrypoint_not_complete_production_text_service"
+        and all(item == "ok_dream7b_segmented_hbm_python_forward" for item in (metrics.get("history_forward_verdicts") or []))
+        and all(item == "pair_in_process" for item in (metrics.get("history_forward_execution_modes") or []))
+        and all(item == "in-process" for item in (metrics.get("history_forward_window_execution_modes") or []))
+        and all(item == 0 for item in (metrics.get("history_forward_child_process_counts") or []))
+        and all(item == [1, 16, 152064] for item in (metrics.get("history_forward_final_shapes") or []))
+        and not diffusion_generate_telemetry.get("errors")
+    )
+    add_check(
+        "diffusion_generate_telemetry",
+        diffusion_generate_telemetry_path,
+        ok,
+        {
+            "verdict": diffusion_generate_telemetry.get("verdict"),
+            "generate_cmd": diffusion_generate_telemetry.get("generate_cmd"),
+            "generation_status": diffusion_generate_telemetry.get("generation_status"),
+            "max_bpu_loading": diffusion_generate_telemetry.get("max_bpu_loading"),
+            "avg_bpu_loading": diffusion_generate_telemetry.get("avg_bpu_loading"),
+            "nonzero_bpu_loading_sample_count": diffusion_generate_telemetry.get("nonzero_bpu_loading_sample_count"),
+            "generation_verdict": metrics.get("verdict"),
+            "forward_cmd": metrics.get("forward_cmd"),
+            "seq_len": metrics.get("seq_len"),
+            "executed_step_count": metrics.get("executed_step_count"),
+            "remaining_mask_positions": metrics.get("remaining_mask_positions"),
+            "decoded_final": metrics.get("decoded_final"),
+            "boundary": metrics.get("boundary"),
+        },
+    )
+
 systemd_telemetry_path, systemd_telemetry = latest_json("dream7b_bpu_batch_queue_systemd_telemetry_*/systemd_telemetry_probe.json")
 if systemd_telemetry is None:
     add_check("systemd_telemetry", systemd_telemetry_path, False, {"reason": "missing systemd_telemetry_probe.json"})

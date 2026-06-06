@@ -1702,6 +1702,8 @@ dream7b_bpu_batch_queue_systemd_drain_*/systemd_drain_probe.json
 dream7b_bpu_batch_queue_systemd_canary_*/systemd_canary_probe.json
 dream7b_bpu_text_queue_run_*/text_queue_run.json
 dream7b_bpu_text_queue_systemd_*/text_queue_systemd_probe.json
+dream7b_bpu_diffusion_generate_*/generation.json
+dream7b_bpu_diffusion_generate_telemetry_*/generation_telemetry_probe.json
 dream7b_bpu_batch_queue_systemd_telemetry_*/systemd_telemetry_probe.json
 dream7b_bpu_fine_forward_long_repeat_*/long_repeat_probe.json
 dream7b_bpu_batch_queue_retention_*/queue_retention_probe.json
@@ -1718,6 +1720,8 @@ systemd_drain
 systemd_canary
 text_queue_run
 text_queue_systemd
+diffusion_generate
+diffusion_generate_telemetry
 systemd_telemetry
 long_repeat
 queue_retention
@@ -1754,6 +1758,7 @@ Latest recorded report:
 /mnt/nas/openclaw/reports/models/dream7b_bpu_deployment_acceptance_20260606-144721/deployment_acceptance_probe.md
 /mnt/nas/openclaw/reports/models/dream7b_bpu_deployment_acceptance_20260606-155233/deployment_acceptance_probe.md
 /mnt/nas/openclaw/reports/models/dream7b_bpu_deployment_acceptance_20260606-161252/deployment_acceptance_probe.md
+/mnt/nas/openclaw/reports/models/dream7b_bpu_deployment_acceptance_20260606-165607/deployment_acceptance_probe.md
 ```
 
 Latest recorded JSON:
@@ -1768,14 +1773,15 @@ Latest recorded JSON:
 /mnt/nas/openclaw/reports/models/dream7b_bpu_deployment_acceptance_20260606-144721/deployment_acceptance_probe.json
 /mnt/nas/openclaw/reports/models/dream7b_bpu_deployment_acceptance_20260606-155233/deployment_acceptance_probe.json
 /mnt/nas/openclaw/reports/models/dream7b_bpu_deployment_acceptance_20260606-161252/deployment_acceptance_probe.json
+/mnt/nas/openclaw/reports/models/dream7b_bpu_deployment_acceptance_20260606-165607/deployment_acceptance_probe.json
 ```
 
 Verified deployment acceptance fields copied from `deployment_acceptance_probe.json`:
 
 ```text
 verdict: ok_dream7b_bpu_deployment_acceptance_probe
-check_count: 12
-passed_check_count: 12
+check_count: 13
+passed_check_count: 13
 min_batch_capacity: 16
 min_systemd_batch_requests: 16
 min_systemd_telemetry_requests: 48
@@ -1792,6 +1798,7 @@ systemd_canary.ok: True
 text_queue_run.ok: True
 text_queue_systemd.ok: True
 diffusion_generate.ok: True
+diffusion_generate_telemetry.ok: True
 systemd_telemetry.ok: True
 long_repeat.ok: True
 queue_retention.ok: True
@@ -1832,6 +1839,23 @@ hello<|im_end|>
 <|im_start|>assistant
 osaosa and and and and and
 diffusion_generate.details.boundary: bounded_seq16_generation_entrypoint_not_complete_production_text_service
+diffusion_generate_telemetry.path: /mnt/nas/openclaw/reports/models/dream7b_bpu_diffusion_generate_telemetry_20260606-163625/generation_telemetry_probe.json
+diffusion_generate_telemetry.details.verdict: ok_dream7b_bpu_diffusion_generate_telemetry_probe
+diffusion_generate_telemetry.details.generate_cmd: dream7b-bpu-diffusion-generate
+diffusion_generate_telemetry.details.generation_status: 0
+diffusion_generate_telemetry.details.max_bpu_loading: 38.0
+diffusion_generate_telemetry.details.avg_bpu_loading: 0.637
+diffusion_generate_telemetry.details.nonzero_bpu_loading_sample_count: 14
+diffusion_generate_telemetry.details.generation_verdict: ok_dream7b_bpu_diffusion_generate
+diffusion_generate_telemetry.details.forward_cmd: dream7b-bpu-fine-forward
+diffusion_generate_telemetry.details.seq_len: 16
+diffusion_generate_telemetry.details.executed_step_count: 2
+diffusion_generate_telemetry.details.remaining_mask_positions: []
+diffusion_generate_telemetry.details.decoded_final: <|im_start|>user
+hello<|im_end|>
+<|im_start|>assistant
+osaosa and and and and and
+diffusion_generate_telemetry.details.boundary: bounded_seq16_generation_entrypoint_not_complete_production_text_service
 hbm_artifact_inventory.details.expected_artifact_count: 14
 hbm_artifact_inventory.details.nas_existing_count: 14
 hbm_artifact_inventory.details.local_existing_count: 14
@@ -1999,6 +2023,127 @@ history[1].forward_child_process_count: 0
 history[1].forward_final_shape: [1, 16, 152064]
 forward_summary_count: 2
 boundary: bounded_seq16_generation_entrypoint_not_complete_production_text_service
+errors: []
+```
+
+### `dream7b-bpu-diffusion-generate-telemetry-probe`
+
+Source file: `scripts/probes/dream7b_bpu_diffusion_generate_telemetry_probe.sh`
+
+Installed command on S100P:
+
+```text
+/usr/local/bin/dream7b-bpu-diffusion-generate-telemetry-probe
+```
+
+Default argument copied from the script:
+
+```text
+report_root = /mnt/nas/openclaw/reports/models
+```
+
+Environment variables copied from the script:
+
+```text
+DREAM7B_BPU_DIFFUSION_GENERATE_TELEMETRY_PROMPT
+DREAM7B_BPU_DIFFUSION_GENERATE_TELEMETRY_CMD
+DREAM7B_BPU_DIFFUSION_GENERATE_TELEMETRY_MONITOR_DELAY_MS
+DREAM7B_BPU_DIFFUSION_GENERATE_TELEMETRY_MONITOR_SAMPLE_COUNT
+DREAM7B_BPU_DIFFUSION_GENERATE_TELEMETRY_TIMEOUT_SEC
+```
+
+Default values copied from the script:
+
+```text
+prompt = hello
+generate_cmd = dream7b-bpu-diffusion-generate
+monitor_delay_ms = 100
+monitor_sample_count = 900
+timeout_sec = 900
+```
+
+Output files copied from the script:
+
+```text
+generation_telemetry_probe.json
+generation_telemetry_probe.md
+hrt_ucp_monitor.stdout
+hrt_ucp_monitor.stderr
+generation.stdout
+generation.stderr
+hrut_somstatus_before.txt
+hrut_somstatus_after.txt
+generation/generation.json
+generation/generation.md
+```
+
+Output fields copied from the script:
+
+```text
+generated_at
+verdict
+run_dir
+generation_dir
+prompt
+generate_cmd
+monitor_delay_ms
+monitor_sample_count
+timeout_sec
+generation_status
+generation_json
+generation_md
+bpu_loading_sample_count
+nonzero_bpu_loading_sample_count
+max_bpu_loading
+avg_bpu_loading
+generation_metrics
+errors
+```
+
+Latest recorded report:
+
+```text
+/mnt/nas/openclaw/reports/models/dream7b_bpu_diffusion_generate_telemetry_20260606-163625/generation_telemetry_probe.md
+```
+
+Latest recorded JSON:
+
+```text
+/mnt/nas/openclaw/reports/models/dream7b_bpu_diffusion_generate_telemetry_20260606-163625/generation_telemetry_probe.json
+```
+
+Verified generation telemetry fields copied from `generation_telemetry_probe.json`:
+
+```text
+verdict: ok_dream7b_bpu_diffusion_generate_telemetry_probe
+run_dir: /mnt/nas/openclaw/reports/models/dream7b_bpu_diffusion_generate_telemetry_20260606-163625
+generation_dir: /mnt/nas/openclaw/reports/models/dream7b_bpu_diffusion_generate_telemetry_20260606-163625/generation
+prompt: hello
+generate_cmd: dream7b-bpu-diffusion-generate
+monitor_delay_ms: 100
+monitor_sample_count: 900
+generation_status: 0
+generation_json: /mnt/nas/openclaw/reports/models/dream7b_bpu_diffusion_generate_telemetry_20260606-163625/generation/generation.json
+bpu_loading_sample_count: 509
+nonzero_bpu_loading_sample_count: 14
+max_bpu_loading: 38.0
+avg_bpu_loading: 0.637
+generation_metrics.verdict: ok_dream7b_bpu_diffusion_generate
+generation_metrics.forward_cmd: dream7b-bpu-fine-forward
+generation_metrics.seq_len: 16
+generation_metrics.steps: 2
+generation_metrics.executed_step_count: 2
+generation_metrics.remaining_mask_positions: []
+generation_metrics.decoded_final: <|im_start|>user
+hello<|im_end|>
+<|im_start|>assistant
+osaosa and and and and and
+generation_metrics.boundary: bounded_seq16_generation_entrypoint_not_complete_production_text_service
+generation_metrics.history_forward_verdicts: ['ok_dream7b_segmented_hbm_python_forward', 'ok_dream7b_segmented_hbm_python_forward']
+generation_metrics.history_forward_execution_modes: ['pair_in_process', 'pair_in_process']
+generation_metrics.history_forward_window_execution_modes: ['in-process', 'in-process']
+generation_metrics.history_forward_child_process_counts: [0, 0]
+generation_metrics.history_forward_final_shapes: [[1, 16, 152064], [1, 16, 152064]]
 errors: []
 ```
 
