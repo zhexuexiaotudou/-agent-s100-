@@ -776,6 +776,37 @@ else:
         },
     )
 
+held_pair_matrix_path, held_pair_matrix = latest_json("dream7b_bpu_held_pair_residency_matrix_*/held_pair_residency_matrix_probe.json")
+if held_pair_matrix is None:
+    add_check("held_pair_residency_matrix", held_pair_matrix_path, False, {"reason": "missing held_pair_residency_matrix_probe.json"})
+else:
+    ok = (
+        held_pair_matrix.get("verdict") == "ok_dream7b_bpu_held_pair_residency_matrix_probe"
+        and int(held_pair_matrix.get("pair_worker_count") or 0) == 5
+        and int(held_pair_matrix.get("ready_holder_pair_count") or 0) == 5
+        and int(held_pair_matrix.get("matrix_entry_count") or 0) == 20
+        and int(held_pair_matrix.get("failed_pair_edge_count") or 0) == 20
+        and int(held_pair_matrix.get("max_resident_pair_count_observed") or 0) == 1
+        and held_pair_matrix.get("next_optimization_target")
+        and not held_pair_matrix.get("errors")
+    )
+    add_check(
+        "held_pair_residency_matrix",
+        held_pair_matrix_path,
+        ok,
+        {
+            "verdict": held_pair_matrix.get("verdict"),
+            "pair_worker_count": held_pair_matrix.get("pair_worker_count"),
+            "ready_holder_pair_count": held_pair_matrix.get("ready_holder_pair_count"),
+            "ready_holder_pair_indexes": held_pair_matrix.get("ready_holder_pair_indexes"),
+            "matrix_entry_count": held_pair_matrix.get("matrix_entry_count"),
+            "successful_pair_edge_count": held_pair_matrix.get("successful_pair_edge_count"),
+            "failed_pair_edge_count": held_pair_matrix.get("failed_pair_edge_count"),
+            "max_resident_pair_count_observed": held_pair_matrix.get("max_resident_pair_count_observed"),
+            "next_optimization_target": held_pair_matrix.get("next_optimization_target"),
+        },
+    )
+
 payload = {
     "generated_at": datetime.now().astimezone().isoformat(),
     "verdict": "ok_dream7b_bpu_deployment_acceptance_probe" if not errors else "failed_dream7b_bpu_deployment_acceptance_probe",

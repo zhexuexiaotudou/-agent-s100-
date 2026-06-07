@@ -1900,6 +1900,114 @@ ready_records[1].exception: DNN Error (code: -400001, desc: Memory alloc failed,
 errors: []
 ```
 
+### `dream7b-bpu-held-pair-residency-matrix-probe`
+
+Source file: `scripts/probes/dream7b_bpu_held_pair_residency_matrix_probe.sh`
+
+Installed command on S100P:
+
+```text
+/usr/local/bin/dream7b-bpu-held-pair-residency-matrix-probe
+```
+
+Default argument copied from the script:
+
+```text
+report_root = /mnt/nas/openclaw/reports/models
+```
+
+Environment variables copied from the script:
+
+```text
+DREAM7B_BPU_HELD_PAIR_MATRIX_HOLDER_READY_TIMEOUT_SECONDS
+DREAM7B_BPU_HELD_PAIR_MATRIX_CANDIDATE_TIMEOUT_SECONDS
+```
+
+Default values copied from the script:
+
+```text
+holder_ready_timeout_seconds = 180
+candidate_timeout_seconds = 180
+```
+
+Output files copied from the script:
+
+```text
+held_pair_residency_matrix_probe.json
+held_pair_residency_matrix_probe.md
+```
+
+Pair workers copied from the script:
+
+```text
+pair_00: seg00_02, seg02_04
+pair_01: seg04_07, seg07_10
+pair_02: seg10_14, seg14_17
+pair_03: seg17_21, seg21_24
+pair_04: seg24_26, seg26_28
+```
+
+Output fields copied from the script:
+
+```text
+generated_at
+verdict
+run_dir
+base_hbm_dir
+fine_hbm_dir
+holder_ready_timeout_seconds
+candidate_timeout_seconds
+pair_worker_count
+ready_holder_pair_count
+ready_holder_pair_indexes
+matrix_entry_count
+successful_pair_edge_count
+failed_pair_edge_count
+successful_pair_edges
+failed_pair_edges
+max_resident_pair_count_observed
+next_optimization_target
+holder_records
+matrix_entries
+errors
+```
+
+Latest recorded report:
+
+```text
+/mnt/nas/openclaw/reports/models/dream7b_bpu_held_pair_residency_matrix_20260605-235813/held_pair_residency_matrix_probe.md
+```
+
+Latest recorded JSON:
+
+```text
+/mnt/nas/openclaw/reports/models/dream7b_bpu_held_pair_residency_matrix_20260605-235813/held_pair_residency_matrix_probe.json
+```
+
+Verified held-pair matrix fields copied from `held_pair_residency_matrix_probe.json`:
+
+```text
+verdict: ok_dream7b_bpu_held_pair_residency_matrix_probe
+pair_worker_count: 5
+ready_holder_pair_count: 5
+ready_holder_pair_indexes: [0, 1, 2, 3, 4]
+matrix_entry_count: 20
+successful_pair_edge_count: 0
+failed_pair_edge_count: 20
+successful_pair_edges: []
+failed_pair_edges: [[0, 1], [0, 2], [0, 3], [0, 4], [1, 0], [1, 2], [1, 3], [1, 4], [2, 0], [2, 1], [2, 3], [2, 4], [3, 0], [3, 1], [3, 2], [3, 4], [4, 0], [4, 1], [4, 2], [4, 3]]
+max_resident_pair_count_observed: 1
+next_optimization_target: persistent multi-pair residency is not supported by this fine split; reduce individual pair HBM size or pursue a different split
+holder_records[0].status: ready
+holder_records[1].status: ready
+holder_records[2].status: ready
+holder_records[3].status: ready
+holder_records[4].status: ready
+matrix_entries[0].exception_type: RuntimeError
+matrix_entries[0].exception: DNN Error (code: -400001, desc: Memory alloc failed, please check error log) hbDNN initialize from multiple .hbm files failed.
+errors: []
+```
+
 ### `dream7b-bpu-deployment-acceptance-probe`
 
 Source file: `scripts/probes/dream7b_bpu_deployment_acceptance_probe.sh`
@@ -1957,6 +2065,7 @@ dream7b_bpu_diffusion_batch_generate_telemetry_*/batch_generation_telemetry_prob
 dream7b_bpu_diffusion_batch_generate_sustained_*/batch_generation_sustained_probe.json
 dream7b_bpu_utilization_gap_*/utilization_gap_probe.json
 dream7b_bpu_persistent_pair_cache_*/persistent_pair_cache_probe.json
+dream7b_bpu_held_pair_residency_matrix_*/held_pair_residency_matrix_probe.json
 dream7b_bpu_batch_queue_systemd_telemetry_*/systemd_telemetry_probe.json
 dream7b_bpu_fine_forward_long_repeat_*/long_repeat_probe.json
 dream7b_bpu_batch_queue_retention_*/queue_retention_probe.json
@@ -1979,6 +2088,7 @@ diffusion_batch_generate_telemetry
 diffusion_batch_generate_sustained
 utilization_gap
 persistent_pair_cache
+held_pair_residency_matrix
 systemd_telemetry
 long_repeat
 queue_retention
@@ -2023,6 +2133,7 @@ Latest recorded report:
 /mnt/nas/openclaw/reports/models/dream7b_bpu_deployment_acceptance_20260606-205153/deployment_acceptance_probe.md
 /mnt/nas/openclaw/reports/models/dream7b_bpu_deployment_acceptance_20260606-212134/deployment_acceptance_probe.md
 /mnt/nas/openclaw/reports/models/dream7b_bpu_deployment_acceptance_20260605-234654/deployment_acceptance_probe.md
+/mnt/nas/openclaw/reports/models/dream7b_bpu_deployment_acceptance_20260606-000234/deployment_acceptance_probe.md
 ```
 
 Latest recorded JSON:
@@ -2043,14 +2154,15 @@ Latest recorded JSON:
 /mnt/nas/openclaw/reports/models/dream7b_bpu_deployment_acceptance_20260606-205153/deployment_acceptance_probe.json
 /mnt/nas/openclaw/reports/models/dream7b_bpu_deployment_acceptance_20260606-212134/deployment_acceptance_probe.json
 /mnt/nas/openclaw/reports/models/dream7b_bpu_deployment_acceptance_20260605-234654/deployment_acceptance_probe.json
+/mnt/nas/openclaw/reports/models/dream7b_bpu_deployment_acceptance_20260606-000234/deployment_acceptance_probe.json
 ```
 
 Verified deployment acceptance fields copied from `deployment_acceptance_probe.json`:
 
 ```text
 verdict: ok_dream7b_bpu_deployment_acceptance_probe
-check_count: 17
-passed_check_count: 17
+check_count: 18
+passed_check_count: 18
 min_batch_capacity: 16
 min_systemd_batch_requests: 16
 min_systemd_telemetry_requests: 48
@@ -2074,6 +2186,7 @@ diffusion_batch_generate_telemetry.ok: True
 diffusion_batch_generate_sustained.ok: True
 utilization_gap.ok: True
 persistent_pair_cache.ok: True
+held_pair_residency_matrix.ok: True
 systemd_telemetry.ok: True
 long_repeat.ok: True
 queue_retention.ok: True
@@ -2186,6 +2299,16 @@ persistent_pair_cache.details.failed_pair_indexes: [1]
 persistent_pair_cache.details.launch_stopped_reason: pair_01_seg04_07__seg07_10 did not reach ready status
 persistent_pair_cache.details.all_pair_workers_ready: False
 persistent_pair_cache.details.next_optimization_target: do not implement all-pair persistent cache yet; use this failure boundary to guide a different split or runtime-residency strategy
+held_pair_residency_matrix.path: /mnt/nas/openclaw/reports/models/dream7b_bpu_held_pair_residency_matrix_20260605-235813/held_pair_residency_matrix_probe.json
+held_pair_residency_matrix.details.verdict: ok_dream7b_bpu_held_pair_residency_matrix_probe
+held_pair_residency_matrix.details.pair_worker_count: 5
+held_pair_residency_matrix.details.ready_holder_pair_count: 5
+held_pair_residency_matrix.details.ready_holder_pair_indexes: [0, 1, 2, 3, 4]
+held_pair_residency_matrix.details.matrix_entry_count: 20
+held_pair_residency_matrix.details.successful_pair_edge_count: 0
+held_pair_residency_matrix.details.failed_pair_edge_count: 20
+held_pair_residency_matrix.details.max_resident_pair_count_observed: 1
+held_pair_residency_matrix.details.next_optimization_target: persistent multi-pair residency is not supported by this fine split; reduce individual pair HBM size or pursue a different split
 hbm_artifact_inventory.details.expected_artifact_count: 14
 hbm_artifact_inventory.details.nas_existing_count: 14
 hbm_artifact_inventory.details.local_existing_count: 14
@@ -3923,6 +4046,10 @@ docs/baseline_progress_2026-06-03_dream7b_segmented_bpu_hbm.md
 - Verified persistent pair cache report at `/mnt/nas/openclaw/reports/models/dream7b_bpu_persistent_pair_cache_20260605-234349/persistent_pair_cache_probe.md` with `pair_worker_count: 5`, `launched_pair_worker_count: 2`, `ready_pair_worker_count: 1`, `all_pair_workers_ready: False`, and `launch_stopped_reason: pair_01_seg04_07__seg07_10 did not reach ready status`.
 - Updated `dream7b-bpu-deployment-acceptance-probe` to include `persistent_pair_cache`.
 - Verified persistent-pair-cache-aware deployment acceptance report at `/mnt/nas/openclaw/reports/models/dream7b_bpu_deployment_acceptance_20260605-234654/deployment_acceptance_probe.md` with `check_count: 17`, `passed_check_count: 17`, and `persistent_pair_cache.ok: True`.
+- Added `dream7b-bpu-held-pair-residency-matrix-probe` for testing every held-pair/candidate-pair coexistence edge across the current five fine pair windows.
+- Verified held-pair residency matrix report at `/mnt/nas/openclaw/reports/models/dream7b_bpu_held_pair_residency_matrix_20260605-235813/held_pair_residency_matrix_probe.md` with `ready_holder_pair_count: 5`, `matrix_entry_count: 20`, `successful_pair_edge_count: 0`, `failed_pair_edge_count: 20`, and `max_resident_pair_count_observed: 1`.
+- Updated `dream7b-bpu-deployment-acceptance-probe` to include `held_pair_residency_matrix`.
+- Verified held-pair-matrix-aware deployment acceptance report at `/mnt/nas/openclaw/reports/models/dream7b_bpu_deployment_acceptance_20260606-000234/deployment_acceptance_probe.md` with `check_count: 18`, `passed_check_count: 18`, and `held_pair_residency_matrix.ok: True`.
 
 ## TODO
 
