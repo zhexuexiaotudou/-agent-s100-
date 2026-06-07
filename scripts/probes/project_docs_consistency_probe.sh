@@ -57,6 +57,7 @@ required_files=(
   "scripts/probes/dream7b_bpu_diffusion_batch_generate_telemetry_probe.sh"
   "scripts/probes/dream7b_bpu_diffusion_batch_generate_sustained_probe.sh"
   "scripts/probes/dream7b_bpu_utilization_gap_probe.sh"
+  "scripts/probes/dream7b_bpu_persistent_pair_cache_probe.sh"
   "scripts/probes/dream7b_bpu_batch_queue_retention_probe.sh"
   "scripts/probes/dream7b_bpu_deployment_acceptance_probe.sh"
   "scripts/startup_link_check/link-check.config.json"
@@ -75,6 +76,7 @@ required_readme_strings=(
   "scripts/probes/dream7b_bpu_diffusion_batch_generate_telemetry_probe.sh"
   "scripts/probes/dream7b_bpu_diffusion_batch_generate_sustained_probe.sh"
   "scripts/probes/dream7b_bpu_utilization_gap_probe.sh"
+  "scripts/probes/dream7b_bpu_persistent_pair_cache_probe.sh"
   "dream7b_bpu_text_queue_systemd_probe.sh"
 )
 
@@ -105,6 +107,7 @@ required_reference_strings=(
   "dream7b-bpu-diffusion-batch-generate-telemetry-probe"
   "dream7b-bpu-diffusion-batch-generate-sustained-probe"
   "dream7b-bpu-utilization-gap-probe"
+  "dream7b-bpu-persistent-pair-cache-probe"
   "dream7b-bpu-batch-queue-retention-probe"
   "dream7b-bpu-deployment-acceptance-probe"
   "dream7b-bpu-batch-queue.service"
@@ -194,6 +197,9 @@ required_reference_strings=(
   "DREAM7B_BPU_UTILIZATION_GAP_MIN_BATCH_COUNT"
   "DREAM7B_BPU_UTILIZATION_GAP_MIN_SUSTAINED_ROUND_COUNT"
   "DREAM7B_BPU_UTILIZATION_GAP_MIN_SUSTAINED_TOTAL_ITEMS"
+  "DREAM7B_BPU_PERSISTENT_PAIR_CACHE_WORKER_HOLD_SECONDS"
+  "DREAM7B_BPU_PERSISTENT_PAIR_CACHE_READY_TIMEOUT_SECONDS"
+  "DREAM7B_BPU_PERSISTENT_PAIR_CACHE_START_DELAY_SECONDS"
   "DREAM7B_BPU_QUEUE_RETENTION_DONE_DAYS"
   "DREAM7B_BPU_QUEUE_RETENTION_FAILED_DAYS"
   "DREAM7B_BPU_QUEUE_RETENTION_PENDING_STALE_MINUTES"
@@ -239,6 +245,14 @@ required_reference_strings=(
   "max_observed_bpu_loading"
   "avg_observed_bpu_loading_across_reports"
   "batch_scaling_reference"
+  "persistent_pair_cache_probe"
+  "ok_dream7b_bpu_persistent_pair_cache_probe"
+  "pair_worker_count"
+  "launched_pair_worker_count"
+  "ready_pair_worker_count"
+  "failed_pair_worker_count"
+  "all_pair_workers_ready"
+  "launch_stopped_reason"
   "hbm_artifact_inventory"
   "expected_artifact_count"
   "expected_base_count"
@@ -995,6 +1009,48 @@ if [[ -f scripts/probes/dream7b_bpu_utilization_gap_probe.sh ]]; then
   fi
 fi
 
+if [[ -f scripts/probes/dream7b_bpu_persistent_pair_cache_probe.sh ]]; then
+  for text in \
+    "DREAM7B_BPU_PERSISTENT_PAIR_CACHE_WORKER_HOLD_SECONDS" \
+    "DREAM7B_BPU_PERSISTENT_PAIR_CACHE_READY_TIMEOUT_SECONDS" \
+    "DREAM7B_BPU_PERSISTENT_PAIR_CACHE_START_DELAY_SECONDS" \
+    "persistent_pair_cache_probe.json" \
+    "persistent_pair_cache_probe.md" \
+    "ok_dream7b_bpu_persistent_pair_cache_probe" \
+    "pair_worker_count" \
+    "launched_pair_worker_count" \
+    "ready_pair_worker_count" \
+    "failed_pair_worker_count" \
+    "ready_pair_indexes" \
+    "failed_pair_indexes" \
+    "launch_stopped_reason" \
+    "all_pair_workers_ready" \
+    "next_optimization_target" \
+    "seg00_02" \
+    "seg02_04" \
+    "seg04_07" \
+    "seg07_10" \
+    "seg10_14" \
+    "seg14_17" \
+    "seg17_21" \
+    "seg21_24" \
+    "seg24_26" \
+    "seg26_28"; do
+    if ! grep -F -- "$text" scripts/probes/dream7b_bpu_persistent_pair_cache_probe.sh >/dev/null; then
+      errors+=("dream7b_bpu_persistent_pair_cache_probe.sh missing $text")
+    fi
+  done
+  if ! grep -F -- 'DREAM7B_BPU_PERSISTENT_PAIR_CACHE_WORKER_HOLD_SECONDS:-20' scripts/probes/dream7b_bpu_persistent_pair_cache_probe.sh >/dev/null; then
+    errors+=("dream7b_bpu_persistent_pair_cache_probe.sh missing default DREAM7B_BPU_PERSISTENT_PAIR_CACHE_WORKER_HOLD_SECONDS:-20")
+  fi
+  if ! grep -F -- 'DREAM7B_BPU_PERSISTENT_PAIR_CACHE_READY_TIMEOUT_SECONDS:-180' scripts/probes/dream7b_bpu_persistent_pair_cache_probe.sh >/dev/null; then
+    errors+=("dream7b_bpu_persistent_pair_cache_probe.sh missing default DREAM7B_BPU_PERSISTENT_PAIR_CACHE_READY_TIMEOUT_SECONDS:-180")
+  fi
+  if ! grep -F -- 'DREAM7B_BPU_PERSISTENT_PAIR_CACHE_START_DELAY_SECONDS:-2' scripts/probes/dream7b_bpu_persistent_pair_cache_probe.sh >/dev/null; then
+    errors+=("dream7b_bpu_persistent_pair_cache_probe.sh missing default DREAM7B_BPU_PERSISTENT_PAIR_CACHE_START_DELAY_SECONDS:-2")
+  fi
+fi
+
 if [[ -f scripts/probes/dream7b_bpu_batch_queue_retention_probe.sh ]]; then
   if ! grep -F -- "DREAM7B_BPU_QUEUE_RETENTION_DONE_DAYS" scripts/probes/dream7b_bpu_batch_queue_retention_probe.sh >/dev/null; then
     errors+=("dream7b_bpu_batch_queue_retention_probe.sh missing DREAM7B_BPU_QUEUE_RETENTION_DONE_DAYS")
@@ -1328,6 +1384,7 @@ if [[ -f scripts/probes/dream7b_bpu_deployment_acceptance_probe.sh ]]; then
     "dream7b_bpu_diffusion_batch_generate_telemetry_*/batch_generation_telemetry_probe.json" \
     "dream7b_bpu_diffusion_batch_generate_sustained_*/batch_generation_sustained_probe.json" \
     "dream7b_bpu_utilization_gap_*/utilization_gap_probe.json" \
+    "dream7b_bpu_persistent_pair_cache_*/persistent_pair_cache_probe.json" \
     "dream7b_bpu_batch_queue_systemd_telemetry_*/systemd_telemetry_probe.json" \
     "dream7b_bpu_fine_forward_long_repeat_*/long_repeat_probe.json" \
     "dream7b_bpu_batch_queue_retention_*/queue_retention_probe.json" \
@@ -1344,13 +1401,17 @@ if [[ -f scripts/probes/dream7b_bpu_deployment_acceptance_probe.sh ]]; then
     "diffusion_batch_generate_telemetry" \
     "diffusion_batch_generate_sustained" \
     "utilization_gap" \
+    "persistent_pair_cache" \
     "ok_dream7b_bpu_utilization_gap_probe" \
+    "ok_dream7b_bpu_persistent_pair_cache_probe" \
     "diagnosis" \
     "next_optimization_target" \
     "max_observed_bpu_loading" \
     "avg_observed_bpu_loading_across_reports" \
     "runtime_load_to_run_ratio" \
     "systemd_load_to_run_ratio" \
+    "all_pair_workers_ready" \
+    "launch_stopped_reason" \
     "ok_dream7b_bpu_diffusion_generate" \
     "ok_dream7b_bpu_diffusion_generate_telemetry_probe" \
     "ok_dream7b_bpu_diffusion_batch_generate" \

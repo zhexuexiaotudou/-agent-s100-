@@ -1791,6 +1791,115 @@ warnings: ['batch_size_sweep max batch_count is below 16; using runtime/systemd/
 errors: []
 ```
 
+### `dream7b-bpu-persistent-pair-cache-probe`
+
+Source file: `scripts/probes/dream7b_bpu_persistent_pair_cache_probe.sh`
+
+Installed command on S100P:
+
+```text
+/usr/local/bin/dream7b-bpu-persistent-pair-cache-probe
+```
+
+Default argument copied from the script:
+
+```text
+report_root = /mnt/nas/openclaw/reports/models
+```
+
+Environment variables copied from the script:
+
+```text
+DREAM7B_BPU_PERSISTENT_PAIR_CACHE_WORKER_HOLD_SECONDS
+DREAM7B_BPU_PERSISTENT_PAIR_CACHE_READY_TIMEOUT_SECONDS
+DREAM7B_BPU_PERSISTENT_PAIR_CACHE_START_DELAY_SECONDS
+```
+
+Default values copied from the script:
+
+```text
+worker_hold_seconds = 20
+worker_ready_timeout_seconds = 180
+worker_start_delay_seconds = 2
+```
+
+Output files copied from the script:
+
+```text
+persistent_pair_cache_probe.json
+persistent_pair_cache_probe.md
+```
+
+Pair workers copied from the script:
+
+```text
+pair_00: seg00_02, seg02_04
+pair_01: seg04_07, seg07_10
+pair_02: seg10_14, seg14_17
+pair_03: seg17_21, seg21_24
+pair_04: seg24_26, seg26_28
+```
+
+Output fields copied from the script:
+
+```text
+generated_at
+verdict
+run_dir
+base_hbm_dir
+fine_hbm_dir
+worker_hold_seconds
+worker_ready_timeout_seconds
+worker_start_delay_seconds
+pair_worker_count
+launched_pair_worker_count
+ready_pair_worker_count
+failed_pair_worker_count
+ready_pair_indexes
+failed_pair_indexes
+launch_stopped_reason
+all_pair_workers_ready
+next_optimization_target
+ready_records
+worker_outputs
+errors
+```
+
+Latest recorded report:
+
+```text
+/mnt/nas/openclaw/reports/models/dream7b_bpu_persistent_pair_cache_20260605-234349/persistent_pair_cache_probe.md
+```
+
+Latest recorded JSON:
+
+```text
+/mnt/nas/openclaw/reports/models/dream7b_bpu_persistent_pair_cache_20260605-234349/persistent_pair_cache_probe.json
+```
+
+Verified persistent pair cache fields copied from `persistent_pair_cache_probe.json`:
+
+```text
+verdict: ok_dream7b_bpu_persistent_pair_cache_probe
+pair_worker_count: 5
+launched_pair_worker_count: 2
+ready_pair_worker_count: 1
+failed_pair_worker_count: 1
+ready_pair_indexes: [0]
+failed_pair_indexes: [1]
+launch_stopped_reason: pair_01_seg04_07__seg07_10 did not reach ready status
+all_pair_workers_ready: False
+next_optimization_target: do not implement all-pair persistent cache yet; use this failure boundary to guide a different split or runtime-residency strategy
+ready_records[0].segments: ['seg00_02', 'seg02_04']
+ready_records[0].status: ready
+ready_records[0].load_ms: 5218.181
+ready_records[1].segments: ['seg04_07', 'seg07_10']
+ready_records[1].status: failed
+ready_records[1].exception_type: RuntimeError
+ready_records[1].exception: DNN Error (code: -400001, desc: Memory alloc failed, please check error log) hbDNN initialize from multiple .hbm files failed.
+errors: []
+```
+
 ### `dream7b-bpu-deployment-acceptance-probe`
 
 Source file: `scripts/probes/dream7b_bpu_deployment_acceptance_probe.sh`
@@ -1847,6 +1956,7 @@ dream7b_bpu_diffusion_generate_telemetry_*/generation_telemetry_probe.json
 dream7b_bpu_diffusion_batch_generate_telemetry_*/batch_generation_telemetry_probe.json
 dream7b_bpu_diffusion_batch_generate_sustained_*/batch_generation_sustained_probe.json
 dream7b_bpu_utilization_gap_*/utilization_gap_probe.json
+dream7b_bpu_persistent_pair_cache_*/persistent_pair_cache_probe.json
 dream7b_bpu_batch_queue_systemd_telemetry_*/systemd_telemetry_probe.json
 dream7b_bpu_fine_forward_long_repeat_*/long_repeat_probe.json
 dream7b_bpu_batch_queue_retention_*/queue_retention_probe.json
@@ -1868,6 +1978,7 @@ diffusion_generate_telemetry
 diffusion_batch_generate_telemetry
 diffusion_batch_generate_sustained
 utilization_gap
+persistent_pair_cache
 systemd_telemetry
 long_repeat
 queue_retention
@@ -1911,6 +2022,7 @@ Latest recorded report:
 /mnt/nas/openclaw/reports/models/dream7b_bpu_deployment_acceptance_20260606-184511/deployment_acceptance_probe.md
 /mnt/nas/openclaw/reports/models/dream7b_bpu_deployment_acceptance_20260606-205153/deployment_acceptance_probe.md
 /mnt/nas/openclaw/reports/models/dream7b_bpu_deployment_acceptance_20260606-212134/deployment_acceptance_probe.md
+/mnt/nas/openclaw/reports/models/dream7b_bpu_deployment_acceptance_20260605-234654/deployment_acceptance_probe.md
 ```
 
 Latest recorded JSON:
@@ -1930,14 +2042,15 @@ Latest recorded JSON:
 /mnt/nas/openclaw/reports/models/dream7b_bpu_deployment_acceptance_20260606-184511/deployment_acceptance_probe.json
 /mnt/nas/openclaw/reports/models/dream7b_bpu_deployment_acceptance_20260606-205153/deployment_acceptance_probe.json
 /mnt/nas/openclaw/reports/models/dream7b_bpu_deployment_acceptance_20260606-212134/deployment_acceptance_probe.json
+/mnt/nas/openclaw/reports/models/dream7b_bpu_deployment_acceptance_20260605-234654/deployment_acceptance_probe.json
 ```
 
 Verified deployment acceptance fields copied from `deployment_acceptance_probe.json`:
 
 ```text
 verdict: ok_dream7b_bpu_deployment_acceptance_probe
-check_count: 16
-passed_check_count: 16
+check_count: 17
+passed_check_count: 17
 min_batch_capacity: 16
 min_systemd_batch_requests: 16
 min_systemd_telemetry_requests: 48
@@ -1960,6 +2073,7 @@ diffusion_generate_telemetry.ok: True
 diffusion_batch_generate_telemetry.ok: True
 diffusion_batch_generate_sustained.ok: True
 utilization_gap.ok: True
+persistent_pair_cache.ok: True
 systemd_telemetry.ok: True
 long_repeat.ok: True
 queue_retention.ok: True
@@ -2061,6 +2175,17 @@ utilization_gap.details.sustained_round_count: 3
 utilization_gap.details.sustained_actual_total_batch_items: 48
 utilization_gap.details.batch_generate_batch_count: 16
 utilization_gap.details.warnings: ['batch_size_sweep max batch_count is below 16; using runtime/systemd/sustained telemetry as the authoritative batch-16 evidence']
+persistent_pair_cache.path: /mnt/nas/openclaw/reports/models/dream7b_bpu_persistent_pair_cache_20260605-234349/persistent_pair_cache_probe.json
+persistent_pair_cache.details.verdict: ok_dream7b_bpu_persistent_pair_cache_probe
+persistent_pair_cache.details.pair_worker_count: 5
+persistent_pair_cache.details.launched_pair_worker_count: 2
+persistent_pair_cache.details.ready_pair_worker_count: 1
+persistent_pair_cache.details.failed_pair_worker_count: 1
+persistent_pair_cache.details.ready_pair_indexes: [0]
+persistent_pair_cache.details.failed_pair_indexes: [1]
+persistent_pair_cache.details.launch_stopped_reason: pair_01_seg04_07__seg07_10 did not reach ready status
+persistent_pair_cache.details.all_pair_workers_ready: False
+persistent_pair_cache.details.next_optimization_target: do not implement all-pair persistent cache yet; use this failure boundary to guide a different split or runtime-residency strategy
 hbm_artifact_inventory.details.expected_artifact_count: 14
 hbm_artifact_inventory.details.nas_existing_count: 14
 hbm_artifact_inventory.details.local_existing_count: 14
@@ -3794,6 +3919,10 @@ docs/baseline_progress_2026-06-03_dream7b_segmented_bpu_hbm.md
 - Verified utilization gap report at `/mnt/nas/openclaw/reports/models/dream7b_bpu_utilization_gap_20260606-211927/utilization_gap_probe.md` with `verdict: ok_dream7b_bpu_utilization_gap_probe`, `diagnosis: hbm_reload_dominated`, `max_observed_bpu_loading: 100.0`, `avg_observed_bpu_loading_across_reports: 8.978`, `runtime_load_to_run_ratio: 8.399`, and `systemd_load_to_run_ratio: 8.48`.
 - Updated `dream7b-bpu-deployment-acceptance-probe` to include `utilization_gap`.
 - Verified utilization-gap-aware deployment acceptance report at `/mnt/nas/openclaw/reports/models/dream7b_bpu_deployment_acceptance_20260606-212134/deployment_acceptance_probe.md` with `check_count: 16`, `passed_check_count: 16`, and `utilization_gap.ok: True`.
+- Added `dream7b-bpu-persistent-pair-cache-probe` for testing whether all five fine pair runtimes can be held as long-lived workers before implementing any persistent pair-worker forward pipeline.
+- Verified persistent pair cache report at `/mnt/nas/openclaw/reports/models/dream7b_bpu_persistent_pair_cache_20260605-234349/persistent_pair_cache_probe.md` with `pair_worker_count: 5`, `launched_pair_worker_count: 2`, `ready_pair_worker_count: 1`, `all_pair_workers_ready: False`, and `launch_stopped_reason: pair_01_seg04_07__seg07_10 did not reach ready status`.
+- Updated `dream7b-bpu-deployment-acceptance-probe` to include `persistent_pair_cache`.
+- Verified persistent-pair-cache-aware deployment acceptance report at `/mnt/nas/openclaw/reports/models/dream7b_bpu_deployment_acceptance_20260605-234654/deployment_acceptance_probe.md` with `check_count: 17`, `passed_check_count: 17`, and `persistent_pair_cache.ok: True`.
 
 ## TODO
 

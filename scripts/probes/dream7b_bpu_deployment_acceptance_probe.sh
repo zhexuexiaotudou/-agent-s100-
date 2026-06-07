@@ -745,6 +745,37 @@ else:
         },
     )
 
+persistent_pair_cache_path, persistent_pair_cache = latest_json("dream7b_bpu_persistent_pair_cache_*/persistent_pair_cache_probe.json")
+if persistent_pair_cache is None:
+    add_check("persistent_pair_cache", persistent_pair_cache_path, False, {"reason": "missing persistent_pair_cache_probe.json"})
+else:
+    ok = (
+        persistent_pair_cache.get("verdict") == "ok_dream7b_bpu_persistent_pair_cache_probe"
+        and int(persistent_pair_cache.get("pair_worker_count") or 0) == 5
+        and int(persistent_pair_cache.get("launched_pair_worker_count") or 0) >= 1
+        and int(persistent_pair_cache.get("ready_pair_worker_count") or 0) >= 1
+        and "all_pair_workers_ready" in persistent_pair_cache
+        and persistent_pair_cache.get("next_optimization_target")
+        and not persistent_pair_cache.get("errors")
+    )
+    add_check(
+        "persistent_pair_cache",
+        persistent_pair_cache_path,
+        ok,
+        {
+            "verdict": persistent_pair_cache.get("verdict"),
+            "pair_worker_count": persistent_pair_cache.get("pair_worker_count"),
+            "launched_pair_worker_count": persistent_pair_cache.get("launched_pair_worker_count"),
+            "ready_pair_worker_count": persistent_pair_cache.get("ready_pair_worker_count"),
+            "failed_pair_worker_count": persistent_pair_cache.get("failed_pair_worker_count"),
+            "ready_pair_indexes": persistent_pair_cache.get("ready_pair_indexes"),
+            "failed_pair_indexes": persistent_pair_cache.get("failed_pair_indexes"),
+            "launch_stopped_reason": persistent_pair_cache.get("launch_stopped_reason"),
+            "all_pair_workers_ready": persistent_pair_cache.get("all_pair_workers_ready"),
+            "next_optimization_target": persistent_pair_cache.get("next_optimization_target"),
+        },
+    )
+
 payload = {
     "generated_at": datetime.now().astimezone().isoformat(),
     "verdict": "ok_dream7b_bpu_deployment_acceptance_probe" if not errors else "failed_dream7b_bpu_deployment_acceptance_probe",
