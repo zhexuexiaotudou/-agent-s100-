@@ -73,6 +73,7 @@ batch_sweep_path, batch_sweep = latest_json("dream7b_bpu_fine_batch_size_sweep_*
 runtime_telemetry_path, runtime_telemetry = latest_json("dream7b_bpu_runtime_telemetry_*/runtime_telemetry_probe.json")
 selected_pair_telemetry_path, selected_pair_telemetry = latest_json("dream7b_bpu_selected_pair_telemetry_*/selected_pair_telemetry_probe.json")
 systemd_telemetry_path, systemd_telemetry = latest_json("dream7b_bpu_batch_queue_systemd_telemetry_*/systemd_telemetry_probe.json")
+selected_pair_candidate_service_telemetry_path, selected_pair_candidate_service_telemetry = latest_json("dream7b_bpu_selected_pair_candidate_service_telemetry_*/systemd_telemetry_probe.json")
 sustained_path, sustained = latest_json("dream7b_bpu_diffusion_batch_generate_sustained_*/batch_generation_sustained_probe.json")
 batch_generate_telemetry_path, batch_generate_telemetry = latest_json("dream7b_bpu_diffusion_batch_generate_telemetry_*/batch_generation_telemetry_probe.json")
 
@@ -84,6 +85,8 @@ if selected_pair_telemetry is None:
     errors.append("missing dream7b_bpu_selected_pair_telemetry_*/selected_pair_telemetry_probe.json")
 if systemd_telemetry is None:
     errors.append("missing dream7b_bpu_batch_queue_systemd_telemetry_*/systemd_telemetry_probe.json")
+if selected_pair_candidate_service_telemetry is None:
+    errors.append("missing dream7b_bpu_selected_pair_candidate_service_telemetry_*/systemd_telemetry_probe.json")
 if sustained is None:
     errors.append("missing dream7b_bpu_diffusion_batch_generate_sustained_*/batch_generation_sustained_probe.json")
 if batch_generate_telemetry is None:
@@ -135,6 +138,36 @@ if isinstance(systemd_telemetry, dict):
     if float(systemd_telemetry.get("max_bpu_loading") or 0.0) <= 0.0:
         errors.append(f"systemd telemetry max_bpu_loading did not exceed zero: {systemd_telemetry.get('max_bpu_loading')}")
 
+selected_pair_candidate_service_comparison = (selected_pair_candidate_service_telemetry or {}).get("comparison_to_default_systemd_telemetry") or {}
+if isinstance(selected_pair_candidate_service_telemetry, dict):
+    if selected_pair_candidate_service_telemetry.get("verdict") != "ok_dream7b_bpu_batch_queue_systemd_telemetry_probe":
+        errors.append(f"unexpected selected-pair candidate service telemetry verdict: {selected_pair_candidate_service_telemetry.get('verdict')}")
+    if selected_pair_candidate_service_telemetry.get("service_name") != "dream7b-bpu-selected-pair-candidate.service":
+        errors.append(f"unexpected selected-pair candidate service_name: {selected_pair_candidate_service_telemetry.get('service_name')}")
+    if int(selected_pair_candidate_service_telemetry.get("processed_request_count") or 0) < min_sustained_total_items:
+        errors.append(
+            "selected-pair candidate service telemetry processed_request_count below "
+            f"{min_sustained_total_items}: {selected_pair_candidate_service_telemetry.get('processed_request_count')}"
+        )
+    if selected_pair_candidate_service_telemetry.get("batch_counts") != [min_batch_count, min_batch_count, min_batch_count]:
+        errors.append(f"unexpected selected-pair candidate service batch_counts: {selected_pair_candidate_service_telemetry.get('batch_counts')}")
+    if selected_pair_candidate_service_telemetry.get("expected_window_execution_mode") != "selected-pair-resident":
+        errors.append(
+            "unexpected selected-pair candidate service expected_window_execution_mode: "
+            f"{selected_pair_candidate_service_telemetry.get('expected_window_execution_mode')}"
+        )
+    if selected_pair_candidate_service_telemetry.get("expected_child_process_count") != 2:
+        errors.append(f"unexpected selected-pair candidate service expected_child_process_count: {selected_pair_candidate_service_telemetry.get('expected_child_process_count')}")
+    if float(selected_pair_candidate_service_telemetry.get("max_bpu_loading") or 0.0) <= 0.0:
+        errors.append(
+            "selected-pair candidate service telemetry max_bpu_loading did not exceed zero: "
+            f"{selected_pair_candidate_service_telemetry.get('max_bpu_loading')}"
+        )
+    if selected_pair_candidate_service_comparison.get("candidate_wall_time_improved_vs_default_systemd") is not True:
+        warnings.append("selected-pair candidate service telemetry did not improve wall time versus default systemd telemetry")
+    if selected_pair_candidate_service_comparison.get("candidate_avg_bpu_loading_not_worse_than_default_systemd") is not True:
+        warnings.append("selected-pair candidate service telemetry improved wall time but did not improve average BPU loading versus default systemd telemetry")
+
 if isinstance(sustained, dict):
     if sustained.get("verdict") != "ok_dream7b_bpu_diffusion_batch_generate_sustained_probe":
         errors.append(f"unexpected sustained verdict: {sustained.get('verdict')}")
@@ -166,10 +199,14 @@ runtime_amortized_run = float(runtime_forward.get("amortized_run_ms_per_forward"
 systemd_total_load = float((systemd_telemetry or {}).get("total_load_ms") or 0.0)
 systemd_total_run = float((systemd_telemetry or {}).get("total_run_ms") or 0.0)
 systemd_load_to_run_ratio = systemd_total_load / systemd_total_run if systemd_total_run else None
+candidate_service_total_load = float((selected_pair_candidate_service_telemetry or {}).get("total_load_ms") or 0.0)
+candidate_service_total_run = float((selected_pair_candidate_service_telemetry or {}).get("total_run_ms") or 0.0)
+candidate_service_load_to_run_ratio = candidate_service_total_load / candidate_service_total_run if candidate_service_total_run else None
 telemetry_avgs = [
     float((runtime_telemetry or {}).get("avg_bpu_loading") or 0.0),
     float((selected_pair_telemetry or {}).get("avg_bpu_loading") or 0.0),
     float((systemd_telemetry or {}).get("avg_bpu_loading") or 0.0),
+    float((selected_pair_candidate_service_telemetry or {}).get("avg_bpu_loading") or 0.0),
     float((sustained or {}).get("avg_bpu_loading") or 0.0),
     float((batch_generate_telemetry or {}).get("avg_bpu_loading") or 0.0),
 ]
@@ -177,6 +214,7 @@ telemetry_maxes = [
     float((runtime_telemetry or {}).get("max_bpu_loading") or 0.0),
     float((selected_pair_telemetry or {}).get("max_bpu_loading") or 0.0),
     float((systemd_telemetry or {}).get("max_bpu_loading") or 0.0),
+    float((selected_pair_candidate_service_telemetry or {}).get("max_bpu_loading") or 0.0),
     float((sustained or {}).get("max_bpu_loading") or 0.0),
     float((batch_generate_telemetry or {}).get("max_bpu_loading") or 0.0),
 ]
@@ -185,7 +223,7 @@ avg_observed_bpu_loading = statistics.fmean(telemetry_avgs) if telemetry_avgs el
 
 load_dominated = any(
     ratio is not None and ratio > 1.0
-    for ratio in (batch_reference_load_to_run_ratio, runtime_load_to_run_ratio, systemd_load_to_run_ratio)
+    for ratio in (batch_reference_load_to_run_ratio, runtime_load_to_run_ratio, systemd_load_to_run_ratio, candidate_service_load_to_run_ratio)
 )
 if max_observed_bpu_loading <= 0.0:
     errors.append(f"max_observed_bpu_loading did not exceed zero: {max_observed_bpu_loading}")
@@ -255,6 +293,24 @@ payload = {
         "amortized_load_ms_per_processed_request": (systemd_telemetry or {}).get("amortized_load_ms_per_processed_request"),
         "amortized_run_ms_per_processed_request": (systemd_telemetry or {}).get("amortized_run_ms_per_processed_request"),
     },
+    "selected_pair_candidate_service_telemetry": {
+        "path": str(selected_pair_candidate_service_telemetry_path) if selected_pair_candidate_service_telemetry_path else None,
+        "service_name": (selected_pair_candidate_service_telemetry or {}).get("service_name"),
+        "processed_request_count": (selected_pair_candidate_service_telemetry or {}).get("processed_request_count"),
+        "batch_counts": (selected_pair_candidate_service_telemetry or {}).get("batch_counts"),
+        "expected_forward_command": (selected_pair_candidate_service_telemetry or {}).get("expected_forward_command"),
+        "expected_window_execution_mode": (selected_pair_candidate_service_telemetry or {}).get("expected_window_execution_mode"),
+        "expected_child_process_count": (selected_pair_candidate_service_telemetry or {}).get("expected_child_process_count"),
+        "max_bpu_loading": (selected_pair_candidate_service_telemetry or {}).get("max_bpu_loading"),
+        "avg_bpu_loading": (selected_pair_candidate_service_telemetry or {}).get("avg_bpu_loading"),
+        "total_load_ms": round_float(candidate_service_total_load),
+        "total_run_ms": round_float(candidate_service_total_run),
+        "load_to_run_ratio": round_float(candidate_service_load_to_run_ratio),
+        "amortized_wall_ms_per_processed_request": (selected_pair_candidate_service_telemetry or {}).get("amortized_wall_ms_per_processed_request"),
+        "amortized_load_ms_per_processed_request": (selected_pair_candidate_service_telemetry or {}).get("amortized_load_ms_per_processed_request"),
+        "amortized_run_ms_per_processed_request": (selected_pair_candidate_service_telemetry or {}).get("amortized_run_ms_per_processed_request"),
+        "comparison_to_default_systemd_telemetry": selected_pair_candidate_service_comparison,
+    },
     "sustained_generation": {
         "path": str(sustained_path) if sustained_path else None,
         "round_count": (sustained or {}).get("round_count"),
@@ -291,6 +347,9 @@ lines = [
     f"- selected_pair_telemetry_avg_bpu_loading: {payload['selected_pair_telemetry']['avg_bpu_loading']}",
     f"- selected_pair_telemetry_wall_delta_ratio: {payload['selected_pair_telemetry']['wall_ms_delta_ratio_vs_default_runtime']}",
     f"- systemd_load_to_run_ratio: {payload['systemd_telemetry']['load_to_run_ratio']}",
+    f"- selected_pair_candidate_service_load_to_run_ratio: {payload['selected_pair_candidate_service_telemetry']['load_to_run_ratio']}",
+    f"- selected_pair_candidate_service_wall_delta_ratio: {payload['selected_pair_candidate_service_telemetry']['comparison_to_default_systemd_telemetry'].get('wall_ms_delta_ratio_vs_default_systemd')}",
+    f"- selected_pair_candidate_service_avg_bpu_delta: {payload['selected_pair_candidate_service_telemetry']['comparison_to_default_systemd_telemetry'].get('avg_bpu_loading_delta_vs_default_systemd')}",
     "",
     "## Evidence",
     "",
@@ -298,6 +357,7 @@ lines = [
     f"- runtime_telemetry: {payload['runtime_telemetry']['path']}",
     f"- selected_pair_telemetry: {payload['selected_pair_telemetry']['path']}",
     f"- systemd_telemetry: {payload['systemd_telemetry']['path']}",
+    f"- selected_pair_candidate_service_telemetry: {payload['selected_pair_candidate_service_telemetry']['path']}",
     f"- sustained_generation: {payload['sustained_generation']['path']}",
     f"- batch_generate_telemetry: {payload['batch_generate_telemetry']['path']}",
     "",

@@ -1214,6 +1214,7 @@ if [[ -f scripts/probes/dream7b_bpu_utilization_gap_probe.sh ]]; then
     "dream7b_bpu_fine_batch_size_sweep_*/batch_size_sweep_probe.json" \
     "dream7b_bpu_runtime_telemetry_*/runtime_telemetry_probe.json" \
     "dream7b_bpu_batch_queue_systemd_telemetry_*/systemd_telemetry_probe.json" \
+    "dream7b_bpu_selected_pair_candidate_service_telemetry_*/systemd_telemetry_probe.json" \
     "dream7b_bpu_diffusion_batch_generate_sustained_*/batch_generation_sustained_probe.json" \
     "dream7b_bpu_diffusion_batch_generate_telemetry_*/batch_generation_telemetry_probe.json" \
     "dream7b_bpu_selected_pair_telemetry_*/selected_pair_telemetry_probe.json" \
@@ -1236,6 +1237,12 @@ if [[ -f scripts/probes/dream7b_bpu_utilization_gap_probe.sh ]]; then
     "selected_wall_time_improved_vs_default_runtime" \
     "selected_avg_bpu_loading_improved_vs_default_runtime" \
     "systemd_telemetry" \
+    "selected_pair_candidate_service_telemetry" \
+    "comparison_to_default_systemd_telemetry" \
+    "candidate_wall_time_improved_vs_default_systemd" \
+    "candidate_avg_bpu_loading_not_worse_than_default_systemd" \
+    "selected_pair_candidate_service_load_to_run_ratio" \
+    "selected_pair_candidate_service_avg_bpu_delta" \
     "sustained_generation" \
     "batch_generate_telemetry"; do
     if ! grep -F -- "$text" scripts/probes/dream7b_bpu_utilization_gap_probe.sh >/dev/null; then

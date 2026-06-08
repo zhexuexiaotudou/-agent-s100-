@@ -1801,13 +1801,13 @@ errors
 Latest recorded report:
 
 ```text
-/mnt/nas/openclaw/reports/models/dream7b_bpu_utilization_gap_20260606-031454/utilization_gap_probe.md
+/mnt/nas/openclaw/reports/models/dream7b_bpu_utilization_gap_20260606-045527/utilization_gap_probe.md
 ```
 
 Latest recorded JSON:
 
 ```text
-/mnt/nas/openclaw/reports/models/dream7b_bpu_utilization_gap_20260606-031454/utilization_gap_probe.json
+/mnt/nas/openclaw/reports/models/dream7b_bpu_utilization_gap_20260606-045527/utilization_gap_probe.json
 ```
 
 Verified utilization gap fields copied from `utilization_gap_probe.json`:
@@ -1817,7 +1817,7 @@ verdict: ok_dream7b_bpu_utilization_gap_probe
 diagnosis: hbm_reload_dominated
 next_optimization_target: reduce per-window HBM reload overhead before expecting sustained 128TOPS-level average utilization
 max_observed_bpu_loading: 100.0
-avg_observed_bpu_loading_across_reports: 8.758
+avg_observed_bpu_loading_across_reports: 8.763
 min_batch_count: 16
 min_sustained_round_count: 3
 min_sustained_total_items: 48
@@ -1857,6 +1857,22 @@ systemd_telemetry.avg_bpu_loading: 9.616
 systemd_telemetry.total_load_ms: 70702.172
 systemd_telemetry.total_run_ms: 8337.877
 systemd_telemetry.load_to_run_ratio: 8.48
+selected_pair_candidate_service_telemetry.path: /mnt/nas/openclaw/reports/models/dream7b_bpu_selected_pair_candidate_service_telemetry_20260606-043944/systemd_telemetry_probe.json
+selected_pair_candidate_service_telemetry.service_name: dream7b-bpu-selected-pair-candidate.service
+selected_pair_candidate_service_telemetry.processed_request_count: 48
+selected_pair_candidate_service_telemetry.batch_counts: [16, 16, 16]
+selected_pair_candidate_service_telemetry.expected_forward_command: dream7b-bpu-selected-pair-batch-forward
+selected_pair_candidate_service_telemetry.expected_window_execution_mode: selected-pair-resident
+selected_pair_candidate_service_telemetry.expected_child_process_count: 2
+selected_pair_candidate_service_telemetry.max_bpu_loading: 98.0
+selected_pair_candidate_service_telemetry.avg_bpu_loading: 8.788
+selected_pair_candidate_service_telemetry.total_load_ms: 69185.546
+selected_pair_candidate_service_telemetry.total_run_ms: 7090.007
+selected_pair_candidate_service_telemetry.load_to_run_ratio: 9.758
+selected_pair_candidate_service_telemetry.comparison_to_default_systemd_telemetry.wall_ms_delta_ratio_vs_default_systemd: 0.138445
+selected_pair_candidate_service_telemetry.comparison_to_default_systemd_telemetry.avg_bpu_loading_delta_vs_default_systemd: -0.828
+selected_pair_candidate_service_telemetry.comparison_to_default_systemd_telemetry.candidate_wall_time_improved_vs_default_systemd: True
+selected_pair_candidate_service_telemetry.comparison_to_default_systemd_telemetry.candidate_avg_bpu_loading_not_worse_than_default_systemd: False
 sustained_generation.path: /mnt/nas/openclaw/reports/models/dream7b_bpu_diffusion_batch_generate_sustained_20260606-190058/batch_generation_sustained_probe.json
 sustained_generation.round_count: 3
 sustained_generation.batch_count: 16
@@ -6604,8 +6620,8 @@ errors: []
 Verified deployment acceptance fields copied from `deployment_acceptance_probe.json`:
 
 ```text
-acceptance_report: /mnt/nas/openclaw/reports/models/dream7b_bpu_deployment_acceptance_20260606-044801/deployment_acceptance_probe.md
-acceptance_json: /mnt/nas/openclaw/reports/models/dream7b_bpu_deployment_acceptance_20260606-044801/deployment_acceptance_probe.json
+acceptance_report: /mnt/nas/openclaw/reports/models/dream7b_bpu_deployment_acceptance_20260606-045552/deployment_acceptance_probe.md
+acceptance_json: /mnt/nas/openclaw/reports/models/dream7b_bpu_deployment_acceptance_20260606-045552/deployment_acceptance_probe.json
 verdict: ok_dream7b_bpu_deployment_acceptance_probe
 check_count: 28
 passed_check_count: 28
@@ -6628,6 +6644,12 @@ queue_retention.ok: True
 selected_pair_telemetry.ok: True
 selected_pair_candidate_service.ok: True
 selected_pair_candidate_service_telemetry.ok: True
+utilization_gap.details.selected_pair_candidate_service_processed_request_count: 48
+utilization_gap.details.selected_pair_candidate_service_load_to_run_ratio: 9.758
+utilization_gap.details.selected_pair_candidate_service_wall_delta_ratio_vs_default_systemd: 0.138445
+utilization_gap.details.selected_pair_candidate_service_avg_bpu_loading_delta_vs_default_systemd: -0.828
+utilization_gap.details.selected_pair_candidate_service_wall_time_improved_vs_default_systemd: True
+utilization_gap.details.selected_pair_candidate_service_avg_bpu_loading_not_worse_than_default_systemd: False
 warnings: []
 errors: []
 ```

@@ -708,6 +708,8 @@ if utilization_gap is None:
 else:
     runtime_telemetry = utilization_gap.get("runtime_telemetry") or {}
     systemd_telemetry = utilization_gap.get("systemd_telemetry") or {}
+    selected_pair_candidate_service_telemetry = utilization_gap.get("selected_pair_candidate_service_telemetry") or {}
+    selected_pair_candidate_service_telemetry_comparison = selected_pair_candidate_service_telemetry.get("comparison_to_default_systemd_telemetry") or {}
     sustained_generation = utilization_gap.get("sustained_generation") or {}
     batch_generate_telemetry = utilization_gap.get("batch_generate_telemetry") or {}
     ok = (
@@ -717,6 +719,12 @@ else:
         and int(utilization_gap.get("min_sustained_total_items") or 0) >= min_systemd_telemetry_requests
         and runtime_telemetry.get("batch_count") == min_batch_capacity
         and int(systemd_telemetry.get("processed_request_count") or 0) >= min_systemd_telemetry_requests
+        and selected_pair_candidate_service_telemetry.get("service_name") == "dream7b-bpu-selected-pair-candidate.service"
+        and int(selected_pair_candidate_service_telemetry.get("processed_request_count") or 0) >= min_systemd_telemetry_requests
+        and selected_pair_candidate_service_telemetry.get("batch_counts") == [16, 16, 16]
+        and selected_pair_candidate_service_telemetry.get("expected_window_execution_mode") == "selected-pair-resident"
+        and selected_pair_candidate_service_telemetry.get("expected_child_process_count") == 2
+        and selected_pair_candidate_service_telemetry_comparison.get("candidate_wall_time_improved_vs_default_systemd") is True
         and int(sustained_generation.get("round_count") or 0) >= min_batch_generate_sustained_round_count
         and int(sustained_generation.get("batch_count") or 0) >= min_batch_capacity
         and int(sustained_generation.get("actual_total_batch_items") or 0) >= min_systemd_telemetry_requests
@@ -738,6 +746,12 @@ else:
             "runtime_load_to_run_ratio": runtime_telemetry.get("load_to_run_ratio"),
             "systemd_processed_request_count": systemd_telemetry.get("processed_request_count"),
             "systemd_load_to_run_ratio": systemd_telemetry.get("load_to_run_ratio"),
+            "selected_pair_candidate_service_processed_request_count": selected_pair_candidate_service_telemetry.get("processed_request_count"),
+            "selected_pair_candidate_service_load_to_run_ratio": selected_pair_candidate_service_telemetry.get("load_to_run_ratio"),
+            "selected_pair_candidate_service_wall_delta_ratio_vs_default_systemd": selected_pair_candidate_service_telemetry_comparison.get("wall_ms_delta_ratio_vs_default_systemd"),
+            "selected_pair_candidate_service_avg_bpu_loading_delta_vs_default_systemd": selected_pair_candidate_service_telemetry_comparison.get("avg_bpu_loading_delta_vs_default_systemd"),
+            "selected_pair_candidate_service_wall_time_improved_vs_default_systemd": selected_pair_candidate_service_telemetry_comparison.get("candidate_wall_time_improved_vs_default_systemd"),
+            "selected_pair_candidate_service_avg_bpu_loading_not_worse_than_default_systemd": selected_pair_candidate_service_telemetry_comparison.get("candidate_avg_bpu_loading_not_worse_than_default_systemd"),
             "sustained_round_count": sustained_generation.get("round_count"),
             "sustained_actual_total_batch_items": sustained_generation.get("actual_total_batch_items"),
             "batch_generate_batch_count": batch_generate_telemetry.get("batch_count"),
