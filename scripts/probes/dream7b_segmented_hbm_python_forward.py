@@ -34,6 +34,23 @@ FINE_ADJACENT_SEGMENTS = [
     ("seg26_28", "fine", "seg26_28/dream7b_segment_26_28_seq16_q8.hbm", "dream_segment_26_28", "hidden"),
 ]
 
+RESPLIT_ADJACENT_SEGMENTS = [
+    ("seg00_01", "resplit", "seg00_01/dream7b_segment_0_1_seq16_q8.hbm", "dream_segment_00_01", "tokens"),
+    ("seg01_02", "resplit", "seg01_02/dream7b_segment_1_2_seq16_q8.hbm", "dream_segment_01_02", "hidden"),
+    ("seg02_04", "fine", "seg02_04/dream7b_segment_2_4_seq16_q8.hbm", "dream_segment_02_04", "hidden"),
+    ("seg04_07", "base", "dream7b_segment_4_7_seq16_q8.hbm", "dream_segment_04_07", "hidden"),
+    ("seg07_10", "fine", "seg07_10/dream7b_segment_7_10_seq16_q8.hbm", "dream_segment_07_10", "hidden"),
+    ("seg10_12", "resplit", "seg10_12/dream7b_segment_10_12_seq16_q8.hbm", "dream_segment_10_12", "hidden"),
+    ("seg12_14", "resplit", "seg12_14/dream7b_segment_12_14_seq16_q8.hbm", "dream_segment_12_14", "hidden"),
+    ("seg14_17", "fine", "seg14_17/dream7b_segment_14_17_seq16_q8.hbm", "dream_segment_14_17", "hidden"),
+    ("seg17_19", "resplit", "seg17_19/dream7b_segment_17_19_seq16_q8.hbm", "dream_segment_17_19", "hidden"),
+    ("seg19_21", "resplit", "seg19_21/dream7b_segment_19_21_seq16_q8.hbm", "dream_segment_19_21", "hidden"),
+    ("seg21_24", "base", "dream7b_segment_21_24_seq16_q8.hbm", "dream_segment_21_24", "hidden"),
+    ("seg24_26", "fine", "seg24_26/dream7b_segment_24_26_seq16_q8.hbm", "dream_segment_24_26", "hidden"),
+    ("seg26_27", "resplit", "seg26_27/dream7b_segment_26_27_seq16_q8.hbm", "dream_segment_26_27", "hidden"),
+    ("seg27_28", "resplit", "seg27_28/dream7b_segment_27_28_seq16_q8.hbm", "dream_segment_27_28", "hidden"),
+]
+
 
 WINDOW_CHILD_CODE = r"""
 import json
@@ -133,7 +150,8 @@ def parse_args():
     parser = argparse.ArgumentParser(description="Run Dream 7B seq16 segmented S100 HBM forward.")
     parser.add_argument("--hbm-dir", default="/mnt/nas/openclaw/models/dream7b-hbm/segments6")
     parser.add_argument("--fine-hbm-dir", default="/mnt/nas/openclaw/models/dream7b-hbm/fine-seq16")
-    parser.add_argument("--segment-plan", choices=("segments6", "fine-adjacent"), default="segments6")
+    parser.add_argument("--resplit-hbm-dir", default="/mnt/nas/openclaw/models/dream7b-hbm/resplit-seq16")
+    parser.add_argument("--segment-plan", choices=("segments6", "fine-adjacent", "resplit-adjacent"), default="segments6")
     parser.add_argument(
         "--residency-window-size",
         type=int,
@@ -170,17 +188,24 @@ def parse_args():
     return parser.parse_args()
 
 
-def resolve_segments(segment_plan: str, hbm_dir: Path, fine_hbm_dir: Path):
+def resolve_segments(segment_plan: str, hbm_dir: Path, fine_hbm_dir: Path, resplit_hbm_dir: Path):
     if segment_plan == "segments6":
         specs = SEGMENTS6
     elif segment_plan == "fine-adjacent":
         specs = FINE_ADJACENT_SEGMENTS
+    elif segment_plan == "resplit-adjacent":
+        specs = RESPLIT_ADJACENT_SEGMENTS
     else:
         raise ValueError(f"Unsupported segment plan: {segment_plan}")
 
     resolved = []
     for segment_id, source, file_name, model_name, input_kind in specs:
-        root = fine_hbm_dir if source == "fine" else hbm_dir
+        if source == "fine":
+            root = fine_hbm_dir
+        elif source == "resplit":
+            root = resplit_hbm_dir
+        else:
+            root = hbm_dir
         resolved.append((segment_id, source, root / file_name, model_name, input_kind))
     return resolved
 
@@ -590,9 +615,10 @@ def main():
         raise ValueError("--residency-window-size must be >= 1")
     hbm_dir = Path(args.hbm_dir)
     fine_hbm_dir = Path(args.fine_hbm_dir)
+    resplit_hbm_dir = Path(args.resplit_hbm_dir)
     output_dir = Path(args.output_dir)
     output_dir.mkdir(parents=True, exist_ok=True)
-    segments = resolve_segments(args.segment_plan, hbm_dir, fine_hbm_dir)
+    segments = resolve_segments(args.segment_plan, hbm_dir, fine_hbm_dir, resplit_hbm_dir)
 
     tokens, tokens_source, batch_count = load_tokens(args.tokens_bin, args.tokens, args.tokens_batch_json, args.seq_len)
     position_ids = np.arange(args.seq_len, dtype=np.int32)
@@ -732,6 +758,7 @@ def main():
         "child_process_count": child_process_count if args.residency_window_size > 1 else 0,
         "hbm_dir": str(hbm_dir),
         "fine_hbm_dir": str(fine_hbm_dir),
+        "resplit_hbm_dir": str(resplit_hbm_dir),
         "output_dir": str(output_dir),
         "runtime_version": HB_HBMRuntime.version,
         "tokens_source": tokens_source,

@@ -32,6 +32,7 @@ required_files=(
   "scripts/dream7b-bpu-diffusion-generate.sh"
   "scripts/dream7b-bpu-diffusion-batch-generate.sh"
   "scripts/dream7b-bpu-selected-pair-batch-forward.sh"
+  "scripts/dream7b-bpu-resplit-forward.sh"
   "scripts/install_dream7b_bpu_selected_pair_candidate_service.sh"
   "scripts/probes/dream7b_segmented_hbm_python_forward.py"
   "scripts/probes/dream7b_bpu_diffusion_loop_probe.sh"
@@ -74,6 +75,10 @@ required_files=(
   "scripts/probes/dream7b_bpu_selected_pair_promotion_gate_probe.sh"
   "scripts/probes/dream7b_bpu_selected_pair_candidate_forward_probe.sh"
   "scripts/probes/dream7b_bpu_selected_pair_candidate_service_probe.sh"
+  "scripts/probes/compile_dream_segments_seq16_resplit_probe.sh"
+  "scripts/probes/dream7b_bpu_resplit_hbm_artifact_inventory_probe.sh"
+  "scripts/probes/dream7b_bpu_resplit_segment_residency_probe.sh"
+  "scripts/probes/dream7b_bpu_resplit_forward_probe.sh"
   "scripts/probes/s100_official_llm_baseline_probe.sh"
   "scripts/probes/s100_official_qwen_runtime_probe.sh"
   "scripts/probes/s100_bpu_memory_pool_probe.sh"
@@ -116,6 +121,11 @@ required_readme_strings=(
   "scripts/probes/dream7b_bpu_selected_pair_candidate_forward_probe.sh"
   "scripts/install_dream7b_bpu_selected_pair_candidate_service.sh"
   "scripts/probes/dream7b_bpu_selected_pair_candidate_service_probe.sh"
+  "scripts/probes/compile_dream_segments_seq16_resplit_probe.sh"
+  "scripts/probes/dream7b_bpu_resplit_hbm_artifact_inventory_probe.sh"
+  "scripts/probes/dream7b_bpu_resplit_segment_residency_probe.sh"
+  "scripts/dream7b-bpu-resplit-forward.sh"
+  "scripts/probes/dream7b_bpu_resplit_forward_probe.sh"
   "scripts/probes/s100_official_llm_baseline_probe.sh"
   "scripts/probes/s100_official_qwen_runtime_probe.sh"
   "scripts/probes/s100_bpu_memory_pool_probe.sh"
@@ -171,6 +181,9 @@ required_reference_strings=(
   "dream7b-bpu-selected-pair-candidate-forward-probe"
   "install-dream7b-bpu-selected-pair-candidate-service"
   "dream7b-bpu-selected-pair-candidate-service-probe"
+  "dream7b-bpu-resplit-forward"
+  "dream7b-bpu-resplit-segment-residency-probe"
+  "dream7b-bpu-resplit-forward-probe"
   "dream7b-bpu-selected-pair-candidate.service"
   "dream7b_bpu_selected_pair_candidate_service_telemetry"
   "comparison_to_default_systemd_telemetry"
@@ -313,6 +326,12 @@ required_reference_strings=(
   "DREAM7B_BPU_SELECTED_PAIR_BATCH_FORWARD_TOP_K"
   "DREAM7B_BPU_SELECTED_PAIR_CANDIDATE_FORWARD_CMD"
   "DREAM7B_BPU_SELECTED_PAIR_CANDIDATE_BATCH_COUNT"
+  "DREAM7B_BPU_RESPLIT_HBM_DIR"
+  "DREAM7B_BPU_RESPLIT_WINDOW_SIZE"
+  "DREAM7B_BPU_RESPLIT_CHILD_WINDOW_MODE"
+  "DREAM7B_BPU_RESPLIT_CHILD_RUNTIME_MODE"
+  "DREAM7B_BPU_RESPLIT_WINDOW_EXECUTION_MODE"
+  "DREAM7B_BPU_RESPLIT_FORWARD_EXPECTED_RESPLIT_HBM_DIR"
   "S100_OFFICIAL_LLM_SDK_ROOT"
   "S100_OFFICIAL_LLM_DREAM_REPORT_ROOT"
   "S100_OFFICIAL_LLM_DOC_URL"
@@ -2550,6 +2569,100 @@ if [[ -f scripts/probes/dream7b_bpu_resplit_hbm_artifact_inventory_probe.sh ]]; 
   fi
   if ! grep -F -- "/home/sunrise/.cache/openclaw/dream7b-hbm/resplit-seq16" docs/baseline_progress_2026-06-03_dream7b_segmented_bpu_hbm.md >/dev/null; then
     errors+=("Dream 7B segmented progress doc missing local resplit HBM path")
+  fi
+fi
+
+if [[ -f scripts/probes/dream7b_segmented_hbm_python_forward.py ]]; then
+  for text in \
+    "RESPLIT_ADJACENT_SEGMENTS" \
+    "--resplit-hbm-dir" \
+    "resplit-adjacent" \
+    "resplit_hbm_dir" \
+    "dream_segment_00_01" \
+    "dream_segment_27_28"; do
+    if ! grep -F -- "$text" scripts/probes/dream7b_segmented_hbm_python_forward.py >/dev/null; then
+      errors+=("dream7b_segmented_hbm_python_forward.py missing resplit runtime support text: $text")
+    fi
+  done
+fi
+
+if [[ -f scripts/dream7b-bpu-resplit-forward.sh ]]; then
+  for text in \
+    "DREAM7B_BPU_RESPLIT_HBM_DIR" \
+    "DREAM7B_BPU_RESPLIT_WINDOW_SIZE" \
+    "DREAM7B_BPU_RESPLIT_CHILD_WINDOW_MODE" \
+    "DREAM7B_BPU_RESPLIT_CHILD_RUNTIME_MODE" \
+    "DREAM7B_BPU_RESPLIT_WINDOW_EXECUTION_MODE" \
+    "/home/sunrise/.cache/openclaw/dream7b-hbm/resplit-seq16" \
+    "--resplit-hbm-dir" \
+    "--segment-plan resplit-adjacent" \
+    "--residency-window-size" \
+    "--child-window-mode" \
+    "--child-runtime-mode" \
+    "--window-execution-mode" \
+    "dream7b-bpu-forward"; do
+    if ! grep -F -- "$text" scripts/dream7b-bpu-resplit-forward.sh >/dev/null; then
+      errors+=("dream7b-bpu-resplit-forward.sh missing $text")
+    fi
+  done
+fi
+
+if [[ -f scripts/probes/dream7b_bpu_resplit_segment_residency_probe.sh ]]; then
+  for text in \
+    "DREAM7B_BPU_RESPLIT_BASE_HBM_DIR" \
+    "DREAM7B_BPU_RESPLIT_FINE_HBM_DIR" \
+    "DREAM7B_BPU_RESPLIT_HBM_DIR" \
+    "DREAM7B_BPU_RESPLIT_RESIDENCY_VENV" \
+    "/home/sunrise/.cache/openclaw/dream7b-hbm/resplit-seq16" \
+    "ok_dream7b_bpu_resplit_segment_residency_probe" \
+    "resplit_segment_residency_probe.json" \
+    "resplit_adjacent_pair_supported" \
+    "ready_prefix_count" \
+    "first_prefix_failure" \
+    "seg00_01" \
+    "seg27_28"; do
+    if ! grep -F -- "$text" scripts/probes/dream7b_bpu_resplit_segment_residency_probe.sh >/dev/null; then
+      errors+=("dream7b_bpu_resplit_segment_residency_probe.sh missing $text")
+    fi
+  done
+  if ! grep -F -- "dream7b_bpu_resplit_segment_residency_probe.sh" README.md >/dev/null; then
+    errors+=("README.md missing dream7b_bpu_resplit_segment_residency_probe.sh")
+  fi
+  if ! grep -F -- "dream7b-bpu-resplit-segment-residency-probe" docs/project_reference.md >/dev/null; then
+    errors+=("docs/project_reference.md missing dream7b-bpu-resplit-segment-residency-probe")
+  fi
+  if ! grep -F -- "dream7b_bpu_resplit_segment_residency_20260606-072919" docs/baseline_progress_2026-06-03_dream7b_segmented_bpu_hbm.md >/dev/null; then
+    errors+=("Dream 7B segmented progress doc missing resplit segment residency report")
+  fi
+fi
+
+if [[ -f scripts/probes/dream7b_bpu_resplit_forward_probe.sh ]]; then
+  for text in \
+    "DREAM7B_BPU_RESPLIT_FORWARD_EXPECTED_BASE_HBM_DIR" \
+    "DREAM7B_BPU_RESPLIT_FORWARD_EXPECTED_FINE_HBM_DIR" \
+    "DREAM7B_BPU_RESPLIT_FORWARD_EXPECTED_RESPLIT_HBM_DIR" \
+    "dream7b-bpu-resplit-forward" \
+    "ok_dream7b_bpu_resplit_forward_probe" \
+    "resplit_forward_probe.json" \
+    "resplit-adjacent" \
+    "pair_in_process" \
+    "topk_last_position" \
+    "final_shape" \
+    "segment_event_count" \
+    "segment_sources" \
+    "amortized_load_ms_per_forward"; do
+    if ! grep -F -- "$text" scripts/probes/dream7b_bpu_resplit_forward_probe.sh >/dev/null; then
+      errors+=("dream7b_bpu_resplit_forward_probe.sh missing $text")
+    fi
+  done
+  if ! grep -F -- "dream7b_bpu_resplit_forward_probe.sh" README.md >/dev/null; then
+    errors+=("README.md missing dream7b_bpu_resplit_forward_probe.sh")
+  fi
+  if ! grep -F -- "dream7b-bpu-resplit-forward-probe" docs/project_reference.md >/dev/null; then
+    errors+=("docs/project_reference.md missing dream7b-bpu-resplit-forward-probe")
+  fi
+  if ! grep -F -- "dream7b_bpu_resplit_forward_20260606-074419" docs/baseline_progress_2026-06-03_dream7b_segmented_bpu_hbm.md >/dev/null; then
+    errors+=("Dream 7B segmented progress doc missing resplit forward report")
   fi
 fi
 
