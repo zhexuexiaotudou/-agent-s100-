@@ -965,6 +965,46 @@ else:
         },
     )
 
+segment_capacity_path, segment_capacity = latest_json("dream7b_bpu_segment_capacity_planner_*/segment_capacity_planner_probe.json")
+if segment_capacity is None:
+    add_check("segment_capacity_planner", segment_capacity_path, False, {"reason": "missing segment_capacity_planner_probe.json"})
+else:
+    current_split_capacity = segment_capacity.get("current_split_capacity") or {}
+    ok = (
+        segment_capacity.get("verdict") == "ok_dream7b_bpu_segment_capacity_planner_probe"
+        and int(segment_capacity.get("segment_count") or 0) == 10
+        and current_split_capacity.get("current_split_quad_residency_supported") is False
+        and int(current_split_capacity.get("max_resident_segment_count_observed") or 0) >= 3
+        and int(current_split_capacity.get("successful_triplet_count") or 0) >= 20
+        and int(current_split_capacity.get("successful_seeded_quad_count") or 0) == 0
+        and current_split_capacity.get("selected_pair") == [1, 8]
+        and current_split_capacity.get("selected_pair_matches_anchor_pair") is True
+        and segment_capacity.get("recommended_anchor_segment_indexes") == [1, 8]
+        and (segment_capacity.get("recommended_resplit_segment_indexes") or [])[:4] == [0, 9, 4, 6]
+        and segment_capacity.get("next_optimization_target")
+        and not segment_capacity.get("errors")
+    )
+    add_check(
+        "segment_capacity_planner",
+        segment_capacity_path,
+        ok,
+        {
+            "verdict": segment_capacity.get("verdict"),
+            "segment_count": segment_capacity.get("segment_count"),
+            "max_resident_segment_count_observed": current_split_capacity.get("max_resident_segment_count_observed"),
+            "successful_triplet_count": current_split_capacity.get("successful_triplet_count"),
+            "successful_seeded_quad_count": current_split_capacity.get("successful_seeded_quad_count"),
+            "current_split_quad_residency_supported": current_split_capacity.get("current_split_quad_residency_supported"),
+            "selected_pair": current_split_capacity.get("selected_pair"),
+            "selected_pair_matches_anchor_pair": current_split_capacity.get("selected_pair_matches_anchor_pair"),
+            "recommended_anchor_segment_indexes": segment_capacity.get("recommended_anchor_segment_indexes"),
+            "recommended_resplit_segment_indexes": segment_capacity.get("recommended_resplit_segment_indexes"),
+            "largest_segment_indexes_by_size": segment_capacity.get("largest_segment_indexes_by_size"),
+            "next_optimization_target": segment_capacity.get("next_optimization_target"),
+            "warnings": segment_capacity.get("warnings"),
+        },
+    )
+
 persistent_triplet_topology_path, persistent_triplet_topology = latest_json("dream7b_bpu_persistent_triplet_topology_*/persistent_triplet_topology_probe.json")
 if persistent_triplet_topology is None:
     add_check("persistent_triplet_topology", persistent_triplet_topology_path, False, {"reason": "missing persistent_triplet_topology_probe.json"})

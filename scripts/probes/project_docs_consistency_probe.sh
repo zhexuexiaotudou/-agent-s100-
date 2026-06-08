@@ -65,6 +65,7 @@ required_files=(
   "scripts/probes/dream7b_bpu_persistent_segment_cache_probe.sh"
   "scripts/probes/dream7b_bpu_single_segment_triplet_residency_probe.sh"
   "scripts/probes/dream7b_bpu_seeded_quad_residency_probe.sh"
+  "scripts/probes/dream7b_bpu_segment_capacity_planner_probe.sh"
   "scripts/probes/dream7b_bpu_persistent_triplet_topology_probe.sh"
   "scripts/probes/dream7b_bpu_window3_forward_feasibility_probe.sh"
   "scripts/probes/dream7b_bpu_selected_triplet_forward_path_probe.sh"
@@ -105,6 +106,7 @@ required_readme_strings=(
   "scripts/probes/dream7b_bpu_persistent_segment_cache_probe.sh"
   "scripts/probes/dream7b_bpu_single_segment_triplet_residency_probe.sh"
   "scripts/probes/dream7b_bpu_seeded_quad_residency_probe.sh"
+  "scripts/probes/dream7b_bpu_segment_capacity_planner_probe.sh"
   "scripts/probes/dream7b_bpu_persistent_triplet_topology_probe.sh"
   "scripts/probes/dream7b_bpu_window3_forward_feasibility_probe.sh"
   "scripts/probes/dream7b_bpu_selected_triplet_forward_path_probe.sh"
@@ -158,6 +160,7 @@ required_reference_strings=(
   "dream7b-bpu-persistent-segment-cache-probe"
   "dream7b-bpu-single-segment-triplet-residency-probe"
   "dream7b-bpu-seeded-quad-residency-probe"
+  "dream7b-bpu-segment-capacity-planner-probe"
   "dream7b-bpu-persistent-triplet-topology-probe"
   "dream7b-bpu-window3-forward-feasibility-probe"
   "dream7b-bpu-selected-triplet-forward-path-probe"
@@ -1509,6 +1512,32 @@ if [[ -f scripts/probes/dream7b_bpu_seeded_quad_residency_probe.sh ]]; then
   fi
 fi
 
+if [[ -f scripts/probes/dream7b_bpu_segment_capacity_planner_probe.sh ]]; then
+  for text in \
+    "DREAM7B_BPU_SEGMENT_CAPACITY_MODEL_REPORT_ROOT" \
+    "DREAM7B_BPU_SEGMENT_CAPACITY_BASE_HBM_DIR" \
+    "DREAM7B_BPU_SEGMENT_CAPACITY_FINE_HBM_DIR" \
+    "dream7b_bpu_segment_capacity_planner_" \
+    "segment_capacity_planner_probe.json" \
+    "segment_capacity_planner_probe.md" \
+    "ok_dream7b_bpu_segment_capacity_planner_probe" \
+    "hbm_segment_inventory" \
+    "current_split_capacity" \
+    "current_split_quad_residency_supported" \
+    "triplet_success_appearance_by_segment_index" \
+    "triplet_failed_worker_count_by_segment_index" \
+    "recommended_anchor_segment_indexes" \
+    "recommended_resplit_segment_indexes" \
+    "recompile or split weak residency segments"; do
+    if ! grep -F -- "$text" scripts/probes/dream7b_bpu_segment_capacity_planner_probe.sh >/dev/null; then
+      errors+=("dream7b_bpu_segment_capacity_planner_probe.sh missing $text")
+    fi
+  done
+  if ! grep -F -- 'DREAM7B_BPU_SEGMENT_CAPACITY_MODEL_REPORT_ROOT:-/mnt/nas/openclaw/reports/models' scripts/probes/dream7b_bpu_segment_capacity_planner_probe.sh >/dev/null; then
+    errors+=("dream7b_bpu_segment_capacity_planner_probe.sh missing default DREAM7B_BPU_SEGMENT_CAPACITY_MODEL_REPORT_ROOT:-/mnt/nas/openclaw/reports/models")
+  fi
+fi
+
 if [[ -f scripts/probes/dream7b_bpu_persistent_triplet_topology_probe.sh ]]; then
   for text in \
     "DREAM7B_BPU_PERSISTENT_TRIPLET_TOPOLOGY_TRIPLET_JSON" \
@@ -2532,6 +2561,7 @@ if [[ -f scripts/probes/dream7b_bpu_deployment_acceptance_probe.sh ]]; then
     "dream7b_bpu_persistent_segment_cache_*/persistent_segment_cache_probe.json" \
     "dream7b_bpu_single_segment_triplet_residency_*/single_segment_triplet_residency_probe.json" \
     "dream7b_bpu_seeded_quad_residency_*/seeded_quad_residency_probe.json" \
+    "dream7b_bpu_segment_capacity_planner_*/segment_capacity_planner_probe.json" \
     "dream7b_bpu_persistent_triplet_topology_*/persistent_triplet_topology_probe.json" \
     "dream7b_bpu_window3_forward_feasibility_*/window3_forward_feasibility_probe.json" \
     "dream7b_bpu_selected_triplet_forward_path_*/selected_triplet_forward_path_probe.json" \
@@ -2561,6 +2591,7 @@ if [[ -f scripts/probes/dream7b_bpu_deployment_acceptance_probe.sh ]]; then
     "persistent_segment_cache" \
     "single_segment_triplet_residency" \
     "seeded_quad_residency" \
+    "segment_capacity_planner" \
     "persistent_triplet_topology" \
     "window3_forward_feasibility" \
     "ok_dream7b_bpu_utilization_gap_probe" \
@@ -2570,6 +2601,7 @@ if [[ -f scripts/probes/dream7b_bpu_deployment_acceptance_probe.sh ]]; then
     "ok_dream7b_bpu_persistent_segment_cache_probe" \
     "ok_dream7b_bpu_single_segment_triplet_residency_probe" \
     "ok_dream7b_bpu_seeded_quad_residency_probe" \
+    "ok_dream7b_bpu_segment_capacity_planner_probe" \
     "ok_dream7b_bpu_persistent_triplet_topology_probe" \
     "ok_dream7b_bpu_window3_forward_feasibility_probe" \
     "ok_dream7b_bpu_selected_triplet_forward_path_probe" \
@@ -2620,6 +2652,10 @@ if [[ -f scripts/probes/dream7b_bpu_deployment_acceptance_probe.sh ]]; then
     "successful_seeded_quad_count" \
     "failed_seeded_quad_count" \
     "successful_seeded_quads" \
+    "current_split_quad_residency_supported" \
+    "recommended_anchor_segment_indexes" \
+    "recommended_resplit_segment_indexes" \
+    "selected_pair_matches_anchor_pair" \
     "tested_triplet_topology_count" \
     "stable_triplet_topology_count" \
     "failed_triplet_topology_count" \
