@@ -1665,8 +1665,8 @@ errors: []
 Verified official S100 LLM/Qwen baseline comparison:
 
 ```text
-official_llm_baseline_report: /mnt/nas/openclaw/reports/models/s100_official_llm_baseline_20260606-002605/official_llm_baseline_probe.md
-official_llm_baseline_json: /mnt/nas/openclaw/reports/models/s100_official_llm_baseline_20260606-002605/official_llm_baseline_probe.json
+official_llm_baseline_report: /mnt/nas/openclaw/reports/models/s100_official_llm_baseline_20260606-004107/official_llm_baseline_probe.md
+official_llm_baseline_json: /mnt/nas/openclaw/reports/models/s100_official_llm_baseline_20260606-004107/official_llm_baseline_probe.json
 verdict: ok_s100_official_llm_baseline_probe
 sdk_exists: True
 runtime_exists: True
@@ -1690,8 +1690,8 @@ comparison_to_dream.dream_failure_summary.systemd_telemetry.load_to_run_ratio: 8
 comparison_to_dream.dream_failure_summary.selected_triplet_forward_supported: False
 comparison_to_dream.dream_failure_summary.reboot_or_disconnect_observed: True
 next_probe_target: inspect S100P BPU/common-buffer memory pool and official runtime performance-mode prerequisites before using Qwen as a clean 128TOPS utilization baseline
-official_qwen_runtime_report: /mnt/nas/openclaw/reports/models/s100_official_qwen_runtime_20260606-002312/official_qwen_runtime_probe.md
-official_qwen_runtime_json: /mnt/nas/openclaw/reports/models/s100_official_qwen_runtime_20260606-002312/official_qwen_runtime_probe.json
+official_qwen_runtime_report: /mnt/nas/openclaw/reports/models/s100_official_qwen_runtime_20260606-003908/official_qwen_runtime_probe.md
+official_qwen_runtime_json: /mnt/nas/openclaw/reports/models/s100_official_qwen_runtime_20260606-003908/official_qwen_runtime_probe.json
 official_qwen_runtime.verdict: ok_s100_official_qwen_runtime_probe
 official_qwen_runtime.qwen_hbm_size_bytes: 1917038584
 official_qwen_runtime.ldd_missing_dependency_observed: False
@@ -1703,6 +1703,22 @@ official_qwen_runtime.memory_alloc_failure_observed: True
 official_qwen_runtime.ion_alloc_failure_observed: True
 official_qwen_runtime.bpu_mem_pool_alloc_error_observed: True
 official_qwen_runtime.segmentation_fault_observed: True
+official_qwen_performance_mode_retest_report: /mnt/nas/openclaw/reports/models/s100_official_qwen_performance_mode_retest_20260606-003908/performance_mode_retest_probe.md
+official_qwen_performance_mode_retest_json: /mnt/nas/openclaw/reports/models/s100_official_qwen_performance_mode_retest_20260606-003908/performance_mode_retest_probe.json
+official_qwen_performance_mode_retest.before_values: {'0x2b047000': '0x0000007E', '0x2b047004': '0x00EC4EC4'}
+official_qwen_performance_mode_retest.after_values: {'0x2b047000': '0x00000099', '0x2b047004': '0x00000099'}
+official_qwen_performance_mode_retest.target_applied: True
+official_qwen_performance_mode_retest.memory_alloc_failure_observed_after_performance_mode: True
+s100_bpu_memory_pool_report: /mnt/nas/openclaw/reports/models/s100_bpu_memory_pool_20260606-004401/bpu_memory_pool_probe.md
+s100_bpu_memory_pool_json: /mnt/nas/openclaw/reports/models/s100_bpu_memory_pool_20260606-004401/bpu_memory_pool_probe.json
+s100_bpu_memory_pool.default_devmem_path: /usr/bin/devmem
+s100_bpu_memory_pool.sudo_devmem_path: /usr/hobot/bin/devmem
+s100_bpu_memory_pool.default_devmem_returncode: 127
+s100_bpu_memory_pool.busybox_devmem_returncode: 0
+s100_bpu_memory_pool.perf_register_0x2b047000: 0x00000099
+s100_bpu_memory_pool.perf_register_0x2b047004: 0x00000099
+s100_bpu_memory_pool.ion_meminfo_shebang_interpreter_exists: False
+s100_bpu_memory_pool.memstat_shebang_interpreter_exists: False
 errors: []
 ```
 
@@ -2086,7 +2102,7 @@ This is real BPU execution for real Dream 7B weights, including a complete seq16
 
 Latest segment-residency update: `/mnt/nas/openclaw/reports/models/dream7b_bpu_single_segment_residency_matrix_20260606-002628/single_segment_residency_matrix_probe.json` proves that all ten single segments can be held individually and every ordered single-to-single edge loads successfully (`matrix_entry_count: 90`, `successful_segment_edge_count: 90`, `failed_segment_edge_count: 0`, `max_resident_segment_count_observed: 2`). `/mnt/nas/openclaw/reports/models/dream7b_bpu_persistent_segment_cache_20260606-005633/persistent_segment_cache_probe.json` then shows the prefix resident boundary is two single-segment runtimes before `segment_02_seg04_07` fails. `/mnt/nas/openclaw/reports/models/dream7b_bpu_single_segment_triplet_residency_20260606-121243/single_segment_triplet_residency_probe.json` expands that boundary: all 120 three-segment combinations were tested, 20 triplets succeeded, 100 failed, and `max_resident_segment_count_observed: 3`. `/mnt/nas/openclaw/reports/models/dream7b_bpu_seeded_quad_residency_20260606-124305/seeded_quad_residency_probe.json` tests every unique four-segment candidate seeded by those 20 successful triplets and shows `seeded_quad_candidate_count: 84`, `tested_seeded_quad_count: 84`, `successful_seeded_quad_count: 0`, `failed_seeded_quad_count: 84`, and `max_resident_segment_count_observed: 3`. `/mnt/nas/openclaw/reports/models/dream7b_bpu_persistent_triplet_topology_20260606-131107/persistent_triplet_topology_probe.json` replays the 20 successful triplets as long-lived workers and shows `tested_triplet_topology_count: 20`, `stable_triplet_topology_count: 20`, `failed_triplet_topology_count: 0`, `selected_topology: [0, 1, 8]`, and `max_resident_segment_count_observed: 3`. `/mnt/nas/openclaw/reports/models/dream7b_bpu_window3_forward_feasibility_20260606-133931/window3_forward_feasibility_probe.json` shows direct packed adjacent window size 3 is not supported (`direct_window3_forward_supported: False`, `expected_window3_failure_observed: True`, `stderr_contains_memory_alloc_failure: True`). `/mnt/nas/openclaw/reports/models/dream7b_bpu_selected_triplet_forward_path_20260606-135729/selected_triplet_forward_path_probe.json` shows the selected `[0, 1, 8]` triplet must not be promoted as a forward-path optimization (`selected_triplet_forward_supported: False`, `reboot_or_disconnect_observed: True`, `expected_reboot_guard_observed: True`). The latest report-only acceptance gate is `/mnt/nas/openclaw/reports/models/dream7b_bpu_deployment_acceptance_20260605-234652/deployment_acceptance_probe.json` with `check_count: 25`, `passed_check_count: 25`, `single_segment_residency_matrix.ok: True`, `persistent_segment_cache.ok: True`, `single_segment_triplet_residency.ok: True`, `seeded_quad_residency.ok: True`, `persistent_triplet_topology.ok: True`, `window3_forward_feasibility.ok: True`, and `selected_triplet_forward_path.ok: True`.
 
-Latest official-Qwen comparison: `/mnt/nas/openclaw/reports/models/s100_official_llm_baseline_20260606-002605/official_llm_baseline_probe.json` shows the official S100 LLM SDK/Qwen baseline assets are staged and the Qwen HBM exists locally (`qwen_existing_hbm_count: 1`, `qwen_hbm_exists_from_multichat: True`). `/mnt/nas/openclaw/reports/models/s100_official_qwen_runtime_20260606-002312/official_qwen_runtime_probe.json` shows official Qwen loads the vendor HBM and both `decode`/`prefill` models, then fails on BPU/common-buffer allocation (`runtime_returncode: -11`, `hbm_load_success_observed: True`, `init_model_success_observed: True`, `memory_alloc_failure_observed: True`, `ion_alloc_failure_observed: True`, `bpu_mem_pool_alloc_error_observed: True`, `official_qwen_runtime_supported_on_current_s100p_state: False`). This is similar to Dream memory-allocation evidence in residency probes, but Dream's sustained service bottleneck remains separately diagnosed as `hbm_reload_dominated`.
+Latest official-Qwen comparison: `/mnt/nas/openclaw/reports/models/s100_official_llm_baseline_20260606-004107/official_llm_baseline_probe.json` shows the official S100 LLM SDK/Qwen baseline assets are staged and the Qwen HBM exists locally (`qwen_existing_hbm_count: 1`, `qwen_hbm_exists_from_multichat: True`). `/mnt/nas/openclaw/reports/models/s100_official_qwen_runtime_20260606-003908/official_qwen_runtime_probe.json` shows official Qwen loads the vendor HBM and both `decode`/`prefill` models, then fails on BPU/common-buffer allocation (`runtime_returncode: -11`, `hbm_load_success_observed: True`, `init_model_success_observed: True`, `memory_alloc_failure_observed: True`, `ion_alloc_failure_observed: True`, `bpu_mem_pool_alloc_error_observed: True`, `official_qwen_runtime_supported_on_current_s100p_state: False`). `/mnt/nas/openclaw/reports/models/s100_official_qwen_performance_mode_retest_20260606-003908/performance_mode_retest_probe.json` proves the official performance registers were moved to `0x00000099` but the Qwen memory allocation failure remained. `/mnt/nas/openclaw/reports/models/s100_bpu_memory_pool_20260606-004401/bpu_memory_pool_probe.json` records the next system-level blockers: sudo resolves `devmem` to the broken `/usr/hobot/bin/devmem`, while `/usr/bin/devmem` works; `ion_meminfo` and `memstat` have missing shebang interpreters; and `/sys/kernel/debug/ion/heaps/all_heap_info` is absent. This is similar to Dream memory-allocation evidence in residency probes, but Dream's sustained service bottleneck remains separately diagnosed as `hbm_reload_dominated`.
 
 Remaining engineering work:
 

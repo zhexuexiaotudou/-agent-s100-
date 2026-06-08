@@ -68,6 +68,8 @@ required_files=(
   "scripts/probes/dream7b_bpu_selected_triplet_forward_path_probe.sh"
   "scripts/probes/s100_official_llm_baseline_probe.sh"
   "scripts/probes/s100_official_qwen_runtime_probe.sh"
+  "scripts/probes/s100_bpu_memory_pool_probe.sh"
+  "scripts/probes/s100_official_qwen_performance_mode_retest_probe.sh"
   "scripts/probes/dream7b_bpu_batch_queue_retention_probe.sh"
   "scripts/probes/dream7b_bpu_deployment_acceptance_probe.sh"
   "scripts/startup_link_check/link-check.config.json"
@@ -97,6 +99,8 @@ required_readme_strings=(
   "scripts/probes/dream7b_bpu_selected_triplet_forward_path_probe.sh"
   "scripts/probes/s100_official_llm_baseline_probe.sh"
   "scripts/probes/s100_official_qwen_runtime_probe.sh"
+  "scripts/probes/s100_bpu_memory_pool_probe.sh"
+  "scripts/probes/s100_official_qwen_performance_mode_retest_probe.sh"
   "dream7b_bpu_text_queue_systemd_probe.sh"
 )
 
@@ -380,9 +384,16 @@ required_reference_strings=(
   "ok_s100_official_llm_baseline_probe"
   "official_qwen_runtime_probe"
   "ok_s100_official_qwen_runtime_probe"
+  "bpu_memory_pool_probe"
+  "ok_s100_bpu_memory_pool_probe"
+  "performance_mode_retest_probe"
+  "ok_s100_official_qwen_performance_mode_retest_probe"
   "supported_model_names_from_resolve_model"
   "qwen_existing_hbm_count"
   "official_qwen_memory_alloc_failure_observed"
+  "latest_performance_mode_retest_memory_alloc_failure_observed"
+  "ion_meminfo_shebang_interpreter_exists"
+  "memstat_shebang_interpreter_exists"
   "similar_issue_evidence_available_for_official_qwen"
   "comparison_to_dream"
   "hbm_artifact_inventory"
@@ -1568,6 +1579,67 @@ if [[ -f scripts/probes/s100_official_qwen_runtime_probe.sh ]]; then
   fi
   if ! grep -F -- 'D-Robotics_LLM_S100_1.0.0_SDK' scripts/probes/s100_official_qwen_runtime_probe.sh >/dev/null; then
     errors+=("s100_official_qwen_runtime_probe.sh missing D-Robotics_LLM_S100_1.0.0_SDK")
+  fi
+fi
+
+if [[ -f scripts/probes/s100_bpu_memory_pool_probe.sh ]]; then
+  for text in \
+    "S100_BPU_MEMORY_POOL_SDK_ROOT" \
+    "S100_BPU_MEMORY_POOL_RELATED_REPORT_ROOT" \
+    "bpu_memory_pool_probe.json" \
+    "bpu_memory_pool_probe.md" \
+    "ok_s100_bpu_memory_pool_probe" \
+    "performance_mode_script_action" \
+    "inspected_not_applied" \
+    "default_devmem_path" \
+    "sudo_devmem_path" \
+    "busybox_devmem_returncode" \
+    "perf_register_0x2b047000" \
+    "perf_register_0x2b047004" \
+    "performance_mode_target_applied_from_latest_retest" \
+    "latest_performance_mode_retest_memory_alloc_failure_observed" \
+    "ion_meminfo_shebang" \
+    "ion_meminfo_shebang_interpreter_exists" \
+    "ion_meminfo_fallback_returncode" \
+    "memstat_shebang" \
+    "memstat_shebang_interpreter_exists" \
+    "memstat_fallback_returncode" \
+    "latest_official_qwen_memory_alloc_failure_observed" \
+    "latest_dream_diagnosis" \
+    "next_probe_target"; do
+    if ! grep -F -- "$text" scripts/probes/s100_bpu_memory_pool_probe.sh >/dev/null; then
+      errors+=("s100_bpu_memory_pool_probe.sh missing $text")
+    fi
+  done
+  if ! grep -F -- 'D-Robotics_LLM_S100_1.0.0_SDK' scripts/probes/s100_bpu_memory_pool_probe.sh >/dev/null; then
+    errors+=("s100_bpu_memory_pool_probe.sh missing D-Robotics_LLM_S100_1.0.0_SDK")
+  fi
+fi
+
+if [[ -f scripts/probes/s100_official_qwen_performance_mode_retest_probe.sh ]]; then
+  for text in \
+    "S100_OFFICIAL_QWEN_PERF_RETEST_RUNTIME_PROBE" \
+    "S100_OFFICIAL_QWEN_PERF_RETEST_DEVMEM_BIN" \
+    "S100_OFFICIAL_QWEN_PERF_RETEST_TARGET_VALUE" \
+    "performance_mode_retest_probe.json" \
+    "performance_mode_retest_probe.md" \
+    "ok_s100_official_qwen_performance_mode_retest_probe" \
+    "0x2b047000" \
+    "0x2b047004" \
+    "0x00000099" \
+    "/usr/bin/devmem" \
+    "target_applied" \
+    "runtime_completed_after_performance_mode" \
+    "memory_alloc_failure_observed_after_performance_mode" \
+    "hbm_load_success_observed_after_performance_mode" \
+    "init_model_success_observed_after_performance_mode" \
+    "next_probe_target"; do
+    if ! grep -F -- "$text" scripts/probes/s100_official_qwen_performance_mode_retest_probe.sh >/dev/null; then
+      errors+=("s100_official_qwen_performance_mode_retest_probe.sh missing $text")
+    fi
+  done
+  if ! grep -F -- 'S100_OFFICIAL_QWEN_PERF_RETEST_TARGET_VALUE:-0x99' scripts/probes/s100_official_qwen_performance_mode_retest_probe.sh >/dev/null; then
+    errors+=("s100_official_qwen_performance_mode_retest_probe.sh missing default S100_OFFICIAL_QWEN_PERF_RETEST_TARGET_VALUE:-0x99")
   fi
 fi
 

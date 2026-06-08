@@ -2846,13 +2846,13 @@ errors
 Latest recorded report:
 
 ```text
-/mnt/nas/openclaw/reports/models/s100_official_llm_baseline_20260606-002605/official_llm_baseline_probe.md
+/mnt/nas/openclaw/reports/models/s100_official_llm_baseline_20260606-004107/official_llm_baseline_probe.md
 ```
 
 Latest recorded JSON:
 
 ```text
-/mnt/nas/openclaw/reports/models/s100_official_llm_baseline_20260606-002605/official_llm_baseline_probe.json
+/mnt/nas/openclaw/reports/models/s100_official_llm_baseline_20260606-004107/official_llm_baseline_probe.json
 ```
 
 Verified official LLM/Qwen baseline fields copied from `official_llm_baseline_probe.json`:
@@ -2873,7 +2873,7 @@ qwen_multichat_config.template_path: ../../config/Qwen2.5_1.5B_Instruct_config/Q
 qwen_multichat_config.model_type: 7
 qwen_hbm_exists_from_multichat: True
 official_qwen_local_runtime_report_present: True
-official_qwen_latest_runtime_report_path: /mnt/nas/openclaw/reports/models/s100_official_qwen_runtime_20260606-002312/official_qwen_runtime_probe.json
+official_qwen_latest_runtime_report_path: /mnt/nas/openclaw/reports/models/s100_official_qwen_runtime_20260606-003908/official_qwen_runtime_probe.json
 official_qwen_runtime_completed: False
 official_qwen_runtime_returncode: -11
 official_qwen_memory_alloc_failure_observed: True
@@ -2990,13 +2990,13 @@ errors
 Latest recorded report:
 
 ```text
-/mnt/nas/openclaw/reports/models/s100_official_qwen_runtime_20260606-002312/official_qwen_runtime_probe.md
+/mnt/nas/openclaw/reports/models/s100_official_qwen_runtime_20260606-003908/official_qwen_runtime_probe.md
 ```
 
 Latest recorded JSON:
 
 ```text
-/mnt/nas/openclaw/reports/models/s100_official_qwen_runtime_20260606-002312/official_qwen_runtime_probe.json
+/mnt/nas/openclaw/reports/models/s100_official_qwen_runtime_20260606-003908/official_qwen_runtime_probe.json
 ```
 
 Verified official Qwen runtime fields copied from `official_qwen_runtime_probe.json`:
@@ -3020,6 +3020,239 @@ segmentation_fault_observed: True
 official_qwen_runtime_supported_on_current_s100p_state: False
 same_failure_class_as_dream: True
 next_probe_target: inspect S100P BPU/common-buffer memory pool and official runtime performance-mode prerequisites before using Qwen as a clean 128TOPS utilization baseline
+errors: []
+```
+
+### `s100-official-qwen-performance-mode-retest-probe`
+
+Source file: `scripts/probes/s100_official_qwen_performance_mode_retest_probe.sh`
+
+Installed command on S100P:
+
+```text
+/usr/local/bin/s100-official-qwen-performance-mode-retest-probe
+```
+
+Default argument copied from the script:
+
+```text
+report_root = /mnt/nas/openclaw/reports/models
+```
+
+Environment variables copied from the script:
+
+```text
+S100_OFFICIAL_QWEN_PERF_RETEST_RUNTIME_PROBE
+S100_OFFICIAL_QWEN_PERF_RETEST_DEVMEM_BIN
+S100_OFFICIAL_QWEN_PERF_RETEST_TARGET_VALUE
+```
+
+Safety constraints copied from the script:
+
+```text
+qwen_runtime_probe = /usr/local/bin/s100-official-qwen-runtime-probe
+devmem_bin = /usr/bin/devmem
+target_value = 0x99
+registers = ['0x2b047000', '0x2b047004']
+target_register_value = 0x00000099
+```
+
+Output files copied from the script:
+
+```text
+performance_mode_retest_probe.json
+performance_mode_retest_probe.md
+boardid.txt
+before_0x2b047000.txt
+before_0x2b047004.txt
+write_0x2b047000.txt
+write_0x2b047004.txt
+after_0x2b047000.txt
+after_0x2b047004.txt
+qwen_runtime_probe.txt
+```
+
+Output fields copied from the script:
+
+```text
+generated_at
+verdict
+run_dir
+report_root
+qwen_runtime_probe
+devmem_bin
+target_value
+boardid
+registers
+before_values
+after_values
+target_applied
+runtime_probe_returncode
+runtime_probe_timed_out
+runtime_report_path
+runtime_completed_after_performance_mode
+memory_alloc_failure_observed_after_performance_mode
+runtime_returncode_after_performance_mode
+hbm_load_success_observed_after_performance_mode
+init_model_success_observed_after_performance_mode
+next_probe_target
+captures
+warnings
+errors
+```
+
+Latest recorded report:
+
+```text
+/mnt/nas/openclaw/reports/models/s100_official_qwen_performance_mode_retest_20260606-003908/performance_mode_retest_probe.md
+```
+
+Latest recorded JSON:
+
+```text
+/mnt/nas/openclaw/reports/models/s100_official_qwen_performance_mode_retest_20260606-003908/performance_mode_retest_probe.json
+```
+
+Verified official Qwen performance-mode retest fields copied from `performance_mode_retest_probe.json`:
+
+```text
+verdict: ok_s100_official_qwen_performance_mode_retest_probe
+boardid: 0x6486
+devmem_bin: /usr/bin/devmem
+target_value: 0x99
+before_values: {'0x2b047000': '0x0000007E', '0x2b047004': '0x00EC4EC4'}
+after_values: {'0x2b047000': '0x00000099', '0x2b047004': '0x00000099'}
+target_applied: True
+runtime_report_path: /mnt/nas/openclaw/reports/models/s100_official_qwen_runtime_20260606-003908/official_qwen_runtime_probe.json
+runtime_completed_after_performance_mode: False
+runtime_returncode_after_performance_mode: -11
+memory_alloc_failure_observed_after_performance_mode: True
+hbm_load_success_observed_after_performance_mode: True
+init_model_success_observed_after_performance_mode: True
+next_probe_target: inspect ION/common-buffer reserved memory and HBMEM/UCP allocation prerequisites; performance-mode register apply alone did not clear official Qwen allocation failure
+errors: []
+```
+
+### `s100-bpu-memory-pool-probe`
+
+Source file: `scripts/probes/s100_bpu_memory_pool_probe.sh`
+
+Installed command on S100P:
+
+```text
+/usr/local/bin/s100-bpu-memory-pool-probe
+```
+
+Default argument copied from the script:
+
+```text
+report_root = /mnt/nas/openclaw/reports/models
+```
+
+Environment variables copied from the script:
+
+```text
+S100_BPU_MEMORY_POOL_SDK_ROOT
+S100_BPU_MEMORY_POOL_RELATED_REPORT_ROOT
+```
+
+Output files copied from the script:
+
+```text
+bpu_memory_pool_probe.json
+bpu_memory_pool_probe.md
+boardid.txt
+which_devmem.txt
+sudo_which_devmem.txt
+devmem_default_test.txt
+devmem_busybox_test.txt
+ion_meminfo.txt
+ion_meminfo_fallback_bash.txt
+memstat.txt
+memstat_fallback_busybox_ash.txt
+debug_probe.txt
+proc_cmdline.txt
+proc_meminfo.txt
+proc_modules.txt
+proc_mounts.txt
+```
+
+Output fields copied from the script:
+
+```text
+generated_at
+verdict
+run_dir
+sdk_root
+performance_mode_script
+performance_mode_script_exists
+performance_mode_script_action
+boardid
+official_script_would_match_s100p
+cmdline_contains_cma
+cmdline_contains_ion
+debug_mount_present
+default_devmem_path
+sudo_devmem_path
+usr_hobot_devmem_exists
+usr_bin_devmem_exists
+busybox_has_devmem
+default_devmem_returncode
+busybox_devmem_returncode
+perf_register_0x2b047000
+perf_register_0x2b047004
+performance_mode_target_applied_from_latest_retest
+latest_performance_mode_retest_path
+latest_performance_mode_retest_memory_alloc_failure_observed
+ion_meminfo_shebang
+ion_meminfo_shebang_interpreter_exists
+ion_meminfo_fallback_returncode
+memstat_shebang
+memstat_shebang_interpreter_exists
+memstat_fallback_returncode
+latest_official_qwen_memory_alloc_failure_observed
+latest_dream_diagnosis
+next_probe_target
+captures
+warnings
+errors
+```
+
+Latest recorded report:
+
+```text
+/mnt/nas/openclaw/reports/models/s100_bpu_memory_pool_20260606-004401/bpu_memory_pool_probe.md
+```
+
+Latest recorded JSON:
+
+```text
+/mnt/nas/openclaw/reports/models/s100_bpu_memory_pool_20260606-004401/bpu_memory_pool_probe.json
+```
+
+Verified S100 BPU memory-pool fields copied from `bpu_memory_pool_probe.json`:
+
+```text
+verdict: ok_s100_bpu_memory_pool_probe
+boardid: 0x6486
+default_devmem_path: /usr/bin/devmem
+sudo_devmem_path: /usr/hobot/bin/devmem
+default_devmem_returncode: 127
+busybox_devmem_returncode: 0
+perf_register_0x2b047000: 0x00000099
+perf_register_0x2b047004: 0x00000099
+performance_mode_target_applied_from_latest_retest: True
+latest_performance_mode_retest_memory_alloc_failure_observed: True
+ion_meminfo_shebang: #!/bin/zsh
+ion_meminfo_shebang_interpreter_exists: False
+ion_meminfo_fallback_returncode: 1
+ion_meminfo_fallback_first_stderr_line: Error: File '/sys/kernel/debug/ion/heaps/all_heap_info' does not exist!
+memstat_shebang: #!/var/busybox/ash
+memstat_shebang_interpreter_exists: False
+memstat_fallback_returncode: 0
+latest_official_qwen_memory_alloc_failure_observed: True
+latest_dream_diagnosis: hbm_reload_dominated
+next_probe_target: inspect ION/common-buffer reserved memory and HBMEM/UCP allocation prerequisites; performance-mode register apply alone did not clear official Qwen allocation failure
 errors: []
 ```
 
@@ -4507,7 +4740,10 @@ Reason: the official SDK contains supported Qwen/DeepSeek-Qwen/InternLM/Omni con
 Evidence:
 
 ```text
-/mnt/nas/openclaw/reports/models/s100_official_llm_baseline_20260606-000204/official_llm_baseline_probe.json
+/mnt/nas/openclaw/reports/models/s100_official_llm_baseline_20260606-004107/official_llm_baseline_probe.json
+/mnt/nas/openclaw/reports/models/s100_official_qwen_runtime_20260606-003908/official_qwen_runtime_probe.json
+/mnt/nas/openclaw/reports/models/s100_official_qwen_performance_mode_retest_20260606-003908/performance_mode_retest_probe.json
+/mnt/nas/openclaw/reports/models/s100_bpu_memory_pool_20260606-004401/bpu_memory_pool_probe.json
 ```
 
 ### Use segmented `.hbm`
@@ -5215,8 +5451,10 @@ docs/baseline_progress_2026-06-03_dream7b_segmented_bpu_hbm.md
 - Verified selected-triplet-aware deployment acceptance report at `/mnt/nas/openclaw/reports/models/dream7b_bpu_deployment_acceptance_20260605-234652/deployment_acceptance_probe.md` with `check_count: 25`, `passed_check_count: 25`, and `selected_triplet_forward_path.ok: True`.
 - Added `s100-official-llm-baseline-probe` to compare the staged official S100 LLM SDK/Qwen route with the custom segmented Dream 7B route without replacing Dream 7B.
 - Added `s100-official-qwen-runtime-probe` to run the official Qwen `oellm_multichat` example through the vendor runtime without replacing Dream 7B.
-- Verified official Qwen runtime report at `/mnt/nas/openclaw/reports/models/s100_official_qwen_runtime_20260606-002312/official_qwen_runtime_probe.md` with `qwen_hbm_size_bytes: 1917038584`, `ldd_missing_dependency_observed: False`, `hbm_load_success_observed: True`, `prefill_model_load_success_observed: True`, `decode_model_load_success_observed: True`, `init_model_success_observed: True`, `runtime_returncode: -11`, `memory_alloc_failure_observed: True`, `ion_alloc_failure_observed: True`, `bpu_mem_pool_alloc_error_observed: True`, and `official_qwen_runtime_supported_on_current_s100p_state: False`.
-- Updated and verified official LLM/Qwen baseline report at `/mnt/nas/openclaw/reports/models/s100_official_llm_baseline_20260606-002605/official_llm_baseline_probe.md` with `sdk_exists: True`, `config_dir_count: 8`, `official_hbm_download_entry_count: 14`, `qwen_existing_hbm_count: 1`, `official_qwen_local_runtime_report_present: True`, `official_qwen_runtime_completed: False`, `official_qwen_memory_alloc_failure_observed: True`, and `similar_issue_evidence_available_for_official_qwen: True`.
+- Verified official Qwen runtime report at `/mnt/nas/openclaw/reports/models/s100_official_qwen_runtime_20260606-003908/official_qwen_runtime_probe.md` with `qwen_hbm_size_bytes: 1917038584`, `ldd_missing_dependency_observed: False`, `hbm_load_success_observed: True`, `prefill_model_load_success_observed: True`, `decode_model_load_success_observed: True`, `init_model_success_observed: True`, `runtime_returncode: -11`, `memory_alloc_failure_observed: True`, `ion_alloc_failure_observed: True`, `bpu_mem_pool_alloc_error_observed: True`, and `official_qwen_runtime_supported_on_current_s100p_state: False`.
+- Added and verified `s100-official-qwen-performance-mode-retest-probe` at `/mnt/nas/openclaw/reports/models/s100_official_qwen_performance_mode_retest_20260606-003908/performance_mode_retest_probe.md`; it changed `0x2b047000` and `0x2b047004` to `0x00000099`, but official Qwen still reported `memory_alloc_failure_observed_after_performance_mode: True`.
+- Added and verified `s100-bpu-memory-pool-probe` at `/mnt/nas/openclaw/reports/models/s100_bpu_memory_pool_20260606-004401/bpu_memory_pool_probe.md`; it records `sudo_devmem_path: /usr/hobot/bin/devmem`, `default_devmem_returncode: 127`, working `/usr/bin/devmem`, applied performance registers, missing `ion_meminfo` and `memstat` shebang interpreters, absent `/sys/kernel/debug/ion/heaps/all_heap_info`, and latest Dream/Qwen allocation evidence.
+- Updated and verified official LLM/Qwen baseline report at `/mnt/nas/openclaw/reports/models/s100_official_llm_baseline_20260606-004107/official_llm_baseline_probe.md` with `sdk_exists: True`, `config_dir_count: 8`, `official_hbm_download_entry_count: 14`, `qwen_existing_hbm_count: 1`, `official_qwen_local_runtime_report_present: True`, `official_qwen_runtime_completed: False`, `official_qwen_memory_alloc_failure_observed: True`, and `similar_issue_evidence_available_for_official_qwen: True`.
 
 ## TODO
 
@@ -5226,7 +5464,7 @@ docs/baseline_progress_2026-06-03_dream7b_segmented_bpu_hbm.md
 - Do not promote `selected_topology: [0, 1, 8]` as a forward-path optimization; the selected triplet forward-path probe records `selected_triplet_forward_supported: False` and `reboot_or_disconnect_observed: True`.
 - Do not switch `dream7b-bpu-fine-batch-forward` defaults to packed adjacent window size 3; the window3 feasibility probe records `expected_window3_failure_observed: True`.
 - Do not attempt a four-segment resident topology on the current HBM artifacts without a new split or runtime change; the seeded quad probe has `successful_seeded_quad_count: 0`.
-- Inspect S100P BPU/common-buffer memory pool and official runtime performance-mode prerequisites before using official Qwen as a clean 128TOPS utilization baseline.
+- Inspect ION/common-buffer reserved memory and HBMEM/UCP allocation prerequisites; performance-mode register apply alone did not clear official Qwen allocation failure.
 - Evaluate smaller HBM artifacts, different segment boundaries, or runtime residency support before expecting sustained 128TOPS-level average utilization from Dream 7B.
 - Continue collecting long-repeat reports before tightening the current `DREAM7B_BPU_FINE_FORWARD_LONG_REPEAT_MAX_WALL_SPREAD_RATIO` default of `0.10`.
 - Keep queue cleanup report-only until an explicit apply mode and archive directory migration rule are approved.
