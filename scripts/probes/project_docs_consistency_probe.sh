@@ -392,6 +392,18 @@ required_reference_strings=(
   "qwen_existing_hbm_count"
   "official_qwen_memory_alloc_failure_observed"
   "latest_performance_mode_retest_memory_alloc_failure_observed"
+  "ion_all_heap_info_exists"
+  "ion_heap_total_sizes"
+  "ion_heap_allocated_totals"
+  "ion_heap_bpu_allocation_sizes"
+  "system_heap_total_size"
+  "system_contig_heap_total_size"
+  "cma_reserved_heap_total_size"
+  "ion_cma_heap_total_size"
+  "carveout_heap_total_size"
+  "reserved_memory_summary"
+  "allocation_failure_interpretation"
+  "minimal HBMEM/UCP common-buffer allocation matrix"
   "ion_meminfo_shebang_interpreter_exists"
   "memstat_shebang_interpreter_exists"
   "similar_issue_evidence_available_for_official_qwen"
@@ -1598,6 +1610,27 @@ if [[ -f scripts/probes/s100_bpu_memory_pool_probe.sh ]]; then
     "perf_register_0x2b047004" \
     "performance_mode_target_applied_from_latest_retest" \
     "latest_performance_mode_retest_memory_alloc_failure_observed" \
+    "ion_debug_present" \
+    "ion_all_heap_info_exists" \
+    "ion_heap_total_sizes" \
+    "ion_heap_allocated_totals" \
+    "ion_heap_available_estimates" \
+    "ion_heap_bpu_allocation_counts" \
+    "ion_heap_bpu_allocation_sizes" \
+    "system_heap_total_size" \
+    "system_contig_heap_total_size" \
+    "carveout_heap_total_size" \
+    "cma_reserved_heap_total_size" \
+    "ion_cma_heap_total_size" \
+    "ion_client_bpu_0_total_line" \
+    "iovmm_bpu" \
+    "iovmm_bpu_hp" \
+    "reserved_memory_nodes.json" \
+    "reserved_memory_summary" \
+    "bpu_region" \
+    "ion_reserved" \
+    "allocation_failure_interpretation" \
+    "minimal HBMEM/UCP common-buffer allocation matrix" \
     "ion_meminfo_shebang" \
     "ion_meminfo_shebang_interpreter_exists" \
     "ion_meminfo_fallback_returncode" \

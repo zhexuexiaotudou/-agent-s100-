@@ -3171,6 +3171,17 @@ ion_meminfo_fallback_bash.txt
 memstat.txt
 memstat_fallback_busybox_ash.txt
 debug_probe.txt
+ion_heap_all_heap_info.txt
+ion_heap_cma_reserved.txt
+ion_heap_ion_cma.txt
+ion_heap_carveout.txt
+ion_heap_chunk.txt
+ion_heap_system.txt
+ion_heap_system_contig.txt
+ion_client_bpu_0.txt
+iovmm_bpu.txt
+iovmm_bpu_hp.txt
+reserved_memory_nodes.json
 proc_cmdline.txt
 proc_meminfo.txt
 proc_modules.txt
@@ -3192,6 +3203,28 @@ official_script_would_match_s100p
 cmdline_contains_cma
 cmdline_contains_ion
 debug_mount_present
+ion_debug_present
+ion_all_heap_info_exists
+ion_heap_names
+ion_heap_total_sizes
+ion_heap_allocated_totals
+ion_heap_available_estimates
+ion_heap_bpu_allocation_counts
+ion_heap_bpu_allocation_sizes
+system_heap_total_size
+system_contig_heap_total_size
+carveout_heap_total_size
+carveout_heap_allocated_total
+cma_reserved_heap_total_size
+cma_reserved_heap_allocated_total
+ion_cma_heap_total_size
+ion_cma_heap_allocated_total
+ion_client_bpu_0_exists
+ion_client_bpu_0_total_line
+iovmm_bpu
+iovmm_bpu_hp
+reserved_memory_node_count
+reserved_memory_summary
 default_devmem_path
 sudo_devmem_path
 usr_hobot_devmem_exists
@@ -3212,6 +3245,7 @@ memstat_shebang_interpreter_exists
 memstat_fallback_returncode
 latest_official_qwen_memory_alloc_failure_observed
 latest_dream_diagnosis
+allocation_failure_interpretation
 next_probe_target
 captures
 warnings
@@ -3221,13 +3255,13 @@ errors
 Latest recorded report:
 
 ```text
-/mnt/nas/openclaw/reports/models/s100_bpu_memory_pool_20260606-004401/bpu_memory_pool_probe.md
+/mnt/nas/openclaw/reports/models/s100_bpu_memory_pool_20260606-010941/bpu_memory_pool_probe.md
 ```
 
 Latest recorded JSON:
 
 ```text
-/mnt/nas/openclaw/reports/models/s100_bpu_memory_pool_20260606-004401/bpu_memory_pool_probe.json
+/mnt/nas/openclaw/reports/models/s100_bpu_memory_pool_20260606-010941/bpu_memory_pool_probe.json
 ```
 
 Verified S100 BPU memory-pool fields copied from `bpu_memory_pool_probe.json`:
@@ -3243,16 +3277,33 @@ perf_register_0x2b047000: 0x00000099
 perf_register_0x2b047004: 0x00000099
 performance_mode_target_applied_from_latest_retest: True
 latest_performance_mode_retest_memory_alloc_failure_observed: True
+ion_debug_present: True
+ion_all_heap_info_exists: True
+ion_heap_total_sizes: {'all_heap_info': 0, 'cma_reserved': 1073741824, 'ion_cma': 536870912, 'carveout': 536870912, 'chunk': 4194304, 'system': 0, 'system_contig': 0}
+ion_heap_allocated_totals: {'all_heap_info': 0, 'cma_reserved': 56492032, 'ion_cma': 0, 'carveout': 3145728, 'chunk': 0, 'system': 0, 'system_contig': 0}
+ion_heap_bpu_allocation_sizes: {'all_heap_info': 3145728, 'cma_reserved': 0, 'ion_cma': 0, 'carveout': 3145728, 'chunk': 0, 'system': 0, 'system_contig': 0}
+system_heap_total_size: 0
+system_contig_heap_total_size: 0
+cma_reserved_heap_total_size: 1073741824
+ion_cma_heap_total_size: 536870912
+carveout_heap_total_size: 536870912
+ion_client_bpu_0_total_line: total            300000
+iovmm_bpu.total_mappings: 0
+iovmm_bpu_hp.total_mappings: 99
+reserved_memory_summary.bpu_region@9A000000.reg.size_mib: 96.0
+reserved_memory_summary.ion_reserved@C80000000.reg.size_mib: 1024.0
+reserved_memory_summary.ion_cma@400000000.reg.size_mib: 512.0
+reserved_memory_summary.ion_carveout@800000000.reg.size_mib: 512.0
 ion_meminfo_shebang: #!/bin/zsh
 ion_meminfo_shebang_interpreter_exists: False
 ion_meminfo_fallback_returncode: 1
-ion_meminfo_fallback_first_stderr_line: Error: File '/sys/kernel/debug/ion/heaps/all_heap_info' does not exist!
 memstat_shebang: #!/var/busybox/ash
 memstat_shebang_interpreter_exists: False
 memstat_fallback_returncode: 0
 latest_official_qwen_memory_alloc_failure_observed: True
 latest_dream_diagnosis: hbm_reload_dominated
-next_probe_target: inspect ION/common-buffer reserved memory and HBMEM/UCP allocation prerequisites; performance-mode register apply alone did not clear official Qwen allocation failure
+allocation_failure_interpretation: reserved ION heaps are visible through debugfs, so the official Qwen failure is not explained by an absent ION debugfs heap; system/system_contig heap capacity and the exact HBMEM/UCP backend selection need a minimal allocation probe
+next_probe_target: run a minimal HBMEM/UCP common-buffer allocation matrix against the exact backend/heap flags used by official Qwen; performance-mode register apply alone did not clear official Qwen allocation failure
 errors: []
 ```
 
@@ -5453,7 +5504,7 @@ docs/baseline_progress_2026-06-03_dream7b_segmented_bpu_hbm.md
 - Added `s100-official-qwen-runtime-probe` to run the official Qwen `oellm_multichat` example through the vendor runtime without replacing Dream 7B.
 - Verified official Qwen runtime report at `/mnt/nas/openclaw/reports/models/s100_official_qwen_runtime_20260606-003908/official_qwen_runtime_probe.md` with `qwen_hbm_size_bytes: 1917038584`, `ldd_missing_dependency_observed: False`, `hbm_load_success_observed: True`, `prefill_model_load_success_observed: True`, `decode_model_load_success_observed: True`, `init_model_success_observed: True`, `runtime_returncode: -11`, `memory_alloc_failure_observed: True`, `ion_alloc_failure_observed: True`, `bpu_mem_pool_alloc_error_observed: True`, and `official_qwen_runtime_supported_on_current_s100p_state: False`.
 - Added and verified `s100-official-qwen-performance-mode-retest-probe` at `/mnt/nas/openclaw/reports/models/s100_official_qwen_performance_mode_retest_20260606-003908/performance_mode_retest_probe.md`; it changed `0x2b047000` and `0x2b047004` to `0x00000099`, but official Qwen still reported `memory_alloc_failure_observed_after_performance_mode: True`.
-- Added and verified `s100-bpu-memory-pool-probe` at `/mnt/nas/openclaw/reports/models/s100_bpu_memory_pool_20260606-004401/bpu_memory_pool_probe.md`; it records `sudo_devmem_path: /usr/hobot/bin/devmem`, `default_devmem_returncode: 127`, working `/usr/bin/devmem`, applied performance registers, missing `ion_meminfo` and `memstat` shebang interpreters, absent `/sys/kernel/debug/ion/heaps/all_heap_info`, and latest Dream/Qwen allocation evidence.
+- Updated and verified `s100-bpu-memory-pool-probe` at `/mnt/nas/openclaw/reports/models/s100_bpu_memory_pool_20260606-010941/bpu_memory_pool_probe.md`; it records direct debugfs ION heap data, BPU ION allocations, BPU iovmm counters, and device-tree reserved-memory nodes, correcting the earlier `ion_meminfo` wrapper error by showing `ion_all_heap_info_exists: True`, `system_heap_total_size: 0`, `system_contig_heap_total_size: 0`, `cma_reserved_heap_total_size: 1073741824`, `ion_cma_heap_total_size: 536870912`, `carveout_heap_total_size: 536870912`, and `reserved_memory_summary.bpu_region@9A000000.reg.size_mib: 96.0`.
 - Updated and verified official LLM/Qwen baseline report at `/mnt/nas/openclaw/reports/models/s100_official_llm_baseline_20260606-004107/official_llm_baseline_probe.md` with `sdk_exists: True`, `config_dir_count: 8`, `official_hbm_download_entry_count: 14`, `qwen_existing_hbm_count: 1`, `official_qwen_local_runtime_report_present: True`, `official_qwen_runtime_completed: False`, `official_qwen_memory_alloc_failure_observed: True`, and `similar_issue_evidence_available_for_official_qwen: True`.
 
 ## TODO
@@ -5464,7 +5515,7 @@ docs/baseline_progress_2026-06-03_dream7b_segmented_bpu_hbm.md
 - Do not promote `selected_topology: [0, 1, 8]` as a forward-path optimization; the selected triplet forward-path probe records `selected_triplet_forward_supported: False` and `reboot_or_disconnect_observed: True`.
 - Do not switch `dream7b-bpu-fine-batch-forward` defaults to packed adjacent window size 3; the window3 feasibility probe records `expected_window3_failure_observed: True`.
 - Do not attempt a four-segment resident topology on the current HBM artifacts without a new split or runtime change; the seeded quad probe has `successful_seeded_quad_count: 0`.
-- Inspect ION/common-buffer reserved memory and HBMEM/UCP allocation prerequisites; performance-mode register apply alone did not clear official Qwen allocation failure.
+- Run a minimal HBMEM/UCP common-buffer allocation matrix against the exact backend/heap flags used by official Qwen; direct debugfs shows reserved ION heaps exist, while `system_heap_total_size` and `system_contig_heap_total_size` are both `0`, and performance-mode register apply alone did not clear official Qwen allocation failure.
 - Evaluate smaller HBM artifacts, different segment boundaries, or runtime residency support before expecting sustained 128TOPS-level average utilization from Dream 7B.
 - Continue collecting long-repeat reports before tightening the current `DREAM7B_BPU_FINE_FORWARD_LONG_REPEAT_MAX_WALL_SPREAD_RATIO` default of `0.10`.
 - Keep queue cleanup report-only until an explicit apply mode and archive directory migration rule are approved.

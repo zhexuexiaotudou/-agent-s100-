@@ -40,6 +40,7 @@ python3 - \
   "$related_report_root" <<'PY'
 import json
 import os
+import re
 import subprocess
 import sys
 from datetime import datetime
@@ -126,6 +127,109 @@ def write_capture(name, result):
     return str(path)
 
 
+def read_root_text(path, timeout=10):
+    result = run(["cat", str(path)], timeout=timeout, use_sudo=True)
+    return result
+
+
+def write_text_capture(name, path, result):
+    capture_path = run_dir / name
+    payload = [
+        f"path: {path}",
+        "$ " + " ".join(result.get("argv") or []),
+        f"returncode: {result.get('returncode')}",
+        f"timed_out: {result.get('timed_out')}",
+        "",
+        result.get("stdout") or "",
+        "",
+        "## stderr",
+        result.get("stderr") or "",
+        "",
+    ]
+    capture_path.write_text("\n".join(payload), encoding="utf-8", errors="replace")
+    return str(capture_path)
+
+
+def parse_heap_debug_text(text):
+    total_size = None
+    allocated_total = None
+    allocations = []
+    for line in (text or "").splitlines():
+        total_match = re.search(r"heap total size\s+(\d+)", line)
+        if total_match:
+            total_size = int(total_match.group(1))
+            continue
+        allocated_match = re.match(r"^\s*total\s+(\d+)\s*$", line)
+        if allocated_match:
+            allocated_total = int(allocated_match.group(1))
+            continue
+        allocation_match = re.match(r"^\s*(\S+)\s+(\d+)\s+(\d+)\s+(\S+)\s+(\d+)\s+.*\s+([0-9A-Fa-f]+)\s*$", line)
+        if allocation_match:
+            allocations.append({
+                "client": allocation_match.group(1),
+                "pid": int(allocation_match.group(2)),
+                "tgid": int(allocation_match.group(3)),
+                "type": allocation_match.group(4),
+                "size": int(allocation_match.group(5)),
+                "paddr": "0x" + allocation_match.group(6),
+            })
+    return {
+        "total_size": total_size,
+        "allocated_total": allocated_total,
+        "available_estimate": (total_size - allocated_total) if total_size is not None and allocated_total is not None else None,
+        "allocations": allocations,
+    }
+
+
+def parse_iovmm_text(text):
+    total_mappings = None
+    total_unmappings = None
+    sid = None
+    for line in (text or "").splitlines():
+        sid_match = re.search(r"\bsid\s+(\S+)", line)
+        if sid_match:
+            sid = sid_match.group(1)
+        mappings_match = re.search(r"Total(?: number of)? mappings\s*:\s+(\d+)", line)
+        if mappings_match:
+            total_mappings = int(mappings_match.group(1))
+        unmap_match = re.search(r"Total(?: number of)? unmappings\s*:\s+(\d+)", line)
+        if unmap_match:
+            total_unmappings = int(unmap_match.group(1))
+    return {
+        "sid": sid,
+        "total_mappings": total_mappings,
+        "total_unmappings": total_unmappings,
+        "has_current_region_rows": bool(re.search(r"^\s*0x[0-9A-Fa-f]+", text or "", re.MULTILINE)),
+    }
+
+
+def parse_dt_string(path):
+    result = read_root_text(path)
+    if result.get("returncode") != 0:
+        return ""
+    return (result.get("stdout") or "").replace("\x00", " ").strip()
+
+
+def parse_dt_reg(path):
+    result = run(["od", "-An", "-tx1", "-v", str(path)], timeout=10, use_sudo=True)
+    if result.get("returncode") != 0:
+        return None
+    hex_bytes = re.findall(r"\b[0-9a-fA-F]{2}\b", result.get("stdout") or "")
+    raw = bytes(int(item, 16) for item in hex_bytes)
+    if len(raw) < 16:
+        return None
+    cells = [int.from_bytes(raw[index:index + 4], "big") for index in range(0, 16, 4)]
+    base = (cells[0] << 32) | cells[1]
+    size = (cells[2] << 32) | cells[3]
+    return {
+        "base": base,
+        "base_hex": f"0x{base:016X}",
+        "size": size,
+        "size_hex": f"0x{size:016X}",
+        "size_mib": round(size / 1048576, 3),
+    }
+
+
 boardid = run(["hrut_boardid"], timeout=10)
 cmdline = Path("/proc/cmdline").read_text(encoding="utf-8", errors="replace") if Path("/proc/cmdline").is_file() else ""
 meminfo = Path("/proc/meminfo").read_text(encoding="utf-8", errors="replace") if Path("/proc/meminfo").is_file() else ""
@@ -155,6 +259,67 @@ ion_meminfo_shebang_interpreter_exists = Path(ion_meminfo_shebang[2:]).exists() 
 memstat_shebang_interpreter_exists = Path(memstat_shebang[2:]).exists() if memstat_shebang.startswith("#!") else None
 debug_mount_present = any("/sys/kernel/debug" in line and "debugfs" in line for line in mounts.splitlines())
 debug_probe = run(["sh", "-lc", "test -d /sys/kernel/debug && ls -ld /sys/kernel/debug && timeout 5 find /sys/kernel/debug -maxdepth 2 -type f -o -type d | sed -n '1,120p'"], timeout=10, use_sudo=True)
+ion_debug_test = run(["test", "-d", "/sys/kernel/debug/ion"], timeout=10, use_sudo=True)
+
+ion_heap_names = ["all_heap_info", "cma_reserved", "ion_cma", "carveout", "chunk", "system", "system_contig"]
+ion_heap_results = {}
+ion_heap_parsed = {}
+ion_heap_captures = {}
+for heap_name in ion_heap_names:
+    heap_path = Path("/sys/kernel/debug/ion/heaps") / heap_name
+    result = read_root_text(heap_path)
+    ion_heap_results[heap_name] = result
+    ion_heap_captures[heap_name] = write_text_capture(f"ion_heap_{heap_name}.txt", heap_path, result)
+    if result.get("returncode") == 0:
+        ion_heap_parsed[heap_name] = parse_heap_debug_text(result.get("stdout") or "")
+    else:
+        ion_heap_parsed[heap_name] = {
+            "total_size": None,
+            "allocated_total": None,
+            "available_estimate": None,
+            "allocations": [],
+        }
+
+ion_client_bpu0_path = Path("/sys/kernel/debug/ion/clients/bpu-0")
+ion_client_bpu0 = read_root_text(ion_client_bpu0_path)
+ion_client_bpu0_capture = write_text_capture("ion_client_bpu_0.txt", ion_client_bpu0_path, ion_client_bpu0)
+
+iovmm_paths = {
+    "bpu": Path("/sys/kernel/debug/iovmm/28108000.bpu"),
+    "bpu_hp": Path("/sys/kernel/debug/iovmm/28100000.bpu_hp"),
+}
+iovmm_results = {}
+iovmm_parsed = {}
+iovmm_captures = {}
+for name, path in iovmm_paths.items():
+    result = read_root_text(path)
+    iovmm_results[name] = result
+    iovmm_captures[name] = write_text_capture(f"iovmm_{name}.txt", path, result)
+    iovmm_parsed[name] = parse_iovmm_text(result.get("stdout") or "") if result.get("returncode") == 0 else {
+        "sid": None,
+        "total_mappings": None,
+        "total_unmappings": None,
+        "has_current_region_rows": False,
+    }
+
+reserved_memory_root = Path("/sys/firmware/devicetree/base/reserved-memory")
+reserved_memory_entries = []
+reserved_memory_summary = {}
+reserved_memory_root_test = run(["test", "-d", str(reserved_memory_root)], timeout=10, use_sudo=True)
+if reserved_memory_root_test.get("returncode") == 0:
+    list_reserved = run(["find", str(reserved_memory_root), "-mindepth", "1", "-maxdepth", "1", "-type", "d", "-printf", "%f\n"], timeout=10, use_sudo=True)
+    for node_name in sorted((list_reserved.get("stdout") or "").splitlines()):
+        node_path = reserved_memory_root / node_name
+        entry = {
+            "name": node_name,
+            "compatible": parse_dt_string(node_path / "compatible"),
+            "reg": parse_dt_reg(node_path / "reg"),
+        }
+        reserved_memory_entries.append(entry)
+        for key in ["ion_carveout", "ion_cma", "ion_reserved", "bpu_region", "vpu_ddr_reserved"]:
+            if node_name.startswith(key):
+                reserved_memory_summary[node_name] = entry
+(run_dir / "reserved_memory_nodes.json").write_text(json.dumps(reserved_memory_entries, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
 
 qwen_path, qwen_runtime = latest_json("s100_official_qwen_runtime_*/official_qwen_runtime_probe.json")
 perf_retest_path, perf_retest = latest_json("s100_official_qwen_performance_mode_retest_*/performance_mode_retest_probe.json")
@@ -180,6 +345,12 @@ if ion_meminfo_shebang and not ion_meminfo_shebang_interpreter_exists:
     warnings.append(f"ion_meminfo shebang interpreter is missing: {ion_meminfo_shebang}")
 if memstat_shebang and not memstat_shebang_interpreter_exists:
     warnings.append(f"memstat shebang interpreter is missing: {memstat_shebang}")
+if ion_heap_results.get("all_heap_info", {}).get("returncode") == 0 and ion_meminfo_fallback and ion_meminfo_fallback.get("returncode") != 0:
+    warnings.append("direct debugfs read found /sys/kernel/debug/ion/heaps/all_heap_info even though ion_meminfo fallback reported an error")
+if ion_heap_parsed.get("system", {}).get("total_size") == 0:
+    warnings.append("ION system heap total size is zero")
+if ion_heap_parsed.get("system_contig", {}).get("total_size") == 0:
+    warnings.append("ION system_contig heap total size is zero")
 
 captures = {
     "boardid": write_capture("boardid.txt", boardid),
@@ -190,7 +361,11 @@ captures = {
     "ion_meminfo": write_capture("ion_meminfo.txt", ion_meminfo),
     "memstat": write_capture("memstat.txt", memstat),
     "debug_probe": write_capture("debug_probe.txt", debug_probe),
+    "ion_client_bpu_0": ion_client_bpu0_capture,
+    "reserved_memory_nodes": str(run_dir / "reserved_memory_nodes.json"),
 }
+captures.update({f"ion_heap_{name}": path for name, path in ion_heap_captures.items()})
+captures.update({f"iovmm_{name}": path for name, path in iovmm_captures.items()})
 if ion_meminfo_fallback:
     captures["ion_meminfo_fallback_bash"] = write_capture("ion_meminfo_fallback_bash.txt", ion_meminfo_fallback)
 if memstat_fallback:
@@ -213,6 +388,34 @@ payload = {
     "cmdline_contains_cma": "cma=" in cmdline,
     "cmdline_contains_ion": "ion" in cmdline.lower(),
     "debug_mount_present": debug_mount_present,
+    "ion_debug_present": ion_debug_test.get("returncode") == 0,
+    "ion_all_heap_info_exists": ion_heap_results.get("all_heap_info", {}).get("returncode") == 0,
+    "ion_heap_names": sorted(ion_heap_parsed.keys()),
+    "ion_heap_total_sizes": {key: value.get("total_size") for key, value in ion_heap_parsed.items()},
+    "ion_heap_allocated_totals": {key: value.get("allocated_total") for key, value in ion_heap_parsed.items()},
+    "ion_heap_available_estimates": {key: value.get("available_estimate") for key, value in ion_heap_parsed.items()},
+    "ion_heap_bpu_allocation_counts": {
+        key: sum(1 for allocation in value.get("allocations", []) if allocation.get("client", "").startswith("bpu") or allocation.get("type", "").startswith("bpu"))
+        for key, value in ion_heap_parsed.items()
+    },
+    "ion_heap_bpu_allocation_sizes": {
+        key: sum(allocation.get("size", 0) for allocation in value.get("allocations", []) if allocation.get("client", "").startswith("bpu") or allocation.get("type", "").startswith("bpu"))
+        for key, value in ion_heap_parsed.items()
+    },
+    "system_heap_total_size": ion_heap_parsed.get("system", {}).get("total_size"),
+    "system_contig_heap_total_size": ion_heap_parsed.get("system_contig", {}).get("total_size"),
+    "carveout_heap_total_size": ion_heap_parsed.get("carveout", {}).get("total_size"),
+    "carveout_heap_allocated_total": ion_heap_parsed.get("carveout", {}).get("allocated_total"),
+    "cma_reserved_heap_total_size": ion_heap_parsed.get("cma_reserved", {}).get("total_size"),
+    "cma_reserved_heap_allocated_total": ion_heap_parsed.get("cma_reserved", {}).get("allocated_total"),
+    "ion_cma_heap_total_size": ion_heap_parsed.get("ion_cma", {}).get("total_size"),
+    "ion_cma_heap_allocated_total": ion_heap_parsed.get("ion_cma", {}).get("allocated_total"),
+    "ion_client_bpu_0_exists": ion_client_bpu0.get("returncode") == 0,
+    "ion_client_bpu_0_total_line": next((line.strip() for line in (ion_client_bpu0.get("stdout") or "").splitlines() if line.strip().startswith("total ")), ""),
+    "iovmm_bpu": iovmm_parsed.get("bpu"),
+    "iovmm_bpu_hp": iovmm_parsed.get("bpu_hp"),
+    "reserved_memory_node_count": len(reserved_memory_entries),
+    "reserved_memory_summary": reserved_memory_summary,
     "default_devmem_path": default_devmem_path,
     "sudo_devmem_path": sudo_devmem_path,
     "usr_hobot_devmem_exists": usr_hobot_devmem.exists(),
@@ -247,8 +450,13 @@ payload = {
     "latest_dream_diagnosis": dream_util.get("diagnosis") if dream_util else None,
     "latest_dream_window3_path": str(dream_window3_path) if dream_window3_path else "",
     "latest_dream_window3_memory_alloc_failure_observed": dream_window3.get("stderr_contains_memory_alloc_failure") if dream_window3 else None,
+    "allocation_failure_interpretation": (
+        "reserved ION heaps are visible through debugfs, so the official Qwen failure is not explained by an absent ION debugfs heap; system/system_contig heap capacity and the exact HBMEM/UCP backend selection need a minimal allocation probe"
+        if ion_heap_results.get("all_heap_info", {}).get("returncode") == 0
+        else "direct ION debugfs heap data is unavailable; inspect debugfs mount/permission before interpreting official Qwen allocation failure"
+    ),
     "next_probe_target": (
-        "inspect ION/common-buffer reserved memory and HBMEM/UCP allocation prerequisites; performance-mode register apply alone did not clear official Qwen allocation failure"
+        "run a minimal HBMEM/UCP common-buffer allocation matrix against the exact backend/heap flags used by official Qwen; performance-mode register apply alone did not clear official Qwen allocation failure"
         if perf_retest and perf_retest.get("memory_alloc_failure_observed_after_performance_mode")
         else "run a controlled official performance-mode register apply using /usr/bin/devmem, then rerun official Qwen runtime to test whether BPU/common-buffer allocation failure changes"
     ),
@@ -281,6 +489,20 @@ lines = [
     f"- cmdline_contains_cma: {payload['cmdline_contains_cma']}",
     f"- cmdline_contains_ion: {payload['cmdline_contains_ion']}",
     f"- debug_mount_present: {payload['debug_mount_present']}",
+    f"- ion_debug_present: {payload['ion_debug_present']}",
+    f"- ion_all_heap_info_exists: {payload['ion_all_heap_info_exists']}",
+    f"- system_heap_total_size: {payload['system_heap_total_size']}",
+    f"- system_contig_heap_total_size: {payload['system_contig_heap_total_size']}",
+    f"- cma_reserved_heap_total_size: {payload['cma_reserved_heap_total_size']}",
+    f"- cma_reserved_heap_allocated_total: {payload['cma_reserved_heap_allocated_total']}",
+    f"- ion_cma_heap_total_size: {payload['ion_cma_heap_total_size']}",
+    f"- ion_cma_heap_allocated_total: {payload['ion_cma_heap_allocated_total']}",
+    f"- carveout_heap_total_size: {payload['carveout_heap_total_size']}",
+    f"- carveout_heap_allocated_total: {payload['carveout_heap_allocated_total']}",
+    f"- ion_client_bpu_0_total_line: {payload['ion_client_bpu_0_total_line']}",
+    f"- reserved_memory_node_count: {payload['reserved_memory_node_count']}",
+    f"- iovmm_bpu_total_mappings: {(payload['iovmm_bpu'] or {}).get('total_mappings')}",
+    f"- iovmm_bpu_hp_total_mappings: {(payload['iovmm_bpu_hp'] or {}).get('total_mappings')}",
     f"- ion_meminfo_returncode: {payload['ion_meminfo_returncode']}",
     f"- ion_meminfo_shebang: {payload['ion_meminfo_shebang']}",
     f"- ion_meminfo_shebang_interpreter_exists: {payload['ion_meminfo_shebang_interpreter_exists']}",
@@ -293,6 +515,7 @@ lines = [
     f"- latest_official_qwen_runtime_returncode: {payload['latest_official_qwen_runtime_returncode']}",
     f"- latest_dream_diagnosis: {payload['latest_dream_diagnosis']}",
     f"- latest_dream_window3_memory_alloc_failure_observed: {payload['latest_dream_window3_memory_alloc_failure_observed']}",
+    f"- allocation_failure_interpretation: {payload['allocation_failure_interpretation']}",
     f"- next_probe_target: {payload['next_probe_target']}",
     "",
     "## Captures",
