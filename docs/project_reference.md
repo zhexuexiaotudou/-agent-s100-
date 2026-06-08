@@ -2420,6 +2420,110 @@ next_optimization_target: no tested seeded quad is resident; use successful trip
 errors: []
 ```
 
+### `dream7b-bpu-persistent-triplet-topology-probe`
+
+Source file: `scripts/probes/dream7b_bpu_persistent_triplet_topology_probe.sh`
+
+Installed command on S100P:
+
+```text
+/usr/local/bin/dream7b-bpu-persistent-triplet-topology-probe
+```
+
+Default argument copied from the script:
+
+```text
+report_root = /mnt/nas/openclaw/reports/models
+```
+
+Environment variables copied from the script:
+
+```text
+DREAM7B_BPU_PERSISTENT_TRIPLET_TOPOLOGY_TRIPLET_JSON
+DREAM7B_BPU_PERSISTENT_TRIPLET_TOPOLOGY_HOLD_SECONDS
+DREAM7B_BPU_PERSISTENT_TRIPLET_TOPOLOGY_READY_TIMEOUT_SECONDS
+DREAM7B_BPU_PERSISTENT_TRIPLET_TOPOLOGY_POLL_INTERVAL_SECONDS
+DREAM7B_BPU_PERSISTENT_TRIPLET_TOPOLOGY_START_DELAY_SECONDS
+DREAM7B_BPU_PERSISTENT_TRIPLET_TOPOLOGY_MAX_TRIPLETS
+```
+
+Default values copied from the script:
+
+```text
+triplet_json = latest dream7b_bpu_single_segment_triplet_residency_*/single_segment_triplet_residency_probe.json under report_root
+hold_seconds = 10
+ready_timeout_seconds = 180
+poll_interval_seconds = 2
+start_delay_seconds = 0
+max_triplets = 20
+```
+
+Output files copied from the script:
+
+```text
+persistent_triplet_topology_probe.json
+persistent_triplet_topology_probe.md
+```
+
+Output fields copied from the script:
+
+```text
+generated_at
+verdict
+run_dir
+base_hbm_dir
+fine_hbm_dir
+triplet_json
+source_successful_triplet_count
+tested_triplet_topology_count
+stable_triplet_topology_count
+failed_triplet_topology_count
+hold_seconds
+ready_timeout_seconds
+poll_interval_seconds
+start_delay_seconds
+max_triplets
+segment_count
+stable_triplets
+failed_triplets
+selected_topology
+selection_rule
+max_resident_segment_count_observed
+next_optimization_target
+topology_records
+errors
+```
+
+Latest recorded report:
+
+```text
+/mnt/nas/openclaw/reports/models/dream7b_bpu_persistent_triplet_topology_20260606-131107/persistent_triplet_topology_probe.md
+```
+
+Latest recorded JSON:
+
+```text
+/mnt/nas/openclaw/reports/models/dream7b_bpu_persistent_triplet_topology_20260606-131107/persistent_triplet_topology_probe.json
+```
+
+Verified persistent triplet topology fields copied from `persistent_triplet_topology_probe.json`:
+
+```text
+verdict: ok_dream7b_bpu_persistent_triplet_topology_probe
+source_successful_triplet_count: 20
+tested_triplet_topology_count: 20
+stable_triplet_topology_count: 20
+failed_triplet_topology_count: 0
+hold_seconds: 10.0
+poll_interval_seconds: 2.0
+stable_triplets: [[0, 1, 8], [1, 2, 3], [1, 2, 5], [1, 2, 7], [1, 2, 8], [1, 3, 5], [1, 3, 7], [1, 3, 8], [1, 4, 8], [1, 5, 7], [1, 5, 8], [1, 6, 8], [1, 7, 8], [1, 8, 9], [2, 3, 8], [2, 5, 8], [2, 7, 8], [3, 5, 8], [3, 7, 8], [5, 7, 8]]
+selected_topology: [0, 1, 8]
+selection_rule: first stable topology in source successful_triplets order
+max_resident_segment_count_observed: 3
+next_optimization_target: wire the selected stable triplet into a forward-path experiment and compare HBM load share against the current pair-window production path
+errors: []
+```
+
 ### `dream7b-bpu-deployment-acceptance-probe`
 
 Source file: `scripts/probes/dream7b_bpu_deployment_acceptance_probe.sh`
@@ -2482,6 +2586,7 @@ dream7b_bpu_single_segment_residency_matrix_*/single_segment_residency_matrix_pr
 dream7b_bpu_persistent_segment_cache_*/persistent_segment_cache_probe.json
 dream7b_bpu_single_segment_triplet_residency_*/single_segment_triplet_residency_probe.json
 dream7b_bpu_seeded_quad_residency_*/seeded_quad_residency_probe.json
+dream7b_bpu_persistent_triplet_topology_*/persistent_triplet_topology_probe.json
 dream7b_bpu_batch_queue_systemd_telemetry_*/systemd_telemetry_probe.json
 dream7b_bpu_fine_forward_long_repeat_*/long_repeat_probe.json
 dream7b_bpu_batch_queue_retention_*/queue_retention_probe.json
@@ -2509,6 +2614,7 @@ single_segment_residency_matrix
 persistent_segment_cache
 single_segment_triplet_residency
 seeded_quad_residency
+persistent_triplet_topology
 systemd_telemetry
 long_repeat
 queue_retention
@@ -2557,6 +2663,8 @@ Latest recorded report:
 /mnt/nas/openclaw/reports/models/dream7b_bpu_deployment_acceptance_20260606-120028/deployment_acceptance_probe.md
 /mnt/nas/openclaw/reports/models/dream7b_bpu_deployment_acceptance_20260606-123257/deployment_acceptance_probe.md
 /mnt/nas/openclaw/reports/models/dream7b_bpu_deployment_acceptance_20260606-125750/deployment_acceptance_probe.md
+/mnt/nas/openclaw/reports/models/dream7b_bpu_deployment_acceptance_20260606-131933/deployment_acceptance_probe.md
+/mnt/nas/openclaw/reports/models/dream7b_bpu_deployment_acceptance_20260606-133119/deployment_acceptance_probe.md
 ```
 
 Latest recorded JSON:
@@ -2581,14 +2689,16 @@ Latest recorded JSON:
 /mnt/nas/openclaw/reports/models/dream7b_bpu_deployment_acceptance_20260606-120028/deployment_acceptance_probe.json
 /mnt/nas/openclaw/reports/models/dream7b_bpu_deployment_acceptance_20260606-123257/deployment_acceptance_probe.json
 /mnt/nas/openclaw/reports/models/dream7b_bpu_deployment_acceptance_20260606-125750/deployment_acceptance_probe.json
+/mnt/nas/openclaw/reports/models/dream7b_bpu_deployment_acceptance_20260606-131933/deployment_acceptance_probe.json
+/mnt/nas/openclaw/reports/models/dream7b_bpu_deployment_acceptance_20260606-133119/deployment_acceptance_probe.json
 ```
 
 Verified deployment acceptance fields copied from `deployment_acceptance_probe.json`:
 
 ```text
 verdict: ok_dream7b_bpu_deployment_acceptance_probe
-check_count: 22
-passed_check_count: 22
+check_count: 23
+passed_check_count: 23
 min_batch_capacity: 16
 min_systemd_batch_requests: 16
 min_systemd_telemetry_requests: 48
@@ -2617,6 +2727,7 @@ single_segment_residency_matrix.ok: True
 persistent_segment_cache.ok: True
 single_segment_triplet_residency.ok: True
 seeded_quad_residency.ok: True
+persistent_triplet_topology.ok: True
 systemd_telemetry.ok: True
 long_repeat.ok: True
 queue_retention.ok: True
@@ -2780,6 +2891,18 @@ seeded_quad_residency.details.failed_seeded_quad_count: 84
 seeded_quad_residency.details.successful_seeded_quads: []
 seeded_quad_residency.details.max_resident_segment_count_observed: 3
 seeded_quad_residency.details.next_optimization_target: no tested seeded quad is resident; use successful triplets as the current persistent topology seed
+persistent_triplet_topology.path: /mnt/nas/openclaw/reports/models/dream7b_bpu_persistent_triplet_topology_20260606-131107/persistent_triplet_topology_probe.json
+persistent_triplet_topology.details.verdict: ok_dream7b_bpu_persistent_triplet_topology_probe
+persistent_triplet_topology.details.segment_count: 10
+persistent_triplet_topology.details.source_successful_triplet_count: 20
+persistent_triplet_topology.details.tested_triplet_topology_count: 20
+persistent_triplet_topology.details.stable_triplet_topology_count: 20
+persistent_triplet_topology.details.failed_triplet_topology_count: 0
+persistent_triplet_topology.details.hold_seconds: 10.0
+persistent_triplet_topology.details.selected_topology: [0, 1, 8]
+persistent_triplet_topology.details.selection_rule: first stable topology in source successful_triplets order
+persistent_triplet_topology.details.max_resident_segment_count_observed: 3
+persistent_triplet_topology.details.next_optimization_target: wire the selected stable triplet into a forward-path experiment and compare HBM load share against the current pair-window production path
 hbm_artifact_inventory.details.expected_artifact_count: 14
 hbm_artifact_inventory.details.nas_existing_count: 14
 hbm_artifact_inventory.details.local_existing_count: 14
@@ -4535,13 +4658,17 @@ docs/baseline_progress_2026-06-03_dream7b_segmented_bpu_hbm.md
 - Verified seeded quad residency report at `/mnt/nas/openclaw/reports/models/dream7b_bpu_seeded_quad_residency_20260606-124305/seeded_quad_residency_probe.md` with `source_successful_triplet_count: 20`, `seeded_quad_candidate_count: 84`, `tested_seeded_quad_count: 84`, `successful_seeded_quad_count: 0`, `failed_seeded_quad_count: 84`, and `max_resident_segment_count_observed: 3`.
 - Updated `dream7b-bpu-deployment-acceptance-probe` to include `seeded_quad_residency`.
 - Verified seeded-quad-aware deployment acceptance report at `/mnt/nas/openclaw/reports/models/dream7b_bpu_deployment_acceptance_20260606-125750/deployment_acceptance_probe.md` with `check_count: 22`, `passed_check_count: 22`, and `seeded_quad_residency.ok: True`.
+- Added `dream7b-bpu-persistent-triplet-topology-probe` for replaying successful triplets as long-lived workers before a forward-path experiment.
+- Verified persistent triplet topology report at `/mnt/nas/openclaw/reports/models/dream7b_bpu_persistent_triplet_topology_20260606-131107/persistent_triplet_topology_probe.md` with `source_successful_triplet_count: 20`, `tested_triplet_topology_count: 20`, `stable_triplet_topology_count: 20`, `failed_triplet_topology_count: 0`, `selected_topology: [0, 1, 8]`, and `max_resident_segment_count_observed: 3`.
+- Updated `dream7b-bpu-deployment-acceptance-probe` to include `persistent_triplet_topology`.
+- Verified persistent-triplet-aware deployment acceptance report at `/mnt/nas/openclaw/reports/models/dream7b_bpu_deployment_acceptance_20260606-133119/deployment_acceptance_probe.md` with `check_count: 23`, `passed_check_count: 23`, and `persistent_triplet_topology.ok: True`.
 
 ## TODO
 
 - Keep `--window-execution-mode child-process` as the fallback path until more long-run evidence extends beyond the current gated 6-run `--window-execution-mode in-process` probe.
 - Do not implement a pair-worker persistent cache on the current five-pair split; the held-pair matrix has `successful_pair_edge_count: 0`.
 - Use the single-segment results as the next residency route: two single-segment runtimes can coexist, but `segment_02_seg04_07` fails as the third resident runtime with S100 BPU `-400001` memory allocation failure.
-- Use the 20 successful single-segment triplets as the seed set for the next persistent topology probe before attempting larger resident groups.
+- Use `selected_topology: [0, 1, 8]` from the persistent triplet topology probe as the first seed for a forward-path experiment, then compare HBM load share against the current pair-window path before changing production defaults.
 - Do not attempt a four-segment resident topology on the current HBM artifacts without a new split or runtime change; the seeded quad probe has `successful_seeded_quad_count: 0`.
 - Evaluate smaller HBM artifacts, different segment boundaries, or runtime residency support before expecting sustained 128TOPS-level average utilization from Dream 7B.
 - Continue collecting long-repeat reports before tightening the current `DREAM7B_BPU_FINE_FORWARD_LONG_REPEAT_MAX_WALL_SPREAD_RATIO` default of `0.10`.

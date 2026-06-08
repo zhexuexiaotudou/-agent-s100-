@@ -935,6 +935,47 @@ else:
         },
     )
 
+persistent_triplet_topology_path, persistent_triplet_topology = latest_json("dream7b_bpu_persistent_triplet_topology_*/persistent_triplet_topology_probe.json")
+if persistent_triplet_topology is None:
+    add_check("persistent_triplet_topology", persistent_triplet_topology_path, False, {"reason": "missing persistent_triplet_topology_probe.json"})
+else:
+    tested_triplet_topology_count = int(persistent_triplet_topology.get("tested_triplet_topology_count") or 0)
+    stable_triplet_topology_count = int(persistent_triplet_topology.get("stable_triplet_topology_count") or 0)
+    failed_triplet_topology_count = int(persistent_triplet_topology.get("failed_triplet_topology_count") or 0)
+    ok = (
+        persistent_triplet_topology.get("verdict") == "ok_dream7b_bpu_persistent_triplet_topology_probe"
+        and int(persistent_triplet_topology.get("segment_count") or 0) == 10
+        and int(persistent_triplet_topology.get("source_successful_triplet_count") or 0) >= 1
+        and tested_triplet_topology_count >= 1
+        and stable_triplet_topology_count >= 1
+        and stable_triplet_topology_count + failed_triplet_topology_count == tested_triplet_topology_count
+        and int(persistent_triplet_topology.get("max_resident_segment_count_observed") or 0) >= 3
+        and persistent_triplet_topology.get("selected_topology")
+        and persistent_triplet_topology.get("selection_rule")
+        and persistent_triplet_topology.get("next_optimization_target")
+        and not persistent_triplet_topology.get("errors")
+    )
+    add_check(
+        "persistent_triplet_topology",
+        persistent_triplet_topology_path,
+        ok,
+        {
+            "verdict": persistent_triplet_topology.get("verdict"),
+            "segment_count": persistent_triplet_topology.get("segment_count"),
+            "source_successful_triplet_count": persistent_triplet_topology.get("source_successful_triplet_count"),
+            "tested_triplet_topology_count": persistent_triplet_topology.get("tested_triplet_topology_count"),
+            "stable_triplet_topology_count": persistent_triplet_topology.get("stable_triplet_topology_count"),
+            "failed_triplet_topology_count": persistent_triplet_topology.get("failed_triplet_topology_count"),
+            "hold_seconds": persistent_triplet_topology.get("hold_seconds"),
+            "stable_triplets": persistent_triplet_topology.get("stable_triplets"),
+            "failed_triplets": persistent_triplet_topology.get("failed_triplets"),
+            "selected_topology": persistent_triplet_topology.get("selected_topology"),
+            "selection_rule": persistent_triplet_topology.get("selection_rule"),
+            "max_resident_segment_count_observed": persistent_triplet_topology.get("max_resident_segment_count_observed"),
+            "next_optimization_target": persistent_triplet_topology.get("next_optimization_target"),
+        },
+    )
+
 payload = {
     "generated_at": datetime.now().astimezone().isoformat(),
     "verdict": "ok_dream7b_bpu_deployment_acceptance_probe" if not errors else "failed_dream7b_bpu_deployment_acceptance_probe",
