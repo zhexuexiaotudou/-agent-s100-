@@ -902,6 +902,39 @@ else:
         },
     )
 
+seeded_quad_path, seeded_quad = latest_json("dream7b_bpu_seeded_quad_residency_*/seeded_quad_residency_probe.json")
+if seeded_quad is None:
+    add_check("seeded_quad_residency", seeded_quad_path, False, {"reason": "missing seeded_quad_residency_probe.json"})
+else:
+    ok = (
+        seeded_quad.get("verdict") == "ok_dream7b_bpu_seeded_quad_residency_probe"
+        and int(seeded_quad.get("segment_count") or 0) == 10
+        and int(seeded_quad.get("source_successful_triplet_count") or 0) >= 1
+        and int(seeded_quad.get("seeded_quad_candidate_count") or 0) >= 1
+        and int(seeded_quad.get("tested_seeded_quad_count") or 0) == int(seeded_quad.get("seeded_quad_candidate_count") or 0)
+        and int(seeded_quad.get("successful_seeded_quad_count") or 0) + int(seeded_quad.get("failed_seeded_quad_count") or 0) == int(seeded_quad.get("tested_seeded_quad_count") or 0)
+        and int(seeded_quad.get("max_resident_segment_count_observed") or 0) >= 3
+        and seeded_quad.get("next_optimization_target")
+        and not seeded_quad.get("errors")
+    )
+    add_check(
+        "seeded_quad_residency",
+        seeded_quad_path,
+        ok,
+        {
+            "verdict": seeded_quad.get("verdict"),
+            "segment_count": seeded_quad.get("segment_count"),
+            "source_successful_triplet_count": seeded_quad.get("source_successful_triplet_count"),
+            "seeded_quad_candidate_count": seeded_quad.get("seeded_quad_candidate_count"),
+            "tested_seeded_quad_count": seeded_quad.get("tested_seeded_quad_count"),
+            "successful_seeded_quad_count": seeded_quad.get("successful_seeded_quad_count"),
+            "failed_seeded_quad_count": seeded_quad.get("failed_seeded_quad_count"),
+            "successful_seeded_quads": seeded_quad.get("successful_seeded_quads"),
+            "max_resident_segment_count_observed": seeded_quad.get("max_resident_segment_count_observed"),
+            "next_optimization_target": seeded_quad.get("next_optimization_target"),
+        },
+    )
+
 payload = {
     "generated_at": datetime.now().astimezone().isoformat(),
     "verdict": "ok_dream7b_bpu_deployment_acceptance_probe" if not errors else "failed_dream7b_bpu_deployment_acceptance_probe",
