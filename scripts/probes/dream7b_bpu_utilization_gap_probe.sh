@@ -76,6 +76,7 @@ systemd_telemetry_path, systemd_telemetry = latest_json("dream7b_bpu_batch_queue
 selected_pair_candidate_service_telemetry_path, selected_pair_candidate_service_telemetry = latest_json("dream7b_bpu_selected_pair_candidate_service_telemetry_*/systemd_telemetry_probe.json")
 selected_pair_cross_job_reuse_path, selected_pair_cross_job_reuse = latest_json("dream7b_bpu_selected_pair_cross_job_reuse_*/selected_pair_cross_job_reuse_probe.json")
 resplit_batch_telemetry_path, resplit_batch_telemetry = latest_json("dream7b_bpu_resplit_batch_telemetry_*/resplit_batch_telemetry_probe.json")
+resplit_window_cost_path, resplit_window_cost = latest_json("dream7b_bpu_resplit_window_cost_*/resplit_window_cost_probe.json")
 sustained_path, sustained = latest_json("dream7b_bpu_diffusion_batch_generate_sustained_*/batch_generation_sustained_probe.json")
 batch_generate_telemetry_path, batch_generate_telemetry = latest_json("dream7b_bpu_diffusion_batch_generate_telemetry_*/batch_generation_telemetry_probe.json")
 
@@ -93,6 +94,8 @@ if selected_pair_cross_job_reuse is None:
     errors.append("missing dream7b_bpu_selected_pair_cross_job_reuse_*/selected_pair_cross_job_reuse_probe.json")
 if resplit_batch_telemetry is None:
     errors.append("missing dream7b_bpu_resplit_batch_telemetry_*/resplit_batch_telemetry_probe.json")
+if resplit_window_cost is None:
+    errors.append("missing dream7b_bpu_resplit_window_cost_*/resplit_window_cost_probe.json")
 if sustained is None:
     errors.append("missing dream7b_bpu_diffusion_batch_generate_sustained_*/batch_generation_sustained_probe.json")
 if batch_generate_telemetry is None:
@@ -234,6 +237,41 @@ if isinstance(resplit_batch_telemetry, dict):
         errors.append(
             "unexpected resplit batch telemetry topk_last_position_by_batch_count: "
             f"{resplit_batch_forward_metrics.get('topk_last_position_by_batch_count')}"
+        )
+
+resplit_top_load_window = (resplit_window_cost or {}).get("top_load_window") or {}
+resplit_top_ratio_window = (resplit_window_cost or {}).get("top_load_to_run_ratio_window") or {}
+if isinstance(resplit_window_cost, dict):
+    if resplit_window_cost.get("verdict") != "ok_dream7b_bpu_resplit_window_cost_probe":
+        errors.append(f"unexpected resplit window cost verdict: {resplit_window_cost.get('verdict')}")
+    if int(resplit_window_cost.get("batch_count") or 0) < min_batch_count:
+        errors.append(f"resplit window cost batch_count below {min_batch_count}: {resplit_window_cost.get('batch_count')}")
+    if resplit_window_cost.get("segment_plan") != "resplit-adjacent":
+        errors.append(f"unexpected resplit window cost segment_plan: {resplit_window_cost.get('segment_plan')}")
+    if resplit_window_cost.get("execution_mode") != "pair_window_batch":
+        errors.append(f"unexpected resplit window cost execution_mode: {resplit_window_cost.get('execution_mode')}")
+    if resplit_window_cost.get("window_execution_mode") != "window-batch":
+        errors.append(f"unexpected resplit window cost window_execution_mode: {resplit_window_cost.get('window_execution_mode')}")
+    if resplit_window_cost.get("child_process_count") != 0:
+        errors.append(f"unexpected resplit window cost child_process_count: {resplit_window_cost.get('child_process_count')}")
+    if resplit_window_cost.get("segment_event_count") != min_batch_count * 14:
+        errors.append(f"unexpected resplit window cost segment_event_count: {resplit_window_cost.get('segment_event_count')}")
+    if resplit_window_cost.get("window_count") != 7:
+        errors.append(f"unexpected resplit window cost window_count: {resplit_window_cost.get('window_count')}")
+    if len(resplit_window_cost.get("ranked_by_load") or []) != 7:
+        errors.append(f"unexpected resplit window cost ranked_by_load length: {len(resplit_window_cost.get('ranked_by_load') or [])}")
+    if float(resplit_window_cost.get("load_to_run_ratio") or 0.0) <= 1.0:
+        errors.append(f"resplit window cost load_to_run_ratio did not exceed 1.0: {resplit_window_cost.get('load_to_run_ratio')}")
+    if not resplit_top_load_window.get("resident_segments"):
+        errors.append("resplit window cost top_load_window missing resident_segments")
+    if float(resplit_top_load_window.get("load_ms") or 0.0) <= 0.0:
+        errors.append(f"resplit window cost top_load_window load_ms did not exceed zero: {resplit_top_load_window.get('load_ms')}")
+    if not resplit_top_ratio_window.get("resident_segments"):
+        errors.append("resplit window cost top_load_to_run_ratio_window missing resident_segments")
+    if float(resplit_top_ratio_window.get("load_to_run_ratio") or 0.0) <= 1.0:
+        errors.append(
+            "resplit window cost top_load_to_run_ratio_window load_to_run_ratio did not exceed 1.0: "
+            f"{resplit_top_ratio_window.get('load_to_run_ratio')}"
         )
 
 if isinstance(sustained, dict):
@@ -434,6 +472,24 @@ payload = {
         "amortized_load_ms_per_forward": resplit_batch_forward_metrics.get("amortized_load_ms_per_forward"),
         "amortized_run_ms_per_forward": resplit_batch_forward_metrics.get("amortized_run_ms_per_forward"),
     },
+    "resplit_window_cost": {
+        "path": str(resplit_window_cost_path) if resplit_window_cost_path else None,
+        "batch_count": (resplit_window_cost or {}).get("batch_count"),
+        "segment_plan": (resplit_window_cost or {}).get("segment_plan"),
+        "execution_mode": (resplit_window_cost or {}).get("execution_mode"),
+        "window_execution_mode": (resplit_window_cost or {}).get("window_execution_mode"),
+        "child_process_count": (resplit_window_cost or {}).get("child_process_count"),
+        "segment_event_count": (resplit_window_cost or {}).get("segment_event_count"),
+        "window_count": (resplit_window_cost or {}).get("window_count"),
+        "total_load_ms": (resplit_window_cost or {}).get("total_load_ms"),
+        "total_run_ms": (resplit_window_cost or {}).get("total_run_ms"),
+        "load_to_run_ratio": (resplit_window_cost or {}).get("load_to_run_ratio"),
+        "amortized_load_ms_per_forward": (resplit_window_cost or {}).get("amortized_load_ms_per_forward"),
+        "amortized_run_ms_per_forward": (resplit_window_cost or {}).get("amortized_run_ms_per_forward"),
+        "top_load_window": resplit_top_load_window,
+        "top_load_to_run_ratio_window": resplit_top_ratio_window,
+        "next_optimization_target": (resplit_window_cost or {}).get("next_optimization_target"),
+    },
     "sustained_generation": {
         "path": str(sustained_path) if sustained_path else None,
         "round_count": (sustained or {}).get("round_count"),
@@ -479,6 +535,9 @@ lines = [
     f"- resplit_batch_telemetry_avg_bpu_loading: {payload['resplit_batch_telemetry']['avg_bpu_loading']}",
     f"- resplit_batch_telemetry_load_to_run_ratio: {payload['resplit_batch_telemetry']['load_to_run_ratio']}",
     f"- resplit_batch_telemetry_amortized_wall_ms_per_forward: {payload['resplit_batch_telemetry']['amortized_wall_ms_per_forward']}",
+    f"- resplit_window_cost_load_to_run_ratio: {payload['resplit_window_cost']['load_to_run_ratio']}",
+    f"- resplit_window_cost_top_load_window: {payload['resplit_window_cost']['top_load_window'].get('resident_segments')}",
+    f"- resplit_window_cost_top_load_to_run_ratio_window: {payload['resplit_window_cost']['top_load_to_run_ratio_window'].get('resident_segments')}",
     "",
     "## Evidence",
     "",
@@ -489,6 +548,7 @@ lines = [
     f"- selected_pair_candidate_service_telemetry: {payload['selected_pair_candidate_service_telemetry']['path']}",
     f"- selected_pair_cross_job_reuse: {payload['selected_pair_cross_job_reuse']['path']}",
     f"- resplit_batch_telemetry: {payload['resplit_batch_telemetry']['path']}",
+    f"- resplit_window_cost: {payload['resplit_window_cost']['path']}",
     f"- sustained_generation: {payload['sustained_generation']['path']}",
     f"- batch_generate_telemetry: {payload['batch_generate_telemetry']['path']}",
     "",

@@ -713,6 +713,9 @@ else:
     selected_pair_cross_job_reuse = utilization_gap.get("selected_pair_cross_job_reuse") or {}
     selected_pair_cross_job_comparison = selected_pair_cross_job_reuse.get("comparison_to_selected_pair_candidate_service") or {}
     resplit_batch_telemetry = utilization_gap.get("resplit_batch_telemetry") or {}
+    resplit_window_cost = utilization_gap.get("resplit_window_cost") or {}
+    resplit_top_load_window = resplit_window_cost.get("top_load_window") or {}
+    resplit_top_ratio_window = resplit_window_cost.get("top_load_to_run_ratio_window") or {}
     sustained_generation = utilization_gap.get("sustained_generation") or {}
     batch_generate_telemetry = utilization_gap.get("batch_generate_telemetry") or {}
     ok = (
@@ -745,6 +748,18 @@ else:
         and resplit_batch_telemetry.get("final_shape_count") == min_batch_capacity
         and resplit_batch_telemetry.get("topk_last_position_by_batch_count") == min_batch_capacity
         and float(resplit_batch_telemetry.get("max_bpu_loading") or 0.0) > 0.0
+        and int(resplit_window_cost.get("batch_count") or 0) >= min_batch_capacity
+        and resplit_window_cost.get("segment_plan") == "resplit-adjacent"
+        and resplit_window_cost.get("execution_mode") == "pair_window_batch"
+        and resplit_window_cost.get("window_execution_mode") == "window-batch"
+        and resplit_window_cost.get("child_process_count") == 0
+        and resplit_window_cost.get("segment_event_count") == min_batch_capacity * 14
+        and resplit_window_cost.get("window_count") == 7
+        and float(resplit_window_cost.get("load_to_run_ratio") or 0.0) > 1.0
+        and bool(resplit_top_load_window.get("resident_segments"))
+        and bool(resplit_top_ratio_window.get("resident_segments"))
+        and float(resplit_top_load_window.get("load_ms") or 0.0) > 0.0
+        and float(resplit_top_ratio_window.get("load_to_run_ratio") or 0.0) > 1.0
         and int(sustained_generation.get("round_count") or 0) >= min_batch_generate_sustained_round_count
         and int(sustained_generation.get("batch_count") or 0) >= min_batch_capacity
         and int(sustained_generation.get("actual_total_batch_items") or 0) >= min_systemd_telemetry_requests
@@ -784,6 +799,12 @@ else:
             "resplit_batch_telemetry_load_to_run_ratio": resplit_batch_telemetry.get("load_to_run_ratio"),
             "resplit_batch_telemetry_amortized_wall_ms_per_forward": resplit_batch_telemetry.get("amortized_wall_ms_per_forward"),
             "resplit_batch_telemetry_segment_event_count": resplit_batch_telemetry.get("segment_event_count"),
+            "resplit_window_cost_window_count": resplit_window_cost.get("window_count"),
+            "resplit_window_cost_load_to_run_ratio": resplit_window_cost.get("load_to_run_ratio"),
+            "resplit_window_cost_top_load_window": resplit_top_load_window.get("resident_segments"),
+            "resplit_window_cost_top_load_window_load_ms": resplit_top_load_window.get("load_ms"),
+            "resplit_window_cost_top_load_to_run_ratio_window": resplit_top_ratio_window.get("resident_segments"),
+            "resplit_window_cost_top_load_to_run_ratio": resplit_top_ratio_window.get("load_to_run_ratio"),
             "sustained_round_count": sustained_generation.get("round_count"),
             "sustained_actual_total_batch_items": sustained_generation.get("actual_total_batch_items"),
             "batch_generate_batch_count": batch_generate_telemetry.get("batch_count"),

@@ -82,6 +82,7 @@ required_files=(
   "scripts/probes/dream7b_bpu_resplit_forward_probe.sh"
   "scripts/probes/dream7b_bpu_resplit_batch_forward_probe.sh"
   "scripts/probes/dream7b_bpu_resplit_batch_telemetry_probe.sh"
+  "scripts/probes/dream7b_bpu_resplit_window_cost_probe.sh"
   "scripts/probes/s100_official_llm_baseline_probe.sh"
   "scripts/probes/s100_official_qwen_runtime_probe.sh"
   "scripts/probes/s100_bpu_memory_pool_probe.sh"
@@ -132,6 +133,7 @@ required_readme_strings=(
   "scripts/dream7b-bpu-resplit-batch-forward.sh"
   "scripts/probes/dream7b_bpu_resplit_batch_forward_probe.sh"
   "scripts/probes/dream7b_bpu_resplit_batch_telemetry_probe.sh"
+  "scripts/probes/dream7b_bpu_resplit_window_cost_probe.sh"
   "scripts/probes/s100_official_llm_baseline_probe.sh"
   "scripts/probes/s100_official_qwen_runtime_probe.sh"
   "scripts/probes/s100_bpu_memory_pool_probe.sh"
@@ -193,6 +195,7 @@ required_reference_strings=(
   "dream7b-bpu-resplit-batch-forward"
   "dream7b-bpu-resplit-batch-forward-probe"
   "dream7b-bpu-resplit-batch-telemetry-probe"
+  "dream7b-bpu-resplit-window-cost-probe"
   "dream7b-bpu-selected-pair-candidate.service"
   "dream7b_bpu_selected_pair_candidate_service_telemetry"
   "comparison_to_default_systemd_telemetry"
@@ -349,6 +352,10 @@ required_reference_strings=(
   "DREAM7B_BPU_RESPLIT_BATCH_TELEMETRY_TOP_K"
   "DREAM7B_BPU_RESPLIT_BATCH_TELEMETRY_TIMEOUT_SEC"
   "DREAM7B_BPU_RESPLIT_BATCH_TELEMETRY_FORWARD_CMD"
+  "DREAM7B_BPU_RESPLIT_WINDOW_COST_MODEL_REPORT_ROOT"
+  "DREAM7B_BPU_RESPLIT_WINDOW_COST_MIN_BATCH_COUNT"
+  "DREAM7B_BPU_RESPLIT_WINDOW_COST_EXPECTED_WINDOW_COUNT"
+  "DREAM7B_BPU_RESPLIT_WINDOW_COST_EXPECTED_SEGMENT_EVENT_COUNT"
   "S100_OFFICIAL_LLM_SDK_ROOT"
   "S100_OFFICIAL_LLM_DREAM_REPORT_ROOT"
   "S100_OFFICIAL_LLM_DOC_URL"
@@ -537,6 +544,9 @@ required_reference_strings=(
   "resplit_batch_telemetry_probe"
   "ok_dream7b_bpu_resplit_batch_telemetry_probe"
   "resplit_batch_telemetry"
+  "resplit_window_cost_probe"
+  "ok_dream7b_bpu_resplit_window_cost_probe"
+  "resplit_window_cost"
   "passed_check_count"
   "systemd_service"
   "batch_capacity"
@@ -675,10 +685,16 @@ required_reference_strings=(
   "/mnt/nas/openclaw/reports/models/dream7b_bpu_batch_queue_retention_20260605-135448/queue_retention_probe.json"
   "/mnt/nas/openclaw/reports/models/dream7b_bpu_resplit_batch_telemetry_20260606-080917/resplit_batch_telemetry_probe.md"
   "/mnt/nas/openclaw/reports/models/dream7b_bpu_resplit_batch_telemetry_20260606-080917/resplit_batch_telemetry_probe.json"
+  "/mnt/nas/openclaw/reports/models/dream7b_bpu_resplit_window_cost_20260606-083152/resplit_window_cost_probe.md"
+  "/mnt/nas/openclaw/reports/models/dream7b_bpu_resplit_window_cost_20260606-083152/resplit_window_cost_probe.json"
   "/mnt/nas/openclaw/reports/models/dream7b_bpu_utilization_gap_20260606-081136/utilization_gap_probe.md"
   "/mnt/nas/openclaw/reports/models/dream7b_bpu_utilization_gap_20260606-081136/utilization_gap_probe.json"
   "/mnt/nas/openclaw/reports/models/dream7b_bpu_deployment_acceptance_20260606-081322/deployment_acceptance_probe.md"
   "/mnt/nas/openclaw/reports/models/dream7b_bpu_deployment_acceptance_20260606-081322/deployment_acceptance_probe.json"
+  "/mnt/nas/openclaw/reports/models/dream7b_bpu_utilization_gap_20260606-083359/utilization_gap_probe.md"
+  "/mnt/nas/openclaw/reports/models/dream7b_bpu_utilization_gap_20260606-083359/utilization_gap_probe.json"
+  "/mnt/nas/openclaw/reports/models/dream7b_bpu_deployment_acceptance_20260606-083359/deployment_acceptance_probe.md"
+  "/mnt/nas/openclaw/reports/models/dream7b_bpu_deployment_acceptance_20260606-083359/deployment_acceptance_probe.json"
   "/mnt/nas/openclaw/reports/models/dream7b_bpu_deployment_acceptance_20260605-143759/deployment_acceptance_probe.md"
   "/mnt/nas/openclaw/reports/models/dream7b_bpu_deployment_acceptance_20260605-143759/deployment_acceptance_probe.json"
   "/mnt/nas/openclaw/reports/models/dream7b_bpu_deployment_acceptance_20260605-153747/deployment_acceptance_probe.md"
@@ -1264,6 +1280,7 @@ if [[ -f scripts/probes/dream7b_bpu_utilization_gap_probe.sh ]]; then
     "dream7b_bpu_batch_queue_systemd_telemetry_*/systemd_telemetry_probe.json" \
     "dream7b_bpu_selected_pair_candidate_service_telemetry_*/systemd_telemetry_probe.json" \
     "dream7b_bpu_resplit_batch_telemetry_*/resplit_batch_telemetry_probe.json" \
+    "dream7b_bpu_resplit_window_cost_*/resplit_window_cost_probe.json" \
     "dream7b_bpu_diffusion_batch_generate_sustained_*/batch_generation_sustained_probe.json" \
     "dream7b_bpu_diffusion_batch_generate_telemetry_*/batch_generation_telemetry_probe.json" \
     "dream7b_bpu_selected_pair_telemetry_*/selected_pair_telemetry_probe.json" \
@@ -1296,6 +1313,10 @@ if [[ -f scripts/probes/dream7b_bpu_utilization_gap_probe.sh ]]; then
     "resplit_batch_telemetry_avg_bpu_loading" \
     "resplit_batch_telemetry_load_to_run_ratio" \
     "resplit_batch_telemetry_amortized_wall_ms_per_forward" \
+    "resplit_window_cost" \
+    "resplit_window_cost_load_to_run_ratio" \
+    "resplit_window_cost_top_load_window" \
+    "resplit_window_cost_top_load_to_run_ratio_window" \
     "sustained_generation" \
     "batch_generate_telemetry"; do
     if ! grep -F -- "$text" scripts/probes/dream7b_bpu_utilization_gap_probe.sh >/dev/null; then
@@ -2796,6 +2817,46 @@ if [[ -f scripts/probes/dream7b_bpu_resplit_batch_telemetry_probe.sh ]]; then
   fi
 fi
 
+if [[ -f scripts/probes/dream7b_bpu_resplit_window_cost_probe.sh ]]; then
+  for text in \
+    "DREAM7B_BPU_RESPLIT_WINDOW_COST_MODEL_REPORT_ROOT" \
+    "DREAM7B_BPU_RESPLIT_WINDOW_COST_MIN_BATCH_COUNT" \
+    "DREAM7B_BPU_RESPLIT_WINDOW_COST_EXPECTED_WINDOW_COUNT" \
+    "DREAM7B_BPU_RESPLIT_WINDOW_COST_EXPECTED_SEGMENT_EVENT_COUNT" \
+    "DREAM7B_BPU_RESPLIT_WINDOW_COST_MIN_BATCH_COUNT:-16" \
+    "DREAM7B_BPU_RESPLIT_WINDOW_COST_EXPECTED_WINDOW_COUNT:-7" \
+    "DREAM7B_BPU_RESPLIT_WINDOW_COST_EXPECTED_SEGMENT_EVENT_COUNT:-224" \
+    "dream7b_bpu_resplit_batch_telemetry_*/resplit_batch_telemetry_probe.json" \
+    "forward_summary" \
+    "ok_dream7b_bpu_resplit_window_cost_probe" \
+    "resplit_window_cost_probe.json" \
+    "resplit_window_cost_probe.md" \
+    "resplit-adjacent" \
+    "pair_window_batch" \
+    "window-batch" \
+    "window_count" \
+    "ranked_by_load" \
+    "ranked_by_load_to_run_ratio" \
+    "top_load_window" \
+    "top_load_to_run_ratio_window" \
+    "load_to_run_ratio" \
+    "amortized_load_ms_per_forward" \
+    "next_optimization_target"; do
+    if ! grep -F -- "$text" scripts/probes/dream7b_bpu_resplit_window_cost_probe.sh >/dev/null; then
+      errors+=("dream7b_bpu_resplit_window_cost_probe.sh missing $text")
+    fi
+  done
+  if ! grep -F -- "dream7b_bpu_resplit_window_cost_probe.sh" README.md >/dev/null; then
+    errors+=("README.md missing dream7b_bpu_resplit_window_cost_probe.sh")
+  fi
+  if ! grep -F -- "dream7b-bpu-resplit-window-cost-probe" docs/project_reference.md >/dev/null; then
+    errors+=("docs/project_reference.md missing dream7b-bpu-resplit-window-cost-probe")
+  fi
+  if ! grep -F -- "dream7b_bpu_resplit_window_cost_20260606-083152" docs/baseline_progress_2026-06-03_dream7b_segmented_bpu_hbm.md >/dev/null; then
+    errors+=("Dream 7B segmented progress doc missing resplit window cost report")
+  fi
+fi
+
 if [[ -f scripts/probes/dream7b_bpu_deployment_acceptance_probe.sh ]]; then
   if ! grep -F -- "DREAM7B_BPU_ACCEPTANCE_MIN_BATCH_CAPACITY" scripts/probes/dream7b_bpu_deployment_acceptance_probe.sh >/dev/null; then
     errors+=("dream7b_bpu_deployment_acceptance_probe.sh missing DREAM7B_BPU_ACCEPTANCE_MIN_BATCH_CAPACITY")
@@ -2858,6 +2919,7 @@ if [[ -f scripts/probes/dream7b_bpu_deployment_acceptance_probe.sh ]]; then
     "dream7b_bpu_selected_pair_candidate_service_telemetry_*/systemd_telemetry_probe.json" \
     "dream7b_bpu_selected_pair_cross_job_reuse_*/selected_pair_cross_job_reuse_probe.json" \
     "resplit_batch_telemetry" \
+    "resplit_window_cost" \
     "dream7b_bpu_persistent_pair_cache_*/persistent_pair_cache_probe.json" \
     "dream7b_bpu_held_pair_residency_matrix_*/held_pair_residency_matrix_probe.json" \
     "dream7b_bpu_single_segment_residency_matrix_*/single_segment_residency_matrix_probe.json" \
@@ -2937,6 +2999,12 @@ if [[ -f scripts/probes/dream7b_bpu_deployment_acceptance_probe.sh ]]; then
     "resplit_batch_telemetry_load_to_run_ratio" \
     "resplit_batch_telemetry_amortized_wall_ms_per_forward" \
     "resplit_batch_telemetry_segment_event_count" \
+    "resplit_window_cost_window_count" \
+    "resplit_window_cost_load_to_run_ratio" \
+    "resplit_window_cost_top_load_window" \
+    "resplit_window_cost_top_load_window_load_ms" \
+    "resplit_window_cost_top_load_to_run_ratio_window" \
+    "resplit_window_cost_top_load_to_run_ratio" \
     "expected_window_execution_mode" \
     "expected_child_process_count" \
     "all_pair_workers_ready" \

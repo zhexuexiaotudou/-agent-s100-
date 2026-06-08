@@ -3147,6 +3147,68 @@ next_optimization_target: reduce resplit batch HBM load overhead before expectin
 errors: []
 ```
 
+### `dream7b-bpu-resplit-window-cost-probe`
+
+Source file: `scripts/probes/dream7b_bpu_resplit_window_cost_probe.sh`
+
+Installed command on S100P:
+
+```text
+/usr/local/bin/dream7b-bpu-resplit-window-cost-probe
+```
+
+Environment variables copied from the script:
+
+```text
+DREAM7B_BPU_RESPLIT_WINDOW_COST_MODEL_REPORT_ROOT
+DREAM7B_BPU_RESPLIT_WINDOW_COST_MIN_BATCH_COUNT
+DREAM7B_BPU_RESPLIT_WINDOW_COST_EXPECTED_WINDOW_COUNT
+DREAM7B_BPU_RESPLIT_WINDOW_COST_EXPECTED_SEGMENT_EVENT_COUNT
+```
+
+Default values copied from the script:
+
+```text
+report_root = /mnt/nas/openclaw/reports/models
+model_report_root = /mnt/nas/openclaw/reports/models
+min_batch_count = 16
+expected_window_count = 7
+expected_segment_event_count = 224
+```
+
+Verified report:
+
+```text
+/mnt/nas/openclaw/reports/models/dream7b_bpu_resplit_window_cost_20260606-083152/resplit_window_cost_probe.json
+```
+
+Verified fields copied from `resplit_window_cost_probe.json`:
+
+```text
+verdict: ok_dream7b_bpu_resplit_window_cost_probe
+resplit_batch_telemetry_path: /mnt/nas/openclaw/reports/models/dream7b_bpu_resplit_batch_telemetry_20260606-080917/resplit_batch_telemetry_probe.json
+forward_summary_path: /mnt/nas/openclaw/reports/models/dream7b_bpu_resplit_batch_telemetry_20260606-080917/forward/summary.json
+batch_count: 16
+segment_plan: resplit-adjacent
+execution_mode: pair_window_batch
+window_execution_mode: window-batch
+child_process_count: 0
+segment_event_count: 224
+window_count: 7
+total_load_ms: 23570.225
+total_run_ms: 2400.803
+load_to_run_ratio: 9.817642
+amortized_load_ms_per_forward: 1473.139062
+amortized_run_ms_per_forward: 150.050187
+top_load_window.resident_segments: ['seg07_10', 'seg10_12']
+top_load_window.load_ms: 3842.891
+top_load_window.load_share: 0.16304
+top_load_to_run_ratio_window.resident_segments: ['seg00_01', 'seg01_02']
+top_load_to_run_ratio_window.load_to_run_ratio: 18.428821
+next_optimization_target: reduce packed HBM load cost for top ranked resplit windows before expecting sustained 128TOPS-level average utilization
+errors: []
+```
+
 ### `dream7b-bpu-persistent-triplet-topology-probe`
 
 Source file: `scripts/probes/dream7b_bpu_persistent_triplet_topology_probe.sh`
@@ -7491,6 +7553,9 @@ docs/baseline_progress_2026-06-03_dream7b_segmented_bpu_hbm.md
 - Added and installed `dream7b-bpu-resplit-batch-telemetry-probe`; verified `/mnt/nas/openclaw/reports/models/dream7b_bpu_resplit_batch_telemetry_20260606-080917/resplit_batch_telemetry_probe.md` with `verdict: ok_dream7b_bpu_resplit_batch_telemetry_probe`, `batch_count: 16`, `max_bpu_loading: 100.0`, `avg_bpu_loading: 8.697`, `nonzero_bpu_loading_sample_count: 30`, `forward_metrics.segment_plan: resplit-adjacent`, `forward_metrics.execution_mode: pair_window_batch`, `forward_metrics.window_execution_mode: window-batch`, `forward_metrics.child_process_count: 0`, `forward_metrics.segment_event_count: 224`, `forward_metrics.amortized_wall_ms_per_forward: 1640.749`, and `forward_metrics.load_to_run_ratio: 9.817642`.
 - Updated `dream7b-bpu-utilization-gap-probe` to include `resplit_batch_telemetry`; verified `/mnt/nas/openclaw/reports/models/dream7b_bpu_utilization_gap_20260606-081136/utilization_gap_probe.json` and `/mnt/nas/openclaw/reports/models/dream7b_bpu_utilization_gap_20260606-081136/utilization_gap_probe.md` with `diagnosis: hbm_reload_dominated`, `max_observed_bpu_loading: 100.0`, `avg_observed_bpu_loading_across_reports: 8.754`, `resplit_batch_telemetry.avg_bpu_loading: 8.697`, `resplit_batch_telemetry.load_to_run_ratio: 9.818`, and `resplit_batch_telemetry.amortized_wall_ms_per_forward: 1640.749`.
 - Updated `dream7b-bpu-deployment-acceptance-probe` to require resplit batch telemetry evidence in the `utilization_gap` check; verified `/mnt/nas/openclaw/reports/models/dream7b_bpu_deployment_acceptance_20260606-081322/deployment_acceptance_probe.json` and `/mnt/nas/openclaw/reports/models/dream7b_bpu_deployment_acceptance_20260606-081322/deployment_acceptance_probe.md` with `check_count: 30`, `passed_check_count: 30`, `utilization_gap.ok: True`, `resplit_batch_telemetry_batch_count: 16`, `resplit_batch_telemetry_max_bpu_loading: 100.0`, and `resplit_batch_telemetry_segment_event_count: 224`.
+- Added and installed `dream7b-bpu-resplit-window-cost-probe`; verified `/mnt/nas/openclaw/reports/models/dream7b_bpu_resplit_window_cost_20260606-083152/resplit_window_cost_probe.md` with `verdict: ok_dream7b_bpu_resplit_window_cost_probe`, `window_count: 7`, `segment_event_count: 224`, `load_to_run_ratio: 9.817642`, `top_load_window.resident_segments: ['seg07_10', 'seg10_12']`, `top_load_window.load_ms: 3842.891`, `top_load_to_run_ratio_window.resident_segments: ['seg00_01', 'seg01_02']`, and `top_load_to_run_ratio_window.load_to_run_ratio: 18.428821`.
+- Updated `dream7b-bpu-utilization-gap-probe` to include `resplit_window_cost`; verified `/mnt/nas/openclaw/reports/models/dream7b_bpu_utilization_gap_20260606-083359/utilization_gap_probe.json` and `/mnt/nas/openclaw/reports/models/dream7b_bpu_utilization_gap_20260606-083359/utilization_gap_probe.md` with `diagnosis: hbm_reload_dominated`, `resplit_window_cost.window_count: 7`, `resplit_window_cost.load_to_run_ratio: 9.817642`, `resplit_window_cost.top_load_window.resident_segments: ['seg07_10', 'seg10_12']`, and `resplit_window_cost.top_load_to_run_ratio_window.resident_segments: ['seg00_01', 'seg01_02']`.
+- Updated `dream7b-bpu-deployment-acceptance-probe` to require resplit window cost evidence through `utilization_gap`; verified `/mnt/nas/openclaw/reports/models/dream7b_bpu_deployment_acceptance_20260606-083359/deployment_acceptance_probe.json` and `/mnt/nas/openclaw/reports/models/dream7b_bpu_deployment_acceptance_20260606-083359/deployment_acceptance_probe.md` with `check_count: 30`, `passed_check_count: 30`, `utilization_gap.ok: True`, `resplit_window_cost_window_count: 7`, `resplit_window_cost_top_load_window: ['seg07_10', 'seg10_12']`, and `resplit_window_cost_top_load_to_run_ratio_window: ['seg00_01', 'seg01_02']`.
 - Added `dream7b-bpu-persistent-triplet-topology-probe` for replaying successful triplets as long-lived workers before a forward-path experiment.
 - Verified persistent triplet topology report at `/mnt/nas/openclaw/reports/models/dream7b_bpu_persistent_triplet_topology_20260606-131107/persistent_triplet_topology_probe.md` with `source_successful_triplet_count: 20`, `tested_triplet_topology_count: 20`, `stable_triplet_topology_count: 20`, `failed_triplet_topology_count: 0`, `selected_topology: [0, 1, 8]`, and `max_resident_segment_count_observed: 3`.
 - Updated `dream7b-bpu-deployment-acceptance-probe` to include `persistent_triplet_topology`.
@@ -7534,7 +7599,7 @@ docs/baseline_progress_2026-06-03_dream7b_segmented_bpu_hbm.md
 - Treat selected pair `[1, 8]` as a positive telemetry-backed warm-path optimization; the promotion gate is ready for a guarded default-service candidate, but `default_service_already_promoted: False`, so the next implementation must add the guarded candidate and rerun deployment acceptance before replacing the current default Dream 7B service path.
 - Do not switch `dream7b-bpu-fine-batch-forward` defaults to packed adjacent window size 3; the window3 feasibility probe records `expected_window3_failure_observed: True`.
 - Do not attempt a four-segment resident topology on the current HBM artifacts without a new split or runtime change; the seeded quad probe has `successful_seeded_quad_count: 0`.
-- Use the verified resplit batch telemetry as the next optimization baseline: `dream7b-bpu-resplit-batch-forward` reaches batch 16 with `max_bpu_loading: 100.0`, but `avg_bpu_loading: 8.697` and `load_to_run_ratio: 9.817642` show load/residency dominance remains before any default-service promotion.
+- Use the verified resplit window cost ranking as the next optimization baseline: `['seg07_10', 'seg10_12']` is the top absolute HBM load window and `['seg00_01', 'seg01_02']` is the top load/run ratio window, so the next split/runtime experiment should reduce packed HBM load cost for these windows before any default-service promotion.
 - Treat explicit `bpu_core` as an optional crash-mitigation variable only; the controlled official Qwen sweep still has `functional_success_by_core` false for every tested value, so Dream 7B must continue focusing on HBM reload/residency reduction before expecting sustained 128TOPS utilization.
 - Evaluate smaller HBM artifacts, different segment boundaries, or runtime residency support before expecting sustained 128TOPS-level average utilization from Dream 7B.
 - Continue collecting long-repeat reports before tightening the current `DREAM7B_BPU_FINE_FORWARD_LONG_REPEAT_MAX_WALL_SPREAD_RATIO` default of `0.10`.
