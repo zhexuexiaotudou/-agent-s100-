@@ -3130,6 +3130,234 @@ warnings: []
 errors: []
 ```
 
+### `dream7b-bpu-selected-pair-batch-forward`
+
+Source file: `scripts/dream7b-bpu-selected-pair-batch-forward.sh`
+
+Installed command on S100P:
+
+```text
+/usr/local/bin/dream7b-bpu-selected-pair-batch-forward
+```
+
+CLI copied from the script:
+
+```text
+dream7b-bpu-selected-pair-batch-forward --tokens-batch-json FILE --top-k N --output-dir DIR
+```
+
+Environment variables copied from the script:
+
+```text
+DREAM7B_BPU_SELECTED_PAIR_BATCH_FORWARD_TOKENS_BATCH_JSON
+DREAM7B_BPU_SELECTED_PAIR_BATCH_FORWARD_OUTPUT_DIR
+DREAM7B_BPU_SELECTED_PAIR_BATCH_FORWARD_TOP_K
+DREAM7B_BPU_SELECTED_PAIR_BATCH_FORWARD_REPORT_ROOT
+DREAM7B_BPU_SELECTED_PAIR_BATCH_FORWARD_PROBE_CMD
+DREAM7B_BPU_SELECTED_PAIR_BATCH_FORWARD_TIMEOUT_SEC
+DREAM7B_BPU_SELECTED_PAIR_BATCH_FORWARD_TRIPLET_JSON
+DREAM7B_BPU_SELECTED_PAIR_TRIPLET_JSON
+DREAM7B_BPU_SELECTED_PAIR_TOKENS_BATCH_JSON
+```
+
+Default values copied from the script:
+
+```text
+top_k = 3
+probe_cmd = dream7b-bpu-selected-pair-forward-path-probe
+timeout_sec = 900
+```
+
+Output files copied from the script:
+
+```text
+summary.json
+summary.md
+selected_pair_reports
+```
+
+Runner-compatible output fields copied from the script:
+
+```text
+verdict
+selected_pair_candidate
+source_probe_json
+source_selected_summary_json
+source_tokens_batch_json
+execution_mode
+window_execution_mode
+child_process_count
+segment_plan
+batch_count
+seq_len
+top_k
+selected_pair
+selected_segments
+selected_pair_covers_all_segments
+selected_resident_load_ms
+load_ms
+warm_load_ms
+run_ms
+wall_ms
+load_share
+warm_load_share
+amortized_load_ms_per_forward
+amortized_warm_load_ms_per_forward
+amortized_run_ms_per_forward
+amortized_wall_ms_per_forward
+final_shape
+final_shapes
+topk_last_position_by_batch
+warnings
+errors
+```
+
+Latest recorded wrapper summary:
+
+```text
+/mnt/nas/openclaw/reports/models/dream7b_bpu_selected_pair_candidate_forward_20260606-035716/forward/summary.json
+```
+
+Verified selected-pair batch forward fields copied from `summary.json`:
+
+```text
+verdict: ok_dream7b_segmented_hbm_python_forward
+selected_pair_candidate: True
+execution_mode: pair_window_batch
+window_execution_mode: selected-pair-resident
+child_process_count: 2
+batch_count: 16
+selected_pair: [1, 8]
+selected_segments: ['seg02_04', 'seg24_26']
+selected_pair_covers_all_segments: True
+load_ms: 24018.25
+warm_load_ms: 20522.582
+run_ms: 2362.387
+wall_ms: 23190.463
+amortized_wall_ms_per_forward: 1449.404
+source_tokens_batch_json: /mnt/nas/openclaw/reports/models/dream7b_bpu_selected_pair_candidate_forward_20260606-035716/tokens_batch.json
+source_probe_json: /mnt/nas/openclaw/reports/models/dream7b_bpu_selected_pair_candidate_forward_20260606-035716/forward/selected_pair_reports/dream7b_bpu_selected_pair_forward_path_20260606-035716/selected_pair_forward_path_probe.json
+```
+
+### `dream7b-bpu-selected-pair-candidate-forward-probe`
+
+Source file: `scripts/probes/dream7b_bpu_selected_pair_candidate_forward_probe.sh`
+
+Installed command on S100P:
+
+```text
+/usr/local/bin/dream7b-bpu-selected-pair-candidate-forward-probe
+```
+
+Default argument copied from the script:
+
+```text
+report_root = /mnt/nas/openclaw/reports/models
+```
+
+Environment variables copied from the script:
+
+```text
+DREAM7B_BPU_SELECTED_PAIR_CANDIDATE_FORWARD_CMD
+DREAM7B_BPU_SELECTED_PAIR_CANDIDATE_BATCH_COUNT
+DREAM7B_BPU_SELECTED_PAIR_CANDIDATE_TOP_K
+DREAM7B_BPU_SELECTED_PAIR_CANDIDATE_TIMEOUT_SEC
+```
+
+Default values copied from the script:
+
+```text
+forward_cmd = dream7b-bpu-selected-pair-batch-forward
+batch_count = 16
+top_k = 3
+timeout_sec = 900
+```
+
+Output files copied from the script:
+
+```text
+selected_pair_candidate_forward_probe.json
+selected_pair_candidate_forward_probe.md
+tokens_batch.json
+forward/summary.json
+forward/summary.md
+```
+
+Output fields copied from the script:
+
+```text
+generated_at
+verdict
+run_dir
+forward_cmd
+batch_count
+top_k
+timeout_sec
+tokens_batch_json
+forward_dir
+forward_status
+stdout_path
+stderr_path
+summary_json
+summary_verdict
+selected_pair_candidate
+execution_mode
+window_execution_mode
+child_process_count
+selected_pair
+selected_segments
+selected_pair_covers_all_segments
+load_ms
+warm_load_ms
+run_ms
+wall_ms
+amortized_wall_ms_per_forward
+source_probe_json
+next_optimization_target
+warnings
+errors
+```
+
+Latest recorded report:
+
+```text
+/mnt/nas/openclaw/reports/models/dream7b_bpu_selected_pair_candidate_forward_20260606-035716/selected_pair_candidate_forward_probe.md
+```
+
+Latest recorded JSON:
+
+```text
+/mnt/nas/openclaw/reports/models/dream7b_bpu_selected_pair_candidate_forward_20260606-035716/selected_pair_candidate_forward_probe.json
+```
+
+Verified selected-pair candidate forward fields copied from `selected_pair_candidate_forward_probe.json`:
+
+```text
+verdict: ok_dream7b_bpu_selected_pair_candidate_forward_probe
+forward_cmd: dream7b-bpu-selected-pair-batch-forward
+batch_count: 16
+top_k: 3
+forward_status: 0
+summary_json: /mnt/nas/openclaw/reports/models/dream7b_bpu_selected_pair_candidate_forward_20260606-035716/forward/summary.json
+summary_verdict: ok_dream7b_segmented_hbm_python_forward
+selected_pair_candidate: True
+execution_mode: pair_window_batch
+window_execution_mode: selected-pair-resident
+child_process_count: 2
+selected_pair: [1, 8]
+selected_segments: ['seg02_04', 'seg24_26']
+selected_pair_covers_all_segments: True
+load_ms: 24018.25
+warm_load_ms: 20522.582
+run_ms: 2362.387
+wall_ms: 23190.463
+amortized_wall_ms_per_forward: 1449.404
+source_probe_json: /mnt/nas/openclaw/reports/models/dream7b_bpu_selected_pair_candidate_forward_20260606-035716/forward/selected_pair_reports/dream7b_bpu_selected_pair_forward_path_20260606-035716/selected_pair_forward_path_probe.json
+next_optimization_target: wire this selected-pair candidate forward command into a guarded service candidate and re-run deployment acceptance before replacing the current default service path
+warnings: []
+errors: []
+```
+
 ### `s100-official-llm-baseline-probe`
 
 Source file: `scripts/probes/s100_official_llm_baseline_probe.sh`
@@ -5629,6 +5857,8 @@ Decision: use official Qwen and DeepSeek-Qwen SDK assets as an S100 LLM baseline
 
 Reason: the official SDK contains supported Qwen/DeepSeek-Qwen/InternLM/Omni configs and precompiled `.hbm` download entries, while the current Dream route is a custom segmented `.hbm` chain. A Qwen run can help identify whether official runtime layout avoids the current Dream `hbm_reload_dominated` failure class, but it is not the requested model.
 
+2026-06-08 raw-log recheck decision: official Qwen is not a clean high-average 128TOPS utilization baseline on the current S100P state. The raw official runtime logs show `decode` and `prefill` model load success first, followed by `AllocError { len: 2359296 }`, repeated `UCP Allocate memory failed` entries with `backend: 9`, and `ION_ALLOCATOR`/`MEM_ALLOCATOR` common-buffer failures. This is similar to Dream only at the broad "BPU runtime problem exists" level; the currently verified Dream service bottleneck remains `hbm_reload_dominated`.
+
 Evidence:
 
 ```text
@@ -6363,6 +6593,7 @@ docs/baseline_progress_2026-06-03_dream7b_segmented_bpu_hbm.md
 - Added and verified `s100-qwen-bpu-core-sweep-probe` at `/mnt/nas/openclaw/reports/models/s100_qwen_bpu_core_sweep_20260606-015133/qwen_bpu_core_sweep_probe.md`; it copies official Qwen config and tests exact `bpu_core` values `-1`, `0`, `1`, `2`, and `3`, showing every case still reports memory allocation failure and `functional_success_by_core` is `False` for every case. Explicit `bpu_core` values `1`, `2`, and `3` remove the process segfault but still fail prefill, so core pinning alone is not sufficient.
 - Updated and verified official LLM/Qwen baseline report at `/mnt/nas/openclaw/reports/models/s100_official_llm_baseline_20260606-004107/official_llm_baseline_probe.md` with `sdk_exists: True`, `config_dir_count: 8`, `official_hbm_download_entry_count: 14`, `qwen_existing_hbm_count: 1`, `official_qwen_local_runtime_report_present: True`, `official_qwen_runtime_completed: False`, `official_qwen_memory_alloc_failure_observed: True`, and `similar_issue_evidence_available_for_official_qwen: True`.
 - Rechecked the official Qwen route by SSH on 2026-06-08: `/mnt/nas/openclaw/toolchains/s100_llm_sdk/D-Robotics_LLM_S100_1.0.0_SDK/oellm_runtime/example/oellm_multichat/qwen_multichat_config.json` contains exact keys `hbm_path`, `tokenizer_dir`, and `template_path` with values `../../model/Qwen2.5_1.5B_Instruct_1024.hbm`, `../../config/Qwen2.5_1.5B_Instruct_config/`, and `../../config/Qwen2.5_1.5B_Instruct_config/Qwen2.5_1.5B_Instruct.jinja`; `/mnt/nas/openclaw/toolchains/s100_llm_sdk/D-Robotics_LLM_S100_1.0.0_SDK/oellm_runtime/example/oellm_multichat/oellm_multichat_demo.cc` defaults `bpu_core` to `-1` and maps that path to `XLM_INFER_BACKEND_BPU_ANY`, so the Qwen comparison remains a valid official-route memory/allocation comparison rather than a clean 128TOPS utilization baseline.
+- Rechecked the official Qwen raw logs by SSH on 2026-06-08: `/mnt/nas/openclaw/reports/models/s100_official_qwen_runtime_20260606-003908/oellm_multichat.stderr.txt` records `Load dnn model success` for `decode` and `prefill`, then `AllocError { len: 2359296 }`; `/mnt/nas/openclaw/reports/models/s100_official_qwen_runtime_20260606-003908/oellm_multichat.stdout.txt` records repeated `UCP Allocate memory failed` with `backend: 9` plus `ION_ALLOCATOR` and `MEM_ALLOCATOR` common-buffer errors, so official Qwen did hit a BPU/common-buffer allocation problem on this board state, while Dream's current sustained-utilization blocker remains HBM reload/residency overhead.
 
 ## TODO
 

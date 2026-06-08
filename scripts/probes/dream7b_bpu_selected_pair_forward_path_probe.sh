@@ -11,6 +11,7 @@ batch_count="${DREAM7B_BPU_SELECTED_PAIR_BATCH_COUNT:-4}"
 top_k="${DREAM7B_BPU_SELECTED_PAIR_TOP_K:-3}"
 timeout_sec="${DREAM7B_BPU_SELECTED_PAIR_TIMEOUT_SEC:-900}"
 selected_only="${DREAM7B_BPU_SELECTED_PAIR_ONLY:-0}"
+tokens_batch_json_override="${DREAM7B_BPU_SELECTED_PAIR_TOKENS_BATCH_JSON:-}"
 
 case "$report_root" in
   /tmp/*|/mnt/nas/openclaw/reports|/mnt/nas/openclaw/reports/*|/root/.openclaw/workspace/reports|/root/.openclaw/workspace/reports/*) ;;
@@ -44,6 +45,20 @@ if [[ -n "$triplet_json" ]]; then
       exit 2
       ;;
   esac
+fi
+
+if [[ -n "$tokens_batch_json_override" ]]; then
+  case "$tokens_batch_json_override" in
+    /tmp/*|/mnt/nas/openclaw/reports|/mnt/nas/openclaw/reports/*|/root/.openclaw/workspace/reports|/root/.openclaw/workspace/reports/*) ;;
+    *)
+      echo "Refusing tokens batch JSON outside approved report directories: $tokens_batch_json_override" >&2
+      exit 2
+      ;;
+  esac
+  if [[ ! -f "$tokens_batch_json_override" ]]; then
+    echo "Missing DREAM7B_BPU_SELECTED_PAIR_TOKENS_BATCH_JSON: $tokens_batch_json_override" >&2
+    exit 2
+  fi
 fi
 
 if ! [[ "$batch_count" =~ ^[1-9][0-9]*$ ]] || (( batch_count > 16 )); then
@@ -86,7 +101,8 @@ python3 - \
   "$batch_count" \
   "$top_k" \
   "$timeout_sec" \
-  "$selected_only" <<'PY'
+  "$selected_only" \
+  "$tokens_batch_json_override" <<'PY'
 import gc
 import itertools
 import json
@@ -112,6 +128,7 @@ batch_count = int(sys.argv[8])
 top_k = int(sys.argv[9])
 timeout_sec = int(sys.argv[10])
 selected_only = sys.argv[11] == "1"
+tokens_batch_json_override = sys.argv[12]
 
 seq_len = 16
 hidden_size = 3584
@@ -196,10 +213,23 @@ if not selected_pair_covers_all_segments:
         f"selected pair {selected_pair} does not cover all segments through successful_triplets; thirds={sorted(selected_thirds)}"
     )
 
-tokens_batch = []
-for batch_index in range(batch_count):
-    base = (batch_index + 1) * 100
-    tokens_batch.append([base + offset for offset in range(1, seq_len + 1)])
+if tokens_batch_json_override:
+    source_tokens_batch_json = Path(tokens_batch_json_override)
+    tokens_batch = json.loads(source_tokens_batch_json.read_text(encoding="utf-8"))
+    if not isinstance(tokens_batch, list) or not tokens_batch:
+        raise SystemExit("DREAM7B_BPU_SELECTED_PAIR_TOKENS_BATCH_JSON must contain a non-empty JSON list")
+    normalized_tokens_batch = []
+    for batch_index, row in enumerate(tokens_batch):
+        if not isinstance(row, list) or len(row) != seq_len:
+            raise SystemExit(f"tokens batch row {batch_index} must contain exactly {seq_len} token ids")
+        normalized_tokens_batch.append([int(item) for item in row])
+    tokens_batch = normalized_tokens_batch
+    batch_count = len(tokens_batch)
+else:
+    tokens_batch = []
+    for batch_index in range(batch_count):
+        base = (batch_index + 1) * 100
+        tokens_batch.append([base + offset for offset in range(1, seq_len + 1)])
 tokens_batch_np = np.asarray(tokens_batch, dtype=np.int32)
 tokens_batch_json = run_dir / "tokens_batch.json"
 tokens_batch_json.write_text(json.dumps(tokens_batch, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
@@ -524,6 +554,7 @@ payload = {
     "timeout_sec": timeout_sec,
     "selected_only": selected_only,
     "tokens_batch_json": str(tokens_batch_json),
+    "source_tokens_batch_json": tokens_batch_json_override,
     "selected_summary_json": str(selected_summary_path),
     "selected": {
         "selected_pair": selected_summary.get("selected_pair"),

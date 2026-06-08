@@ -31,6 +31,7 @@ required_files=(
   "scripts/dream7b-bpu-text-queue-run.sh"
   "scripts/dream7b-bpu-diffusion-generate.sh"
   "scripts/dream7b-bpu-diffusion-batch-generate.sh"
+  "scripts/dream7b-bpu-selected-pair-batch-forward.sh"
   "scripts/probes/dream7b_segmented_hbm_python_forward.py"
   "scripts/probes/dream7b_bpu_diffusion_loop_probe.sh"
   "scripts/probes/dream7b_bpu_fine_forward_repeat_probe.sh"
@@ -69,6 +70,7 @@ required_files=(
   "scripts/probes/dream7b_bpu_selected_pair_forward_path_probe.sh"
   "scripts/probes/dream7b_bpu_selected_pair_telemetry_probe.sh"
   "scripts/probes/dream7b_bpu_selected_pair_promotion_gate_probe.sh"
+  "scripts/probes/dream7b_bpu_selected_pair_candidate_forward_probe.sh"
   "scripts/probes/s100_official_llm_baseline_probe.sh"
   "scripts/probes/s100_official_qwen_runtime_probe.sh"
   "scripts/probes/s100_bpu_memory_pool_probe.sh"
@@ -107,6 +109,7 @@ required_readme_strings=(
   "scripts/probes/dream7b_bpu_selected_pair_forward_path_probe.sh"
   "scripts/probes/dream7b_bpu_selected_pair_telemetry_probe.sh"
   "scripts/probes/dream7b_bpu_selected_pair_promotion_gate_probe.sh"
+  "scripts/probes/dream7b_bpu_selected_pair_candidate_forward_probe.sh"
   "scripts/probes/s100_official_llm_baseline_probe.sh"
   "scripts/probes/s100_official_qwen_runtime_probe.sh"
   "scripts/probes/s100_bpu_memory_pool_probe.sh"
@@ -157,6 +160,8 @@ required_reference_strings=(
   "dream7b-bpu-selected-pair-forward-path-probe"
   "dream7b-bpu-selected-pair-telemetry-probe"
   "dream7b-bpu-selected-pair-promotion-gate-probe"
+  "dream7b-bpu-selected-pair-batch-forward"
+  "dream7b-bpu-selected-pair-candidate-forward-probe"
   "s100-official-llm-baseline-probe"
   "s100-qwen-backend9-baseline-probe"
   "s100-qwen-bpu-core-sweep-probe"
@@ -285,6 +290,12 @@ required_reference_strings=(
   "DREAM7B_BPU_SELECTED_PAIR_PROMOTION_MIN_BATCH_COUNT"
   "DREAM7B_BPU_SELECTED_PAIR_PROMOTION_MIN_WALL_DELTA_RATIO"
   "DREAM7B_BPU_SELECTED_PAIR_PROMOTION_MIN_AVG_BPU_DELTA"
+  "DREAM7B_BPU_SELECTED_PAIR_TOKENS_BATCH_JSON"
+  "DREAM7B_BPU_SELECTED_PAIR_BATCH_FORWARD_TOKENS_BATCH_JSON"
+  "DREAM7B_BPU_SELECTED_PAIR_BATCH_FORWARD_OUTPUT_DIR"
+  "DREAM7B_BPU_SELECTED_PAIR_BATCH_FORWARD_TOP_K"
+  "DREAM7B_BPU_SELECTED_PAIR_CANDIDATE_FORWARD_CMD"
+  "DREAM7B_BPU_SELECTED_PAIR_CANDIDATE_BATCH_COUNT"
   "S100_OFFICIAL_LLM_SDK_ROOT"
   "S100_OFFICIAL_LLM_DREAM_REPORT_ROOT"
   "S100_OFFICIAL_LLM_DOC_URL"
@@ -329,6 +340,10 @@ required_reference_strings=(
   "ok_dream7b_bpu_selected_pair_telemetry_probe"
   "selected_pair_promotion_gate_probe"
   "ok_dream7b_bpu_selected_pair_promotion_gate_probe"
+  "selected_pair_candidate_forward_probe"
+  "ok_dream7b_bpu_selected_pair_candidate_forward_probe"
+  "selected_pair_candidate"
+  "selected-pair-resident"
   "promotion_ready_for_guarded_default_service_candidate"
   "default_service_already_promoted"
   "selected_pair_telemetry"
@@ -1692,6 +1707,61 @@ if [[ -f scripts/probes/dream7b_bpu_selected_pair_promotion_gate_probe.sh ]]; th
   fi
   if ! grep -F -- 'DREAM7B_BPU_SELECTED_PAIR_PROMOTION_MIN_AVG_BPU_DELTA:-1.0' scripts/probes/dream7b_bpu_selected_pair_promotion_gate_probe.sh >/dev/null; then
     errors+=("dream7b_bpu_selected_pair_promotion_gate_probe.sh missing default DREAM7B_BPU_SELECTED_PAIR_PROMOTION_MIN_AVG_BPU_DELTA:-1.0")
+  fi
+fi
+
+if [[ -f scripts/dream7b-bpu-selected-pair-batch-forward.sh ]]; then
+  for text in \
+    "DREAM7B_BPU_SELECTED_PAIR_BATCH_FORWARD_TOKENS_BATCH_JSON" \
+    "DREAM7B_BPU_SELECTED_PAIR_BATCH_FORWARD_OUTPUT_DIR" \
+    "DREAM7B_BPU_SELECTED_PAIR_BATCH_FORWARD_TOP_K" \
+    "DREAM7B_BPU_SELECTED_PAIR_BATCH_FORWARD_REPORT_ROOT" \
+    "DREAM7B_BPU_SELECTED_PAIR_BATCH_FORWARD_PROBE_CMD" \
+    "DREAM7B_BPU_SELECTED_PAIR_BATCH_FORWARD_TIMEOUT_SEC" \
+    "DREAM7B_BPU_SELECTED_PAIR_BATCH_FORWARD_TRIPLET_JSON" \
+    "DREAM7B_BPU_SELECTED_PAIR_TRIPLET_JSON" \
+    "--tokens-batch-json" \
+    "--output-dir" \
+    "DREAM7B_BPU_SELECTED_PAIR_TOKENS_BATCH_JSON" \
+    "selected_pair_candidate" \
+    "selected-pair-resident" \
+    "summary.json" \
+    "ok_dream7b_segmented_hbm_python_forward"; do
+    if ! grep -F -- "$text" scripts/dream7b-bpu-selected-pair-batch-forward.sh >/dev/null; then
+      errors+=("dream7b-bpu-selected-pair-batch-forward.sh missing $text")
+    fi
+  done
+  if ! grep -F -- 'DREAM7B_BPU_SELECTED_PAIR_BATCH_FORWARD_TOP_K:-3' scripts/dream7b-bpu-selected-pair-batch-forward.sh >/dev/null; then
+    errors+=("dream7b-bpu-selected-pair-batch-forward.sh missing default DREAM7B_BPU_SELECTED_PAIR_BATCH_FORWARD_TOP_K:-3")
+  fi
+  if ! grep -F -- 'DREAM7B_BPU_SELECTED_PAIR_BATCH_FORWARD_PROBE_CMD:-dream7b-bpu-selected-pair-forward-path-probe' scripts/dream7b-bpu-selected-pair-batch-forward.sh >/dev/null; then
+    errors+=("dream7b-bpu-selected-pair-batch-forward.sh missing default probe command")
+  fi
+fi
+
+if [[ -f scripts/probes/dream7b_bpu_selected_pair_candidate_forward_probe.sh ]]; then
+  for text in \
+    "DREAM7B_BPU_SELECTED_PAIR_CANDIDATE_FORWARD_CMD" \
+    "DREAM7B_BPU_SELECTED_PAIR_CANDIDATE_BATCH_COUNT" \
+    "DREAM7B_BPU_SELECTED_PAIR_CANDIDATE_TOP_K" \
+    "DREAM7B_BPU_SELECTED_PAIR_CANDIDATE_TIMEOUT_SEC" \
+    "selected_pair_candidate_forward_probe.json" \
+    "selected_pair_candidate_forward_probe.md" \
+    "ok_dream7b_bpu_selected_pair_candidate_forward_probe" \
+    "dream7b-bpu-selected-pair-batch-forward" \
+    "selected_pair_candidate" \
+    "selected-pair-resident" \
+    "selected_pair_covers_all_segments" \
+    "wire this selected-pair candidate forward command into a guarded service candidate"; do
+    if ! grep -F -- "$text" scripts/probes/dream7b_bpu_selected_pair_candidate_forward_probe.sh >/dev/null; then
+      errors+=("dream7b_bpu_selected_pair_candidate_forward_probe.sh missing $text")
+    fi
+  done
+  if ! grep -F -- 'DREAM7B_BPU_SELECTED_PAIR_CANDIDATE_FORWARD_CMD:-dream7b-bpu-selected-pair-batch-forward' scripts/probes/dream7b_bpu_selected_pair_candidate_forward_probe.sh >/dev/null; then
+    errors+=("dream7b_bpu_selected_pair_candidate_forward_probe.sh missing default forward command")
+  fi
+  if ! grep -F -- 'DREAM7B_BPU_SELECTED_PAIR_CANDIDATE_BATCH_COUNT:-16' scripts/probes/dream7b_bpu_selected_pair_candidate_forward_probe.sh >/dev/null; then
+    errors+=("dream7b_bpu_selected_pair_candidate_forward_probe.sh missing default DREAM7B_BPU_SELECTED_PAIR_CANDIDATE_BATCH_COUNT:-16")
   fi
 fi
 
