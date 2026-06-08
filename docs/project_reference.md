@@ -2966,6 +2966,119 @@ amortized_run_ms_per_forward: 152.863
 errors: []
 ```
 
+### `dream7b-bpu-resplit-batch-forward`
+
+Source file: `scripts/dream7b-bpu-resplit-batch-forward.sh`
+
+Installed command on S100P:
+
+```text
+/usr/local/bin/dream7b-bpu-resplit-batch-forward
+```
+
+Environment variables copied from the script:
+
+```text
+DREAM7B_BPU_HBM_DIR
+DREAM7B_BPU_FINE_HBM_DIR
+DREAM7B_BPU_RESPLIT_HBM_DIR
+DREAM7B_BPU_RESPLIT_BATCH_WINDOW_SIZE
+DREAM7B_BPU_RESPLIT_BATCH_CHILD_WINDOW_MODE
+DREAM7B_BPU_RESPLIT_BATCH_CHILD_RUNTIME_MODE
+DREAM7B_BPU_RESPLIT_BATCH_WINDOW_EXECUTION_MODE
+DREAM7B_BPU_RESPLIT_TOKENS_BATCH_JSON
+```
+
+Default values copied from the script:
+
+```text
+base_hbm_dir = /home/sunrise/.cache/openclaw/dream7b-hbm/segments6
+fine_hbm_dir = /home/sunrise/.cache/openclaw/dream7b-hbm/fine-seq16
+resplit_hbm_dir = /home/sunrise/.cache/openclaw/dream7b-hbm/resplit-seq16
+window_size = 2
+child_window_mode = pair
+child_runtime_mode = packed
+window_execution_mode = window-batch
+```
+
+Injected arguments copied from the script:
+
+```text
+--hbm-dir
+--fine-hbm-dir
+--resplit-hbm-dir
+--segment-plan resplit-adjacent
+--residency-window-size
+--child-window-mode
+--child-runtime-mode
+--window-execution-mode
+--tokens-batch-json
+```
+
+### `dream7b-bpu-resplit-batch-forward-probe`
+
+Source file: `scripts/probes/dream7b_bpu_resplit_batch_forward_probe.sh`
+
+Installed command on S100P:
+
+```text
+/usr/local/bin/dream7b-bpu-resplit-batch-forward-probe
+```
+
+Environment variables copied from the script:
+
+```text
+DREAM7B_BPU_RESPLIT_BATCH_FORWARD_COUNT
+DREAM7B_BPU_RESPLIT_BATCH_FORWARD_TOP_K
+DREAM7B_BPU_RESPLIT_BATCH_FORWARD_TIMEOUT_SEC
+```
+
+Default values copied from the script:
+
+```text
+report_root = /mnt/nas/openclaw/reports/models
+batch_count = 16
+top_k = 3
+timeout_sec = 900
+```
+
+Verified report:
+
+```text
+/mnt/nas/openclaw/reports/models/dream7b_bpu_resplit_batch_forward_20260606-075837/resplit_batch_forward_probe.json
+```
+
+Verified fields copied from `resplit_batch_forward_probe.json`:
+
+```text
+verdict: ok_dream7b_bpu_resplit_batch_forward_probe
+segment_plan: resplit-adjacent
+residency_window_size: 2
+execution_mode: pair_window_batch
+window_execution_mode: window-batch
+child_window_mode: pair
+child_runtime_mode: packed
+child_process_count: 0
+batch_count: 16
+top_k: 3
+topk_last_position_by_batch_count: 16
+final_shape_count: 16
+segment_event_count: 224
+expected_segment_event_count: 224
+segment_sources: ['base', 'fine', 'resplit']
+hbm_dir: /home/sunrise/.cache/openclaw/dream7b-hbm/segments6
+fine_hbm_dir: /home/sunrise/.cache/openclaw/dream7b-hbm/fine-seq16
+resplit_hbm_dir: /home/sunrise/.cache/openclaw/dream7b-hbm/resplit-seq16
+wall_ms: 26679.548
+load_ms: 24002.465
+run_ms: 2396.71
+amortized_wall_ms_per_forward: 1667.472
+amortized_load_ms_per_forward: 1500.154
+amortized_run_ms_per_forward: 149.794
+load_to_run_ratio: 10.014756
+errors: []
+```
+
 ### `dream7b-bpu-persistent-triplet-topology-probe`
 
 Source file: `scripts/probes/dream7b_bpu_persistent_triplet_topology_probe.sh`
@@ -7305,6 +7418,8 @@ docs/baseline_progress_2026-06-03_dream7b_segmented_bpu_hbm.md
 - Updated `scripts/probes/dream7b_segmented_hbm_python_forward.py` with `RESPLIT_ADJACENT_SEGMENTS`, `--resplit-hbm-dir`, `resplit-adjacent`, and `resplit_hbm_dir` summary coverage for the 14-segment mixed base/fine/resplit forward plan.
 - Added and installed `dream7b-bpu-resplit-forward`; it wraps `dream7b-bpu-forward` with `--segment-plan resplit-adjacent`, `--residency-window-size 2`, `--child-window-mode pair`, `--child-runtime-mode packed`, and `--window-execution-mode in-process`.
 - Added and installed `dream7b-bpu-resplit-forward-probe`; verified `/mnt/nas/openclaw/reports/models/dream7b_bpu_resplit_forward_20260606-074419/resplit_forward_probe.md` with `verdict: ok_dream7b_bpu_resplit_forward_probe`, `segment_plan: resplit-adjacent`, `execution_mode: pair_in_process`, `child_process_count: 0`, `segment_event_count: 14`, `final_shape: [1, 16, 152064]`, non-empty `topk_last_position`, `load_ms: 23906.713`, `run_ms: 152.863`, and `amortized_wall_ms_per_forward: 24260.349`.
+- Added and installed `dream7b-bpu-resplit-batch-forward`; it wraps `dream7b-bpu-forward` with the same resplit layout and defaults `--window-execution-mode window-batch` for independent seq16 token batches.
+- Added and installed `dream7b-bpu-resplit-batch-forward-probe`; verified `/mnt/nas/openclaw/reports/models/dream7b_bpu_resplit_batch_forward_20260606-075837/resplit_batch_forward_probe.md` with `verdict: ok_dream7b_bpu_resplit_batch_forward_probe`, `batch_count: 16`, `segment_plan: resplit-adjacent`, `execution_mode: pair_window_batch`, `child_process_count: 0`, `segment_event_count: 224`, `final_shape_count: 16`, `topk_last_position_by_batch_count: 16`, `amortized_wall_ms_per_forward: 1667.472`, `amortized_load_ms_per_forward: 1500.154`, `amortized_run_ms_per_forward: 149.794`, and `load_to_run_ratio: 10.014756`.
 - Added `dream7b-bpu-persistent-triplet-topology-probe` for replaying successful triplets as long-lived workers before a forward-path experiment.
 - Verified persistent triplet topology report at `/mnt/nas/openclaw/reports/models/dream7b_bpu_persistent_triplet_topology_20260606-131107/persistent_triplet_topology_probe.md` with `source_successful_triplet_count: 20`, `tested_triplet_topology_count: 20`, `stable_triplet_topology_count: 20`, `failed_triplet_topology_count: 0`, `selected_topology: [0, 1, 8]`, and `max_resident_segment_count_observed: 3`.
 - Updated `dream7b-bpu-deployment-acceptance-probe` to include `persistent_triplet_topology`.
@@ -7348,7 +7463,7 @@ docs/baseline_progress_2026-06-03_dream7b_segmented_bpu_hbm.md
 - Treat selected pair `[1, 8]` as a positive telemetry-backed warm-path optimization; the promotion gate is ready for a guarded default-service candidate, but `default_service_already_promoted: False`, so the next implementation must add the guarded candidate and rerun deployment acceptance before replacing the current default Dream 7B service path.
 - Do not switch `dream7b-bpu-fine-batch-forward` defaults to packed adjacent window size 3; the window3 feasibility probe records `expected_window3_failure_observed: True`.
 - Do not attempt a four-segment resident topology on the current HBM artifacts without a new split or runtime change; the seeded quad probe has `successful_seeded_quad_count: 0`.
-- Use the verified resplit forward gate as the next comparison target: run batch, telemetry, and sustained-service probes against `dream7b-bpu-resplit-forward` or a resplit batch wrapper before considering default-service promotion; the first resplit forward still records `load_ms: 23906.713` versus `run_ms: 152.863`, so the 128TOPS utilization work remains load/residency dominated.
+- Use the verified resplit batch-16 gate as the next telemetry target: run `hrt_ucp_monitor` against `dream7b-bpu-resplit-batch-forward` before considering any default-service promotion; batch 16 reaches logits with `amortized_wall_ms_per_forward: 1667.472`, but `load_to_run_ratio: 10.014756` still shows load/residency dominance.
 - Treat explicit `bpu_core` as an optional crash-mitigation variable only; the controlled official Qwen sweep still has `functional_success_by_core` false for every tested value, so Dream 7B must continue focusing on HBM reload/residency reduction before expecting sustained 128TOPS utilization.
 - Evaluate smaller HBM artifacts, different segment boundaries, or runtime residency support before expecting sustained 128TOPS-level average utilization from Dream 7B.
 - Continue collecting long-repeat reports before tightening the current `DREAM7B_BPU_FINE_FORWARD_LONG_REPEAT_MAX_WALL_SPREAD_RATIO` default of `0.10`.
