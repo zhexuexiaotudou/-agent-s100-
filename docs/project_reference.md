@@ -2746,6 +2746,138 @@ next_optimization_target: do not promote selected triplet forward path; test sma
 errors: []
 ```
 
+### `s100-official-llm-baseline-probe`
+
+Source file: `scripts/probes/s100_official_llm_baseline_probe.sh`
+
+Installed command on S100P:
+
+```text
+/usr/local/bin/s100-official-llm-baseline-probe
+```
+
+Default argument copied from the script:
+
+```text
+report_root = /mnt/nas/openclaw/reports/models
+```
+
+Environment variables copied from the script:
+
+```text
+S100_OFFICIAL_LLM_SDK_ROOT
+S100_OFFICIAL_LLM_DREAM_REPORT_ROOT
+S100_OFFICIAL_LLM_DOC_URL
+```
+
+Default values copied from the script:
+
+```text
+sdk_root = /mnt/nas/openclaw/toolchains/s100_llm_sdk/D-Robotics_LLM_S100_1.0.0_SDK
+dream_report_root = /mnt/nas/openclaw/reports/models
+official_doc_url = https://developer.d-robotics.cc/rdk_doc/rdk_s/Advanced_development/toolchain_development/LLM_Toolchain/
+```
+
+Official SDK paths copied from the script:
+
+```text
+oellm_runtime
+oellm_build
+oellm_runtime/config
+oellm_runtime/example
+oellm_runtime/model/resolve_model_nash-m.txt
+oellm_runtime/example/oellm_multichat/qwen_multichat_config.json
+```
+
+Output files copied from the script:
+
+```text
+official_llm_baseline_probe.json
+official_llm_baseline_probe.md
+```
+
+Output fields copied from the script:
+
+```text
+generated_at
+verdict
+run_dir
+official_doc_url
+sdk_root
+runtime_root
+build_root
+resolve_model_path
+qwen_multichat_config_path
+sdk_exists
+runtime_exists
+build_exists
+config_dir_count
+config_dirs
+supported_model_names_from_resolve_model
+official_hbm_download_entry_count
+official_hbm_download_entries
+qwen_hbm_download_entries
+qwen_existing_hbm_count
+qwen_multichat_config
+qwen_hbm_expected_from_multichat
+qwen_hbm_exists_from_multichat
+official_qwen_local_runtime_report_present
+similar_issue_evidence_available_for_official_qwen
+comparison_to_dream.official_qwen_route
+comparison_to_dream.dream_route
+comparison_to_dream.same_failure_class_as_dream_proven
+comparison_to_dream.reason
+comparison_to_dream.dream_failure_summary.diagnosis
+comparison_to_dream.dream_failure_summary.runtime_telemetry.load_to_run_ratio
+comparison_to_dream.dream_failure_summary.systemd_telemetry.load_to_run_ratio
+comparison_to_dream.dream_failure_summary.selected_triplet_forward_supported
+comparison_to_dream.dream_failure_summary.reboot_or_disconnect_observed
+next_probe_target
+warnings
+errors
+```
+
+Latest recorded report:
+
+```text
+/mnt/nas/openclaw/reports/models/s100_official_llm_baseline_20260606-000204/official_llm_baseline_probe.md
+```
+
+Latest recorded JSON:
+
+```text
+/mnt/nas/openclaw/reports/models/s100_official_llm_baseline_20260606-000204/official_llm_baseline_probe.json
+```
+
+Verified official LLM/Qwen baseline fields copied from `official_llm_baseline_probe.json`:
+
+```text
+verdict: ok_s100_official_llm_baseline_probe
+sdk_exists: True
+runtime_exists: True
+build_exists: True
+config_dir_count: 8
+config_dirs: ['DeepSeek_R1_Distill_Qwen_1.5B_config', 'DeepSeek_R1_Distill_Qwen_7B_config', 'InternLM2_1.8B_config', 'Qwen2.5_1.5B_Instruct_config', 'Qwen2.5_1.5B_config', 'Qwen2.5_7B_Instruct_config', 'Qwen2.5_7B_config', 'Qwen2.5_Omni_3B_config']
+supported_model_names_from_resolve_model: ['DeepSeek-R1-Distill-Qwen-1.5B', 'DeepSeek-R1-Distill-Qwen-7B', 'Qwen-2.5-1.5B', 'Qwen-2.5-7B', 'Qwen-2.5-1.5B-Instruct', 'Qwen-2.5-7B-Instruct', 'InternLM2-1.8B', 'Qwen2.5-Omni-3B']
+official_hbm_download_entry_count: 14
+qwen_existing_hbm_count: 0
+qwen_multichat_config.hbm_path: ../../model/Qwen2.5_1.5B_Instruct_1024.hbm
+qwen_multichat_config.tokenizer_dir: ../../config/Qwen2.5_1.5B_Instruct_config/
+qwen_multichat_config.template_path: ../../config/Qwen2.5_1.5B_Instruct_config/Qwen2.5_1.5B_Instruct.jinja
+qwen_multichat_config.model_type: 7
+qwen_hbm_exists_from_multichat: False
+official_qwen_local_runtime_report_present: False
+similar_issue_evidence_available_for_official_qwen: False
+comparison_to_dream.same_failure_class_as_dream_proven: False
+comparison_to_dream.dream_failure_summary.diagnosis: hbm_reload_dominated
+comparison_to_dream.dream_failure_summary.runtime_telemetry.load_to_run_ratio: 8.399
+comparison_to_dream.dream_failure_summary.systemd_telemetry.load_to_run_ratio: 8.48
+comparison_to_dream.dream_failure_summary.selected_triplet_forward_supported: False
+comparison_to_dream.dream_failure_summary.reboot_or_disconnect_observed: True
+next_probe_target: download one official Qwen .hbm listed in resolve_model_nash-m.txt and run the matching oellm runtime example with hrt_ucp_monitor before using it as a utilization baseline
+errors: []
+```
+
 ### `dream7b-bpu-deployment-acceptance-probe`
 
 Source file: `scripts/probes/dream7b_bpu_deployment_acceptance_probe.sh`
@@ -4221,6 +4353,18 @@ Evidence document:
 docs/baseline_progress_2026-06-03_dream7b_segmented_bpu_hbm.md
 ```
 
+### Use official Qwen only as a baseline probe
+
+Decision: use official Qwen and DeepSeek-Qwen SDK assets as an S100 LLM baseline comparison, but do not replace Dream 7B with Qwen.
+
+Reason: the official SDK contains supported Qwen/DeepSeek-Qwen/InternLM/Omni configs and precompiled `.hbm` download entries, while the current Dream route is a custom segmented `.hbm` chain. A Qwen run can help identify whether official runtime layout avoids the current Dream `hbm_reload_dominated` failure class, but it is not the requested model.
+
+Evidence:
+
+```text
+/mnt/nas/openclaw/reports/models/s100_official_llm_baseline_20260606-000204/official_llm_baseline_probe.json
+```
+
 ### Use segmented `.hbm`
 
 Decision: compile Dream 7B seq16 full-forward into segmented S100 `.hbm` artifacts because larger single-file and four-segment attempts exceeded observed S100P load limits.
@@ -4924,6 +5068,8 @@ docs/baseline_progress_2026-06-03_dream7b_segmented_bpu_hbm.md
 - Verified selected triplet forward path report at `/mnt/nas/openclaw/reports/models/dream7b_bpu_selected_triplet_forward_path_20260606-135729/selected_triplet_forward_path_probe.md` with `selected_triplet_forward_supported: False`, `reboot_or_disconnect_observed: True`, `expected_reboot_guard_observed: True`, and `selected_topology: [0, 1, 8]`.
 - Updated `dream7b-bpu-deployment-acceptance-probe` to include `selected_triplet_forward_path`.
 - Verified selected-triplet-aware deployment acceptance report at `/mnt/nas/openclaw/reports/models/dream7b_bpu_deployment_acceptance_20260605-234652/deployment_acceptance_probe.md` with `check_count: 25`, `passed_check_count: 25`, and `selected_triplet_forward_path.ok: True`.
+- Added `s100-official-llm-baseline-probe` to compare the staged official S100 LLM SDK/Qwen route with the custom segmented Dream 7B route without replacing Dream 7B.
+- Verified official LLM/Qwen baseline report at `/mnt/nas/openclaw/reports/models/s100_official_llm_baseline_20260606-000204/official_llm_baseline_probe.md` with `sdk_exists: True`, `config_dir_count: 8`, `official_hbm_download_entry_count: 14`, `qwen_existing_hbm_count: 0`, and `similar_issue_evidence_available_for_official_qwen: False`.
 
 ## TODO
 
@@ -4933,6 +5079,7 @@ docs/baseline_progress_2026-06-03_dream7b_segmented_bpu_hbm.md
 - Do not promote `selected_topology: [0, 1, 8]` as a forward-path optimization; the selected triplet forward-path probe records `selected_triplet_forward_supported: False` and `reboot_or_disconnect_observed: True`.
 - Do not switch `dream7b-bpu-fine-batch-forward` defaults to packed adjacent window size 3; the window3 feasibility probe records `expected_window3_failure_observed: True`.
 - Do not attempt a four-segment resident topology on the current HBM artifacts without a new split or runtime change; the seeded quad probe has `successful_seeded_quad_count: 0`.
+- Download one official Qwen `.hbm` from `resolve_model_nash-m.txt` and run the matching `oellm_runtime` example with `hrt_ucp_monitor` before using official Qwen as a utilization baseline.
 - Evaluate smaller HBM artifacts, different segment boundaries, or runtime residency support before expecting sustained 128TOPS-level average utilization from Dream 7B.
 - Continue collecting long-repeat reports before tightening the current `DREAM7B_BPU_FINE_FORWARD_LONG_REPEAT_MAX_WALL_SPREAD_RATIO` default of `0.10`.
 - Keep queue cleanup report-only until an explicit apply mode and archive directory migration rule are approved.

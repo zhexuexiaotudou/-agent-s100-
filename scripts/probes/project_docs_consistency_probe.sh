@@ -66,6 +66,7 @@ required_files=(
   "scripts/probes/dream7b_bpu_persistent_triplet_topology_probe.sh"
   "scripts/probes/dream7b_bpu_window3_forward_feasibility_probe.sh"
   "scripts/probes/dream7b_bpu_selected_triplet_forward_path_probe.sh"
+  "scripts/probes/s100_official_llm_baseline_probe.sh"
   "scripts/probes/dream7b_bpu_batch_queue_retention_probe.sh"
   "scripts/probes/dream7b_bpu_deployment_acceptance_probe.sh"
   "scripts/startup_link_check/link-check.config.json"
@@ -93,6 +94,7 @@ required_readme_strings=(
   "scripts/probes/dream7b_bpu_persistent_triplet_topology_probe.sh"
   "scripts/probes/dream7b_bpu_window3_forward_feasibility_probe.sh"
   "scripts/probes/dream7b_bpu_selected_triplet_forward_path_probe.sh"
+  "scripts/probes/s100_official_llm_baseline_probe.sh"
   "dream7b_bpu_text_queue_systemd_probe.sh"
 )
 
@@ -132,6 +134,7 @@ required_reference_strings=(
   "dream7b-bpu-persistent-triplet-topology-probe"
   "dream7b-bpu-window3-forward-feasibility-probe"
   "dream7b-bpu-selected-triplet-forward-path-probe"
+  "s100-official-llm-baseline-probe"
   "dream7b-bpu-batch-queue-retention-probe"
   "dream7b-bpu-deployment-acceptance-probe"
   "dream7b-bpu-batch-queue.service"
@@ -253,6 +256,9 @@ required_reference_strings=(
   "DREAM7B_BPU_SELECTED_TRIPLET_TOP_K"
   "DREAM7B_BPU_SELECTED_TRIPLET_TIMEOUT_SEC"
   "DREAM7B_BPU_SELECTED_TRIPLET_ALLOW_CRASH_RETRY"
+  "S100_OFFICIAL_LLM_SDK_ROOT"
+  "S100_OFFICIAL_LLM_DREAM_REPORT_ROOT"
+  "S100_OFFICIAL_LLM_DOC_URL"
   "DREAM7B_BPU_QUEUE_RETENTION_DONE_DAYS"
   "DREAM7B_BPU_QUEUE_RETENTION_FAILED_DAYS"
   "DREAM7B_BPU_QUEUE_RETENTION_PENDING_STALE_MINUTES"
@@ -368,6 +374,12 @@ required_reference_strings=(
   "reboot_or_disconnect_observed"
   "expected_reboot_guard_observed"
   "source_incomplete_run_dir"
+  "official_llm_baseline_probe"
+  "ok_s100_official_llm_baseline_probe"
+  "supported_model_names_from_resolve_model"
+  "qwen_existing_hbm_count"
+  "similar_issue_evidence_available_for_official_qwen"
+  "comparison_to_dream"
   "hbm_artifact_inventory"
   "expected_artifact_count"
   "expected_base_count"
@@ -1483,6 +1495,37 @@ if [[ -f scripts/probes/dream7b_bpu_selected_triplet_forward_path_probe.sh ]]; t
   fi
   if ! grep -F -- 'DREAM7B_BPU_SELECTED_TRIPLET_TIMEOUT_SEC:-900' scripts/probes/dream7b_bpu_selected_triplet_forward_path_probe.sh >/dev/null; then
     errors+=("dream7b_bpu_selected_triplet_forward_path_probe.sh missing default DREAM7B_BPU_SELECTED_TRIPLET_TIMEOUT_SEC:-900")
+  fi
+fi
+
+if [[ -f scripts/probes/s100_official_llm_baseline_probe.sh ]]; then
+  for text in \
+    "S100_OFFICIAL_LLM_SDK_ROOT" \
+    "S100_OFFICIAL_LLM_DREAM_REPORT_ROOT" \
+    "S100_OFFICIAL_LLM_DOC_URL" \
+    "official_llm_baseline_probe.json" \
+    "official_llm_baseline_probe.md" \
+    "ok_s100_official_llm_baseline_probe" \
+    "resolve_model_nash-m.txt" \
+    "qwen_multichat_config.json" \
+    "supported_model_names_from_resolve_model" \
+    "official_hbm_download_entry_count" \
+    "qwen_existing_hbm_count" \
+    "official_qwen_local_runtime_report_present" \
+    "similar_issue_evidence_available_for_official_qwen" \
+    "comparison_to_dream" \
+    "runtime_telemetry.load_to_run_ratio" \
+    "systemd_telemetry.load_to_run_ratio" \
+    "next_probe_target"; do
+    if ! grep -F -- "$text" scripts/probes/s100_official_llm_baseline_probe.sh >/dev/null; then
+      errors+=("s100_official_llm_baseline_probe.sh missing $text")
+    fi
+  done
+  if ! grep -F -- 'D-Robotics_LLM_S100_1.0.0_SDK' scripts/probes/s100_official_llm_baseline_probe.sh >/dev/null; then
+    errors+=("s100_official_llm_baseline_probe.sh missing D-Robotics_LLM_S100_1.0.0_SDK")
+  fi
+  if ! grep -F -- 'https://developer.d-robotics.cc/rdk_doc/rdk_s/Advanced_development/toolchain_development/LLM_Toolchain/' scripts/probes/s100_official_llm_baseline_probe.sh >/dev/null; then
+    errors+=("s100_official_llm_baseline_probe.sh missing official LLM toolchain doc URL")
   fi
 fi
 
