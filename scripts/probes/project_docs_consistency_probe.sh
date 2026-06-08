@@ -2494,6 +2494,65 @@ if [[ -f scripts/probes/dream7b_bpu_text_queue_systemd_probe.sh ]]; then
   done
 fi
 
+if [[ -f scripts/probes/compile_dream_segments_seq16_resplit_probe.sh ]]; then
+  for text in \
+    "DREAM_RESPLIT_VENV" \
+    "DREAM_RESPLIT_MODEL_DIR" \
+    "DREAM_RESPLIT_OUTPUT_ROOT" \
+    "DREAM_RESPLIT_SEQ_LEN" \
+    "DREAM_RESPLIT_SPECS" \
+    "DREAM_RESPLIT_EXPECTED_SPECS" \
+    "DREAM_RESPLIT_ALLOW_PARTIAL" \
+    "DREAM_RESPLIT_SKIP_EXISTING" \
+    "DREAM_RESPLIT_SKIP_EXISTING:-1" \
+    "0:1 1:2 10:12 12:14 17:19 19:21 26:27 27:28" \
+    "skipped_existing" \
+    "skipped_existing_count" \
+    "ok_dream7b_resplit_compile_probe" \
+    "manifest.sha256"; do
+    if ! grep -F -- "$text" scripts/probes/compile_dream_segments_seq16_resplit_probe.sh >/dev/null; then
+      errors+=("compile_dream_segments_seq16_resplit_probe.sh missing $text")
+    fi
+  done
+  if ! grep -F -- "compile_dream_segments_seq16_resplit_probe.sh" README.md >/dev/null; then
+    errors+=("README.md missing compile_dream_segments_seq16_resplit_probe.sh")
+  fi
+  if ! grep -F -- "compile_dream_segments_seq16_resplit_probe.sh" docs/project_reference.md >/dev/null; then
+    errors+=("docs/project_reference.md missing compile_dream_segments_seq16_resplit_probe.sh")
+  fi
+fi
+
+if [[ -f scripts/probes/dream7b_bpu_resplit_hbm_artifact_inventory_probe.sh ]]; then
+  for text in \
+    "DREAM7B_BPU_RESPLIT_HBM_DIR" \
+    "DREAM7B_BPU_RESPLIT_EXPECTED_SPECS" \
+    "DREAM7B_BPU_RESPLIT_VERIFY_MANIFEST" \
+    "DREAM7B_BPU_RESPLIT_HBM_DIR:-/mnt/nas/openclaw/models/dream7b-hbm/resplit-seq16" \
+    "DREAM7B_BPU_RESPLIT_VERIFY_MANIFEST:-1" \
+    "0:1 1:2 10:12 12:14 17:19 19:21 26:27 27:28" \
+    "ok_dream7b_bpu_resplit_hbm_artifact_inventory_probe" \
+    "resplit_hbm_artifact_inventory_probe.json" \
+    "manifest_verified_count" \
+    "total_hbm_size_bytes" \
+    "unexpected_hbm"; do
+    if ! grep -F -- "$text" scripts/probes/dream7b_bpu_resplit_hbm_artifact_inventory_probe.sh >/dev/null; then
+      errors+=("dream7b_bpu_resplit_hbm_artifact_inventory_probe.sh missing $text")
+    fi
+  done
+  if ! grep -F -- "dream7b_bpu_resplit_hbm_artifact_inventory_probe.sh" README.md >/dev/null; then
+    errors+=("README.md missing dream7b_bpu_resplit_hbm_artifact_inventory_probe.sh")
+  fi
+  if ! grep -F -- "dream7b-bpu-resplit-hbm-artifact-inventory-probe" docs/project_reference.md >/dev/null; then
+    errors+=("docs/project_reference.md missing dream7b-bpu-resplit-hbm-artifact-inventory-probe")
+  fi
+  if ! grep -F -- "/mnt/nas/openclaw/models/dream7b-hbm/resplit-seq16" docs/baseline_progress_2026-06-03_dream7b_segmented_bpu_hbm.md >/dev/null; then
+    errors+=("Dream 7B segmented progress doc missing NAS resplit HBM path")
+  fi
+  if ! grep -F -- "/home/sunrise/.cache/openclaw/dream7b-hbm/resplit-seq16" docs/baseline_progress_2026-06-03_dream7b_segmented_bpu_hbm.md >/dev/null; then
+    errors+=("Dream 7B segmented progress doc missing local resplit HBM path")
+  fi
+fi
+
 if [[ -f scripts/probes/dream7b_bpu_deployment_acceptance_probe.sh ]]; then
   if ! grep -F -- "DREAM7B_BPU_ACCEPTANCE_MIN_BATCH_CAPACITY" scripts/probes/dream7b_bpu_deployment_acceptance_probe.sh >/dev/null; then
     errors+=("dream7b_bpu_deployment_acceptance_probe.sh missing DREAM7B_BPU_ACCEPTANCE_MIN_BATCH_CAPACITY")
