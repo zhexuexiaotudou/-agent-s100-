@@ -1628,6 +1628,7 @@ if [[ -f scripts/probes/dream7b_bpu_selected_pair_forward_path_probe.sh ]]; then
     "DREAM7B_BPU_SELECTED_PAIR_INDEXES" \
     "DREAM7B_BPU_SELECTED_PAIR_BASELINE_FORWARD_CMD" \
     "DREAM7B_BPU_SELECTED_PAIR_BATCH_COUNT" \
+    "DREAM7B_BPU_SELECTED_PAIR_JOB_COUNT" \
     "DREAM7B_BPU_SELECTED_PAIR_TOP_K" \
     "DREAM7B_BPU_SELECTED_PAIR_TIMEOUT_SEC" \
     "DREAM7B_BPU_SELECTED_PAIR_ONLY" \
@@ -1643,6 +1644,9 @@ if [[ -f scripts/probes/dream7b_bpu_selected_pair_forward_path_probe.sh ]]; then
     "selected_segments" \
     "selected_third_segments" \
     "selected_worker_count" \
+    "processed_forward_count" \
+    "tokens_batches_by_job_json" \
+    "final_shapes_by_job" \
     "selected_resident_load_ms" \
     "forward_load_ms" \
     "selected_total_load_ms" \
@@ -1659,6 +1663,9 @@ if [[ -f scripts/probes/dream7b_bpu_selected_pair_forward_path_probe.sh ]]; then
   done
   if ! grep -F -- 'DREAM7B_BPU_SELECTED_PAIR_BATCH_COUNT:-4' scripts/probes/dream7b_bpu_selected_pair_forward_path_probe.sh >/dev/null; then
     errors+=("dream7b_bpu_selected_pair_forward_path_probe.sh missing default DREAM7B_BPU_SELECTED_PAIR_BATCH_COUNT:-4")
+  fi
+  if ! grep -F -- 'DREAM7B_BPU_SELECTED_PAIR_JOB_COUNT:-1' scripts/probes/dream7b_bpu_selected_pair_forward_path_probe.sh >/dev/null; then
+    errors+=("dream7b_bpu_selected_pair_forward_path_probe.sh missing default DREAM7B_BPU_SELECTED_PAIR_JOB_COUNT:-1")
   fi
   if ! grep -F -- 'DREAM7B_BPU_SELECTED_PAIR_TOP_K:-3' scripts/probes/dream7b_bpu_selected_pair_forward_path_probe.sh >/dev/null; then
     errors+=("dream7b_bpu_selected_pair_forward_path_probe.sh missing default DREAM7B_BPU_SELECTED_PAIR_TOP_K:-3")
@@ -1860,6 +1867,39 @@ if [[ -f scripts/probes/dream7b_bpu_selected_pair_candidate_service_probe.sh ]];
   done
   if ! grep -F -- 'DREAM7B_BPU_SELECTED_PAIR_CANDIDATE_SERVICE_REQUEST_COUNT:-16' scripts/probes/dream7b_bpu_selected_pair_candidate_service_probe.sh >/dev/null; then
     errors+=("dream7b_bpu_selected_pair_candidate_service_probe.sh missing default DREAM7B_BPU_SELECTED_PAIR_CANDIDATE_SERVICE_REQUEST_COUNT:-16")
+  fi
+fi
+
+if [[ -f scripts/probes/dream7b_bpu_selected_pair_cross_job_reuse_probe.sh ]]; then
+  for text in \
+    "DREAM7B_BPU_SELECTED_PAIR_CROSS_JOB_MODEL_REPORT_ROOT" \
+    "DREAM7B_BPU_SELECTED_PAIR_CROSS_JOB_FORWARD_PROBE_CMD" \
+    "DREAM7B_BPU_SELECTED_PAIR_CROSS_JOB_COUNT" \
+    "DREAM7B_BPU_SELECTED_PAIR_CROSS_JOB_BATCH_COUNT" \
+    "DREAM7B_BPU_SELECTED_PAIR_CROSS_JOB_TOP_K" \
+    "DREAM7B_BPU_SELECTED_PAIR_CROSS_JOB_TIMEOUT_SEC" \
+    "dream7b-bpu-selected-pair-forward-path-probe" \
+    "dream7b_bpu_selected_pair_cross_job_reuse_" \
+    "selected_pair_cross_job_reuse_probe.json" \
+    "selected_pair_cross_job_reuse_probe.md" \
+    "ok_dream7b_bpu_selected_pair_cross_job_reuse_probe" \
+    "candidate_service_telemetry_path" \
+    "resident_load_once_amortized_ms_per_forward" \
+    "comparison_to_selected_pair_candidate_service" \
+    "cross_job_reuses_selected_pair_workers_once" \
+    "candidate_service_reloads_selected_pair_per_batch" \
+    "cross_job_load_time_improved" \
+    "cross_job_wall_time_improved" \
+    "do not promote cross-job selected-pair reuse until telemetry shows amortized wall/load improvement"; do
+    if ! grep -F -- "$text" scripts/probes/dream7b_bpu_selected_pair_cross_job_reuse_probe.sh >/dev/null; then
+      errors+=("dream7b_bpu_selected_pair_cross_job_reuse_probe.sh missing $text")
+    fi
+  done
+  if ! grep -F -- 'DREAM7B_BPU_SELECTED_PAIR_CROSS_JOB_COUNT:-3' scripts/probes/dream7b_bpu_selected_pair_cross_job_reuse_probe.sh >/dev/null; then
+    errors+=("dream7b_bpu_selected_pair_cross_job_reuse_probe.sh missing default DREAM7B_BPU_SELECTED_PAIR_CROSS_JOB_COUNT:-3")
+  fi
+  if ! grep -F -- 'DREAM7B_BPU_SELECTED_PAIR_CROSS_JOB_BATCH_COUNT:-16' scripts/probes/dream7b_bpu_selected_pair_cross_job_reuse_probe.sh >/dev/null; then
+    errors+=("dream7b_bpu_selected_pair_cross_job_reuse_probe.sh missing default DREAM7B_BPU_SELECTED_PAIR_CROSS_JOB_BATCH_COUNT:-16")
   fi
 fi
 
@@ -2485,6 +2525,7 @@ if [[ -f scripts/probes/dream7b_bpu_deployment_acceptance_probe.sh ]]; then
     "dream7b_bpu_selected_pair_telemetry_*/selected_pair_telemetry_probe.json" \
     "dream7b_bpu_selected_pair_candidate_service_*/selected_pair_candidate_service_probe.json" \
     "dream7b_bpu_selected_pair_candidate_service_telemetry_*/systemd_telemetry_probe.json" \
+    "dream7b_bpu_selected_pair_cross_job_reuse_*/selected_pair_cross_job_reuse_probe.json" \
     "dream7b_bpu_persistent_pair_cache_*/persistent_pair_cache_probe.json" \
     "dream7b_bpu_held_pair_residency_matrix_*/held_pair_residency_matrix_probe.json" \
     "dream7b_bpu_single_segment_residency_matrix_*/single_segment_residency_matrix_probe.json" \
@@ -2513,6 +2554,7 @@ if [[ -f scripts/probes/dream7b_bpu_deployment_acceptance_probe.sh ]]; then
     "selected_pair_telemetry" \
     "selected_pair_candidate_service" \
     "selected_pair_candidate_service_telemetry" \
+    "selected_pair_cross_job_reuse" \
     "persistent_pair_cache" \
     "held_pair_residency_matrix" \
     "single_segment_residency_matrix" \
@@ -2532,6 +2574,7 @@ if [[ -f scripts/probes/dream7b_bpu_deployment_acceptance_probe.sh ]]; then
     "ok_dream7b_bpu_window3_forward_feasibility_probe" \
     "ok_dream7b_bpu_selected_triplet_forward_path_probe" \
     "ok_dream7b_bpu_selected_pair_telemetry_probe" \
+    "ok_dream7b_bpu_selected_pair_cross_job_reuse_probe" \
     "diagnosis" \
     "next_optimization_target" \
     "max_observed_bpu_loading" \
@@ -2549,6 +2592,10 @@ if [[ -f scripts/probes/dream7b_bpu_deployment_acceptance_probe.sh ]]; then
     "default_service_replaced" \
     "candidate_wall_time_improved_vs_default_systemd" \
     "comparison_to_default_systemd_telemetry" \
+    "comparison_to_selected_pair_candidate_service" \
+    "cross_job_load_time_improved" \
+    "cross_job_wall_time_improved" \
+    "resident_load_once_amortized_ms_per_forward" \
     "expected_window_execution_mode" \
     "expected_child_process_count" \
     "all_pair_workers_ready" \

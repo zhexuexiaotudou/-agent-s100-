@@ -1483,6 +1483,76 @@ comparison_to_default_systemd_telemetry.candidate_avg_bpu_loading_not_worse_than
 errors: []
 ```
 
+### `dream7b-bpu-selected-pair-cross-job-reuse-probe`
+
+Source file: `scripts/probes/dream7b_bpu_selected_pair_cross_job_reuse_probe.sh`
+
+Installed command on S100P:
+
+```text
+/usr/local/bin/dream7b-bpu-selected-pair-cross-job-reuse-probe
+```
+
+Environment variables copied from the script:
+
+```text
+DREAM7B_BPU_SELECTED_PAIR_CROSS_JOB_MODEL_REPORT_ROOT
+DREAM7B_BPU_SELECTED_PAIR_CROSS_JOB_FORWARD_PROBE_CMD
+DREAM7B_BPU_SELECTED_PAIR_CROSS_JOB_COUNT
+DREAM7B_BPU_SELECTED_PAIR_CROSS_JOB_BATCH_COUNT
+DREAM7B_BPU_SELECTED_PAIR_CROSS_JOB_TOP_K
+DREAM7B_BPU_SELECTED_PAIR_CROSS_JOB_TIMEOUT_SEC
+```
+
+Default values copied from the script:
+
+```text
+report_root = /mnt/nas/openclaw/reports/models
+DREAM7B_BPU_SELECTED_PAIR_CROSS_JOB_MODEL_REPORT_ROOT = /mnt/nas/openclaw/reports/models
+DREAM7B_BPU_SELECTED_PAIR_CROSS_JOB_FORWARD_PROBE_CMD = dream7b-bpu-selected-pair-forward-path-probe
+DREAM7B_BPU_SELECTED_PAIR_CROSS_JOB_COUNT = 3
+DREAM7B_BPU_SELECTED_PAIR_CROSS_JOB_BATCH_COUNT = 16
+DREAM7B_BPU_SELECTED_PAIR_CROSS_JOB_TOP_K = 3
+DREAM7B_BPU_SELECTED_PAIR_CROSS_JOB_TIMEOUT_SEC = 1800
+```
+
+Latest selected-pair cross-job reuse report:
+
+```text
+/mnt/nas/openclaw/reports/models/dream7b_bpu_selected_pair_cross_job_reuse_20260606-051721/selected_pair_cross_job_reuse_probe.md
+```
+
+Latest selected-pair cross-job reuse JSON:
+
+```text
+/mnt/nas/openclaw/reports/models/dream7b_bpu_selected_pair_cross_job_reuse_20260606-051721/selected_pair_cross_job_reuse_probe.json
+```
+
+Verified selected-pair cross-job reuse fields copied from `selected_pair_cross_job_reuse_probe.json`:
+
+```text
+verdict: ok_dream7b_bpu_selected_pair_cross_job_reuse_probe
+job_count: 3
+batch_count: 16
+processed_forward_count: 48
+selected_pair: [1, 8]
+selected_segments: ['seg02_04', 'seg24_26']
+selected_pair_covers_all_segments: True
+selected_worker_count: 2
+selected_resident_load_ms: 3635.817
+resident_load_once_amortized_ms_per_forward: 75.746
+cross_job_metrics.amortized_wall_ms_per_forward: 1435.554
+cross_job_metrics.amortized_total_load_ms_per_forward: 1344.68
+candidate_service_metrics.amortized_wall_ms_per_processed_request: 1432.54
+candidate_service_metrics.amortized_load_ms_per_processed_request: 1441.366
+comparison_to_selected_pair_candidate_service.wall_ms_delta_ratio: -0.002104
+comparison_to_selected_pair_candidate_service.load_ms_delta_ratio: 0.067079
+comparison_to_selected_pair_candidate_service.cross_job_wall_time_improved: False
+comparison_to_selected_pair_candidate_service.cross_job_load_time_improved: True
+next_optimization_target: do not promote cross-job selected-pair reuse until telemetry shows amortized wall/load improvement
+errors: []
+```
+
 ### `dream7b-bpu-batch-queue-retention-probe`
 
 Source file: `scripts/probes/dream7b_bpu_batch_queue_retention_probe.sh`

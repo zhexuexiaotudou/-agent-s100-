@@ -8,6 +8,7 @@ triplet_json="${DREAM7B_BPU_SELECTED_PAIR_TRIPLET_JSON:-}"
 selected_pair_text="${DREAM7B_BPU_SELECTED_PAIR_INDEXES:-}"
 forward_cmd="${DREAM7B_BPU_SELECTED_PAIR_BASELINE_FORWARD_CMD:-dream7b-bpu-fine-batch-forward}"
 batch_count="${DREAM7B_BPU_SELECTED_PAIR_BATCH_COUNT:-4}"
+job_count="${DREAM7B_BPU_SELECTED_PAIR_JOB_COUNT:-1}"
 top_k="${DREAM7B_BPU_SELECTED_PAIR_TOP_K:-3}"
 timeout_sec="${DREAM7B_BPU_SELECTED_PAIR_TIMEOUT_SEC:-900}"
 selected_only="${DREAM7B_BPU_SELECTED_PAIR_ONLY:-0}"
@@ -65,6 +66,18 @@ if ! [[ "$batch_count" =~ ^[1-9][0-9]*$ ]] || (( batch_count > 16 )); then
   echo "DREAM7B_BPU_SELECTED_PAIR_BATCH_COUNT must be an integer from 1 to 16." >&2
   exit 2
 fi
+if ! [[ "$job_count" =~ ^[1-9][0-9]*$ ]] || (( job_count > 8 )); then
+  echo "DREAM7B_BPU_SELECTED_PAIR_JOB_COUNT must be an integer from 1 to 8." >&2
+  exit 2
+fi
+if (( job_count > 1 )) && [[ "$selected_only" != "1" ]]; then
+  echo "DREAM7B_BPU_SELECTED_PAIR_JOB_COUNT greater than 1 requires DREAM7B_BPU_SELECTED_PAIR_ONLY=1." >&2
+  exit 2
+fi
+if (( job_count > 1 )) && [[ -n "$tokens_batch_json_override" ]]; then
+  echo "DREAM7B_BPU_SELECTED_PAIR_JOB_COUNT greater than 1 does not support DREAM7B_BPU_SELECTED_PAIR_TOKENS_BATCH_JSON override." >&2
+  exit 2
+fi
 if ! [[ "$top_k" =~ ^[0-9]+$ ]]; then
   echo "DREAM7B_BPU_SELECTED_PAIR_TOP_K must be a non-negative integer." >&2
   exit 2
@@ -99,6 +112,7 @@ python3 - \
   "$selected_pair_text" \
   "$forward_cmd" \
   "$batch_count" \
+  "$job_count" \
   "$top_k" \
   "$timeout_sec" \
   "$selected_only" \
@@ -125,10 +139,11 @@ triplet_json_arg = sys.argv[5]
 selected_pair_text = sys.argv[6].strip()
 forward_cmd = sys.argv[7]
 batch_count = int(sys.argv[8])
-top_k = int(sys.argv[9])
-timeout_sec = int(sys.argv[10])
-selected_only = sys.argv[11] == "1"
-tokens_batch_json_override = sys.argv[12]
+job_count = int(sys.argv[9])
+top_k = int(sys.argv[10])
+timeout_sec = int(sys.argv[11])
+selected_only = sys.argv[12] == "1"
+tokens_batch_json_override = sys.argv[13]
 
 seq_len = 16
 hidden_size = 3584
@@ -225,14 +240,20 @@ if tokens_batch_json_override:
         normalized_tokens_batch.append([int(item) for item in row])
     tokens_batch = normalized_tokens_batch
     batch_count = len(tokens_batch)
+    job_tokens_batches = [tokens_batch]
 else:
-    tokens_batch = []
-    for batch_index in range(batch_count):
-        base = (batch_index + 1) * 100
-        tokens_batch.append([base + offset for offset in range(1, seq_len + 1)])
-tokens_batch_np = np.asarray(tokens_batch, dtype=np.int32)
+    job_tokens_batches = []
+    for job_index in range(job_count):
+        tokens_batch = []
+        for batch_index in range(batch_count):
+            base = ((job_index + 1) * 10000) + ((batch_index + 1) * 100)
+            tokens_batch.append([base + offset for offset in range(1, seq_len + 1)])
+        job_tokens_batches.append(tokens_batch)
+tokens_batch = job_tokens_batches[0]
 tokens_batch_json = run_dir / "tokens_batch.json"
 tokens_batch_json.write_text(json.dumps(tokens_batch, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
+tokens_batches_by_job_json = run_dir / "tokens_batches_by_job.json"
+tokens_batches_by_job_json.write_text(json.dumps(job_tokens_batches, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
 
 def first_scale(runtime, model_name, output_name):
     quant = runtime.output_quants[model_name][output_name]
@@ -358,69 +379,84 @@ def run_selected_pair_forward():
     forward_load_ms = 0.0
     forward_run_ms = 0.0
     started = time.perf_counter()
-    batch_outputs = [tokens_batch_np[index].reshape(1, seq_len).copy() for index in range(batch_count)]
+    final_shapes_by_job = []
+    topk_last_position_by_job = []
+    processed_forward_count = 0
     try:
-        for segment_index, (segment_id, source, model_file, model_name, input_kind) in enumerate(segments):
-            if segment_index in workers:
-                worker = workers[segment_index]
-                for batch_index, current_input in enumerate(batch_outputs):
-                    worker["conn"].send({"cmd": "run", "batch_index": batch_index, "input": current_input})
-                    response = worker["conn"].recv()
-                    if not response.get("ok"):
-                        raise RuntimeError(f"selected worker run failed: {response}")
-                    batch_outputs[batch_index] = response["output"]
-                    result = response["result"]
-                    forward_run_ms += float(result.get("run_ms", 0.0))
-                    segment_results.append(result)
-                continue
+        for job_index, job_tokens_batch in enumerate(job_tokens_batches):
+            tokens_batch_np = np.asarray(job_tokens_batch, dtype=np.int32)
+            batch_outputs = [tokens_batch_np[index].reshape(1, seq_len).copy() for index in range(batch_count)]
+            for segment_index, (segment_id, source, model_file, model_name, input_kind) in enumerate(segments):
+                if segment_index in workers:
+                    worker = workers[segment_index]
+                    for batch_index, current_input in enumerate(batch_outputs):
+                        worker["conn"].send({"cmd": "run", "job_index": job_index, "batch_index": batch_index, "input": current_input})
+                        response = worker["conn"].recv()
+                        if not response.get("ok"):
+                            raise RuntimeError(f"selected worker run failed: {response}")
+                        batch_outputs[batch_index] = response["output"]
+                        result = response["result"]
+                        result["job_index"] = job_index
+                        forward_run_ms += float(result.get("run_ms", 0.0))
+                        segment_results.append(result)
+                    continue
 
-            load_start = time.perf_counter()
-            runtime = HB_HBMRuntime(str(model_file))
-            load_end = time.perf_counter()
-            load_ms = round((load_end - load_start) * 1000, 3)
-            forward_load_ms += load_ms
-            try:
-                for batch_index, current_input in enumerate(batch_outputs):
-                    output, result = run_loaded_segment(runtime, model_file, model_name, current_input)
-                    result.update(
+                load_start = time.perf_counter()
+                runtime = HB_HBMRuntime(str(model_file))
+                load_end = time.perf_counter()
+                load_ms = round((load_end - load_start) * 1000, 3)
+                forward_load_ms += load_ms
+                try:
+                    for batch_index, current_input in enumerate(batch_outputs):
+                        output, result = run_loaded_segment(runtime, model_file, model_name, current_input)
+                        result.update(
+                            {
+                                "segment_index": segment_index,
+                                "segment": segment_id,
+                                "job_index": job_index,
+                                "batch_index": batch_index,
+                                "load_ms": load_ms if batch_index == 0 else 0.0,
+                                "resident_worker": False,
+                            }
+                        )
+                        forward_run_ms += float(result.get("run_ms", 0.0))
+                        batch_outputs[batch_index] = output
+                        segment_results.append(result)
+                finally:
+                    del runtime
+                    gc.collect()
+            final_shapes = [list(item.shape) for item in batch_outputs]
+            for batch_index, shape in enumerate(final_shapes):
+                if shape != [1, seq_len, vocab_size]:
+                    raise ValueError(f"Expected final logits shape {[1, seq_len, vocab_size]} for job {job_index} batch {batch_index}, got {shape}")
+            final_shapes_by_job.append(final_shapes)
+            processed_forward_count += len(batch_outputs)
+            job_topk = []
+            if top_k > 0:
+                for batch_index, logits in enumerate(batch_outputs):
+                    last = logits[0, -1].astype(np.float32, copy=False)
+                    k = min(top_k, int(last.shape[0]))
+                    indices = np.argpartition(last, -k)[-k:]
+                    indices = indices[np.argsort(last[indices])[::-1]]
+                    job_topk.append(
                         {
-                            "segment_index": segment_index,
-                            "segment": segment_id,
+                            "job_index": job_index,
                             "batch_index": batch_index,
-                            "load_ms": load_ms if batch_index == 0 else 0.0,
-                            "resident_worker": False,
+                            "topk_last_position": [{"token_id": int(idx), "score": float(last[idx])} for idx in indices],
                         }
                     )
-                    forward_run_ms += float(result.get("run_ms", 0.0))
-                    batch_outputs[batch_index] = output
-                    segment_results.append(result)
-            finally:
-                del runtime
-                gc.collect()
+            topk_last_position_by_job.append(job_topk)
     finally:
         stop_selected_workers(workers)
     wall_ms = round((time.perf_counter() - started) * 1000, 3)
-    final_shapes = [list(item.shape) for item in batch_outputs]
-    for batch_index, shape in enumerate(final_shapes):
-        if shape != [1, seq_len, vocab_size]:
-            raise ValueError(f"Expected final logits shape {[1, seq_len, vocab_size]} for batch {batch_index}, got {shape}")
-    topk_last_position_by_batch = []
-    if top_k > 0:
-        for batch_index, logits in enumerate(batch_outputs):
-            last = logits[0, -1].astype(np.float32, copy=False)
-            k = min(top_k, int(last.shape[0]))
-            indices = np.argpartition(last, -k)[-k:]
-            indices = indices[np.argsort(last[indices])[::-1]]
-            topk_last_position_by_batch.append(
-                {
-                    "batch_index": batch_index,
-                    "topk_last_position": [{"token_id": int(idx), "score": float(last[idx])} for idx in indices],
-                }
-            )
+    final_shapes = final_shapes_by_job[0] if final_shapes_by_job else []
+    topk_last_position_by_batch = topk_last_position_by_job[0] if topk_last_position_by_job else []
     selected_total_load_ms = round(selected_resident_load_ms + forward_load_ms, 3)
     return {
         "verdict": "ok_selected_pair_forward",
+        "job_count": job_count,
         "batch_count": batch_count,
+        "processed_forward_count": processed_forward_count,
         "segment_plan": "fine-adjacent",
         "selected_pair": list(selected_pair),
         "selected_segments": [segments[index][0] for index in selected_pair],
@@ -435,14 +471,16 @@ def run_selected_pair_forward():
         "wall_ms": wall_ms,
         "load_share_including_resident_load": round(selected_total_load_ms / max(wall_ms, 0.001), 6),
         "warm_load_share_excluding_resident_load": round(forward_load_ms / max(wall_ms, 0.001), 6),
-        "amortized_total_load_ms_per_forward": round(selected_total_load_ms / batch_count, 3),
-        "amortized_warm_load_ms_per_forward": round(forward_load_ms / batch_count, 3),
-        "amortized_run_ms_per_forward": round(forward_run_ms / batch_count, 3),
-        "amortized_wall_ms_per_forward": round(wall_ms / batch_count, 3),
+        "amortized_total_load_ms_per_forward": round(selected_total_load_ms / processed_forward_count, 3),
+        "amortized_warm_load_ms_per_forward": round(forward_load_ms / processed_forward_count, 3),
+        "amortized_run_ms_per_forward": round(forward_run_ms / processed_forward_count, 3),
+        "amortized_wall_ms_per_forward": round(wall_ms / processed_forward_count, 3),
         "final_shapes": final_shapes,
+        "final_shapes_by_job": final_shapes_by_job,
         "final_shape": final_shapes[0],
         "top_k": top_k,
         "topk_last_position_by_batch": topk_last_position_by_batch,
+        "topk_last_position_by_job": topk_last_position_by_job,
         "segments": segment_results,
     }
 
@@ -514,8 +552,11 @@ if not selected_only and baseline_summary.get("verdict") != "ok_dream7b_segmente
     errors.append(f"unexpected baseline verdict: {baseline_summary.get('verdict')}")
 if not selected_only and baseline_summary.get("batch_count") != batch_count:
     errors.append(f"unexpected baseline batch_count: {baseline_summary.get('batch_count')}")
-if selected_summary.get("final_shapes") != [[1, seq_len, vocab_size] for _ in range(batch_count)]:
+expected_final_shapes = [[1, seq_len, vocab_size] for _ in range(batch_count)]
+if selected_summary.get("final_shapes") != expected_final_shapes:
     errors.append(f"unexpected selected final_shapes: {selected_summary.get('final_shapes')}")
+if selected_summary.get("final_shapes_by_job") != [expected_final_shapes for _ in range(job_count)]:
+    errors.append(f"unexpected selected final_shapes_by_job: {selected_summary.get('final_shapes_by_job')}")
 
 warm_load_ms_delta = None
 total_load_ms_delta = None
@@ -549,11 +590,14 @@ payload = {
     "forward_cmd": forward_cmd,
     "base_hbm_dir": str(base_hbm_dir),
     "fine_hbm_dir": str(fine_hbm_dir),
+    "job_count": job_count,
     "batch_count": batch_count,
+    "processed_forward_count": selected_summary.get("processed_forward_count"),
     "top_k": top_k,
     "timeout_sec": timeout_sec,
     "selected_only": selected_only,
     "tokens_batch_json": str(tokens_batch_json),
+    "tokens_batches_by_job_json": str(tokens_batches_by_job_json),
     "source_tokens_batch_json": tokens_batch_json_override,
     "selected_summary_json": str(selected_summary_path),
     "selected": {
@@ -562,6 +606,8 @@ payload = {
         "selected_third_segments": selected_summary.get("selected_third_segments"),
         "selected_pair_covers_all_segments": selected_summary.get("selected_pair_covers_all_segments"),
         "selected_worker_count": selected_summary.get("selected_worker_count"),
+        "job_count": selected_summary.get("job_count"),
+        "processed_forward_count": selected_summary.get("processed_forward_count"),
         "selected_resident_load_ms": selected_summary.get("selected_resident_load_ms"),
         "forward_load_ms": selected_summary.get("forward_load_ms"),
         "selected_total_load_ms": selected_summary.get("selected_total_load_ms"),
@@ -574,6 +620,7 @@ payload = {
         "amortized_run_ms_per_forward": selected_summary.get("amortized_run_ms_per_forward"),
         "amortized_wall_ms_per_forward": selected_summary.get("amortized_wall_ms_per_forward"),
         "final_shapes": selected_summary.get("final_shapes"),
+        "final_shapes_by_job": selected_summary.get("final_shapes_by_job"),
     },
     "baseline": {
         "summary_json": baseline.get("summary_json"),
@@ -614,7 +661,9 @@ lines = [
     f"- selected_pair: {payload['selected']['selected_pair']}",
     f"- selected_segments: {payload['selected']['selected_segments']}",
     f"- selected_pair_covers_all_segments: {payload['selected']['selected_pair_covers_all_segments']}",
+    f"- job_count: {payload['job_count']}",
     f"- batch_count: {payload['batch_count']}",
+    f"- processed_forward_count: {payload['processed_forward_count']}",
     f"- selected.forward_load_ms: {payload['selected']['forward_load_ms']}",
     f"- selected.selected_total_load_ms: {payload['selected']['selected_total_load_ms']}",
     f"- baseline.load_ms: {payload['baseline']['load_ms']}",

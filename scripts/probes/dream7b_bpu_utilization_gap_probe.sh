@@ -74,6 +74,7 @@ runtime_telemetry_path, runtime_telemetry = latest_json("dream7b_bpu_runtime_tel
 selected_pair_telemetry_path, selected_pair_telemetry = latest_json("dream7b_bpu_selected_pair_telemetry_*/selected_pair_telemetry_probe.json")
 systemd_telemetry_path, systemd_telemetry = latest_json("dream7b_bpu_batch_queue_systemd_telemetry_*/systemd_telemetry_probe.json")
 selected_pair_candidate_service_telemetry_path, selected_pair_candidate_service_telemetry = latest_json("dream7b_bpu_selected_pair_candidate_service_telemetry_*/systemd_telemetry_probe.json")
+selected_pair_cross_job_reuse_path, selected_pair_cross_job_reuse = latest_json("dream7b_bpu_selected_pair_cross_job_reuse_*/selected_pair_cross_job_reuse_probe.json")
 sustained_path, sustained = latest_json("dream7b_bpu_diffusion_batch_generate_sustained_*/batch_generation_sustained_probe.json")
 batch_generate_telemetry_path, batch_generate_telemetry = latest_json("dream7b_bpu_diffusion_batch_generate_telemetry_*/batch_generation_telemetry_probe.json")
 
@@ -87,6 +88,8 @@ if systemd_telemetry is None:
     errors.append("missing dream7b_bpu_batch_queue_systemd_telemetry_*/systemd_telemetry_probe.json")
 if selected_pair_candidate_service_telemetry is None:
     errors.append("missing dream7b_bpu_selected_pair_candidate_service_telemetry_*/systemd_telemetry_probe.json")
+if selected_pair_cross_job_reuse is None:
+    errors.append("missing dream7b_bpu_selected_pair_cross_job_reuse_*/selected_pair_cross_job_reuse_probe.json")
 if sustained is None:
     errors.append("missing dream7b_bpu_diffusion_batch_generate_sustained_*/batch_generation_sustained_probe.json")
 if batch_generate_telemetry is None:
@@ -168,6 +171,42 @@ if isinstance(selected_pair_candidate_service_telemetry, dict):
     if selected_pair_candidate_service_comparison.get("candidate_avg_bpu_loading_not_worse_than_default_systemd") is not True:
         warnings.append("selected-pair candidate service telemetry improved wall time but did not improve average BPU loading versus default systemd telemetry")
 
+selected_pair_cross_job_metrics = (selected_pair_cross_job_reuse or {}).get("cross_job_metrics") or {}
+selected_pair_cross_job_candidate_metrics = (selected_pair_cross_job_reuse or {}).get("candidate_service_metrics") or {}
+selected_pair_cross_job_comparison = (selected_pair_cross_job_reuse or {}).get("comparison_to_selected_pair_candidate_service") or {}
+if isinstance(selected_pair_cross_job_reuse, dict):
+    if selected_pair_cross_job_reuse.get("verdict") != "ok_dream7b_bpu_selected_pair_cross_job_reuse_probe":
+        errors.append(f"unexpected selected-pair cross-job reuse verdict: {selected_pair_cross_job_reuse.get('verdict')}")
+    if int(selected_pair_cross_job_reuse.get("job_count") or 0) < min_sustained_round_count:
+        errors.append(f"selected-pair cross-job reuse job_count below {min_sustained_round_count}: {selected_pair_cross_job_reuse.get('job_count')}")
+    if int(selected_pair_cross_job_reuse.get("batch_count") or 0) < min_batch_count:
+        errors.append(f"selected-pair cross-job reuse batch_count below {min_batch_count}: {selected_pair_cross_job_reuse.get('batch_count')}")
+    if int(selected_pair_cross_job_reuse.get("processed_forward_count") or 0) < min_sustained_total_items:
+        errors.append(
+            "selected-pair cross-job reuse processed_forward_count below "
+            f"{min_sustained_total_items}: {selected_pair_cross_job_reuse.get('processed_forward_count')}"
+        )
+    if selected_pair_cross_job_reuse.get("selected_pair") != [1, 8]:
+        errors.append(f"unexpected selected-pair cross-job reuse selected_pair: {selected_pair_cross_job_reuse.get('selected_pair')}")
+    if selected_pair_cross_job_reuse.get("selected_segments") != ["seg02_04", "seg24_26"]:
+        errors.append(f"unexpected selected-pair cross-job reuse selected_segments: {selected_pair_cross_job_reuse.get('selected_segments')}")
+    if selected_pair_cross_job_reuse.get("selected_pair_covers_all_segments") is not True:
+        errors.append(
+            "selected-pair cross-job reuse selected_pair_covers_all_segments is not true: "
+            f"{selected_pair_cross_job_reuse.get('selected_pair_covers_all_segments')}"
+        )
+    if selected_pair_cross_job_reuse.get("selected_worker_count") != 2:
+        errors.append(f"unexpected selected-pair cross-job reuse selected_worker_count: {selected_pair_cross_job_reuse.get('selected_worker_count')}")
+    if selected_pair_cross_job_candidate_metrics.get("processed_request_count", 0) < min_sustained_total_items:
+        errors.append(
+            "selected-pair cross-job reuse candidate processed_request_count below "
+            f"{min_sustained_total_items}: {selected_pair_cross_job_candidate_metrics.get('processed_request_count')}"
+        )
+    if selected_pair_cross_job_comparison.get("cross_job_load_time_improved") is not True:
+        warnings.append("selected-pair cross-job reuse did not improve amortized load time versus selected-pair candidate service telemetry")
+    if selected_pair_cross_job_comparison.get("cross_job_wall_time_improved") is not True:
+        warnings.append("selected-pair cross-job reuse reduced load time but did not improve amortized wall time versus selected-pair candidate service telemetry")
+
 if isinstance(sustained, dict):
     if sustained.get("verdict") != "ok_dream7b_bpu_diffusion_batch_generate_sustained_probe":
         errors.append(f"unexpected sustained verdict: {sustained.get('verdict')}")
@@ -202,6 +241,9 @@ systemd_load_to_run_ratio = systemd_total_load / systemd_total_run if systemd_to
 candidate_service_total_load = float((selected_pair_candidate_service_telemetry or {}).get("total_load_ms") or 0.0)
 candidate_service_total_run = float((selected_pair_candidate_service_telemetry or {}).get("total_run_ms") or 0.0)
 candidate_service_load_to_run_ratio = candidate_service_total_load / candidate_service_total_run if candidate_service_total_run else None
+cross_job_total_load = float(selected_pair_cross_job_metrics.get("selected_total_load_ms") or 0.0)
+cross_job_total_run = float(selected_pair_cross_job_metrics.get("run_ms") or 0.0)
+cross_job_load_to_run_ratio = cross_job_total_load / cross_job_total_run if cross_job_total_run else None
 telemetry_avgs = [
     float((runtime_telemetry or {}).get("avg_bpu_loading") or 0.0),
     float((selected_pair_telemetry or {}).get("avg_bpu_loading") or 0.0),
@@ -223,7 +265,7 @@ avg_observed_bpu_loading = statistics.fmean(telemetry_avgs) if telemetry_avgs el
 
 load_dominated = any(
     ratio is not None and ratio > 1.0
-    for ratio in (batch_reference_load_to_run_ratio, runtime_load_to_run_ratio, systemd_load_to_run_ratio, candidate_service_load_to_run_ratio)
+    for ratio in (batch_reference_load_to_run_ratio, runtime_load_to_run_ratio, systemd_load_to_run_ratio, candidate_service_load_to_run_ratio, cross_job_load_to_run_ratio)
 )
 if max_observed_bpu_loading <= 0.0:
     errors.append(f"max_observed_bpu_loading did not exceed zero: {max_observed_bpu_loading}")
@@ -311,6 +353,26 @@ payload = {
         "amortized_run_ms_per_processed_request": (selected_pair_candidate_service_telemetry or {}).get("amortized_run_ms_per_processed_request"),
         "comparison_to_default_systemd_telemetry": selected_pair_candidate_service_comparison,
     },
+    "selected_pair_cross_job_reuse": {
+        "path": str(selected_pair_cross_job_reuse_path) if selected_pair_cross_job_reuse_path else None,
+        "job_count": (selected_pair_cross_job_reuse or {}).get("job_count"),
+        "batch_count": (selected_pair_cross_job_reuse or {}).get("batch_count"),
+        "processed_forward_count": (selected_pair_cross_job_reuse or {}).get("processed_forward_count"),
+        "selected_pair": (selected_pair_cross_job_reuse or {}).get("selected_pair"),
+        "selected_segments": (selected_pair_cross_job_reuse or {}).get("selected_segments"),
+        "selected_pair_covers_all_segments": (selected_pair_cross_job_reuse or {}).get("selected_pair_covers_all_segments"),
+        "selected_worker_count": (selected_pair_cross_job_reuse or {}).get("selected_worker_count"),
+        "selected_resident_load_ms": (selected_pair_cross_job_reuse or {}).get("selected_resident_load_ms"),
+        "resident_load_once_amortized_ms_per_forward": (selected_pair_cross_job_reuse or {}).get("resident_load_once_amortized_ms_per_forward"),
+        "total_load_ms": round_float(cross_job_total_load),
+        "total_run_ms": round_float(cross_job_total_run),
+        "load_to_run_ratio": round_float(cross_job_load_to_run_ratio),
+        "amortized_wall_ms_per_forward": selected_pair_cross_job_metrics.get("amortized_wall_ms_per_forward"),
+        "amortized_total_load_ms_per_forward": selected_pair_cross_job_metrics.get("amortized_total_load_ms_per_forward"),
+        "amortized_run_ms_per_forward": selected_pair_cross_job_metrics.get("amortized_run_ms_per_forward"),
+        "candidate_service_metrics": selected_pair_cross_job_candidate_metrics,
+        "comparison_to_selected_pair_candidate_service": selected_pair_cross_job_comparison,
+    },
     "sustained_generation": {
         "path": str(sustained_path) if sustained_path else None,
         "round_count": (sustained or {}).get("round_count"),
@@ -350,6 +412,9 @@ lines = [
     f"- selected_pair_candidate_service_load_to_run_ratio: {payload['selected_pair_candidate_service_telemetry']['load_to_run_ratio']}",
     f"- selected_pair_candidate_service_wall_delta_ratio: {payload['selected_pair_candidate_service_telemetry']['comparison_to_default_systemd_telemetry'].get('wall_ms_delta_ratio_vs_default_systemd')}",
     f"- selected_pair_candidate_service_avg_bpu_delta: {payload['selected_pair_candidate_service_telemetry']['comparison_to_default_systemd_telemetry'].get('avg_bpu_loading_delta_vs_default_systemd')}",
+    f"- selected_pair_cross_job_load_to_run_ratio: {payload['selected_pair_cross_job_reuse']['load_to_run_ratio']}",
+    f"- selected_pair_cross_job_wall_delta_ratio: {payload['selected_pair_cross_job_reuse']['comparison_to_selected_pair_candidate_service'].get('wall_ms_delta_ratio')}",
+    f"- selected_pair_cross_job_load_delta_ratio: {payload['selected_pair_cross_job_reuse']['comparison_to_selected_pair_candidate_service'].get('load_ms_delta_ratio')}",
     "",
     "## Evidence",
     "",
@@ -358,6 +423,7 @@ lines = [
     f"- selected_pair_telemetry: {payload['selected_pair_telemetry']['path']}",
     f"- systemd_telemetry: {payload['systemd_telemetry']['path']}",
     f"- selected_pair_candidate_service_telemetry: {payload['selected_pair_candidate_service_telemetry']['path']}",
+    f"- selected_pair_cross_job_reuse: {payload['selected_pair_cross_job_reuse']['path']}",
     f"- sustained_generation: {payload['sustained_generation']['path']}",
     f"- batch_generate_telemetry: {payload['batch_generate_telemetry']['path']}",
     "",

@@ -710,6 +710,8 @@ else:
     systemd_telemetry = utilization_gap.get("systemd_telemetry") or {}
     selected_pair_candidate_service_telemetry = utilization_gap.get("selected_pair_candidate_service_telemetry") or {}
     selected_pair_candidate_service_telemetry_comparison = selected_pair_candidate_service_telemetry.get("comparison_to_default_systemd_telemetry") or {}
+    selected_pair_cross_job_reuse = utilization_gap.get("selected_pair_cross_job_reuse") or {}
+    selected_pair_cross_job_comparison = selected_pair_cross_job_reuse.get("comparison_to_selected_pair_candidate_service") or {}
     sustained_generation = utilization_gap.get("sustained_generation") or {}
     batch_generate_telemetry = utilization_gap.get("batch_generate_telemetry") or {}
     ok = (
@@ -725,6 +727,14 @@ else:
         and selected_pair_candidate_service_telemetry.get("expected_window_execution_mode") == "selected-pair-resident"
         and selected_pair_candidate_service_telemetry.get("expected_child_process_count") == 2
         and selected_pair_candidate_service_telemetry_comparison.get("candidate_wall_time_improved_vs_default_systemd") is True
+        and int(selected_pair_cross_job_reuse.get("job_count") or 0) >= min_batch_generate_sustained_round_count
+        and int(selected_pair_cross_job_reuse.get("batch_count") or 0) >= min_batch_capacity
+        and int(selected_pair_cross_job_reuse.get("processed_forward_count") or 0) >= min_systemd_telemetry_requests
+        and selected_pair_cross_job_reuse.get("selected_pair") == [1, 8]
+        and selected_pair_cross_job_reuse.get("selected_segments") == ["seg02_04", "seg24_26"]
+        and selected_pair_cross_job_reuse.get("selected_pair_covers_all_segments") is True
+        and selected_pair_cross_job_comparison.get("cross_job_load_time_improved") is True
+        and selected_pair_cross_job_comparison.get("cross_job_wall_time_improved") is False
         and int(sustained_generation.get("round_count") or 0) >= min_batch_generate_sustained_round_count
         and int(sustained_generation.get("batch_count") or 0) >= min_batch_capacity
         and int(sustained_generation.get("actual_total_batch_items") or 0) >= min_systemd_telemetry_requests
@@ -752,6 +762,12 @@ else:
             "selected_pair_candidate_service_avg_bpu_loading_delta_vs_default_systemd": selected_pair_candidate_service_telemetry_comparison.get("avg_bpu_loading_delta_vs_default_systemd"),
             "selected_pair_candidate_service_wall_time_improved_vs_default_systemd": selected_pair_candidate_service_telemetry_comparison.get("candidate_wall_time_improved_vs_default_systemd"),
             "selected_pair_candidate_service_avg_bpu_loading_not_worse_than_default_systemd": selected_pair_candidate_service_telemetry_comparison.get("candidate_avg_bpu_loading_not_worse_than_default_systemd"),
+            "selected_pair_cross_job_processed_forward_count": selected_pair_cross_job_reuse.get("processed_forward_count"),
+            "selected_pair_cross_job_load_to_run_ratio": selected_pair_cross_job_reuse.get("load_to_run_ratio"),
+            "selected_pair_cross_job_wall_delta_ratio_vs_candidate_service": selected_pair_cross_job_comparison.get("wall_ms_delta_ratio"),
+            "selected_pair_cross_job_load_delta_ratio_vs_candidate_service": selected_pair_cross_job_comparison.get("load_ms_delta_ratio"),
+            "selected_pair_cross_job_wall_time_improved": selected_pair_cross_job_comparison.get("cross_job_wall_time_improved"),
+            "selected_pair_cross_job_load_time_improved": selected_pair_cross_job_comparison.get("cross_job_load_time_improved"),
             "sustained_round_count": sustained_generation.get("round_count"),
             "sustained_actual_total_batch_items": sustained_generation.get("actual_total_batch_items"),
             "batch_generate_batch_count": batch_generate_telemetry.get("batch_count"),
@@ -1202,6 +1218,56 @@ else:
             "avg_bpu_loading": selected_pair_candidate_service_telemetry.get("avg_bpu_loading"),
             "max_bpu_loading": selected_pair_candidate_service_telemetry.get("max_bpu_loading"),
             "comparison_to_default_systemd_telemetry": comparison,
+        },
+    )
+
+selected_pair_cross_job_reuse_path, selected_pair_cross_job_reuse = latest_json("dream7b_bpu_selected_pair_cross_job_reuse_*/selected_pair_cross_job_reuse_probe.json")
+if selected_pair_cross_job_reuse is None:
+    add_check("selected_pair_cross_job_reuse", selected_pair_cross_job_reuse_path, False, {"reason": "missing selected_pair_cross_job_reuse_probe.json"})
+else:
+    comparison = selected_pair_cross_job_reuse.get("comparison_to_selected_pair_candidate_service") or {}
+    cross_job_metrics = selected_pair_cross_job_reuse.get("cross_job_metrics") or {}
+    candidate_metrics = selected_pair_cross_job_reuse.get("candidate_service_metrics") or {}
+    ok = (
+        selected_pair_cross_job_reuse.get("verdict") == "ok_dream7b_bpu_selected_pair_cross_job_reuse_probe"
+        and selected_pair_cross_job_reuse.get("job_count") == 3
+        and selected_pair_cross_job_reuse.get("batch_count") == min_batch_capacity
+        and selected_pair_cross_job_reuse.get("processed_forward_count") == min_systemd_telemetry_requests
+        and selected_pair_cross_job_reuse.get("selected_pair") == [1, 8]
+        and selected_pair_cross_job_reuse.get("selected_segments") == ["seg02_04", "seg24_26"]
+        and selected_pair_cross_job_reuse.get("selected_pair_covers_all_segments") is True
+        and selected_pair_cross_job_reuse.get("selected_worker_count") == 2
+        and candidate_metrics.get("processed_request_count") == min_systemd_telemetry_requests
+        and candidate_metrics.get("batch_counts") == [16, 16, 16]
+        and comparison.get("cross_job_reuses_selected_pair_workers_once") is True
+        and comparison.get("candidate_service_reloads_selected_pair_per_batch") is True
+        and comparison.get("cross_job_load_time_improved") is True
+        and comparison.get("cross_job_wall_time_improved") is False
+        and cross_job_metrics.get("amortized_wall_ms_per_forward") is not None
+        and cross_job_metrics.get("amortized_total_load_ms_per_forward") is not None
+        and not selected_pair_cross_job_reuse.get("errors")
+    )
+    add_check(
+        "selected_pair_cross_job_reuse",
+        selected_pair_cross_job_reuse_path,
+        ok,
+        {
+            "verdict": selected_pair_cross_job_reuse.get("verdict"),
+            "job_count": selected_pair_cross_job_reuse.get("job_count"),
+            "batch_count": selected_pair_cross_job_reuse.get("batch_count"),
+            "processed_forward_count": selected_pair_cross_job_reuse.get("processed_forward_count"),
+            "selected_pair": selected_pair_cross_job_reuse.get("selected_pair"),
+            "selected_segments": selected_pair_cross_job_reuse.get("selected_segments"),
+            "resident_load_once_amortized_ms_per_forward": selected_pair_cross_job_reuse.get("resident_load_once_amortized_ms_per_forward"),
+            "cross_job_amortized_wall_ms_per_forward": cross_job_metrics.get("amortized_wall_ms_per_forward"),
+            "cross_job_amortized_total_load_ms_per_forward": cross_job_metrics.get("amortized_total_load_ms_per_forward"),
+            "candidate_amortized_wall_ms_per_processed_request": candidate_metrics.get("amortized_wall_ms_per_processed_request"),
+            "candidate_amortized_load_ms_per_processed_request": candidate_metrics.get("amortized_load_ms_per_processed_request"),
+            "wall_ms_delta_ratio": comparison.get("wall_ms_delta_ratio"),
+            "load_ms_delta_ratio": comparison.get("load_ms_delta_ratio"),
+            "cross_job_wall_time_improved": comparison.get("cross_job_wall_time_improved"),
+            "cross_job_load_time_improved": comparison.get("cross_job_load_time_improved"),
+            "next_optimization_target": selected_pair_cross_job_reuse.get("next_optimization_target"),
         },
     )
 
