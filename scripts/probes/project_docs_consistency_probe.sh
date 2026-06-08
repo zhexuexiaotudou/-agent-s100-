@@ -32,6 +32,7 @@ required_files=(
   "scripts/dream7b-bpu-diffusion-generate.sh"
   "scripts/dream7b-bpu-diffusion-batch-generate.sh"
   "scripts/dream7b-bpu-selected-pair-batch-forward.sh"
+  "scripts/install_dream7b_bpu_selected_pair_candidate_service.sh"
   "scripts/probes/dream7b_segmented_hbm_python_forward.py"
   "scripts/probes/dream7b_bpu_diffusion_loop_probe.sh"
   "scripts/probes/dream7b_bpu_fine_forward_repeat_probe.sh"
@@ -71,6 +72,7 @@ required_files=(
   "scripts/probes/dream7b_bpu_selected_pair_telemetry_probe.sh"
   "scripts/probes/dream7b_bpu_selected_pair_promotion_gate_probe.sh"
   "scripts/probes/dream7b_bpu_selected_pair_candidate_forward_probe.sh"
+  "scripts/probes/dream7b_bpu_selected_pair_candidate_service_probe.sh"
   "scripts/probes/s100_official_llm_baseline_probe.sh"
   "scripts/probes/s100_official_qwen_runtime_probe.sh"
   "scripts/probes/s100_bpu_memory_pool_probe.sh"
@@ -110,6 +112,8 @@ required_readme_strings=(
   "scripts/probes/dream7b_bpu_selected_pair_telemetry_probe.sh"
   "scripts/probes/dream7b_bpu_selected_pair_promotion_gate_probe.sh"
   "scripts/probes/dream7b_bpu_selected_pair_candidate_forward_probe.sh"
+  "scripts/install_dream7b_bpu_selected_pair_candidate_service.sh"
+  "scripts/probes/dream7b_bpu_selected_pair_candidate_service_probe.sh"
   "scripts/probes/s100_official_llm_baseline_probe.sh"
   "scripts/probes/s100_official_qwen_runtime_probe.sh"
   "scripts/probes/s100_bpu_memory_pool_probe.sh"
@@ -162,6 +166,9 @@ required_reference_strings=(
   "dream7b-bpu-selected-pair-promotion-gate-probe"
   "dream7b-bpu-selected-pair-batch-forward"
   "dream7b-bpu-selected-pair-candidate-forward-probe"
+  "install-dream7b-bpu-selected-pair-candidate-service"
+  "dream7b-bpu-selected-pair-candidate-service-probe"
+  "dream7b-bpu-selected-pair-candidate.service"
   "s100-official-llm-baseline-probe"
   "s100-qwen-backend9-baseline-probe"
   "s100-qwen-bpu-core-sweep-probe"
@@ -179,6 +186,10 @@ required_reference_strings=(
   "DREAM7B_BPU_FINE_BATCH_SWEEP_TOP_K"
   "DREAM7B_BPU_FINE_FORWARD_LONG_REPEAT_COUNT"
   "DREAM7B_BPU_FINE_FORWARD_LONG_REPEAT_MAX_WALL_SPREAD_RATIO"
+  "DREAM7B_BPU_SELECTED_PAIR_CANDIDATE_SERVICE_NAME"
+  "DREAM7B_BPU_SELECTED_PAIR_CANDIDATE_QUEUE_MAX_BATCH_SIZE"
+  "DREAM7B_BPU_SELECTED_PAIR_CANDIDATE_FORWARD_CMD"
+  "DREAM7B_BPU_SELECTED_PAIR_CANDIDATE_SERVICE_REQUEST_COUNT"
   "DREAM7B_BPU_BATCH_CAPACITY_COUNTS"
   "DREAM7B_BPU_BATCH_CAPACITY_TIMEOUT_SEC"
   "DREAM7B_BPU_BATCH_CAPACITY_TOP_K"
@@ -1765,6 +1776,68 @@ if [[ -f scripts/probes/dream7b_bpu_selected_pair_candidate_forward_probe.sh ]];
   fi
 fi
 
+if [[ -f scripts/install_dream7b_bpu_selected_pair_candidate_service.sh ]]; then
+  for text in \
+    "DREAM7B_BPU_SELECTED_PAIR_CANDIDATE_SERVICE_NAME" \
+    "DREAM7B_BPU_SELECTED_PAIR_CANDIDATE_QUEUE_POLL_INTERVAL_SEC" \
+    "DREAM7B_BPU_SELECTED_PAIR_CANDIDATE_QUEUE_MAX_BATCH_SIZE" \
+    "DREAM7B_BPU_SELECTED_PAIR_CANDIDATE_QUEUE_TOP_K" \
+    "DREAM7B_BPU_SELECTED_PAIR_CANDIDATE_QUEUE_LOCK_PATH" \
+    "DREAM7B_BPU_SELECTED_PAIR_CANDIDATE_QUEUE_REPO_DIR" \
+    "DREAM7B_BPU_SELECTED_PAIR_CANDIDATE_FORWARD_CMD" \
+    "DREAM7B_BPU_SELECTED_PAIR_CANDIDATE_QUEUE_DRAIN_ALL" \
+    "dream7b-bpu-selected-pair-candidate.service" \
+    "/mnt/nas/openclaw/queues/dream7b-bpu-selected-pair-candidate" \
+    "/mnt/nas/openclaw/reports/models/dream7b_bpu_selected_pair_candidate_service_systemd" \
+    "dream7b-bpu-selected-pair-batch-forward" \
+    "/run/lock/dream7b_bpu_batch_queue_runner.lock" \
+    "--forward-cmd" \
+    "--max-batch-size" \
+    "--drain-all" \
+    "default_service_replaced: false" \
+    "default_service_name: dream7b-bpu-batch-queue.service"; do
+    if ! grep -F -- "$text" scripts/install_dream7b_bpu_selected_pair_candidate_service.sh >/dev/null; then
+      errors+=("install_dream7b_bpu_selected_pair_candidate_service.sh missing $text")
+    fi
+  done
+  if ! grep -F -- 'DREAM7B_BPU_SELECTED_PAIR_CANDIDATE_QUEUE_MAX_BATCH_SIZE:-16' scripts/install_dream7b_bpu_selected_pair_candidate_service.sh >/dev/null; then
+    errors+=("install_dream7b_bpu_selected_pair_candidate_service.sh missing default DREAM7B_BPU_SELECTED_PAIR_CANDIDATE_QUEUE_MAX_BATCH_SIZE:-16")
+  fi
+  if ! grep -F -- 'DREAM7B_BPU_SELECTED_PAIR_CANDIDATE_FORWARD_CMD:-dream7b-bpu-selected-pair-batch-forward' scripts/install_dream7b_bpu_selected_pair_candidate_service.sh >/dev/null; then
+    errors+=("install_dream7b_bpu_selected_pair_candidate_service.sh missing default selected-pair forward command")
+  fi
+fi
+
+if [[ -f scripts/probes/dream7b_bpu_selected_pair_candidate_service_probe.sh ]]; then
+  for text in \
+    "DREAM7B_BPU_SELECTED_PAIR_CANDIDATE_SERVICE_REQUEST_COUNT" \
+    "DREAM7B_BPU_SELECTED_PAIR_CANDIDATE_SERVICE_TIMEOUT_SEC" \
+    "DREAM7B_BPU_SELECTED_PAIR_CANDIDATE_SERVICE_POLL_INTERVAL_SEC" \
+    "dream7b-bpu-selected-pair-candidate.service" \
+    "/mnt/nas/openclaw/queues/dream7b-bpu-selected-pair-candidate" \
+    "/mnt/nas/openclaw/reports/models/dream7b_bpu_selected_pair_candidate_service_systemd" \
+    "dream7b-bpu-selected-pair-batch-forward" \
+    "selected_pair_candidate_service_probe.json" \
+    "selected_pair_candidate_service_probe.md" \
+    "ok_dream7b_bpu_selected_pair_candidate_service_probe" \
+    "selected-pair-resident" \
+    "child_process_count" \
+    "selected_pair_candidate" \
+    "default_service_replaced" \
+    "default_service_status" \
+    "default_service_enabled" \
+    "selected_segments" \
+    "selected_pair_covers_all_segments" \
+    "amortized_wall_ms_per_processed_request"; do
+    if ! grep -F -- "$text" scripts/probes/dream7b_bpu_selected_pair_candidate_service_probe.sh >/dev/null; then
+      errors+=("dream7b_bpu_selected_pair_candidate_service_probe.sh missing $text")
+    fi
+  done
+  if ! grep -F -- 'DREAM7B_BPU_SELECTED_PAIR_CANDIDATE_SERVICE_REQUEST_COUNT:-16' scripts/probes/dream7b_bpu_selected_pair_candidate_service_probe.sh >/dev/null; then
+    errors+=("dream7b_bpu_selected_pair_candidate_service_probe.sh missing default DREAM7B_BPU_SELECTED_PAIR_CANDIDATE_SERVICE_REQUEST_COUNT:-16")
+  fi
+fi
+
 if [[ -f scripts/probes/s100_official_llm_baseline_probe.sh ]]; then
   for text in \
     "S100_OFFICIAL_LLM_SDK_ROOT" \
@@ -2385,6 +2458,7 @@ if [[ -f scripts/probes/dream7b_bpu_deployment_acceptance_probe.sh ]]; then
     "dream7b_bpu_diffusion_batch_generate_sustained_*/batch_generation_sustained_probe.json" \
     "dream7b_bpu_utilization_gap_*/utilization_gap_probe.json" \
     "dream7b_bpu_selected_pair_telemetry_*/selected_pair_telemetry_probe.json" \
+    "dream7b_bpu_selected_pair_candidate_service_*/selected_pair_candidate_service_probe.json" \
     "dream7b_bpu_persistent_pair_cache_*/persistent_pair_cache_probe.json" \
     "dream7b_bpu_held_pair_residency_matrix_*/held_pair_residency_matrix_probe.json" \
     "dream7b_bpu_single_segment_residency_matrix_*/single_segment_residency_matrix_probe.json" \
@@ -2411,6 +2485,7 @@ if [[ -f scripts/probes/dream7b_bpu_deployment_acceptance_probe.sh ]]; then
     "diffusion_batch_generate_sustained" \
     "utilization_gap" \
     "selected_pair_telemetry" \
+    "selected_pair_candidate_service" \
     "persistent_pair_cache" \
     "held_pair_residency_matrix" \
     "single_segment_residency_matrix" \
@@ -2440,6 +2515,11 @@ if [[ -f scripts/probes/dream7b_bpu_deployment_acceptance_probe.sh ]]; then
     "wall_ms_delta_ratio_vs_default_runtime" \
     "selected_wall_time_improved_vs_default_runtime" \
     "selected_avg_bpu_loading_improved_vs_default_runtime" \
+    "ok_dream7b_bpu_selected_pair_candidate_service_probe" \
+    "dream7b-bpu-selected-pair-candidate.service" \
+    "dream7b-bpu-selected-pair-batch-forward" \
+    "selected_pair_candidate" \
+    "default_service_replaced" \
     "all_pair_workers_ready" \
     "launch_stopped_reason" \
     "ready_holder_pair_count" \

@@ -1089,6 +1089,64 @@ else:
         },
     )
 
+selected_pair_candidate_service_path, selected_pair_candidate_service = latest_json("dream7b_bpu_selected_pair_candidate_service_*/selected_pair_candidate_service_probe.json")
+if selected_pair_candidate_service is None:
+    add_check("selected_pair_candidate_service", selected_pair_candidate_service_path, False, {"reason": "missing selected_pair_candidate_service_probe.json"})
+else:
+    ok = (
+        selected_pair_candidate_service.get("verdict") == "ok_dream7b_bpu_selected_pair_candidate_service_probe"
+        and selected_pair_candidate_service.get("service_name") == "dream7b-bpu-selected-pair-candidate.service"
+        and selected_pair_candidate_service.get("service_status_before") == "active"
+        and selected_pair_candidate_service.get("service_enabled_before") == "enabled"
+        and selected_pair_candidate_service.get("service_status_after") == "active"
+        and selected_pair_candidate_service.get("service_enabled_after") == "enabled"
+        and selected_pair_candidate_service.get("job_status") == "done"
+        and selected_pair_candidate_service.get("forward_command") == "dream7b-bpu-selected-pair-batch-forward"
+        and selected_pair_candidate_service.get("request_count") == min_batch_capacity
+        and selected_pair_candidate_service.get("processed_count") == min_batch_capacity
+        and selected_pair_candidate_service.get("accepted_count") == min_batch_capacity
+        and selected_pair_candidate_service.get("deferred_count") == 0
+        and selected_pair_candidate_service.get("skipped_count") == 0
+        and selected_pair_candidate_service.get("max_batch_size") == 16
+        and selected_pair_candidate_service.get("batch_run_count") == 1
+        and selected_pair_candidate_service.get("batch_count") == min_batch_capacity
+        and selected_pair_candidate_service.get("result_count") == min_batch_capacity
+        and selected_pair_candidate_service.get("execution_mode") == "pair_window_batch"
+        and selected_pair_candidate_service.get("window_execution_mode") == "selected-pair-resident"
+        and selected_pair_candidate_service.get("child_process_count") == 2
+        and selected_pair_candidate_service.get("bpu_lock_path") == "/run/lock/dream7b_bpu_batch_queue_runner.lock"
+        and selected_pair_candidate_service.get("selected_pair_candidate") is True
+        and selected_pair_candidate_service.get("selected_pair") == [1, 8]
+        and selected_pair_candidate_service.get("selected_segments") == ["seg02_04", "seg24_26"]
+        and selected_pair_candidate_service.get("selected_pair_covers_all_segments") is True
+        and selected_pair_candidate_service.get("default_service_replaced") is False
+        and all(item == [1, 16, 152064] for item in (selected_pair_candidate_service.get("final_shapes") or []))
+        and not selected_pair_candidate_service.get("errors")
+    )
+    add_check(
+        "selected_pair_candidate_service",
+        selected_pair_candidate_service_path,
+        ok,
+        {
+            "verdict": selected_pair_candidate_service.get("verdict"),
+            "service_name": selected_pair_candidate_service.get("service_name"),
+            "job_status": selected_pair_candidate_service.get("job_status"),
+            "forward_command": selected_pair_candidate_service.get("forward_command"),
+            "request_count": selected_pair_candidate_service.get("request_count"),
+            "processed_count": selected_pair_candidate_service.get("processed_count"),
+            "batch_count": selected_pair_candidate_service.get("batch_count"),
+            "execution_mode": selected_pair_candidate_service.get("execution_mode"),
+            "window_execution_mode": selected_pair_candidate_service.get("window_execution_mode"),
+            "child_process_count": selected_pair_candidate_service.get("child_process_count"),
+            "selected_pair_candidate": selected_pair_candidate_service.get("selected_pair_candidate"),
+            "selected_pair": selected_pair_candidate_service.get("selected_pair"),
+            "selected_segments": selected_pair_candidate_service.get("selected_segments"),
+            "default_service_replaced": selected_pair_candidate_service.get("default_service_replaced"),
+            "amortized_wall_ms_per_processed_request": selected_pair_candidate_service.get("amortized_wall_ms_per_processed_request"),
+            "next_optimization_target": selected_pair_candidate_service.get("next_optimization_target"),
+        },
+    )
+
 payload = {
     "generated_at": datetime.now().astimezone().isoformat(),
     "verdict": "ok_dream7b_bpu_deployment_acceptance_probe" if not errors else "failed_dream7b_bpu_deployment_acceptance_probe",

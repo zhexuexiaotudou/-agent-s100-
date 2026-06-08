@@ -3358,6 +3358,192 @@ warnings: []
 errors: []
 ```
 
+### `install-dream7b-bpu-selected-pair-candidate-service`
+
+Source file: `scripts/install_dream7b_bpu_selected_pair_candidate_service.sh`
+
+Installed command on S100P:
+
+```text
+/usr/local/bin/install-dream7b-bpu-selected-pair-candidate-service
+```
+
+Actions copied from the script:
+
+```text
+plan
+install
+status
+uninstall
+```
+
+Environment variables copied from the script:
+
+```text
+DREAM7B_BPU_SELECTED_PAIR_CANDIDATE_SERVICE_NAME
+DREAM7B_BPU_SELECTED_PAIR_CANDIDATE_QUEUE_POLL_INTERVAL_SEC
+DREAM7B_BPU_SELECTED_PAIR_CANDIDATE_QUEUE_MAX_BATCH_SIZE
+DREAM7B_BPU_SELECTED_PAIR_CANDIDATE_QUEUE_TOP_K
+DREAM7B_BPU_SELECTED_PAIR_CANDIDATE_QUEUE_LOCK_PATH
+DREAM7B_BPU_SELECTED_PAIR_CANDIDATE_QUEUE_REPO_DIR
+DREAM7B_BPU_SELECTED_PAIR_CANDIDATE_FORWARD_CMD
+DREAM7B_BPU_SELECTED_PAIR_CANDIDATE_QUEUE_DRAIN_ALL
+```
+
+Default values copied from the script:
+
+```text
+service_name = dream7b-bpu-selected-pair-candidate.service
+queue_dir = /mnt/nas/openclaw/queues/dream7b-bpu-selected-pair-candidate
+output_dir = /mnt/nas/openclaw/reports/models/dream7b_bpu_selected_pair_candidate_service_systemd
+poll_interval_sec = 1
+max_batch_size = 16
+top_k = 3
+forward_cmd = dream7b-bpu-selected-pair-batch-forward
+bpu_lock_path = /run/lock/dream7b_bpu_batch_queue_runner.lock
+drain_all = true
+working_directory = /mnt/nas/openclaw
+default_service_replaced = false
+default_service_name = dream7b-bpu-batch-queue.service
+```
+
+Installed systemd unit copied from the script:
+
+```text
+dream7b-bpu-selected-pair-candidate.service
+ExecStart=/usr/local/bin/dream7b-bpu-batch-queue-service /mnt/nas/openclaw/queues/dream7b-bpu-selected-pair-candidate /mnt/nas/openclaw/reports/models/dream7b_bpu_selected_pair_candidate_service_systemd --poll-interval-sec 1 --max-batch-size 16 --top-k 3 --forward-cmd dream7b-bpu-selected-pair-batch-forward --bpu-lock-path /run/lock/dream7b_bpu_batch_queue_runner.lock --drain-all
+```
+
+### `dream7b-bpu-selected-pair-candidate-service-probe`
+
+Source file: `scripts/probes/dream7b_bpu_selected_pair_candidate_service_probe.sh`
+
+Installed command on S100P:
+
+```text
+/usr/local/bin/dream7b-bpu-selected-pair-candidate-service-probe
+```
+
+Default arguments copied from the script:
+
+```text
+report_root = /mnt/nas/openclaw/reports/models
+service_name = dream7b-bpu-selected-pair-candidate.service
+queue_dir = /mnt/nas/openclaw/queues/dream7b-bpu-selected-pair-candidate
+output_dir = /mnt/nas/openclaw/reports/models/dream7b_bpu_selected_pair_candidate_service_systemd
+```
+
+Environment variables copied from the script:
+
+```text
+DREAM7B_BPU_SELECTED_PAIR_CANDIDATE_SERVICE_REQUEST_COUNT
+DREAM7B_BPU_SELECTED_PAIR_CANDIDATE_SERVICE_TIMEOUT_SEC
+DREAM7B_BPU_SELECTED_PAIR_CANDIDATE_SERVICE_POLL_INTERVAL_SEC
+```
+
+Default values copied from the script:
+
+```text
+request_count = 16
+timeout_sec = 480
+poll_interval_sec = 2
+```
+
+Output files copied from the script:
+
+```text
+selected_pair_candidate_service_probe.json
+selected_pair_candidate_service_probe.md
+```
+
+Output fields copied from the script:
+
+```text
+generated_at
+verdict
+service_name
+queue_dir
+output_dir
+job_name
+job_status
+summary_path
+request_count
+timeout_sec
+poll_interval_sec
+service_status_before
+service_enabled_before
+service_status_after
+service_enabled_after
+default_service_status
+default_service_enabled
+unit_path
+exec_start
+forward_command
+drain_all
+max_batch_size
+processed_count
+accepted_count
+deferred_count
+skipped_count
+batch_run_count
+batch_count
+result_count
+execution_mode
+window_execution_mode
+child_process_count
+bpu_lock_path
+final_shapes
+total_wall_ms
+amortized_wall_ms_per_processed_request
+forward_summary_path
+selected_pair_candidate
+selected_pair
+selected_segments
+selected_pair_covers_all_segments
+default_service_replaced
+next_optimization_target
+errors
+```
+
+Latest recorded report:
+
+```text
+/mnt/nas/openclaw/reports/models/dream7b_bpu_selected_pair_candidate_service_20260606-041550/selected_pair_candidate_service_probe.md
+```
+
+Latest recorded JSON:
+
+```text
+/mnt/nas/openclaw/reports/models/dream7b_bpu_selected_pair_candidate_service_20260606-041550/selected_pair_candidate_service_probe.json
+```
+
+Verified selected-pair candidate service fields copied from `selected_pair_candidate_service_probe.json`:
+
+```text
+verdict: ok_dream7b_bpu_selected_pair_candidate_service_probe
+service_name: dream7b-bpu-selected-pair-candidate.service
+job_status: done
+forward_command: dream7b-bpu-selected-pair-batch-forward
+request_count: 16
+processed_count: 16
+accepted_count: 16
+deferred_count: 0
+skipped_count: 0
+batch_run_count: 1
+batch_count: 16
+execution_mode: pair_window_batch
+window_execution_mode: selected-pair-resident
+child_process_count: 2
+selected_pair_candidate: True
+selected_pair: [1, 8]
+selected_segments: ['seg02_04', 'seg24_26']
+selected_pair_covers_all_segments: True
+default_service_replaced: False
+total_wall_ms: 22953.06
+amortized_wall_ms_per_processed_request: 1434.566
+errors: []
+```
+
 ### `s100-official-llm-baseline-probe`
 
 Source file: `scripts/probes/s100_official_llm_baseline_probe.sh`
@@ -6354,14 +6540,16 @@ errors: []
 Verified deployment acceptance fields copied from `deployment_acceptance_probe.json`:
 
 ```text
-acceptance_report: /mnt/nas/openclaw/reports/models/dream7b_bpu_deployment_acceptance_20260605-172156/deployment_acceptance_probe.md
-acceptance_json: /mnt/nas/openclaw/reports/models/dream7b_bpu_deployment_acceptance_20260605-172156/deployment_acceptance_probe.json
+acceptance_report: /mnt/nas/openclaw/reports/models/dream7b_bpu_deployment_acceptance_20260606-042825/deployment_acceptance_probe.md
+acceptance_json: /mnt/nas/openclaw/reports/models/dream7b_bpu_deployment_acceptance_20260606-042825/deployment_acceptance_probe.json
 verdict: ok_dream7b_bpu_deployment_acceptance_probe
-check_count: 9
-passed_check_count: 9
+check_count: 27
+passed_check_count: 27
 min_batch_capacity: 16
 min_systemd_batch_requests: 16
 min_systemd_telemetry_requests: 48
+min_batch_generate_count: 16
+min_batch_generate_sustained_round_count: 3
 min_long_repeat_count: 6
 max_long_repeat_wall_spread_ratio: 0.1
 systemd_service.ok: True
@@ -6373,6 +6561,8 @@ systemd_canary.ok: True
 systemd_telemetry.ok: True
 long_repeat.ok: True
 queue_retention.ok: True
+selected_pair_telemetry.ok: True
+selected_pair_candidate_service.ok: True
 warnings: []
 errors: []
 ```
