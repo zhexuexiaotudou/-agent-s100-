@@ -976,6 +976,40 @@ else:
         },
     )
 
+window3_forward_path, window3_forward = latest_json("dream7b_bpu_window3_forward_feasibility_*/window3_forward_feasibility_probe.json")
+if window3_forward is None:
+    add_check("window3_forward_feasibility", window3_forward_path, False, {"reason": "missing window3_forward_feasibility_probe.json"})
+else:
+    ok = (
+        window3_forward.get("verdict") == "ok_dream7b_bpu_window3_forward_feasibility_probe"
+        and int(window3_forward.get("window_size") or 0) == 3
+        and window3_forward.get("child_window_mode") == "pair"
+        and window3_forward.get("child_runtime_mode") == "packed"
+        and window3_forward.get("window_execution_mode") == "window-batch"
+        and window3_forward.get("direct_window3_forward_supported") is False
+        and window3_forward.get("expected_window3_failure_observed") is True
+        and window3_forward.get("stderr_contains_memory_alloc_failure") is True
+        and window3_forward.get("next_optimization_target")
+        and not window3_forward.get("errors")
+    )
+    add_check(
+        "window3_forward_feasibility",
+        window3_forward_path,
+        ok,
+        {
+            "verdict": window3_forward.get("verdict"),
+            "returncode": window3_forward.get("returncode"),
+            "direct_window3_forward_supported": window3_forward.get("direct_window3_forward_supported"),
+            "expected_window3_failure_observed": window3_forward.get("expected_window3_failure_observed"),
+            "stderr_contains_memory_alloc_failure": window3_forward.get("stderr_contains_memory_alloc_failure"),
+            "window_size": window3_forward.get("window_size"),
+            "child_window_mode": window3_forward.get("child_window_mode"),
+            "child_runtime_mode": window3_forward.get("child_runtime_mode"),
+            "window_execution_mode": window3_forward.get("window_execution_mode"),
+            "next_optimization_target": window3_forward.get("next_optimization_target"),
+        },
+    )
+
 payload = {
     "generated_at": datetime.now().astimezone().isoformat(),
     "verdict": "ok_dream7b_bpu_deployment_acceptance_probe" if not errors else "failed_dream7b_bpu_deployment_acceptance_probe",

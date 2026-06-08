@@ -202,6 +202,9 @@ seeded quad residency JSON: /mnt/nas/openclaw/reports/models/dream7b_bpu_seeded_
 persistent triplet topology command: /usr/local/bin/dream7b-bpu-persistent-triplet-topology-probe
 persistent triplet topology report: /mnt/nas/openclaw/reports/models/dream7b_bpu_persistent_triplet_topology_20260606-131107/persistent_triplet_topology_probe.md
 persistent triplet topology JSON: /mnt/nas/openclaw/reports/models/dream7b_bpu_persistent_triplet_topology_20260606-131107/persistent_triplet_topology_probe.json
+window3 forward feasibility command: /usr/local/bin/dream7b-bpu-window3-forward-feasibility-probe
+window3 forward feasibility report: /mnt/nas/openclaw/reports/models/dream7b_bpu_window3_forward_feasibility_20260606-133931/window3_forward_feasibility_probe.md
+window3 forward feasibility JSON: /mnt/nas/openclaw/reports/models/dream7b_bpu_window3_forward_feasibility_20260606-133931/window3_forward_feasibility_probe.json
 generation-aware deployment acceptance report: /mnt/nas/openclaw/reports/models/dream7b_bpu_deployment_acceptance_20260606-161252/deployment_acceptance_probe.md
 generation-aware deployment acceptance JSON: /mnt/nas/openclaw/reports/models/dream7b_bpu_deployment_acceptance_20260606-161252/deployment_acceptance_probe.json
 generation-telemetry-aware deployment acceptance report: /mnt/nas/openclaw/reports/models/dream7b_bpu_deployment_acceptance_20260606-165607/deployment_acceptance_probe.md
@@ -222,6 +225,8 @@ seeded-quad-aware deployment acceptance report: /mnt/nas/openclaw/reports/models
 seeded-quad-aware deployment acceptance JSON: /mnt/nas/openclaw/reports/models/dream7b_bpu_deployment_acceptance_20260606-125750/deployment_acceptance_probe.json
 persistent-triplet-aware deployment acceptance report: /mnt/nas/openclaw/reports/models/dream7b_bpu_deployment_acceptance_20260606-133119/deployment_acceptance_probe.md
 persistent-triplet-aware deployment acceptance JSON: /mnt/nas/openclaw/reports/models/dream7b_bpu_deployment_acceptance_20260606-133119/deployment_acceptance_probe.json
+window3-aware deployment acceptance report: /mnt/nas/openclaw/reports/models/dream7b_bpu_deployment_acceptance_20260606-134115/deployment_acceptance_probe.md
+window3-aware deployment acceptance JSON: /mnt/nas/openclaw/reports/models/dream7b_bpu_deployment_acceptance_20260606-134115/deployment_acceptance_probe.json
 post-batch fine-forward compatibility report: /mnt/nas/openclaw/reports/models/dream7b_bpu_fine_forward_20260603-183906/fine_forward_probe.md
 fine-forward diffusion-loop report: /mnt/nas/openclaw/reports/models/dream7b_bpu_diffusion_loop_20260603-175030/summary.md
 fine-forward quality-gate report: /mnt/nas/openclaw/reports/models/dream7b_bpu_cpu_quality_gate_20260603-160405/summary.md
@@ -315,6 +320,7 @@ scripts/probes/dream7b_bpu_persistent_segment_cache_probe.sh
 scripts/probes/dream7b_bpu_single_segment_triplet_residency_probe.sh
 scripts/probes/dream7b_bpu_seeded_quad_residency_probe.sh
 scripts/probes/dream7b_bpu_persistent_triplet_topology_probe.sh
+scripts/probes/dream7b_bpu_window3_forward_feasibility_probe.sh
 scripts/probes/dream7b_bpu_batch_queue_retention_probe.sh
 scripts/probes/dream7b_bpu_deployment_acceptance_probe.sh
 ```
@@ -1509,11 +1515,13 @@ triplet_aware_deployment_acceptance_report: /mnt/nas/openclaw/reports/models/dre
 triplet_aware_deployment_acceptance_json: /mnt/nas/openclaw/reports/models/dream7b_bpu_deployment_acceptance_20260606-123257/deployment_acceptance_probe.json
 seeded_quad_aware_deployment_acceptance_report: /mnt/nas/openclaw/reports/models/dream7b_bpu_deployment_acceptance_20260606-125750/deployment_acceptance_probe.md
 seeded_quad_aware_deployment_acceptance_json: /mnt/nas/openclaw/reports/models/dream7b_bpu_deployment_acceptance_20260606-125750/deployment_acceptance_probe.json
-persistent_triplet_aware_deployment_acceptance_report: /mnt/nas/openclaw/reports/models/dream7b_bpu_deployment_acceptance_20260606-131933/deployment_acceptance_probe.md
-persistent_triplet_aware_deployment_acceptance_json: /mnt/nas/openclaw/reports/models/dream7b_bpu_deployment_acceptance_20260606-131933/deployment_acceptance_probe.json
+persistent_triplet_aware_deployment_acceptance_report: /mnt/nas/openclaw/reports/models/dream7b_bpu_deployment_acceptance_20260606-133119/deployment_acceptance_probe.md
+persistent_triplet_aware_deployment_acceptance_json: /mnt/nas/openclaw/reports/models/dream7b_bpu_deployment_acceptance_20260606-133119/deployment_acceptance_probe.json
+window3_aware_deployment_acceptance_report: /mnt/nas/openclaw/reports/models/dream7b_bpu_deployment_acceptance_20260606-134115/deployment_acceptance_probe.md
+window3_aware_deployment_acceptance_json: /mnt/nas/openclaw/reports/models/dream7b_bpu_deployment_acceptance_20260606-134115/deployment_acceptance_probe.json
 verdict: ok_dream7b_bpu_deployment_acceptance_probe
-check_count: 23
-passed_check_count: 23
+check_count: 24
+passed_check_count: 24
 min_batch_capacity: 16
 min_systemd_batch_requests: 16
 min_systemd_telemetry_requests: 48
@@ -1541,6 +1549,7 @@ persistent_segment_cache.ok: True
 single_segment_triplet_residency.ok: True
 seeded_quad_residency.ok: True
 persistent_triplet_topology.ok: True
+window3_forward_feasibility.ok: True
 systemd_telemetry.ok: True
 long_repeat.ok: True
 queue_retention.ok: True
@@ -1608,6 +1617,24 @@ selected_topology: [0, 1, 8]
 selection_rule: first stable topology in source successful_triplets order
 max_resident_segment_count_observed: 3
 next_optimization_target: wire the selected stable triplet into a forward-path experiment and compare HBM load share against the current pair-window production path
+errors: []
+```
+
+Verified window3 forward feasibility:
+
+```text
+window3_forward_feasibility_report: /mnt/nas/openclaw/reports/models/dream7b_bpu_window3_forward_feasibility_20260606-133931/window3_forward_feasibility_probe.md
+window3_forward_feasibility_json: /mnt/nas/openclaw/reports/models/dream7b_bpu_window3_forward_feasibility_20260606-133931/window3_forward_feasibility_probe.json
+verdict: ok_dream7b_bpu_window3_forward_feasibility_probe
+returncode: 1
+direct_window3_forward_supported: False
+expected_window3_failure_observed: True
+stderr_contains_memory_alloc_failure: True
+window_size: 3
+child_window_mode: pair
+child_runtime_mode: packed
+window_execution_mode: window-batch
+next_optimization_target: do not switch production defaults to window3; use selected stable triplet worker or a new HBM split for the next forward-path experiment
 errors: []
 ```
 
@@ -1989,7 +2016,7 @@ bpu remaining_mask_positions: []
 
 This is real BPU execution for real Dream 7B weights, including a complete seq16 forward chain from prompt text or token ids to logits plus verified one-step and strategy-aware bounded multi-step Dream diffusion bridges over masked positions. The path now also has a CPU/BPU quality coverage gate that records current divergence against the existing CPU Dream text path, an HBM cache performance gate that quantifies NAS versus S100P-local HBM load cost, a HBM artifact inventory gate showing `expected_artifact_count: 14`, `nas_existing_count: 14`, `local_existing_count: 14`, `size_match_count: 14`, and `manifest_verified_count: 12`, a residency gate proving that the current six-segment split cannot be made all-resident, a fine-residency gate proving that every adjacent two-segment window can be resident, a deployed fine in-process pair forward command that runs the 10-segment fine plan to logits with 0 child processes, a 3-run repeat probe plus a gated 6-run long-repeat probe for the default in-process path showing `wall_spread_ratio: 0.046307` under `max_wall_spread_ratio: 0.1`, a window-batch throughput probe for concurrent independent seq16 inputs, a batch-size sweep proving amortized wall time drops from `24562.798` ms at batch 1 to `3175.416` ms at batch 8, a batch-capacity probe proving independent seq16 batch 16 passes with `amortized_wall_ms_per_forward: 1714.647`, runtime telemetry with `hrt_ucp_monitor` showing `max_bpu_loading: 100.0` during Dream 7B BPU forward, a reusable `dream7b-bpu-fine-batch-forward` wrapper for JSON token batches, a bounded `dream7b-bpu-batch-queue-runner` JSONL service bridge with verified multi-batch `--drain-all`, verified `cancelled` and `not_after_epoch_ms` control semantics, durable queue state JSONL outputs, default queue-runner single-flight `bpu_lock`, a directory-backed `dream7b-bpu-batch-queue-service` loop with verified real BPU one-shot operation, and a NAS-backed `dream7b-bpu-batch-queue.service` systemd unit with verified single-job, 2-job, historical `max_batch_size=4` and `max_batch_size=8` reports, current default `--max-batch-size 16 --drain-all` one-job sixteen-request real BPU queued execution with `batch_run_count=1`, `batch_count=16`, and `amortized_wall_ms_per_processed_request` around 1.7 seconds, a lightweight one-request systemd canary showing `verdict: ok_dream7b_bpu_batch_queue_systemd_canary_probe`, `job_status: done`, `final_shapes: [[1, 16, 152064]]`, and `errors: []`, reusable `dream7b-bpu-text-queue-submit` and `dream7b-bpu-text-queue-run` commands showing real prompt tokenization through `/mnt/nas/openclaw/models/dream7b/tokenizer`, `submit_verdict: ok_dream7b_bpu_text_queue_submit`, `verdict: ok_dream7b_bpu_text_queue_run`, `fit_mode: pad-right`, `token_count: 16`, `final_shape: [1, 16, 152064]`, non-empty `topk_last_position`, and decoded `topk_last_position_decoded` token texts ` and`, ` or`, and `,`, a reusable bounded `dream7b-bpu-diffusion-generate` command showing `verdict: ok_dream7b_bpu_diffusion_generate`, `executed_step_count: 2`, `remaining_mask_positions: []`, and `decoded_final`, direct bounded-generation telemetry showing `verdict: ok_dream7b_bpu_diffusion_generate_telemetry_probe`, `generation_status: 0`, `nonzero_bpu_loading_sample_count: 14`, and `max_bpu_loading: 38.0`, a reusable bounded `dream7b-bpu-diffusion-batch-generate` command using `dream7b-bpu-fine-batch-forward` once per diffusion step, direct bounded batch-generation telemetry showing `verdict: ok_dream7b_bpu_diffusion_batch_generate_telemetry_probe`, `batch_count: 16`, `forward_batch_counts: [16, 16]`, `nonzero_bpu_loading_sample_count: 68`, `avg_bpu_loading: 8.825`, and `max_bpu_loading: 100.0`, sustained bounded batch-generation telemetry over three rounds showing `successful_generation_count: 3`, `actual_total_batch_items: 48`, `total_forward_call_count: 6`, `avg_bpu_loading: 9.022`, and `max_bpu_loading: 100.0`, sustained service telemetry over three sixteen-request jobs showing `processed_request_count: 48`, `batch_counts: [16, 16, 16]`, `max_bpu_loading: 100.0`, and `amortized_wall_ms_per_processed_request: 1662.737`, a utilization-gap probe showing `diagnosis: hbm_reload_dominated`, `max_observed_bpu_loading: 100.0`, `avg_observed_bpu_loading_across_reports: 8.978`, `runtime_load_to_run_ratio: 8.399`, and `systemd_load_to_run_ratio: 8.48`, a persistent pair cache probe showing `pair_worker_count: 5`, `ready_pair_worker_count: 1`, `all_pair_workers_ready: False`, and `launch_stopped_reason: pair_01_seg04_07__seg07_10 did not reach ready status`, a held-pair residency matrix showing `ready_holder_pair_count: 5`, `matrix_entry_count: 20`, `successful_pair_edge_count: 0`, `failed_pair_edge_count: 20`, and `max_resident_pair_count_observed: 1`, a single-segment triplet residency path showing 20 successful triplets, a seeded quad residency path showing all 84 seeded four-segment candidates fail, a persistent triplet topology probe showing all 20 successful triplets stay stable for the 10-second hold and selecting `[0, 1, 8]`, a report-only queue retention probe showing the current NAS queue has no stale `pending` or `processing` jobs and no current archive candidates, plus a report-only deployment acceptance gate showing `check_count: 23`, `passed_check_count: 23`, `min_batch_generate_count: 16`, `min_batch_generate_sustained_round_count: 3`, `max_long_repeat_wall_spread_ratio: 0.1`, `utilization_gap.ok: True`, `persistent_pair_cache.ok: True`, `held_pair_residency_matrix.ok: True`, `single_segment_triplet_residency.ok: True`, `seeded_quad_residency.ok: True`, `persistent_triplet_topology.ok: True`, and `verdict: ok_dream7b_bpu_deployment_acceptance_probe` across service, capacity, HBM inventory, batch, drain, canary, text-queue-run, text-queue-systemd, diffusion-generate, diffusion-generate-telemetry, diffusion-batch-generate-telemetry, diffusion-batch-generate-sustained, utilization-gap, persistent-pair-cache, held-pair-residency-matrix, single-segment-residency-matrix, persistent-segment-cache, triplet-residency, seeded-quad-residency, persistent-triplet-topology, telemetry, long-repeat, and retention evidence. It is not yet a complete text-generation service.
 
-Latest segment-residency update: `/mnt/nas/openclaw/reports/models/dream7b_bpu_single_segment_residency_matrix_20260606-002628/single_segment_residency_matrix_probe.json` proves that all ten single segments can be held individually and every ordered single-to-single edge loads successfully (`matrix_entry_count: 90`, `successful_segment_edge_count: 90`, `failed_segment_edge_count: 0`, `max_resident_segment_count_observed: 2`). `/mnt/nas/openclaw/reports/models/dream7b_bpu_persistent_segment_cache_20260606-005633/persistent_segment_cache_probe.json` then shows the prefix resident boundary is two single-segment runtimes before `segment_02_seg04_07` fails. `/mnt/nas/openclaw/reports/models/dream7b_bpu_single_segment_triplet_residency_20260606-121243/single_segment_triplet_residency_probe.json` expands that boundary: all 120 three-segment combinations were tested, 20 triplets succeeded, 100 failed, and `max_resident_segment_count_observed: 3`. `/mnt/nas/openclaw/reports/models/dream7b_bpu_seeded_quad_residency_20260606-124305/seeded_quad_residency_probe.json` tests every unique four-segment candidate seeded by those 20 successful triplets and shows `seeded_quad_candidate_count: 84`, `tested_seeded_quad_count: 84`, `successful_seeded_quad_count: 0`, `failed_seeded_quad_count: 84`, and `max_resident_segment_count_observed: 3`. `/mnt/nas/openclaw/reports/models/dream7b_bpu_persistent_triplet_topology_20260606-131107/persistent_triplet_topology_probe.json` replays the 20 successful triplets as long-lived workers and shows `tested_triplet_topology_count: 20`, `stable_triplet_topology_count: 20`, `failed_triplet_topology_count: 0`, `selected_topology: [0, 1, 8]`, and `max_resident_segment_count_observed: 3`. The latest report-only acceptance gate is `/mnt/nas/openclaw/reports/models/dream7b_bpu_deployment_acceptance_20260606-133119/deployment_acceptance_probe.json` with `check_count: 23`, `passed_check_count: 23`, `single_segment_residency_matrix.ok: True`, `persistent_segment_cache.ok: True`, `single_segment_triplet_residency.ok: True`, `seeded_quad_residency.ok: True`, and `persistent_triplet_topology.ok: True`.
+Latest segment-residency update: `/mnt/nas/openclaw/reports/models/dream7b_bpu_single_segment_residency_matrix_20260606-002628/single_segment_residency_matrix_probe.json` proves that all ten single segments can be held individually and every ordered single-to-single edge loads successfully (`matrix_entry_count: 90`, `successful_segment_edge_count: 90`, `failed_segment_edge_count: 0`, `max_resident_segment_count_observed: 2`). `/mnt/nas/openclaw/reports/models/dream7b_bpu_persistent_segment_cache_20260606-005633/persistent_segment_cache_probe.json` then shows the prefix resident boundary is two single-segment runtimes before `segment_02_seg04_07` fails. `/mnt/nas/openclaw/reports/models/dream7b_bpu_single_segment_triplet_residency_20260606-121243/single_segment_triplet_residency_probe.json` expands that boundary: all 120 three-segment combinations were tested, 20 triplets succeeded, 100 failed, and `max_resident_segment_count_observed: 3`. `/mnt/nas/openclaw/reports/models/dream7b_bpu_seeded_quad_residency_20260606-124305/seeded_quad_residency_probe.json` tests every unique four-segment candidate seeded by those 20 successful triplets and shows `seeded_quad_candidate_count: 84`, `tested_seeded_quad_count: 84`, `successful_seeded_quad_count: 0`, `failed_seeded_quad_count: 84`, and `max_resident_segment_count_observed: 3`. `/mnt/nas/openclaw/reports/models/dream7b_bpu_persistent_triplet_topology_20260606-131107/persistent_triplet_topology_probe.json` replays the 20 successful triplets as long-lived workers and shows `tested_triplet_topology_count: 20`, `stable_triplet_topology_count: 20`, `failed_triplet_topology_count: 0`, `selected_topology: [0, 1, 8]`, and `max_resident_segment_count_observed: 3`. `/mnt/nas/openclaw/reports/models/dream7b_bpu_window3_forward_feasibility_20260606-133931/window3_forward_feasibility_probe.json` shows direct packed adjacent window size 3 is not supported (`direct_window3_forward_supported: False`, `expected_window3_failure_observed: True`, `stderr_contains_memory_alloc_failure: True`). The latest report-only acceptance gate is `/mnt/nas/openclaw/reports/models/dream7b_bpu_deployment_acceptance_20260606-134115/deployment_acceptance_probe.json` with `check_count: 24`, `passed_check_count: 24`, `single_segment_residency_matrix.ok: True`, `persistent_segment_cache.ok: True`, `single_segment_triplet_residency.ok: True`, `seeded_quad_residency.ok: True`, `persistent_triplet_topology.ok: True`, and `window3_forward_feasibility.ok: True`.
 
 Remaining engineering work:
 
@@ -1998,6 +2025,7 @@ Remaining engineering work:
 - use the single-segment evidence to choose smaller HBM artifacts, new boundaries, or S100 runtime residency support before expecting sustained 128TOPS-level average utilization;
 - use `selected_topology: [0, 1, 8]` as the first seed for a forward-path experiment and compare HBM load share against the current pair-window path before changing production defaults;
 - do not spend time on four-segment resident groups without a new HBM split/runtime change; the seeded quad probe has `successful_seeded_quad_count: 0`;
+- do not switch the current fine batch forward defaults to packed adjacent window size 3; the window3 feasibility probe has `expected_window3_failure_observed: True`;
 - keep the queue retention path report-only until an explicit apply mode and archive directory migration rule are approved; do not treat systemd supervision as a single-request Dream diffusion speedup;
 - keep all-segment residency out of the plan unless HBRT/HBDK exposes stronger release or streaming APIs; current fine split makes every adjacent two-segment window viable, but three-segment residency still fails;
 - reduce or remove S16->F32 handoff overhead between segments;

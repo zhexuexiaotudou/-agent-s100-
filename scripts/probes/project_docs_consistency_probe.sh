@@ -64,6 +64,7 @@ required_files=(
   "scripts/probes/dream7b_bpu_single_segment_triplet_residency_probe.sh"
   "scripts/probes/dream7b_bpu_seeded_quad_residency_probe.sh"
   "scripts/probes/dream7b_bpu_persistent_triplet_topology_probe.sh"
+  "scripts/probes/dream7b_bpu_window3_forward_feasibility_probe.sh"
   "scripts/probes/dream7b_bpu_batch_queue_retention_probe.sh"
   "scripts/probes/dream7b_bpu_deployment_acceptance_probe.sh"
   "scripts/startup_link_check/link-check.config.json"
@@ -89,6 +90,7 @@ required_readme_strings=(
   "scripts/probes/dream7b_bpu_single_segment_triplet_residency_probe.sh"
   "scripts/probes/dream7b_bpu_seeded_quad_residency_probe.sh"
   "scripts/probes/dream7b_bpu_persistent_triplet_topology_probe.sh"
+  "scripts/probes/dream7b_bpu_window3_forward_feasibility_probe.sh"
   "dream7b_bpu_text_queue_systemd_probe.sh"
 )
 
@@ -126,6 +128,7 @@ required_reference_strings=(
   "dream7b-bpu-single-segment-triplet-residency-probe"
   "dream7b-bpu-seeded-quad-residency-probe"
   "dream7b-bpu-persistent-triplet-topology-probe"
+  "dream7b-bpu-window3-forward-feasibility-probe"
   "dream7b-bpu-batch-queue-retention-probe"
   "dream7b-bpu-deployment-acceptance-probe"
   "dream7b-bpu-batch-queue.service"
@@ -238,6 +241,9 @@ required_reference_strings=(
   "DREAM7B_BPU_PERSISTENT_TRIPLET_TOPOLOGY_POLL_INTERVAL_SECONDS"
   "DREAM7B_BPU_PERSISTENT_TRIPLET_TOPOLOGY_START_DELAY_SECONDS"
   "DREAM7B_BPU_PERSISTENT_TRIPLET_TOPOLOGY_MAX_TRIPLETS"
+  "DREAM7B_BPU_WINDOW3_FORWARD_CMD"
+  "DREAM7B_BPU_WINDOW3_FORWARD_TIMEOUT_SEC"
+  "DREAM7B_BPU_WINDOW3_FORWARD_TOP_K"
   "DREAM7B_BPU_QUEUE_RETENTION_DONE_DAYS"
   "DREAM7B_BPU_QUEUE_RETENTION_FAILED_DAYS"
   "DREAM7B_BPU_QUEUE_RETENTION_PENDING_STALE_MINUTES"
@@ -342,6 +348,11 @@ required_reference_strings=(
   "stable_triplets"
   "selected_topology"
   "selection_rule"
+  "window3_forward_feasibility_probe"
+  "ok_dream7b_bpu_window3_forward_feasibility_probe"
+  "direct_window3_forward_supported"
+  "expected_window3_failure_observed"
+  "stderr_contains_memory_alloc_failure"
   "hbm_artifact_inventory"
   "expected_artifact_count"
   "expected_base_count"
@@ -1399,6 +1410,34 @@ if [[ -f scripts/probes/dream7b_bpu_persistent_triplet_topology_probe.sh ]]; the
   fi
 fi
 
+if [[ -f scripts/probes/dream7b_bpu_window3_forward_feasibility_probe.sh ]]; then
+  for text in \
+    "DREAM7B_BPU_WINDOW3_FORWARD_CMD" \
+    "DREAM7B_BPU_WINDOW3_FORWARD_TIMEOUT_SEC" \
+    "DREAM7B_BPU_WINDOW3_FORWARD_TOP_K" \
+    "window3_forward_feasibility_probe.json" \
+    "window3_forward_feasibility_probe.md" \
+    "ok_dream7b_bpu_window3_forward_feasibility_probe" \
+    "direct_window3_forward_supported" \
+    "expected_window3_failure_observed" \
+    "stderr_contains_memory_alloc_failure" \
+    "window_size" \
+    "child_window_mode" \
+    "child_runtime_mode" \
+    "window_execution_mode" \
+    "next_optimization_target"; do
+    if ! grep -F -- "$text" scripts/probes/dream7b_bpu_window3_forward_feasibility_probe.sh >/dev/null; then
+      errors+=("dream7b_bpu_window3_forward_feasibility_probe.sh missing $text")
+    fi
+  done
+  if ! grep -F -- 'DREAM7B_BPU_WINDOW3_FORWARD_TIMEOUT_SEC:-240' scripts/probes/dream7b_bpu_window3_forward_feasibility_probe.sh >/dev/null; then
+    errors+=("dream7b_bpu_window3_forward_feasibility_probe.sh missing default DREAM7B_BPU_WINDOW3_FORWARD_TIMEOUT_SEC:-240")
+  fi
+  if ! grep -F -- 'DREAM7B_BPU_WINDOW3_FORWARD_TOP_K:-3' scripts/probes/dream7b_bpu_window3_forward_feasibility_probe.sh >/dev/null; then
+    errors+=("dream7b_bpu_window3_forward_feasibility_probe.sh missing default DREAM7B_BPU_WINDOW3_FORWARD_TOP_K:-3")
+  fi
+fi
+
 if [[ -f scripts/probes/dream7b_bpu_batch_queue_retention_probe.sh ]]; then
   if ! grep -F -- "DREAM7B_BPU_QUEUE_RETENTION_DONE_DAYS" scripts/probes/dream7b_bpu_batch_queue_retention_probe.sh >/dev/null; then
     errors+=("dream7b_bpu_batch_queue_retention_probe.sh missing DREAM7B_BPU_QUEUE_RETENTION_DONE_DAYS")
@@ -1739,6 +1778,7 @@ if [[ -f scripts/probes/dream7b_bpu_deployment_acceptance_probe.sh ]]; then
     "dream7b_bpu_single_segment_triplet_residency_*/single_segment_triplet_residency_probe.json" \
     "dream7b_bpu_seeded_quad_residency_*/seeded_quad_residency_probe.json" \
     "dream7b_bpu_persistent_triplet_topology_*/persistent_triplet_topology_probe.json" \
+    "dream7b_bpu_window3_forward_feasibility_*/window3_forward_feasibility_probe.json" \
     "dream7b_bpu_batch_queue_systemd_telemetry_*/systemd_telemetry_probe.json" \
     "dream7b_bpu_fine_forward_long_repeat_*/long_repeat_probe.json" \
     "dream7b_bpu_batch_queue_retention_*/queue_retention_probe.json" \
@@ -1762,6 +1802,7 @@ if [[ -f scripts/probes/dream7b_bpu_deployment_acceptance_probe.sh ]]; then
     "single_segment_triplet_residency" \
     "seeded_quad_residency" \
     "persistent_triplet_topology" \
+    "window3_forward_feasibility" \
     "ok_dream7b_bpu_utilization_gap_probe" \
     "ok_dream7b_bpu_persistent_pair_cache_probe" \
     "ok_dream7b_bpu_held_pair_residency_matrix_probe" \
@@ -1770,6 +1811,7 @@ if [[ -f scripts/probes/dream7b_bpu_deployment_acceptance_probe.sh ]]; then
     "ok_dream7b_bpu_single_segment_triplet_residency_probe" \
     "ok_dream7b_bpu_seeded_quad_residency_probe" \
     "ok_dream7b_bpu_persistent_triplet_topology_probe" \
+    "ok_dream7b_bpu_window3_forward_feasibility_probe" \
     "diagnosis" \
     "next_optimization_target" \
     "max_observed_bpu_loading" \
