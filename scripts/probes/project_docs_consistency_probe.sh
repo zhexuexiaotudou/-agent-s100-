@@ -67,6 +67,7 @@ required_files=(
   "scripts/probes/dream7b_bpu_window3_forward_feasibility_probe.sh"
   "scripts/probes/dream7b_bpu_selected_triplet_forward_path_probe.sh"
   "scripts/probes/s100_official_llm_baseline_probe.sh"
+  "scripts/probes/s100_official_qwen_runtime_probe.sh"
   "scripts/probes/dream7b_bpu_batch_queue_retention_probe.sh"
   "scripts/probes/dream7b_bpu_deployment_acceptance_probe.sh"
   "scripts/startup_link_check/link-check.config.json"
@@ -95,6 +96,7 @@ required_readme_strings=(
   "scripts/probes/dream7b_bpu_window3_forward_feasibility_probe.sh"
   "scripts/probes/dream7b_bpu_selected_triplet_forward_path_probe.sh"
   "scripts/probes/s100_official_llm_baseline_probe.sh"
+  "scripts/probes/s100_official_qwen_runtime_probe.sh"
   "dream7b_bpu_text_queue_systemd_probe.sh"
 )
 
@@ -376,8 +378,11 @@ required_reference_strings=(
   "source_incomplete_run_dir"
   "official_llm_baseline_probe"
   "ok_s100_official_llm_baseline_probe"
+  "official_qwen_runtime_probe"
+  "ok_s100_official_qwen_runtime_probe"
   "supported_model_names_from_resolve_model"
   "qwen_existing_hbm_count"
+  "official_qwen_memory_alloc_failure_observed"
   "similar_issue_evidence_available_for_official_qwen"
   "comparison_to_dream"
   "hbm_artifact_inventory"
@@ -1526,6 +1531,43 @@ if [[ -f scripts/probes/s100_official_llm_baseline_probe.sh ]]; then
   fi
   if ! grep -F -- 'https://developer.d-robotics.cc/rdk_doc/rdk_s/Advanced_development/toolchain_development/LLM_Toolchain/' scripts/probes/s100_official_llm_baseline_probe.sh >/dev/null; then
     errors+=("s100_official_llm_baseline_probe.sh missing official LLM toolchain doc URL")
+  fi
+fi
+
+if [[ -f scripts/probes/s100_official_qwen_runtime_probe.sh ]]; then
+  for text in \
+    "S100_OFFICIAL_QWEN_RUNTIME_SDK_ROOT" \
+    "S100_OFFICIAL_QWEN_RUNTIME_DREAM_REPORT_ROOT" \
+    "S100_OFFICIAL_QWEN_RUNTIME_TIMEOUT_SECONDS" \
+    "official_qwen_runtime_probe.json" \
+    "official_qwen_runtime_probe.md" \
+    "ok_s100_official_qwen_runtime_probe" \
+    "qwen_multichat_config.json" \
+    "LD_LIBRARY_PATH" \
+    "runtime_returncode" \
+    "runtime_completed" \
+    "hbm_load_success_observed" \
+    "prefill_model_load_success_observed" \
+    "decode_model_load_success_observed" \
+    "init_model_success_observed" \
+    "memory_alloc_failure_observed" \
+    "ion_alloc_failure_observed" \
+    "bpu_mem_pool_alloc_error_observed" \
+    "segmentation_fault_observed" \
+    "official_qwen_runtime_supported_on_current_s100p_state" \
+    "same_failure_class_as_dream" \
+    "performance_mode_script_action" \
+    "inspected_not_applied" \
+    "next_probe_target"; do
+    if ! grep -F -- "$text" scripts/probes/s100_official_qwen_runtime_probe.sh >/dev/null; then
+      errors+=("s100_official_qwen_runtime_probe.sh missing $text")
+    fi
+  done
+  if ! grep -F -- 'S100_OFFICIAL_QWEN_RUNTIME_TIMEOUT_SECONDS:-60' scripts/probes/s100_official_qwen_runtime_probe.sh >/dev/null; then
+    errors+=("s100_official_qwen_runtime_probe.sh missing default S100_OFFICIAL_QWEN_RUNTIME_TIMEOUT_SECONDS:-60")
+  fi
+  if ! grep -F -- 'D-Robotics_LLM_S100_1.0.0_SDK' scripts/probes/s100_official_qwen_runtime_probe.sh >/dev/null; then
+    errors+=("s100_official_qwen_runtime_probe.sh missing D-Robotics_LLM_S100_1.0.0_SDK")
   fi
 fi
 

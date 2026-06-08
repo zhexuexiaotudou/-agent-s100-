@@ -2822,6 +2822,12 @@ qwen_multichat_config
 qwen_hbm_expected_from_multichat
 qwen_hbm_exists_from_multichat
 official_qwen_local_runtime_report_present
+official_qwen_latest_runtime_report_path
+official_qwen_runtime_completed
+official_qwen_runtime_returncode
+official_qwen_memory_alloc_failure_observed
+official_qwen_hbm_load_success_observed
+official_qwen_init_model_success_observed
 similar_issue_evidence_available_for_official_qwen
 comparison_to_dream.official_qwen_route
 comparison_to_dream.dream_route
@@ -2840,13 +2846,13 @@ errors
 Latest recorded report:
 
 ```text
-/mnt/nas/openclaw/reports/models/s100_official_llm_baseline_20260606-000204/official_llm_baseline_probe.md
+/mnt/nas/openclaw/reports/models/s100_official_llm_baseline_20260606-002605/official_llm_baseline_probe.md
 ```
 
 Latest recorded JSON:
 
 ```text
-/mnt/nas/openclaw/reports/models/s100_official_llm_baseline_20260606-000204/official_llm_baseline_probe.json
+/mnt/nas/openclaw/reports/models/s100_official_llm_baseline_20260606-002605/official_llm_baseline_probe.json
 ```
 
 Verified official LLM/Qwen baseline fields copied from `official_llm_baseline_probe.json`:
@@ -2860,21 +2866,160 @@ config_dir_count: 8
 config_dirs: ['DeepSeek_R1_Distill_Qwen_1.5B_config', 'DeepSeek_R1_Distill_Qwen_7B_config', 'InternLM2_1.8B_config', 'Qwen2.5_1.5B_Instruct_config', 'Qwen2.5_1.5B_config', 'Qwen2.5_7B_Instruct_config', 'Qwen2.5_7B_config', 'Qwen2.5_Omni_3B_config']
 supported_model_names_from_resolve_model: ['DeepSeek-R1-Distill-Qwen-1.5B', 'DeepSeek-R1-Distill-Qwen-7B', 'Qwen-2.5-1.5B', 'Qwen-2.5-7B', 'Qwen-2.5-1.5B-Instruct', 'Qwen-2.5-7B-Instruct', 'InternLM2-1.8B', 'Qwen2.5-Omni-3B']
 official_hbm_download_entry_count: 14
-qwen_existing_hbm_count: 0
+qwen_existing_hbm_count: 1
 qwen_multichat_config.hbm_path: ../../model/Qwen2.5_1.5B_Instruct_1024.hbm
 qwen_multichat_config.tokenizer_dir: ../../config/Qwen2.5_1.5B_Instruct_config/
 qwen_multichat_config.template_path: ../../config/Qwen2.5_1.5B_Instruct_config/Qwen2.5_1.5B_Instruct.jinja
 qwen_multichat_config.model_type: 7
-qwen_hbm_exists_from_multichat: False
-official_qwen_local_runtime_report_present: False
-similar_issue_evidence_available_for_official_qwen: False
-comparison_to_dream.same_failure_class_as_dream_proven: False
+qwen_hbm_exists_from_multichat: True
+official_qwen_local_runtime_report_present: True
+official_qwen_latest_runtime_report_path: /mnt/nas/openclaw/reports/models/s100_official_qwen_runtime_20260606-002312/official_qwen_runtime_probe.json
+official_qwen_runtime_completed: False
+official_qwen_runtime_returncode: -11
+official_qwen_memory_alloc_failure_observed: True
+similar_issue_evidence_available_for_official_qwen: True
+comparison_to_dream.same_failure_class_as_dream_proven: True
 comparison_to_dream.dream_failure_summary.diagnosis: hbm_reload_dominated
 comparison_to_dream.dream_failure_summary.runtime_telemetry.load_to_run_ratio: 8.399
 comparison_to_dream.dream_failure_summary.systemd_telemetry.load_to_run_ratio: 8.48
 comparison_to_dream.dream_failure_summary.selected_triplet_forward_supported: False
 comparison_to_dream.dream_failure_summary.reboot_or_disconnect_observed: True
-next_probe_target: download one official Qwen .hbm listed in resolve_model_nash-m.txt and run the matching oellm runtime example with hrt_ucp_monitor before using it as a utilization baseline
+next_probe_target: inspect S100P BPU/common-buffer memory pool and official runtime performance-mode prerequisites before using Qwen as a clean 128TOPS utilization baseline
+errors: []
+```
+
+### `s100-official-qwen-runtime-probe`
+
+Source file: `scripts/probes/s100_official_qwen_runtime_probe.sh`
+
+Installed command on S100P:
+
+```text
+/usr/local/bin/s100-official-qwen-runtime-probe
+```
+
+Default argument copied from the script:
+
+```text
+report_root = /mnt/nas/openclaw/reports/models
+```
+
+Environment variables copied from the script:
+
+```text
+S100_OFFICIAL_QWEN_RUNTIME_SDK_ROOT
+S100_OFFICIAL_QWEN_RUNTIME_DREAM_REPORT_ROOT
+S100_OFFICIAL_QWEN_RUNTIME_TIMEOUT_SECONDS
+```
+
+Default values copied from the script:
+
+```text
+sdk_root = /mnt/nas/openclaw/toolchains/s100_llm_sdk/D-Robotics_LLM_S100_1.0.0_SDK
+dream_report_root = /mnt/nas/openclaw/reports/models
+runtime_timeout_seconds = 60
+```
+
+Exact runtime config source copied from the script:
+
+```text
+oellm_runtime/example/oellm_multichat/qwen_multichat_config.json
+```
+
+Output files copied from the script:
+
+```text
+official_qwen_runtime_probe.json
+official_qwen_runtime_probe.md
+oellm_multichat.stdout.txt
+oellm_multichat.stderr.txt
+oellm_multichat.ldd.txt
+```
+
+Output fields copied from the script:
+
+```text
+generated_at
+verdict
+run_dir
+sdk_root
+runtime_root
+multichat_dir
+runtime_bin
+runtime_config
+runtime_lib_dir
+performance_mode_script
+performance_mode_script_exists
+performance_mode_script_action
+runtime_timeout_seconds
+qwen_multichat_config
+qwen_hbm_path
+qwen_hbm_exists
+qwen_hbm_size_bytes
+tokenizer_dir
+tokenizer_dir_exists
+template_path
+template_path_exists
+ldd_returncode
+ldd_missing_dependency_observed
+runtime_returncode
+runtime_timed_out
+runtime_completed
+hbm_load_success_observed
+prefill_model_load_success_observed
+decode_model_load_success_observed
+init_model_success_observed
+memory_alloc_failure_observed
+ion_alloc_failure_observed
+bpu_mem_pool_alloc_error_observed
+segmentation_fault_observed
+official_qwen_runtime_supported_on_current_s100p_state
+same_failure_class_as_dream
+comparison_to_dream.reason
+comparison_to_dream.dream_failure_summary.diagnosis
+comparison_to_dream.dream_failure_summary.runtime_load_to_run_ratio
+comparison_to_dream.dream_failure_summary.systemd_load_to_run_ratio
+next_probe_target
+captured_stdout_path
+captured_stderr_path
+captured_ldd_path
+warnings
+errors
+```
+
+Latest recorded report:
+
+```text
+/mnt/nas/openclaw/reports/models/s100_official_qwen_runtime_20260606-002312/official_qwen_runtime_probe.md
+```
+
+Latest recorded JSON:
+
+```text
+/mnt/nas/openclaw/reports/models/s100_official_qwen_runtime_20260606-002312/official_qwen_runtime_probe.json
+```
+
+Verified official Qwen runtime fields copied from `official_qwen_runtime_probe.json`:
+
+```text
+verdict: ok_s100_official_qwen_runtime_probe
+qwen_hbm_exists: True
+qwen_hbm_size_bytes: 1917038584
+ldd_missing_dependency_observed: False
+runtime_returncode: -11
+runtime_timed_out: False
+runtime_completed: False
+hbm_load_success_observed: True
+prefill_model_load_success_observed: True
+decode_model_load_success_observed: True
+init_model_success_observed: True
+memory_alloc_failure_observed: True
+ion_alloc_failure_observed: True
+bpu_mem_pool_alloc_error_observed: True
+segmentation_fault_observed: True
+official_qwen_runtime_supported_on_current_s100p_state: False
+same_failure_class_as_dream: True
+next_probe_target: inspect S100P BPU/common-buffer memory pool and official runtime performance-mode prerequisites before using Qwen as a clean 128TOPS utilization baseline
 errors: []
 ```
 
@@ -5069,7 +5214,9 @@ docs/baseline_progress_2026-06-03_dream7b_segmented_bpu_hbm.md
 - Updated `dream7b-bpu-deployment-acceptance-probe` to include `selected_triplet_forward_path`.
 - Verified selected-triplet-aware deployment acceptance report at `/mnt/nas/openclaw/reports/models/dream7b_bpu_deployment_acceptance_20260605-234652/deployment_acceptance_probe.md` with `check_count: 25`, `passed_check_count: 25`, and `selected_triplet_forward_path.ok: True`.
 - Added `s100-official-llm-baseline-probe` to compare the staged official S100 LLM SDK/Qwen route with the custom segmented Dream 7B route without replacing Dream 7B.
-- Verified official LLM/Qwen baseline report at `/mnt/nas/openclaw/reports/models/s100_official_llm_baseline_20260606-000204/official_llm_baseline_probe.md` with `sdk_exists: True`, `config_dir_count: 8`, `official_hbm_download_entry_count: 14`, `qwen_existing_hbm_count: 0`, and `similar_issue_evidence_available_for_official_qwen: False`.
+- Added `s100-official-qwen-runtime-probe` to run the official Qwen `oellm_multichat` example through the vendor runtime without replacing Dream 7B.
+- Verified official Qwen runtime report at `/mnt/nas/openclaw/reports/models/s100_official_qwen_runtime_20260606-002312/official_qwen_runtime_probe.md` with `qwen_hbm_size_bytes: 1917038584`, `ldd_missing_dependency_observed: False`, `hbm_load_success_observed: True`, `prefill_model_load_success_observed: True`, `decode_model_load_success_observed: True`, `init_model_success_observed: True`, `runtime_returncode: -11`, `memory_alloc_failure_observed: True`, `ion_alloc_failure_observed: True`, `bpu_mem_pool_alloc_error_observed: True`, and `official_qwen_runtime_supported_on_current_s100p_state: False`.
+- Updated and verified official LLM/Qwen baseline report at `/mnt/nas/openclaw/reports/models/s100_official_llm_baseline_20260606-002605/official_llm_baseline_probe.md` with `sdk_exists: True`, `config_dir_count: 8`, `official_hbm_download_entry_count: 14`, `qwen_existing_hbm_count: 1`, `official_qwen_local_runtime_report_present: True`, `official_qwen_runtime_completed: False`, `official_qwen_memory_alloc_failure_observed: True`, and `similar_issue_evidence_available_for_official_qwen: True`.
 
 ## TODO
 
@@ -5079,7 +5226,7 @@ docs/baseline_progress_2026-06-03_dream7b_segmented_bpu_hbm.md
 - Do not promote `selected_topology: [0, 1, 8]` as a forward-path optimization; the selected triplet forward-path probe records `selected_triplet_forward_supported: False` and `reboot_or_disconnect_observed: True`.
 - Do not switch `dream7b-bpu-fine-batch-forward` defaults to packed adjacent window size 3; the window3 feasibility probe records `expected_window3_failure_observed: True`.
 - Do not attempt a four-segment resident topology on the current HBM artifacts without a new split or runtime change; the seeded quad probe has `successful_seeded_quad_count: 0`.
-- Download one official Qwen `.hbm` from `resolve_model_nash-m.txt` and run the matching `oellm_runtime` example with `hrt_ucp_monitor` before using official Qwen as a utilization baseline.
+- Inspect S100P BPU/common-buffer memory pool and official runtime performance-mode prerequisites before using official Qwen as a clean 128TOPS utilization baseline.
 - Evaluate smaller HBM artifacts, different segment boundaries, or runtime residency support before expecting sustained 128TOPS-level average utilization from Dream 7B.
 - Continue collecting long-repeat reports before tightening the current `DREAM7B_BPU_FINE_FORWARD_LONG_REPEAT_MAX_WALL_SPREAD_RATIO` default of `0.10`.
 - Keep queue cleanup report-only until an explicit apply mode and archive directory migration rule are approved.

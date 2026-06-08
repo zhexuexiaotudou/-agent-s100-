@@ -160,6 +160,7 @@ official_hbm_presence = hbm_presence_from_urls(resolve.get("hbm_urls") or [])
 qwen_expected_hbm = [item for item in official_hbm_presence if "Qwen" in (item.get("filename") or "")]
 qwen_existing_hbm = [item for item in qwen_expected_hbm if item.get("exists")]
 dream = summarize_dream_failures()
+official_qwen_runtime_path, official_qwen_runtime = latest_json("s100_official_qwen_runtime_*/official_qwen_runtime_probe.json")
 
 if not sdk_exists:
     errors.append("official S100 LLM SDK directory is missing")
@@ -179,6 +180,23 @@ if not dream.get("diagnosis"):
 qwen_hbm_path = qwen_multichat_config.get("hbm_path")
 qwen_hbm_expected_from_multichat = str((qwen_multichat_config_path.parent / qwen_hbm_path).resolve()) if qwen_hbm_path else ""
 qwen_hbm_exists_from_multichat = Path(qwen_hbm_expected_from_multichat).is_file() if qwen_hbm_expected_from_multichat else False
+official_qwen_local_runtime_report_present = official_qwen_runtime is not None
+official_qwen_memory_alloc_failure_observed = bool((official_qwen_runtime or {}).get("memory_alloc_failure_observed"))
+official_qwen_runtime_completed = (official_qwen_runtime or {}).get("runtime_completed")
+official_qwen_runtime_returncode = (official_qwen_runtime or {}).get("runtime_returncode")
+similar_issue_evidence_available_for_official_qwen = official_qwen_memory_alloc_failure_observed
+
+if official_qwen_local_runtime_report_present:
+    comparison_reason = (
+        "latest official Qwen runtime report is present; it uses the vendor .hbm and oellm runtime, "
+        "and currently shows BPU/common-buffer memory allocation failure after HBM/model load"
+        if official_qwen_memory_alloc_failure_observed
+        else "latest official Qwen runtime report is present; compare its runtime_completed and captured logs before using it as a clean utilization baseline"
+    )
+    next_probe_target = "inspect S100P BPU/common-buffer memory pool and official runtime performance-mode prerequisites before using Qwen as a clean 128TOPS utilization baseline"
+else:
+    comparison_reason = "no local official Qwen .hbm runtime report is present; available SDK evidence shows a different supported-model runtime layout rather than the custom Dream segmented forward path"
+    next_probe_target = "download one official Qwen .hbm listed in resolve_model_nash-m.txt and run the matching oellm runtime example with hrt_ucp_monitor before using it as a utilization baseline"
 
 payload = {
     "generated_at": datetime.now().astimezone().isoformat(),
@@ -203,16 +221,22 @@ payload = {
     "qwen_multichat_config": qwen_multichat_config,
     "qwen_hbm_expected_from_multichat": qwen_hbm_expected_from_multichat,
     "qwen_hbm_exists_from_multichat": qwen_hbm_exists_from_multichat,
-    "official_qwen_local_runtime_report_present": False,
-    "similar_issue_evidence_available_for_official_qwen": False,
+    "official_qwen_local_runtime_report_present": official_qwen_local_runtime_report_present,
+    "official_qwen_latest_runtime_report_path": str(official_qwen_runtime_path) if official_qwen_runtime_path else "",
+    "official_qwen_runtime_completed": official_qwen_runtime_completed,
+    "official_qwen_runtime_returncode": official_qwen_runtime_returncode,
+    "official_qwen_memory_alloc_failure_observed": official_qwen_memory_alloc_failure_observed,
+    "official_qwen_hbm_load_success_observed": (official_qwen_runtime or {}).get("hbm_load_success_observed"),
+    "official_qwen_init_model_success_observed": (official_qwen_runtime or {}).get("init_model_success_observed"),
+    "similar_issue_evidence_available_for_official_qwen": similar_issue_evidence_available_for_official_qwen,
     "comparison_to_dream": {
         "official_qwen_route": "official runtime config points to one precompiled .hbm path plus tokenizer/template config",
         "dream_route": "project-created segmented Dream .hbm chain with repeated load/run/unload across ten fine segments",
-        "same_failure_class_as_dream_proven": False,
-        "reason": "no local official Qwen .hbm runtime report is present; available SDK evidence shows a different supported-model runtime layout rather than the custom Dream segmented forward path",
+        "same_failure_class_as_dream_proven": (official_qwen_runtime or {}).get("same_failure_class_as_dream", False),
+        "reason": comparison_reason,
         "dream_failure_summary": dream,
     },
-    "next_probe_target": "download one official Qwen .hbm listed in resolve_model_nash-m.txt and run the matching oellm runtime example with hrt_ucp_monitor before using it as a utilization baseline",
+    "next_probe_target": next_probe_target,
     "warnings": warnings,
     "errors": errors,
 }
@@ -234,6 +258,10 @@ lines = [
     f"- qwen_existing_hbm_count: {payload['qwen_existing_hbm_count']}",
     f"- qwen_hbm_exists_from_multichat: {payload['qwen_hbm_exists_from_multichat']}",
     f"- official_qwen_local_runtime_report_present: {payload['official_qwen_local_runtime_report_present']}",
+    f"- official_qwen_latest_runtime_report_path: {payload['official_qwen_latest_runtime_report_path']}",
+    f"- official_qwen_runtime_completed: {payload['official_qwen_runtime_completed']}",
+    f"- official_qwen_runtime_returncode: {payload['official_qwen_runtime_returncode']}",
+    f"- official_qwen_memory_alloc_failure_observed: {payload['official_qwen_memory_alloc_failure_observed']}",
     f"- similar_issue_evidence_available_for_official_qwen: {payload['similar_issue_evidence_available_for_official_qwen']}",
     f"- dream.diagnosis: {dream.get('diagnosis')}",
     f"- dream.selected_triplet_forward_supported: {dream.get('selected_triplet_forward_supported')}",
