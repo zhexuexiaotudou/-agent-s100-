@@ -3307,6 +3307,102 @@ next_probe_target: run a minimal HBMEM/UCP common-buffer allocation matrix again
 errors: []
 ```
 
+### `s100-hbmem-common-buffer-matrix-probe`
+
+Source file: `scripts/probes/s100_hbmem_common_buffer_matrix_probe.sh`
+
+Installed command on S100P:
+
+```text
+/usr/local/bin/s100-hbmem-common-buffer-matrix-probe
+```
+
+Default argument copied from the script:
+
+```text
+report_root = /mnt/nas/openclaw/reports/models
+```
+
+Environment variables copied from the script:
+
+```text
+S100_HBMEM_MATRIX_SDK_ROOT
+```
+
+Output files copied from the script:
+
+```text
+hbmem_common_buffer_matrix.c
+hbmem_common_buffer_matrix
+hbmem_common_buffer_matrix.jsonl
+hbmem_common_buffer_matrix.stdout.txt
+hbmem_common_buffer_matrix.stderr.txt
+hbmem_common_buffer_matrix_probe.json
+hbmem_common_buffer_matrix_probe.md
+compile.stdout.txt
+compile.stderr.txt
+```
+
+Output fields copied from the script:
+
+```text
+generated_at
+verdict
+run_dir
+source_path
+binary_path
+jsonl_path
+stdout_path
+stderr_path
+run_status
+ucp_enabled
+row_count
+hbmem_alloc_case_count
+hbmem_alloc_success_count
+hbmem_alloc_failure_count
+qwen_log_size_case_count
+qwen_log_size_success_count
+qwen_log_size_failure_count
+qwen_log_sizes
+successful_qwen_size_cases
+failed_qwen_size_cases
+ucp_case_count
+ucp_success_count
+next_probe_target
+errors
+```
+
+Latest recorded report:
+
+```text
+/mnt/nas/openclaw/reports/models/s100_hbmem_common_buffer_matrix_20260606-012033/hbmem_common_buffer_matrix_probe.md
+```
+
+Latest recorded JSON:
+
+```text
+/mnt/nas/openclaw/reports/models/s100_hbmem_common_buffer_matrix_20260606-012033/hbmem_common_buffer_matrix_probe.json
+```
+
+Verified S100 HBMEM/UCP common-buffer allocation matrix fields copied from `hbmem_common_buffer_matrix_probe.json`:
+
+```text
+verdict: ok_s100_hbmem_common_buffer_matrix_probe
+run_status: 0
+ucp_enabled: True
+hbmem_alloc_case_count: 28
+hbmem_alloc_success_count: 28
+hbmem_alloc_failure_count: 0
+qwen_log_sizes: [786432, 2359296]
+qwen_log_size_case_count: 14
+qwen_log_size_success_count: 14
+qwen_log_size_failure_count: 0
+ucp_case_count: 8
+ucp_success_count: 8
+next_probe_target: compare these direct HBMEM/UCP allocation results with official Qwen's backend: 9 failure path and inspect libhbucp backend-to-hbmem flag selection if direct allocations pass
+errors: []
+```
+
 ### `dream7b-bpu-deployment-acceptance-probe`
 
 Source file: `scripts/probes/dream7b_bpu_deployment_acceptance_probe.sh`
@@ -5505,6 +5601,7 @@ docs/baseline_progress_2026-06-03_dream7b_segmented_bpu_hbm.md
 - Verified official Qwen runtime report at `/mnt/nas/openclaw/reports/models/s100_official_qwen_runtime_20260606-003908/official_qwen_runtime_probe.md` with `qwen_hbm_size_bytes: 1917038584`, `ldd_missing_dependency_observed: False`, `hbm_load_success_observed: True`, `prefill_model_load_success_observed: True`, `decode_model_load_success_observed: True`, `init_model_success_observed: True`, `runtime_returncode: -11`, `memory_alloc_failure_observed: True`, `ion_alloc_failure_observed: True`, `bpu_mem_pool_alloc_error_observed: True`, and `official_qwen_runtime_supported_on_current_s100p_state: False`.
 - Added and verified `s100-official-qwen-performance-mode-retest-probe` at `/mnt/nas/openclaw/reports/models/s100_official_qwen_performance_mode_retest_20260606-003908/performance_mode_retest_probe.md`; it changed `0x2b047000` and `0x2b047004` to `0x00000099`, but official Qwen still reported `memory_alloc_failure_observed_after_performance_mode: True`.
 - Updated and verified `s100-bpu-memory-pool-probe` at `/mnt/nas/openclaw/reports/models/s100_bpu_memory_pool_20260606-010941/bpu_memory_pool_probe.md`; it records direct debugfs ION heap data, BPU ION allocations, BPU iovmm counters, and device-tree reserved-memory nodes, correcting the earlier `ion_meminfo` wrapper error by showing `ion_all_heap_info_exists: True`, `system_heap_total_size: 0`, `system_contig_heap_total_size: 0`, `cma_reserved_heap_total_size: 1073741824`, `ion_cma_heap_total_size: 536870912`, `carveout_heap_total_size: 536870912`, and `reserved_memory_summary.bpu_region@9A000000.reg.size_mib: 96.0`.
+- Added and verified `s100-hbmem-common-buffer-matrix-probe` at `/mnt/nas/openclaw/reports/models/s100_hbmem_common_buffer_matrix_20260606-012033/hbmem_common_buffer_matrix_probe.md`; it compiles a minimal C allocation matrix against `hb_mem_alloc_com_buf`, `hbUCPMalloc`, and `hbUCPMallocCached`, and shows the official Qwen failure sizes `786432` and `2359296` pass all tested HBMEM cases (`qwen_log_size_success_count: 14`, `qwen_log_size_failure_count: 0`) and all tested UCP cases pass (`ucp_success_count: 8`).
 - Updated and verified official LLM/Qwen baseline report at `/mnt/nas/openclaw/reports/models/s100_official_llm_baseline_20260606-004107/official_llm_baseline_probe.md` with `sdk_exists: True`, `config_dir_count: 8`, `official_hbm_download_entry_count: 14`, `qwen_existing_hbm_count: 1`, `official_qwen_local_runtime_report_present: True`, `official_qwen_runtime_completed: False`, `official_qwen_memory_alloc_failure_observed: True`, and `similar_issue_evidence_available_for_official_qwen: True`.
 
 ## TODO
@@ -5515,7 +5612,7 @@ docs/baseline_progress_2026-06-03_dream7b_segmented_bpu_hbm.md
 - Do not promote `selected_topology: [0, 1, 8]` as a forward-path optimization; the selected triplet forward-path probe records `selected_triplet_forward_supported: False` and `reboot_or_disconnect_observed: True`.
 - Do not switch `dream7b-bpu-fine-batch-forward` defaults to packed adjacent window size 3; the window3 feasibility probe records `expected_window3_failure_observed: True`.
 - Do not attempt a four-segment resident topology on the current HBM artifacts without a new split or runtime change; the seeded quad probe has `successful_seeded_quad_count: 0`.
-- Run a minimal HBMEM/UCP common-buffer allocation matrix against the exact backend/heap flags used by official Qwen; direct debugfs shows reserved ION heaps exist, while `system_heap_total_size` and `system_contig_heap_total_size` are both `0`, and performance-mode register apply alone did not clear official Qwen allocation failure.
+- Compare the passing direct HBMEM/UCP allocation matrix with official Qwen's `backend: 9` failure path and inspect `libhbucp` backend-to-HBMEM flag selection; direct allocation of Qwen's logged sizes succeeds, so the failure is not explained by raw size-only common-buffer availability.
 - Evaluate smaller HBM artifacts, different segment boundaries, or runtime residency support before expecting sustained 128TOPS-level average utilization from Dream 7B.
 - Continue collecting long-repeat reports before tightening the current `DREAM7B_BPU_FINE_FORWARD_LONG_REPEAT_MAX_WALL_SPREAD_RATIO` default of `0.10`.
 - Keep queue cleanup report-only until an explicit apply mode and archive directory migration rule are approved.

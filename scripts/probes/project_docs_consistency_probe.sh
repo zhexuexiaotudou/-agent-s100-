@@ -69,6 +69,7 @@ required_files=(
   "scripts/probes/s100_official_llm_baseline_probe.sh"
   "scripts/probes/s100_official_qwen_runtime_probe.sh"
   "scripts/probes/s100_bpu_memory_pool_probe.sh"
+  "scripts/probes/s100_hbmem_common_buffer_matrix_probe.sh"
   "scripts/probes/s100_official_qwen_performance_mode_retest_probe.sh"
   "scripts/probes/dream7b_bpu_batch_queue_retention_probe.sh"
   "scripts/probes/dream7b_bpu_deployment_acceptance_probe.sh"
@@ -100,6 +101,7 @@ required_readme_strings=(
   "scripts/probes/s100_official_llm_baseline_probe.sh"
   "scripts/probes/s100_official_qwen_runtime_probe.sh"
   "scripts/probes/s100_bpu_memory_pool_probe.sh"
+  "scripts/probes/s100_hbmem_common_buffer_matrix_probe.sh"
   "scripts/probes/s100_official_qwen_performance_mode_retest_probe.sh"
   "dream7b_bpu_text_queue_systemd_probe.sh"
 )
@@ -386,6 +388,8 @@ required_reference_strings=(
   "ok_s100_official_qwen_runtime_probe"
   "bpu_memory_pool_probe"
   "ok_s100_bpu_memory_pool_probe"
+  "hbmem_common_buffer_matrix_probe"
+  "ok_s100_hbmem_common_buffer_matrix_probe"
   "performance_mode_retest_probe"
   "ok_s100_official_qwen_performance_mode_retest_probe"
   "supported_model_names_from_resolve_model"
@@ -404,6 +408,10 @@ required_reference_strings=(
   "reserved_memory_summary"
   "allocation_failure_interpretation"
   "minimal HBMEM/UCP common-buffer allocation matrix"
+  "qwen_log_size_success_count"
+  "qwen_log_size_failure_count"
+  "ucp_success_count"
+  "backend: 9"
   "ion_meminfo_shebang_interpreter_exists"
   "memstat_shebang_interpreter_exists"
   "similar_issue_evidence_available_for_official_qwen"
@@ -1646,6 +1654,38 @@ if [[ -f scripts/probes/s100_bpu_memory_pool_probe.sh ]]; then
   done
   if ! grep -F -- 'D-Robotics_LLM_S100_1.0.0_SDK' scripts/probes/s100_bpu_memory_pool_probe.sh >/dev/null; then
     errors+=("s100_bpu_memory_pool_probe.sh missing D-Robotics_LLM_S100_1.0.0_SDK")
+  fi
+fi
+
+if [[ -f scripts/probes/s100_hbmem_common_buffer_matrix_probe.sh ]]; then
+  for text in \
+    "S100_HBMEM_MATRIX_SDK_ROOT" \
+    "hb_mem_alloc_com_buf" \
+    "hb_mem_free_buf" \
+    "hbUCPMalloc" \
+    "hbUCPMallocCached" \
+    "786432" \
+    "2359296" \
+    "hbmem_common_buffer_matrix.jsonl" \
+    "hbmem_common_buffer_matrix_probe.json" \
+    "hbmem_common_buffer_matrix_probe.md" \
+    "ok_s100_hbmem_common_buffer_matrix_probe" \
+    "qwen_log_sizes" \
+    "qwen_log_size_success_count" \
+    "qwen_log_size_failure_count" \
+    "ucp_success_count" \
+    "backend: 9" \
+    "libhbucp" \
+    "HB_MEM_USAGE_HW_BPU" \
+    "HB_MEM_USAGE_PRIV_HEAP_DMA" \
+    "HB_MEM_USAGE_PRIV_HEAP_RESERVED" \
+    "HB_MEM_USAGE_PRIV_HEAP_2_RESERVED"; do
+    if ! grep -F -- "$text" scripts/probes/s100_hbmem_common_buffer_matrix_probe.sh >/dev/null; then
+      errors+=("s100_hbmem_common_buffer_matrix_probe.sh missing $text")
+    fi
+  done
+  if ! grep -F -- 'D-Robotics_LLM_S100_1.0.0_SDK' scripts/probes/s100_hbmem_common_buffer_matrix_probe.sh >/dev/null; then
+    errors+=("s100_hbmem_common_buffer_matrix_probe.sh missing D-Robotics_LLM_S100_1.0.0_SDK")
   fi
 fi
 
