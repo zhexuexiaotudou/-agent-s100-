@@ -1147,6 +1147,50 @@ else:
         },
     )
 
+selected_pair_candidate_service_telemetry_path, selected_pair_candidate_service_telemetry = latest_json("dream7b_bpu_selected_pair_candidate_service_telemetry_*/systemd_telemetry_probe.json")
+if selected_pair_candidate_service_telemetry is None:
+    add_check("selected_pair_candidate_service_telemetry", selected_pair_candidate_service_telemetry_path, False, {"reason": "missing selected_pair_candidate_service_telemetry systemd_telemetry_probe.json"})
+else:
+    comparison = selected_pair_candidate_service_telemetry.get("comparison_to_default_systemd_telemetry") or {}
+    ok = (
+        selected_pair_candidate_service_telemetry.get("verdict") == "ok_dream7b_bpu_batch_queue_systemd_telemetry_probe"
+        and selected_pair_candidate_service_telemetry.get("service_name") == "dream7b-bpu-selected-pair-candidate.service"
+        and selected_pair_candidate_service_telemetry.get("service_status_before") == "active"
+        and selected_pair_candidate_service_telemetry.get("service_enabled_before") == "enabled"
+        and selected_pair_candidate_service_telemetry.get("service_status_after") == "active"
+        and selected_pair_candidate_service_telemetry.get("service_enabled_after") == "enabled"
+        and selected_pair_candidate_service_telemetry.get("expected_forward_command") == "dream7b-bpu-selected-pair-batch-forward"
+        and selected_pair_candidate_service_telemetry.get("expected_window_execution_mode") == "selected-pair-resident"
+        and selected_pair_candidate_service_telemetry.get("expected_child_process_count") == 2
+        and selected_pair_candidate_service_telemetry.get("job_count") == 3
+        and selected_pair_candidate_service_telemetry.get("request_count") == min_batch_capacity
+        and selected_pair_candidate_service_telemetry.get("processed_request_count") == 48
+        and selected_pair_candidate_service_telemetry.get("accepted_request_count") == 48
+        and selected_pair_candidate_service_telemetry.get("deferred_request_count") == 0
+        and selected_pair_candidate_service_telemetry.get("result_count") == 48
+        and selected_pair_candidate_service_telemetry.get("batch_counts") == [16, 16, 16]
+        and selected_pair_candidate_service_telemetry.get("max_bpu_loading", 0) > 0
+        and selected_pair_candidate_service_telemetry.get("nonzero_bpu_loading_sample_count", 0) > 0
+        and comparison.get("candidate_wall_time_improved_vs_default_systemd") is True
+        and comparison.get("default_systemd_telemetry_path")
+        and not selected_pair_candidate_service_telemetry.get("errors")
+    )
+    add_check(
+        "selected_pair_candidate_service_telemetry",
+        selected_pair_candidate_service_telemetry_path,
+        ok,
+        {
+            "verdict": selected_pair_candidate_service_telemetry.get("verdict"),
+            "service_name": selected_pair_candidate_service_telemetry.get("service_name"),
+            "processed_request_count": selected_pair_candidate_service_telemetry.get("processed_request_count"),
+            "batch_counts": selected_pair_candidate_service_telemetry.get("batch_counts"),
+            "amortized_wall_ms_per_processed_request": selected_pair_candidate_service_telemetry.get("amortized_wall_ms_per_processed_request"),
+            "avg_bpu_loading": selected_pair_candidate_service_telemetry.get("avg_bpu_loading"),
+            "max_bpu_loading": selected_pair_candidate_service_telemetry.get("max_bpu_loading"),
+            "comparison_to_default_systemd_telemetry": comparison,
+        },
+    )
+
 payload = {
     "generated_at": datetime.now().astimezone().isoformat(),
     "verdict": "ok_dream7b_bpu_deployment_acceptance_probe" if not errors else "failed_dream7b_bpu_deployment_acceptance_probe",

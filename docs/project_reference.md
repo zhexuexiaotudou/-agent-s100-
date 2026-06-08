@@ -1027,6 +1027,19 @@ queue_dir = /mnt/nas/openclaw/queues/dream7b-bpu
 output_dir = /mnt/nas/openclaw/reports/models/dream7b_bpu_batch_queue_service_systemd
 ```
 
+Selected-pair candidate arguments copied from the script:
+
+```text
+service_name = dream7b-bpu-selected-pair-candidate.service
+queue_dir = /mnt/nas/openclaw/queues/dream7b-bpu-selected-pair-candidate
+output_dir = /mnt/nas/openclaw/reports/models/dream7b_bpu_selected_pair_candidate_service_systemd
+run_prefix = dream7b_bpu_selected_pair_candidate_service_telemetry
+expected_forward_command = dream7b-bpu-selected-pair-batch-forward
+expected_window_execution_mode = selected-pair-resident
+expected_child_process_count = 2
+comparison_to_default_systemd_telemetry
+```
+
 Environment variables copied from the script:
 
 ```text
@@ -1390,13 +1403,20 @@ job_name
 status
 summary_path
 runner_verdict
+forward_command
 processed_count
 batch_count
+expected_forward_command
+expected_window_execution_mode
+expected_child_process_count
 final_shape
 bpu_lock.path
 execution_mode
 window_execution_mode
 child_process_count
+comparison_to_default_systemd_telemetry
+candidate_wall_time_improved_vs_default_systemd
+candidate_avg_bpu_loading_not_worse_than_default_systemd
 ```
 
 Latest recorded report:
@@ -1417,6 +1437,50 @@ Latest recorded queue job summaries:
 /mnt/nas/openclaw/reports/models/dream7b_bpu_batch_queue_service_systemd/jobs/systemd_telemetry_20260605-133919_001/queue_summary.json
 /mnt/nas/openclaw/reports/models/dream7b_bpu_batch_queue_service_systemd/jobs/systemd_telemetry_20260605-133919_002/queue_summary.json
 /mnt/nas/openclaw/reports/models/dream7b_bpu_batch_queue_service_systemd/jobs/systemd_telemetry_20260605-133919_003/queue_summary.json
+```
+
+Latest selected-pair candidate service telemetry report:
+
+```text
+/mnt/nas/openclaw/reports/models/dream7b_bpu_selected_pair_candidate_service_telemetry_20260606-043944/systemd_telemetry_probe.md
+```
+
+Latest selected-pair candidate service telemetry JSON:
+
+```text
+/mnt/nas/openclaw/reports/models/dream7b_bpu_selected_pair_candidate_service_telemetry_20260606-043944/systemd_telemetry_probe.json
+```
+
+Verified selected-pair candidate service telemetry fields copied from `systemd_telemetry_probe.json`:
+
+```text
+verdict: ok_dream7b_bpu_batch_queue_systemd_telemetry_probe
+service_name: dream7b-bpu-selected-pair-candidate.service
+job_count: 3
+request_count: 16
+processed_request_count: 48
+accepted_request_count: 48
+deferred_request_count: 0
+result_count: 48
+batch_counts: [16, 16, 16]
+expected_forward_command: dream7b-bpu-selected-pair-batch-forward
+expected_window_execution_mode: selected-pair-resident
+expected_child_process_count: 2
+amortized_wall_ms_per_processed_request: 1432.54
+amortized_load_ms_per_processed_request: 1441.366
+amortized_run_ms_per_processed_request: 147.708
+avg_bpu_loading: 8.788
+max_bpu_loading: 98.0
+comparison_to_default_systemd_telemetry.default_systemd_telemetry_path: /mnt/nas/openclaw/reports/models/dream7b_bpu_batch_queue_systemd_telemetry_20260605-133919/systemd_telemetry_probe.json
+comparison_to_default_systemd_telemetry.default_amortized_wall_ms_per_processed_request: 1662.737
+comparison_to_default_systemd_telemetry.candidate_amortized_wall_ms_per_processed_request: 1432.54
+comparison_to_default_systemd_telemetry.wall_ms_delta_ratio_vs_default_systemd: 0.138445
+comparison_to_default_systemd_telemetry.default_avg_bpu_loading: 9.616
+comparison_to_default_systemd_telemetry.candidate_avg_bpu_loading: 8.788
+comparison_to_default_systemd_telemetry.avg_bpu_loading_delta_vs_default_systemd: -0.828
+comparison_to_default_systemd_telemetry.candidate_wall_time_improved_vs_default_systemd: True
+comparison_to_default_systemd_telemetry.candidate_avg_bpu_loading_not_worse_than_default_systemd: False
+errors: []
 ```
 
 ### `dream7b-bpu-batch-queue-retention-probe`
@@ -6540,11 +6604,11 @@ errors: []
 Verified deployment acceptance fields copied from `deployment_acceptance_probe.json`:
 
 ```text
-acceptance_report: /mnt/nas/openclaw/reports/models/dream7b_bpu_deployment_acceptance_20260606-042825/deployment_acceptance_probe.md
-acceptance_json: /mnt/nas/openclaw/reports/models/dream7b_bpu_deployment_acceptance_20260606-042825/deployment_acceptance_probe.json
+acceptance_report: /mnt/nas/openclaw/reports/models/dream7b_bpu_deployment_acceptance_20260606-044801/deployment_acceptance_probe.md
+acceptance_json: /mnt/nas/openclaw/reports/models/dream7b_bpu_deployment_acceptance_20260606-044801/deployment_acceptance_probe.json
 verdict: ok_dream7b_bpu_deployment_acceptance_probe
-check_count: 27
-passed_check_count: 27
+check_count: 28
+passed_check_count: 28
 min_batch_capacity: 16
 min_systemd_batch_requests: 16
 min_systemd_telemetry_requests: 48
@@ -6563,6 +6627,7 @@ long_repeat.ok: True
 queue_retention.ok: True
 selected_pair_telemetry.ok: True
 selected_pair_candidate_service.ok: True
+selected_pair_candidate_service_telemetry.ok: True
 warnings: []
 errors: []
 ```

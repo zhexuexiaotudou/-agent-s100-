@@ -169,6 +169,9 @@ required_reference_strings=(
   "install-dream7b-bpu-selected-pair-candidate-service"
   "dream7b-bpu-selected-pair-candidate-service-probe"
   "dream7b-bpu-selected-pair-candidate.service"
+  "dream7b_bpu_selected_pair_candidate_service_telemetry"
+  "comparison_to_default_systemd_telemetry"
+  "candidate_wall_time_improved_vs_default_systemd"
   "s100-official-llm-baseline-probe"
   "s100-qwen-backend9-baseline-probe"
   "s100-qwen-bpu-core-sweep-probe"
@@ -1068,6 +1071,21 @@ if [[ -f scripts/probes/dream7b_bpu_batch_queue_systemd_telemetry_probe.sh ]]; t
   if ! grep -F -- "max_bpu_loading" scripts/probes/dream7b_bpu_batch_queue_systemd_telemetry_probe.sh >/dev/null; then
     errors+=("dream7b_bpu_batch_queue_systemd_telemetry_probe.sh missing max_bpu_loading")
   fi
+  for text in \
+    "dream7b-bpu-selected-pair-candidate.service" \
+    "dream7b_bpu_selected_pair_candidate_service_telemetry" \
+    "dream7b-bpu-selected-pair-batch-forward" \
+    "selected-pair-resident" \
+    "expected_forward_command" \
+    "expected_window_execution_mode" \
+    "expected_child_process_count" \
+    "comparison_to_default_systemd_telemetry" \
+    "candidate_wall_time_improved_vs_default_systemd" \
+    "candidate_avg_bpu_loading_not_worse_than_default_systemd"; do
+    if ! grep -F -- "$text" scripts/probes/dream7b_bpu_batch_queue_systemd_telemetry_probe.sh >/dev/null; then
+      errors+=("dream7b_bpu_batch_queue_systemd_telemetry_probe.sh missing selected-pair candidate telemetry string $text")
+    fi
+  done
 fi
 
 if [[ -f scripts/probes/dream7b_bpu_diffusion_generate_telemetry_probe.sh ]]; then
@@ -2459,6 +2477,7 @@ if [[ -f scripts/probes/dream7b_bpu_deployment_acceptance_probe.sh ]]; then
     "dream7b_bpu_utilization_gap_*/utilization_gap_probe.json" \
     "dream7b_bpu_selected_pair_telemetry_*/selected_pair_telemetry_probe.json" \
     "dream7b_bpu_selected_pair_candidate_service_*/selected_pair_candidate_service_probe.json" \
+    "dream7b_bpu_selected_pair_candidate_service_telemetry_*/systemd_telemetry_probe.json" \
     "dream7b_bpu_persistent_pair_cache_*/persistent_pair_cache_probe.json" \
     "dream7b_bpu_held_pair_residency_matrix_*/held_pair_residency_matrix_probe.json" \
     "dream7b_bpu_single_segment_residency_matrix_*/single_segment_residency_matrix_probe.json" \
@@ -2486,6 +2505,7 @@ if [[ -f scripts/probes/dream7b_bpu_deployment_acceptance_probe.sh ]]; then
     "utilization_gap" \
     "selected_pair_telemetry" \
     "selected_pair_candidate_service" \
+    "selected_pair_candidate_service_telemetry" \
     "persistent_pair_cache" \
     "held_pair_residency_matrix" \
     "single_segment_residency_matrix" \
@@ -2520,6 +2540,10 @@ if [[ -f scripts/probes/dream7b_bpu_deployment_acceptance_probe.sh ]]; then
     "dream7b-bpu-selected-pair-batch-forward" \
     "selected_pair_candidate" \
     "default_service_replaced" \
+    "candidate_wall_time_improved_vs_default_systemd" \
+    "comparison_to_default_systemd_telemetry" \
+    "expected_window_execution_mode" \
+    "expected_child_process_count" \
     "all_pair_workers_ready" \
     "launch_stopped_reason" \
     "ready_holder_pair_count" \
