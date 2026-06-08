@@ -2622,6 +2622,130 @@ next_optimization_target: do not switch production defaults to window3; use sele
 errors: []
 ```
 
+### `dream7b-bpu-selected-triplet-forward-path-probe`
+
+Source file: `scripts/probes/dream7b_bpu_selected_triplet_forward_path_probe.sh`
+
+Installed command on S100P:
+
+```text
+/usr/local/bin/dream7b-bpu-selected-triplet-forward-path-probe
+```
+
+Default argument copied from the script:
+
+```text
+report_root = /mnt/nas/openclaw/reports/models
+```
+
+Environment variables copied from the script:
+
+```text
+DREAM7B_BPU_HBM_DIR
+DREAM7B_BPU_FINE_HBM_DIR
+DREAM7B_BPU_SELECTED_TRIPLET_TOPOLOGY_JSON
+DREAM7B_BPU_SELECTED_TRIPLET_BASELINE_FORWARD_CMD
+DREAM7B_BPU_SELECTED_TRIPLET_BATCH_COUNT
+DREAM7B_BPU_SELECTED_TRIPLET_TOP_K
+DREAM7B_BPU_SELECTED_TRIPLET_TIMEOUT_SEC
+DREAM7B_BPU_SELECTED_TRIPLET_ALLOW_CRASH_RETRY
+```
+
+Default values copied from the script:
+
+```text
+base_hbm_dir = /home/sunrise/.cache/openclaw/dream7b-hbm/segments6
+fine_hbm_dir = /home/sunrise/.cache/openclaw/dream7b-hbm/fine-seq16
+forward_cmd = dream7b-bpu-fine-batch-forward
+batch_count = 4
+top_k = 3
+timeout_sec = 900
+```
+
+Output files copied from the script:
+
+```text
+tokens_batch.json
+selected_triplet_forward_summary.json
+selected_triplet_forward_path_probe.json
+selected_triplet_forward_path_probe.md
+baseline.forward.stdout
+baseline.forward.stderr
+baseline_pair_window_forward/summary.json
+```
+
+Crash/reboot guard copied from the script:
+
+```text
+If the latest dream7b_bpu_selected_triplet_forward_path_* directory contains tokens_batch.json but not selected_triplet_forward_path_probe.json, the probe writes a structured guard report and exits without retrying BPU forward unless DREAM7B_BPU_SELECTED_TRIPLET_ALLOW_CRASH_RETRY=1.
+```
+
+Output fields copied from the script:
+
+```text
+generated_at
+verdict
+run_dir
+topology_json
+forward_cmd
+base_hbm_dir
+fine_hbm_dir
+batch_count
+top_k
+timeout_sec
+tokens_batch_json
+selected_triplet_forward_supported
+reboot_or_disconnect_observed
+expected_reboot_guard_observed
+source_incomplete_run_dir
+source_incomplete_files
+selected.selected_topology
+selected.selected_segments
+selected.selected_worker_count
+selected.selected_resident_load_ms
+selected.forward_load_ms
+selected.selected_total_load_ms
+selected.run_ms
+selected.wall_ms
+baseline.returncode
+baseline.verdict
+comparison.warm_path_load_improved
+comparison.total_path_load_improved
+comparison.reason
+next_optimization_target
+warnings
+errors
+```
+
+Latest recorded report:
+
+```text
+/mnt/nas/openclaw/reports/models/dream7b_bpu_selected_triplet_forward_path_20260606-135729/selected_triplet_forward_path_probe.md
+```
+
+Latest recorded JSON:
+
+```text
+/mnt/nas/openclaw/reports/models/dream7b_bpu_selected_triplet_forward_path_20260606-135729/selected_triplet_forward_path_probe.json
+```
+
+Verified selected triplet forward path fields copied from `selected_triplet_forward_path_probe.json`:
+
+```text
+verdict: ok_dream7b_bpu_selected_triplet_forward_path_probe
+selected_triplet_forward_supported: False
+reboot_or_disconnect_observed: True
+expected_reboot_guard_observed: True
+source_incomplete_run_dir: /mnt/nas/openclaw/reports/models/dream7b_bpu_selected_triplet_forward_path_20260606-135729
+source_incomplete_files: ['tokens_batch.json']
+selected.selected_topology: [0, 1, 8]
+selected.selected_worker_count: 3
+comparison.warm_path_load_improved: False
+comparison.total_path_load_improved: False
+next_optimization_target: do not promote selected triplet forward path; test smaller resident sets or vendor-supported multi-segment HBM residency instead
+errors: []
+```
+
 ### `dream7b-bpu-deployment-acceptance-probe`
 
 Source file: `scripts/probes/dream7b_bpu_deployment_acceptance_probe.sh`
@@ -2686,6 +2810,7 @@ dream7b_bpu_single_segment_triplet_residency_*/single_segment_triplet_residency_
 dream7b_bpu_seeded_quad_residency_*/seeded_quad_residency_probe.json
 dream7b_bpu_persistent_triplet_topology_*/persistent_triplet_topology_probe.json
 dream7b_bpu_window3_forward_feasibility_*/window3_forward_feasibility_probe.json
+dream7b_bpu_selected_triplet_forward_path_*/selected_triplet_forward_path_probe.json
 dream7b_bpu_batch_queue_systemd_telemetry_*/systemd_telemetry_probe.json
 dream7b_bpu_fine_forward_long_repeat_*/long_repeat_probe.json
 dream7b_bpu_batch_queue_retention_*/queue_retention_probe.json
@@ -2715,6 +2840,7 @@ single_segment_triplet_residency
 seeded_quad_residency
 persistent_triplet_topology
 window3_forward_feasibility
+selected_triplet_forward_path
 systemd_telemetry
 long_repeat
 queue_retention
@@ -2766,6 +2892,7 @@ Latest recorded report:
 /mnt/nas/openclaw/reports/models/dream7b_bpu_deployment_acceptance_20260606-131933/deployment_acceptance_probe.md
 /mnt/nas/openclaw/reports/models/dream7b_bpu_deployment_acceptance_20260606-133119/deployment_acceptance_probe.md
 /mnt/nas/openclaw/reports/models/dream7b_bpu_deployment_acceptance_20260606-134115/deployment_acceptance_probe.md
+/mnt/nas/openclaw/reports/models/dream7b_bpu_deployment_acceptance_20260605-234652/deployment_acceptance_probe.md
 ```
 
 Latest recorded JSON:
@@ -2793,14 +2920,15 @@ Latest recorded JSON:
 /mnt/nas/openclaw/reports/models/dream7b_bpu_deployment_acceptance_20260606-131933/deployment_acceptance_probe.json
 /mnt/nas/openclaw/reports/models/dream7b_bpu_deployment_acceptance_20260606-133119/deployment_acceptance_probe.json
 /mnt/nas/openclaw/reports/models/dream7b_bpu_deployment_acceptance_20260606-134115/deployment_acceptance_probe.json
+/mnt/nas/openclaw/reports/models/dream7b_bpu_deployment_acceptance_20260605-234652/deployment_acceptance_probe.json
 ```
 
 Verified deployment acceptance fields copied from `deployment_acceptance_probe.json`:
 
 ```text
 verdict: ok_dream7b_bpu_deployment_acceptance_probe
-check_count: 24
-passed_check_count: 24
+check_count: 25
+passed_check_count: 25
 min_batch_capacity: 16
 min_systemd_batch_requests: 16
 min_systemd_telemetry_requests: 48
@@ -2831,6 +2959,7 @@ single_segment_triplet_residency.ok: True
 seeded_quad_residency.ok: True
 persistent_triplet_topology.ok: True
 window3_forward_feasibility.ok: True
+selected_triplet_forward_path.ok: True
 systemd_telemetry.ok: True
 long_repeat.ok: True
 queue_retention.ok: True
@@ -3017,6 +3146,17 @@ window3_forward_feasibility.details.child_window_mode: pair
 window3_forward_feasibility.details.child_runtime_mode: packed
 window3_forward_feasibility.details.window_execution_mode: window-batch
 window3_forward_feasibility.details.next_optimization_target: do not switch production defaults to window3; use selected stable triplet worker or a new HBM split for the next forward-path experiment
+selected_triplet_forward_path.path: /mnt/nas/openclaw/reports/models/dream7b_bpu_selected_triplet_forward_path_20260606-135729/selected_triplet_forward_path_probe.json
+selected_triplet_forward_path.details.verdict: ok_dream7b_bpu_selected_triplet_forward_path_probe
+selected_triplet_forward_path.details.selected_triplet_forward_supported: False
+selected_triplet_forward_path.details.reboot_or_disconnect_observed: True
+selected_triplet_forward_path.details.expected_reboot_guard_observed: True
+selected_triplet_forward_path.details.source_incomplete_run_dir: /mnt/nas/openclaw/reports/models/dream7b_bpu_selected_triplet_forward_path_20260606-135729
+selected_triplet_forward_path.details.selected_topology: [0, 1, 8]
+selected_triplet_forward_path.details.selected_worker_count: 3
+selected_triplet_forward_path.details.warm_path_load_improved: False
+selected_triplet_forward_path.details.total_path_load_improved: False
+selected_triplet_forward_path.details.next_optimization_target: do not promote selected triplet forward path; test smaller resident sets or vendor-supported multi-segment HBM residency instead
 hbm_artifact_inventory.details.expected_artifact_count: 14
 hbm_artifact_inventory.details.nas_existing_count: 14
 hbm_artifact_inventory.details.local_existing_count: 14
@@ -4780,13 +4920,17 @@ docs/baseline_progress_2026-06-03_dream7b_segmented_bpu_hbm.md
 - Verified window3 forward feasibility report at `/mnt/nas/openclaw/reports/models/dream7b_bpu_window3_forward_feasibility_20260606-133931/window3_forward_feasibility_probe.md` with `direct_window3_forward_supported: False`, `expected_window3_failure_observed: True`, `stderr_contains_memory_alloc_failure: True`, and `returncode: 1`.
 - Updated `dream7b-bpu-deployment-acceptance-probe` to include `window3_forward_feasibility`.
 - Verified window3-aware deployment acceptance report at `/mnt/nas/openclaw/reports/models/dream7b_bpu_deployment_acceptance_20260606-134115/deployment_acceptance_probe.md` with `check_count: 24`, `passed_check_count: 24`, and `window3_forward_feasibility.ok: True`.
+- Added `dream7b-bpu-selected-triplet-forward-path-probe` for the selected `[0, 1, 8]` triplet forward-path experiment, plus a reboot/disconnect guard that records an incomplete run without retrying unless `DREAM7B_BPU_SELECTED_TRIPLET_ALLOW_CRASH_RETRY=1`.
+- Verified selected triplet forward path report at `/mnt/nas/openclaw/reports/models/dream7b_bpu_selected_triplet_forward_path_20260606-135729/selected_triplet_forward_path_probe.md` with `selected_triplet_forward_supported: False`, `reboot_or_disconnect_observed: True`, `expected_reboot_guard_observed: True`, and `selected_topology: [0, 1, 8]`.
+- Updated `dream7b-bpu-deployment-acceptance-probe` to include `selected_triplet_forward_path`.
+- Verified selected-triplet-aware deployment acceptance report at `/mnt/nas/openclaw/reports/models/dream7b_bpu_deployment_acceptance_20260605-234652/deployment_acceptance_probe.md` with `check_count: 25`, `passed_check_count: 25`, and `selected_triplet_forward_path.ok: True`.
 
 ## TODO
 
 - Keep `--window-execution-mode child-process` as the fallback path until more long-run evidence extends beyond the current gated 6-run `--window-execution-mode in-process` probe.
 - Do not implement a pair-worker persistent cache on the current five-pair split; the held-pair matrix has `successful_pair_edge_count: 0`.
 - Use the single-segment results as the next residency route: two single-segment runtimes can coexist, but `segment_02_seg04_07` fails as the third resident runtime with S100 BPU `-400001` memory allocation failure.
-- Use `selected_topology: [0, 1, 8]` from the persistent triplet topology probe as the first seed for a forward-path experiment, then compare HBM load share against the current pair-window path before changing production defaults.
+- Do not promote `selected_topology: [0, 1, 8]` as a forward-path optimization; the selected triplet forward-path probe records `selected_triplet_forward_supported: False` and `reboot_or_disconnect_observed: True`.
 - Do not switch `dream7b-bpu-fine-batch-forward` defaults to packed adjacent window size 3; the window3 feasibility probe records `expected_window3_failure_observed: True`.
 - Do not attempt a four-segment resident topology on the current HBM artifacts without a new split or runtime change; the seeded quad probe has `successful_seeded_quad_count: 0`.
 - Evaluate smaller HBM artifacts, different segment boundaries, or runtime residency support before expecting sustained 128TOPS-level average utilization from Dream 7B.

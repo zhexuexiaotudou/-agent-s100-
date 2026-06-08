@@ -1010,6 +1010,42 @@ else:
         },
     )
 
+selected_triplet_forward_path, selected_triplet_forward = latest_json("dream7b_bpu_selected_triplet_forward_path_*/selected_triplet_forward_path_probe.json")
+if selected_triplet_forward is None:
+    add_check("selected_triplet_forward_path", selected_triplet_forward_path, False, {"reason": "missing selected_triplet_forward_path_probe.json"})
+else:
+    selected_details = selected_triplet_forward.get("selected") or {}
+    comparison_details = selected_triplet_forward.get("comparison") or {}
+    ok = (
+        selected_triplet_forward.get("verdict") == "ok_dream7b_bpu_selected_triplet_forward_path_probe"
+        and selected_triplet_forward.get("selected_triplet_forward_supported") is False
+        and selected_triplet_forward.get("reboot_or_disconnect_observed") is True
+        and selected_triplet_forward.get("expected_reboot_guard_observed") is True
+        and selected_details.get("selected_topology") == [0, 1, 8]
+        and selected_details.get("selected_worker_count") == 3
+        and comparison_details.get("warm_path_load_improved") is False
+        and comparison_details.get("total_path_load_improved") is False
+        and selected_triplet_forward.get("next_optimization_target")
+        and not selected_triplet_forward.get("errors")
+    )
+    add_check(
+        "selected_triplet_forward_path",
+        selected_triplet_forward_path,
+        ok,
+        {
+            "verdict": selected_triplet_forward.get("verdict"),
+            "selected_triplet_forward_supported": selected_triplet_forward.get("selected_triplet_forward_supported"),
+            "reboot_or_disconnect_observed": selected_triplet_forward.get("reboot_or_disconnect_observed"),
+            "expected_reboot_guard_observed": selected_triplet_forward.get("expected_reboot_guard_observed"),
+            "source_incomplete_run_dir": selected_triplet_forward.get("source_incomplete_run_dir"),
+            "selected_topology": selected_details.get("selected_topology"),
+            "selected_worker_count": selected_details.get("selected_worker_count"),
+            "warm_path_load_improved": comparison_details.get("warm_path_load_improved"),
+            "total_path_load_improved": comparison_details.get("total_path_load_improved"),
+            "next_optimization_target": selected_triplet_forward.get("next_optimization_target"),
+        },
+    )
+
 payload = {
     "generated_at": datetime.now().astimezone().isoformat(),
     "verdict": "ok_dream7b_bpu_deployment_acceptance_probe" if not errors else "failed_dream7b_bpu_deployment_acceptance_probe",
