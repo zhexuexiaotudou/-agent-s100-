@@ -10,6 +10,7 @@ forward_cmd="${DREAM7B_BPU_SELECTED_PAIR_BASELINE_FORWARD_CMD:-dream7b-bpu-fine-
 batch_count="${DREAM7B_BPU_SELECTED_PAIR_BATCH_COUNT:-4}"
 top_k="${DREAM7B_BPU_SELECTED_PAIR_TOP_K:-3}"
 timeout_sec="${DREAM7B_BPU_SELECTED_PAIR_TIMEOUT_SEC:-900}"
+selected_only="${DREAM7B_BPU_SELECTED_PAIR_ONLY:-0}"
 
 case "$report_root" in
   /tmp/*|/mnt/nas/openclaw/reports|/mnt/nas/openclaw/reports/*|/root/.openclaw/workspace/reports|/root/.openclaw/workspace/reports/*) ;;
@@ -57,6 +58,13 @@ if ! [[ "$timeout_sec" =~ ^[1-9][0-9]*$ ]]; then
   echo "DREAM7B_BPU_SELECTED_PAIR_TIMEOUT_SEC must be a positive integer." >&2
   exit 2
 fi
+case "$selected_only" in
+  0|1) ;;
+  *)
+    echo "DREAM7B_BPU_SELECTED_PAIR_ONLY must be 0 or 1." >&2
+    exit 2
+    ;;
+esac
 if ! command -v "$forward_cmd" >/dev/null 2>&1; then
   echo "Missing deployed S100P command: $forward_cmd" >&2
   exit 4
@@ -77,7 +85,8 @@ python3 - \
   "$forward_cmd" \
   "$batch_count" \
   "$top_k" \
-  "$timeout_sec" <<'PY'
+  "$timeout_sec" \
+  "$selected_only" <<'PY'
 import gc
 import itertools
 import json
@@ -102,6 +111,7 @@ forward_cmd = sys.argv[7]
 batch_count = int(sys.argv[8])
 top_k = int(sys.argv[9])
 timeout_sec = int(sys.argv[10])
+selected_only = sys.argv[11] == "1"
 
 seq_len = 16
 hidden_size = 3584
@@ -446,7 +456,17 @@ selected_summary["subprocess_wall_ms"] = selected_elapsed_ms
 selected_summary_path = run_dir / "selected_pair_forward_summary.json"
 selected_summary_path.write_text(json.dumps(selected_summary, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
 
-baseline = run_baseline_forward()
+baseline = {
+    "command": [],
+    "returncode": None,
+    "wall_ms_from_subprocess": None,
+    "stdout": "",
+    "stderr": "",
+    "summary_json": "",
+    "summary": {},
+}
+if not selected_only:
+    baseline = run_baseline_forward()
 baseline_summary = baseline.get("summary") or {}
 baseline_load_ms = float(baseline_summary.get("load_ms") or 0.0)
 baseline_run_ms = float(baseline_summary.get("run_ms") or 0.0)
@@ -458,24 +478,35 @@ errors = []
 warnings = []
 if selected_summary.get("verdict") != "ok_selected_pair_forward":
     errors.append(f"unexpected selected verdict: {selected_summary.get('verdict')}")
-if baseline.get("returncode") != 0:
+if not selected_only and baseline.get("returncode") != 0:
     errors.append(f"baseline forward returned {baseline.get('returncode')}")
-if baseline_summary.get("verdict") != "ok_dream7b_segmented_hbm_python_forward":
+if not selected_only and baseline_summary.get("verdict") != "ok_dream7b_segmented_hbm_python_forward":
     errors.append(f"unexpected baseline verdict: {baseline_summary.get('verdict')}")
-if baseline_summary.get("batch_count") != batch_count:
+if not selected_only and baseline_summary.get("batch_count") != batch_count:
     errors.append(f"unexpected baseline batch_count: {baseline_summary.get('batch_count')}")
 if selected_summary.get("final_shapes") != [[1, seq_len, vocab_size] for _ in range(batch_count)]:
     errors.append(f"unexpected selected final_shapes: {selected_summary.get('final_shapes')}")
 
-warm_load_ms_delta = round(baseline_load_ms - selected_warm_load_ms, 3)
-total_load_ms_delta = round(baseline_load_ms - selected_total_load_ms, 3)
-warm_load_ms_delta_ratio = round(warm_load_ms_delta / baseline_load_ms, 6) if baseline_load_ms else 0.0
-total_load_ms_delta_ratio = round(total_load_ms_delta / baseline_load_ms, 6) if baseline_load_ms else 0.0
-if warm_load_ms_delta <= 0:
+warm_load_ms_delta = None
+total_load_ms_delta = None
+warm_load_ms_delta_ratio = None
+total_load_ms_delta_ratio = None
+warm_path_load_improved = False
+total_path_load_improved = False
+if selected_only:
+    warnings.append("baseline comparison skipped because DREAM7B_BPU_SELECTED_PAIR_ONLY=1")
+else:
+    warm_load_ms_delta = round(baseline_load_ms - selected_warm_load_ms, 3)
+    total_load_ms_delta = round(baseline_load_ms - selected_total_load_ms, 3)
+    warm_load_ms_delta_ratio = round(warm_load_ms_delta / baseline_load_ms, 6) if baseline_load_ms else 0.0
+    total_load_ms_delta_ratio = round(total_load_ms_delta / baseline_load_ms, 6) if baseline_load_ms else 0.0
+    warm_path_load_improved = warm_load_ms_delta > 0
+    total_path_load_improved = total_load_ms_delta > 0
+if not selected_only and warm_load_ms_delta <= 0:
     warnings.append(
         f"selected warm forward_load_ms did not improve baseline load_ms: baseline={baseline_load_ms}, selected_warm={selected_warm_load_ms}"
     )
-if total_load_ms_delta <= 0:
+if not selected_only and total_load_ms_delta <= 0:
     warnings.append(
         f"selected total load including resident startup did not improve baseline load_ms: baseline={baseline_load_ms}, selected_total={selected_total_load_ms}"
     )
@@ -491,6 +522,7 @@ payload = {
     "batch_count": batch_count,
     "top_k": top_k,
     "timeout_sec": timeout_sec,
+    "selected_only": selected_only,
     "tokens_batch_json": str(tokens_batch_json),
     "selected_summary_json": str(selected_summary_path),
     "selected": {
@@ -533,8 +565,9 @@ payload = {
         "warm_load_ms_delta_ratio_vs_baseline": warm_load_ms_delta_ratio,
         "total_load_ms_delta_vs_baseline": total_load_ms_delta,
         "total_load_ms_delta_ratio_vs_baseline": total_load_ms_delta_ratio,
-        "warm_path_load_improved": warm_load_ms_delta > 0,
-        "total_path_load_improved": total_load_ms_delta > 0,
+        "warm_path_load_improved": warm_path_load_improved,
+        "total_path_load_improved": total_path_load_improved,
+        "baseline_skipped": selected_only,
     },
     "next_optimization_target": "promote selected-pair worker path only after batch16 and telemetry probes confirm the warm-load reduction improves sustained BPU utilization",
     "warnings": warnings,

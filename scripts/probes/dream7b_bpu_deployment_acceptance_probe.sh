@@ -1046,6 +1046,49 @@ else:
         },
     )
 
+selected_pair_telemetry_path, selected_pair_telemetry = latest_json("dream7b_bpu_selected_pair_telemetry_*/selected_pair_telemetry_probe.json")
+if selected_pair_telemetry is None:
+    add_check("selected_pair_telemetry", selected_pair_telemetry_path, False, {"reason": "missing selected_pair_telemetry_probe.json"})
+else:
+    selected_pair_details = selected_pair_telemetry.get("selected") or {}
+    selected_pair_comparison = selected_pair_telemetry.get("comparison_to_default_runtime_telemetry") or {}
+    ok = (
+        selected_pair_telemetry.get("verdict") == "ok_dream7b_bpu_selected_pair_telemetry_probe"
+        and int(selected_pair_telemetry.get("batch_count") or 0) >= min_batch_capacity
+        and float(selected_pair_telemetry.get("max_bpu_loading") or 0.0) > 0.0
+        and float(selected_pair_telemetry.get("avg_bpu_loading") or 0.0) > 0.0
+        and selected_pair_details.get("selected_pair") == [1, 8]
+        and selected_pair_details.get("selected_pair_covers_all_segments") is True
+        and selected_pair_details.get("final_shapes") == [[1, 16, 152064] for _ in range(int(selected_pair_telemetry.get("batch_count") or 0))]
+        and selected_pair_comparison.get("selected_wall_time_improved_vs_default_runtime") is True
+        and selected_pair_comparison.get("wall_ms_delta_ratio_vs_default_runtime") is not None
+        and selected_pair_telemetry.get("next_optimization_target")
+        and not selected_pair_telemetry.get("errors")
+    )
+    add_check(
+        "selected_pair_telemetry",
+        selected_pair_telemetry_path,
+        ok,
+        {
+            "verdict": selected_pair_telemetry.get("verdict"),
+            "batch_count": selected_pair_telemetry.get("batch_count"),
+            "selected_pair": selected_pair_details.get("selected_pair"),
+            "selected_segments": selected_pair_details.get("selected_segments"),
+            "selected_pair_covers_all_segments": selected_pair_details.get("selected_pair_covers_all_segments"),
+            "selected_wall_ms": selected_pair_details.get("wall_ms"),
+            "selected_forward_load_ms": selected_pair_details.get("forward_load_ms"),
+            "selected_run_ms": selected_pair_details.get("run_ms"),
+            "max_bpu_loading": selected_pair_telemetry.get("max_bpu_loading"),
+            "avg_bpu_loading": selected_pair_telemetry.get("avg_bpu_loading"),
+            "wall_ms_delta_vs_default_runtime": selected_pair_comparison.get("wall_ms_delta_vs_default_runtime"),
+            "wall_ms_delta_ratio_vs_default_runtime": selected_pair_comparison.get("wall_ms_delta_ratio_vs_default_runtime"),
+            "avg_bpu_loading_delta_vs_default_runtime": selected_pair_comparison.get("avg_bpu_loading_delta_vs_default_runtime"),
+            "selected_wall_time_improved_vs_default_runtime": selected_pair_comparison.get("selected_wall_time_improved_vs_default_runtime"),
+            "selected_avg_bpu_loading_improved_vs_default_runtime": selected_pair_comparison.get("selected_avg_bpu_loading_improved_vs_default_runtime"),
+            "next_optimization_target": selected_pair_telemetry.get("next_optimization_target"),
+        },
+    )
+
 payload = {
     "generated_at": datetime.now().astimezone().isoformat(),
     "verdict": "ok_dream7b_bpu_deployment_acceptance_probe" if not errors else "failed_dream7b_bpu_deployment_acceptance_probe",

@@ -67,6 +67,7 @@ required_files=(
   "scripts/probes/dream7b_bpu_window3_forward_feasibility_probe.sh"
   "scripts/probes/dream7b_bpu_selected_triplet_forward_path_probe.sh"
   "scripts/probes/dream7b_bpu_selected_pair_forward_path_probe.sh"
+  "scripts/probes/dream7b_bpu_selected_pair_telemetry_probe.sh"
   "scripts/probes/s100_official_llm_baseline_probe.sh"
   "scripts/probes/s100_official_qwen_runtime_probe.sh"
   "scripts/probes/s100_bpu_memory_pool_probe.sh"
@@ -103,6 +104,7 @@ required_readme_strings=(
   "scripts/probes/dream7b_bpu_window3_forward_feasibility_probe.sh"
   "scripts/probes/dream7b_bpu_selected_triplet_forward_path_probe.sh"
   "scripts/probes/dream7b_bpu_selected_pair_forward_path_probe.sh"
+  "scripts/probes/dream7b_bpu_selected_pair_telemetry_probe.sh"
   "scripts/probes/s100_official_llm_baseline_probe.sh"
   "scripts/probes/s100_official_qwen_runtime_probe.sh"
   "scripts/probes/s100_bpu_memory_pool_probe.sh"
@@ -151,6 +153,7 @@ required_reference_strings=(
   "dream7b-bpu-window3-forward-feasibility-probe"
   "dream7b-bpu-selected-triplet-forward-path-probe"
   "dream7b-bpu-selected-pair-forward-path-probe"
+  "dream7b-bpu-selected-pair-telemetry-probe"
   "s100-official-llm-baseline-probe"
   "s100-qwen-backend9-baseline-probe"
   "s100-qwen-bpu-core-sweep-probe"
@@ -316,6 +319,13 @@ required_reference_strings=(
   "nonzero_bpu_loading_sample_count"
   "max_bpu_loading"
   "avg_bpu_loading"
+  "selected_pair_telemetry_probe"
+  "ok_dream7b_bpu_selected_pair_telemetry_probe"
+  "selected_pair_telemetry"
+  "comparison_to_default_runtime_telemetry"
+  "wall_ms_delta_ratio_vs_default_runtime"
+  "selected_wall_time_improved_vs_default_runtime"
+  "selected_avg_bpu_loading_improved_vs_default_runtime"
   "utilization_gap_probe"
   "ok_dream7b_bpu_utilization_gap_probe"
   "diagnosis"
@@ -1152,6 +1162,7 @@ if [[ -f scripts/probes/dream7b_bpu_utilization_gap_probe.sh ]]; then
     "dream7b_bpu_batch_queue_systemd_telemetry_*/systemd_telemetry_probe.json" \
     "dream7b_bpu_diffusion_batch_generate_sustained_*/batch_generation_sustained_probe.json" \
     "dream7b_bpu_diffusion_batch_generate_telemetry_*/batch_generation_telemetry_probe.json" \
+    "dream7b_bpu_selected_pair_telemetry_*/selected_pair_telemetry_probe.json" \
     "utilization_gap_probe.json" \
     "utilization_gap_probe.md" \
     "ok_dream7b_bpu_utilization_gap_probe" \
@@ -1166,6 +1177,10 @@ if [[ -f scripts/probes/dream7b_bpu_utilization_gap_probe.sh ]]; then
     "amortized_load_ms_per_forward" \
     "amortized_run_ms_per_forward" \
     "runtime_telemetry" \
+    "selected_pair_telemetry" \
+    "wall_ms_delta_ratio_vs_default_runtime" \
+    "selected_wall_time_improved_vs_default_runtime" \
+    "selected_avg_bpu_loading_improved_vs_default_runtime" \
     "systemd_telemetry" \
     "sustained_generation" \
     "batch_generate_telemetry"; do
@@ -1554,7 +1569,10 @@ if [[ -f scripts/probes/dream7b_bpu_selected_pair_forward_path_probe.sh ]]; then
     "DREAM7B_BPU_SELECTED_PAIR_BATCH_COUNT" \
     "DREAM7B_BPU_SELECTED_PAIR_TOP_K" \
     "DREAM7B_BPU_SELECTED_PAIR_TIMEOUT_SEC" \
+    "DREAM7B_BPU_SELECTED_PAIR_ONLY" \
     "successful_triplets" \
+    "selected_only" \
+    "baseline_skipped" \
     "selected_pair_covers_all_segments" \
     "selected_pair_forward_summary.json" \
     "selected_pair_forward_path_probe.json" \
@@ -1586,6 +1604,51 @@ if [[ -f scripts/probes/dream7b_bpu_selected_pair_forward_path_probe.sh ]]; then
   fi
   if ! grep -F -- 'DREAM7B_BPU_SELECTED_PAIR_TIMEOUT_SEC:-900' scripts/probes/dream7b_bpu_selected_pair_forward_path_probe.sh >/dev/null; then
     errors+=("dream7b_bpu_selected_pair_forward_path_probe.sh missing default DREAM7B_BPU_SELECTED_PAIR_TIMEOUT_SEC:-900")
+  fi
+fi
+
+if [[ -f scripts/probes/dream7b_bpu_selected_pair_telemetry_probe.sh ]]; then
+  for text in \
+    "DREAM7B_BPU_SELECTED_PAIR_TELEMETRY_BATCH_COUNT" \
+    "DREAM7B_BPU_SELECTED_PAIR_TELEMETRY_MONITOR_DELAY_MS" \
+    "DREAM7B_BPU_SELECTED_PAIR_TELEMETRY_MONITOR_SAMPLE_COUNT" \
+    "DREAM7B_BPU_SELECTED_PAIR_TELEMETRY_TOP_K" \
+    "DREAM7B_BPU_SELECTED_PAIR_TELEMETRY_TIMEOUT_SEC" \
+    "DREAM7B_BPU_SELECTED_PAIR_TELEMETRY_FORWARD_CMD" \
+    "DREAM7B_BPU_SELECTED_PAIR_ONLY=1" \
+    "hrt_ucp_monitor" \
+    "selected_pair_telemetry_probe.json" \
+    "selected_pair_telemetry_probe.md" \
+    "ok_dream7b_bpu_selected_pair_telemetry_probe" \
+    "selected_pair_report_json" \
+    "bpu_loading_sample_count" \
+    "nonzero_bpu_loading_sample_count" \
+    "max_bpu_loading" \
+    "avg_bpu_loading" \
+    "default_runtime_telemetry" \
+    "comparison_to_default_runtime_telemetry" \
+    "wall_ms_delta_ratio_vs_default_runtime" \
+    "selected_wall_time_improved_vs_default_runtime" \
+    "selected_avg_bpu_loading_improved_vs_default_runtime" \
+    "rerun default runtime telemetry and selected-pair telemetry back-to-back"; do
+    if ! grep -F -- "$text" scripts/probes/dream7b_bpu_selected_pair_telemetry_probe.sh >/dev/null; then
+      errors+=("dream7b_bpu_selected_pair_telemetry_probe.sh missing $text")
+    fi
+  done
+  if ! grep -F -- 'DREAM7B_BPU_SELECTED_PAIR_TELEMETRY_BATCH_COUNT:-16' scripts/probes/dream7b_bpu_selected_pair_telemetry_probe.sh >/dev/null; then
+    errors+=("dream7b_bpu_selected_pair_telemetry_probe.sh missing default DREAM7B_BPU_SELECTED_PAIR_TELEMETRY_BATCH_COUNT:-16")
+  fi
+  if ! grep -F -- 'DREAM7B_BPU_SELECTED_PAIR_TELEMETRY_MONITOR_DELAY_MS:-100' scripts/probes/dream7b_bpu_selected_pair_telemetry_probe.sh >/dev/null; then
+    errors+=("dream7b_bpu_selected_pair_telemetry_probe.sh missing default DREAM7B_BPU_SELECTED_PAIR_TELEMETRY_MONITOR_DELAY_MS:-100")
+  fi
+  if ! grep -F -- 'DREAM7B_BPU_SELECTED_PAIR_TELEMETRY_MONITOR_SAMPLE_COUNT:-320' scripts/probes/dream7b_bpu_selected_pair_telemetry_probe.sh >/dev/null; then
+    errors+=("dream7b_bpu_selected_pair_telemetry_probe.sh missing default DREAM7B_BPU_SELECTED_PAIR_TELEMETRY_MONITOR_SAMPLE_COUNT:-320")
+  fi
+  if ! grep -F -- 'DREAM7B_BPU_SELECTED_PAIR_TELEMETRY_TOP_K:-3' scripts/probes/dream7b_bpu_selected_pair_telemetry_probe.sh >/dev/null; then
+    errors+=("dream7b_bpu_selected_pair_telemetry_probe.sh missing default DREAM7B_BPU_SELECTED_PAIR_TELEMETRY_TOP_K:-3")
+  fi
+  if ! grep -F -- 'DREAM7B_BPU_SELECTED_PAIR_TELEMETRY_TIMEOUT_SEC:-480' scripts/probes/dream7b_bpu_selected_pair_telemetry_probe.sh >/dev/null; then
+    errors+=("dream7b_bpu_selected_pair_telemetry_probe.sh missing default DREAM7B_BPU_SELECTED_PAIR_TELEMETRY_TIMEOUT_SEC:-480")
   fi
 fi
 
@@ -2208,6 +2271,7 @@ if [[ -f scripts/probes/dream7b_bpu_deployment_acceptance_probe.sh ]]; then
     "dream7b_bpu_diffusion_batch_generate_telemetry_*/batch_generation_telemetry_probe.json" \
     "dream7b_bpu_diffusion_batch_generate_sustained_*/batch_generation_sustained_probe.json" \
     "dream7b_bpu_utilization_gap_*/utilization_gap_probe.json" \
+    "dream7b_bpu_selected_pair_telemetry_*/selected_pair_telemetry_probe.json" \
     "dream7b_bpu_persistent_pair_cache_*/persistent_pair_cache_probe.json" \
     "dream7b_bpu_held_pair_residency_matrix_*/held_pair_residency_matrix_probe.json" \
     "dream7b_bpu_single_segment_residency_matrix_*/single_segment_residency_matrix_probe.json" \
@@ -2233,6 +2297,7 @@ if [[ -f scripts/probes/dream7b_bpu_deployment_acceptance_probe.sh ]]; then
     "diffusion_batch_generate_telemetry" \
     "diffusion_batch_generate_sustained" \
     "utilization_gap" \
+    "selected_pair_telemetry" \
     "persistent_pair_cache" \
     "held_pair_residency_matrix" \
     "single_segment_residency_matrix" \
@@ -2251,12 +2316,17 @@ if [[ -f scripts/probes/dream7b_bpu_deployment_acceptance_probe.sh ]]; then
     "ok_dream7b_bpu_persistent_triplet_topology_probe" \
     "ok_dream7b_bpu_window3_forward_feasibility_probe" \
     "ok_dream7b_bpu_selected_triplet_forward_path_probe" \
+    "ok_dream7b_bpu_selected_pair_telemetry_probe" \
     "diagnosis" \
     "next_optimization_target" \
     "max_observed_bpu_loading" \
     "avg_observed_bpu_loading_across_reports" \
     "runtime_load_to_run_ratio" \
     "systemd_load_to_run_ratio" \
+    "selected_pair_covers_all_segments" \
+    "wall_ms_delta_ratio_vs_default_runtime" \
+    "selected_wall_time_improved_vs_default_runtime" \
+    "selected_avg_bpu_loading_improved_vs_default_runtime" \
     "all_pair_workers_ready" \
     "launch_stopped_reason" \
     "ready_holder_pair_count" \

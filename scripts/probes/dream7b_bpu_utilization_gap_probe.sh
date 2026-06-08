@@ -71,6 +71,7 @@ def round_float(value):
 
 batch_sweep_path, batch_sweep = latest_json("dream7b_bpu_fine_batch_size_sweep_*/batch_size_sweep_probe.json")
 runtime_telemetry_path, runtime_telemetry = latest_json("dream7b_bpu_runtime_telemetry_*/runtime_telemetry_probe.json")
+selected_pair_telemetry_path, selected_pair_telemetry = latest_json("dream7b_bpu_selected_pair_telemetry_*/selected_pair_telemetry_probe.json")
 systemd_telemetry_path, systemd_telemetry = latest_json("dream7b_bpu_batch_queue_systemd_telemetry_*/systemd_telemetry_probe.json")
 sustained_path, sustained = latest_json("dream7b_bpu_diffusion_batch_generate_sustained_*/batch_generation_sustained_probe.json")
 batch_generate_telemetry_path, batch_generate_telemetry = latest_json("dream7b_bpu_diffusion_batch_generate_telemetry_*/batch_generation_telemetry_probe.json")
@@ -79,6 +80,8 @@ if batch_sweep is None:
     errors.append("missing dream7b_bpu_fine_batch_size_sweep_*/batch_size_sweep_probe.json")
 if runtime_telemetry is None:
     errors.append("missing dream7b_bpu_runtime_telemetry_*/runtime_telemetry_probe.json")
+if selected_pair_telemetry is None:
+    errors.append("missing dream7b_bpu_selected_pair_telemetry_*/selected_pair_telemetry_probe.json")
 if systemd_telemetry is None:
     errors.append("missing dream7b_bpu_batch_queue_systemd_telemetry_*/systemd_telemetry_probe.json")
 if sustained is None:
@@ -109,6 +112,20 @@ if isinstance(runtime_telemetry, dict):
         errors.append(f"runtime telemetry batch_count below {min_batch_count}: {runtime_telemetry.get('batch_count')}")
     if float(runtime_telemetry.get("max_bpu_loading") or 0.0) <= 0.0:
         errors.append(f"runtime telemetry max_bpu_loading did not exceed zero: {runtime_telemetry.get('max_bpu_loading')}")
+
+selected_pair_selected = (selected_pair_telemetry or {}).get("selected") or {}
+selected_pair_comparison = (selected_pair_telemetry or {}).get("comparison_to_default_runtime_telemetry") or {}
+if isinstance(selected_pair_telemetry, dict):
+    if selected_pair_telemetry.get("verdict") != "ok_dream7b_bpu_selected_pair_telemetry_probe":
+        errors.append(f"unexpected selected pair telemetry verdict: {selected_pair_telemetry.get('verdict')}")
+    if int(selected_pair_telemetry.get("batch_count") or 0) < min_batch_count:
+        errors.append(f"selected pair telemetry batch_count below {min_batch_count}: {selected_pair_telemetry.get('batch_count')}")
+    if float(selected_pair_telemetry.get("max_bpu_loading") or 0.0) <= 0.0:
+        errors.append(f"selected pair telemetry max_bpu_loading did not exceed zero: {selected_pair_telemetry.get('max_bpu_loading')}")
+    if selected_pair_selected.get("selected_pair_covers_all_segments") is not True:
+        errors.append(f"selected pair telemetry selected_pair_covers_all_segments is not true: {selected_pair_selected.get('selected_pair_covers_all_segments')}")
+    if selected_pair_comparison.get("selected_wall_time_improved_vs_default_runtime") is not True:
+        warnings.append("selected pair telemetry did not improve wall time versus the latest default runtime telemetry")
 
 if isinstance(systemd_telemetry, dict):
     if systemd_telemetry.get("verdict") != "ok_dream7b_bpu_batch_queue_systemd_telemetry_probe":
@@ -151,12 +168,14 @@ systemd_total_run = float((systemd_telemetry or {}).get("total_run_ms") or 0.0)
 systemd_load_to_run_ratio = systemd_total_load / systemd_total_run if systemd_total_run else None
 telemetry_avgs = [
     float((runtime_telemetry or {}).get("avg_bpu_loading") or 0.0),
+    float((selected_pair_telemetry or {}).get("avg_bpu_loading") or 0.0),
     float((systemd_telemetry or {}).get("avg_bpu_loading") or 0.0),
     float((sustained or {}).get("avg_bpu_loading") or 0.0),
     float((batch_generate_telemetry or {}).get("avg_bpu_loading") or 0.0),
 ]
 telemetry_maxes = [
     float((runtime_telemetry or {}).get("max_bpu_loading") or 0.0),
+    float((selected_pair_telemetry or {}).get("max_bpu_loading") or 0.0),
     float((systemd_telemetry or {}).get("max_bpu_loading") or 0.0),
     float((sustained or {}).get("max_bpu_loading") or 0.0),
     float((batch_generate_telemetry or {}).get("max_bpu_loading") or 0.0),
@@ -208,6 +227,23 @@ payload = {
         "amortized_run_ms_per_forward": round_float(runtime_amortized_run),
         "load_to_run_ratio": round_float(runtime_load_to_run_ratio),
     },
+    "selected_pair_telemetry": {
+        "path": str(selected_pair_telemetry_path) if selected_pair_telemetry_path else None,
+        "batch_count": (selected_pair_telemetry or {}).get("batch_count"),
+        "max_bpu_loading": (selected_pair_telemetry or {}).get("max_bpu_loading"),
+        "avg_bpu_loading": (selected_pair_telemetry or {}).get("avg_bpu_loading"),
+        "selected_pair": selected_pair_selected.get("selected_pair"),
+        "selected_segments": selected_pair_selected.get("selected_segments"),
+        "selected_pair_covers_all_segments": selected_pair_selected.get("selected_pair_covers_all_segments"),
+        "selected_wall_ms": selected_pair_selected.get("wall_ms"),
+        "selected_forward_load_ms": selected_pair_selected.get("forward_load_ms"),
+        "selected_run_ms": selected_pair_selected.get("run_ms"),
+        "wall_ms_delta_vs_default_runtime": selected_pair_comparison.get("wall_ms_delta_vs_default_runtime"),
+        "wall_ms_delta_ratio_vs_default_runtime": selected_pair_comparison.get("wall_ms_delta_ratio_vs_default_runtime"),
+        "avg_bpu_loading_delta_vs_default_runtime": selected_pair_comparison.get("avg_bpu_loading_delta_vs_default_runtime"),
+        "selected_wall_time_improved_vs_default_runtime": selected_pair_comparison.get("selected_wall_time_improved_vs_default_runtime"),
+        "selected_avg_bpu_loading_improved_vs_default_runtime": selected_pair_comparison.get("selected_avg_bpu_loading_improved_vs_default_runtime"),
+    },
     "systemd_telemetry": {
         "path": str(systemd_telemetry_path) if systemd_telemetry_path else None,
         "processed_request_count": (systemd_telemetry or {}).get("processed_request_count"),
@@ -252,12 +288,15 @@ lines = [
     f"- avg_observed_bpu_loading_across_reports: {payload['avg_observed_bpu_loading_across_reports']}",
     f"- batch_scaling_reference_load_to_run_ratio: {payload['batch_scaling_reference']['load_to_run_ratio']}",
     f"- runtime_load_to_run_ratio: {payload['runtime_telemetry']['load_to_run_ratio']}",
+    f"- selected_pair_telemetry_avg_bpu_loading: {payload['selected_pair_telemetry']['avg_bpu_loading']}",
+    f"- selected_pair_telemetry_wall_delta_ratio: {payload['selected_pair_telemetry']['wall_ms_delta_ratio_vs_default_runtime']}",
     f"- systemd_load_to_run_ratio: {payload['systemd_telemetry']['load_to_run_ratio']}",
     "",
     "## Evidence",
     "",
     f"- batch_sweep: {payload['batch_scaling_reference']['path']}",
     f"- runtime_telemetry: {payload['runtime_telemetry']['path']}",
+    f"- selected_pair_telemetry: {payload['selected_pair_telemetry']['path']}",
     f"- systemd_telemetry: {payload['systemd_telemetry']['path']}",
     f"- sustained_generation: {payload['sustained_generation']['path']}",
     f"- batch_generate_telemetry: {payload['batch_generate_telemetry']['path']}",
