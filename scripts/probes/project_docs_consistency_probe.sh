@@ -59,6 +59,8 @@ required_files=(
   "scripts/probes/dream7b_bpu_utilization_gap_probe.sh"
   "scripts/probes/dream7b_bpu_persistent_pair_cache_probe.sh"
   "scripts/probes/dream7b_bpu_held_pair_residency_matrix_probe.sh"
+  "scripts/probes/dream7b_bpu_single_segment_residency_matrix_probe.sh"
+  "scripts/probes/dream7b_bpu_persistent_segment_cache_probe.sh"
   "scripts/probes/dream7b_bpu_batch_queue_retention_probe.sh"
   "scripts/probes/dream7b_bpu_deployment_acceptance_probe.sh"
   "scripts/startup_link_check/link-check.config.json"
@@ -79,6 +81,8 @@ required_readme_strings=(
   "scripts/probes/dream7b_bpu_utilization_gap_probe.sh"
   "scripts/probes/dream7b_bpu_persistent_pair_cache_probe.sh"
   "scripts/probes/dream7b_bpu_held_pair_residency_matrix_probe.sh"
+  "scripts/probes/dream7b_bpu_single_segment_residency_matrix_probe.sh"
+  "scripts/probes/dream7b_bpu_persistent_segment_cache_probe.sh"
   "dream7b_bpu_text_queue_systemd_probe.sh"
 )
 
@@ -111,6 +115,8 @@ required_reference_strings=(
   "dream7b-bpu-utilization-gap-probe"
   "dream7b-bpu-persistent-pair-cache-probe"
   "dream7b-bpu-held-pair-residency-matrix-probe"
+  "dream7b-bpu-single-segment-residency-matrix-probe"
+  "dream7b-bpu-persistent-segment-cache-probe"
   "dream7b-bpu-batch-queue-retention-probe"
   "dream7b-bpu-deployment-acceptance-probe"
   "dream7b-bpu-batch-queue.service"
@@ -205,6 +211,11 @@ required_reference_strings=(
   "DREAM7B_BPU_PERSISTENT_PAIR_CACHE_START_DELAY_SECONDS"
   "DREAM7B_BPU_HELD_PAIR_MATRIX_HOLDER_READY_TIMEOUT_SECONDS"
   "DREAM7B_BPU_HELD_PAIR_MATRIX_CANDIDATE_TIMEOUT_SECONDS"
+  "DREAM7B_BPU_SINGLE_SEGMENT_MATRIX_HOLDER_READY_TIMEOUT_SECONDS"
+  "DREAM7B_BPU_SINGLE_SEGMENT_MATRIX_CANDIDATE_TIMEOUT_SECONDS"
+  "DREAM7B_BPU_PERSISTENT_SEGMENT_CACHE_WORKER_HOLD_SECONDS"
+  "DREAM7B_BPU_PERSISTENT_SEGMENT_CACHE_READY_TIMEOUT_SECONDS"
+  "DREAM7B_BPU_PERSISTENT_SEGMENT_CACHE_START_DELAY_SECONDS"
   "DREAM7B_BPU_QUEUE_RETENTION_DONE_DAYS"
   "DREAM7B_BPU_QUEUE_RETENTION_FAILED_DAYS"
   "DREAM7B_BPU_QUEUE_RETENTION_PENDING_STALE_MINUTES"
@@ -268,6 +279,22 @@ required_reference_strings=(
   "successful_pair_edges"
   "failed_pair_edges"
   "max_resident_pair_count_observed"
+  "single_segment_residency_matrix_probe"
+  "ok_dream7b_bpu_single_segment_residency_matrix_probe"
+  "ready_holder_segment_count"
+  "ready_holder_segment_indexes"
+  "successful_segment_edge_count"
+  "failed_segment_edge_count"
+  "successful_segment_edges"
+  "failed_segment_edges"
+  "max_resident_segment_count_observed"
+  "persistent_segment_cache_probe"
+  "ok_dream7b_bpu_persistent_segment_cache_probe"
+  "segment_worker_count"
+  "launched_segment_worker_count"
+  "ready_segment_worker_count"
+  "failed_segment_worker_count"
+  "all_segment_workers_ready"
   "hbm_artifact_inventory"
   "expected_artifact_count"
   "expected_base_count"
@@ -1105,6 +1132,88 @@ if [[ -f scripts/probes/dream7b_bpu_held_pair_residency_matrix_probe.sh ]]; then
   fi
 fi
 
+if [[ -f scripts/probes/dream7b_bpu_single_segment_residency_matrix_probe.sh ]]; then
+  for text in \
+    "DREAM7B_BPU_SINGLE_SEGMENT_MATRIX_HOLDER_READY_TIMEOUT_SECONDS" \
+    "DREAM7B_BPU_SINGLE_SEGMENT_MATRIX_CANDIDATE_TIMEOUT_SECONDS" \
+    "single_segment_residency_matrix_probe.json" \
+    "single_segment_residency_matrix_probe.md" \
+    "ok_dream7b_bpu_single_segment_residency_matrix_probe" \
+    "segment_count" \
+    "ready_holder_segment_count" \
+    "ready_holder_segment_indexes" \
+    "matrix_entry_count" \
+    "successful_segment_edge_count" \
+    "failed_segment_edge_count" \
+    "successful_segment_edges" \
+    "failed_segment_edges" \
+    "max_resident_segment_count_observed" \
+    "next_optimization_target" \
+    "seg00_02" \
+    "seg02_04" \
+    "seg04_07" \
+    "seg07_10" \
+    "seg10_14" \
+    "seg14_17" \
+    "seg17_21" \
+    "seg21_24" \
+    "seg24_26" \
+    "seg26_28"; do
+    if ! grep -F -- "$text" scripts/probes/dream7b_bpu_single_segment_residency_matrix_probe.sh >/dev/null; then
+      errors+=("dream7b_bpu_single_segment_residency_matrix_probe.sh missing $text")
+    fi
+  done
+  if ! grep -F -- 'DREAM7B_BPU_SINGLE_SEGMENT_MATRIX_HOLDER_READY_TIMEOUT_SECONDS:-180' scripts/probes/dream7b_bpu_single_segment_residency_matrix_probe.sh >/dev/null; then
+    errors+=("dream7b_bpu_single_segment_residency_matrix_probe.sh missing default DREAM7B_BPU_SINGLE_SEGMENT_MATRIX_HOLDER_READY_TIMEOUT_SECONDS:-180")
+  fi
+  if ! grep -F -- 'DREAM7B_BPU_SINGLE_SEGMENT_MATRIX_CANDIDATE_TIMEOUT_SECONDS:-180' scripts/probes/dream7b_bpu_single_segment_residency_matrix_probe.sh >/dev/null; then
+    errors+=("dream7b_bpu_single_segment_residency_matrix_probe.sh missing default DREAM7B_BPU_SINGLE_SEGMENT_MATRIX_CANDIDATE_TIMEOUT_SECONDS:-180")
+  fi
+fi
+
+if [[ -f scripts/probes/dream7b_bpu_persistent_segment_cache_probe.sh ]]; then
+  for text in \
+    "DREAM7B_BPU_PERSISTENT_SEGMENT_CACHE_WORKER_HOLD_SECONDS" \
+    "DREAM7B_BPU_PERSISTENT_SEGMENT_CACHE_READY_TIMEOUT_SECONDS" \
+    "DREAM7B_BPU_PERSISTENT_SEGMENT_CACHE_START_DELAY_SECONDS" \
+    "persistent_segment_cache_probe.json" \
+    "persistent_segment_cache_probe.md" \
+    "ok_dream7b_bpu_persistent_segment_cache_probe" \
+    "segment_worker_count" \
+    "launched_segment_worker_count" \
+    "ready_segment_worker_count" \
+    "failed_segment_worker_count" \
+    "ready_segment_indexes" \
+    "failed_segment_indexes" \
+    "all_segment_workers_ready" \
+    "launch_stopped_reason" \
+    "max_resident_segment_count_observed" \
+    "next_optimization_target" \
+    "seg00_02" \
+    "seg02_04" \
+    "seg04_07" \
+    "seg07_10" \
+    "seg10_14" \
+    "seg14_17" \
+    "seg17_21" \
+    "seg21_24" \
+    "seg24_26" \
+    "seg26_28"; do
+    if ! grep -F -- "$text" scripts/probes/dream7b_bpu_persistent_segment_cache_probe.sh >/dev/null; then
+      errors+=("dream7b_bpu_persistent_segment_cache_probe.sh missing $text")
+    fi
+  done
+  if ! grep -F -- 'DREAM7B_BPU_PERSISTENT_SEGMENT_CACHE_WORKER_HOLD_SECONDS:-5' scripts/probes/dream7b_bpu_persistent_segment_cache_probe.sh >/dev/null; then
+    errors+=("dream7b_bpu_persistent_segment_cache_probe.sh missing default DREAM7B_BPU_PERSISTENT_SEGMENT_CACHE_WORKER_HOLD_SECONDS:-5")
+  fi
+  if ! grep -F -- 'DREAM7B_BPU_PERSISTENT_SEGMENT_CACHE_READY_TIMEOUT_SECONDS:-180' scripts/probes/dream7b_bpu_persistent_segment_cache_probe.sh >/dev/null; then
+    errors+=("dream7b_bpu_persistent_segment_cache_probe.sh missing default DREAM7B_BPU_PERSISTENT_SEGMENT_CACHE_READY_TIMEOUT_SECONDS:-180")
+  fi
+  if ! grep -F -- 'DREAM7B_BPU_PERSISTENT_SEGMENT_CACHE_START_DELAY_SECONDS:-1' scripts/probes/dream7b_bpu_persistent_segment_cache_probe.sh >/dev/null; then
+    errors+=("dream7b_bpu_persistent_segment_cache_probe.sh missing default DREAM7B_BPU_PERSISTENT_SEGMENT_CACHE_START_DELAY_SECONDS:-1")
+  fi
+fi
+
 if [[ -f scripts/probes/dream7b_bpu_batch_queue_retention_probe.sh ]]; then
   if ! grep -F -- "DREAM7B_BPU_QUEUE_RETENTION_DONE_DAYS" scripts/probes/dream7b_bpu_batch_queue_retention_probe.sh >/dev/null; then
     errors+=("dream7b_bpu_batch_queue_retention_probe.sh missing DREAM7B_BPU_QUEUE_RETENTION_DONE_DAYS")
@@ -1440,6 +1549,8 @@ if [[ -f scripts/probes/dream7b_bpu_deployment_acceptance_probe.sh ]]; then
     "dream7b_bpu_utilization_gap_*/utilization_gap_probe.json" \
     "dream7b_bpu_persistent_pair_cache_*/persistent_pair_cache_probe.json" \
     "dream7b_bpu_held_pair_residency_matrix_*/held_pair_residency_matrix_probe.json" \
+    "dream7b_bpu_single_segment_residency_matrix_*/single_segment_residency_matrix_probe.json" \
+    "dream7b_bpu_persistent_segment_cache_*/persistent_segment_cache_probe.json" \
     "dream7b_bpu_batch_queue_systemd_telemetry_*/systemd_telemetry_probe.json" \
     "dream7b_bpu_fine_forward_long_repeat_*/long_repeat_probe.json" \
     "dream7b_bpu_batch_queue_retention_*/queue_retention_probe.json" \
@@ -1458,9 +1569,13 @@ if [[ -f scripts/probes/dream7b_bpu_deployment_acceptance_probe.sh ]]; then
     "utilization_gap" \
     "persistent_pair_cache" \
     "held_pair_residency_matrix" \
+    "single_segment_residency_matrix" \
+    "persistent_segment_cache" \
     "ok_dream7b_bpu_utilization_gap_probe" \
     "ok_dream7b_bpu_persistent_pair_cache_probe" \
     "ok_dream7b_bpu_held_pair_residency_matrix_probe" \
+    "ok_dream7b_bpu_single_segment_residency_matrix_probe" \
+    "ok_dream7b_bpu_persistent_segment_cache_probe" \
     "diagnosis" \
     "next_optimization_target" \
     "max_observed_bpu_loading" \
@@ -1474,6 +1589,12 @@ if [[ -f scripts/probes/dream7b_bpu_deployment_acceptance_probe.sh ]]; then
     "successful_pair_edge_count" \
     "failed_pair_edge_count" \
     "max_resident_pair_count_observed" \
+    "ready_holder_segment_count" \
+    "successful_segment_edge_count" \
+    "failed_segment_edge_count" \
+    "all_segment_workers_ready" \
+    "ready_segment_worker_count" \
+    "max_resident_segment_count_observed" \
     "ok_dream7b_bpu_diffusion_generate" \
     "ok_dream7b_bpu_diffusion_generate_telemetry_probe" \
     "ok_dream7b_bpu_diffusion_batch_generate" \

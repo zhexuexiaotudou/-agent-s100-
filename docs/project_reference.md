@@ -2008,6 +2008,221 @@ matrix_entries[0].exception: DNN Error (code: -400001, desc: Memory alloc failed
 errors: []
 ```
 
+### `dream7b-bpu-single-segment-residency-matrix-probe`
+
+Source file: `scripts/probes/dream7b_bpu_single_segment_residency_matrix_probe.sh`
+
+Installed command on S100P:
+
+```text
+/usr/local/bin/dream7b-bpu-single-segment-residency-matrix-probe
+```
+
+Default argument copied from the script:
+
+```text
+report_root = /mnt/nas/openclaw/reports/models
+```
+
+Environment variables copied from the script:
+
+```text
+DREAM7B_BPU_SINGLE_SEGMENT_MATRIX_HOLDER_READY_TIMEOUT_SECONDS
+DREAM7B_BPU_SINGLE_SEGMENT_MATRIX_CANDIDATE_TIMEOUT_SECONDS
+```
+
+Default values copied from the script:
+
+```text
+holder_ready_timeout_seconds = 180
+candidate_timeout_seconds = 180
+```
+
+Output files copied from the script:
+
+```text
+single_segment_residency_matrix_probe.json
+single_segment_residency_matrix_probe.md
+```
+
+Segments copied from the script:
+
+```text
+segment_00: seg00_02
+segment_01: seg02_04
+segment_02: seg04_07
+segment_03: seg07_10
+segment_04: seg10_14
+segment_05: seg14_17
+segment_06: seg17_21
+segment_07: seg21_24
+segment_08: seg24_26
+segment_09: seg26_28
+```
+
+Output fields copied from the script:
+
+```text
+generated_at
+verdict
+run_dir
+base_hbm_dir
+fine_hbm_dir
+holder_ready_timeout_seconds
+candidate_timeout_seconds
+segment_count
+ready_holder_segment_count
+ready_holder_segment_indexes
+matrix_entry_count
+successful_segment_edge_count
+failed_segment_edge_count
+successful_segment_edges
+failed_segment_edges
+max_resident_segment_count_observed
+next_optimization_target
+holder_records
+matrix_entries
+errors
+```
+
+Latest recorded report:
+
+```text
+/mnt/nas/openclaw/reports/models/dream7b_bpu_single_segment_residency_matrix_20260606-002628/single_segment_residency_matrix_probe.md
+```
+
+Latest recorded JSON:
+
+```text
+/mnt/nas/openclaw/reports/models/dream7b_bpu_single_segment_residency_matrix_20260606-002628/single_segment_residency_matrix_probe.json
+```
+
+Verified single-segment matrix fields copied from `single_segment_residency_matrix_probe.json`:
+
+```text
+verdict: ok_dream7b_bpu_single_segment_residency_matrix_probe
+segment_count: 10
+ready_holder_segment_count: 10
+matrix_entry_count: 90
+successful_segment_edge_count: 90
+failed_segment_edge_count: 0
+max_resident_segment_count_observed: 2
+next_optimization_target: inspect successful single-segment coexistence edges and then probe multi-segment cliques before changing the production runner
+errors: []
+```
+
+### `dream7b-bpu-persistent-segment-cache-probe`
+
+Source file: `scripts/probes/dream7b_bpu_persistent_segment_cache_probe.sh`
+
+Installed command on S100P:
+
+```text
+/usr/local/bin/dream7b-bpu-persistent-segment-cache-probe
+```
+
+Default argument copied from the script:
+
+```text
+report_root = /mnt/nas/openclaw/reports/models
+```
+
+Environment variables copied from the script:
+
+```text
+DREAM7B_BPU_PERSISTENT_SEGMENT_CACHE_WORKER_HOLD_SECONDS
+DREAM7B_BPU_PERSISTENT_SEGMENT_CACHE_READY_TIMEOUT_SECONDS
+DREAM7B_BPU_PERSISTENT_SEGMENT_CACHE_START_DELAY_SECONDS
+```
+
+Default values copied from the script:
+
+```text
+hold_seconds = 5
+ready_timeout_seconds = 180
+start_delay_seconds = 1
+```
+
+Output files copied from the script:
+
+```text
+persistent_segment_cache_probe.json
+persistent_segment_cache_probe.md
+```
+
+Segments copied from the script:
+
+```text
+segment_00: seg00_02
+segment_01: seg02_04
+segment_02: seg04_07
+segment_03: seg07_10
+segment_04: seg10_14
+segment_05: seg14_17
+segment_06: seg17_21
+segment_07: seg21_24
+segment_08: seg24_26
+segment_09: seg26_28
+```
+
+Output fields copied from the script:
+
+```text
+generated_at
+verdict
+run_dir
+base_hbm_dir
+fine_hbm_dir
+hold_seconds
+ready_timeout_seconds
+start_delay_seconds
+segment_worker_count
+launched_segment_worker_count
+ready_segment_worker_count
+failed_segment_worker_count
+ready_segment_indexes
+failed_segment_indexes
+all_segment_workers_ready
+launch_stopped_reason
+max_resident_segment_count_observed
+next_optimization_target
+ready_records
+failed_records
+records
+errors
+```
+
+Latest recorded report:
+
+```text
+/mnt/nas/openclaw/reports/models/dream7b_bpu_persistent_segment_cache_20260606-005633/persistent_segment_cache_probe.md
+```
+
+Latest recorded JSON:
+
+```text
+/mnt/nas/openclaw/reports/models/dream7b_bpu_persistent_segment_cache_20260606-005633/persistent_segment_cache_probe.json
+```
+
+Verified persistent segment cache fields copied from `persistent_segment_cache_probe.json`:
+
+```text
+verdict: ok_dream7b_bpu_persistent_segment_cache_probe
+segment_worker_count: 10
+launched_segment_worker_count: 3
+ready_segment_worker_count: 2
+failed_segment_worker_count: 1
+ready_segment_indexes: [0, 1]
+failed_segment_indexes: [2]
+all_segment_workers_ready: False
+launch_stopped_reason: segment_02_seg04_07 did not reach ready status
+max_resident_segment_count_observed: 2
+next_optimization_target: use the ready prefix and failure record to choose a smaller segment split or different runtime-residency strategy
+failed_records[0].exception_type: RuntimeError
+failed_records[0].exception: DNN Error (code: -400001, desc: Memory alloc failed, please check error log) hbDNN initialize from multiple .hbm files failed.
+errors: []
+```
+
 ### `dream7b-bpu-deployment-acceptance-probe`
 
 Source file: `scripts/probes/dream7b_bpu_deployment_acceptance_probe.sh`
@@ -2066,6 +2281,8 @@ dream7b_bpu_diffusion_batch_generate_sustained_*/batch_generation_sustained_prob
 dream7b_bpu_utilization_gap_*/utilization_gap_probe.json
 dream7b_bpu_persistent_pair_cache_*/persistent_pair_cache_probe.json
 dream7b_bpu_held_pair_residency_matrix_*/held_pair_residency_matrix_probe.json
+dream7b_bpu_single_segment_residency_matrix_*/single_segment_residency_matrix_probe.json
+dream7b_bpu_persistent_segment_cache_*/persistent_segment_cache_probe.json
 dream7b_bpu_batch_queue_systemd_telemetry_*/systemd_telemetry_probe.json
 dream7b_bpu_fine_forward_long_repeat_*/long_repeat_probe.json
 dream7b_bpu_batch_queue_retention_*/queue_retention_probe.json
@@ -2089,6 +2306,8 @@ diffusion_batch_generate_sustained
 utilization_gap
 persistent_pair_cache
 held_pair_residency_matrix
+single_segment_residency_matrix
+persistent_segment_cache
 systemd_telemetry
 long_repeat
 queue_retention
@@ -2134,6 +2353,7 @@ Latest recorded report:
 /mnt/nas/openclaw/reports/models/dream7b_bpu_deployment_acceptance_20260606-212134/deployment_acceptance_probe.md
 /mnt/nas/openclaw/reports/models/dream7b_bpu_deployment_acceptance_20260605-234654/deployment_acceptance_probe.md
 /mnt/nas/openclaw/reports/models/dream7b_bpu_deployment_acceptance_20260606-000234/deployment_acceptance_probe.md
+/mnt/nas/openclaw/reports/models/dream7b_bpu_deployment_acceptance_20260606-120028/deployment_acceptance_probe.md
 ```
 
 Latest recorded JSON:
@@ -2155,14 +2375,15 @@ Latest recorded JSON:
 /mnt/nas/openclaw/reports/models/dream7b_bpu_deployment_acceptance_20260606-212134/deployment_acceptance_probe.json
 /mnt/nas/openclaw/reports/models/dream7b_bpu_deployment_acceptance_20260605-234654/deployment_acceptance_probe.json
 /mnt/nas/openclaw/reports/models/dream7b_bpu_deployment_acceptance_20260606-000234/deployment_acceptance_probe.json
+/mnt/nas/openclaw/reports/models/dream7b_bpu_deployment_acceptance_20260606-120028/deployment_acceptance_probe.json
 ```
 
 Verified deployment acceptance fields copied from `deployment_acceptance_probe.json`:
 
 ```text
 verdict: ok_dream7b_bpu_deployment_acceptance_probe
-check_count: 18
-passed_check_count: 18
+check_count: 20
+passed_check_count: 20
 min_batch_capacity: 16
 min_systemd_batch_requests: 16
 min_systemd_telemetry_requests: 48
@@ -2187,6 +2408,8 @@ diffusion_batch_generate_sustained.ok: True
 utilization_gap.ok: True
 persistent_pair_cache.ok: True
 held_pair_residency_matrix.ok: True
+single_segment_residency_matrix.ok: True
+persistent_segment_cache.ok: True
 systemd_telemetry.ok: True
 long_repeat.ok: True
 queue_retention.ok: True
@@ -2309,6 +2532,27 @@ held_pair_residency_matrix.details.successful_pair_edge_count: 0
 held_pair_residency_matrix.details.failed_pair_edge_count: 20
 held_pair_residency_matrix.details.max_resident_pair_count_observed: 1
 held_pair_residency_matrix.details.next_optimization_target: persistent multi-pair residency is not supported by this fine split; reduce individual pair HBM size or pursue a different split
+single_segment_residency_matrix.path: /mnt/nas/openclaw/reports/models/dream7b_bpu_single_segment_residency_matrix_20260606-002628/single_segment_residency_matrix_probe.json
+single_segment_residency_matrix.details.verdict: ok_dream7b_bpu_single_segment_residency_matrix_probe
+single_segment_residency_matrix.details.segment_count: 10
+single_segment_residency_matrix.details.ready_holder_segment_count: 10
+single_segment_residency_matrix.details.matrix_entry_count: 90
+single_segment_residency_matrix.details.successful_segment_edge_count: 90
+single_segment_residency_matrix.details.failed_segment_edge_count: 0
+single_segment_residency_matrix.details.max_resident_segment_count_observed: 2
+single_segment_residency_matrix.details.next_optimization_target: inspect successful single-segment coexistence edges and then probe multi-segment cliques before changing the production runner
+persistent_segment_cache.path: /mnt/nas/openclaw/reports/models/dream7b_bpu_persistent_segment_cache_20260606-005633/persistent_segment_cache_probe.json
+persistent_segment_cache.details.verdict: ok_dream7b_bpu_persistent_segment_cache_probe
+persistent_segment_cache.details.segment_worker_count: 10
+persistent_segment_cache.details.launched_segment_worker_count: 3
+persistent_segment_cache.details.ready_segment_worker_count: 2
+persistent_segment_cache.details.failed_segment_worker_count: 1
+persistent_segment_cache.details.ready_segment_indexes: [0, 1]
+persistent_segment_cache.details.failed_segment_indexes: [2]
+persistent_segment_cache.details.all_segment_workers_ready: False
+persistent_segment_cache.details.launch_stopped_reason: segment_02_seg04_07 did not reach ready status
+persistent_segment_cache.details.max_resident_segment_count_observed: 2
+persistent_segment_cache.details.next_optimization_target: use the ready prefix and failure record to choose a smaller segment split or different runtime-residency strategy
 hbm_artifact_inventory.details.expected_artifact_count: 14
 hbm_artifact_inventory.details.nas_existing_count: 14
 hbm_artifact_inventory.details.local_existing_count: 14
@@ -4050,10 +4294,19 @@ docs/baseline_progress_2026-06-03_dream7b_segmented_bpu_hbm.md
 - Verified held-pair residency matrix report at `/mnt/nas/openclaw/reports/models/dream7b_bpu_held_pair_residency_matrix_20260605-235813/held_pair_residency_matrix_probe.md` with `ready_holder_pair_count: 5`, `matrix_entry_count: 20`, `successful_pair_edge_count: 0`, `failed_pair_edge_count: 20`, and `max_resident_pair_count_observed: 1`.
 - Updated `dream7b-bpu-deployment-acceptance-probe` to include `held_pair_residency_matrix`.
 - Verified held-pair-matrix-aware deployment acceptance report at `/mnt/nas/openclaw/reports/models/dream7b_bpu_deployment_acceptance_20260606-000234/deployment_acceptance_probe.md` with `check_count: 18`, `passed_check_count: 18`, and `held_pair_residency_matrix.ok: True`.
+- Added `dream7b-bpu-single-segment-residency-matrix-probe` for testing every held-single-segment/candidate-single-segment coexistence edge across the current ten fine segments.
+- Verified single-segment residency matrix report at `/mnt/nas/openclaw/reports/models/dream7b_bpu_single_segment_residency_matrix_20260606-002628/single_segment_residency_matrix_probe.md` with `segment_count: 10`, `ready_holder_segment_count: 10`, `matrix_entry_count: 90`, `successful_segment_edge_count: 90`, `failed_segment_edge_count: 0`, and `max_resident_segment_count_observed: 2`.
+- Added `dream7b-bpu-persistent-segment-cache-probe` for launching single-segment runtimes sequentially and recording the current simultaneous residency boundary before implementing a persistent single-segment worker pipeline.
+- Verified persistent segment cache report at `/mnt/nas/openclaw/reports/models/dream7b_bpu_persistent_segment_cache_20260606-005633/persistent_segment_cache_probe.md` with `segment_worker_count: 10`, `launched_segment_worker_count: 3`, `ready_segment_worker_count: 2`, `failed_segment_worker_count: 1`, `all_segment_workers_ready: False`, `launch_stopped_reason: segment_02_seg04_07 did not reach ready status`, and `max_resident_segment_count_observed: 2`.
+- Updated `dream7b-bpu-deployment-acceptance-probe` to include `single_segment_residency_matrix` and `persistent_segment_cache`.
+- Verified segment-residency-aware deployment acceptance report at `/mnt/nas/openclaw/reports/models/dream7b_bpu_deployment_acceptance_20260606-120028/deployment_acceptance_probe.md` with `check_count: 20`, `passed_check_count: 20`, `single_segment_residency_matrix.ok: True`, and `persistent_segment_cache.ok: True`.
 
 ## TODO
 
 - Keep `--window-execution-mode child-process` as the fallback path until more long-run evidence extends beyond the current gated 6-run `--window-execution-mode in-process` probe.
+- Do not implement a pair-worker persistent cache on the current five-pair split; the held-pair matrix has `successful_pair_edge_count: 0`.
+- Use the single-segment results as the next residency route: two single-segment runtimes can coexist, but `segment_02_seg04_07` fails as the third resident runtime with S100 BPU `-400001` memory allocation failure.
+- Evaluate smaller HBM artifacts, different segment boundaries, or runtime residency support before expecting sustained 128TOPS-level average utilization from Dream 7B.
 - Continue collecting long-repeat reports before tightening the current `DREAM7B_BPU_FINE_FORWARD_LONG_REPEAT_MAX_WALL_SPREAD_RATIO` default of `0.10`.
 - Keep queue cleanup report-only until an explicit apply mode and archive directory migration rule are approved.
 - Re-run `dream7b-bpu-deployment-acceptance-probe` after every Dream 7B BPU service, batching, telemetry, or retention change.

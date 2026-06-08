@@ -807,6 +807,69 @@ else:
         },
     )
 
+single_segment_matrix_path, single_segment_matrix = latest_json("dream7b_bpu_single_segment_residency_matrix_*/single_segment_residency_matrix_probe.json")
+if single_segment_matrix is None:
+    add_check("single_segment_residency_matrix", single_segment_matrix_path, False, {"reason": "missing single_segment_residency_matrix_probe.json"})
+else:
+    ok = (
+        single_segment_matrix.get("verdict") == "ok_dream7b_bpu_single_segment_residency_matrix_probe"
+        and int(single_segment_matrix.get("segment_count") or 0) == 10
+        and int(single_segment_matrix.get("ready_holder_segment_count") or 0) == 10
+        and int(single_segment_matrix.get("matrix_entry_count") or 0) == 90
+        and int(single_segment_matrix.get("successful_segment_edge_count") or 0) + int(single_segment_matrix.get("failed_segment_edge_count") or 0) == 90
+        and int(single_segment_matrix.get("max_resident_segment_count_observed") or 0) >= 1
+        and single_segment_matrix.get("next_optimization_target")
+        and not single_segment_matrix.get("errors")
+    )
+    add_check(
+        "single_segment_residency_matrix",
+        single_segment_matrix_path,
+        ok,
+        {
+            "verdict": single_segment_matrix.get("verdict"),
+            "segment_count": single_segment_matrix.get("segment_count"),
+            "ready_holder_segment_count": single_segment_matrix.get("ready_holder_segment_count"),
+            "matrix_entry_count": single_segment_matrix.get("matrix_entry_count"),
+            "successful_segment_edge_count": single_segment_matrix.get("successful_segment_edge_count"),
+            "failed_segment_edge_count": single_segment_matrix.get("failed_segment_edge_count"),
+            "max_resident_segment_count_observed": single_segment_matrix.get("max_resident_segment_count_observed"),
+            "next_optimization_target": single_segment_matrix.get("next_optimization_target"),
+        },
+    )
+
+persistent_segment_cache_path, persistent_segment_cache = latest_json("dream7b_bpu_persistent_segment_cache_*/persistent_segment_cache_probe.json")
+if persistent_segment_cache is None:
+    add_check("persistent_segment_cache", persistent_segment_cache_path, False, {"reason": "missing persistent_segment_cache_probe.json"})
+else:
+    ok = (
+        persistent_segment_cache.get("verdict") == "ok_dream7b_bpu_persistent_segment_cache_probe"
+        and int(persistent_segment_cache.get("segment_worker_count") or 0) == 10
+        and int(persistent_segment_cache.get("launched_segment_worker_count") or 0) >= 1
+        and int(persistent_segment_cache.get("ready_segment_worker_count") or 0) >= 1
+        and "all_segment_workers_ready" in persistent_segment_cache
+        and int(persistent_segment_cache.get("max_resident_segment_count_observed") or 0) >= 1
+        and persistent_segment_cache.get("next_optimization_target")
+        and not persistent_segment_cache.get("errors")
+    )
+    add_check(
+        "persistent_segment_cache",
+        persistent_segment_cache_path,
+        ok,
+        {
+            "verdict": persistent_segment_cache.get("verdict"),
+            "segment_worker_count": persistent_segment_cache.get("segment_worker_count"),
+            "launched_segment_worker_count": persistent_segment_cache.get("launched_segment_worker_count"),
+            "ready_segment_worker_count": persistent_segment_cache.get("ready_segment_worker_count"),
+            "failed_segment_worker_count": persistent_segment_cache.get("failed_segment_worker_count"),
+            "ready_segment_indexes": persistent_segment_cache.get("ready_segment_indexes"),
+            "failed_segment_indexes": persistent_segment_cache.get("failed_segment_indexes"),
+            "all_segment_workers_ready": persistent_segment_cache.get("all_segment_workers_ready"),
+            "launch_stopped_reason": persistent_segment_cache.get("launch_stopped_reason"),
+            "max_resident_segment_count_observed": persistent_segment_cache.get("max_resident_segment_count_observed"),
+            "next_optimization_target": persistent_segment_cache.get("next_optimization_target"),
+        },
+    )
+
 payload = {
     "generated_at": datetime.now().astimezone().isoformat(),
     "verdict": "ok_dream7b_bpu_deployment_acceptance_probe" if not errors else "failed_dream7b_bpu_deployment_acceptance_probe",
