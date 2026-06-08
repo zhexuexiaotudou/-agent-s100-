@@ -68,6 +68,7 @@ required_files=(
   "scripts/probes/dream7b_bpu_selected_triplet_forward_path_probe.sh"
   "scripts/probes/dream7b_bpu_selected_pair_forward_path_probe.sh"
   "scripts/probes/dream7b_bpu_selected_pair_telemetry_probe.sh"
+  "scripts/probes/dream7b_bpu_selected_pair_promotion_gate_probe.sh"
   "scripts/probes/s100_official_llm_baseline_probe.sh"
   "scripts/probes/s100_official_qwen_runtime_probe.sh"
   "scripts/probes/s100_bpu_memory_pool_probe.sh"
@@ -105,6 +106,7 @@ required_readme_strings=(
   "scripts/probes/dream7b_bpu_selected_triplet_forward_path_probe.sh"
   "scripts/probes/dream7b_bpu_selected_pair_forward_path_probe.sh"
   "scripts/probes/dream7b_bpu_selected_pair_telemetry_probe.sh"
+  "scripts/probes/dream7b_bpu_selected_pair_promotion_gate_probe.sh"
   "scripts/probes/s100_official_llm_baseline_probe.sh"
   "scripts/probes/s100_official_qwen_runtime_probe.sh"
   "scripts/probes/s100_bpu_memory_pool_probe.sh"
@@ -154,6 +156,7 @@ required_reference_strings=(
   "dream7b-bpu-selected-triplet-forward-path-probe"
   "dream7b-bpu-selected-pair-forward-path-probe"
   "dream7b-bpu-selected-pair-telemetry-probe"
+  "dream7b-bpu-selected-pair-promotion-gate-probe"
   "s100-official-llm-baseline-probe"
   "s100-qwen-backend9-baseline-probe"
   "s100-qwen-bpu-core-sweep-probe"
@@ -279,6 +282,9 @@ required_reference_strings=(
   "DREAM7B_BPU_SELECTED_TRIPLET_TOP_K"
   "DREAM7B_BPU_SELECTED_TRIPLET_TIMEOUT_SEC"
   "DREAM7B_BPU_SELECTED_TRIPLET_ALLOW_CRASH_RETRY"
+  "DREAM7B_BPU_SELECTED_PAIR_PROMOTION_MIN_BATCH_COUNT"
+  "DREAM7B_BPU_SELECTED_PAIR_PROMOTION_MIN_WALL_DELTA_RATIO"
+  "DREAM7B_BPU_SELECTED_PAIR_PROMOTION_MIN_AVG_BPU_DELTA"
   "S100_OFFICIAL_LLM_SDK_ROOT"
   "S100_OFFICIAL_LLM_DREAM_REPORT_ROOT"
   "S100_OFFICIAL_LLM_DOC_URL"
@@ -321,6 +327,10 @@ required_reference_strings=(
   "avg_bpu_loading"
   "selected_pair_telemetry_probe"
   "ok_dream7b_bpu_selected_pair_telemetry_probe"
+  "selected_pair_promotion_gate_probe"
+  "ok_dream7b_bpu_selected_pair_promotion_gate_probe"
+  "promotion_ready_for_guarded_default_service_candidate"
+  "default_service_already_promoted"
   "selected_pair_telemetry"
   "comparison_to_default_runtime_telemetry"
   "wall_ms_delta_ratio_vs_default_runtime"
@@ -1649,6 +1659,39 @@ if [[ -f scripts/probes/dream7b_bpu_selected_pair_telemetry_probe.sh ]]; then
   fi
   if ! grep -F -- 'DREAM7B_BPU_SELECTED_PAIR_TELEMETRY_TIMEOUT_SEC:-480' scripts/probes/dream7b_bpu_selected_pair_telemetry_probe.sh >/dev/null; then
     errors+=("dream7b_bpu_selected_pair_telemetry_probe.sh missing default DREAM7B_BPU_SELECTED_PAIR_TELEMETRY_TIMEOUT_SEC:-480")
+  fi
+fi
+
+if [[ -f scripts/probes/dream7b_bpu_selected_pair_promotion_gate_probe.sh ]]; then
+  for text in \
+    "DREAM7B_BPU_SELECTED_PAIR_PROMOTION_MIN_BATCH_COUNT" \
+    "DREAM7B_BPU_SELECTED_PAIR_PROMOTION_MIN_WALL_DELTA_RATIO" \
+    "DREAM7B_BPU_SELECTED_PAIR_PROMOTION_MIN_AVG_BPU_DELTA" \
+    "selected_pair_promotion_gate_probe.json" \
+    "selected_pair_promotion_gate_probe.md" \
+    "ok_dream7b_bpu_selected_pair_promotion_gate_probe" \
+    "promotion_ready_for_guarded_default_service_candidate" \
+    "default_service_already_promoted" \
+    "selected_pair_telemetry_path" \
+    "utilization_gap_path" \
+    "deployment_acceptance_path" \
+    "selected_wall_time_improved_vs_default_runtime" \
+    "selected_avg_bpu_loading_improved_vs_default_runtime" \
+    "wall_ms_delta_ratio_vs_default_runtime" \
+    "avg_bpu_loading_delta_vs_default_runtime" \
+    "implement a guarded selected-pair default-service candidate"; do
+    if ! grep -F -- "$text" scripts/probes/dream7b_bpu_selected_pair_promotion_gate_probe.sh >/dev/null; then
+      errors+=("dream7b_bpu_selected_pair_promotion_gate_probe.sh missing $text")
+    fi
+  done
+  if ! grep -F -- 'DREAM7B_BPU_SELECTED_PAIR_PROMOTION_MIN_BATCH_COUNT:-16' scripts/probes/dream7b_bpu_selected_pair_promotion_gate_probe.sh >/dev/null; then
+    errors+=("dream7b_bpu_selected_pair_promotion_gate_probe.sh missing default DREAM7B_BPU_SELECTED_PAIR_PROMOTION_MIN_BATCH_COUNT:-16")
+  fi
+  if ! grep -F -- 'DREAM7B_BPU_SELECTED_PAIR_PROMOTION_MIN_WALL_DELTA_RATIO:-0.05' scripts/probes/dream7b_bpu_selected_pair_promotion_gate_probe.sh >/dev/null; then
+    errors+=("dream7b_bpu_selected_pair_promotion_gate_probe.sh missing default DREAM7B_BPU_SELECTED_PAIR_PROMOTION_MIN_WALL_DELTA_RATIO:-0.05")
+  fi
+  if ! grep -F -- 'DREAM7B_BPU_SELECTED_PAIR_PROMOTION_MIN_AVG_BPU_DELTA:-1.0' scripts/probes/dream7b_bpu_selected_pair_promotion_gate_probe.sh >/dev/null; then
+    errors+=("dream7b_bpu_selected_pair_promotion_gate_probe.sh missing default DREAM7B_BPU_SELECTED_PAIR_PROMOTION_MIN_AVG_BPU_DELTA:-1.0")
   fi
 fi
 

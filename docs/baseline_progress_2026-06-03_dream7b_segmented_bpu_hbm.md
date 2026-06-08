@@ -179,11 +179,14 @@ bounded batch generation sustained command: /usr/local/bin/dream7b-bpu-diffusion
 bounded batch generation sustained report: /mnt/nas/openclaw/reports/models/dream7b_bpu_diffusion_batch_generate_sustained_20260606-190058/batch_generation_sustained_probe.md
 bounded batch generation sustained JSON: /mnt/nas/openclaw/reports/models/dream7b_bpu_diffusion_batch_generate_sustained_20260606-190058/batch_generation_sustained_probe.json
 utilization gap command: /usr/local/bin/dream7b-bpu-utilization-gap-probe
-utilization gap report: /mnt/nas/openclaw/reports/models/dream7b_bpu_utilization_gap_20260606-024035/utilization_gap_probe.md
-utilization gap JSON: /mnt/nas/openclaw/reports/models/dream7b_bpu_utilization_gap_20260606-024035/utilization_gap_probe.json
+utilization gap report: /mnt/nas/openclaw/reports/models/dream7b_bpu_utilization_gap_20260606-031454/utilization_gap_probe.md
+utilization gap JSON: /mnt/nas/openclaw/reports/models/dream7b_bpu_utilization_gap_20260606-031454/utilization_gap_probe.json
 selected pair telemetry command: /usr/local/bin/dream7b-bpu-selected-pair-telemetry-probe
-selected pair telemetry report: /mnt/nas/openclaw/reports/models/dream7b_bpu_selected_pair_telemetry_20260606-023752/selected_pair_telemetry_probe.md
-selected pair telemetry JSON: /mnt/nas/openclaw/reports/models/dream7b_bpu_selected_pair_telemetry_20260606-023752/selected_pair_telemetry_probe.json
+selected pair telemetry report: /mnt/nas/openclaw/reports/models/dream7b_bpu_selected_pair_telemetry_20260606-031259/selected_pair_telemetry_probe.md
+selected pair telemetry JSON: /mnt/nas/openclaw/reports/models/dream7b_bpu_selected_pair_telemetry_20260606-031259/selected_pair_telemetry_probe.json
+selected pair promotion gate command: /usr/local/bin/dream7b-bpu-selected-pair-promotion-gate-probe
+selected pair promotion gate report: /mnt/nas/openclaw/reports/models/dream7b_bpu_selected_pair_promotion_gate_20260606-034228/selected_pair_promotion_gate_probe.md
+selected pair promotion gate JSON: /mnt/nas/openclaw/reports/models/dream7b_bpu_selected_pair_promotion_gate_20260606-034228/selected_pair_promotion_gate_probe.json
 persistent pair cache command: /usr/local/bin/dream7b-bpu-persistent-pair-cache-probe
 persistent pair cache report: /mnt/nas/openclaw/reports/models/dream7b_bpu_persistent_pair_cache_20260605-234349/persistent_pair_cache_probe.md
 persistent pair cache JSON: /mnt/nas/openclaw/reports/models/dream7b_bpu_persistent_pair_cache_20260605-234349/persistent_pair_cache_probe.json
@@ -230,8 +233,8 @@ persistent-triplet-aware deployment acceptance report: /mnt/nas/openclaw/reports
 persistent-triplet-aware deployment acceptance JSON: /mnt/nas/openclaw/reports/models/dream7b_bpu_deployment_acceptance_20260606-133119/deployment_acceptance_probe.json
 window3-aware deployment acceptance report: /mnt/nas/openclaw/reports/models/dream7b_bpu_deployment_acceptance_20260606-134115/deployment_acceptance_probe.md
 window3-aware deployment acceptance JSON: /mnt/nas/openclaw/reports/models/dream7b_bpu_deployment_acceptance_20260606-134115/deployment_acceptance_probe.json
-selected-pair-aware deployment acceptance report: /mnt/nas/openclaw/reports/models/dream7b_bpu_deployment_acceptance_20260606-024353/deployment_acceptance_probe.md
-selected-pair-aware deployment acceptance JSON: /mnt/nas/openclaw/reports/models/dream7b_bpu_deployment_acceptance_20260606-024353/deployment_acceptance_probe.json
+selected-pair-aware deployment acceptance report: /mnt/nas/openclaw/reports/models/dream7b_bpu_deployment_acceptance_20260606-031455/deployment_acceptance_probe.md
+selected-pair-aware deployment acceptance JSON: /mnt/nas/openclaw/reports/models/dream7b_bpu_deployment_acceptance_20260606-031455/deployment_acceptance_probe.json
 post-batch fine-forward compatibility report: /mnt/nas/openclaw/reports/models/dream7b_bpu_fine_forward_20260603-183906/fine_forward_probe.md
 fine-forward diffusion-loop report: /mnt/nas/openclaw/reports/models/dream7b_bpu_diffusion_loop_20260603-175030/summary.md
 fine-forward quality-gate report: /mnt/nas/openclaw/reports/models/dream7b_bpu_cpu_quality_gate_20260603-160405/summary.md
@@ -329,6 +332,7 @@ scripts/probes/dream7b_bpu_window3_forward_feasibility_probe.sh
 scripts/probes/dream7b_bpu_selected_triplet_forward_path_probe.sh
 scripts/probes/dream7b_bpu_selected_pair_forward_path_probe.sh
 scripts/probes/dream7b_bpu_selected_pair_telemetry_probe.sh
+scripts/probes/dream7b_bpu_selected_pair_promotion_gate_probe.sh
 scripts/probes/s100_official_llm_baseline_probe.sh
 scripts/probes/dream7b_bpu_batch_queue_retention_probe.sh
 scripts/probes/dream7b_bpu_deployment_acceptance_probe.sh
@@ -1530,8 +1534,8 @@ window3_aware_deployment_acceptance_report: /mnt/nas/openclaw/reports/models/dre
 window3_aware_deployment_acceptance_json: /mnt/nas/openclaw/reports/models/dream7b_bpu_deployment_acceptance_20260606-134115/deployment_acceptance_probe.json
 selected_triplet_forward_path_aware_deployment_acceptance_report: /mnt/nas/openclaw/reports/models/dream7b_bpu_deployment_acceptance_20260605-234652/deployment_acceptance_probe.md
 selected_triplet_forward_path_aware_deployment_acceptance_json: /mnt/nas/openclaw/reports/models/dream7b_bpu_deployment_acceptance_20260605-234652/deployment_acceptance_probe.json
-selected_pair_telemetry_aware_deployment_acceptance_report: /mnt/nas/openclaw/reports/models/dream7b_bpu_deployment_acceptance_20260606-024353/deployment_acceptance_probe.md
-selected_pair_telemetry_aware_deployment_acceptance_json: /mnt/nas/openclaw/reports/models/dream7b_bpu_deployment_acceptance_20260606-024353/deployment_acceptance_probe.json
+selected_pair_telemetry_aware_deployment_acceptance_report: /mnt/nas/openclaw/reports/models/dream7b_bpu_deployment_acceptance_20260606-031455/deployment_acceptance_probe.md
+selected_pair_telemetry_aware_deployment_acceptance_json: /mnt/nas/openclaw/reports/models/dream7b_bpu_deployment_acceptance_20260606-031455/deployment_acceptance_probe.json
 verdict: ok_dream7b_bpu_deployment_acceptance_probe
 check_count: 26
 passed_check_count: 26
@@ -1706,28 +1710,28 @@ errors: []
 Verified selected pair telemetry:
 
 ```text
-selected_pair_telemetry_report: /mnt/nas/openclaw/reports/models/dream7b_bpu_selected_pair_telemetry_20260606-023752/selected_pair_telemetry_probe.md
-selected_pair_telemetry_json: /mnt/nas/openclaw/reports/models/dream7b_bpu_selected_pair_telemetry_20260606-023752/selected_pair_telemetry_probe.json
+selected_pair_telemetry_report: /mnt/nas/openclaw/reports/models/dream7b_bpu_selected_pair_telemetry_20260606-031259/selected_pair_telemetry_probe.md
+selected_pair_telemetry_json: /mnt/nas/openclaw/reports/models/dream7b_bpu_selected_pair_telemetry_20260606-031259/selected_pair_telemetry_probe.json
 verdict: ok_dream7b_bpu_selected_pair_telemetry_probe
 batch_count: 16
 selected.selected_pair: [1, 8]
 selected.selected_segments: ['seg02_04', 'seg24_26']
 selected.selected_pair_covers_all_segments: True
 selected.selected_worker_count: 2
-selected.selected_resident_load_ms: 2977.436
-selected.forward_load_ms: 20462.122
-selected.selected_total_load_ms: 23439.558
-selected.run_ms: 2361.565
-selected.wall_ms: 23130.344
-bpu_loading_sample_count: 260
-nonzero_bpu_loading_sample_count: 31
+selected.selected_resident_load_ms: 2983.357
+selected.forward_load_ms: 20290.033
+selected.selected_total_load_ms: 23273.39
+selected.run_ms: 2360.901
+selected.wall_ms: 22955.54
+bpu_loading_sample_count: 258
+nonzero_bpu_loading_sample_count: 36
 max_bpu_loading: 98.0
-avg_bpu_loading: 8.746
-default_runtime_telemetry.path: /mnt/nas/openclaw/reports/models/dream7b_bpu_runtime_telemetry_20260605-132014/runtime_telemetry_probe.json
-default_runtime_telemetry.forward_wall_ms: 26369.124
-comparison_to_default_runtime_telemetry.wall_ms_delta_vs_default_runtime: 3238.78
-comparison_to_default_runtime_telemetry.wall_ms_delta_ratio_vs_default_runtime: 0.122825
-comparison_to_default_runtime_telemetry.avg_bpu_loading_delta_vs_default_runtime: 0.296
+avg_bpu_loading: 9.14
+default_runtime_telemetry.path: /mnt/nas/openclaw/reports/models/dream7b_bpu_runtime_telemetry_20260606-031226/runtime_telemetry_probe.json
+default_runtime_telemetry.forward_wall_ms: 25915.772
+comparison_to_default_runtime_telemetry.wall_ms_delta_vs_default_runtime: 2960.232
+comparison_to_default_runtime_telemetry.wall_ms_delta_ratio_vs_default_runtime: 0.114225
+comparison_to_default_runtime_telemetry.avg_bpu_loading_delta_vs_default_runtime: 1.952
 comparison_to_default_runtime_telemetry.selected_wall_time_improved_vs_default_runtime: True
 comparison_to_default_runtime_telemetry.selected_avg_bpu_loading_improved_vs_default_runtime: True
 next_optimization_target: rerun default runtime telemetry and selected-pair telemetry back-to-back before promoting selected-pair worker path into the default Dream 7B service
@@ -1902,13 +1906,13 @@ errors: []
 Verified Dream 7B BPU utilization gap diagnosis:
 
 ```text
-utilization_gap_report: /mnt/nas/openclaw/reports/models/dream7b_bpu_utilization_gap_20260606-024035/utilization_gap_probe.md
-utilization_gap_json: /mnt/nas/openclaw/reports/models/dream7b_bpu_utilization_gap_20260606-024035/utilization_gap_probe.json
+utilization_gap_report: /mnt/nas/openclaw/reports/models/dream7b_bpu_utilization_gap_20260606-031454/utilization_gap_probe.md
+utilization_gap_json: /mnt/nas/openclaw/reports/models/dream7b_bpu_utilization_gap_20260606-031454/utilization_gap_probe.json
 verdict: ok_dream7b_bpu_utilization_gap_probe
 diagnosis: hbm_reload_dominated
 next_optimization_target: reduce per-window HBM reload overhead before expecting sustained 128TOPS-level average utilization
 max_observed_bpu_loading: 100.0
-avg_observed_bpu_loading_across_reports: 8.932
+avg_observed_bpu_loading_across_reports: 8.758
 min_batch_count: 16
 min_sustained_round_count: 3
 min_sustained_total_items: 48
@@ -1918,19 +1922,19 @@ runtime_telemetry.batch_count: 16
 runtime_telemetry.amortized_load_ms_per_forward: 1458.539
 runtime_telemetry.amortized_run_ms_per_forward: 173.651
 runtime_telemetry.load_to_run_ratio: 8.399
-selected_pair_telemetry.path: /mnt/nas/openclaw/reports/models/dream7b_bpu_selected_pair_telemetry_20260606-023752/selected_pair_telemetry_probe.json
+selected_pair_telemetry.path: /mnt/nas/openclaw/reports/models/dream7b_bpu_selected_pair_telemetry_20260606-031259/selected_pair_telemetry_probe.json
 selected_pair_telemetry.batch_count: 16
 selected_pair_telemetry.max_bpu_loading: 98.0
-selected_pair_telemetry.avg_bpu_loading: 8.746
+selected_pair_telemetry.avg_bpu_loading: 9.14
 selected_pair_telemetry.selected_pair: [1, 8]
 selected_pair_telemetry.selected_segments: ['seg02_04', 'seg24_26']
 selected_pair_telemetry.selected_pair_covers_all_segments: True
-selected_pair_telemetry.selected_wall_ms: 23130.344
-selected_pair_telemetry.selected_forward_load_ms: 20462.122
-selected_pair_telemetry.selected_run_ms: 2361.565
-selected_pair_telemetry.wall_ms_delta_vs_default_runtime: 3238.78
-selected_pair_telemetry.wall_ms_delta_ratio_vs_default_runtime: 0.122825
-selected_pair_telemetry.avg_bpu_loading_delta_vs_default_runtime: 0.296
+selected_pair_telemetry.selected_wall_ms: 22955.54
+selected_pair_telemetry.selected_forward_load_ms: 20290.033
+selected_pair_telemetry.selected_run_ms: 2360.901
+selected_pair_telemetry.wall_ms_delta_vs_default_runtime: 2960.232
+selected_pair_telemetry.wall_ms_delta_ratio_vs_default_runtime: 0.114225
+selected_pair_telemetry.avg_bpu_loading_delta_vs_default_runtime: 1.952
 selected_pair_telemetry.selected_wall_time_improved_vs_default_runtime: True
 selected_pair_telemetry.selected_avg_bpu_loading_improved_vs_default_runtime: True
 systemd_telemetry.processed_request_count: 48
@@ -2217,9 +2221,13 @@ This is real BPU execution for real Dream 7B weights, including a complete seq16
 
 Latest segment-residency update: `/mnt/nas/openclaw/reports/models/dream7b_bpu_single_segment_residency_matrix_20260606-002628/single_segment_residency_matrix_probe.json` proves that all ten single segments can be held individually and every ordered single-to-single edge loads successfully (`matrix_entry_count: 90`, `successful_segment_edge_count: 90`, `failed_segment_edge_count: 0`, `max_resident_segment_count_observed: 2`). `/mnt/nas/openclaw/reports/models/dream7b_bpu_persistent_segment_cache_20260606-005633/persistent_segment_cache_probe.json` then shows the prefix resident boundary is two single-segment runtimes before `segment_02_seg04_07` fails. `/mnt/nas/openclaw/reports/models/dream7b_bpu_single_segment_triplet_residency_20260606-121243/single_segment_triplet_residency_probe.json` expands that boundary: all 120 three-segment combinations were tested, 20 triplets succeeded, 100 failed, and `max_resident_segment_count_observed: 3`. `/mnt/nas/openclaw/reports/models/dream7b_bpu_seeded_quad_residency_20260606-124305/seeded_quad_residency_probe.json` tests every unique four-segment candidate seeded by those 20 successful triplets and shows `seeded_quad_candidate_count: 84`, `tested_seeded_quad_count: 84`, `successful_seeded_quad_count: 0`, `failed_seeded_quad_count: 84`, and `max_resident_segment_count_observed: 3`. `/mnt/nas/openclaw/reports/models/dream7b_bpu_persistent_triplet_topology_20260606-131107/persistent_triplet_topology_probe.json` replays the 20 successful triplets as long-lived workers and shows `tested_triplet_topology_count: 20`, `stable_triplet_topology_count: 20`, `failed_triplet_topology_count: 0`, `selected_topology: [0, 1, 8]`, and `max_resident_segment_count_observed: 3`. `/mnt/nas/openclaw/reports/models/dream7b_bpu_window3_forward_feasibility_20260606-133931/window3_forward_feasibility_probe.json` shows direct packed adjacent window size 3 is not supported (`direct_window3_forward_supported: False`, `expected_window3_failure_observed: True`, `stderr_contains_memory_alloc_failure: True`). `/mnt/nas/openclaw/reports/models/dream7b_bpu_selected_triplet_forward_path_20260606-135729/selected_triplet_forward_path_probe.json` shows the selected `[0, 1, 8]` triplet must not be promoted as a forward-path optimization (`selected_triplet_forward_supported: False`, `reboot_or_disconnect_observed: True`, `expected_reboot_guard_observed: True`). The latest report-only acceptance gate is `/mnt/nas/openclaw/reports/models/dream7b_bpu_deployment_acceptance_20260605-234652/deployment_acceptance_probe.json` with `check_count: 25`, `passed_check_count: 25`, `single_segment_residency_matrix.ok: True`, `persistent_segment_cache.ok: True`, `single_segment_triplet_residency.ok: True`, `seeded_quad_residency.ok: True`, `persistent_triplet_topology.ok: True`, `window3_forward_feasibility.ok: True`, and `selected_triplet_forward_path.ok: True`.
 
-Latest selected-pair telemetry update: `/mnt/nas/openclaw/reports/models/dream7b_bpu_selected_pair_telemetry_20260606-023752/selected_pair_telemetry_probe.json` shows selected pair `[1, 8]` with `batch_count: 16`, `max_bpu_loading: 98.0`, `avg_bpu_loading: 8.746`, `comparison_to_default_runtime_telemetry.wall_ms_delta_ratio_vs_default_runtime: 0.122825`, `comparison_to_default_runtime_telemetry.selected_wall_time_improved_vs_default_runtime: True`, and `comparison_to_default_runtime_telemetry.selected_avg_bpu_loading_improved_vs_default_runtime: True`. `/mnt/nas/openclaw/reports/models/dream7b_bpu_utilization_gap_20260606-024035/utilization_gap_probe.json` now includes `selected_pair_telemetry` and still records `diagnosis: hbm_reload_dominated`, `max_observed_bpu_loading: 100.0`, and `avg_observed_bpu_loading_across_reports: 8.932`. The latest selected-pair-aware report-only acceptance gate is `/mnt/nas/openclaw/reports/models/dream7b_bpu_deployment_acceptance_20260606-024353/deployment_acceptance_probe.json` with `check_count: 26`, `passed_check_count: 26`, and `selected_pair_telemetry.ok: True`.
+Latest selected-pair telemetry update: `/mnt/nas/openclaw/reports/models/dream7b_bpu_selected_pair_telemetry_20260606-031259/selected_pair_telemetry_probe.json` shows selected pair `[1, 8]` with `batch_count: 16`, `max_bpu_loading: 98.0`, `avg_bpu_loading: 9.14`, `comparison_to_default_runtime_telemetry.wall_ms_delta_ratio_vs_default_runtime: 0.114225`, `comparison_to_default_runtime_telemetry.avg_bpu_loading_delta_vs_default_runtime: 1.952`, `comparison_to_default_runtime_telemetry.selected_wall_time_improved_vs_default_runtime: True`, and `comparison_to_default_runtime_telemetry.selected_avg_bpu_loading_improved_vs_default_runtime: True`. `/mnt/nas/openclaw/reports/models/dream7b_bpu_utilization_gap_20260606-031454/utilization_gap_probe.json` now includes `selected_pair_telemetry` and still records `diagnosis: hbm_reload_dominated`, `max_observed_bpu_loading: 100.0`, and `avg_observed_bpu_loading_across_reports: 8.758`. The latest selected-pair-aware report-only acceptance gate is `/mnt/nas/openclaw/reports/models/dream7b_bpu_deployment_acceptance_20260606-031455/deployment_acceptance_probe.json` with `check_count: 26`, `passed_check_count: 26`, and `selected_pair_telemetry.ok: True`.
+
+Latest selected-pair promotion gate: `/mnt/nas/openclaw/reports/models/dream7b_bpu_selected_pair_promotion_gate_20260606-034228/selected_pair_promotion_gate_probe.json` records `verdict: ok_dream7b_bpu_selected_pair_promotion_gate_probe`, `promotion_ready_for_guarded_default_service_candidate: True`, `default_service_already_promoted: False`, `min_batch_count: 16`, `min_wall_delta_ratio: 0.05`, `min_avg_bpu_delta: 1.0`, and `next_optimization_target: implement a guarded selected-pair default-service candidate and re-run deployment acceptance before replacing the current default Dream 7B service path`.
 
 Latest official-Qwen comparison: `/mnt/nas/openclaw/reports/models/s100_official_llm_baseline_20260606-004107/official_llm_baseline_probe.json` shows the official S100 LLM SDK/Qwen baseline assets are staged and the Qwen HBM exists locally (`qwen_existing_hbm_count: 1`, `qwen_hbm_exists_from_multichat: True`). `/mnt/nas/openclaw/reports/models/s100_official_qwen_runtime_20260606-003908/official_qwen_runtime_probe.json` shows official Qwen loads the vendor HBM and both `decode`/`prefill` models, then fails on BPU/common-buffer allocation (`runtime_returncode: -11`, `hbm_load_success_observed: True`, `init_model_success_observed: True`, `memory_alloc_failure_observed: True`, `ion_alloc_failure_observed: True`, `bpu_mem_pool_alloc_error_observed: True`, `official_qwen_runtime_supported_on_current_s100p_state: False`). `/mnt/nas/openclaw/reports/models/s100_official_qwen_performance_mode_retest_20260606-003908/performance_mode_retest_probe.json` proves the official performance registers were moved to `0x00000099` but the Qwen memory allocation failure remained. `/mnt/nas/openclaw/reports/models/s100_bpu_memory_pool_20260606-010941/bpu_memory_pool_probe.json` corrects the earlier `ion_meminfo` wrapper error by directly reading debugfs and device-tree: `ion_all_heap_info_exists: True`, `cma_reserved_heap_total_size: 1073741824`, `ion_cma_heap_total_size: 536870912`, `carveout_heap_total_size: 536870912`, `system_heap_total_size: 0`, `system_contig_heap_total_size: 0`, `reserved_memory_summary.bpu_region@9A000000.reg.size_mib: 96.0`, and `allocation_failure_interpretation` says the official Qwen failure is not explained by an absent ION debugfs heap. `/mnt/nas/openclaw/reports/models/s100_hbmem_common_buffer_matrix_20260606-012033/hbmem_common_buffer_matrix_probe.json` then shows direct allocation of the official Qwen logged sizes succeeds through both HBMEM and UCP (`qwen_log_size_success_count: 14`, `qwen_log_size_failure_count: 0`, `ucp_success_count: 8`). `/mnt/nas/openclaw/reports/models/s100_qwen_backend9_baseline_20260606-013902/qwen_backend9_baseline_probe.json` records the current official Qwen config has no `bpu_core`, the demo source defaults `bpu_core: -1` and `XLM_INFER_BACKEND_BPU_ANY`, the observed failure uses `backend: 9`, and `backend: 9` matches `HB_UCP_BPU_CORE_0` plus `HB_UCP_BPU_CORE_3` from `/usr/include/hobot/hb_ucp.h` but does not equal `HB_UCP_BPU_CORE_ANY`. `/mnt/nas/openclaw/reports/models/s100_qwen_bpu_core_sweep_20260606-015133/qwen_bpu_core_sweep_probe.json` then tests exact `bpu_core` values `-1`, `0`, `1`, `2`, and `3`: all cases still report memory allocation failure and no case has `functional_success_observed`, while `bpu_core: 1`, `2`, and `3` only change the failure from segfault to prefill failure with return code `0`. `/mnt/nas/openclaw/reports/models/dream7b_bpu_scheduling_params_20260606-020548/scheduling_params_probe.json` shows Dream `HB_HBMRuntime.set_scheduling_params(..., bpu_cores=...)` is real but model-specific: the tested Dream single segment supports default scheduling and explicit core `0`, while cores `1`, `2`, and `3` are unsupported and abort in isolated child processes. This proves official Qwen does hit a similar BPU/common-buffer memory issue on this board state, but simple `bpu_core` pinning is not enough and cannot be copied directly into Dream; Dream's sustained service bottleneck remains separately diagnosed as `hbm_reload_dominated`.
+
+2026-06-08 SSH recheck: the official Qwen example still resolves through `/mnt/nas/openclaw/toolchains/s100_llm_sdk/D-Robotics_LLM_S100_1.0.0_SDK/oellm_runtime/example/oellm_multichat/qwen_multichat_config.json` with exact keys `hbm_path`, `tokenizer_dir`, and `template_path`; their values are `../../model/Qwen2.5_1.5B_Instruct_1024.hbm`, `../../config/Qwen2.5_1.5B_Instruct_config/`, and `../../config/Qwen2.5_1.5B_Instruct_config/Qwen2.5_1.5B_Instruct.jinja`. The matching `oellm_multichat_demo.cc` defaults `bpu_core` to `-1` and uses `XLM_INFER_BACKEND_BPU_ANY` for that default, so Qwen's current failure is evidence of an official-route BPU/common-buffer allocation issue, not evidence that the official route already provides a clean high-average 128TOPS utilization target.
 
 Remaining engineering work:
 
@@ -2227,7 +2235,7 @@ Remaining engineering work:
 - do not implement a persistent pair-worker cache on the current five-pair split; the held-pair matrix has `successful_pair_edge_count: 0`;
 - use the single-segment evidence to choose smaller HBM artifacts, new boundaries, or S100 runtime residency support before expecting sustained 128TOPS-level average utilization;
 - do not promote `selected_topology: [0, 1, 8]` as a forward-path optimization; the selected triplet forward-path probe records `selected_triplet_forward_supported: False` and `reboot_or_disconnect_observed: True`;
-- treat selected pair `[1, 8]` as a positive telemetry-backed warm-path optimization, but do not promote it into the default service until default runtime telemetry and selected-pair telemetry are rerun back-to-back; the selected-pair telemetry report records `comparison_to_default_runtime_telemetry.selected_wall_time_improved_vs_default_runtime: True` and `comparison_to_default_runtime_telemetry.selected_avg_bpu_loading_improved_vs_default_runtime: True`;
+- treat selected pair `[1, 8]` as a positive telemetry-backed warm-path optimization; the promotion gate now passes with `promotion_ready_for_guarded_default_service_candidate: True`, but `default_service_already_promoted: False`, so the next change must implement a guarded selected-pair default-service candidate followed by deployment acceptance;
 - do not spend time on four-segment resident groups without a new HBM split/runtime change; the seeded quad probe has `successful_seeded_quad_count: 0`;
 - do not switch the current fine batch forward defaults to packed adjacent window size 3; the window3 feasibility probe has `expected_window3_failure_observed: True`;
 - treat explicit `bpu_core` as an optional crash-mitigation variable only; the controlled official Qwen sweep still has no functional-success case, so Dream 7B must continue HBM reload/residency work before expecting sustained 128TOPS utilization;
