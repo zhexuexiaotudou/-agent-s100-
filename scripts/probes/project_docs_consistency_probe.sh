@@ -71,6 +71,7 @@ required_files=(
   "scripts/probes/s100_bpu_memory_pool_probe.sh"
   "scripts/probes/s100_hbmem_common_buffer_matrix_probe.sh"
   "scripts/probes/s100_qwen_backend9_baseline_probe.sh"
+  "scripts/probes/s100_qwen_bpu_core_sweep_probe.sh"
   "scripts/probes/s100_official_qwen_performance_mode_retest_probe.sh"
   "scripts/probes/dream7b_bpu_batch_queue_retention_probe.sh"
   "scripts/probes/dream7b_bpu_deployment_acceptance_probe.sh"
@@ -104,6 +105,7 @@ required_readme_strings=(
   "scripts/probes/s100_bpu_memory_pool_probe.sh"
   "scripts/probes/s100_hbmem_common_buffer_matrix_probe.sh"
   "scripts/probes/s100_qwen_backend9_baseline_probe.sh"
+  "scripts/probes/s100_qwen_bpu_core_sweep_probe.sh"
   "scripts/probes/s100_official_qwen_performance_mode_retest_probe.sh"
   "dream7b_bpu_text_queue_systemd_probe.sh"
 )
@@ -146,6 +148,7 @@ required_reference_strings=(
   "dream7b-bpu-selected-triplet-forward-path-probe"
   "s100-official-llm-baseline-probe"
   "s100-qwen-backend9-baseline-probe"
+  "s100-qwen-bpu-core-sweep-probe"
   "dream7b-bpu-batch-queue-retention-probe"
   "dream7b-bpu-deployment-acceptance-probe"
   "dream7b-bpu-batch-queue.service"
@@ -1723,6 +1726,42 @@ if [[ -f scripts/probes/s100_qwen_backend9_baseline_probe.sh ]]; then
   done
   if ! grep -F -- 'D-Robotics_LLM_S100_1.0.0_SDK' scripts/probes/s100_qwen_backend9_baseline_probe.sh >/dev/null; then
     errors+=("s100_qwen_backend9_baseline_probe.sh missing D-Robotics_LLM_S100_1.0.0_SDK")
+  fi
+fi
+
+if [[ -f scripts/probes/s100_qwen_bpu_core_sweep_probe.sh ]]; then
+  for text in \
+    "S100_QWEN_BPU_CORE_SWEEP_SDK_ROOT" \
+    "S100_QWEN_BPU_CORE_SWEEP_TIMEOUT_SECONDS" \
+    "S100_QWEN_BPU_CORE_SWEEP_CORES" \
+    "qwen_multichat_config.json" \
+    "oellm_multichat_demo.cc" \
+    "/usr/include/hobot/hb_ucp.h" \
+    "bpu_core" \
+    "-1 0 1 2 3" \
+    "qwen_bpu_core_sweep_probe.json" \
+    "qwen_bpu_core_sweep_probe.md" \
+    "ok_s100_qwen_bpu_core_sweep_probe" \
+    "backend_values_by_core" \
+    "memory_alloc_failure_by_core" \
+    "runtime_completed_by_core" \
+    "segmentation_fault_by_core" \
+    "functional_failure_by_core" \
+    "functional_success_by_core" \
+    "prefill_failure_by_core" \
+    "all_cases_failed_functionally" \
+    "any_case_functional_success" \
+    "functional_success_observed" \
+    "prefill_failure_observed" \
+    "hbUCPSubmitTask" \
+    "DnnModelInfer prefill failed" \
+    "core pinning alone is not sufficient"; do
+    if ! grep -F -- "$text" scripts/probes/s100_qwen_bpu_core_sweep_probe.sh >/dev/null; then
+      errors+=("s100_qwen_bpu_core_sweep_probe.sh missing $text")
+    fi
+  done
+  if ! grep -F -- 'D-Robotics_LLM_S100_1.0.0_SDK' scripts/probes/s100_qwen_bpu_core_sweep_probe.sh >/dev/null; then
+    errors+=("s100_qwen_bpu_core_sweep_probe.sh missing D-Robotics_LLM_S100_1.0.0_SDK")
   fi
 fi
 

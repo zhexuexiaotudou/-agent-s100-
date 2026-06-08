@@ -3537,6 +3537,166 @@ warnings: ['observed Qwen backend: 9 does not equal HB_UCP_BPU_CORE_ANY from /us
 errors: []
 ```
 
+### `s100-qwen-bpu-core-sweep-probe`
+
+Source file: `scripts/probes/s100_qwen_bpu_core_sweep_probe.sh`
+
+Installed command on S100P:
+
+```text
+/usr/local/bin/s100-qwen-bpu-core-sweep-probe
+```
+
+Default argument copied from the script:
+
+```text
+report_root = /mnt/nas/openclaw/reports/models
+```
+
+Environment variables copied from the script:
+
+```text
+S100_QWEN_BPU_CORE_SWEEP_SDK_ROOT
+S100_QWEN_BPU_CORE_SWEEP_TIMEOUT_SECONDS
+S100_QWEN_BPU_CORE_SWEEP_CORES
+```
+
+Default values copied from the script:
+
+```text
+timeout_seconds = 45
+cores_text = -1 0 1 2 3
+```
+
+Input files copied from the script:
+
+```text
+/mnt/nas/openclaw/toolchains/s100_llm_sdk/D-Robotics_LLM_S100_1.0.0_SDK/oellm_runtime/example/oellm_multichat/qwen_multichat_config.json
+/mnt/nas/openclaw/toolchains/s100_llm_sdk/D-Robotics_LLM_S100_1.0.0_SDK/oellm_runtime/example/oellm_multichat/oellm_multichat
+/mnt/nas/openclaw/toolchains/s100_llm_sdk/D-Robotics_LLM_S100_1.0.0_SDK/oellm_runtime/example/oellm_multichat/oellm_multichat_demo.cc
+/usr/include/hobot/hb_ucp.h
+```
+
+Output files copied from the script:
+
+```text
+qwen_bpu_core_sweep_probe.json
+qwen_bpu_core_sweep_probe.md
+bpu_core_minus_1/qwen_multichat_config.json
+bpu_core_minus_1/oellm_multichat.stdout.txt
+bpu_core_minus_1/oellm_multichat.stderr.txt
+bpu_core_minus_1/case_result.json
+bpu_core_minus_1/case_result.md
+bpu_core_0/qwen_multichat_config.json
+bpu_core_0/oellm_multichat.stdout.txt
+bpu_core_0/oellm_multichat.stderr.txt
+bpu_core_0/case_result.json
+bpu_core_0/case_result.md
+bpu_core_1/qwen_multichat_config.json
+bpu_core_1/oellm_multichat.stdout.txt
+bpu_core_1/oellm_multichat.stderr.txt
+bpu_core_1/case_result.json
+bpu_core_1/case_result.md
+bpu_core_2/qwen_multichat_config.json
+bpu_core_2/oellm_multichat.stdout.txt
+bpu_core_2/oellm_multichat.stderr.txt
+bpu_core_2/case_result.json
+bpu_core_2/case_result.md
+bpu_core_3/qwen_multichat_config.json
+bpu_core_3/oellm_multichat.stdout.txt
+bpu_core_3/oellm_multichat.stderr.txt
+bpu_core_3/case_result.json
+bpu_core_3/case_result.md
+```
+
+Output fields copied from the script:
+
+```text
+generated_at
+verdict
+run_dir
+sdk_root
+runtime_bin
+source_config_path
+runtime_lib_dir
+timeout_seconds
+tested_bpu_core_values
+source_config_had_bpu_core
+demo_source_path
+demo_supports_config_bpu_core
+demo_default_bpu_core_value
+demo_default_infer_backend
+demo_bpu_core_lines
+hb_ucp_header_path
+hb_ucp_backend_constants
+qwen_hbm_path
+tokenizer_dir
+template_path
+case_count
+case_report_paths
+case_results
+backend_values_by_core
+memory_alloc_failure_by_core
+runtime_completed_by_core
+returncode_by_core
+segmentation_fault_by_core
+functional_failure_by_core
+functional_success_by_core
+prefill_failure_by_core
+all_cases_failed_memory
+all_cases_failed_functionally
+any_case_completed
+any_case_functional_success
+backend_changed_by_core
+explicit_core_changed_backend_or_failure
+latest_backend9_baseline_report_path
+latest_backend9_baseline_observed_backend_values
+latest_backend9_baseline_direct_hbmem_matrix_qwen_sizes_pass
+dream_utilization_report_path
+dream_diagnosis
+interpretation
+next_probe_target
+warnings
+errors
+```
+
+Latest recorded report:
+
+```text
+/mnt/nas/openclaw/reports/models/s100_qwen_bpu_core_sweep_20260606-015133/qwen_bpu_core_sweep_probe.md
+```
+
+Latest recorded JSON:
+
+```text
+/mnt/nas/openclaw/reports/models/s100_qwen_bpu_core_sweep_20260606-015133/qwen_bpu_core_sweep_probe.json
+```
+
+Verified S100 Qwen `bpu_core` sweep fields copied from `qwen_bpu_core_sweep_probe.json`:
+
+```text
+verdict: ok_s100_qwen_bpu_core_sweep_probe
+tested_bpu_core_values: [-1, 0, 1, 2, 3]
+backend_values_by_core: {'-1': [9], '0': [9], '1': [9], '2': [9], '3': [9]}
+memory_alloc_failure_by_core: {'-1': True, '0': True, '1': True, '2': True, '3': True}
+runtime_completed_by_core: {'-1': False, '0': False, '1': True, '2': True, '3': True}
+returncode_by_core: {'-1': -11, '0': -11, '1': 0, '2': 0, '3': 0}
+segmentation_fault_by_core: {'-1': True, '0': True, '1': False, '2': False, '3': False}
+functional_failure_by_core: {'-1': True, '0': True, '1': True, '2': True, '3': True}
+functional_success_by_core: {'-1': False, '0': False, '1': False, '2': False, '3': False}
+prefill_failure_by_core: {'-1': False, '0': False, '1': True, '2': True, '3': True}
+all_cases_failed_memory: True
+all_cases_failed_functionally: True
+any_case_completed: True
+any_case_functional_success: False
+backend_changed_by_core: False
+explicit_core_changed_backend_or_failure: True
+interpretation: explicit bpu_core values changed the official Qwen crash behavior, but no tested core produced functional inference; core pinning alone is not sufficient
+next_probe_target: treat explicit bpu_core as an optional crash-mitigation variable, but continue Dream 7B HBM reload/residency work before expecting sustained 128TOPS utilization
+warnings: ['all tested official Qwen bpu_core values still reported memory allocation failure', 'all tested official Qwen bpu_core values produced the same observed backend value set', 'all tested official Qwen bpu_core values still failed functionally']
+errors: []
+```
+
 ### `dream7b-bpu-deployment-acceptance-probe`
 
 Source file: `scripts/probes/dream7b_bpu_deployment_acceptance_probe.sh`
@@ -5026,6 +5186,7 @@ Evidence:
 /mnt/nas/openclaw/reports/models/s100_official_qwen_performance_mode_retest_20260606-003908/performance_mode_retest_probe.json
 /mnt/nas/openclaw/reports/models/s100_bpu_memory_pool_20260606-004401/bpu_memory_pool_probe.json
 /mnt/nas/openclaw/reports/models/s100_qwen_backend9_baseline_20260606-013902/qwen_backend9_baseline_probe.json
+/mnt/nas/openclaw/reports/models/s100_qwen_bpu_core_sweep_20260606-015133/qwen_bpu_core_sweep_probe.json
 ```
 
 ### Use segmented `.hbm`
@@ -5738,6 +5899,7 @@ docs/baseline_progress_2026-06-03_dream7b_segmented_bpu_hbm.md
 - Updated and verified `s100-bpu-memory-pool-probe` at `/mnt/nas/openclaw/reports/models/s100_bpu_memory_pool_20260606-010941/bpu_memory_pool_probe.md`; it records direct debugfs ION heap data, BPU ION allocations, BPU iovmm counters, and device-tree reserved-memory nodes, correcting the earlier `ion_meminfo` wrapper error by showing `ion_all_heap_info_exists: True`, `system_heap_total_size: 0`, `system_contig_heap_total_size: 0`, `cma_reserved_heap_total_size: 1073741824`, `ion_cma_heap_total_size: 536870912`, `carveout_heap_total_size: 536870912`, and `reserved_memory_summary.bpu_region@9A000000.reg.size_mib: 96.0`.
 - Added and verified `s100-hbmem-common-buffer-matrix-probe` at `/mnt/nas/openclaw/reports/models/s100_hbmem_common_buffer_matrix_20260606-012033/hbmem_common_buffer_matrix_probe.md`; it compiles a minimal C allocation matrix against `hb_mem_alloc_com_buf`, `hbUCPMalloc`, and `hbUCPMallocCached`, and shows the official Qwen failure sizes `786432` and `2359296` pass all tested HBMEM cases (`qwen_log_size_success_count: 14`, `qwen_log_size_failure_count: 0`) and all tested UCP cases pass (`ucp_success_count: 8`).
 - Added and verified `s100-qwen-backend9-baseline-probe` at `/mnt/nas/openclaw/reports/models/s100_qwen_backend9_baseline_20260606-013902/qwen_backend9_baseline_probe.md`; it records official Qwen `qwen_multichat_config.json` lacks `bpu_core`, `oellm_multichat_demo.cc` defaults `bpu_core` to `-1` and `XLM_INFER_BACKEND_BPU_ANY`, the observed Qwen failure uses `backend: 9`, `/usr/include/hobot/hb_ucp.h` maps `backend: 9` to `HB_UCP_BPU_CORE_0` plus `HB_UCP_BPU_CORE_3` and not `HB_UCP_BPU_CORE_ANY`, and direct HBMEM/UCP allocation of the logged Qwen sizes still passes.
+- Added and verified `s100-qwen-bpu-core-sweep-probe` at `/mnt/nas/openclaw/reports/models/s100_qwen_bpu_core_sweep_20260606-015133/qwen_bpu_core_sweep_probe.md`; it copies official Qwen config and tests exact `bpu_core` values `-1`, `0`, `1`, `2`, and `3`, showing every case still reports memory allocation failure and `functional_success_by_core` is `False` for every case. Explicit `bpu_core` values `1`, `2`, and `3` remove the process segfault but still fail prefill, so core pinning alone is not sufficient.
 - Updated and verified official LLM/Qwen baseline report at `/mnt/nas/openclaw/reports/models/s100_official_llm_baseline_20260606-004107/official_llm_baseline_probe.md` with `sdk_exists: True`, `config_dir_count: 8`, `official_hbm_download_entry_count: 14`, `qwen_existing_hbm_count: 1`, `official_qwen_local_runtime_report_present: True`, `official_qwen_runtime_completed: False`, `official_qwen_memory_alloc_failure_observed: True`, and `similar_issue_evidence_available_for_official_qwen: True`.
 
 ## TODO
@@ -5748,7 +5910,7 @@ docs/baseline_progress_2026-06-03_dream7b_segmented_bpu_hbm.md
 - Do not promote `selected_topology: [0, 1, 8]` as a forward-path optimization; the selected triplet forward-path probe records `selected_triplet_forward_supported: False` and `reboot_or_disconnect_observed: True`.
 - Do not switch `dream7b-bpu-fine-batch-forward` defaults to packed adjacent window size 3; the window3 feasibility probe records `expected_window3_failure_observed: True`.
 - Do not attempt a four-segment resident topology on the current HBM artifacts without a new split or runtime change; the seeded quad probe has `successful_seeded_quad_count: 0`.
-- Run a controlled official Qwen `bpu_core` sweep by copying `qwen_multichat_config.json` and adding exact `bpu_core` values `-1`, `0`, `1`, `2`, and `3`; compare backend values and memory failures before transferring any backend/core-pinning idea to Dream 7B.
+- Treat explicit `bpu_core` as an optional crash-mitigation variable only; the controlled official Qwen sweep still has `functional_success_by_core` false for every tested value, so Dream 7B must continue focusing on HBM reload/residency reduction before expecting sustained 128TOPS utilization.
 - Evaluate smaller HBM artifacts, different segment boundaries, or runtime residency support before expecting sustained 128TOPS-level average utilization from Dream 7B.
 - Continue collecting long-repeat reports before tightening the current `DREAM7B_BPU_FINE_FORWARD_LONG_REPEAT_MAX_WALL_SPREAD_RATIO` default of `0.10`.
 - Keep queue cleanup report-only until an explicit apply mode and archive directory migration rule are approved.
