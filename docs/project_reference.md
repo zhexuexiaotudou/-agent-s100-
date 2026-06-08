@@ -1,6 +1,6 @@
 # Project Reference
 
-Last updated: 2026-06-06
+Last updated: 2026-06-08
 
 This document is the project-level reference for API-like command interfaces, configuration keys, architecture, decisions, development log, requirements, and TODOs. All identifiers in this file are copied from repository files or recorded evidence. When a name, key, path, or field is uncertain, read the source file first and do not infer spelling, case, format, or structure.
 
@@ -3403,6 +3403,140 @@ next_probe_target: compare these direct HBMEM/UCP allocation results with offici
 errors: []
 ```
 
+### `s100-qwen-backend9-baseline-probe`
+
+Source file: `scripts/probes/s100_qwen_backend9_baseline_probe.sh`
+
+Installed command on S100P:
+
+```text
+/usr/local/bin/s100-qwen-backend9-baseline-probe
+```
+
+Default argument copied from the script:
+
+```text
+report_root = /mnt/nas/openclaw/reports/models
+```
+
+Environment variables copied from the script:
+
+```text
+S100_QWEN_BACKEND9_SDK_ROOT
+```
+
+Input files copied from the script:
+
+```text
+/mnt/nas/openclaw/toolchains/s100_llm_sdk/D-Robotics_LLM_S100_1.0.0_SDK/oellm_runtime/example/oellm_multichat/qwen_multichat_config.json
+/mnt/nas/openclaw/toolchains/s100_llm_sdk/D-Robotics_LLM_S100_1.0.0_SDK/oellm_runtime/example/oellm_multichat/oellm_multichat_demo.cc
+/mnt/nas/openclaw/toolchains/s100_llm_sdk/D-Robotics_LLM_S100_1.0.0_SDK/oellm_runtime/lib/libhbucp.so
+/usr/include/hobot/hb_ucp.h
+```
+
+Output files copied from the script:
+
+```text
+qwen_multichat_config.json
+oellm_multichat_demo_bpu_core_lines.txt
+hb_ucp_backend_constants.txt
+qwen_backend_failure_lines.txt
+libhbucp_nm_relevant.txt
+libhbucp_strings_relevant.txt
+qwen_backend9_baseline_probe.json
+qwen_backend9_baseline_probe.md
+```
+
+Output fields copied from the script:
+
+```text
+generated_at
+verdict
+run_dir
+sdk_root
+qwen_multichat_config_path
+qwen_multichat_config
+config_has_bpu_core
+config_bpu_core_value
+demo_source_path
+demo_default_bpu_core_value
+demo_default_infer_backend
+demo_bpu_core_lines
+hb_ucp_header_path
+hb_ucp_backend_constants
+observed_backend_values
+observed_backend_bit_matches_from_hb_ucp_header
+backend_9_equals_hb_ucp_bpu_core_any
+observed_ucp_alloc_failure_sizes
+stderr_alloc_error_lens
+ion_failure_line_count
+qwen_runtime_report_path
+qwen_runtime_returncode
+qwen_runtime_completed
+qwen_hbm_load_success_observed
+qwen_init_model_success_observed
+qwen_memory_alloc_failure_observed
+qwen_ion_alloc_failure_observed
+qwen_bpu_mem_pool_alloc_error_observed
+qwen_segmentation_fault_observed
+qwen_same_failure_class_as_dream
+hbmem_matrix_report_path
+hbmem_matrix_qwen_log_size_success_count
+hbmem_matrix_qwen_log_size_failure_count
+hbmem_matrix_ucp_success_count
+direct_hbmem_matrix_qwen_sizes_pass
+official_qwen_has_similar_bpu_memory_issue
+official_qwen_issue_not_raw_size_only
+dream_utilization_report_path
+dream_diagnosis
+dream_max_observed_bpu_loading
+dream_avg_observed_bpu_loading_across_reports
+dream_window3_report_path
+dream_window3_stderr_contains_memory_alloc_failure
+comparison
+next_probe_target
+captures
+warnings
+errors
+```
+
+Latest recorded report:
+
+```text
+/mnt/nas/openclaw/reports/models/s100_qwen_backend9_baseline_20260606-013902/qwen_backend9_baseline_probe.md
+```
+
+Latest recorded JSON:
+
+```text
+/mnt/nas/openclaw/reports/models/s100_qwen_backend9_baseline_20260606-013902/qwen_backend9_baseline_probe.json
+```
+
+Verified S100 Qwen backend 9 baseline fields copied from `qwen_backend9_baseline_probe.json`:
+
+```text
+verdict: ok_s100_qwen_backend9_baseline_probe
+config_has_bpu_core: False
+config_bpu_core_value: None
+demo_default_bpu_core_value: -1
+demo_default_infer_backend: XLM_INFER_BACKEND_BPU_ANY
+observed_backend_values: [9]
+observed_backend_bit_matches_from_hb_ucp_header: {'9': ['HB_UCP_BPU_CORE_0', 'HB_UCP_BPU_CORE_3']}
+backend_9_equals_hb_ucp_bpu_core_any: False
+observed_ucp_alloc_failure_sizes: [786432, 1572864]
+stderr_alloc_error_lens: [2359296]
+hbmem_matrix_qwen_log_size_success_count: 14
+hbmem_matrix_qwen_log_size_failure_count: 0
+direct_hbmem_matrix_qwen_sizes_pass: True
+official_qwen_has_similar_bpu_memory_issue: True
+official_qwen_issue_not_raw_size_only: True
+dream_diagnosis: hbm_reload_dominated
+dream_window3_stderr_contains_memory_alloc_failure: True
+next_probe_target: run a controlled official Qwen bpu_core sweep by copying qwen_multichat_config.json and adding exact bpu_core values -1, 0, 1, 2, and 3; compare backend values and memory failures before transferring any backend/core-pinning idea to Dream 7B
+warnings: ['observed Qwen backend: 9 does not equal HB_UCP_BPU_CORE_ANY from /usr/include/hobot/hb_ucp.h', 'official Qwen has a BPU/common-buffer allocation failure even though direct HBMEM/UCP allocation of logged Qwen sizes passed']
+errors: []
+```
+
 ### `dream7b-bpu-deployment-acceptance-probe`
 
 Source file: `scripts/probes/dream7b_bpu_deployment_acceptance_probe.sh`
@@ -4891,6 +5025,7 @@ Evidence:
 /mnt/nas/openclaw/reports/models/s100_official_qwen_runtime_20260606-003908/official_qwen_runtime_probe.json
 /mnt/nas/openclaw/reports/models/s100_official_qwen_performance_mode_retest_20260606-003908/performance_mode_retest_probe.json
 /mnt/nas/openclaw/reports/models/s100_bpu_memory_pool_20260606-004401/bpu_memory_pool_probe.json
+/mnt/nas/openclaw/reports/models/s100_qwen_backend9_baseline_20260606-013902/qwen_backend9_baseline_probe.json
 ```
 
 ### Use segmented `.hbm`
@@ -5602,6 +5737,7 @@ docs/baseline_progress_2026-06-03_dream7b_segmented_bpu_hbm.md
 - Added and verified `s100-official-qwen-performance-mode-retest-probe` at `/mnt/nas/openclaw/reports/models/s100_official_qwen_performance_mode_retest_20260606-003908/performance_mode_retest_probe.md`; it changed `0x2b047000` and `0x2b047004` to `0x00000099`, but official Qwen still reported `memory_alloc_failure_observed_after_performance_mode: True`.
 - Updated and verified `s100-bpu-memory-pool-probe` at `/mnt/nas/openclaw/reports/models/s100_bpu_memory_pool_20260606-010941/bpu_memory_pool_probe.md`; it records direct debugfs ION heap data, BPU ION allocations, BPU iovmm counters, and device-tree reserved-memory nodes, correcting the earlier `ion_meminfo` wrapper error by showing `ion_all_heap_info_exists: True`, `system_heap_total_size: 0`, `system_contig_heap_total_size: 0`, `cma_reserved_heap_total_size: 1073741824`, `ion_cma_heap_total_size: 536870912`, `carveout_heap_total_size: 536870912`, and `reserved_memory_summary.bpu_region@9A000000.reg.size_mib: 96.0`.
 - Added and verified `s100-hbmem-common-buffer-matrix-probe` at `/mnt/nas/openclaw/reports/models/s100_hbmem_common_buffer_matrix_20260606-012033/hbmem_common_buffer_matrix_probe.md`; it compiles a minimal C allocation matrix against `hb_mem_alloc_com_buf`, `hbUCPMalloc`, and `hbUCPMallocCached`, and shows the official Qwen failure sizes `786432` and `2359296` pass all tested HBMEM cases (`qwen_log_size_success_count: 14`, `qwen_log_size_failure_count: 0`) and all tested UCP cases pass (`ucp_success_count: 8`).
+- Added and verified `s100-qwen-backend9-baseline-probe` at `/mnt/nas/openclaw/reports/models/s100_qwen_backend9_baseline_20260606-013902/qwen_backend9_baseline_probe.md`; it records official Qwen `qwen_multichat_config.json` lacks `bpu_core`, `oellm_multichat_demo.cc` defaults `bpu_core` to `-1` and `XLM_INFER_BACKEND_BPU_ANY`, the observed Qwen failure uses `backend: 9`, `/usr/include/hobot/hb_ucp.h` maps `backend: 9` to `HB_UCP_BPU_CORE_0` plus `HB_UCP_BPU_CORE_3` and not `HB_UCP_BPU_CORE_ANY`, and direct HBMEM/UCP allocation of the logged Qwen sizes still passes.
 - Updated and verified official LLM/Qwen baseline report at `/mnt/nas/openclaw/reports/models/s100_official_llm_baseline_20260606-004107/official_llm_baseline_probe.md` with `sdk_exists: True`, `config_dir_count: 8`, `official_hbm_download_entry_count: 14`, `qwen_existing_hbm_count: 1`, `official_qwen_local_runtime_report_present: True`, `official_qwen_runtime_completed: False`, `official_qwen_memory_alloc_failure_observed: True`, and `similar_issue_evidence_available_for_official_qwen: True`.
 
 ## TODO
@@ -5612,7 +5748,7 @@ docs/baseline_progress_2026-06-03_dream7b_segmented_bpu_hbm.md
 - Do not promote `selected_topology: [0, 1, 8]` as a forward-path optimization; the selected triplet forward-path probe records `selected_triplet_forward_supported: False` and `reboot_or_disconnect_observed: True`.
 - Do not switch `dream7b-bpu-fine-batch-forward` defaults to packed adjacent window size 3; the window3 feasibility probe records `expected_window3_failure_observed: True`.
 - Do not attempt a four-segment resident topology on the current HBM artifacts without a new split or runtime change; the seeded quad probe has `successful_seeded_quad_count: 0`.
-- Compare the passing direct HBMEM/UCP allocation matrix with official Qwen's `backend: 9` failure path and inspect `libhbucp` backend-to-HBMEM flag selection; direct allocation of Qwen's logged sizes succeeds, so the failure is not explained by raw size-only common-buffer availability.
+- Run a controlled official Qwen `bpu_core` sweep by copying `qwen_multichat_config.json` and adding exact `bpu_core` values `-1`, `0`, `1`, `2`, and `3`; compare backend values and memory failures before transferring any backend/core-pinning idea to Dream 7B.
 - Evaluate smaller HBM artifacts, different segment boundaries, or runtime residency support before expecting sustained 128TOPS-level average utilization from Dream 7B.
 - Continue collecting long-repeat reports before tightening the current `DREAM7B_BPU_FINE_FORWARD_LONG_REPEAT_MAX_WALL_SPREAD_RATIO` default of `0.10`.
 - Keep queue cleanup report-only until an explicit apply mode and archive directory migration rule are approved.

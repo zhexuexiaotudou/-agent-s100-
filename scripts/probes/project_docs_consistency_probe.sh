@@ -70,6 +70,7 @@ required_files=(
   "scripts/probes/s100_official_qwen_runtime_probe.sh"
   "scripts/probes/s100_bpu_memory_pool_probe.sh"
   "scripts/probes/s100_hbmem_common_buffer_matrix_probe.sh"
+  "scripts/probes/s100_qwen_backend9_baseline_probe.sh"
   "scripts/probes/s100_official_qwen_performance_mode_retest_probe.sh"
   "scripts/probes/dream7b_bpu_batch_queue_retention_probe.sh"
   "scripts/probes/dream7b_bpu_deployment_acceptance_probe.sh"
@@ -102,6 +103,7 @@ required_readme_strings=(
   "scripts/probes/s100_official_qwen_runtime_probe.sh"
   "scripts/probes/s100_bpu_memory_pool_probe.sh"
   "scripts/probes/s100_hbmem_common_buffer_matrix_probe.sh"
+  "scripts/probes/s100_qwen_backend9_baseline_probe.sh"
   "scripts/probes/s100_official_qwen_performance_mode_retest_probe.sh"
   "dream7b_bpu_text_queue_systemd_probe.sh"
 )
@@ -143,6 +145,7 @@ required_reference_strings=(
   "dream7b-bpu-window3-forward-feasibility-probe"
   "dream7b-bpu-selected-triplet-forward-path-probe"
   "s100-official-llm-baseline-probe"
+  "s100-qwen-backend9-baseline-probe"
   "dream7b-bpu-batch-queue-retention-probe"
   "dream7b-bpu-deployment-acceptance-probe"
   "dream7b-bpu-batch-queue.service"
@@ -1686,6 +1689,40 @@ if [[ -f scripts/probes/s100_hbmem_common_buffer_matrix_probe.sh ]]; then
   done
   if ! grep -F -- 'D-Robotics_LLM_S100_1.0.0_SDK' scripts/probes/s100_hbmem_common_buffer_matrix_probe.sh >/dev/null; then
     errors+=("s100_hbmem_common_buffer_matrix_probe.sh missing D-Robotics_LLM_S100_1.0.0_SDK")
+  fi
+fi
+
+if [[ -f scripts/probes/s100_qwen_backend9_baseline_probe.sh ]]; then
+  for text in \
+    "S100_QWEN_BACKEND9_SDK_ROOT" \
+    "qwen_multichat_config.json" \
+    "oellm_multichat_demo.cc" \
+    "libhbucp.so" \
+    "/usr/include/hobot/hb_ucp.h" \
+    "bpu_core" \
+    "XLM_INFER_BACKEND_BPU_ANY" \
+    "backend:" \
+    "backend_9_equals_hb_ucp_bpu_core_any" \
+    "HB_UCP_BPU_CORE_ANY" \
+    "Allocate memory failed" \
+    "AllocError" \
+    "ION_IOC_ALLOC" \
+    "qwen_backend9_baseline_probe.json" \
+    "qwen_backend9_baseline_probe.md" \
+    "ok_s100_qwen_backend9_baseline_probe" \
+    "observed_backend_values" \
+    "observed_ucp_alloc_failure_sizes" \
+    "direct_hbmem_matrix_qwen_sizes_pass" \
+    "official_qwen_has_similar_bpu_memory_issue" \
+    "official_qwen_issue_not_raw_size_only" \
+    "dream_diagnosis" \
+    "run a controlled official Qwen bpu_core sweep"; do
+    if ! grep -F -- "$text" scripts/probes/s100_qwen_backend9_baseline_probe.sh >/dev/null; then
+      errors+=("s100_qwen_backend9_baseline_probe.sh missing $text")
+    fi
+  done
+  if ! grep -F -- 'D-Robotics_LLM_S100_1.0.0_SDK' scripts/probes/s100_qwen_backend9_baseline_probe.sh >/dev/null; then
+    errors+=("s100_qwen_backend9_baseline_probe.sh missing D-Robotics_LLM_S100_1.0.0_SDK")
   fi
 fi
 
