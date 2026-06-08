@@ -870,6 +870,38 @@ else:
         },
     )
 
+single_segment_triplet_path, single_segment_triplet = latest_json("dream7b_bpu_single_segment_triplet_residency_*/single_segment_triplet_residency_probe.json")
+if single_segment_triplet is None:
+    add_check("single_segment_triplet_residency", single_segment_triplet_path, False, {"reason": "missing single_segment_triplet_residency_probe.json"})
+else:
+    ok = (
+        single_segment_triplet.get("verdict") == "ok_dream7b_bpu_single_segment_triplet_residency_probe"
+        and int(single_segment_triplet.get("segment_count") or 0) == 10
+        and int(single_segment_triplet.get("total_triplet_combination_count") or 0) == 120
+        and int(single_segment_triplet.get("tested_triplet_combination_count") or 0) == 120
+        and int(single_segment_triplet.get("successful_triplet_count") or 0) + int(single_segment_triplet.get("failed_triplet_count") or 0) == 120
+        and int(single_segment_triplet.get("successful_triplet_count") or 0) >= 1
+        and int(single_segment_triplet.get("max_resident_segment_count_observed") or 0) >= 3
+        and single_segment_triplet.get("next_optimization_target")
+        and not single_segment_triplet.get("errors")
+    )
+    add_check(
+        "single_segment_triplet_residency",
+        single_segment_triplet_path,
+        ok,
+        {
+            "verdict": single_segment_triplet.get("verdict"),
+            "segment_count": single_segment_triplet.get("segment_count"),
+            "total_triplet_combination_count": single_segment_triplet.get("total_triplet_combination_count"),
+            "tested_triplet_combination_count": single_segment_triplet.get("tested_triplet_combination_count"),
+            "successful_triplet_count": single_segment_triplet.get("successful_triplet_count"),
+            "failed_triplet_count": single_segment_triplet.get("failed_triplet_count"),
+            "successful_triplets": single_segment_triplet.get("successful_triplets"),
+            "max_resident_segment_count_observed": single_segment_triplet.get("max_resident_segment_count_observed"),
+            "next_optimization_target": single_segment_triplet.get("next_optimization_target"),
+        },
+    )
+
 payload = {
     "generated_at": datetime.now().astimezone().isoformat(),
     "verdict": "ok_dream7b_bpu_deployment_acceptance_probe" if not errors else "failed_dream7b_bpu_deployment_acceptance_probe",
