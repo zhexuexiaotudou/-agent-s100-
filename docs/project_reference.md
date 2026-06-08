@@ -3697,6 +3697,56 @@ warnings: ['all tested official Qwen bpu_core values still reported memory alloc
 errors: []
 ```
 
+### `dream7b-bpu-scheduling-params-probe`
+
+Source file: `scripts/probes/dream7b_bpu_scheduling_params_probe.sh`
+
+Installed command on S100P:
+
+```text
+/usr/local/bin/dream7b-bpu-scheduling-params-probe
+```
+
+Environment variables copied from the script:
+
+```text
+DREAM7B_BPU_SCHEDULING_PARAMS_PYTHON
+DREAM7B_BPU_SCHEDULING_PARAMS_HBM
+DREAM7B_BPU_SCHEDULING_PARAMS_CORES
+DREAM7B_BPU_SCHEDULING_PARAMS_TIMEOUT_SECONDS
+```
+
+Default values copied from the script:
+
+```text
+python_bin = /mnt/nas/openclaw/runtimes/hbm-runtime-venv/bin/python
+hbm_path = /home/sunrise/.cache/openclaw/dream7b-hbm/fine-seq16/seg00_02/dream7b_segment_0_2_seq16_q8.hbm
+cores_text = default 0 1 2 3
+timeout_seconds = 30
+```
+
+Latest recorded JSON:
+
+```text
+/mnt/nas/openclaw/reports/models/dream7b_bpu_scheduling_params_20260606-020548/scheduling_params_probe.json
+```
+
+Verified Dream 7B BPU scheduling params fields copied from `scheduling_params_probe.json`:
+
+```text
+verdict: ok_dream7b_bpu_scheduling_params_probe
+tested_cores: ['default', '0', '1', '2', '3']
+run_ok_by_core: {'default': True, '0': True, '1': False, '2': False, '3': False}
+returncode_by_core: {'default': 0, '0': 0, '1': -6, '2': -6, '3': -6}
+schedule_backend_unsupported_by_core: {'default': False, '0': False, '1': True, '2': True, '3': True}
+abort_by_core: {'default': False, '0': False, '1': True, '2': True, '3': True}
+core0_explicit_supported: True
+nonzero_cores_supported: False
+interpretation: Dream HB_HBMRuntime exposes set_scheduling_params with bpu_cores mapping; the tested single segment supports default and core 0, while cores 1/2/3 are unsupported for this HBM and abort in isolated child processes.
+next_probe_target: treat Dream bpu_cores as a model-specific scheduling constraint; do not port Qwen bpu_core values directly, and continue HBM reload/residency optimization with optional core0-only scheduling checks.
+errors: []
+```
+
 ### `dream7b-bpu-deployment-acceptance-probe`
 
 Source file: `scripts/probes/dream7b_bpu_deployment_acceptance_probe.sh`

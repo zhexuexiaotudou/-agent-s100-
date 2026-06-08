@@ -72,6 +72,7 @@ required_files=(
   "scripts/probes/s100_hbmem_common_buffer_matrix_probe.sh"
   "scripts/probes/s100_qwen_backend9_baseline_probe.sh"
   "scripts/probes/s100_qwen_bpu_core_sweep_probe.sh"
+  "scripts/probes/dream7b_bpu_scheduling_params_probe.sh"
   "scripts/probes/s100_official_qwen_performance_mode_retest_probe.sh"
   "scripts/probes/dream7b_bpu_batch_queue_retention_probe.sh"
   "scripts/probes/dream7b_bpu_deployment_acceptance_probe.sh"
@@ -106,6 +107,7 @@ required_readme_strings=(
   "scripts/probes/s100_hbmem_common_buffer_matrix_probe.sh"
   "scripts/probes/s100_qwen_backend9_baseline_probe.sh"
   "scripts/probes/s100_qwen_bpu_core_sweep_probe.sh"
+  "scripts/probes/dream7b_bpu_scheduling_params_probe.sh"
   "scripts/probes/s100_official_qwen_performance_mode_retest_probe.sh"
   "dream7b_bpu_text_queue_systemd_probe.sh"
 )
@@ -149,6 +151,7 @@ required_reference_strings=(
   "s100-official-llm-baseline-probe"
   "s100-qwen-backend9-baseline-probe"
   "s100-qwen-bpu-core-sweep-probe"
+  "dream7b-bpu-scheduling-params-probe"
   "dream7b-bpu-batch-queue-retention-probe"
   "dream7b-bpu-deployment-acceptance-probe"
   "dream7b-bpu-batch-queue.service"
@@ -1762,6 +1765,40 @@ if [[ -f scripts/probes/s100_qwen_bpu_core_sweep_probe.sh ]]; then
   done
   if ! grep -F -- 'D-Robotics_LLM_S100_1.0.0_SDK' scripts/probes/s100_qwen_bpu_core_sweep_probe.sh >/dev/null; then
     errors+=("s100_qwen_bpu_core_sweep_probe.sh missing D-Robotics_LLM_S100_1.0.0_SDK")
+  fi
+fi
+
+if [[ -f scripts/probes/dream7b_bpu_scheduling_params_probe.sh ]]; then
+  for text in \
+    "DREAM7B_BPU_SCHEDULING_PARAMS_PYTHON" \
+    "DREAM7B_BPU_SCHEDULING_PARAMS_HBM" \
+    "DREAM7B_BPU_SCHEDULING_PARAMS_CORES" \
+    "DREAM7B_BPU_SCHEDULING_PARAMS_TIMEOUT_SECONDS" \
+    "/mnt/nas/openclaw/runtimes/hbm-runtime-venv/bin/python" \
+    "/home/sunrise/.cache/openclaw/dream7b-hbm/fine-seq16/seg00_02/dream7b_segment_0_2_seq16_q8.hbm" \
+    "HB_HBMRuntime" \
+    "set_scheduling_params" \
+    "bpu_cores" \
+    "schedule backend unsupported" \
+    "scheduling_params_probe.json" \
+    "scheduling_params_probe.md" \
+    "ok_dream7b_bpu_scheduling_params_probe" \
+    "run_ok_by_core" \
+    "returncode_by_core" \
+    "schedule_backend_unsupported_by_core" \
+    "abort_by_core" \
+    "core0_explicit_supported" \
+    "nonzero_cores_supported" \
+    "model-specific scheduling constraint"; do
+    if ! grep -F -- "$text" scripts/probes/dream7b_bpu_scheduling_params_probe.sh >/dev/null; then
+      errors+=("dream7b_bpu_scheduling_params_probe.sh missing $text")
+    fi
+  done
+  if ! grep -F -- 'DREAM7B_BPU_SCHEDULING_PARAMS_CORES:-default 0 1 2 3' scripts/probes/dream7b_bpu_scheduling_params_probe.sh >/dev/null; then
+    errors+=("dream7b_bpu_scheduling_params_probe.sh missing default DREAM7B_BPU_SCHEDULING_PARAMS_CORES:-default 0 1 2 3")
+  fi
+  if ! grep -F -- 'DREAM7B_BPU_SCHEDULING_PARAMS_TIMEOUT_SECONDS:-30' scripts/probes/dream7b_bpu_scheduling_params_probe.sh >/dev/null; then
+    errors+=("dream7b_bpu_scheduling_params_probe.sh missing default DREAM7B_BPU_SCHEDULING_PARAMS_TIMEOUT_SECONDS:-30")
   fi
 fi
 
