@@ -66,6 +66,7 @@ required_files=(
   "scripts/probes/dream7b_bpu_persistent_triplet_topology_probe.sh"
   "scripts/probes/dream7b_bpu_window3_forward_feasibility_probe.sh"
   "scripts/probes/dream7b_bpu_selected_triplet_forward_path_probe.sh"
+  "scripts/probes/dream7b_bpu_selected_pair_forward_path_probe.sh"
   "scripts/probes/s100_official_llm_baseline_probe.sh"
   "scripts/probes/s100_official_qwen_runtime_probe.sh"
   "scripts/probes/s100_bpu_memory_pool_probe.sh"
@@ -101,6 +102,7 @@ required_readme_strings=(
   "scripts/probes/dream7b_bpu_persistent_triplet_topology_probe.sh"
   "scripts/probes/dream7b_bpu_window3_forward_feasibility_probe.sh"
   "scripts/probes/dream7b_bpu_selected_triplet_forward_path_probe.sh"
+  "scripts/probes/dream7b_bpu_selected_pair_forward_path_probe.sh"
   "scripts/probes/s100_official_llm_baseline_probe.sh"
   "scripts/probes/s100_official_qwen_runtime_probe.sh"
   "scripts/probes/s100_bpu_memory_pool_probe.sh"
@@ -148,6 +150,7 @@ required_reference_strings=(
   "dream7b-bpu-persistent-triplet-topology-probe"
   "dream7b-bpu-window3-forward-feasibility-probe"
   "dream7b-bpu-selected-triplet-forward-path-probe"
+  "dream7b-bpu-selected-pair-forward-path-probe"
   "s100-official-llm-baseline-probe"
   "s100-qwen-backend9-baseline-probe"
   "s100-qwen-bpu-core-sweep-probe"
@@ -1540,6 +1543,49 @@ if [[ -f scripts/probes/dream7b_bpu_selected_triplet_forward_path_probe.sh ]]; t
   fi
   if ! grep -F -- 'DREAM7B_BPU_SELECTED_TRIPLET_TIMEOUT_SEC:-900' scripts/probes/dream7b_bpu_selected_triplet_forward_path_probe.sh >/dev/null; then
     errors+=("dream7b_bpu_selected_triplet_forward_path_probe.sh missing default DREAM7B_BPU_SELECTED_TRIPLET_TIMEOUT_SEC:-900")
+  fi
+fi
+
+if [[ -f scripts/probes/dream7b_bpu_selected_pair_forward_path_probe.sh ]]; then
+  for text in \
+    "DREAM7B_BPU_SELECTED_PAIR_TRIPLET_JSON" \
+    "DREAM7B_BPU_SELECTED_PAIR_INDEXES" \
+    "DREAM7B_BPU_SELECTED_PAIR_BASELINE_FORWARD_CMD" \
+    "DREAM7B_BPU_SELECTED_PAIR_BATCH_COUNT" \
+    "DREAM7B_BPU_SELECTED_PAIR_TOP_K" \
+    "DREAM7B_BPU_SELECTED_PAIR_TIMEOUT_SEC" \
+    "successful_triplets" \
+    "selected_pair_covers_all_segments" \
+    "selected_pair_forward_summary.json" \
+    "selected_pair_forward_path_probe.json" \
+    "selected_pair_forward_path_probe.md" \
+    "ok_dream7b_bpu_selected_pair_forward_path_probe" \
+    "selected_pair" \
+    "selected_segments" \
+    "selected_third_segments" \
+    "selected_worker_count" \
+    "selected_resident_load_ms" \
+    "forward_load_ms" \
+    "selected_total_load_ms" \
+    "warm_load_ms_delta_vs_baseline" \
+    "warm_load_ms_delta_ratio_vs_baseline" \
+    "total_load_ms_delta_vs_baseline" \
+    "total_load_ms_delta_ratio_vs_baseline" \
+    "warm_path_load_improved" \
+    "total_path_load_improved" \
+    "promote selected-pair worker path only after batch16 and telemetry probes"; do
+    if ! grep -F -- "$text" scripts/probes/dream7b_bpu_selected_pair_forward_path_probe.sh >/dev/null; then
+      errors+=("dream7b_bpu_selected_pair_forward_path_probe.sh missing $text")
+    fi
+  done
+  if ! grep -F -- 'DREAM7B_BPU_SELECTED_PAIR_BATCH_COUNT:-4' scripts/probes/dream7b_bpu_selected_pair_forward_path_probe.sh >/dev/null; then
+    errors+=("dream7b_bpu_selected_pair_forward_path_probe.sh missing default DREAM7B_BPU_SELECTED_PAIR_BATCH_COUNT:-4")
+  fi
+  if ! grep -F -- 'DREAM7B_BPU_SELECTED_PAIR_TOP_K:-3' scripts/probes/dream7b_bpu_selected_pair_forward_path_probe.sh >/dev/null; then
+    errors+=("dream7b_bpu_selected_pair_forward_path_probe.sh missing default DREAM7B_BPU_SELECTED_PAIR_TOP_K:-3")
+  fi
+  if ! grep -F -- 'DREAM7B_BPU_SELECTED_PAIR_TIMEOUT_SEC:-900' scripts/probes/dream7b_bpu_selected_pair_forward_path_probe.sh >/dev/null; then
+    errors+=("dream7b_bpu_selected_pair_forward_path_probe.sh missing default DREAM7B_BPU_SELECTED_PAIR_TIMEOUT_SEC:-900")
   fi
 fi
 

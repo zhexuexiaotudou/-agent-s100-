@@ -322,6 +322,7 @@ scripts/probes/dream7b_bpu_seeded_quad_residency_probe.sh
 scripts/probes/dream7b_bpu_persistent_triplet_topology_probe.sh
 scripts/probes/dream7b_bpu_window3_forward_feasibility_probe.sh
 scripts/probes/dream7b_bpu_selected_triplet_forward_path_probe.sh
+scripts/probes/dream7b_bpu_selected_pair_forward_path_probe.sh
 scripts/probes/s100_official_llm_baseline_probe.sh
 scripts/probes/dream7b_bpu_batch_queue_retention_probe.sh
 scripts/probes/dream7b_bpu_deployment_acceptance_probe.sh
@@ -1662,6 +1663,37 @@ next_optimization_target: do not promote selected triplet forward path; test sma
 errors: []
 ```
 
+Verified selected pair forward path:
+
+```text
+selected_pair_forward_path_report: /mnt/nas/openclaw/reports/models/dream7b_bpu_selected_pair_forward_path_20260606-022052/selected_pair_forward_path_probe.md
+selected_pair_forward_path_json: /mnt/nas/openclaw/reports/models/dream7b_bpu_selected_pair_forward_path_20260606-022052/selected_pair_forward_path_probe.json
+verdict: ok_dream7b_bpu_selected_pair_forward_path_probe
+batch_count: 16
+selected.selected_pair: [1, 8]
+selected.selected_segments: ['seg02_04', 'seg24_26']
+selected.selected_third_segments: ['seg00_02', 'seg04_07', 'seg07_10', 'seg10_14', 'seg14_17', 'seg17_21', 'seg21_24', 'seg26_28']
+selected.selected_pair_covers_all_segments: True
+selected.selected_worker_count: 2
+selected.selected_resident_load_ms: 3505.384
+selected.forward_load_ms: 20428.46
+selected.selected_total_load_ms: 23933.844
+selected.run_ms: 2357.697
+selected.wall_ms: 23090.689
+baseline.load_ms: 23181.414
+baseline.run_ms: 2351.057
+baseline.wall_ms: 25785.378
+comparison.warm_load_ms_delta_vs_baseline: 2752.954
+comparison.warm_load_ms_delta_ratio_vs_baseline: 0.118757
+comparison.total_load_ms_delta_vs_baseline: -752.43
+comparison.total_load_ms_delta_ratio_vs_baseline: -0.032458
+comparison.warm_path_load_improved: True
+comparison.total_path_load_improved: False
+warnings: ['selected total load including resident startup did not improve baseline load_ms: baseline=23181.414, selected_total=23933.844']
+next_optimization_target: promote selected-pair worker path only after batch16 and telemetry probes confirm the warm-load reduction improves sustained BPU utilization
+errors: []
+```
+
 Verified official S100 LLM/Qwen baseline comparison:
 
 ```text
@@ -2137,6 +2169,7 @@ Remaining engineering work:
 - do not implement a persistent pair-worker cache on the current five-pair split; the held-pair matrix has `successful_pair_edge_count: 0`;
 - use the single-segment evidence to choose smaller HBM artifacts, new boundaries, or S100 runtime residency support before expecting sustained 128TOPS-level average utilization;
 - do not promote `selected_topology: [0, 1, 8]` as a forward-path optimization; the selected triplet forward-path probe records `selected_triplet_forward_supported: False` and `reboot_or_disconnect_observed: True`;
+- treat selected pair `[1, 8]` as an experimental warm-path optimization only: batch16 has `comparison.warm_path_load_improved: True` and lower wall time than baseline, but `comparison.total_path_load_improved: False`, so it still needs telemetry before promotion;
 - do not spend time on four-segment resident groups without a new HBM split/runtime change; the seeded quad probe has `successful_seeded_quad_count: 0`;
 - do not switch the current fine batch forward defaults to packed adjacent window size 3; the window3 feasibility probe has `expected_window3_failure_observed: True`;
 - treat explicit `bpu_core` as an optional crash-mitigation variable only; the controlled official Qwen sweep still has no functional-success case, so Dream 7B must continue HBM reload/residency work before expecting sustained 128TOPS utilization;

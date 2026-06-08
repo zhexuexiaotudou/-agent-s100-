@@ -2746,6 +2746,140 @@ next_optimization_target: do not promote selected triplet forward path; test sma
 errors: []
 ```
 
+### `dream7b-bpu-selected-pair-forward-path-probe`
+
+Source file: `scripts/probes/dream7b_bpu_selected_pair_forward_path_probe.sh`
+
+Installed command on S100P:
+
+```text
+/usr/local/bin/dream7b-bpu-selected-pair-forward-path-probe
+```
+
+Default argument copied from the script:
+
+```text
+report_root = /mnt/nas/openclaw/reports/models
+```
+
+Environment variables copied from the script:
+
+```text
+DREAM7B_BPU_HBM_DIR
+DREAM7B_BPU_FINE_HBM_DIR
+DREAM7B_BPU_SELECTED_PAIR_TRIPLET_JSON
+DREAM7B_BPU_SELECTED_PAIR_INDEXES
+DREAM7B_BPU_SELECTED_PAIR_BASELINE_FORWARD_CMD
+DREAM7B_BPU_SELECTED_PAIR_BATCH_COUNT
+DREAM7B_BPU_SELECTED_PAIR_TOP_K
+DREAM7B_BPU_SELECTED_PAIR_TIMEOUT_SEC
+```
+
+Default values copied from the script:
+
+```text
+base_hbm_dir = /home/sunrise/.cache/openclaw/dream7b-hbm/segments6
+fine_hbm_dir = /home/sunrise/.cache/openclaw/dream7b-hbm/fine-seq16
+forward_cmd = dream7b-bpu-fine-batch-forward
+batch_count = 4
+top_k = 3
+timeout_sec = 900
+```
+
+The selected pair is derived from `successful_triplets` in `single_segment_triplet_residency_probe.json` unless `DREAM7B_BPU_SELECTED_PAIR_INDEXES` is explicitly set. The selected pair must satisfy `selected_pair_covers_all_segments: True`; otherwise the probe exits instead of running a forward path.
+
+Output files copied from the script:
+
+```text
+tokens_batch.json
+selected_pair_forward_summary.json
+selected_pair_forward_path_probe.json
+selected_pair_forward_path_probe.md
+baseline.forward.stdout
+baseline.forward.stderr
+baseline_pair_window_forward/summary.json
+```
+
+Output fields copied from the script:
+
+```text
+generated_at
+verdict
+run_dir
+triplet_json
+forward_cmd
+base_hbm_dir
+fine_hbm_dir
+batch_count
+top_k
+timeout_sec
+tokens_batch_json
+selected_summary_json
+selected.selected_pair
+selected.selected_segments
+selected.selected_third_segments
+selected.selected_pair_covers_all_segments
+selected.selected_worker_count
+selected.selected_resident_load_ms
+selected.forward_load_ms
+selected.selected_total_load_ms
+selected.run_ms
+selected.wall_ms
+baseline.load_ms
+baseline.run_ms
+baseline.wall_ms
+comparison.warm_load_ms_delta_vs_baseline
+comparison.warm_load_ms_delta_ratio_vs_baseline
+comparison.total_load_ms_delta_vs_baseline
+comparison.total_load_ms_delta_ratio_vs_baseline
+comparison.warm_path_load_improved
+comparison.total_path_load_improved
+next_optimization_target
+warnings
+errors
+```
+
+Latest recorded report:
+
+```text
+/mnt/nas/openclaw/reports/models/dream7b_bpu_selected_pair_forward_path_20260606-022052/selected_pair_forward_path_probe.md
+```
+
+Latest recorded JSON:
+
+```text
+/mnt/nas/openclaw/reports/models/dream7b_bpu_selected_pair_forward_path_20260606-022052/selected_pair_forward_path_probe.json
+```
+
+Verified selected pair forward path fields copied from `selected_pair_forward_path_probe.json`:
+
+```text
+verdict: ok_dream7b_bpu_selected_pair_forward_path_probe
+batch_count: 16
+selected.selected_pair: [1, 8]
+selected.selected_segments: ['seg02_04', 'seg24_26']
+selected.selected_third_segments: ['seg00_02', 'seg04_07', 'seg07_10', 'seg10_14', 'seg14_17', 'seg17_21', 'seg21_24', 'seg26_28']
+selected.selected_pair_covers_all_segments: True
+selected.selected_worker_count: 2
+selected.selected_resident_load_ms: 3505.384
+selected.forward_load_ms: 20428.46
+selected.selected_total_load_ms: 23933.844
+selected.run_ms: 2357.697
+selected.wall_ms: 23090.689
+baseline.load_ms: 23181.414
+baseline.run_ms: 2351.057
+baseline.wall_ms: 25785.378
+comparison.warm_load_ms_delta_vs_baseline: 2752.954
+comparison.warm_load_ms_delta_ratio_vs_baseline: 0.118757
+comparison.total_load_ms_delta_vs_baseline: -752.43
+comparison.total_load_ms_delta_ratio_vs_baseline: -0.032458
+comparison.warm_path_load_improved: True
+comparison.total_path_load_improved: False
+warnings: ['selected total load including resident startup did not improve baseline load_ms: baseline=23181.414, selected_total=23933.844']
+errors: []
+next_optimization_target: promote selected-pair worker path only after batch16 and telemetry probes confirm the warm-load reduction improves sustained BPU utilization
+```
+
 ### `s100-official-llm-baseline-probe`
 
 Source file: `scripts/probes/s100_official_llm_baseline_probe.sh`
@@ -5942,6 +6076,8 @@ docs/baseline_progress_2026-06-03_dream7b_segmented_bpu_hbm.md
 - Verified selected triplet forward path report at `/mnt/nas/openclaw/reports/models/dream7b_bpu_selected_triplet_forward_path_20260606-135729/selected_triplet_forward_path_probe.md` with `selected_triplet_forward_supported: False`, `reboot_or_disconnect_observed: True`, `expected_reboot_guard_observed: True`, and `selected_topology: [0, 1, 8]`.
 - Updated `dream7b-bpu-deployment-acceptance-probe` to include `selected_triplet_forward_path`.
 - Verified selected-triplet-aware deployment acceptance report at `/mnt/nas/openclaw/reports/models/dream7b_bpu_deployment_acceptance_20260605-234652/deployment_acceptance_probe.md` with `check_count: 25`, `passed_check_count: 25`, and `selected_triplet_forward_path.ok: True`.
+- Added `dream7b-bpu-selected-pair-forward-path-probe` to test the smaller resident-set route requested after the selected triplet forward path was rejected.
+- Verified selected pair forward path report at `/mnt/nas/openclaw/reports/models/dream7b_bpu_selected_pair_forward_path_20260606-022052/selected_pair_forward_path_probe.md` with `batch_count: 16`, `selected.selected_pair: [1, 8]`, `selected.selected_pair_covers_all_segments: True`, `comparison.warm_path_load_improved: True`, `comparison.warm_load_ms_delta_ratio_vs_baseline: 0.118757`, `selected.wall_ms: 23090.689`, `baseline.wall_ms: 25785.378`, and `comparison.total_path_load_improved: False`.
 - Added `s100-official-llm-baseline-probe` to compare the staged official S100 LLM SDK/Qwen route with the custom segmented Dream 7B route without replacing Dream 7B.
 - Added `s100-official-qwen-runtime-probe` to run the official Qwen `oellm_multichat` example through the vendor runtime without replacing Dream 7B.
 - Verified official Qwen runtime report at `/mnt/nas/openclaw/reports/models/s100_official_qwen_runtime_20260606-003908/official_qwen_runtime_probe.md` with `qwen_hbm_size_bytes: 1917038584`, `ldd_missing_dependency_observed: False`, `hbm_load_success_observed: True`, `prefill_model_load_success_observed: True`, `decode_model_load_success_observed: True`, `init_model_success_observed: True`, `runtime_returncode: -11`, `memory_alloc_failure_observed: True`, `ion_alloc_failure_observed: True`, `bpu_mem_pool_alloc_error_observed: True`, and `official_qwen_runtime_supported_on_current_s100p_state: False`.
@@ -5958,6 +6094,7 @@ docs/baseline_progress_2026-06-03_dream7b_segmented_bpu_hbm.md
 - Do not implement a pair-worker persistent cache on the current five-pair split; the held-pair matrix has `successful_pair_edge_count: 0`.
 - Use the single-segment results as the next residency route: two single-segment runtimes can coexist, but `segment_02_seg04_07` fails as the third resident runtime with S100 BPU `-400001` memory allocation failure.
 - Do not promote `selected_topology: [0, 1, 8]` as a forward-path optimization; the selected triplet forward-path probe records `selected_triplet_forward_supported: False` and `reboot_or_disconnect_observed: True`.
+- Treat selected pair `[1, 8]` as an experimental warm-path optimization only until a dedicated telemetry probe proves sustained utilization improvement; batch16 lowers warm load and wall time but does not lower total load when resident startup is counted.
 - Do not switch `dream7b-bpu-fine-batch-forward` defaults to packed adjacent window size 3; the window3 feasibility probe records `expected_window3_failure_observed: True`.
 - Do not attempt a four-segment resident topology on the current HBM artifacts without a new split or runtime change; the seeded quad probe has `successful_seeded_quad_count: 0`.
 - Treat explicit `bpu_core` as an optional crash-mitigation variable only; the controlled official Qwen sweep still has `functional_success_by_core` false for every tested value, so Dream 7B must continue focusing on HBM reload/residency reduction before expecting sustained 128TOPS utilization.
