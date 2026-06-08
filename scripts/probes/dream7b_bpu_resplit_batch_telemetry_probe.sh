@@ -8,6 +8,9 @@ monitor_sample_count="${DREAM7B_BPU_RESPLIT_BATCH_TELEMETRY_MONITOR_SAMPLE_COUNT
 top_k="${DREAM7B_BPU_RESPLIT_BATCH_TELEMETRY_TOP_K:-3}"
 timeout_sec="${DREAM7B_BPU_RESPLIT_BATCH_TELEMETRY_TIMEOUT_SEC:-900}"
 forward_cmd="${DREAM7B_BPU_RESPLIT_BATCH_TELEMETRY_FORWARD_CMD:-dream7b-bpu-resplit-batch-forward}"
+expected_segment_plan="${DREAM7B_BPU_RESPLIT_BATCH_TELEMETRY_EXPECTED_SEGMENT_PLAN:-resplit-adjacent}"
+expected_segment_event_count="${DREAM7B_BPU_RESPLIT_BATCH_TELEMETRY_EXPECTED_SEGMENT_EVENT_COUNT:-}"
+expected_segment_sources="${DREAM7B_BPU_RESPLIT_BATCH_TELEMETRY_EXPECTED_SEGMENT_SOURCES:-base fine resplit}"
 
 case "$report_root" in
   /tmp/*|/mnt/nas/openclaw/reports|/mnt/nas/openclaw/reports/*|/root/.openclaw/workspace/reports|/root/.openclaw/workspace/reports/*) ;;
@@ -35,6 +38,17 @@ if ! [[ "$top_k" =~ ^[0-9]+$ ]]; then
 fi
 if ! [[ "$timeout_sec" =~ ^[1-9][0-9]*$ ]]; then
   echo "DREAM7B_BPU_RESPLIT_BATCH_TELEMETRY_TIMEOUT_SEC must be a positive integer." >&2
+  exit 2
+fi
+case "$expected_segment_plan" in
+  resplit-adjacent|resplit-topwindow-adjacent) ;;
+  *)
+    echo "DREAM7B_BPU_RESPLIT_BATCH_TELEMETRY_EXPECTED_SEGMENT_PLAN must be resplit-adjacent or resplit-topwindow-adjacent." >&2
+    exit 2
+    ;;
+esac
+if [[ -n "$expected_segment_event_count" ]] && ! [[ "$expected_segment_event_count" =~ ^[1-9][0-9]*$ ]]; then
+  echo "DREAM7B_BPU_RESPLIT_BATCH_TELEMETRY_EXPECTED_SEGMENT_EVENT_COUNT must be a positive integer when set." >&2
   exit 2
 fi
 
@@ -105,7 +119,10 @@ python3 - \
   "$top_k" \
   "$timeout_sec" \
   "$forward_cmd" \
-  "$forward_status" <<'PY'
+  "$forward_status" \
+  "$expected_segment_plan" \
+  "$expected_segment_event_count" \
+  "$expected_segment_sources" <<'PY'
 import json
 import re
 import statistics
@@ -121,6 +138,9 @@ top_k = int(sys.argv[5])
 timeout_sec = int(sys.argv[6])
 forward_cmd = sys.argv[7]
 forward_status = int(sys.argv[8])
+expected_segment_plan = sys.argv[9]
+expected_segment_event_count_arg = sys.argv[10]
+expected_segment_sources = sorted(item for item in sys.argv[11].split() if item)
 
 monitor_stdout = run_dir / "hrt_ucp_monitor.stdout"
 monitor_stderr = run_dir / "hrt_ucp_monitor.stderr"
@@ -150,14 +170,14 @@ segments = forward.get("segments", []) if isinstance(forward, dict) else []
 final_shapes = forward.get("final_shapes", []) if isinstance(forward, dict) else []
 topk_by_batch = forward.get("topk_last_position_by_batch", []) if isinstance(forward, dict) else []
 segment_sources = sorted({item.get("source") for item in segments})
-expected_segment_event_count = batch_count * 14
+expected_segment_event_count = int(expected_segment_event_count_arg) if expected_segment_event_count_arg else batch_count * 14
 
 if forward_status != 0:
     errors.append(f"forward command exited with status {forward_status}")
 if isinstance(forward, dict):
     if forward.get("verdict") != "ok_dream7b_segmented_hbm_python_forward":
         errors.append(f"unexpected forward verdict: {forward.get('verdict')}")
-    if forward.get("segment_plan") != "resplit-adjacent":
+    if forward.get("segment_plan") != expected_segment_plan:
         errors.append(f"unexpected segment_plan: {forward.get('segment_plan')}")
     if forward.get("batch_count") != batch_count:
         errors.append(f"unexpected batch_count: {forward.get('batch_count')}")
@@ -176,7 +196,7 @@ if isinstance(forward, dict):
         errors.append(f"unexpected topk_last_position_by_batch length: {len(topk_by_batch)}")
     if len(segments) != expected_segment_event_count:
         errors.append(f"unexpected segment event count: {len(segments)}")
-    if segment_sources != ["base", "fine", "resplit"]:
+    if segment_sources != expected_segment_sources:
         errors.append(f"unexpected segment sources: {segment_sources}")
 
 if max_bpu_loading <= 0.0:
@@ -198,6 +218,9 @@ payload = {
     "top_k": top_k,
     "timeout_sec": timeout_sec,
     "forward_cmd": forward_cmd,
+    "expected_segment_plan": expected_segment_plan,
+    "expected_segment_event_count": expected_segment_event_count,
+    "expected_segment_sources": expected_segment_sources,
     "forward_status": forward_status,
     "forward_summary": str(summary_path),
     "bpu_loading_sample_count": len(bpu_loading_samples),
@@ -229,6 +252,7 @@ payload = {
         "amortized_run_ms_per_forward": forward.get("amortized_run_ms_per_forward") if isinstance(forward, dict) else None,
         "final_shape_count": len(final_shapes),
         "topk_last_position_by_batch_count": len(topk_by_batch),
+        "topwindow_hbm_dir": forward.get("topwindow_hbm_dir") if isinstance(forward, dict) else None,
     },
     "next_optimization_target": (
         "reduce resplit batch HBM load overhead before expecting sustained 128TOPS-level average utilization"

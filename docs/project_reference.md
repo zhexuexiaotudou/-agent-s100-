@@ -2807,6 +2807,33 @@ total_hbm_size_gib: 3.587439
 errors: []
 ```
 
+Verified top-window NAS report:
+
+```text
+/mnt/nas/openclaw/reports/models/dream7b_bpu_resplit_hbm_artifact_inventory_20260606-110342/resplit_hbm_artifact_inventory_probe.json
+```
+
+Verified top-window S100P local-cache report:
+
+```text
+/mnt/nas/openclaw/reports/models/dream7b_bpu_resplit_hbm_artifact_inventory_20260606-110343/resplit_hbm_artifact_inventory_probe.json
+```
+
+Verified top-window fields copied from `resplit_hbm_artifact_inventory_probe.json`:
+
+```text
+verdict: ok_dream7b_bpu_resplit_hbm_artifact_inventory_probe
+hbm_dir: /mnt/nas/openclaw/models/dream7b-hbm/resplit-topwindow-seq16
+hbm_dir: /home/sunrise/.cache/openclaw/dream7b-hbm/resplit-topwindow-seq16
+expected_specs: ['7:8', '8:10', '21:22', '22:24']
+expected_hbm_count: 4
+existing_hbm_count: 4
+manifest_entry_count: 4
+manifest_verified_count: 4
+total_hbm_size_bytes: 1373714912
+errors: []
+```
+
 ### `dream7b-bpu-resplit-forward`
 
 Source file: `scripts/dream7b-bpu-resplit-forward.sh`
@@ -2823,6 +2850,8 @@ Environment variables copied from the script:
 DREAM7B_BPU_HBM_DIR
 DREAM7B_BPU_FINE_HBM_DIR
 DREAM7B_BPU_RESPLIT_HBM_DIR
+DREAM7B_BPU_TOPWINDOW_HBM_DIR
+DREAM7B_BPU_RESPLIT_SEGMENT_PLAN
 DREAM7B_BPU_RESPLIT_WINDOW_SIZE
 DREAM7B_BPU_RESPLIT_CHILD_WINDOW_MODE
 DREAM7B_BPU_RESPLIT_CHILD_RUNTIME_MODE
@@ -2835,6 +2864,8 @@ Default values copied from the script:
 base_hbm_dir = /home/sunrise/.cache/openclaw/dream7b-hbm/segments6
 fine_hbm_dir = /home/sunrise/.cache/openclaw/dream7b-hbm/fine-seq16
 resplit_hbm_dir = /home/sunrise/.cache/openclaw/dream7b-hbm/resplit-seq16
+topwindow_hbm_dir = /home/sunrise/.cache/openclaw/dream7b-hbm/resplit-topwindow-seq16
+segment_plan = resplit-adjacent
 window_size = 2
 child_window_mode = pair
 child_runtime_mode = packed
@@ -2847,7 +2878,8 @@ Injected arguments copied from the script:
 --hbm-dir
 --fine-hbm-dir
 --resplit-hbm-dir
---segment-plan resplit-adjacent
+--topwindow-hbm-dir
+--segment-plan
 --residency-window-size
 --child-window-mode
 --child-runtime-mode
@@ -2858,9 +2890,13 @@ Runtime support copied from `scripts/probes/dream7b_segmented_hbm_python_forward
 
 ```text
 RESPLIT_ADJACENT_SEGMENTS
+RESPLIT_TOPWINDOW_ADJACENT_SEGMENTS
 --resplit-hbm-dir
+--topwindow-hbm-dir
 resplit-adjacent
+resplit-topwindow-adjacent
 resplit_hbm_dir
+topwindow_hbm_dir
 ```
 
 ### `dream7b-bpu-resplit-segment-residency-probe`
@@ -2995,6 +3031,8 @@ Default values copied from the script:
 base_hbm_dir = /home/sunrise/.cache/openclaw/dream7b-hbm/segments6
 fine_hbm_dir = /home/sunrise/.cache/openclaw/dream7b-hbm/fine-seq16
 resplit_hbm_dir = /home/sunrise/.cache/openclaw/dream7b-hbm/resplit-seq16
+topwindow_hbm_dir = /home/sunrise/.cache/openclaw/dream7b-hbm/resplit-topwindow-seq16
+segment_plan = resplit-adjacent
 window_size = 2
 child_window_mode = pair
 child_runtime_mode = packed
@@ -3007,7 +3045,8 @@ Injected arguments copied from the script:
 --hbm-dir
 --fine-hbm-dir
 --resplit-hbm-dir
---segment-plan resplit-adjacent
+--topwindow-hbm-dir
+--segment-plan
 --residency-window-size
 --child-window-mode
 --child-runtime-mode
@@ -3098,6 +3137,9 @@ DREAM7B_BPU_RESPLIT_BATCH_TELEMETRY_MONITOR_SAMPLE_COUNT
 DREAM7B_BPU_RESPLIT_BATCH_TELEMETRY_TOP_K
 DREAM7B_BPU_RESPLIT_BATCH_TELEMETRY_TIMEOUT_SEC
 DREAM7B_BPU_RESPLIT_BATCH_TELEMETRY_FORWARD_CMD
+DREAM7B_BPU_RESPLIT_BATCH_TELEMETRY_EXPECTED_SEGMENT_PLAN
+DREAM7B_BPU_RESPLIT_BATCH_TELEMETRY_EXPECTED_SEGMENT_EVENT_COUNT
+DREAM7B_BPU_RESPLIT_BATCH_TELEMETRY_EXPECTED_SEGMENT_SOURCES
 ```
 
 Default values copied from the script:
@@ -3110,6 +3152,9 @@ monitor_sample_count = 320
 top_k = 3
 timeout_sec = 900
 forward_cmd = dream7b-bpu-resplit-batch-forward
+expected_segment_plan = resplit-adjacent
+expected_segment_event_count =
+expected_segment_sources = base fine resplit
 ```
 
 Verified report:
@@ -3147,6 +3192,34 @@ next_optimization_target: reduce resplit batch HBM load overhead before expectin
 errors: []
 ```
 
+Verified top-window report:
+
+```text
+/mnt/nas/openclaw/reports/models/dream7b_bpu_resplit_batch_telemetry_20260606-112018/resplit_batch_telemetry_probe.json
+```
+
+Verified top-window fields copied from `resplit_batch_telemetry_probe.json`:
+
+```text
+verdict: ok_dream7b_bpu_resplit_batch_telemetry_probe
+batch_count: 16
+expected_segment_plan: resplit-topwindow-adjacent
+expected_segment_event_count: 256
+max_bpu_loading: 100.0
+avg_bpu_loading: 8.946
+forward_metrics.segment_plan: resplit-topwindow-adjacent
+forward_metrics.segment_event_count: 256
+forward_metrics.expected_segment_event_count: 256
+forward_metrics.segment_sources: ['base', 'fine', 'resplit', 'topwindow']
+forward_metrics.load_ms: 23476.584
+forward_metrics.run_ms: 2421.61
+forward_metrics.load_to_run_ratio: 9.694618
+forward_metrics.amortized_load_ms_per_forward: 1467.286
+forward_metrics.amortized_run_ms_per_forward: 151.351
+forward_metrics.topwindow_hbm_dir: /home/sunrise/.cache/openclaw/dream7b-hbm/resplit-topwindow-seq16
+errors: []
+```
+
 ### `dream7b-bpu-resplit-window-cost-probe`
 
 Source file: `scripts/probes/dream7b_bpu_resplit_window_cost_probe.sh`
@@ -3164,6 +3237,7 @@ DREAM7B_BPU_RESPLIT_WINDOW_COST_MODEL_REPORT_ROOT
 DREAM7B_BPU_RESPLIT_WINDOW_COST_MIN_BATCH_COUNT
 DREAM7B_BPU_RESPLIT_WINDOW_COST_EXPECTED_WINDOW_COUNT
 DREAM7B_BPU_RESPLIT_WINDOW_COST_EXPECTED_SEGMENT_EVENT_COUNT
+DREAM7B_BPU_RESPLIT_WINDOW_COST_EXPECTED_SEGMENT_PLAN
 ```
 
 Default values copied from the script:
@@ -3174,6 +3248,7 @@ model_report_root = /mnt/nas/openclaw/reports/models
 min_batch_count = 16
 expected_window_count = 7
 expected_segment_event_count = 224
+expected_segment_plan = resplit-adjacent
 ```
 
 Verified report:
@@ -3206,6 +3281,33 @@ top_load_window.load_share: 0.16304
 top_load_to_run_ratio_window.resident_segments: ['seg00_01', 'seg01_02']
 top_load_to_run_ratio_window.load_to_run_ratio: 18.428821
 next_optimization_target: reduce packed HBM load cost for top ranked resplit windows before expecting sustained 128TOPS-level average utilization
+errors: []
+```
+
+Verified top-window window-cost report:
+
+```text
+/mnt/nas/openclaw/reports/models/dream7b_bpu_resplit_window_cost_20260606-112223/resplit_window_cost_probe.json
+```
+
+Verified top-window fields copied from `resplit_window_cost_probe.json`:
+
+```text
+verdict: ok_dream7b_bpu_resplit_window_cost_probe
+segment_plan: resplit-topwindow-adjacent
+expected_segment_plan: resplit-topwindow-adjacent
+batch_count: 16
+segment_event_count: 256
+window_count: 8
+total_load_ms: 23476.584
+total_run_ms: 2421.61
+load_to_run_ratio: 9.694618
+amortized_load_ms_per_forward: 1467.2865
+amortized_run_ms_per_forward: 151.350625
+top_load_window.resident_segments: ['seg14_17', 'seg17_19']
+top_load_window.load_ms: 3505.334
+top_load_to_run_ratio_window.resident_segments: ['seg00_01', 'seg01_02']
+top_load_to_run_ratio_window.load_to_run_ratio: 18.920179
 errors: []
 ```
 

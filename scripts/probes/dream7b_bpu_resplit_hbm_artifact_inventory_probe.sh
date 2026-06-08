@@ -15,7 +15,7 @@ case "$report_root" in
 esac
 
 case "$hbm_dir" in
-  /mnt/nas/openclaw/models/dream7b-hbm/resplit-seq16|/mnt/nas/openclaw/models/dream7b-hbm/resplit-seq16/|/home/sunrise/.cache/openclaw/dream7b-hbm/resplit-seq16|/home/sunrise/.cache/openclaw/dream7b-hbm/resplit-seq16/|/tmp/dream7b-hbm/resplit-seq16|/tmp/dream7b-hbm/resplit-seq16/) ;;
+  /mnt/nas/openclaw/models/dream7b-hbm/resplit-seq16|/mnt/nas/openclaw/models/dream7b-hbm/resplit-seq16/|/home/sunrise/.cache/openclaw/dream7b-hbm/resplit-seq16|/home/sunrise/.cache/openclaw/dream7b-hbm/resplit-seq16/|/tmp/dream7b-hbm/resplit-seq16|/tmp/dream7b-hbm/resplit-seq16/|/mnt/nas/openclaw/models/dream7b-hbm/resplit-topwindow-seq16|/mnt/nas/openclaw/models/dream7b-hbm/resplit-topwindow-seq16/|/home/sunrise/.cache/openclaw/dream7b-hbm/resplit-topwindow-seq16|/home/sunrise/.cache/openclaw/dream7b-hbm/resplit-topwindow-seq16/|/tmp/dream7b-hbm/resplit-topwindow-seq16|/tmp/dream7b-hbm/resplit-topwindow-seq16/) ;;
   *)
     echo "Refusing resplit HBM path outside approved Dream 7B resplit directories: $hbm_dir" >&2
     exit 2

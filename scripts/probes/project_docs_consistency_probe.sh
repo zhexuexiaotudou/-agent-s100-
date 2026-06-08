@@ -2599,6 +2599,7 @@ if [[ -f scripts/probes/dream7b_bpu_resplit_hbm_artifact_inventory_probe.sh ]]; 
     "DREAM7B_BPU_RESPLIT_EXPECTED_SPECS" \
     "DREAM7B_BPU_RESPLIT_VERIFY_MANIFEST" \
     "DREAM7B_BPU_RESPLIT_HBM_DIR:-/mnt/nas/openclaw/models/dream7b-hbm/resplit-seq16" \
+    "resplit-topwindow-seq16" \
     "DREAM7B_BPU_RESPLIT_VERIFY_MANIFEST:-1" \
     "0:1 1:2 10:12 12:14 17:19 19:21 26:27 27:28" \
     "ok_dream7b_bpu_resplit_hbm_artifact_inventory_probe" \
@@ -2622,15 +2623,38 @@ if [[ -f scripts/probes/dream7b_bpu_resplit_hbm_artifact_inventory_probe.sh ]]; 
   if ! grep -F -- "/home/sunrise/.cache/openclaw/dream7b-hbm/resplit-seq16" docs/baseline_progress_2026-06-03_dream7b_segmented_bpu_hbm.md >/dev/null; then
     errors+=("Dream 7B segmented progress doc missing local resplit HBM path")
   fi
+  for text in \
+    "/mnt/nas/openclaw/models/dream7b-hbm/resplit-topwindow-seq16" \
+    "/home/sunrise/.cache/openclaw/dream7b-hbm/resplit-topwindow-seq16" \
+    "dream7b_bpu_resplit_hbm_artifact_inventory_20260606-110342" \
+    "dream7b_bpu_resplit_hbm_artifact_inventory_20260606-110343" \
+    "expected_specs: ['7:8', '8:10', '21:22', '22:24']"; do
+    if ! grep -F -- "$text" docs/baseline_progress_2026-06-03_dream7b_segmented_bpu_hbm.md >/dev/null; then
+      errors+=("Dream 7B segmented progress doc missing top-window artifact evidence: $text")
+    fi
+  done
+  if ! grep -F -- "dream7b_bpu_resplit_hbm_artifact_inventory_20260606-110342" README.md >/dev/null; then
+    errors+=("README.md missing top-window resplit HBM inventory evidence")
+  fi
+  if ! grep -F -- "dream7b_bpu_resplit_hbm_artifact_inventory_20260606-110342" docs/project_reference.md >/dev/null; then
+    errors+=("docs/project_reference.md missing top-window resplit HBM inventory evidence")
+  fi
 fi
 
 if [[ -f scripts/probes/dream7b_segmented_hbm_python_forward.py ]]; then
   for text in \
     "RESPLIT_ADJACENT_SEGMENTS" \
+    "RESPLIT_TOPWINDOW_ADJACENT_SEGMENTS" \
     "--resplit-hbm-dir" \
+    "--topwindow-hbm-dir" \
     "resplit-adjacent" \
+    "resplit-topwindow-adjacent" \
     "resplit_hbm_dir" \
+    "topwindow_hbm_dir" \
     "dream_segment_00_01" \
+    "dream_segment_07_08" \
+    "dream_segment_21_22" \
+    "dream_segment_22_24" \
     "dream_segment_27_28"; do
     if ! grep -F -- "$text" scripts/probes/dream7b_segmented_hbm_python_forward.py >/dev/null; then
       errors+=("dream7b_segmented_hbm_python_forward.py missing resplit runtime support text: $text")
@@ -2641,13 +2665,17 @@ fi
 if [[ -f scripts/dream7b-bpu-resplit-forward.sh ]]; then
   for text in \
     "DREAM7B_BPU_RESPLIT_HBM_DIR" \
+    "DREAM7B_BPU_TOPWINDOW_HBM_DIR" \
+    "DREAM7B_BPU_RESPLIT_SEGMENT_PLAN" \
     "DREAM7B_BPU_RESPLIT_WINDOW_SIZE" \
     "DREAM7B_BPU_RESPLIT_CHILD_WINDOW_MODE" \
     "DREAM7B_BPU_RESPLIT_CHILD_RUNTIME_MODE" \
     "DREAM7B_BPU_RESPLIT_WINDOW_EXECUTION_MODE" \
     "/home/sunrise/.cache/openclaw/dream7b-hbm/resplit-seq16" \
+    "/home/sunrise/.cache/openclaw/dream7b-hbm/resplit-topwindow-seq16" \
     "--resplit-hbm-dir" \
-    "--segment-plan resplit-adjacent" \
+    "--topwindow-hbm-dir" \
+    "--segment-plan" \
     "--residency-window-size" \
     "--child-window-mode" \
     "--child-runtime-mode" \
@@ -2725,9 +2753,13 @@ if [[ -f scripts/dream7b-bpu-resplit-batch-forward.sh ]]; then
     "DREAM7B_BPU_RESPLIT_BATCH_CHILD_RUNTIME_MODE" \
     "DREAM7B_BPU_RESPLIT_BATCH_WINDOW_EXECUTION_MODE" \
     "DREAM7B_BPU_RESPLIT_TOKENS_BATCH_JSON" \
+    "DREAM7B_BPU_TOPWINDOW_HBM_DIR" \
+    "DREAM7B_BPU_RESPLIT_SEGMENT_PLAN" \
     "/home/sunrise/.cache/openclaw/dream7b-hbm/resplit-seq16" \
+    "/home/sunrise/.cache/openclaw/dream7b-hbm/resplit-topwindow-seq16" \
     "--resplit-hbm-dir" \
-    "--segment-plan resplit-adjacent" \
+    "--topwindow-hbm-dir" \
+    "--segment-plan" \
     "--window-execution-mode" \
     "--tokens-batch-json" \
     "window-batch" \
@@ -2785,6 +2817,9 @@ if [[ -f scripts/probes/dream7b_bpu_resplit_batch_telemetry_probe.sh ]]; then
     "DREAM7B_BPU_RESPLIT_BATCH_TELEMETRY_TOP_K" \
     "DREAM7B_BPU_RESPLIT_BATCH_TELEMETRY_TIMEOUT_SEC" \
     "DREAM7B_BPU_RESPLIT_BATCH_TELEMETRY_FORWARD_CMD" \
+    "DREAM7B_BPU_RESPLIT_BATCH_TELEMETRY_EXPECTED_SEGMENT_PLAN" \
+    "DREAM7B_BPU_RESPLIT_BATCH_TELEMETRY_EXPECTED_SEGMENT_EVENT_COUNT" \
+    "DREAM7B_BPU_RESPLIT_BATCH_TELEMETRY_EXPECTED_SEGMENT_SOURCES" \
     "DREAM7B_BPU_RESPLIT_BATCH_TELEMETRY_COUNT:-16" \
     "DREAM7B_BPU_RESPLIT_BATCH_TELEMETRY_FORWARD_CMD:-dream7b-bpu-resplit-batch-forward" \
     "hrt_ucp_monitor" \
@@ -2793,6 +2828,7 @@ if [[ -f scripts/probes/dream7b_bpu_resplit_batch_telemetry_probe.sh ]]; then
     "resplit_batch_telemetry_probe.json" \
     "resplit_batch_telemetry_probe.md" \
     "resplit-adjacent" \
+    "resplit-topwindow-adjacent" \
     "pair_window_batch" \
     "window-batch" \
     "max_bpu_loading" \
@@ -2801,6 +2837,7 @@ if [[ -f scripts/probes/dream7b_bpu_resplit_batch_telemetry_probe.sh ]]; then
     "amortized_load_ms_per_forward" \
     "segment_event_count" \
     "expected_segment_event_count" \
+    "topwindow_hbm_dir" \
     "topk_last_position_by_batch_count"; do
     if ! grep -F -- "$text" scripts/probes/dream7b_bpu_resplit_batch_telemetry_probe.sh >/dev/null; then
       errors+=("dream7b_bpu_resplit_batch_telemetry_probe.sh missing $text")
@@ -2815,6 +2852,22 @@ if [[ -f scripts/probes/dream7b_bpu_resplit_batch_telemetry_probe.sh ]]; then
   if ! grep -F -- "dream7b_bpu_resplit_batch_telemetry_20260606-080917" docs/baseline_progress_2026-06-03_dream7b_segmented_bpu_hbm.md >/dev/null; then
     errors+=("Dream 7B segmented progress doc missing resplit batch telemetry report")
   fi
+  for text in \
+    "dream7b_bpu_resplit_batch_telemetry_20260606-112018" \
+    "expected_segment_plan: resplit-topwindow-adjacent" \
+    "forward_metrics.segment_event_count: 256" \
+    "forward_metrics.segment_sources: ['base', 'fine', 'resplit', 'topwindow']" \
+    "forward_metrics.load_to_run_ratio: 9.694618"; do
+    if ! grep -F -- "$text" docs/baseline_progress_2026-06-03_dream7b_segmented_bpu_hbm.md >/dev/null; then
+      errors+=("Dream 7B segmented progress doc missing top-window batch telemetry evidence: $text")
+    fi
+  done
+  if ! grep -F -- "dream7b_bpu_resplit_batch_telemetry_20260606-112018" README.md >/dev/null; then
+    errors+=("README.md missing top-window batch telemetry evidence")
+  fi
+  if ! grep -F -- "dream7b_bpu_resplit_batch_telemetry_20260606-112018" docs/project_reference.md >/dev/null; then
+    errors+=("docs/project_reference.md missing top-window batch telemetry evidence")
+  fi
 fi
 
 if [[ -f scripts/probes/dream7b_bpu_resplit_window_cost_probe.sh ]]; then
@@ -2823,15 +2876,18 @@ if [[ -f scripts/probes/dream7b_bpu_resplit_window_cost_probe.sh ]]; then
     "DREAM7B_BPU_RESPLIT_WINDOW_COST_MIN_BATCH_COUNT" \
     "DREAM7B_BPU_RESPLIT_WINDOW_COST_EXPECTED_WINDOW_COUNT" \
     "DREAM7B_BPU_RESPLIT_WINDOW_COST_EXPECTED_SEGMENT_EVENT_COUNT" \
+    "DREAM7B_BPU_RESPLIT_WINDOW_COST_EXPECTED_SEGMENT_PLAN" \
     "DREAM7B_BPU_RESPLIT_WINDOW_COST_MIN_BATCH_COUNT:-16" \
     "DREAM7B_BPU_RESPLIT_WINDOW_COST_EXPECTED_WINDOW_COUNT:-7" \
     "DREAM7B_BPU_RESPLIT_WINDOW_COST_EXPECTED_SEGMENT_EVENT_COUNT:-224" \
+    "DREAM7B_BPU_RESPLIT_WINDOW_COST_EXPECTED_SEGMENT_PLAN:-resplit-adjacent" \
     "dream7b_bpu_resplit_batch_telemetry_*/resplit_batch_telemetry_probe.json" \
     "forward_summary" \
     "ok_dream7b_bpu_resplit_window_cost_probe" \
     "resplit_window_cost_probe.json" \
     "resplit_window_cost_probe.md" \
     "resplit-adjacent" \
+    "resplit-topwindow-adjacent" \
     "pair_window_batch" \
     "window-batch" \
     "window_count" \
@@ -2854,6 +2910,23 @@ if [[ -f scripts/probes/dream7b_bpu_resplit_window_cost_probe.sh ]]; then
   fi
   if ! grep -F -- "dream7b_bpu_resplit_window_cost_20260606-083152" docs/baseline_progress_2026-06-03_dream7b_segmented_bpu_hbm.md >/dev/null; then
     errors+=("Dream 7B segmented progress doc missing resplit window cost report")
+  fi
+  for text in \
+    "dream7b_bpu_resplit_window_cost_20260606-112223" \
+    "segment_plan: resplit-topwindow-adjacent" \
+    "segment_event_count: 256" \
+    "window_count: 8" \
+    "load_to_run_ratio: 9.694618" \
+    "['seg14_17', 'seg17_19']"; do
+    if ! grep -F -- "$text" docs/baseline_progress_2026-06-03_dream7b_segmented_bpu_hbm.md >/dev/null; then
+      errors+=("Dream 7B segmented progress doc missing top-window window-cost evidence: $text")
+    fi
+  done
+  if ! grep -F -- "dream7b_bpu_resplit_window_cost_20260606-112223" README.md >/dev/null; then
+    errors+=("README.md missing top-window window-cost evidence")
+  fi
+  if ! grep -F -- "dream7b_bpu_resplit_window_cost_20260606-112223" docs/project_reference.md >/dev/null; then
+    errors+=("docs/project_reference.md missing top-window window-cost evidence")
   fi
 fi
 

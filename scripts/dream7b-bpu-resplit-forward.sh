@@ -4,6 +4,8 @@ set -euo pipefail
 base_hbm_dir="${DREAM7B_BPU_HBM_DIR:-/home/sunrise/.cache/openclaw/dream7b-hbm/segments6}"
 fine_hbm_dir="${DREAM7B_BPU_FINE_HBM_DIR:-/home/sunrise/.cache/openclaw/dream7b-hbm/fine-seq16}"
 resplit_hbm_dir="${DREAM7B_BPU_RESPLIT_HBM_DIR:-/home/sunrise/.cache/openclaw/dream7b-hbm/resplit-seq16}"
+topwindow_hbm_dir="${DREAM7B_BPU_TOPWINDOW_HBM_DIR:-/home/sunrise/.cache/openclaw/dream7b-hbm/resplit-topwindow-seq16}"
+segment_plan="${DREAM7B_BPU_RESPLIT_SEGMENT_PLAN:-resplit-adjacent}"
 window_size="${DREAM7B_BPU_RESPLIT_WINDOW_SIZE:-2}"
 child_window_mode="${DREAM7B_BPU_RESPLIT_CHILD_WINDOW_MODE:-pair}"
 child_runtime_mode="${DREAM7B_BPU_RESPLIT_CHILD_RUNTIME_MODE:-packed}"
@@ -13,6 +15,7 @@ args=("$@")
 has_hbm_dir=0
 has_fine_hbm_dir=0
 has_resplit_hbm_dir=0
+has_topwindow_hbm_dir=0
 has_segment_plan=0
 has_window_size=0
 has_child_window_mode=0
@@ -23,6 +26,7 @@ for arg in "${args[@]}"; do
   [[ "$arg" == "--hbm-dir" || "$arg" == --hbm-dir=* ]] && has_hbm_dir=1
   [[ "$arg" == "--fine-hbm-dir" || "$arg" == --fine-hbm-dir=* ]] && has_fine_hbm_dir=1
   [[ "$arg" == "--resplit-hbm-dir" || "$arg" == --resplit-hbm-dir=* ]] && has_resplit_hbm_dir=1
+  [[ "$arg" == "--topwindow-hbm-dir" || "$arg" == --topwindow-hbm-dir=* ]] && has_topwindow_hbm_dir=1
   [[ "$arg" == "--segment-plan" || "$arg" == --segment-plan=* ]] && has_segment_plan=1
   [[ "$arg" == "--residency-window-size" || "$arg" == --residency-window-size=* ]] && has_window_size=1
   [[ "$arg" == "--child-window-mode" || "$arg" == --child-window-mode=* ]] && has_child_window_mode=1
@@ -42,8 +46,12 @@ if [[ "$has_resplit_hbm_dir" -eq 0 ]]; then
   args=(--resplit-hbm-dir "$resplit_hbm_dir" "${args[@]}")
 fi
 
+if [[ "$has_topwindow_hbm_dir" -eq 0 ]]; then
+  args=(--topwindow-hbm-dir "$topwindow_hbm_dir" "${args[@]}")
+fi
+
 if [[ "$has_segment_plan" -eq 0 ]]; then
-  args=(--segment-plan resplit-adjacent "${args[@]}")
+  args=(--segment-plan "$segment_plan" "${args[@]}")
 fi
 
 if [[ "$has_window_size" -eq 0 ]]; then

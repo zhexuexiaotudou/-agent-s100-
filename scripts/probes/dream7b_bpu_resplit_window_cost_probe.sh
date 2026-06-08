@@ -6,6 +6,7 @@ model_report_root="${DREAM7B_BPU_RESPLIT_WINDOW_COST_MODEL_REPORT_ROOT:-/mnt/nas
 min_batch_count="${DREAM7B_BPU_RESPLIT_WINDOW_COST_MIN_BATCH_COUNT:-16}"
 expected_window_count="${DREAM7B_BPU_RESPLIT_WINDOW_COST_EXPECTED_WINDOW_COUNT:-7}"
 expected_segment_event_count="${DREAM7B_BPU_RESPLIT_WINDOW_COST_EXPECTED_SEGMENT_EVENT_COUNT:-224}"
+expected_segment_plan="${DREAM7B_BPU_RESPLIT_WINDOW_COST_EXPECTED_SEGMENT_PLAN:-resplit-adjacent}"
 
 case "$report_root" in
   /tmp/*|/mnt/nas/openclaw/reports|/mnt/nas/openclaw/reports/*|/root/.openclaw/workspace/reports|/root/.openclaw/workspace/reports/*) ;;
@@ -35,6 +36,13 @@ if ! [[ "$expected_segment_event_count" =~ ^[1-9][0-9]*$ ]]; then
   echo "DREAM7B_BPU_RESPLIT_WINDOW_COST_EXPECTED_SEGMENT_EVENT_COUNT must be a positive integer." >&2
   exit 2
 fi
+case "$expected_segment_plan" in
+  resplit-adjacent|resplit-topwindow-adjacent) ;;
+  *)
+    echo "DREAM7B_BPU_RESPLIT_WINDOW_COST_EXPECTED_SEGMENT_PLAN must be resplit-adjacent or resplit-topwindow-adjacent." >&2
+    exit 2
+    ;;
+esac
 
 mkdir -p "$report_root"
 stamp="$(date +%Y%m%d-%H%M%S)"
@@ -46,7 +54,8 @@ python3 - \
   "$model_report_root" \
   "$min_batch_count" \
   "$expected_window_count" \
-  "$expected_segment_event_count" <<'PY'
+  "$expected_segment_event_count" \
+  "$expected_segment_plan" <<'PY'
 import glob
 import json
 import sys
@@ -59,6 +68,7 @@ model_report_root = Path(sys.argv[2])
 min_batch_count = int(sys.argv[3])
 expected_window_count = int(sys.argv[4])
 expected_segment_event_count = int(sys.argv[5])
+expected_segment_plan = sys.argv[6]
 errors = []
 warnings = []
 
@@ -188,7 +198,7 @@ if telemetry.get("verdict") != "ok_dream7b_bpu_resplit_batch_telemetry_probe":
     errors.append(f"unexpected resplit telemetry verdict: {telemetry.get('verdict')}")
 if summary.get("verdict") != "ok_dream7b_segmented_hbm_python_forward":
     errors.append(f"unexpected forward summary verdict: {summary.get('verdict')}")
-if summary.get("segment_plan") != "resplit-adjacent":
+if summary.get("segment_plan") != expected_segment_plan:
     errors.append(f"unexpected segment_plan: {summary.get('segment_plan')}")
 if summary.get("execution_mode") != "pair_window_batch":
     errors.append(f"unexpected execution_mode: {summary.get('execution_mode')}")
@@ -202,8 +212,8 @@ if len(segments) != expected_segment_event_count:
     errors.append(f"segment event count expected {expected_segment_event_count}, got {len(segments)}")
 if len(window_costs) != expected_window_count:
     errors.append(f"window count expected {expected_window_count}, got {len(window_costs)}")
-expected_events_per_window = batch_count * 2 if batch_count else None
 for item in window_costs:
+    expected_events_per_window = batch_count * len(item["resident_segments"]) if batch_count else None
     if expected_events_per_window is not None and item["event_count"] != expected_events_per_window:
         errors.append(f"window {item['resident_segments']} event_count expected {expected_events_per_window}, got {item['event_count']}")
     if item["batch_count"] != batch_count:
@@ -225,6 +235,7 @@ payload = {
     "forward_summary_path": str(summary_path) if summary_path else None,
     "batch_count": batch_count,
     "segment_plan": summary.get("segment_plan"),
+    "expected_segment_plan": expected_segment_plan,
     "execution_mode": summary.get("execution_mode"),
     "window_execution_mode": summary.get("window_execution_mode"),
     "child_process_count": summary.get("child_process_count"),
