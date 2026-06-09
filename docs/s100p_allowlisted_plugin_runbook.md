@@ -47,6 +47,8 @@ baseline_gap_decision_probe
 log_diagnose
 index_documents
 document_daily_summary_probe
+openclaw_entry_demo_probe
+ai_nas_movie_sort_demo_probe
 ```
 
 The plugin internally calls:
@@ -80,6 +82,8 @@ Restart the gateway afterward.
 - Asking the agent to use `s100p_run_probe` with `tool_id=ros2_status_probe` returns a report path under `/root/.openclaw/workspace/logs/probes`.
 - Asking the agent to use `tool_id=log_diagnose` returns a diagnosis report under `/root/.openclaw/workspace/logs/probes`.
 - Asking the agent to use `tool_id=index_documents` returns an index report under `/root/.openclaw/workspace/reports`.
+- Asking the agent to use `tool_id=openclaw_entry_demo_probe` returns a teacher-demo report under `/mnt/nas/openclaw/reports/teacher-demos/openclaw-entry`.
+- Asking the agent to use `tool_id=ai_nas_movie_sort_demo_probe` returns a teacher-demo report under `/mnt/nas/openclaw/reports/teacher-demos/ai-nas-movie-sort`.
 - Asking for any unlisted `tool_id` is rejected by schema or plugin validation.
 - The broad `system.run` route must not be considered fixed until a negative test proves non-allowlisted commands cannot execute.
 
@@ -803,3 +807,41 @@ iiod: keep-or-firewall
 
 This verifies the narrow tool path for the B-010 decision pack. It deliberately
 does not stop services or edit firewall rules.
+
+## 2026-06-09 Teacher Demo Extension
+
+The loaded plugin copy at:
+
+```text
+/root/.openclaw/extensions/s100p-allowlisted-tools/index.js
+```
+
+and the workspace runner path at:
+
+```text
+/root/.openclaw/workspace/scripts/run_allowlisted_tool.sh
+```
+
+now include the two teacher demo tool IDs:
+
+```text
+openclaw_entry_demo_probe
+ai_nas_movie_sort_demo_probe
+```
+
+The plugin routes them to NAS-backed demo paths:
+
+```text
+/mnt/nas/openclaw/reports/teacher-demos/openclaw-entry
+/mnt/nas/openclaw/demo/ai-nas-movie-sort
+/mnt/nas/openclaw/reports/teacher-demos/ai-nas-movie-sort
+```
+
+Board evidence through the same runner path used by the OpenClaw plugin:
+
+```text
+/mnt/nas/openclaw/reports/teacher-demos/openclaw-entry/openclaw_entry_demo_20260609-141220/openclaw_entry_demo.md
+/mnt/nas/openclaw/reports/teacher-demos/ai-nas-movie-sort/movie_sort_demo_20260609-141220/movie_sort_demo.md
+```
+
+If a UI session previously saw `ai_nas_movie_sort_demo_probe` rejected, start a new chat or refresh after the gateway restart so the agent does not reuse the stale refusal from earlier session history.

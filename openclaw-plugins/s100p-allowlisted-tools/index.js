@@ -17,6 +17,10 @@ const modelReportsDir = "/root/.openclaw/workspace/reports/models";
 const browserReportsDir = "/root/.openclaw/workspace/reports/browser-smoke";
 const teacherReportsDir = "/root/.openclaw/workspace/reports/teacher";
 const robotDatasetsDir = "/root/.openclaw/workspace/robot_datasets";
+const nasReportsDir = "/mnt/nas/openclaw/reports";
+const nasTeacherDemoEntryReportsDir = "/mnt/nas/openclaw/reports/teacher-demos/openclaw-entry";
+const nasTeacherDemoMovieSortReportsDir = "/mnt/nas/openclaw/reports/teacher-demos/ai-nas-movie-sort";
+const nasTeacherDemoMovieSortDir = "/mnt/nas/openclaw/demo/ai-nas-movie-sort";
 const allowedTools = new Map([
   ["openclaw_status_probe", [probeOutDir]],
   ["nas_discovery_probe", [probeOutDir]],
@@ -48,7 +52,9 @@ const allowedTools = new Map([
   ["teacher_baseline_briefing_probe", ["/mnt/nas/openclaw", teacherReportsDir]],
   ["log_diagnose", [logsDir, probeOutDir]],
   ["index_documents", [documentsDir, reportsDir]],
-  ["document_daily_summary_probe", [documentsDir, dailySummaryReportsDir]]
+  ["document_daily_summary_probe", [documentsDir, dailySummaryReportsDir]],
+  ["openclaw_entry_demo_probe", [nasTeacherDemoEntryReportsDir]],
+  ["ai_nas_movie_sort_demo_probe", [nasTeacherDemoMovieSortDir, nasTeacherDemoMovieSortReportsDir]]
 ]);
 
 function jsonResult(payload) {
@@ -66,13 +72,13 @@ function jsonResult(payload) {
 function readToolId(rawParams) {
   const value = rawParams?.tool_id;
   if (typeof value !== "string" || !allowedTools.has(value)) {
-    throw new Error("tool_id must be one of: openclaw_status_probe, nas_discovery_probe, ros2_status_probe, sandbox_status_probe, security_audit_probe, service_policy_probe, service_hardening_plan_probe, service_convergence_decision_probe, service_execution_preflight_probe, stability_snapshot_probe, stability_summary_probe, image_caption_probe, vision_caption_readiness_probe, dream7b_readiness_probe, dream7b_smoke_probe, home_assistant_status_probe, control_action_policy_probe, browser_smoke_probe, rosbag_snapshot_probe, rosbag_session_probe, rosbag_capture_policy_probe, experiment_report_probe, baseline_status_probe, baseline_gap_decision_probe, baseline_acceptance_probe, baseline_acceptance_trend_probe, baseline_evidence_manifest_probe, teacher_baseline_briefing_probe, log_diagnose, index_documents, document_daily_summary_probe");
+    throw new Error("tool_id must be one of: openclaw_status_probe, nas_discovery_probe, ros2_status_probe, sandbox_status_probe, security_audit_probe, service_policy_probe, service_hardening_plan_probe, service_convergence_decision_probe, service_execution_preflight_probe, stability_snapshot_probe, stability_summary_probe, image_caption_probe, vision_caption_readiness_probe, dream7b_readiness_probe, dream7b_smoke_probe, home_assistant_status_probe, control_action_policy_probe, browser_smoke_probe, rosbag_snapshot_probe, rosbag_session_probe, rosbag_capture_policy_probe, experiment_report_probe, baseline_status_probe, baseline_gap_decision_probe, baseline_acceptance_probe, baseline_acceptance_trend_probe, baseline_evidence_manifest_probe, teacher_baseline_briefing_probe, log_diagnose, index_documents, document_daily_summary_probe, openclaw_entry_demo_probe, ai_nas_movie_sort_demo_probe");
   }
   return value;
 }
 
 function assertSafeReportPath(path) {
-  if (!path.startsWith(`${probeOutDir}/`) && !path.startsWith(`${reportsDir}/`)) {
+  if (!path.startsWith(`${probeOutDir}/`) && !path.startsWith(`${reportsDir}/`) && !path.startsWith(`${nasReportsDir}/`)) {
     throw new Error(`probe returned an unexpected report path: ${path}`);
   }
 }
@@ -103,7 +109,7 @@ const S100pRunProbeSchema = {
   properties: {
     tool_id: {
       type: "string",
-      enum: ["openclaw_status_probe", "nas_discovery_probe", "ros2_status_probe", "sandbox_status_probe", "security_audit_probe", "service_policy_probe", "service_hardening_plan_probe", "service_convergence_decision_probe", "service_execution_preflight_probe", "stability_snapshot_probe", "stability_summary_probe", "image_caption_probe", "vision_caption_readiness_probe", "dream7b_readiness_probe", "dream7b_smoke_probe", "home_assistant_status_probe", "control_action_policy_probe", "browser_smoke_probe", "rosbag_snapshot_probe", "rosbag_session_probe", "rosbag_capture_policy_probe", "experiment_report_probe", "baseline_status_probe", "baseline_gap_decision_probe", "baseline_acceptance_probe", "baseline_acceptance_trend_probe", "baseline_evidence_manifest_probe", "teacher_baseline_briefing_probe", "log_diagnose", "index_documents", "document_daily_summary_probe"],
+      enum: ["openclaw_status_probe", "nas_discovery_probe", "ros2_status_probe", "sandbox_status_probe", "security_audit_probe", "service_policy_probe", "service_hardening_plan_probe", "service_convergence_decision_probe", "service_execution_preflight_probe", "stability_snapshot_probe", "stability_summary_probe", "image_caption_probe", "vision_caption_readiness_probe", "dream7b_readiness_probe", "dream7b_smoke_probe", "home_assistant_status_probe", "control_action_policy_probe", "browser_smoke_probe", "rosbag_snapshot_probe", "rosbag_session_probe", "rosbag_capture_policy_probe", "experiment_report_probe", "baseline_status_probe", "baseline_gap_decision_probe", "baseline_acceptance_probe", "baseline_acceptance_trend_probe", "baseline_evidence_manifest_probe", "teacher_baseline_briefing_probe", "log_diagnose", "index_documents", "document_daily_summary_probe", "openclaw_entry_demo_probe", "ai_nas_movie_sort_demo_probe"],
       description: "Allowlisted S100P probe ID to run."
     }
   },

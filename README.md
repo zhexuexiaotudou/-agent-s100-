@@ -570,6 +570,8 @@ scripts/run_allowlisted_tool.sh openclaw_entry_demo_probe
 scripts/run_allowlisted_tool.sh ai_nas_movie_sort_demo_probe
 ```
 
+The S100P OpenClaw plugin tool `s100p_run_probe` also allows these two exact `tool_id` values after the 2026-06-09 plugin update. If an older chat says `ai_nas_movie_sort_demo_probe` is not allowed, refresh or start a new OpenClaw chat after the gateway restart.
+
 Demo report roots:
 
 ```text
