@@ -561,6 +561,7 @@ Current demo runbooks:
 
 - [docs/openclaw_entry_demo_runbook.md](docs/openclaw_entry_demo_runbook.md)
 - [docs/ai_nas_movie_sort_demo_runbook.md](docs/ai_nas_movie_sort_demo_runbook.md)
+- [docs/teacher_demo_run_2026-06-09_1312.md](docs/teacher_demo_run_2026-06-09_1312.md): latest real S100P + NAS run evidence for both demos.
 
 Current demo tool IDs:
 

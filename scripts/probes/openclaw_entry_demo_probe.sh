@@ -43,6 +43,8 @@ nas_findmnt_capture="$(capture nas_findmnt findmnt /mnt/nas/openclaw)"
 nas_mount_capture="$(capture nas_mount sh -c "mount | grep ' /mnt/nas/openclaw '")"
 service_capture="$(capture openclaw_gateway_status systemctl --user --no-pager --full status openclaw-gateway)"
 service_active_capture="$(capture openclaw_gateway_active systemctl --user is-active openclaw-gateway)"
+root_service_capture="$(capture openclaw_gateway_root_status sudo -n env XDG_RUNTIME_DIR=/run/user/0 systemctl --user --no-pager --full status openclaw-gateway)"
+root_service_active_capture="$(capture openclaw_gateway_root_active sudo -n env XDG_RUNTIME_DIR=/run/user/0 systemctl --user is-active openclaw-gateway)"
 port_capture="$(capture port_18789 sh -c "ss -ltnp 2>/dev/null | grep ':18789 '")"
 
 nas_mounted="false"
@@ -90,6 +92,8 @@ export OPENCLAW_ENTRY_DEMO_NAS_FINDMNT_CAPTURE="$nas_findmnt_capture"
 export OPENCLAW_ENTRY_DEMO_NAS_MOUNT_CAPTURE="$nas_mount_capture"
 export OPENCLAW_ENTRY_DEMO_SERVICE_CAPTURE="$service_capture"
 export OPENCLAW_ENTRY_DEMO_SERVICE_ACTIVE_CAPTURE="$service_active_capture"
+export OPENCLAW_ENTRY_DEMO_ROOT_SERVICE_CAPTURE="$root_service_capture"
+export OPENCLAW_ENTRY_DEMO_ROOT_SERVICE_ACTIVE_CAPTURE="$root_service_active_capture"
 export OPENCLAW_ENTRY_DEMO_PORT_CAPTURE="$port_capture"
 export OPENCLAW_ENTRY_DEMO_NAS_MOUNTED="$nas_mounted"
 export OPENCLAW_ENTRY_DEMO_NAS_WRITABLE="$nas_writable"
@@ -143,6 +147,8 @@ payload = {
         "nas_mount": os.environ["OPENCLAW_ENTRY_DEMO_NAS_MOUNT_CAPTURE"],
         "openclaw_gateway_status": os.environ["OPENCLAW_ENTRY_DEMO_SERVICE_CAPTURE"],
         "openclaw_gateway_active": os.environ["OPENCLAW_ENTRY_DEMO_SERVICE_ACTIVE_CAPTURE"],
+        "openclaw_gateway_root_status": os.environ["OPENCLAW_ENTRY_DEMO_ROOT_SERVICE_CAPTURE"],
+        "openclaw_gateway_root_active": os.environ["OPENCLAW_ENTRY_DEMO_ROOT_SERVICE_ACTIVE_CAPTURE"],
         "port_18789": os.environ["OPENCLAW_ENTRY_DEMO_PORT_CAPTURE"],
     },
     "nas": {

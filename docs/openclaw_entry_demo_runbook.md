@@ -51,6 +51,8 @@ captures/nas_findmnt.txt
 captures/nas_mount.txt
 captures/openclaw_gateway_status.txt
 captures/openclaw_gateway_active.txt
+captures/openclaw_gateway_root_status.txt
+captures/openclaw_gateway_root_active.txt
 captures/port_18789.txt
 ```
 
@@ -71,7 +73,7 @@ scripts/run_allowlisted_tool.sh openclaw_entry_demo_probe
 
 3. Open the generated `openclaw_entry_demo.md`.
 4. Show that the report is stored under `/mnt/nas/openclaw/reports/teacher-demos/openclaw-entry` when NAS is mounted.
-5. Show `openclaw_gateway_status`, `openclaw_gateway_active`, `port_18789`, and NAS mount capture entries in the report.
+5. Show `openclaw_gateway_root_status`, `openclaw_gateway_root_active`, `port_18789`, and NAS mount capture entries in the report.
 
 ## Acceptance
 
@@ -80,6 +82,7 @@ scripts/run_allowlisted_tool.sh openclaw_entry_demo_probe
 - `openclaw_entry_demo.json` contains `claims.pc_high_privilege_required: not_required_by_demo_procedure`.
 - `openclaw_entry_demo.json` contains `claims.pc_unsafe_writes: not_required_by_demo_procedure`.
 - `openclaw_entry_demo.json` contains `claims.persistence: nas_report_root_when_/mnt/nas/openclaw_is_mounted_and_writable`.
+- When `openclaw-gateway.service` runs as the root user service, `captures/openclaw_gateway_root_active.txt` contains `active`.
 
 ## Safety Boundary
 
