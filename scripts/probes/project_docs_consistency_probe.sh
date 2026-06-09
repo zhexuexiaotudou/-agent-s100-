@@ -93,8 +93,13 @@ required_files=(
   "scripts/probes/s100_official_qwen_performance_mode_retest_probe.sh"
   "scripts/probes/dream7b_bpu_batch_queue_retention_probe.sh"
   "scripts/probes/dream7b_bpu_deployment_acceptance_probe.sh"
+  "scripts/probes/openclaw_entry_demo_probe.sh"
+  "scripts/probes/ai_nas_movie_sort_demo_probe.sh"
   "scripts/startup_link_check/link-check.config.json"
   "scripts/tool_allowlist.json"
+  "docs/teacher_demo_path_2026-06-09.md"
+  "docs/openclaw_entry_demo_runbook.md"
+  "docs/ai_nas_movie_sort_demo_runbook.md"
 )
 
 required_readme_strings=(
@@ -143,6 +148,14 @@ required_readme_strings=(
   "scripts/probes/dream7b_bpu_scheduling_params_probe.sh"
   "scripts/probes/s100_official_qwen_performance_mode_retest_probe.sh"
   "dream7b_bpu_text_queue_systemd_probe.sh"
+  "docs/teacher_demo_path_2026-06-09.md"
+  "docs/openclaw_entry_demo_runbook.md"
+  "docs/ai_nas_movie_sort_demo_runbook.md"
+  "openclaw_entry_demo_probe"
+  "ai_nas_movie_sort_demo_probe"
+  "/mnt/nas/openclaw/reports/teacher-demos/openclaw-entry"
+  "/mnt/nas/openclaw/reports/teacher-demos/ai-nas-movie-sort"
+  "/mnt/nas/openclaw/demo/ai-nas-movie-sort"
 )
 
 required_reference_strings=(
@@ -206,6 +219,17 @@ required_reference_strings=(
   "dream7b-bpu-scheduling-params-probe"
   "dream7b-bpu-batch-queue-retention-probe"
   "dream7b-bpu-deployment-acceptance-probe"
+  "openclaw_entry_demo_probe"
+  "ai_nas_movie_sort_demo_probe"
+  "openclaw_entry_demo.md"
+  "openclaw_entry_demo.json"
+  "movie_sort_demo.md"
+  "movie_sort_demo.json"
+  "classification_engine"
+  "deterministic_filename_metadata_rules"
+  "/mnt/nas/openclaw/reports/teacher-demos/openclaw-entry"
+  "/mnt/nas/openclaw/reports/teacher-demos/ai-nas-movie-sort"
+  "/mnt/nas/openclaw/demo/ai-nas-movie-sort"
   "dream7b-bpu-batch-queue.service"
   "dream7b-bpu-text-forward"
   "dream7b-bpu-diffusion-loop-probe"

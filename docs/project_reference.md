@@ -13,6 +13,10 @@ This document is the project-level reference for API-like command interfaces, co
 
 ## Project Requirements
 
+- Follow the 2026-06-09 teacher demo priority: first finish the S100P OpenClaw entry demo, then the AI NAS movie-sort demo, then return to Dream 7B.
+- Keep robot capability, ROS2, and rosbag work out of the current teacher demo path.
+- Demonstrate that S100P can run the OpenClaw entry while the PC side does not need high-privilege operations and NAS provides persistence.
+- Demonstrate an AI NAS workflow where OpenClaw on S100P organizes movie-like files by type on NAS.
 - Keep Dream 7B as the model; do not replace it with another model for the BPU route.
 - Make real Dream 7B weights execute on the S100P BPU path through segmented S100 `.hbm` artifacts.
 - Keep S100P + NAS + OpenClaw link checks reproducible through scripts and report files.
@@ -42,6 +46,8 @@ NAS
   -> Dream 7B HBM root: /mnt/nas/openclaw/models/dream7b-hbm
   -> Dream 7B resplit HBM root: /mnt/nas/openclaw/models/dream7b-hbm/resplit-seq16
   -> reports root: /mnt/nas/openclaw/reports/models
+  -> teacher demo report roots: /mnt/nas/openclaw/reports/teacher-demos/openclaw-entry and /mnt/nas/openclaw/reports/teacher-demos/ai-nas-movie-sort
+  -> AI NAS movie-sort demo root: /mnt/nas/openclaw/demo/ai-nas-movie-sort
 
 Dream 7B BPU path
   -> Dream HF weights
@@ -55,6 +61,112 @@ Dream 7B BPU path
 The current Dream 7B BPU route is documented in `docs/baseline_progress_2026-06-03_dream7b_segmented_bpu_hbm.md`.
 
 ## Command Interfaces
+
+### `scripts/run_allowlisted_tool.sh openclaw_entry_demo_probe`
+
+Source files:
+
+```text
+scripts/run_allowlisted_tool.sh
+scripts/probes/openclaw_entry_demo_probe.sh
+```
+
+Default argument copied from `scripts/probes/openclaw_entry_demo_probe.sh`:
+
+```text
+report_root = /mnt/nas/openclaw/reports/teacher-demos/openclaw-entry
+```
+
+Output files copied from `scripts/probes/openclaw_entry_demo_probe.sh`:
+
+```text
+openclaw_entry_demo.md
+openclaw_entry_demo.json
+captures/
+```
+
+JSON fields copied from `scripts/probes/openclaw_entry_demo_probe.sh`:
+
+```text
+generated_at
+verdict
+demo_id
+host
+report_root
+run_dir
+claims
+safety_boundary
+recording_script
+captures
+nas
+openclaw_status_probe
+```
+
+Acceptance fields:
+
+```text
+verdict: ok_openclaw_entry_demo_probe
+claims.openclaw_runs_on_s100p: validated_by_openclaw_gateway_status_and_port_capture
+claims.pc_high_privilege_required: not_required_by_demo_procedure
+claims.pc_unsafe_writes: not_required_by_demo_procedure
+claims.persistence: nas_report_root_when_/mnt/nas/openclaw_is_mounted_and_writable
+```
+
+### `scripts/run_allowlisted_tool.sh ai_nas_movie_sort_demo_probe`
+
+Source files:
+
+```text
+scripts/run_allowlisted_tool.sh
+scripts/probes/ai_nas_movie_sort_demo_probe.sh
+```
+
+Default arguments copied from `scripts/probes/ai_nas_movie_sort_demo_probe.sh`:
+
+```text
+demo_root = /mnt/nas/openclaw/demo/ai-nas-movie-sort
+report_root = /mnt/nas/openclaw/reports/teacher-demos/ai-nas-movie-sort
+```
+
+Output files copied from `scripts/probes/ai_nas_movie_sort_demo_probe.sh`:
+
+```text
+movie_sort_demo.md
+movie_sort_demo.json
+/mnt/nas/openclaw/demo/ai-nas-movie-sort/library/<type>/MANIFEST.md
+/mnt/nas/openclaw/demo/ai-nas-movie-sort/library/<type>/<file>.movie.json
+```
+
+JSON fields copied from `scripts/probes/ai_nas_movie_sort_demo_probe.sh`:
+
+```text
+generated_at
+verdict
+demo_id
+demo_root
+inbox_dir
+library_dir
+report_dir
+classification_engine
+seeded_sample_files
+processed_file_count
+classified_file_count
+types
+originals_preserved
+copy_mode
+scope
+records
+```
+
+Acceptance fields:
+
+```text
+verdict: ok_ai_nas_movie_sort_demo_probe
+classification_engine: deterministic_filename_metadata_rules
+originals_preserved: True
+scope.real_media_library_touched: False
+scope.ros2_or_robot_scope: out_of_scope
+```
 
 ### `dream7b-bpu-forward`
 
@@ -7694,6 +7806,10 @@ docs/baseline_progress_2026-06-03_dream7b_segmented_bpu_hbm.md
 
 ## TODO
 
+- Record the S100P OpenClaw entry demo after `openclaw_entry_demo_probe` writes NAS-backed evidence.
+- Record the AI NAS movie-sort demo after `ai_nas_movie_sort_demo_probe` writes NAS-backed evidence.
+- Keep Dream 7B work paused behind the two teacher demos until both demo runbooks are runnable.
+- For the next Dream 7B phase, run an official S100 LLM quantization-to-deployment sample flow before replacing the official model with Dream 7B.
 - Keep `--window-execution-mode child-process` as the fallback path until more long-run evidence extends beyond the current gated 6-run `--window-execution-mode in-process` probe.
 - Do not implement a pair-worker persistent cache on the current five-pair split; the held-pair matrix has `successful_pair_edge_count: 0`.
 - Use the single-segment results as the next residency route: two single-segment runtimes can coexist, but `segment_02_seg04_07` fails as the third resident runtime with S100 BPU `-400001` memory allocation failure.

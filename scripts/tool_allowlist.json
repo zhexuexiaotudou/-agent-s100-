@@ -74,6 +74,33 @@
       "description": "Generate a deterministic daily Markdown and JSON summary for text-like documents without calling external models."
     },
     {
+      "id": "openclaw_entry_demo_probe",
+      "script": "scripts/probes/openclaw_entry_demo_probe.sh",
+      "mode": "bounded-report",
+      "approvedOutputPrefixes": [
+        "/tmp/",
+        "/mnt/nas/openclaw/reports/",
+        "/root/.openclaw/workspace/reports/"
+      ],
+      "description": "Generate teacher-demo evidence that OpenClaw runs on S100P, the PC demo path does not require elevated operations, and persistence uses the NAS report root."
+    },
+    {
+      "id": "ai_nas_movie_sort_demo_probe",
+      "script": "scripts/probes/ai_nas_movie_sort_demo_probe.sh",
+      "mode": "bounded-demo-write",
+      "approvedInputPrefixes": [
+        "/tmp/",
+        "/mnt/nas/openclaw/demo/ai-nas-movie-sort/",
+        "/root/.openclaw/workspace/demo/ai-nas-movie-sort/"
+      ],
+      "approvedOutputPrefixes": [
+        "/tmp/",
+        "/mnt/nas/openclaw/reports/",
+        "/root/.openclaw/workspace/reports/"
+      ],
+      "description": "Create or use a bounded demo movie inbox, classify sample movie files by type, copy them into a demo library, and write Markdown/JSON evidence without touching the real media library."
+    },
+    {
       "id": "ros2_status_probe",
       "script": "scripts/probes/ros2_status_probe.sh",
       "mode": "readonly",

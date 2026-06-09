@@ -546,3 +546,47 @@ scripts/run_allowlisted_tool.sh nas_discovery_probe
 scripts/run_allowlisted_tool.sh rosbag_capture_policy_probe
 scripts/run_allowlisted_tool.sh rosbag_named_capture_probe
 ```
+
+## 2026-06-09 Teacher Demo Priority
+
+The current work path is demo-first, based on the teacher instruction recorded in [docs/teacher_demo_path_2026-06-09.md](docs/teacher_demo_path_2026-06-09.md).
+
+Priority order:
+
+1. Finish and record the S100P OpenClaw entry demo.
+2. Finish and record the AI NAS movie-sort demo.
+3. Return to Dream 7B after both demos are recordable.
+
+Current demo runbooks:
+
+- [docs/openclaw_entry_demo_runbook.md](docs/openclaw_entry_demo_runbook.md)
+- [docs/ai_nas_movie_sort_demo_runbook.md](docs/ai_nas_movie_sort_demo_runbook.md)
+
+Current demo tool IDs:
+
+```bash
+scripts/run_allowlisted_tool.sh openclaw_entry_demo_probe
+scripts/run_allowlisted_tool.sh ai_nas_movie_sort_demo_probe
+```
+
+Demo report roots:
+
+```text
+/mnt/nas/openclaw/reports/teacher-demos/openclaw-entry
+/mnt/nas/openclaw/reports/teacher-demos/ai-nas-movie-sort
+```
+
+AI NAS movie-sort demo workspace:
+
+```text
+/mnt/nas/openclaw/demo/ai-nas-movie-sort
+```
+
+Out of scope for these two videos:
+
+- Robot capability.
+- ROS2.
+- rosbag.
+- Dream 7B BPU optimization.
+
+Dream 7B remains in the project, but the next Dream step is to run an official S100 LLM quantization-to-deployment sample flow first, then try replacing the official model with Dream 7B.

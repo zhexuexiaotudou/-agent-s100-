@@ -8,6 +8,53 @@
 scripts/probes/
 scripts/robot/
 ```
+## 2026-06-09 Teacher Demo Tools
+
+Additional allowlisted tool:
+
+```text
+openclaw_entry_demo_probe  Bounded teacher demo evidence for S100P OpenClaw entry and NAS persistence
+```
+
+Approved runner entry:
+
+```bash
+scripts/run_allowlisted_tool.sh openclaw_entry_demo_probe /mnt/nas/openclaw/reports/teacher-demos/openclaw-entry
+```
+
+Safety boundary:
+
+```text
+system_changes: no
+service_changes: no
+firewall_changes: no
+pc_writes: no
+nas_writes: bounded_reports_only
+```
+
+Additional allowlisted tool:
+
+```text
+ai_nas_movie_sort_demo_probe  Bounded AI NAS demo that sorts sample movie files by type inside the demo workspace
+```
+
+Approved runner entry:
+
+```bash
+scripts/run_allowlisted_tool.sh ai_nas_movie_sort_demo_probe \
+  /mnt/nas/openclaw/demo/ai-nas-movie-sort \
+  /mnt/nas/openclaw/reports/teacher-demos/ai-nas-movie-sort
+```
+
+Safety boundary:
+
+```text
+real_media_library_touched: false
+external_api_called: false
+model_inference_run: false
+ros2_or_robot_scope: out_of_scope
+```
+
 
 第一阶段只开放 `scripts/probes/`。这些脚本必须满足：
 
