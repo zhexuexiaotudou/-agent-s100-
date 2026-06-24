@@ -103,8 +103,14 @@ function Ensure-WindowsIcsSharing {
     $states = New-Object System.Collections.Generic.List[string]
 
     foreach ($conn in $connections) {
-      $props = $netShare.NetConnectionProps($conn)
-      $cfg = $netShare.INetSharingConfigurationForINetConnection($conn)
+      if ($null -eq $conn) { continue }
+      try {
+        $props = $netShare.NetConnectionProps($conn)
+        $cfg = $netShare.INetSharingConfigurationForINetConnection($conn)
+      } catch {
+        $states.Add(("name=<error>; error={0}" -f $_.Exception.Message))
+        continue
+      }
       $states.Add(("name={0}; enabled={1}; type={2}" -f $props.Name, $cfg.SharingEnabled, $cfg.SharingConnectionType))
       if ($props.Name -eq $publicName) { $publicConn = $conn }
       if ($props.Name -eq $privateName) { $privateConn = $conn }
@@ -126,9 +132,14 @@ function Ensure-WindowsIcsSharing {
     }
 
     foreach ($conn in $connections) {
-      $cfg = $netShare.INetSharingConfigurationForINetConnection($conn)
-      if ($cfg.SharingEnabled) {
-        $cfg.DisableSharing()
+      if ($null -eq $conn) { continue }
+      try {
+        $cfg = $netShare.INetSharingConfigurationForINetConnection($conn)
+        if ($cfg.SharingEnabled) {
+          $cfg.DisableSharing()
+        }
+      } catch {
+        $states.Add(("disable_error={0}" -f $_.Exception.Message))
       }
     }
 
@@ -136,11 +147,17 @@ function Ensure-WindowsIcsSharing {
       try {
         Restart-Service -Name SharedAccess -Force -ErrorAction Stop
         Start-Sleep -Seconds 3
+      } catch {
+        $states.Add(("SharedAccess restart skipped: {0}" -f $_.Exception.Message))
+      }
+
+      try {
         $netShare = New-Object -ComObject HNetCfg.HNetShare
         $connections = @($netShare.EnumEveryConnection())
         $publicConn = $null
         $privateConn = $null
         foreach ($conn in $connections) {
+          if ($null -eq $conn) { continue }
           $props = $netShare.NetConnectionProps($conn)
           if ($props.Name -eq $publicName) { $publicConn = $conn }
           if ($props.Name -eq $privateName) { $privateConn = $conn }
@@ -163,9 +180,14 @@ function Ensure-WindowsIcsSharing {
 
     $after = New-Object System.Collections.Generic.List[string]
     foreach ($conn in @($netShare.EnumEveryConnection())) {
-      $props = $netShare.NetConnectionProps($conn)
-      $cfg = $netShare.INetSharingConfigurationForINetConnection($conn)
-      $after.Add(("name={0}; enabled={1}; type={2}" -f $props.Name, $cfg.SharingEnabled, $cfg.SharingConnectionType))
+      if ($null -eq $conn) { continue }
+      try {
+        $props = $netShare.NetConnectionProps($conn)
+        $cfg = $netShare.INetSharingConfigurationForINetConnection($conn)
+        $after.Add(("name={0}; enabled={1}; type={2}" -f $props.Name, $cfg.SharingEnabled, $cfg.SharingConnectionType))
+      } catch {
+        $after.Add(("name=<error>; error={0}" -f $_.Exception.Message))
+      }
     }
     $message = if ($ForceReset.IsPresent) {
       "已重启 SharedAccess 并重新启用 ${publicName} -> ${privateName} 共享上网"

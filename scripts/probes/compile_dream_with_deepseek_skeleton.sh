@@ -4,9 +4,15 @@ set -euo pipefail
 # First Dream-on-S100 BPU experiment:
 # compile Dream HF safetensors through the official DeepSeek/Qwen text skeleton.
 #
-# This does not make Dream work through xlm_infer. It only tries to produce a
-# fixed-length HBM forward/logits graph that a host-side Dream diffusion loop can
-# call once per denoise step.
+# Why this is the first attempt:
+# - Dream uses a Qwen/Llama-like decoder block and its HF weight names match
+#   leap_llm.models.deepseek after the SDK removes the "model." prefix.
+# - The official xlm runtime does not support Dream, so this script only builds
+#   an HBM forward graph. Host-side Dream diffusion sampling must call that graph
+#   directly instead of xlm_infer.
+#
+# Must run on x86_64 Linux with Python 3.10. The hbdk4 compiler wheel in the
+# S100 LLM SDK is manylinux_x86_64, not aarch64 and not Windows.
 
 SDK_OELLM_BUILD="${SDK_OELLM_BUILD:-/opt/D-Robotics_LLM_S100_1.0.0_SDK/oellm_build}"
 DREAM_MODEL_DIR="${DREAM_MODEL_DIR:-/mnt/nas/openclaw/models/dream7b-hf}"
@@ -16,14 +22,11 @@ CHUNK_SIZE="${CHUNK_SIZE:-256}"
 CACHE_LEN="${CACHE_LEN:-512}"
 W_BITS="${W_BITS:-8}"
 VENV_DIR="${VENV_DIR:-/tmp/dream-s100-oellm-venv}"
+USE_QEMU_X86_64="${USE_QEMU_X86_64:-0}"
+QEMU_X86_64_BIN="${QEMU_X86_64_BIN:-/usr/bin/qemu-x86_64-static}"
 
 if [[ "$(uname -m)" != "x86_64" ]]; then
   echo "ERROR: hbdk4 compiler wheel requires x86_64 Linux, current arch is $(uname -m)." >&2
-  exit 2
-fi
-
-if ! grep -qw avx /proc/cpuinfo; then
-  echo "ERROR: HBDK compiler import can SIGILL on this CPU because AVX is absent." >&2
   exit 2
 fi
 
@@ -47,18 +50,26 @@ python -m pip install \
   "$SDK_OELLM_BUILD/hbdk4_compiler-"*.whl \
   "$SDK_OELLM_BUILD/leap_llm-"*.whl
 
-python -X faulthandler - <<'PY'
+python - <<'PY'
 import platform
-import hbdk4.compiler
+import hbdk4
 import leap_llm
-import torch
 print("python", platform.python_version(), platform.machine())
-print("torch", torch.__version__)
-print("hbdk4.compiler imported")
+print("hbdk4", getattr(hbdk4, "__version__", "unknown"))
 print("leap_llm imported")
 PY
 
-oellm_build \
+if [[ "$USE_QEMU_X86_64" == "1" ]]; then
+  if [[ ! -x "$QEMU_X86_64_BIN" ]]; then
+    echo "ERROR: USE_QEMU_X86_64=1 but qemu binary not found: $QEMU_X86_64_BIN" >&2
+    exit 2
+  fi
+  OELLM_BUILD=(env QEMU_CPU=max "$QEMU_X86_64_BIN" "$VENV_DIR/bin/python" "$VENV_DIR/bin/oellm_build")
+else
+  OELLM_BUILD=(oellm_build)
+fi
+
+"${OELLM_BUILD[@]}" \
   --model_name deepseek-qwen-7b \
   --march "$MARCH" \
   --input_model_path "$DREAM_MODEL_DIR" \

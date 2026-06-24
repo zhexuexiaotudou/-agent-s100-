@@ -1,0 +1,17 @@
+[Unit]
+Description=OpenClaw local gateway for AI-NAS allowlisted tools
+After=network-online.target dream7b-local-openai-gateway.service
+Wants=network-online.target
+
+[Service]
+Type=simple
+WorkingDirectory=/root/.openclaw/workspace
+Environment=AI_NAS_REPORT_ROOT=/mnt/nas/openclaw/reports/ai_nas_mvp
+ExecStart=/root/.openclaw/workspace/scripts/openclaw_gateway.py
+Restart=on-failure
+RestartSec=5s
+StartLimitIntervalSec=300
+StartLimitBurst=5
+
+[Install]
+WantedBy=default.target

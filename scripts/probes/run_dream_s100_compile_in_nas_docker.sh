@@ -1,8 +1,8 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-# Run from S100P. It controls the QNAP NAS Docker daemon over TLS and attempts
-# Dream -> S100 HBM compilation inside a NAS-hosted x86_64 Ubuntu container.
+# Run from S100P. It controls the QNAP NAS Docker daemon over TLS and runs the
+# first Dream -> S100 HBM compile attempt inside an x86_64 Ubuntu container.
 
 NAS_DOCKER_HOST="${NAS_DOCKER_HOST:-tcp://169.254.143.37:2376}"
 NAS_DOCKER_CERT_PATH="${NAS_DOCKER_CERT_PATH:-/home/sunrise/.docker/nas-tudou}"
@@ -35,6 +35,7 @@ apt-get install -y --no-install-recommends \
   python3.10-dev \
   python3.10-venv \
   python3-pip \
+  qemu-user-static \
   git \
   curl \
   libglib2.0-0 \
@@ -50,6 +51,7 @@ MARCH="${MARCH:-nash-e}"
 CHUNK_SIZE="${CHUNK_SIZE:-256}"
 CACHE_LEN="${CACHE_LEN:-512}"
 W_BITS="${W_BITS:-8}"
+USE_QEMU_X86_64="${USE_QEMU_X86_64:-0}"
 
 SDK_OELLM_BUILD="$SDK_OELLM_BUILD" \
 DREAM_MODEL_DIR="$DREAM_MODEL_DIR" \
@@ -59,6 +61,7 @@ MARCH="$MARCH" \
 CHUNK_SIZE="$CHUNK_SIZE" \
 CACHE_LEN="$CACHE_LEN" \
 W_BITS="$W_BITS" \
+USE_QEMU_X86_64="$USE_QEMU_X86_64" \
 bash "$DREAM_MODEL_DIR/compile_dream_with_deepseek_skeleton.sh"
 INNER
 
@@ -69,7 +72,6 @@ export DOCKER_TLS_VERIFY=1
 export DOCKER_CERT_PATH="$NAS_DOCKER_CERT_PATH"
 
 docker run --rm \
-  --platform linux/amd64 \
   --name dream-s100-compile \
   -v "$NAS_WORKSPACE_HOST_PATH:$WORKSPACE" \
   -e PIP_INDEX_URL="${PIP_INDEX_URL:-https://pypi.tuna.tsinghua.edu.cn/simple}" \

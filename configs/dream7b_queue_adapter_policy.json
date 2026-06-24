@@ -1,0 +1,64 @@
+{
+  "version": 1,
+  "generated_for": "dream7b-openclaw-two-track",
+  "principle": "Route A stays on 18888. Route B is isolated on 18889 and never promotes BPU output without evidence gates.",
+  "route_a": {
+    "name": "product-default",
+    "base_url": "http://127.0.0.1:18888",
+    "model": "Dream7B-S100P-local",
+    "backend": "diffuse-resident",
+    "protected": true
+  },
+  "route_b": {
+    "name": "bpu-experimental",
+    "host": "127.0.0.1",
+    "port": 18889,
+    "model": "Dream7B-S100P-bpu-experimental",
+    "enabled_by_default": false,
+    "queue_dir": "/mnt/nas/openclaw/queues/dream7b-bpu",
+    "report_root": "/mnt/nas/openclaw/reports/models",
+    "allowed_task_classes": [
+      "background",
+      "batch",
+      "async",
+      "offline_report"
+    ],
+    "forbidden_task_classes": [
+      "interactive",
+      "chat",
+      "foreground"
+    ],
+    "required_request_metadata": [
+      "task_class"
+    ],
+    "bpu_job_contract": {
+      "accepted_payload": "metadata.bpu_tokens",
+      "seq_len": 16,
+      "reason": "current queue baseline is seq16; long OpenClaw prompts must not be silently truncated",
+      "future_targets": [
+        "seq128",
+        "seq256"
+      ]
+    },
+    "timeouts": {
+      "enqueue_timeout_ms": 500,
+      "queue_wait_timeout_ms": 0,
+      "fallback_proxy_timeout_ms": 30000
+    },
+    "fallback": {
+      "on_forbidden_task": "proxy_route_a",
+      "on_missing_tokens": "proxy_route_a",
+      "on_invalid_tokens": "proxy_route_a",
+      "on_queue_error": "proxy_route_a",
+      "on_empty_or_garbled_output": "proxy_route_a"
+    },
+    "promotion_blockers": [
+      "seq16_prompt_truncation",
+      "missing_seq128_or_seq256_hbm",
+      "missing_logits_quality_gate",
+      "missing_chinese_generation_quality_gate",
+      "missing_same_workload_latency_gate",
+      "missing_rollback_gate"
+    ]
+  }
+}

@@ -1,0 +1,17 @@
+[Unit]
+Description=Dream7B S100P BPU batch queue service
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=simple
+WorkingDirectory=/root/.openclaw/workspace
+Environment=AI_NAS_REPORT_ROOT=/mnt/nas/openclaw/reports/ai_nas_mvp
+ExecStart=/root/.openclaw/workspace/scripts/dream7b-bpu-batch-queue-run.sh
+Restart=on-failure
+RestartSec=5s
+StartLimitIntervalSec=300
+StartLimitBurst=5
+
+[Install]
+WantedBy=default.target
