@@ -1,0 +1,2289 @@
+﻿# Dream 7B Segmented S100 BPU HBM Progress
+
+Date: 2026-06-03
+
+## Goal
+
+Keep Dream 7B as the model and make real Dream weights consume the S100P BPU path.
+
+## Result
+
+Dream 7B seq16 full-forward was compiled into S100/Nash-E `.hbm` artifacts and verified on S100P with `hrt_model_exec infer` and the board Python `HB_HBMRuntime`.
+
+The working split is six HBM segments:
+
+```text
+/mnt/nas/openclaw/models/dream7b-hbm/segments6/dream7b_segment_0_4_seq16_q8.hbm
+/mnt/nas/openclaw/models/dream7b-hbm/segments6/dream7b_segment_4_7_seq16_q8.hbm
+/mnt/nas/openclaw/models/dream7b-hbm/segments6/dream7b_segment_7_14_seq16_q8.hbm
+/mnt/nas/openclaw/models/dream7b-hbm/segments6/dream7b_segment_14_21_seq16_q8.hbm
+/mnt/nas/openclaw/models/dream7b-hbm/segments6/dream7b_segment_21_24_seq16_q8.hbm
+/mnt/nas/openclaw/models/dream7b-hbm/segments6/dream7b_segment_24_28_seq16_q8.hbm
+```
+
+S100P smoke evidence:
+
+```text
+model_info: all six segments loaded successfully on S100P
+infer: all six segments ran one dummy frame successfully on S100P
+chain: six segments chained token -> hidden -> logits with dequantized F32 hidden handoff
+runtime: /usr/hobot/bin/hrt_model_exec
+NAS path: /mnt/nas/openclaw/models/dream7b-hbm
+manifest: /mnt/nas/openclaw/models/dream7b-hbm/segments6/manifest.sha256
+smoke outputs: /mnt/nas/openclaw/models/dream7b-hbm/smoke_outputs
+smoke report: /mnt/nas/openclaw/reports/models/dream7b_segmented_hbm_smoke_20260603-015519/summary.md
+chain report: /mnt/nas/openclaw/reports/models/dream7b_segmented_hbm_chain_20260603-021025/summary.md
+python forward report: /mnt/nas/openclaw/reports/models/dream7b_python_forward_20260603-verified/summary.json
+deployed command: /usr/local/bin/dream7b-bpu-forward
+deployed command report: /mnt/nas/openclaw/reports/models/dream7b_bpu_forward_20260603-022912/summary.json
+token-arg report: /mnt/nas/openclaw/reports/models/dream7b_bpu_forward_20260603-023557/summary.json
+token-arg logits: /mnt/nas/openclaw/reports/models/dream7b_bpu_forward_20260603-023557/logits.npy
+text-forward command: /usr/local/bin/dream7b-bpu-text-forward
+text-forward report: /mnt/nas/openclaw/reports/models/dream7b_bpu_forward_20260603-024218/summary.json
+text-forward logits: /mnt/nas/openclaw/reports/models/dream7b_bpu_forward_20260603-024218/logits.npy
+top-k report: /mnt/nas/openclaw/reports/models/dream7b_bpu_forward_20260603-024533/summary.json
+diffusion-step command: /usr/local/bin/dream7b-bpu-diffusion-step-probe
+diffusion-step report: /mnt/nas/openclaw/reports/models/dream7b_bpu_diffusion_step_20260603-025304/summary.md
+diffusion-loop command: /usr/local/bin/dream7b-bpu-diffusion-loop-probe
+diffusion-loop report: /mnt/nas/openclaw/reports/models/dream7b_bpu_diffusion_loop_20260603-030011/summary.md
+strategy-aware diffusion-loop report: /mnt/nas/openclaw/reports/models/dream7b_bpu_diffusion_loop_20260603-031016/summary.md
+cpu-quality-gate command: /usr/local/bin/dream7b-bpu-cpu-quality-gate-probe
+cpu-quality-gate report: /mnt/nas/openclaw/reports/models/dream7b_bpu_cpu_quality_gate_20260603-033101/summary.md
+hbm-cache-perf command: /usr/local/bin/dream7b-bpu-hbm-cache-perf-probe
+hbm-cache-perf report: /mnt/nas/openclaw/reports/models/dream7b_bpu_hbm_cache_perf_20260603-034629/summary.md
+artifact-inventory command: /usr/local/bin/dream7b-bpu-hbm-artifact-inventory-probe
+artifact-inventory report: /mnt/nas/openclaw/reports/models/dream7b_bpu_hbm_artifact_inventory_20260605-160050/hbm_artifact_inventory_probe.md
+artifact-inventory JSON: /mnt/nas/openclaw/reports/models/dream7b_bpu_hbm_artifact_inventory_20260605-160050/hbm_artifact_inventory_probe.json
+local-cache loop report: /mnt/nas/openclaw/reports/models/dream7b_bpu_diffusion_loop_20260603-034939/summary.md
+residency command: /usr/local/bin/dream7b-bpu-residency-probe
+residency report: /mnt/nas/openclaw/reports/models/dream7b_bpu_residency_20260603-035939/summary.md
+fine 26:28 HBM: /mnt/nas/openclaw/models/dream7b-hbm/fine-seq16/seg26_28/dream7b_segment_26_28_seq16_q8.hbm
+fine 24:26 HBM: /mnt/nas/openclaw/models/dream7b-hbm/fine-seq16/seg24_26/dream7b_segment_24_26_seq16_q8.hbm
+fine 0:2 HBM: /mnt/nas/openclaw/models/dream7b-hbm/fine-seq16/seg00_02/dream7b_segment_0_2_seq16_q8.hbm
+fine 2:4 HBM: /mnt/nas/openclaw/models/dream7b-hbm/fine-seq16/seg02_04/dream7b_segment_2_4_seq16_q8.hbm
+fine 7:10 HBM: /mnt/nas/openclaw/models/dream7b-hbm/fine-seq16/seg07_10/dream7b_segment_7_10_seq16_q8.hbm
+fine 10:14 HBM: /mnt/nas/openclaw/models/dream7b-hbm/fine-seq16/seg10_14/dream7b_segment_10_14_seq16_q8.hbm
+fine 14:17 HBM: /mnt/nas/openclaw/models/dream7b-hbm/fine-seq16/seg14_17/dream7b_segment_14_17_seq16_q8.hbm
+fine 17:21 HBM: /mnt/nas/openclaw/models/dream7b-hbm/fine-seq16/seg17_21/dream7b_segment_17_21_seq16_q8.hbm
+fine-residency command: /usr/local/bin/dream7b-bpu-fine-residency-probe
+fine-residency report: /mnt/nas/openclaw/reports/models/dream7b_bpu_fine_residency_20260603-054031/summary.md
+fine-forward command: /usr/local/bin/dream7b-bpu-fine-forward
+fine-forward report: /mnt/nas/openclaw/reports/models/dream7b_bpu_fine_forward_20260603-174608/summary.json
+fine-forward probe command: /usr/local/bin/dream7b-bpu-fine-forward-probe
+fine-forward probe report: /mnt/nas/openclaw/reports/models/dream7b_bpu_fine_forward_20260603-174608/fine_forward_probe.md
+fine-forward perf command: /usr/local/bin/dream7b-bpu-fine-forward-perf-probe
+fine-forward perf report: /mnt/nas/openclaw/reports/models/dream7b_bpu_fine_forward_perf_20260603-174745/summary.md
+fine-forward repeat command: /usr/local/bin/dream7b-bpu-fine-forward-repeat-probe
+fine-forward repeat report: /mnt/nas/openclaw/reports/models/dream7b_bpu_fine_forward_repeat_20260603-180108/summary.md
+fine-forward long-repeat command: /usr/local/bin/dream7b-bpu-fine-forward-long-repeat-probe
+fine-forward long-repeat report: /mnt/nas/openclaw/reports/models/dream7b_bpu_fine_forward_long_repeat_20260605-140733/long_repeat_probe.md
+gated fine-forward long-repeat report: /mnt/nas/openclaw/reports/models/dream7b_bpu_fine_forward_long_repeat_20260605-163343/long_repeat_probe.md
+fine-forward window-batch command: /usr/local/bin/dream7b-bpu-fine-forward-window-batch-probe
+fine-forward window-batch report: /mnt/nas/openclaw/reports/models/dream7b_bpu_fine_forward_window_batch_20260603-181131/summary.md
+fine-batch-forward command: /usr/local/bin/dream7b-bpu-fine-batch-forward
+fine-batch-forward probe command: /usr/local/bin/dream7b-bpu-fine-batch-forward-probe
+fine-batch-forward probe report: /mnt/nas/openclaw/reports/models/dream7b_bpu_fine_batch_forward_20260603-183625/fine_batch_forward_probe.md
+fine-batch-size-sweep probe command: /usr/local/bin/dream7b-bpu-fine-batch-size-sweep-probe
+fine-batch-size-sweep report: /mnt/nas/openclaw/reports/models/dream7b_bpu_fine_batch_size_sweep_20260604-181429/batch_size_sweep_probe.md
+runtime telemetry probe command: /usr/local/bin/dream7b-bpu-runtime-telemetry-probe
+runtime telemetry report: /mnt/nas/openclaw/reports/models/dream7b_bpu_runtime_telemetry_20260604-225030/runtime_telemetry_probe.md
+batch-queue-runner command: /usr/local/bin/dream7b-bpu-batch-queue-runner
+batch-queue-runner probe command: /usr/local/bin/dream7b-bpu-batch-queue-runner-probe
+batch-queue-runner probe report: /mnt/nas/openclaw/reports/models/dream7b_bpu_batch_queue_runner_20260603-193243/batch_queue_runner_probe.md
+batch-queue-drain probe command: /usr/local/bin/dream7b-bpu-batch-queue-drain-probe
+batch-queue-drain probe report: /mnt/nas/openclaw/reports/models/dream7b_bpu_batch_queue_drain_20260603-193309/batch_queue_drain_probe.md
+batch-queue-control probe command: /usr/local/bin/dream7b-bpu-batch-queue-control-probe
+batch-queue-control probe report: /mnt/nas/openclaw/reports/models/dream7b_bpu_batch_queue_control_20260603-193400/batch_queue_control_probe.md
+batch-queue-lock probe command: /usr/local/bin/dream7b-bpu-batch-queue-lock-probe
+batch-queue-lock probe report: /mnt/nas/openclaw/reports/models/dream7b_bpu_batch_queue_lock_20260603-193209/batch_queue_lock_probe.md
+batch-queue-service command: /usr/local/bin/dream7b-bpu-batch-queue-service
+batch-queue-service probe command: /usr/local/bin/dream7b-bpu-batch-queue-service-probe
+batch-queue-service probe report: /mnt/nas/openclaw/reports/models/dream7b_bpu_batch_queue_service_20260603-194437/batch_queue_service_probe.md
+batch-queue-service real BPU report: /mnt/nas/openclaw/reports/models/dream7b_bpu_batch_queue_service_real_scp_20260603-194827/output/service_summary.md
+batch-queue systemd install command: /usr/local/bin/install-dream7b-bpu-queue-service
+batch-queue systemd service: /etc/systemd/system/dream7b-bpu-batch-queue.service
+batch-queue systemd probe command: /usr/local/bin/dream7b-bpu-batch-queue-systemd-probe
+batch-queue systemd probe report: /mnt/nas/openclaw/reports/models/dream7b_bpu_batch_queue_systemd_20260603-221324/systemd_probe.md
+batch-queue systemd service summary: /mnt/nas/openclaw/reports/models/dream7b_bpu_batch_queue_service_systemd/service_summary.md
+batch-queue systemd real BPU job summary: /mnt/nas/openclaw/reports/models/dream7b_bpu_batch_queue_service_systemd/jobs/systemd_job_20260603_220710/queue_summary.json
+batch-queue systemd BPU lock path: /run/lock/dream7b_bpu_batch_queue_runner.lock
+batch-queue systemd soak probe command: /usr/local/bin/dream7b-bpu-batch-queue-systemd-soak-probe
+batch-queue systemd soak report: /mnt/nas/openclaw/reports/models/dream7b_bpu_batch_queue_systemd_soak_20260604-131223/systemd_soak_probe.md
+batch-queue systemd soak job 001 summary: /mnt/nas/openclaw/reports/models/dream7b_bpu_batch_queue_service_systemd/jobs/systemd_soak_20260604-131223_001/queue_summary.json
+batch-queue systemd soak job 002 summary: /mnt/nas/openclaw/reports/models/dream7b_bpu_batch_queue_service_systemd/jobs/systemd_soak_20260604-131223_002/queue_summary.json
+batch-queue systemd batch probe command: /usr/local/bin/dream7b-bpu-batch-queue-systemd-batch-probe
+batch-queue systemd batch report: /mnt/nas/openclaw/reports/models/dream7b_bpu_batch_queue_systemd_batch_20260604-133034/systemd_batch_probe.md
+batch-queue systemd batch job summary: /mnt/nas/openclaw/reports/models/dream7b_bpu_batch_queue_service_systemd/jobs/systemd_batch_20260604-133034/queue_summary.json
+batch-queue systemd drain probe command: /usr/local/bin/dream7b-bpu-batch-queue-systemd-drain-probe
+batch-queue systemd drain report: /mnt/nas/openclaw/reports/models/dream7b_bpu_batch_queue_systemd_drain_20260604-174953/systemd_drain_probe.md
+batch-queue systemd drain job summary: /mnt/nas/openclaw/reports/models/dream7b_bpu_batch_queue_service_systemd/jobs/systemd_drain_20260604-174953/queue_summary.json
+batch-queue systemd full-batch drain report: /mnt/nas/openclaw/reports/models/dream7b_bpu_batch_queue_systemd_drain_20260604-180557/systemd_drain_probe.md
+batch-queue systemd full-batch drain job summary: /mnt/nas/openclaw/reports/models/dream7b_bpu_batch_queue_service_systemd/jobs/systemd_drain_20260604-180557/queue_summary.json
+batch-queue systemd canary probe command: /usr/local/bin/dream7b-bpu-batch-queue-systemd-canary-probe
+batch-queue systemd canary report: /mnt/nas/openclaw/reports/models/dream7b_bpu_batch_queue_systemd_canary_20260605-151715/systemd_canary_probe.md
+batch-queue systemd canary JSON: /mnt/nas/openclaw/reports/models/dream7b_bpu_batch_queue_systemd_canary_20260605-151715/systemd_canary_probe.json
+batch-queue systemd canary job summary: /mnt/nas/openclaw/reports/models/dream7b_bpu_batch_queue_service_systemd/jobs/systemd_canary_20260605-151715/queue_summary.json
+text-queue systemd probe command: /usr/local/bin/dream7b-bpu-text-queue-systemd-probe
+text-queue systemd report: /mnt/nas/openclaw/reports/models/dream7b_bpu_text_queue_systemd_20260605-234555/text_queue_systemd_probe.md
+text-queue systemd JSON: /mnt/nas/openclaw/reports/models/dream7b_bpu_text_queue_systemd_20260605-234555/text_queue_systemd_probe.json
+text-queue tokenizer JSON: /mnt/nas/openclaw/reports/models/dream7b_bpu_text_queue_systemd_20260605-234555/tokenizer_input.json
+text-queue queue summary: /mnt/nas/openclaw/reports/models/dream7b_bpu_batch_queue_service_systemd/jobs/text_queue_systemd_20260605-234555/queue_summary.json
+text-queue submit command: /usr/local/bin/dream7b-bpu-text-queue-submit
+text-queue run command: /usr/local/bin/dream7b-bpu-text-queue-run
+text-queue run report: /mnt/nas/openclaw/reports/models/dream7b_bpu_text_queue_run_20260606-155102/text_queue_run.md
+text-queue run JSON: /mnt/nas/openclaw/reports/models/dream7b_bpu_text_queue_run_20260606-155102/text_queue_run.json
+submit-aware text-queue systemd report: /mnt/nas/openclaw/reports/models/dream7b_bpu_text_queue_systemd_20260606-142516/text_queue_systemd_probe.md
+submit-aware text-queue systemd JSON: /mnt/nas/openclaw/reports/models/dream7b_bpu_text_queue_systemd_20260606-142516/text_queue_systemd_probe.json
+submit-aware text-queue submit JSON: /mnt/nas/openclaw/reports/models/dream7b_bpu_text_queue_systemd_20260606-142516/text_queue_submit.json
+submit-aware text-queue tokenizer JSON: /mnt/nas/openclaw/reports/models/dream7b_bpu_text_queue_systemd_20260606-142516/tokenizer_input.json
+submit-aware text-queue queue summary: /mnt/nas/openclaw/reports/models/dream7b_bpu_batch_queue_service_systemd/jobs/text_queue_systemd_20260606-142516/queue_summary.json
+run-aware text-queue systemd report: /mnt/nas/openclaw/reports/models/dream7b_bpu_text_queue_systemd_20260606-155148/text_queue_systemd_probe.md
+run-aware text-queue systemd JSON: /mnt/nas/openclaw/reports/models/dream7b_bpu_text_queue_systemd_20260606-155148/text_queue_systemd_probe.json
+run-aware text-queue run JSON: /mnt/nas/openclaw/reports/models/dream7b_bpu_text_queue_systemd_20260606-155148/text_queue_run.json
+run-aware text-queue submit JSON: /mnt/nas/openclaw/reports/models/dream7b_bpu_text_queue_systemd_20260606-155148/text_queue_submit.json
+run-aware text-queue queue summary: /mnt/nas/openclaw/reports/models/dream7b_bpu_batch_queue_service_systemd/jobs/text_queue_systemd_20260606-155148/queue_summary.json
+batch-queue systemd telemetry probe command: /usr/local/bin/dream7b-bpu-batch-queue-systemd-telemetry-probe
+batch-queue systemd telemetry report: /mnt/nas/openclaw/reports/models/dream7b_bpu_batch_queue_systemd_telemetry_20260605-133919/systemd_telemetry_probe.md
+batch-queue systemd telemetry job 001 summary: /mnt/nas/openclaw/reports/models/dream7b_bpu_batch_queue_service_systemd/jobs/systemd_telemetry_20260605-133919_001/queue_summary.json
+batch-queue systemd telemetry job 002 summary: /mnt/nas/openclaw/reports/models/dream7b_bpu_batch_queue_service_systemd/jobs/systemd_telemetry_20260605-133919_002/queue_summary.json
+batch-queue systemd telemetry job 003 summary: /mnt/nas/openclaw/reports/models/dream7b_bpu_batch_queue_service_systemd/jobs/systemd_telemetry_20260605-133919_003/queue_summary.json
+batch-queue retention probe command: /usr/local/bin/dream7b-bpu-batch-queue-retention-probe
+batch-queue retention report: /mnt/nas/openclaw/reports/models/dream7b_bpu_batch_queue_retention_20260605-135448/queue_retention_probe.md
+deployment acceptance probe command: /usr/local/bin/dream7b-bpu-deployment-acceptance-probe
+deployment acceptance report: /mnt/nas/openclaw/reports/models/dream7b_bpu_deployment_acceptance_20260605-143759/deployment_acceptance_probe.md
+deployment acceptance JSON: /mnt/nas/openclaw/reports/models/dream7b_bpu_deployment_acceptance_20260605-143759/deployment_acceptance_probe.json
+updated deployment acceptance report: /mnt/nas/openclaw/reports/models/dream7b_bpu_deployment_acceptance_20260605-153747/deployment_acceptance_probe.md
+updated deployment acceptance JSON: /mnt/nas/openclaw/reports/models/dream7b_bpu_deployment_acceptance_20260605-153747/deployment_acceptance_probe.json
+artifact-aware deployment acceptance report: /mnt/nas/openclaw/reports/models/dream7b_bpu_deployment_acceptance_20260605-161000/deployment_acceptance_probe.md
+artifact-aware deployment acceptance JSON: /mnt/nas/openclaw/reports/models/dream7b_bpu_deployment_acceptance_20260605-161000/deployment_acceptance_probe.json
+gated deployment acceptance report: /mnt/nas/openclaw/reports/models/dream7b_bpu_deployment_acceptance_20260605-172156/deployment_acceptance_probe.md
+gated deployment acceptance JSON: /mnt/nas/openclaw/reports/models/dream7b_bpu_deployment_acceptance_20260605-172156/deployment_acceptance_probe.json
+text-queue-aware deployment acceptance report: /mnt/nas/openclaw/reports/models/dream7b_bpu_deployment_acceptance_20260606-134314/deployment_acceptance_probe.md
+text-queue-aware deployment acceptance JSON: /mnt/nas/openclaw/reports/models/dream7b_bpu_deployment_acceptance_20260606-134314/deployment_acceptance_probe.json
+submit-aware deployment acceptance report: /mnt/nas/openclaw/reports/models/dream7b_bpu_deployment_acceptance_20260606-142559/deployment_acceptance_probe.md
+submit-aware deployment acceptance JSON: /mnt/nas/openclaw/reports/models/dream7b_bpu_deployment_acceptance_20260606-142559/deployment_acceptance_probe.json
+run-aware deployment acceptance report: /mnt/nas/openclaw/reports/models/dream7b_bpu_deployment_acceptance_20260606-144721/deployment_acceptance_probe.md
+run-aware deployment acceptance JSON: /mnt/nas/openclaw/reports/models/dream7b_bpu_deployment_acceptance_20260606-144721/deployment_acceptance_probe.json
+bounded generation command: /usr/local/bin/dream7b-bpu-diffusion-generate
+bounded generation report: /mnt/nas/openclaw/reports/models/dream7b_bpu_diffusion_generate_20260606-161120/generation.md
+bounded generation JSON: /mnt/nas/openclaw/reports/models/dream7b_bpu_diffusion_generate_20260606-161120/generation.json
+bounded generation telemetry command: /usr/local/bin/dream7b-bpu-diffusion-generate-telemetry-probe
+bounded generation telemetry report: /mnt/nas/openclaw/reports/models/dream7b_bpu_diffusion_generate_telemetry_20260606-163625/generation_telemetry_probe.md
+bounded generation telemetry JSON: /mnt/nas/openclaw/reports/models/dream7b_bpu_diffusion_generate_telemetry_20260606-163625/generation_telemetry_probe.json
+bounded batch generation command: /usr/local/bin/dream7b-bpu-diffusion-batch-generate
+bounded batch generation telemetry command: /usr/local/bin/dream7b-bpu-diffusion-batch-generate-telemetry-probe
+bounded batch generation telemetry report: /mnt/nas/openclaw/reports/models/dream7b_bpu_diffusion_batch_generate_telemetry_20260606-184316/batch_generation_telemetry_probe.md
+bounded batch generation telemetry JSON: /mnt/nas/openclaw/reports/models/dream7b_bpu_diffusion_batch_generate_telemetry_20260606-184316/batch_generation_telemetry_probe.json
+bounded batch generation JSON: /mnt/nas/openclaw/reports/models/dream7b_bpu_diffusion_batch_generate_telemetry_20260606-184316/generation/batch_generation.json
+bounded batch generation sustained command: /usr/local/bin/dream7b-bpu-diffusion-batch-generate-sustained-probe
+bounded batch generation sustained report: /mnt/nas/openclaw/reports/models/dream7b_bpu_diffusion_batch_generate_sustained_20260606-190058/batch_generation_sustained_probe.md
+bounded batch generation sustained JSON: /mnt/nas/openclaw/reports/models/dream7b_bpu_diffusion_batch_generate_sustained_20260606-190058/batch_generation_sustained_probe.json
+utilization gap command: /usr/local/bin/dream7b-bpu-utilization-gap-probe
+utilization gap report: /mnt/nas/openclaw/reports/models/dream7b_bpu_utilization_gap_20260606-031454/utilization_gap_probe.md
+utilization gap JSON: /mnt/nas/openclaw/reports/models/dream7b_bpu_utilization_gap_20260606-031454/utilization_gap_probe.json
+selected pair telemetry command: /usr/local/bin/dream7b-bpu-selected-pair-telemetry-probe
+selected pair telemetry report: /mnt/nas/openclaw/reports/models/dream7b_bpu_selected_pair_telemetry_20260606-031259/selected_pair_telemetry_probe.md
+selected pair telemetry JSON: /mnt/nas/openclaw/reports/models/dream7b_bpu_selected_pair_telemetry_20260606-031259/selected_pair_telemetry_probe.json
+selected pair promotion gate command: /usr/local/bin/dream7b-bpu-selected-pair-promotion-gate-probe
+selected pair promotion gate report: /mnt/nas/openclaw/reports/models/dream7b_bpu_selected_pair_promotion_gate_20260606-034228/selected_pair_promotion_gate_probe.md
+selected pair promotion gate JSON: /mnt/nas/openclaw/reports/models/dream7b_bpu_selected_pair_promotion_gate_20260606-034228/selected_pair_promotion_gate_probe.json
+persistent pair cache command: /usr/local/bin/dream7b-bpu-persistent-pair-cache-probe
+persistent pair cache report: /mnt/nas/openclaw/reports/models/dream7b_bpu_persistent_pair_cache_20260605-234349/persistent_pair_cache_probe.md
+persistent pair cache JSON: /mnt/nas/openclaw/reports/models/dream7b_bpu_persistent_pair_cache_20260605-234349/persistent_pair_cache_probe.json
+held pair residency matrix command: /usr/local/bin/dream7b-bpu-held-pair-residency-matrix-probe
+held pair residency matrix report: /mnt/nas/openclaw/reports/models/dream7b_bpu_held_pair_residency_matrix_20260605-235813/held_pair_residency_matrix_probe.md
+held pair residency matrix JSON: /mnt/nas/openclaw/reports/models/dream7b_bpu_held_pair_residency_matrix_20260605-235813/held_pair_residency_matrix_probe.json
+single segment residency matrix command: /usr/local/bin/dream7b-bpu-single-segment-residency-matrix-probe
+single segment residency matrix report: /mnt/nas/openclaw/reports/models/dream7b_bpu_single_segment_residency_matrix_20260606-002628/single_segment_residency_matrix_probe.md
+single segment residency matrix JSON: /mnt/nas/openclaw/reports/models/dream7b_bpu_single_segment_residency_matrix_20260606-002628/single_segment_residency_matrix_probe.json
+persistent segment cache command: /usr/local/bin/dream7b-bpu-persistent-segment-cache-probe
+persistent segment cache report: /mnt/nas/openclaw/reports/models/dream7b_bpu_persistent_segment_cache_20260606-005633/persistent_segment_cache_probe.md
+persistent segment cache JSON: /mnt/nas/openclaw/reports/models/dream7b_bpu_persistent_segment_cache_20260606-005633/persistent_segment_cache_probe.json
+single segment triplet residency command: /usr/local/bin/dream7b-bpu-single-segment-triplet-residency-probe
+single segment triplet residency report: /mnt/nas/openclaw/reports/models/dream7b_bpu_single_segment_triplet_residency_20260606-121243/single_segment_triplet_residency_probe.md
+single segment triplet residency JSON: /mnt/nas/openclaw/reports/models/dream7b_bpu_single_segment_triplet_residency_20260606-121243/single_segment_triplet_residency_probe.json
+seeded quad residency command: /usr/local/bin/dream7b-bpu-seeded-quad-residency-probe
+seeded quad residency report: /mnt/nas/openclaw/reports/models/dream7b_bpu_seeded_quad_residency_20260606-124305/seeded_quad_residency_probe.md
+seeded quad residency JSON: /mnt/nas/openclaw/reports/models/dream7b_bpu_seeded_quad_residency_20260606-124305/seeded_quad_residency_probe.json
+persistent triplet topology command: /usr/local/bin/dream7b-bpu-persistent-triplet-topology-probe
+persistent triplet topology report: /mnt/nas/openclaw/reports/models/dream7b_bpu_persistent_triplet_topology_20260606-131107/persistent_triplet_topology_probe.md
+persistent triplet topology JSON: /mnt/nas/openclaw/reports/models/dream7b_bpu_persistent_triplet_topology_20260606-131107/persistent_triplet_topology_probe.json
+window3 forward feasibility command: /usr/local/bin/dream7b-bpu-window3-forward-feasibility-probe
+window3 forward feasibility report: /mnt/nas/openclaw/reports/models/dream7b_bpu_window3_forward_feasibility_20260606-133931/window3_forward_feasibility_probe.md
+window3 forward feasibility JSON: /mnt/nas/openclaw/reports/models/dream7b_bpu_window3_forward_feasibility_20260606-133931/window3_forward_feasibility_probe.json
+generation-aware deployment acceptance report: /mnt/nas/openclaw/reports/models/dream7b_bpu_deployment_acceptance_20260606-161252/deployment_acceptance_probe.md
+generation-aware deployment acceptance JSON: /mnt/nas/openclaw/reports/models/dream7b_bpu_deployment_acceptance_20260606-161252/deployment_acceptance_probe.json
+generation-telemetry-aware deployment acceptance report: /mnt/nas/openclaw/reports/models/dream7b_bpu_deployment_acceptance_20260606-165607/deployment_acceptance_probe.md
+generation-telemetry-aware deployment acceptance JSON: /mnt/nas/openclaw/reports/models/dream7b_bpu_deployment_acceptance_20260606-165607/deployment_acceptance_probe.json
+batch-generation-aware deployment acceptance report: /mnt/nas/openclaw/reports/models/dream7b_bpu_deployment_acceptance_20260606-205153/deployment_acceptance_probe.md
+batch-generation-aware deployment acceptance JSON: /mnt/nas/openclaw/reports/models/dream7b_bpu_deployment_acceptance_20260606-205153/deployment_acceptance_probe.json
+utilization-gap-aware deployment acceptance report: /mnt/nas/openclaw/reports/models/dream7b_bpu_deployment_acceptance_20260606-212134/deployment_acceptance_probe.md
+utilization-gap-aware deployment acceptance JSON: /mnt/nas/openclaw/reports/models/dream7b_bpu_deployment_acceptance_20260606-212134/deployment_acceptance_probe.json
+persistent-pair-cache-aware deployment acceptance report: /mnt/nas/openclaw/reports/models/dream7b_bpu_deployment_acceptance_20260605-234654/deployment_acceptance_probe.md
+persistent-pair-cache-aware deployment acceptance JSON: /mnt/nas/openclaw/reports/models/dream7b_bpu_deployment_acceptance_20260605-234654/deployment_acceptance_probe.json
+held-pair-matrix-aware deployment acceptance report: /mnt/nas/openclaw/reports/models/dream7b_bpu_deployment_acceptance_20260606-000234/deployment_acceptance_probe.md
+held-pair-matrix-aware deployment acceptance JSON: /mnt/nas/openclaw/reports/models/dream7b_bpu_deployment_acceptance_20260606-000234/deployment_acceptance_probe.json
+segment-residency-aware deployment acceptance report: /mnt/nas/openclaw/reports/models/dream7b_bpu_deployment_acceptance_20260606-120028/deployment_acceptance_probe.md
+segment-residency-aware deployment acceptance JSON: /mnt/nas/openclaw/reports/models/dream7b_bpu_deployment_acceptance_20260606-120028/deployment_acceptance_probe.json
+triplet-aware deployment acceptance report: /mnt/nas/openclaw/reports/models/dream7b_bpu_deployment_acceptance_20260606-123257/deployment_acceptance_probe.md
+triplet-aware deployment acceptance JSON: /mnt/nas/openclaw/reports/models/dream7b_bpu_deployment_acceptance_20260606-123257/deployment_acceptance_probe.json
+seeded-quad-aware deployment acceptance report: /mnt/nas/openclaw/reports/models/dream7b_bpu_deployment_acceptance_20260606-125750/deployment_acceptance_probe.md
+seeded-quad-aware deployment acceptance JSON: /mnt/nas/openclaw/reports/models/dream7b_bpu_deployment_acceptance_20260606-125750/deployment_acceptance_probe.json
+persistent-triplet-aware deployment acceptance report: /mnt/nas/openclaw/reports/models/dream7b_bpu_deployment_acceptance_20260606-133119/deployment_acceptance_probe.md
+persistent-triplet-aware deployment acceptance JSON: /mnt/nas/openclaw/reports/models/dream7b_bpu_deployment_acceptance_20260606-133119/deployment_acceptance_probe.json
+window3-aware deployment acceptance report: /mnt/nas/openclaw/reports/models/dream7b_bpu_deployment_acceptance_20260606-134115/deployment_acceptance_probe.md
+window3-aware deployment acceptance JSON: /mnt/nas/openclaw/reports/models/dream7b_bpu_deployment_acceptance_20260606-134115/deployment_acceptance_probe.json
+selected-pair-aware deployment acceptance report: /mnt/nas/openclaw/reports/models/dream7b_bpu_deployment_acceptance_20260606-031455/deployment_acceptance_probe.md
+selected-pair-aware deployment acceptance JSON: /mnt/nas/openclaw/reports/models/dream7b_bpu_deployment_acceptance_20260606-031455/deployment_acceptance_probe.json
+post-batch fine-forward compatibility report: /mnt/nas/openclaw/reports/models/dream7b_bpu_fine_forward_20260603-183906/fine_forward_probe.md
+fine-forward diffusion-loop report: /mnt/nas/openclaw/reports/models/dream7b_bpu_diffusion_loop_20260603-175030/summary.md
+fine-forward quality-gate report: /mnt/nas/openclaw/reports/models/dream7b_bpu_cpu_quality_gate_20260603-160405/summary.md
+default-forward compatibility report: /mnt/nas/openclaw/reports/models/dream7b_bpu_forward_20260603-151711/summary.json
+```
+
+Observed one-frame infer times:
+
+| Segment | Input | Output | Infer time |
+| --- | --- | --- | ---: |
+| `dream_segment_00_04` | token ids + positions | hidden S16 | 27.384 ms |
+| `dream_segment_04_07` | hidden F32 + positions | hidden S16 | 17.571 ms |
+| `dream_segment_07_14` | hidden F32 + positions | hidden S16 | 39.528 ms |
+| `dream_segment_14_21` | hidden F32 + positions | hidden S16 | 39.455 ms |
+| `dream_segment_21_24` | hidden F32 + positions | hidden S16 | 17.548 ms |
+| `dream_segment_24_28` | hidden F32 + positions | logits S16 | 34.675 ms |
+
+## Why Six Segments
+
+The first successful full-model link produced a single 7.1GB HBM:
+
+```text
+/mnt/nas/openclaw/models/dream7b-hbm/dream7b_seq16_4seg_q8.hbm
+sha256: 81add9c86ed25a06b168daa62af9837ed06059f9b7784cbd20e782a14dae610c
+```
+
+That file failed to load on S100P because HBRT tried to allocate about 7.62GB of BPU/ION memory.
+
+A four-segment split also failed for the edge segments:
+
+```text
+0-7:  resource exhausted at about 2.19GB
+21-28: resource exhausted at about 2.18GB
+```
+
+The six-segment split keeps every load under the board's observed runtime limit.
+
+## New Scripts
+
+```text
+scripts/probes/compile_dream_segmented_full_forward.py
+scripts/probes/compile_dream_segments_seq16.sh
+scripts/probes/dream7b_segmented_hbm_smoke_probe.sh
+scripts/probes/dream7b_segmented_hbm_chain_probe.sh
+scripts/probes/dream7b_segmented_hbm_python_forward.py
+scripts/dream7b-bpu-forward.sh
+scripts/dream7b-bpu-text-forward.sh
+scripts/probes/dream7b_bpu_diffusion_step_probe.sh
+scripts/probes/dream7b_bpu_diffusion_loop_probe.sh
+scripts/probes/dream7b_bpu_cpu_quality_gate_probe.sh
+scripts/probes/dream7b_bpu_hbm_cache_perf_probe.sh
+scripts/probes/dream7b_bpu_hbm_artifact_inventory_probe.sh
+scripts/probes/dream7b_bpu_residency_probe.sh
+scripts/probes/compile_dream_segments_seq16_fine.sh
+scripts/probes/dream7b_bpu_fine_residency_probe.sh
+scripts/dream7b-bpu-fine-forward.sh
+scripts/probes/dream7b_bpu_fine_forward_probe.sh
+scripts/probes/dream7b_bpu_fine_forward_perf_probe.sh
+scripts/probes/dream7b_bpu_fine_forward_repeat_probe.sh
+scripts/probes/dream7b_bpu_fine_forward_long_repeat_probe.sh
+scripts/probes/dream7b_bpu_fine_forward_window_batch_probe.sh
+scripts/dream7b-bpu-fine-batch-forward.sh
+scripts/probes/dream7b_bpu_fine_batch_forward_probe.sh
+scripts/probes/dream7b_bpu_fine_batch_size_sweep_probe.sh
+scripts/probes/dream7b_bpu_runtime_telemetry_probe.sh
+scripts/dream7b-bpu-batch-queue-runner.sh
+scripts/dream7b_bpu_batch_queue_runner.py
+scripts/probes/dream7b_bpu_batch_queue_runner_probe.sh
+scripts/probes/dream7b_bpu_batch_queue_drain_probe.sh
+scripts/probes/dream7b_bpu_batch_queue_control_probe.sh
+scripts/probes/dream7b_bpu_batch_queue_lock_probe.sh
+scripts/dream7b-bpu-batch-queue-service.sh
+scripts/dream7b_bpu_batch_queue_service.py
+scripts/probes/dream7b_bpu_batch_queue_service_probe.sh
+scripts/install_dream7b_bpu_queue_service.sh
+scripts/probes/dream7b_bpu_batch_queue_systemd_probe.sh
+scripts/probes/dream7b_bpu_batch_queue_systemd_soak_probe.sh
+scripts/probes/dream7b_bpu_batch_queue_systemd_batch_probe.sh
+scripts/probes/dream7b_bpu_batch_queue_systemd_drain_probe.sh
+scripts/probes/dream7b_bpu_batch_queue_systemd_canary_probe.sh
+scripts/probes/dream7b_bpu_batch_queue_systemd_telemetry_probe.sh
+scripts/probes/dream7b_bpu_diffusion_generate_telemetry_probe.sh
+scripts/dream7b-bpu-diffusion-batch-generate.sh
+scripts/probes/dream7b_bpu_diffusion_batch_generate_telemetry_probe.sh
+scripts/probes/dream7b_bpu_diffusion_batch_generate_sustained_probe.sh
+scripts/probes/dream7b_bpu_utilization_gap_probe.sh
+scripts/probes/dream7b_bpu_persistent_pair_cache_probe.sh
+scripts/probes/dream7b_bpu_held_pair_residency_matrix_probe.sh
+scripts/probes/dream7b_bpu_single_segment_residency_matrix_probe.sh
+scripts/probes/dream7b_bpu_persistent_segment_cache_probe.sh
+scripts/probes/dream7b_bpu_single_segment_triplet_residency_probe.sh
+scripts/probes/dream7b_bpu_seeded_quad_residency_probe.sh
+scripts/probes/dream7b_bpu_persistent_triplet_topology_probe.sh
+scripts/probes/dream7b_bpu_window3_forward_feasibility_probe.sh
+scripts/probes/dream7b_bpu_selected_triplet_forward_path_probe.sh
+scripts/probes/dream7b_bpu_selected_pair_forward_path_probe.sh
+scripts/probes/dream7b_bpu_selected_pair_telemetry_probe.sh
+scripts/probes/dream7b_bpu_selected_pair_promotion_gate_probe.sh
+scripts/dream7b-bpu-selected-pair-batch-forward.sh
+scripts/probes/dream7b_bpu_selected_pair_candidate_forward_probe.sh
+scripts/install_dream7b_bpu_selected_pair_candidate_service.sh
+scripts/probes/dream7b_bpu_selected_pair_candidate_service_probe.sh
+scripts/probes/s100_official_llm_baseline_probe.sh
+scripts/probes/dream7b_bpu_batch_queue_retention_probe.sh
+scripts/probes/dream7b_bpu_deployment_acceptance_probe.sh
+```
+
+The smoke probe can be run on S100P:
+
+```bash
+bash scripts/probes/dream7b_segmented_hbm_smoke_probe.sh \
+  /mnt/nas/openclaw/reports/models \
+  /mnt/nas/openclaw/models/dream7b-hbm/segments6
+```
+
+The chained forward proof can be run on S100P:
+
+```bash
+bash scripts/probes/dream7b_segmented_hbm_chain_probe.sh \
+  /mnt/nas/openclaw/reports/models \
+  /mnt/nas/openclaw/models/dream7b-hbm/segments6
+```
+
+The reusable Python forward prototype can be run after building/installing the board-provided `hbm_runtime` pybind package into:
+
+```text
+/mnt/nas/openclaw/runtimes/hbm-runtime-venv
+```
+
+Run:
+
+```bash
+. /mnt/nas/openclaw/runtimes/hbm-runtime-venv/bin/activate
+python scripts/probes/dream7b_segmented_hbm_python_forward.py \
+  --hbm-dir /mnt/nas/openclaw/models/dream7b-hbm/segments6 \
+  --output-dir /mnt/nas/openclaw/reports/models/dream7b_python_forward
+```
+
+Verified output:
+
+```text
+verdict: ok_dream7b_segmented_hbm_python_forward
+runtime_version: 3.13.6_(4.7.5 HBRT)
+final_shape: [1, 16, 152064]
+final_dtype: float32
+```
+
+The deployed S100P command is:
+
+```bash
+dream7b-bpu-forward
+```
+
+It uses these default paths:
+
+```text
+venv: /mnt/nas/openclaw/runtimes/hbm-runtime-venv
+script: /mnt/nas/openclaw/runtimes/dream7b-bpu-forward/dream7b_segmented_hbm_python_forward.py
+hbm_dir: /mnt/nas/openclaw/models/dream7b-hbm/segments6
+report_root: /mnt/nas/openclaw/reports/models
+```
+
+The deployed command was verified on S100P and wrote:
+
+```text
+/mnt/nas/openclaw/reports/models/dream7b_bpu_forward_20260603-022912/summary.json
+```
+
+It also accepts explicit seq16 token ids and can write final logits:
+
+```bash
+dream7b-bpu-forward \
+  --tokens '1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16' \
+  --save-logits
+```
+
+Verified token-arg output:
+
+```text
+verdict: ok_dream7b_segmented_hbm_python_forward
+tokens_source: tokens_arg
+logits_npy: /mnt/nas/openclaw/reports/models/dream7b_bpu_forward_20260603-023557/logits.npy
+final_shape: [1, 16, 152064]
+```
+
+The deployed text-to-BPU entrypoint is:
+
+```bash
+dream7b-bpu-text-forward --fit truncate-left --save-logits \
+  'Explain in one sentence why S100P BPU execution matters for Dream 7B deployment in OpenClaw.'
+```
+
+Default prompt fitting is `exact`, so non-seq16 prompts are rejected unless a probe explicitly chooses `--fit truncate-left` or `--fit pad-right`. This avoids silently changing the input shape while the available HBM artifacts are fixed at seq16.
+
+Verified text-forward output:
+
+```text
+verdict: ok_dream7b_segmented_hbm_python_forward
+tokens_source: tokens_arg
+logits_npy: /mnt/nas/openclaw/reports/models/dream7b_bpu_forward_20260603-024218/logits.npy
+final_shape: [1, 16, 152064]
+```
+
+The forward script also supports a lightweight top-k summary for the final position:
+
+```bash
+dream7b-bpu-text-forward --fit truncate-left --top-k 5 \
+  'Explain in one sentence why S100P BPU execution matters for Dream 7B deployment in OpenClaw.'
+```
+
+Verified top-k output:
+
+```text
+report: /mnt/nas/openclaw/reports/models/dream7b_bpu_forward_20260603-024533/summary.json
+top_k: 5
+topk_last_position: token ids 279, 11, 315, 13, 374
+```
+
+The deployed one-step diffusion bridge probe is:
+
+```bash
+dream7b-bpu-diffusion-step-probe \
+  /mnt/nas/openclaw/reports/models \
+  'Explain why S100P BPU matters for Dream 7B in OpenClaw.'
+```
+
+It builds a seq16 Dream-style input with masked generation slots, runs the six-segment BPU forward path, applies the same logits shift used by `DreamGenerationMixin._sample`, and greedily fills the masked positions for one host-side diffusion step.
+
+Verified diffusion-step output:
+
+```text
+report: /mnt/nas/openclaw/reports/models/dream7b_bpu_diffusion_step_20260603-025304/summary.md
+verdict: ok_dream7b_bpu_diffusion_step_probe
+logits_shape: [1, 16, 152064]
+mask_positions: [12, 13, 14, 15]
+selected_token_ids: 279, 279, 279, 279
+```
+
+The deployed bounded diffusion loop probe is:
+
+```bash
+dream7b-bpu-diffusion-loop-probe \
+  /mnt/nas/openclaw/reports/models \
+  'Explain why S100P BPU matters for Dream 7B in OpenClaw.'
+```
+
+It repeatedly calls the deployed BPU forward command, applies the Dream logits shift before selecting mask positions, and transfers a bounded number of mask tokens per step. The default verification loop uses two BPU forward calls over the seq16 graph.
+
+The loop probe now supports remasking strategies compatible with the deployed CPU `diffuse-cli` names:
+
+```text
+low_confidence
+entropy_exit
+maskgit_plus
+topk_margin
+entropy
+```
+
+Its default is `entropy_exit`, matching the existing `dream7b-text` CPU wrapper's `--remasking entropy_exit` path. The probe also records `temperature`, `seed`, `entropy_threshold`, selected token ids, per-position confidence, and entropy-derived transfer decisions.
+
+Verified diffusion-loop output:
+
+```text
+report: /mnt/nas/openclaw/reports/models/dream7b_bpu_diffusion_loop_20260603-030011/summary.md
+verdict: ok_dream7b_bpu_diffusion_loop_probe
+steps: 2
+remaining_mask_positions: []
+step0_transferred: 1 token
+step1_transferred: 3 tokens
+```
+
+Verified strategy-aware `entropy_exit` output:
+
+```text
+report: /mnt/nas/openclaw/reports/models/dream7b_bpu_diffusion_loop_20260603-031016/summary.md
+verdict: ok_dream7b_bpu_diffusion_loop_probe
+remasking: entropy_exit
+temperature: 0.0
+entropy_threshold: 1.5
+remaining_mask_positions: []
+```
+
+The deployed CPU/BPU quality coverage gate is:
+
+```bash
+dream7b-bpu-cpu-quality-gate-probe \
+  /mnt/nas/openclaw/reports/models \
+  'Explain why BPU matters.'
+```
+
+It runs a bounded CPU Dream sample through `dream7b-text`, runs the BPU diffusion loop probe for the same prompt, and records the comparison without treating current seq16 divergence as a deployment failure.
+
+Verified quality-gate output:
+
+```text
+report: /mnt/nas/openclaw/reports/models/dream7b_bpu_cpu_quality_gate_20260603-033101/summary.md
+verdict: ok_dream7b_bpu_cpu_quality_gate_recorded
+quality_status: diverged_expected_for_seq16_probe
+cpu_output: I
+bpu_summary: /mnt/nas/openclaw/reports/models/dream7b_bpu_diffusion_loop_20260603-033112/summary.md
+```
+
+The deployed HBM cache performance probe is:
+
+```bash
+dream7b-bpu-hbm-cache-perf-probe /mnt/nas/openclaw/reports/models
+```
+
+It syncs the NAS HBM segments into the S100P local cache path and compares one full seq16 forward from NAS versus local cache:
+
+```text
+local cache: /home/sunrise/.cache/openclaw/dream7b-hbm/segments6
+report: /mnt/nas/openclaw/reports/models/dream7b_bpu_hbm_cache_perf_20260603-034629/summary.md
+NAS wall: 66510.049 ms
+NAS HBM load: 65212.480 ms
+local wall: 25203.805 ms
+local HBM load: 23933.206 ms
+local-vs-NAS load speedup: 2.725x
+local-vs-NAS wall speedup: 2.639x
+```
+
+The same local cache path works for the diffusion loop:
+
+```bash
+DREAM7B_BPU_HBM_DIR=/home/sunrise/.cache/openclaw/dream7b-hbm/segments6 \
+  dream7b-bpu-diffusion-loop-probe \
+  /mnt/nas/openclaw/reports/models \
+  'Explain why S100P BPU matters for Dream 7B in OpenClaw.'
+```
+
+Verified local-cache loop output:
+
+```text
+report: /mnt/nas/openclaw/reports/models/dream7b_bpu_diffusion_loop_20260603-034939/summary.md
+verdict: ok_dream7b_bpu_diffusion_loop_probe
+hbm_dir: /home/sunrise/.cache/openclaw/dream7b-hbm/segments6
+remaining_mask_positions: []
+```
+
+The deployed segment residency probe is:
+
+```bash
+dream7b-bpu-residency-probe \
+  /mnt/nas/openclaw/reports/models \
+  /home/sunrise/.cache/openclaw/dream7b-hbm/segments6
+```
+
+It loads single segments and every pair of segments in isolated child processes to test whether multiple HBM runtimes can be held resident at once.
+
+Verified residency output:
+
+```text
+report: /mnt/nas/openclaw/reports/models/dream7b_bpu_residency_20260603-035939/summary.md
+verdict: ok_dream7b_bpu_residency_probe
+successful_pair_count: 1
+failed_pair_count: 14
+successful_pair: seg04_07, seg21_24
+```
+
+This rules out a simple all-segment resident orchestrator for the current six-segment split. Only the two small non-adjacent segments can coexist. Any pair involving a large segment failed to load in the same process, so the next performance path should be one of:
+
+- compile a more granular split with lower per-segment residency pressure;
+- find an official HBRT/HBDK mechanism for explicit release or streaming residency;
+- keep local HBM cache as the current practical improvement while preserving correctness gates.
+
+## Fine Split Residency
+
+The fine-split follow-up replaced the original large segments `0:4`, `7:14`, `14:21`, and `24:28` with smaller HBM windows while keeping the existing small base segments `4:7` and `21:24`.
+
+Compiled fine HBM artifacts:
+
+```text
+/mnt/nas/openclaw/models/dream7b-hbm/fine-seq16/seg24_26/dream7b_segment_24_26_seq16_q8.hbm
+/mnt/nas/openclaw/models/dream7b-hbm/fine-seq16/seg26_28/dream7b_segment_26_28_seq16_q8.hbm
+/mnt/nas/openclaw/models/dream7b-hbm/fine-seq16/seg00_02/dream7b_segment_0_2_seq16_q8.hbm
+/mnt/nas/openclaw/models/dream7b-hbm/fine-seq16/seg02_04/dream7b_segment_2_4_seq16_q8.hbm
+/mnt/nas/openclaw/models/dream7b-hbm/fine-seq16/seg07_10/dream7b_segment_7_10_seq16_q8.hbm
+/mnt/nas/openclaw/models/dream7b-hbm/fine-seq16/seg10_14/dream7b_segment_10_14_seq16_q8.hbm
+/mnt/nas/openclaw/models/dream7b-hbm/fine-seq16/seg14_17/dream7b_segment_14_17_seq16_q8.hbm
+/mnt/nas/openclaw/models/dream7b-hbm/fine-seq16/seg17_21/dream7b_segment_17_21_seq16_q8.hbm
+```
+
+S100P model-load evidence:
+
+```text
+seg24_26 model_info: dream_segment_24_26, input (16,3584) F32 + (16) S32, output (16,3584) S16, DDR load 2182.22 ms
+seg26_28 model_info: dream_segment_26_28, input (16,3584) F32 + (16) S32, output (1,16,152064) S16, DDR load 3680.37 ms
+seg00_02 model_info: dream_segment_00_02, input (1,16) S32 + (16) S32, output (16,3584) S16, DDR load 4065.79 ms
+seg02_04 model_info: dream_segment_02_04, input (16,3584) F32 + (16) S32, output (16,3584) S16, DDR load 5658.17 ms
+seg07_10 model_info: dream_segment_07_10, input (16,3584) F32 + (16) S32, output (16,3584) S16, DDR load 2946.25 ms
+seg10_14 model_info: dream_segment_10_14, input (16,3584) F32 + (16) S32, output (16,3584) S16, DDR load 3618.08 ms
+seg14_17 model_info: dream_segment_14_17, input (16,3584) F32 + (16) S32, output (16,3584) S16, DDR load 2889.95 ms
+seg17_21 model_info: dream_segment_17_21, input (16,3584) F32 + (16) S32, output (16,3584) S16, DDR load 3613.18 ms
+```
+
+Verified fine-residency output:
+
+```text
+report: /mnt/nas/openclaw/reports/models/dream7b_bpu_fine_residency_20260603-054031/summary.md
+verdict: ok_dream7b_bpu_fine_residency_probe
+seg00_02: ok, 3804.416 ms
+seg02_04: ok, 2136.789 ms
+seg00_02 + seg02_04: ok, 5427.987 ms
+seg02_04 + seg04_07: ok, 4252.896 ms
+seg07_10: ok, 2843.748 ms
+seg10_14: ok, 3709.783 ms
+seg04_07 + seg07_10: ok, 5134.936 ms
+seg07_10 + seg10_14: ok, 5658.337 ms
+seg10_14 + seg14_21: failed, memory alloc failed
+seg14_17: ok, 3025.018 ms
+seg17_21: ok, 3558.866 ms
+seg10_14 + seg14_17: ok, 5820.523 ms
+seg14_17 + seg17_21: ok, 5716.064 ms
+seg17_21 + seg21_24: ok, 5673.588 ms
+seg24_26: ok, 2133.847 ms
+seg26_28: ok, 4370.982 ms
+seg24_26 + seg26_28: ok, 5193.505 ms
+seg21_24 + seg24_26: ok, 4393.535 ms
+seg04_07 + seg26_28: ok, 6059.886 ms
+seg21_24 + seg26_28: ok, 6089.736 ms
+seg21_24 + seg24_26 + seg26_28: failed, memory alloc failed
+seg04_07 + seg21_24 + seg26_28: failed, memory alloc failed
+seg24_28 + seg26_28: failed, memory alloc failed
+```
+
+This proves the fine-split direction is useful: every adjacent window in the fine split can be loaded resident as a pair:
+
+```text
+00:02 + 02:04
+02:04 + 04:07
+04:07 + 07:10
+07:10 + 10:14
+10:14 + 14:17
+14:17 + 17:21
+17:21 + 21:24
+21:24 + 24:26
+24:26 + 26:28
+```
+
+It does not solve all-resident orchestration, because three-segment combinations still exceed the board's current load-residency limit. The next engineering target is a lower-overhead sliding two-segment resident orchestrator over the fine split, not an all-segment resident orchestrator.
+
+## Fine Sliding Forward
+
+The deployed fine forward entrypoint is:
+
+```bash
+dream7b-bpu-fine-forward \
+  --tokens '1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16' \
+  --top-k 5
+```
+
+It wraps `dream7b-bpu-forward` with:
+
+```text
+segment_plan: fine-adjacent
+residency_window_size: 2
+child_window_mode: pair
+child_runtime_mode: packed
+window_execution_mode: in-process
+base_hbm_dir: /home/sunrise/.cache/openclaw/dream7b-hbm/segments6
+fine_hbm_dir: /home/sunrise/.cache/openclaw/dream7b-hbm/fine-seq16
+```
+
+Because `HB_HBMRuntime` does not expose an explicit release/close API, the first in-process two-segment attempt failed after the first segment with an ION allocation error while loading `seg04_07`. The working implementation now deletes output array/runtime references and calls `gc.collect()` between resident pair windows.
+
+The first working mode was `sliding`, with one child per segment. The next working mode was `pair_child_process`, which reduced the forward from 10 child processes to 5. The current default is `pair_in_process`: each resident pair constructs one packed `HB_HBMRuntime`, runs both adjacent segments in order, then releases references before the next pair. This keeps the two-segment residency invariant while reducing the forward from 5 child processes to 0.
+
+Verified fine in-process forward output:
+
+```text
+report: /mnt/nas/openclaw/reports/models/dream7b_bpu_fine_forward_20260603-174608/summary.json
+verdict: ok_dream7b_segmented_hbm_python_forward
+segment_plan: fine-adjacent
+residency_window_size: 2
+child_window_mode: pair
+child_runtime_mode: packed
+window_execution_mode: in-process
+execution_mode: pair_in_process
+child_process_count: 0
+segments: 10
+final_shape: [1, 16, 152064]
+top_k: 5
+```
+
+Observed comparison against the earlier sliding-child report:
+
+```text
+sliding-child report: /mnt/nas/openclaw/reports/models/dream7b_bpu_forward_20260603-154303/summary.json
+sliding-child child_process_count: 10
+sliding-child summed load_ms: 30624.418
+sliding-child summed run_ms: 184.756
+pair-child report: /mnt/nas/openclaw/reports/models/dream7b_bpu_fine_forward_20260603-162214/summary.json
+pair-child child_process_count: 5
+pair-child summed load_ms: 27021.312
+pair-child summed run_ms: 179.693
+```
+
+The deployed fine-forward performance regression probe is:
+
+```bash
+dream7b-bpu-fine-forward-perf-probe /mnt/nas/openclaw/reports/models
+```
+
+It runs the deployed six-segment forward, fine sliding-child forward, and fine pair-child forward against the same seq16 token input. This is a regression/performance probe, not a full throughput benchmark.
+
+Verified performance probe output:
+
+```text
+report: /mnt/nas/openclaw/reports/models/dream7b_bpu_fine_forward_perf_20260603-164445/summary.md
+verdict: ok_dream7b_bpu_fine_forward_perf_probe
+segments6: execution_mode=in_process, child_process_count=0, wall_ms=26359.864, load_ms=24034.035, run_ms=173.134
+fine_sliding: execution_mode=sliding_child_process, child_window_mode=sliding, child_process_count=10, wall_ms=62410.354, load_ms=30704.095, run_ms=185.360
+fine_pair: execution_mode=pair_child_process, child_window_mode=pair, child_process_count=5, wall_ms=32836.161, load_ms=27688.528, run_ms=179.260
+pair_vs_sliding_child_process_reduction: 5
+pair_vs_sliding_load_speedup: 1.109x
+pair_vs_sliding_wall_speedup: 1.901x
+```
+
+The packed-runtime update was verified with:
+
+```text
+report: /mnt/nas/openclaw/reports/models/dream7b_bpu_fine_forward_perf_20260603-171203/summary.md
+verdict: ok_dream7b_bpu_fine_forward_perf_probe
+segments6: execution_mode=in_process, child_process_count=0, wall_ms=25640.083, load_ms=24277.313, run_ms=173.395
+fine_sliding: execution_mode=sliding_child_process, child_window_mode=sliding, child_runtime_mode=separate, child_process_count=10, wall_ms=62374.465, load_ms=30651.821, run_ms=185.280
+fine_pair_separate: execution_mode=pair_child_process, child_window_mode=pair, child_runtime_mode=separate, child_process_count=5, wall_ms=32569.229, load_ms=27262.626, run_ms=179.780
+fine_pair_packed: execution_mode=pair_child_process, child_window_mode=pair, child_runtime_mode=packed, child_process_count=5, wall_ms=32302.286, load_ms=27215.231, run_ms=179.190
+pair_vs_sliding_child_process_reduction: 5
+pair_vs_sliding_load_speedup: 1.126x
+pair_vs_sliding_wall_speedup: 1.931x
+packed_vs_separate_pair_load_speedup: 1.002x
+packed_vs_separate_pair_wall_speedup: 1.008x
+```
+
+The in-process pair release update was verified with:
+
+```text
+report: /mnt/nas/openclaw/reports/models/dream7b_bpu_fine_forward_perf_20260603-174745/summary.md
+verdict: ok_dream7b_bpu_fine_forward_perf_probe
+segments6: execution_mode=in_process, child_process_count=0, wall_ms=26698.544, load_ms=24260.385, run_ms=173.340
+fine_sliding_child: execution_mode=sliding_child_process, window_execution_mode=child-process, child_window_mode=sliding, child_runtime_mode=separate, child_process_count=10, wall_ms=62042.823, load_ms=30972.421, run_ms=185.000
+fine_pair_child_packed: execution_mode=pair_child_process, window_execution_mode=child-process, child_window_mode=pair, child_runtime_mode=packed, child_process_count=5, wall_ms=32218.834, load_ms=27023.825, run_ms=179.515
+fine_pair_in_process_packed: execution_mode=pair_in_process, window_execution_mode=in-process, child_window_mode=pair, child_runtime_mode=packed, child_process_count=0, wall_ms=25459.392, load_ms=24159.358, run_ms=176.133
+pair_vs_sliding_child_process_reduction: 5
+pair_vs_sliding_load_speedup: 1.146x
+pair_vs_sliding_wall_speedup: 1.926x
+in_process_vs_child_pair_child_process_reduction: 5
+in_process_vs_child_pair_load_speedup: 1.119x
+in_process_vs_child_pair_wall_speedup: 1.265x
+```
+
+The same deployed Python script remains compatible with the existing six-segment entrypoint:
+
+```text
+report: /mnt/nas/openclaw/reports/models/dream7b_bpu_forward_20260603-151711/summary.json
+verdict: ok_dream7b_segmented_hbm_python_forward
+segment_plan: segments6
+residency_window_size: 1
+execution_mode: in_process
+segments: 6
+final_shape: [1, 16, 152064]
+```
+
+The deployed fine-forward check probe is:
+
+```bash
+dream7b-bpu-fine-forward-probe /mnt/nas/openclaw/reports/models
+```
+
+Verified probe output:
+
+```text
+report: /mnt/nas/openclaw/reports/models/dream7b_bpu_fine_forward_20260603-174608/fine_forward_probe.md
+verdict: ok_dream7b_bpu_fine_forward_probe
+segment_plan: fine-adjacent
+residency_window_size: 2
+child_window_mode: pair
+child_runtime_mode: packed
+window_execution_mode: in-process
+execution_mode: pair_in_process
+child_process_count: 0
+final_shape: [1, 16, 152064]
+segment_count: 10
+```
+
+The deployed fine-forward repeat check is:
+
+```bash
+dream7b-bpu-fine-forward-repeat-probe /mnt/nas/openclaw/reports/models
+```
+
+Verified repeat output:
+
+```text
+report: /mnt/nas/openclaw/reports/models/dream7b_bpu_fine_forward_repeat_20260603-180108/summary.md
+verdict: ok_dream7b_bpu_fine_forward_repeat_probe
+repeat_count: 3
+median_wall_ms: 25477.291
+median_load_ms: 24051.374
+median_run_ms: 176.018
+run_01: execution_mode=pair_in_process, window_execution_mode=in-process, child_process_count=0, final_shape=[1, 16, 152064], wall_ms=26215.101
+run_02: execution_mode=pair_in_process, window_execution_mode=in-process, child_process_count=0, final_shape=[1, 16, 152064], wall_ms=25344.291
+run_03: execution_mode=pair_in_process, window_execution_mode=in-process, child_process_count=0, final_shape=[1, 16, 152064], wall_ms=25477.291
+```
+
+Verified longer repeat output:
+
+```text
+long_repeat_report: /mnt/nas/openclaw/reports/models/dream7b_bpu_fine_forward_long_repeat_20260605-163343/long_repeat_probe.md
+long_repeat_verdict: ok_dream7b_bpu_fine_forward_long_repeat_probe
+repeat_count: 6
+repeat_status: 0
+failure_count: 0
+median_wall_ms: 25253.389
+median_load_ms: 24134.596
+median_run_ms: 176.056
+min_wall_ms: 24998.927
+max_wall_ms: 26168.34
+wall_spread_ratio: 0.046307
+max_wall_spread_ratio: 0.1
+warnings: []
+errors: []
+```
+
+The deployed window-batch throughput probe is:
+
+```bash
+dream7b-bpu-fine-forward-window-batch-probe /mnt/nas/openclaw/reports/models
+```
+
+Verified window-batch output:
+
+```text
+report: /mnt/nas/openclaw/reports/models/dream7b_bpu_fine_forward_window_batch_20260603-181131/summary.md
+verdict: ok_dream7b_bpu_fine_forward_window_batch_probe
+batch_count: 3
+execution_mode: pair_window_batch
+window_execution_mode: window-batch
+child_process_count: 0
+window_count: 5
+total_segment_events: 30
+wall_ms: 24448.566
+load_ms: 23729.686
+run_ms: 523.525
+amortized_load_ms_per_forward: 7909.895
+amortized_wall_ms_per_forward: 8149.522
+final_shapes: [[1, 16, 152064], [1, 16, 152064], [1, 16, 152064]]
+```
+
+This proves a throughput direction for concurrent independent seq16 inputs: load each resident pair once, run that pair for multiple inputs, then release the runtime. It does not reduce reload cost for a single dependent Dream diffusion request.
+
+The reusable batch wrapper for that path is:
+
+```bash
+dream7b-bpu-fine-batch-forward \
+  --tokens-batch-json /mnt/nas/openclaw/reports/models/dream7b_bpu_fine_batch_forward_20260603-183625/tokens_batch.json \
+  --top-k 3 \
+  --output-dir /mnt/nas/openclaw/reports/models/dream7b_bpu_fine_batch_forward_20260603-183625
+```
+
+It wraps `dream7b-bpu-forward` with:
+
+```text
+segment_plan: fine-adjacent
+residency_window_size: 2
+child_window_mode: pair
+child_runtime_mode: packed
+window_execution_mode: window-batch
+tokens_batch_json: /mnt/nas/openclaw/reports/models/dream7b_bpu_fine_batch_forward_20260603-183625/tokens_batch.json
+```
+
+Verified fine batch-forward output:
+
+```text
+report: /mnt/nas/openclaw/reports/models/dream7b_bpu_fine_batch_forward_20260603-183625/fine_batch_forward_probe.md
+summary: /mnt/nas/openclaw/reports/models/dream7b_bpu_fine_batch_forward_20260603-183625/summary.json
+verdict: ok_dream7b_bpu_fine_batch_forward_probe
+segment_plan: fine-adjacent
+residency_window_size: 2
+execution_mode: pair_window_batch
+window_execution_mode: window-batch
+child_window_mode: pair
+child_runtime_mode: packed
+child_process_count: 0
+batch_count: 3
+wall_ms: 24495.731
+load_ms: 23776.245
+run_ms: 522.62
+amortized_wall_ms_per_forward: 8165.244
+amortized_load_ms_per_forward: 7925.415
+final_shapes: [[1, 16, 152064], [1, 16, 152064], [1, 16, 152064]]
+segment_event_count: 30
+```
+
+The fine-batch-size sweep path is:
+
+```bash
+dream7b-bpu-fine-batch-size-sweep-probe /mnt/nas/openclaw/reports/models
+```
+
+Verified fine-batch-size sweep output:
+
+```text
+report: /mnt/nas/openclaw/reports/models/dream7b_bpu_fine_batch_size_sweep_20260604-181429/batch_size_sweep_probe.md
+verdict: ok_dream7b_bpu_fine_batch_size_sweep_probe
+counts: [1, 2, 4, 8]
+batch_count 1 amortized_wall_ms_per_forward: 24562.798
+batch_count 1 amortized_load_ms_per_forward: 24198.434
+batch_count 1 amortized_run_ms_per_forward: 175.949
+batch_count 2 amortized_wall_ms_per_forward: 12293.305
+batch_count 2 amortized_load_ms_per_forward: 12022.294
+batch_count 2 amortized_run_ms_per_forward: 175.037
+batch_count 4 amortized_wall_ms_per_forward: 6336.077
+batch_count 4 amortized_load_ms_per_forward: 6111.385
+batch_count 4 amortized_run_ms_per_forward: 173.981
+batch_count 8 amortized_wall_ms_per_forward: 3175.416
+batch_count 8 amortized_load_ms_per_forward: 2974.35
+batch_count 8 amortized_run_ms_per_forward: 173.565
+execution_mode: pair_window_batch
+window_execution_mode: window-batch
+child_process_count: 0
+```
+
+The runtime telemetry path is:
+
+```bash
+dream7b-bpu-runtime-telemetry-probe /mnt/nas/openclaw/reports/models
+```
+
+Verified runtime telemetry output:
+
+```text
+report: /mnt/nas/openclaw/reports/models/dream7b_bpu_runtime_telemetry_20260604-225030/runtime_telemetry_probe.md
+verdict: ok_dream7b_bpu_runtime_telemetry_probe
+batch_count: 8
+monitor_delay_ms: 100
+monitor_sample_count: 320
+bpu_loading_sample_count: 320
+nonzero_bpu_loading_sample_count: 20
+max_bpu_loading: 100.0
+avg_bpu_loading: 4.369
+forward_summary: /mnt/nas/openclaw/reports/models/dream7b_bpu_runtime_telemetry_20260604-225030/forward/summary.json
+forward execution_mode: pair_window_batch
+forward window_execution_mode: window-batch
+forward child_process_count: 0
+forward wall_ms: 24821.269
+forward load_ms: 23209.905
+forward run_ms: 1390.985
+forward amortized_wall_ms_per_forward: 3102.659
+forward amortized_load_ms_per_forward: 2901.238
+forward amortized_run_ms_per_forward: 173.873
+final_shapes: [1, 16, 152064] x 8
+```
+
+The service-level JSONL queue runner for independent seq16 requests is:
+
+```bash
+dream7b-bpu-batch-queue-runner \
+  /mnt/nas/openclaw/reports/models/dream7b_bpu_batch_queue_runner_20260603-193243/requests.jsonl \
+  /mnt/nas/openclaw/reports/models/dream7b_bpu_batch_queue_runner_20260603-193243 \
+  --max-batch-size 3 \
+  --top-k 3
+```
+
+Request JSONL keys:
+
+```text
+request_id
+tokens
+cancelled
+not_after_epoch_ms
+```
+
+The runner accepts up to `--max-batch-size` requests, writes `tokens_batch.json`, calls `dream7b-bpu-fine-batch-forward`, records `results`, records overflow request IDs in `deferred_request_ids`, skips `cancelled` or expired `not_after_epoch_ms` requests, and writes durable state JSONL files under `durable_state`.
+
+Default BPU lock arguments:
+
+```text
+--bpu-lock-path /tmp/dream7b_bpu_batch_queue_runner.lock
+--bpu-lock-timeout-sec 600.0
+```
+
+The runner records lock status in `bpu_lock`.
+
+Durable state files:
+
+```text
+accepted_requests.jsonl
+deferred_requests.jsonl
+skipped_requests.jsonl
+results.jsonl
+```
+
+Verified batch-queue output:
+
+```text
+report: /mnt/nas/openclaw/reports/models/dream7b_bpu_batch_queue_runner_20260603-193243/batch_queue_runner_probe.md
+summary: /mnt/nas/openclaw/reports/models/dream7b_bpu_batch_queue_runner_20260603-193243/queue_summary.json
+verdict: ok_dream7b_bpu_batch_queue_runner_probe
+accepted_count: 3
+deferred_count: 1
+deferred_request_ids: ['req-004']
+execution_mode: pair_window_batch
+window_execution_mode: window-batch
+child_process_count: 0
+batch_count: 3
+total_wall_ms: 24536.714
+amortized_wall_ms_per_processed_request: 8178.905
+result_count: 3
+bpu_lock: {'path': '/tmp/dream7b_bpu_batch_queue_runner.lock', 'timeout_sec': 600.0, 'acquired': True, 'wait_ms': 0.01}
+```
+
+The multi-batch drain path is:
+
+```bash
+dream7b-bpu-batch-queue-runner \
+  /mnt/nas/openclaw/reports/models/dream7b_bpu_batch_queue_drain_20260603-193309/requests.jsonl \
+  /mnt/nas/openclaw/reports/models/dream7b_bpu_batch_queue_drain_20260603-193309 \
+  --max-batch-size 3 \
+  --top-k 3 \
+  --drain-all
+```
+
+Verified drain-all output:
+
+```text
+report: /mnt/nas/openclaw/reports/models/dream7b_bpu_batch_queue_drain_20260603-193309/batch_queue_drain_probe.md
+summary: /mnt/nas/openclaw/reports/models/dream7b_bpu_batch_queue_drain_20260603-193309/queue_summary.json
+verdict: ok_dream7b_bpu_batch_queue_drain_probe
+drain_all: True
+request_count: 5
+processed_count: 5
+deferred_count: 0
+batch_run_count: 2
+batch_counts: [3, 2]
+result_count: 5
+total_wall_ms: 48940.128
+amortized_wall_ms_per_processed_request: 9788.026
+bpu_lock: {'path': '/tmp/dream7b_bpu_batch_queue_runner.lock', 'timeout_sec': 600.0, 'acquired': True, 'wait_ms': 0.01}
+```
+
+The cancellation, expiration, and durable-state control path is:
+
+```bash
+dream7b-bpu-batch-queue-control-probe /mnt/nas/openclaw/reports/models
+```
+
+Verified queue-control output:
+
+```text
+report: /mnt/nas/openclaw/reports/models/dream7b_bpu_batch_queue_control_20260603-193400/batch_queue_control_probe.md
+summary: /mnt/nas/openclaw/reports/models/dream7b_bpu_batch_queue_control_20260603-193400/queue_summary.json
+verdict: ok_dream7b_bpu_batch_queue_control_probe
+request_count: 4
+runnable_count: 2
+processed_count: 2
+skipped_count: 2
+deferred_count: 0
+result_request_ids: ['control-001', 'control-002']
+skipped_requests: [{'request_id': 'control-cancelled', 'line_number': 2, 'reason': 'cancelled'}, {'request_id': 'control-expired', 'line_number': 3, 'reason': 'expired', 'not_after_epoch_ms': 1, 'now_epoch_ms': 1780486440249}]
+bpu_lock: {'path': '/tmp/dream7b_bpu_batch_queue_runner.lock', 'timeout_sec': 600.0, 'acquired': True, 'wait_ms': 0.009}
+```
+
+The single-flight queue lock path is:
+
+```bash
+dream7b-bpu-batch-queue-lock-probe /mnt/nas/openclaw/reports/models
+```
+
+Verified queue-lock output:
+
+```text
+report: /mnt/nas/openclaw/reports/models/dream7b_bpu_batch_queue_lock_20260603-193209/batch_queue_lock_probe.md
+verdict: ok_dream7b_bpu_batch_queue_lock_probe
+run_a_bpu_lock_wait_ms: 0.172
+run_b_bpu_lock_wait_ms: 2003.713
+lock_path: /mnt/nas/openclaw/reports/models/dream7b_bpu_batch_queue_lock_20260603-193209/dream7b_bpu_batch_queue_runner.lock
+```
+
+The directory-backed service loop is:
+
+```bash
+dream7b-bpu-batch-queue-service \
+  /mnt/nas/openclaw/queues/dream7b-bpu \
+  /mnt/nas/openclaw/reports/models/dream7b_bpu_batch_queue_service
+```
+
+Queue subdirectories:
+
+```text
+pending
+processing
+done
+failed
+```
+
+The service calls `dream7b-bpu-batch-queue-runner` for each pending JSONL job, so `durable_state` and `bpu_lock` remain the runner-level source of truth.
+
+Verified service probe output:
+
+```text
+report: /mnt/nas/openclaw/reports/models/dream7b_bpu_batch_queue_service_20260603-194437/batch_queue_service_probe.md
+verdict: ok_dream7b_bpu_batch_queue_service_probe
+processed_job_count: 1
+failed_job_count: 0
+done_files: ['job_001.jsonl']
+job_runner_verdict: ok_dream7b_bpu_batch_queue_runner
+job_processed_count: 2
+```
+
+Verified real BPU service one-shot output:
+
+```text
+summary: /mnt/nas/openclaw/reports/models/dream7b_bpu_batch_queue_service_real_scp_20260603-194827/output/service_summary.md
+verdict: ok_dream7b_bpu_batch_queue_service
+processed_job_count: 1
+failed_job_count: 0
+runner_verdict: ok_dream7b_bpu_batch_queue_runner
+processed_count: 1
+result_shape: [1, 16, 152064]
+bpu_lock: {'path': '/tmp/dream7b_bpu_batch_queue_runner.lock', 'timeout_sec': 600.0, 'acquired': True, 'wait_ms': 0.01}
+```
+
+The NAS-backed systemd service is installed as:
+
+```text
+service: dream7b-bpu-batch-queue.service
+service_path: /etc/systemd/system/dream7b-bpu-batch-queue.service
+queue_dir: /mnt/nas/openclaw/queues/dream7b-bpu
+output_dir: /mnt/nas/openclaw/reports/models/dream7b_bpu_batch_queue_service_systemd
+bpu_lock_path: /run/lock/dream7b_bpu_batch_queue_runner.lock
+drain_all: true
+working_directory: /mnt/nas/openclaw
+```
+
+Verified systemd probe output:
+
+```text
+report: /mnt/nas/openclaw/reports/models/dream7b_bpu_batch_queue_systemd_20260603-221324/systemd_probe.md
+service_status: active
+service_enabled: enabled
+unit_path: /etc/systemd/system/dream7b-bpu-batch-queue.service
+exec_start includes: /run/lock/dream7b_bpu_batch_queue_runner.lock
+```
+
+Verified systemd drain-all probe output after reinstalling default `DREAM7B_BPU_QUEUE_DRAIN_ALL=1`:
+
+```text
+report: /mnt/nas/openclaw/reports/models/dream7b_bpu_batch_queue_systemd_20260604-174953/systemd_probe.md
+verdict: ok_dream7b_bpu_batch_queue_systemd_probe
+service_status: active
+service_enabled: enabled
+drain_all_required: True
+exec_start includes: --drain-all
+```
+
+Verified real systemd-queued BPU output:
+
+```text
+service_summary: /mnt/nas/openclaw/reports/models/dream7b_bpu_batch_queue_service_systemd/service_summary.md
+job_summary: /mnt/nas/openclaw/reports/models/dream7b_bpu_batch_queue_service_systemd/jobs/systemd_job_20260603_220710/queue_summary.json
+verdict: ok_dream7b_bpu_batch_queue_runner
+request_id: systemd-req-001
+processed_count: 1
+final_shape: [1, 16, 152064]
+bpu_lock.path: /run/lock/dream7b_bpu_batch_queue_runner.lock
+execution_mode: pair_window_batch
+window_execution_mode: window-batch
+child_process_count: 0
+```
+
+Verified real systemd-queued BPU soak output:
+
+```text
+report: /mnt/nas/openclaw/reports/models/dream7b_bpu_batch_queue_systemd_soak_20260604-131223/systemd_soak_probe.md
+verdict: ok_dream7b_bpu_batch_queue_systemd_soak_probe
+job_count: 2
+service_status_before: active
+service_status_after: active
+completed_job_count: 2
+failed_job_count: 0
+processed_request_count: 2
+total_wall_ms: 49192.894
+amortized_wall_ms_per_processed_request: 24596.447
+job_001_summary: /mnt/nas/openclaw/reports/models/dream7b_bpu_batch_queue_service_systemd/jobs/systemd_soak_20260604-131223_001/queue_summary.json
+job_002_summary: /mnt/nas/openclaw/reports/models/dream7b_bpu_batch_queue_service_systemd/jobs/systemd_soak_20260604-131223_002/queue_summary.json
+job verdicts: ok_dream7b_bpu_batch_queue_runner, ok_dream7b_bpu_batch_queue_runner
+job final_shapes: [1, 16, 152064], [1, 16, 152064]
+job execution_mode: pair_window_batch
+job window_execution_mode: window-batch
+job child_process_count: 0
+```
+
+Verified real systemd-queued BPU batch output:
+
+```text
+report: /mnt/nas/openclaw/reports/models/dream7b_bpu_batch_queue_systemd_batch_20260604-133034/systemd_batch_probe.md
+verdict: ok_dream7b_bpu_batch_queue_systemd_batch_probe
+job_name: systemd_batch_20260604-133034.jsonl
+job_status: done
+request_count: 4
+processed_count: 4
+accepted_count: 4
+deferred_count: 0
+batch_count: 4
+result_count: 4
+execution_mode: pair_window_batch
+window_execution_mode: window-batch
+child_process_count: 0
+total_wall_ms: 24977.437
+amortized_wall_ms_per_processed_request: 6244.359
+queue_summary: /mnt/nas/openclaw/reports/models/dream7b_bpu_batch_queue_service_systemd/jobs/systemd_batch_20260604-133034/queue_summary.json
+bpu_lock.path: /run/lock/dream7b_bpu_batch_queue_runner.lock
+```
+
+Verified real systemd-queued BPU drain-all output:
+
+```text
+report: /mnt/nas/openclaw/reports/models/dream7b_bpu_batch_queue_systemd_drain_20260604-174953/systemd_drain_probe.md
+verdict: ok_dream7b_bpu_batch_queue_systemd_drain_probe
+job_name: systemd_drain_20260604-174953.jsonl
+job_status: done
+request_count: 5
+expected_batch_counts: [4, 1]
+drain_all: True
+max_batch_size: 4
+processed_count: 5
+accepted_count: 5
+deferred_count: 0
+batch_run_count: 2
+batch_counts: [4, 1]
+result_count: 5
+execution_modes: ['pair_window_batch', 'pair_window_batch']
+window_execution_modes: ['window-batch', 'window-batch']
+child_process_counts: [0, 0]
+total_wall_ms: 49773.849
+amortized_wall_ms_per_processed_request: 9954.77
+queue_summary: /mnt/nas/openclaw/reports/models/dream7b_bpu_batch_queue_service_systemd/jobs/systemd_drain_20260604-174953/queue_summary.json
+bpu_lock.path: /run/lock/dream7b_bpu_batch_queue_runner.lock
+final_shapes: [1, 16, 152064] x 5
+```
+
+Verified real systemd-queued BPU full-batch drain-all output:
+
+```text
+report: /mnt/nas/openclaw/reports/models/dream7b_bpu_batch_queue_systemd_drain_20260604-180557/systemd_drain_probe.md
+verdict: ok_dream7b_bpu_batch_queue_systemd_drain_probe
+job_name: systemd_drain_20260604-180557.jsonl
+job_status: done
+request_count: 8
+expected_batch_counts: [4, 4]
+drain_all: True
+max_batch_size: 4
+processed_count: 8
+accepted_count: 8
+deferred_count: 0
+batch_run_count: 2
+batch_counts: [4, 4]
+result_count: 8
+execution_modes: ['pair_window_batch', 'pair_window_batch']
+window_execution_modes: ['window-batch', 'window-batch']
+child_process_counts: [0, 0]
+total_wall_ms: 49509.638
+amortized_wall_ms_per_processed_request: 6188.705
+queue_summary: /mnt/nas/openclaw/reports/models/dream7b_bpu_batch_queue_service_systemd/jobs/systemd_drain_20260604-180557/queue_summary.json
+bpu_lock.path: /run/lock/dream7b_bpu_batch_queue_runner.lock
+final_shapes: [1, 16, 152064] x 8
+```
+
+Verified current max-batch-size-8 systemd output after updating `DREAM7B_BPU_QUEUE_MAX_BATCH_SIZE` default to 8:
+
+```text
+systemd_report: /mnt/nas/openclaw/reports/models/dream7b_bpu_batch_queue_systemd_20260604-233926/systemd_probe.md
+systemd_verdict: ok_dream7b_bpu_batch_queue_systemd_probe
+service_status: active
+service_enabled: enabled
+max_batch_size_required: 8
+drain_all_required: True
+exec_start includes: --max-batch-size 8
+exec_start includes: --drain-all
+batch_report: /mnt/nas/openclaw/reports/models/dream7b_bpu_batch_queue_systemd_batch_20260604-235205/systemd_batch_probe.md
+batch_queue_summary: /mnt/nas/openclaw/reports/models/dream7b_bpu_batch_queue_service_systemd/jobs/systemd_batch_20260604-235205/queue_summary.json
+batch_verdict: ok_dream7b_bpu_batch_queue_systemd_batch_probe
+batch_request_count: 8
+batch_processed_count: 8
+batch_accepted_count: 8
+batch_deferred_count: 0
+batch_max_batch_size: 8
+batch_run_count: 1
+batch_count: 8
+batch_result_count: 8
+batch_total_wall_ms: 25568.117
+batch_amortized_wall_ms_per_processed_request: 3196.015
+drain_report: /mnt/nas/openclaw/reports/models/dream7b_bpu_batch_queue_systemd_drain_20260604-235302/systemd_drain_probe.md
+drain_queue_summary: /mnt/nas/openclaw/reports/models/dream7b_bpu_batch_queue_service_systemd/jobs/systemd_drain_20260604-235302/queue_summary.json
+drain_verdict: ok_dream7b_bpu_batch_queue_systemd_drain_probe
+drain_request_count: 8
+drain_expected_batch_counts: [8]
+drain_max_batch_size: 8
+drain_batch_run_count: 1
+drain_batch_counts: [8]
+drain_total_wall_ms: 25621.258
+drain_amortized_wall_ms_per_processed_request: 3202.657
+```
+
+Verified batch capacity expansion to 16 independent seq16 requests:
+
+```text
+capacity_report: /mnt/nas/openclaw/reports/models/dream7b_bpu_batch_capacity_20260605-123835/batch_capacity_probe.md
+capacity_verdict: ok_dream7b_bpu_batch_capacity_probe
+counts: [8, 12, 16]
+max_passing_count: 16
+batch_8_amortized_wall_ms_per_forward: 3197.161
+batch_8_amortized_load_ms_per_forward: 2996.019
+batch_8_amortized_run_ms_per_forward: 173.652
+batch_12_amortized_wall_ms_per_forward: 2188.664
+batch_12_amortized_load_ms_per_forward: 1995.449
+batch_12_amortized_run_ms_per_forward: 173.423
+batch_16_amortized_wall_ms_per_forward: 1714.647
+batch_16_amortized_load_ms_per_forward: 1525.35
+batch_16_amortized_run_ms_per_forward: 173.253
+```
+
+Verified current max-batch-size-16 systemd output after updating `DREAM7B_BPU_QUEUE_MAX_BATCH_SIZE` default to 16:
+
+```text
+systemd_report: /mnt/nas/openclaw/reports/models/dream7b_bpu_batch_queue_systemd_20260605-131550/systemd_probe.md
+systemd_verdict: ok_dream7b_bpu_batch_queue_systemd_probe
+service_status: active
+service_enabled: enabled
+max_batch_size_required: 16
+drain_all_required: True
+exec_start includes: --max-batch-size 16
+exec_start includes: --drain-all
+batch_report: /mnt/nas/openclaw/reports/models/dream7b_bpu_batch_queue_systemd_batch_20260605-131550/systemd_batch_probe.md
+batch_queue_summary: /mnt/nas/openclaw/reports/models/dream7b_bpu_batch_queue_service_systemd/jobs/systemd_batch_20260605-131550/queue_summary.json
+batch_verdict: ok_dream7b_bpu_batch_queue_systemd_batch_probe
+batch_request_count: 16
+batch_processed_count: 16
+batch_accepted_count: 16
+batch_deferred_count: 0
+batch_max_batch_size: 16
+batch_run_count: 1
+batch_count: 16
+batch_result_count: 16
+batch_total_wall_ms: 27416.621
+batch_amortized_wall_ms_per_processed_request: 1713.539
+drain_report: /mnt/nas/openclaw/reports/models/dream7b_bpu_batch_queue_systemd_drain_20260605-131621/systemd_drain_probe.md
+drain_queue_summary: /mnt/nas/openclaw/reports/models/dream7b_bpu_batch_queue_service_systemd/jobs/systemd_drain_20260605-131621/queue_summary.json
+drain_verdict: ok_dream7b_bpu_batch_queue_systemd_drain_probe
+drain_request_count: 16
+drain_expected_batch_counts: [16]
+drain_max_batch_size: 16
+drain_batch_run_count: 1
+drain_batch_counts: [16]
+drain_total_wall_ms: 27248.799
+drain_amortized_wall_ms_per_processed_request: 1703.05
+```
+
+Verified lightweight systemd canary:
+
+```text
+canary_report: /mnt/nas/openclaw/reports/models/dream7b_bpu_batch_queue_systemd_canary_20260605-151715/systemd_canary_probe.md
+canary_json: /mnt/nas/openclaw/reports/models/dream7b_bpu_batch_queue_systemd_canary_20260605-151715/systemd_canary_probe.json
+canary_queue_summary: /mnt/nas/openclaw/reports/models/dream7b_bpu_batch_queue_service_systemd/jobs/systemd_canary_20260605-151715/queue_summary.json
+canary_verdict: ok_dream7b_bpu_batch_queue_systemd_canary_probe
+service_name: dream7b-bpu-batch-queue.service
+job_name: systemd_canary_20260605-151715.jsonl
+job_status: done
+request_count: 1
+processed_count: 1
+accepted_count: 1
+deferred_count: 0
+skipped_count: 0
+drain_all: True
+max_batch_size: 16
+batch_run_count: 1
+batch_count: 1
+result_count: 1
+execution_mode: pair_window_batch
+window_execution_mode: window-batch
+child_process_count: 0
+bpu_lock_path: /run/lock/dream7b_bpu_batch_queue_runner.lock
+final_shapes: [[1, 16, 152064]]
+total_wall_ms: 24073.138
+amortized_wall_ms_per_processed_request: 24073.138
+errors: []
+```
+
+Verified HBM artifact inventory:
+
+```text
+inventory_report: /mnt/nas/openclaw/reports/models/dream7b_bpu_hbm_artifact_inventory_20260605-160050/hbm_artifact_inventory_probe.md
+inventory_json: /mnt/nas/openclaw/reports/models/dream7b_bpu_hbm_artifact_inventory_20260605-160050/hbm_artifact_inventory_probe.json
+inventory_verdict: ok_dream7b_bpu_hbm_artifact_inventory_probe
+forward_script: /mnt/nas/openclaw/runtimes/dream7b-bpu-forward/dream7b_segmented_hbm_python_forward.py
+nas_hbm_dir: /mnt/nas/openclaw/models/dream7b-hbm/segments6
+nas_fine_hbm_dir: /mnt/nas/openclaw/models/dream7b-hbm/fine-seq16
+local_hbm_dir: /home/sunrise/.cache/openclaw/dream7b-hbm/segments6
+local_fine_hbm_dir: /home/sunrise/.cache/openclaw/dream7b-hbm/fine-seq16
+expected_artifact_count: 14
+expected_base_count: 6
+expected_fine_count: 8
+nas_existing_count: 14
+local_existing_count: 14
+size_match_count: 14
+manifest_expected_count: 12
+manifest_verified_count: 12
+required_manifest_expected_count: 12
+warnings: []
+errors: []
+```
+
+Verified batch 16 runtime telemetry:
+
+```text
+telemetry_report: /mnt/nas/openclaw/reports/models/dream7b_bpu_runtime_telemetry_20260605-132014/runtime_telemetry_probe.md
+telemetry_verdict: ok_dream7b_bpu_runtime_telemetry_probe
+batch_count: 16
+bpu_loading_sample_count: 320
+nonzero_bpu_loading_sample_count: 35
+max_bpu_loading: 100.0
+avg_bpu_loading: 8.45
+forward_summary: /mnt/nas/openclaw/reports/models/dream7b_bpu_runtime_telemetry_20260605-132014/forward/summary.json
+forward_wall_ms: 26369.124
+forward_load_ms: 23336.624
+forward_run_ms: 2778.412
+forward_amortized_wall_ms_per_forward: 1648.07
+forward_amortized_load_ms_per_forward: 1458.539
+forward_amortized_run_ms_per_forward: 173.651
+```
+
+Verified sustained systemd telemetry over three sixteen-request jobs:
+
+```text
+systemd_telemetry_report: /mnt/nas/openclaw/reports/models/dream7b_bpu_batch_queue_systemd_telemetry_20260605-133919/systemd_telemetry_probe.md
+systemd_telemetry_verdict: ok_dream7b_bpu_batch_queue_systemd_telemetry_probe
+job_count: 3
+request_count: 16
+expected_request_total: 48
+completed_job_count: 3
+failed_job_count: 0
+processed_request_count: 48
+accepted_request_count: 48
+deferred_request_count: 0
+result_count: 48
+batch_counts: [16, 16, 16]
+total_wall_ms: 79811.376
+total_load_ms: 70702.172
+total_run_ms: 8337.877
+amortized_wall_ms_per_processed_request: 1662.737
+amortized_load_ms_per_processed_request: 1472.962
+amortized_run_ms_per_processed_request: 173.706
+bpu_loading_sample_count: 829
+nonzero_bpu_loading_sample_count: 99
+max_bpu_loading: 100.0
+avg_bpu_loading: 9.616
+queue_summary_001: /mnt/nas/openclaw/reports/models/dream7b_bpu_batch_queue_service_systemd/jobs/systemd_telemetry_20260605-133919_001/queue_summary.json
+queue_summary_002: /mnt/nas/openclaw/reports/models/dream7b_bpu_batch_queue_service_systemd/jobs/systemd_telemetry_20260605-133919_002/queue_summary.json
+queue_summary_003: /mnt/nas/openclaw/reports/models/dream7b_bpu_batch_queue_service_systemd/jobs/systemd_telemetry_20260605-133919_003/queue_summary.json
+```
+
+Verified report-only queue retention policy:
+
+```text
+retention_report: /mnt/nas/openclaw/reports/models/dream7b_bpu_batch_queue_retention_20260605-135448/queue_retention_probe.md
+retention_verdict: ok_dream7b_bpu_batch_queue_retention_probe
+policy_mode: report_only
+queue_counts: {'pending': 0, 'processing': 0, 'done': 13, 'failed': 1}
+queue_size_bytes: {'pending': 0, 'processing': 0, 'done': 18685, 'failed': 83}
+pending_stale_count: 0
+processing_stale_count: 0
+done_archive_candidate_count: 0
+failed_archive_candidate_count: 0
+archive_root: /mnt/nas/openclaw/queues/dream7b-bpu/archive
+apply_supported: False
+warnings: []
+errors: []
+```
+
+Verified report-only deployment acceptance gate:
+
+```text
+deployment_acceptance_report: /mnt/nas/openclaw/reports/models/dream7b_bpu_deployment_acceptance_20260606-205153/deployment_acceptance_probe.md
+deployment_acceptance_json: /mnt/nas/openclaw/reports/models/dream7b_bpu_deployment_acceptance_20260606-205153/deployment_acceptance_probe.json
+utilization_gap_aware_deployment_acceptance_report: /mnt/nas/openclaw/reports/models/dream7b_bpu_deployment_acceptance_20260606-212134/deployment_acceptance_probe.md
+utilization_gap_aware_deployment_acceptance_json: /mnt/nas/openclaw/reports/models/dream7b_bpu_deployment_acceptance_20260606-212134/deployment_acceptance_probe.json
+persistent_pair_cache_aware_deployment_acceptance_report: /mnt/nas/openclaw/reports/models/dream7b_bpu_deployment_acceptance_20260605-234654/deployment_acceptance_probe.md
+persistent_pair_cache_aware_deployment_acceptance_json: /mnt/nas/openclaw/reports/models/dream7b_bpu_deployment_acceptance_20260605-234654/deployment_acceptance_probe.json
+held_pair_matrix_aware_deployment_acceptance_report: /mnt/nas/openclaw/reports/models/dream7b_bpu_deployment_acceptance_20260606-000234/deployment_acceptance_probe.md
+held_pair_matrix_aware_deployment_acceptance_json: /mnt/nas/openclaw/reports/models/dream7b_bpu_deployment_acceptance_20260606-000234/deployment_acceptance_probe.json
+segment_residency_aware_deployment_acceptance_report: /mnt/nas/openclaw/reports/models/dream7b_bpu_deployment_acceptance_20260606-120028/deployment_acceptance_probe.md
+segment_residency_aware_deployment_acceptance_json: /mnt/nas/openclaw/reports/models/dream7b_bpu_deployment_acceptance_20260606-120028/deployment_acceptance_probe.json
+triplet_aware_deployment_acceptance_report: /mnt/nas/openclaw/reports/models/dream7b_bpu_deployment_acceptance_20260606-123257/deployment_acceptance_probe.md
+triplet_aware_deployment_acceptance_json: /mnt/nas/openclaw/reports/models/dream7b_bpu_deployment_acceptance_20260606-123257/deployment_acceptance_probe.json
+seeded_quad_aware_deployment_acceptance_report: /mnt/nas/openclaw/reports/models/dream7b_bpu_deployment_acceptance_20260606-125750/deployment_acceptance_probe.md
+seeded_quad_aware_deployment_acceptance_json: /mnt/nas/openclaw/reports/models/dream7b_bpu_deployment_acceptance_20260606-125750/deployment_acceptance_probe.json
+persistent_triplet_aware_deployment_acceptance_report: /mnt/nas/openclaw/reports/models/dream7b_bpu_deployment_acceptance_20260606-133119/deployment_acceptance_probe.md
+persistent_triplet_aware_deployment_acceptance_json: /mnt/nas/openclaw/reports/models/dream7b_bpu_deployment_acceptance_20260606-133119/deployment_acceptance_probe.json
+window3_aware_deployment_acceptance_report: /mnt/nas/openclaw/reports/models/dream7b_bpu_deployment_acceptance_20260606-134115/deployment_acceptance_probe.md
+window3_aware_deployment_acceptance_json: /mnt/nas/openclaw/reports/models/dream7b_bpu_deployment_acceptance_20260606-134115/deployment_acceptance_probe.json
+selected_triplet_forward_path_aware_deployment_acceptance_report: /mnt/nas/openclaw/reports/models/dream7b_bpu_deployment_acceptance_20260605-234652/deployment_acceptance_probe.md
+selected_triplet_forward_path_aware_deployment_acceptance_json: /mnt/nas/openclaw/reports/models/dream7b_bpu_deployment_acceptance_20260605-234652/deployment_acceptance_probe.json
+selected_pair_telemetry_aware_deployment_acceptance_report: /mnt/nas/openclaw/reports/models/dream7b_bpu_deployment_acceptance_20260606-031455/deployment_acceptance_probe.md
+selected_pair_telemetry_aware_deployment_acceptance_json: /mnt/nas/openclaw/reports/models/dream7b_bpu_deployment_acceptance_20260606-031455/deployment_acceptance_probe.json
+verdict: ok_dream7b_bpu_deployment_acceptance_probe
+check_count: 26
+passed_check_count: 26
+min_batch_capacity: 16
+min_systemd_batch_requests: 16
+min_systemd_telemetry_requests: 48
+min_batch_generate_count: 16
+min_batch_generate_sustained_round_count: 3
+min_long_repeat_count: 6
+max_long_repeat_wall_spread_ratio: 0.1
+systemd_service.ok: True
+batch_capacity.ok: True
+hbm_artifact_inventory.ok: True
+systemd_batch.ok: True
+systemd_drain.ok: True
+systemd_canary.ok: True
+text_queue_run.ok: True
+text_queue_systemd.ok: True
+diffusion_generate.ok: True
+diffusion_generate_telemetry.ok: True
+diffusion_batch_generate_telemetry.ok: True
+diffusion_batch_generate_sustained.ok: True
+utilization_gap.ok: True
+selected_pair_telemetry.ok: True
+persistent_pair_cache.ok: True
+held_pair_residency_matrix.ok: True
+single_segment_residency_matrix.ok: True
+persistent_segment_cache.ok: True
+single_segment_triplet_residency.ok: True
+seeded_quad_residency.ok: True
+persistent_triplet_topology.ok: True
+window3_forward_feasibility.ok: True
+selected_triplet_forward_path.ok: True
+systemd_telemetry.ok: True
+long_repeat.ok: True
+queue_retention.ok: True
+warnings: []
+errors: []
+```
+
+Verified held-pair residency matrix:
+
+```text
+held_pair_residency_matrix_report: /mnt/nas/openclaw/reports/models/dream7b_bpu_held_pair_residency_matrix_20260605-235813/held_pair_residency_matrix_probe.md
+held_pair_residency_matrix_json: /mnt/nas/openclaw/reports/models/dream7b_bpu_held_pair_residency_matrix_20260605-235813/held_pair_residency_matrix_probe.json
+verdict: ok_dream7b_bpu_held_pair_residency_matrix_probe
+pair_worker_count: 5
+ready_holder_pair_count: 5
+ready_holder_pair_indexes: [0, 1, 2, 3, 4]
+matrix_entry_count: 20
+successful_pair_edge_count: 0
+failed_pair_edge_count: 20
+successful_pair_edges: []
+failed_pair_edges: [[0, 1], [0, 2], [0, 3], [0, 4], [1, 0], [1, 2], [1, 3], [1, 4], [2, 0], [2, 1], [2, 3], [2, 4], [3, 0], [3, 1], [3, 2], [3, 4], [4, 0], [4, 1], [4, 2], [4, 3]]
+max_resident_pair_count_observed: 1
+next_optimization_target: persistent multi-pair residency is not supported by this fine split; reduce individual pair HBM size or pursue a different split
+holder_records[0].status: ready
+holder_records[1].status: ready
+holder_records[2].status: ready
+holder_records[3].status: ready
+holder_records[4].status: ready
+matrix_entries[0].exception_type: RuntimeError
+matrix_entries[0].exception: DNN Error (code: -400001, desc: Memory alloc failed, please check error log) hbDNN initialize from multiple .hbm files failed.
+errors: []
+```
+
+Verified seeded quad residency:
+
+```text
+seeded_quad_residency_report: /mnt/nas/openclaw/reports/models/dream7b_bpu_seeded_quad_residency_20260606-124305/seeded_quad_residency_probe.md
+seeded_quad_residency_json: /mnt/nas/openclaw/reports/models/dream7b_bpu_seeded_quad_residency_20260606-124305/seeded_quad_residency_probe.json
+verdict: ok_dream7b_bpu_seeded_quad_residency_probe
+source_successful_triplet_count: 20
+seeded_quad_candidate_count: 84
+tested_seeded_quad_count: 84
+successful_seeded_quad_count: 0
+failed_seeded_quad_count: 84
+successful_seeded_quads: []
+max_resident_segment_count_observed: 3
+next_optimization_target: no tested seeded quad is resident; use successful triplets as the current persistent topology seed
+errors: []
+```
+
+Verified persistent triplet topology:
+
+```text
+persistent_triplet_topology_report: /mnt/nas/openclaw/reports/models/dream7b_bpu_persistent_triplet_topology_20260606-131107/persistent_triplet_topology_probe.md
+persistent_triplet_topology_json: /mnt/nas/openclaw/reports/models/dream7b_bpu_persistent_triplet_topology_20260606-131107/persistent_triplet_topology_probe.json
+verdict: ok_dream7b_bpu_persistent_triplet_topology_probe
+source_successful_triplet_count: 20
+tested_triplet_topology_count: 20
+stable_triplet_topology_count: 20
+failed_triplet_topology_count: 0
+hold_seconds: 10.0
+poll_interval_seconds: 2.0
+stable_triplets: [[0, 1, 8], [1, 2, 3], [1, 2, 5], [1, 2, 7], [1, 2, 8], [1, 3, 5], [1, 3, 7], [1, 3, 8], [1, 4, 8], [1, 5, 7], [1, 5, 8], [1, 6, 8], [1, 7, 8], [1, 8, 9], [2, 3, 8], [2, 5, 8], [2, 7, 8], [3, 5, 8], [3, 7, 8], [5, 7, 8]]
+selected_topology: [0, 1, 8]
+selection_rule: first stable topology in source successful_triplets order
+max_resident_segment_count_observed: 3
+next_optimization_target: wire the selected stable triplet into a forward-path experiment and compare HBM load share against the current pair-window production path
+errors: []
+```
+
+Verified window3 forward feasibility:
+
+```text
+window3_forward_feasibility_report: /mnt/nas/openclaw/reports/models/dream7b_bpu_window3_forward_feasibility_20260606-133931/window3_forward_feasibility_probe.md
+window3_forward_feasibility_json: /mnt/nas/openclaw/reports/models/dream7b_bpu_window3_forward_feasibility_20260606-133931/window3_forward_feasibility_probe.json
+verdict: ok_dream7b_bpu_window3_forward_feasibility_probe
+returncode: 1
+direct_window3_forward_supported: False
+expected_window3_failure_observed: True
+stderr_contains_memory_alloc_failure: True
+window_size: 3
+child_window_mode: pair
+child_runtime_mode: packed
+window_execution_mode: window-batch
+next_optimization_target: do not switch production defaults to window3; use selected stable triplet worker or a new HBM split for the next forward-path experiment
+errors: []
+```
+
+Verified selected triplet forward path:
+
+```text
+selected_triplet_forward_path_report: /mnt/nas/openclaw/reports/models/dream7b_bpu_selected_triplet_forward_path_20260606-135729/selected_triplet_forward_path_probe.md
+selected_triplet_forward_path_json: /mnt/nas/openclaw/reports/models/dream7b_bpu_selected_triplet_forward_path_20260606-135729/selected_triplet_forward_path_probe.json
+verdict: ok_dream7b_bpu_selected_triplet_forward_path_probe
+selected_triplet_forward_supported: False
+reboot_or_disconnect_observed: True
+expected_reboot_guard_observed: True
+source_incomplete_run_dir: /mnt/nas/openclaw/reports/models/dream7b_bpu_selected_triplet_forward_path_20260606-135729
+source_incomplete_files: ['tokens_batch.json']
+selected.selected_topology: [0, 1, 8]
+selected.selected_worker_count: 3
+comparison.warm_path_load_improved: False
+comparison.total_path_load_improved: False
+next_optimization_target: do not promote selected triplet forward path; test smaller resident sets or vendor-supported multi-segment HBM residency instead
+errors: []
+```
+
+Verified selected pair forward path:
+
+```text
+selected_pair_forward_path_report: /mnt/nas/openclaw/reports/models/dream7b_bpu_selected_pair_forward_path_20260606-022052/selected_pair_forward_path_probe.md
+selected_pair_forward_path_json: /mnt/nas/openclaw/reports/models/dream7b_bpu_selected_pair_forward_path_20260606-022052/selected_pair_forward_path_probe.json
+verdict: ok_dream7b_bpu_selected_pair_forward_path_probe
+batch_count: 16
+selected.selected_pair: [1, 8]
+selected.selected_segments: ['seg02_04', 'seg24_26']
+selected.selected_third_segments: ['seg00_02', 'seg04_07', 'seg07_10', 'seg10_14', 'seg14_17', 'seg17_21', 'seg21_24', 'seg26_28']
+selected.selected_pair_covers_all_segments: True
+selected.selected_worker_count: 2
+selected.selected_resident_load_ms: 3505.384
+selected.forward_load_ms: 20428.46
+selected.selected_total_load_ms: 23933.844
+selected.run_ms: 2357.697
+selected.wall_ms: 23090.689
+baseline.load_ms: 23181.414
+baseline.run_ms: 2351.057
+baseline.wall_ms: 25785.378
+comparison.warm_load_ms_delta_vs_baseline: 2752.954
+comparison.warm_load_ms_delta_ratio_vs_baseline: 0.118757
+comparison.total_load_ms_delta_vs_baseline: -752.43
+comparison.total_load_ms_delta_ratio_vs_baseline: -0.032458
+comparison.warm_path_load_improved: True
+comparison.total_path_load_improved: False
+warnings: ['selected total load including resident startup did not improve baseline load_ms: baseline=23181.414, selected_total=23933.844']
+next_optimization_target: promote selected-pair worker path only after batch16 and telemetry probes confirm the warm-load reduction improves sustained BPU utilization
+errors: []
+```
+
+Verified selected pair telemetry:
+
+```text
+selected_pair_telemetry_report: /mnt/nas/openclaw/reports/models/dream7b_bpu_selected_pair_telemetry_20260606-031259/selected_pair_telemetry_probe.md
+selected_pair_telemetry_json: /mnt/nas/openclaw/reports/models/dream7b_bpu_selected_pair_telemetry_20260606-031259/selected_pair_telemetry_probe.json
+verdict: ok_dream7b_bpu_selected_pair_telemetry_probe
+batch_count: 16
+selected.selected_pair: [1, 8]
+selected.selected_segments: ['seg02_04', 'seg24_26']
+selected.selected_pair_covers_all_segments: True
+selected.selected_worker_count: 2
+selected.selected_resident_load_ms: 2983.357
+selected.forward_load_ms: 20290.033
+selected.selected_total_load_ms: 23273.39
+selected.run_ms: 2360.901
+selected.wall_ms: 22955.54
+bpu_loading_sample_count: 258
+nonzero_bpu_loading_sample_count: 36
+max_bpu_loading: 98.0
+avg_bpu_loading: 9.14
+default_runtime_telemetry.path: /mnt/nas/openclaw/reports/models/dream7b_bpu_runtime_telemetry_20260606-031226/runtime_telemetry_probe.json
+default_runtime_telemetry.forward_wall_ms: 25915.772
+comparison_to_default_runtime_telemetry.wall_ms_delta_vs_default_runtime: 2960.232
+comparison_to_default_runtime_telemetry.wall_ms_delta_ratio_vs_default_runtime: 0.114225
+comparison_to_default_runtime_telemetry.avg_bpu_loading_delta_vs_default_runtime: 1.952
+comparison_to_default_runtime_telemetry.selected_wall_time_improved_vs_default_runtime: True
+comparison_to_default_runtime_telemetry.selected_avg_bpu_loading_improved_vs_default_runtime: True
+next_optimization_target: rerun default runtime telemetry and selected-pair telemetry back-to-back before promoting selected-pair worker path into the default Dream 7B service
+warnings: []
+errors: []
+```
+
+Verified official S100 LLM/Qwen baseline comparison:
+
+```text
+official_llm_baseline_report: /mnt/nas/openclaw/reports/models/s100_official_llm_baseline_20260606-004107/official_llm_baseline_probe.md
+official_llm_baseline_json: /mnt/nas/openclaw/reports/models/s100_official_llm_baseline_20260606-004107/official_llm_baseline_probe.json
+verdict: ok_s100_official_llm_baseline_probe
+sdk_exists: True
+runtime_exists: True
+build_exists: True
+config_dir_count: 8
+supported_model_names_from_resolve_model: ['DeepSeek-R1-Distill-Qwen-1.5B', 'DeepSeek-R1-Distill-Qwen-7B', 'Qwen-2.5-1.5B', 'Qwen-2.5-7B', 'Qwen-2.5-1.5B-Instruct', 'Qwen-2.5-7B-Instruct', 'InternLM2-1.8B', 'Qwen2.5-Omni-3B']
+official_hbm_download_entry_count: 14
+qwen_existing_hbm_count: 1
+qwen_multichat_config.hbm_path: ../../model/Qwen2.5_1.5B_Instruct_1024.hbm
+qwen_multichat_config.model_type: 7
+qwen_hbm_exists_from_multichat: True
+official_qwen_local_runtime_report_present: True
+official_qwen_runtime_completed: False
+official_qwen_runtime_returncode: -11
+official_qwen_memory_alloc_failure_observed: True
+similar_issue_evidence_available_for_official_qwen: True
+comparison_to_dream.same_failure_class_as_dream_proven: True
+comparison_to_dream.dream_failure_summary.diagnosis: hbm_reload_dominated
+comparison_to_dream.dream_failure_summary.runtime_telemetry.load_to_run_ratio: 8.399
+comparison_to_dream.dream_failure_summary.systemd_telemetry.load_to_run_ratio: 8.48
+comparison_to_dream.dream_failure_summary.selected_triplet_forward_supported: False
+comparison_to_dream.dream_failure_summary.reboot_or_disconnect_observed: True
+next_probe_target: inspect S100P BPU/common-buffer memory pool and official runtime performance-mode prerequisites before using Qwen as a clean 128TOPS utilization baseline
+official_qwen_runtime_report: /mnt/nas/openclaw/reports/models/s100_official_qwen_runtime_20260606-003908/official_qwen_runtime_probe.md
+official_qwen_runtime_json: /mnt/nas/openclaw/reports/models/s100_official_qwen_runtime_20260606-003908/official_qwen_runtime_probe.json
+official_qwen_runtime.verdict: ok_s100_official_qwen_runtime_probe
+official_qwen_runtime.qwen_hbm_size_bytes: 1917038584
+official_qwen_runtime.ldd_missing_dependency_observed: False
+official_qwen_runtime.hbm_load_success_observed: True
+official_qwen_runtime.prefill_model_load_success_observed: True
+official_qwen_runtime.decode_model_load_success_observed: True
+official_qwen_runtime.init_model_success_observed: True
+official_qwen_runtime.memory_alloc_failure_observed: True
+official_qwen_runtime.ion_alloc_failure_observed: True
+official_qwen_runtime.bpu_mem_pool_alloc_error_observed: True
+official_qwen_runtime.segmentation_fault_observed: True
+official_qwen_performance_mode_retest_report: /mnt/nas/openclaw/reports/models/s100_official_qwen_performance_mode_retest_20260606-003908/performance_mode_retest_probe.md
+official_qwen_performance_mode_retest_json: /mnt/nas/openclaw/reports/models/s100_official_qwen_performance_mode_retest_20260606-003908/performance_mode_retest_probe.json
+official_qwen_performance_mode_retest.before_values: {'0x2b047000': '0x0000007E', '0x2b047004': '0x00EC4EC4'}
+official_qwen_performance_mode_retest.after_values: {'0x2b047000': '0x00000099', '0x2b047004': '0x00000099'}
+official_qwen_performance_mode_retest.target_applied: True
+official_qwen_performance_mode_retest.memory_alloc_failure_observed_after_performance_mode: True
+s100_bpu_memory_pool_report: /mnt/nas/openclaw/reports/models/s100_bpu_memory_pool_20260606-010941/bpu_memory_pool_probe.md
+s100_bpu_memory_pool_json: /mnt/nas/openclaw/reports/models/s100_bpu_memory_pool_20260606-010941/bpu_memory_pool_probe.json
+s100_bpu_memory_pool.default_devmem_path: /usr/bin/devmem
+s100_bpu_memory_pool.sudo_devmem_path: /usr/hobot/bin/devmem
+s100_bpu_memory_pool.default_devmem_returncode: 127
+s100_bpu_memory_pool.busybox_devmem_returncode: 0
+s100_bpu_memory_pool.perf_register_0x2b047000: 0x00000099
+s100_bpu_memory_pool.perf_register_0x2b047004: 0x00000099
+s100_bpu_memory_pool.ion_debug_present: True
+s100_bpu_memory_pool.ion_all_heap_info_exists: True
+s100_bpu_memory_pool.cma_reserved_heap_total_size: 1073741824
+s100_bpu_memory_pool.ion_cma_heap_total_size: 536870912
+s100_bpu_memory_pool.carveout_heap_total_size: 536870912
+s100_bpu_memory_pool.system_heap_total_size: 0
+s100_bpu_memory_pool.system_contig_heap_total_size: 0
+s100_bpu_memory_pool.ion_heap_bpu_allocation_sizes.carveout: 3145728
+s100_bpu_memory_pool.iovmm_bpu.total_mappings: 0
+s100_bpu_memory_pool.iovmm_bpu_hp.total_mappings: 99
+s100_bpu_memory_pool.reserved_memory_summary.bpu_region@9A000000.reg.size_mib: 96.0
+s100_bpu_memory_pool.reserved_memory_summary.ion_reserved@C80000000.reg.size_mib: 1024.0
+s100_bpu_memory_pool.ion_meminfo_shebang_interpreter_exists: False
+s100_bpu_memory_pool.memstat_shebang_interpreter_exists: False
+s100_bpu_memory_pool.allocation_failure_interpretation: reserved ION heaps are visible through debugfs, so the official Qwen failure is not explained by an absent ION debugfs heap; system/system_contig heap capacity and the exact HBMEM/UCP backend selection need a minimal allocation probe
+s100_bpu_memory_pool.next_probe_target: run a minimal HBMEM/UCP common-buffer allocation matrix against the exact backend/heap flags used by official Qwen; performance-mode register apply alone did not clear official Qwen allocation failure
+s100_hbmem_common_buffer_matrix_report: /mnt/nas/openclaw/reports/models/s100_hbmem_common_buffer_matrix_20260606-012033/hbmem_common_buffer_matrix_probe.md
+s100_hbmem_common_buffer_matrix_json: /mnt/nas/openclaw/reports/models/s100_hbmem_common_buffer_matrix_20260606-012033/hbmem_common_buffer_matrix_probe.json
+s100_hbmem_common_buffer_matrix.verdict: ok_s100_hbmem_common_buffer_matrix_probe
+s100_hbmem_common_buffer_matrix.ucp_enabled: True
+s100_hbmem_common_buffer_matrix.hbmem_alloc_case_count: 28
+s100_hbmem_common_buffer_matrix.hbmem_alloc_success_count: 28
+s100_hbmem_common_buffer_matrix.hbmem_alloc_failure_count: 0
+s100_hbmem_common_buffer_matrix.qwen_log_sizes: [786432, 2359296]
+s100_hbmem_common_buffer_matrix.qwen_log_size_success_count: 14
+s100_hbmem_common_buffer_matrix.qwen_log_size_failure_count: 0
+s100_hbmem_common_buffer_matrix.ucp_case_count: 8
+s100_hbmem_common_buffer_matrix.ucp_success_count: 8
+s100_hbmem_common_buffer_matrix.next_probe_target: compare these direct HBMEM/UCP allocation results with official Qwen's backend: 9 failure path and inspect libhbucp backend-to-hbmem flag selection if direct allocations pass
+errors: []
+```
+
+Verified single-segment triplet residency:
+
+```text
+single_segment_triplet_residency_report: /mnt/nas/openclaw/reports/models/dream7b_bpu_single_segment_triplet_residency_20260606-121243/single_segment_triplet_residency_probe.md
+single_segment_triplet_residency_json: /mnt/nas/openclaw/reports/models/dream7b_bpu_single_segment_triplet_residency_20260606-121243/single_segment_triplet_residency_probe.json
+verdict: ok_dream7b_bpu_single_segment_triplet_residency_probe
+tested_triplet_combination_count: 120
+successful_triplet_count: 20
+failed_triplet_count: 100
+max_resident_segment_count_observed: 3
+successful_triplets: [[0, 1, 8], [1, 2, 3], [1, 2, 5], [1, 2, 7], [1, 2, 8], [1, 3, 5], [1, 3, 7], [1, 3, 8], [1, 4, 8], [1, 5, 7], [1, 5, 8], [1, 6, 8], [1, 7, 8], [1, 8, 9], [2, 3, 8], [2, 5, 8], [2, 7, 8], [3, 5, 8], [3, 7, 8], [5, 7, 8]]
+next_optimization_target: inspect successful triplets and then test a persistent topology seeded by those segment groups
+errors: []
+```
+
+Verified single-segment residency matrix:
+
+```text
+single_segment_residency_matrix_report: /mnt/nas/openclaw/reports/models/dream7b_bpu_single_segment_residency_matrix_20260606-002628/single_segment_residency_matrix_probe.md
+single_segment_residency_matrix_json: /mnt/nas/openclaw/reports/models/dream7b_bpu_single_segment_residency_matrix_20260606-002628/single_segment_residency_matrix_probe.json
+verdict: ok_dream7b_bpu_single_segment_residency_matrix_probe
+segment_count: 10
+ready_holder_segment_count: 10
+matrix_entry_count: 90
+successful_segment_edge_count: 90
+failed_segment_edge_count: 0
+max_resident_segment_count_observed: 2
+next_optimization_target: inspect successful single-segment coexistence edges and then probe multi-segment cliques before changing the production runner
+errors: []
+```
+
+Verified persistent segment cache boundary:
+
+```text
+persistent_segment_cache_report: /mnt/nas/openclaw/reports/models/dream7b_bpu_persistent_segment_cache_20260606-005633/persistent_segment_cache_probe.md
+persistent_segment_cache_json: /mnt/nas/openclaw/reports/models/dream7b_bpu_persistent_segment_cache_20260606-005633/persistent_segment_cache_probe.json
+verdict: ok_dream7b_bpu_persistent_segment_cache_probe
+segment_worker_count: 10
+launched_segment_worker_count: 3
+ready_segment_worker_count: 2
+failed_segment_worker_count: 1
+ready_segment_indexes: [0, 1]
+failed_segment_indexes: [2]
+all_segment_workers_ready: False
+launch_stopped_reason: segment_02_seg04_07 did not reach ready status
+max_resident_segment_count_observed: 2
+next_optimization_target: use the ready prefix and failure record to choose a smaller segment split or different runtime-residency strategy
+failed_records[0].exception_type: RuntimeError
+failed_records[0].exception: DNN Error (code: -400001, desc: Memory alloc failed, please check error log) hbDNN initialize from multiple .hbm files failed.
+errors: []
+```
+
+Verified persistent pair cache boundary:
+
+```text
+persistent_pair_cache_report: /mnt/nas/openclaw/reports/models/dream7b_bpu_persistent_pair_cache_20260605-234349/persistent_pair_cache_probe.md
+persistent_pair_cache_json: /mnt/nas/openclaw/reports/models/dream7b_bpu_persistent_pair_cache_20260605-234349/persistent_pair_cache_probe.json
+verdict: ok_dream7b_bpu_persistent_pair_cache_probe
+pair_worker_count: 5
+launched_pair_worker_count: 2
+ready_pair_worker_count: 1
+failed_pair_worker_count: 1
+ready_pair_indexes: [0]
+failed_pair_indexes: [1]
+launch_stopped_reason: pair_01_seg04_07__seg07_10 did not reach ready status
+all_pair_workers_ready: False
+next_optimization_target: do not implement all-pair persistent cache yet; use this failure boundary to guide a different split or runtime-residency strategy
+ready_records[0].segments: ['seg00_02', 'seg02_04']
+ready_records[0].status: ready
+ready_records[0].load_ms: 5218.181
+ready_records[1].segments: ['seg04_07', 'seg07_10']
+ready_records[1].status: failed
+ready_records[1].exception_type: RuntimeError
+ready_records[1].exception: DNN Error (code: -400001, desc: Memory alloc failed, please check error log) hbDNN initialize from multiple .hbm files failed.
+errors: []
+```
+
+Verified Dream 7B BPU utilization gap diagnosis:
+
+```text
+utilization_gap_report: /mnt/nas/openclaw/reports/models/dream7b_bpu_utilization_gap_20260606-031454/utilization_gap_probe.md
+utilization_gap_json: /mnt/nas/openclaw/reports/models/dream7b_bpu_utilization_gap_20260606-031454/utilization_gap_probe.json
+verdict: ok_dream7b_bpu_utilization_gap_probe
+diagnosis: hbm_reload_dominated
+next_optimization_target: reduce per-window HBM reload overhead before expecting sustained 128TOPS-level average utilization
+max_observed_bpu_loading: 100.0
+avg_observed_bpu_loading_across_reports: 8.758
+min_batch_count: 16
+min_sustained_round_count: 3
+min_sustained_total_items: 48
+batch_scaling_reference.max_available_batch_count: 8
+batch_scaling_reference.load_to_run_ratio: 17.137
+runtime_telemetry.batch_count: 16
+runtime_telemetry.amortized_load_ms_per_forward: 1458.539
+runtime_telemetry.amortized_run_ms_per_forward: 173.651
+runtime_telemetry.load_to_run_ratio: 8.399
+selected_pair_telemetry.path: /mnt/nas/openclaw/reports/models/dream7b_bpu_selected_pair_telemetry_20260606-031259/selected_pair_telemetry_probe.json
+selected_pair_telemetry.batch_count: 16
+selected_pair_telemetry.max_bpu_loading: 98.0
+selected_pair_telemetry.avg_bpu_loading: 9.14
+selected_pair_telemetry.selected_pair: [1, 8]
+selected_pair_telemetry.selected_segments: ['seg02_04', 'seg24_26']
+selected_pair_telemetry.selected_pair_covers_all_segments: True
+selected_pair_telemetry.selected_wall_ms: 22955.54
+selected_pair_telemetry.selected_forward_load_ms: 20290.033
+selected_pair_telemetry.selected_run_ms: 2360.901
+selected_pair_telemetry.wall_ms_delta_vs_default_runtime: 2960.232
+selected_pair_telemetry.wall_ms_delta_ratio_vs_default_runtime: 0.114225
+selected_pair_telemetry.avg_bpu_loading_delta_vs_default_runtime: 1.952
+selected_pair_telemetry.selected_wall_time_improved_vs_default_runtime: True
+selected_pair_telemetry.selected_avg_bpu_loading_improved_vs_default_runtime: True
+systemd_telemetry.processed_request_count: 48
+systemd_telemetry.amortized_load_ms_per_processed_request: 1472.962
+systemd_telemetry.amortized_run_ms_per_processed_request: 173.706
+systemd_telemetry.load_to_run_ratio: 8.48
+sustained_generation.round_count: 3
+sustained_generation.batch_count: 16
+sustained_generation.actual_total_batch_items: 48
+batch_generate_telemetry.batch_count: 16
+warnings: ['batch_size_sweep max batch_count is below 16; using runtime/systemd/sustained telemetry as the authoritative batch-16 evidence']
+errors: []
+```
+
+Verified bounded Dream diffusion batch generation telemetry:
+
+```text
+batch_generation_telemetry_report: /mnt/nas/openclaw/reports/models/dream7b_bpu_diffusion_batch_generate_telemetry_20260606-184316/batch_generation_telemetry_probe.md
+batch_generation_telemetry_json: /mnt/nas/openclaw/reports/models/dream7b_bpu_diffusion_batch_generate_telemetry_20260606-184316/batch_generation_telemetry_probe.json
+batch_generation_json: /mnt/nas/openclaw/reports/models/dream7b_bpu_diffusion_batch_generate_telemetry_20260606-184316/generation/batch_generation.json
+verdict: ok_dream7b_bpu_diffusion_batch_generate_telemetry_probe
+generation_dir: /mnt/nas/openclaw/reports/models/dream7b_bpu_diffusion_batch_generate_telemetry_20260606-184316/generation
+batch_count: 16
+generate_cmd: dream7b-bpu-diffusion-batch-generate
+monitor_delay_ms: 100
+monitor_sample_count: 900
+generation_status: 0
+bpu_loading_sample_count: 604
+nonzero_bpu_loading_sample_count: 68
+max_bpu_loading: 100.0
+avg_bpu_loading: 8.825
+generation_metrics.verdict: ok_dream7b_bpu_diffusion_batch_generate
+generation_metrics.forward_cmd: dream7b-bpu-fine-batch-forward
+generation_metrics.batch_count: 16
+generation_metrics.seq_len: 16
+generation_metrics.steps: 2
+generation_metrics.executed_step_count: 2
+generation_metrics.forward_batch_counts: [16, 16]
+generation_metrics.remaining_mask_positions_by_batch: [{'batch_index': 0, 'remaining_mask_positions': []}, {'batch_index': 1, 'remaining_mask_positions': []}, {'batch_index': 2, 'remaining_mask_positions': []}, {'batch_index': 3, 'remaining_mask_positions': []}, {'batch_index': 4, 'remaining_mask_positions': []}, {'batch_index': 5, 'remaining_mask_positions': []}, {'batch_index': 6, 'remaining_mask_positions': []}, {'batch_index': 7, 'remaining_mask_positions': []}, {'batch_index': 8, 'remaining_mask_positions': []}, {'batch_index': 9, 'remaining_mask_positions': []}, {'batch_index': 10, 'remaining_mask_positions': []}, {'batch_index': 11, 'remaining_mask_positions': []}, {'batch_index': 12, 'remaining_mask_positions': []}, {'batch_index': 13, 'remaining_mask_positions': []}, {'batch_index': 14, 'remaining_mask_positions': []}, {'batch_index': 15, 'remaining_mask_positions': []}]
+generation_metrics.boundary: bounded_seq16_batch_generation_entrypoint_not_complete_production_text_service
+generation_metrics.history_forward_verdicts: ['ok_dream7b_segmented_hbm_python_forward', 'ok_dream7b_segmented_hbm_python_forward']
+generation_metrics.history_forward_execution_modes: ['pair_window_batch', 'pair_window_batch']
+generation_metrics.history_forward_window_execution_modes: ['window-batch', 'window-batch']
+generation_metrics.history_forward_child_process_counts: [0, 0]
+generation_metrics.history_forward_batch_counts: [16, 16]
+errors: []
+```
+
+Verified sustained bounded Dream diffusion batch generation:
+
+```text
+batch_generation_sustained_report: /mnt/nas/openclaw/reports/models/dream7b_bpu_diffusion_batch_generate_sustained_20260606-190058/batch_generation_sustained_probe.md
+batch_generation_sustained_json: /mnt/nas/openclaw/reports/models/dream7b_bpu_diffusion_batch_generate_sustained_20260606-190058/batch_generation_sustained_probe.json
+verdict: ok_dream7b_bpu_diffusion_batch_generate_sustained_probe
+run_dir: /mnt/nas/openclaw/reports/models/dream7b_bpu_diffusion_batch_generate_sustained_20260606-190058
+round_count: 3
+batch_count: 16
+generate_cmd: dream7b-bpu-diffusion-batch-generate
+successful_generation_count: 3
+expected_total_batch_items: 48
+actual_total_batch_items: 48
+generation_statuses: [0, 0, 0]
+generation_wall_ms: [60548, 59410, 59494]
+generation_batch_counts: [16, 16, 16]
+generation_executed_step_counts: [2, 2, 2]
+generation_forward_batch_counts_by_round: [[16, 16], [16, 16], [16, 16]]
+total_forward_call_count: 6
+monitor_delay_ms: 100
+monitor_sample_count: 2400
+bpu_loading_sample_count: 1790
+nonzero_bpu_loading_sample_count: 199
+max_bpu_loading: 100.0
+avg_bpu_loading: 9.022
+rounds[0].verdict: ok_dream7b_bpu_diffusion_batch_generate
+rounds[1].verdict: ok_dream7b_bpu_diffusion_batch_generate
+rounds[2].verdict: ok_dream7b_bpu_diffusion_batch_generate
+errors: []
+```
+
+Verified bounded Dream diffusion generation telemetry:
+
+```text
+generation_telemetry_report: /mnt/nas/openclaw/reports/models/dream7b_bpu_diffusion_generate_telemetry_20260606-163625/generation_telemetry_probe.md
+generation_telemetry_json: /mnt/nas/openclaw/reports/models/dream7b_bpu_diffusion_generate_telemetry_20260606-163625/generation_telemetry_probe.json
+verdict: ok_dream7b_bpu_diffusion_generate_telemetry_probe
+generation_dir: /mnt/nas/openclaw/reports/models/dream7b_bpu_diffusion_generate_telemetry_20260606-163625/generation
+prompt: hello
+generate_cmd: dream7b-bpu-diffusion-generate
+monitor_delay_ms: 100
+monitor_sample_count: 900
+generation_status: 0
+generation_json: /mnt/nas/openclaw/reports/models/dream7b_bpu_diffusion_generate_telemetry_20260606-163625/generation/generation.json
+bpu_loading_sample_count: 509
+nonzero_bpu_loading_sample_count: 14
+max_bpu_loading: 38.0
+avg_bpu_loading: 0.637
+generation_metrics.verdict: ok_dream7b_bpu_diffusion_generate
+generation_metrics.forward_cmd: dream7b-bpu-fine-forward
+generation_metrics.seq_len: 16
+generation_metrics.steps: 2
+generation_metrics.executed_step_count: 2
+generation_metrics.remaining_mask_positions: []
+generation_metrics.decoded_final: <|im_start|>user
+hello<|im_end|>
+<|im_start|>assistant
+osaosa and and and and and
+generation_metrics.boundary: bounded_seq16_generation_entrypoint_not_complete_production_text_service
+generation_metrics.history_forward_verdicts: ['ok_dream7b_segmented_hbm_python_forward', 'ok_dream7b_segmented_hbm_python_forward']
+generation_metrics.history_forward_execution_modes: ['pair_in_process', 'pair_in_process']
+generation_metrics.history_forward_window_execution_modes: ['in-process', 'in-process']
+generation_metrics.history_forward_child_process_counts: [0, 0]
+generation_metrics.history_forward_final_shapes: [[1, 16, 152064], [1, 16, 152064]]
+errors: []
+```
+
+Verified reusable bounded Dream diffusion generation:
+
+```text
+generation_report: /mnt/nas/openclaw/reports/models/dream7b_bpu_diffusion_generate_20260606-161120/generation.md
+generation_json: /mnt/nas/openclaw/reports/models/dream7b_bpu_diffusion_generate_20260606-161120/generation.json
+verdict: ok_dream7b_bpu_diffusion_generate
+forward_cmd: dream7b-bpu-fine-forward
+prompt: hello
+seq_len: 16
+steps: 2
+executed_step_count: 2
+top_k: 5
+remasking: entropy_exit
+temperature: 0.0
+seed: 42
+entropy_threshold: 1.5
+fit_mode: natural_prompt_then_masks
+prompt_token_count: 9
+prefix_token_count: 9
+mask_token_id: 151666
+remaining_mask_positions: []
+decoded_final: <|im_start|>user
+hello<|im_end|>
+<|im_start|>assistant
+osaosa and and and and and
+history[0].forward_verdict: ok_dream7b_segmented_hbm_python_forward
+history[0].forward_execution_mode: pair_in_process
+history[0].forward_window_execution_mode: in-process
+history[0].forward_child_process_count: 0
+history[0].forward_final_shape: [1, 16, 152064]
+history[1].forward_verdict: ok_dream7b_segmented_hbm_python_forward
+history[1].forward_execution_mode: pair_in_process
+history[1].forward_window_execution_mode: in-process
+history[1].forward_child_process_count: 0
+history[1].forward_final_shape: [1, 16, 152064]
+forward_summary_count: 2
+boundary: bounded_seq16_generation_entrypoint_not_complete_production_text_service
+errors: []
+```
+
+Verified reusable text prompt queue run:
+
+```text
+text_queue_run_report: /mnt/nas/openclaw/reports/models/dream7b_bpu_text_queue_run_20260606-155102/text_queue_run.md
+text_queue_run_json: /mnt/nas/openclaw/reports/models/dream7b_bpu_text_queue_run_20260606-155102/text_queue_run.json
+verdict: ok_dream7b_bpu_text_queue_run
+submit_cmd: dream7b-bpu-text-queue-submit
+submit_verdict: ok_dream7b_bpu_text_queue_submit
+job_status: done
+request_id: text_queue_run_20260606-155102-001
+tokenizer_dir: /mnt/nas/openclaw/models/dream7b/tokenizer
+fit_mode: pad-right
+original_token_count: 9
+token_count: 16
+processed_count: 1
+accepted_count: 1
+deferred_count: 0
+skipped_count: 0
+batch_run_count: 1
+batch_count: 1
+result_count: 1
+execution_mode: pair_window_batch
+window_execution_mode: window-batch
+child_process_count: 0
+bpu_lock_path: /run/lock/dream7b_bpu_batch_queue_runner.lock
+final_shape: [1, 16, 152064]
+topk_last_position: [{'token_id': 323, 'score': 1.7742547988891602}, {'token_id': 476, 'score': 1.0451929569244385}, {'token_id': 11, 'score': 0.8926413059234619}]
+topk_last_position_decoded: [{'token_id': 323, 'score': 1.7742547988891602, 'token_text': ' and'}, {'token_id': 476, 'score': 1.0451929569244385, 'token_text': ' or'}, {'token_id': 11, 'score': 0.8926413059234619, 'token_text': ','}]
+durable_results_jsonl: /mnt/nas/openclaw/reports/models/dream7b_bpu_batch_queue_service_systemd/jobs/text_queue_run_20260606-155102/durable_state/results.jsonl
+total_wall_ms: 24132.416
+amortized_wall_ms_per_processed_request: 24132.416
+errors: []
+```
+
+Verified real text prompt to NAS-backed systemd BPU queue:
+
+```text
+text_queue_report: /mnt/nas/openclaw/reports/models/dream7b_bpu_text_queue_systemd_20260606-155148/text_queue_systemd_probe.md
+text_queue_json: /mnt/nas/openclaw/reports/models/dream7b_bpu_text_queue_systemd_20260606-155148/text_queue_systemd_probe.json
+text_queue_run_json: /mnt/nas/openclaw/reports/models/dream7b_bpu_text_queue_systemd_20260606-155148/text_queue_run.json
+text_queue_submit_json: /mnt/nas/openclaw/reports/models/dream7b_bpu_text_queue_systemd_20260606-155148/text_queue_submit.json
+verdict: ok_dream7b_bpu_text_queue_systemd_probe
+run_cmd: dream7b-bpu-text-queue-run
+run_verdict: ok_dream7b_bpu_text_queue_run
+submit_cmd: dream7b-bpu-text-queue-submit
+submit_verdict: ok_dream7b_bpu_text_queue_submit
+job_status: done
+request_id: text-queue-20260606-155148-001
+tokenizer_dir: /mnt/nas/openclaw/models/dream7b/tokenizer
+fit_mode: pad-right
+original_token_count: 9
+token_count: 16
+processed_count: 1
+accepted_count: 1
+deferred_count: 0
+skipped_count: 0
+batch_run_count: 1
+batch_count: 1
+result_count: 1
+execution_mode: pair_window_batch
+window_execution_mode: window-batch
+child_process_count: 0
+bpu_lock_path: /run/lock/dream7b_bpu_batch_queue_runner.lock
+final_shape: [1, 16, 152064]
+topk_last_position: [{'token_id': 323, 'score': 1.7742547988891602}, {'token_id': 476, 'score': 1.0451929569244385}, {'token_id': 11, 'score': 0.8926413059234619}]
+topk_last_position_decoded: [{'token_id': 323, 'score': 1.7742547988891602, 'token_text': ' and'}, {'token_id': 476, 'score': 1.0451929569244385, 'token_text': ' or'}, {'token_id': 11, 'score': 0.8926413059234619, 'token_text': ','}]
+durable_results_jsonl: /mnt/nas/openclaw/reports/models/dream7b_bpu_batch_queue_service_systemd/jobs/text_queue_systemd_20260606-155148/durable_state/results.jsonl
+total_wall_ms: 24279.5
+amortized_wall_ms_per_processed_request: 24279.5
+errors: []
+```
+
+The default single-input fine-forward path was re-verified after adding `--tokens-batch-json`, `--window-execution-mode window-batch`, and timing fields:
+
+```text
+report: /mnt/nas/openclaw/reports/models/dream7b_bpu_fine_forward_20260603-183906/fine_forward_probe.md
+verdict: ok_dream7b_bpu_fine_forward_probe
+execution_mode: pair_in_process
+window_execution_mode: in-process
+child_process_count: 0
+final_shape: [1, 16, 152064]
+segment_count: 10
+```
+
+The deployed diffusion loop can now select the forward backend with:
+
+```bash
+DREAM7B_BPU_FORWARD_CMD=dream7b-bpu-fine-forward \
+  dream7b-bpu-diffusion-loop-probe \
+  /mnt/nas/openclaw/reports/models \
+  'Explain why S100P BPU matters for Dream 7B in OpenClaw.'
+```
+
+Verified fine-forward diffusion-loop output:
+
+```text
+report: /mnt/nas/openclaw/reports/models/dream7b_bpu_diffusion_loop_20260603-175030/summary.md
+verdict: ok_dream7b_bpu_diffusion_loop_probe
+forward_command: dream7b-bpu-fine-forward
+steps: 2
+remaining_mask_positions: []
+step0 forward: segment_plan=fine-adjacent, residency_window_size=2, window_execution_mode=in-process, child_window_mode=pair, child_runtime_mode=packed, execution_mode=pair_in_process, child_process_count=0, final_shape=[1, 16, 152064]
+step1 forward: segment_plan=fine-adjacent, residency_window_size=2, window_execution_mode=in-process, child_window_mode=pair, child_runtime_mode=packed, execution_mode=pair_in_process, child_process_count=0, final_shape=[1, 16, 152064]
+```
+
+The CPU/BPU quality gate can now record the fine-forward path with:
+
+```bash
+DREAM7B_BPU_QUALITY_FORWARD_CMD=dream7b-bpu-fine-forward \
+  dream7b-bpu-cpu-quality-gate-probe \
+  /mnt/nas/openclaw/reports/models \
+  'Explain why BPU matters.'
+```
+
+Verified fine-forward quality-gate output:
+
+```text
+report: /mnt/nas/openclaw/reports/models/dream7b_bpu_cpu_quality_gate_20260603-160405/summary.md
+verdict: ok_dream7b_bpu_cpu_quality_gate_recorded
+quality_status: diverged_expected_for_seq16_probe
+bpu_forward_command: dream7b-bpu-fine-forward
+bpu loop verdict: ok_dream7b_bpu_diffusion_loop_probe
+bpu remaining_mask_positions: []
+```
+
+## Current Boundary
+
+This is real BPU execution for real Dream 7B weights, including a complete seq16 forward chain from prompt text or token ids to logits plus verified one-step and strategy-aware bounded multi-step Dream diffusion bridges over masked positions. The path now also has a CPU/BPU quality coverage gate that records current divergence against the existing CPU Dream text path, an HBM cache performance gate that quantifies NAS versus S100P-local HBM load cost, a HBM artifact inventory gate showing `expected_artifact_count: 14`, `nas_existing_count: 14`, `local_existing_count: 14`, `size_match_count: 14`, and `manifest_verified_count: 12`, a residency gate proving that the current six-segment split cannot be made all-resident, a fine-residency gate proving that every adjacent two-segment window can be resident, a deployed fine in-process pair forward command that runs the 10-segment fine plan to logits with 0 child processes, a 3-run repeat probe plus a gated 6-run long-repeat probe for the default in-process path showing `wall_spread_ratio: 0.046307` under `max_wall_spread_ratio: 0.1`, a window-batch throughput probe for concurrent independent seq16 inputs, a batch-size sweep proving amortized wall time drops from `24562.798` ms at batch 1 to `3175.416` ms at batch 8, a batch-capacity probe proving independent seq16 batch 16 passes with `amortized_wall_ms_per_forward: 1714.647`, runtime telemetry with `hrt_ucp_monitor` showing `max_bpu_loading: 100.0` during Dream 7B BPU forward, a reusable `dream7b-bpu-fine-batch-forward` wrapper for JSON token batches, a bounded `dream7b-bpu-batch-queue-runner` JSONL service bridge with verified multi-batch `--drain-all`, verified `cancelled` and `not_after_epoch_ms` control semantics, durable queue state JSONL outputs, default queue-runner single-flight `bpu_lock`, a directory-backed `dream7b-bpu-batch-queue-service` loop with verified real BPU one-shot operation, and a NAS-backed `dream7b-bpu-batch-queue.service` systemd unit with verified single-job, 2-job, historical `max_batch_size=4` and `max_batch_size=8` reports, current default `--max-batch-size 16 --drain-all` one-job sixteen-request real BPU queued execution with `batch_run_count=1`, `batch_count=16`, and `amortized_wall_ms_per_processed_request` around 1.7 seconds, a lightweight one-request systemd canary showing `verdict: ok_dream7b_bpu_batch_queue_systemd_canary_probe`, `job_status: done`, `final_shapes: [[1, 16, 152064]]`, and `errors: []`, reusable `dream7b-bpu-text-queue-submit` and `dream7b-bpu-text-queue-run` commands showing real prompt tokenization through `/mnt/nas/openclaw/models/dream7b/tokenizer`, `submit_verdict: ok_dream7b_bpu_text_queue_submit`, `verdict: ok_dream7b_bpu_text_queue_run`, `fit_mode: pad-right`, `token_count: 16`, `final_shape: [1, 16, 152064]`, non-empty `topk_last_position`, and decoded `topk_last_position_decoded` token texts ` and`, ` or`, and `,`, a reusable bounded `dream7b-bpu-diffusion-generate` command showing `verdict: ok_dream7b_bpu_diffusion_generate`, `executed_step_count: 2`, `remaining_mask_positions: []`, and `decoded_final`, direct bounded-generation telemetry showing `verdict: ok_dream7b_bpu_diffusion_generate_telemetry_probe`, `generation_status: 0`, `nonzero_bpu_loading_sample_count: 14`, and `max_bpu_loading: 38.0`, a reusable bounded `dream7b-bpu-diffusion-batch-generate` command using `dream7b-bpu-fine-batch-forward` once per diffusion step, direct bounded batch-generation telemetry showing `verdict: ok_dream7b_bpu_diffusion_batch_generate_telemetry_probe`, `batch_count: 16`, `forward_batch_counts: [16, 16]`, `nonzero_bpu_loading_sample_count: 68`, `avg_bpu_loading: 8.825`, and `max_bpu_loading: 100.0`, sustained bounded batch-generation telemetry over three rounds showing `successful_generation_count: 3`, `actual_total_batch_items: 48`, `total_forward_call_count: 6`, `avg_bpu_loading: 9.022`, and `max_bpu_loading: 100.0`, sustained service telemetry over three sixteen-request jobs showing `processed_request_count: 48`, `batch_counts: [16, 16, 16]`, `max_bpu_loading: 100.0`, and `amortized_wall_ms_per_processed_request: 1662.737`, a utilization-gap probe showing `diagnosis: hbm_reload_dominated`, `max_observed_bpu_loading: 100.0`, `avg_observed_bpu_loading_across_reports: 8.978`, `runtime_load_to_run_ratio: 8.399`, and `systemd_load_to_run_ratio: 8.48`, a persistent pair cache probe showing `pair_worker_count: 5`, `ready_pair_worker_count: 1`, `all_pair_workers_ready: False`, and `launch_stopped_reason: pair_01_seg04_07__seg07_10 did not reach ready status`, a held-pair residency matrix showing `ready_holder_pair_count: 5`, `matrix_entry_count: 20`, `successful_pair_edge_count: 0`, `failed_pair_edge_count: 20`, and `max_resident_pair_count_observed: 1`, a single-segment triplet residency path showing 20 successful triplets, a seeded quad residency path showing all 84 seeded four-segment candidates fail, a persistent triplet topology probe showing all 20 successful triplets stay stable for the 10-second hold and selecting `[0, 1, 8]`, a report-only queue retention probe showing the current NAS queue has no stale `pending` or `processing` jobs and no current archive candidates, plus a report-only deployment acceptance gate showing `check_count: 23`, `passed_check_count: 23`, `min_batch_generate_count: 16`, `min_batch_generate_sustained_round_count: 3`, `max_long_repeat_wall_spread_ratio: 0.1`, `utilization_gap.ok: True`, `persistent_pair_cache.ok: True`, `held_pair_residency_matrix.ok: True`, `single_segment_triplet_residency.ok: True`, `seeded_quad_residency.ok: True`, `persistent_triplet_topology.ok: True`, and `verdict: ok_dream7b_bpu_deployment_acceptance_probe` across service, capacity, HBM inventory, batch, drain, canary, text-queue-run, text-queue-systemd, diffusion-generate, diffusion-generate-telemetry, diffusion-batch-generate-telemetry, diffusion-batch-generate-sustained, utilization-gap, persistent-pair-cache, held-pair-residency-matrix, single-segment-residency-matrix, persistent-segment-cache, triplet-residency, seeded-quad-residency, persistent-triplet-topology, telemetry, long-repeat, and retention evidence. It is not yet a complete text-generation service.
+
+Latest segment-residency update: `/mnt/nas/openclaw/reports/models/dream7b_bpu_single_segment_residency_matrix_20260606-002628/single_segment_residency_matrix_probe.json` proves that all ten single segments can be held individually and every ordered single-to-single edge loads successfully (`matrix_entry_count: 90`, `successful_segment_edge_count: 90`, `failed_segment_edge_count: 0`, `max_resident_segment_count_observed: 2`). `/mnt/nas/openclaw/reports/models/dream7b_bpu_persistent_segment_cache_20260606-005633/persistent_segment_cache_probe.json` then shows the prefix resident boundary is two single-segment runtimes before `segment_02_seg04_07` fails. `/mnt/nas/openclaw/reports/models/dream7b_bpu_single_segment_triplet_residency_20260606-121243/single_segment_triplet_residency_probe.json` expands that boundary: all 120 three-segment combinations were tested, 20 triplets succeeded, 100 failed, and `max_resident_segment_count_observed: 3`. `/mnt/nas/openclaw/reports/models/dream7b_bpu_seeded_quad_residency_20260606-124305/seeded_quad_residency_probe.json` tests every unique four-segment candidate seeded by those 20 successful triplets and shows `seeded_quad_candidate_count: 84`, `tested_seeded_quad_count: 84`, `successful_seeded_quad_count: 0`, `failed_seeded_quad_count: 84`, and `max_resident_segment_count_observed: 3`. `/mnt/nas/openclaw/reports/models/dream7b_bpu_persistent_triplet_topology_20260606-131107/persistent_triplet_topology_probe.json` replays the 20 successful triplets as long-lived workers and shows `tested_triplet_topology_count: 20`, `stable_triplet_topology_count: 20`, `failed_triplet_topology_count: 0`, `selected_topology: [0, 1, 8]`, and `max_resident_segment_count_observed: 3`. `/mnt/nas/openclaw/reports/models/dream7b_bpu_window3_forward_feasibility_20260606-133931/window3_forward_feasibility_probe.json` shows direct packed adjacent window size 3 is not supported (`direct_window3_forward_supported: False`, `expected_window3_failure_observed: True`, `stderr_contains_memory_alloc_failure: True`). `/mnt/nas/openclaw/reports/models/dream7b_bpu_selected_triplet_forward_path_20260606-135729/selected_triplet_forward_path_probe.json` shows the selected `[0, 1, 8]` triplet must not be promoted as a forward-path optimization (`selected_triplet_forward_supported: False`, `reboot_or_disconnect_observed: True`, `expected_reboot_guard_observed: True`). The latest report-only acceptance gate is `/mnt/nas/openclaw/reports/models/dream7b_bpu_deployment_acceptance_20260605-234652/deployment_acceptance_probe.json` with `check_count: 25`, `passed_check_count: 25`, `single_segment_residency_matrix.ok: True`, `persistent_segment_cache.ok: True`, `single_segment_triplet_residency.ok: True`, `seeded_quad_residency.ok: True`, `persistent_triplet_topology.ok: True`, `window3_forward_feasibility.ok: True`, and `selected_triplet_forward_path.ok: True`.
+
+Latest selected-pair telemetry update: `/mnt/nas/openclaw/reports/models/dream7b_bpu_selected_pair_telemetry_20260606-031259/selected_pair_telemetry_probe.json` shows selected pair `[1, 8]` with `batch_count: 16`, `max_bpu_loading: 98.0`, `avg_bpu_loading: 9.14`, `comparison_to_default_runtime_telemetry.wall_ms_delta_ratio_vs_default_runtime: 0.114225`, `comparison_to_default_runtime_telemetry.avg_bpu_loading_delta_vs_default_runtime: 1.952`, `comparison_to_default_runtime_telemetry.selected_wall_time_improved_vs_default_runtime: True`, and `comparison_to_default_runtime_telemetry.selected_avg_bpu_loading_improved_vs_default_runtime: True`. `/mnt/nas/openclaw/reports/models/dream7b_bpu_utilization_gap_20260606-045527/utilization_gap_probe.json` now includes `selected_pair_telemetry` plus `selected_pair_candidate_service_telemetry` and still records `diagnosis: hbm_reload_dominated`, `max_observed_bpu_loading: 100.0`, `avg_observed_bpu_loading_across_reports: 8.763`, `selected_pair_candidate_service_telemetry.load_to_run_ratio: 9.758`, and `selected_pair_candidate_service_telemetry.comparison_to_default_systemd_telemetry.avg_bpu_loading_delta_vs_default_systemd: -0.828`. The latest candidate-service-aware report-only acceptance gate is `/mnt/nas/openclaw/reports/models/dream7b_bpu_deployment_acceptance_20260606-045552/deployment_acceptance_probe.json` with `check_count: 28`, `passed_check_count: 28`, `utilization_gap.ok: True`, `selected_pair_candidate_service.ok: True`, and `selected_pair_candidate_service_telemetry.ok: True`.
+
+Latest selected-pair promotion gate: `/mnt/nas/openclaw/reports/models/dream7b_bpu_selected_pair_promotion_gate_20260606-034228/selected_pair_promotion_gate_probe.json` records `verdict: ok_dream7b_bpu_selected_pair_promotion_gate_probe`, `promotion_ready_for_guarded_default_service_candidate: True`, `default_service_already_promoted: False`, `min_batch_count: 16`, `min_wall_delta_ratio: 0.05`, `min_avg_bpu_delta: 1.0`, and `next_optimization_target: implement a guarded selected-pair default-service candidate and re-run deployment acceptance before replacing the current default Dream 7B service path`.
+
+Latest selected-pair candidate forward: `/mnt/nas/openclaw/reports/models/dream7b_bpu_selected_pair_candidate_forward_20260606-035716/selected_pair_candidate_forward_probe.json` records `verdict: ok_dream7b_bpu_selected_pair_candidate_forward_probe`, `forward_cmd: dream7b-bpu-selected-pair-batch-forward`, `summary_verdict: ok_dream7b_segmented_hbm_python_forward`, `selected_pair_candidate: True`, `execution_mode: pair_window_batch`, `window_execution_mode: selected-pair-resident`, `batch_count: 16`, `child_process_count: 2`, `selected_pair: [1, 8]`, `selected_segments: ['seg02_04', 'seg24_26']`, `selected_pair_covers_all_segments: True`, `warm_load_ms: 20522.582`, `wall_ms: 23190.463`, `amortized_wall_ms_per_forward: 1449.404`, `source_probe_json: /mnt/nas/openclaw/reports/models/dream7b_bpu_selected_pair_candidate_forward_20260606-035716/forward/selected_pair_reports/dream7b_bpu_selected_pair_forward_path_20260606-035716/selected_pair_forward_path_probe.json`, and `next_optimization_target: wire this selected-pair candidate forward command into a guarded service candidate and re-run deployment acceptance before replacing the current default service path`. The runner-compatible wrapper `dream7b-bpu-selected-pair-batch-forward` accepts `--tokens-batch-json`, `--top-k`, and `--output-dir`, then writes `forward/summary.json` with `selected_pair_candidate: True` and `window_execution_mode: selected-pair-resident`.
+
+Latest selected-pair candidate service: `/mnt/nas/openclaw/reports/models/dream7b_bpu_selected_pair_candidate_service_20260606-041550/selected_pair_candidate_service_probe.json` records `verdict: ok_dream7b_bpu_selected_pair_candidate_service_probe`, `service_name: dream7b-bpu-selected-pair-candidate.service`, `forward_command: dream7b-bpu-selected-pair-batch-forward`, `request_count: 16`, `processed_count: 16`, `accepted_count: 16`, `deferred_count: 0`, `skipped_count: 0`, `batch_run_count: 1`, `batch_count: 16`, `execution_mode: pair_window_batch`, `window_execution_mode: selected-pair-resident`, `child_process_count: 2`, `selected_pair_candidate: True`, `selected_pair: [1, 8]`, `selected_segments: ['seg02_04', 'seg24_26']`, `selected_pair_covers_all_segments: True`, `default_service_replaced: False`, `default_service_status: inactive`, `default_service_enabled: enabled`, `total_wall_ms: 22953.06`, and `amortized_wall_ms_per_processed_request: 1434.566`. After this probe, the default `dream7b-bpu-batch-queue.service` was restarted and refreshed through `/mnt/nas/openclaw/reports/models/dream7b_bpu_batch_queue_systemd_20260606-041719/systemd_probe.json`, which records `service_status: active` and `service_enabled: enabled`. The latest deployment acceptance report `/mnt/nas/openclaw/reports/models/dream7b_bpu_deployment_acceptance_20260606-045552/deployment_acceptance_probe.json` records `verdict: ok_dream7b_bpu_deployment_acceptance_probe`, `check_count: 28`, `passed_check_count: 28`, `systemd_service.ok: True`, `utilization_gap.ok: True`, `selected_pair_candidate_service.ok: True`, and `selected_pair_candidate_service_telemetry.ok: True`.
+
+Latest selected-pair candidate service telemetry: `/mnt/nas/openclaw/reports/models/dream7b_bpu_selected_pair_candidate_service_telemetry_20260606-043944/systemd_telemetry_probe.json` records `verdict: ok_dream7b_bpu_batch_queue_systemd_telemetry_probe`, `service_name: dream7b-bpu-selected-pair-candidate.service`, `job_count: 3`, `request_count: 16`, `processed_request_count: 48`, `batch_counts: [16, 16, 16]`, `expected_forward_command: dream7b-bpu-selected-pair-batch-forward`, `expected_window_execution_mode: selected-pair-resident`, `expected_child_process_count: 2`, `amortized_wall_ms_per_processed_request: 1432.54`, `avg_bpu_loading: 8.788`, `max_bpu_loading: 98.0`, `comparison_to_default_systemd_telemetry.default_amortized_wall_ms_per_processed_request: 1662.737`, `comparison_to_default_systemd_telemetry.wall_ms_delta_ratio_vs_default_systemd: 0.138445`, `candidate_wall_time_improved_vs_default_systemd: True`, and `candidate_avg_bpu_loading_not_worse_than_default_systemd: False`. This is enough evidence to keep the selected-pair service candidate as a faster guarded path, but it is not enough to claim the 128TOPS utilization gap is solved because average BPU loading was lower than the default systemd telemetry baseline.
+
+Latest selected-pair cross-job reuse: `/mnt/nas/openclaw/reports/models/dream7b_bpu_selected_pair_cross_job_reuse_20260606-051721/selected_pair_cross_job_reuse_probe.json` records `verdict: ok_dream7b_bpu_selected_pair_cross_job_reuse_probe`, `job_count: 3`, `batch_count: 16`, `processed_forward_count: 48`, `selected_pair: [1, 8]`, `selected_segments: ['seg02_04', 'seg24_26']`, `selected_resident_load_ms: 3635.817`, `resident_load_once_amortized_ms_per_forward: 75.746`, `cross_job_metrics.amortized_total_load_ms_per_forward: 1344.68`, and `cross_job_metrics.amortized_wall_ms_per_forward: 1435.554`. Compared with selected-pair candidate service telemetry, load time improved (`comparison_to_selected_pair_candidate_service.load_ms_delta_ratio: 0.067079`) but wall time did not (`comparison_to_selected_pair_candidate_service.wall_ms_delta_ratio: -0.002104`, `cross_job_wall_time_improved: False`). `/mnt/nas/openclaw/reports/models/dream7b_bpu_utilization_gap_20260606-052509/utilization_gap_probe.json` now includes this evidence and keeps `diagnosis: hbm_reload_dominated`, adding the warning that cross-job selected-pair reuse reduced load time but did not improve amortized wall time. `/mnt/nas/openclaw/reports/models/dream7b_bpu_deployment_acceptance_20260606-052509/deployment_acceptance_probe.json` now records `check_count: 29`, `passed_check_count: 29`, `selected_pair_cross_job_reuse.ok: True`, and `utilization_gap.details.selected_pair_cross_job_wall_time_improved: False`; this preserves the evidence while preventing accidental promotion of the cross-job reuse route.
+
+Latest segment capacity planner: `/mnt/nas/openclaw/reports/models/dream7b_bpu_segment_capacity_planner_20260606-054148/segment_capacity_planner_probe.json` records `verdict: ok_dream7b_bpu_segment_capacity_planner_probe`, `segment_count: 10`, `current_split_capacity.max_resident_segment_count_observed: 3`, `current_split_capacity.successful_triplet_count: 20`, `current_split_capacity.successful_seeded_quad_count: 0`, `current_split_capacity.current_split_quad_residency_supported: False`, `current_split_capacity.selected_pair: [1, 8]`, `current_split_capacity.selected_pair_matches_anchor_pair: True`, `recommended_anchor_segment_indexes: [1, 8]`, `recommended_resplit_segment_indexes: [0, 9, 4, 6]`, and `largest_segment_indexes_by_size: [0, 9, 4, 6, 7, 3, 2, 5, 8, 1]`. `/mnt/nas/openclaw/reports/models/dream7b_bpu_deployment_acceptance_20260606-054148/deployment_acceptance_probe.json` now records `check_count: 30`, `passed_check_count: 30`, and `segment_capacity_planner.ok: True`. This makes the next segmentation decision explicit: recompile or split weak residency segments `[0, 9, 4, 6]` into smaller HBM shards before attempting a four-resident forward path or default-service promotion.
+
+Latest resplit compile and artifact update: `/tmp/dream7b_resplit_compile_reports/dream7b_resplit_compile_20260608-112349/resplit_compile_probe.json` records `verdict: ok_dream7b_resplit_compile_probe`, `specs: ['0:1', '1:2', '10:12', '12:14', '17:19', '19:21', '26:27', '27:28']`, `compiled_spec_count: 8`, `expected_spec_count: 8`, `hbm_success_count: 8`, and `failed_spec_count: 0`. The resumable rerun `/tmp/dream7b_resplit_compile_reports_resume/dream7b_resplit_compile_20260608-120008/resplit_compile_probe.json` records `skipped_existing_count: 8`, proving `DREAM_RESPLIT_SKIP_EXISTING=1` can recover without recompiling existing HBM files. The verified `.hbm` artifacts and `manifest.sha256` were copied to `/mnt/nas/openclaw/models/dream7b-hbm/resplit-seq16` and `/home/sunrise/.cache/openclaw/dream7b-hbm/resplit-seq16`; both locations passed `sha256sum -c manifest.sha256`. `/mnt/nas/openclaw/reports/models/dream7b_bpu_resplit_hbm_artifact_inventory_20260606-071645/resplit_hbm_artifact_inventory_probe.json` verifies the NAS copy, and `/mnt/nas/openclaw/reports/models/dream7b_bpu_resplit_hbm_artifact_inventory_20260606-071820/resplit_hbm_artifact_inventory_probe.json` verifies the S100P local cache; both record `verdict: ok_dream7b_bpu_resplit_hbm_artifact_inventory_probe`, `expected_hbm_count: 8`, `existing_hbm_count: 8`, `manifest_verified_count: 8`, `total_hbm_size_bytes: 3851983368`, and `errors: []`.
+
+Latest resplit residency and forward update: `/mnt/nas/openclaw/reports/models/dream7b_bpu_resplit_segment_residency_20260606-072919/resplit_segment_residency_probe.json` records `verdict: ok_dream7b_bpu_resplit_segment_residency_probe`, `segment_count: 14`, `single_success_count: 14`, `adjacent_pair_count: 13`, `adjacent_pair_success_count: 13`, `resplit_adjacent_pair_supported: True`, `ready_prefix_count: 3`, and `first_prefix_failure.segment: seg04_07`. The runtime now exposes `RESPLIT_ADJACENT_SEGMENTS`, `--resplit-hbm-dir`, `resplit-adjacent`, and `resplit_hbm_dir`, and the wrapper `dream7b-bpu-resplit-forward` injects `--segment-plan resplit-adjacent`, `--residency-window-size 2`, `--child-window-mode pair`, `--child-runtime-mode packed`, and `--window-execution-mode in-process`. The reusable probe `/mnt/nas/openclaw/reports/models/dream7b_bpu_resplit_forward_20260606-074419/resplit_forward_probe.json` records `verdict: ok_dream7b_bpu_resplit_forward_probe`, `segment_plan: resplit-adjacent`, `execution_mode: pair_in_process`, `child_process_count: 0`, `segment_event_count: 14`, `segment_sources: ['base', 'fine', 'resplit']`, `final_shape: [1, 16, 152064]`, non-empty `topk_last_position`, `load_ms: 23906.713`, `run_ms: 152.863`, and `amortized_wall_ms_per_forward: 24260.349`. This proves the resplit route now reaches logits on real S100P BPU execution, but the load/run ratio still requires batch, telemetry, and sustained-service comparison before any 128TOPS utilization claim.
+
+Latest resplit batch update: `dream7b-bpu-resplit-batch-forward` is now the reusable batch wrapper for the resplit-adjacent layout, defaulting to `--window-execution-mode window-batch`. `/mnt/nas/openclaw/reports/models/dream7b_bpu_resplit_batch_forward_20260606-075837/resplit_batch_forward_probe.json` records `verdict: ok_dream7b_bpu_resplit_batch_forward_probe`, `batch_count: 16`, `segment_plan: resplit-adjacent`, `execution_mode: pair_window_batch`, `window_execution_mode: window-batch`, `child_process_count: 0`, `segment_event_count: 224`, `final_shape_count: 16`, `topk_last_position_by_batch_count: 16`, `load_ms: 24002.465`, `run_ms: 2396.71`, `amortized_wall_ms_per_forward: 1667.472`, `amortized_load_ms_per_forward: 1500.154`, `amortized_run_ms_per_forward: 149.794`, and `load_to_run_ratio: 10.014756`. The batch route amortizes one resplit forward to roughly the same per-item wall time class as the existing fine batch path, but the load/run ratio still makes telemetry the next required gate before any stronger 128TOPS utilization claim.
+
+Latest resplit telemetry and acceptance update: `/mnt/nas/openclaw/reports/models/dream7b_bpu_resplit_batch_telemetry_20260606-080917/resplit_batch_telemetry_probe.json` records `verdict: ok_dream7b_bpu_resplit_batch_telemetry_probe`, `batch_count: 16`, `max_bpu_loading: 100.0`, `avg_bpu_loading: 8.697`, `nonzero_bpu_loading_sample_count: 30`, `forward_metrics.segment_plan: resplit-adjacent`, `forward_metrics.execution_mode: pair_window_batch`, `forward_metrics.window_execution_mode: window-batch`, `forward_metrics.child_process_count: 0`, `forward_metrics.segment_event_count: 224`, `forward_metrics.amortized_wall_ms_per_forward: 1640.749`, and `forward_metrics.load_to_run_ratio: 9.817642`. `/mnt/nas/openclaw/reports/models/dream7b_bpu_utilization_gap_20260606-081136/utilization_gap_probe.json` now includes `resplit_batch_telemetry` and still records `diagnosis: hbm_reload_dominated`, `max_observed_bpu_loading: 100.0`, and `avg_observed_bpu_loading_across_reports: 8.754`. `/mnt/nas/openclaw/reports/models/dream7b_bpu_deployment_acceptance_20260606-081322/deployment_acceptance_probe.json` requires this telemetry through the `utilization_gap` check and records `verdict: ok_dream7b_bpu_deployment_acceptance_probe`, `check_count: 30`, `passed_check_count: 30`, `utilization_gap.ok: True`, `resplit_batch_telemetry_batch_count: 16`, `resplit_batch_telemetry_max_bpu_loading: 100.0`, and `resplit_batch_telemetry_segment_event_count: 224`. This proves resplit batch execution can spike the BPU to full loading, but it does not prove sustained 128TOPS use because the average loading remains low and the forward is still load dominated.
+
+Latest resplit window cost diagnosis: `/mnt/nas/openclaw/reports/models/dream7b_bpu_resplit_window_cost_20260606-083152/resplit_window_cost_probe.json` records `verdict: ok_dream7b_bpu_resplit_window_cost_probe`, `window_count: 7`, `segment_event_count: 224`, `total_load_ms: 23570.225`, `total_run_ms: 2400.803`, `load_to_run_ratio: 9.817642`, and `amortized_load_ms_per_forward: 1473.139062`. Its absolute top load window is `['seg07_10', 'seg10_12']` with `load_ms: 3842.891`, `run_ms: 394.784`, and `load_share: 0.16304`; its top load/run ratio window is `['seg00_01', 'seg01_02']` with `load_to_run_ratio: 18.428821`. `/mnt/nas/openclaw/reports/models/dream7b_bpu_utilization_gap_20260606-083359/utilization_gap_probe.json` now includes `resplit_window_cost`, and `/mnt/nas/openclaw/reports/models/dream7b_bpu_deployment_acceptance_20260606-083359/deployment_acceptance_probe.json` requires the window-cost evidence through `utilization_gap.ok: True` with `check_count: 30` and `passed_check_count: 30`. This turns the next optimization target from a general HBM reload diagnosis into a concrete window-level target.
+
+Latest top-window resplit update: the first targeted split compiled `seg07_08` and `seg08_10`; the second targeted split compiled `seg21_22` and `seg22_24`. The four top-window HBM artifacts are published under `/mnt/nas/openclaw/models/dream7b-hbm/resplit-topwindow-seq16` and `/home/sunrise/.cache/openclaw/dream7b-hbm/resplit-topwindow-seq16`. `/mnt/nas/openclaw/reports/models/dream7b_bpu_resplit_hbm_artifact_inventory_20260606-110342/resplit_hbm_artifact_inventory_probe.json` verifies the NAS copy and `/mnt/nas/openclaw/reports/models/dream7b_bpu_resplit_hbm_artifact_inventory_20260606-110343/resplit_hbm_artifact_inventory_probe.json` verifies the S100P local cache; both record `verdict: ok_dream7b_bpu_resplit_hbm_artifact_inventory_probe`, `expected_specs: ['7:8', '8:10', '21:22', '22:24']`, `expected_hbm_count: 4`, `existing_hbm_count: 4`, `manifest_entry_count: 4`, `manifest_verified_count: 4`, `total_hbm_size_bytes: 1373714912`, and `errors: []`.
+
+Latest top-window runtime update: `dream7b_segmented_hbm_python_forward.py` now exposes `RESPLIT_TOPWINDOW_ADJACENT_SEGMENTS`, `--topwindow-hbm-dir`, `resplit-topwindow-adjacent`, and `topwindow_hbm_dir`. `dream7b-bpu-resplit-forward` and `dream7b-bpu-resplit-batch-forward` now expose `DREAM7B_BPU_TOPWINDOW_HBM_DIR` and `DREAM7B_BPU_RESPLIT_SEGMENT_PLAN` while keeping the default `segment_plan = resplit-adjacent`. `/mnt/nas/openclaw/reports/models/dream7b_bpu_resplit_batch_telemetry_20260606-112018/resplit_batch_telemetry_probe.json` records `verdict: ok_dream7b_bpu_resplit_batch_telemetry_probe`, `batch_count: 16`, `expected_segment_plan: resplit-topwindow-adjacent`, `forward_metrics.segment_event_count: 256`, `forward_metrics.segment_sources: ['base', 'fine', 'resplit', 'topwindow']`, `max_bpu_loading: 100.0`, `avg_bpu_loading: 8.946`, `forward_metrics.load_ms: 23476.584`, `forward_metrics.run_ms: 2421.61`, and `forward_metrics.load_to_run_ratio: 9.694618`. `/mnt/nas/openclaw/reports/models/dream7b_bpu_resplit_window_cost_20260606-112223/resplit_window_cost_probe.json` records `verdict: ok_dream7b_bpu_resplit_window_cost_probe`, `segment_plan: resplit-topwindow-adjacent`, `segment_event_count: 256`, `window_count: 8`, `load_to_run_ratio: 9.694618`, top absolute-load window `['seg14_17', 'seg17_19']`, and top load/run-ratio window `['seg00_01', 'seg01_02']`. This is a measured improvement over the earlier top-window `load_to_run_ratio: 9.803158` and the original resplit `load_to_run_ratio: 9.817642`, but the route remains HBM-reload dominated; the next concrete split target is now `['seg14_17', 'seg17_19']`, while `['seg00_01', 'seg01_02']` remains the highest load/run-ratio window.
+
+Latest official-Qwen comparison: `/mnt/nas/openclaw/reports/models/s100_official_llm_baseline_20260606-004107/official_llm_baseline_probe.json` shows the official S100 LLM SDK/Qwen baseline assets are staged and the Qwen HBM exists locally (`qwen_existing_hbm_count: 1`, `qwen_hbm_exists_from_multichat: True`). `/mnt/nas/openclaw/reports/models/s100_official_qwen_runtime_20260606-003908/official_qwen_runtime_probe.json` shows official Qwen loads the vendor HBM and both `decode`/`prefill` models, then fails on BPU/common-buffer allocation (`runtime_returncode: -11`, `hbm_load_success_observed: True`, `init_model_success_observed: True`, `memory_alloc_failure_observed: True`, `ion_alloc_failure_observed: True`, `bpu_mem_pool_alloc_error_observed: True`, `official_qwen_runtime_supported_on_current_s100p_state: False`). `/mnt/nas/openclaw/reports/models/s100_official_qwen_performance_mode_retest_20260606-003908/performance_mode_retest_probe.json` proves the official performance registers were moved to `0x00000099` but the Qwen memory allocation failure remained. `/mnt/nas/openclaw/reports/models/s100_bpu_memory_pool_20260606-010941/bpu_memory_pool_probe.json` corrects the earlier `ion_meminfo` wrapper error by directly reading debugfs and device-tree: `ion_all_heap_info_exists: True`, `cma_reserved_heap_total_size: 1073741824`, `ion_cma_heap_total_size: 536870912`, `carveout_heap_total_size: 536870912`, `system_heap_total_size: 0`, `system_contig_heap_total_size: 0`, `reserved_memory_summary.bpu_region@9A000000.reg.size_mib: 96.0`, and `allocation_failure_interpretation` says the official Qwen failure is not explained by an absent ION debugfs heap. `/mnt/nas/openclaw/reports/models/s100_hbmem_common_buffer_matrix_20260606-012033/hbmem_common_buffer_matrix_probe.json` then shows direct allocation of the official Qwen logged sizes succeeds through both HBMEM and UCP (`qwen_log_size_success_count: 14`, `qwen_log_size_failure_count: 0`, `ucp_success_count: 8`). `/mnt/nas/openclaw/reports/models/s100_qwen_backend9_baseline_20260606-013902/qwen_backend9_baseline_probe.json` records the current official Qwen config has no `bpu_core`, the demo source defaults `bpu_core: -1` and `XLM_INFER_BACKEND_BPU_ANY`, the observed failure uses `backend: 9`, and `backend: 9` matches `HB_UCP_BPU_CORE_0` plus `HB_UCP_BPU_CORE_3` from `/usr/include/hobot/hb_ucp.h` but does not equal `HB_UCP_BPU_CORE_ANY`. `/mnt/nas/openclaw/reports/models/s100_qwen_bpu_core_sweep_20260606-015133/qwen_bpu_core_sweep_probe.json` then tests exact `bpu_core` values `-1`, `0`, `1`, `2`, and `3`: all cases still report memory allocation failure and no case has `functional_success_observed`, while `bpu_core: 1`, `2`, and `3` only change the failure from segfault to prefill failure with return code `0`. `/mnt/nas/openclaw/reports/models/dream7b_bpu_scheduling_params_20260606-020548/scheduling_params_probe.json` shows Dream `HB_HBMRuntime.set_scheduling_params(..., bpu_cores=...)` is real but model-specific: the tested Dream single segment supports default scheduling and explicit core `0`, while cores `1`, `2`, and `3` are unsupported and abort in isolated child processes. This proves official Qwen does hit a similar BPU/common-buffer memory issue on this board state, but simple `bpu_core` pinning is not enough and cannot be copied directly into Dream; Dream's sustained service bottleneck remains separately diagnosed as `hbm_reload_dominated`.
+
+2026-06-08 SSH recheck: the official Qwen example still resolves through `/mnt/nas/openclaw/toolchains/s100_llm_sdk/D-Robotics_LLM_S100_1.0.0_SDK/oellm_runtime/example/oellm_multichat/qwen_multichat_config.json` with exact keys `hbm_path`, `tokenizer_dir`, and `template_path`; their values are `../../model/Qwen2.5_1.5B_Instruct_1024.hbm`, `../../config/Qwen2.5_1.5B_Instruct_config/`, and `../../config/Qwen2.5_1.5B_Instruct_config/Qwen2.5_1.5B_Instruct.jinja`. The matching `oellm_multichat_demo.cc` defaults `bpu_core` to `-1` and uses `XLM_INFER_BACKEND_BPU_ANY` for that default, so Qwen's current failure is evidence of an official-route BPU/common-buffer allocation issue, not evidence that the official route already provides a clean high-average 128TOPS utilization target.
+
+2026-06-08 raw-log recheck: `/mnt/nas/openclaw/reports/models/s100_official_qwen_runtime_20260606-003908/oellm_multichat.stderr.txt` shows the official Qwen runtime loads both `decode` and `prefill` from `../../model/Qwen2.5_1.5B_Instruct_1024.hbm`, then fails with `AllocError { len: 2359296 }`. `/mnt/nas/openclaw/reports/models/s100_official_qwen_runtime_20260606-003908/oellm_multichat.stdout.txt` shows repeated `UCP Allocate memory failed` entries with `backend: 9` and `ION_ALLOCATOR`/`MEM_ALLOCATOR` common-buffer failures. Conclusion: Qwen does have a related S100P BPU runtime problem in this environment, but it is an allocation failure after official model load; Dream's current 128TOPS utilization work should still prioritize reducing HBM reload/residency overhead rather than copying Qwen `bpu_core` settings.
+
+Remaining engineering work:
+
+- continue reducing per-window HBM reload overhead in `dream7b-bpu-fine-forward`; in-process pair mode removed child-process overhead but still reloads HBM per resident pair;
+- keep `dream7b-bpu-selected-pair-candidate.service` as the guarded candidate path; do not replace the current default Dream 7B service path until a default-service replacement decision has fresh acceptance evidence and rollback instructions;
+- do not implement a persistent pair-worker cache on the current five-pair split; the held-pair matrix has `successful_pair_edge_count: 0`;
+- use the single-segment evidence to choose smaller HBM artifacts, new boundaries, or S100 runtime residency support before expecting sustained 128TOPS-level average utilization;
+- do not promote `selected_topology: [0, 1, 8]` as a forward-path optimization; the selected triplet forward-path probe records `selected_triplet_forward_supported: False` and `reboot_or_disconnect_observed: True`;
+- treat selected pair `[1, 8]` as a positive wall-time optimization; the guarded candidate service now passes 48-request service telemetry with `candidate_wall_time_improved_vs_default_systemd: True`, but `candidate_avg_bpu_loading_not_worse_than_default_systemd: False`, so the next change must improve residency/load ratio before any default replacement;
+- do not promote cross-job selected-pair reuse yet; the 3x16 real BPU probe reduced amortized load time but did not improve amortized wall time versus the selected-pair candidate service;
+- use the verified resplit window-cost ranking as the optimization baseline before any default-service promotion; `['seg07_10', 'seg10_12']` is the highest absolute HBM load window and `['seg00_01', 'seg01_02']` is the highest load/run ratio window;
+- do not spend time on four-segment resident groups without a new HBM split/runtime change; the seeded quad probe has `successful_seeded_quad_count: 0`;
+- do not switch the current fine batch forward defaults to packed adjacent window size 3; the window3 feasibility probe has `expected_window3_failure_observed: True`;
+- treat explicit `bpu_core` as an optional crash-mitigation variable only; the controlled official Qwen sweep still has no functional-success case, so Dream 7B must continue HBM reload/residency work before expecting sustained 128TOPS utilization;
+- keep the queue retention path report-only until an explicit apply mode and archive directory migration rule are approved; do not treat systemd supervision as a single-request Dream diffusion speedup;
+- keep all-segment residency out of the plan unless HBRT/HBDK exposes stronger release or streaming APIs; current fine split makes every adjacent two-segment window viable, but three-segment residency still fails;
+- reduce or remove S16->F32 handoff overhead between segments;
+- add quality gates against the existing CPU Dream output path and decide acceptable divergence for seq16 BPU probes;
+- benchmark with production prompt/token settings, not only dummy seq16 smoke input.
+
+## Review
+
+The path still uses Dream 7B, not a substitute model. The current route is now:
+
+```text
+Dream HF weights -> WSL1 AVX build host -> segmented S100 HBM -> NAS storage -> S100P tokenizer/runtime -> deployed S100P commands
+```
+
+The earlier official cached prefill/decode skeleton remains unsuitable for Dream in the short term because Dream is diffusion-based and the direct official skeleton conversion crashed on real Dream graphs.

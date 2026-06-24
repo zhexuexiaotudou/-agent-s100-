@@ -1,0 +1,215 @@
+\documentclass[UTF8,zihao=-4]{ctexart}
+
+\usepackage[a4paper,top=2.2cm,bottom=2.2cm,left=2.2cm,right=2.2cm]{geometry}
+\usepackage{fontspec}
+\usepackage{xcolor}
+\usepackage{tabularx}
+\usepackage{longtable}
+\usepackage{booktabs}
+\usepackage{array}
+\usepackage{colortbl}
+\usepackage{enumitem}
+\usepackage{fancyhdr}
+\usepackage{titlesec}
+\usepackage{hyperref}
+\usepackage{lastpage}
+
+\IfFontExistsTF{DengXian}{
+  \setCJKmainfont{DengXian}
+  \setCJKsansfont{DengXian}
+}{}
+\IfFontExistsTF{Arial}{\setmainfont{Arial}}{}
+
+\definecolor{deepblue}{HTML}{14213D}
+\definecolor{sectionblue}{HTML}{1A365D}
+\definecolor{tablehead}{HTML}{EAF1F8}
+\definecolor{lightbox}{HTML}{F6F8FB}
+\definecolor{linegray}{HTML}{CBD5E1}
+\definecolor{textgray}{HTML}{334155}
+
+\hypersetup{
+  colorlinks=true,
+  linkcolor=sectionblue,
+  urlcolor=sectionblue,
+  pdfauthor={Codex},
+  pdftitle={S100P + NAS + OpenClaw Baseline 汇报}
+}
+\urlstyle{tt}
+
+\pagestyle{fancy}
+\fancyhf{}
+\lhead{\small S100P + NAS + OpenClaw Baseline 汇报}
+\rhead{\small 2026-05-28}
+\cfoot{\small 第 \thepage\ 页 / 共 \pageref{LastPage} 页}
+\renewcommand{\headrulewidth}{0.4pt}
+
+\titleformat{\section}{\Large\bfseries\color{sectionblue}}{\thesection}{0.7em}{}
+\titleformat{\subsection}{\large\bfseries\color{sectionblue}}{\thesubsection}{0.7em}{}
+\titlespacing*{\section}{0pt}{1.0em}{0.5em}
+\titlespacing*{\subsection}{0pt}{0.7em}{0.35em}
+
+\setlist[itemize]{leftmargin=1.8em,itemsep=0.2em,topsep=0.2em}
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{0.45em}
+\setlength{\headheight}{14pt}
+\setlength{\emergencystretch}{2em}
+\renewcommand{\arraystretch}{1.23}
+
+\newcolumntype{Y}{>{\raggedright\arraybackslash}X}
+\newcommand{\status}[1]{\textbf{\textcolor{sectionblue}{#1}}}
+\newcommand{\answerbox}[1]{
+  \vspace{0.2em}
+  \noindent
+  \fcolorbox{linegray}{lightbox}{
+    \begin{minipage}{0.96\linewidth}
+      \small #1
+    \end{minipage}
+  }
+  \vspace{0.3em}
+}
+
+\begin{document}
+
+\begin{titlepage}
+  \thispagestyle{empty}
+  \vspace*{-2.0cm}
+  \noindent\colorbox{deepblue}{\makebox[\dimexpr\textwidth-2\fboxsep\relax][l]{\hspace{0.4cm}\color{white}\bfseries S100P + TS-264C + OpenClaw}}
+  \vspace{2.4cm}
+
+  \begin{center}
+    {\zihao{1}\bfseries\color{deepblue} S100P + NAS + OpenClaw\\Baseline 阶段性汇报\par}
+    \vspace{0.8em}
+    {\large 围绕 PC OpenClaw 类似效果与 AI NAS 功能复刻两个问题\par}
+    \vspace{0.4em}
+    {\normalsize 2026-05-28 \quad | \quad F:\textbackslash Project\textbackslash Digua\par}
+  \end{center}
+
+  \vspace{1.0em}
+  \answerbox{
+  当前已经从本地 workspace fallback 推进到 NAS-backed smoke baseline：S100P 常驻 OpenClaw Gateway，TS-264C 通过 NFS v4.1 持久化挂载到 \texttt{/mnt/nas/openclaw}，文档索引、每日摘要、日志诊断、浏览器截图、ROS bag session、300 秒命名采集、dataset card、实验报告、稳定性采样和安全审计均可写入 NAS。
+  }
+
+  \section*{当前结论}
+  \begin{itemize}
+    \item S100P 可以覆盖 PC OpenClaw 的核心链路，但定位不是完整替代 PC，而是常驻入口、机器人边缘执行节点和数据落盘节点。
+    \item NAS 的价值已经体现：日志、报告、数据集、截图、索引和恢复证据都从 PC 本地迁移到统一 workspace。
+    \item AI NAS 常见的资料库、数据集管理、日志诊断、实验报告和安全审计能力，已经有可复现的 smoke baseline。
+    \item 未完成项集中在长期稳定性、sandbox runtime、服务收敛执行、Home Assistant 真实配置、控制策略和真实业务数据填充。
+  \end{itemize}
+
+  \vfill
+  {\small 证据入口：\path{docs/baseline_tracking.md} 与 \path{docs/baseline_report_2026-05-28_nas_backed_smoke.md}}
+\end{titlepage}
+
+\setcounter{page}{1}
+
+\section{问题一：S100P 能否实现 PC OpenClaw 的类似效果}
+
+\answerbox{
+回答：能实现核心效果，但不是按完整桌面 PC 替代来定义。S100P 更适合作为低功耗常驻 Gateway、飞书入口、机器人侧工具执行节点和 NAS 数据落盘节点；PC 仍适合承担临时交互和重型开发。
+}
+
+\begin{longtable}{p{0.23\linewidth}p{0.17\linewidth}p{0.52\linewidth}}
+\toprule
+\rowcolor{tablehead}
+能力 & 状态 & 当前证据 \\
+\midrule
+OpenClaw Gateway 常驻 & verified & Gateway active-listening，飞书 WebSocket ready，消息 received/dispatch complete 已观察到。 \\
+飞书入口 & verified & 群聊/私聊均能触发 agent；\texttt{99991672} contact 权限为非阻断告警。 \\
+联网搜索 & verified & Tavily 已作为 OpenClaw 搜索源验证。 \\
+NAS workspace & verified & \texttt{169.254.110.209:/OpenClawWorkspace} 持久化挂载到 \texttt{/mnt/nas/openclaw}，重启后可写。 \\
+浏览器自动化 & verified & Headless Chromium 打开本地页面，截图写入 NAS，PNG magic 校验通过。 \\
+ROS2 状态查询 & verified & 可读取 node/topic/service 状态。 \\
+ROS bag 采集 & verified & NAS-backed start/status/stop self-test 通过；命名采集 policy 已生成；一次人工批准的 300 秒 named capture 已完成，\texttt{record\_exit=0}、\texttt{metadata\_exists=yes}。 \\
+稳定性采样 & doing & systemd timer 与 overnight runner 均已写 NAS；当前 14 个 snapshot、5.63h，仍需 168 小时样本。 \\
+工具白名单 & verified & narrow plugin/runner 可用；2026-05-28 负向复测中 agent 拒绝非白名单 \texttt{/usr/bin/touch}，marker 未创建。 \\
+Sandbox & blocked & S100P 当前无 Docker/Podman/runc runtime。 \\
+\bottomrule
+\end{longtable}
+
+\subsection{S100P + NAS 的直接帮助}
+
+\begin{itemize}
+  \item 常驻性：PC 不开机时，S100P 仍能承载 Gateway、飞书入口和采样任务。
+  \item 统一落盘：所有日志、报告、ROS bag、dataset card、截图和索引都写 NAS。
+  \item 断电恢复：Windows 托盘工具检查 PC 到 S100P、NAS、OpenClaw/飞书的链路；S100P 侧 NFS automount 已通过重启验证。
+  \item 机器人侧闭环：S100P 靠近 ROS2/TROS 和机器人数据，NAS 做长期存储，OpenClaw 做触发、诊断和汇总。
+\end{itemize}
+
+\section{问题二：AI NAS / OpenClaw NAS 能力复刻}
+
+\answerbox{
+回答：高价 AI NAS 的核心价值不只是本地模型，而是把资料库、检索、日志分析、实验报告、数据集和自动化审计组织成长期可用的工作流。当前 S100P + TS-264C 已经复刻了其中一批基础能力。
+}
+
+\begin{longtable}{p{0.28\linewidth}p{0.48\linewidth}p{0.16\linewidth}}
+\toprule
+\rowcolor{tablehead}
+AI NAS 常见能力 & S100P + NAS 当前实现 & 状态 \\
+\midrule
+统一 workspace & TS-264C NFS \texttt{/OpenClawWorkspace} 挂到 S100P & verified \\
+文档索引/每日摘要 & Markdown 索引、hash、preview、deterministic daily summary & verified \\
+图片 caption / 搜索 & 图片 metadata caption 与 JSONL index；语义 caption readiness 已确认缺本地视觉模型 & doing \\
+日志诊断 & 从 NAS logs 输出错误摘要、关键匹配和建议命令 & verified \\
+机器人数据集管理 & ROS bag session 和 300 秒 named capture 写 NAS，并生成 \texttt{DATASET\_CARD.md} & verified \\
+实验/周报 & 从 NAS logs、reports、datasets 汇总 Markdown 报告 & verified \\
+稳定性报告 & NAS-backed snapshot + summary，timer 自动采样 & doing \\
+安全审计 & Gateway 暴露、NAS mount、secret scan、服务监听审计和 service convergence decision pack & doing \\
+设备只读状态 & Home Assistant read-only preflight 已有 & doing \\
+低风险控制 & disabled-by-default policy/audit preflight 已有，启用动作数为 0，未开放执行 & doing \\
+\bottomrule
+\end{longtable}
+
+\section{关键 NAS-backed 证据}
+
+\small
+\begin{longtable}{p{0.30\linewidth}p{0.62\linewidth}}
+\toprule
+\rowcolor{tablehead}
+项目 & 路径 \\
+\midrule
+Baseline roll-up & \path{/mnt/nas/openclaw/reports/baseline-status/baseline_status_20260528-235400.md} \\
+Stability summary & \path{/mnt/nas/openclaw/reports/stability/stability_summary_20260528-235359.md} \\
+Experiment report & \path{/mnt/nas/openclaw/reports/experiments/experiment_report_20260528-184444.md} \\
+Document index & \path{/mnt/nas/openclaw/reports/document_index_20260528-182111.md} \\
+Document daily summary & \path{/mnt/nas/openclaw/reports/daily-summary/document_daily_summary_20260528-184329.md} \\
+Browser screenshot & \path{/mnt/nas/openclaw/reports/browser-smoke/browser_smoke_20260528-182111.png} \\
+ROS bag dataset & \path{/mnt/nas/openclaw/robot_datasets/rosbag_session_20260528-182117/} \\
+ROS bag named capture & \path{/mnt/nas/openclaw/logs/probes/rosbag_named_capture_20260528-231319.md} \\
+Dataset card & \path{/mnt/nas/openclaw/robot_datasets/approved_named_capture_20260528-231319/DATASET_CARD.md} \\
+ROS bag capture policy & \path{/mnt/nas/openclaw/logs/probes/rosbag_capture_policy_20260528-224523.md} \\
+Log diagnosis & \path{/mnt/nas/openclaw/logs/probes/log_diagnosis_20260528-181546.md} \\
+Image caption index & \path{/mnt/nas/openclaw/reports/image-captions/image_caption_index_20260528-182530.md} \\
+Vision caption readiness & \path{/mnt/nas/openclaw/reports/image-captions/vision_caption_readiness_20260528-230810.md} \\
+Security audit & \path{/mnt/nas/openclaw/logs/probes/security_audit_20260528-232340.md} \\
+Service policy & \path{/mnt/nas/openclaw/logs/probes/service_policy_20260528-232101.md} \\
+Service convergence decision & \path{/mnt/nas/openclaw/reports/security/service_convergence_decision_20260528-235327.md} \\
+Control action policy & \path{/mnt/nas/openclaw/logs/probes/control_action_policy_20260528-225702.md} \\
+Overnight runner & \path{/mnt/nas/openclaw/logs/overnight/overnight_baseline_20260528-232330.jsonl} \\
+\bottomrule
+\end{longtable}
+\normalsize
+
+\section{当前阻塞与后续计划}
+
+\begin{longtable}{p{0.24\linewidth}p{0.34\linewidth}p{0.34\linewidth}}
+\toprule
+\rowcolor{tablehead}
+事项 & 当前阻塞 & 下一步 \\
+\midrule
+A-010 稳定性 & 需要 168 小时样本 & timer 与 overnight runner 已在 NAS 采样，等待时间累计后生成验收 summary。 \\
+A-006 Sandbox & 无 Docker/Podman/runc & 决定安装 runtime 或从第一版 baseline drop。 \\
+B-003 图片 caption & metadata caption 已验证；语义 readiness 结论为缺本地语义模型 & 决定是否保持 metadata-only，或安装/挂载本地语义视觉模型。 \\
+B-008 设备状态 & 缺 Home Assistant URL/token & 用户提供配置后仅调用 \texttt{GET /api/} 和 \texttt{GET /api/states}。 \\
+B-009 控制动作 & disabled policy 已通过预检 & 补真实 reviewed action、二次确认文案和 request/approve/execute 审计。 \\
+B-010 服务收敛 & decision pack 已给出建议；需确认 NFS/RPC、x11vnc、iiod 是否可关 & 只在确认后执行 disable/firewall，并在执行后重跑 security audit。 \\
+\bottomrule
+\end{longtable}
+
+\section{汇报用结论}
+
+当前可以汇报：S100P + NAS 已经跑通一个可恢复、可观察、可写 NAS 的 OpenClaw 常驻 baseline。它已经能覆盖 PC OpenClaw 的常驻入口、消息触发、工具执行、浏览器截图、ROS 数据采集、日志诊断和报告汇总的一部分核心能力；同时，它也开始具备 AI NAS 的资料库、日志、数据集、日报/周报和安全审计雏形。
+
+下一阶段不应继续堆 smoke demo，而应把真实文档、真实图片、真实机器人数据和 7 天稳定性样本接入同一套 NAS-backed 报告链路，并在服务收敛执行和控制策略确认后再进入更接近产品化的验收。
+
+\end{document}

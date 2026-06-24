@@ -1,0 +1,480 @@
+{
+  "version": 1,
+  "tools": [
+    {
+      "id": "openclaw_status_probe",
+      "script": "scripts/probes/openclaw_status_probe.sh",
+      "mode": "readonly",
+      "approvedOutputPrefixes": [
+        "/tmp/",
+        "/mnt/nas/openclaw/logs/probes/",
+        "/root/.openclaw/workspace/logs/probes/"
+      ],
+      "description": "Collect OpenClaw, network, Feishu/Tavily summary, and NAS mount status without changing system configuration."
+    },
+    {
+      "id": "nas_discovery_probe",
+      "script": "scripts/probes/nas_discovery_probe.sh",
+      "mode": "readonly",
+      "approvedOutputPrefixes": [
+        "/tmp/",
+        "/mnt/nas/openclaw/logs/probes/",
+        "/root/.openclaw/workspace/logs/probes/"
+      ],
+      "description": "Passively collect NAS mount, network neighbor, route, mDNS, and SMB/NFS tooling readiness for A-003."
+    },
+    {
+      "id": "log_diagnose",
+      "script": "scripts/probes/log_diagnose.sh",
+      "mode": "readonly",
+      "approvedInputPrefixes": [
+        "/tmp/",
+        "/mnt/nas/openclaw/logs/",
+        "/root/.openclaw/workspace/logs/"
+      ],
+      "approvedOutputPrefixes": [
+        "/tmp/",
+        "/mnt/nas/openclaw/logs/probes/",
+        "/root/.openclaw/workspace/logs/probes/"
+      ],
+      "description": "Summarize common error patterns from log files and write a Markdown diagnosis report."
+    },
+    {
+      "id": "index_documents",
+      "script": "scripts/probes/index_documents.sh",
+      "mode": "readonly",
+      "approvedInputPrefixes": [
+        "/tmp/",
+        "/mnt/nas/openclaw/documents/",
+        "/root/.openclaw/workspace/documents/"
+      ],
+      "approvedOutputPrefixes": [
+        "/tmp/",
+        "/mnt/nas/openclaw/reports/",
+        "/mnt/nas/openclaw/logs/probes/",
+        "/root/.openclaw/workspace/reports/",
+        "/root/.openclaw/workspace/logs/probes/"
+      ],
+      "description": "Create a Markdown index for text-like documents with size, mtime, hash, and preview."
+    },
+    {
+      "id": "document_daily_summary_probe",
+      "script": "scripts/probes/document_daily_summary_probe.sh",
+      "mode": "readonly",
+      "approvedInputPrefixes": [
+        "/tmp/",
+        "/mnt/nas/openclaw/documents/",
+        "/root/.openclaw/workspace/documents/"
+      ],
+      "approvedOutputPrefixes": [
+        "/tmp/",
+        "/mnt/nas/openclaw/reports/",
+        "/root/.openclaw/workspace/reports/"
+      ],
+      "description": "Generate a deterministic daily Markdown and JSON summary for text-like documents without calling external models."
+    },
+    {
+      "id": "openclaw_entry_demo_probe",
+      "script": "scripts/probes/openclaw_entry_demo_probe.sh",
+      "mode": "bounded-report",
+      "approvedOutputPrefixes": [
+        "/tmp/",
+        "/mnt/nas/openclaw/reports/",
+        "/root/.openclaw/workspace/reports/"
+      ],
+      "description": "Generate teacher-demo evidence that OpenClaw runs on S100P, the PC demo path does not require elevated operations, and persistence uses the NAS report root."
+    },
+    {
+      "id": "ai_nas_movie_sort_demo_probe",
+      "script": "scripts/probes/ai_nas_movie_sort_demo_probe.sh",
+      "mode": "bounded-demo-write",
+      "approvedInputPrefixes": [
+        "/tmp/",
+        "/mnt/nas/openclaw/demo/ai-nas-movie-sort/",
+        "/root/.openclaw/workspace/demo/ai-nas-movie-sort/"
+      ],
+      "approvedOutputPrefixes": [
+        "/tmp/",
+        "/mnt/nas/openclaw/reports/",
+        "/root/.openclaw/workspace/reports/"
+      ],
+      "description": "Create or use a bounded demo movie inbox, classify sample movie files by type, copy them into a demo library, and write Markdown/JSON evidence without touching the real media library."
+    },
+    {
+      "id": "ros2_status_probe",
+      "script": "scripts/probes/ros2_status_probe.sh",
+      "mode": "readonly",
+      "approvedOutputPrefixes": [
+        "/tmp/",
+        "/mnt/nas/openclaw/logs/probes/",
+        "/root/.openclaw/workspace/logs/probes/"
+      ],
+      "description": "Collect ROS2/TROS command, node, topic, service, and package status without changing robot state."
+    },
+    {
+      "id": "sandbox_status_probe",
+      "script": "scripts/probes/sandbox_status_probe.sh",
+      "mode": "readonly",
+      "approvedOutputPrefixes": [
+        "/tmp/",
+        "/mnt/nas/openclaw/logs/probes/",
+        "/root/.openclaw/workspace/logs/probes/"
+      ],
+      "description": "Collect Docker, Podman, runc, service, package, namespace, and cgroup status without changing sandbox configuration."
+    },
+    {
+      "id": "security_audit_probe",
+      "script": "scripts/probes/security_audit_probe.sh",
+      "mode": "readonly",
+      "approvedOutputPrefixes": [
+        "/tmp/",
+        "/mnt/nas/openclaw/logs/probes/",
+        "/root/.openclaw/workspace/logs/probes/"
+      ],
+      "description": "Generate a redacted security audit for Gateway exposure, OpenClaw config, plugins, NAS mount, and workspace secret-like metadata."
+    },
+    {
+      "id": "service_policy_probe",
+      "script": "scripts/probes/service_policy_probe.sh",
+      "mode": "readonly",
+      "approvedOutputPrefixes": [
+        "/tmp/",
+        "/mnt/nas/openclaw/logs/probes/",
+        "/root/.openclaw/workspace/logs/probes/"
+      ],
+      "description": "Generate a read-only keep/disable/firewall policy plan for exposed S100P services."
+    },
+    {
+      "id": "service_hardening_plan_probe",
+      "script": "scripts/probes/service_hardening_plan_probe.sh",
+      "mode": "readonly",
+      "approvedOutputPrefixes": [
+        "/tmp/",
+        "/mnt/nas/openclaw/logs/probes/",
+        "/root/.openclaw/workspace/logs/probes/"
+      ],
+      "description": "Generate a dry-run service hardening command plan without changing services or firewall rules."
+    },
+    {
+      "id": "service_convergence_decision_probe",
+      "script": "scripts/probes/service_convergence_decision_probe.sh",
+      "mode": "readonly",
+      "approvedInputPrefixes": [
+        "/tmp/",
+        "/mnt/nas/openclaw/logs/probes/",
+        "/root/.openclaw/workspace/logs/probes/"
+      ],
+      "approvedOutputPrefixes": [
+        "/tmp/",
+        "/mnt/nas/openclaw/reports/",
+        "/root/.openclaw/workspace/reports/"
+      ],
+      "description": "Generate a read-only B-010 service convergence decision pack with preconditions, candidate commands, rollback, and verification steps."
+    },
+    {
+      "id": "service_execution_preflight_probe",
+      "script": "scripts/probes/service_execution_preflight_probe.sh",
+      "mode": "readonly",
+      "approvedInputPrefixes": [
+        "/tmp/",
+        "/mnt/nas/openclaw/config/",
+        "/root/.openclaw/workspace/config/"
+      ],
+      "approvedOutputPrefixes": [
+        "/tmp/",
+        "/mnt/nas/openclaw/reports/",
+        "/root/.openclaw/workspace/reports/"
+      ],
+      "description": "Validate B-010 service convergence confirmations and write a read-only execution preflight; never changes services or firewall rules."
+    },
+    {
+      "id": "stability_snapshot_probe",
+      "script": "scripts/probes/stability_snapshot_probe.sh",
+      "mode": "readonly",
+      "approvedOutputPrefixes": [
+        "/tmp/",
+        "/mnt/nas/openclaw/logs/probes/",
+        "/root/.openclaw/workspace/logs/probes/"
+      ],
+      "description": "Collect a point-in-time uptime, resource, disk, OpenClaw Gateway, and recent error-log snapshot for A-010."
+    },
+    {
+      "id": "stability_summary_probe",
+      "script": "scripts/probes/stability_summary_probe.sh",
+      "mode": "readonly",
+      "approvedInputPrefixes": [
+        "/tmp/",
+        "/mnt/nas/openclaw/logs/probes/",
+        "/root/.openclaw/workspace/logs/probes/"
+      ],
+      "approvedOutputPrefixes": [
+        "/tmp/",
+        "/mnt/nas/openclaw/reports/",
+        "/root/.openclaw/workspace/reports/"
+      ],
+      "description": "Summarize existing A-010 stability snapshots into a trend and acceptance-gap report."
+    },
+    {
+      "id": "image_caption_probe",
+      "script": "scripts/probes/image_caption_probe.sh",
+      "mode": "readonly",
+      "approvedInputPrefixes": [
+        "/tmp/",
+        "/mnt/nas/openclaw/photos/",
+        "/root/.openclaw/workspace/photos/"
+      ],
+      "approvedOutputPrefixes": [
+        "/tmp/",
+        "/mnt/nas/openclaw/reports/",
+        "/root/.openclaw/workspace/reports/"
+      ],
+      "description": "Generate deterministic image metadata captions and a JSONL index for B-003."
+    },
+    {
+      "id": "vision_caption_readiness_probe",
+      "script": "scripts/probes/vision_caption_readiness_probe.sh",
+      "mode": "readonly",
+      "approvedInputPrefixes": [
+        "/tmp/",
+        "/mnt/nas/openclaw/photos/",
+        "/root/.openclaw/workspace/photos/"
+      ],
+      "approvedOutputPrefixes": [
+        "/tmp/",
+        "/mnt/nas/openclaw/reports/",
+        "/root/.openclaw/workspace/reports/"
+      ],
+      "description": "Check local semantic vision caption model/runtime readiness for B-003 without calling external APIs."
+    },
+    {
+      "id": "dream7b_readiness_probe",
+      "script": "scripts/probes/dream7b_readiness_probe.sh",
+      "mode": "readonly",
+      "approvedOutputPrefixes": [
+        "/tmp/",
+        "/mnt/nas/openclaw/reports/",
+        "/root/.openclaw/workspace/reports/"
+      ],
+      "description": "Check Dream 7B / local DLM deployment readiness without downloading models, calling external APIs, or starting a model server."
+    },
+    {
+      "id": "dream7b_smoke_probe",
+      "script": "scripts/probes/dream7b_smoke_probe.sh",
+      "mode": "bounded-local-inference",
+      "approvedInputPrefixes": [
+        "/root/.openclaw/workspace/config/dream7b_deployment.json",
+        "/mnt/nas/openclaw/config/dream7b_deployment.json",
+        "/mnt/nas/openclaw/models/dream7b/dream7b_deployment.json",
+        "/tmp/dream7b_deployment.json",
+        "/mnt/nas/openclaw/models/",
+        "/root/.openclaw/workspace/models/",
+        "/home/sunrise/models/"
+      ],
+      "approvedOutputPrefixes": [
+        "/tmp/",
+        "/mnt/nas/openclaw/reports/",
+        "/root/.openclaw/workspace/reports/"
+      ],
+      "description": "Run one bounded local Dream 7B smoke test from an explicit config and local model path; never downloads models or starts a persistent server."
+    },
+    {
+      "id": "home_assistant_status_probe",
+      "script": "scripts/probes/home_assistant_status_probe.sh",
+      "mode": "readonly",
+      "approvedOutputPrefixes": [
+        "/tmp/",
+        "/mnt/nas/openclaw/logs/probes/",
+        "/root/.openclaw/workspace/logs/probes/"
+      ],
+      "description": "Read-only Home Assistant API status preflight for B-008; never calls service/control endpoints."
+    },
+    {
+      "id": "control_action_policy_probe",
+      "script": "scripts/probes/control_action_policy_probe.sh",
+      "mode": "readonly",
+      "approvedOutputPrefixes": [
+        "/tmp/",
+        "/mnt/nas/openclaw/logs/probes/",
+        "/root/.openclaw/workspace/logs/probes/"
+      ],
+      "description": "Read-only low-risk control policy and audit preflight for B-009; never executes actions."
+    },
+    {
+      "id": "browser_smoke_probe",
+      "script": "scripts/probes/browser_smoke_probe.sh",
+      "mode": "readonly",
+      "approvedOutputPrefixes": [
+        "/tmp/",
+        "/mnt/nas/openclaw/reports/",
+        "/root/.openclaw/workspace/reports/"
+      ],
+      "description": "Open a local test page with headless Chromium, capture a screenshot, and write a Markdown report."
+    },
+    {
+      "id": "rosbag_snapshot_probe",
+      "script": "scripts/probes/rosbag_snapshot_probe.sh",
+      "mode": "capture",
+      "approvedInputPrefixes": [],
+      "approvedOutputPrefixes": [
+        "/tmp/",
+        "/mnt/nas/openclaw/robot_datasets/",
+        "/mnt/nas/openclaw/logs/probes/",
+        "/root/.openclaw/workspace/robot_datasets/",
+        "/root/.openclaw/workspace/logs/probes/"
+      ],
+      "description": "Record a bounded ROS bag snapshot for low-risk topics and write a metadata report."
+    },
+    {
+      "id": "rosbag_session_probe",
+      "script": "scripts/probes/rosbag_session_probe.sh",
+      "mode": "capture",
+      "approvedInputPrefixes": [],
+      "approvedOutputPrefixes": [
+        "/tmp/",
+        "/mnt/nas/openclaw/robot_datasets/",
+        "/mnt/nas/openclaw/logs/probes/",
+        "/root/.openclaw/workspace/robot_datasets/",
+        "/root/.openclaw/workspace/logs/probes/"
+      ],
+      "description": "Run a start/status/stop ROS bag capture self-test for low-risk topics and write a metadata report."
+    },
+    {
+      "id": "rosbag_capture_policy_probe",
+      "script": "scripts/probes/rosbag_capture_policy_probe.sh",
+      "mode": "readonly",
+      "approvedInputPrefixes": [],
+      "approvedOutputPrefixes": [
+        "/tmp/",
+        "/mnt/nas/openclaw/logs/probes/",
+        "/root/.openclaw/workspace/logs/probes/"
+      ],
+      "description": "Generate a read-only named ROS bag capture policy, topic classification, and retention plan for A-009."
+    },
+    {
+      "id": "rosbag_named_capture_probe",
+      "script": "scripts/probes/rosbag_named_capture_probe.sh",
+      "mode": "bounded-capture",
+      "approvedInputPrefixes": [
+        "/tmp/",
+        "/mnt/nas/openclaw/robot_datasets/",
+        "/root/.openclaw/workspace/robot_datasets/"
+      ],
+      "approvedOutputPrefixes": [
+        "/tmp/",
+        "/mnt/nas/openclaw/logs/probes/",
+        "/root/.openclaw/workspace/logs/probes/"
+      ],
+      "description": "Run one operator-approved bounded named ROS bag capture for A-009 using approved status topics only."
+    },
+    {
+      "id": "experiment_report_probe",
+      "script": "scripts/probes/experiment_report_probe.sh",
+      "mode": "readonly",
+      "approvedInputPrefixes": [
+        "/mnt/nas/openclaw/",
+        "/root/.openclaw/workspace/"
+      ],
+      "approvedOutputPrefixes": [
+        "/tmp/",
+        "/mnt/nas/openclaw/reports/",
+        "/root/.openclaw/workspace/reports/"
+      ],
+      "description": "Generate a Markdown experiment report from existing probe reports, browser screenshots, document indexes, and robot dataset cards."
+    },
+    {
+      "id": "baseline_status_probe",
+      "script": "scripts/probes/baseline_status_probe.sh",
+      "mode": "readonly",
+      "approvedInputPrefixes": [
+        "/mnt/nas/openclaw/",
+        "/root/.openclaw/workspace/"
+      ],
+      "approvedOutputPrefixes": [
+        "/tmp/",
+        "/mnt/nas/openclaw/reports/",
+        "/root/.openclaw/workspace/reports/"
+      ],
+      "description": "Generate a read-only roll-up status report for the S100P PC parity and AI NAS homework baselines."
+    },
+    {
+      "id": "baseline_gap_decision_probe",
+      "script": "scripts/probes/baseline_gap_decision_probe.sh",
+      "mode": "readonly",
+      "approvedInputPrefixes": [
+        "/tmp/",
+        "/mnt/nas/openclaw/",
+        "/root/.openclaw/workspace/"
+      ],
+      "approvedOutputPrefixes": [
+        "/tmp/",
+        "/mnt/nas/openclaw/reports/",
+        "/root/.openclaw/workspace/reports/"
+      ],
+      "description": "Generate a read-only remaining-gap and next-decision report for the S100P PC parity and AI NAS homework baselines."
+    },
+    {
+      "id": "baseline_acceptance_probe",
+      "script": "scripts/probes/baseline_acceptance_probe.sh",
+      "mode": "readonly",
+      "approvedInputPrefixes": [
+        "/tmp/",
+        "/mnt/nas/openclaw/",
+        "/root/.openclaw/workspace/"
+      ],
+      "approvedOutputPrefixes": [
+        "/tmp/",
+        "/mnt/nas/openclaw/reports/",
+        "/root/.openclaw/workspace/reports/"
+      ],
+      "description": "Generate a read-only pass/collecting/blocked acceptance gate matrix for all A/B baseline IDs."
+    },
+    {
+      "id": "baseline_acceptance_trend_probe",
+      "script": "scripts/probes/baseline_acceptance_trend_probe.sh",
+      "mode": "readonly",
+      "approvedInputPrefixes": [
+        "/tmp/",
+        "/mnt/nas/openclaw/",
+        "/root/.openclaw/workspace/"
+      ],
+      "approvedOutputPrefixes": [
+        "/tmp/",
+        "/mnt/nas/openclaw/reports/",
+        "/root/.openclaw/workspace/reports/"
+      ],
+      "description": "Generate a read-only trend report across saved baseline acceptance snapshots."
+    },
+    {
+      "id": "baseline_evidence_manifest_probe",
+      "script": "scripts/probes/baseline_evidence_manifest_probe.sh",
+      "mode": "readonly",
+      "approvedInputPrefixes": [
+        "/tmp/",
+        "/mnt/nas/openclaw/",
+        "/root/.openclaw/workspace/"
+      ],
+      "approvedOutputPrefixes": [
+        "/tmp/",
+        "/mnt/nas/openclaw/reports/",
+        "/root/.openclaw/workspace/reports/"
+      ],
+      "description": "Generate a read-only SHA256 evidence manifest for current baseline proof files."
+    },
+    {
+      "id": "teacher_baseline_briefing_probe",
+      "script": "scripts/probes/teacher_baseline_briefing_probe.sh",
+      "mode": "readonly",
+      "approvedInputPrefixes": [
+        "/tmp/",
+        "/mnt/nas/openclaw/",
+        "/root/.openclaw/workspace/"
+      ],
+      "approvedOutputPrefixes": [
+        "/tmp/",
+        "/mnt/nas/openclaw/reports/",
+        "/root/.openclaw/workspace/reports/"
+      ],
+      "description": "Generate a teacher-facing Markdown and JSON briefing package from the latest NAS-backed evidence for the two baseline tracks."
+    }
+  ]
+}

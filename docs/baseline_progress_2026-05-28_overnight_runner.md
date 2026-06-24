@@ -1,0 +1,117 @@
+# Baseline Progress: Overnight Baseline Runner
+
+Date: 2026-05-28
+
+This note records the overnight S100P background runner used to continue the two
+baseline tracks while Codex or the PC can be left unattended.
+
+## Scripts
+
+```text
+scripts/overnight_baseline_runner.sh
+scripts/start_overnight_baseline_runner.sh
+scripts/check_overnight_baseline_runner.sh
+scripts/summarize_overnight_baseline_runner.sh
+```
+
+Default behavior:
+
+- duration: 10 hours
+- interval: 1800 seconds
+- output root: `/mnt/nas/openclaw/logs/overnight`
+- mode: read-only probes and reports
+
+Each iteration runs:
+
+- `stability_snapshot_probe`
+- `stability_summary_probe`
+- `baseline_status_probe`
+
+The first iteration and every fourth iteration also run:
+
+- `openclaw_status_probe`
+- `security_audit_probe`
+- `service_convergence_decision_probe`
+
+The runner does not install packages, change services, change firewall rules, or
+delete data.
+
+## Current Background Run
+
+```text
+pid: 72079
+launch_log: /mnt/nas/openclaw/logs/overnight/overnight_launch_20260528-232330.out
+jsonl: /mnt/nas/openclaw/logs/overnight/overnight_baseline_20260528-232330.jsonl
+report: /mnt/nas/openclaw/logs/overnight/overnight_baseline_20260528-232330.md
+pid_file: /mnt/nas/openclaw/logs/overnight/overnight_baseline_20260528-232330.pid
+```
+
+First iteration evidence:
+
+```text
+stability_snapshot: /mnt/nas/openclaw/logs/probes/stability_snapshot_20260528-232330.md
+stability_summary: /mnt/nas/openclaw/reports/stability/stability_summary_20260528-232339.md
+baseline_status: /mnt/nas/openclaw/reports/baseline-status/baseline_status_20260528-232339.md
+openclaw_status: /mnt/nas/openclaw/logs/probes/openclaw_status_20260528-232340.txt
+security_audit: /mnt/nas/openclaw/logs/probes/security_audit_20260528-232340.md
+```
+
+## How To Check
+
+```bash
+sudo ps -p 72079 -o pid=,etime=,cmd=
+sudo tail -n 20 /mnt/nas/openclaw/logs/overnight/overnight_baseline_20260528-232330.jsonl
+sudo /root/.openclaw/workspace/scripts/check_overnight_baseline_runner.sh
+```
+
+The status checker writes a Markdown report under:
+
+```text
+/mnt/nas/openclaw/reports/baseline-status/overnight_baseline_YYYYmmdd-HHMMSS_status.md
+```
+
+It summarizes whether the process is still running, how many iterations are
+visible in JSONL, when the next iteration is expected, latest events by action,
+and whether any failed events have been recorded.
+
+The summary helper writes a higher-level interim or final acceptance summary
+under:
+
+```text
+/mnt/nas/openclaw/reports/baseline-status/overnight_baseline_YYYYmmdd-HHMMSS_summary.md
+```
+
+It records the latest stability summary, baseline roll-up, security audit,
+B-010 service convergence decision, event counts, failure counts, and whether
+the run is still `collecting` or has finished without failed events.
+
+The runner now calls this summary helper once more at finish, so a completed
+overnight run leaves both the raw JSONL and a final human-readable summary.
+
+Current status-check evidence:
+
+```text
+status_report: /mnt/nas/openclaw/reports/baseline-status/overnight_baseline_20260528-232330_status.md
+summary_report: /mnt/nas/openclaw/reports/baseline-status/overnight_baseline_20260528-232330_summary.md
+pid: 72079
+process_status: running
+completed_iterations_observed: 2
+event_count: 13
+failed_event_count: 0
+summary_verdict: collecting
+latest_stability_summary: /mnt/nas/openclaw/reports/stability/stability_summary_20260528-235359.md
+latest_baseline_status: /mnt/nas/openclaw/reports/baseline-status/baseline_status_20260528-235400.md
+latest_service_convergence_decision: /mnt/nas/openclaw/reports/security/service_convergence_decision_20260528-235327.md
+last_event_action: iteration_end
+last_event_status: ok
+schedule_status: waiting_for_next_interval
+```
+
+## How To Stop
+
+```bash
+sudo kill 72079
+```
+
+Stopping the runner only stops future overnight sampling. It does not affect the
+existing systemd stability sampler or any already written NAS reports.
