@@ -109,6 +109,35 @@ Out of scope：不该第一版做。
 5. 哪些事项必须进入 GitHub issue 的验收标准。
 ```
 
+## Prompt 5：AI-NAS 图像识别和 embedding 升级
+
+完整上下文见
+[`docs/ai_nas_visual_search_embedding_handoff.md`](ai_nas_visual_search_embedding_handoff.md)。
+
+```text
+你是一个资深本地 AI-NAS 产品架构师、视觉检索/向量数据库工程师。请为我的 Digua / AI-NAS 项目设计一套可落地的“自然语言搜图 + 图像识别 + 数据库 embedding”升级方案，目标是让用户输入“找穿白色上衣的照片”“白色 T 恤的人”“white shirt photo”这类查询时，系统能在 NAS 照片库中返回正确照片、缩略图、路径、证据和置信度。
+
+项目背景：
+- 项目形态是“低成本 NAS + S100P 本地 AI 层 + OpenClaw 控制层 + Web NAS OS 门户”。
+- 当前已有 SQLite 索引、文件搜索、文档 embedding、OCR、照片基础 metadata、EXIF/GPS、pHash、local visual embedding fallback、照片语义搜索原型。
+- 当前缺陷是图像 embedding 主要仍是整图/metadata/标签级别，无法可靠区分白色上衣、白车、白墙、白文件和白色背景。
+- 必须优先本地/离线，不默认上传私人照片到云端。
+- Web、API、AI 检索必须共享同一套 ACL/visible-paths 权限模型。
+- 默认不做人脸识别、不做人脸聚类、不识别具体身份；只允许 generic person、衣服颜色、物体、场景等非身份属性。
+- 每个结果必须返回 evidence：source path/source id、thumbnail/open URL、模型/运行时、命中的属性、置信度、生成的 embedding/检测 artifact 路径、隐私分类和降级原因。
+
+请输出：
+1. 为什么现有 local visual embedding / metadata 搜索不能解决“穿白色上衣”。
+2. 离线索引 pipeline 和查询 pipeline。
+3. 快速 MVP 与高质量生产方案的模型选择。
+4. SQLite/向量索引 schema，包括 image embeddings、regions、attributes、captions/artifacts、ACL scope、model/runtime versioning 和 orphan cleanup。
+5. “穿白色上衣”的专项实现：先检测 person/upper-body/clothing region，再判断 clothing color，排除 white car/wall/document/background。
+6. API/UI 改造和 OpenClaw/Qwen 聊天路由。
+7. 权限和隐私规则。
+8. gate 设计：ai_nas_image_attribute_index_gate、ai_nas_semantic_image_search_gate、ai_nas_visual_acl_leakage_gate、ai_nas_visual_search_portal_gate。
+9. MVP、可用版、生产强化版三阶段实施 checklist。
+```
+
 ## Codex 采纳规则
 
 GPT Pro 的输出不能直接替代实测。Codex 应按以下规则处理：
