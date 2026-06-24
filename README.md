@@ -87,6 +87,8 @@ docs/agent_operation.md 和 skills 目录。我的目标是从一块刚烧录好
 │  ├─ agent_operation.md
 │  ├─ openclaw_s100p_nas_baseline.md
 │  ├─ baseline_tracking.md
+│  ├─ ai_nas_progress_2026-06-24.md
+│  ├─ ai_nas_visual_search_embedding_handoff.md
 │  ├─ pro_model_handoff.md
 │  ├─ security_model.md
 │  ├─ review_checklist.md
@@ -115,6 +117,8 @@ S100P 跑通基础链路后，下一阶段目标是把它作为 OpenClaw 主上�
 
 - [docs/openclaw_s100p_nas_baseline.md](docs/openclaw_s100p_nas_baseline.md)：baseline 定义和落地顺序。
 - [docs/baseline_tracking.md](docs/baseline_tracking.md)：Codex 跟踪任务矩阵。
+- [docs/ai_nas_progress_2026-06-24.md](docs/ai_nas_progress_2026-06-24.md)：AI-NAS 当前进展、已验证 gate、产品边界和下一步视觉搜索缺口。
+- [docs/ai_nas_visual_search_embedding_handoff.md](docs/ai_nas_visual_search_embedding_handoff.md)：图像识别和 embedding 升级交接，重点解决“找穿白色上衣的照片”这类自然语言搜图。
 - [docs/security_model.md](docs/security_model.md)：Gateway、NAS、token、机器人控制的安全边界。
 - [docs/pro_model_handoff.md](docs/pro_model_handoff.md)：给 GPT Pro 做阶段性复审的提示词模板。
 - [docs/github_issue_seed.md](docs/github_issue_seed.md)：GitHub issue 顶层入口草稿。
