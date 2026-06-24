@@ -16,7 +16,7 @@ from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 from pathlib import Path
 from typing import Any
 
-from ai_nas_common import ensure_report_dir, iso_now, safe_write_json, safe_write_text
+from ai_nas_common import default_official_manager_url, ensure_report_dir, iso_now, safe_write_json, safe_write_text
 
 
 TOOL_ID = "ai_nas_settings_portal_gate"
@@ -175,7 +175,7 @@ def main() -> int:
         "--schedule-db-path",
         str(run_dir / "schedule.sqlite3"),
         "--official-manager-url",
-        "http://nas.local:8080/",
+        default_official_manager_url(),
         "--qwen-gateway-url",
         fake_model_url,
         "--openclaw-gateway-url",

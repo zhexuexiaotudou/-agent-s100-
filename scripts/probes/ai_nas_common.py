@@ -29,6 +29,8 @@ from pathlib import Path
 from urllib.parse import quote
 from typing import Iterable
 
+from ai_nas_vision_schema import ensure_vision_product_schema
+
 
 _SQLITE_DEFAULT_ISOLATION = object()
 _SQLITE_MODE_BY_PATH: dict[str, str] = {}
@@ -38,6 +40,7 @@ DEFAULT_PERSONAL_ROOT = Path(os.environ.get("AI_NAS_PERSONAL_ROOT", "/mnt/nas/op
 DEFAULT_REPORT_ROOT = Path(os.environ.get("AI_NAS_REPORT_ROOT", "/mnt/nas/openclaw/reports/ai_nas_mvp"))
 DEFAULT_INDEX_PATH = DEFAULT_REPORT_ROOT / "personal_inventory_latest.json"
 DEFAULT_SQLITE_INDEX_PATH = DEFAULT_REPORT_ROOT / "personal_inventory.sqlite3"
+DEFAULT_PORTAL_LOCAL_CONFIG = Path(__file__).resolve().parents[2] / "configs" / "openclaw_nas_portal.local.json"
 EMBEDDING_MODEL_ID = "local_hash_embedding_v1"
 EMBEDDING_DIM = 128
 IMAGE_EMBEDDING_MODEL_ID = "local_visual_embedding_v1"
@@ -99,6 +102,17 @@ DOCUMENT_CLASS_ALIASES = {
     "paper": ["paper", "manuscript", "research", "abstract", "references", "\u8bba\u6587", "\u6587\u732e", "\u6458\u8981"],
     "manual": ["manual", "guide", "instruction", "datasheet", "\u8bf4\u660e\u4e66", "\u624b\u518c", "\u6307\u5357"],
 }
+
+
+def default_official_manager_url(fallback: str = "http://nas.local:8080/") -> str:
+    env_url = os.environ.get("OPENCLAW_OFFICIAL_MANAGER_URL", "").strip()
+    if env_url:
+        return env_url
+    try:
+        cfg = json.loads(DEFAULT_PORTAL_LOCAL_CONFIG.read_text(encoding="utf-8"))
+    except (OSError, json.JSONDecodeError):
+        return fallback
+    return str(cfg.get("official_manager_url") or cfg.get("nas_manager_url") or fallback).strip()
 
 
 def now_stamp() -> str:
@@ -996,11 +1010,23 @@ def upsert_image_embedding_result(db_path: Path, result: dict) -> None:
 
 
 def image_embedding_summary(db_path: Path, limit: int = 20) -> dict:
+    photo_exts = tuple(sorted(PHOTO_EXTS))
+    placeholders = ",".join("?" for _ in photo_exts)
     con = open_index_db(db_path)
     try:
         status_counts = {
             row["status"]: row["count"]
-            for row in con.execute("SELECT status, COUNT(*) AS count FROM image_embeddings GROUP BY status")
+            for row in con.execute(
+                f"""
+                SELECT image_embeddings.status AS status, COUNT(*) AS count
+                FROM image_embeddings
+                JOIN records ON records.path = image_embeddings.path
+                WHERE records.type = 'Photos'
+                  AND lower(records.extension) IN ({placeholders})
+                GROUP BY image_embeddings.status
+                """,
+                photo_exts,
+            )
         }
         recent = [
             {
@@ -1012,13 +1038,17 @@ def image_embedding_summary(db_path: Path, limit: int = 20) -> dict:
                 "updated_at": row["updated_at"],
             }
             for row in con.execute(
-                """
-                SELECT relative_path, model_id, status, engine, error, updated_at
+                f"""
+                SELECT image_embeddings.relative_path, image_embeddings.model_id, image_embeddings.status,
+                       image_embeddings.engine, image_embeddings.error, image_embeddings.updated_at
                 FROM image_embeddings
-                ORDER BY updated_at DESC
+                JOIN records ON records.path = image_embeddings.path
+                WHERE records.type = 'Photos'
+                  AND lower(records.extension) IN ({placeholders})
+                ORDER BY image_embeddings.updated_at DESC
                 LIMIT ?
                 """,
-                (limit,),
+                (*photo_exts, limit),
             )
         ]
     finally:
@@ -1027,10 +1057,12 @@ def image_embedding_summary(db_path: Path, limit: int = 20) -> dict:
 
 
 def ensure_image_embeddings_for_photos(db_path: Path, limit: int = 500) -> dict:
+    photo_exts = tuple(sorted(PHOTO_EXTS))
+    placeholders = ",".join("?" for _ in photo_exts)
     con = open_index_db(db_path)
     try:
         rows = con.execute(
-            """
+            f"""
             SELECT records.*
             FROM records
             LEFT JOIN image_embeddings
@@ -1038,11 +1070,12 @@ def ensure_image_embeddings_for_photos(db_path: Path, limit: int = 500) -> dict:
              AND image_embeddings.model_id = ?
              AND image_embeddings.dim = ?
             WHERE records.type = 'Photos'
+              AND lower(records.extension) IN ({placeholders})
               AND image_embeddings.path IS NULL
             ORDER BY records.relative_path
             LIMIT ?
             """,
-            (IMAGE_EMBEDDING_MODEL_ID, IMAGE_EMBEDDING_DIM, limit),
+            (IMAGE_EMBEDDING_MODEL_ID, IMAGE_EMBEDDING_DIM, *photo_exts, limit),
         ).fetchall()
         records = [_record_from_sqlite_row(row) for row in rows]
     finally:
@@ -1344,11 +1377,23 @@ def upsert_image_caption_result(db_path: Path, result: dict) -> None:
 
 
 def image_caption_summary(db_path: Path, limit: int = 20) -> dict:
+    photo_exts = tuple(sorted(PHOTO_EXTS))
+    placeholders = ",".join("?" for _ in photo_exts)
     con = open_index_db(db_path)
     try:
         status_counts = {
             row["status"]: row["count"]
-            for row in con.execute("SELECT status, COUNT(*) AS count FROM image_captions GROUP BY status")
+            for row in con.execute(
+                f"""
+                SELECT image_captions.status AS status, COUNT(*) AS count
+                FROM image_captions
+                JOIN records ON records.path = image_captions.path
+                WHERE records.type = 'Photos'
+                  AND lower(records.extension) IN ({placeholders})
+                GROUP BY image_captions.status
+                """,
+                photo_exts,
+            )
         }
         recent = [
             {
@@ -1361,13 +1406,18 @@ def image_caption_summary(db_path: Path, limit: int = 20) -> dict:
                 "updated_at": row["updated_at"],
             }
             for row in con.execute(
-                """
-                SELECT relative_path, provider, model_id, status, caption, error, updated_at
+                f"""
+                SELECT image_captions.relative_path, image_captions.provider, image_captions.model_id,
+                       image_captions.status, image_captions.caption, image_captions.error,
+                       image_captions.updated_at
                 FROM image_captions
-                ORDER BY updated_at DESC
+                JOIN records ON records.path = image_captions.path
+                WHERE records.type = 'Photos'
+                  AND lower(records.extension) IN ({placeholders})
+                ORDER BY image_captions.updated_at DESC
                 LIMIT ?
                 """,
-                (limit,),
+                (*photo_exts, limit),
             )
         ]
     finally:
@@ -1377,16 +1427,19 @@ def image_caption_summary(db_path: Path, limit: int = 20) -> dict:
 
 def ensure_image_captions_for_photos(db_path: Path, limit: int = 500, caption_provider=None) -> dict:
     target_model_id = "" if caption_provider is not None else str(vision_caption_runtime_status().get("model_id") or "")
+    photo_exts = tuple(sorted(PHOTO_EXTS))
+    placeholders = ",".join("?" for _ in photo_exts)
     con = open_index_db(db_path)
     try:
         rows = con.execute(
-            """
+            f"""
             SELECT records.*
             FROM records
             LEFT JOIN image_captions
               ON image_captions.path = records.path
              AND image_captions.schema_version = ?
             WHERE records.type = 'Photos'
+              AND lower(records.extension) IN ({placeholders})
               AND (
                 image_captions.path IS NULL
                 OR image_captions.status LIKE 'blocked_%'
@@ -1396,7 +1449,7 @@ def ensure_image_captions_for_photos(db_path: Path, limit: int = 500, caption_pr
             ORDER BY records.relative_path
             LIMIT ?
             """,
-            (IMAGE_CAPTION_SCHEMA_VERSION, target_model_id, target_model_id, limit),
+            (IMAGE_CAPTION_SCHEMA_VERSION, *photo_exts, target_model_id, target_model_id, limit),
         ).fetchall()
         records = [_record_from_sqlite_row(row) for row in rows]
     finally:
@@ -2061,6 +2114,7 @@ def open_index_db(db_path: Path | str) -> sqlite3.Connection:
     )
     con.execute("CREATE INDEX IF NOT EXISTS idx_image_captions_status ON image_captions(status)")
     con.execute("CREATE INDEX IF NOT EXISTS idx_image_captions_model ON image_captions(model_id, schema_version)")
+    ensure_vision_product_schema(con)
     con.execute(
         """
         CREATE TABLE IF NOT EXISTS file_operations (
@@ -2994,11 +3048,13 @@ def _caption_matches_clothing_query(caption_text: str, terms: set[str]) -> bool:
 
 
 def search_photo_semantic_index(db_path: Path, query: str, limit: int = 10) -> list[dict]:
+    photo_exts = tuple(sorted(PHOTO_EXTS))
+    placeholders = ",".join("?" for _ in photo_exts)
     con = open_index_db(db_path)
     rows = []
     try:
         for row in con.execute(
-            """
+            f"""
             SELECT
                 records.*,
                 image_embeddings.status AS image_embedding_status,
@@ -3026,8 +3082,9 @@ def search_photo_semantic_index(db_path: Path, query: str, limit: int = 10) -> l
             LEFT JOIN ocr_results
               ON ocr_results.path = records.path
             WHERE records.type = 'Photos'
+              AND lower(records.extension) IN ({placeholders})
             """,
-            (IMAGE_EMBEDDING_MODEL_ID, IMAGE_EMBEDDING_DIM, IMAGE_CAPTION_SCHEMA_VERSION),
+            (IMAGE_EMBEDDING_MODEL_ID, IMAGE_EMBEDDING_DIM, IMAGE_CAPTION_SCHEMA_VERSION, *photo_exts),
         ):
             rows.append(row)
     finally:

@@ -25,6 +25,8 @@ from ai_nas_common import (
     DEFAULT_PERSONAL_ROOT,
     DEFAULT_REPORT_ROOT,
     DEFAULT_SQLITE_INDEX_PATH,
+    PHOTO_EXTS,
+    SCAN_DIRS,
     StoragePathError,
     _record_from_sqlite_row,
     build_sqlite_inventory,
@@ -49,6 +51,21 @@ from ai_nas_common import (
     storage_status,
     upsert_ocr_result,
     vision_caption_runtime_status,
+)
+from ai_nas_vision_runtime import vision_product_runtime_status
+from ai_nas_vision_schema import vision_product_schema_status
+from ai_nas_vision_index import ensure_photo_visual_states, photo_visual_state_summary
+from ai_nas_vision_search import search_product_visual_index
+from ai_nas_ocr_adapter import run_product_ocr_for_record, upsert_product_ocr_evidence
+from ai_nas_embedding_adapter import (
+    product_embedding_summary,
+    run_product_image_embedding_for_record,
+    upsert_product_image_embedding,
+)
+from ai_nas_region_adapter import (
+    product_region_summary,
+    run_product_region_analysis_for_record,
+    upsert_product_region_evidence,
 )
 from ai_nas_operator_portal_contract_probe import latest_report, read_json
 try:
@@ -94,6 +111,7 @@ DEFAULT_OPENCLAW_MODEL_GATEWAY_URL = "http://127.0.0.1:18888"
 DEFAULT_OPENCLAW_MODEL = "OpenClaw-Dream7B-S100P-local"
 DEFAULT_QWEN_GATEWAY_URL = "http://127.0.0.1:18080"
 DEFAULT_QWEN_MODEL = "Qwen2.5-1.5B-Instruct-S100P-official"
+DEFAULT_PORTAL_LOCAL_CONFIG = Path(__file__).resolve().parents[2] / "configs" / "openclaw_nas_portal.local.json"
 COPILOT_IMAGE_EXTS = {".jpg", ".jpeg", ".png", ".gif", ".bmp", ".webp", ".tiff", ".tif", ".heic", ".heif"}
 COPILOT_VIDEO_EXTS = {".mp4", ".mov", ".avi", ".mkv", ".wmv", ".flv", ".webm", ".m4v", ".3gp"}
 STORAGE_AUDIO_EXTS = {".mp3", ".wav", ".flac", ".aac", ".ogg", ".m4a", ".wma"}
@@ -101,6 +119,17 @@ STORAGE_DOCUMENT_EXTS = {".txt", ".md", ".pdf", ".doc", ".docx", ".xls", ".xlsx"
 STORAGE_ARCHIVE_EXTS = {".zip", ".7z", ".rar", ".tar", ".gz", ".bz2", ".xz"}
 STORAGE_CODE_EXTS = {".py", ".js", ".ts", ".tsx", ".jsx", ".html", ".css", ".sh", ".ps1", ".bat", ".sql", ".xml"}
 STORAGE_MODEL_EXTS = {".onnx", ".pt", ".pth", ".safetensors", ".bin", ".gguf", ".hbm", ".hbo", ".bc"}
+
+
+def default_official_manager_url() -> str:
+    env_url = os.environ.get("OPENCLAW_OFFICIAL_MANAGER_URL", "").strip()
+    if env_url:
+        return env_url
+    try:
+        cfg = json.loads(DEFAULT_PORTAL_LOCAL_CONFIG.read_text(encoding="utf-8"))
+    except (OSError, json.JSONDecodeError):
+        return ""
+    return str(cfg.get("official_manager_url") or cfg.get("nas_manager_url") or "").strip()
 IMAGE_QUERY_TERMS = (
     "image", "images", "photo", "photos", "picture", "pictures", "album",
     "图片", "图像", "照片", "相册", "截图", "白底", "发票", "车", "汽车",
@@ -176,8 +205,38 @@ PWA_ICON_SVG = """<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
 <path d="M218 305c14 18 62 18 76 0" fill="none" stroke="#fff" stroke-width="18" stroke-linecap="round"/>
 </svg>
 """
-PWA_SW_JS = """const CACHE_NAME='openclaw-nas-pwa-v2';
-const SHELL_ASSETS=['/','/manifest.webmanifest','/assets/openclaw/openclaw_app_icon.png'];
+PWA_SW_JS = """const CACHE_NAME='openclaw-nas-pwa-v8';
+const SHELL_ASSETS=[
+  '/',
+  '/manifest.webmanifest',
+  '/assets/openclaw/openclaw_app_icon.png',
+  '/assets/openclaw/openclaw_mascot.png',
+  '/assets/openclaw/home_room_bg.png',
+  '/assets/openclaw/nav_home.png',
+  '/assets/openclaw/nav_photos.png',
+  '/assets/openclaw/nav_movies.png',
+  '/assets/openclaw/nav_music.png',
+  '/assets/openclaw/nav_files.png',
+  '/assets/openclaw/nav_recovery.png',
+  '/assets/openclaw/nav_backup.png',
+  '/assets/openclaw/nav_users.png',
+  '/assets/openclaw/nav_system.png',
+  '/assets/openclaw/nav_apps.png',
+  '/assets/openclaw/action_official.png',
+  '/assets/openclaw/action_install.png',
+  '/assets/openclaw/action_refresh.png',
+  '/assets/openclaw/action_logout.png',
+  '/assets/openclaw/action_send.png',
+  '/assets/openclaw/action_chevron.png',
+  '/assets/openclaw/weather_sunny.png',
+  '/assets/openclaw/weather_partly_cloudy.png',
+  '/assets/openclaw/weather_cloudy.png',
+  '/assets/openclaw/weather_light_rain.png',
+  '/assets/openclaw/weather_heavy_rain.png',
+  '/assets/openclaw/weather_thunderstorm.png',
+  '/assets/openclaw/weather_snow.png',
+  '/assets/openclaw/weather_fog.png'
+];
 self.addEventListener('install',event=>{
   event.waitUntil(caches.open(CACHE_NAME).then(cache=>cache.addAll(SHELL_ASSETS)).then(()=>self.skipWaiting()));
 });
@@ -1434,7 +1493,9 @@ class PortalState:
                 "image_embedding": image_embedding_runtime_status(),
                 "image_caption": vision_caption_runtime_status(),
                 "ocr": ocr_engine_status(),
+                "vision_product": vision_product_runtime_status(),
             },
+            "vision_schema": vision_product_schema_status(self.sqlite_index_path),
             "integration_boundary": (
                 "Official S100 vision readiness is verified for YOLO image/video-frame routing"
                 + (" and PP-OCR wrapper evidence" if wrapper_ready else "")
@@ -1459,6 +1520,26 @@ class PortalState:
         finally:
             con.close()
 
+    def _indexed_photo_records(self, limit: int = 500) -> list[dict]:
+        limit = max(1, min(int(limit or 500), 5000))
+        photo_exts = tuple(sorted(PHOTO_EXTS))
+        placeholders = ",".join("?" for _ in photo_exts)
+        con = open_index_db(self.sqlite_index_path)
+        try:
+            rows = con.execute(
+                f"""
+                SELECT *
+                FROM records
+                WHERE lower(extension) IN ({placeholders})
+                ORDER BY relative_path
+                LIMIT ?
+                """,
+                (*photo_exts, limit),
+            ).fetchall()
+            return [_record_from_sqlite_row(row) for row in rows]
+        finally:
+            con.close()
+
     def vision_index_payload(self, limit: int = 500, include_ocr: bool = True, include_caption: bool = True) -> dict:
         limit = max(1, min(int(limit or 500), 5000))
         index_status = self.rescan_storage()
@@ -1470,22 +1551,59 @@ class PortalState:
             "runtime": vision_caption_runtime_status(),
         }
         embedding_update = ensure_image_embeddings_for_photos(self.sqlite_index_path, limit=limit)
-        records = self._indexed_records("Photos", limit=limit)
+        records = self._indexed_photo_records(limit=limit)
+        product_runtime = vision_product_runtime_status()
+        visual_state_update = ensure_photo_visual_states(self.sqlite_index_path, records, runtime=product_runtime)
         ocr_updates: list[dict] = []
+        product_embedding_updates: list[dict] = []
+        product_region_updates: list[dict] = []
         if include_ocr:
             for record in records:
                 if not ocr_candidate_record(record, include_images=True):
                     continue
-                result = run_ocr_for_record(record)
+                result = run_product_ocr_for_record(record)
+                if str(result.get("status") or "").startswith("blocked_"):
+                    result = run_ocr_for_record(record)
                 upsert_ocr_result(self.sqlite_index_path, result)
+                product_evidence = upsert_product_ocr_evidence(self.sqlite_index_path, result)
                 ocr_updates.append(
                     {
                         "relative_path": result.get("relative_path"),
                         "status": result.get("status"),
                         "engine": result.get("engine"),
                         "error": result.get("error"),
+                        "product_evidence": product_evidence,
                     }
                 )
+        for record in records:
+            product_embedding = run_product_image_embedding_for_record(record)
+            embedding_evidence = upsert_product_image_embedding(self.sqlite_index_path, product_embedding)
+            if not str(product_embedding.get("status") or "").startswith("blocked_"):
+                product_embedding_updates.append(
+                    {
+                        "relative_path": product_embedding.get("relative_path"),
+                        "status": product_embedding.get("status"),
+                        "model_id": product_embedding.get("model_id"),
+                        "dim": product_embedding.get("dim"),
+                        "error": product_embedding.get("error"),
+                        "product_evidence": embedding_evidence,
+                    }
+                )
+            product_region = run_product_region_analysis_for_record(record)
+            region_evidence = upsert_product_region_evidence(self.sqlite_index_path, product_region)
+            if not str(product_region.get("status") or "").startswith("blocked_"):
+                product_region_updates.append(
+                    {
+                        "relative_path": product_region.get("relative_path"),
+                        "status": product_region.get("status"),
+                        "model_id": product_region.get("model_id"),
+                        "regions": len(product_region.get("regions") or []),
+                        "error": product_region.get("error"),
+                        "product_evidence": region_evidence,
+                    }
+                )
+        if ocr_updates or product_embedding_updates or product_region_updates:
+            visual_state_update = ensure_photo_visual_states(self.sqlite_index_path, records, runtime=product_runtime)
         return {
             "ok": True,
             "indexed_at": iso_timestamp(),
@@ -1494,11 +1612,23 @@ class PortalState:
             "image_caption_summary": image_caption_summary(self.sqlite_index_path),
             "image_embedding_update": embedding_update,
             "image_embedding_summary": image_embedding_summary(self.sqlite_index_path),
+            "product_embedding_update": {
+                "attempted": len(product_embedding_updates),
+                "items": product_embedding_updates[:20],
+                "summary": product_embedding_summary(self.sqlite_index_path),
+            },
+            "product_region_update": {
+                "attempted": len(product_region_updates),
+                "items": product_region_updates[:20],
+                "summary": product_region_summary(self.sqlite_index_path),
+            },
             "ocr_update": {
                 "attempted": len(ocr_updates),
                 "items": ocr_updates[:20],
                 "summary": ocr_results_summary(self.sqlite_index_path),
             },
+            "visual_state_update": visual_state_update,
+            "visual_state_summary": photo_visual_state_summary(self.sqlite_index_path),
             "vision_status": self.official_vision_status_payload(),
         }
 
@@ -1531,6 +1661,13 @@ class PortalState:
             "ocr": match.get("ocr") or {},
             "image_caption": match.get("image_caption") or {},
             "image_embedding": match.get("image_embedding") or {},
+            "visual_state": match.get("visual_state") or {},
+            "degraded": bool(match.get("degraded")),
+            "degradation": match.get("degradation") or [],
+            "evidence_items": match.get("evidence_items") or [],
+            "evidence_chips": match.get("evidence_chips") or [],
+            "query_plan": match.get("query_plan") or {},
+            "confidence_kind": match.get("confidence_kind") or "legacy_score",
             "privacy": match.get("privacy") or {},
             "source": "vision_semantic_search",
             "visual_source": match.get("source") or "sqlite_photo_llm_caption_semantic_search",
@@ -1542,22 +1679,30 @@ class PortalState:
         index_update = None
         if auto_index:
             index_update = self.vision_index_payload(limit=max(limit, 50), include_ocr=True)
-        matches = search_photo_semantic_index(self.sqlite_index_path, query, limit=limit * 3)
-        results = []
+        search_pool_limit = max(limit * 3, 50)
+        product_search = search_product_visual_index(self.sqlite_index_path, query, limit=search_pool_limit)
+        matches = product_search.get("matches") or []
+        authorized_results = []
         for match in matches:
             rel = str(match.get("relative_path") or "").strip().strip("/")
             if not rel:
                 continue
             if not self._user_can_read(user, rel):
                 continue
-            results.append(self._vision_result_payload(match))
-            if len(results) >= limit:
-                break
+            authorized_results.append(self._vision_result_payload(match))
+        results = authorized_results[:limit]
         return {
             "ok": True,
             "query": query,
             "limit": limit,
+            "display_limit": limit,
+            "total_found": len(authorized_results),
+            "displayed_count": len(results),
             "results": results,
+            "query_plan": product_search.get("query_plan") or {},
+            "degraded": bool(product_search.get("degraded")),
+            "degradation": product_search.get("degradation") or [],
+            "search_runtime": product_search.get("search_runtime"),
             "index_update": index_update,
             "vision_status": self.official_vision_status_payload(),
         }
@@ -1835,6 +1980,9 @@ class PortalState:
                 rel = path.resolve(strict=False).relative_to(root).as_posix()
             except ValueError:
                 continue
+            top_dir = rel.split("/", 1)[0]
+            if top_dir not in SCAN_DIRS:
+                continue
             kind = self._media_kind(path)
             if requested in {"image", "video"} and kind != requested:
                 continue
@@ -1990,6 +2138,9 @@ class PortalState:
             try:
                 rel = path.resolve(strict=False).relative_to(root).as_posix()
             except ValueError:
+                continue
+            top_dir = rel.split("/", 1)[0]
+            if top_dir not in SCAN_DIRS:
                 continue
             kind = self._media_kind(path)
             if requested in {"image", "video"} and kind != requested:
@@ -4797,7 +4948,7 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--app-db-path", type=Path, default=None, help="Path to app ecosystem SQLite database")
     parser.add_argument("--schedule-db-path", type=Path, default=None, help="Path to scheduled organizing rules SQLite database")
     parser.add_argument("--nas-portal", action="store_true", default=False, help="Serve NAS Web OS portal instead of operator portal at /")
-    parser.add_argument("--official-manager-url", default=os.environ.get("OPENCLAW_OFFICIAL_MANAGER_URL", ""), help="Optional vendor NAS manager URL opened from the NAS portal.")
+    parser.add_argument("--official-manager-url", default=default_official_manager_url(), help="Optional vendor NAS manager URL opened from the NAS portal.")
     parser.add_argument("--openclaw-gateway-url", default=os.environ.get("OPENCLAW_GATEWAY_URL", DEFAULT_OPENCLAW_GATEWAY_URL), help="OpenClaw control gateway base URL.")
     parser.add_argument("--openclaw-model-gateway-url", default=os.environ.get("OPENCLAW_MODEL_GATEWAY_URL", DEFAULT_OPENCLAW_MODEL_GATEWAY_URL), help="OpenAI-compatible model gateway used by OpenClaw chat.")
     parser.add_argument("--openclaw-model", default=os.environ.get("OPENCLAW_MODEL", DEFAULT_OPENCLAW_MODEL), help="Model id used for OpenClaw chat.")

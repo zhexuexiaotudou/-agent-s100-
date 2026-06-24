@@ -1,0 +1,18 @@
+{
+  "official_manager_url": "http://127.0.0.1:18090/",
+  "official_manager_route": {
+    "mode": "ssh_local_forward",
+    "local_url": "http://127.0.0.1:18090/",
+    "local_port": 18090,
+    "ssh_host": "192.168.127.10",
+    "ssh_user": "sunrise",
+    "ssh_key": "C:/Users/example/.ssh/s100p_linkcheck_ed25519",
+    "nas_host": "169.254.143.37",
+    "nas_http_port": 8080,
+    "nas_https_port": 5001,
+    "remote_http_url": "http://169.254.143.37:8080/",
+    "remote_https_url": "https://169.254.143.37:5001/",
+    "nas_export": "/OpenClawWorkspace",
+    "s100p_mount_point": "/mnt/nas/openclaw"
+  }
+}

@@ -7,10 +7,27 @@ Current project conclusion as of 2026-06-23: Dream7B is not the right model
 path for this project. The reusable value is the deployment and validation
 toolchain built while trying to make Dream7B work on S100P.
 
+## Project Log
+
+- 2026-05-17: 建立 S100P agent 化 bring-up 文档，沉淀刷机、联网、依赖和验收方法。
+- 2026-06-09: 完成 Windows/S100P/NAS/OpenClaw 开机链路自检脚本与日志机制。
+- 2026-06-13: 调研高端 AI-NAS 功能，形成低成本平替的文件、媒体、备份和助手目标。
+- 2026-06-14: 建成 AI-NAS MVP 验收、BPU 优化分析和基础 Demo 录制材料。
+- 2026-06-18: 完成 Dream7B S100P 证据包和 true-batch HBM 可行性分析。
+- 2026-06-19: 完成 Dream7B B=4/B=16 运行分析，明确队列批处理仍是基线。
+- 2026-06-20: 固化 Dream7B 部署基线和回滚状态，避免重复无效扫参。
+- 2026-06-21: 刷新 S100P 运行状态、服务状态和 last-token 验证计划。
+- 2026-06-22: 修复 OpenClaw/Dream 网关快路径，确认 Dream 通用对话质量边界。
+- 2026-06-23: 转向官方 Qwen2.5 S100P 路由，完成 AI-NAS 产品闭环和交付包。
+- 2026-06-24: 重做 OpenClaw 门户 UI、图像检索/设置，并接通 QNAP 官方 NAS 管理入口。
+
 ## Start Here
 
 - `docs/project_retrospective_2026-06-23.md` - end-to-end project history,
   current conclusion, and what to keep.
+- `docs/openclaw_official_nas_manager_discovery_2026-06-24.md` - current
+  official NAS manager discovery result, S100P SSH-forward route, and
+  new-user setup closure.
 - `docs/dream7b_seq128_cloud_compile_closure_2026-06-23.md` - final cloud
   compile closure: seq128 HBM package produced and verified, but Dream compile
   work is paused and not promoted.
@@ -80,9 +97,9 @@ Do not treat the existing Dream7B artifacts as a promotion plan.
 
 - Preserve the current OpenClaw/S100P evidence chain before deleting local
   artifacts.
-- Use NAS-backed reports and generated JSON/Markdown packets as evidence; this
-  workspace is not currently a valid Git repository despite the empty `.git`
-  directory.
+- Use NAS-backed reports and generated JSON/Markdown packets as evidence. The
+  GitHub repository is the shared release record; this Windows workspace may be
+  used as a local working mirror.
 - Keep new model work isolated from Dream7B-specific ports, aliases, and
   service names until a new model has its own promotion gates.
 - For cleanup, classify first, then delete only the approved subset.

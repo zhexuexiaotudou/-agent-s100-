@@ -16,7 +16,7 @@ from pathlib import Path
 from urllib.parse import urlencode
 from typing import Any
 
-from ai_nas_common import ensure_report_dir, iso_now, safe_write_json, safe_write_text
+from ai_nas_common import default_official_manager_url, ensure_report_dir, iso_now, safe_write_json, safe_write_text
 
 
 TOOL_ID = "ai_nas_integrated_portal_gate"
@@ -213,7 +213,7 @@ def main() -> int:
         "--app-db-path",
         str(run_dir / "apps.sqlite3"),
         "--official-manager-url",
-        "http://nas.local:8080/",
+        default_official_manager_url(),
         "--openclaw-gateway-url",
         fake_openclaw_url,
         "--openclaw-model-gateway-url",
