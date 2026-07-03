@@ -1,0 +1,63 @@
+{
+  "case_id": "short_chinese_prompt_padded",
+  "variant": "shifted_plus_2_positions",
+  "positions": {
+    "path": "/mnt/nas/openclaw/reports/models/dream7b_s100p_v17_execution_20260703/evidence/position_ablation_v17/short_chinese_prompt_padded/position_variants/shifted_plus_2_positions/positions.npy",
+    "sha256": "4b6e984c749fd3bec30f020207f09916cc1fa7c767cbc672fe81167a79dd8b50",
+    "stats": {
+      "shape": [
+        128
+      ],
+      "dtype": "int32",
+      "size": 128,
+      "min": 2.0,
+      "max": 129.0,
+      "mean": 65.5,
+      "std": 36.94928957368463,
+      "abs_max": 129.0,
+      "nonzero_count": 128,
+      "allzero": false,
+      "constant": false
+    }
+  },
+  "raw_output": {
+    "path": "/mnt/nas/openclaw/reports/models/dream7b_s100p_v17_execution_20260703/evidence/position_ablation_v17/short_chinese_prompt_padded/position_variants/shifted_plus_2_positions/raw_output.npy",
+    "sha256": "75bcc29ba1b3e538129350aa3bc200b8b34264869b036ab9c22a3214f92e4c76",
+    "stats": {
+      "shape": [
+        128,
+        3584
+      ],
+      "dtype": "int16",
+      "size": 458752,
+      "min": -10107.0,
+      "max": 11463.0,
+      "mean": -1.8391505650111608,
+      "std": 877.5271153558322,
+      "abs_max": 11463.0,
+      "nonzero_count": 458490,
+      "allzero": false,
+      "constant": false
+    }
+  },
+  "dequant_output": {
+    "path": "/mnt/nas/openclaw/reports/models/dream7b_s100p_v17_execution_20260703/evidence/position_ablation_v17/short_chinese_prompt_padded/position_variants/shifted_plus_2_positions/dequant_output.npy",
+    "sha256": "83b37dc3338b57521675a99497f4ea79df858953142e22c15bdb7563d56e7436",
+    "stats": {
+      "shape": [
+        128,
+        3584
+      ],
+      "dtype": "float32",
+      "size": 458752,
+      "min": -0.6127363443374634,
+      "max": 0.6949437260627747,
+      "mean": -0.00011149838974233717,
+      "std": 0.05320003256201744,
+      "abs_max": 0.6949437260627747,
+      "nonzero_count": 458490,
+      "allzero": false,
+      "constant": false
+    }
+  }
+}

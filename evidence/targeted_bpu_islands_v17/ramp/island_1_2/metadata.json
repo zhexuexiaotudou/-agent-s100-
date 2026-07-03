@@ -1,0 +1,395 @@
+{
+  "case_id": "ramp",
+  "island": [
+    1,
+    2
+  ],
+  "route": "HF/PyTorch prefix through layer 0, BPU island 1..2, HF/PyTorch suffix 3..27 + final norm + lm_head",
+  "input_source": {
+    "path": "/mnt/nas/openclaw/reports/models/dream7b_s100p_v11_execution_20260701/evidence/hf_boundaries_v11/ramp/layer_00_output.npy",
+    "sha256": "33d792d7db1b499fe47e2bb3f355851ec152725a3f39f281f55c037f0c6c5bb4"
+  },
+  "segments": [
+    {
+      "segment": 1,
+      "bpu": {
+        "segment": 1,
+        "model_name": "dream_segment_01_02",
+        "hbm_path": "/mnt/nas/openclaw/models/dream7b-hbm/seq128-b1-lmheadq16-lasttoken/seg01_02/dream7b_segment_1_2_seq128_q8.hbm",
+        "hbm_sha256": "387a797d25ed624d47888217fcbdb4761bed52e1b6be854acf776c523f0e8fd0",
+        "input_contract": {
+          "kind": "hidden_plus_position_ids",
+          "input_0_shape": [
+            128,
+            3584
+          ],
+          "input_0_dtype": "float32",
+          "input_1_shape": [
+            128
+          ],
+          "input_1_dtype": "int32"
+        },
+        "load_seconds": 1.926,
+        "run_seconds": 0.01,
+        "quant_metadata": {
+          "available": true,
+          "scale": [
+            4.552441168925725e-05
+          ],
+          "scale_first": 4.552441168925725e-05,
+          "zero_point": [
+            0.0
+          ],
+          "repr": "<hbm_runtime.HB_HBMRuntime.QuantParams object at 0xffff270bc530>"
+        },
+        "raw_stats": {
+          "shape": [
+            128,
+            3584
+          ],
+          "dtype": "int16",
+          "size": 458752,
+          "min": -15140.0,
+          "max": 15140.0,
+          "mean": -45.133898053850444,
+          "std": 3068.6958171303545,
+          "abs_max": 15140.0,
+          "nonzero_count": 458653,
+          "allzero": false,
+          "constant": false,
+          "nan_count": 0,
+          "inf_count": 0
+        },
+        "dequant_stats": {
+          "shape": [
+            128,
+            3584
+          ],
+          "dtype": "float32",
+          "size": 458752,
+          "min": -0.6892396211624146,
+          "max": 0.6892396211624146,
+          "mean": -0.002054694341495633,
+          "std": 0.13970059156417847,
+          "abs_max": 0.6892396211624146,
+          "nonzero_count": 458653,
+          "allzero": false,
+          "constant": false,
+          "nan_count": 0,
+          "inf_count": 0
+        }
+      },
+      "raw_output": {
+        "path": "evidence/bpu_island_reconstruction_v13/ramp/island_01_02/seg_01/bpu_raw_output.npy",
+        "sha256": "54945a3a75186d65ad7ac775afcd7984dc34632343253dfa587d257b2c76607a",
+        "stats": {
+          "shape": [
+            128,
+            3584
+          ],
+          "dtype": "int16",
+          "size": 458752,
+          "min": -15140.0,
+          "max": 15140.0,
+          "mean": -45.133898053850444,
+          "std": 3068.6958171303545,
+          "abs_max": 15140.0,
+          "nonzero_count": 458653,
+          "allzero": false,
+          "constant": false,
+          "nan_count": 0,
+          "inf_count": 0
+        }
+      },
+      "dequant_output": {
+        "path": "evidence/bpu_island_reconstruction_v13/ramp/island_01_02/seg_01/bpu_dequant_output.npy",
+        "sha256": "e91269de886a6942c0659949c58c407af9227cced4656284154c49d129a92e2f",
+        "stats": {
+          "shape": [
+            128,
+            3584
+          ],
+          "dtype": "float32",
+          "size": 458752,
+          "min": -0.6892396211624146,
+          "max": 0.6892396211624146,
+          "mean": -0.002054694341495633,
+          "std": 0.13970059156417847,
+          "abs_max": 0.6892396211624146,
+          "nonzero_count": 458653,
+          "allzero": false,
+          "constant": false,
+          "nan_count": 0,
+          "inf_count": 0
+        }
+      }
+    },
+    {
+      "segment": 2,
+      "bpu": {
+        "segment": 2,
+        "model_name": "dream_segment_02_03",
+        "hbm_path": "/mnt/nas/openclaw/models/dream7b-hbm/seq128-b1-lmheadq16-lasttoken/seg02_03/dream7b_segment_2_3_seq128_q8.hbm",
+        "hbm_sha256": "2e4efa4cbfdd1ade5a2a511142de8c885bea14b896a2174a8e066bd8aaf940e6",
+        "input_contract": {
+          "kind": "hidden_plus_position_ids",
+          "input_0_shape": [
+            128,
+            3584
+          ],
+          "input_0_dtype": "float32",
+          "input_1_shape": [
+            128
+          ],
+          "input_1_dtype": "int32"
+        },
+        "load_seconds": 1.926,
+        "run_seconds": 0.01,
+        "quant_metadata": {
+          "available": true,
+          "scale": [
+            0.0010667958995327353
+          ],
+          "scale_first": 0.0010667958995327353,
+          "zero_point": [
+            0.0
+          ],
+          "repr": "<hbm_runtime.HB_HBMRuntime.QuantParams object at 0xffff270bc7b0>"
+        },
+        "raw_stats": {
+          "shape": [
+            128,
+            3584
+          ],
+          "dtype": "int16",
+          "size": 458752,
+          "min": -427.0,
+          "max": 427.0,
+          "mean": -2.600642613002232,
+          "std": 127.50184927771392,
+          "abs_max": 427.0,
+          "nonzero_count": 456045,
+          "allzero": false,
+          "constant": false,
+          "nan_count": 0,
+          "inf_count": 0
+        },
+        "dequant_stats": {
+          "shape": [
+            128,
+            3584
+          ],
+          "dtype": "float32",
+          "size": 458752,
+          "min": -0.4555218517780304,
+          "max": 0.4555218517780304,
+          "mean": -0.002774354536086321,
+          "std": 0.13601845502853394,
+          "abs_max": 0.4555218517780304,
+          "nonzero_count": 456045,
+          "allzero": false,
+          "constant": false,
+          "nan_count": 0,
+          "inf_count": 0
+        }
+      },
+      "raw_output": {
+        "path": "evidence/bpu_island_reconstruction_v13/ramp/island_01_02/seg_02/bpu_raw_output.npy",
+        "sha256": "210abf9c5d8605f56389ca894e2cade9c8d3b897652793484d5fe1c8fac03f28",
+        "stats": {
+          "shape": [
+            128,
+            3584
+          ],
+          "dtype": "int16",
+          "size": 458752,
+          "min": -427.0,
+          "max": 427.0,
+          "mean": -2.600642613002232,
+          "std": 127.50184927771392,
+          "abs_max": 427.0,
+          "nonzero_count": 456045,
+          "allzero": false,
+          "constant": false,
+          "nan_count": 0,
+          "inf_count": 0
+        }
+      },
+      "dequant_output": {
+        "path": "evidence/bpu_island_reconstruction_v13/ramp/island_01_02/seg_02/bpu_dequant_output.npy",
+        "sha256": "f1e04f406a9e93f6300587d39b2c7f74def7517648a6b45e61b8254dc8920bdb",
+        "stats": {
+          "shape": [
+            128,
+            3584
+          ],
+          "dtype": "float32",
+          "size": 458752,
+          "min": -0.4555218517780304,
+          "max": 0.4555218517780304,
+          "mean": -0.002774354536086321,
+          "std": 0.13601845502853394,
+          "abs_max": 0.4555218517780304,
+          "nonzero_count": 456045,
+          "allzero": false,
+          "constant": false,
+          "nan_count": 0,
+          "inf_count": 0
+        }
+      }
+    }
+  ],
+  "hf_suffix_layers": [
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9,
+    10,
+    11,
+    12,
+    13,
+    14,
+    15,
+    16,
+    17,
+    18,
+    19,
+    20,
+    21,
+    22,
+    23,
+    24,
+    25,
+    26,
+    27
+  ],
+  "logits": {
+    "path": "evidence/bpu_island_reconstruction_v13/ramp/island_01_02/island_logits.npy",
+    "sha256": "fa3c03272883dff908aa2fcd5759d3ae886924a3509a98f87bc7a3a3f70cf2a0",
+    "stats": {
+      "shape": [
+        152064
+      ],
+      "dtype": "float32",
+      "size": 152064,
+      "min": -11.0625,
+      "max": 8.5625,
+      "mean": -7.269302845001221,
+      "std": 1.3999050855636597,
+      "abs_max": 11.0625,
+      "nonzero_count": 152064,
+      "allzero": false,
+      "constant": false,
+      "nan_count": 0,
+      "inf_count": 0
+    }
+  },
+  "final_metrics": {
+    "shape_match": true,
+    "reference_top1": 151643,
+    "candidate_top1": 151643,
+    "top1_agreement": true,
+    "reference_top1_in_candidate_top5": true,
+    "top5_overlap": 1,
+    "cosine": 0.8932710127498482,
+    "pearson_centered": 0.027381070191340937,
+    "relative_l2": 2.5246112657214064,
+    "max_abs_error": 11.6875,
+    "mean_abs_error": 5.283631550267288,
+    "candidate_normalized_entropy": 0.11520385303087932,
+    "candidate_stats": {
+      "shape": [
+        152064
+      ],
+      "dtype": "float32",
+      "size": 152064,
+      "min": -11.0625,
+      "max": 8.5625,
+      "mean": -7.269302845001221,
+      "std": 1.3999050855636597,
+      "abs_max": 11.0625,
+      "nonzero_count": 152064,
+      "allzero": false,
+      "constant": false,
+      "nan_count": 0,
+      "inf_count": 0
+    },
+    "reference_stats": {
+      "shape": [
+        152064
+      ],
+      "dtype": "float32",
+      "size": 152064,
+      "min": -7.65625,
+      "max": 12.25,
+      "mean": -1.9889841079711914,
+      "std": 0.9208143353462219,
+      "abs_max": 12.25,
+      "nonzero_count": 152064,
+      "allzero": false,
+      "constant": false,
+      "nan_count": 0,
+      "inf_count": 0
+    }
+  },
+  "boundary_metrics": {
+    "shape_match": true,
+    "reference_top1": 126259,
+    "candidate_top1": 331316,
+    "top1_agreement": false,
+    "reference_top1_in_candidate_top5": false,
+    "top5_overlap": 0,
+    "cosine": 0.5147314514042609,
+    "pearson_centered": 0.5147981689022778,
+    "relative_l2": 0.8574598832377712,
+    "max_abs_error": 4.26322814822197,
+    "mean_abs_error": 0.16221945404213095,
+    "candidate_normalized_entropy": 0.9992867487422611,
+    "candidate_stats": {
+      "shape": [
+        458752
+      ],
+      "dtype": "float32",
+      "size": 458752,
+      "min": -0.4555218517780304,
+      "max": 0.4555218517780304,
+      "mean": -0.002774354536086321,
+      "std": 0.13601845502853394,
+      "abs_max": 0.4555218517780304,
+      "nonzero_count": 456045,
+      "allzero": false,
+      "constant": false,
+      "nan_count": 0,
+      "inf_count": 0
+    },
+    "reference_stats": {
+      "shape": [
+        458752
+      ],
+      "dtype": "float32",
+      "size": 458752,
+      "min": -4.71875,
+      "max": 3.4375,
+      "mean": -0.0005226843641139567,
+      "std": 0.25748497247695923,
+      "abs_max": 4.71875,
+      "nonzero_count": 458345,
+      "allzero": false,
+      "constant": false,
+      "nan_count": 0,
+      "inf_count": 0
+    }
+  },
+  "strict_thresholds": {
+    "top1_agreement": true,
+    "reference_top1_in_candidate_top5": true,
+    "mean_cosine_min": 0.95,
+    "relative_l2_max": 0.1,
+    "no_allzero_or_constant_logits": true
+  },
+  "elapsed_seconds": 1005.925,
+  "status": "pass"
+}

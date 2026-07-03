@@ -1,0 +1,63 @@
+{
+  "case_id": "ramp",
+  "variant": "shifted_plus_16_positions",
+  "positions": {
+    "path": "/mnt/nas/openclaw/reports/models/dream7b_s100p_v17_execution_20260703/evidence/position_ablation_v17/ramp/position_variants/shifted_plus_16_positions/positions.npy",
+    "sha256": "f66da7c3afd946d70598dac47e23a4dc4622435f53a8768744f24ca265b8afff",
+    "stats": {
+      "shape": [
+        128
+      ],
+      "dtype": "int32",
+      "size": 128,
+      "min": 16.0,
+      "max": 143.0,
+      "mean": 79.5,
+      "std": 36.94928957368463,
+      "abs_max": 143.0,
+      "nonzero_count": 128,
+      "allzero": false,
+      "constant": false
+    }
+  },
+  "raw_output": {
+    "path": "/mnt/nas/openclaw/reports/models/dream7b_s100p_v17_execution_20260703/evidence/position_ablation_v17/ramp/position_variants/shifted_plus_16_positions/raw_output.npy",
+    "sha256": "a684bbea6420c2a154f15b022f8ca40cbeff0bd85e9f4bab821c877d5276214e",
+    "stats": {
+      "shape": [
+        128,
+        3584
+      ],
+      "dtype": "int16",
+      "size": 458752,
+      "min": -15478.0,
+      "max": 12470.0,
+      "mean": -10.074183872767858,
+      "std": 826.0714975662247,
+      "abs_max": 15478.0,
+      "nonzero_count": 458456,
+      "allzero": false,
+      "constant": false
+    }
+  },
+  "dequant_output": {
+    "path": "/mnt/nas/openclaw/reports/models/dream7b_s100p_v17_execution_20260703/evidence/position_ablation_v17/ramp/position_variants/shifted_plus_16_positions/dequant_output.npy",
+    "sha256": "c2fed2a286ba9a3b2b47b26cc508d9eb0e0f6031629478f4c9a381c7e0b2fa8b",
+    "stats": {
+      "shape": [
+        128,
+        3584
+      ],
+      "dtype": "float32",
+      "size": 458752,
+      "min": -0.9383528828620911,
+      "max": 0.7559930682182312,
+      "mean": -0.0006107467925176024,
+      "std": 0.05008053034543991,
+      "abs_max": 0.9383528828620911,
+      "nonzero_count": 458456,
+      "allzero": false,
+      "constant": false
+    }
+  }
+}

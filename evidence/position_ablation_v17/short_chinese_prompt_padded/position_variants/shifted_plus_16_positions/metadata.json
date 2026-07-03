@@ -1,0 +1,63 @@
+{
+  "case_id": "short_chinese_prompt_padded",
+  "variant": "shifted_plus_16_positions",
+  "positions": {
+    "path": "/mnt/nas/openclaw/reports/models/dream7b_s100p_v17_execution_20260703/evidence/position_ablation_v17/short_chinese_prompt_padded/position_variants/shifted_plus_16_positions/positions.npy",
+    "sha256": "f66da7c3afd946d70598dac47e23a4dc4622435f53a8768744f24ca265b8afff",
+    "stats": {
+      "shape": [
+        128
+      ],
+      "dtype": "int32",
+      "size": 128,
+      "min": 16.0,
+      "max": 143.0,
+      "mean": 79.5,
+      "std": 36.94928957368463,
+      "abs_max": 143.0,
+      "nonzero_count": 128,
+      "allzero": false,
+      "constant": false
+    }
+  },
+  "raw_output": {
+    "path": "/mnt/nas/openclaw/reports/models/dream7b_s100p_v17_execution_20260703/evidence/position_ablation_v17/short_chinese_prompt_padded/position_variants/shifted_plus_16_positions/raw_output.npy",
+    "sha256": "afdbfd3d0f08e09b22f2e5370df4dc27c006b987781df0de13f72c1b3778ae66",
+    "stats": {
+      "shape": [
+        128,
+        3584
+      ],
+      "dtype": "int16",
+      "size": 458752,
+      "min": -10131.0,
+      "max": 11546.0,
+      "mean": -1.8869171142578125,
+      "std": 875.3824572745284,
+      "abs_max": 11546.0,
+      "nonzero_count": 458534,
+      "allzero": false,
+      "constant": false
+    }
+  },
+  "dequant_output": {
+    "path": "/mnt/nas/openclaw/reports/models/dream7b_s100p_v17_execution_20260703/evidence/position_ablation_v17/short_chinese_prompt_padded/position_variants/shifted_plus_16_positions/dequant_output.npy",
+    "sha256": "0822a6ef00d71bb60127e051db511cecbcb44764b6e7fcbcf4681a925640cb02",
+    "stats": {
+      "shape": [
+        128,
+        3584
+      ],
+      "dtype": "float32",
+      "size": 458752,
+      "min": -0.6141912937164307,
+      "max": 0.6999756097793579,
+      "mean": -0.00011439424997661263,
+      "std": 0.05307001248002052,
+      "abs_max": 0.6999756097793579,
+      "nonzero_count": 458534,
+      "allzero": false,
+      "constant": false
+    }
+  }
+}

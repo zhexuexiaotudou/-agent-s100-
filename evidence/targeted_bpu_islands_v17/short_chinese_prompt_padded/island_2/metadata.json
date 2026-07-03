@@ -1,0 +1,270 @@
+{
+  "case_id": "short_chinese_prompt_padded",
+  "segment": 2,
+  "input_source": {
+    "kind": "hf_layer_output",
+    "path": "/mnt/nas/openclaw/reports/models/dream7b_s100p_v11_execution_20260701/evidence/hf_boundaries_v11/short_chinese_prompt_padded/layer_01_output.npy",
+    "sha256": "8e2bf066fedfc5b6e838a8da833525f7fbda99394b71a51e4a5235f1d0c801b3"
+  },
+  "layout_scale_variant_used": "direct_float32_seq_hidden_or_token_ids",
+  "bpu": {
+    "segment": 2,
+    "model_name": "dream_segment_02_03",
+    "hbm_path": "/mnt/nas/openclaw/models/dream7b-hbm/seq128-b1-lmheadq16-lasttoken/seg02_03/dream7b_segment_2_3_seq128_q8.hbm",
+    "hbm_sha256": "2e4efa4cbfdd1ade5a2a511142de8c885bea14b896a2174a8e066bd8aaf940e6",
+    "input_contract": {
+      "kind": "hidden_plus_position_ids",
+      "input_0_shape": [
+        128,
+        3584
+      ],
+      "input_0_dtype": "float32",
+      "input_1_shape": [
+        128
+      ],
+      "input_1_dtype": "int32"
+    },
+    "load_seconds": 1.933,
+    "run_seconds": 0.009,
+    "quant_metadata": {
+      "available": true,
+      "scale": [
+        0.0010667958995327353
+      ],
+      "scale_first": 0.0010667958995327353,
+      "zero_point": [
+        0.0
+      ],
+      "repr": "<hbm_runtime.HB_HBMRuntime.QuantParams object at 0xffff44d249f0>"
+    },
+    "raw_stats": {
+      "shape": [
+        128,
+        3584
+      ],
+      "dtype": "int16",
+      "size": 458752,
+      "min": -427.0,
+      "max": 427.0,
+      "mean": 0.761627197265625,
+      "std": 187.38530052346667,
+      "abs_max": 427.0,
+      "nonzero_count": 457182,
+      "allzero": false,
+      "constant": false,
+      "nan_count": 0,
+      "inf_count": 0
+    },
+    "dequant_stats": {
+      "shape": [
+        128,
+        3584
+      ],
+      "dtype": "float32",
+      "size": 458752,
+      "min": -0.4555218517780304,
+      "max": 0.4555218517780304,
+      "mean": 0.0008125007734633982,
+      "std": 0.19990187883377075,
+      "abs_max": 0.4555218517780304,
+      "nonzero_count": 457182,
+      "allzero": false,
+      "constant": false,
+      "nan_count": 0,
+      "inf_count": 0
+    }
+  },
+  "raw_output": {
+    "path": "evidence/single_segment_substitution_v12r/short_chinese_prompt_padded/seg_02/bpu_raw_output.npy",
+    "sha256": "18d95c6442a1825d41fa6019a64fcc8b5ca0eec3b47048b8b9b89c765bd0262a",
+    "stats": {
+      "shape": [
+        128,
+        3584
+      ],
+      "dtype": "int16",
+      "size": 458752,
+      "min": -427.0,
+      "max": 427.0,
+      "mean": 0.761627197265625,
+      "std": 187.38530052346667,
+      "abs_max": 427.0,
+      "nonzero_count": 457182,
+      "allzero": false,
+      "constant": false,
+      "nan_count": 0,
+      "inf_count": 0
+    }
+  },
+  "dequant_output": {
+    "path": "evidence/single_segment_substitution_v12r/short_chinese_prompt_padded/seg_02/bpu_dequant_output.npy",
+    "sha256": "df294eb9bd8d1664c715b698e77f99e2084969dac791ca9900aca63808cd70da",
+    "stats": {
+      "shape": [
+        128,
+        3584
+      ],
+      "dtype": "float32",
+      "size": 458752,
+      "min": -0.4555218517780304,
+      "max": 0.4555218517780304,
+      "mean": 0.0008125007734633982,
+      "std": 0.19990187883377075,
+      "abs_max": 0.4555218517780304,
+      "nonzero_count": 457182,
+      "allzero": false,
+      "constant": false,
+      "nan_count": 0,
+      "inf_count": 0
+    }
+  },
+  "suffix": {
+    "kind": "hf_suffix",
+    "hf_suffix_layers": [
+      3,
+      4,
+      5,
+      6,
+      7,
+      8,
+      9,
+      10,
+      11,
+      12,
+      13,
+      14,
+      15,
+      16,
+      17,
+      18,
+      19,
+      20,
+      21,
+      22,
+      23,
+      24,
+      25,
+      26,
+      27
+    ]
+  },
+  "logits": {
+    "path": "evidence/single_segment_substitution_v12r/short_chinese_prompt_padded/seg_02/substitution_logits.npy",
+    "sha256": "c39eb38c92facadcefe59492c9b6a28909e2e387cdcf1a4e5cd01d5668c3b41b",
+    "stats": {
+      "shape": [
+        152064
+      ],
+      "dtype": "float32",
+      "size": 152064,
+      "min": -11.0,
+      "max": 12.1875,
+      "mean": -6.918537616729736,
+      "std": 1.2724509239196777,
+      "abs_max": 12.1875,
+      "nonzero_count": 152064,
+      "allzero": false,
+      "constant": false,
+      "nan_count": 0,
+      "inf_count": 0
+    }
+  },
+  "final_metrics": {
+    "shape_match": true,
+    "reference_top1": 151643,
+    "candidate_top1": 151643,
+    "top1_agreement": true,
+    "reference_top1_in_candidate_top5": true,
+    "top5_overlap": 3,
+    "cosine": 0.9944116020451758,
+    "pearson_centered": 0.8602299989922332,
+    "relative_l2": 0.24327235182054857,
+    "max_abs_error": 7.640625,
+    "mean_abs_error": 2.033264504538642,
+    "candidate_normalized_entropy": 0.025466185482712535,
+    "candidate_stats": {
+      "shape": [
+        152064
+      ],
+      "dtype": "float32",
+      "size": 152064,
+      "min": -11.0,
+      "max": 12.1875,
+      "mean": -6.918537616729736,
+      "std": 1.2724509239196777,
+      "abs_max": 12.1875,
+      "nonzero_count": 152064,
+      "allzero": false,
+      "constant": false,
+      "nan_count": 0,
+      "inf_count": 0
+    },
+    "reference_stats": {
+      "shape": [
+        152064
+      ],
+      "dtype": "float32",
+      "size": 152064,
+      "min": -12.5,
+      "max": 9.125,
+      "mean": -8.877497673034668,
+      "std": 1.8784396648406982,
+      "abs_max": 12.5,
+      "nonzero_count": 152064,
+      "allzero": false,
+      "constant": false,
+      "nan_count": 0,
+      "inf_count": 0
+    }
+  },
+  "boundary_metrics": {
+    "shape_match": true,
+    "reference_top1": 59004,
+    "candidate_top1": 19072,
+    "top1_agreement": false,
+    "reference_top1_in_candidate_top5": false,
+    "top5_overlap": 0,
+    "cosine": 0.8047159862533707,
+    "pearson_centered": 0.8047277287569938,
+    "relative_l2": 0.5948898298028159,
+    "max_abs_error": 4.70072814822197,
+    "mean_abs_error": 0.1069263922990079,
+    "candidate_normalized_entropy": 0.9984739211410241,
+    "candidate_stats": {
+      "shape": [
+        458752
+      ],
+      "dtype": "float32",
+      "size": 458752,
+      "min": -0.4555218517780304,
+      "max": 0.4555218517780304,
+      "mean": 0.0008125007734633982,
+      "std": 0.19990187883377075,
+      "abs_max": 0.4555218517780304,
+      "nonzero_count": 457182,
+      "allzero": false,
+      "constant": false,
+      "nan_count": 0,
+      "inf_count": 0
+    },
+    "reference_stats": {
+      "shape": [
+        458752
+      ],
+      "dtype": "float32",
+      "size": 458752,
+      "min": -5.15625,
+      "max": 2.78125,
+      "mean": -0.0002941264829132706,
+      "std": 0.2608058750629425,
+      "abs_max": 5.15625,
+      "nonzero_count": 458416,
+      "allzero": false,
+      "constant": false,
+      "nan_count": 0,
+      "inf_count": 0
+    }
+  },
+  "elapsed_seconds": 1000.25,
+  "status": "pass"
+}

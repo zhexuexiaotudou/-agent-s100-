@@ -1,0 +1,631 @@
+{
+  "schema_version": "dream7b_s100p_v17_1860_targeted_bpu_island_validation",
+  "created_at_utc": "2026-07-03T15:37:42.936320+00:00",
+  "run_commands": [
+    "C:\\Users\\zhexu\\AppData\\Local\\Python\\pythoncore-3.14-64\\python.exe tools\\build_v17_research_thread.py --root ."
+  ],
+  "host_environment": {
+    "local_platform": "Windows-11-10.0.26200-SP0",
+    "python": "3.14.3 (tags/v3.14.3:323c59a, Feb  3 2026, 16:04:56) [MSC v.1944 64 bit (AMD64)]"
+  },
+  "git": {
+    "returncode": 128,
+    "stdout": "",
+    "stderr": "fatal: not a git repository (or any of the parent directories): .git"
+  },
+  "input_artifacts": [
+    {
+      "path": "evidence/single_segment_substitution_v12r",
+      "exists": true
+    },
+    {
+      "path": "evidence/bpu_island_reconstruction_v13",
+      "exists": true
+    }
+  ],
+  "output_artifacts": [
+    {
+      "path": "reports/1860_targeted_bpu_island_validation.json",
+      "exists": true,
+      "size_bytes": 20524,
+      "sha256": "b08c86e1370d7531689520a93c2d9288abbc52794c5dc4f1159e2fde960d28a7"
+    },
+    {
+      "path": "reports/1860_targeted_bpu_island_validation.md",
+      "exists": true,
+      "size_bytes": 322,
+      "sha256": "7b1da58782ebf3f12bd2ed5bc9110dea841eb18951763503d3d103c1b65fac87"
+    }
+  ],
+  "blocking_or_failure_reasons": [
+    "Targeted [1], [2], and [1,2] islands do not pass the all-three-case v17 strict gate; ramp case is the recurring failure."
+  ],
+  "next_minimal_experiments": [],
+  "safety": {
+    "generation_quality_run": false,
+    "product_routes_18888_18889_touched": false,
+    "dream7b_frontend_openclaw_traffic_touched": false,
+    "harness_qwen_openclaw_defaults_modified": false
+  },
+  "verdict": "no_targeted_bpu_island_strict_pass",
+  "strict_gate": {
+    "reference_top1_in_candidate_top5_required": true,
+    "cosine_min": 0.95,
+    "relative_l2_max": 0.3,
+    "no_allzero_or_constant_logits": true,
+    "top1_agreement": "reported_not_hard_required"
+  },
+  "rows": [
+    {
+      "case_id": "zeros",
+      "island": "[1]",
+      "input_boundary_name": "hf_layer_output",
+      "output_boundary_name": "BPU island output -> HF suffix input",
+      "conversion_used": "official_runtime_output_scale_direct_float32_no_target_affine",
+      "official_scale_available": true,
+      "final_metrics": {
+        "shape_match": true,
+        "reference_top1": 220,
+        "candidate_top1": 220,
+        "top1_agreement": true,
+        "reference_top1_in_candidate_top5": true,
+        "top5_overlap": 3,
+        "cosine": 0.9987466601720674,
+        "pearson_centered": 0.9573031848327884,
+        "relative_l2": 0.05439471786443934,
+        "max_abs_error": 3.46875,
+        "mean_abs_error": 0.38163133984061604,
+        "candidate_normalized_entropy": 0.6347360354908663,
+        "candidate_stats": {
+          "shape": [
+            152064
+          ],
+          "dtype": "float32",
+          "size": 152064,
+          "min": -14.3125,
+          "max": 1.296875,
+          "mean": -10.458613395690918,
+          "std": 1.6959292888641357,
+          "abs_max": 14.3125,
+          "nonzero_count": 152064,
+          "allzero": false,
+          "constant": false,
+          "nan_count": 0,
+          "inf_count": 0
+        },
+        "reference_stats": {
+          "shape": [
+            152064
+          ],
+          "dtype": "float32",
+          "size": 152064,
+          "min": -14.25,
+          "max": 1.75,
+          "mean": -10.231769561767578,
+          "std": 1.7890510559082031,
+          "abs_max": 14.25,
+          "nonzero_count": 152064,
+          "allzero": false,
+          "constant": false,
+          "nan_count": 0,
+          "inf_count": 0
+        }
+      },
+      "strict_pass": true,
+      "status": "pass",
+      "source_metadata": "evidence/single_segment_substitution_v12r/zeros/seg_01/metadata.json"
+    },
+    {
+      "case_id": "zeros",
+      "island": "[2]",
+      "input_boundary_name": "hf_layer_output",
+      "output_boundary_name": "BPU island output -> HF suffix input",
+      "conversion_used": "official_runtime_output_scale_direct_float32_no_target_affine",
+      "official_scale_available": true,
+      "final_metrics": {
+        "shape_match": true,
+        "reference_top1": 220,
+        "candidate_top1": 151643,
+        "top1_agreement": false,
+        "reference_top1_in_candidate_top5": true,
+        "top5_overlap": 3,
+        "cosine": 0.9927867345326791,
+        "pearson_centered": 0.7351509667213215,
+        "relative_l2": 0.1685334072511153,
+        "max_abs_error": 8.0625,
+        "mean_abs_error": 1.2898589882385048,
+        "candidate_normalized_entropy": 0.5560137132246044,
+        "candidate_stats": {
+          "shape": [
+            152064
+          ],
+          "dtype": "float32",
+          "size": 152064,
+          "min": -15.625,
+          "max": 1.28125,
+          "mean": -11.484200477600098,
+          "std": 1.1572046279907227,
+          "abs_max": 15.625,
+          "nonzero_count": 152064,
+          "allzero": false,
+          "constant": false,
+          "nan_count": 0,
+          "inf_count": 0
+        },
+        "reference_stats": {
+          "shape": [
+            152064
+          ],
+          "dtype": "float32",
+          "size": 152064,
+          "min": -14.25,
+          "max": 1.75,
+          "mean": -10.231769561767578,
+          "std": 1.7890510559082031,
+          "abs_max": 14.25,
+          "nonzero_count": 152064,
+          "allzero": false,
+          "constant": false,
+          "nan_count": 0,
+          "inf_count": 0
+        }
+      },
+      "strict_pass": true,
+      "status": "pass",
+      "source_metadata": "evidence/single_segment_substitution_v12r/zeros/seg_02/metadata.json"
+    },
+    {
+      "case_id": "zeros",
+      "island": "[1,2]",
+      "input_boundary_name": "/mnt/nas/openclaw/reports/models/dream7b_s100p_v11_execution_20260701/evidence/hf_boundaries_v11/zeros/layer_00_output.npy",
+      "output_boundary_name": "BPU island output -> HF suffix input",
+      "conversion_used": "official_runtime_output_scale_direct_float32_no_target_affine",
+      "official_scale_available": true,
+      "final_metrics": {
+        "shape_match": true,
+        "reference_top1": 220,
+        "candidate_top1": 151643,
+        "top1_agreement": false,
+        "reference_top1_in_candidate_top5": true,
+        "top5_overlap": 2,
+        "cosine": 0.9897397280578065,
+        "pearson_centered": 0.561792452349674,
+        "relative_l2": 0.24683616137632639,
+        "max_abs_error": 9.4375,
+        "mean_abs_error": 2.0944823576545075,
+        "candidate_normalized_entropy": 0.6270975545117258,
+        "candidate_stats": {
+          "shape": [
+            152064
+          ],
+          "dtype": "float32",
+          "size": 152064,
+          "min": -16.5,
+          "max": -0.400390625,
+          "mean": -12.324068069458008,
+          "std": 1.0777568817138672,
+          "abs_max": 16.5,
+          "nonzero_count": 152064,
+          "allzero": false,
+          "constant": false,
+          "nan_count": 0,
+          "inf_count": 0
+        },
+        "reference_stats": {
+          "shape": [
+            152064
+          ],
+          "dtype": "float32",
+          "size": 152064,
+          "min": -14.25,
+          "max": 1.75,
+          "mean": -10.231769561767578,
+          "std": 1.7890510559082031,
+          "abs_max": 14.25,
+          "nonzero_count": 152064,
+          "allzero": false,
+          "constant": false,
+          "nan_count": 0,
+          "inf_count": 0
+        }
+      },
+      "strict_pass": true,
+      "status": "pass",
+      "source_metadata": "evidence/bpu_island_reconstruction_v13/zeros/island_01_02/metadata.json"
+    },
+    {
+      "case_id": "ramp",
+      "island": "[1]",
+      "input_boundary_name": "hf_layer_output",
+      "output_boundary_name": "BPU island output -> HF suffix input",
+      "conversion_used": "official_runtime_output_scale_direct_float32_no_target_affine",
+      "official_scale_available": true,
+      "final_metrics": {
+        "shape_match": true,
+        "reference_top1": 151643,
+        "candidate_top1": 151643,
+        "top1_agreement": true,
+        "reference_top1_in_candidate_top5": true,
+        "top5_overlap": 1,
+        "cosine": 0.8851444727108002,
+        "pearson_centered": 0.29401541343438153,
+        "relative_l2": 0.6965286925172396,
+        "max_abs_error": 6.484375,
+        "mean_abs_error": 1.3090662981449352,
+        "candidate_normalized_entropy": 0.003956234529260854,
+        "candidate_stats": {
+          "shape": [
+            152064
+          ],
+          "dtype": "float32",
+          "size": 152064,
+          "min": -7.53125,
+          "max": 16.0,
+          "mean": -2.8392980098724365,
+          "std": 1.1834298372268677,
+          "abs_max": 16.0,
+          "nonzero_count": 152064,
+          "allzero": false,
+          "constant": false,
+          "nan_count": 0,
+          "inf_count": 0
+        },
+        "reference_stats": {
+          "shape": [
+            152064
+          ],
+          "dtype": "float32",
+          "size": 152064,
+          "min": -7.65625,
+          "max": 12.25,
+          "mean": -1.9889841079711914,
+          "std": 0.9208143353462219,
+          "abs_max": 12.25,
+          "nonzero_count": 152064,
+          "allzero": false,
+          "constant": false,
+          "nan_count": 0,
+          "inf_count": 0
+        }
+      },
+      "strict_pass": false,
+      "status": "pass",
+      "source_metadata": "evidence/single_segment_substitution_v12r/ramp/seg_01/metadata.json"
+    },
+    {
+      "case_id": "ramp",
+      "island": "[2]",
+      "input_boundary_name": "hf_layer_output",
+      "output_boundary_name": "BPU island output -> HF suffix input",
+      "conversion_used": "official_runtime_output_scale_direct_float32_no_target_affine",
+      "official_scale_available": true,
+      "final_metrics": {
+        "shape_match": true,
+        "reference_top1": 151643,
+        "candidate_top1": 151643,
+        "top1_agreement": true,
+        "reference_top1_in_candidate_top5": true,
+        "top5_overlap": 1,
+        "cosine": 0.8873157801762007,
+        "pearson_centered": 0.05784853552924378,
+        "relative_l2": 2.0024496533897596,
+        "max_abs_error": 9.34375,
+        "mean_abs_error": 4.062932716450507,
+        "candidate_normalized_entropy": 0.0008202134456622376,
+        "candidate_stats": {
+          "shape": [
+            152064
+          ],
+          "dtype": "float32",
+          "size": 152064,
+          "min": -10.4375,
+          "max": 15.125,
+          "mean": -6.038248538970947,
+          "std": 1.4749999046325684,
+          "abs_max": 15.125,
+          "nonzero_count": 152064,
+          "allzero": false,
+          "constant": false,
+          "nan_count": 0,
+          "inf_count": 0
+        },
+        "reference_stats": {
+          "shape": [
+            152064
+          ],
+          "dtype": "float32",
+          "size": 152064,
+          "min": -7.65625,
+          "max": 12.25,
+          "mean": -1.9889841079711914,
+          "std": 0.9208143353462219,
+          "abs_max": 12.25,
+          "nonzero_count": 152064,
+          "allzero": false,
+          "constant": false,
+          "nan_count": 0,
+          "inf_count": 0
+        }
+      },
+      "strict_pass": false,
+      "status": "pass",
+      "source_metadata": "evidence/single_segment_substitution_v12r/ramp/seg_02/metadata.json"
+    },
+    {
+      "case_id": "ramp",
+      "island": "[1,2]",
+      "input_boundary_name": "/mnt/nas/openclaw/reports/models/dream7b_s100p_v11_execution_20260701/evidence/hf_boundaries_v11/ramp/layer_00_output.npy",
+      "output_boundary_name": "BPU island output -> HF suffix input",
+      "conversion_used": "official_runtime_output_scale_direct_float32_no_target_affine",
+      "official_scale_available": true,
+      "final_metrics": {
+        "shape_match": true,
+        "reference_top1": 151643,
+        "candidate_top1": 151643,
+        "top1_agreement": true,
+        "reference_top1_in_candidate_top5": true,
+        "top5_overlap": 1,
+        "cosine": 0.8932710127498482,
+        "pearson_centered": 0.027381070191340937,
+        "relative_l2": 2.5246112657214064,
+        "max_abs_error": 11.6875,
+        "mean_abs_error": 5.283631550267288,
+        "candidate_normalized_entropy": 0.11520385303087932,
+        "candidate_stats": {
+          "shape": [
+            152064
+          ],
+          "dtype": "float32",
+          "size": 152064,
+          "min": -11.0625,
+          "max": 8.5625,
+          "mean": -7.269302845001221,
+          "std": 1.3999050855636597,
+          "abs_max": 11.0625,
+          "nonzero_count": 152064,
+          "allzero": false,
+          "constant": false,
+          "nan_count": 0,
+          "inf_count": 0
+        },
+        "reference_stats": {
+          "shape": [
+            152064
+          ],
+          "dtype": "float32",
+          "size": 152064,
+          "min": -7.65625,
+          "max": 12.25,
+          "mean": -1.9889841079711914,
+          "std": 0.9208143353462219,
+          "abs_max": 12.25,
+          "nonzero_count": 152064,
+          "allzero": false,
+          "constant": false,
+          "nan_count": 0,
+          "inf_count": 0
+        }
+      },
+      "strict_pass": false,
+      "status": "pass",
+      "source_metadata": "evidence/bpu_island_reconstruction_v13/ramp/island_01_02/metadata.json"
+    },
+    {
+      "case_id": "short_chinese_prompt_padded",
+      "island": "[1]",
+      "input_boundary_name": "hf_layer_output",
+      "output_boundary_name": "BPU island output -> HF suffix input",
+      "conversion_used": "official_runtime_output_scale_direct_float32_no_target_affine",
+      "official_scale_available": true,
+      "final_metrics": {
+        "shape_match": true,
+        "reference_top1": 151643,
+        "candidate_top1": 220,
+        "top1_agreement": false,
+        "reference_top1_in_candidate_top5": true,
+        "top5_overlap": 2,
+        "cosine": 0.9953378968417455,
+        "pearson_centered": 0.932074115015126,
+        "relative_l2": 0.21536491437324923,
+        "max_abs_error": 9.1015625,
+        "mean_abs_error": 1.7534768174995075,
+        "candidate_normalized_entropy": 0.5253107052611347,
+        "candidate_stats": {
+          "shape": [
+            152064
+          ],
+          "dtype": "float32",
+          "size": 152064,
+          "min": -14.6875,
+          "max": 3.984375,
+          "mean": -10.428914070129395,
+          "std": 2.7250423431396484,
+          "abs_max": 14.6875,
+          "nonzero_count": 152064,
+          "allzero": false,
+          "constant": false,
+          "nan_count": 0,
+          "inf_count": 0
+        },
+        "reference_stats": {
+          "shape": [
+            152064
+          ],
+          "dtype": "float32",
+          "size": 152064,
+          "min": -12.5,
+          "max": 9.125,
+          "mean": -8.877497673034668,
+          "std": 1.8784396648406982,
+          "abs_max": 12.5,
+          "nonzero_count": 152064,
+          "allzero": false,
+          "constant": false,
+          "nan_count": 0,
+          "inf_count": 0
+        }
+      },
+      "strict_pass": true,
+      "status": "pass",
+      "source_metadata": "evidence/single_segment_substitution_v12r/short_chinese_prompt_padded/seg_01/metadata.json"
+    },
+    {
+      "case_id": "short_chinese_prompt_padded",
+      "island": "[2]",
+      "input_boundary_name": "hf_layer_output",
+      "output_boundary_name": "BPU island output -> HF suffix input",
+      "conversion_used": "official_runtime_output_scale_direct_float32_no_target_affine",
+      "official_scale_available": true,
+      "final_metrics": {
+        "shape_match": true,
+        "reference_top1": 151643,
+        "candidate_top1": 151643,
+        "top1_agreement": true,
+        "reference_top1_in_candidate_top5": true,
+        "top5_overlap": 3,
+        "cosine": 0.9944116020451758,
+        "pearson_centered": 0.8602299989922332,
+        "relative_l2": 0.24327235182054857,
+        "max_abs_error": 7.640625,
+        "mean_abs_error": 2.033264504538642,
+        "candidate_normalized_entropy": 0.025466185482712535,
+        "candidate_stats": {
+          "shape": [
+            152064
+          ],
+          "dtype": "float32",
+          "size": 152064,
+          "min": -11.0,
+          "max": 12.1875,
+          "mean": -6.918537616729736,
+          "std": 1.2724509239196777,
+          "abs_max": 12.1875,
+          "nonzero_count": 152064,
+          "allzero": false,
+          "constant": false,
+          "nan_count": 0,
+          "inf_count": 0
+        },
+        "reference_stats": {
+          "shape": [
+            152064
+          ],
+          "dtype": "float32",
+          "size": 152064,
+          "min": -12.5,
+          "max": 9.125,
+          "mean": -8.877497673034668,
+          "std": 1.8784396648406982,
+          "abs_max": 12.5,
+          "nonzero_count": 152064,
+          "allzero": false,
+          "constant": false,
+          "nan_count": 0,
+          "inf_count": 0
+        }
+      },
+      "strict_pass": true,
+      "status": "pass",
+      "source_metadata": "evidence/single_segment_substitution_v12r/short_chinese_prompt_padded/seg_02/metadata.json"
+    },
+    {
+      "case_id": "short_chinese_prompt_padded",
+      "island": "[1,2]",
+      "input_boundary_name": "/mnt/nas/openclaw/reports/models/dream7b_s100p_v11_execution_20260701/evidence/hf_boundaries_v11/short_chinese_prompt_padded/layer_00_output.npy",
+      "output_boundary_name": "BPU island output -> HF suffix input",
+      "conversion_used": "official_runtime_output_scale_direct_float32_no_target_affine",
+      "official_scale_available": true,
+      "final_metrics": {
+        "shape_match": true,
+        "reference_top1": 151643,
+        "candidate_top1": 151643,
+        "top1_agreement": true,
+        "reference_top1_in_candidate_top5": true,
+        "top5_overlap": 3,
+        "cosine": 0.9915937175563057,
+        "pearson_centered": 0.7980703912859516,
+        "relative_l2": 0.35126610398693225,
+        "max_abs_error": 8.3046875,
+        "mean_abs_error": 2.988886541188365,
+        "candidate_normalized_entropy": 0.027708500477123192,
+        "candidate_stats": {
+          "shape": [
+            152064
+          ],
+          "dtype": "float32",
+          "size": 152064,
+          "min": -9.8125,
+          "max": 12.9375,
+          "mean": -5.911850929260254,
+          "std": 1.210411787033081,
+          "abs_max": 12.9375,
+          "nonzero_count": 152064,
+          "allzero": false,
+          "constant": false,
+          "nan_count": 0,
+          "inf_count": 0
+        },
+        "reference_stats": {
+          "shape": [
+            152064
+          ],
+          "dtype": "float32",
+          "size": 152064,
+          "min": -12.5,
+          "max": 9.125,
+          "mean": -8.877497673034668,
+          "std": 1.8784396648406982,
+          "abs_max": 12.5,
+          "nonzero_count": 152064,
+          "allzero": false,
+          "constant": false,
+          "nan_count": 0,
+          "inf_count": 0
+        }
+      },
+      "strict_pass": false,
+      "status": "pass",
+      "source_metadata": "evidence/bpu_island_reconstruction_v13/short_chinese_prompt_padded/island_01_02/metadata.json"
+    }
+  ],
+  "summary_by_island": {
+    "[1]": {
+      "rows": 3,
+      "strict_pass_rows": 2,
+      "all_cases_strict_pass": false,
+      "reference_top1_in_candidate_top5_rows": 3,
+      "top1_agreement_rows": 2,
+      "median_relative_l2": 0.21536491437324923,
+      "min_cosine": 0.8851444727108002
+    },
+    "[2]": {
+      "rows": 3,
+      "strict_pass_rows": 2,
+      "all_cases_strict_pass": false,
+      "reference_top1_in_candidate_top5_rows": 3,
+      "top1_agreement_rows": 2,
+      "median_relative_l2": 0.24327235182054857,
+      "min_cosine": 0.8873157801762007
+    },
+    "[1,2]": {
+      "rows": 3,
+      "strict_pass_rows": 1,
+      "all_cases_strict_pass": false,
+      "reference_top1_in_candidate_top5_rows": 3,
+      "top1_agreement_rows": 2,
+      "median_relative_l2": 0.35126610398693225,
+      "min_cosine": 0.8932710127498482
+    }
+  },
+  "valid_islands": [],
+  "skipped_optional": [
+    {
+      "island": "[1,2,3]",
+      "reason": "no existing row and HF suffix rerun is expensive/runtime-risky"
+    },
+    {
+      "island": "[2,3]",
+      "reason": "no existing row and HF suffix rerun is expensive/runtime-risky"
+    }
+  ]
+}

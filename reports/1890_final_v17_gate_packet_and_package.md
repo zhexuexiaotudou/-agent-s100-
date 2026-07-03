@@ -1,0 +1,4 @@
+# Final v17 Gate Packet and Package
+
+- zip_path: `evidence_for_gptpro/dream7b_s100p_v17_for_gptpro_20260703_233743.zip`
+- zip_sha256: `5f51618398c94d41827db13b18b6524c47d4e5e57f3cd8b03c61836490a6ebd9`

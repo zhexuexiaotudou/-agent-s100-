@@ -1,0 +1,546 @@
+{
+  "schema_version": "dream7b_s100p_v17_1820_add_input1_reconstruction",
+  "created_at_utc": "2026-07-03T15:37:40.587503+00:00",
+  "run_commands": [
+    "C:\\Users\\zhexu\\AppData\\Local\\Python\\pythoncore-3.14-64\\python.exe tools\\build_v17_research_thread.py --root ."
+  ],
+  "host_environment": {
+    "local_platform": "Windows-11-10.0.26200-SP0",
+    "python": "3.14.3 (tags/v3.14.3:323c59a, Feb  3 2026, 16:04:56) [MSC v.1944 64 bit (AMD64)]"
+  },
+  "git": {
+    "returncode": 128,
+    "stdout": "",
+    "stderr": "fatal: not a git repository (or any of the parent directories): .git"
+  },
+  "input_artifacts": [
+    {
+      "path": "evidence/seg00_01_exact_graph_v14",
+      "exists": true
+    }
+  ],
+  "output_artifacts": [
+    {
+      "path": "reports/1820_add_input1_reconstruction.json",
+      "exists": true,
+      "size_bytes": 16221,
+      "sha256": "18e80599941b59d759c48d08639941b0a2b20bcc88b0789d1889af17ce9e53ea"
+    },
+    {
+      "path": "reports/1820_add_input1_reconstruction.md",
+      "exists": true,
+      "size_bytes": 344,
+      "sha256": "7bebe80766864012a28be9e4ec8bbf99b367f36107e62fc79a4260aec0151aab"
+    }
+  ],
+  "blocking_or_failure_reasons": [
+    "hbir.add input-1 cannot be formally reconstructed without official add input-0/GatherND scale or direct add input-1 dump."
+  ],
+  "next_minimal_experiments": [],
+  "safety": {
+    "generation_quality_run": false,
+    "product_routes_18888_18889_touched": false,
+    "dream7b_frontend_openclaw_traffic_touched": false,
+    "harness_qwen_openclaw_defaults_modified": false
+  },
+  "verdict": "add_input1_not_legally_reconstructable_scale_domain_blocked",
+  "formal_reconstruction_legal": false,
+  "reason": "add output scale is official, but add input-0/GatherND scale is missing; int8 raw and int16 dequant cannot be subtracted for root-cause evidence.",
+  "diagnostic_only": [
+    {
+      "case_id": "zeros",
+      "formal_reconstruction_legal": false,
+      "domain": {
+        "add_input0": "int8 raw with missing official scale",
+        "add_output": "int16 with official output scale",
+        "diagnostic_add0_scale": 0.006681890545356027,
+        "diagnostic_scale_category": "target_fitted_LS_invalid_for_root_cause"
+      },
+      "add_input0_raw_stats": {
+        "shape": [
+          128,
+          3584
+        ],
+        "dtype": "float32",
+        "size": 458752,
+        "min": -18.0,
+        "max": 15.0,
+        "mean": 0.0,
+        "std": 2.136000871658325,
+        "abs_max": 18.0,
+        "nonzero_count": 366848,
+        "allzero": false,
+        "constant": false,
+        "nan_count": 0,
+        "inf_count": 0
+      },
+      "add_output_dequant_stats": {
+        "shape": [
+          128,
+          3584
+        ],
+        "dtype": "float32",
+        "size": 458752,
+        "min": -0.5522932410240173,
+        "max": 0.5447757840156555,
+        "mean": -0.00010915865277638659,
+        "std": 0.05312284082174301,
+        "abs_max": 0.5522932410240173,
+        "nonzero_count": 458449,
+        "allzero": false,
+        "constant": false,
+        "nan_count": 0,
+        "inf_count": 0
+      },
+      "diagnostic_add_input1_stats": {
+        "shape": [
+          128,
+          3584
+        ],
+        "dtype": "float32",
+        "size": 458752,
+        "min": -0.5790207982063293,
+        "max": 0.5314120054244995,
+        "mean": -0.00010915863822447136,
+        "std": 0.05092833936214447,
+        "abs_max": 0.5790207982063293,
+        "nonzero_count": 458723,
+        "allzero": false,
+        "constant": false,
+        "nan_count": 0,
+        "inf_count": 0
+      },
+      "diagnostic_add_input1_path": "evidence/add_input1_reconstruction_v17/zeros_diagnostic_add_input1_estimated_invalid_domain.npy",
+      "per_token_norm_stats": {
+        "shape": [
+          128
+        ],
+        "dtype": "float32",
+        "size": 128,
+        "min": 3.0442073345184326,
+        "max": 3.0520713329315186,
+        "mean": 3.0489087104797363,
+        "std": 0.0015578186139464378,
+        "abs_max": 3.0520713329315186,
+        "nonzero_count": 128,
+        "allzero": false,
+        "constant": false,
+        "nan_count": 0,
+        "inf_count": 0
+      },
+      "per_dimension_norm_stats": {
+        "shape": [
+          3584
+        ],
+        "dtype": "float32",
+        "size": 3584,
+        "min": 0.0010588155128061771,
+        "max": 6.541845321655273,
+        "mean": 0.4104403555393219,
+        "std": 0.40439242124557495,
+        "abs_max": 6.541845321655273,
+        "nonzero_count": 3584,
+        "allzero": false,
+        "constant": false,
+        "nan_count": 0,
+        "inf_count": 0
+      },
+      "svd_top10": [
+        34.49416414240166,
+        0.10733684496723757,
+        0.04912899268335796,
+        0.04317776167414487,
+        0.03575553158416946,
+        0.02108100598496194,
+        0.01928396925435093,
+        0.018319684305767497,
+        0.016312431778475227,
+        0.01502954466488961
+      ],
+      "svd_top1_energy_ratio": 0.999982340809233,
+      "numerical_rank_1e_3": 5
+    },
+    {
+      "case_id": "ramp",
+      "formal_reconstruction_legal": false,
+      "domain": {
+        "add_input0": "int8 raw with missing official scale",
+        "add_output": "int16 with official output scale",
+        "diagnostic_add0_scale": 0.006681890545356027,
+        "diagnostic_scale_category": "target_fitted_LS_invalid_for_root_cause"
+      },
+      "add_input0_raw_stats": {
+        "shape": [
+          128,
+          3584
+        ],
+        "dtype": "float32",
+        "size": 458752,
+        "min": -40.0,
+        "max": 127.0,
+        "mean": -0.0055367606692016125,
+        "std": 2.083650827407837,
+        "abs_max": 127.0,
+        "nonzero_count": 345742,
+        "allzero": false,
+        "constant": false,
+        "nan_count": 0,
+        "inf_count": 0
+      },
+      "add_output_dequant_stats": {
+        "shape": [
+          128,
+          3584
+        ],
+        "dtype": "float32",
+        "size": 458752,
+        "min": -0.9146485328674316,
+        "max": 0.7435043454170227,
+        "mean": -0.0005779584171250463,
+        "std": 0.05070845037698746,
+        "abs_max": 0.9146485328674316,
+        "nonzero_count": 458457,
+        "allzero": false,
+        "constant": false,
+        "nan_count": 0,
+        "inf_count": 0
+      },
+      "diagnostic_add_input1_stats": {
+        "shape": [
+          128,
+          3584
+        ],
+        "dtype": "float32",
+        "size": 458752,
+        "min": -0.974785566329956,
+        "max": 0.7405468821525574,
+        "mean": -0.0005409623263403773,
+        "std": 0.04875005781650543,
+        "abs_max": 0.974785566329956,
+        "nonzero_count": 458675,
+        "allzero": false,
+        "constant": false,
+        "nan_count": 0,
+        "inf_count": 0
+      },
+      "diagnostic_add_input1_path": "evidence/add_input1_reconstruction_v17/ramp_diagnostic_add_input1_estimated_invalid_domain.npy",
+      "per_token_norm_stats": {
+        "shape": [
+          128
+        ],
+        "dtype": "float32",
+        "size": 128,
+        "min": 2.512362480163574,
+        "max": 4.719919204711914,
+        "mean": 2.869871139526367,
+        "std": 0.5315154194831848,
+        "abs_max": 4.719919204711914,
+        "nonzero_count": 128,
+        "allzero": false,
+        "constant": false,
+        "nan_count": 0,
+        "inf_count": 0
+      },
+      "per_dimension_norm_stats": {
+        "shape": [
+          3584
+        ],
+        "dtype": "float32",
+        "size": 3584,
+        "min": 0.1220676526427269,
+        "max": 6.242883682250977,
+        "mean": 0.43420299887657166,
+        "std": 0.34015581011772156,
+        "abs_max": 6.242883682250977,
+        "nonzero_count": 3584,
+        "allzero": false,
+        "constant": false,
+        "nan_count": 0,
+        "inf_count": 0
+      },
+      "svd_top10": [
+        28.30818332958127,
+        8.623521880463084,
+        5.360895055617376,
+        4.382728487086645,
+        3.76075829424553,
+        3.48574547537548,
+        3.3546794148064776,
+        3.075186282896714,
+        2.9108743263724097,
+        2.7200086867060627
+      ],
+      "svd_top1_energy_ratio": 0.7349236595108097,
+      "numerical_rank_1e_3": 128
+    },
+    {
+      "case_id": "short_chinese_prompt_padded",
+      "formal_reconstruction_legal": false,
+      "domain": {
+        "add_input0": "int8 raw with missing official scale",
+        "add_output": "int16 with official output scale",
+        "diagnostic_add0_scale": 0.006681890545356027,
+        "diagnostic_scale_category": "target_fitted_LS_invalid_for_root_cause"
+      },
+      "add_input0_raw_stats": {
+        "shape": [
+          128,
+          3584
+        ],
+        "dtype": "float32",
+        "size": 458752,
+        "min": -34.0,
+        "max": 72.0,
+        "mean": 0.0006125313811935484,
+        "std": 2.1119861602783203,
+        "abs_max": 72.0,
+        "nonzero_count": 360269,
+        "allzero": false,
+        "constant": false,
+        "nan_count": 0,
+        "inf_count": 0
+      },
+      "add_output_dequant_stats": {
+        "shape": [
+          128,
+          3584
+        ],
+        "dtype": "float32",
+        "size": 458752,
+        "min": -0.6131000518798828,
+        "max": 0.8125561475753784,
+        "mean": -0.00011516363883856684,
+        "std": 0.053335294127464294,
+        "abs_max": 0.8125561475753784,
+        "nonzero_count": 458480,
+        "allzero": false,
+        "constant": false,
+        "nan_count": 0,
+        "inf_count": 0
+      },
+      "diagnostic_add_input1_stats": {
+        "shape": [
+          128,
+          3584
+        ],
+        "dtype": "float32",
+        "size": 458752,
+        "min": -0.6159626245498657,
+        "max": 0.805874228477478,
+        "mean": -0.00011925649596378207,
+        "std": 0.051172710955142975,
+        "abs_max": 0.805874228477478,
+        "nonzero_count": 458704,
+        "allzero": false,
+        "constant": false,
+        "nan_count": 0,
+        "inf_count": 0
+      },
+      "diagnostic_add_input1_path": "evidence/add_input1_reconstruction_v17/short_chinese_prompt_padded_diagnostic_add_input1_estimated_invalid_domain.npy",
+      "per_token_norm_stats": {
+        "shape": [
+          128
+        ],
+        "dtype": "float32",
+        "size": 128,
+        "min": 2.8888330459594727,
+        "max": 5.252765655517578,
+        "mean": 3.0465445518493652,
+        "std": 0.32224953174591064,
+        "abs_max": 5.252765655517578,
+        "nonzero_count": 128,
+        "allzero": false,
+        "constant": false,
+        "nan_count": 0,
+        "inf_count": 0
+      },
+      "per_dimension_norm_stats": {
+        "shape": [
+          3584
+        ],
+        "dtype": "float32",
+        "size": 3584,
+        "min": 0.04403248801827431,
+        "max": 6.360823631286621,
+        "mean": 0.4339697062969208,
+        "std": 0.38322171568870544,
+        "abs_max": 6.360823631286621,
+        "nonzero_count": 3584,
+        "allzero": false,
+        "constant": false,
+        "nan_count": 0,
+        "inf_count": 0
+      },
+      "svd_top10": [
+        33.59579717580392,
+        4.987165698735927,
+        4.059982615851924,
+        3.7684559021209845,
+        2.5931463440158113,
+        1.9301351950985715,
+        1.7243031255338896,
+        1.1943552214692994,
+        0.8058948770876375,
+        0.6891459170792429
+      ],
+      "svd_top1_energy_ratio": 0.9395344920413435,
+      "numerical_rank_1e_3": 43
+    }
+  ],
+  "pairwise_same_position_different_tokens_diagnostic": [
+    {
+      "case_a": "zeros",
+      "case_b": "ramp",
+      "metrics": {
+        "shape_match": true,
+        "reference_top1": 144369,
+        "candidate_top1": 78868,
+        "top1_agreement": false,
+        "reference_top1_in_candidate_top5": false,
+        "top5_overlap": 0,
+        "cosine": 0.8095399250755447,
+        "pearson_centered": 0.809567840489031,
+        "relative_l2": 0.6053708187256331,
+        "max_abs_error": 0.9273746758699417,
+        "mean_abs_error": 0.018375084397138513,
+        "candidate_stats": {
+          "shape": [
+            458752
+          ],
+          "dtype": "float32",
+          "size": 458752,
+          "min": -0.974785566329956,
+          "max": 0.7405468821525574,
+          "mean": -0.0005409623263403773,
+          "std": 0.04875005781650543,
+          "abs_max": 0.974785566329956,
+          "nonzero_count": 458675,
+          "allzero": false,
+          "constant": false,
+          "nan_count": 0,
+          "inf_count": 0
+        },
+        "reference_stats": {
+          "shape": [
+            458752
+          ],
+          "dtype": "float32",
+          "size": 458752,
+          "min": -0.5790207982063293,
+          "max": 0.5314120054244995,
+          "mean": -0.00010915863822447136,
+          "std": 0.05092833936214447,
+          "abs_max": 0.5790207982063293,
+          "nonzero_count": 458723,
+          "allzero": false,
+          "constant": false,
+          "nan_count": 0,
+          "inf_count": 0
+        }
+      }
+    },
+    {
+      "case_a": "zeros",
+      "case_b": "short_chinese_prompt_padded",
+      "metrics": {
+        "shape_match": true,
+        "reference_top1": 144369,
+        "candidate_top1": 4593,
+        "top1_agreement": false,
+        "reference_top1_in_candidate_top5": false,
+        "top5_overlap": 0,
+        "cosine": 0.967326812913516,
+        "pearson_centered": 0.9673266666383391,
+        "relative_l2": 0.25628692908935263,
+        "max_abs_error": 0.5790105760097504,
+        "mean_abs_error": 0.004286093037847708,
+        "candidate_stats": {
+          "shape": [
+            458752
+          ],
+          "dtype": "float32",
+          "size": 458752,
+          "min": -0.6159626245498657,
+          "max": 0.805874228477478,
+          "mean": -0.00011925649596378207,
+          "std": 0.051172710955142975,
+          "abs_max": 0.805874228477478,
+          "nonzero_count": 458704,
+          "allzero": false,
+          "constant": false,
+          "nan_count": 0,
+          "inf_count": 0
+        },
+        "reference_stats": {
+          "shape": [
+            458752
+          ],
+          "dtype": "float32",
+          "size": 458752,
+          "min": -0.5790207982063293,
+          "max": 0.5314120054244995,
+          "mean": -0.00010915863822447136,
+          "std": 0.05092833936214447,
+          "abs_max": 0.5790207982063293,
+          "nonzero_count": 458723,
+          "allzero": false,
+          "constant": false,
+          "nan_count": 0,
+          "inf_count": 0
+        }
+      }
+    },
+    {
+      "case_a": "ramp",
+      "case_b": "short_chinese_prompt_padded",
+      "metrics": {
+        "shape_match": true,
+        "reference_top1": 78868,
+        "candidate_top1": 4593,
+        "top1_agreement": false,
+        "reference_top1_in_candidate_top5": false,
+        "top5_overlap": 0,
+        "cosine": 0.7947971043897141,
+        "pearson_centered": 0.7948223348290722,
+        "relative_l2": 0.6582090654382414,
+        "max_abs_error": 0.9205240570008755,
+        "mean_abs_error": 0.01873035357931379,
+        "candidate_stats": {
+          "shape": [
+            458752
+          ],
+          "dtype": "float32",
+          "size": 458752,
+          "min": -0.6159626245498657,
+          "max": 0.805874228477478,
+          "mean": -0.00011925649596378207,
+          "std": 0.051172710955142975,
+          "abs_max": 0.805874228477478,
+          "nonzero_count": 458704,
+          "allzero": false,
+          "constant": false,
+          "nan_count": 0,
+          "inf_count": 0
+        },
+        "reference_stats": {
+          "shape": [
+            458752
+          ],
+          "dtype": "float32",
+          "size": 458752,
+          "min": -0.974785566329956,
+          "max": 0.7405468821525574,
+          "mean": -0.0005409623263403773,
+          "std": 0.04875005781650543,
+          "abs_max": 0.974785566329956,
+          "nonzero_count": 458675,
+          "allzero": false,
+          "constant": false,
+          "nan_count": 0,
+          "inf_count": 0
+        }
+      }
+    }
+  ],
+  "position_contribution_candidate": "invalid_domain_diagnostic_suggests_token/case dependence; not a deployable formula"
+}
