@@ -1,0 +1,66 @@
+{
+  "generated_at": "2026-07-03T01:33:34.502342+08:00",
+  "gate_id": "stage1_package_reproducibility_gate",
+  "verdict": "ok_stage1_package_reproducibility_gate",
+  "passed_count": 7,
+  "check_count": 7,
+  "failure_count": 0,
+  "failures": [],
+  "checks": [
+    {
+      "label": "package zip exists",
+      "ok": true,
+      "detail": "evidence_for_gptpro\\ai_nas_harness_stage1_fixed_gptpro_20260702-233035.zip"
+    },
+    {
+      "label": "MANIFEST.json exists after extract",
+      "ok": true,
+      "detail": "F:\\Project\\Digua\\tmp\\stage1_package_repro_check\\MANIFEST.json"
+    },
+    {
+      "label": "SHA256SUMS.txt generated",
+      "ok": true,
+      "detail": "F:\\Project\\Digua\\tmp\\stage1_package_repro_check\\SHA256SUMS.txt"
+    },
+    {
+      "label": "production context assets resolve",
+      "ok": true,
+      "detail": {
+        "dispatcher": "F:\\Project\\Digua\\tmp\\stage1_package_repro_check\\production_context\\scripts\\probes\\ai_nas_allowlisted_tool.sh",
+        "qwen_gateway": "F:\\Project\\Digua\\tmp\\stage1_package_repro_check\\production_context\\scripts\\qwen25_openai_gateway.py",
+        "openclaw_service": "F:\\Project\\Digua\\tmp\\stage1_package_repro_check\\production_context\\configs\\systemd\\openclaw-gateway.service",
+        "qwen_service": "F:\\Project\\Digua\\tmp\\stage1_package_repro_check\\production_context\\configs\\systemd\\qwen25-local-openai-gateway.service",
+        "qwen_policy": "F:\\Project\\Digua\\tmp\\stage1_package_repro_check\\production_context\\configs\\qwen25_official_route_policy.json",
+        "dream7b_service": "F:\\Project\\Digua\\tmp\\stage1_package_repro_check\\production_context\\configs\\systemd\\dream7b-local-openai-gateway.service",
+        "dream7b_18889_service": "F:\\Project\\Digua\\tmp\\stage1_package_repro_check\\production_context\\configs\\systemd\\dream7b-bpu-experimental-gateway-18889.service"
+      }
+    },
+    {
+      "label": "stage1 gate runner exists in package",
+      "ok": true,
+      "detail": "F:\\Project\\Digua\\tmp\\stage1_package_repro_check\\gates\\run_harness_stage1_gates.py"
+    },
+    {
+      "label": "stage1 gates rerun from clean package",
+      "ok": true,
+      "detail": {
+        "returncode": 0,
+        "stdout_tail": "F:\\Project\\Digua\\tmp\\stage1_package_repro_check\\reports\\harness_stage1_gate_report.json\nF:\\Project\\Digua\\tmp\\stage1_package_repro_check\\reports\\harness_stage1_gate_report.md\n",
+        "stderr_tail": ""
+      }
+    },
+    {
+      "label": "missing dispatcher hard-fails resolver",
+      "ok": true
+    }
+  ],
+  "detail": {
+    "package_zip": "evidence_for_gptpro\\ai_nas_harness_stage1_fixed_gptpro_20260702-233035.zip",
+    "stage1_gate_rerun": {
+      "returncode": 0,
+      "stdout_tail": "F:\\Project\\Digua\\tmp\\stage1_package_repro_check\\reports\\harness_stage1_gate_report.json\nF:\\Project\\Digua\\tmp\\stage1_package_repro_check\\reports\\harness_stage1_gate_report.md\n",
+      "stderr_tail": ""
+    },
+    "extracted_file_count": 87
+  }
+}

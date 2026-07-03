@@ -1,0 +1,156 @@
+{
+  "case_id": "ramp",
+  "cut": 20,
+  "route": "BPU segments 0..20 then HF/PyTorch CPU suffix 21..27 + final norm + lm_head",
+  "input_boundary": {
+    "path": "evidence/bpu_boundaries_v12r/ramp/seg_20_output.npy",
+    "sha256": "804ea9da6664ec1cfea63a72e5cb5e45c313c22ad33e94fd53044cca019979cf",
+    "stats": {
+      "shape": [
+        128,
+        3584
+      ],
+      "dtype": "float32",
+      "size": 458752,
+      "min": -15.748214721679688,
+      "max": 23.074800491333008,
+      "mean": 0.022539827972650528,
+      "std": 2.259937286376953,
+      "abs_max": 23.074800491333008,
+      "nonzero_count": 458682,
+      "allzero": false,
+      "constant": false,
+      "nan_count": 0,
+      "inf_count": 0
+    }
+  },
+  "hf_suffix_layers": [
+    21,
+    22,
+    23,
+    24,
+    25,
+    26,
+    27
+  ],
+  "logits": {
+    "path": "evidence/hybrid_routes_v12r/ramp/cut_20/hybrid_logits.npy",
+    "sha256": "1ba7be066dc76c84f2632ee09e425faf20493aee87b862d8865af30f7bd6c763",
+    "stats": {
+      "shape": [
+        152064
+      ],
+      "dtype": "float32",
+      "size": 152064,
+      "min": -6.5625,
+      "max": 8.8125,
+      "mean": -2.422563076019287,
+      "std": 1.68817138671875,
+      "abs_max": 8.8125,
+      "nonzero_count": 152064,
+      "allzero": false,
+      "constant": false,
+      "nan_count": 0,
+      "inf_count": 0
+    }
+  },
+  "final_metrics": {
+    "shape_match": true,
+    "reference_top1": 151643,
+    "candidate_top1": 1103,
+    "top1_agreement": false,
+    "reference_top1_in_candidate_top5": false,
+    "top5_overlap": 0,
+    "cosine": 0.7029058789571287,
+    "pearson_centered": -0.1732788932759366,
+    "relative_l2": 0.9596971294028634,
+    "max_abs_error": 12.005859375,
+    "mean_abs_error": 1.8047522687610327,
+    "candidate_normalized_entropy": 0.7680338935102384,
+    "candidate_stats": {
+      "shape": [
+        152064
+      ],
+      "dtype": "float32",
+      "size": 152064,
+      "min": -6.5625,
+      "max": 8.8125,
+      "mean": -2.422563076019287,
+      "std": 1.68817138671875,
+      "abs_max": 8.8125,
+      "nonzero_count": 152064,
+      "allzero": false,
+      "constant": false,
+      "nan_count": 0,
+      "inf_count": 0
+    },
+    "reference_stats": {
+      "shape": [
+        152064
+      ],
+      "dtype": "float32",
+      "size": 152064,
+      "min": -7.65625,
+      "max": 12.25,
+      "mean": -1.9889841079711914,
+      "std": 0.9208143353462219,
+      "abs_max": 12.25,
+      "nonzero_count": 152064,
+      "allzero": false,
+      "constant": false,
+      "nan_count": 0,
+      "inf_count": 0
+    }
+  },
+  "boundary_metrics": {
+    "shape_match": true,
+    "reference_top1": 407710,
+    "candidate_top1": 61386,
+    "top1_agreement": false,
+    "reference_top1_in_candidate_top5": false,
+    "top5_overlap": 0,
+    "cosine": -0.06671218832976296,
+    "pearson_centered": -0.06667253026008345,
+    "relative_l2": 1.491471207733707,
+    "max_abs_error": 571.074800491333,
+    "mean_abs_error": 1.8513168405109692,
+    "candidate_normalized_entropy": 0.42542270754274514,
+    "candidate_stats": {
+      "shape": [
+        458752
+      ],
+      "dtype": "float32",
+      "size": 458752,
+      "min": -15.748214721679688,
+      "max": 23.074800491333008,
+      "mean": 0.022539827972650528,
+      "std": 2.259937286376953,
+      "abs_max": 23.074800491333008,
+      "nonzero_count": 458682,
+      "allzero": false,
+      "constant": false,
+      "nan_count": 0,
+      "inf_count": 0
+    },
+    "reference_stats": {
+      "shape": [
+        458752
+      ],
+      "dtype": "float32",
+      "size": 458752,
+      "min": -548.0,
+      "max": 168.0,
+      "mean": -0.009485813789069653,
+      "std": 2.169219732284546,
+      "abs_max": 548.0,
+      "nonzero_count": 458325,
+      "allzero": false,
+      "constant": false,
+      "nan_count": 0,
+      "inf_count": 0
+    }
+  },
+  "layout_scale_variant_used": "existing_full_chain_bpu_dequant_boundary_direct_float32_seq_hidden",
+  "elapsed_seconds": 279.55,
+  "status": "pass"
+}

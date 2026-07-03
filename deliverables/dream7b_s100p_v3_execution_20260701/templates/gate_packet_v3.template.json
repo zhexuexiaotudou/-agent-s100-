@@ -1,0 +1,21 @@
+{
+  "schema_version": "dream7b_s100p_gate_packet_v3",
+  "created_at_utc": "YYYY-MM-DDTHH:MM:SSZ",
+  "verdict": "accurate_deployment_supported|deployment_falsified_against_bf16_reference|deployment_blocked_against_deployment_reference_but_bf16_unresolved|inconclusive_due_to_missing_artifact_reference_or_input_alignment",
+  "gate_status": {
+    "compile_feasible": "pass|fail|inconclusive",
+    "s100p_runtime_valid": "pass|fail|inconclusive",
+    "logits_numerically_valid": "pass|fail|inconclusive|blocked",
+    "generation_quality_valid": "pending|blocked|pass|fail|not_run",
+    "product_route_valid": "pending|blocked|pass|fail|not_run"
+  },
+  "deployment_reference_status": "pass|fail|blocked|inconclusive",
+  "bf16_reference_status": "available|unavailable|failed_to_export|inconclusive",
+  "segment_io_contract_status": "pass|fail|inconclusive",
+  "final_segment_input_sweep_status": "pass|fail|inconclusive|blocked",
+  "first_divergent_segment": null,
+  "blocking_issues": [],
+  "safe_claim_boundary": "...",
+  "next_minimal_experiment": "...",
+  "source_reports": []
+}

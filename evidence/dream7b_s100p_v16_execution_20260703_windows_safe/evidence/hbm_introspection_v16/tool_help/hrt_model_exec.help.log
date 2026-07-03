@@ -1,0 +1,88 @@
+COMMAND: hrt_model_exec --help
+ENV_OVERRIDES: {}
+
+STDOUT:
+[UCP]: log level = 3
+[UCP]: UCP version = 3.13.6
+[VP]: log level = 3
+[DNN]: log level = 3
+[HPL]: log level = 3
+[UCPT]: log level = 6
+
+Usage:
+hrt_model_exec [Option...] [Parameter]
+
+[Option]                      [instruction]       
+---------------------------------------------------------------------------------------------------------------
+-h --help                     Display this information
+-v --version                  Display this version
+
+[Option]                      [Parameter]         
+---------------------------------------------------------------------------------------------------------------
+--model_file                  [string]: Model file paths, separate by comma, each represents one model file path.
+--model_name                  [string]: Model name.  
+                                        When model_file has one more model and Subcommand is infer or perf,
+                                        "model_name" must be specified!
+--core_id                     [string]: core id, 0 for any core, 1 for core 0, 2 for core 1 and etc, default is 0.
+                                        Please confirm the number of bpu cores on the board before setting up.
+                                        When you need to specify multiple cores, separate them with commas, such as "1,2".
+--input_file                  [string]: Input file paths, separate by comma, each represents one input.
+                                        The extension of files should be one of [jpg, JPG, jpeg, JPEG, png, PNG, bin, txt, npy]
+                                        bin for binary such as image data, nv12 or yuv444 etc.
+                                        txt for plain data such as image info.
+--frame_count                 [int]   : frame count for run loop, default 200, valid when perf_time is 0 in perf mode; default 1 for infer mode.
+--dump_intermediate           [string]: dump intermediate layer input and output. The default is 0. Subcommand must be infer.
+--enable_dump                 [bool]  : flag for dump infer input and output. The default is false. Subcommand must be infer.
+--dump_precision              [int]   : Output dump precision for float32/float64 in txt file. Default is 9 decimal places.
+--dequantize_process          [bool]  : dequantize the model infer output. The default is false.
+                                        Subcommand must be infer, enable_dump set as true
+--remove_padding_process      [bool]  : remove padding of the model infer output. The default is false.
+                                        Subcommand must be infer, enable_dump set as true
+--dump_format                 [string]: output dump format, only support [bin, txt]. The default is bin.
+                                        Subcommand must be infer.
+--dump_txt_axis               [int]   : The txt file of dump is expanded according to the specified axis; 
+                                        the default is -1, which means there is only one data per line; 
+                                        Subcommand must be infer, dump_format must be txt.
+                                        range:[0, tensor_dimension].
+--enable_cls_post_process     [bool]  : flag for classfication post process, only for ptq model now.
+                                        Subcommand must be infer.
+--perf_time                   [int]   : minute, perf time for run loop, default 0.
+                                        Subcommand must be perf.
+--thread_num                  [int]   : thread num for run loop, thread_num range:[1,32], Subcommand must be perf.
+--profile_path                [string]: profile log and csv files path, set to get detail information
+                                        of model execution. 
+--dump_path                   [string]: dump file path, --enable_dump or --dump_intermediate will dump model nodes inputs and outputs files.
+--input_img_properties        [string]: Specify the color space of the image type input. Each image needs to specify the color space, separated by commas. 
+                                        The supported color spaces are [Y, UV].
+--input_valid_shape           [string]: Complete the validshape of the model input, allowing only the dynamic part to change. Provide two ways to set:
+                                        1. This only needs to be set when the validShape of the model input is dynamic. 2. Set for all inputs.
+                                        Different inputs are separated by semicolons, and different dimensions are separated by commas.
+                                        For example: --input_valid_shape="1,376,376,1;1,188,188,2".
+--input_stride                [string]: Complete the stride of the model input, allowing only the dynamic part to change. Provide two ways to set:
+                                        1. This only needs to be set when the stride of model input is dynamic. 2. Set for all inputs. 
+                                        Different inputs are separated by semicolons, and different dimensions are separated by commas.
+                                        For example: --input_stride="144384,384,1,1;72192,384,2,1".
+
+[Examples]
+---------------------------------------------------------------------------------------------------------------
+hrt_model_exec model_info          | hrt_model_exec infer               | hrt_model_exec perf                
+   --model_file                    |    --model_file                    |    --model_file                    
+   --model_name                    |    --model_name                    |    --model_name                    
+                                   |    --core_id                       |    --core_id                       
+                                   |    --input_file                    |    --input_file                    
+                                   |    --input_img_properties          |    --input_img_properties          
+                                   |    --input_valid_shape             |    --input_valid_shape             
+                                   |    --input_stride                  |    --input_stride                  
+                                   |    --frame_count                   |    --frame_count                   
+                                   |    --dump_intermediate             |    --profile_path                  
+                                   |    --enable_dump                   |    --perf_time                     
+                                   |    --dump_precision                |    --thread_num                    
+                                   |    --dequantize_process            | 
+                                   |    --dump_path                     | 
+                                   |    --remove_padding_process        | 
+                                   |    --dump_format                   | 
+                                   |    --dump_txt_axis                 | 
+                                   |    --enable_cls_post_process       | 
+
+
+STDERR:

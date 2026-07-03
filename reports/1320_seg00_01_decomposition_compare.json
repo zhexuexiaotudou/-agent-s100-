@@ -1,0 +1,213 @@
+{
+  "schema_version": "dream7b_s100p_v13_1320_seg00_01_decomposition_compare",
+  "created_at_utc": "2026-07-03T05:26:14.355283+00:00",
+  "run_commands": [
+    "C:\\Users\\zhexu\\AppData\\Local\\Python\\pythoncore-3.14-64\\python.exe tools\\build_v13_research_thread.py --root ."
+  ],
+  "host_environment": {
+    "local_platform": "Windows-11-10.0.26200-SP0",
+    "python": "3.14.3 (tags/v3.14.3:323c59a, Feb  3 2026, 16:04:56) [MSC v.1944 64 bit (AMD64)]"
+  },
+  "git": {
+    "returncode": 128,
+    "stdout": "",
+    "stderr": "fatal: not a git repository (or any of the parent directories): .git"
+  },
+  "input_artifacts": [
+    {
+      "path": "evidence/seg00_01_decomposition_v13",
+      "exists": true
+    }
+  ],
+  "output_artifacts": [
+    {
+      "path": "reports/1320_seg00_01_decomposition_compare.json",
+      "exists": true,
+      "size_bytes": 6479,
+      "sha256": "c0592d085e3189397f10d4b49d8cbc8a4e1e7e3bc49ea37d7583e49da8244da5"
+    },
+    {
+      "path": "reports/1320_seg00_01_decomposition_compare.md",
+      "exists": true,
+      "size_bytes": 327,
+      "sha256": "4e8ad2bf01ad909df573cd5f8d5da8d2e17eb669cbe1551f7c332c3be7e6a6e9"
+    }
+  ],
+  "blocking_or_failure_reasons": [
+    "No BPU seg00_01 output/input/interpretation variant matched any HF layer0 boundary across all canonical cases with relL2<0.1 and Pearson>0.95."
+  ],
+  "next_minimal_experiments": [],
+  "safety": {
+    "generation_quality_run": false,
+    "product_routes_18888_18889_touched": false,
+    "dream7b_frontend_openclaw_traffic_touched": false
+  },
+  "verdict": "seg00_01_graph_input_quant_contract_failure",
+  "matched_boundaries": [],
+  "best_by_case": {
+    "zeros": {
+      "case_id": "zeros",
+      "input_variant": "canonical_pos_128",
+      "interpretation": "official_dequant",
+      "hf_boundary": "layer0_pre_attention_norm_output",
+      "metrics": {
+        "shape_match": true,
+        "reference_top1": 242054,
+        "candidate_top1": 144369,
+        "top1_agreement": false,
+        "reference_top1_in_candidate_top5": false,
+        "top5_overlap": 0,
+        "cosine": 0.26776705079230867,
+        "pearson_centered": 0.26778097063257184,
+        "relative_l2": 0.9644179917411231,
+        "max_abs_error": 2.454470667988062,
+        "mean_abs_error": 0.17061187295113062,
+        "candidate_normalized_entropy": 0.9998890702961837,
+        "candidate_stats": {
+          "shape": [
+            458752
+          ],
+          "dtype": "float32",
+          "size": 458752,
+          "min": -0.5522932410240173,
+          "max": 0.5447757840156555,
+          "mean": -0.00010915865277638659,
+          "std": 0.05312284082174301,
+          "abs_max": 0.5522932410240173,
+          "nonzero_count": 458449,
+          "allzero": false,
+          "constant": false,
+          "nan_count": 0,
+          "inf_count": 0
+        },
+        "reference_stats": {
+          "shape": [
+            458752
+          ],
+          "dtype": "float32",
+          "size": 458752,
+          "min": -2.359375,
+          "max": 2.5,
+          "mean": 0.0011602024314925075,
+          "std": 0.2357577234506607,
+          "abs_max": 2.5,
+          "nonzero_count": 458752,
+          "allzero": false,
+          "constant": false,
+          "nan_count": 0,
+          "inf_count": 0
+        }
+      }
+    },
+    "ramp": {
+      "case_id": "ramp",
+      "input_variant": "canonical_pos_128",
+      "interpretation": "official_dequant",
+      "hf_boundary": "layer0_final_output",
+      "metrics": {
+        "shape_match": true,
+        "reference_top1": 453276,
+        "candidate_top1": 80540,
+        "top1_agreement": false,
+        "reference_top1_in_candidate_top5": false,
+        "top5_overlap": 0,
+        "cosine": 0.3440026674710142,
+        "pearson_centered": 0.3439567969761554,
+        "relative_l2": 0.9405217046083041,
+        "max_abs_error": 2.0433772206306458,
+        "mean_abs_error": 0.08799551365831507,
+        "candidate_normalized_entropy": 0.9998985190091544,
+        "candidate_stats": {
+          "shape": [
+            458752
+          ],
+          "dtype": "float32",
+          "size": 458752,
+          "min": -0.9146485328674316,
+          "max": 0.7435043454170227,
+          "mean": -0.0005779584171250463,
+          "std": 0.05070845037698746,
+          "abs_max": 0.9146485328674316,
+          "nonzero_count": 458457,
+          "allzero": false,
+          "constant": false,
+          "nan_count": 0,
+          "inf_count": 0
+        },
+        "reference_stats": {
+          "shape": [
+            458752
+          ],
+          "dtype": "float32",
+          "size": 458752,
+          "min": -2.4375,
+          "max": 1.53125,
+          "mean": -0.0008476033108308911,
+          "std": 0.1274041384458542,
+          "abs_max": 2.4375,
+          "nonzero_count": 458345,
+          "allzero": false,
+          "constant": false,
+          "nan_count": 0,
+          "inf_count": 0
+        }
+      }
+    },
+    "short_chinese_prompt_padded": {
+      "case_id": "short_chinese_prompt_padded",
+      "input_variant": "canonical_pos_128",
+      "interpretation": "official_dequant",
+      "hf_boundary": "layer0_pre_attention_norm_output",
+      "metrics": {
+        "shape_match": true,
+        "reference_top1": 10066,
+        "candidate_top1": 4593,
+        "top1_agreement": false,
+        "reference_top1_in_candidate_top5": false,
+        "top5_overlap": 0,
+        "cosine": 0.2656772230006207,
+        "pearson_centered": 0.2656925177208762,
+        "relative_l2": 0.9648451447836214,
+        "max_abs_error": 9.577807873487473,
+        "mean_abs_error": 0.16840567229180411,
+        "candidate_normalized_entropy": 0.999888058170207,
+        "candidate_stats": {
+          "shape": [
+            458752
+          ],
+          "dtype": "float32",
+          "size": 458752,
+          "min": -0.6131000518798828,
+          "max": 0.8125561475753784,
+          "mean": -0.00011516363883856684,
+          "std": 0.053335294127464294,
+          "abs_max": 0.8125561475753784,
+          "nonzero_count": 458480,
+          "allzero": false,
+          "constant": false,
+          "nan_count": 0,
+          "inf_count": 0
+        },
+        "reference_stats": {
+          "shape": [
+            458752
+          ],
+          "dtype": "float32",
+          "size": 458752,
+          "min": -6.0625,
+          "max": 10.0,
+          "mean": 0.0012131615076214075,
+          "std": 0.23514986038208008,
+          "abs_max": 10.0,
+          "nonzero_count": 458752,
+          "allzero": false,
+          "constant": false,
+          "nan_count": 0,
+          "inf_count": 0
+        }
+      }
+    }
+  },
+  "comparison_rows": 126,
+  "output_root": "evidence/seg00_01_decomposition_v13"
+}

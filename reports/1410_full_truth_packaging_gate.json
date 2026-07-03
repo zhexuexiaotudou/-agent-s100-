@@ -1,0 +1,301 @@
+{
+  "schema_version": "dream7b_s100p_v14_1410_full_truth_packaging_gate",
+  "created_at_utc": "2026-07-03T06:10:19.475040+00:00",
+  "run_commands": [
+    "C:\\Users\\zhexu\\AppData\\Local\\Python\\pythoncore-3.14-64\\python.exe tools\\build_v14_research_thread.py --root ."
+  ],
+  "host_environment": {
+    "local_platform": "Windows-11-10.0.26200-SP0",
+    "python": "3.14.3 (tags/v3.14.3:323c59a, Feb  3 2026, 16:04:56) [MSC v.1944 64 bit (AMD64)]"
+  },
+  "git": {
+    "returncode": 128,
+    "stdout": "",
+    "stderr": "fatal: not a git repository (or any of the parent directories): .git"
+  },
+  "input_artifacts": [
+    {
+      "path": "evidence/full_truth_repeat_v11",
+      "exists": true
+    }
+  ],
+  "output_artifacts": [
+    {
+      "path": "reports/1410_full_truth_packaging_gate.json",
+      "exists": true,
+      "size_bytes": 9133,
+      "sha256": "c3d69ea14adaa7ab20a527e178996c183e16d41abf2a0d74aec0d682a1348419"
+    },
+    {
+      "path": "reports/1410_full_truth_packaging_gate.md",
+      "exists": true,
+      "size_bytes": 78,
+      "sha256": "83ece78ca1701f1e17559f363ecb9875fe1cc631092131f4d5880945832ce6f4"
+    }
+  ],
+  "blocking_or_failure_reasons": [],
+  "next_minimal_experiments": [],
+  "safety": {
+    "generation_quality_run": false,
+    "product_routes_18888_18889_touched": false,
+    "dream7b_frontend_openclaw_traffic_touched": false
+  },
+  "status": "pass",
+  "rows": [
+    {
+      "case_id": "zeros",
+      "model_path": "/mnt/nas/openclaw/models/dream7b-hf",
+      "model_class": "AutoModel trust_remote_code DreamForCausalLM/DreamModel",
+      "dtype": "torch.bfloat16",
+      "device": "cpu",
+      "tokenizer_path": "/mnt/nas/openclaw/models/dream7b-hf",
+      "tokenizer_manifest_sha256": "c51fc579c5fc1f2b7328be47afd14234041f2ec1cf4d69500d54c76d6764ee84",
+      "model_code_hashes": {
+        "config.json": "11afc7fe7a1881e73dcd70cca6868aaaf8eb89ad45ea5fc6426c3fb82dec9340",
+        "configuration_dream.py": "24d038962ccf16361595494461000ec0c1b043653c7494d7fc835c96f121f0b9",
+        "modeling_dream.py": "3166e789f0d69beb1f4fbdee2317953d1c1c3b9bc21479b109afc5dd059de5b3",
+        "tokenization_dream.py": "1d7f04104fa673831f48256e3cd42cd0bbd1bddd801b4abea5c74cc47d98bdd2"
+      },
+      "token_ids_sha256": "1b912946d3fd584649a7924a6d699d2bd0ee0da2ebc320bd53135fa9b1ec21a0",
+      "position_ids_sha256": "4497d32c822ad4ae57132a3462f6a0630d5d4a7863915c4ee08634841c4fee9f",
+      "last_token_index": 127,
+      "semantic_or_diagnostic": "diagnostic",
+      "logits_shape": [
+        152064
+      ],
+      "top10": [
+        {
+          "index": 220,
+          "value": 1.75
+        },
+        {
+          "index": 151643,
+          "value": 1.6171875
+        },
+        {
+          "index": 16,
+          "value": 0.9609375
+        },
+        {
+          "index": 15,
+          "value": 0.8984375
+        },
+        {
+          "index": 576,
+          "value": 0.59765625
+        },
+        {
+          "index": 279,
+          "value": 0.173828125
+        },
+        {
+          "index": 600,
+          "value": 0.091796875
+        },
+        {
+          "index": 17,
+          "value": -0.14453125
+        },
+        {
+          "index": 0,
+          "value": -0.30078125
+        },
+        {
+          "index": 518,
+          "value": -0.310546875
+        }
+      ],
+      "stats": {
+        "shape": [
+          152064
+        ],
+        "dtype": "float32",
+        "size": 152064,
+        "min": -14.25,
+        "max": 1.75,
+        "mean": -10.231769561767578,
+        "std": 1.7890512943267822,
+        "abs_max": 14.25,
+        "nonzero_count": 152064,
+        "allzero": false,
+        "constant": false,
+        "nan_count": 0,
+        "inf_count": 0
+      },
+      "sha256": "661ae552e7e368d829971c052f36bca50d0ba7f3b36e32c0b40d23179b77d56c",
+      "source_repeat_v11_sha256": "661ae552e7e368d829971c052f36bca50d0ba7f3b36e32c0b40d23179b77d56c",
+      "v10_sha256": "661ae552e7e368d829971c052f36bca50d0ba7f3b36e32c0b40d23179b77d56c",
+      "matches_v10_sha256": true
+    },
+    {
+      "case_id": "ramp",
+      "model_path": "/mnt/nas/openclaw/models/dream7b-hf",
+      "model_class": "AutoModel trust_remote_code DreamForCausalLM/DreamModel",
+      "dtype": "torch.bfloat16",
+      "device": "cpu",
+      "tokenizer_path": "/mnt/nas/openclaw/models/dream7b-hf",
+      "tokenizer_manifest_sha256": "c51fc579c5fc1f2b7328be47afd14234041f2ec1cf4d69500d54c76d6764ee84",
+      "model_code_hashes": {
+        "config.json": "11afc7fe7a1881e73dcd70cca6868aaaf8eb89ad45ea5fc6426c3fb82dec9340",
+        "configuration_dream.py": "24d038962ccf16361595494461000ec0c1b043653c7494d7fc835c96f121f0b9",
+        "modeling_dream.py": "3166e789f0d69beb1f4fbdee2317953d1c1c3b9bc21479b109afc5dd059de5b3",
+        "tokenization_dream.py": "1d7f04104fa673831f48256e3cd42cd0bbd1bddd801b4abea5c74cc47d98bdd2"
+      },
+      "token_ids_sha256": "f0d76dfdfbf5467a030817361d4cedd8ddc8e86a9b24ee55e7749eb72a658b53",
+      "position_ids_sha256": "4497d32c822ad4ae57132a3462f6a0630d5d4a7863915c4ee08634841c4fee9f",
+      "last_token_index": 127,
+      "semantic_or_diagnostic": "diagnostic",
+      "logits_shape": [
+        152064
+      ],
+      "top10": [
+        {
+          "index": 151643,
+          "value": 12.25
+        },
+        {
+          "index": 126,
+          "value": 7.78125
+        },
+        {
+          "index": 122,
+          "value": 6.9375
+        },
+        {
+          "index": 245,
+          "value": 6.625
+        },
+        {
+          "index": 242,
+          "value": 6.46875
+        },
+        {
+          "index": 107,
+          "value": 6.34375
+        },
+        {
+          "index": 230,
+          "value": 6.28125
+        },
+        {
+          "index": 123,
+          "value": 6.0625
+        },
+        {
+          "index": 246,
+          "value": 5.875
+        },
+        {
+          "index": 253,
+          "value": 5.75
+        }
+      ],
+      "stats": {
+        "shape": [
+          152064
+        ],
+        "dtype": "float32",
+        "size": 152064,
+        "min": -7.65625,
+        "max": 12.25,
+        "mean": -1.9889841079711914,
+        "std": 0.9208143353462219,
+        "abs_max": 12.25,
+        "nonzero_count": 152064,
+        "allzero": false,
+        "constant": false,
+        "nan_count": 0,
+        "inf_count": 0
+      },
+      "sha256": "c5ba9211687cd11d69e6825ae32e2e253db9f3ddbe11d9df4a72b2e790a5c154",
+      "source_repeat_v11_sha256": "c5ba9211687cd11d69e6825ae32e2e253db9f3ddbe11d9df4a72b2e790a5c154",
+      "v10_sha256": "c5ba9211687cd11d69e6825ae32e2e253db9f3ddbe11d9df4a72b2e790a5c154",
+      "matches_v10_sha256": true
+    },
+    {
+      "case_id": "short_chinese_prompt_padded",
+      "model_path": "/mnt/nas/openclaw/models/dream7b-hf",
+      "model_class": "AutoModel trust_remote_code DreamForCausalLM/DreamModel",
+      "dtype": "torch.bfloat16",
+      "device": "cpu",
+      "tokenizer_path": "/mnt/nas/openclaw/models/dream7b-hf",
+      "tokenizer_manifest_sha256": "c51fc579c5fc1f2b7328be47afd14234041f2ec1cf4d69500d54c76d6764ee84",
+      "model_code_hashes": {
+        "config.json": "11afc7fe7a1881e73dcd70cca6868aaaf8eb89ad45ea5fc6426c3fb82dec9340",
+        "configuration_dream.py": "24d038962ccf16361595494461000ec0c1b043653c7494d7fc835c96f121f0b9",
+        "modeling_dream.py": "3166e789f0d69beb1f4fbdee2317953d1c1c3b9bc21479b109afc5dd059de5b3",
+        "tokenization_dream.py": "1d7f04104fa673831f48256e3cd42cd0bbd1bddd801b4abea5c74cc47d98bdd2"
+      },
+      "token_ids_sha256": "ac26ad530204a4bc2196cff5fd05bf83a46048a578fdabab2b9073439addd01a",
+      "position_ids_sha256": "4497d32c822ad4ae57132a3462f6a0630d5d4a7863915c4ee08634841c4fee9f",
+      "last_token_index": 127,
+      "semantic_or_diagnostic": "semantic",
+      "logits_shape": [
+        152064
+      ],
+      "top10": [
+        {
+          "index": 151643,
+          "value": 9.125
+        },
+        {
+          "index": 0,
+          "value": 4.53125
+        },
+        {
+          "index": 2055,
+          "value": 2.359375
+        },
+        {
+          "index": 6313,
+          "value": 2.046875
+        },
+        {
+          "index": 2219,
+          "value": 1.8046875
+        },
+        {
+          "index": 4894,
+          "value": 1.7109375
+        },
+        {
+          "index": 220,
+          "value": 1.515625
+        },
+        {
+          "index": 576,
+          "value": 0.85546875
+        },
+        {
+          "index": 3555,
+          "value": 0.82421875
+        },
+        {
+          "index": 4102,
+          "value": 0.58203125
+        }
+      ],
+      "stats": {
+        "shape": [
+          152064
+        ],
+        "dtype": "float32",
+        "size": 152064,
+        "min": -12.5,
+        "max": 9.125,
+        "mean": -8.877497673034668,
+        "std": 1.8784396648406982,
+        "abs_max": 12.5,
+        "nonzero_count": 152064,
+        "allzero": false,
+        "constant": false,
+        "nan_count": 0,
+        "inf_count": 0
+      },
+      "sha256": "e46398de01f01c3646ca333aee4bce5e89705190d79290ac34ae6e40b3d6a5a6",
+      "source_repeat_v11_sha256": "e46398de01f01c3646ca333aee4bce5e89705190d79290ac34ae6e40b3d6a5a6",
+      "v10_sha256": "e46398de01f01c3646ca333aee4bce5e89705190d79290ac34ae6e40b3d6a5a6",
+      "matches_v10_sha256": true
+    }
+  ]
+}

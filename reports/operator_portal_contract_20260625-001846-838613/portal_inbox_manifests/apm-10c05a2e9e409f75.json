@@ -1,0 +1,191 @@
+{
+  "tool_id": "ai_nas_action_approval_manifest",
+  "manifest_id": "apm-10c05a2e9e409f75",
+  "status": "awaiting_human_confirmation",
+  "query": "2024 renovation payment contract invoice receipt chat screenshot",
+  "collection_name": "2024_renovation_payment_packet",
+  "proposed_actions": [
+    {
+      "action_id": "copy-5957664a1403d9d5",
+      "action_type": "copy",
+      "status": "proposed_requires_human_confirmation",
+      "source_relative_path": "Photos/2024_renovation_chat_invoice_screenshot.jpg",
+      "source_absolute_path": "F:\\Project\\Digua\\reports\\operator_portal_contract_20260625-001846-838613\\appliance_experience_fixture\\Personal\\Photos\\2024_renovation_chat_invoice_screenshot.jpg",
+      "source_sha256": "862ed55531ab6b86fa9e4da68e121f8566f5cf0dd9c4da3c99ea26e8b1d3425e",
+      "target_relative_path": "Collections/2024_renovation_payment_packet/screenshots/2024_renovation_chat_invoice_screenshot.jpg",
+      "target_absolute_path": "F:\\Project\\Digua\\reports\\operator_portal_contract_20260625-001846-838613\\appliance_experience_fixture\\Personal\\Collections\\2024_renovation_payment_packet\\screenshots\\2024_renovation_chat_invoice_screenshot.jpg",
+      "target_exists_now": false,
+      "confidence": 0.95,
+      "evidence_sources": [
+        "sqlite_text_fts_metadata",
+        "local_hash_embedding",
+        "photo_semantic_local_visual"
+      ],
+      "reason": "copy matched evidence into a case collection without modifying the original file",
+      "permission_level_required": "bounded-personal-copy",
+      "requires_human_confirmation": true,
+      "destructive": false,
+      "write_effect": "create one copied file only if the exact target path does not already exist",
+      "preconditions": [
+        "operator explicitly approves this manifest and action_id",
+        "source path exists and source_sha256 still matches",
+        "target path is under Personal/Collections",
+        "target path does not already exist",
+        "no source delete, move, rename, or overwrite is allowed"
+      ],
+      "rollback_plan": [
+        "remove only the copied target created by the future execution manifest",
+        "rollback must verify target sha256 equals the approved source_sha256 before removal",
+        "rollback must append its own audit event and never touch the source file"
+      ]
+    },
+    {
+      "action_id": "copy-f44ebf95c5d5021d",
+      "action_type": "copy",
+      "status": "proposed_requires_human_confirmation",
+      "source_relative_path": "Documents/2024_renovation_invoice_receipt.txt",
+      "source_absolute_path": "F:\\Project\\Digua\\reports\\operator_portal_contract_20260625-001846-838613\\appliance_experience_fixture\\Personal\\Documents\\2024_renovation_invoice_receipt.txt",
+      "source_sha256": "6205d6474f925a06ebbeadab90a268b6941351cb0944696d5c36916d1ad77f85",
+      "target_relative_path": "Collections/2024_renovation_payment_packet/invoice/2024_renovation_invoice_receipt.txt",
+      "target_absolute_path": "F:\\Project\\Digua\\reports\\operator_portal_contract_20260625-001846-838613\\appliance_experience_fixture\\Personal\\Collections\\2024_renovation_payment_packet\\invoice\\2024_renovation_invoice_receipt.txt",
+      "target_exists_now": false,
+      "confidence": 0.95,
+      "evidence_sources": [
+        "sqlite_text_fts_metadata",
+        "local_hash_embedding"
+      ],
+      "reason": "copy matched evidence into a case collection without modifying the original file",
+      "permission_level_required": "bounded-personal-copy",
+      "requires_human_confirmation": true,
+      "destructive": false,
+      "write_effect": "create one copied file only if the exact target path does not already exist",
+      "preconditions": [
+        "operator explicitly approves this manifest and action_id",
+        "source path exists and source_sha256 still matches",
+        "target path is under Personal/Collections",
+        "target path does not already exist",
+        "no source delete, move, rename, or overwrite is allowed"
+      ],
+      "rollback_plan": [
+        "remove only the copied target created by the future execution manifest",
+        "rollback must verify target sha256 equals the approved source_sha256 before removal",
+        "rollback must append its own audit event and never touch the source file"
+      ]
+    },
+    {
+      "action_id": "copy-2235bd511a238350",
+      "action_type": "copy",
+      "status": "proposed_requires_human_confirmation",
+      "source_relative_path": "Documents/2024_renovation_contract.txt",
+      "source_absolute_path": "F:\\Project\\Digua\\reports\\operator_portal_contract_20260625-001846-838613\\appliance_experience_fixture\\Personal\\Documents\\2024_renovation_contract.txt",
+      "source_sha256": "b2181dd3223dcb5dd5df5308dcf92355668cae608de2a9315ba3656874afadd3",
+      "target_relative_path": "Collections/2024_renovation_payment_packet/contract/2024_renovation_contract.txt",
+      "target_absolute_path": "F:\\Project\\Digua\\reports\\operator_portal_contract_20260625-001846-838613\\appliance_experience_fixture\\Personal\\Collections\\2024_renovation_payment_packet\\contract\\2024_renovation_contract.txt",
+      "target_exists_now": false,
+      "confidence": 0.95,
+      "evidence_sources": [
+        "sqlite_text_fts_metadata",
+        "local_hash_embedding"
+      ],
+      "reason": "copy matched evidence into a case collection without modifying the original file",
+      "permission_level_required": "bounded-personal-copy",
+      "requires_human_confirmation": true,
+      "destructive": false,
+      "write_effect": "create one copied file only if the exact target path does not already exist",
+      "preconditions": [
+        "operator explicitly approves this manifest and action_id",
+        "source path exists and source_sha256 still matches",
+        "target path is under Personal/Collections",
+        "target path does not already exist",
+        "no source delete, move, rename, or overwrite is allowed"
+      ],
+      "rollback_plan": [
+        "remove only the copied target created by the future execution manifest",
+        "rollback must verify target sha256 equals the approved source_sha256 before removal",
+        "rollback must append its own audit event and never touch the source file"
+      ]
+    },
+    {
+      "action_id": "copy-a749991a30c8408b",
+      "action_type": "copy",
+      "status": "proposed_requires_human_confirmation",
+      "source_relative_path": "Photos/2024_unrelated_beach_photo.jpg",
+      "source_absolute_path": "F:\\Project\\Digua\\reports\\operator_portal_contract_20260625-001846-838613\\appliance_experience_fixture\\Personal\\Photos\\2024_unrelated_beach_photo.jpg",
+      "source_sha256": "37486d9e58df0916b4ebe7ea42fe82911590be4a5618f70e945414086c763c0b",
+      "target_relative_path": "Collections/2024_renovation_payment_packet/beach/2024_unrelated_beach_photo.jpg",
+      "target_absolute_path": "F:\\Project\\Digua\\reports\\operator_portal_contract_20260625-001846-838613\\appliance_experience_fixture\\Personal\\Collections\\2024_renovation_payment_packet\\beach\\2024_unrelated_beach_photo.jpg",
+      "target_exists_now": false,
+      "confidence": 0.83,
+      "evidence_sources": [
+        "sqlite_text_fts_metadata",
+        "local_hash_embedding",
+        "photo_semantic_local_visual"
+      ],
+      "reason": "copy matched evidence into a case collection without modifying the original file",
+      "permission_level_required": "bounded-personal-copy",
+      "requires_human_confirmation": true,
+      "destructive": false,
+      "write_effect": "create one copied file only if the exact target path does not already exist",
+      "preconditions": [
+        "operator explicitly approves this manifest and action_id",
+        "source path exists and source_sha256 still matches",
+        "target path is under Personal/Collections",
+        "target path does not already exist",
+        "no source delete, move, rename, or overwrite is allowed"
+      ],
+      "rollback_plan": [
+        "remove only the copied target created by the future execution manifest",
+        "rollback must verify target sha256 equals the approved source_sha256 before removal",
+        "rollback must append its own audit event and never touch the source file"
+      ]
+    }
+  ],
+  "blocked_destructive_actions": [
+    {
+      "action_type": "move",
+      "status": "blocked_not_generated",
+      "reason": "destructive actions require a separate operator-approved execution tool, backup/retention policy, exact source hash checks, and rollback manifest",
+      "candidate_file_count": 4,
+      "required_gate": "suggestion -> human confirmation -> bounded execution -> rollback/manifest"
+    },
+    {
+      "action_type": "delete",
+      "status": "blocked_not_generated",
+      "reason": "destructive actions require a separate operator-approved execution tool, backup/retention policy, exact source hash checks, and rollback manifest",
+      "candidate_file_count": 4,
+      "required_gate": "suggestion -> human confirmation -> bounded execution -> rollback/manifest"
+    },
+    {
+      "action_type": "overwrite",
+      "status": "blocked_not_generated",
+      "reason": "destructive actions require a separate operator-approved execution tool, backup/retention policy, exact source hash checks, and rollback manifest",
+      "candidate_file_count": 4,
+      "required_gate": "suggestion -> human confirmation -> bounded execution -> rollback/manifest"
+    },
+    {
+      "action_type": "rename",
+      "status": "blocked_not_generated",
+      "reason": "destructive actions require a separate operator-approved execution tool, backup/retention policy, exact source hash checks, and rollback manifest",
+      "candidate_file_count": 4,
+      "required_gate": "suggestion -> human confirmation -> bounded execution -> rollback/manifest"
+    }
+  ],
+  "approval": {
+    "required": true,
+    "approval_phrase": "APPROVE apm-10c05a2e9e409f75",
+    "execution_allowed_by_this_tool": false,
+    "future_execution_requirements": [
+      "re-check source_sha256 and target non-existence immediately before copying",
+      "write execution_manifest.json with created files and per-action result",
+      "provide rollback_manifest.json for copied targets"
+    ]
+  },
+  "audit": {
+    "source_files_modified": false,
+    "delete_performed": false,
+    "move_performed": false,
+    "overwrite_performed": false,
+    "execution_performed": false
+  },
+  "manifest_sha256": "b91e0fb281d9108f7a6f18fe02f251f2c764c36f6ea52876c2bc70c055db6422"
+}

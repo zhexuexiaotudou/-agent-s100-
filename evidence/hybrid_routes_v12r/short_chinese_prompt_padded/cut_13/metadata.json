@@ -1,0 +1,163 @@
+{
+  "case_id": "short_chinese_prompt_padded",
+  "cut": 13,
+  "route": "BPU segments 0..13 then HF/PyTorch CPU suffix 14..27 + final norm + lm_head",
+  "input_boundary": {
+    "path": "evidence/bpu_boundaries_v12r/short_chinese_prompt_padded/seg_13_output.npy",
+    "sha256": "4e89a003b7cc8fb45b01ebf5a6b7061396c2e7e763b138ebb078702ff2708872",
+    "stats": {
+      "shape": [
+        128,
+        3584
+      ],
+      "dtype": "float32",
+      "size": 458752,
+      "min": -5.40559720993042,
+      "max": 5.405432224273682,
+      "mean": -0.037023741751909256,
+      "std": 3.704967737197876,
+      "abs_max": 5.40559720993042,
+      "nonzero_count": 458744,
+      "allzero": false,
+      "constant": false,
+      "nan_count": 0,
+      "inf_count": 0
+    }
+  },
+  "hf_suffix_layers": [
+    14,
+    15,
+    16,
+    17,
+    18,
+    19,
+    20,
+    21,
+    22,
+    23,
+    24,
+    25,
+    26,
+    27
+  ],
+  "logits": {
+    "path": "evidence/hybrid_routes_v12r/short_chinese_prompt_padded/cut_13/hybrid_logits.npy",
+    "sha256": "5e0f7b5adf45edf3626fd5412e5c8162fd97850c89817520c6af3894f5430813",
+    "stats": {
+      "shape": [
+        152064
+      ],
+      "dtype": "float32",
+      "size": 152064,
+      "min": -6.09375,
+      "max": 7.4375,
+      "mean": 0.16440124809741974,
+      "std": 1.1485956907272339,
+      "abs_max": 7.4375,
+      "nonzero_count": 152064,
+      "allzero": false,
+      "constant": false,
+      "nan_count": 0,
+      "inf_count": 0
+    }
+  },
+  "final_metrics": {
+    "shape_match": true,
+    "reference_top1": 151643,
+    "candidate_top1": 13236,
+    "top1_agreement": false,
+    "reference_top1_in_candidate_top5": false,
+    "top5_overlap": 0,
+    "cosine": -0.049197342169887075,
+    "pearson_centered": 0.43636641615926386,
+    "relative_l2": 1.0143631234079533,
+    "max_abs_error": 15.96875,
+    "mean_abs_error": 9.043623908948128,
+    "candidate_normalized_entropy": 0.9027806192051276,
+    "candidate_stats": {
+      "shape": [
+        152064
+      ],
+      "dtype": "float32",
+      "size": 152064,
+      "min": -6.09375,
+      "max": 7.4375,
+      "mean": 0.16440124809741974,
+      "std": 1.1485956907272339,
+      "abs_max": 7.4375,
+      "nonzero_count": 152064,
+      "allzero": false,
+      "constant": false,
+      "nan_count": 0,
+      "inf_count": 0
+    },
+    "reference_stats": {
+      "shape": [
+        152064
+      ],
+      "dtype": "float32",
+      "size": 152064,
+      "min": -12.5,
+      "max": 9.125,
+      "mean": -8.877497673034668,
+      "std": 1.8784396648406982,
+      "abs_max": 12.5,
+      "nonzero_count": 152064,
+      "allzero": false,
+      "constant": false,
+      "nan_count": 0,
+      "inf_count": 0
+    }
+  },
+  "boundary_metrics": {
+    "shape_match": true,
+    "reference_top1": 321694,
+    "candidate_top1": 370491,
+    "top1_agreement": false,
+    "reference_top1_in_candidate_top5": false,
+    "top5_overlap": 0,
+    "cosine": 0.01181808288512367,
+    "pearson_centered": 0.01175660547066948,
+    "relative_l2": 2.5934265310679705,
+    "max_abs_error": 262.5944027900696,
+    "mean_abs_error": 3.3179762755411746,
+    "candidate_normalized_entropy": 0.8973339819170851,
+    "candidate_stats": {
+      "shape": [
+        458752
+      ],
+      "dtype": "float32",
+      "size": 458752,
+      "min": -5.40559720993042,
+      "max": 5.405432224273682,
+      "mean": -0.037023741751909256,
+      "std": 3.704967737197876,
+      "abs_max": 5.40559720993042,
+      "nonzero_count": 458744,
+      "allzero": false,
+      "constant": false,
+      "nan_count": 0,
+      "inf_count": 0
+    },
+    "reference_stats": {
+      "shape": [
+        458752
+      ],
+      "dtype": "float32",
+      "size": 458752,
+      "min": -268.0,
+      "max": 67.0,
+      "mean": -0.009605162777006626,
+      "std": 1.5407507419586182,
+      "abs_max": 268.0,
+      "nonzero_count": 458318,
+      "allzero": false,
+      "constant": false,
+      "nan_count": 0,
+      "inf_count": 0
+    }
+  },
+  "layout_scale_variant_used": "existing_full_chain_bpu_dequant_boundary_direct_float32_seq_hidden",
+  "elapsed_seconds": 558.119,
+  "status": "pass"
+}

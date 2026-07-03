@@ -1,0 +1,139 @@
+
+A module that was compiled using NumPy 1.x cannot be run in
+NumPy 2.2.6 as it may crash. To support both 1.x and 2.x
+versions of NumPy, modules must be compiled with NumPy 2.0.
+Some module may need to rebuild instead e.g. with 'pybind11>=2.12'.
+
+If you are a user of the module, the easiest solution will be to
+downgrade to 'numpy<2' or try to upgrade the affected module.
+We expect that some modules will need time to support NumPy 2.
+
+Traceback (most recent call last):  File "/mnt/nas/openclaw/reports/models/dream7b_s100p_v12r_execution_20260702/tools/run_v12r_remote_reconstruction.py", line 444, in <module>
+    raise SystemExit(main())
+  File "/mnt/nas/openclaw/reports/models/dream7b_s100p_v12r_execution_20260702/tools/run_v12r_remote_reconstruction.py", line 294, in main
+    import torch
+  File "/mnt/nas/openclaw/reports/models/dream7b_s100p_v8_execution_20260701/pydeps_modern/torch/__init__.py", line 1477, in <module>
+    from .functional import *  # noqa: F403
+  File "/mnt/nas/openclaw/reports/models/dream7b_s100p_v8_execution_20260701/pydeps_modern/torch/functional.py", line 9, in <module>
+    import torch.nn.functional as F
+  File "/mnt/nas/openclaw/reports/models/dream7b_s100p_v8_execution_20260701/pydeps_modern/torch/nn/__init__.py", line 1, in <module>
+    from .modules import *  # noqa: F403
+  File "/mnt/nas/openclaw/reports/models/dream7b_s100p_v8_execution_20260701/pydeps_modern/torch/nn/modules/__init__.py", line 35, in <module>
+    from .transformer import TransformerEncoder, TransformerDecoder, \
+  File "/mnt/nas/openclaw/reports/models/dream7b_s100p_v8_execution_20260701/pydeps_modern/torch/nn/modules/transformer.py", line 20, in <module>
+    device: torch.device = torch.device(torch._C._get_default_device()),  # torch.device('cpu'),
+/mnt/nas/openclaw/reports/models/dream7b_s100p_v8_execution_20260701/pydeps_modern/torch/nn/modules/transformer.py:20: UserWarning: Failed to initialize NumPy: 
+A module that was compiled using NumPy 1.x cannot be run in
+NumPy 2.2.6 as it may crash. To support both 1.x and 2.x
+versions of NumPy, modules must be compiled with NumPy 2.0.
+Some module may need to rebuild instead e.g. with 'pybind11>=2.12'.
+
+If you are a user of the module, the easiest solution will be to
+downgrade to 'numpy<2' or try to upgrade the affected module.
+We expect that some modules will need time to support NumPy 2.
+
+ (Triggered internally at /pytorch/torch/csrc/utils/tensor_numpy.cpp:84.)
+  device: torch.device = torch.device(torch._C._get_default_device()),  # torch.device('cpu'),
+[v12r] loading HF model dtype=bfloat16
+Loading checkpoint shards:   0%|          | 0/4 [00:00<?, ?it/s]Loading checkpoint shards:  25%|██▌       | 1/4 [00:00<00:00,  8.59it/s]Loading checkpoint shards:  75%|███████▌  | 3/4 [00:00<00:00, 10.16it/s]Loading checkpoint shards: 100%|██████████| 4/4 [00:00<00:00, 10.76it/s]
+/mnt/nas/openclaw/reports/models/dream7b_s100p_v8_execution_20260701/pydeps_modern/transformers/generation/configuration_utils.py:590: UserWarning: `do_sample` is set to `False`. However, `temperature` is set to `0.0` -- this flag is only used in sample-based generation modes. You should set `do_sample=True` or unset `temperature`. This was detected when initializing the generation config instance, which means the corresponding file may hold incorrect parameterization and should be fixed.
+  warnings.warn(
+/mnt/nas/openclaw/reports/models/dream7b_s100p_v8_execution_20260701/pydeps_modern/transformers/generation/configuration_utils.py:590: UserWarning: `do_sample` is set to `False`. However, `temperature` is set to `0.0` -- this flag is only used in sample-based generation modes. You should set `do_sample=True` or unset `temperature`.
+  warnings.warn(
+[v12r] skip existing single case=zeros seg=00
+[v12r] skip existing single case=zeros seg=01
+[v12r] skip existing single case=zeros seg=02
+[v12r] skip existing single case=zeros seg=04
+[v12r] skip existing single case=zeros seg=08
+[v12r] skip existing single case=zeros seg=11
+[v12r] skip existing single case=zeros seg=12
+[v12r] skip existing single case=zeros seg=13
+[v12r] skip existing single case=zeros seg=20
+[v12r] skip existing single case=zeros seg=25
+[v12r] skip existing single case=zeros seg=26
+[v12r] skip existing single case=zeros seg=27
+[v12r] skip existing hybrid case=zeros cut=00
+[v12r] skip existing hybrid case=zeros cut=01
+[v12r] skip existing hybrid case=zeros cut=02
+[v12r] skip existing hybrid case=zeros cut=04
+[v12r] skip existing hybrid case=zeros cut=08
+[v12r] skip existing hybrid case=zeros cut=11
+[v12r] skip existing hybrid case=zeros cut=12
+[v12r] skip existing hybrid case=zeros cut=13
+[v12r] skip existing hybrid case=zeros cut=20
+[v12r] skip existing hybrid case=zeros cut=25
+[v12r] skip existing hybrid case=zeros cut=26
+[v12r] skip existing single case=ramp seg=00
+[v12r] skip existing single case=ramp seg=01
+[v12r] skip existing single case=ramp seg=02
+[v12r] skip existing single case=ramp seg=04
+[v12r] skip existing single case=ramp seg=08
+[v12r] skip existing single case=ramp seg=11
+[v12r] skip existing single case=ramp seg=12
+[v12r] skip existing single case=ramp seg=13
+[v12r] skip existing single case=ramp seg=20
+[v12r] skip existing single case=ramp seg=25
+[v12r] single case=ramp seg=26
+[UCP]: log level = 3
+[UCP]: UCP version = 3.13.6
+[VP]: log level = 3
+[DNN]: log level = 3
+[HPL]: log level = 3
+[UCPT]: log level = 6
+[BPU][[BPU_MONITOR]][281473372718784][INFO]BPULib verison(2, 2, 15)[f21ee84]!
+[DNN]: 3.13.6_(4.7.5 HBRT)
+[v12r] single case=ramp seg=27
+[ERROR][][mem_log.c:104] [183592.45210][540303:540303][ION_ALLOCATOR] <mem_ion_alloc_internal:650> Fail to do ION_IOC_ALLOC(ret=Cannot allocate memory)!
+[ERROR][][mem_log.c:104] [183592.45210][540303:540303][ION_ALLOCATOR] <mem_alloc_handle_and_buf:799> Fail to allocate ion memory(ret=-12).
+[ERROR][][mem_log.c:104] [183592.45210][540303:540303][ION_ALLOCATOR] <mem_osal_alloc_com_buf:994> Fail to allocate handle and buf(ret=-16777211).
+[ERROR][][mem_log.c:104] [183592.45210][540303:540303][MEM_ALLOCATOR] <mem_try_alloc_com_buf_locked:304> Fail to allocate memory(Insufficient memory).
+[ERROR][][mem_log.c:104] [183592.45210][540303:540303][MEM_ALLOCATOR] <hb_mem_alloc_com_buf_with_lable:510> Fail to allocate common buffer(ret=-16777211).
+[31m[1m[E][540303][07-02][20:17:12:305][configuration.cpp:203][python3][DNN] [HBRT] 4.7.5: [12h:17m:12s:305582331ns ERROR hbrt4_mem::unified] pid:540303 tid:540303 hbrt4_mem/src/unified.rs:156: Cannot malloc bpu memory with length 1880386728 bytes: AllocError { len: 1881735168 }
+[m[K[31m[1m[E][540303][07-02][20:17:12:305][packed_model.cpp:222][python3][DNN] [Model] Load hbm failed! error: HBRT4_STATUS_RESOURCE_EXHAUSTED
+[m[K[31m[1m[E][540303][07-02][20:17:12:305][packed_model.cpp:132][python3][DNN] [Model] Load model failed, model file:/mnt/nas/openclaw/models/dream7b-hbm/seq128-b1-lmheadq16-lasttoken/seg27_28/dream7b_segment_27_28_seq128_q8_lmheadq16_last_token_logits.hbm
+[m[K[33m[1m[W][540303][07-02][20:17:12:305][hb_dnn.cpp:342][python3][DNN] [Task] hbDNNGetErrorDesc interface is deprecated, please use hbUCPGetErrorDesc instead for best performance and functionality!
+[m[K[v12r] ERROR {'matrix': 'single_segment', 'case_id': 'ramp', 'segment': 27, 'type': 'RuntimeError', 'message': 'DNN Error (code: -400001, desc: Memory alloc failed, please check error log) hbDNN initialize from /mnt/nas/openclaw/models/dream7b-hbm/seq128-b1-lmheadq16-lasttoken/seg27_28/dream7b_segment_27_28_seq128_q8_lmheadq16_last_token_logits.hbm file failed.'}
+[v12r] hybrid case=ramp cut=00
+[v12r] hybrid case=ramp cut=01
+[v12r] hybrid case=ramp cut=02
+[v12r] hybrid case=ramp cut=04
+[v12r] hybrid case=ramp cut=08
+[v12r] hybrid case=ramp cut=11
+[v12r] hybrid case=ramp cut=12
+[v12r] hybrid case=ramp cut=13
+[v12r] hybrid case=ramp cut=20
+[v12r] hybrid case=ramp cut=25
+[v12r] hybrid case=ramp cut=26
+[v12r] single case=short_chinese_prompt_padded seg=00
+[v12r] single case=short_chinese_prompt_padded seg=01
+[v12r] single case=short_chinese_prompt_padded seg=02
+[v12r] single case=short_chinese_prompt_padded seg=04
+[v12r] single case=short_chinese_prompt_padded seg=08
+[v12r] single case=short_chinese_prompt_padded seg=11
+[v12r] single case=short_chinese_prompt_padded seg=12
+[v12r] single case=short_chinese_prompt_padded seg=13
+[v12r] single case=short_chinese_prompt_padded seg=20
+[v12r] single case=short_chinese_prompt_padded seg=25
+[v12r] single case=short_chinese_prompt_padded seg=26
+[v12r] single case=short_chinese_prompt_padded seg=27
+[ERROR][][mem_log.c:104] [197606.44096][540303:540303][ION_ALLOCATOR] <mem_ion_alloc_internal:650> Fail to do ION_IOC_ALLOC(ret=Cannot allocate memory)!
+[ERROR][][mem_log.c:104] [197606.44096][540303:540303][ION_ALLOCATOR] <mem_alloc_handle_and_buf:799> Fail to allocate ion memory(ret=-12).
+[ERROR][][mem_log.c:104] [197606.44096][540303:540303][ION_ALLOCATOR] <mem_osal_alloc_com_buf:994> Fail to allocate handle and buf(ret=-16777211).
+[ERROR][][mem_log.c:104] [197606.44096][540303:540303][MEM_ALLOCATOR] <mem_try_alloc_com_buf_locked:304> Fail to allocate memory(Insufficient memory).
+[ERROR][][mem_log.c:104] [197606.44096][540303:540303][MEM_ALLOCATOR] <hb_mem_alloc_com_buf_with_lable:510> Fail to allocate common buffer(ret=-16777211).
+[31m[1m[E][540303][07-03][00:10:46:292][configuration.cpp:203][python3][DNN] [HBRT] 4.7.5: [16h:10m:46s:292718410ns ERROR hbrt4_mem::unified] pid:540303 tid:540303 hbrt4_mem/src/unified.rs:156: Cannot malloc bpu memory with length 1880386728 bytes: AllocError { len: 1881735168 }
+[m[K[31m[1m[E][540303][07-03][00:10:46:292][packed_model.cpp:222][python3][DNN] [Model] Load hbm failed! error: HBRT4_STATUS_RESOURCE_EXHAUSTED
+[m[K[31m[1m[E][540303][07-03][00:10:46:292][packed_model.cpp:132][python3][DNN] [Model] Load model failed, model file:/mnt/nas/openclaw/models/dream7b-hbm/seq128-b1-lmheadq16-lasttoken/seg27_28/dream7b_segment_27_28_seq128_q8_lmheadq16_last_token_logits.hbm
+[m[K[v12r] ERROR {'matrix': 'single_segment', 'case_id': 'short_chinese_prompt_padded', 'segment': 27, 'type': 'RuntimeError', 'message': 'DNN Error (code: -400001, desc: Memory alloc failed, please check error log) hbDNN initialize from /mnt/nas/openclaw/models/dream7b-hbm/seq128-b1-lmheadq16-lasttoken/seg27_28/dream7b_segment_27_28_seq128_q8_lmheadq16_last_token_logits.hbm file failed.'}
+[v12r] hybrid case=short_chinese_prompt_padded cut=00
+[v12r] hybrid case=short_chinese_prompt_padded cut=01
+[v12r] hybrid case=short_chinese_prompt_padded cut=02
+[v12r] hybrid case=short_chinese_prompt_padded cut=04
+[v12r] hybrid case=short_chinese_prompt_padded cut=08
+[v12r] hybrid case=short_chinese_prompt_padded cut=11
+[v12r] hybrid case=short_chinese_prompt_padded cut=12
+[v12r] hybrid case=short_chinese_prompt_padded cut=13
+[v12r] hybrid case=short_chinese_prompt_padded cut=20
+[v12r] hybrid case=short_chinese_prompt_padded cut=25
+[v12r] hybrid case=short_chinese_prompt_padded cut=26
+reports/1030_1040_v12r_remote_reconstruction.json

@@ -1,0 +1,183 @@
+{
+  "schema_version": "dream7b_s100p_v6_460_scale_fix_or_falsify",
+  "created_at_utc": "2026-07-01T09:34:35.102186+00:00",
+  "run_commands": [
+    "py tools/build_v6_research_thread.py --pack-root tmp\\dream7b_s100p_v6_after_v5_review_pack_20260701\\dream7b_s100p_v6_codex_after_v5_review_pack_20260701 --timestamp 20260701_v6_after_nas_hf"
+  ],
+  "git": {
+    "cwd": "F:\\Project\\Digua",
+    "git_dir_exists": true,
+    "git_head_exists": false,
+    "commit": null,
+    "dirty": null,
+    "status": "unavailable_empty_git_dir"
+  },
+  "input_artifacts": [
+    {
+      "path": "reports/400_evidence_hygiene_and_raw_endpoints.json",
+      "exists": true,
+      "size_bytes": 133034,
+      "sha256": "70b55a57c563931236884dddbd0c2285b4aef8ae707d8ace91e199a227b297c2"
+    },
+    {
+      "path": "reports/420_verified_dream_bf16_wrapper.json",
+      "exists": true,
+      "size_bytes": 10498,
+      "sha256": "16fc6b678e10c97ac315e3c000f698707aff7500f44f7b1bcbdd689a7480eb0f"
+    },
+    {
+      "path": "reports/430_gguf_f16_q4_reference_matrix.json",
+      "exists": true,
+      "size_bytes": 5598,
+      "sha256": "d35247fcaa24e2c5ebc79c897b272f01f70d401353b2a25b1c26b6f460765333"
+    }
+  ],
+  "output_artifacts": [
+    {
+      "path": "reports/460_scale_fix_or_falsify.json"
+    },
+    {
+      "path": "reports/460_scale_fix_or_falsify.md"
+    }
+  ],
+  "gate_status": {
+    "scale_fix_or_falsify": "blocked_reference_unavailable"
+  },
+  "blocking_or_failure_reasons": [
+    "No BF16/FP32 or GGUF F16 reference row exists to score corrected-scale logits."
+  ],
+  "next_minimal_experiments": [
+    "Once BF16/GGUF F16 exists, score /2.75, /3, /3.25, /3.5, clip_6, clip_5, clip_4 against semantic-case thresholds."
+  ],
+  "transition_endpoint_stats": [
+    {
+      "case_id": "zeros",
+      "variant": "real_x",
+      "input_abs_max": 16.29678726196289,
+      "raw_allzero": true,
+      "raw_nonzero_count": 0
+    },
+    {
+      "case_id": "zeros",
+      "variant": "real_x_div_2",
+      "input_abs_max": 8.148393630981445,
+      "raw_allzero": true,
+      "raw_nonzero_count": 0
+    },
+    {
+      "case_id": "zeros",
+      "variant": "real_x_div_2p75",
+      "input_abs_max": 5.926104545593262,
+      "raw_allzero": false,
+      "raw_nonzero_count": 152062
+    },
+    {
+      "case_id": "zeros",
+      "variant": "real_x_div_3",
+      "input_abs_max": 5.432262420654297,
+      "raw_allzero": false,
+      "raw_nonzero_count": 152063
+    },
+    {
+      "case_id": "zeros",
+      "variant": "real_x_clip_6",
+      "input_abs_max": 6.0,
+      "raw_allzero": false,
+      "raw_nonzero_count": 152064
+    },
+    {
+      "case_id": "zeros",
+      "variant": "real_x_clip_4",
+      "input_abs_max": 4.0,
+      "raw_allzero": false,
+      "raw_nonzero_count": 152064
+    },
+    {
+      "case_id": "ramp",
+      "variant": "real_x",
+      "input_abs_max": 16.29678726196289,
+      "raw_allzero": true,
+      "raw_nonzero_count": 0
+    },
+    {
+      "case_id": "ramp",
+      "variant": "real_x_div_2",
+      "input_abs_max": 8.148393630981445,
+      "raw_allzero": true,
+      "raw_nonzero_count": 0
+    },
+    {
+      "case_id": "ramp",
+      "variant": "real_x_div_2p75",
+      "input_abs_max": 5.926104545593262,
+      "raw_allzero": false,
+      "raw_nonzero_count": 152046
+    },
+    {
+      "case_id": "ramp",
+      "variant": "real_x_div_3",
+      "input_abs_max": 5.432262420654297,
+      "raw_allzero": false,
+      "raw_nonzero_count": 152043
+    },
+    {
+      "case_id": "ramp",
+      "variant": "real_x_clip_6",
+      "input_abs_max": 6.0,
+      "raw_allzero": false,
+      "raw_nonzero_count": 152045
+    },
+    {
+      "case_id": "ramp",
+      "variant": "real_x_clip_4",
+      "input_abs_max": 4.0,
+      "raw_allzero": false,
+      "raw_nonzero_count": 152009
+    },
+    {
+      "case_id": "short_chinese_prompt_padded",
+      "variant": "real_x",
+      "input_abs_max": 16.29678726196289,
+      "raw_allzero": true,
+      "raw_nonzero_count": 0
+    },
+    {
+      "case_id": "short_chinese_prompt_padded",
+      "variant": "real_x_div_2",
+      "input_abs_max": 8.148393630981445,
+      "raw_allzero": true,
+      "raw_nonzero_count": 0
+    },
+    {
+      "case_id": "short_chinese_prompt_padded",
+      "variant": "real_x_div_2p75",
+      "input_abs_max": 5.926104545593262,
+      "raw_allzero": false,
+      "raw_nonzero_count": 152046
+    },
+    {
+      "case_id": "short_chinese_prompt_padded",
+      "variant": "real_x_div_3",
+      "input_abs_max": 5.432262420654297,
+      "raw_allzero": false,
+      "raw_nonzero_count": 152053
+    },
+    {
+      "case_id": "short_chinese_prompt_padded",
+      "variant": "real_x_clip_6",
+      "input_abs_max": 6.0,
+      "raw_allzero": false,
+      "raw_nonzero_count": 152047
+    },
+    {
+      "case_id": "short_chinese_prompt_padded",
+      "variant": "real_x_clip_4",
+      "input_abs_max": 4.0,
+      "raw_allzero": false,
+      "raw_nonzero_count": 152043
+    }
+  ],
+  "scale_correction_status": "blocked_reference_unavailable",
+  "nonzero_recovery_not_correctness": true,
+  "verdict": "blocked_reference_unavailable"
+}

@@ -1,0 +1,294 @@
+{
+  "schema_version": "dream7b_s100p_gate_packet_v6",
+  "created_at_utc": "2026-07-01T09:34:35.146474+00:00",
+  "run_commands": [
+    "py tools/build_v6_research_thread.py --pack-root tmp\\dream7b_s100p_v6_after_v5_review_pack_20260701\\dream7b_s100p_v6_codex_after_v5_review_pack_20260701 --timestamp 20260701_v6_after_nas_hf"
+  ],
+  "git": {
+    "cwd": "F:\\Project\\Digua",
+    "git_dir_exists": true,
+    "git_head_exists": false,
+    "commit": null,
+    "dirty": null,
+    "status": "unavailable_empty_git_dir"
+  },
+  "verdict_class": "C_deployment_blocked_against_deployment_reference_but_bf16_unresolved",
+  "verdict": "v6 fixes v5 raw endpoint hygiene and adds seg20..27 boundary evidence. NAS HF safetensors and Dream wrapper code are present and AutoModel load was demonstrated, but logits numerical validity remains blocked against the available deployment reference and unresolved against BF16 because verified BF16/FP32 logits plus GGUF F16/Q4_0 rows are unavailable.",
+  "gate_status": {
+    "gate_0_evidence_hygiene": "pass",
+    "gate_1_compile_feasibility": "pass_from_v5_reference_metadata_large_hbm_excluded",
+    "gate_2_s100p_board_runtime_validity": "pass_offline_seg20_27_and_prior_full_chain",
+    "gate_3_reference_matrix_validity": "partial_q4km_s100p_corrected_variants_available_bf16_f16_q4_0_missing",
+    "gate_4_logits_numerical_validity": "fail_against_q4_k_m_deployment_reference_inconclusive_against_bf16",
+    "gate_5_root_cause_localization": "pass_late_range_saturation_bounded_seg20_27_and_final_input_contract",
+    "gate_6_generation_quality": "not_run_by_design",
+    "gate_7_product_route": "not_run_by_design"
+  },
+  "reference_matrix_summary": {
+    "hf_pytorch_bf16_or_fp32": {
+      "status": "model_load_pass_logits_export_blocked",
+      "reason": "Task 420 found HF safetensors and loaded AutoModel, but no verified BF16/FP32 logits were exported"
+    },
+    "gguf_f16": {
+      "status": "unavailable",
+      "reason": "no F16 GGUF artifact found; HF safetensors exist but no verified conversion/export row was produced in this run"
+    },
+    "gguf_q4_0": {
+      "status": "unavailable",
+      "reason": "no Q4_0 GGUF artifact found; no verified F16/HF conversion and quantized reference row was produced in this run"
+    },
+    "gguf_q4_k_m": {
+      "status": "available",
+      "artifacts": [
+        {
+          "root": "/mnt/nas/openclaw/models/dream7b",
+          "relative_path": "dream-7b-q4km.gguf",
+          "path": "/mnt/nas/openclaw/models/dream7b/dream-7b-q4km.gguf",
+          "exists": true,
+          "size_bytes": 5313916320,
+          "sha256": "skipped_large_file_not_in_sha256sums"
+        }
+      ]
+    },
+    "hf_safetensors_source": {
+      "status": "available",
+      "artifacts": [
+        {
+          "root": "/mnt/nas/openclaw/models/dream7b-hf",
+          "relative_path": "model-00001-of-00004.safetensors",
+          "path": "/mnt/nas/openclaw/models/dream7b-hf/model-00001-of-00004.safetensors",
+          "exists": true,
+          "size_bytes": 4877660776,
+          "sha256": "3014d84950f2f3afcce622508b6625e9cd911b9c340f4206e35e6a3177aec993"
+        },
+        {
+          "root": "/mnt/nas/openclaw/models/dream7b-hf",
+          "relative_path": "model-00002-of-00004.safetensors",
+          "path": "/mnt/nas/openclaw/models/dream7b-hf/model-00002-of-00004.safetensors",
+          "exists": true,
+          "size_bytes": 4932751008,
+          "sha256": "78fc44a7eae29c3d13bba010ca12584f4220798d41c9e617579a33c47222aa57"
+        },
+        {
+          "root": "/mnt/nas/openclaw/models/dream7b-hf",
+          "relative_path": "model-00003-of-00004.safetensors",
+          "path": "/mnt/nas/openclaw/models/dream7b-hf/model-00003-of-00004.safetensors",
+          "exists": true,
+          "size_bytes": 4330865200,
+          "sha256": "eac5afaf9a0e0b4a23c7ac1dbe5f538ccdf9fac5c0db7919fd9625a92c378e48"
+        },
+        {
+          "root": "/mnt/nas/openclaw/models/dream7b-hf",
+          "relative_path": "model-00004-of-00004.safetensors",
+          "path": "/mnt/nas/openclaw/models/dream7b-hf/model-00004-of-00004.safetensors",
+          "exists": true,
+          "size_bytes": 1089994880,
+          "sha256": "398da65f1f599ca8d594a9d7a077a3b7c4eb0ddfdff8e7e004c3d259712b3cb7"
+        }
+      ]
+    },
+    "s100p_bpu_raw_dequant": {
+      "status": "partial_available",
+      "note": "representative zeros logits copied from v3 raw subset; full 10-case row remains from v5 reports"
+    },
+    "corrected_scale_variants": {
+      "status": "available_without_reference_comparison",
+      "source": "evidence/raw_endpoint_subset_v6"
+    }
+  },
+  "canonical_case_hashes": [
+    {
+      "case_id": "zeros",
+      "token_ids_sha256": "1b912946d3fd584649a7924a6d699d2bd0ee0da2ebc320bd53135fa9b1ec21a0",
+      "source_case_sha256": "3724a8c1d3b86d1ef0030fcfed0b97f97078765b7edf32b558177fa27829a273"
+    },
+    {
+      "case_id": "ramp",
+      "token_ids_sha256": "f0d76dfdfbf5467a030817361d4cedd8ddc8e86a9b24ee55e7749eb72a658b53",
+      "source_case_sha256": "c19351b815e288defacde9a3c50acb2807ec03342dd00ead05ee0adfcde920dc"
+    },
+    {
+      "case_id": "repeated_frequent_token",
+      "token_ids_sha256": "6285266a2fb67a34940db360925b075d4f0c60efc8955bbf4a884558223025c3",
+      "source_case_sha256": "80f3321f0e57bb08ab3747c40e6191f6f5790a3bb5638a032f5e9520553a3834"
+    },
+    {
+      "case_id": "repeated_rare_token",
+      "token_ids_sha256": "5ea5eb622675b234ed39d1a54f897e114a15164bc7c8b1ff8e7764431700aa5a",
+      "source_case_sha256": "be0c0df83aa7b828d6635f1cad1b8be9f6e2978a94566bfef859b17242bb4690"
+    },
+    {
+      "case_id": "alternating_two_tokens",
+      "token_ids_sha256": "37e76277f06f791edebe8a7976e09e026db9bb0941ee47fca964866c2aaf3a64",
+      "source_case_sha256": "53c68a3a523d4563cfe0c21d9ca0abbe8bb1cfc8c92e70029d5ef4b758a08464"
+    },
+    {
+      "case_id": "short_english_prompt_padded",
+      "token_ids_sha256": "887ea52fe65420829944f15f63997061672b785aa22942ecdc32a807abe9d593",
+      "source_case_sha256": "c738d0b5d094b3cf71f747a95d495d6a08813f8e6cd9ef1e5d029383536f552f"
+    },
+    {
+      "case_id": "short_chinese_prompt_padded",
+      "token_ids_sha256": "ac26ad530204a4bc2196cff5fd05bf83a46048a578fdabab2b9073439addd01a",
+      "source_case_sha256": "b201299283f3d3fe09d7e2fc9d141aaf4ac14f77a1eef2f8abc216ed80cff5c0"
+    },
+    {
+      "case_id": "openclaw_style_prompt_padded",
+      "token_ids_sha256": "27eaf7ec33df2e2b127a46295717114387e516ede8c975d252c0390804c7394d",
+      "source_case_sha256": "dcba211dc8db58816146f0e91f62fd10ef95e086aa794198dd7a54fba84e4313"
+    },
+    {
+      "case_id": "exactly_128_token_synthetic_prompt",
+      "token_ids_sha256": "00b74a18a594b2deda847efac9d287e8e0e3d442fa2df659107790253374719b",
+      "source_case_sha256": "2f8186829633ad0ac67ef5fc02ef9b52e3db1150552eceaabbba5980e1c99a68"
+    },
+    {
+      "case_id": "prompt_with_mask_tail",
+      "token_ids_sha256": "a61399757647c41202f4cddd5b5aa43d9192417e8577d3add0bf0f149ffd41b5",
+      "source_case_sha256": "2c9d8528e573c6fd425c1bf198c94e4f03e34ba422a006feb346bd19cb4a4cb0"
+    }
+  ],
+  "bf16_wrapper_status": {
+    "status": "blocked",
+    "reason": "HF safetensors and Dream wrapper code are present on NAS and AutoModel loads with isolated transformers plus torch compatibility shims, but verified BF16/FP32 logits were not exported because forward execution is blocked/impractical on the current S100P torch runtime.",
+    "generic_auto_model_rejected": false,
+    "config_tokenizer_load_pass": true,
+    "model_load_pass": true,
+    "forward_logits_export_pass": false,
+    "no_bf16_logits_fabricated": true
+  },
+  "gguf_reference_status": {
+    "hf_pytorch_bf16_or_fp32": {
+      "status": "model_load_pass_logits_export_blocked",
+      "reason": "Task 420 found HF safetensors and loaded AutoModel, but no verified BF16/FP32 logits were exported"
+    },
+    "gguf_f16": {
+      "status": "unavailable",
+      "reason": "no F16 GGUF artifact found; HF safetensors exist but no verified conversion/export row was produced in this run"
+    },
+    "gguf_q4_0": {
+      "status": "unavailable",
+      "reason": "no Q4_0 GGUF artifact found; no verified F16/HF conversion and quantized reference row was produced in this run"
+    },
+    "gguf_q4_k_m": {
+      "status": "available",
+      "artifacts": [
+        {
+          "root": "/mnt/nas/openclaw/models/dream7b",
+          "relative_path": "dream-7b-q4km.gguf",
+          "path": "/mnt/nas/openclaw/models/dream7b/dream-7b-q4km.gguf",
+          "exists": true,
+          "size_bytes": 5313916320,
+          "sha256": "skipped_large_file_not_in_sha256sums"
+        }
+      ]
+    },
+    "hf_safetensors_source": {
+      "status": "available",
+      "artifacts": [
+        {
+          "root": "/mnt/nas/openclaw/models/dream7b-hf",
+          "relative_path": "model-00001-of-00004.safetensors",
+          "path": "/mnt/nas/openclaw/models/dream7b-hf/model-00001-of-00004.safetensors",
+          "exists": true,
+          "size_bytes": 4877660776,
+          "sha256": "3014d84950f2f3afcce622508b6625e9cd911b9c340f4206e35e6a3177aec993"
+        },
+        {
+          "root": "/mnt/nas/openclaw/models/dream7b-hf",
+          "relative_path": "model-00002-of-00004.safetensors",
+          "path": "/mnt/nas/openclaw/models/dream7b-hf/model-00002-of-00004.safetensors",
+          "exists": true,
+          "size_bytes": 4932751008,
+          "sha256": "78fc44a7eae29c3d13bba010ca12584f4220798d41c9e617579a33c47222aa57"
+        },
+        {
+          "root": "/mnt/nas/openclaw/models/dream7b-hf",
+          "relative_path": "model-00003-of-00004.safetensors",
+          "path": "/mnt/nas/openclaw/models/dream7b-hf/model-00003-of-00004.safetensors",
+          "exists": true,
+          "size_bytes": 4330865200,
+          "sha256": "eac5afaf9a0e0b4a23c7ac1dbe5f538ccdf9fac5c0db7919fd9625a92c378e48"
+        },
+        {
+          "root": "/mnt/nas/openclaw/models/dream7b-hf",
+          "relative_path": "model-00004-of-00004.safetensors",
+          "path": "/mnt/nas/openclaw/models/dream7b-hf/model-00004-of-00004.safetensors",
+          "exists": true,
+          "size_bytes": 1089994880,
+          "sha256": "398da65f1f599ca8d594a9d7a077a3b7c4eb0ddfdff8e7e004c3d259712b3cb7"
+        }
+      ]
+    },
+    "s100p_bpu_raw_dequant": {
+      "status": "partial_available",
+      "note": "representative zeros logits copied from v3 raw subset; full 10-case row remains from v5 reports"
+    },
+    "corrected_scale_variants": {
+      "status": "available_without_reference_comparison",
+      "source": "evidence/raw_endpoint_subset_v6"
+    }
+  },
+  "s100p_runtime_status": {
+    "raw_endpoint_verdict": "pass_all_endpoint_raw_arrays_present_and_verified",
+    "boundary_dump_verdict": "pass"
+  },
+  "hybrid_route_summary": {
+    "route_a": {
+      "status": "blocked",
+      "reason": "HF weights/model load exist, but verified HF final norm/lm_head logits export did not complete"
+    },
+    "route_b": {
+      "status": "blocked",
+      "reason": "HF seg26 boundary unavailable because BF16 forward/boundary export did not complete"
+    },
+    "route_c": {
+      "status": "executed_raw_endpoint_packaged",
+      "reason": "Task 400 has all critical endpoint raw arrays",
+      "correctness": "unproven_reference_unavailable"
+    }
+  },
+  "first_divergent_segment_or_range": "Raw S100P range/saturation is now bounded across seg20..27: seg20 already hits positive int16 max, seg22/24/25 hit full int16 extremes, seg26 clamps at +/-19807, seg27 final logits are all-zero. BF16-divergent segment remains unresolved because BF16 boundaries are unavailable.",
+  "scale_correction_status": "blocked_reference_unavailable",
+  "blocking_issues": [
+    "Verified BF16/FP32 logits export unavailable even though HF safetensors and wrapper code exist.",
+    "GGUF F16 and Q4_0 rows unavailable.",
+    "Hybrid Route A/B blocked by missing verified HF final lm_head logits export and HF seg26 boundary export.",
+    "Corrected-scale logits are nonzero diagnostics but not correctness."
+  ],
+  "allowed_claims": [
+    "v6 includes all critical raw endpoint arrays including /2.75 and clip_6.",
+    "v6 dumps seg20..27 raw/dequant boundaries for zeros/ramp/short_chinese on S100P.",
+    "NAS contains Dream7B HF safetensors and custom wrapper code; config/tokenizer and AutoModel load passed under isolated deps plus compatibility shims.",
+    "Current evidence supports a late range/saturation/input-contract anomaly, not deployment success."
+  ],
+  "forbidden_claims": [
+    "Dream7B is accurately deployed on S100P.",
+    "Dream7B is falsified against BF16/PyTorch ground truth.",
+    "Any corrected scale is a valid fix.",
+    "Generation quality or product route 18888/18889 passed or failed."
+  ],
+  "next_minimal_experiments": [
+    "Run the available Dream7B HF safetensors/wrapper on a torch runtime that can export verified BF16/FP32 logits and boundary activations.",
+    "Export GGUF F16 and Q4_0 logits for canonical cases.",
+    "Score corrected-scale endpoints against BF16/GGUF F16.",
+    "Compare seg20..27 BPU boundary tensors to BF16 layer/boundary activations."
+  ],
+  "artifact_manifest": {
+    "raw_endpoint_subset": "evidence/raw_endpoint_subset_v6/MANIFEST.json",
+    "boundary_subset": "evidence/boundary_subset_v6/MANIFEST.json"
+  },
+  "sha256sums": {
+    "raw_endpoint_subset": "evidence/raw_endpoint_subset_v6/SHA256SUMS.txt",
+    "boundary_subset": "evidence/boundary_subset_v6/SHA256SUMS.txt"
+  },
+  "source_reports": {
+    "400_evidence_hygiene_and_raw_endpoints": "reports/400_evidence_hygiene_and_raw_endpoints.json",
+    "410_canonical_seq128_cases": "reports/410_canonical_seq128_cases.json",
+    "420_verified_dream_bf16_wrapper": "reports/420_verified_dream_bf16_wrapper.json",
+    "430_gguf_f16_q4_reference_matrix": "reports/430_gguf_f16_q4_reference_matrix.json",
+    "440_hybrid_routes": "reports/440_hybrid_routes.json",
+    "450_seg20_27_boundary_saturation_origin": "reports/450_seg20_27_boundary_saturation_origin.json",
+    "460_scale_fix_or_falsify": "reports/460_scale_fix_or_falsify.json"
+  }
+}

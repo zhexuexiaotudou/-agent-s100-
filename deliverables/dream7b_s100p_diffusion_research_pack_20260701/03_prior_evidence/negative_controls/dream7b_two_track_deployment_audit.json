@@ -1,0 +1,256 @@
+{
+  "generated_at": "2026-06-22T19:42:52.153288+08:00",
+  "verdict": "ok_dream7b_two_track_deployment_audit",
+  "local": {
+    "files": [
+      {
+        "path": "configs/systemd/dream7b-local-openai-gateway.service",
+        "exists": true,
+        "sha256": "833a44e1b5a19addf7f20dcc927f0d20099542cac348820fdddf4f67bb5d5209",
+        "size_bytes": 876
+      },
+      {
+        "path": "configs/systemd/dream7b-bpu-batch-queue.service",
+        "exists": true,
+        "sha256": "db11700608217ba03352b9570e549109600a6b2e938758c93838c1bb3a348b77",
+        "size_bytes": 434
+      },
+      {
+        "path": "configs/systemd/openclaw-gateway.service",
+        "exists": true,
+        "sha256": "b04847455389af6cade3ffffa4286ce8f52d9a9394cc0d25514846642340090a",
+        "size_bytes": 474
+      },
+      {
+        "path": "configs/systemd/dream7b-bpu-experimental-gateway-18889.service",
+        "exists": true,
+        "sha256": "13f993a457889a399e136d3bc4d83b76d3fa3150bca9ab6c00a143d6f759fb2a",
+        "size_bytes": 723
+      },
+      {
+        "path": "configs/dream7b_backend_policy.yaml",
+        "exists": true,
+        "sha256": "4ae2824c26f3dcccc64ddb0de640141c8ad2998e89bf770cc4b4243bf36a5394",
+        "size_bytes": 1634
+      },
+      {
+        "path": "configs/dream7b_queue_adapter_policy.json",
+        "exists": true,
+        "sha256": "aa29dd0dea41d01f9d99f75fe971c2af826b24d580b0b6c776dd2fed0dc95af1",
+        "size_bytes": 1856
+      },
+      {
+        "path": "scripts/dream7b_experimental_18889_gateway.py",
+        "exists": true,
+        "sha256": "7c1bf4635932b213854d42fef97bf7ba4f7a1d8a75be687c2750d4238004767e",
+        "size_bytes": 11177
+      },
+      {
+        "path": "docs/dream7b_s100p_next_work_runbook.md",
+        "exists": true,
+        "sha256": "530a491c8d362cc559f5b6164b9039b8a60ad86d7653a240ea22f520ca65d49b",
+        "size_bytes": 25689
+      },
+      {
+        "path": "docs/dream7b_openclaw_fast_path_fix_2026-06-22.md",
+        "exists": true,
+        "sha256": "a2a60e4b51531513c7ee3940e7cf2ca6114d4be5d2c1b0f742a045474245c182",
+        "size_bytes": 18386
+      },
+      {
+        "path": "docs/dream7b_bpu_logits_diagnosis_2026-06-22.md",
+        "exists": true,
+        "sha256": "c561ffc0693c0d02dd4a1bb810ac34183c9d1ea7cf28ac49c08511f1c7bc9104",
+        "size_bytes": 2666
+      },
+      {
+        "path": "docs/dream7b_bpu_seq16_quality_root_cause_2026-06-22.md",
+        "exists": true,
+        "sha256": "9126eabc4c0fdc5b2947846063aef6e2d5f8678c1fe31ea174af97967a694d1a",
+        "size_bytes": 17302
+      }
+    ],
+    "latest_reports": {
+      "queue_health": {
+        "path": "tmp\\product_guardrail_snapshots\\dream7b_queue_health_snapshot_20260622-192542\\dream7b_queue_health_snapshot.json",
+        "verdict": "warning_dream7b_queue_health_snapshot",
+        "loaded": true
+      },
+      "fast_path": {
+        "path": "tmp\\product_guardrail_snapshots\\dream7b_fast_path_regression_20260622-174547\\dream7b_fast_path_regression.json",
+        "verdict": "ok_dream7b_fast_path_regression",
+        "loaded": true
+      },
+      "quality_promotion_gate": {
+        "path": "tmp\\product_guardrail_snapshots\\dream7b_bpu_quality_promotion_gate_20260622-193510\\dream7b_bpu_quality_promotion_gate.json",
+        "verdict": "blocked_dream7b_bpu_quality_promotion_gate",
+        "loaded": true
+      },
+      "post_compile_matrix": {
+        "path": "tmp\\product_guardrail_snapshots\\dream7b_bpu_quality_post_compile_validation_matrix_20260622-193510\\dream7b_bpu_quality_post_compile_validation_matrix.json",
+        "verdict": "blocked_dream7b_bpu_quality_post_compile_validation_matrix",
+        "loaded": true
+      },
+      "final_goal_audit": {
+        "path": "tmp\\product_guardrail_snapshots\\dream7b_ai_nas_final_goal_audit_20260622-193513\\dream7b_ai_nas_final_goal_audit.json",
+        "verdict": "partial_dream7b_ai_nas_final_goal_audit_route_a_ready_route_b_blocked",
+        "loaded": true
+      }
+    }
+  },
+  "remote": {
+    "payload": {
+      "services": {
+        "queue_active": "active",
+        "queue_enabled": "enabled",
+        "gateway_18888_active": "active",
+        "gateway_18888_enabled": "enabled",
+        "openclaw_gateway_active": "active",
+        "openclaw_gateway_enabled": "enabled",
+        "experimental_18889_active": "inactive",
+        "experimental_18889_enabled": ""
+      },
+      "health": {
+        "gateway_18888": {
+          "ok": true,
+          "model": "Dream7B-S100P-local",
+          "backend": "diffuse-resident",
+          "progress_interval_sec": 0.25,
+          "default_steps": 4,
+          "default_max_tokens": 16,
+          "inline_tokenizer_enabled": false,
+          "inline_tokenizer_loaded": true,
+          "inline_tokenizer": {
+            "tokenizer_dir": "/mnt/nas/openclaw/models/dream7b/tokenizer",
+            "tokenizer_load_ms": 4160
+          },
+          "resident_enabled": true,
+          "resident_available": true,
+          "resident_cmd": "/mnt/nas/openclaw/runtimes/diffuse-cpp/build/diffuse-resident",
+          "resident_running": true,
+          "resident": {
+            "resident_cmd": "/mnt/nas/openclaw/runtimes/diffuse-cpp/build/diffuse-resident",
+            "resident_ready_line": "READY\t7938",
+            "resident_start_ms": 7942,
+            "dream_runtime": "/mnt/nas/openclaw/runtimes/diffuse-cpp",
+            "dream_model": "/mnt/nas/openclaw/models/dream7b/dream-7b-q4km.gguf",
+            "threads": "8"
+          },
+          "quick_response_enabled": true,
+          "quick_max_tokens": 3,
+          "quick_steps": 2
+        },
+        "openclaw_18789": {
+          "ok": true,
+          "status": "live"
+        },
+        "experimental_18889": {}
+      },
+      "queue": {
+        "pending_count": 0,
+        "processing_count": 0,
+        "done_count": 357,
+        "failed_count": 1
+      },
+      "latest_reports": {
+        "text_queue_run": "/mnt/nas/openclaw/reports/models/dream7b_bpu_text_queue_run_20260622-115956/text_queue_run.json",
+        "goal_status": "/mnt/nas/openclaw/reports/models/dream7b_ai_nas_goal_status_packet_20260622-193511/dream7b_ai_nas_goal_status_packet.json",
+        "acceptance": "/mnt/nas/openclaw/reports/models/dream7b_ai_nas_acceptance_packet_20260622-193512/dream7b_ai_nas_acceptance_packet.json",
+        "final_goal_audit": "/mnt/nas/openclaw/reports/models/dream7b_ai_nas_final_goal_audit_20260622-193513/dream7b_ai_nas_final_goal_audit.json",
+        "promotion_gate": "/mnt/nas/openclaw/reports/models/dream7b_bpu_quality_promotion_gate_20260622-193510/dream7b_bpu_quality_promotion_gate.json",
+        "rollback": "/mnt/nas/openclaw/reports/models/dream7b_bpu_quality_rollback_report_20260622-183248/dream7b_bpu_quality_rollback_report.json"
+      },
+      "hbm_artifacts": [
+        {
+          "name": "fine-seq16",
+          "path": "/mnt/nas/openclaw/models/dream7b-hbm/fine-seq16",
+          "manifest_count": 0,
+          "hbm_count": 8
+        },
+        {
+          "name": "true-batch-seq16-b16",
+          "path": "/mnt/nas/openclaw/models/dream7b-hbm/true-batch-seq16-b16",
+          "manifest_count": 1,
+          "hbm_count": 28
+        },
+        {
+          "name": "true-batch-seq16-b16.upload",
+          "path": "/mnt/nas/openclaw/models/dream7b-hbm/true-batch-seq16-b16.upload",
+          "manifest_count": 0,
+          "hbm_count": 0
+        },
+        {
+          "name": "true-batch-seq16-b2",
+          "path": "/mnt/nas/openclaw/models/dream7b-hbm/true-batch-seq16-b2",
+          "manifest_count": 28,
+          "hbm_count": 28
+        },
+        {
+          "name": "true-batch-seq16-b32",
+          "path": "/mnt/nas/openclaw/models/dream7b-hbm/true-batch-seq16-b32",
+          "manifest_count": 1,
+          "hbm_count": 28
+        },
+        {
+          "name": "true-batch-seq16-b32.upload",
+          "path": "/mnt/nas/openclaw/models/dream7b-hbm/true-batch-seq16-b32.upload",
+          "manifest_count": 0,
+          "hbm_count": 0
+        },
+        {
+          "name": "true-batch-seq16-b4",
+          "path": "/mnt/nas/openclaw/models/dream7b-hbm/true-batch-seq16-b4",
+          "manifest_count": 28,
+          "hbm_count": 28
+        },
+        {
+          "name": "true-batch-seq16-b64",
+          "path": "/mnt/nas/openclaw/models/dream7b-hbm/true-batch-seq16-b64",
+          "manifest_count": 1,
+          "hbm_count": 28
+        },
+        {
+          "name": "true-batch-seq16-b64.upload",
+          "path": "/mnt/nas/openclaw/models/dream7b-hbm/true-batch-seq16-b64.upload",
+          "manifest_count": 0,
+          "hbm_count": 0
+        },
+        {
+          "name": "true-batch-seq16-b8",
+          "path": "/mnt/nas/openclaw/models/dream7b-hbm/true-batch-seq16-b8",
+          "manifest_count": 1,
+          "hbm_count": 28
+        },
+        {
+          "name": "true-batch-seq16-b8.upload",
+          "path": "/mnt/nas/openclaw/models/dream7b-hbm/true-batch-seq16-b8.upload",
+          "manifest_count": 0,
+          "hbm_count": 0
+        }
+      ],
+      "processes": {
+        "true_batch_or_compile_or_18889": []
+      }
+    },
+    "command": {
+      "args": [
+        "ssh.exe",
+        "-i",
+        "C:\\Users\\zhexu\\.ssh\\s100p_linkcheck_ed25519",
+        "-o",
+        "StrictHostKeyChecking=no",
+        "-o",
+        "UserKnownHostsFile=C:\\Users\\zhexu\\.ssh\\known_hosts",
+        "sunrise@192.168.127.10",
+        "\npython3 - <<'PY'\nimport glob\nimport json\nimport pathlib\nimport subprocess\n\ndef cmd(args):\n    p = subprocess.run(args, text=True, capture_output=True)\n    return {\"returncode\": p.returncode, \"stdout\": p.stdout.strip(), \"stderr\": p.stderr.strip()}\n\ndef first(args):\n    out = cmd(args)[\"stdout\"].splitlines()\n    return out[0].strip() if out else \"\"\n\ndef userctl(*parts):\n    return [\"sudo\", \"-n\", \"env\", \"XDG_RUNTIME_DIR=/run/user/0\", \"systemctl\", \"--user\", *parts]\n\ndef http_json(url):\n    raw = first([\"curl\", \"-sS\", \"--max-time\", \"3\", url])\n    try:\n        return json.loads(raw) if raw else {}\n    except Exception as exc:\n        return {\"_error\": f\"{type(exc).__name__}:{exc}\", \"raw\": raw}\n\ndef count(path):\n    p = pathlib.Path(path)\n    return len(list(p.glob(\"*.jsonl\"))) if p.is_dir() else None\n\ndef latest(pattern):\n    paths = sorted(glob.glob(pattern), key=lambda item: pathlib.Path(item).stat().st_mtime)\n    return paths[-1] if paths else None\n\nmodel_root = pathlib.Path(\"/mnt/nas/openclaw/models/dream7b-hbm\")\nhbm_dirs = []\nif model_root.is_dir():\n    for item in sorted(model_root.iterdir()):\n        if item.is_dir() and (item.name.startswith(\"true-batch-\") or item.name.startswith(\"bpu-quality-\") or item.name == \"fine-seq16\"):\n            manifests = list(item.rglob(\"manifest.sha256\"))\n            hbms = list(item.rglob(\"*.hbm\"))\n            hbm_dirs.append({\"name\": item.name, \"path\": str(item), \"manifest_count\": len(manifests), \"hbm_count\": len(hbms)})\n\nps = cmd([\"ps\", \"-eo\", \"pid=,args=\"])[\"stdout\"].splitlines()\ntrue_batch_processes = [\n    line.strip()\n    for line in ps\n    if (\"dream7b_true_batch\" in line or \"compile_dream_true_batch\" in line or \"dream7b-bpu-experimental\" in line)\n    and \"python3 - <<'PY'\" not in line\n    and \"bash -c\" not in line\n]\n\npayload = {\n    \"services\": {\n        \"queue_active\": first([\"systemctl\", \"is-active\", \"dream7b-bpu-batch-queue.service\"]),\n        \"queue_enabled\": first([\"systemctl\", \"is-enabled\", \"dream7b-bpu-batch-queue.service\"]),\n        \"gateway_18888_active\": first(userctl(\"is-active\", \"dream7b-local-openai-gateway.service\")),\n        \"gateway_18888_enabled\": first(userctl(\"is-enabled\", \"dream7b-local-openai-gateway.service\")),\n        \"openclaw_gateway_active\": first(userctl(\"is-active\", \"openclaw-gateway.service\")),\n        \"openclaw_gateway_enabled\": first(userctl(\"is-enabled\", \"openclaw-gateway.service\")),\n        \"experimental_18889_active\": first(userctl(\"is-active\", \"dream7b-bpu-experimental-gateway-18889.service\")),\n        \"experimental_18889_enabled\": first(userctl(\"is-enabled\", \"dream7b-bpu-experimental-gateway-18889.service\")),\n    },\n    \"health\": {\n        \"gateway_18888\": http_json(\"http://127.0.0.1:18888/health\"),\n        \"openclaw_18789\": http_json(\"http://127.0.0.1:18789/health\"),\n        \"experimental_18889\": http_json(\"http://127.0.0.1:18889/health\"),\n    },\n    \"queue\": {\n        \"pending_count\": count(\"/mnt/nas/openclaw/queues/dream7b-bpu/pending\"),\n        \"processing_count\": count(\"/mnt/nas/openclaw/queues/dream7b-bpu/processing\"),\n        \"done_count\": count(\"/mnt/nas/openclaw/queues/dream7b-bpu/done\"),\n        \"failed_count\": count(\"/mnt/nas/openclaw/queues/dream7b-bpu/failed\"),\n    },\n    \"latest_reports\": {\n        \"text_queue_run\": latest(\"/mnt/nas/openclaw/reports/models/dream7b_bpu_text_queue_run_*/text_queue_run.json\"),\n        \"goal_status\": latest(\"/mnt/nas/openclaw/reports/models/dream7b_ai_nas_goal_status_packet_*/dream7b_ai_nas_goal_status_packet.json\"),\n        \"acceptance\": latest(\"/mnt/nas/openclaw/reports/models/dream7b_ai_nas_acceptance_packet_*/dream7b_ai_nas_acceptance_packet.json\"),\n        \"final_goal_audit\": latest(\"/mnt/nas/openclaw/reports/models/dream7b_ai_nas_final_goal_audit_*/dream7b_ai_nas_final_goal_audit.json\"),\n        \"promotion_gate\": latest(\"/mnt/nas/openclaw/reports/models/dream7b_bpu_quality_promotion_gate_*/dream7b_bpu_quality_promotion_gate.json\"),\n        \"rollback\": latest(\"/mnt/nas/openclaw/reports/models/dream7b_bpu_quality_rollback_report_*/dream7b_bpu_quality_rollback_report.json\"),\n    },\n    \"hbm_artifacts\": hbm_dirs,\n    \"processes\": {\n        \"true_batch_or_compile_or_18889\": true_batch_processes,\n    },\n}\nprint(json.dumps(payload, ensure_ascii=False))\nPY\n"
+      ],
+      "returncode": 0,
+      "stdout": "{\"services\": {\"queue_active\": \"active\", \"queue_enabled\": \"enabled\", \"gateway_18888_active\": \"active\", \"gateway_18888_enabled\": \"enabled\", \"openclaw_gateway_active\": \"active\", \"openclaw_gateway_enabled\": \"enabled\", \"experimental_18889_active\": \"inactive\", \"experimental_18889_enabled\": \"\"}, \"health\": {\"gateway_18888\": {\"ok\": true, \"model\": \"Dream7B-S100P-local\", \"backend\": \"diffuse-resident\", \"progress_interval_sec\": 0.25, \"default_steps\": 4, \"default_max_tokens\": 16, \"inline_tokenizer_enabled\": false, \"inline_tokenizer_loaded\": true, \"inline_tokenizer\": {\"tokenizer_dir\": \"/mnt/nas/openclaw/models/dream7b/tokenizer\", \"tokenizer_load_ms\": 4160}, \"resident_enabled\": true, \"resident_available\": true, \"resident_cmd\": \"/mnt/nas/openclaw/runtimes/diffuse-cpp/build/diffuse-resident\", \"resident_running\": true, \"resident\": {\"resident_cmd\": \"/mnt/nas/openclaw/runtimes/diffuse-cpp/build/diffuse-resident\", \"resident_ready_line\": \"READY\\t7938\", \"resident_start_ms\": 7942, \"dream_runtime\": \"/mnt/nas/openclaw/runtimes/diffuse-cpp\", \"dream_model\": \"/mnt/nas/openclaw/models/dream7b/dream-7b-q4km.gguf\", \"threads\": \"8\"}, \"quick_response_enabled\": true, \"quick_max_tokens\": 3, \"quick_steps\": 2}, \"openclaw_18789\": {\"ok\": true, \"status\": \"live\"}, \"experimental_18889\": {}}, \"queue\": {\"pending_count\": 0, \"processing_count\": 0, \"done_count\": 357, \"failed_count\": 1}, \"latest_reports\": {\"text_queue_run\": \"/mnt/nas/openclaw/reports/models/dream7b_bpu_text_queue_run_20260622-115956/text_queue_run.json\", \"goal_status\": \"/mnt/nas/openclaw/reports/models/dream7b_ai_nas_goal_status_packet_20260622-193511/dream7b_ai_nas_goal_status_packet.json\", \"acceptance\": \"/mnt/nas/openclaw/reports/models/dream7b_ai_nas_acceptance_packet_20260622-193512/dream7b_ai_nas_acceptance_packet.json\", \"final_goal_audit\": \"/mnt/nas/openclaw/reports/models/dream7b_ai_nas_final_goal_audit_20260622-193513/dream7b_ai_nas_final_goal_audit.json\", \"promotion_gate\": \"/mnt/nas/openclaw/reports/models/dream7b_bpu_quality_promotion_gate_20260622-193510/dream7b_bpu_quality_promotion_gate.json\", \"rollback\": \"/mnt/nas/openclaw/reports/models/dream7b_bpu_quality_rollback_report_20260622-183248/dream7b_bpu_quality_rollback_report.json\"}, \"hbm_artifacts\": [{\"name\": \"fine-seq16\", \"path\": \"/mnt/nas/openclaw/models/dream7b-hbm/fine-seq16\", \"manifest_count\": 0, \"hbm_count\": 8}, {\"name\": \"true-batch-seq16-b16\", \"path\": \"/mnt/nas/openclaw/models/dream7b-hbm/true-batch-seq16-b16\", \"manifest_count\": 1, \"hbm_count\": 28}, {\"name\": \"true-batch-seq16-b16.upload\", \"path\": \"/mnt/nas/openclaw/models/dream7b-hbm/true-batch-seq16-b16.upload\", \"manifest_count\": 0, \"hbm_count\": 0}, {\"name\": \"true-batch-seq16-b2\", \"path\": \"/mnt/nas/openclaw/models/dream7b-hbm/true-batch-seq16-b2\", \"manifest_count\": 28, \"hbm_count\": 28}, {\"name\": \"true-batch-seq16-b32\", \"path\": \"/mnt/nas/openclaw/models/dream7b-hbm/true-batch-seq16-b32\", \"manifest_count\": 1, \"hbm_count\": 28}, {\"name\": \"true-batch-seq16-b32.upload\", \"path\": \"/mnt/nas/openclaw/models/dream7b-hbm/true-batch-seq16-b32.upload\", \"manifest_count\": 0, \"hbm_count\": 0}, {\"name\": \"true-batch-seq16-b4\", \"path\": \"/mnt/nas/openclaw/models/dream7b-hbm/true-batch-seq16-b4\", \"manifest_count\": 28, \"hbm_count\": 28}, {\"name\": \"true-batch-seq16-b64\", \"path\": \"/mnt/nas/openclaw/models/dream7b-hbm/true-batch-seq16-b64\", \"manifest_count\": 1, \"hbm_count\": 28}, {\"name\": \"true-batch-seq16-b64.upload\", \"path\": \"/mnt/nas/openclaw/models/dream7b-hbm/true-batch-seq16-b64.upload\", \"manifest_count\": 0, \"hbm_count\": 0}, {\"name\": \"true-batch-seq16-b8\", \"path\": \"/mnt/nas/openclaw/models/dream7b-hbm/true-batch-seq16-b8\", \"manifest_count\": 1, \"hbm_count\": 28}, {\"name\": \"true-batch-seq16-b8.upload\", \"path\": \"/mnt/nas/openclaw/models/dream7b-hbm/true-batch-seq16-b8.upload\", \"manifest_count\": 0, \"hbm_count\": 0}], \"processes\": {\"true_batch_or_compile_or_18889\": []}}\n",
+      "stderr": ""
+    }
+  },
+  "blockers": [],
+  "warnings": [
+    "latest local BPU promotion gate is not passing"
+  ]
+}

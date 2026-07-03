@@ -1,0 +1,314 @@
+{
+  "all_numbered_gates_pass": true,
+  "blocking_items_before_stage3": [
+    "Run the same gates on the S100P host with live Qwen/OpenClaw health available.",
+    "Replace mock sidecar with real Zleap or an equivalent runtime in an isolated port, still read-only.",
+    "Run controlled read-only dispatcher execution instead of dry-run bridge records.",
+    "Keep write/destructive workspaces disabled until signed approval, UX, audit log, and rollback are gate-backed."
+  ],
+  "commands_run": [
+    "py -3 -m py_compile ai_nas_harness\\*.py probes\\harness_shadow_probe.py gates\\*.py stage2_sidecar\\*.py",
+    "py -3 probes\\harness_shadow_probe.py --report-root reports",
+    "py -3 gates\\run_harness_stage1_gates.py --report-root reports",
+    "bash tmp/stage1_fixed_repro_manual/scripts/run_stage1_gates_from_package.sh",
+    "py -3 gates\\stage2_readiness_gates.py --report-root reports --package-zip evidence_for_gptpro\\ai_nas_harness_stage1_fixed_gptpro_20260702-233035.zip",
+    "py -3 scripts\\generate_stage2_final_packet.py",
+    "git status --short"
+  ],
+  "context_minimization": {
+    "comparisons": [
+      {
+        "scenario": "nas_search_read_only",
+        "stage1_context": 1397,
+        "stage1_exposed": 1,
+        "stage2_estimated_context": 1466,
+        "stage2_exposed": 3
+      },
+      {
+        "scenario": "nas_denied_acl_search",
+        "stage1_context": 1405,
+        "stage1_exposed": 1,
+        "stage2_estimated_context": 1475,
+        "stage2_exposed": 3
+      },
+      {
+        "scenario": "document_report_generation",
+        "stage1_context": 1512,
+        "stage1_exposed": 2,
+        "stage2_estimated_context": 1587,
+        "stage2_exposed": 5
+      }
+    ]
+  },
+  "dispatcher_and_policy": {
+    "arbitrary_shell_path_allowed": false,
+    "dispatcher_sha256": "e62f2278e1264519ee4e4cd13df44bd34d4375a989715cce3b6223f44c1c21e2",
+    "workspace_arg_policy": {
+      "path": "config/workspace_arg_policy.yaml",
+      "sha256": "6a25bb032b92726525b68537ee03cc4891cf26bc14a17c0274e97ab4bbff3c2a"
+    },
+    "workspace_tool_policy": {
+      "path": "config/workspace_tool_policy.yaml",
+      "sha256": "4d83f8b376a88b86afeb8c810aea236464165006587daf625d84c69d312658c9"
+    },
+    "write_workspace_allowed": false
+  },
+  "environment": {
+    "git_status": {
+      "returncode": 128,
+      "stderr": "fatal: not a git repository (or any of the parent directories): .git",
+      "stdout": "",
+      "usable": false
+    },
+    "platform": "Windows-11-10.0.26200-SP0",
+    "python": "3.14.3",
+    "repo_root": "F:\\Project\\Digua"
+  },
+  "final_package": {
+    "file_count": 80,
+    "sha256": "b3153bc2161070e342c594865712b3eadf20ba510f47d0fe96777a561be74676",
+    "sha256_file": "F:\\Project\\Digua\\evidence_for_gptpro\\digua_ai_nas_harness_stage2_for_gptpro_20260702-234039.zip.sha256.txt",
+    "zip_path": "F:\\Project\\Digua\\evidence_for_gptpro\\digua_ai_nas_harness_stage2_for_gptpro_20260702-234039.zip"
+  },
+  "final_verdict": "ready_for_more_readonly_sidecar_trials",
+  "generated_at": "2026-07-02T23:40:39+08:00",
+  "inputs": {
+    "stage1_fixed_package": "evidence_for_gptpro/ai_nas_harness_stage1_fixed_gptpro_20260702-233035.zip",
+    "stage1_fixed_package_sha256": "5d6bec0d735050ad65ad272093edd59b63fea2259bc58525f707f1a8599233bb"
+  },
+  "model_provider_identity": {
+    "health": {
+      "error": "URLError:<urlopen error [WinError 10061] 由于目标计算机积极拒绝，无法连接。>",
+      "ok": false,
+      "status": 0
+    },
+    "interpretation": "Local Qwen provider is configured for sidecar default, but this Windows run recorded the gateway as explicitly unavailable.",
+    "model_id": "unknown",
+    "models": {
+      "error": "URLError:<urlopen error [WinError 10061] 由于目标计算机积极拒绝，无法连接。>",
+      "ok": false,
+      "status": 0
+    },
+    "provider_config": {
+      "default_provider": "qwen25_local",
+      "providers": {
+        "qwen25_local": {
+          "allow_cloud": false,
+          "base_url": "http://127.0.0.1:18080/v1",
+          "model": "Qwen2.5-1.5B-Instruct-S100P-official"
+        }
+      },
+      "sidecar": {
+        "bind": "127.0.0.1",
+        "default_enabled": false,
+        "foreground_route": false,
+        "port": 19080
+      },
+      "version": "stage2_sidecar_provider_v1"
+    },
+    "qwen_gateway_url": "http://127.0.0.1:18080"
+  },
+  "numbered_reports": [
+    {
+      "check_count": 2,
+      "failure_count": 0,
+      "gate_id": "stage1_review_baseline_lock",
+      "passed_count": 2,
+      "path": "reports/2000_stage1_review_baseline_lock.json",
+      "report_id": "2000_stage1_review_baseline_lock",
+      "sha256": "5e1d367b99c8c877a021b771e2a8ec9d86d6aa955c12f88313cf30a9defcacd5",
+      "verdict": "ok_stage1_review_baseline_lock"
+    },
+    {
+      "check_count": 7,
+      "failure_count": 0,
+      "gate_id": "stage1_package_reproducibility_gate",
+      "passed_count": 7,
+      "path": "reports/2010_package_reproducibility_gate.json",
+      "report_id": "2010_package_reproducibility_gate",
+      "sha256": "8b00359b66dd85cedd6b07e74b9623bf27a7e081aac364bc672598462ff1c4c9",
+      "verdict": "ok_stage1_package_reproducibility_gate"
+    },
+    {
+      "check_count": 2,
+      "failure_count": 0,
+      "gate_id": "existing_gate_hard_fail_test",
+      "passed_count": 2,
+      "path": "reports/2020_existing_gate_hard_fail_test.json",
+      "report_id": "2020_existing_gate_hard_fail_test",
+      "sha256": "87cd5ddcc1ceef2b93cc4a3d728d147ed888ff310466836970498d551eacf547",
+      "verdict": "ok_existing_gate_hard_fail_test"
+    },
+    {
+      "check_count": 12,
+      "failure_count": 0,
+      "gate_id": "stage1_cloud_redaction_hardening_gate",
+      "passed_count": 12,
+      "path": "reports/2030_cloud_redaction_hardening_gate.json",
+      "report_id": "2030_cloud_redaction_hardening_gate",
+      "sha256": "0fc2cdd15bbd5e4560dcd8120f860d57b6c43d29fb86c51295aa08c559d536df",
+      "verdict": "ok_stage1_cloud_redaction_hardening_gate"
+    },
+    {
+      "check_count": 10,
+      "failure_count": 0,
+      "gate_id": "stage1_argument_scope_gate",
+      "passed_count": 10,
+      "path": "reports/2040_argument_scope_gate.json",
+      "report_id": "2040_argument_scope_gate",
+      "sha256": "43ba98bf74a580e0c1c0cc0cb628ec0ec6537c211d9baa036d9e8bc672985516",
+      "verdict": "ok_stage1_argument_scope_gate"
+    },
+    {
+      "check_count": 6,
+      "failure_count": 0,
+      "gate_id": "approval_token_schema_gate",
+      "passed_count": 6,
+      "path": "reports/2050_approval_token_schema_gate.json",
+      "report_id": "2050_approval_token_schema_gate",
+      "sha256": "e31bfb2c1f1a0e17e72939f4afa55bbe930070ea94e32a854055d27c5202addf",
+      "verdict": "ok_approval_token_schema_gate"
+    },
+    {
+      "check_count": 4,
+      "failure_count": 0,
+      "gate_id": "qwen_runtime_identity_gate",
+      "passed_count": 4,
+      "path": "reports/2060_qwen_runtime_identity_gate.json",
+      "report_id": "2060_qwen_runtime_identity_gate",
+      "sha256": "6838a564eae803e1abc1fcdf401444fffcf4766f9da1fdda724be512dffbe578",
+      "verdict": "ok_qwen_runtime_identity_gate"
+    },
+    {
+      "check_count": 4,
+      "failure_count": 0,
+      "gate_id": "stage2_sidecar_mock_isolation_gate",
+      "passed_count": 4,
+      "path": "reports/2070_stage2_sidecar_mock_isolation.json",
+      "report_id": "2070_stage2_sidecar_mock_isolation",
+      "sha256": "c5188a4680e4bd4bc687cc4d5bf9da57b26b6ae34baaf13fc1385b6f546dbdd1",
+      "verdict": "ok_stage2_sidecar_mock_isolation_gate"
+    },
+    {
+      "check_count": 4,
+      "failure_count": 0,
+      "gate_id": "stage2_readonly_nas_search_bridge",
+      "passed_count": 4,
+      "path": "reports/2080_stage2_readonly_nas_search_bridge.json",
+      "report_id": "2080_stage2_readonly_nas_search_bridge",
+      "sha256": "84032c011fba8078e5b998bd321c06e054bc6442b85c3c8bc8cbd5c4266791b9",
+      "verdict": "ok_stage2_readonly_nas_search_bridge"
+    },
+    {
+      "check_count": 4,
+      "failure_count": 0,
+      "gate_id": "stage2_document_rag_bridge",
+      "passed_count": 4,
+      "path": "reports/2090_stage2_document_rag_bridge.json",
+      "report_id": "2090_stage2_document_rag_bridge",
+      "sha256": "04f16ac66feb8b26c07b996c5a1ed5fe70d4ee5c8479b9d319571c962148c4bc",
+      "verdict": "ok_stage2_document_rag_bridge"
+    },
+    {
+      "check_count": 3,
+      "failure_count": 0,
+      "gate_id": "stage2_runtime_trace_completeness_gate",
+      "passed_count": 3,
+      "path": "reports/2100_stage2_runtime_trace_completeness.json",
+      "report_id": "2100_stage2_runtime_trace_completeness",
+      "sha256": "55f2420f9f73316f7cbf6ec30e154cb0be4352ea808da15b09804fa348a7a832",
+      "verdict": "ok_stage2_runtime_trace_completeness_gate"
+    },
+    {
+      "check_count": 3,
+      "failure_count": 0,
+      "gate_id": "stage2_context_minimization_regression_gate",
+      "passed_count": 3,
+      "path": "reports/2110_stage2_context_minimization_regression.json",
+      "report_id": "2110_stage2_context_minimization_regression",
+      "sha256": "b56904b2117493fc0d9f47eeb376be232380fba8b6db74cdbe82a735c41a5647",
+      "verdict": "ok_stage2_context_minimization_regression_gate"
+    },
+    {
+      "check_count": 4,
+      "failure_count": 0,
+      "gate_id": "stage2_rollback_gate",
+      "passed_count": 4,
+      "path": "reports/2120_stage2_rollback_gate.json",
+      "report_id": "2120_stage2_rollback_gate",
+      "sha256": "97d5533ec77b07d5c009537355652fe56f21903aaa451de4a2ed518c6788067a",
+      "verdict": "ok_stage2_rollback_gate"
+    }
+  ],
+  "product_safe_claim_boundary": [
+    "Stage 1 package reproducibility issues are fixed and gate-backed in this checkout.",
+    "Stage 2 is ready only for more read-only sidecar trials.",
+    "The package does not prove production Zleap integration.",
+    "The package does not enable write/destructive NAS tools.",
+    "The package does not enable private NAS cloud egress.",
+    "The package does not modify OpenClaw, local Qwen, dispatcher, Dream7B routes, or protected ports."
+  ],
+  "recommendations": {
+    "absorb_zleap_design_without_code": "yes; keep workspace-scoped tools, trace, provider isolation, and rollback patterns",
+    "allow_cloud_research": "public/redacted only; no private NAS raw content",
+    "allow_write_workspace": "no",
+    "continue_sqlite": "yes for harness trace and current NAS index evidence",
+    "continue_zleap_sidecar": "yes, but only as isolated read-only trials",
+    "modify_production_route": "no",
+    "openclaw_qwen_dispatcher_unchanged": "yes, by hash evidence in 2070/2120",
+    "postgres_pgvector": "no production dependency now; lab-only if real Zleap requires it",
+    "rollback_passed": "yes"
+  },
+  "service_and_port_boundary": {
+    "foreground_route": false,
+    "protected_asset_hashes": {
+      "dispatcher": "e62f2278e1264519ee4e4cd13df44bd34d4375a989715cce3b6223f44c1c21e2",
+      "dream7b_18889_service": "13f993a457889a399e136d3bc4d83b76d3fa3150bca9ab6c00a143d6f759fb2a",
+      "dream7b_service": "833a44e1b5a19addf7f20dcc927f0d20099542cac348820fdddf4f67bb5d5209",
+      "openclaw_service": "efc108f1b8df688edb9a4aa31677e5519bec34e36d6b9878a922de1e80d48ed6",
+      "qwen_gateway": "3c75b901126e8783f0e3e36803b902eb1bef09507c7d4a27931834ba6577081f",
+      "qwen_policy": "2e6da77dbb462e7ad930ceabef2f96ca03ff27bc35a651ab997b8819abcb50f7",
+      "qwen_service": "16c71a0a8b41f46072f74163e8cf1d01a25a89dcb355186d7139f75f1f2aac9f"
+    },
+    "protected_ports": [
+      8765,
+      18080,
+      18888,
+      18889
+    ],
+    "rollback_verdict": "ok_stage2_rollback_gate",
+    "sidecar_mock_port": 55341
+  },
+  "stage": "stage2_readonly_sidecar_trial_readiness",
+  "stage2_sidecar_status": {
+    "cloud_called": false,
+    "document_rag_bridge_execute_real_dispatcher": false,
+    "mock_health": {
+      "json": {
+        "foreground_route": false,
+        "ok": true,
+        "provider_base_url": "http://127.0.0.1:18080/v1",
+        "runtime": "stage2_sidecar_mock",
+        "tools": [
+          "mock.nas_search",
+          "mock.document_rag",
+          "mock.report_write"
+        ]
+      },
+      "ok": true,
+      "status": 200
+    },
+    "nas_search_bridge_execute_real_dispatcher": false,
+    "production_route_modified": false,
+    "real_zleap_integrated": false,
+    "runtime": "stage2_sidecar_mock"
+  },
+  "trace_and_redaction": {
+    "redaction_cases": 6,
+    "redaction_failure_count": 0,
+    "redaction_report": "reports/2030_cloud_redaction_hardening_gate.json",
+    "trace_complete_rate": 1.0,
+    "trace_report": "reports/2100_stage2_runtime_trace_completeness.json",
+    "trace_run_count": 16
+  }
+}

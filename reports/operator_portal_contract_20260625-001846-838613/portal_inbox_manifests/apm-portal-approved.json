@@ -1,0 +1,77 @@
+{
+  "generated_at": "2026-06-25T00:18:47.012263+08:00",
+  "tool_id": "ai_nas_action_approval_manifest",
+  "manifest_id": "apm-portal-approved",
+  "status": "approved_for_execution",
+  "query": "2024 renovation payment contract invoice receipt chat screenshot",
+  "collection_name": "2024_Renovation_Payment_Evidence",
+  "proposed_actions": [
+    {
+      "action_id": "copy-proved0",
+      "action_type": "copy",
+      "status": "proposed_requires_human_confirmation",
+      "source_relative_path": "Documents/2024_renovation_contract_0.txt",
+      "source_sha256": "49c1d4dbad75bf3eeed15e6df5a79bed17f6bd6d36aa85f8ed20ff390eaf5c53",
+      "target_relative_path": "Collections/2024_Renovation/Documents/2024_renovation_contract_0.txt",
+      "target_exists_now": false,
+      "requires_human_confirmation": true,
+      "destructive": false,
+      "confidence": 0.91,
+      "evidence_sources": [
+        "sqlite_text_fts_metadata",
+        "local_hash_embedding"
+      ],
+      "rollback_plan": [
+        "remove only the copied target created by the future execution manifest",
+        "verify copied target sha256 before rollback",
+        "append rollback audit event"
+      ]
+    }
+  ],
+  "blocked_destructive_actions": [
+    {
+      "action_type": "move",
+      "status": "blocked_not_generated",
+      "candidate_file_count": 1,
+      "required_gate": "suggestion -> human confirmation -> bounded execution -> rollback/manifest"
+    },
+    {
+      "action_type": "delete",
+      "status": "blocked_not_generated",
+      "candidate_file_count": 1,
+      "required_gate": "suggestion -> human confirmation -> bounded execution -> rollback/manifest"
+    },
+    {
+      "action_type": "overwrite",
+      "status": "blocked_not_generated",
+      "candidate_file_count": 1,
+      "required_gate": "suggestion -> human confirmation -> bounded execution -> rollback/manifest"
+    },
+    {
+      "action_type": "rename",
+      "status": "blocked_not_generated",
+      "candidate_file_count": 1,
+      "required_gate": "suggestion -> human confirmation -> bounded execution -> rollback/manifest"
+    }
+  ],
+  "approval": {
+    "required": true,
+    "approval_phrase": "APPROVE apm-portal-approved",
+    "approval_scope": "copy-only actions listed in proposed_actions by exact action_id",
+    "execution_allowed_by_this_tool": false,
+    "future_execution_requirements": [
+      "accept only this manifest_id and explicit action_ids",
+      "re-check source_sha256 and target non-existence immediately before copying",
+      "write execution_manifest.json with created files and per-action result",
+      "provide rollback_manifest.json for copied targets"
+    ]
+  },
+  "audit": {
+    "source_files_modified": false,
+    "delete_performed": false,
+    "move_performed": false,
+    "overwrite_performed": false,
+    "execution_performed": false
+  },
+  "manifest_sha256": "83e5ab48fe3b7fcf150724558bdd72ca3b33d3580f191e18c97338e67d4bce30"
+}

@@ -1,0 +1,110 @@
+{
+  "variant_id": "real_x_z_normalized",
+  "why_included": "z-normalized real seg26 hidden",
+  "input_path": "/mnt/nas/openclaw/reports/models/dream7b_s100p_v5_execution_20260701/evidence/final_segment_dense_sweep_v5/short_chinese_prompt_padded/real_x_z_normalized/input.npy",
+  "raw_output_path": "/mnt/nas/openclaw/reports/models/dream7b_s100p_v5_execution_20260701/evidence/final_segment_dense_sweep_v5/short_chinese_prompt_padded/real_x_z_normalized/raw_output.npy",
+  "dequant_logits_path": "/mnt/nas/openclaw/reports/models/dream7b_s100p_v5_execution_20260701/evidence/final_segment_dense_sweep_v5/short_chinese_prompt_padded/real_x_z_normalized/dequant_logits.npy",
+  "metadata_path": "/mnt/nas/openclaw/reports/models/dream7b_s100p_v5_execution_20260701/evidence/final_segment_dense_sweep_v5/short_chinese_prompt_padded/real_x_z_normalized/metadata.json",
+  "input_stats": {
+    "shape": [
+      128,
+      3584
+    ],
+    "dtype": "float32",
+    "size": 458752,
+    "min": -1.014628529548645,
+    "max": 1.0069383382797241,
+    "mean": 1.4834638406568956e-08,
+    "std": 1.0000001192092896,
+    "abs_max": 1.014628529548645,
+    "nonzero_count": 458752,
+    "allzero": false,
+    "constant": false,
+    "nan_count": 0,
+    "inf_count": 0
+  },
+  "run_status": "pass",
+  "runtime_exception": null,
+  "raw_output_stats": {
+    "shape": [
+      1,
+      152064
+    ],
+    "dtype": "int16",
+    "size": 152064,
+    "min": -12827.0,
+    "max": 10204.0,
+    "mean": -2767.328651094276,
+    "std": 1674.5002862558454,
+    "abs_max": 12827.0,
+    "nonzero_count": 152061,
+    "allzero": false,
+    "constant": false,
+    "nan_count": 0,
+    "inf_count": 0
+  },
+  "dequant_output_stats": {
+    "shape": [
+      152064
+    ],
+    "dtype": "float32",
+    "size": 152064,
+    "min": -12827.0,
+    "max": 10204.0,
+    "mean": -2767.328857421875,
+    "std": 1674.500244140625,
+    "abs_max": 12827.0,
+    "nonzero_count": 152061,
+    "allzero": false,
+    "constant": false,
+    "nan_count": 0,
+    "inf_count": 0
+  },
+  "softmax": {
+    "entropy": 4.1847144468276986e-307,
+    "normalized_entropy": 3.5071191242641985e-308,
+    "top1_probability": 1.0
+  },
+  "top10_logits": [
+    {
+      "token": 66906,
+      "logit": 10204.0
+    },
+    {
+      "token": 58113,
+      "logit": 9492.0
+    },
+    {
+      "token": 37355,
+      "logit": 9458.0
+    },
+    {
+      "token": 54462,
+      "logit": 9244.0
+    },
+    {
+      "token": 40745,
+      "logit": 9011.0
+    },
+    {
+      "token": 88222,
+      "logit": 8680.0
+    },
+    {
+      "token": 41810,
+      "logit": 8566.0
+    },
+    {
+      "token": 72869,
+      "logit": 8210.0
+    },
+    {
+      "token": 36542,
+      "logit": 8040.0
+    },
+    {
+      "token": 36593,
+      "logit": 7954.0
+    }
+  ]
+}

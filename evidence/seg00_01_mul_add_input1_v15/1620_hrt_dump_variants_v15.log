@@ -1,0 +1,30 @@
+## npy dump
+[UCP]: log level = 3
+[UCP]: UCP version = 3.13.6
+[VP]: log level = 3
+[DNN]: log level = 3
+[HPL]: log level = 3
+[UCPT]: log level = 6
+hrt_model_exec infer --model_file --model_name dream_segment_00_01 --input_file --frame_count 1 --dump_intermediate 1 --enable_dump true --dump_path evidence/seg00_01_mul_add_input1_v15/hrt_dump_npy --dump_format npy
+[32m[I][772914][07-03][17:07:43:429][main.cpp:321][hrt_model_exec][HRT_MODEL_EXEC] dump_path: evidence/seg00_01_mul_add_input1_v15/hrt_dump_npy exsit
+[m[K[32m[I][772914][07-03][17:07:43:429][main.cpp:347][hrt_model_exec][HRT_MODEL_EXEC] The remove_padding_process option is enabled by default when dumping inputs and outputs in npy format.
+[m[K[BPU][[BPU_MONITOR]][281473112765728][INFO]BPULib verison(2, 2, 15)[f21ee84]!
+[DNN]: 3.13.6_(4.7.5 HBRT)
+[31m[1m[E][772914][07-03][17:07:44:167][packed_model.cpp:87][hrt_model_exec][DNN] [Model] Can not open --model_name, file not exists or no read permission.
+[m[K[31m[1m[E][772914][07-03][17:07:44:167][main.cpp:419][hrt_model_exec][HRT_MODEL_EXEC] hbDNNInitializeFromFiles failed, error code: -500001
+[m[K## txt dump
+[UCP]: log level = 3
+[UCP]: UCP version = 3.13.6
+[VP]: log level = 3
+[DNN]: log level = 3
+[HPL]: log level = 3
+[UCPT]: log level = 6
+hrt_model_exec infer --model_file --model_name dream_segment_00_01 --input_file --frame_count 1 --dump_intermediate 1 --enable_dump true --dump_path evidence/seg00_01_mul_add_input1_v15/hrt_dump_txt --dump_format txt --dump_txt_axis -1
+[32m[I][772947][07-03][17:07:44:840][main.cpp:321][hrt_model_exec][HRT_MODEL_EXEC] dump_path: evidence/seg00_01_mul_add_input1_v15/hrt_dump_txt exsit
+[m[K[BPU][[BPU_MONITOR]][281472957379872][INFO]BPULib verison(2, 2, 15)[f21ee84]!
+[DNN]: 3.13.6_(4.7.5 HBRT)
+[31m[1m[E][772947][07-03][17:07:45:573][main.cpp:419][hrt_model_exec][HRT_MODEL_EXEC] hbDNNInitializeFromFiles failed, error code: -500001
+[m[K[31m[1m[E][772947][07-03][17:07:45:573][packed_model.cpp:87][hrt_model_exec][DNN] [Model] Can not open --model_name, file not exists or no read permission.
+[m[K## listings
+evidence/seg00_01_mul_add_input1_v15/inputs/input_0_tokens.npy 640
+evidence/seg00_01_mul_add_input1_v15/inputs/input_1_positions.npy 640

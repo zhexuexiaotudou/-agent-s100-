@@ -1,0 +1,354 @@
+{
+  "generated_at": "2026-07-03T17:23:39.917163+08:00",
+  "gate_id": "stage2_8_baseline_lock",
+  "verdict": "ok_stage2_8_baseline_lock",
+  "passed_count": 8,
+  "check_count": 8,
+  "failure_count": 0,
+  "failures": [],
+  "checks": [
+    {
+      "label": "Stage2.7 required evidence files exist",
+      "ok": true,
+      "detail": []
+    },
+    {
+      "label": "Stage2.7 final packet read",
+      "ok": true,
+      "detail": "ready_with_fixes_before_stage3"
+    },
+    {
+      "label": "Stage2.7 blockers listed",
+      "ok": true,
+      "detail": [
+        {
+          "report": "6020_qwen_structured_decision_contract_gate",
+          "gate_id": "stage2_7_qwen_structured_decision_contract_gate",
+          "verdict": "failed_stage2_7_qwen_structured_decision_contract_gate",
+          "passed_count": 8,
+          "check_count": 12,
+          "failure_count": 4
+        },
+        {
+          "report": "6030_qwen_driven_readonly_agent_loop_gate",
+          "gate_id": "stage2_7_qwen_driven_readonly_agent_loop_gate",
+          "verdict": "failed_stage2_7_qwen_driven_readonly_agent_loop_gate",
+          "passed_count": 0,
+          "check_count": 1,
+          "failure_count": 1
+        },
+        {
+          "report": "6040_qwen_driven_agent_loop_soak_gate",
+          "gate_id": "stage2_7_qwen_driven_agent_loop_soak_gate",
+          "verdict": "failed_stage2_7_qwen_driven_agent_loop_soak_gate",
+          "passed_count": 0,
+          "check_count": 1,
+          "failure_count": 1
+        },
+        {
+          "report": "6060_stage3_readonly_shadow_go_no_go_gate",
+          "gate_id": "stage2_7_stage3_readonly_shadow_go_no_go_gate",
+          "verdict": "failed_stage2_7_stage3_readonly_shadow_go_no_go_gate",
+          "passed_count": 11,
+          "check_count": 12,
+          "failure_count": 1
+        }
+      ]
+    },
+    {
+      "label": "Stage2.8 is not Stage3",
+      "ok": true,
+      "detail": "Stage 2.8 is not Stage 3."
+    },
+    {
+      "label": "Qwen role downgraded to advisor only",
+      "ok": true,
+      "detail": "Qwen is not tool execution authority"
+    },
+    {
+      "label": "OpenClaw/Qwen current health sampled",
+      "ok": true,
+      "detail": {
+        "openclaw": {
+          "ok": true,
+          "returncode": 0,
+          "http_code": "200",
+          "time_total": 0.909532,
+          "json": {
+            "ok": true,
+            "tool_id": "ai_nas_operator_portal_server",
+            "operator_portal_contract": {
+              "found": true,
+              "filename": "operator_portal_contract.json",
+              "path": "/mnt/nas/openclaw/reports/ai_nas_mvp/operator_portal_contract_20260618-160406-445747/operator_portal_contract.json",
+              "verdict": "ok_ai_nas_operator_portal_contract",
+              "generated_at": "2026-06-18T16:04:08.346324+08:00",
+              "selection_policy": "generated_at_then_mtime"
+            },
+            "portal_html": "/mnt/nas/openclaw/reports/ai_nas_mvp/operator_portal_contract_20260618-160406-445747/operator_portal.html",
+            "refresh_on_start": null
+          },
+          "body_hash": "3f602e957754ba001c367fa58c76c536eda10a7318d8befc265f0d27698f100e",
+          "stderr_hash": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "stderr_tail": ""
+        },
+        "qwen": {
+          "ok": true,
+          "returncode": 0,
+          "http_code": "200",
+          "time_total": 0.002128,
+          "json": {
+            "ok": true,
+            "model": "Qwen2.5-1.5B-Instruct-S100P-official",
+            "backend": "official-qwen2.5-oellm-multichat-plus-ai-nas-tools",
+            "port": 18080,
+            "active_profile": "qwen25_7b_instruct_cache_len_1024_q8",
+            "priority_profile": "qwen25_7b_instruct_cache_len_1024_q8_vendor_default",
+            "priority_status": "promoted_from_shadow_18081",
+            "active_hbm": {
+              "path": "/mnt/nas/openclaw/toolchains/s100_llm_sdk/D-Robotics_LLM_S100_1.0.0_SDK/oellm_runtime/model/Qwen2.5_1.5B_Instruct_512.hbm",
+              "exists": false,
+              "size_bytes": 0
+            },
+            "priority_hbm": {
+              "path": "/mnt/nas/openclaw/toolchains/s100_llm_sdk/D-Robotics_LLM_S100_1.0.0_SDK/oellm_runtime/model/Qwen2.5_1.5B_Instruct_512.hbm",
+              "exists": false,
+              "size_bytes": 0
+            },
+            "tool_dispatcher": "/mnt/nas/openclaw/scripts/probes/ai_nas_allowlisted_tool.sh",
+            "report_root": "/mnt/nas/openclaw/reports/qwen25_ai_nas"
+          },
+          "body_hash": "93f6c14eaa15d5be20371ecd6e2125c3534ad144dc5fcee349d782ded5be1812",
+          "stderr_hash": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "stderr_tail": ""
+        },
+        "models": {
+          "object": "list",
+          "data": [
+            {
+              "id": "Qwen2.5-1.5B-Instruct-S100P-official",
+              "object": "model",
+              "owned_by": "local-s100p-official-qwen"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "label": "protected ports sampled",
+      "ok": true,
+      "detail": "LISTEN 0      511        127.0.0.1:18765      0.0.0.0:*                                      \nLISTEN 0      5          127.0.0.1:18888      0.0.0.0:*                                      \nLISTEN 0      5          127.0.0.1:18080      0.0.0.0:*    users:((\"python3\",pid=42829,fd=3))\nLISTEN 0      5          127.0.0.1:8765       0.0.0.0:*    users:((\"python3\",pid=42831,fd=3))\nLISTEN 0      511            [::1]:18765         [::]:*                                      \n"
+    },
+    {
+      "label": "SQLite remains default; PostgreSQL/pgvector not default",
+      "ok": true
+    }
+  ],
+  "detail": {
+    "stage2_7_package": {
+      "path": "F:\\Project\\Digua\\evidence_for_gptpro\\digua_ai_nas_harness_stage2_7_for_gptpro_20260703-130304.zip",
+      "exists": true,
+      "sha256": "f8adecb2f714e827ceae7c6f5ab4436f197927179b1cf70b7402322c85549115",
+      "packet_package_sha256": "f8adecb2f714e827ceae7c6f5ab4436f197927179b1cf70b7402322c85549115"
+    },
+    "stage2_7_final_verdict": "ready_with_fixes_before_stage3",
+    "failed_gates": [
+      {
+        "report": "6020_qwen_structured_decision_contract_gate",
+        "gate_id": "stage2_7_qwen_structured_decision_contract_gate",
+        "verdict": "failed_stage2_7_qwen_structured_decision_contract_gate",
+        "passed_count": 8,
+        "check_count": 12,
+        "failure_count": 4
+      },
+      {
+        "report": "6030_qwen_driven_readonly_agent_loop_gate",
+        "gate_id": "stage2_7_qwen_driven_readonly_agent_loop_gate",
+        "verdict": "failed_stage2_7_qwen_driven_readonly_agent_loop_gate",
+        "passed_count": 0,
+        "check_count": 1,
+        "failure_count": 1
+      },
+      {
+        "report": "6040_qwen_driven_agent_loop_soak_gate",
+        "gate_id": "stage2_7_qwen_driven_agent_loop_soak_gate",
+        "verdict": "failed_stage2_7_qwen_driven_agent_loop_soak_gate",
+        "passed_count": 0,
+        "check_count": 1,
+        "failure_count": 1
+      },
+      {
+        "report": "6060_stage3_readonly_shadow_go_no_go_gate",
+        "gate_id": "stage2_7_stage3_readonly_shadow_go_no_go_gate",
+        "verdict": "failed_stage2_7_stage3_readonly_shadow_go_no_go_gate",
+        "passed_count": 11,
+        "check_count": 12,
+        "failure_count": 1
+      }
+    ],
+    "qwen_structured_failure_metrics": {
+      "mode": "contract",
+      "run_count": 45,
+      "concurrency": 1,
+      "allowed_count": 35,
+      "denied_count": 10,
+      "qwen_http_ok_rate": 1.0,
+      "allowed_qwen_http_ok_rate": 1.0,
+      "parsed_json_ok_rate": 0.0,
+      "schema_valid_rate": 0.0,
+      "allowed_qwen_structured_valid_rate": 0.0,
+      "workspace_policy_match_rate": 0.0,
+      "tool_policy_match_rate": 0.0,
+      "allowed_qwen_policy_match_rate": 0.0,
+      "allowed_dispatcher_success_rate": 0.0,
+      "denial_correctness": 1.0,
+      "invented_tool_count": 0,
+      "write_destructive_exposed_count": 0,
+      "private_leak_count": 0,
+      "cloud_allowed_for_private_count": 0,
+      "fallback_count": 0,
+      "leak_count": 0,
+      "shell_bypass_count": 0,
+      "cloud_called_count": 0,
+      "qwen_latency_ms": {
+        "p50": 2306.288,
+        "p95": 2389.92,
+        "p99": 2433.9
+      },
+      "dispatcher_latency_ms": {
+        "p50": null,
+        "p95": null,
+        "p99": null
+      },
+      "qwen_health_before_ok": true,
+      "qwen_health_after_ok": true,
+      "openclaw_health_before_ok": true,
+      "openclaw_health_after_ok": true
+    },
+    "qwen_persistence_candidate_status": {
+      "verdict": "ok_stage2_7_qwen_service_persistence_closure_gate_candidate_not_applied",
+      "stage3_blocker_removed": false,
+      "mode": "candidate_ready_but_not_applied"
+    },
+    "architecture_decision": "policy_first_deterministic_router_with_qwen_summarizer_advisor",
+    "why_stage3_still_blocked": {
+      "stage2_7_6060_verdict": "failed_stage2_7_stage3_readonly_shadow_go_no_go_gate",
+      "conditions": {
+        "package_self_rerun_pass": true,
+        "qwen_service_persistence_fully_fixed": false,
+        "structured_contract_or_policy_first_claim": true,
+        "qwen_driven_soak_pass_if_claiming_qwen_driven": true,
+        "readonly_dispatcher_bridge_pass": true,
+        "cloud_private_leak_count_zero": true,
+        "runtime_trace_complete": true,
+        "rollback_pass": true,
+        "no_write_destructive_admin_recovery_tools": true,
+        "no_production_route_change": true,
+        "sqlite_remains_default": true,
+        "zleap_lab_only_or_skipped": true
+      }
+    },
+    "hard_constraints": [
+      "Stage 2.8 is not Stage 3.",
+      "Do not replace OpenClaw.",
+      "Do not replace local Qwen.",
+      "Do not bypass ai_nas_allowlisted_tool.sh.",
+      "Do not execute arbitrary shell/script paths.",
+      "Do not modify product semantics of ports 8765/18080/18888/18889.",
+      "Do not attach sidecar to OpenClaw foreground.",
+      "Do not attach Dream7B to foreground.",
+      "Do not enable write/destructive/admin/recovery workspaces.",
+      "Do not allow cloud to see private NAS raw content.",
+      "Do not make PostgreSQL/pgvector a default production dependency.",
+      "Do not claim Qwen-driven autonomous agent loop.",
+      "Do not call Qwen HTTP 200 structured semantic success.",
+      "Do not call Qwen service candidate persistence fixed.",
+      "Do not apply systemd without explicit operator approval.",
+      "Qwen advisor output never directly triggers tools."
+    ],
+    "protected_ports": {
+      "ports": [
+        8765,
+        18080,
+        18888,
+        18889
+      ],
+      "stdout": "LISTEN 0      511        127.0.0.1:18765      0.0.0.0:*                                      \nLISTEN 0      5          127.0.0.1:18888      0.0.0.0:*                                      \nLISTEN 0      5          127.0.0.1:18080      0.0.0.0:*    users:((\"python3\",pid=42829,fd=3))\nLISTEN 0      5          127.0.0.1:8765       0.0.0.0:*    users:((\"python3\",pid=42831,fd=3))\nLISTEN 0      511            [::1]:18765         [::]:*                                      \n",
+      "stdout_hash": "422810341c68e53763d7c0622c403e9e6f6508f45b9e4c37057bbae81a2e6fdc",
+      "returncode": 0
+    },
+    "openclaw_health": {
+      "ok": true,
+      "returncode": 0,
+      "http_code": "200",
+      "time_total": 0.909532,
+      "json": {
+        "ok": true,
+        "tool_id": "ai_nas_operator_portal_server",
+        "operator_portal_contract": {
+          "found": true,
+          "filename": "operator_portal_contract.json",
+          "path": "/mnt/nas/openclaw/reports/ai_nas_mvp/operator_portal_contract_20260618-160406-445747/operator_portal_contract.json",
+          "verdict": "ok_ai_nas_operator_portal_contract",
+          "generated_at": "2026-06-18T16:04:08.346324+08:00",
+          "selection_policy": "generated_at_then_mtime"
+        },
+        "portal_html": "/mnt/nas/openclaw/reports/ai_nas_mvp/operator_portal_contract_20260618-160406-445747/operator_portal.html",
+        "refresh_on_start": null
+      },
+      "body_hash": "3f602e957754ba001c367fa58c76c536eda10a7318d8befc265f0d27698f100e",
+      "stderr_hash": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr_tail": ""
+    },
+    "qwen_health": {
+      "ok": true,
+      "returncode": 0,
+      "http_code": "200",
+      "time_total": 0.002128,
+      "json": {
+        "ok": true,
+        "model": "Qwen2.5-1.5B-Instruct-S100P-official",
+        "backend": "official-qwen2.5-oellm-multichat-plus-ai-nas-tools",
+        "port": 18080,
+        "active_profile": "qwen25_7b_instruct_cache_len_1024_q8",
+        "priority_profile": "qwen25_7b_instruct_cache_len_1024_q8_vendor_default",
+        "priority_status": "promoted_from_shadow_18081",
+        "active_hbm": {
+          "path": "/mnt/nas/openclaw/toolchains/s100_llm_sdk/D-Robotics_LLM_S100_1.0.0_SDK/oellm_runtime/model/Qwen2.5_1.5B_Instruct_512.hbm",
+          "exists": false,
+          "size_bytes": 0
+        },
+        "priority_hbm": {
+          "path": "/mnt/nas/openclaw/toolchains/s100_llm_sdk/D-Robotics_LLM_S100_1.0.0_SDK/oellm_runtime/model/Qwen2.5_1.5B_Instruct_512.hbm",
+          "exists": false,
+          "size_bytes": 0
+        },
+        "tool_dispatcher": "/mnt/nas/openclaw/scripts/probes/ai_nas_allowlisted_tool.sh",
+        "report_root": "/mnt/nas/openclaw/reports/qwen25_ai_nas"
+      },
+      "body_hash": "93f6c14eaa15d5be20371ecd6e2125c3534ad144dc5fcee349d782ded5be1812",
+      "stderr_hash": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr_tail": ""
+    },
+    "qwen_models": {
+      "object": "list",
+      "data": [
+        {
+          "id": "Qwen2.5-1.5B-Instruct-S100P-official",
+          "object": "model",
+          "owned_by": "local-s100p-official-qwen"
+        }
+      ]
+    },
+    "dream7b_foreground_status": "disabled for Stage2.8/Stage3 foreground; remote process snapshot is observe-only",
+    "remote_snapshot": {
+      "returncode": 0,
+      "elapsed_ms": 502.377,
+      "stdout_hash": "5c8c0e832e8cf63f3620b24743f20242cc1e6c946384c639adcd2145fb44f56f",
+      "stderr_hash": "0c7d4405eb8e99583889e05c63b3e65ca0d4cfba82731ab451bca83cffd893bd",
+      "stdout_tail": "__HOST__\nubuntu\nFri Jul  3 17:23:39 CST 2026\nLinux ubuntu 6.1.158-rt58-DR-4.0.5-2603031328-g9f678e-g6caa4d #17 SMP PREEMPT_RT Tue Mar  3 13:29:49 CST 2026 aarch64 aarch64 aarch64 GNU/Linux\n__SYSTEMD_OPENCLAW__\nactive\nenabled\n__SYSTEMD_QWEN__\ninactive\n__PORTS__\nLISTEN 0      511        127.0.0.1:18765      0.0.0.0:*                                      \nLISTEN 0      5          127.0.0.1:18888      0.0.0.0:*                                      \nLISTEN 0      5          127.0.0.1:18080      0.0.0.0:*    users:((\"python3\",pid=42829,fd=3))\nLISTEN 0      5          127.0.0.1:8765       0.0.0.0:*    users:((\"python3\",pid=42831,fd=3))\nLISTEN 0      511            [::1]:18765         [::]:*                                      \n__PROCS__\n  41889    1613 Ss    0.0  0.0 17664 python          /mnt/nas/openclaw/runtimes/dream7b-tokenizer-venv/bin/python /root/.openclaw/workspace/scripts/dream7b_local_openai_gateway.py\n__LOAD__\n 17:23:39 up 3 days, 6 min,  1 user,  load average: 3.68, 3.90, 3.98\n               total        used        free      shared  buff/cache   available\nMem:           21783        2673         839          46       18270       18842\nSwap:              0           0           0\n",
+      "stderr_tail": "Failed to get unit file state for qwen25-local-openai-gateway.service: No such file or directory\n"
+    },
+    "sqlite_postgresql_boundary": "SQLite/default local files remain the default. PostgreSQL/pgvector is not a production dependency in Stage2.8."
+  }
+}

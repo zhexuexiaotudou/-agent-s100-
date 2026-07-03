@@ -1,0 +1,180 @@
+{
+  "case_id": "short_chinese_prompt_padded",
+  "variant_id": "real_x_clip_5",
+  "source_directory": "evidence/raw_endpoint_subset_v6/final_segment_dense_sweep_v5/short_chinese_prompt_padded/real_x_clip_5",
+  "runtime_command_or_log_pointer": "remote v5 final_segment_dense_sweep_v5 endpoint run; local raw subset packaged in v6",
+  "official_scale": 0.00025415877462364733,
+  "official_zero_point": 0.0,
+  "input_stats": {
+    "shape": [
+      128,
+      3584
+    ],
+    "dtype": "float32",
+    "size": 458752,
+    "min": -5.0,
+    "max": 5.0,
+    "mean": 0.01854286529123783,
+    "std": 4.983898639678955,
+    "abs_max": 5.0,
+    "nonzero_count": 458752,
+    "allzero": false,
+    "constant": false,
+    "nan_count": 0,
+    "inf_count": 0
+  },
+  "raw_output_stats": {
+    "shape": [
+      1,
+      152064
+    ],
+    "dtype": "int16",
+    "size": 152064,
+    "min": -21552.0,
+    "max": 22590.0,
+    "mean": 1571.5806568287037,
+    "std": 3196.5405240153123,
+    "abs_max": 22590.0,
+    "nonzero_count": 152054,
+    "allzero": false,
+    "constant": false,
+    "nan_count": 0,
+    "inf_count": 0,
+    "count_pos_32767": 0,
+    "count_neg_32768": 0,
+    "frac_pos_32767": 0.0,
+    "frac_neg_32768": 0.0
+  },
+  "official_dequant_stats": {
+    "shape": [
+      152064
+    ],
+    "dtype": "float32",
+    "size": 152064,
+    "min": -5.477630138397217,
+    "max": 5.741446495056152,
+    "mean": 0.3994310200214386,
+    "std": 0.8124287724494934,
+    "abs_max": 5.741446495056152,
+    "nonzero_count": 152054,
+    "allzero": false,
+    "constant": false,
+    "nan_count": 0,
+    "inf_count": 0
+  },
+  "sha256": {
+    "input.npy": "fd5f11b878b20598d1fdcf10f933034e47645db73b275f6eb9736002dc630e54",
+    "raw_output.npy": "bcfca3c4090ab95814bd381fe7531a8646a56f6b407ce60262d6879ffc80f0ce",
+    "official_dequant_logits.npy": "53a01131c4d0065731a13145da892ee8076715f3150a165c3ab41d1087970eb4"
+  },
+  "source_metadata": {
+    "variant_id": "real_x_clip_5",
+    "why_included": "real seg26 hidden clipped to +/-5",
+    "input_path": "/mnt/nas/openclaw/reports/models/dream7b_s100p_v5_execution_20260701/evidence/final_segment_dense_sweep_v5/short_chinese_prompt_padded/real_x_clip_5/input.npy",
+    "raw_output_path": "/mnt/nas/openclaw/reports/models/dream7b_s100p_v5_execution_20260701/evidence/final_segment_dense_sweep_v5/short_chinese_prompt_padded/real_x_clip_5/raw_output.npy",
+    "dequant_logits_path": "/mnt/nas/openclaw/reports/models/dream7b_s100p_v5_execution_20260701/evidence/final_segment_dense_sweep_v5/short_chinese_prompt_padded/real_x_clip_5/dequant_logits.npy",
+    "metadata_path": "/mnt/nas/openclaw/reports/models/dream7b_s100p_v5_execution_20260701/evidence/final_segment_dense_sweep_v5/short_chinese_prompt_padded/real_x_clip_5/metadata.json",
+    "input_stats": {
+      "shape": [
+        128,
+        3584
+      ],
+      "dtype": "float32",
+      "size": 458752,
+      "min": -5.0,
+      "max": 5.0,
+      "mean": 0.018542861565947533,
+      "std": 4.983898639678955,
+      "abs_max": 5.0,
+      "nonzero_count": 458752,
+      "allzero": false,
+      "constant": false,
+      "nan_count": 0,
+      "inf_count": 0
+    },
+    "run_status": "pass",
+    "runtime_exception": null,
+    "raw_output_stats": {
+      "shape": [
+        1,
+        152064
+      ],
+      "dtype": "int16",
+      "size": 152064,
+      "min": -21552.0,
+      "max": 22590.0,
+      "mean": 1571.5806568287037,
+      "std": 3196.540524015312,
+      "abs_max": 22590.0,
+      "nonzero_count": 152054,
+      "allzero": false,
+      "constant": false,
+      "nan_count": 0,
+      "inf_count": 0
+    },
+    "dequant_output_stats": {
+      "shape": [
+        152064
+      ],
+      "dtype": "float32",
+      "size": 152064,
+      "min": -21552.0,
+      "max": 22590.0,
+      "mean": 1571.58056640625,
+      "std": 3196.5400390625,
+      "abs_max": 22590.0,
+      "nonzero_count": 152054,
+      "allzero": false,
+      "constant": false,
+      "nan_count": 0,
+      "inf_count": 0
+    },
+    "softmax": {
+      "entropy": 1.7486990871111096e-242,
+      "normalized_entropy": 1.4655470735022016e-243,
+      "top1_probability": 1.0
+    },
+    "top10_logits": [
+      {
+        "token": 72869,
+        "logit": 22590.0
+      },
+      {
+        "token": 37355,
+        "logit": 22027.0
+      },
+      {
+        "token": 58375,
+        "logit": 21056.0
+      },
+      {
+        "token": 84602,
+        "logit": 20922.0
+      },
+      {
+        "token": 31069,
+        "logit": 20886.0
+      },
+      {
+        "token": 5379,
+        "logit": 20567.0
+      },
+      {
+        "token": 97982,
+        "logit": 20181.0
+      },
+      {
+        "token": 97281,
+        "logit": 19776.0
+      },
+      {
+        "token": 32903,
+        "logit": 19716.0
+      },
+      {
+        "token": 83613,
+        "logit": 19484.0
+      }
+    ]
+  }
+}

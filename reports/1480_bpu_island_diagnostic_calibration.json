@@ -1,0 +1,58 @@
+{
+  "schema_version": "dream7b_s100p_v14_1480_bpu_island_diagnostic_calibration",
+  "created_at_utc": "2026-07-03T06:10:20.973930+00:00",
+  "run_commands": [
+    "C:\\Users\\zhexu\\AppData\\Local\\Python\\pythoncore-3.14-64\\python.exe tools\\build_v14_research_thread.py --root ."
+  ],
+  "host_environment": {
+    "local_platform": "Windows-11-10.0.26200-SP0",
+    "python": "3.14.3 (tags/v3.14.3:323c59a, Feb  3 2026, 16:04:56) [MSC v.1944 64 bit (AMD64)]"
+  },
+  "git": {
+    "returncode": 128,
+    "stdout": "",
+    "stderr": "fatal: not a git repository (or any of the parent directories): .git"
+  },
+  "input_artifacts": [
+    {
+      "path": "evidence/bpu_island_diagnostic_calibration_v14",
+      "exists": true
+    },
+    {
+      "path": "evidence/s100p_remote_v14_reports",
+      "exists": true
+    }
+  ],
+  "output_artifacts": [
+    {
+      "path": "reports/1480_bpu_island_diagnostic_calibration.json",
+      "exists": true,
+      "size_bytes": 1693,
+      "sha256": "a85432b99f24555f6fe61cfee202d6fc3257500e5436a4b246d2445e7f71ef6c"
+    },
+    {
+      "path": "reports/1480_bpu_island_diagnostic_calibration.md",
+      "exists": true,
+      "size_bytes": 499,
+      "sha256": "58c4a5bcbaba18830ba50a68817be5e3423b821a08610de4a3c892a0efe81bd0"
+    }
+  ],
+  "blocking_or_failure_reasons": [
+    "No deployable known-scale/no-fit early BPU island calibration passed strict logits validity across all three cases.",
+    "The remote HF suffix calibration attempt loaded the model and started zeros island=[1], but produced no result rows before manual stop; v13 island suffix timing indicates the full 60-row v14 sweep is not practical in this runtime."
+  ],
+  "next_minimal_experiments": [],
+  "safety": {
+    "generation_quality_run": false,
+    "product_routes_18888_18889_touched": false,
+    "dream7b_frontend_openclaw_traffic_touched": false
+  },
+  "verdict": "runtime_timeout_no_rows_after_model_load",
+  "remote_status": "model_loaded",
+  "rows": 0,
+  "expected_rows": null,
+  "errors": [],
+  "summary": {},
+  "deployable_pass": [],
+  "diagnostic_pass": []
+}

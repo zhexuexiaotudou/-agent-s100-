@@ -1,0 +1,147 @@
+{
+  "schema_version": "dream7b_s100p_gate_packet_v13",
+  "created_at_utc": "2026-07-03T05:26:14.933545+00:00",
+  "verdict": "all_bpu_and_hybrid_candidates_fail_logits",
+  "generation_quality_run": false,
+  "product_routes_18888_18889_touched": false,
+  "dream7b_frontend_openclaw_traffic_touched": false,
+  "current_full_bpu_path": "falsified_against_HF_PyTorch_BF16_logits_truth",
+  "seg00_01": {
+    "mapping": "manifest_mapping_only",
+    "decomposition": "seg00_01_graph_input_quant_contract_failure"
+  },
+  "bpu_islands": {
+    "verdict": "no_valid_islands",
+    "valid_islands": []
+  },
+  "gguf_reference": "gguf_f16_blocked_no_artifact",
+  "route_decision": {
+    "schema_version": "dream7b_s100p_v13_1360_corrected_route_decision_matrix",
+    "created_at_utc": "2026-07-03T05:26:14.888559+00:00",
+    "run_commands": [
+      "C:\\Users\\zhexu\\AppData\\Local\\Python\\pythoncore-3.14-64\\python.exe tools\\build_v13_research_thread.py --root ."
+    ],
+    "host_environment": {
+      "local_platform": "Windows-11-10.0.26200-SP0",
+      "python": "3.14.3 (tags/v3.14.3:323c59a, Feb  3 2026, 16:04:56) [MSC v.1944 64 bit (AMD64)]"
+    },
+    "git": {
+      "returncode": 128,
+      "stdout": "",
+      "stderr": "fatal: not a git repository (or any of the parent directories): .git"
+    },
+    "input_artifacts": [
+      {
+        "path": "reports/1340_bpu_island_reconstruction_matrix.json",
+        "exists": true,
+        "size_bytes": 6193,
+        "sha256": "d60e8710deab8ba6bd7c11afc579972231c845353d8a7858c4e8da0ccdeb15ad"
+      }
+    ],
+    "output_artifacts": [
+      {
+        "path": "reports/1360_corrected_route_decision_matrix.json",
+        "exists": true,
+        "size_bytes": 2895,
+        "sha256": "178f81f01466254e2dc3e60bc1fe2a9dfadec845e95ce00b67840d58ca096f48"
+      },
+      {
+        "path": "reports/1360_corrected_route_decision_matrix.md",
+        "exists": true,
+        "size_bytes": 117,
+        "sha256": "729a13edd63c2801720b1a83d415395db3f47a1bf23fe5ed19614e4ff02890fa"
+      }
+    ],
+    "blocking_or_failure_reasons": [],
+    "next_minimal_experiments": [],
+    "safety": {
+      "generation_quality_run": false,
+      "product_routes_18888_18889_touched": false,
+      "dream7b_frontend_openclaw_traffic_touched": false
+    },
+    "any_route_passes_logits": false,
+    "generation_gate_can_be_unlocked": false,
+    "segments_can_run_on_bpu_with_logits_validity": [],
+    "segments_must_remain_cpu_hf_gguf": "all deployment-critical segments until seg00_01/compiler contract is corrected",
+    "candidates": [
+      {
+        "route": "Full BPU with corrected seg00_01 recompile",
+        "logits_pass": false,
+        "bpu_segments": "0..27 only after corrected recompile",
+        "cpu_hf_gguf_segments": "none",
+        "blockers": [
+          "no compiler/export pipeline",
+          "seg00_01 exact operator mapping unresolved"
+        ]
+      },
+      {
+        "route": "CPU/HF seg00_01 + BPU island + HF suffix",
+        "logits_pass": false,
+        "bpu_segments": [],
+        "cpu_hf_gguf_segments": "HF prefix/suffix",
+        "blockers": [
+          "no tested BPU island passed strict logits validity"
+        ]
+      },
+      {
+        "route": "No BPU route until compiler/calibration/vendor support",
+        "logits_pass": false,
+        "bpu_segments": "none recommended for deployment",
+        "cpu_hf_gguf_segments": "HF/PyTorch reference path",
+        "blockers": []
+      },
+      {
+        "route": "GGUF route as product fallback/reference only",
+        "logits_pass": false,
+        "bpu_segments": "none",
+        "cpu_hf_gguf_segments": "GGUF when F16/logits runner exists",
+        "blockers": [
+          "gguf_f16_blocked_no_artifact"
+        ]
+      }
+    ],
+    "remaining_blockers": [
+      "seg00_01 graph/input/quant contract failure",
+      "missing compiler/export pipeline",
+      "missing GGUF F16/logits reference"
+    ],
+    "next_minimal_experiment": "obtain compiler/HBO graph or rebuild seg00_01 with verified layer0 split and higher precision output, then rerun boundary/logits gate only"
+  },
+  "commands": [
+    "C:\\Users\\zhexu\\AppData\\Local\\Python\\pythoncore-3.14-64\\python.exe tools\\build_v13_research_thread.py --root ."
+  ],
+  "model_hashes": {
+    "seg00_01_hbm": {
+      "path": "evidence/single_segment_substitution_v12r/zeros/seg_00/metadata.json",
+      "exists": true,
+      "size_bytes": 6497,
+      "sha256": "41e457c4a545919f0257d967fad0bd28de32f0a2524c2cef50ac7e178cb46358"
+    }
+  },
+  "bf16_truth_hashes": {
+    "zeros": {
+      "path": "evidence/full_truth_repeat_v11/zeros/repeat_full_truth_logits.npy",
+      "exists": true,
+      "size_bytes": 608384,
+      "sha256": "661ae552e7e368d829971c052f36bca50d0ba7f3b36e32c0b40d23179b77d56c"
+    },
+    "ramp": {
+      "path": "evidence/full_truth_repeat_v11/ramp/repeat_full_truth_logits.npy",
+      "exists": true,
+      "size_bytes": 608384,
+      "sha256": "c5ba9211687cd11d69e6825ae32e2e253db9f3ddbe11d9df4a72b2e790a5c154"
+    },
+    "short_chinese_prompt_padded": {
+      "path": "evidence/full_truth_repeat_v11/short_chinese_prompt_padded/repeat_full_truth_logits.npy",
+      "exists": true,
+      "size_bytes": 608384,
+      "sha256": "e46398de01f01c3646ca333aee4bce5e89705190d79290ac34ae6e40b3d6a5a6"
+    }
+  },
+  "raw_tensor_manifest": {
+    "v13_evidence_roots": [
+      "evidence/seg00_01_decomposition_v13",
+      "evidence/bpu_island_reconstruction_v13"
+    ]
+  }
+}

@@ -1,0 +1,200 @@
+{
+  "version": "harness_stage1_shadow_v1",
+  "shadow_env_flag": "AI_NAS_HARNESS_SHADOW",
+  "shadow_default_enabled": false,
+  "dispatcher": {
+    "local_path": "scripts/probes/ai_nas_allowlisted_tool.sh",
+    "remote_path": "/mnt/nas/openclaw/scripts/probes/ai_nas_allowlisted_tool.sh",
+    "forbid_arbitrary_script_path": true
+  },
+  "global_denies": {
+    "ports": [18888, 18889],
+    "model_routes": ["Dream7B foreground", "dream7b-local-openai-gateway", "dream7b-bpu-experimental-gateway-18889"],
+    "shell_path_execution": true
+  },
+  "tool_catalog": {
+    "ai_nas_personal_inventory": {"description": "Read-only Personal inventory report."},
+    "ai_nas_controlled_personal_seed": {"description": "Controlled fixture seed; execution requires explicit flag in original probe."},
+    "ai_nas_index_status": {"description": "Read index status."},
+    "ai_nas_index_daemon_readiness": {"description": "Read index daemon readiness."},
+    "ai_nas_index_daemon_smoke": {"description": "Smoke test index daemon."},
+    "ai_nas_index_daemon_resident": {"description": "Resident index daemon contract."},
+    "ai_nas_index_systemd_daemon_install": {"description": "Install index daemon systemd unit; approval required in harness."},
+    "ai_nas_index_rename_detection": {"description": "Index rename detection contract."},
+    "ai_nas_index_observability_contract": {"description": "Index observability contract."},
+    "ai_nas_sqlite_index_integrity_contract": {"description": "SQLite index integrity contract."},
+    "ai_nas_incremental_scan_efficiency_contract": {"description": "Incremental scan efficiency contract."},
+    "ai_nas_index_search_isolation_slo": {"description": "Search/index isolation SLO."},
+    "ai_nas_perf_benchmark": {"description": "AI-NAS performance benchmark."},
+    "ai_nas_concurrency_stability": {"description": "Concurrency stability probe."},
+    "ai_nas_continuous_task_soak": {"description": "Continuous task soak."},
+    "ai_nas_nas_backed_long_soak": {"description": "NAS-backed long soak."},
+    "ai_nas_soak_completion_gate_watcher": {"description": "Long soak completion watcher."},
+    "ai_nas_soak_checkpoint_resume": {"description": "Soak checkpoint resume probe."},
+    "ai_nas_queue_backpressure_slo": {"description": "Queue backpressure SLO."},
+    "ai_nas_user_facing_tail_latency": {"description": "User-facing tail latency SLO."},
+    "ai_nas_bpu_headroom_slo": {"description": "BPU headroom SLO; read-only in harness."},
+    "ai_nas_operational_slo_rollup_contract": {"description": "Operational SLO rollup."},
+    "ai_nas_edge_cloud_router": {"description": "Local-first edge/cloud router gate."},
+    "dream7b_perf_identity": {"description": "Historical Dream7B performance identity; never foreground."},
+    "ai_nas_allowlist_governance_audit": {"description": "Allowlist governance audit."},
+    "ai_nas_task_queue": {"description": "SQLite task queue probe."},
+    "ai_nas_case_packet": {"description": "Evidence case packet."},
+    "ai_nas_appliance_experience_acceptance": {"description": "Appliance experience acceptance."},
+    "ai_nas_operator_portal_contract": {"description": "Operator portal contract."},
+    "ai_nas_operator_portal_server": {"description": "Operator portal server; not started by shadow harness."},
+    "ai_nas_production_dependency_bundle": {"description": "Production dependency bundle."},
+    "ai_nas_production_blocker_runbook_contract": {"description": "Production blocker runbook contract."},
+    "ai_nas_evidence_catalog_contract": {"description": "Evidence catalog contract."},
+    "ai_nas_objective_traceability_contract": {"description": "Objective traceability contract."},
+    "ai_nas_goal_completion_audit": {"description": "Goal completion audit."},
+    "ai_nas_goal_completion_finalizer": {"description": "Goal completion finalizer."},
+    "ai_nas_evidence_freshness_contract": {"description": "Evidence freshness contract."},
+    "ai_nas_portable_nas_adapter_contract": {"description": "Portable NAS adapter contract."},
+    "ai_nas_production_readiness_gate": {"description": "Production readiness gate."},
+    "ai_nas_official_ppocr_wrapper": {"description": "Official PP-OCR wrapper."},
+    "ai_nas_official_route_readiness_gate": {"description": "Official route readiness gate."},
+    "ai_nas_product_closure_gate": {"description": "Product closure gate."},
+    "ai_nas_search_evidence_contract": {"description": "Search evidence contract."},
+    "ai_nas_search_confidence_calibration_contract": {"description": "Search confidence calibration contract."},
+    "ai_nas_multimodal_intent_routing_contract": {"description": "Multimodal intent routing contract."},
+    "ai_nas_semantic_query_acceptance": {"description": "Semantic query acceptance."},
+    "ai_nas_action_approval_manifest": {"description": "Build action approval manifest."},
+    "ai_nas_action_manifest_integrity": {"description": "Validate action manifest integrity."},
+    "ai_nas_operator_approval_inbox": {"description": "Operator approval inbox."},
+    "ai_nas_action_execute_copy": {"description": "Execute approved copy action."},
+    "ai_nas_action_rollback_copy": {"description": "Rollback approved copy action."},
+    "ai_nas_destructive_action_governance": {"description": "Destructive action governance."},
+    "ai_nas_audit_trail_contract": {"description": "Audit trail contract."},
+    "ai_nas_permission_aware_search": {"description": "Permission-aware redacted search."},
+    "ai_nas_acl_mapping_readiness": {"description": "ACL mapping readiness."},
+    "ai_nas_evidence_report": {"description": "Evidence report."},
+    "ai_nas_embedding_search": {"description": "Embedding search."},
+    "ai_nas_embedding_backend_readiness": {"description": "Embedding backend readiness."},
+    "ai_nas_embedding_runtime_contract": {"description": "Embedding runtime contract."},
+    "ai_nas_model_service_resilience": {"description": "Model service resilience."},
+    "ai_nas_model_service_recovery_drill": {"description": "Model service recovery drill."},
+    "ai_nas_model_service_recovery_manifest": {"description": "Model service recovery manifest."},
+    "ai_nas_model_service_real_recovery_drill": {"description": "Real recovery drill; approval required."},
+    "ai_nas_ocr_runtime_contract": {"description": "OCR runtime contract."},
+    "ai_nas_ocr_readiness": {"description": "OCR readiness."},
+    "ai_nas_ocr_extract": {"description": "OCR extraction."},
+    "ai_nas_document_pipeline_acceptance": {"description": "Document pipeline acceptance."},
+    "ai_nas_file_search": {"description": "File search."},
+    "ai_nas_folder_rag": {"description": "Folder RAG."},
+    "ai_nas_folder_rag_grounding_contract": {"description": "Folder RAG grounding contract."},
+    "ai_nas_folder_summary": {"description": "Folder summary."},
+    "ai_nas_duplicate_report": {"description": "Duplicate report."},
+    "ai_nas_photo_similarity": {"description": "Photo similarity."},
+    "ai_nas_image_embedding_extract": {"description": "Image embedding extraction."},
+    "ai_nas_photo_semantic_search": {"description": "Photo semantic search."},
+    "ai_nas_photo_pipeline_acceptance": {"description": "Photo pipeline acceptance."},
+    "ai_nas_photo_privacy_governance": {"description": "Photo privacy governance."},
+    "ai_nas_movie_sort_enhanced": {"description": "Movie sort enhanced; write/copy requires approval."}
+  },
+  "workspaces": {
+    "main_router": {
+      "allowed_tool_ids": ["ai_nas_edge_cloud_router"],
+      "approval_required_tools": []
+    },
+    "nas_search": {
+      "allowed_tool_ids": [
+        "ai_nas_personal_inventory",
+        "ai_nas_index_status",
+        "ai_nas_permission_aware_search",
+        "ai_nas_file_search",
+        "ai_nas_search_evidence_contract",
+        "ai_nas_search_confidence_calibration_contract",
+        "ai_nas_embedding_search",
+        "ai_nas_semantic_query_acceptance",
+        "ai_nas_folder_summary"
+      ],
+      "approval_required_tools": []
+    },
+    "nas_action": {
+      "allowed_tool_ids": [
+        "ai_nas_action_approval_manifest",
+        "ai_nas_action_manifest_integrity",
+        "ai_nas_operator_approval_inbox",
+        "ai_nas_action_execute_copy",
+        "ai_nas_action_rollback_copy",
+        "ai_nas_destructive_action_governance",
+        "ai_nas_audit_trail_contract"
+      ],
+      "approval_required_tools": ["ai_nas_action_execute_copy", "ai_nas_action_rollback_copy"]
+    },
+    "media_photo": {
+      "allowed_tool_ids": [
+        "ai_nas_photo_similarity",
+        "ai_nas_image_embedding_extract",
+        "ai_nas_photo_semantic_search",
+        "ai_nas_photo_pipeline_acceptance",
+        "ai_nas_photo_privacy_governance",
+        "ai_nas_duplicate_report",
+        "ai_nas_movie_sort_enhanced",
+        "ai_nas_multimodal_intent_routing_contract"
+      ],
+      "approval_required_tools": ["ai_nas_movie_sort_enhanced"]
+    },
+    "document_rag": {
+      "allowed_tool_ids": [
+        "ai_nas_case_packet",
+        "ai_nas_evidence_report",
+        "ai_nas_folder_rag",
+        "ai_nas_folder_rag_grounding_contract",
+        "ai_nas_folder_summary",
+        "ai_nas_ocr_readiness",
+        "ai_nas_ocr_extract",
+        "ai_nas_ocr_runtime_contract",
+        "ai_nas_document_pipeline_acceptance"
+      ],
+      "approval_required_tools": []
+    },
+    "ops_recovery": {
+      "allowed_tool_ids": [
+        "ai_nas_index_daemon_readiness",
+        "ai_nas_index_daemon_smoke",
+        "ai_nas_index_daemon_resident",
+        "ai_nas_index_observability_contract",
+        "ai_nas_task_queue",
+        "ai_nas_queue_backpressure_slo",
+        "ai_nas_model_service_resilience",
+        "ai_nas_model_service_recovery_manifest",
+        "ai_nas_model_service_recovery_drill",
+        "ai_nas_model_service_real_recovery_drill",
+        "ai_nas_production_blocker_runbook_contract",
+        "ai_nas_production_dependency_bundle"
+      ],
+      "approval_required_tools": [
+        "ai_nas_model_service_recovery_drill",
+        "ai_nas_model_service_real_recovery_drill"
+      ]
+    },
+    "web_cloud_research": {
+      "allowed_tool_ids": [
+        "ai_nas_edge_cloud_router",
+        "ai_nas_evidence_catalog_contract",
+        "ai_nas_objective_traceability_contract"
+      ],
+      "approval_required_tools": []
+    },
+    "admin_audit": {
+      "allowed_tool_ids": [
+        "ai_nas_allowlist_governance_audit",
+        "ai_nas_audit_trail_contract",
+        "ai_nas_acl_mapping_readiness",
+        "ai_nas_evidence_freshness_contract",
+        "ai_nas_objective_traceability_contract",
+        "ai_nas_production_readiness_gate",
+        "ai_nas_official_route_readiness_gate",
+        "ai_nas_product_closure_gate",
+        "ai_nas_appliance_experience_acceptance"
+      ],
+      "approval_required_tools": ["ai_nas_production_readiness_gate", "ai_nas_product_closure_gate"]
+    }
+  },
+  "cloud_redaction": {
+    "private_terms": ["invoice", "receipt", "contract", "payment", "family", "child", "face", "screenshot", "/mnt/nas", "Personal/", "bank", "salary"],
+    "replacement": "[REDACTED_PRIVATE_NAS_CONTEXT]"
+  }
+}

@@ -1,6 +1,7 @@
 English| [简体中文](./README_cn.md)
 
-# Getting Started with DNN Node Example
+Getting Started with DNN Node Example
+=======
 
 
 # Introduction
@@ -81,7 +82,7 @@ hbm_img_msgs is a custom image message format used for image transmission in sha
 
   # RDK Ultra
   bash robot_dev_config/build.sh -p Rdkultra -s dnn_node_example
-
+  
   # RDK X5
   bash robot_dev_config/build.sh -p X5 -s dnn_node_example
   ```
@@ -136,7 +137,7 @@ The source code contains the **dnn_node_example package**, which can be configur
 
 ## Execution
 
-- The models used by dnn_node_example are already installed during tros.b installation. The RDK X3 is installed in `/opt/hobot/model/x3/basic`, the RDK Ultra is installed in `/opt/hobot/model/rdkultra/basic/`, and the RDK X5 is installed in `/opt/hobot/model/x5/basic/` after a successful build.
+- The models used by dnn_node_example are already installed during tros.b installation. The RDK X3 is installed in `/opt/hobot/model/x3/basic`, the RDK Ultra is installed in `/opt/hobot/model/rdkultra/basic/`, and the RDK X5 is installed in `/opt/hobot/model/x5/basic/` after a successful build. 
 
 - After compilation, copy the generated install path to the D-Robotics RDK (if compiling on the RDK, skip the copying step) and run the following command.
 
@@ -357,7 +358,7 @@ Command executed: `ros2 run dnn_node_example example --ros-args -p config_file:=
 
 ```
 
-Rendered image:
+Rendered image: 
 
 ![image](./render/yolov3.jpeg)
 

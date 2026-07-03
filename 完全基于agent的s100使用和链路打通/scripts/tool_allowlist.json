@@ -1,0 +1,2593 @@
+{
+  "version": 1,
+  "tools": [
+    {
+      "id": "openclaw_status_probe",
+      "script": "scripts/probes/openclaw_status_probe.sh",
+      "mode": "readonly",
+      "approvedOutputPrefixes": [
+        "/tmp/",
+        "/mnt/nas/openclaw/logs/probes/",
+        "/root/.openclaw/workspace/logs/probes/"
+      ],
+      "description": "Collect OpenClaw, network, Feishu/Tavily summary, and NAS mount status without changing system configuration."
+    },
+    {
+      "id": "nas_discovery_probe",
+      "script": "scripts/probes/nas_discovery_probe.sh",
+      "mode": "readonly",
+      "approvedOutputPrefixes": [
+        "/tmp/",
+        "/mnt/nas/openclaw/logs/probes/",
+        "/root/.openclaw/workspace/logs/probes/"
+      ],
+      "description": "Passively collect NAS mount, network neighbor, route, mDNS, and SMB/NFS tooling readiness for A-003."
+    },
+    {
+      "id": "nas_link_blocker_probe",
+      "script": "scripts/probes/nas_link_blocker_probe.sh",
+      "mode": "readonly",
+      "approvedInputPrefixes": [
+        "169.254.",
+        "192.168.",
+        "10.",
+        "172.16.",
+        "172.17.",
+        "172.18.",
+        "172.19.",
+        "172.20.",
+        "172.21.",
+        "172.22.",
+        "172.23.",
+        "172.24.",
+        "172.25.",
+        "172.26.",
+        "172.27.",
+        "172.28.",
+        "172.29.",
+        "172.30.",
+        "172.31."
+      ],
+      "approvedOutputPrefixes": [
+        "/tmp/",
+        "/mnt/nas/openclaw/logs/probes/",
+        "/root/.openclaw/workspace/logs/probes/"
+      ],
+      "description": "Run a targeted read-only NAS link blocker probe for a known private/link-local NAS IP; does not mount, scan, log in, or use credentials."
+    },
+    {
+      "id": "infrastructure_gate_probe",
+      "script": "scripts/probes/infrastructure_gate_probe.sh",
+      "mode": "readonly",
+      "approvedInputPrefixes": [
+        "/tmp/",
+        "/mnt/nas/openclaw/",
+        "/root/.openclaw/workspace/"
+      ],
+      "approvedOutputPrefixes": [
+        "/tmp/",
+        "/mnt/nas/openclaw/reports/",
+        "/root/.openclaw/workspace/reports/"
+      ],
+      "description": "Generate a read-only A-003/A-006/B-001 infrastructure packet gate without NAS login, mount/unmount, network changes, runtime installs, or service/firewall changes."
+    },
+    {
+      "id": "log_diagnose",
+      "script": "scripts/probes/log_diagnose.sh",
+      "mode": "readonly",
+      "approvedInputPrefixes": [
+        "/tmp/",
+        "/mnt/nas/openclaw/logs/",
+        "/root/.openclaw/workspace/logs/"
+      ],
+      "approvedOutputPrefixes": [
+        "/tmp/",
+        "/mnt/nas/openclaw/logs/probes/",
+        "/root/.openclaw/workspace/logs/probes/"
+      ],
+      "description": "Summarize common error patterns from log files and write a Markdown diagnosis report."
+    },
+    {
+      "id": "index_documents",
+      "script": "scripts/probes/index_documents.sh",
+      "mode": "readonly",
+      "approvedInputPrefixes": [
+        "/tmp/",
+        "/mnt/nas/openclaw/documents/",
+        "/root/.openclaw/workspace/documents/"
+      ],
+      "approvedOutputPrefixes": [
+        "/tmp/",
+        "/mnt/nas/openclaw/reports/",
+        "/mnt/nas/openclaw/logs/probes/",
+        "/root/.openclaw/workspace/reports/",
+        "/root/.openclaw/workspace/logs/probes/"
+      ],
+      "description": "Create a Markdown index for text-like documents with size, mtime, hash, and preview."
+    },
+    {
+      "id": "document_daily_summary_probe",
+      "script": "scripts/probes/document_daily_summary_probe.sh",
+      "mode": "readonly",
+      "approvedInputPrefixes": [
+        "/tmp/",
+        "/mnt/nas/openclaw/documents/",
+        "/root/.openclaw/workspace/documents/"
+      ],
+      "approvedOutputPrefixes": [
+        "/tmp/",
+        "/mnt/nas/openclaw/reports/",
+        "/root/.openclaw/workspace/reports/"
+      ],
+      "description": "Generate a deterministic daily Markdown and JSON summary for text-like documents without calling external models."
+    },
+    {
+      "id": "openclaw_entry_demo_probe",
+      "script": "scripts/probes/openclaw_entry_demo_probe.sh",
+      "mode": "bounded-report",
+      "approvedOutputPrefixes": [
+        "/tmp/",
+        "/mnt/nas/openclaw/reports/",
+        "/root/.openclaw/workspace/reports/"
+      ],
+      "description": "Generate teacher-demo evidence that OpenClaw runs on S100P, the PC demo path does not require elevated operations, and persistence uses the NAS report root."
+    },
+    {
+      "id": "ai_nas_movie_sort_demo_probe",
+      "script": "scripts/probes/ai_nas_movie_sort_demo_probe.sh",
+      "mode": "bounded-demo-write",
+      "inputSchema": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {}
+      },
+      "permissionLevel": "bounded-demo-write",
+      "writesFiles": true,
+      "requiresConfirmation": false,
+      "reportPathPolicy": "approvedOutputPrefixes only; writes bounded demo files and Markdown/JSON reports under approved demo/report prefixes, never touches the real Personal media library",
+      "approvedInputPrefixes": [
+        "/tmp/",
+        "/mnt/nas/openclaw/demo/ai-nas-movie-sort/",
+        "/root/.openclaw/workspace/demo/ai-nas-movie-sort/"
+      ],
+      "approvedOutputPrefixes": [
+        "/tmp/",
+        "/mnt/nas/openclaw/reports/",
+        "/root/.openclaw/workspace/reports/"
+      ],
+      "description": "Create or use a bounded demo movie inbox, classify sample movie files by type, copy them into a demo library, and write Markdown/JSON evidence without touching the real media library."
+    },
+    {
+      "id": "personal_data_sort_probe",
+      "script": "scripts/probes/personal_data_sort_probe.sh",
+      "mode": "bounded-personal-copy-sort",
+      "approvedInputPrefixes": [
+        "Personal",
+        "Personal/Movies/",
+        "Personal/Documents/",
+        "Personal/Photos/",
+        "Personal/Datasets/",
+        "Personal/Inbox/"
+      ],
+      "approvedOutputPrefixes": [
+        "Personal/Sorted/",
+        "/tmp/",
+        "/mnt/nas/openclaw/reports/",
+        "/root/.openclaw/workspace/reports/"
+      ],
+      "description": "Safely organize approved Personal NAS content by copying into Personal/Sorted, preserving originals, reporting SHA256 duplicates without deletion, and writing Markdown/JSON evidence."
+    },
+    {
+      "id": "personal_data_sort_dry_run_probe",
+      "script": "scripts/probes/personal_data_sort_dry_run_probe.sh",
+      "mode": "bounded-personal-dry-run",
+      "approvedInputPrefixes": [
+        "Personal",
+        "Personal/Movies/",
+        "Personal/Documents/",
+        "Personal/Photos/",
+        "Personal/Datasets/",
+        "Personal/Inbox/"
+      ],
+      "approvedOutputPrefixes": [
+        "/tmp/",
+        "/mnt/nas/openclaw/reports/",
+        "/root/.openclaw/workspace/reports/"
+      ],
+      "description": "Preview approved Personal NAS organization by generating Markdown/JSON plans only; does not upload, move, delete, rename, or overwrite NAS files."
+    },
+    {
+      "id": "ai_nas_personal_inventory",
+      "script": "scripts/probes/ai_nas_personal_inventory_probe.sh",
+      "mode": "bounded-personal-readonly-index",
+      "inputSchema": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {}
+      },
+      "permissionLevel": "readonly",
+      "writesFiles": true,
+      "requiresConfirmation": false,
+      "reportPathPolicy": "approvedOutputPrefixes only; writes Markdown/JSON reports plus SQLite index under the AI NAS report root",
+      "approvedInputPrefixes": [
+        "/mnt/nas/openclaw/Personal/",
+        "/root/.openclaw/workspace/tmp/ai_nas_local_personal/"
+      ],
+      "approvedOutputPrefixes": [
+        "/tmp/",
+        "/mnt/nas/openclaw/reports/ai_nas_mvp/",
+        "/root/.openclaw/workspace/reports/ai_nas_mvp/"
+      ],
+      "description": "Scan approved Personal subfolders, build a SQLite/FTS inventory index with document and photo metadata, and write Markdown/JSON reports without deleting, moving, or overwriting source files."
+    },
+    {
+      "id": "ai_nas_file_search",
+      "script": "scripts/probes/ai_nas_file_search_probe.sh",
+      "mode": "bounded-personal-readonly-search",
+      "inputSchema": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "query": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 240
+          }
+        }
+      },
+      "permissionLevel": "readonly",
+      "writesFiles": true,
+      "requiresConfirmation": false,
+      "reportPathPolicy": "approvedOutputPrefixes only; writes Markdown/JSON search evidence reports",
+      "approvedInputPrefixes": [
+        "/mnt/nas/openclaw/Personal/",
+        "/mnt/nas/openclaw/reports/ai_nas_mvp/",
+        "/root/.openclaw/workspace/reports/ai_nas_mvp/"
+      ],
+      "approvedOutputPrefixes": [
+        "/tmp/",
+        "/mnt/nas/openclaw/reports/ai_nas_mvp/",
+        "/root/.openclaw/workspace/reports/ai_nas_mvp/"
+      ],
+      "description": "Run a bounded natural-language Personal file search from the inventory index and write Markdown/JSON evidence. Optional query is passed as a single argv value only for this search tool."
+    },
+    {
+      "id": "ai_nas_index_status",
+      "script": "scripts/probes/ai_nas_index_status_probe.sh",
+      "mode": "bounded-personal-readonly-index-status",
+      "inputSchema": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {}
+      },
+      "permissionLevel": "readonly",
+      "writesFiles": true,
+      "requiresConfirmation": false,
+      "reportPathPolicy": "approvedOutputPrefixes only; writes Markdown/JSON status reports and reads the SQLite index state",
+      "approvedInputPrefixes": [
+        "/mnt/nas/openclaw/reports/ai_nas_mvp/",
+        "/root/.openclaw/workspace/reports/ai_nas_mvp/"
+      ],
+      "approvedOutputPrefixes": [
+        "/tmp/",
+        "/mnt/nas/openclaw/reports/ai_nas_mvp/",
+        "/root/.openclaw/workspace/reports/ai_nas_mvp/"
+      ],
+      "description": "Report SQLite/FTS Personal index status, last scan time, failures, queue progress, and recent file changes without modifying source files."
+    },
+    {
+      "id": "ai_nas_index_daemon_readiness",
+      "script": "scripts/probes/ai_nas_index_daemon_readiness_probe.sh",
+      "mode": "bounded-personal-index-daemon-readiness",
+      "inputSchema": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {}
+      },
+      "permissionLevel": "bounded-readwrite-report-index",
+      "writesFiles": true,
+      "requiresConfirmation": false,
+      "reportPathPolicy": "approvedOutputPrefixes only; writes Markdown/JSON readiness reports, daemon SQLite state, and refreshed SQLite/FTS index rows, never modifies Personal source files or starts services",
+      "approvedInputPrefixes": [
+        "/mnt/nas/openclaw/Personal/",
+        "/mnt/nas/openclaw/reports/ai_nas_mvp/",
+        "/root/.openclaw/workspace/reports/ai_nas_mvp/"
+      ],
+      "approvedOutputPrefixes": [
+        "/tmp/",
+        "/mnt/nas/openclaw/reports/ai_nas_mvp/",
+        "/root/.openclaw/workspace/reports/ai_nas_mvp/"
+      ],
+      "description": "Run bounded background-index readiness cycles with daemon state, stale-lock recovery, event-source capability checks, recent change_log visibility, and a service-unit draft; does not delete, move, overwrite, or start a daemon."
+    },
+    {
+      "id": "ai_nas_index_daemon_smoke",
+      "script": "scripts/probes/ai_nas_index_daemon_smoke_probe.sh",
+      "mode": "bounded-index-daemon-change-detection-smoke",
+      "inputSchema": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {}
+      },
+      "permissionLevel": "bounded-fixture-index-smoke-report",
+      "writesFiles": true,
+      "requiresConfirmation": false,
+      "reportPathPolicy": "approvedOutputPrefixes only; writes isolated fixture files, SQLite/FTS smoke index, and Markdown/JSON smoke reports; deletes only a temporary fixture file created by this probe and never modifies real Personal source files or starts services",
+      "approvedInputPrefixes": [
+        "/tmp/",
+        "/mnt/nas/openclaw/reports/ai_nas_mvp/",
+        "/root/.openclaw/workspace/reports/ai_nas_mvp/"
+      ],
+      "approvedOutputPrefixes": [
+        "/tmp/",
+        "/mnt/nas/openclaw/reports/ai_nas_mvp/",
+        "/root/.openclaw/workspace/reports/ai_nas_mvp/"
+      ],
+      "description": "Run a bounded short-lived polling index-daemon smoke over an isolated Personal fixture, proving create/update/delete detection through the real SQLite/FTS inventory and change_log path with detection P50/P95/P99; never touches the real Personal tree and does not install or start a resident daemon."
+    },
+    {
+      "id": "ai_nas_index_daemon_resident",
+      "script": "scripts/probes/ai_nas_index_daemon_resident_probe.sh",
+      "mode": "bounded-resident-index-daemon-child-process",
+      "inputSchema": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {}
+      },
+      "permissionLevel": "bounded-fixture-owned-child-process-index-report",
+      "writesFiles": true,
+      "requiresConfirmation": false,
+      "reportPathPolicy": "approvedOutputPrefixes only; starts and stops only an owned child Python polling worker created by this probe, writes isolated fixture files, SQLite/FTS index, daemon heartbeat SQLite, and Markdown/JSON reports; never modifies real Personal source files and never installs or starts system services",
+      "approvedInputPrefixes": [
+        "/tmp/",
+        "/mnt/nas/openclaw/reports/ai_nas_mvp/",
+        "/root/.openclaw/workspace/reports/ai_nas_mvp/"
+      ],
+      "approvedOutputPrefixes": [
+        "/tmp/",
+        "/mnt/nas/openclaw/reports/ai_nas_mvp/",
+        "/root/.openclaw/workspace/reports/ai_nas_mvp/"
+      ],
+      "description": "Run a bounded resident index-daemon probe by launching an owned child polling worker over an isolated Personal fixture, mutating fixture files while the worker runs, verifying heartbeat rows plus add/update/delete change_log detection, and reporting P50/P95/P99 detection latency without touching real Personal data or systemd."
+    },
+    {
+      "id": "ai_nas_index_systemd_daemon_install",
+      "script": "scripts/probes/ai_nas_index_systemd_daemon_install_probe.sh",
+      "mode": "readonly-production-systemd-index-daemon-install",
+      "inputSchema": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {}
+      },
+      "permissionLevel": "readonly",
+      "writesFiles": true,
+      "requiresConfirmation": false,
+      "reportPathPolicy": "approvedOutputPrefixes only; writes Markdown/JSON install verification reports, reads systemd status and unit files, and never installs, starts, restarts, stops, kills, deletes, moves, or overwrites services or data",
+      "approvedInputPrefixes": [
+        "/root/.config/systemd/user/",
+        "/etc/systemd/system/",
+        "/mnt/nas/openclaw/reports/ai_nas_mvp/",
+        "/root/.openclaw/workspace/reports/ai_nas_mvp/"
+      ],
+      "approvedOutputPrefixes": [
+        "/tmp/",
+        "/mnt/nas/openclaw/reports/ai_nas_mvp/",
+        "/root/.openclaw/workspace/reports/ai_nas_mvp/"
+      ],
+      "description": "Verify whether the AI-NAS resident index daemon is actually installed, enabled, active, restart-policy protected, and optionally backed by observed daemon cycles; read-only report only with no systemd mutation."
+    },
+    {
+      "id": "ai_nas_index_rename_detection",
+      "script": "scripts/probes/ai_nas_index_rename_detection_probe.sh",
+      "mode": "bounded-index-rename-detection-fixture",
+      "inputSchema": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {}
+      },
+      "permissionLevel": "bounded-fixture-index-rename-report",
+      "writesFiles": true,
+      "requiresConfirmation": false,
+      "reportPathPolicy": "approvedOutputPrefixes only; writes isolated fixture files, SQLite/FTS index state, and Markdown/JSON rename detection reports; never modifies real Personal source files, never starts services, no real delete, no real move, no real overwrite",
+      "approvedInputPrefixes": [
+        "/tmp/",
+        "/mnt/nas/openclaw/reports/ai_nas_mvp/",
+        "/root/.openclaw/workspace/reports/ai_nas_mvp/"
+      ],
+      "approvedOutputPrefixes": [
+        "/tmp/",
+        "/mnt/nas/openclaw/reports/ai_nas_mvp/",
+        "/root/.openclaw/workspace/reports/ai_nas_mvp/"
+      ],
+      "description": "Run a bounded rename/move detection acceptance by renaming an isolated fixture file, verifying old-path deleted and new-path added change_log rows, matching SHA256, and emitting a rename_or_move candidate without touching real Personal data."
+    },
+    {
+      "id": "ai_nas_index_observability_contract",
+      "script": "scripts/probes/ai_nas_index_observability_contract_probe.sh",
+      "mode": "bounded-index-observability-contract-fixture",
+      "inputSchema": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {}
+      },
+      "permissionLevel": "bounded-fixture-index-observability-report",
+      "writesFiles": true,
+      "requiresConfirmation": false,
+      "reportPathPolicy": "approvedOutputPrefixes only; writes isolated fixture files, SQLite/FTS index state, and Markdown/JSON observability contract reports; never modifies real Personal source files, never installs or starts services, no real delete, no real move, no real overwrite",
+      "approvedInputPrefixes": [
+        "/tmp/",
+        "/mnt/nas/openclaw/reports/ai_nas_mvp/",
+        "/root/.openclaw/workspace/reports/ai_nas_mvp/"
+      ],
+      "approvedOutputPrefixes": [
+        "/tmp/",
+        "/mnt/nas/openclaw/reports/ai_nas_mvp/",
+        "/root/.openclaw/workspace/reports/ai_nas_mvp/"
+      ],
+      "description": "Validate that SQLite/FTS index status is queryable for last scan timestamps, failed files, queue progress, recent changes, mtime/hash updates, and explicit no-content-invented parse failures using an isolated fixture only."
+    },
+    {
+      "id": "ai_nas_sqlite_index_integrity_contract",
+      "script": "scripts/probes/ai_nas_sqlite_index_integrity_contract_probe.sh",
+      "mode": "bounded-sqlite-index-integrity-contract-fixture",
+      "inputSchema": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {}
+      },
+      "permissionLevel": "bounded-fixture-sqlite-index-integrity-report",
+      "writesFiles": true,
+      "requiresConfirmation": false,
+      "reportPathPolicy": "approvedOutputPrefixes only; writes isolated fixture files, SQLite/FTS index state, and Markdown/JSON SQLite integrity contract reports; never modifies real Personal source files, never installs or starts services, no real delete, no real move, no real overwrite",
+      "approvedInputPrefixes": [
+        "/tmp/",
+        "/mnt/nas/openclaw/reports/ai_nas_mvp/",
+        "/root/.openclaw/workspace/reports/ai_nas_mvp/"
+      ],
+      "approvedOutputPrefixes": [
+        "/tmp/",
+        "/mnt/nas/openclaw/reports/ai_nas_mvp/",
+        "/root/.openclaw/workspace/reports/ai_nas_mvp/"
+      ],
+      "description": "Validate productized SQLite/FTS index integrity with required tables and indexes, PRAGMA integrity checks, records/FTS/vector row consistency, orphan cleanup after deleted files, and grounded search evidence using an isolated fixture only."
+    },
+    {
+      "id": "ai_nas_incremental_scan_efficiency_contract",
+      "script": "scripts/probes/ai_nas_incremental_scan_efficiency_contract_probe.sh",
+      "mode": "bounded-incremental-scan-efficiency-contract-fixture",
+      "inputSchema": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {}
+      },
+      "permissionLevel": "bounded-fixture-incremental-index-efficiency-report",
+      "writesFiles": true,
+      "requiresConfirmation": false,
+      "reportPathPolicy": "approvedOutputPrefixes only; writes isolated fixture files, SQLite/FTS index state, and Markdown/JSON incremental scan efficiency reports; deletes only one fixture file to verify deleted change_log and never modifies real Personal source files, installs or starts services, calls network, moves, or overwrites",
+      "approvedInputPrefixes": [
+        "/tmp/",
+        "/mnt/nas/openclaw/reports/ai_nas_mvp/",
+        "/root/.openclaw/workspace/reports/ai_nas_mvp/"
+      ],
+      "approvedOutputPrefixes": [
+        "/tmp/",
+        "/mnt/nas/openclaw/reports/ai_nas_mvp/",
+        "/root/.openclaw/workspace/reports/ai_nas_mvp/"
+      ],
+      "description": "Validate that unchanged files are not re-extracted or re-hashed on a no-change SQLite/FTS scan, while a later incremental scan processes only added and modified files and records deleted files in change_log using an isolated fixture only."
+    },
+    {
+      "id": "ai_nas_index_search_isolation_slo",
+      "script": "scripts/probes/ai_nas_index_search_isolation_slo_probe.sh",
+      "mode": "bounded-index-search-isolation-slo-fixture",
+      "inputSchema": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {}
+      },
+      "permissionLevel": "bounded-fixture-index-search-slo-report",
+      "writesFiles": true,
+      "requiresConfirmation": false,
+      "reportPathPolicy": "approvedOutputPrefixes only; writes isolated fixture files, SQLite/FTS index state, and Markdown/JSON index/search isolation SLO reports; never modifies real Personal source files, never starts services, no real delete, no real move, no real overwrite",
+      "approvedInputPrefixes": [
+        "/tmp/",
+        "/mnt/nas/openclaw/reports/ai_nas_mvp/",
+        "/root/.openclaw/workspace/reports/ai_nas_mvp/"
+      ],
+      "approvedOutputPrefixes": [
+        "/tmp/",
+        "/mnt/nas/openclaw/reports/ai_nas_mvp/",
+        "/root/.openclaw/workspace/reports/ai_nas_mvp/"
+      ],
+      "description": "Run a bounded index/search isolation SLO acceptance that refreshes a SQLite/FTS index while concurrent interactive searches must keep returning grounded matches with reasons, evidence, confidence, and P95/P99 latency within SLO."
+    },
+    {
+      "id": "ai_nas_perf_benchmark",
+      "script": "scripts/probes/ai_nas_perf_benchmark_probe.sh",
+      "mode": "bounded-personal-performance-benchmark",
+      "inputSchema": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {}
+      },
+      "permissionLevel": "bounded-readwrite-report-index",
+      "writesFiles": true,
+      "requiresConfirmation": false,
+      "reportPathPolicy": "approvedOutputPrefixes only; writes benchmark Markdown/JSON reports, updates the SQLite index state, and appends perf_benchmark_runs history, never modifies Personal source files",
+      "approvedInputPrefixes": [
+        "/mnt/nas/openclaw/Personal/",
+        "/mnt/nas/openclaw/reports/ai_nas_mvp/",
+        "/root/.openclaw/workspace/reports/ai_nas_mvp/"
+      ],
+      "approvedOutputPrefixes": [
+        "/tmp/",
+        "/mnt/nas/openclaw/reports/ai_nas_mvp/",
+        "/root/.openclaw/workspace/reports/ai_nas_mvp/"
+      ],
+      "description": "Measure AI-NAS sequential search P50/P95/P99 plus concurrent mixed search/embedding/folder-RAG/index throughput, queue wait, task latency, and persistent benchmark history without modifying Personal source files."
+    },
+    {
+      "id": "ai_nas_concurrency_stability",
+      "script": "scripts/probes/ai_nas_concurrency_stability_probe.sh",
+      "mode": "bounded-personal-concurrency-stability",
+      "inputSchema": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {}
+      },
+      "permissionLevel": "bounded-readwrite-report-index",
+      "writesFiles": true,
+      "requiresConfirmation": false,
+      "reportPathPolicy": "approvedOutputPrefixes only; writes concurrency stability Markdown/JSON reports plus SQLite history/index rows, checks health endpoints, never modifies Personal source files or restarts services",
+      "approvedInputPrefixes": [
+        "/mnt/nas/openclaw/Personal/",
+        "/mnt/nas/openclaw/reports/ai_nas_mvp/",
+        "/root/.openclaw/workspace/reports/ai_nas_mvp/"
+      ],
+      "approvedOutputPrefixes": [
+        "/tmp/",
+        "/mnt/nas/openclaw/reports/ai_nas_mvp/",
+        "/root/.openclaw/workspace/reports/ai_nas_mvp/"
+      ],
+      "description": "Run bounded concurrent index refresh, file search, embedding search, photo semantic search, and dialog-health checks; reports throughput, P95/P99 latency, failures, and error taxonomy without deleting, moving, overwriting, or restarting services."
+    },
+    {
+      "id": "ai_nas_continuous_task_soak",
+      "script": "scripts/probes/ai_nas_continuous_task_soak_probe.sh",
+      "mode": "bounded-continuous-task-soak-fixture",
+      "inputSchema": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {}
+      },
+      "permissionLevel": "bounded-fixture-queue-index-report",
+      "writesFiles": true,
+      "requiresConfirmation": false,
+      "reportPathPolicy": "approvedOutputPrefixes only; writes isolated fixture files, SQLite index, SQLite queue state, and Markdown/JSON soak reports; never modifies real Personal source files and never starts services",
+      "approvedInputPrefixes": [
+        "/tmp/",
+        "/mnt/nas/openclaw/reports/ai_nas_mvp/",
+        "/root/.openclaw/workspace/reports/ai_nas_mvp/"
+      ],
+      "approvedOutputPrefixes": [
+        "/tmp/",
+        "/mnt/nas/openclaw/reports/ai_nas_mvp/",
+        "/root/.openclaw/workspace/reports/ai_nas_mvp/"
+      ],
+      "description": "Run a bounded multi-wave continuous AI-NAS task soak over an isolated SQLite queue with index/search/folder-RAG jobs, reporting throughput, queue wait P95/P99, task latency P95/P99, unfinished jobs, failures, absolute SLO thresholds, and normalized P95 degradation across waves."
+    },
+    {
+      "id": "ai_nas_nas_backed_long_soak",
+      "script": "scripts/probes/ai_nas_nas_backed_long_soak_probe.sh",
+      "mode": "production-nas-backed-long-soak-readonly",
+      "inputSchema": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {}
+      },
+      "permissionLevel": "readonly-long-running-index-report",
+      "writesFiles": true,
+      "requiresConfirmation": false,
+      "reportPathPolicy": "approvedOutputPrefixes only; writes SQLite index refresh state and Markdown/JSON long-soak reports, reads real NAS Personal files, and never deletes, moves, renames, overwrites, starts services, or mutates Personal source data",
+      "approvedInputPrefixes": [
+        "/mnt/nas/openclaw/Personal/",
+        "/mnt/nas/openclaw/reports/ai_nas_mvp/",
+        "/root/.openclaw/workspace/reports/ai_nas_mvp/"
+      ],
+      "approvedOutputPrefixes": [
+        "/tmp/",
+        "/mnt/nas/openclaw/reports/ai_nas_mvp/",
+        "/root/.openclaw/workspace/reports/ai_nas_mvp/"
+      ],
+      "description": "Run the production NAS-backed long soak against the real mounted Personal root, repeatedly refreshing the SQLite/FTS index and executing read-only search/folder-RAG waves with P95/P99 SLO evidence."
+    },
+    {
+      "id": "ai_nas_soak_checkpoint_resume",
+      "script": "scripts/probes/ai_nas_soak_checkpoint_resume_probe.sh",
+      "mode": "bounded-soak-checkpoint-resume-fixture",
+      "inputSchema": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {}
+      },
+      "permissionLevel": "bounded-fixture-queue-checkpoint-report",
+      "writesFiles": true,
+      "requiresConfirmation": false,
+      "reportPathPolicy": "approvedOutputPrefixes only; writes isolated fixture files, SQLite index, SQLite queue/execution/checkpoint tables, and Markdown/JSON checkpoint-resume reports; never modifies real Personal source files and never starts services, performs network calls, deletes, moves, or overwrites",
+      "approvedInputPrefixes": [
+        "/tmp/",
+        "/mnt/nas/openclaw/reports/ai_nas_mvp/",
+        "/root/.openclaw/workspace/reports/ai_nas_mvp/"
+      ],
+      "approvedOutputPrefixes": [
+        "/tmp/",
+        "/mnt/nas/openclaw/reports/ai_nas_mvp/",
+        "/root/.openclaw/workspace/reports/ai_nas_mvp/"
+      ],
+      "description": "Validate interrupted continuous-soak recovery by simulating a crashed running job, writing hash-chained checkpoints, resuming pending work, verifying all jobs finish once, and reporting idempotency and checkpoint audit evidence."
+    },
+    {
+      "id": "ai_nas_queue_backpressure_slo",
+      "script": "scripts/probes/ai_nas_queue_backpressure_slo_probe.sh",
+      "mode": "bounded-queue-backpressure-interactive-slo-fixture",
+      "inputSchema": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {}
+      },
+      "permissionLevel": "bounded-fixture-queue-slo-report",
+      "writesFiles": true,
+      "requiresConfirmation": false,
+      "reportPathPolicy": "approvedOutputPrefixes only; writes isolated fixture files, SQLite index, SQLite queue state, and Markdown/JSON SLO reports; never modifies real Personal source files and never starts services",
+      "approvedInputPrefixes": [
+        "/tmp/",
+        "/mnt/nas/openclaw/reports/ai_nas_mvp/",
+        "/root/.openclaw/workspace/reports/ai_nas_mvp/"
+      ],
+      "approvedOutputPrefixes": [
+        "/tmp/",
+        "/mnt/nas/openclaw/reports/ai_nas_mvp/",
+        "/root/.openclaw/workspace/reports/ai_nas_mvp/"
+      ],
+      "description": "Run a bounded queue scheduling acceptance for background backpressure, interactive-priority admission, P95/P99 queue-wait SLO, retry-to-dead-letter behavior, no unfinished jobs, and audit evidence without modifying real Personal source files."
+    },
+    {
+      "id": "ai_nas_user_facing_tail_latency",
+      "script": "scripts/probes/ai_nas_user_facing_tail_latency_probe.sh",
+      "mode": "bounded-user-facing-tail-latency-fixture",
+      "inputSchema": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {}
+      },
+      "permissionLevel": "bounded-fixture-latency-report",
+      "writesFiles": true,
+      "requiresConfirmation": false,
+      "reportPathPolicy": "approvedOutputPrefixes only; writes isolated fixture files, SQLite/FTS index and image embedding rows, and Markdown/JSON user-facing tail-latency reports; never modifies real Personal source files, deletes, moves, overwrites, starts services, or performs network calls",
+      "approvedInputPrefixes": [
+        "/tmp/",
+        "/mnt/nas/openclaw/reports/ai_nas_mvp/",
+        "/root/.openclaw/workspace/reports/ai_nas_mvp/"
+      ],
+      "approvedOutputPrefixes": [
+        "/tmp/",
+        "/mnt/nas/openclaw/reports/ai_nas_mvp/",
+        "/root/.openclaw/workspace/reports/ai_nas_mvp/"
+      ],
+      "description": "Run a bounded user-facing P95/P99 tail-latency and grounding contract across SQLite text search, local hash embedding search, photo semantic search, folder RAG, and case packet surfaces with reasons, evidence, confidence, and copy suggestion checks."
+    },
+    {
+      "id": "ai_nas_bpu_headroom_slo",
+      "script": "scripts/probes/ai_nas_bpu_headroom_slo_probe.sh",
+      "mode": "bounded-bpu-headroom-scheduling-slo",
+      "inputSchema": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {}
+      },
+      "permissionLevel": "bounded-fixture-bpu-headroom-report",
+      "writesFiles": true,
+      "requiresConfirmation": false,
+      "reportPathPolicy": "approvedOutputPrefixes only; writes Markdown/JSON BPU headroom SLO reports; no downloads, no network, no service restarts, no kills, no delete, no move, no overwrite, no Personal source mutation",
+      "approvedInputPrefixes": [
+        "/tmp/",
+        "/mnt/nas/openclaw/reports/ai_nas_mvp/",
+        "/root/.openclaw/workspace/reports/ai_nas_mvp/"
+      ],
+      "approvedOutputPrefixes": [
+        "/tmp/",
+        "/mnt/nas/openclaw/reports/ai_nas_mvp/",
+        "/root/.openclaw/workspace/reports/ai_nas_mvp/"
+      ],
+      "description": "Validate bounded scheduling policy that keeps average BPU utilization in the 93-95 percent headroom band, prevents 100 percent saturation, prioritizes interactive queue latency, and preserves background throughput using remaining capacity."
+    },
+    {
+      "id": "ai_nas_operational_slo_rollup_contract",
+      "script": "scripts/probes/ai_nas_operational_slo_rollup_contract_probe.sh",
+      "mode": "readonly-operational-slo-rollup-contract",
+      "inputSchema": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {}
+      },
+      "permissionLevel": "readonly-slo-rollup-report",
+      "writesFiles": true,
+      "requiresConfirmation": false,
+      "reportPathPolicy": "approvedOutputPrefixes only; writes Markdown/JSON operational SLO rollup reports, never downloads, calls networks, restarts services, kills processes, deletes, moves, overwrites, or modifies Personal source files",
+      "approvedInputPrefixes": [
+        "/tmp/",
+        "/mnt/nas/openclaw/reports/ai_nas_mvp/",
+        "/root/.openclaw/workspace/reports/ai_nas_mvp/"
+      ],
+      "approvedOutputPrefixes": [
+        "/tmp/",
+        "/mnt/nas/openclaw/reports/ai_nas_mvp/",
+        "/root/.openclaw/workspace/reports/ai_nas_mvp/"
+      ],
+      "description": "Roll up latest P95/P99 latency, continuous throughput, queue backpressure, index/search concurrency, BPU headroom, and model-service recovery reports into one operator-facing SLO scorecard without running services or mutating data."
+    },
+    {
+      "id": "ai_nas_allowlist_governance_audit",
+      "script": "scripts/probes/ai_nas_allowlist_governance_audit_probe.sh",
+      "mode": "readonly-ai-nas-allowlist-governance-audit",
+      "inputSchema": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {}
+      },
+      "permissionLevel": "readonly",
+      "writesFiles": true,
+      "requiresConfirmation": false,
+      "reportPathPolicy": "approvedOutputPrefixes only; writes Markdown/JSON governance audit reports, never modifies allowlist, plugin, runner, Personal source files, or services",
+      "approvedInputPrefixes": [
+        "/mnt/nas/openclaw/reports/ai_nas_mvp/",
+        "/root/.openclaw/workspace/reports/ai_nas_mvp/",
+        "/root/.openclaw/workspace/scripts/",
+        "/root/.openclaw/workspace/plugins/s100p-allowlisted-tools/",
+        "/root/.openclaw/workspace/openclaw-plugins/s100p-allowlisted-tools/"
+      ],
+      "approvedOutputPrefixes": [
+        "/tmp/",
+        "/mnt/nas/openclaw/reports/ai_nas_mvp/",
+        "/root/.openclaw/workspace/reports/ai_nas_mvp/"
+      ],
+      "description": "Audit canonical AI-NAS allowlist entries for input schemas, permission levels, write/confirmation flags, report path policy, approved prefixes, destructive-action guardrails, runner exposure, and OpenClaw plugin alignment."
+    },
+    {
+      "id": "ai_nas_task_queue",
+      "script": "scripts/probes/ai_nas_task_queue_probe.sh",
+      "mode": "bounded-personal-task-queue-recovery",
+      "inputSchema": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {}
+      },
+      "permissionLevel": "bounded-readwrite-queue-report-index",
+      "writesFiles": true,
+      "requiresConfirmation": false,
+      "reportPathPolicy": "approvedOutputPrefixes only; writes queue SQLite state and Markdown/JSON reports, updates SQLite index state, never modifies Personal source files",
+      "approvedInputPrefixes": [
+        "/mnt/nas/openclaw/Personal/",
+        "/mnt/nas/openclaw/reports/ai_nas_mvp/",
+        "/root/.openclaw/workspace/reports/ai_nas_mvp/"
+      ],
+      "approvedOutputPrefixes": [
+        "/tmp/",
+        "/mnt/nas/openclaw/reports/ai_nas_mvp/",
+        "/root/.openclaw/workspace/reports/ai_nas_mvp/"
+      ],
+      "description": "Exercise a persistent SQLite AI-NAS task queue with pending/running/done/failed states, lease-timeout crash recovery, concurrent workers, and audit output without modifying Personal source files."
+    },
+    {
+      "id": "ai_nas_case_packet",
+      "script": "scripts/probes/ai_nas_case_packet_probe.sh",
+      "mode": "bounded-personal-mixed-evidence-case-packet",
+      "inputSchema": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "query": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 240,
+            "description": "Optional single-line case packet query, for example 2024 renovation payment contract invoice screenshot."
+          }
+        }
+      },
+      "permissionLevel": "bounded-readwrite-report-index",
+      "writesFiles": true,
+      "requiresConfirmation": false,
+      "reportPathPolicy": "approvedOutputPrefixes only; writes mixed evidence Markdown/JSON case packet reports and may refresh SQLite index/image_embeddings rows, never modifies Personal source files",
+      "approvedInputPrefixes": [
+        "/mnt/nas/openclaw/Personal/",
+        "/mnt/nas/openclaw/reports/ai_nas_mvp/",
+        "/root/.openclaw/workspace/reports/ai_nas_mvp/"
+      ],
+      "approvedOutputPrefixes": [
+        "/tmp/",
+        "/mnt/nas/openclaw/reports/ai_nas_mvp/",
+        "/root/.openclaw/workspace/reports/ai_nas_mvp/"
+      ],
+      "description": "Build a report-only mixed evidence packet from text/FTS, local embedding, and photo semantic search with reasons, snippets, dates, amounts, payment nodes, confidence, rejected candidates, explicit gaps, and copy-only organizing suggestions."
+    },
+    {
+      "id": "ai_nas_semantic_query_acceptance",
+      "script": "scripts/probes/ai_nas_semantic_query_acceptance_probe.sh",
+      "mode": "bounded-semantic-query-acceptance-fixture",
+      "inputSchema": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {}
+      },
+      "permissionLevel": "bounded-fixture-search-report-index",
+      "writesFiles": true,
+      "requiresConfirmation": false,
+      "reportPathPolicy": "approvedOutputPrefixes only; writes bounded semantic fixture files, SQLite/FTS/vector rows, and Markdown/JSON acceptance reports; never modifies real Personal source files",
+      "approvedInputPrefixes": [
+        "/tmp/",
+        "/mnt/nas/openclaw/reports/ai_nas_mvp/",
+        "/root/.openclaw/workspace/reports/ai_nas_mvp/"
+      ],
+      "approvedOutputPrefixes": [
+        "/tmp/",
+        "/mnt/nas/openclaw/reports/ai_nas_mvp/",
+        "/root/.openclaw/workspace/reports/ai_nas_mvp/"
+      ],
+      "description": "Run a bounded semantic fuzzy-query acceptance suite for contract, child beach photo, and reimbursement invoice queries, requiring each top result to include reasons, evidence snippets, confidence, and explicit limitations for unsupported person/CLIP semantics."
+    },
+    {
+      "id": "ai_nas_appliance_experience_acceptance",
+      "script": "scripts/probes/ai_nas_appliance_experience_acceptance_probe.sh",
+      "mode": "bounded-appliance-experience-acceptance-fixture",
+      "inputSchema": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {}
+      },
+      "permissionLevel": "bounded-fixture-report-index-manifest",
+      "writesFiles": true,
+      "requiresConfirmation": false,
+      "reportPathPolicy": "approvedOutputPrefixes only; writes bounded fixture files, SQLite index/image_embeddings rows, one-click Markdown/JSON report, and dry-run approval manifest; never modifies real Personal source files and never executes copy/delete/move/overwrite",
+      "approvedInputPrefixes": [
+        "/tmp/",
+        "/mnt/nas/openclaw/reports/ai_nas_mvp/",
+        "/root/.openclaw/workspace/reports/ai_nas_mvp/"
+      ],
+      "approvedOutputPrefixes": [
+        "/tmp/",
+        "/mnt/nas/openclaw/reports/ai_nas_mvp/",
+        "/root/.openclaw/workspace/reports/ai_nas_mvp/"
+      ],
+      "description": "Run a bounded end-to-end AI-NAS Copilot Appliance experience acceptance for the 2024 renovation payment query, requiring related files, reasons, summaries, payment/date/amount nodes, original paths, confidence, copyable organizing suggestions, one-click report paths, dry-run approval manifest, blocked destructive actions, and audit evidence."
+    },
+    {
+      "id": "ai_nas_operator_portal_contract",
+      "script": "scripts/probes/ai_nas_operator_portal_contract_probe.sh",
+      "mode": "bounded-operator-portal-contract-fixture",
+      "inputSchema": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {}
+      },
+      "permissionLevel": "bounded-fixture-operator-portal-report",
+      "writesFiles": true,
+      "requiresConfirmation": false,
+      "reportPathPolicy": "approvedOutputPrefixes only; writes bounded fixture files, SQLite index/image_embeddings rows, static HTML portal, and Markdown/JSON portal reports; never modifies real Personal source files and never executes copy, delete, move, overwrite, rollback, network, or service actions",
+      "approvedInputPrefixes": [
+        "/tmp/",
+        "/mnt/nas/openclaw/reports/ai_nas_mvp/",
+        "/root/.openclaw/workspace/reports/ai_nas_mvp/"
+      ],
+      "approvedOutputPrefixes": [
+        "/tmp/",
+        "/mnt/nas/openclaw/reports/ai_nas_mvp/",
+        "/root/.openclaw/workspace/reports/ai_nas_mvp/"
+      ],
+      "description": "Generate and validate a static AI-NAS operator portal showing the query, related files, reasons, evidence snippets, summaries, payment/date/amount nodes, copy suggestions, one-click report path, approval queue, blocked destructive actions, audit status, latest production readiness, operational SLO, and objective traceability."
+    },
+    {
+      "id": "ai_nas_production_dependency_bundle",
+      "script": "scripts/probes/ai_nas_production_dependency_bundle_probe.sh",
+      "mode": "readonly-production-dependency-evidence-bundle",
+      "inputSchema": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {}
+      },
+      "permissionLevel": "readonly-production-dependency-report",
+      "writesFiles": true,
+      "requiresConfirmation": false,
+      "reportPathPolicy": "approvedOutputPrefixes only; writes Markdown/JSON production dependency evidence bundle reports plus an isolated local image fixture; no downloads, no network beyond local health endpoints, no service restarts, no kills, no delete, no move, no overwrite, no permission changes, no Personal source mutation",
+      "approvedInputPrefixes": [
+        "/tmp/",
+        "/mnt/nas/openclaw/Personal/",
+        "/mnt/nas/openclaw/reports/ai_nas_mvp/",
+        "/root/.openclaw/workspace/reports/ai_nas_mvp/"
+      ],
+      "approvedOutputPrefixes": [
+        "/tmp/",
+        "/mnt/nas/openclaw/reports/ai_nas_mvp/",
+        "/root/.openclaw/workspace/reports/ai_nas_mvp/"
+      ],
+      "description": "Consolidate production dependency evidence for NAS mount and ACL/user mapping, text embeddings, CLIP image embeddings, OCR runtime, model/OpenClaw health endpoints, systemd restart policy, and operator recovery-drill next steps without mutating source files or services."
+    },
+    {
+      "id": "ai_nas_evidence_freshness_contract",
+      "script": "scripts/probes/ai_nas_evidence_freshness_contract_probe.sh",
+      "mode": "readonly-production-evidence-freshness-contract",
+      "inputSchema": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {}
+      },
+      "permissionLevel": "readonly-evidence-freshness-report",
+      "writesFiles": true,
+      "requiresConfirmation": false,
+      "reportPathPolicy": "approvedOutputPrefixes only; writes Markdown/JSON evidence freshness and provenance contract reports; no downloads, no network, no service restarts, no kills, no delete, no move, no overwrite, no permission changes, no Personal source mutation",
+      "approvedInputPrefixes": [
+        "/tmp/",
+        "/mnt/nas/openclaw/reports/ai_nas_mvp/",
+        "/root/.openclaw/workspace/reports/ai_nas_mvp/"
+      ],
+      "approvedOutputPrefixes": [
+        "/tmp/",
+        "/mnt/nas/openclaw/reports/ai_nas_mvp/",
+        "/root/.openclaw/workspace/reports/ai_nas_mvp/"
+      ],
+      "description": "Verify production-readiness evidence reports are present, fresh, attributable to expected AI-NAS tool IDs and accepted verdicts, and free of forbidden destructive audit flags before using them in the production readiness gate."
+    },
+    {
+      "id": "ai_nas_portable_nas_adapter_contract",
+      "script": "scripts/probes/ai_nas_portable_nas_adapter_contract_probe.sh",
+      "mode": "bounded-portable-nas-adapter-contract",
+      "inputSchema": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {}
+      },
+      "permissionLevel": "bounded-fixture-portable-nas-report",
+      "writesFiles": true,
+      "requiresConfirmation": false,
+      "reportPathPolicy": "approvedOutputPrefixes only; writes isolated fixture files, SQLite indexes, and Markdown/JSON portable NAS adapter reports; never modifies real Personal source files, no downloads, no network, no service restarts, no kills, no delete, no move, no overwrite",
+      "approvedInputPrefixes": [
+        "/tmp/",
+        "/mnt/nas/openclaw/reports/ai_nas_mvp/",
+        "/root/.openclaw/workspace/reports/ai_nas_mvp/"
+      ],
+      "approvedOutputPrefixes": [
+        "/tmp/",
+        "/mnt/nas/openclaw/reports/ai_nas_mvp/",
+        "/root/.openclaw/workspace/reports/ai_nas_mvp/"
+      ],
+      "description": "Validate that the AI-NAS layer can point at multiple arbitrary mounted NAS Personal roots, build separate SQLite/FTS indexes, return grounded searches with confined paths, and keep reports outside source trees without NAS-OS-specific assumptions."
+    },
+    {
+      "id": "ai_nas_production_readiness_gate",
+      "script": "scripts/probes/ai_nas_production_readiness_gate_probe.sh",
+      "mode": "readonly-production-readiness-gate",
+      "inputSchema": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {}
+      },
+      "permissionLevel": "readonly-production-readiness-report",
+      "writesFiles": true,
+      "requiresConfirmation": false,
+      "reportPathPolicy": "approvedOutputPrefixes only; writes Markdown/JSON production readiness gate reports; no downloads, no service restarts, no kills, no delete, no move, no overwrite, no Personal source mutation",
+      "approvedInputPrefixes": [
+        "/tmp/",
+        "/mnt/nas/openclaw/Personal/",
+        "/mnt/nas/openclaw/reports/ai_nas_mvp/",
+        "/root/.openclaw/workspace/reports/ai_nas_mvp/"
+      ],
+      "approvedOutputPrefixes": [
+        "/tmp/",
+        "/mnt/nas/openclaw/reports/ai_nas_mvp/",
+        "/root/.openclaw/workspace/reports/ai_nas_mvp/"
+      ],
+      "description": "Generate a strict production readiness gate for AI-NAS Copilot Appliance claims across SQLite/FTS indexing, resident daemon evidence, P95/P99 queue soak, production embeddings/CLIP, OCR, photo pipeline, NAS ACL/user mapping, model-service recovery, end-to-end appliance experience, and OpenClaw allowlist governance without mutating source files or services."
+    },
+    {
+      "id": "ai_nas_production_blocker_runbook_contract",
+      "script": "scripts/probes/ai_nas_production_blocker_runbook_contract_probe.sh",
+      "mode": "readonly-production-blocker-runbook-contract",
+      "inputSchema": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {}
+      },
+      "permissionLevel": "readonly-runbook-report",
+      "writesFiles": true,
+      "requiresConfirmation": false,
+      "reportPathPolicy": "approvedOutputPrefixes only; writes Markdown/JSON production blocker runbook reports, never installs dependencies, restarts services, kills processes, changes permissions, deletes, moves, overwrites, or modifies Personal source files",
+      "approvedInputPrefixes": [
+        "/tmp/",
+        "/mnt/nas/openclaw/reports/ai_nas_mvp/",
+        "/root/.openclaw/workspace/reports/ai_nas_mvp/"
+      ],
+      "approvedOutputPrefixes": [
+        "/tmp/",
+        "/mnt/nas/openclaw/reports/ai_nas_mvp/",
+        "/root/.openclaw/workspace/reports/ai_nas_mvp/"
+      ],
+      "description": "Validate every current production readiness blocker maps to a runbook owner category, remediation steps, AI-NAS verification commands, and acceptance evidence without performing any external dependency installation or service mutation."
+    },
+    {
+      "id": "ai_nas_evidence_catalog_contract",
+      "script": "scripts/probes/ai_nas_evidence_catalog_contract_probe.sh",
+      "mode": "readonly-evidence-catalog-contract",
+      "inputSchema": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {}
+      },
+      "permissionLevel": "readonly-evidence-catalog-report",
+      "writesFiles": true,
+      "requiresConfirmation": false,
+      "reportPathPolicy": "approvedOutputPrefixes only; writes Markdown/JSON evidence catalog reports and SQLite catalog, never downloads, calls networks, restarts services, kills processes, deletes, moves, overwrites, or modifies Personal source files",
+      "approvedInputPrefixes": [
+        "/tmp/",
+        "/mnt/nas/openclaw/reports/ai_nas_mvp/",
+        "/root/.openclaw/workspace/reports/ai_nas_mvp/"
+      ],
+      "approvedOutputPrefixes": [
+        "/tmp/",
+        "/mnt/nas/openclaw/reports/ai_nas_mvp/",
+        "/root/.openclaw/workspace/reports/ai_nas_mvp/"
+      ],
+      "description": "Catalog AI-NAS Markdown/JSON report provenance into SQLite with tool_id, verdict, generated_at, sha256, latest-report selection, parse errors, and forbidden audit flag visibility without mutating source data."
+    },
+    {
+      "id": "ai_nas_objective_traceability_contract",
+      "script": "scripts/probes/ai_nas_objective_traceability_contract_probe.sh",
+      "mode": "readonly-objective-traceability-contract",
+      "inputSchema": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {}
+      },
+      "permissionLevel": "readonly-objective-traceability-report",
+      "writesFiles": true,
+      "requiresConfirmation": false,
+      "reportPathPolicy": "approvedOutputPrefixes only; writes Markdown/JSON objective traceability reports, never downloads, calls networks, restarts services, kills processes, deletes, moves, overwrites, or modifies Personal source files",
+      "approvedInputPrefixes": [
+        "/tmp/",
+        "/mnt/nas/openclaw/reports/ai_nas_mvp/",
+        "/root/.openclaw/workspace/reports/ai_nas_mvp/"
+      ],
+      "approvedOutputPrefixes": [
+        "/tmp/",
+        "/mnt/nas/openclaw/reports/ai_nas_mvp/",
+        "/root/.openclaw/workspace/reports/ai_nas_mvp/"
+      ],
+      "description": "Generate a read-only objective-to-evidence traceability matrix from the AI-NAS Copilot Appliance objective to current reports, limited areas, missing evidence, and explicit production blockers without mutating source data."
+    },
+    {
+      "id": "ai_nas_goal_completion_audit",
+      "script": "scripts/probes/ai_nas_goal_completion_audit_probe.sh",
+      "mode": "readonly-goal-completion-audit",
+      "inputSchema": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {}
+      },
+      "permissionLevel": "readonly-goal-completion-report",
+      "writesFiles": true,
+      "requiresConfirmation": false,
+      "reportPathPolicy": "approvedOutputPrefixes only; writes Markdown/JSON active-goal completion audit reports; no downloads, no network, no service restarts, no kills, no delete, no move, no overwrite, no Personal source mutation",
+      "approvedInputPrefixes": [
+        "/tmp/",
+        "/mnt/nas/openclaw/reports/ai_nas_mvp/",
+        "/root/.openclaw/workspace/reports/ai_nas_mvp/"
+      ],
+      "approvedOutputPrefixes": [
+        "/tmp/",
+        "/mnt/nas/openclaw/reports/ai_nas_mvp/",
+        "/root/.openclaw/workspace/reports/ai_nas_mvp/"
+      ],
+      "description": "Run the strict active-goal completion audit for NAS soak/gate evidence, Operator Portal demo readiness, and Dream7B interaction readiness without mutating source data or services."
+    },
+    {
+      "id": "ai_nas_goal_completion_finalizer",
+      "script": "scripts/probes/ai_nas_goal_completion_finalizer_probe.sh",
+      "mode": "readonly-goal-completion-finalizer",
+      "inputSchema": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {}
+      },
+      "permissionLevel": "readonly-goal-completion-finalizer-report",
+      "writesFiles": true,
+      "requiresConfirmation": false,
+      "reportPathPolicy": "approvedOutputPrefixes only; writes finalizer JSON/Markdown status and runs the strict goal completion audit only after watcher gate/runbook readiness; no downloads, no network, no service restarts, no kills, no delete, no move, no overwrite, no Personal source mutation",
+      "approvedInputPrefixes": [
+        "/tmp/",
+        "/mnt/nas/openclaw/reports/ai_nas_mvp/",
+        "/root/.openclaw/workspace/reports/ai_nas_mvp/"
+      ],
+      "approvedOutputPrefixes": [
+        "/tmp/",
+        "/mnt/nas/openclaw/reports/ai_nas_mvp/",
+        "/root/.openclaw/workspace/reports/ai_nas_mvp/"
+      ],
+      "description": "Wait for the NAS long-soak watcher to verify the fresh 21600-second soak and final gate/runbook, then run the strict goal completion audit and publish a latest finalizer status report."
+    },
+    {
+      "id": "ai_nas_search_evidence_contract",
+      "script": "scripts/probes/ai_nas_search_evidence_contract_probe.sh",
+      "mode": "bounded-search-evidence-contract-fixture",
+      "inputSchema": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {}
+      },
+      "permissionLevel": "bounded-fixture-search-contract-report",
+      "writesFiles": true,
+      "requiresConfirmation": false,
+      "reportPathPolicy": "approvedOutputPrefixes only; writes bounded fixture files, SQLite/FTS and image embedding rows, and Markdown/JSON search evidence contract reports; never modifies real Personal source files, never starts services, no real delete, no real move, no real overwrite",
+      "approvedInputPrefixes": [
+        "/tmp/",
+        "/mnt/nas/openclaw/reports/ai_nas_mvp/",
+        "/root/.openclaw/workspace/reports/ai_nas_mvp/"
+      ],
+      "approvedOutputPrefixes": [
+        "/tmp/",
+        "/mnt/nas/openclaw/reports/ai_nas_mvp/",
+        "/root/.openclaw/workspace/reports/ai_nas_mvp/"
+      ],
+      "description": "Run a bounded result-contract acceptance across SQLite/FTS text search, local hash embedding search, photo semantic search, folder RAG, mixed case packet, and user-facing case results; every accepted result must include path, reasons, evidence, confidence, and audit-safe grounding."
+    },
+    {
+      "id": "ai_nas_search_confidence_calibration_contract",
+      "script": "scripts/probes/ai_nas_search_confidence_calibration_contract_probe.sh",
+      "mode": "bounded-search-confidence-calibration-fixture",
+      "inputSchema": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {}
+      },
+      "permissionLevel": "bounded-fixture-search-calibration-report",
+      "writesFiles": true,
+      "requiresConfirmation": false,
+      "reportPathPolicy": "approvedOutputPrefixes only; writes isolated fixture files, SQLite/FTS/vector/image embedding rows, and Markdown/JSON search confidence calibration reports; never modifies real Personal source files, no downloads, no network, no service restarts, no kills, no delete, no move, no overwrite",
+      "approvedInputPrefixes": [
+        "/tmp/",
+        "/mnt/nas/openclaw/reports/ai_nas_mvp/",
+        "/root/.openclaw/workspace/reports/ai_nas_mvp/"
+      ],
+      "approvedOutputPrefixes": [
+        "/tmp/",
+        "/mnt/nas/openclaw/reports/ai_nas_mvp/",
+        "/root/.openclaw/workspace/reports/ai_nas_mvp/"
+      ],
+      "description": "Validate search confidence calibration so strong contract/invoice queries receive grounded higher confidence, unsupported queries do not become overconfident, and child/person photo queries remain metadata-only with explicit limitations."
+    },
+    {
+      "id": "ai_nas_multimodal_intent_routing_contract",
+      "script": "scripts/probes/ai_nas_multimodal_intent_routing_contract_probe.sh",
+      "mode": "bounded-multimodal-intent-routing-fixture",
+      "inputSchema": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {}
+      },
+      "permissionLevel": "bounded-fixture-multimodal-routing-report",
+      "writesFiles": true,
+      "requiresConfirmation": false,
+      "reportPathPolicy": "approvedOutputPrefixes only; writes isolated fixture files, SQLite/FTS/vector/image embedding rows, and Markdown/JSON multimodal intent routing reports; never modifies real Personal source files, no downloads, no network, no service restarts, no kills, no delete, no move, no overwrite",
+      "approvedInputPrefixes": [
+        "/tmp/",
+        "/mnt/nas/openclaw/reports/ai_nas_mvp/",
+        "/root/.openclaw/workspace/reports/ai_nas_mvp/"
+      ],
+      "approvedOutputPrefixes": [
+        "/tmp/",
+        "/mnt/nas/openclaw/reports/ai_nas_mvp/",
+        "/root/.openclaw/workspace/reports/ai_nas_mvp/"
+      ],
+      "description": "Validate the target AI-NAS query decomposes into contract, invoice, receipt, chat, screenshot, payment/date/amount, report, approval, and audit intents, then routes through SQLite/FTS, local embedding, photo semantic search, folder RAG, case packet, and human-confirmed approval suggestions."
+    },
+    {
+      "id": "ai_nas_action_approval_manifest",
+      "script": "scripts/probes/ai_nas_action_approval_manifest_probe.sh",
+      "mode": "bounded-personal-dry-run-action-approval-manifest",
+      "inputSchema": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "query": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 240,
+            "description": "Optional single-line query used to derive evidence-backed copy-only approval actions."
+          }
+        }
+      },
+      "permissionLevel": "bounded-readwrite-report-index",
+      "writesFiles": true,
+      "requiresConfirmation": false,
+      "reportPathPolicy": "approvedOutputPrefixes only; writes dry-run Markdown/JSON approval manifests and may refresh SQLite index/image_embeddings rows, never modifies Personal source files; proposed actions require human confirmation and are copy-only with no delete, no move, no overwrite",
+      "approvedInputPrefixes": [
+        "/mnt/nas/openclaw/Personal/",
+        "/mnt/nas/openclaw/reports/ai_nas_mvp/",
+        "/root/.openclaw/workspace/reports/ai_nas_mvp/"
+      ],
+      "approvedOutputPrefixes": [
+        "/tmp/",
+        "/mnt/nas/openclaw/reports/ai_nas_mvp/",
+        "/root/.openclaw/workspace/reports/ai_nas_mvp/"
+      ],
+      "description": "Generate a dry-run action approval manifest from grounded case evidence, with exact action IDs, source hashes, target paths, confirmation phrase, preconditions, rollback plan, blocked destructive actions, and audit metadata; no file copy, delete, move, rename, or overwrite is executed."
+    },
+    {
+      "id": "ai_nas_action_manifest_integrity",
+      "script": "scripts/probes/ai_nas_action_manifest_integrity_probe.sh",
+      "mode": "bounded-action-manifest-integrity-fixture",
+      "inputSchema": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {}
+      },
+      "permissionLevel": "bounded-fixture-governance-report",
+      "writesFiles": true,
+      "requiresConfirmation": false,
+      "reportPathPolicy": "approvedOutputPrefixes only; writes isolated fixture files and Markdown/JSON manifest integrity reports; never modifies real Personal source files, never copies files, deletes, moves, overwrites, starts services, or executes destructive actions",
+      "approvedInputPrefixes": [
+        "/tmp/",
+        "/mnt/nas/openclaw/reports/ai_nas_mvp/",
+        "/root/.openclaw/workspace/reports/ai_nas_mvp/"
+      ],
+      "approvedOutputPrefixes": [
+        "/tmp/",
+        "/mnt/nas/openclaw/reports/ai_nas_mvp/",
+        "/root/.openclaw/workspace/reports/ai_nas_mvp/"
+      ],
+      "description": "Validate executor-side approval manifest integrity checks by accepting a valid signed copy-only manifest and refusing tampered target paths, stale action IDs, missing source hashes, and approval phrase mismatches without executing file operations."
+    },
+    {
+      "id": "ai_nas_operator_approval_inbox",
+      "script": "scripts/probes/ai_nas_operator_approval_inbox_probe.sh",
+      "mode": "bounded-operator-approval-inbox-fixture",
+      "inputSchema": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {}
+      },
+      "permissionLevel": "bounded-fixture-approval-inbox-report",
+      "writesFiles": true,
+      "requiresConfirmation": false,
+      "reportPathPolicy": "approvedOutputPrefixes only; writes bounded fixture approval manifests plus Markdown/JSON approval inbox reports; never modifies real Personal source files and never executes copy, delete, move, overwrite, rollback, network, or service actions",
+      "approvedInputPrefixes": [
+        "/tmp/",
+        "/mnt/nas/openclaw/reports/ai_nas_mvp/",
+        "/root/.openclaw/workspace/reports/ai_nas_mvp/"
+      ],
+      "approvedOutputPrefixes": [
+        "/tmp/",
+        "/mnt/nas/openclaw/reports/ai_nas_mvp/",
+        "/root/.openclaw/workspace/reports/ai_nas_mvp/"
+      ],
+      "description": "Build a report-only operator approval inbox from AI-NAS approval manifests, classifying pending, ready-for-review, and needs-repair packets with exact approval phrases, source-hash completeness, rollback-plan completeness, blocked destructive actions, decision options, and audit status."
+    },
+    {
+      "id": "ai_nas_action_execute_copy",
+      "script": "scripts/probes/ai_nas_action_execute_copy_probe.sh",
+      "mode": "bounded-personal-approved-copy-execution",
+      "inputSchema": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "manifest_path": {
+            "type": "string",
+            "maxLength": 260,
+            "description": "Path to an ai_nas_action_approval_manifest JSON file under approved report directories."
+          },
+          "approval_phrase": {
+            "type": "string",
+            "maxLength": 80,
+            "description": "Exact approval phrase from the manifest, for example APPROVE apm-0123456789abcdef."
+          }
+        }
+      },
+      "permissionLevel": "bounded-approved-copy-write",
+      "writesFiles": true,
+      "requiresConfirmation": true,
+      "reportPathPolicy": "approvedOutputPrefixes only; after exact approval phrase, copies files only under Personal/Collections and writes execution/rollback Markdown/JSON manifests; no delete, no move, no overwrite",
+      "approvedInputPrefixes": [
+        "/tmp/",
+        "/mnt/nas/openclaw/reports/ai_nas_mvp/",
+        "/root/.openclaw/workspace/reports/ai_nas_mvp/",
+        "/mnt/nas/openclaw/Personal/",
+        "/root/.openclaw/workspace/tmp/ai_nas_local_personal/"
+      ],
+      "approvedOutputPrefixes": [
+        "/tmp/",
+        "/mnt/nas/openclaw/Personal/Collections/",
+        "/root/.openclaw/workspace/tmp/ai_nas_local_personal/Collections/",
+        "/mnt/nas/openclaw/reports/ai_nas_mvp/",
+        "/root/.openclaw/workspace/reports/ai_nas_mvp/"
+      ],
+      "description": "Execute only approved copy actions from an AI-NAS approval manifest after exact human approval phrase validation, source SHA256 re-check, target non-existence check, and Personal/Collections path confinement; writes execution and rollback manifests and never deletes, moves, renames, or overwrites source files."
+    },
+    {
+      "id": "ai_nas_action_rollback_copy",
+      "script": "scripts/probes/ai_nas_action_rollback_copy_probe.sh",
+      "mode": "bounded-personal-approved-copy-rollback",
+      "inputSchema": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "rollback_manifest_path": {
+            "type": "string",
+            "maxLength": 260,
+            "description": "Path to an ai_nas_action_execute_copy rollback_manifest.json file under approved report directories."
+          },
+          "rollback_phrase": {
+            "type": "string",
+            "maxLength": 80,
+            "description": "Exact rollback phrase derived from the manifest id, for example ROLLBACK apm-0123456789abcdef."
+          }
+        }
+      },
+      "permissionLevel": "bounded-approved-copy-rollback",
+      "writesFiles": true,
+      "requiresConfirmation": true,
+      "reportPathPolicy": "approvedOutputPrefixes only; after exact rollback phrase, removes only copied target files listed in rollback_manifest.json after target SHA256 verification; never touches source files, never moves, never overwrites, and never recursively deletes directories",
+      "approvedInputPrefixes": [
+        "/tmp/",
+        "/mnt/nas/openclaw/reports/ai_nas_mvp/",
+        "/root/.openclaw/workspace/reports/ai_nas_mvp/",
+        "/mnt/nas/openclaw/Personal/Collections/",
+        "/root/.openclaw/workspace/tmp/ai_nas_local_personal/Collections/"
+      ],
+      "approvedOutputPrefixes": [
+        "/tmp/",
+        "/mnt/nas/openclaw/Personal/Collections/",
+        "/root/.openclaw/workspace/tmp/ai_nas_local_personal/Collections/",
+        "/mnt/nas/openclaw/reports/ai_nas_mvp/",
+        "/root/.openclaw/workspace/reports/ai_nas_mvp/"
+      ],
+      "description": "Rollback only previously approved AI-NAS copy actions from an execution rollback manifest after exact human rollback phrase validation and target SHA256 re-check; removes copied target files under Personal/Collections and writes rollback execution reports without deleting sources, moving files, overwriting files, or removing directories."
+    },
+    {
+      "id": "ai_nas_destructive_action_governance",
+      "script": "scripts/probes/ai_nas_destructive_action_governance_probe.sh",
+      "mode": "bounded-destructive-action-governance-fixture",
+      "inputSchema": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {}
+      },
+      "permissionLevel": "bounded-fixture-action-governance-report",
+      "writesFiles": true,
+      "requiresConfirmation": false,
+      "reportPathPolicy": "approvedOutputPrefixes only; non-destructive governance report; writes an isolated fixture source file and Markdown/JSON governance reports; verifies destructive actions are blocked or refused; never modifies real Personal source files, no delete, no move, no overwrite, no copy execution",
+      "approvedInputPrefixes": [
+        "/tmp/",
+        "/mnt/nas/openclaw/reports/ai_nas_mvp/",
+        "/root/.openclaw/workspace/reports/ai_nas_mvp/"
+      ],
+      "approvedOutputPrefixes": [
+        "/tmp/",
+        "/mnt/nas/openclaw/reports/ai_nas_mvp/",
+        "/root/.openclaw/workspace/reports/ai_nas_mvp/"
+      ],
+      "description": "Run a bounded non-destructive destructive-action governance acceptance proving move/delete/overwrite/rename are blocked as executable actions, copy actions require human confirmation and rollback plans, and execution/rollback layers refuse destructive or out-of-scope bypass attempts."
+    },
+    {
+      "id": "ai_nas_audit_trail_contract",
+      "script": "scripts/probes/ai_nas_audit_trail_contract_probe.sh",
+      "mode": "bounded-audit-trail-contract-fixture",
+      "inputSchema": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {}
+      },
+      "permissionLevel": "bounded-fixture-audit-report",
+      "writesFiles": true,
+      "requiresConfirmation": false,
+      "reportPathPolicy": "approvedOutputPrefixes only; writes isolated fixture files, hash-chained JSONL/SQLite audit ledger, and Markdown/JSON audit contract reports; may perform fixture-only copy and rollback under the probe-owned Personal/Collections directory; never modifies real Personal source files, no real delete, no real move, no real overwrite, no network call, no service start",
+      "approvedInputPrefixes": [
+        "/tmp/",
+        "/mnt/nas/openclaw/reports/ai_nas_mvp/",
+        "/root/.openclaw/workspace/reports/ai_nas_mvp/"
+      ],
+      "approvedOutputPrefixes": [
+        "/tmp/",
+        "/mnt/nas/openclaw/reports/ai_nas_mvp/",
+        "/root/.openclaw/workspace/reports/ai_nas_mvp/"
+      ],
+      "description": "Validate a hash-chained cross-step audit trail for query, index refresh, case packet, approval manifest, blocked destructive actions, copy execution, rollback manifest, rollback execution, and final report over an isolated fixture."
+    },
+    {
+      "id": "ai_nas_permission_aware_search",
+      "script": "scripts/probes/ai_nas_permission_aware_search_probe.sh",
+      "mode": "bounded-personal-permission-aware-search",
+      "inputSchema": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "query": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 240,
+            "description": "Optional single-line search query."
+          },
+          "principal": {
+            "type": "string",
+            "enum": [
+              "admin",
+              "family_member",
+              "accountant",
+              "guest",
+              "child"
+            ],
+            "description": "Optional local policy principal. Denied results are redacted."
+          }
+        }
+      },
+      "permissionLevel": "bounded-readwrite-report-index",
+      "writesFiles": true,
+      "requiresConfirmation": false,
+      "reportPathPolicy": "approvedOutputPrefixes only; writes Markdown/JSON permission-aware search reports and may refresh SQLite index/image_embeddings rows, never modifies Personal source files; denied results are redacted",
+      "approvedInputPrefixes": [
+        "/mnt/nas/openclaw/Personal/",
+        "/mnt/nas/openclaw/reports/ai_nas_mvp/",
+        "/root/.openclaw/workspace/reports/ai_nas_mvp/"
+      ],
+      "approvedOutputPrefixes": [
+        "/tmp/",
+        "/mnt/nas/openclaw/reports/ai_nas_mvp/",
+        "/root/.openclaw/workspace/reports/ai_nas_mvp/"
+      ],
+      "description": "Run bounded Personal search with an application-layer role/path/sensitivity policy overlay, returning visible evidence only for allowed files and redacted denied-result IDs for files the principal cannot view; no delete, move, overwrite, or source modification is executed."
+    },
+    {
+      "id": "ai_nas_acl_mapping_readiness",
+      "script": "scripts/probes/ai_nas_acl_mapping_readiness_probe.sh",
+      "mode": "readonly-nas-acl-user-mapping-readiness",
+      "inputSchema": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {}
+      },
+      "permissionLevel": "readonly",
+      "writesFiles": true,
+      "requiresConfirmation": false,
+      "reportPathPolicy": "approvedOutputPrefixes only; writes Markdown/JSON ACL readiness reports, samples file metadata read-only, never changes NAS ACLs, permissions, users, groups, or Personal source files",
+      "approvedInputPrefixes": [
+        "/mnt/nas/openclaw/Personal/",
+        "/mnt/nas/openclaw/config/",
+        "/root/.openclaw/workspace/config/",
+        "/mnt/nas/openclaw/reports/ai_nas_mvp/",
+        "/root/.openclaw/workspace/reports/ai_nas_mvp/"
+      ],
+      "approvedOutputPrefixes": [
+        "/tmp/",
+        "/mnt/nas/openclaw/reports/ai_nas_mvp/",
+        "/root/.openclaw/workspace/reports/ai_nas_mvp/"
+      ],
+      "description": "Report whether production NAS ACL/user mapping is ready to replace the local permission overlay by checking Personal root visibility, read-only owner/group/mode samples, POSIX ACL and identity tools, SMB/user mapping tools, and principal mapping config blockers."
+    },
+    {
+      "id": "ai_nas_evidence_report",
+      "script": "scripts/probes/ai_nas_evidence_report_probe.sh",
+      "mode": "bounded-personal-readonly-evidence-report",
+      "inputSchema": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "query": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 240
+          }
+        }
+      },
+      "permissionLevel": "readonly",
+      "writesFiles": true,
+      "requiresConfirmation": false,
+      "reportPathPolicy": "approvedOutputPrefixes only; writes Markdown/JSON evidence reports and copy suggestions, never modifies Personal source files",
+      "approvedInputPrefixes": [
+        "/mnt/nas/openclaw/Personal/",
+        "/mnt/nas/openclaw/reports/ai_nas_mvp/",
+        "/root/.openclaw/workspace/reports/ai_nas_mvp/"
+      ],
+      "approvedOutputPrefixes": [
+        "/tmp/",
+        "/mnt/nas/openclaw/reports/ai_nas_mvp/",
+        "/root/.openclaw/workspace/reports/ai_nas_mvp/"
+      ],
+      "description": "Generate a one-click auditable evidence report from the AI-NAS search index with reasons, snippets, dates, amounts, payment nodes, original paths, confidence, and copy-only organizing suggestions. Optional query is passed as a single argv value only for this report tool."
+    },
+    {
+      "id": "ai_nas_embedding_search",
+      "script": "scripts/probes/ai_nas_embedding_search_probe.sh",
+      "mode": "bounded-personal-readonly-local-embedding-search",
+      "inputSchema": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "query": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 240
+          }
+        }
+      },
+      "permissionLevel": "bounded-readwrite-report-index",
+      "writesFiles": true,
+      "requiresConfirmation": false,
+      "reportPathPolicy": "approvedOutputPrefixes only; writes embedding search Markdown/JSON reports and refreshes SQLite index/embedding rows, never modifies Personal source files",
+      "approvedInputPrefixes": [
+        "/mnt/nas/openclaw/Personal/",
+        "/mnt/nas/openclaw/reports/ai_nas_mvp/",
+        "/root/.openclaw/workspace/reports/ai_nas_mvp/"
+      ],
+      "approvedOutputPrefixes": [
+        "/tmp/",
+        "/mnt/nas/openclaw/reports/ai_nas_mvp/",
+        "/root/.openclaw/workspace/reports/ai_nas_mvp/"
+      ],
+      "description": "Run the local_hash_embedding_v1 lightweight vector-search interface over the AI-NAS SQLite index, returning cosine similarity, reasons, snippets, confidence, and explicit limitations before production CLIP or transformer embeddings are installed. Optional query is passed as a single argv value only for this search tool."
+    },
+    {
+      "id": "ai_nas_embedding_backend_readiness",
+      "script": "scripts/probes/ai_nas_embedding_backend_readiness_probe.sh",
+      "mode": "bounded-production-embedding-backend-readiness",
+      "inputSchema": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {}
+      },
+      "permissionLevel": "bounded-readwrite-report-index",
+      "writesFiles": true,
+      "requiresConfirmation": false,
+      "reportPathPolicy": "approvedOutputPrefixes only; writes Markdown/JSON embedding backend readiness reports and may refresh SQLite index rows; never downloads models, performs network calls, or modifies Personal source files",
+      "approvedInputPrefixes": [
+        "/mnt/nas/openclaw/Personal/",
+        "/mnt/nas/openclaw/reports/ai_nas_mvp/",
+        "/root/.openclaw/workspace/reports/ai_nas_mvp/",
+        "/mnt/nas/openclaw/models/",
+        "/root/.openclaw/workspace/models/",
+        "/home/sunrise/models/"
+      ],
+      "approvedOutputPrefixes": [
+        "/tmp/",
+        "/mnt/nas/openclaw/reports/ai_nas_mvp/",
+        "/root/.openclaw/workspace/reports/ai_nas_mvp/"
+      ],
+      "description": "Check production text and image embedding backend readiness for local sentence-transformer and CLIP/open_clip/transformers runtimes, configured local model directories, optional local-only smoke tests, current SQLite vector rows, and migration blockers without downloading models or calling external networks."
+    },
+    {
+      "id": "ai_nas_embedding_runtime_contract",
+      "script": "scripts/probes/ai_nas_embedding_runtime_contract_probe.sh",
+      "mode": "bounded-production-embedding-runtime-contract",
+      "inputSchema": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {}
+      },
+      "permissionLevel": "readonly",
+      "writesFiles": true,
+      "requiresConfirmation": false,
+      "reportPathPolicy": "approvedOutputPrefixes only; writes isolated image fixture plus Markdown/JSON embedding runtime contract report under the AI NAS report root; never downloads models, performs network calls, starts services, modifies Personal source files, deletes, moves, overwrites, or performs face recognition",
+      "approvedInputPrefixes": [
+        "/mnt/nas/openclaw/reports/ai_nas_mvp/",
+        "/root/.openclaw/workspace/reports/ai_nas_mvp/",
+        "/mnt/nas/openclaw/models/",
+        "/root/.openclaw/workspace/models/",
+        "/home/sunrise/models/"
+      ],
+      "approvedOutputPrefixes": [
+        "/tmp/",
+        "/mnt/nas/openclaw/reports/ai_nas_mvp/",
+        "/root/.openclaw/workspace/reports/ai_nas_mvp/"
+      ],
+      "description": "Report the local-only production embedding and CLIP runtime contract: module availability, local fallback vector smoke, sentence-transformer smoke, CLIP smoke, model directory requirements, missing operator steps, and audit policy without downloads, network calls, service starts, Personal source mutation, deletion, move, overwrite, or face recognition."
+    },
+    {
+      "id": "ai_nas_model_service_resilience",
+      "script": "scripts/probes/ai_nas_model_service_resilience_probe.sh",
+      "mode": "readonly-model-service-resilience-preflight",
+      "inputSchema": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {}
+      },
+      "permissionLevel": "readonly",
+      "writesFiles": true,
+      "requiresConfirmation": false,
+      "reportPathPolicy": "approvedOutputPrefixes only; writes model service resilience Markdown/JSON reports, never restarts services or kills processes",
+      "approvedInputPrefixes": [
+        "/mnt/nas/openclaw/reports/ai_nas_mvp/",
+        "/root/.openclaw/workspace/reports/ai_nas_mvp/",
+        "/root/.config/systemd/user/",
+        "/etc/systemd/system/"
+      ],
+      "approvedOutputPrefixes": [
+        "/tmp/",
+        "/mnt/nas/openclaw/reports/ai_nas_mvp/",
+        "/root/.openclaw/workspace/reports/ai_nas_mvp/"
+      ],
+      "description": "Read-only preflight for Dream7B/OpenClaw service resilience: checks health endpoints, systemd active/enabled state, readable Restart policies, gaps, and manual recovery-drill steps without mutating services."
+    },
+    {
+      "id": "ai_nas_model_service_recovery_drill",
+      "script": "scripts/probes/ai_nas_model_service_recovery_drill_probe.sh",
+      "mode": "bounded-local-model-service-recovery-drill",
+      "inputSchema": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {}
+      },
+      "permissionLevel": "bounded-local-process-drill-report",
+      "writesFiles": true,
+      "requiresConfirmation": false,
+      "reportPathPolicy": "approvedOutputPrefixes only; starts and kills only an owned child mock health service created by this probe, writes Markdown/JSON recovery reports, and never kills or restarts real Dream/OpenClaw/systemd services",
+      "approvedInputPrefixes": [
+        "/mnt/nas/openclaw/reports/ai_nas_mvp/",
+        "/root/.openclaw/workspace/reports/ai_nas_mvp/"
+      ],
+      "approvedOutputPrefixes": [
+        "/tmp/",
+        "/mnt/nas/openclaw/reports/ai_nas_mvp/",
+        "/root/.openclaw/workspace/reports/ai_nas_mvp/"
+      ],
+      "description": "Run a bounded local crash-recovery drill by supervising a mock health child process owned by the probe, killing that child, restarting it, measuring recovery P50/P95/P99, and reporting the remaining production gap without touching real model, OpenClaw, or systemd services."
+    },
+    {
+      "id": "ai_nas_model_service_recovery_manifest",
+      "script": "scripts/probes/ai_nas_model_service_recovery_manifest_probe.sh",
+      "mode": "readonly-model-service-recovery-approval-manifest",
+      "inputSchema": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {}
+      },
+      "permissionLevel": "readonly-recovery-approval-report",
+      "writesFiles": true,
+      "requiresConfirmation": false,
+      "reportPathPolicy": "approvedOutputPrefixes only; writes Markdown/JSON recovery approval manifests; no service restart, no process kill, no systemd mutation, no delete, no move, no overwrite",
+      "approvedInputPrefixes": [
+        "/tmp/",
+        "/mnt/nas/openclaw/reports/ai_nas_mvp/",
+        "/root/.openclaw/workspace/reports/ai_nas_mvp/"
+      ],
+      "approvedOutputPrefixes": [
+        "/tmp/",
+        "/mnt/nas/openclaw/reports/ai_nas_mvp/",
+        "/root/.openclaw/workspace/reports/ai_nas_mvp/"
+      ],
+      "description": "Generate a read-only model/OpenClaw service recovery approval manifest with preflight health evidence, exact approval phrase, proposed service-scoped restart actions, blocked unsafe actions, post-checks, rollback plan, and audit contract without executing service changes."
+    },
+    {
+      "id": "ai_nas_model_service_real_recovery_drill",
+      "script": "scripts/probes/ai_nas_model_service_real_recovery_drill_probe.sh",
+      "mode": "operator-approved-real-service-recovery-drill",
+      "inputSchema": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "manifest_path": {
+            "type": "string",
+            "maxLength": 260
+          },
+          "approval_phrase": {
+            "type": "string",
+            "maxLength": 80
+          },
+          "execution_mode": {
+            "type": "string",
+            "maxLength": 16
+          }
+        }
+      },
+      "permissionLevel": "operator-confirmed-service-restart",
+      "writesFiles": true,
+      "requiresConfirmation": true,
+      "reportPathPolicy": "approvedOutputPrefixes only; writes Markdown/JSON real recovery drill reports; may restart only approved systemd user services when manifest_path, exact approval_phrase, and execution_mode=execute are provided; never kills PIDs, deletes, moves, or overwrites data",
+      "approvedInputPrefixes": [
+        "/tmp/",
+        "/mnt/nas/openclaw/reports/ai_nas_mvp/",
+        "/root/.openclaw/workspace/reports/ai_nas_mvp/"
+      ],
+      "approvedOutputPrefixes": [
+        "/tmp/",
+        "/mnt/nas/openclaw/reports/ai_nas_mvp/",
+        "/root/.openclaw/workspace/reports/ai_nas_mvp/"
+      ],
+      "description": "Execute or dry-check the operator-approved real Dream/OpenClaw model service recovery drill from a prior recovery manifest; restart is service-scoped, approval-gated, and explicitly records that PID kill is out of scope."
+    },
+    {
+      "id": "ai_nas_ocr_runtime_contract",
+      "script": "scripts/probes/ai_nas_ocr_runtime_contract_probe.sh",
+      "mode": "bounded-ocr-runtime-contract-fixture",
+      "inputSchema": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {}
+      },
+      "permissionLevel": "bounded-fixture-ocr-runtime-report",
+      "writesFiles": true,
+      "requiresConfirmation": false,
+      "reportPathPolicy": "approvedOutputPrefixes only; writes isolated text-layer PDF and scanned-image fixtures plus Markdown/JSON OCR runtime contract reports; never modifies real Personal source files, never installs runtimes, no downloads, no network calls, no delete, no move, no overwrite",
+      "approvedInputPrefixes": [
+        "/tmp/",
+        "/mnt/nas/openclaw/reports/ai_nas_mvp/",
+        "/root/.openclaw/workspace/reports/ai_nas_mvp/"
+      ],
+      "approvedOutputPrefixes": [
+        "/tmp/",
+        "/mnt/nas/openclaw/reports/ai_nas_mvp/",
+        "/root/.openclaw/workspace/reports/ai_nas_mvp/"
+      ],
+      "description": "Generate a local OCR runtime contract with PDF text-layer smoke, scanned-image detection smoke, scanned-image OCR smoke when tesseract/pytesseract are available, explicit missing requirements, and no invented content."
+    },
+    {
+      "id": "ai_nas_ocr_readiness",
+      "script": "scripts/probes/ai_nas_ocr_readiness_probe.sh",
+      "mode": "bounded-personal-readonly-ocr-readiness",
+      "inputSchema": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {}
+      },
+      "permissionLevel": "readonly",
+      "writesFiles": true,
+      "requiresConfirmation": false,
+      "reportPathPolicy": "approvedOutputPrefixes only; writes OCR readiness Markdown/JSON reports, never installs runtimes or modifies source files",
+      "approvedInputPrefixes": [
+        "/mnt/nas/openclaw/Personal/",
+        "/mnt/nas/openclaw/reports/ai_nas_mvp/",
+        "/root/.openclaw/workspace/reports/ai_nas_mvp/"
+      ],
+      "approvedOutputPrefixes": [
+        "/tmp/",
+        "/mnt/nas/openclaw/reports/ai_nas_mvp/",
+        "/root/.openclaw/workspace/reports/ai_nas_mvp/"
+      ],
+      "description": "Report local OCR engine readiness, scanned-document detection readiness, indexed OCR-required files, and extraction failures without installing software or inventing content."
+    },
+    {
+      "id": "ai_nas_ocr_extract",
+      "script": "scripts/probes/ai_nas_ocr_extract_probe.sh",
+      "mode": "bounded-personal-ocr-extract",
+      "inputSchema": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {}
+      },
+      "permissionLevel": "bounded-readwrite-report-index",
+      "writesFiles": true,
+      "requiresConfirmation": false,
+      "reportPathPolicy": "approvedOutputPrefixes only; writes OCR extraction Markdown/JSON reports and SQLite ocr_results rows, never modifies Personal source files",
+      "approvedInputPrefixes": [
+        "/mnt/nas/openclaw/Personal/",
+        "/mnt/nas/openclaw/reports/ai_nas_mvp/",
+        "/root/.openclaw/workspace/reports/ai_nas_mvp/"
+      ],
+      "approvedOutputPrefixes": [
+        "/tmp/",
+        "/mnt/nas/openclaw/reports/ai_nas_mvp/",
+        "/root/.openclaw/workspace/reports/ai_nas_mvp/"
+      ],
+      "description": "Attempt bounded OCR extraction for indexed scanned PDFs and invoice/screenshot images when a local OCR runtime exists; otherwise record explicit blocked_missing_ocr_engine status without inventing content."
+    },
+    {
+      "id": "ai_nas_document_pipeline_acceptance",
+      "script": "scripts/probes/ai_nas_document_pipeline_acceptance_probe.sh",
+      "mode": "bounded-document-pipeline-acceptance-fixture",
+      "inputSchema": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {}
+      },
+      "permissionLevel": "bounded-fixture-document-report-index",
+      "writesFiles": true,
+      "requiresConfirmation": false,
+      "reportPathPolicy": "approvedOutputPrefixes only; writes bounded fixture documents/PDFs, SQLite index/OCR rows, and Markdown/JSON acceptance reports; never modifies real Personal source files and never invents OCR/PDF content",
+      "approvedInputPrefixes": [
+        "/tmp/",
+        "/mnt/nas/openclaw/reports/ai_nas_mvp/",
+        "/root/.openclaw/workspace/reports/ai_nas_mvp/"
+      ],
+      "approvedOutputPrefixes": [
+        "/tmp/",
+        "/mnt/nas/openclaw/reports/ai_nas_mvp/",
+        "/root/.openclaw/workspace/reports/ai_nas_mvp/"
+      ],
+      "description": "Run a bounded document pipeline acceptance suite for PDF text extraction, OCR-required scanned PDFs, contract/invoice/paper/manual classification, folder-level evidence-grounded RAG, explicit no-answer handling, and no invented content."
+    },
+    {
+      "id": "ai_nas_folder_summary",
+      "script": "scripts/probes/ai_nas_folder_summary_probe.sh",
+      "mode": "bounded-personal-readonly-summary",
+      "inputSchema": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {}
+      },
+      "permissionLevel": "readonly",
+      "writesFiles": true,
+      "requiresConfirmation": false,
+      "reportPathPolicy": "approvedOutputPrefixes only; writes Markdown/JSON folder summary reports",
+      "approvedInputPrefixes": [
+        "/mnt/nas/openclaw/Personal/",
+        "/mnt/nas/openclaw/reports/ai_nas_mvp/",
+        "/root/.openclaw/workspace/reports/ai_nas_mvp/"
+      ],
+      "approvedOutputPrefixes": [
+        "/tmp/",
+        "/mnt/nas/openclaw/reports/ai_nas_mvp/",
+        "/root/.openclaw/workspace/reports/ai_nas_mvp/"
+      ],
+      "description": "Generate a fixed Documents folder summary and question-answer report from extracted file metadata and summaries."
+    },
+    {
+      "id": "ai_nas_folder_rag",
+      "script": "scripts/probes/ai_nas_folder_rag_probe.sh",
+      "mode": "bounded-personal-readonly-folder-rag",
+      "inputSchema": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "folder": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 160
+          },
+          "query": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 240
+          }
+        }
+      },
+      "permissionLevel": "readonly",
+      "writesFiles": true,
+      "requiresConfirmation": false,
+      "reportPathPolicy": "approvedOutputPrefixes only; writes folder-scoped RAG Markdown/JSON reports, never modifies Personal source files",
+      "approvedInputPrefixes": [
+        "/mnt/nas/openclaw/Personal/",
+        "/mnt/nas/openclaw/reports/ai_nas_mvp/",
+        "/root/.openclaw/workspace/reports/ai_nas_mvp/"
+      ],
+      "approvedOutputPrefixes": [
+        "/tmp/",
+        "/mnt/nas/openclaw/reports/ai_nas_mvp/",
+        "/root/.openclaw/workspace/reports/ai_nas_mvp/"
+      ],
+      "description": "Answer a question over one Personal folder using only indexed folder-scoped evidence, with reasons, snippets, payment/date/amount nodes, confidence, parse failures, and explicit no-answer gaps."
+    },
+    {
+      "id": "ai_nas_folder_rag_grounding_contract",
+      "script": "scripts/probes/ai_nas_folder_rag_grounding_contract_probe.sh",
+      "mode": "bounded-folder-rag-grounding-fixture",
+      "inputSchema": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {}
+      },
+      "permissionLevel": "bounded-fixture-folder-rag-grounding-report",
+      "writesFiles": true,
+      "requiresConfirmation": false,
+      "reportPathPolicy": "approvedOutputPrefixes only; writes isolated fixture documents, SQLite/FTS rows, and Markdown/JSON folder-RAG grounding reports; never modifies real Personal source files, no downloads, no network, no service restarts, no kills, no delete, no move, no overwrite",
+      "approvedInputPrefixes": [
+        "/tmp/",
+        "/mnt/nas/openclaw/reports/ai_nas_mvp/",
+        "/root/.openclaw/workspace/reports/ai_nas_mvp/"
+      ],
+      "approvedOutputPrefixes": [
+        "/tmp/",
+        "/mnt/nas/openclaw/reports/ai_nas_mvp/",
+        "/root/.openclaw/workspace/reports/ai_nas_mvp/"
+      ],
+      "description": "Validate folder-level RAG grounding so payment/date/amount nodes map back to matched files with reasons, evidence, confidence, parse failures remain explicit, and unsupported identifier questions return no-answer instead of fabricated content."
+    },
+    {
+      "id": "ai_nas_duplicate_report",
+      "script": "scripts/probes/ai_nas_duplicate_report_probe.sh",
+      "mode": "bounded-personal-readonly-duplicate-report",
+      "inputSchema": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {}
+      },
+      "permissionLevel": "readonly",
+      "writesFiles": true,
+      "requiresConfirmation": false,
+      "reportPathPolicy": "approvedOutputPrefixes only; writes cleanup suggestions, never executes delete/move",
+      "approvedInputPrefixes": [
+        "/mnt/nas/openclaw/Personal/",
+        "/mnt/nas/openclaw/reports/ai_nas_mvp/",
+        "/root/.openclaw/workspace/reports/ai_nas_mvp/"
+      ],
+      "approvedOutputPrefixes": [
+        "/tmp/",
+        "/mnt/nas/openclaw/reports/ai_nas_mvp/",
+        "/root/.openclaw/workspace/reports/ai_nas_mvp/"
+      ],
+      "description": "Detect SHA256 duplicate groups and write cleanup suggestions that require human confirmation; never deletes or moves files."
+    },
+    {
+      "id": "ai_nas_photo_similarity",
+      "script": "scripts/probes/ai_nas_photo_similarity_probe.sh",
+      "mode": "bounded-personal-readonly-photo-similarity",
+      "inputSchema": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {}
+      },
+      "permissionLevel": "readonly",
+      "writesFiles": true,
+      "requiresConfirmation": false,
+      "reportPathPolicy": "approvedOutputPrefixes only; writes pHash similarity Markdown/JSON reports, never modifies photos",
+      "approvedInputPrefixes": [
+        "/mnt/nas/openclaw/Personal/",
+        "/mnt/nas/openclaw/reports/ai_nas_mvp/",
+        "/root/.openclaw/workspace/reports/ai_nas_mvp/"
+      ],
+      "approvedOutputPrefixes": [
+        "/tmp/",
+        "/mnt/nas/openclaw/reports/ai_nas_mvp/",
+        "/root/.openclaw/workspace/reports/ai_nas_mvp/"
+      ],
+      "description": "Group similar Personal photos using local pHash metadata and write an auditable report without deleting, moving, or renaming files."
+    },
+    {
+      "id": "ai_nas_image_embedding_extract",
+      "script": "scripts/probes/ai_nas_image_embedding_extract_probe.sh",
+      "mode": "bounded-personal-image-embedding-extract",
+      "inputSchema": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {}
+      },
+      "permissionLevel": "bounded-readwrite-report-index",
+      "writesFiles": true,
+      "requiresConfirmation": false,
+      "reportPathPolicy": "approvedOutputPrefixes only; writes image embedding Markdown/JSON reports and SQLite image_embeddings rows, never modifies Personal source files",
+      "approvedInputPrefixes": [
+        "/mnt/nas/openclaw/Personal/",
+        "/mnt/nas/openclaw/reports/ai_nas_mvp/",
+        "/root/.openclaw/workspace/reports/ai_nas_mvp/"
+      ],
+      "approvedOutputPrefixes": [
+        "/tmp/",
+        "/mnt/nas/openclaw/reports/ai_nas_mvp/",
+        "/root/.openclaw/workspace/reports/ai_nas_mvp/"
+      ],
+      "description": "Build local_visual_embedding_v1 vectors for indexed photos and report production CLIP runtime readiness; local vectors are a replaceable plumbing backend, not object-level CLIP semantics."
+    },
+    {
+      "id": "ai_nas_photo_semantic_search",
+      "script": "scripts/probes/ai_nas_photo_semantic_search_probe.sh",
+      "mode": "bounded-personal-photo-semantic-search",
+      "inputSchema": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "query": {
+            "type": "string",
+            "maxLength": 200,
+            "description": "Optional single-line photo search query, for example beach photos, white car, or invoice screenshot."
+          }
+        }
+      },
+      "permissionLevel": "bounded-readwrite-report-index",
+      "writesFiles": true,
+      "requiresConfirmation": false,
+      "reportPathPolicy": "approvedOutputPrefixes only; writes photo semantic search Markdown/JSON reports and missing SQLite image_embeddings rows, never modifies Personal source files",
+      "approvedInputPrefixes": [
+        "/mnt/nas/openclaw/Personal/",
+        "/mnt/nas/openclaw/reports/ai_nas_mvp/",
+        "/root/.openclaw/workspace/reports/ai_nas_mvp/"
+      ],
+      "approvedOutputPrefixes": [
+        "/tmp/",
+        "/mnt/nas/openclaw/reports/ai_nas_mvp/",
+        "/root/.openclaw/workspace/reports/ai_nas_mvp/"
+      ],
+      "description": "Search indexed photos using metadata/path labels, OCR status/text when available, and local_visual_embedding_v1 color hints; returns reasons, evidence, confidence, and missing-intent limitations without claiming production CLIP semantics."
+    },
+    {
+      "id": "ai_nas_photo_pipeline_acceptance",
+      "script": "scripts/probes/ai_nas_photo_pipeline_acceptance_probe.sh",
+      "mode": "bounded-photo-pipeline-acceptance-fixture",
+      "inputSchema": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {}
+      },
+      "permissionLevel": "bounded-fixture-photo-report-index",
+      "writesFiles": true,
+      "requiresConfirmation": false,
+      "reportPathPolicy": "approvedOutputPrefixes only; writes bounded fixture photos, SQLite index/image_embeddings rows, pHash/search acceptance reports, and Markdown/JSON reports; never modifies real Personal source files, never performs face recognition, and never claims production CLIP semantics",
+      "approvedInputPrefixes": [
+        "/tmp/",
+        "/mnt/nas/openclaw/reports/ai_nas_mvp/",
+        "/root/.openclaw/workspace/reports/ai_nas_mvp/"
+      ],
+      "approvedOutputPrefixes": [
+        "/tmp/",
+        "/mnt/nas/openclaw/reports/ai_nas_mvp/",
+        "/root/.openclaw/workspace/reports/ai_nas_mvp/"
+      ],
+      "description": "Run a bounded photo pipeline acceptance suite for EXIF time/place labels, SHA256, pHash similarity, local visual image embedding rows, and grounded beach/white car/invoice screenshot/meal photo search while explicitly reporting CLIP/person-model limitations."
+    },
+    {
+      "id": "ai_nas_photo_privacy_governance",
+      "script": "scripts/probes/ai_nas_photo_privacy_governance_probe.sh",
+      "mode": "bounded-photo-privacy-governance-fixture",
+      "inputSchema": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {}
+      },
+      "permissionLevel": "bounded-fixture-photo-privacy-report",
+      "writesFiles": true,
+      "requiresConfirmation": false,
+      "reportPathPolicy": "approvedOutputPrefixes only; writes bounded fixture photos, SQLite index/image_embeddings rows, and Markdown/JSON privacy governance reports; never modifies real Personal source files, never performs face recognition, face embedding, identity matching, network calls, service starts, delete, move, or overwrite",
+      "approvedInputPrefixes": [
+        "/tmp/",
+        "/mnt/nas/openclaw/reports/ai_nas_mvp/",
+        "/root/.openclaw/workspace/reports/ai_nas_mvp/"
+      ],
+      "approvedOutputPrefixes": [
+        "/tmp/",
+        "/mnt/nas/openclaw/reports/ai_nas_mvp/",
+        "/root/.openclaw/workspace/reports/ai_nas_mvp/"
+      ],
+      "description": "Validate photo privacy governance: child/person terms are metadata-only, face recognition and identity verification remain disabled, and any future face model requires a separate privacy review."
+    },
+    {
+      "id": "ai_nas_movie_sort_enhanced",
+      "script": "scripts/probes/ai_nas_movie_sort_enhanced_probe.sh",
+      "mode": "bounded-personal-copy-sort",
+      "inputSchema": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {}
+      },
+      "permissionLevel": "bounded-write",
+      "writesFiles": true,
+      "requiresConfirmation": false,
+      "reportPathPolicy": "approvedOutputPrefixes only; copy-only output under Personal/Sorted/Movies plus Markdown/JSON manifest",
+      "approvedInputPrefixes": [
+        "/mnt/nas/openclaw/Personal/Movies/",
+        "/mnt/nas/openclaw/reports/ai_nas_mvp/",
+        "/root/.openclaw/workspace/reports/ai_nas_mvp/"
+      ],
+      "approvedOutputPrefixes": [
+        "/tmp/",
+        "/mnt/nas/openclaw/Personal/Sorted/Movies/",
+        "/mnt/nas/openclaw/reports/ai_nas_mvp/",
+        "/root/.openclaw/workspace/reports/ai_nas_mvp/"
+      ],
+      "description": "Copy approved Personal/Movies files into Personal/Sorted/Movies by year and genre, skip existing targets, preserve originals, and write a manifest."
+    },
+    {
+      "id": "ros2_status_probe",
+      "script": "scripts/probes/ros2_status_probe.sh",
+      "mode": "readonly",
+      "approvedOutputPrefixes": [
+        "/tmp/",
+        "/mnt/nas/openclaw/logs/probes/",
+        "/root/.openclaw/workspace/logs/probes/"
+      ],
+      "description": "Collect ROS2/TROS command, node, topic, service, and package status without changing robot state."
+    },
+    {
+      "id": "sandbox_status_probe",
+      "script": "scripts/probes/sandbox_status_probe.sh",
+      "mode": "readonly",
+      "approvedOutputPrefixes": [
+        "/tmp/",
+        "/mnt/nas/openclaw/logs/probes/",
+        "/root/.openclaw/workspace/logs/probes/"
+      ],
+      "description": "Collect Docker, Podman, runc, service, package, namespace, and cgroup status without changing sandbox configuration."
+    },
+    {
+      "id": "sandbox_isolation_smoke_probe",
+      "script": "scripts/probes/sandbox_isolation_smoke_probe.sh",
+      "mode": "bounded",
+      "approvedOutputPrefixes": [
+        "/tmp/",
+        "/mnt/nas/openclaw/logs/probes/",
+        "/root/.openclaw/workspace/logs/probes/"
+      ],
+      "description": "Run the A-006 isolation smoke only with an existing runtime and local image; does not install packages or pull images."
+    },
+    {
+      "id": "security_audit_probe",
+      "script": "scripts/probes/security_audit_probe.sh",
+      "mode": "readonly",
+      "approvedOutputPrefixes": [
+        "/tmp/",
+        "/mnt/nas/openclaw/logs/probes/",
+        "/root/.openclaw/workspace/logs/probes/"
+      ],
+      "description": "Generate a redacted security audit for Gateway exposure, OpenClaw config, plugins, NAS mount, and workspace secret-like metadata."
+    },
+    {
+      "id": "service_policy_probe",
+      "script": "scripts/probes/service_policy_probe.sh",
+      "mode": "readonly",
+      "approvedOutputPrefixes": [
+        "/tmp/",
+        "/mnt/nas/openclaw/logs/probes/",
+        "/root/.openclaw/workspace/logs/probes/"
+      ],
+      "description": "Generate a read-only keep/disable/firewall policy plan for exposed S100P services."
+    },
+    {
+      "id": "service_hardening_plan_probe",
+      "script": "scripts/probes/service_hardening_plan_probe.sh",
+      "mode": "readonly",
+      "approvedOutputPrefixes": [
+        "/tmp/",
+        "/mnt/nas/openclaw/logs/probes/",
+        "/root/.openclaw/workspace/logs/probes/"
+      ],
+      "description": "Generate a dry-run service hardening command plan without changing services or firewall rules."
+    },
+    {
+      "id": "service_convergence_decision_probe",
+      "script": "scripts/probes/service_convergence_decision_probe.sh",
+      "mode": "readonly",
+      "approvedInputPrefixes": [
+        "/tmp/",
+        "/mnt/nas/openclaw/logs/probes/",
+        "/root/.openclaw/workspace/logs/probes/"
+      ],
+      "approvedOutputPrefixes": [
+        "/tmp/",
+        "/mnt/nas/openclaw/reports/",
+        "/root/.openclaw/workspace/reports/"
+      ],
+      "description": "Generate a read-only B-010 service convergence decision pack with preconditions, candidate commands, rollback, and verification steps."
+    },
+    {
+      "id": "service_confirmation_template_probe",
+      "script": "scripts/probes/service_confirmation_template_probe.sh",
+      "mode": "readonly",
+      "approvedOutputPrefixes": [
+        "/tmp/",
+        "/mnt/nas/openclaw/reports/",
+        "/root/.openclaw/workspace/reports/"
+      ],
+      "description": "Generate a read-only B-010 confirmation template artifact without writing runtime config or changing services."
+    },
+    {
+      "id": "service_execution_preflight_probe",
+      "script": "scripts/probes/service_execution_preflight_probe.sh",
+      "mode": "readonly",
+      "approvedInputPrefixes": [
+        "/tmp/",
+        "/mnt/nas/openclaw/config/",
+        "/root/.openclaw/workspace/config/"
+      ],
+      "approvedOutputPrefixes": [
+        "/tmp/",
+        "/mnt/nas/openclaw/reports/",
+        "/root/.openclaw/workspace/reports/"
+      ],
+      "description": "Validate B-010 service convergence confirmations and write a read-only execution preflight; never changes services or firewall rules."
+    },
+    {
+      "id": "stability_snapshot_probe",
+      "script": "scripts/probes/stability_snapshot_probe.sh",
+      "mode": "readonly",
+      "approvedOutputPrefixes": [
+        "/tmp/",
+        "/mnt/nas/openclaw/logs/probes/",
+        "/root/.openclaw/workspace/logs/probes/"
+      ],
+      "description": "Collect a point-in-time uptime, resource, disk, OpenClaw Gateway, and recent error-log snapshot for A-010."
+    },
+    {
+      "id": "stability_summary_probe",
+      "script": "scripts/probes/stability_summary_probe.sh",
+      "mode": "readonly",
+      "approvedInputPrefixes": [
+        "/tmp/",
+        "/mnt/nas/openclaw/logs/probes/",
+        "/root/.openclaw/workspace/logs/probes/"
+      ],
+      "approvedOutputPrefixes": [
+        "/tmp/",
+        "/mnt/nas/openclaw/reports/",
+        "/root/.openclaw/workspace/reports/"
+      ],
+      "description": "Summarize existing A-010 stability snapshots into a trend and acceptance-gap report."
+    },
+    {
+      "id": "stability_checkpoint_probe",
+      "script": "scripts/probes/stability_checkpoint_probe.sh",
+      "mode": "readonly",
+      "approvedInputPrefixes": [
+        "/tmp/",
+        "/mnt/nas/openclaw/logs/probes/",
+        "/root/.openclaw/workspace/logs/probes/"
+      ],
+      "approvedOutputPrefixes": [
+        "/tmp/",
+        "/mnt/nas/openclaw/reports/",
+        "/root/.openclaw/workspace/reports/"
+      ],
+      "description": "Generate a read-only A-010 stability checkpoint with elapsed time, remaining hours, ETA, sample interval, and continuous-window projection."
+    },
+    {
+      "id": "image_caption_probe",
+      "script": "scripts/probes/image_caption_probe.sh",
+      "mode": "readonly",
+      "approvedInputPrefixes": [
+        "/tmp/",
+        "/mnt/nas/openclaw/photos/",
+        "/root/.openclaw/workspace/photos/"
+      ],
+      "approvedOutputPrefixes": [
+        "/tmp/",
+        "/mnt/nas/openclaw/reports/",
+        "/root/.openclaw/workspace/reports/"
+      ],
+      "description": "Generate deterministic image metadata captions and a JSONL index for B-003."
+    },
+    {
+      "id": "vision_caption_readiness_probe",
+      "script": "scripts/probes/vision_caption_readiness_probe.sh",
+      "mode": "readonly",
+      "approvedInputPrefixes": [
+        "/tmp/",
+        "/mnt/nas/openclaw/photos/",
+        "/root/.openclaw/workspace/photos/"
+      ],
+      "approvedOutputPrefixes": [
+        "/tmp/",
+        "/mnt/nas/openclaw/reports/",
+        "/root/.openclaw/workspace/reports/"
+      ],
+      "description": "Check local semantic vision caption model/runtime readiness for B-003 without calling external APIs."
+    },
+    {
+      "id": "dream7b_readiness_probe",
+      "script": "scripts/probes/dream7b_readiness_probe.sh",
+      "mode": "readonly",
+      "approvedOutputPrefixes": [
+        "/tmp/",
+        "/mnt/nas/openclaw/reports/",
+        "/root/.openclaw/workspace/reports/"
+      ],
+      "description": "Check Dream 7B / local DLM deployment readiness without downloading models, calling external APIs, or starting a model server."
+    },
+    {
+      "id": "dream7b_config_template_probe",
+      "script": "scripts/probes/dream7b_config_template_probe.sh",
+      "mode": "readonly",
+      "approvedOutputPrefixes": [
+        "/tmp/",
+        "/mnt/nas/openclaw/reports/",
+        "/root/.openclaw/workspace/reports/"
+      ],
+      "description": "Generate a read-only B-003 Dream 7B deployment config template artifact without writing runtime config, downloading models, or starting a model server."
+    },
+    {
+      "id": "dream7b_smoke_probe",
+      "script": "scripts/probes/dream7b_smoke_probe.sh",
+      "mode": "bounded-local-inference",
+      "approvedInputPrefixes": [
+        "/root/.openclaw/workspace/config/dream7b_deployment.json",
+        "/mnt/nas/openclaw/config/dream7b_deployment.json",
+        "/mnt/nas/openclaw/models/dream7b/dream7b_deployment.json",
+        "/tmp/dream7b_deployment.json",
+        "/mnt/nas/openclaw/models/",
+        "/root/.openclaw/workspace/models/",
+        "/home/sunrise/models/"
+      ],
+      "approvedOutputPrefixes": [
+        "/tmp/",
+        "/mnt/nas/openclaw/reports/",
+        "/root/.openclaw/workspace/reports/"
+      ],
+      "description": "Run one bounded local Dream 7B smoke test from an explicit config and local model path; never downloads models or starts a persistent server."
+    },
+    {
+      "id": "home_assistant_status_probe",
+      "script": "scripts/probes/home_assistant_status_probe.sh",
+      "mode": "readonly",
+      "approvedOutputPrefixes": [
+        "/tmp/",
+        "/mnt/nas/openclaw/logs/probes/",
+        "/root/.openclaw/workspace/logs/probes/"
+      ],
+      "description": "Read-only Home Assistant API status preflight for B-008; never calls service/control endpoints."
+    },
+    {
+      "id": "home_assistant_config_template_probe",
+      "script": "scripts/probes/home_assistant_config_template_probe.sh",
+      "mode": "readonly",
+      "approvedOutputPrefixes": [
+        "/tmp/",
+        "/mnt/nas/openclaw/reports/",
+        "/root/.openclaw/workspace/reports/"
+      ],
+      "description": "Generate a read-only B-008 Home Assistant env template artifact without writing credentials or calling Home Assistant."
+    },
+    {
+      "id": "external_input_gate_probe",
+      "script": "scripts/probes/external_input_gate_probe.sh",
+      "mode": "readonly",
+      "approvedInputPrefixes": [
+        "/tmp/",
+        "/mnt/nas/openclaw/",
+        "/root/.openclaw/workspace/"
+      ],
+      "approvedOutputPrefixes": [
+        "/tmp/",
+        "/mnt/nas/openclaw/reports/",
+        "/root/.openclaw/workspace/reports/"
+      ],
+      "description": "Generate a read-only B-003/B-008 external input packet gate without writing credentials, downloading models, or calling control APIs."
+    },
+    {
+      "id": "control_action_template_probe",
+      "script": "scripts/probes/control_action_template_probe.sh",
+      "mode": "readonly",
+      "approvedOutputPrefixes": [
+        "/tmp/",
+        "/mnt/nas/openclaw/reports/",
+        "/root/.openclaw/workspace/reports/"
+      ],
+      "description": "Generate a read-only B-009 reviewed action and approval-audit template artifact without writing runtime allowlist or calling devices."
+    },
+    {
+      "id": "control_action_policy_probe",
+      "script": "scripts/probes/control_action_policy_probe.sh",
+      "mode": "readonly",
+      "approvedOutputPrefixes": [
+        "/tmp/",
+        "/mnt/nas/openclaw/logs/probes/",
+        "/root/.openclaw/workspace/logs/probes/"
+      ],
+      "description": "Read-only low-risk control policy and audit preflight for B-009; never executes actions."
+    },
+    {
+      "id": "operator_review_gate_probe",
+      "script": "scripts/probes/operator_review_gate_probe.sh",
+      "mode": "readonly",
+      "approvedInputPrefixes": [
+        "/tmp/",
+        "/mnt/nas/openclaw/",
+        "/root/.openclaw/workspace/"
+      ],
+      "approvedOutputPrefixes": [
+        "/tmp/",
+        "/mnt/nas/openclaw/reports/",
+        "/root/.openclaw/workspace/reports/"
+      ],
+      "description": "Generate a read-only A-009/B-009/B-010 operator review packet gate without writing runtime config or executing actions."
+    },
+    {
+      "id": "browser_smoke_probe",
+      "script": "scripts/probes/browser_smoke_probe.sh",
+      "mode": "readonly",
+      "approvedOutputPrefixes": [
+        "/tmp/",
+        "/mnt/nas/openclaw/reports/",
+        "/root/.openclaw/workspace/reports/"
+      ],
+      "description": "Open a local test page with headless Chromium, capture a screenshot, and write a Markdown report."
+    },
+    {
+      "id": "dataset_card_inventory_probe",
+      "script": "scripts/probes/dataset_card_inventory_probe.sh",
+      "mode": "readonly",
+      "approvedInputPrefixes": [
+        "/tmp/",
+        "/mnt/nas/openclaw/robot_datasets/",
+        "/root/.openclaw/workspace/robot_datasets/"
+      ],
+      "approvedOutputPrefixes": [
+        "/tmp/",
+        "/mnt/nas/openclaw/reports/",
+        "/root/.openclaw/workspace/reports/"
+      ],
+      "description": "Inventory existing robot dataset DATASET_CARD.md files without recording ROS bags or creating datasets."
+    },
+    {
+      "id": "rosbag_snapshot_probe",
+      "script": "scripts/probes/rosbag_snapshot_probe.sh",
+      "mode": "capture",
+      "approvedInputPrefixes": [],
+      "approvedOutputPrefixes": [
+        "/tmp/",
+        "/mnt/nas/openclaw/robot_datasets/",
+        "/mnt/nas/openclaw/logs/probes/",
+        "/root/.openclaw/workspace/robot_datasets/",
+        "/root/.openclaw/workspace/logs/probes/"
+      ],
+      "description": "Record a bounded ROS bag snapshot for low-risk topics and write a metadata report."
+    },
+    {
+      "id": "rosbag_session_probe",
+      "script": "scripts/probes/rosbag_session_probe.sh",
+      "mode": "capture",
+      "approvedInputPrefixes": [],
+      "approvedOutputPrefixes": [
+        "/tmp/",
+        "/mnt/nas/openclaw/robot_datasets/",
+        "/mnt/nas/openclaw/logs/probes/",
+        "/root/.openclaw/workspace/robot_datasets/",
+        "/root/.openclaw/workspace/logs/probes/"
+      ],
+      "description": "Run a start/status/stop ROS bag capture self-test for low-risk topics and write a metadata report."
+    },
+    {
+      "id": "rosbag_capture_policy_probe",
+      "script": "scripts/probes/rosbag_capture_policy_probe.sh",
+      "mode": "readonly",
+      "approvedInputPrefixes": [],
+      "approvedOutputPrefixes": [
+        "/tmp/",
+        "/mnt/nas/openclaw/logs/probes/",
+        "/root/.openclaw/workspace/logs/probes/"
+      ],
+      "description": "Generate a read-only named ROS bag capture policy, topic classification, and retention plan for A-009."
+    },
+    {
+      "id": "rosbag_named_capture_request_probe",
+      "script": "scripts/probes/rosbag_named_capture_request_probe.sh",
+      "mode": "readonly",
+      "approvedOutputPrefixes": [
+        "/tmp/",
+        "/mnt/nas/openclaw/reports/",
+        "/root/.openclaw/workspace/reports/"
+      ],
+      "description": "Generate a read-only A-009 named capture request/approval template without starting rosbag recording or creating datasets."
+    },
+    {
+      "id": "rosbag_named_capture_probe",
+      "script": "scripts/probes/rosbag_named_capture_probe.sh",
+      "mode": "bounded-capture",
+      "approvedInputPrefixes": [
+        "/tmp/",
+        "/mnt/nas/openclaw/robot_datasets/",
+        "/root/.openclaw/workspace/robot_datasets/"
+      ],
+      "approvedOutputPrefixes": [
+        "/tmp/",
+        "/mnt/nas/openclaw/logs/probes/",
+        "/root/.openclaw/workspace/logs/probes/"
+      ],
+      "description": "Run one operator-approved bounded named ROS bag capture for A-009 using approved status topics only."
+    },
+    {
+      "id": "experiment_report_probe",
+      "script": "scripts/probes/experiment_report_probe.sh",
+      "mode": "readonly",
+      "approvedInputPrefixes": [
+        "/mnt/nas/openclaw/",
+        "/root/.openclaw/workspace/"
+      ],
+      "approvedOutputPrefixes": [
+        "/tmp/",
+        "/mnt/nas/openclaw/reports/",
+        "/root/.openclaw/workspace/reports/"
+      ],
+      "description": "Generate a Markdown experiment report from existing probe reports, browser screenshots, document indexes, and robot dataset cards."
+    },
+    {
+      "id": "baseline_status_probe",
+      "script": "scripts/probes/baseline_status_probe.sh",
+      "mode": "readonly",
+      "approvedInputPrefixes": [
+        "/mnt/nas/openclaw/",
+        "/root/.openclaw/workspace/"
+      ],
+      "approvedOutputPrefixes": [
+        "/tmp/",
+        "/mnt/nas/openclaw/reports/",
+        "/root/.openclaw/workspace/reports/"
+      ],
+      "description": "Generate a read-only roll-up status report for the S100P PC parity and AI NAS homework baselines."
+    },
+    {
+      "id": "baseline_gap_decision_probe",
+      "script": "scripts/probes/baseline_gap_decision_probe.sh",
+      "mode": "readonly",
+      "approvedInputPrefixes": [
+        "/tmp/",
+        "/mnt/nas/openclaw/",
+        "/root/.openclaw/workspace/"
+      ],
+      "approvedOutputPrefixes": [
+        "/tmp/",
+        "/mnt/nas/openclaw/reports/",
+        "/root/.openclaw/workspace/reports/"
+      ],
+      "description": "Generate a read-only remaining-gap and next-decision report for the S100P PC parity and AI NAS homework baselines."
+    },
+    {
+      "id": "baseline_acceptance_probe",
+      "script": "scripts/probes/baseline_acceptance_probe.sh",
+      "mode": "readonly",
+      "approvedInputPrefixes": [
+        "/tmp/",
+        "/mnt/nas/openclaw/",
+        "/root/.openclaw/workspace/"
+      ],
+      "approvedOutputPrefixes": [
+        "/tmp/",
+        "/mnt/nas/openclaw/reports/",
+        "/root/.openclaw/workspace/reports/"
+      ],
+      "description": "Generate a read-only pass/collecting/blocked acceptance gate matrix for all A/B baseline IDs."
+    },
+    {
+      "id": "baseline_acceptance_trend_probe",
+      "script": "scripts/probes/baseline_acceptance_trend_probe.sh",
+      "mode": "readonly",
+      "approvedInputPrefixes": [
+        "/tmp/",
+        "/mnt/nas/openclaw/",
+        "/root/.openclaw/workspace/"
+      ],
+      "approvedOutputPrefixes": [
+        "/tmp/",
+        "/mnt/nas/openclaw/reports/",
+        "/root/.openclaw/workspace/reports/"
+      ],
+      "description": "Generate a read-only trend report across saved baseline acceptance snapshots."
+    },
+    {
+      "id": "baseline_next_action_queue_probe",
+      "script": "scripts/probes/baseline_next_action_queue_probe.sh",
+      "mode": "readonly",
+      "approvedInputPrefixes": [
+        "/tmp/",
+        "/mnt/nas/openclaw/",
+        "/root/.openclaw/workspace/"
+      ],
+      "approvedOutputPrefixes": [
+        "/tmp/",
+        "/mnt/nas/openclaw/reports/",
+        "/root/.openclaw/workspace/reports/"
+      ],
+      "description": "Generate a lane-aware read-only next-action queue from the current baseline acceptance state and audit decision."
+    },
+    {
+      "id": "baseline_evidence_manifest_probe",
+      "script": "scripts/probes/baseline_evidence_manifest_probe.sh",
+      "mode": "readonly",
+      "approvedInputPrefixes": [
+        "/tmp/",
+        "/mnt/nas/openclaw/",
+        "/root/.openclaw/workspace/"
+      ],
+      "approvedOutputPrefixes": [
+        "/tmp/",
+        "/mnt/nas/openclaw/reports/",
+        "/root/.openclaw/workspace/reports/"
+      ],
+      "description": "Generate a read-only SHA256 evidence manifest for current baseline proof files."
+    },
+    {
+      "id": "teacher_baseline_briefing_probe",
+      "script": "scripts/probes/teacher_baseline_briefing_probe.sh",
+      "mode": "readonly",
+      "approvedInputPrefixes": [
+        "/tmp/",
+        "/mnt/nas/openclaw/",
+        "/root/.openclaw/workspace/"
+      ],
+      "approvedOutputPrefixes": [
+        "/tmp/",
+        "/mnt/nas/openclaw/reports/",
+        "/root/.openclaw/workspace/reports/"
+      ],
+      "description": "Generate a teacher-facing Markdown and JSON briefing package from the latest NAS-backed evidence for the two baseline tracks."
+    }
+  ]
+}

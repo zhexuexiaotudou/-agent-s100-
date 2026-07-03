@@ -1,0 +1,23 @@
+[Unit]
+Description=Qwen2.5 7B official shadow OpenAI-compatible gateway for AI-NAS
+After=network-online.target ai-nas-index-daemon.service
+Wants=network-online.target
+
+[Service]
+Type=simple
+WorkingDirectory=/mnt/nas/openclaw
+Environment=QWEN25_OPENAI_HOST=127.0.0.1
+Environment=QWEN25_OPENAI_PORT=18081
+Environment=QWEN25_MODEL_ID=Qwen2.5-7B-Instruct-S100P-official-shadow
+Environment=QWEN25_POLICY=/mnt/nas/openclaw/configs/qwen25_7b_shadow_route_policy.json
+Environment=QWEN25_CHAT_TIMEOUT_SECONDS=300
+Environment=AI_NAS_PERSONAL_ROOT=/mnt/nas/openclaw/Personal
+Environment=AI_NAS_REPORT_ROOT=/mnt/nas/openclaw/reports/qwen25_7b_ai_nas
+ExecStart=/usr/bin/python3 /mnt/nas/openclaw/scripts/qwen25_openai_gateway.py --config ${QWEN25_POLICY}
+Restart=on-failure
+RestartSec=5
+StartLimitIntervalSec=300
+StartLimitBurst=5
+
+[Install]
+WantedBy=default.target

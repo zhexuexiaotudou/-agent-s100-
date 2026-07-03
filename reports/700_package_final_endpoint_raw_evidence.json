@@ -1,0 +1,3709 @@
+{
+  "schema_version": "dream7b_s100p_v9_700_package_final_endpoint_raw_evidence",
+  "created_at_utc": "2026-07-01T12:03:41.507354+00:00",
+  "run_commands": [
+    "C:\\Users\\zhexu\\AppData\\Local\\Python\\pythoncore-3.14-64\\python.exe tools\\build_v9_research_thread.py --root . --exact-source evidence\\s100p_remote_v9_hf_isolated_final_segment_v8"
+  ],
+  "git": {
+    "cwd": "F:\\Project\\Digua",
+    "status": "unavailable:CalledProcessError"
+  },
+  "input_artifacts": [
+    {
+      "path": "evidence/raw_endpoint_subset_v6/final_segment_dense_sweep_v5",
+      "exists": true
+    }
+  ],
+  "output_artifacts": [
+    {
+      "path": "reports/700_package_final_endpoint_raw_evidence.json"
+    },
+    {
+      "path": "reports/700_package_final_endpoint_raw_evidence.md"
+    }
+  ],
+  "blocking_or_failure_reasons": [],
+  "next_minimal_experiments": [],
+  "case_ids": [
+    "zeros",
+    "ramp",
+    "short_chinese_prompt_padded"
+  ],
+  "variants": [
+    "real_x",
+    "real_x_div_2",
+    "real_x_div_2p25",
+    "real_x_div_2p5",
+    "real_x_div_2p75",
+    "real_x_div_3",
+    "real_x_div_3p25",
+    "real_x_div_3p5",
+    "real_x_div_4",
+    "real_x_clip_8",
+    "real_x_clip_6",
+    "real_x_clip_5",
+    "real_x_clip_4",
+    "real_x_z_normalized"
+  ],
+  "expected_rows": 42,
+  "packaged_rows": 42,
+  "missing_rows": [],
+  "official_final_output_scale": 0.00025415877462364733,
+  "official_final_output_zero_point": 0.0,
+  "rows": [
+    {
+      "case_id": "zeros",
+      "variant_id": "real_x",
+      "input_stats": {
+        "shape": [
+          128,
+          3584
+        ],
+        "dtype": "float32",
+        "size": 458752,
+        "min": -16.29678726196289,
+        "max": 16.29678726196289,
+        "mean": 0.005043779034167528,
+        "std": 16.12376594543457,
+        "abs_max": 16.29678726196289,
+        "nonzero_count": 458751,
+        "allzero": false,
+        "constant": false,
+        "nan_count": 0,
+        "inf_count": 0
+      },
+      "raw_output_stats": {
+        "shape": [
+          1,
+          152064
+        ],
+        "dtype": "int16",
+        "size": 152064,
+        "min": 0.0,
+        "max": 0.0,
+        "mean": 0.0,
+        "std": 0.0,
+        "abs_max": 0.0,
+        "nonzero_count": 0,
+        "allzero": true,
+        "constant": true,
+        "nan_count": 0,
+        "inf_count": 0,
+        "count_pos_32767": 0,
+        "count_neg_32768": 0,
+        "frac_pos_32767": 0.0,
+        "frac_neg_32768": 0.0
+      },
+      "official_dequant_stats": {
+        "shape": [
+          152064
+        ],
+        "dtype": "float32",
+        "size": 152064,
+        "min": 0.0,
+        "max": 0.0,
+        "mean": 0.0,
+        "std": 0.0,
+        "abs_max": 0.0,
+        "nonzero_count": 0,
+        "allzero": true,
+        "constant": true,
+        "nan_count": 0,
+        "inf_count": 0
+      },
+      "files": {
+        "input": {
+          "path": "evidence/final_segment_endpoint_raw_v9/zeros/real_x/input.npy",
+          "exists": true,
+          "size_bytes": 1835136,
+          "sha256": "f534056b9455cfefc25185a78366a2c1a83530a4b7631bf7b2210fe49ca28cc5"
+        },
+        "raw_output": {
+          "path": "evidence/final_segment_endpoint_raw_v9/zeros/real_x/raw_output.npy",
+          "exists": true,
+          "size_bytes": 304256,
+          "sha256": "f5984f81235af99ba68d00422604dff6513b2338cec45b8185958ed61386239e"
+        },
+        "official_dequant": {
+          "path": "evidence/final_segment_endpoint_raw_v9/zeros/real_x/official_dequant_logits.npy",
+          "exists": true,
+          "size_bytes": 608384,
+          "sha256": "c5446456b2eaa03e29c1e66c2511a51606f3a4c35988047d31ce7f9d921deb67"
+        },
+        "metadata": {
+          "path": "evidence/final_segment_endpoint_raw_v9/zeros/real_x/metadata.json",
+          "exists": true,
+          "size_bytes": 4621,
+          "sha256": "e5da78fdc70f91ba17e63aa790c6f4ab87594e253811ca8539a4a33fd5644d63"
+        }
+      }
+    },
+    {
+      "case_id": "zeros",
+      "variant_id": "real_x_div_2",
+      "input_stats": {
+        "shape": [
+          128,
+          3584
+        ],
+        "dtype": "float32",
+        "size": 458752,
+        "min": -8.148393630981445,
+        "max": 8.148393630981445,
+        "mean": 0.002521889517083764,
+        "std": 8.061882972717285,
+        "abs_max": 8.148393630981445,
+        "nonzero_count": 458751,
+        "allzero": false,
+        "constant": false,
+        "nan_count": 0,
+        "inf_count": 0
+      },
+      "raw_output_stats": {
+        "shape": [
+          1,
+          152064
+        ],
+        "dtype": "int16",
+        "size": 152064,
+        "min": 0.0,
+        "max": 0.0,
+        "mean": 0.0,
+        "std": 0.0,
+        "abs_max": 0.0,
+        "nonzero_count": 0,
+        "allzero": true,
+        "constant": true,
+        "nan_count": 0,
+        "inf_count": 0,
+        "count_pos_32767": 0,
+        "count_neg_32768": 0,
+        "frac_pos_32767": 0.0,
+        "frac_neg_32768": 0.0
+      },
+      "official_dequant_stats": {
+        "shape": [
+          152064
+        ],
+        "dtype": "float32",
+        "size": 152064,
+        "min": 0.0,
+        "max": 0.0,
+        "mean": 0.0,
+        "std": 0.0,
+        "abs_max": 0.0,
+        "nonzero_count": 0,
+        "allzero": true,
+        "constant": true,
+        "nan_count": 0,
+        "inf_count": 0
+      },
+      "files": {
+        "input": {
+          "path": "evidence/final_segment_endpoint_raw_v9/zeros/real_x_div_2/input.npy",
+          "exists": true,
+          "size_bytes": 1835136,
+          "sha256": "402f8aee9ca333c6567f9d744023382b63dc123b783f38e6d2875e30f64de866"
+        },
+        "raw_output": {
+          "path": "evidence/final_segment_endpoint_raw_v9/zeros/real_x_div_2/raw_output.npy",
+          "exists": true,
+          "size_bytes": 304256,
+          "sha256": "f5984f81235af99ba68d00422604dff6513b2338cec45b8185958ed61386239e"
+        },
+        "official_dequant": {
+          "path": "evidence/final_segment_endpoint_raw_v9/zeros/real_x_div_2/official_dequant_logits.npy",
+          "exists": true,
+          "size_bytes": 608384,
+          "sha256": "c5446456b2eaa03e29c1e66c2511a51606f3a4c35988047d31ce7f9d921deb67"
+        },
+        "metadata": {
+          "path": "evidence/final_segment_endpoint_raw_v9/zeros/real_x_div_2/metadata.json",
+          "exists": true,
+          "size_bytes": 4663,
+          "sha256": "02fcfd14d341a53aca1d304128a58a30e8773a1f005d9e6f8ab14e5f8fb2427d"
+        }
+      }
+    },
+    {
+      "case_id": "zeros",
+      "variant_id": "real_x_div_2p25",
+      "input_stats": {
+        "shape": [
+          128,
+          3584
+        ],
+        "dtype": "float32",
+        "size": 458752,
+        "min": -7.243016719818115,
+        "max": 7.243016719818115,
+        "mean": 0.0022416808642446995,
+        "std": 7.16611909866333,
+        "abs_max": 7.243016719818115,
+        "nonzero_count": 458751,
+        "allzero": false,
+        "constant": false,
+        "nan_count": 0,
+        "inf_count": 0
+      },
+      "raw_output_stats": {
+        "shape": [
+          1,
+          152064
+        ],
+        "dtype": "int16",
+        "size": 152064,
+        "min": 0.0,
+        "max": 0.0,
+        "mean": 0.0,
+        "std": 0.0,
+        "abs_max": 0.0,
+        "nonzero_count": 0,
+        "allzero": true,
+        "constant": true,
+        "nan_count": 0,
+        "inf_count": 0,
+        "count_pos_32767": 0,
+        "count_neg_32768": 0,
+        "frac_pos_32767": 0.0,
+        "frac_neg_32768": 0.0
+      },
+      "official_dequant_stats": {
+        "shape": [
+          152064
+        ],
+        "dtype": "float32",
+        "size": 152064,
+        "min": 0.0,
+        "max": 0.0,
+        "mean": 0.0,
+        "std": 0.0,
+        "abs_max": 0.0,
+        "nonzero_count": 0,
+        "allzero": true,
+        "constant": true,
+        "nan_count": 0,
+        "inf_count": 0
+      },
+      "files": {
+        "input": {
+          "path": "evidence/final_segment_endpoint_raw_v9/zeros/real_x_div_2p25/input.npy",
+          "exists": true,
+          "size_bytes": 1835136,
+          "sha256": "650e640be956e816921ebed77d121b21f30c8ee79fc94acde379d2b290ffebe0"
+        },
+        "raw_output": {
+          "path": "evidence/final_segment_endpoint_raw_v9/zeros/real_x_div_2p25/raw_output.npy",
+          "exists": true,
+          "size_bytes": 304256,
+          "sha256": "f5984f81235af99ba68d00422604dff6513b2338cec45b8185958ed61386239e"
+        },
+        "official_dequant": {
+          "path": "evidence/final_segment_endpoint_raw_v9/zeros/real_x_div_2p25/official_dequant_logits.npy",
+          "exists": true,
+          "size_bytes": 608384,
+          "sha256": "c5446456b2eaa03e29c1e66c2511a51606f3a4c35988047d31ce7f9d921deb67"
+        },
+        "metadata": {
+          "path": "evidence/final_segment_endpoint_raw_v9/zeros/real_x_div_2p25/metadata.json",
+          "exists": true,
+          "size_bytes": 4684,
+          "sha256": "b1694b50b7e3263790e98b1960dcc867d2531d22f65875da84f59faa7a46b26d"
+        }
+      }
+    },
+    {
+      "case_id": "zeros",
+      "variant_id": "real_x_div_2p5",
+      "input_stats": {
+        "shape": [
+          128,
+          3584
+        ],
+        "dtype": "float32",
+        "size": 458752,
+        "min": -6.518714904785156,
+        "max": 6.518714904785156,
+        "mean": 0.0020175117533653975,
+        "std": 6.4495062828063965,
+        "abs_max": 6.518714904785156,
+        "nonzero_count": 458751,
+        "allzero": false,
+        "constant": false,
+        "nan_count": 0,
+        "inf_count": 0
+      },
+      "raw_output_stats": {
+        "shape": [
+          1,
+          152064
+        ],
+        "dtype": "int16",
+        "size": 152064,
+        "min": 0.0,
+        "max": 0.0,
+        "mean": 0.0,
+        "std": 0.0,
+        "abs_max": 0.0,
+        "nonzero_count": 0,
+        "allzero": true,
+        "constant": true,
+        "nan_count": 0,
+        "inf_count": 0,
+        "count_pos_32767": 0,
+        "count_neg_32768": 0,
+        "frac_pos_32767": 0.0,
+        "frac_neg_32768": 0.0
+      },
+      "official_dequant_stats": {
+        "shape": [
+          152064
+        ],
+        "dtype": "float32",
+        "size": 152064,
+        "min": 0.0,
+        "max": 0.0,
+        "mean": 0.0,
+        "std": 0.0,
+        "abs_max": 0.0,
+        "nonzero_count": 0,
+        "allzero": true,
+        "constant": true,
+        "nan_count": 0,
+        "inf_count": 0
+      },
+      "files": {
+        "input": {
+          "path": "evidence/final_segment_endpoint_raw_v9/zeros/real_x_div_2p5/input.npy",
+          "exists": true,
+          "size_bytes": 1835136,
+          "sha256": "f5fc3cb2a7febfb633f2f18cd5b9f7236e78bffaa43f7ad121d0936ae64892ca"
+        },
+        "raw_output": {
+          "path": "evidence/final_segment_endpoint_raw_v9/zeros/real_x_div_2p5/raw_output.npy",
+          "exists": true,
+          "size_bytes": 304256,
+          "sha256": "f5984f81235af99ba68d00422604dff6513b2338cec45b8185958ed61386239e"
+        },
+        "official_dequant": {
+          "path": "evidence/final_segment_endpoint_raw_v9/zeros/real_x_div_2p5/official_dequant_logits.npy",
+          "exists": true,
+          "size_bytes": 608384,
+          "sha256": "c5446456b2eaa03e29c1e66c2511a51606f3a4c35988047d31ce7f9d921deb67"
+        },
+        "metadata": {
+          "path": "evidence/final_segment_endpoint_raw_v9/zeros/real_x_div_2p5/metadata.json",
+          "exists": true,
+          "size_bytes": 4679,
+          "sha256": "0163d4c8b17ae79e4b4752332e066b494ee6291107f1384eb4f862c37848d80e"
+        }
+      }
+    },
+    {
+      "case_id": "zeros",
+      "variant_id": "real_x_div_2p75",
+      "input_stats": {
+        "shape": [
+          128,
+          3584
+        ],
+        "dtype": "float32",
+        "size": 458752,
+        "min": -5.926104545593262,
+        "max": 5.926104545593262,
+        "mean": 0.0018341030227020383,
+        "std": 5.863187789916992,
+        "abs_max": 5.926104545593262,
+        "nonzero_count": 458751,
+        "allzero": false,
+        "constant": false,
+        "nan_count": 0,
+        "inf_count": 0
+      },
+      "raw_output_stats": {
+        "shape": [
+          1,
+          152064
+        ],
+        "dtype": "int16",
+        "size": 152064,
+        "min": -26768.0,
+        "max": 32767.0,
+        "mean": 13795.855876473064,
+        "std": 4790.546009744509,
+        "abs_max": 32767.0,
+        "nonzero_count": 152062,
+        "allzero": false,
+        "constant": false,
+        "nan_count": 0,
+        "inf_count": 0,
+        "count_pos_32767": 10,
+        "count_neg_32768": 0,
+        "frac_pos_32767": 6.576178451178451e-05,
+        "frac_neg_32768": 0.0
+      },
+      "official_dequant_stats": {
+        "shape": [
+          152064
+        ],
+        "dtype": "float32",
+        "size": 152064,
+        "min": -6.8033223152160645,
+        "max": 8.328020095825195,
+        "mean": 3.506337881088257,
+        "std": 1.2175593376159668,
+        "abs_max": 8.328020095825195,
+        "nonzero_count": 152062,
+        "allzero": false,
+        "constant": false,
+        "nan_count": 0,
+        "inf_count": 0
+      },
+      "files": {
+        "input": {
+          "path": "evidence/final_segment_endpoint_raw_v9/zeros/real_x_div_2p75/input.npy",
+          "exists": true,
+          "size_bytes": 1835136,
+          "sha256": "0950dd1ae98eb3c2cfd6f0a40a673f80f2a22bae89f75e089962a910c49a5a64"
+        },
+        "raw_output": {
+          "path": "evidence/final_segment_endpoint_raw_v9/zeros/real_x_div_2p75/raw_output.npy",
+          "exists": true,
+          "size_bytes": 304256,
+          "sha256": "9964931f5896d84147398536cf0094d05c3677cfd17624a0f0a41245083f8c0e"
+        },
+        "official_dequant": {
+          "path": "evidence/final_segment_endpoint_raw_v9/zeros/real_x_div_2p75/official_dequant_logits.npy",
+          "exists": true,
+          "size_bytes": 608384,
+          "sha256": "d2c08d0525ce1a633a8c6e7dd11807b043228cb9c4601dfb93f98134b80f3c5b"
+        },
+        "metadata": {
+          "path": "evidence/final_segment_endpoint_raw_v9/zeros/real_x_div_2p75/metadata.json",
+          "exists": true,
+          "size_bytes": 4964,
+          "sha256": "04afb12f96bc9ec5a411f20b6cb0c6558ed8e6b65ddb06ebfbc99e3733408355"
+        }
+      }
+    },
+    {
+      "case_id": "zeros",
+      "variant_id": "real_x_div_3",
+      "input_stats": {
+        "shape": [
+          128,
+          3584
+        ],
+        "dtype": "float32",
+        "size": 458752,
+        "min": -5.432262420654297,
+        "max": 5.432262420654297,
+        "mean": 0.00168126099742949,
+        "std": 5.374588489532471,
+        "abs_max": 5.432262420654297,
+        "nonzero_count": 458751,
+        "allzero": false,
+        "constant": false,
+        "nan_count": 0,
+        "inf_count": 0
+      },
+      "raw_output_stats": {
+        "shape": [
+          1,
+          152064
+        ],
+        "dtype": "int16",
+        "size": 152064,
+        "min": -24367.0,
+        "max": 32767.0,
+        "mean": 12348.009765625,
+        "std": 4369.906686977599,
+        "abs_max": 32767.0,
+        "nonzero_count": 152063,
+        "allzero": false,
+        "constant": false,
+        "nan_count": 0,
+        "inf_count": 0,
+        "count_pos_32767": 3,
+        "count_neg_32768": 0,
+        "frac_pos_32767": 1.9728535353535355e-05,
+        "frac_neg_32768": 0.0
+      },
+      "official_dequant_stats": {
+        "shape": [
+          152064
+        ],
+        "dtype": "float32",
+        "size": 152064,
+        "min": -6.193086624145508,
+        "max": 8.328020095825195,
+        "mean": 3.138355016708374,
+        "std": 1.1106501817703247,
+        "abs_max": 8.328020095825195,
+        "nonzero_count": 152063,
+        "allzero": false,
+        "constant": false,
+        "nan_count": 0,
+        "inf_count": 0
+      },
+      "files": {
+        "input": {
+          "path": "evidence/final_segment_endpoint_raw_v9/zeros/real_x_div_3/input.npy",
+          "exists": true,
+          "size_bytes": 1835136,
+          "sha256": "e738bf7e37d720d14331037d682d05aebf5095d250a474cd432b3386a3e25249"
+        },
+        "raw_output": {
+          "path": "evidence/final_segment_endpoint_raw_v9/zeros/real_x_div_3/raw_output.npy",
+          "exists": true,
+          "size_bytes": 304256,
+          "sha256": "3d26f25864999d44a817147b2759842574fd9cac58a2b683c1bed1216a163f55"
+        },
+        "official_dequant": {
+          "path": "evidence/final_segment_endpoint_raw_v9/zeros/real_x_div_3/official_dequant_logits.npy",
+          "exists": true,
+          "size_bytes": 608384,
+          "sha256": "95c8bbe33a087dbe022401f180b04d3d77deb867b3bb86e2987293a41078c647"
+        },
+        "metadata": {
+          "path": "evidence/final_segment_endpoint_raw_v9/zeros/real_x_div_3/metadata.json",
+          "exists": true,
+          "size_bytes": 4944,
+          "sha256": "67e2d1025346769705dda602236765f92a6acff57529477680892a750ba207f5"
+        }
+      }
+    },
+    {
+      "case_id": "zeros",
+      "variant_id": "real_x_div_3p25",
+      "input_stats": {
+        "shape": [
+          128,
+          3584
+        ],
+        "dtype": "float32",
+        "size": 458752,
+        "min": -5.0143961906433105,
+        "max": 5.0143961906433105,
+        "mean": 0.0015519342850893736,
+        "std": 4.961158752441406,
+        "abs_max": 5.0143961906433105,
+        "nonzero_count": 458751,
+        "allzero": false,
+        "constant": false,
+        "nan_count": 0,
+        "inf_count": 0
+      },
+      "raw_output_stats": {
+        "shape": [
+          1,
+          152064
+        ],
+        "dtype": "int16",
+        "size": 152064,
+        "min": -22338.0,
+        "max": 31813.0,
+        "mean": 11116.467605744949,
+        "std": 4017.2174917557227,
+        "abs_max": 31813.0,
+        "nonzero_count": 152063,
+        "allzero": false,
+        "constant": false,
+        "nan_count": 0,
+        "inf_count": 0,
+        "count_pos_32767": 0,
+        "count_neg_32768": 0,
+        "frac_pos_32767": 0.0,
+        "frac_neg_32768": 0.0
+      },
+      "official_dequant_stats": {
+        "shape": [
+          152064
+        ],
+        "dtype": "float32",
+        "size": 152064,
+        "min": -5.677398681640625,
+        "max": 8.085553169250488,
+        "mean": 2.825347900390625,
+        "std": 1.0210111141204834,
+        "abs_max": 8.085553169250488,
+        "nonzero_count": 152063,
+        "allzero": false,
+        "constant": false,
+        "nan_count": 0,
+        "inf_count": 0
+      },
+      "files": {
+        "input": {
+          "path": "evidence/final_segment_endpoint_raw_v9/zeros/real_x_div_3p25/input.npy",
+          "exists": true,
+          "size_bytes": 1835136,
+          "sha256": "9f93c433fcf6b490cd324d6b6317942e90fcb2b7a6cc6a812ede776852711280"
+        },
+        "raw_output": {
+          "path": "evidence/final_segment_endpoint_raw_v9/zeros/real_x_div_3p25/raw_output.npy",
+          "exists": true,
+          "size_bytes": 304256,
+          "sha256": "492dbece49799b0000cd412b45f8ae565d4e1dc2d22590268ffd7bfe1e46cd44"
+        },
+        "official_dequant": {
+          "path": "evidence/final_segment_endpoint_raw_v9/zeros/real_x_div_3p25/official_dequant_logits.npy",
+          "exists": true,
+          "size_bytes": 608384,
+          "sha256": "198c2f484712a8febfa083425e33c3a0fdd5fa701601d207a57870c207402403"
+        },
+        "metadata": {
+          "path": "evidence/final_segment_endpoint_raw_v9/zeros/real_x_div_3p25/metadata.json",
+          "exists": true,
+          "size_bytes": 4961,
+          "sha256": "aa28c84891c54c8cd851656f20b7f8dfd5e3817d10751ef7aa19051c49b9d6df"
+        }
+      }
+    },
+    {
+      "case_id": "zeros",
+      "variant_id": "real_x_div_3p5",
+      "input_stats": {
+        "shape": [
+          128,
+          3584
+        ],
+        "dtype": "float32",
+        "size": 458752,
+        "min": -4.656224727630615,
+        "max": 4.656224727630615,
+        "mean": 0.0014410830335691571,
+        "std": 4.606790065765381,
+        "abs_max": 4.656224727630615,
+        "nonzero_count": 458751,
+        "allzero": false,
+        "constant": false,
+        "nan_count": 0,
+        "inf_count": 0
+      },
+      "raw_output_stats": {
+        "shape": [
+          1,
+          152064
+        ],
+        "dtype": "int16",
+        "size": 152064,
+        "min": -20611.0,
+        "max": 29667.0,
+        "mean": 10076.70172427399,
+        "std": 3720.4460933376486,
+        "abs_max": 29667.0,
+        "nonzero_count": 152061,
+        "allzero": false,
+        "constant": false,
+        "nan_count": 0,
+        "inf_count": 0,
+        "count_pos_32767": 0,
+        "count_neg_32768": 0,
+        "frac_pos_32767": 0.0,
+        "frac_neg_32768": 0.0
+      },
+      "official_dequant_stats": {
+        "shape": [
+          152064
+        ],
+        "dtype": "float32",
+        "size": 152064,
+        "min": -5.238466739654541,
+        "max": 7.540128231048584,
+        "mean": 2.561082124710083,
+        "std": 0.9455840587615967,
+        "abs_max": 7.540128231048584,
+        "nonzero_count": 152061,
+        "allzero": false,
+        "constant": false,
+        "nan_count": 0,
+        "inf_count": 0
+      },
+      "files": {
+        "input": {
+          "path": "evidence/final_segment_endpoint_raw_v9/zeros/real_x_div_3p5/input.npy",
+          "exists": true,
+          "size_bytes": 1835136,
+          "sha256": "966796864a8e79bff7258e098f09a914838f9be7a5ec1d1e88e1120b2024f125"
+        },
+        "raw_output": {
+          "path": "evidence/final_segment_endpoint_raw_v9/zeros/real_x_div_3p5/raw_output.npy",
+          "exists": true,
+          "size_bytes": 304256,
+          "sha256": "427ca1cdd9288c07b8980782fb7f1024981cfd7151c76eb63b65ca070bd25ac2"
+        },
+        "official_dequant": {
+          "path": "evidence/final_segment_endpoint_raw_v9/zeros/real_x_div_3p5/official_dequant_logits.npy",
+          "exists": true,
+          "size_bytes": 608384,
+          "sha256": "7a25f35c63856798d31ae298d8b148c969ca8b7be847613dd7e69f27fc76cdf1"
+        },
+        "metadata": {
+          "path": "evidence/final_segment_endpoint_raw_v9/zeros/real_x_div_3p5/metadata.json",
+          "exists": true,
+          "size_bytes": 4944,
+          "sha256": "bbedf73c31f1ef686a0f765751ec413c9cc4b563c3e6873a12cf6a39fae93da9"
+        }
+      }
+    },
+    {
+      "case_id": "zeros",
+      "variant_id": "real_x_div_4",
+      "input_stats": {
+        "shape": [
+          128,
+          3584
+        ],
+        "dtype": "float32",
+        "size": 458752,
+        "min": -4.074196815490723,
+        "max": 4.074196815490723,
+        "mean": 0.001260944758541882,
+        "std": 4.030941486358643,
+        "abs_max": 4.074196815490723,
+        "nonzero_count": 458751,
+        "allzero": false,
+        "constant": false,
+        "nan_count": 0,
+        "inf_count": 0
+      },
+      "raw_output_stats": {
+        "shape": [
+          1,
+          152064
+        ],
+        "dtype": "int16",
+        "size": 152064,
+        "min": -17760.0,
+        "max": 26164.0,
+        "mean": 8362.730185974327,
+        "std": 3244.647338415464,
+        "abs_max": 26164.0,
+        "nonzero_count": 152059,
+        "allzero": false,
+        "constant": false,
+        "nan_count": 0,
+        "inf_count": 0,
+        "count_pos_32767": 0,
+        "count_neg_32768": 0,
+        "frac_pos_32767": 0.0,
+        "frac_neg_32768": 0.0
+      },
+      "official_dequant_stats": {
+        "shape": [
+          152064
+        ],
+        "dtype": "float32",
+        "size": 152064,
+        "min": -4.513859748840332,
+        "max": 6.649810314178467,
+        "mean": 2.1254611015319824,
+        "std": 0.8246555924415588,
+        "abs_max": 6.649810314178467,
+        "nonzero_count": 152059,
+        "allzero": false,
+        "constant": false,
+        "nan_count": 0,
+        "inf_count": 0
+      },
+      "files": {
+        "input": {
+          "path": "evidence/final_segment_endpoint_raw_v9/zeros/real_x_div_4/input.npy",
+          "exists": true,
+          "size_bytes": 1835136,
+          "sha256": "014169daff7432efc79797993fdf3761b0c1cfe97b3d4fd1b4cccd20f6b9a19a"
+        },
+        "raw_output": {
+          "path": "evidence/final_segment_endpoint_raw_v9/zeros/real_x_div_4/raw_output.npy",
+          "exists": true,
+          "size_bytes": 304256,
+          "sha256": "80b44f938a51ac16d237e2782c1456f8ec25321c3635846c531a7938b5ec829c"
+        },
+        "official_dequant": {
+          "path": "evidence/final_segment_endpoint_raw_v9/zeros/real_x_div_4/official_dequant_logits.npy",
+          "exists": true,
+          "size_bytes": 608384,
+          "sha256": "82c410490ebccf39e7cc081e0d1e15b662419d1416a9830644d7f7060805c451"
+        },
+        "metadata": {
+          "path": "evidence/final_segment_endpoint_raw_v9/zeros/real_x_div_4/metadata.json",
+          "exists": true,
+          "size_bytes": 4927,
+          "sha256": "6ede89a64a0cdfd49b250eb361eca8f05dbbd5f381a87e88f5b2ab0271bba617"
+        }
+      }
+    },
+    {
+      "case_id": "zeros",
+      "variant_id": "real_x_clip_8",
+      "input_stats": {
+        "shape": [
+          128,
+          3584
+        ],
+        "dtype": "float32",
+        "size": 458752,
+        "min": -8.0,
+        "max": 8.0,
+        "mean": 0.00299398647621274,
+        "std": 7.958622455596924,
+        "abs_max": 8.0,
+        "nonzero_count": 458751,
+        "allzero": false,
+        "constant": false,
+        "nan_count": 0,
+        "inf_count": 0
+      },
+      "raw_output_stats": {
+        "shape": [
+          1,
+          152064
+        ],
+        "dtype": "int16",
+        "size": 152064,
+        "min": 0.0,
+        "max": 0.0,
+        "mean": 0.0,
+        "std": 0.0,
+        "abs_max": 0.0,
+        "nonzero_count": 0,
+        "allzero": true,
+        "constant": true,
+        "nan_count": 0,
+        "inf_count": 0,
+        "count_pos_32767": 0,
+        "count_neg_32768": 0,
+        "frac_pos_32767": 0.0,
+        "frac_neg_32768": 0.0
+      },
+      "official_dequant_stats": {
+        "shape": [
+          152064
+        ],
+        "dtype": "float32",
+        "size": 152064,
+        "min": 0.0,
+        "max": 0.0,
+        "mean": 0.0,
+        "std": 0.0,
+        "abs_max": 0.0,
+        "nonzero_count": 0,
+        "allzero": true,
+        "constant": true,
+        "nan_count": 0,
+        "inf_count": 0
+      },
+      "files": {
+        "input": {
+          "path": "evidence/final_segment_endpoint_raw_v9/zeros/real_x_clip_8/input.npy",
+          "exists": true,
+          "size_bytes": 1835136,
+          "sha256": "7d829fb73081067773dbda1ee660d6ea9185667fdf76c263f5b5f6f300cfed15"
+        },
+        "raw_output": {
+          "path": "evidence/final_segment_endpoint_raw_v9/zeros/real_x_clip_8/raw_output.npy",
+          "exists": true,
+          "size_bytes": 304256,
+          "sha256": "f5984f81235af99ba68d00422604dff6513b2338cec45b8185958ed61386239e"
+        },
+        "official_dequant": {
+          "path": "evidence/final_segment_endpoint_raw_v9/zeros/real_x_clip_8/official_dequant_logits.npy",
+          "exists": true,
+          "size_bytes": 608384,
+          "sha256": "c5446456b2eaa03e29c1e66c2511a51606f3a4c35988047d31ce7f9d921deb67"
+        },
+        "metadata": {
+          "path": "evidence/final_segment_endpoint_raw_v9/zeros/real_x_clip_8/metadata.json",
+          "exists": true,
+          "size_bytes": 4586,
+          "sha256": "e562394950ed4d3e2b2ae06bfbdca5e05c74e672858fabccfe5b3c1b94b6f25a"
+        }
+      }
+    },
+    {
+      "case_id": "zeros",
+      "variant_id": "real_x_clip_6",
+      "input_stats": {
+        "shape": [
+          128,
+          3584
+        ],
+        "dtype": "float32",
+        "size": 458752,
+        "min": -6.0,
+        "max": 6.0,
+        "mean": 0.002561774104833603,
+        "std": 5.976745128631592,
+        "abs_max": 6.0,
+        "nonzero_count": 458751,
+        "allzero": false,
+        "constant": false,
+        "nan_count": 0,
+        "inf_count": 0
+      },
+      "raw_output_stats": {
+        "shape": [
+          1,
+          152064
+        ],
+        "dtype": "int16",
+        "size": 152064,
+        "min": -27342.0,
+        "max": 32767.0,
+        "mean": 13901.408827861953,
+        "std": 4951.16961879634,
+        "abs_max": 32767.0,
+        "nonzero_count": 152064,
+        "allzero": false,
+        "constant": false,
+        "nan_count": 0,
+        "inf_count": 0,
+        "count_pos_32767": 11,
+        "count_neg_32768": 0,
+        "frac_pos_32767": 7.233796296296296e-05,
+        "frac_neg_32768": 0.0
+      },
+      "official_dequant_stats": {
+        "shape": [
+          152064
+        ],
+        "dtype": "float32",
+        "size": 152064,
+        "min": -6.949209213256836,
+        "max": 8.328020095825195,
+        "mean": 3.5331649780273438,
+        "std": 1.2583831548690796,
+        "abs_max": 8.328020095825195,
+        "nonzero_count": 152064,
+        "allzero": false,
+        "constant": false,
+        "nan_count": 0,
+        "inf_count": 0
+      },
+      "files": {
+        "input": {
+          "path": "evidence/final_segment_endpoint_raw_v9/zeros/real_x_clip_6/input.npy",
+          "exists": true,
+          "size_bytes": 1835136,
+          "sha256": "f4841f72f8d9a7d4db92f9bb8e3fae20dcbb43e4abe56aef543ae74fcda6d744"
+        },
+        "raw_output": {
+          "path": "evidence/final_segment_endpoint_raw_v9/zeros/real_x_clip_6/raw_output.npy",
+          "exists": true,
+          "size_bytes": 304256,
+          "sha256": "d45a66d5b0614feba732b743afff0bcfcebf0d0765db64aae26cfe3c6e7cf2ba"
+        },
+        "official_dequant": {
+          "path": "evidence/final_segment_endpoint_raw_v9/zeros/real_x_clip_6/official_dequant_logits.npy",
+          "exists": true,
+          "size_bytes": 608384,
+          "sha256": "560a08dc252d9a17c76fb28af99028e8e031457ebd2ff93eb238b1ff63a19ca3"
+        },
+        "metadata": {
+          "path": "evidence/final_segment_endpoint_raw_v9/zeros/real_x_clip_6/metadata.json",
+          "exists": true,
+          "size_bytes": 4878,
+          "sha256": "ed2ce79ab8c8c7faa92af0d7e630f07d68d286e658746c74f47b78353951c3ca"
+        }
+      }
+    },
+    {
+      "case_id": "zeros",
+      "variant_id": "real_x_clip_5",
+      "input_stats": {
+        "shape": [
+          128,
+          3584
+        ],
+        "dtype": "float32",
+        "size": 458752,
+        "min": -5.0,
+        "max": 5.0,
+        "mean": 0.002310575684532523,
+        "std": 4.983819961547852,
+        "abs_max": 5.0,
+        "nonzero_count": 458751,
+        "allzero": false,
+        "constant": false,
+        "nan_count": 0,
+        "inf_count": 0
+      },
+      "raw_output_stats": {
+        "shape": [
+          1,
+          152064
+        ],
+        "dtype": "int16",
+        "size": 152064,
+        "min": -22475.0,
+        "max": 31351.0,
+        "mean": 10948.973925452441,
+        "std": 4084.0300318067934,
+        "abs_max": 31351.0,
+        "nonzero_count": 152063,
+        "allzero": false,
+        "constant": false,
+        "nan_count": 0,
+        "inf_count": 0,
+        "count_pos_32767": 0,
+        "count_neg_32768": 0,
+        "frac_pos_32767": 0.0,
+        "frac_neg_32768": 0.0
+      },
+      "official_dequant_stats": {
+        "shape": [
+          152064
+        ],
+        "dtype": "float32",
+        "size": 152064,
+        "min": -5.712218284606934,
+        "max": 7.9681315422058105,
+        "mean": 2.782777786254883,
+        "std": 1.037992000579834,
+        "abs_max": 7.9681315422058105,
+        "nonzero_count": 152063,
+        "allzero": false,
+        "constant": false,
+        "nan_count": 0,
+        "inf_count": 0
+      },
+      "files": {
+        "input": {
+          "path": "evidence/final_segment_endpoint_raw_v9/zeros/real_x_clip_5/input.npy",
+          "exists": true,
+          "size_bytes": 1835136,
+          "sha256": "0295365611baa54ad4c7c11f2e298fa7d88d82e54bf614649e066d802053d612"
+        },
+        "raw_output": {
+          "path": "evidence/final_segment_endpoint_raw_v9/zeros/real_x_clip_5/raw_output.npy",
+          "exists": true,
+          "size_bytes": 304256,
+          "sha256": "0361c6dba8131ff85c056af9576bd544bf0612d368f90d1e9320058cd36290f3"
+        },
+        "official_dequant": {
+          "path": "evidence/final_segment_endpoint_raw_v9/zeros/real_x_clip_5/official_dequant_logits.npy",
+          "exists": true,
+          "size_bytes": 608384,
+          "sha256": "d73d4017b941dcf7e4a3e8f110d7b119202af6cf62bc4bd44a494eac41133041"
+        },
+        "metadata": {
+          "path": "evidence/final_segment_endpoint_raw_v9/zeros/real_x_clip_5/metadata.json",
+          "exists": true,
+          "size_bytes": 4820,
+          "sha256": "10f4d6acc4b56b9a31cdc4aa2b79c7769b24a42f4d5952d35f441aa1e82a18e4"
+        }
+      }
+    },
+    {
+      "case_id": "zeros",
+      "variant_id": "real_x_clip_4",
+      "input_stats": {
+        "shape": [
+          128,
+          3584
+        ],
+        "dtype": "float32",
+        "size": 458752,
+        "min": -4.0,
+        "max": 4.0,
+        "mean": 0.0019538872875273228,
+        "std": 3.9896481037139893,
+        "abs_max": 4.0,
+        "nonzero_count": 458751,
+        "allzero": false,
+        "constant": false,
+        "nan_count": 0,
+        "inf_count": 0
+      },
+      "raw_output_stats": {
+        "shape": [
+          1,
+          152064
+        ],
+        "dtype": "int16",
+        "size": 152064,
+        "min": -17553.0,
+        "max": 25411.0,
+        "mean": 7976.964870054714,
+        "std": 3243.9829364508887,
+        "abs_max": 25411.0,
+        "nonzero_count": 152064,
+        "allzero": false,
+        "constant": false,
+        "nan_count": 0,
+        "inf_count": 0,
+        "count_pos_32767": 0,
+        "count_neg_32768": 0,
+        "frac_pos_32767": 0.0,
+        "frac_neg_32768": 0.0
+      },
+      "official_dequant_stats": {
+        "shape": [
+          152064
+        ],
+        "dtype": "float32",
+        "size": 152064,
+        "min": -4.461248874664307,
+        "max": 6.458428859710693,
+        "mean": 2.0274157524108887,
+        "std": 0.8244867324829102,
+        "abs_max": 6.458428859710693,
+        "nonzero_count": 152064,
+        "allzero": false,
+        "constant": false,
+        "nan_count": 0,
+        "inf_count": 0
+      },
+      "files": {
+        "input": {
+          "path": "evidence/final_segment_endpoint_raw_v9/zeros/real_x_clip_4/input.npy",
+          "exists": true,
+          "size_bytes": 1835136,
+          "sha256": "a39523e509e80ac0e883ba6690ffe15aa6c45924372400c96e6a366bf64b0b5a"
+        },
+        "raw_output": {
+          "path": "evidence/final_segment_endpoint_raw_v9/zeros/real_x_clip_4/raw_output.npy",
+          "exists": true,
+          "size_bytes": 304256,
+          "sha256": "9241bc88868d553c13341e955779fbfc1f8d9a167d43653d6c49db77949f8b96"
+        },
+        "official_dequant": {
+          "path": "evidence/final_segment_endpoint_raw_v9/zeros/real_x_clip_4/official_dequant_logits.npy",
+          "exists": true,
+          "size_bytes": 608384,
+          "sha256": "98426593ec9c2794a232c68fafccc58ec4f9c0c4466474ad05e53aaea5c87a93"
+        },
+        "metadata": {
+          "path": "evidence/final_segment_endpoint_raw_v9/zeros/real_x_clip_4/metadata.json",
+          "exists": true,
+          "size_bytes": 4869,
+          "sha256": "77ec90d33681b8757eb7f637f951c0faed7142f9903ef6ac7bde27ad15a5827e"
+        }
+      }
+    },
+    {
+      "case_id": "zeros",
+      "variant_id": "real_x_z_normalized",
+      "input_stats": {
+        "shape": [
+          128,
+          3584
+        ],
+        "dtype": "float32",
+        "size": 458752,
+        "min": -1.0110434293746948,
+        "max": 1.0104179382324219,
+        "mean": 4.829572830544748e-08,
+        "std": 0.9999999403953552,
+        "abs_max": 1.0110434293746948,
+        "nonzero_count": 458752,
+        "allzero": false,
+        "constant": false,
+        "nan_count": 0,
+        "inf_count": 0
+      },
+      "raw_output_stats": {
+        "shape": [
+          1,
+          152064
+        ],
+        "dtype": "int16",
+        "size": 152064,
+        "min": -10620.0,
+        "max": 11565.0,
+        "mean": -656.9417613636364,
+        "std": 1508.005700777672,
+        "abs_max": 11565.0,
+        "nonzero_count": 152042,
+        "allzero": false,
+        "constant": false,
+        "nan_count": 0,
+        "inf_count": 0,
+        "count_pos_32767": 0,
+        "count_neg_32768": 0,
+        "frac_pos_32767": 0.0,
+        "frac_neg_32768": 0.0
+      },
+      "official_dequant_stats": {
+        "shape": [
+          152064
+        ],
+        "dtype": "float32",
+        "size": 152064,
+        "min": -2.6991662979125977,
+        "max": 2.9393463134765625,
+        "mean": -0.166967511177063,
+        "std": 0.38327285647392273,
+        "abs_max": 2.9393463134765625,
+        "nonzero_count": 152042,
+        "allzero": false,
+        "constant": false,
+        "nan_count": 0,
+        "inf_count": 0
+      },
+      "files": {
+        "input": {
+          "path": "evidence/final_segment_endpoint_raw_v9/zeros/real_x_z_normalized/input.npy",
+          "exists": true,
+          "size_bytes": 1835136,
+          "sha256": "4c9ffba7047a5112f9b14143983efcf2b54405ebb03baa44dd4f4e74f9e34ad7"
+        },
+        "raw_output": {
+          "path": "evidence/final_segment_endpoint_raw_v9/zeros/real_x_z_normalized/raw_output.npy",
+          "exists": true,
+          "size_bytes": 304256,
+          "sha256": "165bee5d5ecb1796b4ab5bc9f6ac55fba00ca2fd38a9ff18c088857418b346e8"
+        },
+        "official_dequant": {
+          "path": "evidence/final_segment_endpoint_raw_v9/zeros/real_x_z_normalized/official_dequant_logits.npy",
+          "exists": true,
+          "size_bytes": 608384,
+          "sha256": "d54899cbc7a726c421dc0aa3412a0eb1bb52c9276904a16da744793bb129eba3"
+        },
+        "metadata": {
+          "path": "evidence/final_segment_endpoint_raw_v9/zeros/real_x_z_normalized/metadata.json",
+          "exists": true,
+          "size_bytes": 4996,
+          "sha256": "2ab3caa32cfc4cd30e55d00edfa7377904118c975000429b95f1560bf853d5ce"
+        }
+      }
+    },
+    {
+      "case_id": "ramp",
+      "variant_id": "real_x",
+      "input_stats": {
+        "shape": [
+          128,
+          3584
+        ],
+        "dtype": "float32",
+        "size": 458752,
+        "min": -16.29678726196289,
+        "max": 16.29678726196289,
+        "mean": 0.08678288012742996,
+        "std": 16.120622634887695,
+        "abs_max": 16.29678726196289,
+        "nonzero_count": 458752,
+        "allzero": false,
+        "constant": false,
+        "nan_count": 0,
+        "inf_count": 0
+      },
+      "raw_output_stats": {
+        "shape": [
+          1,
+          152064
+        ],
+        "dtype": "int16",
+        "size": 152064,
+        "min": 0.0,
+        "max": 0.0,
+        "mean": 0.0,
+        "std": 0.0,
+        "abs_max": 0.0,
+        "nonzero_count": 0,
+        "allzero": true,
+        "constant": true,
+        "nan_count": 0,
+        "inf_count": 0,
+        "count_pos_32767": 0,
+        "count_neg_32768": 0,
+        "frac_pos_32767": 0.0,
+        "frac_neg_32768": 0.0
+      },
+      "official_dequant_stats": {
+        "shape": [
+          152064
+        ],
+        "dtype": "float32",
+        "size": 152064,
+        "min": 0.0,
+        "max": 0.0,
+        "mean": 0.0,
+        "std": 0.0,
+        "abs_max": 0.0,
+        "nonzero_count": 0,
+        "allzero": true,
+        "constant": true,
+        "nan_count": 0,
+        "inf_count": 0
+      },
+      "files": {
+        "input": {
+          "path": "evidence/final_segment_endpoint_raw_v9/ramp/real_x/input.npy",
+          "exists": true,
+          "size_bytes": 1835136,
+          "sha256": "ed37076930e61bfebbd1771195cfc671cc88c391f24b43430aa5986a1cc656d9"
+        },
+        "raw_output": {
+          "path": "evidence/final_segment_endpoint_raw_v9/ramp/real_x/raw_output.npy",
+          "exists": true,
+          "size_bytes": 304256,
+          "sha256": "f5984f81235af99ba68d00422604dff6513b2338cec45b8185958ed61386239e"
+        },
+        "official_dequant": {
+          "path": "evidence/final_segment_endpoint_raw_v9/ramp/real_x/official_dequant_logits.npy",
+          "exists": true,
+          "size_bytes": 608384,
+          "sha256": "c5446456b2eaa03e29c1e66c2511a51606f3a4c35988047d31ce7f9d921deb67"
+        },
+        "metadata": {
+          "path": "evidence/final_segment_endpoint_raw_v9/ramp/real_x/metadata.json",
+          "exists": true,
+          "size_bytes": 4614,
+          "sha256": "69f4792659609c63358b01066f85973c961576ec34c3ac1c559806ef7e5238a0"
+        }
+      }
+    },
+    {
+      "case_id": "ramp",
+      "variant_id": "real_x_div_2",
+      "input_stats": {
+        "shape": [
+          128,
+          3584
+        ],
+        "dtype": "float32",
+        "size": 458752,
+        "min": -8.148393630981445,
+        "max": 8.148393630981445,
+        "mean": 0.04339144006371498,
+        "std": 8.060311317443848,
+        "abs_max": 8.148393630981445,
+        "nonzero_count": 458752,
+        "allzero": false,
+        "constant": false,
+        "nan_count": 0,
+        "inf_count": 0
+      },
+      "raw_output_stats": {
+        "shape": [
+          1,
+          152064
+        ],
+        "dtype": "int16",
+        "size": 152064,
+        "min": 0.0,
+        "max": 0.0,
+        "mean": 0.0,
+        "std": 0.0,
+        "abs_max": 0.0,
+        "nonzero_count": 0,
+        "allzero": true,
+        "constant": true,
+        "nan_count": 0,
+        "inf_count": 0,
+        "count_pos_32767": 0,
+        "count_neg_32768": 0,
+        "frac_pos_32767": 0.0,
+        "frac_neg_32768": 0.0
+      },
+      "official_dequant_stats": {
+        "shape": [
+          152064
+        ],
+        "dtype": "float32",
+        "size": 152064,
+        "min": 0.0,
+        "max": 0.0,
+        "mean": 0.0,
+        "std": 0.0,
+        "abs_max": 0.0,
+        "nonzero_count": 0,
+        "allzero": true,
+        "constant": true,
+        "nan_count": 0,
+        "inf_count": 0
+      },
+      "files": {
+        "input": {
+          "path": "evidence/final_segment_endpoint_raw_v9/ramp/real_x_div_2/input.npy",
+          "exists": true,
+          "size_bytes": 1835136,
+          "sha256": "ac72dbdb0ee209413f381af3c4dfb5d495ac45d2bc164f70f00d9caed442c60c"
+        },
+        "raw_output": {
+          "path": "evidence/final_segment_endpoint_raw_v9/ramp/real_x_div_2/raw_output.npy",
+          "exists": true,
+          "size_bytes": 304256,
+          "sha256": "f5984f81235af99ba68d00422604dff6513b2338cec45b8185958ed61386239e"
+        },
+        "official_dequant": {
+          "path": "evidence/final_segment_endpoint_raw_v9/ramp/real_x_div_2/official_dequant_logits.npy",
+          "exists": true,
+          "size_bytes": 608384,
+          "sha256": "c5446456b2eaa03e29c1e66c2511a51606f3a4c35988047d31ce7f9d921deb67"
+        },
+        "metadata": {
+          "path": "evidence/final_segment_endpoint_raw_v9/ramp/real_x_div_2/metadata.json",
+          "exists": true,
+          "size_bytes": 4655,
+          "sha256": "2e73af2ec4022a1e05062e068d28c0d563736bb6c3d48199e4dc467bfb49b849"
+        }
+      }
+    },
+    {
+      "case_id": "ramp",
+      "variant_id": "real_x_div_2p25",
+      "input_stats": {
+        "shape": [
+          128,
+          3584
+        ],
+        "dtype": "float32",
+        "size": 458752,
+        "min": -7.243016719818115,
+        "max": 7.243016719818115,
+        "mean": 0.03857016935944557,
+        "std": 7.164721488952637,
+        "abs_max": 7.243016719818115,
+        "nonzero_count": 458752,
+        "allzero": false,
+        "constant": false,
+        "nan_count": 0,
+        "inf_count": 0
+      },
+      "raw_output_stats": {
+        "shape": [
+          1,
+          152064
+        ],
+        "dtype": "int16",
+        "size": 152064,
+        "min": 0.0,
+        "max": 0.0,
+        "mean": 0.0,
+        "std": 0.0,
+        "abs_max": 0.0,
+        "nonzero_count": 0,
+        "allzero": true,
+        "constant": true,
+        "nan_count": 0,
+        "inf_count": 0,
+        "count_pos_32767": 0,
+        "count_neg_32768": 0,
+        "frac_pos_32767": 0.0,
+        "frac_neg_32768": 0.0
+      },
+      "official_dequant_stats": {
+        "shape": [
+          152064
+        ],
+        "dtype": "float32",
+        "size": 152064,
+        "min": 0.0,
+        "max": 0.0,
+        "mean": 0.0,
+        "std": 0.0,
+        "abs_max": 0.0,
+        "nonzero_count": 0,
+        "allzero": true,
+        "constant": true,
+        "nan_count": 0,
+        "inf_count": 0
+      },
+      "files": {
+        "input": {
+          "path": "evidence/final_segment_endpoint_raw_v9/ramp/real_x_div_2p25/input.npy",
+          "exists": true,
+          "size_bytes": 1835136,
+          "sha256": "204a27d3444b41ffe290fa359177199c265faa768af58cf11cec902bb831dc48"
+        },
+        "raw_output": {
+          "path": "evidence/final_segment_endpoint_raw_v9/ramp/real_x_div_2p25/raw_output.npy",
+          "exists": true,
+          "size_bytes": 304256,
+          "sha256": "f5984f81235af99ba68d00422604dff6513b2338cec45b8185958ed61386239e"
+        },
+        "official_dequant": {
+          "path": "evidence/final_segment_endpoint_raw_v9/ramp/real_x_div_2p25/official_dequant_logits.npy",
+          "exists": true,
+          "size_bytes": 608384,
+          "sha256": "c5446456b2eaa03e29c1e66c2511a51606f3a4c35988047d31ce7f9d921deb67"
+        },
+        "metadata": {
+          "path": "evidence/final_segment_endpoint_raw_v9/ramp/real_x_div_2p25/metadata.json",
+          "exists": true,
+          "size_bytes": 4677,
+          "sha256": "60bb5545f934975e1b7c7e8151bf2a5b2307e72c590f5ff32440020b0d0db4ef"
+        }
+      }
+    },
+    {
+      "case_id": "ramp",
+      "variant_id": "real_x_div_2p5",
+      "input_stats": {
+        "shape": [
+          128,
+          3584
+        ],
+        "dtype": "float32",
+        "size": 458752,
+        "min": -6.518714904785156,
+        "max": 6.518714904785156,
+        "mean": 0.034713152796030045,
+        "std": 6.448249340057373,
+        "abs_max": 6.518714904785156,
+        "nonzero_count": 458752,
+        "allzero": false,
+        "constant": false,
+        "nan_count": 0,
+        "inf_count": 0
+      },
+      "raw_output_stats": {
+        "shape": [
+          1,
+          152064
+        ],
+        "dtype": "int16",
+        "size": 152064,
+        "min": 0.0,
+        "max": 0.0,
+        "mean": 0.0,
+        "std": 0.0,
+        "abs_max": 0.0,
+        "nonzero_count": 0,
+        "allzero": true,
+        "constant": true,
+        "nan_count": 0,
+        "inf_count": 0,
+        "count_pos_32767": 0,
+        "count_neg_32768": 0,
+        "frac_pos_32767": 0.0,
+        "frac_neg_32768": 0.0
+      },
+      "official_dequant_stats": {
+        "shape": [
+          152064
+        ],
+        "dtype": "float32",
+        "size": 152064,
+        "min": 0.0,
+        "max": 0.0,
+        "mean": 0.0,
+        "std": 0.0,
+        "abs_max": 0.0,
+        "nonzero_count": 0,
+        "allzero": true,
+        "constant": true,
+        "nan_count": 0,
+        "inf_count": 0
+      },
+      "files": {
+        "input": {
+          "path": "evidence/final_segment_endpoint_raw_v9/ramp/real_x_div_2p5/input.npy",
+          "exists": true,
+          "size_bytes": 1835136,
+          "sha256": "5a89aa1fe128076bbb710e50ab05e0b46bb8cb462ee0d16cc5faf23c6dc38e61"
+        },
+        "raw_output": {
+          "path": "evidence/final_segment_endpoint_raw_v9/ramp/real_x_div_2p5/raw_output.npy",
+          "exists": true,
+          "size_bytes": 304256,
+          "sha256": "f5984f81235af99ba68d00422604dff6513b2338cec45b8185958ed61386239e"
+        },
+        "official_dequant": {
+          "path": "evidence/final_segment_endpoint_raw_v9/ramp/real_x_div_2p5/official_dequant_logits.npy",
+          "exists": true,
+          "size_bytes": 608384,
+          "sha256": "c5446456b2eaa03e29c1e66c2511a51606f3a4c35988047d31ce7f9d921deb67"
+        },
+        "metadata": {
+          "path": "evidence/final_segment_endpoint_raw_v9/ramp/real_x_div_2p5/metadata.json",
+          "exists": true,
+          "size_bytes": 4670,
+          "sha256": "7d8d4ac61e96a2cae38fb1f82ece9cdcf4c6b4e7e0401201300cf90f9f923a68"
+        }
+      }
+    },
+    {
+      "case_id": "ramp",
+      "variant_id": "real_x_div_2p75",
+      "input_stats": {
+        "shape": [
+          128,
+          3584
+        ],
+        "dtype": "float32",
+        "size": 458752,
+        "min": -5.926104545593262,
+        "max": 5.926104545593262,
+        "mean": 0.031557414680719376,
+        "std": 5.8620452880859375,
+        "abs_max": 5.926104545593262,
+        "nonzero_count": 458752,
+        "allzero": false,
+        "constant": false,
+        "nan_count": 0,
+        "inf_count": 0
+      },
+      "raw_output_stats": {
+        "shape": [
+          1,
+          152064
+        ],
+        "dtype": "int16",
+        "size": 152064,
+        "min": -24024.0,
+        "max": 26797.0,
+        "mean": 272.7115293560606,
+        "std": 3770.3126040798447,
+        "abs_max": 26797.0,
+        "nonzero_count": 152046,
+        "allzero": false,
+        "constant": false,
+        "nan_count": 0,
+        "inf_count": 0,
+        "count_pos_32767": 0,
+        "count_neg_32768": 0,
+        "frac_pos_32767": 0.0,
+        "frac_neg_32768": 0.0
+      },
+      "official_dequant_stats": {
+        "shape": [
+          152064
+        ],
+        "dtype": "float32",
+        "size": 152064,
+        "min": -6.105910301208496,
+        "max": 6.81069278717041,
+        "mean": 0.06931202113628387,
+        "std": 0.9582580327987671,
+        "abs_max": 6.81069278717041,
+        "nonzero_count": 152046,
+        "allzero": false,
+        "constant": false,
+        "nan_count": 0,
+        "inf_count": 0
+      },
+      "files": {
+        "input": {
+          "path": "evidence/final_segment_endpoint_raw_v9/ramp/real_x_div_2p75/input.npy",
+          "exists": true,
+          "size_bytes": 1835136,
+          "sha256": "64686a6a19126711286e2ee623899ad4bb8008ce9f809d5826a2227206f854b7"
+        },
+        "raw_output": {
+          "path": "evidence/final_segment_endpoint_raw_v9/ramp/real_x_div_2p75/raw_output.npy",
+          "exists": true,
+          "size_bytes": 304256,
+          "sha256": "74d1af86b1f825550ef48f8106a000d9672fd88bf62d32a6c848f9830ecf6962"
+        },
+        "official_dequant": {
+          "path": "evidence/final_segment_endpoint_raw_v9/ramp/real_x_div_2p75/official_dequant_logits.npy",
+          "exists": true,
+          "size_bytes": 608384,
+          "sha256": "bf89963afa70f98e1a0c6fb80929254b21b236645712aff59c772090ce6eac68"
+        },
+        "metadata": {
+          "path": "evidence/final_segment_endpoint_raw_v9/ramp/real_x_div_2p75/metadata.json",
+          "exists": true,
+          "size_bytes": 4905,
+          "sha256": "9a59a664e9113855faed3d49a31b5d2e79ab0f3fa0b20e9f64b0c64fcc42662f"
+        }
+      }
+    },
+    {
+      "case_id": "ramp",
+      "variant_id": "real_x_div_3",
+      "input_stats": {
+        "shape": [
+          128,
+          3584
+        ],
+        "dtype": "float32",
+        "size": 458752,
+        "min": -5.432262420654297,
+        "max": 5.432262420654297,
+        "mean": 0.028927627950906754,
+        "std": 5.373540878295898,
+        "abs_max": 5.432262420654297,
+        "nonzero_count": 458752,
+        "allzero": false,
+        "constant": false,
+        "nan_count": 0,
+        "inf_count": 0
+      },
+      "raw_output_stats": {
+        "shape": [
+          1,
+          152064
+        ],
+        "dtype": "int16",
+        "size": 152064,
+        "min": -22934.0,
+        "max": 24652.0,
+        "mean": -48.22696364688552,
+        "std": 3504.3364668510676,
+        "abs_max": 24652.0,
+        "nonzero_count": 152043,
+        "allzero": false,
+        "constant": false,
+        "nan_count": 0,
+        "inf_count": 0,
+        "count_pos_32767": 0,
+        "count_neg_32768": 0,
+        "frac_pos_32767": 0.0,
+        "frac_neg_32768": 0.0
+      },
+      "official_dequant_stats": {
+        "shape": [
+          152064
+        ],
+        "dtype": "float32",
+        "size": 152064,
+        "min": -5.8288774490356445,
+        "max": 6.265522003173828,
+        "mean": -0.012257309630513191,
+        "std": 0.8906578421592712,
+        "abs_max": 6.265522003173828,
+        "nonzero_count": 152043,
+        "allzero": false,
+        "constant": false,
+        "nan_count": 0,
+        "inf_count": 0
+      },
+      "files": {
+        "input": {
+          "path": "evidence/final_segment_endpoint_raw_v9/ramp/real_x_div_3/input.npy",
+          "exists": true,
+          "size_bytes": 1835136,
+          "sha256": "53c20951478c68ab6fdcd6b59e44e2ac1f5bbe8b225353877fb6cdc47029d5ef"
+        },
+        "raw_output": {
+          "path": "evidence/final_segment_endpoint_raw_v9/ramp/real_x_div_3/raw_output.npy",
+          "exists": true,
+          "size_bytes": 304256,
+          "sha256": "818fb9c23238d88c42ba2845ba447e23bec96435c12792f492d781b5037ec885"
+        },
+        "official_dequant": {
+          "path": "evidence/final_segment_endpoint_raw_v9/ramp/real_x_div_3/official_dequant_logits.npy",
+          "exists": true,
+          "size_bytes": 608384,
+          "sha256": "9cbf203408b6441c76920997f66ac6b10c3972fd078c052a46a0fc695a1e3015"
+        },
+        "metadata": {
+          "path": "evidence/final_segment_endpoint_raw_v9/ramp/real_x_div_3/metadata.json",
+          "exists": true,
+          "size_bytes": 4888,
+          "sha256": "78e633bae697d5a61b22ddb57c937374e756af6d493acfa75e8243e1b79b7c78"
+        }
+      }
+    },
+    {
+      "case_id": "ramp",
+      "variant_id": "real_x_div_3p25",
+      "input_stats": {
+        "shape": [
+          128,
+          3584
+        ],
+        "dtype": "float32",
+        "size": 458752,
+        "min": -5.0143961906433105,
+        "max": 5.0143961906433105,
+        "mean": 0.026702428236603737,
+        "std": 4.96019172668457,
+        "abs_max": 5.0143961906433105,
+        "nonzero_count": 458752,
+        "allzero": false,
+        "constant": false,
+        "nan_count": 0,
+        "inf_count": 0
+      },
+      "raw_output_stats": {
+        "shape": [
+          1,
+          152064
+        ],
+        "dtype": "int16",
+        "size": 152064,
+        "min": -22025.0,
+        "max": 22818.0,
+        "mean": -336.2013691603535,
+        "std": 3285.096418988762,
+        "abs_max": 22818.0,
+        "nonzero_count": 152041,
+        "allzero": false,
+        "constant": false,
+        "nan_count": 0,
+        "inf_count": 0,
+        "count_pos_32767": 0,
+        "count_neg_32768": 0,
+        "frac_pos_32767": 0.0,
+        "frac_neg_32768": 0.0
+      },
+      "official_dequant_stats": {
+        "shape": [
+          152064
+        ],
+        "dtype": "float32",
+        "size": 152064,
+        "min": -5.597846984863281,
+        "max": 5.7993950843811035,
+        "mean": -0.08544853329658508,
+        "std": 0.8349360823631287,
+        "abs_max": 5.7993950843811035,
+        "nonzero_count": 152041,
+        "allzero": false,
+        "constant": false,
+        "nan_count": 0,
+        "inf_count": 0
+      },
+      "files": {
+        "input": {
+          "path": "evidence/final_segment_endpoint_raw_v9/ramp/real_x_div_3p25/input.npy",
+          "exists": true,
+          "size_bytes": 1835136,
+          "sha256": "93ec4e8a8433d65d95e1f2af079e39f31e0e24bd8862a1b7912f3d894a2b2ad3"
+        },
+        "raw_output": {
+          "path": "evidence/final_segment_endpoint_raw_v9/ramp/real_x_div_3p25/raw_output.npy",
+          "exists": true,
+          "size_bytes": 304256,
+          "sha256": "d8eabc0ab82cc4ef757b85bf466686f65b2548f0925a0b145c67951349335f8f"
+        },
+        "official_dequant": {
+          "path": "evidence/final_segment_endpoint_raw_v9/ramp/real_x_div_3p25/official_dequant_logits.npy",
+          "exists": true,
+          "size_bytes": 608384,
+          "sha256": "d857ce49c4f9b44b3be64fdc877295232c5de225ca0cef8df277de397dc473bc"
+        },
+        "metadata": {
+          "path": "evidence/final_segment_endpoint_raw_v9/ramp/real_x_div_3p25/metadata.json",
+          "exists": true,
+          "size_bytes": 4912,
+          "sha256": "57d6dc575d20fab4e9e0b15b56512bb0e98ef1d798a20fe278cece4a0e886a69"
+        }
+      }
+    },
+    {
+      "case_id": "ramp",
+      "variant_id": "real_x_div_3p5",
+      "input_stats": {
+        "shape": [
+          128,
+          3584
+        ],
+        "dtype": "float32",
+        "size": 458752,
+        "min": -4.656224727630615,
+        "max": 4.656224727630615,
+        "mean": 0.024795109406113625,
+        "std": 4.605892181396484,
+        "abs_max": 4.656224727630615,
+        "nonzero_count": 458752,
+        "allzero": false,
+        "constant": false,
+        "nan_count": 0,
+        "inf_count": 0
+      },
+      "raw_output_stats": {
+        "shape": [
+          1,
+          152064
+        ],
+        "dtype": "int16",
+        "size": 152064,
+        "min": -21232.0,
+        "max": 21263.0,
+        "mean": -564.412050189394,
+        "std": 3100.142278066197,
+        "abs_max": 21263.0,
+        "nonzero_count": 152045,
+        "allzero": false,
+        "constant": false,
+        "nan_count": 0,
+        "inf_count": 0,
+        "count_pos_32767": 0,
+        "count_neg_32768": 0,
+        "frac_pos_32767": 0.0,
+        "frac_neg_32768": 0.0
+      },
+      "official_dequant_stats": {
+        "shape": [
+          152064
+        ],
+        "dtype": "float32",
+        "size": 152064,
+        "min": -5.396298885345459,
+        "max": 5.404178142547607,
+        "mean": -0.1434502899646759,
+        "std": 0.7879284024238586,
+        "abs_max": 5.404178142547607,
+        "nonzero_count": 152045,
+        "allzero": false,
+        "constant": false,
+        "nan_count": 0,
+        "inf_count": 0
+      },
+      "files": {
+        "input": {
+          "path": "evidence/final_segment_endpoint_raw_v9/ramp/real_x_div_3p5/input.npy",
+          "exists": true,
+          "size_bytes": 1835136,
+          "sha256": "cce13f414d0b115c5ddcb229f88c4ce157457d3567517795bc770e75b38d6cd7"
+        },
+        "raw_output": {
+          "path": "evidence/final_segment_endpoint_raw_v9/ramp/real_x_div_3p5/raw_output.npy",
+          "exists": true,
+          "size_bytes": 304256,
+          "sha256": "b02f690dc649879e597beec8105fe297c027b7db0a01a3942b464dbaa8ddcc13"
+        },
+        "official_dequant": {
+          "path": "evidence/final_segment_endpoint_raw_v9/ramp/real_x_div_3p5/official_dequant_logits.npy",
+          "exists": true,
+          "size_bytes": 608384,
+          "sha256": "e34151380a05c67a0a0fa5f2ed6d3e88897893d21ae5f087aca6ab5d6671da1f"
+        },
+        "metadata": {
+          "path": "evidence/final_segment_endpoint_raw_v9/ramp/real_x_div_3p5/metadata.json",
+          "exists": true,
+          "size_bytes": 4893,
+          "sha256": "6f8ed7f5192f9d30ea2471a91cf3089ff0b734986c41f2983b997889a5f993a6"
+        }
+      }
+    },
+    {
+      "case_id": "ramp",
+      "variant_id": "real_x_div_4",
+      "input_stats": {
+        "shape": [
+          128,
+          3584
+        ],
+        "dtype": "float32",
+        "size": 458752,
+        "min": -4.074196815490723,
+        "max": 4.074196815490723,
+        "mean": 0.02169572003185749,
+        "std": 4.030155658721924,
+        "abs_max": 4.074196815490723,
+        "nonzero_count": 458752,
+        "allzero": false,
+        "constant": false,
+        "nan_count": 0,
+        "inf_count": 0
+      },
+      "raw_output_stats": {
+        "shape": [
+          1,
+          152064
+        ],
+        "dtype": "int16",
+        "size": 152064,
+        "min": -19955.0,
+        "max": 18713.0,
+        "mean": -955.0366884995791,
+        "std": 2809.492744625213,
+        "abs_max": 19955.0,
+        "nonzero_count": 152030,
+        "allzero": false,
+        "constant": false,
+        "nan_count": 0,
+        "inf_count": 0,
+        "count_pos_32767": 0,
+        "count_neg_32768": 0,
+        "frac_pos_32767": 0.0,
+        "frac_neg_32768": 0.0
+      },
+      "official_dequant_stats": {
+        "shape": [
+          152064
+        ],
+        "dtype": "float32",
+        "size": 152064,
+        "min": -5.071738243103027,
+        "max": 4.756072998046875,
+        "mean": -0.24273096024990082,
+        "std": 0.7140572667121887,
+        "abs_max": 5.071738243103027,
+        "nonzero_count": 152030,
+        "allzero": false,
+        "constant": false,
+        "nan_count": 0,
+        "inf_count": 0
+      },
+      "files": {
+        "input": {
+          "path": "evidence/final_segment_endpoint_raw_v9/ramp/real_x_div_4/input.npy",
+          "exists": true,
+          "size_bytes": 1835136,
+          "sha256": "d136b7fc4e3ed0600ec4ed8d5045d9b3704197ef6a2660ce34a958fbc2c951d6"
+        },
+        "raw_output": {
+          "path": "evidence/final_segment_endpoint_raw_v9/ramp/real_x_div_4/raw_output.npy",
+          "exists": true,
+          "size_bytes": 304256,
+          "sha256": "3da1cc9c4c932df36a5cdfed989bd58e1c7106cafa2bc95f3df5125f8b12f51d"
+        },
+        "official_dequant": {
+          "path": "evidence/final_segment_endpoint_raw_v9/ramp/real_x_div_4/official_dequant_logits.npy",
+          "exists": true,
+          "size_bytes": 608384,
+          "sha256": "5afb58355efd73c09b84f6137e3a73b4692ea843c9354e00d1be01862b51f552"
+        },
+        "metadata": {
+          "path": "evidence/final_segment_endpoint_raw_v9/ramp/real_x_div_4/metadata.json",
+          "exists": true,
+          "size_bytes": 4889,
+          "sha256": "778ef17704ac5f901f673f4f81cfb3ed4fd92ef4c8f2b1214ff5bd7b1d049567"
+        }
+      }
+    },
+    {
+      "case_id": "ramp",
+      "variant_id": "real_x_clip_8",
+      "input_stats": {
+        "shape": [
+          128,
+          3584
+        ],
+        "dtype": "float32",
+        "size": 458752,
+        "min": -8.0,
+        "max": 8.0,
+        "mean": 0.04259825497865677,
+        "std": 7.957447052001953,
+        "abs_max": 8.0,
+        "nonzero_count": 458752,
+        "allzero": false,
+        "constant": false,
+        "nan_count": 0,
+        "inf_count": 0
+      },
+      "raw_output_stats": {
+        "shape": [
+          1,
+          152064
+        ],
+        "dtype": "int16",
+        "size": 152064,
+        "min": 0.0,
+        "max": 0.0,
+        "mean": 0.0,
+        "std": 0.0,
+        "abs_max": 0.0,
+        "nonzero_count": 0,
+        "allzero": true,
+        "constant": true,
+        "nan_count": 0,
+        "inf_count": 0,
+        "count_pos_32767": 0,
+        "count_neg_32768": 0,
+        "frac_pos_32767": 0.0,
+        "frac_neg_32768": 0.0
+      },
+      "official_dequant_stats": {
+        "shape": [
+          152064
+        ],
+        "dtype": "float32",
+        "size": 152064,
+        "min": 0.0,
+        "max": 0.0,
+        "mean": 0.0,
+        "std": 0.0,
+        "abs_max": 0.0,
+        "nonzero_count": 0,
+        "allzero": true,
+        "constant": true,
+        "nan_count": 0,
+        "inf_count": 0
+      },
+      "files": {
+        "input": {
+          "path": "evidence/final_segment_endpoint_raw_v9/ramp/real_x_clip_8/input.npy",
+          "exists": true,
+          "size_bytes": 1835136,
+          "sha256": "26b3c4c7c0e69fd78a6b17f51c08b5f87a050a48cff3dc29ac168ed03539a0d4"
+        },
+        "raw_output": {
+          "path": "evidence/final_segment_endpoint_raw_v9/ramp/real_x_clip_8/raw_output.npy",
+          "exists": true,
+          "size_bytes": 304256,
+          "sha256": "f5984f81235af99ba68d00422604dff6513b2338cec45b8185958ed61386239e"
+        },
+        "official_dequant": {
+          "path": "evidence/final_segment_endpoint_raw_v9/ramp/real_x_clip_8/official_dequant_logits.npy",
+          "exists": true,
+          "size_bytes": 608384,
+          "sha256": "c5446456b2eaa03e29c1e66c2511a51606f3a4c35988047d31ce7f9d921deb67"
+        },
+        "metadata": {
+          "path": "evidence/final_segment_endpoint_raw_v9/ramp/real_x_clip_8/metadata.json",
+          "exists": true,
+          "size_bytes": 4579,
+          "sha256": "a1eb3dbdb4288490322c92d48404ef03e276d87ebae5b638db1bf8a11a44072a"
+        }
+      }
+    },
+    {
+      "case_id": "ramp",
+      "variant_id": "real_x_clip_6",
+      "input_stats": {
+        "shape": [
+          128,
+          3584
+        ],
+        "dtype": "float32",
+        "size": 458752,
+        "min": -6.0,
+        "max": 6.0,
+        "mean": 0.03175175562500954,
+        "std": 5.976074695587158,
+        "abs_max": 6.0,
+        "nonzero_count": 458752,
+        "allzero": false,
+        "constant": false,
+        "nan_count": 0,
+        "inf_count": 0
+      },
+      "raw_output_stats": {
+        "shape": [
+          1,
+          152064
+        ],
+        "dtype": "int16",
+        "size": 152064,
+        "min": -23629.0,
+        "max": 27140.0,
+        "mean": 145.63838252314815,
+        "std": 3824.5445180875386,
+        "abs_max": 27140.0,
+        "nonzero_count": 152045,
+        "allzero": false,
+        "constant": false,
+        "nan_count": 0,
+        "inf_count": 0,
+        "count_pos_32767": 0,
+        "count_neg_32768": 0,
+        "frac_pos_32767": 0.0,
+        "frac_neg_32768": 0.0
+      },
+      "official_dequant_stats": {
+        "shape": [
+          152064
+        ],
+        "dtype": "float32",
+        "size": 152064,
+        "min": -6.005517482757568,
+        "max": 6.897869110107422,
+        "mean": 0.03701527416706085,
+        "std": 0.9720415472984314,
+        "abs_max": 6.897869110107422,
+        "nonzero_count": 152045,
+        "allzero": false,
+        "constant": false,
+        "nan_count": 0,
+        "inf_count": 0
+      },
+      "files": {
+        "input": {
+          "path": "evidence/final_segment_endpoint_raw_v9/ramp/real_x_clip_6/input.npy",
+          "exists": true,
+          "size_bytes": 1835136,
+          "sha256": "f508aca160b80c05eb7b82396a66a788374b9d12bcdbd2d5af130001a5c1db96"
+        },
+        "raw_output": {
+          "path": "evidence/final_segment_endpoint_raw_v9/ramp/real_x_clip_6/raw_output.npy",
+          "exists": true,
+          "size_bytes": 304256,
+          "sha256": "81c5cc6b40e7fffa997f12ca2867b18c82b396ea752e561cccbd8d6cd5e5e575"
+        },
+        "official_dequant": {
+          "path": "evidence/final_segment_endpoint_raw_v9/ramp/real_x_clip_6/official_dequant_logits.npy",
+          "exists": true,
+          "size_bytes": 608384,
+          "sha256": "b64c9c0b649c018d8049f941a5f7bc18e7e3841d322f9b6c4d58723ce5495d09"
+        },
+        "metadata": {
+          "path": "evidence/final_segment_endpoint_raw_v9/ramp/real_x_clip_6/metadata.json",
+          "exists": true,
+          "size_bytes": 4810,
+          "sha256": "c0bfdcc9d3d08160635736c7040ce95fe6c591bda223a1830029aae77b2fe1e9"
+        }
+      }
+    },
+    {
+      "case_id": "ramp",
+      "variant_id": "real_x_clip_5",
+      "input_stats": {
+        "shape": [
+          128,
+          3584
+        ],
+        "dtype": "float32",
+        "size": 458752,
+        "min": -5.0,
+        "max": 5.0,
+        "mean": 0.026432620361447334,
+        "std": 4.983414649963379,
+        "abs_max": 5.0,
+        "nonzero_count": 458752,
+        "allzero": false,
+        "constant": false,
+        "nan_count": 0,
+        "inf_count": 0
+      },
+      "raw_output_stats": {
+        "shape": [
+          1,
+          152064
+        ],
+        "dtype": "int16",
+        "size": 152064,
+        "min": -21522.0,
+        "max": 22697.0,
+        "mean": -560.3762494739058,
+        "std": 3291.688611354879,
+        "abs_max": 22697.0,
+        "nonzero_count": 152041,
+        "allzero": false,
+        "constant": false,
+        "nan_count": 0,
+        "inf_count": 0,
+        "count_pos_32767": 0,
+        "count_neg_32768": 0,
+        "frac_pos_32767": 0.0,
+        "frac_neg_32768": 0.0
+      },
+      "official_dequant_stats": {
+        "shape": [
+          152064
+        ],
+        "dtype": "float32",
+        "size": 152064,
+        "min": -5.470005035400391,
+        "max": 5.768641471862793,
+        "mean": -0.142424538731575,
+        "std": 0.8366115093231201,
+        "abs_max": 5.768641471862793,
+        "nonzero_count": 152041,
+        "allzero": false,
+        "constant": false,
+        "nan_count": 0,
+        "inf_count": 0
+      },
+      "files": {
+        "input": {
+          "path": "evidence/final_segment_endpoint_raw_v9/ramp/real_x_clip_5/input.npy",
+          "exists": true,
+          "size_bytes": 1835136,
+          "sha256": "1a4fcc4fbee5cc81c6cce04eb5e5312fe28dec85f16db8ef922aee3664596480"
+        },
+        "raw_output": {
+          "path": "evidence/final_segment_endpoint_raw_v9/ramp/real_x_clip_5/raw_output.npy",
+          "exists": true,
+          "size_bytes": 304256,
+          "sha256": "b0d604ff647cc8c80a9b2cba1a6ef3b66d39a8f99e74e98a723b39b3abda8c1d"
+        },
+        "official_dequant": {
+          "path": "evidence/final_segment_endpoint_raw_v9/ramp/real_x_clip_5/official_dequant_logits.npy",
+          "exists": true,
+          "size_bytes": 608384,
+          "sha256": "0f3572efecaceab368c296c8a40c56c802f7659438016323cb509173c995b5c7"
+        },
+        "metadata": {
+          "path": "evidence/final_segment_endpoint_raw_v9/ramp/real_x_clip_5/metadata.json",
+          "exists": true,
+          "size_bytes": 4806,
+          "sha256": "f92de28ee7b310737f15478d4c704a9664da949a240f4650358a1f7223aaf5e5"
+        }
+      }
+    },
+    {
+      "case_id": "ramp",
+      "variant_id": "real_x_clip_4",
+      "input_stats": {
+        "shape": [
+          128,
+          3584
+        ],
+        "dtype": "float32",
+        "size": 458752,
+        "min": -4.0,
+        "max": 4.0,
+        "mean": 0.021146446466445923,
+        "std": 3.9893834590911865,
+        "abs_max": 4.0,
+        "nonzero_count": 458752,
+        "allzero": false,
+        "constant": false,
+        "nan_count": 0,
+        "inf_count": 0
+      },
+      "raw_output_stats": {
+        "shape": [
+          1,
+          152064
+        ],
+        "dtype": "int16",
+        "size": 152064,
+        "min": -19393.0,
+        "max": 18311.0,
+        "mean": -1213.3176491477273,
+        "std": 2788.2071599380406,
+        "abs_max": 19393.0,
+        "nonzero_count": 152009,
+        "allzero": false,
+        "constant": false,
+        "nan_count": 0,
+        "inf_count": 0,
+        "count_pos_32767": 0,
+        "count_neg_32768": 0,
+        "frac_pos_32767": 0.0,
+        "frac_neg_32768": 0.0
+      },
+      "official_dequant_stats": {
+        "shape": [
+          152064
+        ],
+        "dtype": "float32",
+        "size": 152064,
+        "min": -4.928901195526123,
+        "max": 4.653901100158691,
+        "mean": -0.30837535858154297,
+        "std": 0.7086473107337952,
+        "abs_max": 4.928901195526123,
+        "nonzero_count": 152009,
+        "allzero": false,
+        "constant": false,
+        "nan_count": 0,
+        "inf_count": 0
+      },
+      "files": {
+        "input": {
+          "path": "evidence/final_segment_endpoint_raw_v9/ramp/real_x_clip_4/input.npy",
+          "exists": true,
+          "size_bytes": 1835136,
+          "sha256": "bfbbf3c2e1db4b05198113605795ebd9a5cdf8924277a0024f5408fe8a409ab6"
+        },
+        "raw_output": {
+          "path": "evidence/final_segment_endpoint_raw_v9/ramp/real_x_clip_4/raw_output.npy",
+          "exists": true,
+          "size_bytes": 304256,
+          "sha256": "f342f129f5795bf5b8b063cdd0ac0d3b10be8bdfbc04445a5b0914bdf5f79680"
+        },
+        "official_dequant": {
+          "path": "evidence/final_segment_endpoint_raw_v9/ramp/real_x_clip_4/official_dequant_logits.npy",
+          "exists": true,
+          "size_bytes": 608384,
+          "sha256": "1c5a95effe881c886a7dc7ebf9e13368af1e41dcd0f44910f13f38fae661300b"
+        },
+        "metadata": {
+          "path": "evidence/final_segment_endpoint_raw_v9/ramp/real_x_clip_4/metadata.json",
+          "exists": true,
+          "size_bytes": 4816,
+          "sha256": "e1bb36ea6cfcc3ebc7aa99436918933c7e1ba8f81ea3148e74336251c27c7713"
+        }
+      }
+    },
+    {
+      "case_id": "ramp",
+      "variant_id": "real_x_z_normalized",
+      "input_stats": {
+        "shape": [
+          128,
+          3584
+        ],
+        "dtype": "float32",
+        "size": 458752,
+        "min": -1.0163111686706543,
+        "max": 1.0055445432662964,
+        "mean": 4.8362249316369343e-08,
+        "std": 1.0,
+        "abs_max": 1.0163111686706543,
+        "nonzero_count": 458752,
+        "allzero": false,
+        "constant": false,
+        "nan_count": 0,
+        "inf_count": 0
+      },
+      "raw_output_stats": {
+        "shape": [
+          1,
+          152064
+        ],
+        "dtype": "int16",
+        "size": 152064,
+        "min": -13243.0,
+        "max": 9450.0,
+        "mean": -2999.9810869107746,
+        "std": 1739.4205806411192,
+        "abs_max": 13243.0,
+        "nonzero_count": 152060,
+        "allzero": false,
+        "constant": false,
+        "nan_count": 0,
+        "inf_count": 0,
+        "count_pos_32767": 0,
+        "count_neg_32768": 0,
+        "frac_pos_32767": 0.0,
+        "frac_neg_32768": 0.0
+      },
+      "official_dequant_stats": {
+        "shape": [
+          152064
+        ],
+        "dtype": "float32",
+        "size": 152064,
+        "min": -3.3658246994018555,
+        "max": 2.4018003940582275,
+        "mean": -0.7624714970588684,
+        "std": 0.4420890212059021,
+        "abs_max": 3.3658246994018555,
+        "nonzero_count": 152060,
+        "allzero": false,
+        "constant": false,
+        "nan_count": 0,
+        "inf_count": 0
+      },
+      "files": {
+        "input": {
+          "path": "evidence/final_segment_endpoint_raw_v9/ramp/real_x_z_normalized/input.npy",
+          "exists": true,
+          "size_bytes": 1835136,
+          "sha256": "e9b841a4ec7cd55c7d5e674b817ac0d28b5a5e096f159095353d36392225478c"
+        },
+        "raw_output": {
+          "path": "evidence/final_segment_endpoint_raw_v9/ramp/real_x_z_normalized/raw_output.npy",
+          "exists": true,
+          "size_bytes": 304256,
+          "sha256": "83a20df95bcceda68019bd990b9f341e3ab5b5a5c32c199ee35f1e5ede172a78"
+        },
+        "official_dequant": {
+          "path": "evidence/final_segment_endpoint_raw_v9/ramp/real_x_z_normalized/official_dequant_logits.npy",
+          "exists": true,
+          "size_bytes": 608384,
+          "sha256": "76ba341aa87292e634a1dbce3890e758e041aa925d4cfcdbeffbe718efc2315f"
+        },
+        "metadata": {
+          "path": "evidence/final_segment_endpoint_raw_v9/ramp/real_x_z_normalized/metadata.json",
+          "exists": true,
+          "size_bytes": 4964,
+          "sha256": "6ffdd2ad43ef3b1e43c0e84a5818874f5676d2a988a1f0c35d5eaae826f715b6"
+        }
+      }
+    },
+    {
+      "case_id": "short_chinese_prompt_padded",
+      "variant_id": "real_x",
+      "input_stats": {
+        "shape": [
+          128,
+          3584
+        ],
+        "dtype": "float32",
+        "size": 458752,
+        "min": -16.29678726196289,
+        "max": 16.29678726196289,
+        "mean": 0.06199396401643753,
+        "std": 16.122926712036133,
+        "abs_max": 16.29678726196289,
+        "nonzero_count": 458752,
+        "allzero": false,
+        "constant": false,
+        "nan_count": 0,
+        "inf_count": 0
+      },
+      "raw_output_stats": {
+        "shape": [
+          1,
+          152064
+        ],
+        "dtype": "int16",
+        "size": 152064,
+        "min": 0.0,
+        "max": 0.0,
+        "mean": 0.0,
+        "std": 0.0,
+        "abs_max": 0.0,
+        "nonzero_count": 0,
+        "allzero": true,
+        "constant": true,
+        "nan_count": 0,
+        "inf_count": 0,
+        "count_pos_32767": 0,
+        "count_neg_32768": 0,
+        "frac_pos_32767": 0.0,
+        "frac_neg_32768": 0.0
+      },
+      "official_dequant_stats": {
+        "shape": [
+          152064
+        ],
+        "dtype": "float32",
+        "size": 152064,
+        "min": 0.0,
+        "max": 0.0,
+        "mean": 0.0,
+        "std": 0.0,
+        "abs_max": 0.0,
+        "nonzero_count": 0,
+        "allzero": true,
+        "constant": true,
+        "nan_count": 0,
+        "inf_count": 0
+      },
+      "files": {
+        "input": {
+          "path": "evidence/final_segment_endpoint_raw_v9/short_chinese_prompt_padded/real_x/input.npy",
+          "exists": true,
+          "size_bytes": 1835136,
+          "sha256": "4726c9b42b207704ecdafbb48a69fb97cbfd7d9eba6fe00beaed8e30b95f0f70"
+        },
+        "raw_output": {
+          "path": "evidence/final_segment_endpoint_raw_v9/short_chinese_prompt_padded/real_x/raw_output.npy",
+          "exists": true,
+          "size_bytes": 304256,
+          "sha256": "f5984f81235af99ba68d00422604dff6513b2338cec45b8185958ed61386239e"
+        },
+        "official_dequant": {
+          "path": "evidence/final_segment_endpoint_raw_v9/short_chinese_prompt_padded/real_x/official_dequant_logits.npy",
+          "exists": true,
+          "size_bytes": 608384,
+          "sha256": "c5446456b2eaa03e29c1e66c2511a51606f3a4c35988047d31ce7f9d921deb67"
+        },
+        "metadata": {
+          "path": "evidence/final_segment_endpoint_raw_v9/short_chinese_prompt_padded/real_x/metadata.json",
+          "exists": true,
+          "size_bytes": 4752,
+          "sha256": "5517607dfef311ab1e96e06d913835369fa754aca24d373a92057e39472b27d6"
+        }
+      }
+    },
+    {
+      "case_id": "short_chinese_prompt_padded",
+      "variant_id": "real_x_div_2",
+      "input_stats": {
+        "shape": [
+          128,
+          3584
+        ],
+        "dtype": "float32",
+        "size": 458752,
+        "min": -8.148393630981445,
+        "max": 8.148393630981445,
+        "mean": 0.030996982008218765,
+        "std": 8.061463356018066,
+        "abs_max": 8.148393630981445,
+        "nonzero_count": 458752,
+        "allzero": false,
+        "constant": false,
+        "nan_count": 0,
+        "inf_count": 0
+      },
+      "raw_output_stats": {
+        "shape": [
+          1,
+          152064
+        ],
+        "dtype": "int16",
+        "size": 152064,
+        "min": 0.0,
+        "max": 0.0,
+        "mean": 0.0,
+        "std": 0.0,
+        "abs_max": 0.0,
+        "nonzero_count": 0,
+        "allzero": true,
+        "constant": true,
+        "nan_count": 0,
+        "inf_count": 0,
+        "count_pos_32767": 0,
+        "count_neg_32768": 0,
+        "frac_pos_32767": 0.0,
+        "frac_neg_32768": 0.0
+      },
+      "official_dequant_stats": {
+        "shape": [
+          152064
+        ],
+        "dtype": "float32",
+        "size": 152064,
+        "min": 0.0,
+        "max": 0.0,
+        "mean": 0.0,
+        "std": 0.0,
+        "abs_max": 0.0,
+        "nonzero_count": 0,
+        "allzero": true,
+        "constant": true,
+        "nan_count": 0,
+        "inf_count": 0
+      },
+      "files": {
+        "input": {
+          "path": "evidence/final_segment_endpoint_raw_v9/short_chinese_prompt_padded/real_x_div_2/input.npy",
+          "exists": true,
+          "size_bytes": 1835136,
+          "sha256": "23c180eb8edecae851849b058b5f71538dda5b722e1b7535e12ed937b7cb27b8"
+        },
+        "raw_output": {
+          "path": "evidence/final_segment_endpoint_raw_v9/short_chinese_prompt_padded/real_x_div_2/raw_output.npy",
+          "exists": true,
+          "size_bytes": 304256,
+          "sha256": "f5984f81235af99ba68d00422604dff6513b2338cec45b8185958ed61386239e"
+        },
+        "official_dequant": {
+          "path": "evidence/final_segment_endpoint_raw_v9/short_chinese_prompt_padded/real_x_div_2/official_dequant_logits.npy",
+          "exists": true,
+          "size_bytes": 608384,
+          "sha256": "c5446456b2eaa03e29c1e66c2511a51606f3a4c35988047d31ce7f9d921deb67"
+        },
+        "metadata": {
+          "path": "evidence/final_segment_endpoint_raw_v9/short_chinese_prompt_padded/real_x_div_2/metadata.json",
+          "exists": true,
+          "size_bytes": 4794,
+          "sha256": "8af2241caab6ab8eee46d6af607569e38fe304749713603c6d5b7d06e0c669fb"
+        }
+      }
+    },
+    {
+      "case_id": "short_chinese_prompt_padded",
+      "variant_id": "real_x_div_2p25",
+      "input_stats": {
+        "shape": [
+          128,
+          3584
+        ],
+        "dtype": "float32",
+        "size": 458752,
+        "min": -7.243016719818115,
+        "max": 7.243016719818115,
+        "mean": 0.027552874758839607,
+        "std": 7.165746212005615,
+        "abs_max": 7.243016719818115,
+        "nonzero_count": 458752,
+        "allzero": false,
+        "constant": false,
+        "nan_count": 0,
+        "inf_count": 0
+      },
+      "raw_output_stats": {
+        "shape": [
+          1,
+          152064
+        ],
+        "dtype": "int16",
+        "size": 152064,
+        "min": 0.0,
+        "max": 0.0,
+        "mean": 0.0,
+        "std": 0.0,
+        "abs_max": 0.0,
+        "nonzero_count": 0,
+        "allzero": true,
+        "constant": true,
+        "nan_count": 0,
+        "inf_count": 0,
+        "count_pos_32767": 0,
+        "count_neg_32768": 0,
+        "frac_pos_32767": 0.0,
+        "frac_neg_32768": 0.0
+      },
+      "official_dequant_stats": {
+        "shape": [
+          152064
+        ],
+        "dtype": "float32",
+        "size": 152064,
+        "min": 0.0,
+        "max": 0.0,
+        "mean": 0.0,
+        "std": 0.0,
+        "abs_max": 0.0,
+        "nonzero_count": 0,
+        "allzero": true,
+        "constant": true,
+        "nan_count": 0,
+        "inf_count": 0
+      },
+      "files": {
+        "input": {
+          "path": "evidence/final_segment_endpoint_raw_v9/short_chinese_prompt_padded/real_x_div_2p25/input.npy",
+          "exists": true,
+          "size_bytes": 1835136,
+          "sha256": "d245a4d3d2332ba8c565c7ede999f16c4a1d112159538d0c5e0e96c2da01783b"
+        },
+        "raw_output": {
+          "path": "evidence/final_segment_endpoint_raw_v9/short_chinese_prompt_padded/real_x_div_2p25/raw_output.npy",
+          "exists": true,
+          "size_bytes": 304256,
+          "sha256": "f5984f81235af99ba68d00422604dff6513b2338cec45b8185958ed61386239e"
+        },
+        "official_dequant": {
+          "path": "evidence/final_segment_endpoint_raw_v9/short_chinese_prompt_padded/real_x_div_2p25/official_dequant_logits.npy",
+          "exists": true,
+          "size_bytes": 608384,
+          "sha256": "c5446456b2eaa03e29c1e66c2511a51606f3a4c35988047d31ce7f9d921deb67"
+        },
+        "metadata": {
+          "path": "evidence/final_segment_endpoint_raw_v9/short_chinese_prompt_padded/real_x_div_2p25/metadata.json",
+          "exists": true,
+          "size_bytes": 4816,
+          "sha256": "fa43c4d0fe2f4d3c1d6a066f97fbc5ee26d8514231b8b4d7a7869fa34c0ce25e"
+        }
+      }
+    },
+    {
+      "case_id": "short_chinese_prompt_padded",
+      "variant_id": "real_x_div_2p5",
+      "input_stats": {
+        "shape": [
+          128,
+          3584
+        ],
+        "dtype": "float32",
+        "size": 458752,
+        "min": -6.518714904785156,
+        "max": 6.518714904785156,
+        "mean": 0.02479758858680725,
+        "std": 6.44917106628418,
+        "abs_max": 6.518714904785156,
+        "nonzero_count": 458752,
+        "allzero": false,
+        "constant": false,
+        "nan_count": 0,
+        "inf_count": 0
+      },
+      "raw_output_stats": {
+        "shape": [
+          1,
+          152064
+        ],
+        "dtype": "int16",
+        "size": 152064,
+        "min": 0.0,
+        "max": 0.0,
+        "mean": 0.0,
+        "std": 0.0,
+        "abs_max": 0.0,
+        "nonzero_count": 0,
+        "allzero": true,
+        "constant": true,
+        "nan_count": 0,
+        "inf_count": 0,
+        "count_pos_32767": 0,
+        "count_neg_32768": 0,
+        "frac_pos_32767": 0.0,
+        "frac_neg_32768": 0.0
+      },
+      "official_dequant_stats": {
+        "shape": [
+          152064
+        ],
+        "dtype": "float32",
+        "size": 152064,
+        "min": 0.0,
+        "max": 0.0,
+        "mean": 0.0,
+        "std": 0.0,
+        "abs_max": 0.0,
+        "nonzero_count": 0,
+        "allzero": true,
+        "constant": true,
+        "nan_count": 0,
+        "inf_count": 0
+      },
+      "files": {
+        "input": {
+          "path": "evidence/final_segment_endpoint_raw_v9/short_chinese_prompt_padded/real_x_div_2p5/input.npy",
+          "exists": true,
+          "size_bytes": 1835136,
+          "sha256": "4b54e431c82b2a741022e79722c456664ba0f3e3f53fd4d50f3b1975032a4347"
+        },
+        "raw_output": {
+          "path": "evidence/final_segment_endpoint_raw_v9/short_chinese_prompt_padded/real_x_div_2p5/raw_output.npy",
+          "exists": true,
+          "size_bytes": 304256,
+          "sha256": "f5984f81235af99ba68d00422604dff6513b2338cec45b8185958ed61386239e"
+        },
+        "official_dequant": {
+          "path": "evidence/final_segment_endpoint_raw_v9/short_chinese_prompt_padded/real_x_div_2p5/official_dequant_logits.npy",
+          "exists": true,
+          "size_bytes": 608384,
+          "sha256": "c5446456b2eaa03e29c1e66c2511a51606f3a4c35988047d31ce7f9d921deb67"
+        },
+        "metadata": {
+          "path": "evidence/final_segment_endpoint_raw_v9/short_chinese_prompt_padded/real_x_div_2p5/metadata.json",
+          "exists": true,
+          "size_bytes": 4804,
+          "sha256": "49ca31426260d5b4bedcfbf5be6a68713728f52b0068f2306a19cc6ce682d12e"
+        }
+      }
+    },
+    {
+      "case_id": "short_chinese_prompt_padded",
+      "variant_id": "real_x_div_2p75",
+      "input_stats": {
+        "shape": [
+          128,
+          3584
+        ],
+        "dtype": "float32",
+        "size": 458752,
+        "min": -5.926104545593262,
+        "max": 5.926104545593262,
+        "mean": 0.02254326455295086,
+        "std": 5.862883567810059,
+        "abs_max": 5.926104545593262,
+        "nonzero_count": 458752,
+        "allzero": false,
+        "constant": false,
+        "nan_count": 0,
+        "inf_count": 0
+      },
+      "raw_output_stats": {
+        "shape": [
+          1,
+          152064
+        ],
+        "dtype": "int16",
+        "size": 152064,
+        "min": -26389.0,
+        "max": 24908.0,
+        "mean": 1392.5514322916667,
+        "std": 3676.3329750318353,
+        "abs_max": 26389.0,
+        "nonzero_count": 152046,
+        "allzero": false,
+        "constant": false,
+        "nan_count": 0,
+        "inf_count": 0,
+        "count_pos_32767": 0,
+        "count_neg_32768": 0,
+        "frac_pos_32767": 0.0,
+        "frac_neg_32768": 0.0
+      },
+      "official_dequant_stats": {
+        "shape": [
+          152064
+        ],
+        "dtype": "float32",
+        "size": 152064,
+        "min": -6.706995964050293,
+        "max": 6.330586910247803,
+        "mean": 0.35392916202545166,
+        "std": 0.9343723058700562,
+        "abs_max": 6.706995964050293,
+        "nonzero_count": 152046,
+        "allzero": false,
+        "constant": false,
+        "nan_count": 0,
+        "inf_count": 0
+      },
+      "files": {
+        "input": {
+          "path": "evidence/final_segment_endpoint_raw_v9/short_chinese_prompt_padded/real_x_div_2p75/input.npy",
+          "exists": true,
+          "size_bytes": 1835136,
+          "sha256": "36f507d5b87f0396811bf4148e8018d4889d740fd9ffcd2e23534df96017d721"
+        },
+        "raw_output": {
+          "path": "evidence/final_segment_endpoint_raw_v9/short_chinese_prompt_padded/real_x_div_2p75/raw_output.npy",
+          "exists": true,
+          "size_bytes": 304256,
+          "sha256": "896e23c560d850ec86f6f667120ecd016753e544ad4accb1dcdd28b118bd63fe"
+        },
+        "official_dequant": {
+          "path": "evidence/final_segment_endpoint_raw_v9/short_chinese_prompt_padded/real_x_div_2p75/official_dequant_logits.npy",
+          "exists": true,
+          "size_bytes": 608384,
+          "sha256": "e1f735d972bb6654b502766de8c686f92327bb6d56e3f6fd35ec27a58f7c8949"
+        },
+        "metadata": {
+          "path": "evidence/final_segment_endpoint_raw_v9/short_chinese_prompt_padded/real_x_div_2p75/metadata.json",
+          "exists": true,
+          "size_bytes": 5051,
+          "sha256": "83a04e8ecfaf8db2aa42918173d5ee18dc7c823f99e5bf7089c0e593d5a87a6a"
+        }
+      }
+    },
+    {
+      "case_id": "short_chinese_prompt_padded",
+      "variant_id": "real_x_div_3",
+      "input_stats": {
+        "shape": [
+          128,
+          3584
+        ],
+        "dtype": "float32",
+        "size": 458752,
+        "min": -5.432262420654297,
+        "max": 5.432262420654297,
+        "mean": 0.020664658397436142,
+        "std": 5.374309062957764,
+        "abs_max": 5.432262420654297,
+        "nonzero_count": 458752,
+        "allzero": false,
+        "constant": false,
+        "nan_count": 0,
+        "inf_count": 0
+      },
+      "raw_output_stats": {
+        "shape": [
+          1,
+          152064
+        ],
+        "dtype": "int16",
+        "size": 152064,
+        "min": -24072.0,
+        "max": 23224.0,
+        "mean": 970.4870120475589,
+        "std": 3405.0357402823465,
+        "abs_max": 24072.0,
+        "nonzero_count": 152053,
+        "allzero": false,
+        "constant": false,
+        "nan_count": 0,
+        "inf_count": 0,
+        "count_pos_32767": 0,
+        "count_neg_32768": 0,
+        "frac_pos_32767": 0.0,
+        "frac_neg_32768": 0.0
+      },
+      "official_dequant_stats": {
+        "shape": [
+          152064
+        ],
+        "dtype": "float32",
+        "size": 152064,
+        "min": -6.118110179901123,
+        "max": 5.902583599090576,
+        "mean": 0.2466578185558319,
+        "std": 0.8654196858406067,
+        "abs_max": 6.118110179901123,
+        "nonzero_count": 152053,
+        "allzero": false,
+        "constant": false,
+        "nan_count": 0,
+        "inf_count": 0
+      },
+      "files": {
+        "input": {
+          "path": "evidence/final_segment_endpoint_raw_v9/short_chinese_prompt_padded/real_x_div_3/input.npy",
+          "exists": true,
+          "size_bytes": 1835136,
+          "sha256": "e6f2ccfac4f0d4b563d6de081eea766e963ac251766343d00ef81a5603423c4a"
+        },
+        "raw_output": {
+          "path": "evidence/final_segment_endpoint_raw_v9/short_chinese_prompt_padded/real_x_div_3/raw_output.npy",
+          "exists": true,
+          "size_bytes": 304256,
+          "sha256": "9e3d4b16bcd7102502dd4e032b27604abf25bb1a54b906b69c32a163cfd9f97a"
+        },
+        "official_dequant": {
+          "path": "evidence/final_segment_endpoint_raw_v9/short_chinese_prompt_padded/real_x_div_3/official_dequant_logits.npy",
+          "exists": true,
+          "size_bytes": 608384,
+          "sha256": "b21e123fe05ba842a8f543475ba597d4a453e914d1b95308b22de5ac2fccf8e4"
+        },
+        "metadata": {
+          "path": "evidence/final_segment_endpoint_raw_v9/short_chinese_prompt_padded/real_x_div_3/metadata.json",
+          "exists": true,
+          "size_bytes": 5025,
+          "sha256": "2f9a5858e72b4f9b8fdfe7ba5dab6daba6b4031b3296bd372e2b0e777f983c49"
+        }
+      }
+    },
+    {
+      "case_id": "short_chinese_prompt_padded",
+      "variant_id": "real_x_div_3p25",
+      "input_stats": {
+        "shape": [
+          128,
+          3584
+        ],
+        "dtype": "float32",
+        "size": 458752,
+        "min": -5.0143961906433105,
+        "max": 5.0143961906433105,
+        "mean": 0.019075069576501846,
+        "std": 4.960900783538818,
+        "abs_max": 5.0143961906433105,
+        "nonzero_count": 458752,
+        "allzero": false,
+        "constant": false,
+        "nan_count": 0,
+        "inf_count": 0
+      },
+      "raw_output_stats": {
+        "shape": [
+          1,
+          152064
+        ],
+        "dtype": "int16",
+        "size": 152064,
+        "min": -22102.0,
+        "max": 21799.0,
+        "mean": 613.0612571022727,
+        "std": 3181.067871375324,
+        "abs_max": 22102.0,
+        "nonzero_count": 152052,
+        "allzero": false,
+        "constant": false,
+        "nan_count": 0,
+        "inf_count": 0,
+        "count_pos_32767": 0,
+        "count_neg_32768": 0,
+        "frac_pos_32767": 0.0,
+        "frac_neg_32768": 0.0
+      },
+      "official_dequant_stats": {
+        "shape": [
+          152064
+        ],
+        "dtype": "float32",
+        "size": 152064,
+        "min": -5.617417335510254,
+        "max": 5.540407180786133,
+        "mean": 0.15581488609313965,
+        "std": 0.8084962964057922,
+        "abs_max": 5.617417335510254,
+        "nonzero_count": 152052,
+        "allzero": false,
+        "constant": false,
+        "nan_count": 0,
+        "inf_count": 0
+      },
+      "files": {
+        "input": {
+          "path": "evidence/final_segment_endpoint_raw_v9/short_chinese_prompt_padded/real_x_div_3p25/input.npy",
+          "exists": true,
+          "size_bytes": 1835136,
+          "sha256": "e7fce51f45127a16925c86fa235a0b0b6edc59f6b9cd2d3da61ba00aa9b8222e"
+        },
+        "raw_output": {
+          "path": "evidence/final_segment_endpoint_raw_v9/short_chinese_prompt_padded/real_x_div_3p25/raw_output.npy",
+          "exists": true,
+          "size_bytes": 304256,
+          "sha256": "6169489306851819de3792a591dc8f0929941bd9dd5584c98474794b0b5279ea"
+        },
+        "official_dequant": {
+          "path": "evidence/final_segment_endpoint_raw_v9/short_chinese_prompt_padded/real_x_div_3p25/official_dequant_logits.npy",
+          "exists": true,
+          "size_bytes": 608384,
+          "sha256": "ebed6e626d1b022b0313f2660ae4f6518e9f198d2b270ed7a25fbcc9f004ea60"
+        },
+        "metadata": {
+          "path": "evidence/final_segment_endpoint_raw_v9/short_chinese_prompt_padded/real_x_div_3p25/metadata.json",
+          "exists": true,
+          "size_bytes": 5052,
+          "sha256": "a3770a13ecc950427924cd624fc42e2726150b2a8e69b8768cfaa92f9434e277"
+        }
+      }
+    },
+    {
+      "case_id": "short_chinese_prompt_padded",
+      "variant_id": "real_x_div_3p5",
+      "input_stats": {
+        "shape": [
+          128,
+          3584
+        ],
+        "dtype": "float32",
+        "size": 458752,
+        "min": -4.656224727630615,
+        "max": 4.656224727630615,
+        "mean": 0.017712563276290894,
+        "std": 4.606550693511963,
+        "abs_max": 4.656224727630615,
+        "nonzero_count": 458752,
+        "allzero": false,
+        "constant": false,
+        "nan_count": 0,
+        "inf_count": 0
+      },
+      "raw_output_stats": {
+        "shape": [
+          1,
+          152064
+        ],
+        "dtype": "int16",
+        "size": 152064,
+        "min": -20426.0,
+        "max": 20589.0,
+        "mean": 320.8616832386364,
+        "std": 2993.294363334295,
+        "abs_max": 20589.0,
+        "nonzero_count": 152035,
+        "allzero": false,
+        "constant": false,
+        "nan_count": 0,
+        "inf_count": 0,
+        "count_pos_32767": 0,
+        "count_neg_32768": 0,
+        "frac_pos_32767": 0.0,
+        "frac_neg_32768": 0.0
+      },
+      "official_dequant_stats": {
+        "shape": [
+          152064
+        ],
+        "dtype": "float32",
+        "size": 152064,
+        "min": -5.1914472579956055,
+        "max": 5.232874870300293,
+        "mean": 0.08154981583356857,
+        "std": 0.7607720494270325,
+        "abs_max": 5.232874870300293,
+        "nonzero_count": 152035,
+        "allzero": false,
+        "constant": false,
+        "nan_count": 0,
+        "inf_count": 0
+      },
+      "files": {
+        "input": {
+          "path": "evidence/final_segment_endpoint_raw_v9/short_chinese_prompt_padded/real_x_div_3p5/input.npy",
+          "exists": true,
+          "size_bytes": 1835136,
+          "sha256": "caddb5a8b8487374750d18e22e1edf5a92379478f53ee2183de50925e1149ed6"
+        },
+        "raw_output": {
+          "path": "evidence/final_segment_endpoint_raw_v9/short_chinese_prompt_padded/real_x_div_3p5/raw_output.npy",
+          "exists": true,
+          "size_bytes": 304256,
+          "sha256": "58396f98d97df147f5f5e2898ea30888d6c4cf2933ba865bb97beb21ea74a0c1"
+        },
+        "official_dequant": {
+          "path": "evidence/final_segment_endpoint_raw_v9/short_chinese_prompt_padded/real_x_div_3p5/official_dequant_logits.npy",
+          "exists": true,
+          "size_bytes": 608384,
+          "sha256": "29ef57ae93c5a5611151e6b72447852c3af063429cb80e233aeb846754d6ec1d"
+        },
+        "metadata": {
+          "path": "evidence/final_segment_endpoint_raw_v9/short_chinese_prompt_padded/real_x_div_3p5/metadata.json",
+          "exists": true,
+          "size_bytes": 5077,
+          "sha256": "0c30671c2531ab4fd3695cb630ff95de0dfe52403ea73b084e47dda5fa18e0cb"
+        }
+      }
+    },
+    {
+      "case_id": "short_chinese_prompt_padded",
+      "variant_id": "real_x_div_4",
+      "input_stats": {
+        "shape": [
+          128,
+          3584
+        ],
+        "dtype": "float32",
+        "size": 458752,
+        "min": -4.074196815490723,
+        "max": 4.074196815490723,
+        "mean": 0.015498491004109383,
+        "std": 4.030731678009033,
+        "abs_max": 4.074196815490723,
+        "nonzero_count": 458752,
+        "allzero": false,
+        "constant": false,
+        "nan_count": 0,
+        "inf_count": 0
+      },
+      "raw_output_stats": {
+        "shape": [
+          1,
+          152064
+        ],
+        "dtype": "int16",
+        "size": 152064,
+        "min": -17951.0,
+        "max": 18616.0,
+        "mean": -169.99175347222223,
+        "std": 2698.416375765232,
+        "abs_max": 18616.0,
+        "nonzero_count": 152040,
+        "allzero": false,
+        "constant": false,
+        "nan_count": 0,
+        "inf_count": 0,
+        "count_pos_32767": 0,
+        "count_neg_32768": 0,
+        "frac_pos_32767": 0.0,
+        "frac_neg_32768": 0.0
+      },
+      "official_dequant_stats": {
+        "shape": [
+          152064
+        ],
+        "dtype": "float32",
+        "size": 152064,
+        "min": -4.562404155731201,
+        "max": 4.731419563293457,
+        "mean": -0.0432048961520195,
+        "std": 0.6858261823654175,
+        "abs_max": 4.731419563293457,
+        "nonzero_count": 152040,
+        "allzero": false,
+        "constant": false,
+        "nan_count": 0,
+        "inf_count": 0
+      },
+      "files": {
+        "input": {
+          "path": "evidence/final_segment_endpoint_raw_v9/short_chinese_prompt_padded/real_x_div_4/input.npy",
+          "exists": true,
+          "size_bytes": 1835136,
+          "sha256": "ccb4d43516b1e8c1ee7b08f28785f67bf6642530d8c2ec6ed524a69aef9080df"
+        },
+        "raw_output": {
+          "path": "evidence/final_segment_endpoint_raw_v9/short_chinese_prompt_padded/real_x_div_4/raw_output.npy",
+          "exists": true,
+          "size_bytes": 304256,
+          "sha256": "5e7d4829b86c175930bc16c2f3ddad27e62199eedcfa313d03560a8f426a2d67"
+        },
+        "official_dequant": {
+          "path": "evidence/final_segment_endpoint_raw_v9/short_chinese_prompt_padded/real_x_div_4/official_dequant_logits.npy",
+          "exists": true,
+          "size_bytes": 608384,
+          "sha256": "c8c5a096f4ac0818ec50ee08608365e1976e2f6c916c0faa8e85d12b6797406c"
+        },
+        "metadata": {
+          "path": "evidence/final_segment_endpoint_raw_v9/short_chinese_prompt_padded/real_x_div_4/metadata.json",
+          "exists": true,
+          "size_bytes": 5067,
+          "sha256": "cef3838427928736fe34505d0e99803c90ed424aa3559ceb5df8fc7e028528de"
+        }
+      }
+    },
+    {
+      "case_id": "short_chinese_prompt_padded",
+      "variant_id": "real_x_clip_8",
+      "input_stats": {
+        "shape": [
+          128,
+          3584
+        ],
+        "dtype": "float32",
+        "size": 458752,
+        "min": -8.0,
+        "max": 8.0,
+        "mean": 0.03006989136338234,
+        "std": 7.958583354949951,
+        "abs_max": 8.0,
+        "nonzero_count": 458752,
+        "allzero": false,
+        "constant": false,
+        "nan_count": 0,
+        "inf_count": 0
+      },
+      "raw_output_stats": {
+        "shape": [
+          1,
+          152064
+        ],
+        "dtype": "int16",
+        "size": 152064,
+        "min": 0.0,
+        "max": 0.0,
+        "mean": 0.0,
+        "std": 0.0,
+        "abs_max": 0.0,
+        "nonzero_count": 0,
+        "allzero": true,
+        "constant": true,
+        "nan_count": 0,
+        "inf_count": 0,
+        "count_pos_32767": 0,
+        "count_neg_32768": 0,
+        "frac_pos_32767": 0.0,
+        "frac_neg_32768": 0.0
+      },
+      "official_dequant_stats": {
+        "shape": [
+          152064
+        ],
+        "dtype": "float32",
+        "size": 152064,
+        "min": 0.0,
+        "max": 0.0,
+        "mean": 0.0,
+        "std": 0.0,
+        "abs_max": 0.0,
+        "nonzero_count": 0,
+        "allzero": true,
+        "constant": true,
+        "nan_count": 0,
+        "inf_count": 0
+      },
+      "files": {
+        "input": {
+          "path": "evidence/final_segment_endpoint_raw_v9/short_chinese_prompt_padded/real_x_clip_8/input.npy",
+          "exists": true,
+          "size_bytes": 1835136,
+          "sha256": "b13ac9312bff928d829b1f9753cd2c15541a60d3b5c15b12df1ee83054438c69"
+        },
+        "raw_output": {
+          "path": "evidence/final_segment_endpoint_raw_v9/short_chinese_prompt_padded/real_x_clip_8/raw_output.npy",
+          "exists": true,
+          "size_bytes": 304256,
+          "sha256": "f5984f81235af99ba68d00422604dff6513b2338cec45b8185958ed61386239e"
+        },
+        "official_dequant": {
+          "path": "evidence/final_segment_endpoint_raw_v9/short_chinese_prompt_padded/real_x_clip_8/official_dequant_logits.npy",
+          "exists": true,
+          "size_bytes": 608384,
+          "sha256": "c5446456b2eaa03e29c1e66c2511a51606f3a4c35988047d31ce7f9d921deb67"
+        },
+        "metadata": {
+          "path": "evidence/final_segment_endpoint_raw_v9/short_chinese_prompt_padded/real_x_clip_8/metadata.json",
+          "exists": true,
+          "size_bytes": 4716,
+          "sha256": "236083c97061651eba80cf0b170166ec8740969967b68c6f75337d481904b453"
+        }
+      }
+    },
+    {
+      "case_id": "short_chinese_prompt_padded",
+      "variant_id": "real_x_clip_6",
+      "input_stats": {
+        "shape": [
+          128,
+          3584
+        ],
+        "dtype": "float32",
+        "size": 458752,
+        "min": -6.0,
+        "max": 6.0,
+        "mean": 0.022296467795968056,
+        "std": 5.976783752441406,
+        "abs_max": 6.0,
+        "nonzero_count": 458752,
+        "allzero": false,
+        "constant": false,
+        "nan_count": 0,
+        "inf_count": 0
+      },
+      "raw_output_stats": {
+        "shape": [
+          1,
+          152064
+        ],
+        "dtype": "int16",
+        "size": 152064,
+        "min": -26176.0,
+        "max": 25972.0,
+        "mean": 2370.22163694234,
+        "std": 3749.6275784461154,
+        "abs_max": 26176.0,
+        "nonzero_count": 152047,
+        "allzero": false,
+        "constant": false,
+        "nan_count": 0,
+        "inf_count": 0,
+        "count_pos_32767": 0,
+        "count_neg_32768": 0,
+        "frac_pos_32767": 0.0,
+        "frac_neg_32768": 0.0
+      },
+      "official_dequant_stats": {
+        "shape": [
+          152064
+        ],
+        "dtype": "float32",
+        "size": 152064,
+        "min": -6.652860164642334,
+        "max": 6.601011753082275,
+        "mean": 0.6024126410484314,
+        "std": 0.9530007243156433,
+        "abs_max": 6.652860164642334,
+        "nonzero_count": 152047,
+        "allzero": false,
+        "constant": false,
+        "nan_count": 0,
+        "inf_count": 0
+      },
+      "files": {
+        "input": {
+          "path": "evidence/final_segment_endpoint_raw_v9/short_chinese_prompt_padded/real_x_clip_6/input.npy",
+          "exists": true,
+          "size_bytes": 1835136,
+          "sha256": "1497f670b17b8a34986f0b6cc2db8b0d09715e7eb2d25f435000b1a81274c004"
+        },
+        "raw_output": {
+          "path": "evidence/final_segment_endpoint_raw_v9/short_chinese_prompt_padded/real_x_clip_6/raw_output.npy",
+          "exists": true,
+          "size_bytes": 304256,
+          "sha256": "caa953e9b08f03b487c0023e37852046d01eaec0e26d8a7a0572241585935ddc"
+        },
+        "official_dequant": {
+          "path": "evidence/final_segment_endpoint_raw_v9/short_chinese_prompt_padded/real_x_clip_6/official_dequant_logits.npy",
+          "exists": true,
+          "size_bytes": 608384,
+          "sha256": "82f384fd80c72c8ddb11b7dd4af76ebff4a5ab75cb96044292e5fff4dfc5549d"
+        },
+        "metadata": {
+          "path": "evidence/final_segment_endpoint_raw_v9/short_chinese_prompt_padded/real_x_clip_6/metadata.json",
+          "exists": true,
+          "size_bytes": 4983,
+          "sha256": "4acca9af4865514497eebed26b09e7da7c8cd04ea488c5b2efb1d1bb2f3b1fe8"
+        }
+      }
+    },
+    {
+      "case_id": "short_chinese_prompt_padded",
+      "variant_id": "real_x_clip_5",
+      "input_stats": {
+        "shape": [
+          128,
+          3584
+        ],
+        "dtype": "float32",
+        "size": 458752,
+        "min": -5.0,
+        "max": 5.0,
+        "mean": 0.01854286529123783,
+        "std": 4.983898639678955,
+        "abs_max": 5.0,
+        "nonzero_count": 458752,
+        "allzero": false,
+        "constant": false,
+        "nan_count": 0,
+        "inf_count": 0
+      },
+      "raw_output_stats": {
+        "shape": [
+          1,
+          152064
+        ],
+        "dtype": "int16",
+        "size": 152064,
+        "min": -21552.0,
+        "max": 22590.0,
+        "mean": 1571.5806568287037,
+        "std": 3196.5405240153123,
+        "abs_max": 22590.0,
+        "nonzero_count": 152054,
+        "allzero": false,
+        "constant": false,
+        "nan_count": 0,
+        "inf_count": 0,
+        "count_pos_32767": 0,
+        "count_neg_32768": 0,
+        "frac_pos_32767": 0.0,
+        "frac_neg_32768": 0.0
+      },
+      "official_dequant_stats": {
+        "shape": [
+          152064
+        ],
+        "dtype": "float32",
+        "size": 152064,
+        "min": -5.477630138397217,
+        "max": 5.741446495056152,
+        "mean": 0.3994310200214386,
+        "std": 0.8124287724494934,
+        "abs_max": 5.741446495056152,
+        "nonzero_count": 152054,
+        "allzero": false,
+        "constant": false,
+        "nan_count": 0,
+        "inf_count": 0
+      },
+      "files": {
+        "input": {
+          "path": "evidence/final_segment_endpoint_raw_v9/short_chinese_prompt_padded/real_x_clip_5/input.npy",
+          "exists": true,
+          "size_bytes": 1835136,
+          "sha256": "fd5f11b878b20598d1fdcf10f933034e47645db73b275f6eb9736002dc630e54"
+        },
+        "raw_output": {
+          "path": "evidence/final_segment_endpoint_raw_v9/short_chinese_prompt_padded/real_x_clip_5/raw_output.npy",
+          "exists": true,
+          "size_bytes": 304256,
+          "sha256": "bcfca3c4090ab95814bd381fe7531a8646a56f6b407ce60262d6879ffc80f0ce"
+        },
+        "official_dequant": {
+          "path": "evidence/final_segment_endpoint_raw_v9/short_chinese_prompt_padded/real_x_clip_5/official_dequant_logits.npy",
+          "exists": true,
+          "size_bytes": 608384,
+          "sha256": "53a01131c4d0065731a13145da892ee8076715f3150a165c3ab41d1087970eb4"
+        },
+        "metadata": {
+          "path": "evidence/final_segment_endpoint_raw_v9/short_chinese_prompt_padded/real_x_clip_5/metadata.json",
+          "exists": true,
+          "size_bytes": 4986,
+          "sha256": "1ebfdea167c7fa645e742b8e6c453d32f72237d686530fd2a5214aa40a5c926b"
+        }
+      }
+    },
+    {
+      "case_id": "short_chinese_prompt_padded",
+      "variant_id": "real_x_clip_4",
+      "input_stats": {
+        "shape": [
+          128,
+          3584
+        ],
+        "dtype": "float32",
+        "size": 458752,
+        "min": -4.0,
+        "max": 4.0,
+        "mean": 0.014855923131108284,
+        "std": 3.9897100925445557,
+        "abs_max": 4.0,
+        "nonzero_count": 458752,
+        "allzero": false,
+        "constant": false,
+        "nan_count": 0,
+        "inf_count": 0
+      },
+      "raw_output_stats": {
+        "shape": [
+          1,
+          152064
+        ],
+        "dtype": "int16",
+        "size": 152064,
+        "min": -16898.0,
+        "max": 19216.0,
+        "mean": 759.6362649936868,
+        "std": 2674.6940765901263,
+        "abs_max": 19216.0,
+        "nonzero_count": 152043,
+        "allzero": false,
+        "constant": false,
+        "nan_count": 0,
+        "inf_count": 0,
+        "count_pos_32767": 0,
+        "count_neg_32768": 0,
+        "frac_pos_32767": 0.0,
+        "frac_neg_32768": 0.0
+      },
+      "official_dequant_stats": {
+        "shape": [
+          152064
+        ],
+        "dtype": "float32",
+        "size": 152064,
+        "min": -4.294775009155273,
+        "max": 4.883914947509766,
+        "mean": 0.1930682212114334,
+        "std": 0.6797969341278076,
+        "abs_max": 4.883914947509766,
+        "nonzero_count": 152043,
+        "allzero": false,
+        "constant": false,
+        "nan_count": 0,
+        "inf_count": 0
+      },
+      "files": {
+        "input": {
+          "path": "evidence/final_segment_endpoint_raw_v9/short_chinese_prompt_padded/real_x_clip_4/input.npy",
+          "exists": true,
+          "size_bytes": 1835136,
+          "sha256": "8cf444025400605542b8f7f816e80aba698de776c681edd3b0b31f19872f70e1"
+        },
+        "raw_output": {
+          "path": "evidence/final_segment_endpoint_raw_v9/short_chinese_prompt_padded/real_x_clip_4/raw_output.npy",
+          "exists": true,
+          "size_bytes": 304256,
+          "sha256": "ceccae174c1aa022cf559c731be13b2f85425d192b7ca4cd3272058c7141fab9"
+        },
+        "official_dequant": {
+          "path": "evidence/final_segment_endpoint_raw_v9/short_chinese_prompt_padded/real_x_clip_4/official_dequant_logits.npy",
+          "exists": true,
+          "size_bytes": 608384,
+          "sha256": "eaf1ae73854ead49e53682ed57420db041e2ff50d74e47e03580c9efe7c6cc6a"
+        },
+        "metadata": {
+          "path": "evidence/final_segment_endpoint_raw_v9/short_chinese_prompt_padded/real_x_clip_4/metadata.json",
+          "exists": true,
+          "size_bytes": 4985,
+          "sha256": "1a0a61c142f667f2efeb9100a76009939e0adea9d83788c9a8f3c5cadf552c59"
+        }
+      }
+    },
+    {
+      "case_id": "short_chinese_prompt_padded",
+      "variant_id": "real_x_z_normalized",
+      "input_stats": {
+        "shape": [
+          128,
+          3584
+        ],
+        "dtype": "float32",
+        "size": 458752,
+        "min": -1.014628529548645,
+        "max": 1.0069383382797241,
+        "mean": 1.3504177331924438e-08,
+        "std": 1.0,
+        "abs_max": 1.014628529548645,
+        "nonzero_count": 458752,
+        "allzero": false,
+        "constant": false,
+        "nan_count": 0,
+        "inf_count": 0
+      },
+      "raw_output_stats": {
+        "shape": [
+          1,
+          152064
+        ],
+        "dtype": "int16",
+        "size": 152064,
+        "min": -12827.0,
+        "max": 10204.0,
+        "mean": -2767.328651094276,
+        "std": 1674.5002862558451,
+        "abs_max": 12827.0,
+        "nonzero_count": 152061,
+        "allzero": false,
+        "constant": false,
+        "nan_count": 0,
+        "inf_count": 0,
+        "count_pos_32767": 0,
+        "count_neg_32768": 0,
+        "frac_pos_32767": 0.0,
+        "frac_neg_32768": 0.0
+      },
+      "official_dequant_stats": {
+        "shape": [
+          152064
+        ],
+        "dtype": "float32",
+        "size": 152064,
+        "min": -3.26009464263916,
+        "max": 2.5934362411499023,
+        "mean": -0.7033408880233765,
+        "std": 0.4255889356136322,
+        "abs_max": 3.26009464263916,
+        "nonzero_count": 152061,
+        "allzero": false,
+        "constant": false,
+        "nan_count": 0,
+        "inf_count": 0
+      },
+      "files": {
+        "input": {
+          "path": "evidence/final_segment_endpoint_raw_v9/short_chinese_prompt_padded/real_x_z_normalized/input.npy",
+          "exists": true,
+          "size_bytes": 1835136,
+          "sha256": "0c0b4f653f2a8e934cf85138b8e93a964690398a602cec8a50f6dcd8d93bfe30"
+        },
+        "raw_output": {
+          "path": "evidence/final_segment_endpoint_raw_v9/short_chinese_prompt_padded/real_x_z_normalized/raw_output.npy",
+          "exists": true,
+          "size_bytes": 304256,
+          "sha256": "74bf8274275197219f3862e740b681f3704a0f50c468b72e2ef0bfee933712ab"
+        },
+        "official_dequant": {
+          "path": "evidence/final_segment_endpoint_raw_v9/short_chinese_prompt_padded/real_x_z_normalized/official_dequant_logits.npy",
+          "exists": true,
+          "size_bytes": 608384,
+          "sha256": "46d7d21b794c80bc61acd94a5ba6f81ff158552164b050937a76836227a19c9a"
+        },
+        "metadata": {
+          "path": "evidence/final_segment_endpoint_raw_v9/short_chinese_prompt_padded/real_x_z_normalized/metadata.json",
+          "exists": true,
+          "size_bytes": 5100,
+          "sha256": "b29402746047ecfb4a72446864469acdee548adf73e05ff37fdad643b5f8b034"
+        }
+      }
+    }
+  ]
+}

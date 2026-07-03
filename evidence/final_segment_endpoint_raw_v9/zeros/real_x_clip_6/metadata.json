@@ -1,0 +1,180 @@
+{
+  "case_id": "zeros",
+  "variant_id": "real_x_clip_6",
+  "source_directory": "evidence/raw_endpoint_subset_v6/final_segment_dense_sweep_v5/zeros/real_x_clip_6",
+  "runtime_command_or_log_pointer": "remote v5 final_segment_dense_sweep_v5 endpoint run; local raw subset packaged in v6",
+  "official_scale": 0.00025415877462364733,
+  "official_zero_point": 0.0,
+  "input_stats": {
+    "shape": [
+      128,
+      3584
+    ],
+    "dtype": "float32",
+    "size": 458752,
+    "min": -6.0,
+    "max": 6.0,
+    "mean": 0.002561774104833603,
+    "std": 5.976745128631592,
+    "abs_max": 6.0,
+    "nonzero_count": 458751,
+    "allzero": false,
+    "constant": false,
+    "nan_count": 0,
+    "inf_count": 0
+  },
+  "raw_output_stats": {
+    "shape": [
+      1,
+      152064
+    ],
+    "dtype": "int16",
+    "size": 152064,
+    "min": -27342.0,
+    "max": 32767.0,
+    "mean": 13901.408827861953,
+    "std": 4951.16961879634,
+    "abs_max": 32767.0,
+    "nonzero_count": 152064,
+    "allzero": false,
+    "constant": false,
+    "nan_count": 0,
+    "inf_count": 0,
+    "count_pos_32767": 11,
+    "count_neg_32768": 0,
+    "frac_pos_32767": 7.233796296296296e-05,
+    "frac_neg_32768": 0.0
+  },
+  "official_dequant_stats": {
+    "shape": [
+      152064
+    ],
+    "dtype": "float32",
+    "size": 152064,
+    "min": -6.949209213256836,
+    "max": 8.328020095825195,
+    "mean": 3.5331649780273438,
+    "std": 1.2583831548690796,
+    "abs_max": 8.328020095825195,
+    "nonzero_count": 152064,
+    "allzero": false,
+    "constant": false,
+    "nan_count": 0,
+    "inf_count": 0
+  },
+  "sha256": {
+    "input.npy": "f4841f72f8d9a7d4db92f9bb8e3fae20dcbb43e4abe56aef543ae74fcda6d744",
+    "raw_output.npy": "d45a66d5b0614feba732b743afff0bcfcebf0d0765db64aae26cfe3c6e7cf2ba",
+    "official_dequant_logits.npy": "560a08dc252d9a17c76fb28af99028e8e031457ebd2ff93eb238b1ff63a19ca3"
+  },
+  "source_metadata": {
+    "variant_id": "real_x_clip_6",
+    "why_included": "real seg26 hidden clipped to +/-6",
+    "input_path": "/mnt/nas/openclaw/reports/models/dream7b_s100p_v5_execution_20260701/evidence/final_segment_dense_sweep_v5/zeros/real_x_clip_6/input.npy",
+    "raw_output_path": "/mnt/nas/openclaw/reports/models/dream7b_s100p_v5_execution_20260701/evidence/final_segment_dense_sweep_v5/zeros/real_x_clip_6/raw_output.npy",
+    "dequant_logits_path": "/mnt/nas/openclaw/reports/models/dream7b_s100p_v5_execution_20260701/evidence/final_segment_dense_sweep_v5/zeros/real_x_clip_6/dequant_logits.npy",
+    "metadata_path": "/mnt/nas/openclaw/reports/models/dream7b_s100p_v5_execution_20260701/evidence/final_segment_dense_sweep_v5/zeros/real_x_clip_6/metadata.json",
+    "input_stats": {
+      "shape": [
+        128,
+        3584
+      ],
+      "dtype": "float32",
+      "size": 458752,
+      "min": -6.0,
+      "max": 6.0,
+      "mean": 0.00256177457049489,
+      "std": 5.976745128631592,
+      "abs_max": 6.0,
+      "nonzero_count": 458751,
+      "allzero": false,
+      "constant": false,
+      "nan_count": 0,
+      "inf_count": 0
+    },
+    "run_status": "pass",
+    "runtime_exception": null,
+    "raw_output_stats": {
+      "shape": [
+        1,
+        152064
+      ],
+      "dtype": "int16",
+      "size": 152064,
+      "min": -27342.0,
+      "max": 32767.0,
+      "mean": 13901.408827861953,
+      "std": 4951.16961879634,
+      "abs_max": 32767.0,
+      "nonzero_count": 152064,
+      "allzero": false,
+      "constant": false,
+      "nan_count": 0,
+      "inf_count": 0
+    },
+    "dequant_output_stats": {
+      "shape": [
+        152064
+      ],
+      "dtype": "float32",
+      "size": 152064,
+      "min": -27342.0,
+      "max": 32767.0,
+      "mean": 13901.408203125,
+      "std": 4951.16943359375,
+      "abs_max": 32767.0,
+      "nonzero_count": 152064,
+      "allzero": false,
+      "constant": false,
+      "nan_count": 0,
+      "inf_count": 0
+    },
+    "softmax": {
+      "entropy": 2.3978952727983707,
+      "normalized_entropy": 0.20096244262470567,
+      "top1_probability": 0.09090909090909091
+    },
+    "top10_logits": [
+      {
+        "token": 71851,
+        "logit": 32767.0
+      },
+      {
+        "token": 95132,
+        "logit": 32767.0
+      },
+      {
+        "token": 76842,
+        "logit": 32767.0
+      },
+      {
+        "token": 74466,
+        "logit": 32767.0
+      },
+      {
+        "token": 86611,
+        "logit": 32767.0
+      },
+      {
+        "token": 94222,
+        "logit": 32767.0
+      },
+      {
+        "token": 33955,
+        "logit": 32767.0
+      },
+      {
+        "token": 45223,
+        "logit": 32767.0
+      },
+      {
+        "token": 85512,
+        "logit": 32767.0
+      },
+      {
+        "token": 82733,
+        "logit": 32767.0
+      }
+    ]
+  }
+}

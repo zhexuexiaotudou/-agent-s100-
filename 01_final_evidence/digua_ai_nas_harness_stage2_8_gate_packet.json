@@ -1,0 +1,88 @@
+{
+  "generated_at": "2026-07-03T17:24:27.458457+08:00",
+  "final_verdict": "blocked_by_no_operator_approval_for_qwen_persistence",
+  "all_stage2_8_gates_pass": false,
+  "stage3_allowed": false,
+  "stage3_scope_if_allowed": "Stage 3 Readonly Shadow Dry-Run, Policy-First Mode",
+  "evidence_table": [
+    {
+      "report": "7000_stage2_8_baseline_lock",
+      "gate_id": "stage2_8_baseline_lock",
+      "verdict": "ok_stage2_8_baseline_lock",
+      "passed_count": 8,
+      "check_count": 8,
+      "failure_count": 0
+    },
+    {
+      "report": "7010_qwen_systemd_apply_verify_rollback_gate",
+      "gate_id": "stage2_8_qwen_systemd_apply_verify_rollback_gate",
+      "verdict": "blocked_by_no_operator_approval",
+      "passed_count": 12,
+      "check_count": 13,
+      "failure_count": 1
+    },
+    {
+      "report": "7020_policy_first_shadow_contract_gate",
+      "gate_id": "stage2_8_policy_first_shadow_contract_gate",
+      "verdict": "ok_stage2_8_policy_first_shadow_contract_gate",
+      "passed_count": 11,
+      "check_count": 11,
+      "failure_count": 0
+    },
+    {
+      "report": "7030_qwen_advisor_schema_gate",
+      "gate_id": "stage2_8_qwen_advisor_schema_gate",
+      "verdict": "failed_stage2_8_qwen_advisor_schema_gate",
+      "passed_count": 9,
+      "check_count": 11,
+      "failure_count": 2
+    },
+    {
+      "report": "7040_policy_first_readonly_shadow_preflight_soak_gate",
+      "gate_id": "stage2_8_readonly_shadow_preflight_soak_gate",
+      "verdict": "ok_stage2_8_readonly_shadow_preflight_soak_gate",
+      "passed_count": 15,
+      "check_count": 15,
+      "failure_count": 0
+    },
+    {
+      "report": "7050_stage2_8_stage3_go_no_go_gate",
+      "gate_id": "stage2_8_stage3_go_no_go_gate",
+      "verdict": "blocked_by_no_operator_approval_for_qwen_persistence",
+      "passed_count": 7,
+      "check_count": 8,
+      "failure_count": 1
+    }
+  ],
+  "environment": {
+    "repo_root": "F:\\Project\\Digua",
+    "platform": "Windows-11-10.0.26200-SP0",
+    "python": "3.14.3"
+  },
+  "qwen_persistence_status": "blocked_by_no_operator_approval",
+  "qwen_role": {
+    "structured_decision": "disabled",
+    "advisor": "disabled_safe_mode",
+    "execution_authority": false
+  },
+  "tool_authority": [
+    "deterministic_policy_router",
+    "workspace_tool_policy",
+    "workspace_arg_policy",
+    "ai_nas_allowlisted_tool.sh"
+  ],
+  "product_safe_claim_boundary": [
+    "Qwen is a local summarizer/advisor only.",
+    "The deterministic policy router and allowlisted dispatcher choose and execute tools.",
+    "Stage 3, if allowed later, is readonly shadow dry-run policy-first only.",
+    "No write/destructive/admin/recovery workspace is enabled.",
+    "No private NAS raw content is sent to cloud.",
+    "OpenClaw foreground and protected product ports remain unchanged."
+  ],
+  "final_package": {
+    "zip_path": "F:\\Project\\Digua\\evidence_for_gptpro\\digua_ai_nas_harness_stage2_8_for_gptpro_20260703-172337.zip",
+    "sha256": "7bc82f76a4b1ec565b7396ce3e3fa6c65fa7085d033cb664a587a2c1d0fd8239",
+    "sha256_file": "F:\\Project\\Digua\\evidence_for_gptpro\\digua_ai_nas_harness_stage2_8_for_gptpro_20260703-172337.zip.sha256.txt",
+    "file_count": 441
+  }
+}

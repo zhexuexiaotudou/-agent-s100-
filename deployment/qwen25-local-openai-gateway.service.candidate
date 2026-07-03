@@ -1,0 +1,24 @@
+[Unit]
+Description=Qwen2.5 official local OpenAI-compatible gateway for AI-NAS
+After=network-online.target ai-nas-index-daemon.service
+Wants=network-online.target
+StartLimitIntervalSec=0
+
+[Service]
+Type=simple
+User=sunrise
+WorkingDirectory=/mnt/nas/openclaw
+Environment=QWEN25_OPENAI_HOST=127.0.0.1
+Environment=QWEN25_OPENAI_PORT=18080
+Environment=QWEN25_MODEL_ID=Qwen2.5-1.5B-Instruct-S100P-official
+Environment=QWEN25_POLICY=/mnt/nas/openclaw/configs/qwen25_official_route_policy.json
+Environment=AI_NAS_PERSONAL_ROOT=/mnt/nas/openclaw/Personal
+Environment=AI_NAS_REPORT_ROOT=/mnt/nas/openclaw/reports/qwen25_ai_nas
+ExecStartPre=/usr/bin/test -r /mnt/nas/openclaw/scripts/qwen25_openai_gateway.py
+ExecStartPre=/usr/bin/test -r /mnt/nas/openclaw/configs/qwen25_official_route_policy.json
+ExecStart=/usr/bin/python3 /mnt/nas/openclaw/scripts/qwen25_openai_gateway.py --config /mnt/nas/openclaw/configs/qwen25_official_route_policy.json
+Restart=on-failure
+RestartSec=30s
+
+[Install]
+WantedBy=multi-user.target

@@ -1,0 +1,587 @@
+{
+  "schema_version": "dream7b_s100p_v14_1440_seg00_01_position_input_audit",
+  "created_at_utc": "2026-07-03T06:10:20.346187+00:00",
+  "run_commands": [
+    "C:\\Users\\zhexu\\AppData\\Local\\Python\\pythoncore-3.14-64\\python.exe tools\\build_v14_research_thread.py --root ."
+  ],
+  "host_environment": {
+    "local_platform": "Windows-11-10.0.26200-SP0",
+    "python": "3.14.3 (tags/v3.14.3:323c59a, Feb  3 2026, 16:04:56) [MSC v.1944 64 bit (AMD64)]"
+  },
+  "git": {
+    "returncode": 128,
+    "stdout": "",
+    "stderr": "fatal: not a git repository (or any of the parent directories): .git"
+  },
+  "input_artifacts": [
+    {
+      "path": "evidence/s100p_remote_v14_reports/1420_1440_v14_seg00_exact_graph_position_remote.json",
+      "exists": true,
+      "size_bytes": 109835,
+      "sha256": "a1768fd476adfbe2c5615081c5ef51cc679accfcf50a51dc39ffc9cdd10be4e1"
+    }
+  ],
+  "output_artifacts": [
+    {
+      "path": "reports/1440_seg00_01_position_input_audit.json",
+      "exists": true,
+      "size_bytes": 16318,
+      "sha256": "576f2953301a0cf197d032a84007e6c96b56d71971d9407f89d81f6983fbcb71"
+    },
+    {
+      "path": "reports/1440_seg00_01_position_input_audit.md",
+      "exists": true,
+      "size_bytes": 315,
+      "sha256": "cdb0d57f3e4e78b47d7ab64426d0e526a2b366067dbf18ae791c24f9fb8e3685"
+    }
+  ],
+  "blocking_or_failure_reasons": [
+    "Changing _input_1 position vectors produces material seg00_01 output deltas, but HF code does not expose a learned absolute position add at this boundary."
+  ],
+  "next_minimal_experiments": [],
+  "safety": {
+    "generation_quality_run": false,
+    "product_routes_18888_18889_touched": false,
+    "dream7b_frontend_openclaw_traffic_touched": false
+  },
+  "verdict": "position_input_contract_suspicious",
+  "rows": [
+    {
+      "case_id": "zeros",
+      "variant": "canonical_0_to_127",
+      "delta_abs_max": 0.00885125994682312,
+      "delta_std": 0.0006965818465687335,
+      "delta_norm": 0.4718486964702606,
+      "output_stats": {
+        "shape": [
+          128,
+          3584
+        ],
+        "dtype": "float32",
+        "size": 458752,
+        "min": -0.5522932410240173,
+        "max": 0.5447757840156555,
+        "mean": -0.00010915863094851375,
+        "std": 0.05312283709645271,
+        "abs_max": 0.5522932410240173,
+        "nonzero_count": 458449,
+        "allzero": false,
+        "constant": false,
+        "nan_count": 0,
+        "inf_count": 0
+      }
+    },
+    {
+      "case_id": "zeros",
+      "variant": "all_zero_positions",
+      "delta_abs_max": 0.0,
+      "delta_std": 0.0,
+      "delta_norm": 0.0,
+      "output_stats": {
+        "shape": [
+          128,
+          3584
+        ],
+        "dtype": "float32",
+        "size": 458752,
+        "min": -0.5446544885635376,
+        "max": 0.5361064076423645,
+        "mean": -0.00011588769120862707,
+        "std": 0.05251793563365936,
+        "abs_max": 0.5446544885635376,
+        "nonzero_count": 458496,
+        "allzero": false,
+        "constant": false,
+        "nan_count": 0,
+        "inf_count": 0
+      }
+    },
+    {
+      "case_id": "zeros",
+      "variant": "all_one_positions",
+      "delta_abs_max": 0.0,
+      "delta_std": 0.0,
+      "delta_norm": 0.0,
+      "output_stats": {
+        "shape": [
+          128,
+          3584
+        ],
+        "dtype": "float32",
+        "size": 458752,
+        "min": -0.5446544885635376,
+        "max": 0.5361064076423645,
+        "mean": -0.00011588769120862707,
+        "std": 0.05251793563365936,
+        "abs_max": 0.5446544885635376,
+        "nonzero_count": 458496,
+        "allzero": false,
+        "constant": false,
+        "nan_count": 0,
+        "inf_count": 0
+      }
+    },
+    {
+      "case_id": "zeros",
+      "variant": "one_indexed_1_to_128",
+      "delta_abs_max": 0.009154319763183594,
+      "delta_std": 0.0007023429498076439,
+      "delta_norm": 0.47574618458747864,
+      "output_stats": {
+        "shape": [
+          128,
+          3584
+        ],
+        "dtype": "float32",
+        "size": 458752,
+        "min": -0.552475094795227,
+        "max": 0.5452607274055481,
+        "mean": -0.00010976508929161355,
+        "std": 0.053117576986551285,
+        "abs_max": 0.552475094795227,
+        "nonzero_count": 458486,
+        "allzero": false,
+        "constant": false,
+        "nan_count": 0,
+        "inf_count": 0
+      }
+    },
+    {
+      "case_id": "zeros",
+      "variant": "reverse_127_to_0",
+      "delta_abs_max": 0.00885125994682312,
+      "delta_std": 0.0006965818465687335,
+      "delta_norm": 0.4718487560749054,
+      "output_stats": {
+        "shape": [
+          128,
+          3584
+        ],
+        "dtype": "float32",
+        "size": 458752,
+        "min": -0.5522932410240173,
+        "max": 0.5447757840156555,
+        "mean": -0.00010915862367255613,
+        "std": 0.05312284082174301,
+        "abs_max": 0.5522932410240173,
+        "nonzero_count": 458449,
+        "allzero": false,
+        "constant": false,
+        "nan_count": 0,
+        "inf_count": 0
+      }
+    },
+    {
+      "case_id": "zeros",
+      "variant": "doubled_positions",
+      "delta_abs_max": 0.010366886854171753,
+      "delta_std": 0.0005263837520033121,
+      "delta_norm": 0.35653311014175415,
+      "output_stats": {
+        "shape": [
+          128,
+          3584
+        ],
+        "dtype": "float32",
+        "size": 458752,
+        "min": -0.5534451007843018,
+        "max": 0.544593870639801,
+        "mean": -0.00011313270806567743,
+        "std": 0.052828919142484665,
+        "abs_max": 0.5534451007843018,
+        "nonzero_count": 458487,
+        "allzero": false,
+        "constant": false,
+        "nan_count": 0,
+        "inf_count": 0
+      }
+    },
+    {
+      "case_id": "zeros",
+      "variant": "random_permutation_positions",
+      "delta_abs_max": 0.00885125994682312,
+      "delta_std": 0.0006965818465687335,
+      "delta_norm": 0.47184813022613525,
+      "output_stats": {
+        "shape": [
+          128,
+          3584
+        ],
+        "dtype": "float32",
+        "size": 458752,
+        "min": -0.5522932410240173,
+        "max": 0.5447757840156555,
+        "mean": -0.00010915862367255613,
+        "std": 0.05312283709645271,
+        "abs_max": 0.5522932410240173,
+        "nonzero_count": 458449,
+        "allzero": false,
+        "constant": false,
+        "nan_count": 0,
+        "inf_count": 0
+      }
+    },
+    {
+      "case_id": "ramp",
+      "variant": "canonical_0_to_127",
+      "delta_abs_max": 0.668208122253418,
+      "delta_std": 0.023096079006791115,
+      "delta_norm": 15.643328666687012,
+      "output_stats": {
+        "shape": [
+          128,
+          3584
+        ],
+        "dtype": "float32",
+        "size": 458752,
+        "min": -0.9146485328674316,
+        "max": 0.7435043454170227,
+        "mean": -0.0005779584171250463,
+        "std": 0.05070844665169716,
+        "abs_max": 0.9146485328674316,
+        "nonzero_count": 458457,
+        "allzero": false,
+        "constant": false,
+        "nan_count": 0,
+        "inf_count": 0
+      }
+    },
+    {
+      "case_id": "ramp",
+      "variant": "all_zero_positions",
+      "delta_abs_max": 0.0,
+      "delta_std": 0.0,
+      "delta_norm": 0.0,
+      "output_stats": {
+        "shape": [
+          128,
+          3584
+        ],
+        "dtype": "float32",
+        "size": 458752,
+        "min": -0.6766350269317627,
+        "max": 0.7410187125205994,
+        "mean": -0.000675148912705481,
+        "std": 0.04517232999205589,
+        "abs_max": 0.7410187125205994,
+        "nonzero_count": 458440,
+        "allzero": false,
+        "constant": false,
+        "nan_count": 0,
+        "inf_count": 0
+      }
+    },
+    {
+      "case_id": "ramp",
+      "variant": "all_one_positions",
+      "delta_abs_max": 0.03473809361457825,
+      "delta_std": 0.0020977945532649755,
+      "delta_norm": 1.4208892583847046,
+      "output_stats": {
+        "shape": [
+          128,
+          3584
+        ],
+        "dtype": "float32",
+        "size": 458752,
+        "min": -0.6839706301689148,
+        "max": 0.7317430973052979,
+        "mean": -0.000690783082973212,
+        "std": 0.045079056173563004,
+        "abs_max": 0.7317430973052979,
+        "nonzero_count": 458409,
+        "allzero": false,
+        "constant": false,
+        "nan_count": 0,
+        "inf_count": 0
+      }
+    },
+    {
+      "case_id": "ramp",
+      "variant": "one_indexed_1_to_128",
+      "delta_abs_max": 0.6595994234085083,
+      "delta_std": 0.02314041741192341,
+      "delta_norm": 15.673354148864746,
+      "output_stats": {
+        "shape": [
+          128,
+          3584
+        ],
+        "dtype": "float32",
+        "size": 458752,
+        "min": -0.915133535861969,
+        "max": 0.7430193424224854,
+        "mean": -0.0005785390385426581,
+        "std": 0.0506080687046051,
+        "abs_max": 0.915133535861969,
+        "nonzero_count": 458452,
+        "allzero": false,
+        "constant": false,
+        "nan_count": 0,
+        "inf_count": 0
+      }
+    },
+    {
+      "case_id": "ramp",
+      "variant": "reverse_127_to_0",
+      "delta_abs_max": 0.6751194000244141,
+      "delta_std": 0.023246608674526215,
+      "delta_norm": 15.745233535766602,
+      "output_stats": {
+        "shape": [
+          128,
+          3584
+        ],
+        "dtype": "float32",
+        "size": 458752,
+        "min": -0.9144060611724854,
+        "max": 0.749203085899353,
+        "mean": -0.000594771874602884,
+        "std": 0.05112948641180992,
+        "abs_max": 0.9144060611724854,
+        "nonzero_count": 458454,
+        "allzero": false,
+        "constant": false,
+        "nan_count": 0,
+        "inf_count": 0
+      }
+    },
+    {
+      "case_id": "ramp",
+      "variant": "doubled_positions",
+      "delta_abs_max": 0.6357131600379944,
+      "delta_std": 0.021587030962109566,
+      "delta_norm": 14.621112823486328,
+      "output_stats": {
+        "shape": [
+          128,
+          3584
+        ],
+        "dtype": "float32",
+        "size": 458752,
+        "min": -0.9676953554153442,
+        "max": 0.8496586084365845,
+        "mean": -0.0007358748698607087,
+        "std": 0.0487440824508667,
+        "abs_max": 0.9676953554153442,
+        "nonzero_count": 458442,
+        "allzero": false,
+        "constant": false,
+        "nan_count": 0,
+        "inf_count": 0
+      }
+    },
+    {
+      "case_id": "ramp",
+      "variant": "random_permutation_positions",
+      "delta_abs_max": 0.5019745230674744,
+      "delta_std": 0.022269463166594505,
+      "delta_norm": 15.083314895629883,
+      "output_stats": {
+        "shape": [
+          128,
+          3584
+        ],
+        "dtype": "float32",
+        "size": 458752,
+        "min": -0.9541153907775879,
+        "max": 0.7779393196105957,
+        "mean": -0.0006535000866279006,
+        "std": 0.05041874572634697,
+        "abs_max": 0.9541153907775879,
+        "nonzero_count": 458461,
+        "allzero": false,
+        "constant": false,
+        "nan_count": 0,
+        "inf_count": 0
+      }
+    },
+    {
+      "case_id": "short_chinese_prompt_padded",
+      "variant": "canonical_0_to_127",
+      "delta_abs_max": 0.44735145568847656,
+      "delta_std": 0.015638679265975952,
+      "delta_norm": 10.592347145080566,
+      "output_stats": {
+        "shape": [
+          128,
+          3584
+        ],
+        "dtype": "float32",
+        "size": 458752,
+        "min": -0.6131000518798828,
+        "max": 0.8125561475753784,
+        "mean": -0.00011516364611452445,
+        "std": 0.053335294127464294,
+        "abs_max": 0.8125561475753784,
+        "nonzero_count": 458480,
+        "allzero": false,
+        "constant": false,
+        "nan_count": 0,
+        "inf_count": 0
+      }
+    },
+    {
+      "case_id": "short_chinese_prompt_padded",
+      "variant": "all_zero_positions",
+      "delta_abs_max": 0.0,
+      "delta_std": 0.0,
+      "delta_norm": 0.0,
+      "output_stats": {
+        "shape": [
+          128,
+          3584
+        ],
+        "dtype": "float32",
+        "size": 458752,
+        "min": -0.5724207162857056,
+        "max": 0.5448364019393921,
+        "mean": -4.287934643798508e-05,
+        "std": 0.05246572196483612,
+        "abs_max": 0.5724207162857056,
+        "nonzero_count": 458494,
+        "allzero": false,
+        "constant": false,
+        "nan_count": 0,
+        "inf_count": 0
+      }
+    },
+    {
+      "case_id": "short_chinese_prompt_padded",
+      "variant": "all_one_positions",
+      "delta_abs_max": 0.010063737630844116,
+      "delta_std": 0.0006911237142048776,
+      "delta_norm": 0.4682547450065613,
+      "output_stats": {
+        "shape": [
+          128,
+          3584
+        ],
+        "dtype": "float32",
+        "size": 458752,
+        "min": -0.5733907222747803,
+        "max": 0.5448970198631287,
+        "mean": -5.8826197346206754e-05,
+        "std": 0.05242929607629776,
+        "abs_max": 0.5733907222747803,
+        "nonzero_count": 458610,
+        "allzero": false,
+        "constant": false,
+        "nan_count": 0,
+        "inf_count": 0
+      }
+    },
+    {
+      "case_id": "short_chinese_prompt_padded",
+      "variant": "one_indexed_1_to_128",
+      "delta_abs_max": 0.4534139633178711,
+      "delta_std": 0.01535545289516449,
+      "delta_norm": 10.40049934387207,
+      "output_stats": {
+        "shape": [
+          128,
+          3584
+        ],
+        "dtype": "float32",
+        "size": 458752,
+        "min": -0.6094019412994385,
+        "max": 0.6933674812316895,
+        "mean": -0.00011207984789507464,
+        "std": 0.05321883037686348,
+        "abs_max": 0.6933674812316895,
+        "nonzero_count": 458499,
+        "allzero": false,
+        "constant": false,
+        "nan_count": 0,
+        "inf_count": 0
+      }
+    },
+    {
+      "case_id": "short_chinese_prompt_padded",
+      "variant": "reverse_127_to_0",
+      "delta_abs_max": 0.44183456897735596,
+      "delta_std": 0.015874598175287247,
+      "delta_norm": 10.752208709716797,
+      "output_stats": {
+        "shape": [
+          128,
+          3584
+        ],
+        "dtype": "float32",
+        "size": 458752,
+        "min": -0.5688438415527344,
+        "max": 0.8095248937606812,
+        "mean": -0.00013557187048718333,
+        "std": 0.0534464530646801,
+        "abs_max": 0.8095248937606812,
+        "nonzero_count": 458524,
+        "allzero": false,
+        "constant": false,
+        "nan_count": 0,
+        "inf_count": 0
+      }
+    },
+    {
+      "case_id": "short_chinese_prompt_padded",
+      "variant": "doubled_positions",
+      "delta_abs_max": 0.4771789312362671,
+      "delta_std": 0.01665385067462921,
+      "delta_norm": 11.279953956604004,
+      "output_stats": {
+        "shape": [
+          128,
+          3584
+        ],
+        "dtype": "float32",
+        "size": 458752,
+        "min": -0.6191019415855408,
+        "max": 0.7815161943435669,
+        "mean": -0.00012684465036727488,
+        "std": 0.05290108174085617,
+        "abs_max": 0.7815161943435669,
+        "nonzero_count": 458576,
+        "allzero": false,
+        "constant": false,
+        "nan_count": 0,
+        "inf_count": 0
+      }
+    },
+    {
+      "case_id": "short_chinese_prompt_padded",
+      "variant": "random_permutation_positions",
+      "delta_abs_max": 0.43486273288726807,
+      "delta_std": 0.015609717927873135,
+      "delta_norm": 10.572779655456543,
+      "output_stats": {
+        "shape": [
+          128,
+          3584
+        ],
+        "dtype": "float32",
+        "size": 458752,
+        "min": -0.632803201675415,
+        "max": 0.7978848814964294,
+        "mean": -0.00012939941370859742,
+        "std": 0.05333041399717331,
+        "abs_max": 0.7978848814964294,
+        "nonzero_count": 458499,
+        "allzero": false,
+        "constant": false,
+        "nan_count": 0,
+        "inf_count": 0
+      }
+    }
+  ],
+  "max_delta_abs": 0.6751194000244141,
+  "max_delta_norm": 15.745233535766602,
+  "hf_source_interpretation": "DreamModel.forward uses embed_tokens(input_ids), then creates rotary position embeddings for decoder layers; no learned absolute position embedding is added at the embedding boundary.",
+  "source_lines": {
+    "modeling_dream.py": [
+      615,
+      665,
+      677,
+      679,
+      682
+    ]
+  }
+}

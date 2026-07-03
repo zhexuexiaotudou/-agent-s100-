@@ -1,0 +1,106 @@
+{
+  "generated_at": "2026-07-03T01:38:25.824516+08:00",
+  "final_verdict": "ready_for_more_readonly_sidecar_trials_on_s100p",
+  "all_live_gates_pass": true,
+  "evidence_table": [
+    {
+      "report": "3000_s100p_stage2_live_baseline_lock",
+      "gate_id": "stage2_s100p_live_baseline_lock",
+      "verdict": "ok_stage2_s100p_live_baseline_lock",
+      "passed_count": 2,
+      "check_count": 2,
+      "failure_count": 0
+    },
+    {
+      "report": "3010_stage2_package_self_reproducibility_gate",
+      "gate_id": "stage2_package_self_reproducibility_gate",
+      "verdict": "ok_stage2_package_self_reproducibility_gate",
+      "passed_count": 7,
+      "check_count": 7,
+      "failure_count": 0
+    },
+    {
+      "report": "3020_s100p_live_provider_route_integrity_gate",
+      "gate_id": "stage2_s100p_live_provider_and_route_integrity_gate",
+      "verdict": "ok_stage2_s100p_live_provider_and_route_integrity_gate",
+      "passed_count": 9,
+      "check_count": 9,
+      "failure_count": 0
+    },
+    {
+      "report": "3030_s100p_sidecar_isolation_gate",
+      "gate_id": "stage2_s100p_sidecar_isolation_gate",
+      "verdict": "ok_stage2_s100p_sidecar_isolation_gate",
+      "passed_count": 6,
+      "check_count": 6,
+      "failure_count": 0
+    },
+    {
+      "report": "3040_s100p_real_readonly_nas_search_dispatcher_gate",
+      "gate_id": "stage2_real_readonly_dispatcher_execution_gate",
+      "verdict": "ok_stage2_real_readonly_dispatcher_execution_gate",
+      "passed_count": 8,
+      "check_count": 8,
+      "failure_count": 0
+    },
+    {
+      "report": "3050_s100p_real_readonly_document_rag_dispatcher_gate",
+      "gate_id": "stage2_document_rag_live_boundary_gate",
+      "verdict": "ok_stage2_document_rag_live_boundary_gate",
+      "passed_count": 8,
+      "check_count": 8,
+      "failure_count": 0
+    },
+    {
+      "report": "3060_s100p_live_acl_redaction_cloud_egress_gate",
+      "gate_id": "stage2_live_acl_redaction_cloud_egress_gate",
+      "verdict": "ok_stage2_live_acl_redaction_cloud_egress_gate",
+      "passed_count": 8,
+      "check_count": 8,
+      "failure_count": 0
+    },
+    {
+      "report": "3070_s100p_actual_context_minimization_gate",
+      "gate_id": "stage2_actual_context_minimization_gate",
+      "verdict": "ok_stage2_actual_context_minimization_gate",
+      "passed_count": 4,
+      "check_count": 4,
+      "failure_count": 0
+    },
+    {
+      "report": "3080_s100p_runtime_trace_completeness_gate",
+      "gate_id": "stage2_s100p_runtime_trace_completeness_gate",
+      "verdict": "ok_stage2_s100p_runtime_trace_completeness_gate",
+      "passed_count": 4,
+      "check_count": 4,
+      "failure_count": 0
+    },
+    {
+      "report": "3090_s100p_sidecar_resource_rollback_gate",
+      "gate_id": "stage2_real_sidecar_resource_rollback_gate",
+      "verdict": "ok_stage2_real_sidecar_resource_rollback_gate",
+      "passed_count": 7,
+      "check_count": 7,
+      "failure_count": 0
+    }
+  ],
+  "environment": {
+    "repo_root": "F:\\Project\\Digua",
+    "platform": "Windows-11-10.0.26200-SP0",
+    "python": "3.14.3"
+  },
+  "product_safe_claim_boundary": [
+    "S100P OpenClaw/Qwen read-only sidecar trial evidence is report-backed.",
+    "No write/destructive workspace is enabled.",
+    "Sidecar remains isolated and opt-in, not OpenClaw foreground.",
+    "Cloud egress remains disabled or public/redacted only.",
+    "Dream/llama research process was observed only, not stopped or modified.",
+    "Stage 3 is not allowed unless live gates pass and service persistence issues are resolved."
+  ],
+  "final_package": {
+    "zip_path": "F:\\Project\\Digua\\evidence_for_gptpro\\digua_ai_nas_harness_stage2_s100p_live_for_gptpro_20260703-013757.zip",
+    "sha256": "9a586883ef8087915322f9acbdaedecf8819a9a6460bf6e9f1377cd035600911",
+    "file_count": 37,
+    "sha256_file": "F:\\Project\\Digua\\evidence_for_gptpro\\digua_ai_nas_harness_stage2_s100p_live_for_gptpro_20260703-013757.zip.sha256.txt"
+  }
+}

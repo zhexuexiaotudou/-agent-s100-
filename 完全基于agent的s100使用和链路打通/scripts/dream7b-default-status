@@ -1,0 +1,89 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+format="${1:-human}"
+service_name="${DREAM7B_DEFAULT_STATUS_SERVICE_NAME:-dream7b-bpu-batch-queue.service}"
+report_root="${DREAM7B_DEFAULT_STATUS_REPORT_ROOT:-/mnt/nas/openclaw/reports/models}"
+
+python3 - "$format" "$service_name" "$report_root" <<'PY'
+import glob
+import json
+import subprocess
+import sys
+from pathlib import Path
+
+fmt, service_name, report_root = sys.argv[1:4]
+root = Path(report_root)
+
+
+def run(*args):
+    proc = subprocess.run(args, text=True, capture_output=True)
+    return proc.stdout.strip() if proc.returncode == 0 else ""
+
+
+def latest(pattern):
+    matches = [Path(item) for item in glob.glob(str(root / pattern))]
+    if not matches:
+        return None, {}
+    matches.sort(key=lambda item: item.stat().st_mtime, reverse=True)
+    path = matches[0]
+    try:
+        return path, json.loads(path.read_text(encoding="utf-8"))
+    except Exception as exc:
+        return path, {"read_error": str(exc)}
+
+
+promotion_path, promotion = latest("dream7b_bpu_segment_major_default_promotion_*/segment_major_default_promotion_probe.json")
+soak_path, soak = latest("dream7b_bpu_segment_major_candidate_soak_*/segment_major_candidate_soak_probe.json")
+telemetry_path, telemetry = latest("dream7b_bpu_segment_major_candidate_service_telemetry_*/segment_major_candidate_service_telemetry_probe.json")
+openclaw_path, openclaw = latest("dream7b_openclaw_candidate_validation_*/openclaw_candidate_validation_probe.json")
+
+exec_start = run("systemctl", "show", service_name, "-p", "ExecStart", "--value")
+payload = {
+    "service_name": service_name,
+    "active": run("systemctl", "is-active", service_name),
+    "enabled": run("systemctl", "is-enabled", service_name),
+    "exec_start": exec_start,
+    "segment_major_default": "dream7b_bpu_segment_major_load_once_queue_runner.py" in exec_start
+    and "--max-batch-size 256" in exec_start,
+    "queue_dir": "/mnt/nas/openclaw/queues/dream7b-bpu",
+    "output_dir": "/mnt/nas/openclaw/reports/models/dream7b_bpu_batch_queue_service_systemd",
+    "latest_promotion_json": str(promotion_path) if promotion_path else "",
+    "latest_promotion_verdict": promotion.get("verdict"),
+    "latest_promotion_default_service_replaced": promotion.get("default_service_replaced"),
+    "latest_promotion_rollback_verified": promotion.get("rollback_verified"),
+    "latest_soak_json": str(soak_path) if soak_path else "",
+    "latest_soak_verdict": soak.get("verdict"),
+    "latest_soak_decision": soak.get("decision"),
+    "latest_soak_avg_bpu_loading": soak.get("avg_bpu_loading"),
+    "latest_soak_failed_job_count": soak.get("failed_job_count"),
+    "latest_telemetry_json": str(telemetry_path) if telemetry_path else "",
+    "latest_telemetry_avg_bpu_loading": telemetry.get("avg_bpu_loading"),
+    "latest_telemetry_failed_job_count": telemetry.get("failed_job_count"),
+    "latest_openclaw_json": str(openclaw_path) if openclaw_path else "",
+    "latest_openclaw_primary_model": openclaw.get("primary_model"),
+    "latest_openclaw_base_url": openclaw.get("dream_provider_base_url"),
+    "latest_openclaw_errors": openclaw.get("errors"),
+}
+
+if fmt == "--json" or fmt == "json":
+    print(json.dumps(payload, ensure_ascii=False, indent=2))
+else:
+    print("Dream 7B Default Service Status")
+    print(f"- service: {payload['service_name']}")
+    print(f"- active/enabled: {payload['active']} / {payload['enabled']}")
+    print(f"- segment_major_24x256_default: {payload['segment_major_default']}")
+    print(f"- latest promotion: {payload['latest_promotion_verdict']} "
+          f"default_replaced={payload['latest_promotion_default_service_replaced']} "
+          f"rollback_verified={payload['latest_promotion_rollback_verified']}")
+    print(f"- latest soak: {payload['latest_soak_verdict']} "
+          f"decision={payload['latest_soak_decision']} "
+          f"avg_bpu={payload['latest_soak_avg_bpu_loading']} "
+          f"failed_jobs={payload['latest_soak_failed_job_count']}")
+    print(f"- latest telemetry avg_bpu: {payload['latest_telemetry_avg_bpu_loading']} "
+          f"failed_jobs={payload['latest_telemetry_failed_job_count']}")
+    print(f"- OpenClaw model: {payload['latest_openclaw_primary_model']} "
+          f"base_url={payload['latest_openclaw_base_url']}")
+    print(f"- promotion_json: {payload['latest_promotion_json']}")
+    print(f"- soak_json: {payload['latest_soak_json']}")
+PY

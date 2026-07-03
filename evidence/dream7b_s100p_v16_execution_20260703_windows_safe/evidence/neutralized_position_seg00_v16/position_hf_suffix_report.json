@@ -1,0 +1,37 @@
+{
+  "schema_version": "dream7b_s100p_v16_position_hf_suffix",
+  "created_at_unix": 1783071854.9414268,
+  "python": "3.10.12 (main, Aug 15 2025, 14:32:43) [GCC 11.4.0]",
+  "platform": "Linux-6.1.158-rt58-DR-4.0.5-2603031328-g9f678e-g6caa4d-aarch64-with-glibc2.35",
+  "args": {
+    "model_dir": "/mnt/nas/openclaw/models/dream7b-hf",
+    "position_root": "/mnt/nas/openclaw/reports/models/dream7b_s100p_v16_execution_20260703/evidence/position_finite_difference_v16",
+    "truth_root": "/mnt/nas/openclaw/reports/models/dream7b_s100p_v11_execution_20260701/evidence/full_truth_repeat_v11",
+    "hf_boundary_root": "/mnt/nas/openclaw/reports/models/dream7b_s100p_v11_execution_20260701/evidence/hf_boundaries_v11",
+    "output_root": "/mnt/nas/openclaw/reports/models/dream7b_s100p_v16_execution_20260703/evidence/neutralized_position_seg00_v16",
+    "seq_len": 128,
+    "dtype": "bfloat16",
+    "torch_threads": 4
+  },
+  "rows": [],
+  "errors": [
+    {
+      "type": "RuntimeBlocked",
+      "message": "seg00_01 boundary to HF suffix layers 1..27 produced zero logits rows after more than six minutes on S100P research host with pydeps_modern torch/transformers; process was terminated to avoid an unbounded offline run."
+    }
+  ],
+  "safety": {
+    "generation_quality_run": false,
+    "product_routes_18888_18889_touched": false,
+    "dream7b_frontend_openclaw_traffic_touched": false
+  },
+  "status": "runtime_blocked_no_logits_rows_after_timeout",
+  "route": "BPU seg00_01 position-variant output -> HF/PyTorch BF16 suffix layers 1..27 + final norm + lm_head",
+  "runtime_versions": {
+    "torch": "2.2.2",
+    "transformers": "4.46.2",
+    "numpy": "2.2.6"
+  },
+  "manual_stop_unix": 1783072263.815391,
+  "timeout_observation": "seg00_01 boundary to HF suffix layers 1..27 produced zero logits rows after more than six minutes on S100P research host with pydeps_modern torch/transformers; process was terminated to avoid an unbounded offline run."
+}

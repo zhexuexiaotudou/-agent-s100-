@@ -1,0 +1,85 @@
+{
+  "case_id": "short_chinese_prompt_padded",
+  "model_path": "/mnt/nas/openclaw/models/dream7b-hf",
+  "model_class": "AutoModel trust_remote_code DreamForCausalLM/DreamModel",
+  "dtype": "torch.bfloat16",
+  "device": "cpu",
+  "tokenizer_path": "/mnt/nas/openclaw/models/dream7b-hf",
+  "tokenizer_manifest_sha256": "c51fc579c5fc1f2b7328be47afd14234041f2ec1cf4d69500d54c76d6764ee84",
+  "model_code_hashes": {
+    "config.json": "11afc7fe7a1881e73dcd70cca6868aaaf8eb89ad45ea5fc6426c3fb82dec9340",
+    "configuration_dream.py": "24d038962ccf16361595494461000ec0c1b043653c7494d7fc835c96f121f0b9",
+    "modeling_dream.py": "3166e789f0d69beb1f4fbdee2317953d1c1c3b9bc21479b109afc5dd059de5b3",
+    "tokenization_dream.py": "1d7f04104fa673831f48256e3cd42cd0bbd1bddd801b4abea5c74cc47d98bdd2"
+  },
+  "token_ids_sha256": "ac26ad530204a4bc2196cff5fd05bf83a46048a578fdabab2b9073439addd01a",
+  "position_ids_sha256": "4497d32c822ad4ae57132a3462f6a0630d5d4a7863915c4ee08634841c4fee9f",
+  "last_token_index": 127,
+  "semantic_or_diagnostic": "semantic",
+  "logits_shape": [
+    152064
+  ],
+  "top10": [
+    {
+      "index": 151643,
+      "value": 9.125
+    },
+    {
+      "index": 0,
+      "value": 4.53125
+    },
+    {
+      "index": 2055,
+      "value": 2.359375
+    },
+    {
+      "index": 6313,
+      "value": 2.046875
+    },
+    {
+      "index": 2219,
+      "value": 1.8046875
+    },
+    {
+      "index": 4894,
+      "value": 1.7109375
+    },
+    {
+      "index": 220,
+      "value": 1.515625
+    },
+    {
+      "index": 576,
+      "value": 0.85546875
+    },
+    {
+      "index": 3555,
+      "value": 0.82421875
+    },
+    {
+      "index": 4102,
+      "value": 0.58203125
+    }
+  ],
+  "stats": {
+    "shape": [
+      152064
+    ],
+    "dtype": "float32",
+    "size": 152064,
+    "min": -12.5,
+    "max": 9.125,
+    "mean": -8.877497673034668,
+    "std": 1.8784396648406982,
+    "abs_max": 12.5,
+    "nonzero_count": 152064,
+    "allzero": false,
+    "constant": false,
+    "nan_count": 0,
+    "inf_count": 0
+  },
+  "sha256": "e46398de01f01c3646ca333aee4bce5e89705190d79290ac34ae6e40b3d6a5a6",
+  "source_repeat_v11_sha256": "e46398de01f01c3646ca333aee4bce5e89705190d79290ac34ae6e40b3d6a5a6",
+  "v10_sha256": "e46398de01f01c3646ca333aee4bce5e89705190d79290ac34ae6e40b3d6a5a6",
+  "matches_v10_sha256": true
+}

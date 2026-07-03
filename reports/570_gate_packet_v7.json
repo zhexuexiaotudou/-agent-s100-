@@ -1,0 +1,91 @@
+{
+  "schema_version": "dream7b_s100p_gate_packet_v7",
+  "created_at_utc": "2026-07-01T10:13:19.550498+00:00",
+  "run_commands": [
+    "py tools/build_v7_research_thread.py --timestamp 20260701_v7_allseg_hfhead"
+  ],
+  "git": {
+    "cwd": "F:\\Project\\Digua",
+    "git_dir_exists": true,
+    "status": "unavailable:CalledProcessError"
+  },
+  "verdict_class": "E_final_segment_contract_fault_strongly_supported_but_full_reference_unresolved",
+  "verdict": "v7 packages all-segment boundaries and shows that for the same BPU seg26 hidden, HF final RMSNorm+lm_head produces nonzero logits while S100P seg27_28 can return all-zero or mismatched logits. This strongly supports a final-segment contract/runtime fault, but full BF16/GGUF F16 truth remains unavailable.",
+  "gate_status": {
+    "gate_0_evidence_integrity": "pass_pending_zip_self_check",
+    "gate_1_all_segment_boundary_audit": "pass_all_segment_raw_boundaries_packaged",
+    "gate_2_hf_final_norm_lmhead_only_route": "pass_hf_final_lmhead_only_logits_exported",
+    "gate_3_final_segment_functional_comparison": "pass_final_segment_mismatch_quantified_same_input",
+    "gate_4_full_reference_matrix": "partial_q4km_plus_hf_lmhead_only_rows",
+    "gate_5_logits_numerical_validity": "blocked_full_bf16_or_gguf_f16_truth_unavailable_final_segment_fault_supported",
+    "gate_6_generation_quality": "not_run_by_design",
+    "gate_7_product_route": "not_run_by_design"
+  },
+  "all_segment_saturation_table": {
+    "zeros": {
+      "first_any_int16_extreme": 9,
+      "first_both_sided_int16_extreme": 12,
+      "first_gt_1pct_int16_saturation": 12,
+      "first_dequant_std_jump_gt_10x_previous": 11,
+      "first_allzero_raw": 27
+    },
+    "ramp": {
+      "first_any_int16_extreme": 9,
+      "first_both_sided_int16_extreme": 12,
+      "first_gt_1pct_int16_saturation": 12,
+      "first_dequant_std_jump_gt_10x_previous": 11,
+      "first_allzero_raw": 27
+    },
+    "short_chinese_prompt_padded": {
+      "first_any_int16_extreme": 9,
+      "first_both_sided_int16_extreme": 12,
+      "first_gt_1pct_int16_saturation": 12,
+      "first_dequant_std_jump_gt_10x_previous": 11,
+      "first_allzero_raw": 27
+    }
+  },
+  "final_segment_functional_comparison_summary": {
+    "comparisons": 27,
+    "mismatch_count": 23,
+    "real_x_bpu_allzero_hf_nonzero_cases": [
+      "zeros",
+      "ramp",
+      "short_chinese_prompt_padded"
+    ]
+  },
+  "reference_matrix_rows": {
+    "hf_bf16_or_fp32_full": "unavailable",
+    "gguf_f16": "unavailable",
+    "gguf_q4_0": "unavailable",
+    "gguf_q4_k_m": "available",
+    "s100p_bpu_dequant": "partial_available",
+    "corrected_scale_diagnostic": "available",
+    "hf_final_lmhead_only": "available"
+  },
+  "blocking_issues": [
+    "No verified BF16/FP32 full logits or GGUF F16 row exists.",
+    "HF final-head-only route proves a same-input final projection mismatch, but it does not prove the BPU seg26 hidden itself is correct.",
+    "GGUF F16 and Q4_0 rows remain unavailable."
+  ],
+  "allowed_claims": [
+    "All-segment raw/dequant boundary arrays for seg00..27 are packaged for zeros/ramp/short-Chinese if Task 500 passed.",
+    "Earlier saturation/extreme indicators precede seg20; do not claim first saturation at seg20.",
+    "HF final-norm+lm_head-only logits can be computed from BPU hidden inputs and compared to BPU seg27_28 on the same input.",
+    "A final-segment input contract/runtime fault is strongly supported if BPU and HF final-head logits diverge on the same hidden."
+  ],
+  "forbidden_claims": [
+    "Dream7B is accurately deployed on S100P.",
+    "Dream7B is falsified against BF16/PyTorch full-model truth.",
+    "Any scaled/clipped nonzero BPU output is a correctness fix.",
+    "Generation quality or product route 18888/18889 passed or failed."
+  ],
+  "next_minimal_experiment": "Export full BF16/FP32 or GGUF F16 canonical logits, then decide whether the BPU seg26 hidden is valid and whether the final-segment fault is the only remaining blocker.",
+  "paper_claim_boundary": "v7 supports a same-input final-segment contract fault and corrects the v6 localization claim by packaging seg00..27 boundaries. It does not validate full Dream7B numerical correctness because a full BF16/FP32 or GGUF F16 truth row is still missing.",
+  "source_reports": {
+    "500_all_segment_boundary_raw_audit": "reports/500_all_segment_boundary_raw_audit.json",
+    "510_hf_final_norm_lmhead_only_route": "reports/510_hf_final_norm_lmhead_only_route.json",
+    "520_final_segment_functional_compare": "reports/520_final_segment_functional_compare.json",
+    "530_reference_matrix_completion": "reports/530_reference_matrix_completion.json",
+    "540_bf16_full_forward_export": "reports/540_bf16_full_forward_export.json"
+  }
+}

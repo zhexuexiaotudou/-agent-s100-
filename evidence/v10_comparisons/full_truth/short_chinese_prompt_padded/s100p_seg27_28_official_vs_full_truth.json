@@ -1,0 +1,68 @@
+{
+  "candidate_top1": 152063,
+  "reference_top1": 151643,
+  "top1_agreement": false,
+  "top5_overlap": 0,
+  "reference_top1_in_candidate_top5": false,
+  "candidate_max_tie_count": 152064,
+  "reference_max_tie_count": 1,
+  "reference_top1_in_candidate_max_tie_set": true,
+  "candidate_top1_in_reference_max_tie_set": false,
+  "rank_interval_for_reference_top1_under_candidate_ties": [
+    1,
+    152064
+  ],
+  "cosine": 0.0,
+  "pearson_centered": 0.0,
+  "relative_l2": 0.9999999999999998,
+  "mean_abs_error": 8.877857951604156,
+  "max_abs_error": 12.5,
+  "candidate_stats": {
+    "shape": [
+      152064
+    ],
+    "dtype": "float32",
+    "size": 152064,
+    "min": 0.0,
+    "max": 0.0,
+    "mean": 0.0,
+    "std": 0.0,
+    "abs_max": 0.0,
+    "nonzero_count": 0,
+    "allzero": true,
+    "constant": true,
+    "nan_count": 0,
+    "inf_count": 0
+  },
+  "reference_stats": {
+    "shape": [
+      152064
+    ],
+    "dtype": "float32",
+    "size": 152064,
+    "min": -12.5,
+    "max": 9.125,
+    "mean": -8.877497673034668,
+    "std": 1.8784396648406982,
+    "abs_max": 12.5,
+    "nonzero_count": 152064,
+    "allzero": false,
+    "constant": false,
+    "nan_count": 0,
+    "inf_count": 0
+  },
+  "candidate_entropy": {
+    "entropy": 11.932056763842207,
+    "normalized_entropy": 1.0,
+    "top1_probability": 6.576178451178451e-06
+  },
+  "reference_entropy": {
+    "entropy": 0.4009702328313241,
+    "normalized_entropy": 0.033604452339380995,
+    "top1_probability": 0.9639511998170708
+  },
+  "case_id": "short_chinese_prompt_padded",
+  "comparison": "s100p_seg27_28_official_vs_full_truth",
+  "candidate_path": "evidence/final_segment_endpoint_raw_v9/short_chinese_prompt_padded/real_x/official_dequant_logits.npy",
+  "reference_path": "evidence/full_truth_v10/short_chinese_prompt_padded/full_truth_logits.npy"
+}

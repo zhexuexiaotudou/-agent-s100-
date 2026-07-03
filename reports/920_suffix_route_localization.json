@@ -1,0 +1,1159 @@
+{
+  "schema_version": "dream7b_s100p_v11_920_suffix_route_localization",
+  "created_at_utc": "2026-07-01T19:15:57.070391+00:00",
+  "run_commands": [
+    "C:\\Users\\zhexu\\AppData\\Local\\Python\\pythoncore-3.14-64\\python.exe tools\\build_v11_research_thread.py --root ."
+  ],
+  "git": {
+    "cwd": "F:\\Project\\Digua",
+    "git_dir_exists": true,
+    "git_head_exists": false,
+    "status": "unavailable_empty_or_incomplete_git_dir"
+  },
+  "input_artifacts": [
+    {
+      "path": "evidence/hf_suffix_route_v11",
+      "exists": true
+    },
+    {
+      "path": "evidence/s100p_remote_v11_reports/920_suffix_route_remote.json",
+      "exists": true,
+      "size_bytes": 31551,
+      "sha256": "27d4901e9a257bf1cf1cfe7cf706764e4c94f487eac4fcfb91b9796ff4a24470"
+    }
+  ],
+  "output_artifacts": [
+    {
+      "path": "reports/920_suffix_route_localization.json"
+    },
+    {
+      "path": "reports/920_suffix_route_localization.md"
+    }
+  ],
+  "blocking_or_failure_reasons": [],
+  "next_minimal_experiments": [],
+  "suffix_rows": 18,
+  "expected_rows": 18,
+  "remote_status": "pass",
+  "remote_errors": [],
+  "summary_by_boundary": {
+    "8": {
+      "rows": 3,
+      "top1_agreement_rows": 0,
+      "median_relative_l2": 0.36483010734570137,
+      "median_pearson_centered": 0.7738799236962725
+    },
+    "11": {
+      "rows": 3,
+      "top1_agreement_rows": 0,
+      "median_relative_l2": 0.5439676217073303,
+      "median_pearson_centered": 0.7268482008437188
+    },
+    "12": {
+      "rows": 3,
+      "top1_agreement_rows": 0,
+      "median_relative_l2": 0.7695447913051602,
+      "median_pearson_centered": 0.39622286170800675
+    },
+    "13": {
+      "rows": 3,
+      "top1_agreement_rows": 0,
+      "median_relative_l2": 1.0143631234079535,
+      "median_pearson_centered": 0.34768120741850733
+    },
+    "20": {
+      "rows": 3,
+      "top1_agreement_rows": 0,
+      "median_relative_l2": 0.6944710626344935,
+      "median_pearson_centered": 0.6430598489163829
+    },
+    "26": {
+      "rows": 3,
+      "top1_agreement_rows": 0,
+      "median_relative_l2": 1.383325206753448,
+      "median_pearson_centered": -0.24282643221749534
+    }
+  },
+  "rows": [
+    {
+      "shape_mismatch": false,
+      "cosine": 0.9904542752656255,
+      "pearson_centered": 0.777157742316441,
+      "relative_l2": 0.36483010734570137,
+      "mean_abs_error": 3.6266603479381363,
+      "max_abs_error": 11.265625,
+      "candidate_stats": {
+        "shape": [
+          152064
+        ],
+        "dtype": "float32",
+        "size": 152064,
+        "min": -10.6875,
+        "max": 5.125,
+        "mean": -6.6146240234375,
+        "std": 1.4849048852920532,
+        "abs_max": 10.6875,
+        "nonzero_count": 152064,
+        "allzero": false,
+        "constant": false,
+        "nan_count": 0,
+        "inf_count": 0
+      },
+      "reference_stats": {
+        "shape": [
+          152064
+        ],
+        "dtype": "float32",
+        "size": 152064,
+        "min": -14.25,
+        "max": 1.75,
+        "mean": -10.231769561767578,
+        "std": 1.7890512943267822,
+        "abs_max": 14.25,
+        "nonzero_count": 152064,
+        "allzero": false,
+        "constant": false,
+        "nan_count": 0,
+        "inf_count": 0
+      },
+      "candidate_top1": 279,
+      "reference_top1": 220,
+      "top1_agreement": false,
+      "top5_overlap": 0,
+      "candidate_entropy": {
+        "entropy": 7.782928025339609,
+        "normalized_entropy": 0.652270449209081,
+        "top1_probability": 0.08420069831665775
+      },
+      "reference_entropy": {
+        "entropy": 7.571224949104677,
+        "normalized_entropy": 0.6345280699676028,
+        "top1_probability": 0.0663488567541616
+      },
+      "case_id": "zeros",
+      "boundary": 8,
+      "candidate_path": "evidence/hf_suffix_route_v11/zeros/seg_08_to_logits/suffix_logits.npy",
+      "reference_path": "evidence/full_truth_v10/zeros/full_truth_logits.npy"
+    },
+    {
+      "shape_mismatch": false,
+      "cosine": 0.976927634953906,
+      "pearson_centered": 0.7268482008437188,
+      "relative_l2": 0.5439676217073303,
+      "mean_abs_error": 5.512439380741681,
+      "max_abs_error": 13.421875,
+      "candidate_stats": {
+        "shape": [
+          152064
+        ],
+        "dtype": "float32",
+        "size": 152064,
+        "min": -9.9375,
+        "max": 8.0625,
+        "mean": -4.720181941986084,
+        "std": 1.4935977458953857,
+        "abs_max": 9.9375,
+        "nonzero_count": 152064,
+        "allzero": false,
+        "constant": false,
+        "nan_count": 0,
+        "inf_count": 0
+      },
+      "reference_stats": {
+        "shape": [
+          152064
+        ],
+        "dtype": "float32",
+        "size": 152064,
+        "min": -14.25,
+        "max": 1.75,
+        "mean": -10.231769561767578,
+        "std": 1.7890512943267822,
+        "abs_max": 14.25,
+        "nonzero_count": 152064,
+        "allzero": false,
+        "constant": false,
+        "nan_count": 0,
+        "inf_count": 0
+      },
+      "candidate_top1": 279,
+      "reference_top1": 220,
+      "top1_agreement": false,
+      "top5_overlap": 0,
+      "candidate_entropy": {
+        "entropy": 6.959830323801136,
+        "normalized_entropy": 0.5832884021212134,
+        "top1_probability": 0.1708451239950236
+      },
+      "reference_entropy": {
+        "entropy": 7.571224949104677,
+        "normalized_entropy": 0.6345280699676028,
+        "top1_probability": 0.0663488567541616
+      },
+      "case_id": "zeros",
+      "boundary": 11,
+      "candidate_path": "evidence/hf_suffix_route_v11/zeros/seg_11_to_logits/suffix_logits.npy",
+      "reference_path": "evidence/full_truth_v10/zeros/full_truth_logits.npy"
+    },
+    {
+      "shape_mismatch": false,
+      "cosine": 0.8943388520813518,
+      "pearson_centered": 0.39622286170800675,
+      "relative_l2": 0.7879294799495743,
+      "mean_abs_error": 8.000182078221519,
+      "max_abs_error": 15.65625,
+      "candidate_stats": {
+        "shape": [
+          152064
+        ],
+        "dtype": "float32",
+        "size": 152064,
+        "min": -8.625,
+        "max": 7.03125,
+        "mean": -2.2316322326660156,
+        "std": 1.2390775680541992,
+        "abs_max": 8.625,
+        "nonzero_count": 152064,
+        "allzero": false,
+        "constant": false,
+        "nan_count": 0,
+        "inf_count": 0
+      },
+      "reference_stats": {
+        "shape": [
+          152064
+        ],
+        "dtype": "float32",
+        "size": 152064,
+        "min": -14.25,
+        "max": 1.75,
+        "mean": -10.231769561767578,
+        "std": 1.7890512943267822,
+        "abs_max": 14.25,
+        "nonzero_count": 152064,
+        "allzero": false,
+        "constant": false,
+        "nan_count": 0,
+        "inf_count": 0
+      },
+      "candidate_top1": 50,
+      "reference_top1": 220,
+      "top1_agreement": false,
+      "top5_overlap": 1,
+      "candidate_entropy": {
+        "entropy": 9.452430572079916,
+        "normalized_entropy": 0.7921878649390673,
+        "top1_probability": 0.01568795872925718
+      },
+      "reference_entropy": {
+        "entropy": 7.571224949104677,
+        "normalized_entropy": 0.6345280699676028,
+        "top1_probability": 0.0663488567541616
+      },
+      "case_id": "zeros",
+      "boundary": 12,
+      "candidate_path": "evidence/hf_suffix_route_v11/zeros/seg_12_to_logits/suffix_logits.npy",
+      "reference_path": "evidence/full_truth_v10/zeros/full_truth_logits.npy"
+    },
+    {
+      "shape_mismatch": false,
+      "cosine": 0.08624558764480426,
+      "pearson_centered": 0.34768120741850733,
+      "relative_l2": 0.9964925990517032,
+      "mean_abs_error": 10.203321813240409,
+      "max_abs_error": 17.34375,
+      "candidate_stats": {
+        "shape": [
+          152064
+        ],
+        "dtype": "float32",
+        "size": 152064,
+        "min": -7.28125,
+        "max": 7.1875,
+        "mean": -0.029800569638609886,
+        "std": 1.1122715473175049,
+        "abs_max": 7.28125,
+        "nonzero_count": 152064,
+        "allzero": false,
+        "constant": false,
+        "nan_count": 0,
+        "inf_count": 0
+      },
+      "reference_stats": {
+        "shape": [
+          152064
+        ],
+        "dtype": "float32",
+        "size": 152064,
+        "min": -14.25,
+        "max": 1.75,
+        "mean": -10.231769561767578,
+        "std": 1.7890512943267822,
+        "abs_max": 14.25,
+        "nonzero_count": 152064,
+        "allzero": false,
+        "constant": false,
+        "nan_count": 0,
+        "inf_count": 0
+      },
+      "candidate_top1": 54975,
+      "reference_top1": 220,
+      "top1_agreement": false,
+      "top5_overlap": 0,
+      "candidate_entropy": {
+        "entropy": 10.844132688239991,
+        "normalized_entropy": 0.9088234243991398,
+        "top1_probability": 0.0038659797314805518
+      },
+      "reference_entropy": {
+        "entropy": 7.571224949104677,
+        "normalized_entropy": 0.6345280699676028,
+        "top1_probability": 0.0663488567541616
+      },
+      "case_id": "zeros",
+      "boundary": 13,
+      "candidate_path": "evidence/hf_suffix_route_v11/zeros/seg_13_to_logits/suffix_logits.npy",
+      "reference_path": "evidence/full_truth_v10/zeros/full_truth_logits.npy"
+    },
+    {
+      "shape_mismatch": false,
+      "cosine": 0.9476250408333973,
+      "pearson_centered": 0.6430598489163829,
+      "relative_l2": 0.6944710626344935,
+      "mean_abs_error": 7.079982614282657,
+      "max_abs_error": 14.15625,
+      "candidate_stats": {
+        "shape": [
+          152064
+        ],
+        "dtype": "float32",
+        "size": 152064,
+        "min": -8.8125,
+        "max": 5.125,
+        "mean": -3.15299654006958,
+        "std": 1.3696123361587524,
+        "abs_max": 8.8125,
+        "nonzero_count": 152064,
+        "allzero": false,
+        "constant": false,
+        "nan_count": 0,
+        "inf_count": 0
+      },
+      "reference_stats": {
+        "shape": [
+          152064
+        ],
+        "dtype": "float32",
+        "size": 152064,
+        "min": -14.25,
+        "max": 1.75,
+        "mean": -10.231769561767578,
+        "std": 1.7890512943267822,
+        "abs_max": 14.25,
+        "nonzero_count": 152064,
+        "allzero": false,
+        "constant": false,
+        "nan_count": 0,
+        "inf_count": 0
+      },
+      "candidate_top1": 4102,
+      "reference_top1": 220,
+      "top1_agreement": false,
+      "top5_overlap": 0,
+      "candidate_entropy": {
+        "entropy": 10.426042535307333,
+        "normalized_entropy": 0.8737841883975478,
+        "top1_probability": 0.0075417252072752065
+      },
+      "reference_entropy": {
+        "entropy": 7.571224949104677,
+        "normalized_entropy": 0.6345280699676028,
+        "top1_probability": 0.0663488567541616
+      },
+      "case_id": "zeros",
+      "boundary": 20,
+      "candidate_path": "evidence/hf_suffix_route_v11/zeros/seg_20_to_logits/suffix_logits.npy",
+      "reference_path": "evidence/full_truth_v10/zeros/full_truth_logits.npy"
+    },
+    {
+      "shape_mismatch": false,
+      "cosine": -0.9632912650721812,
+      "pearson_centered": -0.5578625105907106,
+      "relative_l2": 1.383325206753448,
+      "mean_abs_error": 14.103310672412642,
+      "max_abs_error": 21.625,
+      "candidate_stats": {
+        "shape": [
+          152064
+        ],
+        "dtype": "float32",
+        "size": 152064,
+        "min": -7.40625,
+        "max": 10.6875,
+        "mean": 3.870509386062622,
+        "std": 1.3209731578826904,
+        "abs_max": 10.6875,
+        "nonzero_count": 152064,
+        "allzero": false,
+        "constant": false,
+        "nan_count": 0,
+        "inf_count": 0
+      },
+      "reference_stats": {
+        "shape": [
+          152064
+        ],
+        "dtype": "float32",
+        "size": 152064,
+        "min": -14.25,
+        "max": 1.75,
+        "mean": -10.231769561767578,
+        "std": 1.7890512943267822,
+        "abs_max": 14.25,
+        "nonzero_count": 152064,
+        "allzero": false,
+        "constant": false,
+        "nan_count": 0,
+        "inf_count": 0
+      },
+      "candidate_top1": 82733,
+      "reference_top1": 220,
+      "top1_agreement": false,
+      "top5_overlap": 0,
+      "candidate_entropy": {
+        "entropy": 11.331667860395598,
+        "normalized_entropy": 0.9496826980185032,
+        "top1_probability": 0.003226447145934711
+      },
+      "reference_entropy": {
+        "entropy": 7.571224949104677,
+        "normalized_entropy": 0.6345280699676028,
+        "top1_probability": 0.0663488567541616
+      },
+      "case_id": "zeros",
+      "boundary": 26,
+      "candidate_path": "evidence/hf_suffix_route_v11/zeros/seg_26_to_logits/suffix_logits.npy",
+      "reference_path": "evidence/full_truth_v10/zeros/full_truth_logits.npy"
+    },
+    {
+      "shape_mismatch": false,
+      "cosine": 0.8731776229608214,
+      "pearson_centered": -0.17497820563406516,
+      "relative_l2": 2.6114304392763903,
+      "mean_abs_error": 5.409968564782279,
+      "max_abs_error": 14.21875,
+      "candidate_stats": {
+        "shape": [
+          152064
+        ],
+        "dtype": "float32",
+        "size": 152064,
+        "min": -12.0,
+        "max": 4.0625,
+        "mean": -7.377200603485107,
+        "std": 1.5436060428619385,
+        "abs_max": 12.0,
+        "nonzero_count": 152064,
+        "allzero": false,
+        "constant": false,
+        "nan_count": 0,
+        "inf_count": 0
+      },
+      "reference_stats": {
+        "shape": [
+          152064
+        ],
+        "dtype": "float32",
+        "size": 152064,
+        "min": -7.65625,
+        "max": 12.25,
+        "mean": -1.9889841079711914,
+        "std": 0.9208143353462219,
+        "abs_max": 12.25,
+        "nonzero_count": 152064,
+        "allzero": false,
+        "constant": false,
+        "nan_count": 0,
+        "inf_count": 0
+      },
+      "candidate_top1": 279,
+      "reference_top1": 151643,
+      "top1_agreement": false,
+      "top5_overlap": 0,
+      "candidate_entropy": {
+        "entropy": 7.966613079669798,
+        "normalized_entropy": 0.6676646983285464,
+        "top1_probability": 0.05792741349881967
+      },
+      "reference_entropy": {
+        "entropy": 2.2516018927699237,
+        "normalized_entropy": 0.18870190926286642,
+        "top1_probability": 0.8155245210005765
+      },
+      "case_id": "ramp",
+      "boundary": 8,
+      "candidate_path": "evidence/hf_suffix_route_v11/ramp/seg_08_to_logits/suffix_logits.npy",
+      "reference_path": "evidence/full_truth_v10/ramp/full_truth_logits.npy"
+    },
+    {
+      "shape_mismatch": false,
+      "cosine": 0.8630903619709949,
+      "pearson_centered": -0.11424474037605802,
+      "relative_l2": 1.8872666837455658,
+      "mean_abs_error": 3.8143032302308564,
+      "max_abs_error": 13.2578125,
+      "candidate_stats": {
+        "shape": [
+          152064
+        ],
+        "dtype": "float32",
+        "size": 152064,
+        "min": -10.875,
+        "max": 7.59375,
+        "mean": -5.671474933624268,
+        "std": 1.5419337749481201,
+        "abs_max": 10.875,
+        "nonzero_count": 152064,
+        "allzero": false,
+        "constant": false,
+        "nan_count": 0,
+        "inf_count": 0
+      },
+      "reference_stats": {
+        "shape": [
+          152064
+        ],
+        "dtype": "float32",
+        "size": 152064,
+        "min": -7.65625,
+        "max": 12.25,
+        "mean": -1.9889841079711914,
+        "std": 0.9208143353462219,
+        "abs_max": 12.25,
+        "nonzero_count": 152064,
+        "allzero": false,
+        "constant": false,
+        "nan_count": 0,
+        "inf_count": 0
+      },
+      "candidate_top1": 279,
+      "reference_top1": 151643,
+      "top1_agreement": false,
+      "top5_overlap": 0,
+      "candidate_entropy": {
+        "entropy": 6.329665737430008,
+        "normalized_entropy": 0.5304756642300628,
+        "top1_probability": 0.18762930240881423
+      },
+      "reference_entropy": {
+        "entropy": 2.2516018927699237,
+        "normalized_entropy": 0.18870190926286642,
+        "top1_probability": 0.8155245210005765
+      },
+      "case_id": "ramp",
+      "boundary": 11,
+      "candidate_path": "evidence/hf_suffix_route_v11/ramp/seg_11_to_logits/suffix_logits.npy",
+      "reference_path": "evidence/full_truth_v10/ramp/full_truth_logits.npy"
+    },
+    {
+      "shape_mismatch": false,
+      "cosine": 0.7876969493347444,
+      "pearson_centered": -0.05831626504491857,
+      "relative_l2": 0.7695447913051602,
+      "mean_abs_error": 1.3587415636319555,
+      "max_abs_error": 11.3125,
+      "candidate_stats": {
+        "shape": [
+          152064
+        ],
+        "dtype": "float32",
+        "size": 152064,
+        "min": -8.125,
+        "max": 7.9375,
+        "mean": -2.410947799682617,
+        "std": 1.2960536479949951,
+        "abs_max": 8.125,
+        "nonzero_count": 152064,
+        "allzero": false,
+        "constant": false,
+        "nan_count": 0,
+        "inf_count": 0
+      },
+      "reference_stats": {
+        "shape": [
+          152064
+        ],
+        "dtype": "float32",
+        "size": 152064,
+        "min": -7.65625,
+        "max": 12.25,
+        "mean": -1.9889841079711914,
+        "std": 0.9208143353462219,
+        "abs_max": 12.25,
+        "nonzero_count": 152064,
+        "allzero": false,
+        "constant": false,
+        "nan_count": 0,
+        "inf_count": 0
+      },
+      "candidate_top1": 285,
+      "reference_top1": 151643,
+      "top1_agreement": false,
+      "top5_overlap": 0,
+      "candidate_entropy": {
+        "entropy": 9.112464349452203,
+        "normalized_entropy": 0.7636960274163098,
+        "top1_probability": 0.03801699314797428
+      },
+      "reference_entropy": {
+        "entropy": 2.2516018927699237,
+        "normalized_entropy": 0.18870190926286642,
+        "top1_probability": 0.8155245210005765
+      },
+      "case_id": "ramp",
+      "boundary": 12,
+      "candidate_path": "evidence/hf_suffix_route_v11/ramp/seg_12_to_logits/suffix_logits.npy",
+      "reference_path": "evidence/full_truth_v10/ramp/full_truth_logits.npy"
+    },
+    {
+      "shape_mismatch": false,
+      "cosine": -0.38964289484748854,
+      "pearson_centered": -0.20422437419575887,
+      "relative_l2": 1.4754598557577954,
+      "mean_abs_error": 2.603292471511283,
+      "max_abs_error": 12.5625,
+      "candidate_stats": {
+        "shape": [
+          152064
+        ],
+        "dtype": "float32",
+        "size": 152064,
+        "min": -5.71875,
+        "max": 8.25,
+        "mean": 0.5694597363471985,
+        "std": 1.5726165771484375,
+        "abs_max": 8.25,
+        "nonzero_count": 152064,
+        "allzero": false,
+        "constant": false,
+        "nan_count": 0,
+        "inf_count": 0
+      },
+      "reference_stats": {
+        "shape": [
+          152064
+        ],
+        "dtype": "float32",
+        "size": 152064,
+        "min": -7.65625,
+        "max": 12.25,
+        "mean": -1.9889841079711914,
+        "std": 0.9208143353462219,
+        "abs_max": 12.25,
+        "nonzero_count": 152064,
+        "allzero": false,
+        "constant": false,
+        "nan_count": 0,
+        "inf_count": 0
+      },
+      "candidate_top1": 3914,
+      "reference_top1": 151643,
+      "top1_agreement": false,
+      "top5_overlap": 0,
+      "candidate_entropy": {
+        "entropy": 10.393249131520339,
+        "normalized_entropy": 0.8710358437964419,
+        "top1_probability": 0.003214235524734291
+      },
+      "reference_entropy": {
+        "entropy": 2.2516018927699237,
+        "normalized_entropy": 0.18870190926286642,
+        "top1_probability": 0.8155245210005765
+      },
+      "case_id": "ramp",
+      "boundary": 13,
+      "candidate_path": "evidence/hf_suffix_route_v11/ramp/seg_13_to_logits/suffix_logits.npy",
+      "reference_path": "evidence/full_truth_v10/ramp/full_truth_logits.npy"
+    },
+    {
+      "shape_mismatch": false,
+      "cosine": 0.7029058789571287,
+      "pearson_centered": -0.1732788932759384,
+      "relative_l2": 0.9596971294028633,
+      "mean_abs_error": 1.8047522687610327,
+      "max_abs_error": 12.005859375,
+      "candidate_stats": {
+        "shape": [
+          152064
+        ],
+        "dtype": "float32",
+        "size": 152064,
+        "min": -6.5625,
+        "max": 8.8125,
+        "mean": -2.422562837600708,
+        "std": 1.68817138671875,
+        "abs_max": 8.8125,
+        "nonzero_count": 152064,
+        "allzero": false,
+        "constant": false,
+        "nan_count": 0,
+        "inf_count": 0
+      },
+      "reference_stats": {
+        "shape": [
+          152064
+        ],
+        "dtype": "float32",
+        "size": 152064,
+        "min": -7.65625,
+        "max": 12.25,
+        "mean": -1.9889841079711914,
+        "std": 0.9208143353462219,
+        "abs_max": 12.25,
+        "nonzero_count": 152064,
+        "allzero": false,
+        "constant": false,
+        "nan_count": 0,
+        "inf_count": 0
+      },
+      "candidate_top1": 1103,
+      "reference_top1": 151643,
+      "top1_agreement": false,
+      "top5_overlap": 0,
+      "candidate_entropy": {
+        "entropy": 9.164224013918904,
+        "normalized_entropy": 0.7680338935102383,
+        "top1_probability": 0.07160890638575779
+      },
+      "reference_entropy": {
+        "entropy": 2.2516018927699237,
+        "normalized_entropy": 0.18870190926286642,
+        "top1_probability": 0.8155245210005765
+      },
+      "case_id": "ramp",
+      "boundary": 20,
+      "candidate_path": "evidence/hf_suffix_route_v11/ramp/seg_20_to_logits/suffix_logits.npy",
+      "reference_path": "evidence/full_truth_v10/ramp/full_truth_logits.npy"
+    },
+    {
+      "shape_mismatch": false,
+      "cosine": -0.5633275357817081,
+      "pearson_centered": 0.07167945471470942,
+      "relative_l2": 1.447325830397701,
+      "mean_abs_error": 2.920915390654884,
+      "max_abs_error": 11.125,
+      "candidate_stats": {
+        "shape": [
+          152064
+        ],
+        "dtype": "float32",
+        "size": 152064,
+        "min": -6.4375,
+        "max": 8.0625,
+        "mean": 0.8850488066673279,
+        "std": 1.045539379119873,
+        "abs_max": 8.0625,
+        "nonzero_count": 152064,
+        "allzero": false,
+        "constant": false,
+        "nan_count": 0,
+        "inf_count": 0
+      },
+      "reference_stats": {
+        "shape": [
+          152064
+        ],
+        "dtype": "float32",
+        "size": 152064,
+        "min": -7.65625,
+        "max": 12.25,
+        "mean": -1.9889841079711914,
+        "std": 0.9208143353462219,
+        "abs_max": 12.25,
+        "nonzero_count": 152064,
+        "allzero": false,
+        "constant": false,
+        "nan_count": 0,
+        "inf_count": 0
+      },
+      "candidate_top1": 61183,
+      "reference_top1": 151643,
+      "top1_agreement": false,
+      "top5_overlap": 0,
+      "candidate_entropy": {
+        "entropy": 11.109556016521221,
+        "normalized_entropy": 0.9310679823604749,
+        "top1_probability": 0.004753348365316501
+      },
+      "reference_entropy": {
+        "entropy": 2.2516018927699237,
+        "normalized_entropy": 0.18870190926286642,
+        "top1_probability": 0.8155245210005765
+      },
+      "case_id": "ramp",
+      "boundary": 26,
+      "candidate_path": "evidence/hf_suffix_route_v11/ramp/seg_26_to_logits/suffix_logits.npy",
+      "reference_path": "evidence/full_truth_v10/ramp/full_truth_logits.npy"
+    },
+    {
+      "shape_mismatch": false,
+      "cosine": 0.9897884437179918,
+      "pearson_centered": 0.7738799236962725,
+      "relative_l2": 0.2870022460730246,
+      "mean_abs_error": 2.3952447897958433,
+      "max_abs_error": 11.5625,
+      "candidate_stats": {
+        "shape": [
+          152064
+        ],
+        "dtype": "float32",
+        "size": 152064,
+        "min": -10.75,
+        "max": 5.0,
+        "mean": -6.560842990875244,
+        "std": 1.4586584568023682,
+        "abs_max": 10.75,
+        "nonzero_count": 152064,
+        "allzero": false,
+        "constant": false,
+        "nan_count": 0,
+        "inf_count": 0
+      },
+      "reference_stats": {
+        "shape": [
+          152064
+        ],
+        "dtype": "float32",
+        "size": 152064,
+        "min": -12.5,
+        "max": 9.125,
+        "mean": -8.877497673034668,
+        "std": 1.8784396648406982,
+        "abs_max": 12.5,
+        "nonzero_count": 152064,
+        "allzero": false,
+        "constant": false,
+        "nan_count": 0,
+        "inf_count": 0
+      },
+      "candidate_top1": 279,
+      "reference_top1": 151643,
+      "top1_agreement": false,
+      "top5_overlap": 0,
+      "candidate_entropy": {
+        "entropy": 7.9091222638441385,
+        "normalized_entropy": 0.6628465167724651,
+        "top1_probability": 0.0751032531455086
+      },
+      "reference_entropy": {
+        "entropy": 0.4009702328313241,
+        "normalized_entropy": 0.033604452339380995,
+        "top1_probability": 0.9639511998170708
+      },
+      "case_id": "short_chinese_prompt_padded",
+      "boundary": 8,
+      "candidate_path": "evidence/hf_suffix_route_v11/short_chinese_prompt_padded/seg_08_to_logits/suffix_logits.npy",
+      "reference_path": "evidence/full_truth_v10/short_chinese_prompt_padded/full_truth_logits.npy"
+    },
+    {
+      "shape_mismatch": false,
+      "cosine": 0.9786645483413007,
+      "pearson_centered": 0.7317416897781929,
+      "relative_l2": 0.48085136480504365,
+      "mean_abs_error": 4.177916984603762,
+      "max_abs_error": 12.640625,
+      "candidate_stats": {
+        "shape": [
+          152064
+        ],
+        "dtype": "float32",
+        "size": 152064,
+        "min": -9.9375,
+        "max": 7.90625,
+        "mean": -4.707687854766846,
+        "std": 1.4823930263519287,
+        "abs_max": 9.9375,
+        "nonzero_count": 152064,
+        "allzero": false,
+        "constant": false,
+        "nan_count": 0,
+        "inf_count": 0
+      },
+      "reference_stats": {
+        "shape": [
+          152064
+        ],
+        "dtype": "float32",
+        "size": 152064,
+        "min": -12.5,
+        "max": 9.125,
+        "mean": -8.877497673034668,
+        "std": 1.8784396648406982,
+        "abs_max": 12.5,
+        "nonzero_count": 152064,
+        "allzero": false,
+        "constant": false,
+        "nan_count": 0,
+        "inf_count": 0
+      },
+      "candidate_top1": 279,
+      "reference_top1": 151643,
+      "top1_agreement": false,
+      "top5_overlap": 0,
+      "candidate_entropy": {
+        "entropy": 7.1163013152900785,
+        "normalized_entropy": 0.5964018991976853,
+        "top1_probability": 0.15290456268729696
+      },
+      "reference_entropy": {
+        "entropy": 0.4009702328313241,
+        "normalized_entropy": 0.033604452339380995,
+        "top1_probability": 0.9639511998170708
+      },
+      "case_id": "short_chinese_prompt_padded",
+      "boundary": 11,
+      "candidate_path": "evidence/hf_suffix_route_v11/short_chinese_prompt_padded/seg_11_to_logits/suffix_logits.npy",
+      "reference_path": "evidence/full_truth_v10/short_chinese_prompt_padded/full_truth_logits.npy"
+    },
+    {
+      "shape_mismatch": false,
+      "cosine": 0.9228436351877953,
+      "pearson_centered": 0.4226798377786133,
+      "relative_l2": 0.7087660126309548,
+      "mean_abs_error": 6.1862566395669,
+      "max_abs_error": 14.03125,
+      "candidate_stats": {
+        "shape": [
+          152064
+        ],
+        "dtype": "float32",
+        "size": 152064,
+        "min": -8.875,
+        "max": 6.78125,
+        "mean": -2.6933441162109375,
+        "std": 1.2638683319091797,
+        "abs_max": 8.875,
+        "nonzero_count": 152064,
+        "allzero": false,
+        "constant": false,
+        "nan_count": 0,
+        "inf_count": 0
+      },
+      "reference_stats": {
+        "shape": [
+          152064
+        ],
+        "dtype": "float32",
+        "size": 152064,
+        "min": -12.5,
+        "max": 9.125,
+        "mean": -8.877497673034668,
+        "std": 1.8784396648406982,
+        "abs_max": 12.5,
+        "nonzero_count": 152064,
+        "allzero": false,
+        "constant": false,
+        "nan_count": 0,
+        "inf_count": 0
+      },
+      "candidate_top1": 50,
+      "reference_top1": 151643,
+      "top1_agreement": false,
+      "top5_overlap": 0,
+      "candidate_entropy": {
+        "entropy": 9.243849873584022,
+        "normalized_entropy": 0.7747071654566482,
+        "top1_probability": 0.01733841437990899
+      },
+      "reference_entropy": {
+        "entropy": 0.4009702328313241,
+        "normalized_entropy": 0.033604452339380995,
+        "top1_probability": 0.9639511998170708
+      },
+      "case_id": "short_chinese_prompt_padded",
+      "boundary": 12,
+      "candidate_path": "evidence/hf_suffix_route_v11/short_chinese_prompt_padded/seg_12_to_logits/suffix_logits.npy",
+      "reference_path": "evidence/full_truth_v10/short_chinese_prompt_padded/full_truth_logits.npy"
+    },
+    {
+      "shape_mismatch": false,
+      "cosine": -0.049197342169887075,
+      "pearson_centered": 0.43636641615941996,
+      "relative_l2": 1.0143631234079535,
+      "mean_abs_error": 9.043623908948128,
+      "max_abs_error": 15.96875,
+      "candidate_stats": {
+        "shape": [
+          152064
+        ],
+        "dtype": "float32",
+        "size": 152064,
+        "min": -6.09375,
+        "max": 7.4375,
+        "mean": 0.16440120339393616,
+        "std": 1.1485958099365234,
+        "abs_max": 7.4375,
+        "nonzero_count": 152064,
+        "allzero": false,
+        "constant": false,
+        "nan_count": 0,
+        "inf_count": 0
+      },
+      "reference_stats": {
+        "shape": [
+          152064
+        ],
+        "dtype": "float32",
+        "size": 152064,
+        "min": -12.5,
+        "max": 9.125,
+        "mean": -8.877497673034668,
+        "std": 1.8784396648406982,
+        "abs_max": 12.5,
+        "nonzero_count": 152064,
+        "allzero": false,
+        "constant": false,
+        "nan_count": 0,
+        "inf_count": 0
+      },
+      "candidate_top1": 13236,
+      "reference_top1": 151643,
+      "top1_agreement": false,
+      "top5_overlap": 0,
+      "candidate_entropy": {
+        "entropy": 10.772029593652203,
+        "normalized_entropy": 0.902780619205128,
+        "top1_probability": 0.0038246543180742595
+      },
+      "reference_entropy": {
+        "entropy": 0.4009702328313241,
+        "normalized_entropy": 0.033604452339380995,
+        "top1_probability": 0.9639511998170708
+      },
+      "case_id": "short_chinese_prompt_padded",
+      "boundary": 13,
+      "candidate_path": "evidence/hf_suffix_route_v11/short_chinese_prompt_padded/seg_13_to_logits/suffix_logits.npy",
+      "reference_path": "evidence/full_truth_v10/short_chinese_prompt_padded/full_truth_logits.npy"
+    },
+    {
+      "shape_mismatch": false,
+      "cosine": 0.9851647367018007,
+      "pearson_centered": 0.746087508101841,
+      "relative_l2": 0.3647717594245033,
+      "mean_abs_error": 3.109120315574235,
+      "max_abs_error": 14.46875,
+      "candidate_stats": {
+        "shape": [
+          152064
+        ],
+        "dtype": "float32",
+        "size": 152064,
+        "min": -10.875,
+        "max": 6.90625,
+        "mean": -5.816415309906006,
+        "std": 1.5471420288085938,
+        "abs_max": 10.875,
+        "nonzero_count": 152064,
+        "allzero": false,
+        "constant": false,
+        "nan_count": 0,
+        "inf_count": 0
+      },
+      "reference_stats": {
+        "shape": [
+          152064
+        ],
+        "dtype": "float32",
+        "size": 152064,
+        "min": -12.5,
+        "max": 9.125,
+        "mean": -8.877497673034668,
+        "std": 1.8784396648406982,
+        "abs_max": 12.5,
+        "nonzero_count": 152064,
+        "allzero": false,
+        "constant": false,
+        "nan_count": 0,
+        "inf_count": 0
+      },
+      "candidate_top1": 291,
+      "reference_top1": 151643,
+      "top1_agreement": false,
+      "top5_overlap": 0,
+      "candidate_entropy": {
+        "entropy": 7.548564633425571,
+        "normalized_entropy": 0.6326289576747606,
+        "top1_probability": 0.2510780505540968
+      },
+      "reference_entropy": {
+        "entropy": 0.4009702328313241,
+        "normalized_entropy": 0.033604452339380995,
+        "top1_probability": 0.9639511998170708
+      },
+      "case_id": "short_chinese_prompt_padded",
+      "boundary": 20,
+      "candidate_path": "evidence/hf_suffix_route_v11/short_chinese_prompt_padded/seg_20_to_logits/suffix_logits.npy",
+      "reference_path": "evidence/full_truth_v10/short_chinese_prompt_padded/full_truth_logits.npy"
+    },
+    {
+      "shape_mismatch": false,
+      "cosine": -0.5992080162230626,
+      "pearson_centered": -0.24282643221749534,
+      "relative_l2": 1.0874407353546525,
+      "mean_abs_error": 9.586109183248922,
+      "max_abs_error": 15.6875,
+      "candidate_stats": {
+        "shape": [
+          152064
+        ],
+        "dtype": "float32",
+        "size": 152064,
+        "min": -6.96875,
+        "max": 7.21875,
+        "mean": 0.7074334025382996,
+        "std": 1.01904296875,
+        "abs_max": 7.21875,
+        "nonzero_count": 152064,
+        "allzero": false,
+        "constant": false,
+        "nan_count": 0,
+        "inf_count": 0
+      },
+      "reference_stats": {
+        "shape": [
+          152064
+        ],
+        "dtype": "float32",
+        "size": 152064,
+        "min": -12.5,
+        "max": 9.125,
+        "mean": -8.877497673034668,
+        "std": 1.8784396648406982,
+        "abs_max": 12.5,
+        "nonzero_count": 152064,
+        "allzero": false,
+        "constant": false,
+        "nan_count": 0,
+        "inf_count": 0
+      },
+      "candidate_top1": 58375,
+      "reference_top1": 151643,
+      "top1_agreement": false,
+      "top5_overlap": 0,
+      "candidate_entropy": {
+        "entropy": 11.211220164246388,
+        "normalized_entropy": 0.9395882358035561,
+        "top1_probability": 0.002571625505910755
+      },
+      "reference_entropy": {
+        "entropy": 0.4009702328313241,
+        "normalized_entropy": 0.033604452339380995,
+        "top1_probability": 0.9639511998170708
+      },
+      "case_id": "short_chinese_prompt_padded",
+      "boundary": 26,
+      "candidate_path": "evidence/hf_suffix_route_v11/short_chinese_prompt_padded/seg_26_to_logits/suffix_logits.npy",
+      "reference_path": "evidence/full_truth_v10/short_chinese_prompt_padded/full_truth_logits.npy"
+    }
+  ]
+}

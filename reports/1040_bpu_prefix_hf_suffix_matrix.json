@@ -1,0 +1,144 @@
+{
+  "schema_version": "dream7b_s100p_v12r_1040_bpu_prefix_hf_suffix_matrix",
+  "created_at_utc": "2026-07-02T18:13:18.488516+00:00",
+  "run_commands": [
+    "C:\\Users\\zhexu\\AppData\\Local\\Python\\pythoncore-3.14-64\\python.exe tools\\build_v12r_research_thread.py --root ."
+  ],
+  "git": {
+    "cwd": "F:\\Project\\Digua",
+    "returncode": 128,
+    "status": "unavailable_empty_or_incomplete_git_dir",
+    "stderr": "fatal: not a git repository (or any of the parent directories): .git"
+  },
+  "input_artifacts": [
+    {
+      "path": "evidence/s100p_remote_v12r_reports/1030_1040_v12r_remote_reconstruction.json",
+      "exists": true,
+      "size_bytes": 427728,
+      "sha256": "bf66088f0d4c9d883c6d524edc19b25641aee2b9733e60e2ed36eff37a849eeb"
+    }
+  ],
+  "output_artifacts": [
+    {
+      "path": "reports/1040_bpu_prefix_hf_suffix_matrix.json"
+    },
+    {
+      "path": "reports/1040_bpu_prefix_hf_suffix_matrix.md"
+    }
+  ],
+  "blocking_or_failure_reasons": [],
+  "next_minimal_experiments": [],
+  "safety": {
+    "generation_quality_run": false,
+    "product_routes_18888_18889_enabled_modified_or_tested": false
+  },
+  "remote_status": "pass",
+  "hybrid_rows": 33,
+  "expected_rows": 33,
+  "summary_by_cut": {
+    "0": {
+      "rows": 3,
+      "top1_agreement_rows": 0,
+      "strict_logits_valid_rows": 0,
+      "reference_top1_in_candidate_top5_rows": 1,
+      "median_relative_l2": 1.306784232048819,
+      "median_pearson_centered": 0.055939298366469464,
+      "median_top5_overlap": 0.0
+    },
+    "1": {
+      "rows": 3,
+      "top1_agreement_rows": 2,
+      "strict_logits_valid_rows": 0,
+      "reference_top1_in_candidate_top5_rows": 2,
+      "median_relative_l2": 0.6503937211440085,
+      "median_pearson_centered": 0.42469081766823813,
+      "median_top5_overlap": 1.0
+    },
+    "2": {
+      "rows": 3,
+      "top1_agreement_rows": 1,
+      "strict_logits_valid_rows": 0,
+      "reference_top1_in_candidate_top5_rows": 1,
+      "median_relative_l2": 0.37724877561683057,
+      "median_pearson_centered": 0.6190303949341291,
+      "median_top5_overlap": 0.0
+    },
+    "4": {
+      "rows": 3,
+      "top1_agreement_rows": 0,
+      "strict_logits_valid_rows": 0,
+      "reference_top1_in_candidate_top5_rows": 2,
+      "median_relative_l2": 0.5787871864521483,
+      "median_pearson_centered": 0.2666639011081233,
+      "median_top5_overlap": 1.0
+    },
+    "8": {
+      "rows": 3,
+      "top1_agreement_rows": 0,
+      "strict_logits_valid_rows": 0,
+      "reference_top1_in_candidate_top5_rows": 0,
+      "median_relative_l2": 0.36483010734570137,
+      "median_pearson_centered": 0.7738799236957962,
+      "median_top5_overlap": 0.0
+    },
+    "11": {
+      "rows": 3,
+      "top1_agreement_rows": 0,
+      "strict_logits_valid_rows": 0,
+      "reference_top1_in_candidate_top5_rows": 0,
+      "median_relative_l2": 0.5439676217073303,
+      "median_pearson_centered": 0.7268482008436589,
+      "median_top5_overlap": 0.0
+    },
+    "12": {
+      "rows": 3,
+      "top1_agreement_rows": 0,
+      "strict_logits_valid_rows": 0,
+      "reference_top1_in_candidate_top5_rows": 0,
+      "median_relative_l2": 0.7695447913051603,
+      "median_pearson_centered": 0.3962228617080422,
+      "median_top5_overlap": 0.0
+    },
+    "13": {
+      "rows": 3,
+      "top1_agreement_rows": 0,
+      "strict_logits_valid_rows": 0,
+      "reference_top1_in_candidate_top5_rows": 0,
+      "median_relative_l2": 1.0143631234079533,
+      "median_pearson_centered": 0.3476812074184938,
+      "median_top5_overlap": 0.0
+    },
+    "20": {
+      "rows": 3,
+      "top1_agreement_rows": 0,
+      "strict_logits_valid_rows": 0,
+      "reference_top1_in_candidate_top5_rows": 0,
+      "median_relative_l2": 0.6944710626344935,
+      "median_pearson_centered": 0.6430598489163577,
+      "median_top5_overlap": 0.0
+    },
+    "25": {
+      "rows": 3,
+      "top1_agreement_rows": 0,
+      "strict_logits_valid_rows": 0,
+      "reference_top1_in_candidate_top5_rows": 0,
+      "median_relative_l2": 1.1652820876967134,
+      "median_pearson_centered": -0.18620098548786662,
+      "median_top5_overlap": 0.0
+    },
+    "26": {
+      "rows": 3,
+      "top1_agreement_rows": 0,
+      "strict_logits_valid_rows": 0,
+      "reference_top1_in_candidate_top5_rows": 0,
+      "median_relative_l2": 1.383325206753448,
+      "median_pearson_centered": -0.24282643221742578,
+      "median_top5_overlap": 0.0
+    }
+  },
+  "any_bpu_prefix_hf_suffix_valid": false,
+  "longest_valid_bpu_prefix_cut": null,
+  "first_bad_cut": 0,
+  "reverse_hf_prefix_bpu_segment_hf_suffix_basis": "Task 1030 single-segment substitution rows",
+  "remote_errors": []
+}

@@ -1,0 +1,160 @@
+{
+  "schema_version": "dream7b_s100p_v9_740_upstream_hidden_validity_audit",
+  "created_at_utc": "2026-07-01T12:03:43.344365+00:00",
+  "run_commands": [
+    "C:\\Users\\zhexu\\AppData\\Local\\Python\\pythoncore-3.14-64\\python.exe tools\\build_v9_research_thread.py --root . --exact-source evidence\\s100p_remote_v9_hf_isolated_final_segment_v8"
+  ],
+  "git": {
+    "cwd": "F:\\Project\\Digua",
+    "status": "unavailable:CalledProcessError"
+  },
+  "input_artifacts": [
+    {
+      "path": "evidence/final_segment_endpoint_raw_v9",
+      "exists": true
+    },
+    {
+      "path": "evidence/hf_exact_final_segment_v9",
+      "exists": true
+    }
+  ],
+  "output_artifacts": [
+    {
+      "path": "reports/740_upstream_hidden_validity_audit.json"
+    },
+    {
+      "path": "reports/740_upstream_hidden_validity_audit.md"
+    }
+  ],
+  "blocking_or_failure_reasons": [
+    "full truth row unavailable; upstream hidden validity versus full model cannot be proven or falsified"
+  ],
+  "next_minimal_experiments": [],
+  "full_truth_available": false,
+  "full_deployment_hidden_correctness_testable": false,
+  "same_input_hidden_executability_rows": 3,
+  "interpretation": "Without a full BF16/FP32 or GGUF F16 truth row, BPU seg26 hidden correctness versus full-model hidden is not testable. The same-input exact final test does show the hidden endpoint is not by itself forcing all-zero logits.",
+  "rows": [
+    {
+      "case_id": "zeros",
+      "variant_id": "real_x",
+      "bpu_seg26_hidden_stats": {
+        "shape": [
+          128,
+          3584
+        ],
+        "dtype": "float32",
+        "size": 458752,
+        "min": -16.29678726196289,
+        "max": 16.29678726196289,
+        "mean": 0.005043779034167528,
+        "std": 16.12376594543457,
+        "abs_max": 16.29678726196289,
+        "nonzero_count": 458751,
+        "allzero": false,
+        "constant": false,
+        "nan_count": 0,
+        "inf_count": 0
+      },
+      "exact_hf_final_logits_stats": {
+        "shape": [
+          152064
+        ],
+        "dtype": "float32",
+        "size": 152064,
+        "min": -7.40625,
+        "max": 10.6875,
+        "mean": 3.870509386062622,
+        "std": 1.3209731578826904,
+        "abs_max": 10.6875,
+        "nonzero_count": 152064,
+        "allzero": false,
+        "constant": false,
+        "nan_count": 0,
+        "inf_count": 0
+      },
+      "interpretation": "BPU seg26 endpoint hidden is executable through exact HF final boundary and yields nonzero/nonconstant logits; this does not validate hidden against a full truth row."
+    },
+    {
+      "case_id": "ramp",
+      "variant_id": "real_x",
+      "bpu_seg26_hidden_stats": {
+        "shape": [
+          128,
+          3584
+        ],
+        "dtype": "float32",
+        "size": 458752,
+        "min": -16.29678726196289,
+        "max": 16.29678726196289,
+        "mean": 0.08678288012742996,
+        "std": 16.120622634887695,
+        "abs_max": 16.29678726196289,
+        "nonzero_count": 458752,
+        "allzero": false,
+        "constant": false,
+        "nan_count": 0,
+        "inf_count": 0
+      },
+      "exact_hf_final_logits_stats": {
+        "shape": [
+          152064
+        ],
+        "dtype": "float32",
+        "size": 152064,
+        "min": -6.4375,
+        "max": 8.0625,
+        "mean": 0.8850488066673279,
+        "std": 1.045539379119873,
+        "abs_max": 8.0625,
+        "nonzero_count": 152064,
+        "allzero": false,
+        "constant": false,
+        "nan_count": 0,
+        "inf_count": 0
+      },
+      "interpretation": "BPU seg26 endpoint hidden is executable through exact HF final boundary and yields nonzero/nonconstant logits; this does not validate hidden against a full truth row."
+    },
+    {
+      "case_id": "short_chinese_prompt_padded",
+      "variant_id": "real_x",
+      "bpu_seg26_hidden_stats": {
+        "shape": [
+          128,
+          3584
+        ],
+        "dtype": "float32",
+        "size": 458752,
+        "min": -16.29678726196289,
+        "max": 16.29678726196289,
+        "mean": 0.06199396401643753,
+        "std": 16.122926712036133,
+        "abs_max": 16.29678726196289,
+        "nonzero_count": 458752,
+        "allzero": false,
+        "constant": false,
+        "nan_count": 0,
+        "inf_count": 0
+      },
+      "exact_hf_final_logits_stats": {
+        "shape": [
+          152064
+        ],
+        "dtype": "float32",
+        "size": 152064,
+        "min": -6.96875,
+        "max": 7.21875,
+        "mean": 0.7074334025382996,
+        "std": 1.01904296875,
+        "abs_max": 7.21875,
+        "nonzero_count": 152064,
+        "allzero": false,
+        "constant": false,
+        "nan_count": 0,
+        "inf_count": 0
+      },
+      "interpretation": "BPU seg26 endpoint hidden is executable through exact HF final boundary and yields nonzero/nonconstant logits; this does not validate hidden against a full truth row."
+    }
+  ],
+  "exact_final_segment_compared_rows": 42
+}

@@ -1,0 +1,4066 @@
+{
+  "schema_version": "dream7b_s100p_v11_910_hf_bpu_boundary_alignment",
+  "created_at_utc": "2026-07-01T19:15:56.741052+00:00",
+  "run_commands": [
+    "C:\\Users\\zhexu\\AppData\\Local\\Python\\pythoncore-3.14-64\\python.exe tools\\build_v11_research_thread.py --root ."
+  ],
+  "git": {
+    "cwd": "F:\\Project\\Digua",
+    "git_dir_exists": true,
+    "git_head_exists": false,
+    "status": "unavailable_empty_or_incomplete_git_dir"
+  },
+  "input_artifacts": [
+    {
+      "path": "evidence/hf_boundaries_v11",
+      "exists": true
+    },
+    {
+      "path": "evidence/boundary_all_segments_v7",
+      "exists": true
+    }
+  ],
+  "output_artifacts": [
+    {
+      "path": "reports/910_hf_bpu_boundary_alignment.json"
+    },
+    {
+      "path": "reports/910_hf_bpu_boundary_alignment.md"
+    }
+  ],
+  "blocking_or_failure_reasons": [],
+  "next_minimal_experiments": [],
+  "alignment_rows": 84,
+  "missing_rows": [],
+  "divergent_rows": 84,
+  "first_divergent_segment_by_case": {
+    "zeros": 0,
+    "ramp": 0,
+    "short_chinese_prompt_padded": 0
+  },
+  "first_divergent_segment_global": 0,
+  "thresholds": {
+    "relative_l2_fail_gt": 0.1,
+    "pearson_fail_lt": 0.95
+  },
+  "rows": [
+    {
+      "shape_mismatch": false,
+      "cosine": 0.1598934275880074,
+      "pearson_centered": 0.15989032192581618,
+      "relative_l2": 0.9904896359341777,
+      "mean_abs_error": 0.16244002675008756,
+      "max_abs_error": 1.9577000234276056,
+      "candidate_stats": {
+        "shape": [
+          128,
+          3584
+        ],
+        "dtype": "float32",
+        "size": 458752,
+        "min": -0.5522932410240173,
+        "max": 0.5447757840156555,
+        "mean": -0.00010915865277638659,
+        "std": 0.05312284082174301,
+        "abs_max": 0.5522932410240173,
+        "nonzero_count": 458449,
+        "allzero": false,
+        "constant": false,
+        "nan_count": 0,
+        "inf_count": 0
+      },
+      "reference_stats": {
+        "shape": [
+          128,
+          3584
+        ],
+        "dtype": "float32",
+        "size": 458752,
+        "min": -1.984375,
+        "max": 1.8984375,
+        "mean": -0.0003966305230278522,
+        "std": 0.2201046347618103,
+        "abs_max": 1.984375,
+        "nonzero_count": 458465,
+        "allzero": false,
+        "constant": false,
+        "nan_count": 0,
+        "inf_count": 0
+      },
+      "case_id": "zeros",
+      "segment": 0,
+      "hf_path": "evidence/hf_boundaries_v11/zeros/layer_00_output.npy",
+      "bpu_path": "evidence/boundary_all_segments_v7/zeros/seg_00_output.npy",
+      "missing": false
+    },
+    {
+      "shape_mismatch": false,
+      "cosine": 0.21706065539463595,
+      "pearson_centered": 0.21709644476593612,
+      "relative_l2": 0.9817839803762477,
+      "mean_abs_error": 0.18887851006046616,
+      "max_abs_error": 4.362415008246899,
+      "candidate_stats": {
+        "shape": [
+          128,
+          3584
+        ],
+        "dtype": "float32",
+        "size": 458752,
+        "min": -0.6892396211624146,
+        "max": 0.6892396211624146,
+        "mean": -0.0011539312545210123,
+        "std": 0.08624354004859924,
+        "abs_max": 0.6892396211624146,
+        "nonzero_count": 458635,
+        "allzero": false,
+        "constant": false,
+        "nan_count": 0,
+        "inf_count": 0
+      },
+      "reference_stats": {
+        "shape": [
+          128,
+          3584
+        ],
+        "dtype": "float32",
+        "size": 458752,
+        "min": -4.34375,
+        "max": 2.234375,
+        "mean": 0.0003243394603487104,
+        "std": 0.26784956455230713,
+        "abs_max": 4.34375,
+        "nonzero_count": 458307,
+        "allzero": false,
+        "constant": false,
+        "nan_count": 0,
+        "inf_count": 0
+      },
+      "case_id": "zeros",
+      "segment": 1,
+      "hf_path": "evidence/hf_boundaries_v11/zeros/layer_01_output.npy",
+      "bpu_path": "evidence/boundary_all_segments_v7/zeros/seg_01_output.npy",
+      "missing": false
+    },
+    {
+      "shape_mismatch": false,
+      "cosine": 0.21548190472321432,
+      "pearson_centered": 0.21546913570516915,
+      "relative_l2": 0.9823881784166548,
+      "mean_abs_error": 0.2064210385563534,
+      "max_abs_error": 2.2944781482219696,
+      "candidate_stats": {
+        "shape": [
+          128,
+          3584
+        ],
+        "dtype": "float32",
+        "size": 458752,
+        "min": -0.4555218517780304,
+        "max": 0.4555218517780304,
+        "mean": -0.0020846042316406965,
+        "std": 0.09001476317644119,
+        "abs_max": 0.4555218517780304,
+        "nonzero_count": 453959,
+        "allzero": false,
+        "constant": false,
+        "nan_count": 0,
+        "inf_count": 0
+      },
+      "reference_stats": {
+        "shape": [
+          128,
+          3584
+        ],
+        "dtype": "float32",
+        "size": 458752,
+        "min": -2.234375,
+        "max": 2.75,
+        "mean": -0.0008620392181910574,
+        "std": 0.27892228960990906,
+        "abs_max": 2.75,
+        "nonzero_count": 458348,
+        "allzero": false,
+        "constant": false,
+        "nan_count": 0,
+        "inf_count": 0
+      },
+      "case_id": "zeros",
+      "segment": 2,
+      "hf_path": "evidence/hf_boundaries_v11/zeros/layer_02_output.npy",
+      "bpu_path": "evidence/boundary_all_segments_v7/zeros/seg_02_output.npy",
+      "missing": false
+    },
+    {
+      "shape_mismatch": false,
+      "cosine": 0.1749018427025882,
+      "pearson_centered": 0.1749966718748967,
+      "relative_l2": 1.0130646751823944,
+      "mean_abs_error": 0.26150320853633147,
+      "max_abs_error": 2.9212525486946106,
+      "candidate_stats": {
+        "shape": [
+          128,
+          3584
+        ],
+        "dtype": "float32",
+        "size": 458752,
+        "min": -0.6256224513053894,
+        "max": 0.6256224513053894,
+        "mean": -0.001081610331311822,
+        "std": 0.13972686231136322,
+        "abs_max": 0.6256224513053894,
+        "nonzero_count": 423246,
+        "allzero": false,
+        "constant": false,
+        "nan_count": 0,
+        "inf_count": 0
+      },
+      "reference_stats": {
+        "shape": [
+          128,
+          3584
+        ],
+        "dtype": "float32",
+        "size": 458752,
+        "min": -1.734375,
+        "max": 3.546875,
+        "mean": 0.003501633647829294,
+        "std": 0.3379703760147095,
+        "abs_max": 3.546875,
+        "nonzero_count": 458060,
+        "allzero": false,
+        "constant": false,
+        "nan_count": 0,
+        "inf_count": 0
+      },
+      "case_id": "zeros",
+      "segment": 3,
+      "hf_path": "evidence/hf_boundaries_v11/zeros/layer_03_output.npy",
+      "bpu_path": "evidence/boundary_all_segments_v7/zeros/seg_03_output.npy",
+      "missing": false
+    },
+    {
+      "shape_mismatch": false,
+      "cosine": 0.16253969864735643,
+      "pearson_centered": 0.16261713749460177,
+      "relative_l2": 1.00057644348943,
+      "mean_abs_error": 0.3121103163855433,
+      "max_abs_error": 3.998117595911026,
+      "candidate_stats": {
+        "shape": [
+          128,
+          3584
+        ],
+        "dtype": "float32",
+        "size": 458752,
+        "min": -0.439382404088974,
+        "max": 0.439382404088974,
+        "mean": -0.0011736274464055896,
+        "std": 0.13856148719787598,
+        "abs_max": 0.439382404088974,
+        "nonzero_count": 452847,
+        "allzero": false,
+        "constant": false,
+        "nan_count": 0,
+        "inf_count": 0
+      },
+      "reference_stats": {
+        "shape": [
+          128,
+          3584
+        ],
+        "dtype": "float32",
+        "size": 458752,
+        "min": -4.4375,
+        "max": 3.34375,
+        "mean": 0.003315020352602005,
+        "std": 0.421688437461853,
+        "abs_max": 4.4375,
+        "nonzero_count": 458390,
+        "allzero": false,
+        "constant": false,
+        "nan_count": 0,
+        "inf_count": 0
+      },
+      "case_id": "zeros",
+      "segment": 4,
+      "hf_path": "evidence/hf_boundaries_v11/zeros/layer_04_output.npy",
+      "bpu_path": "evidence/boundary_all_segments_v7/zeros/seg_04_output.npy",
+      "missing": false
+    },
+    {
+      "shape_mismatch": false,
+      "cosine": 0.2183371303423433,
+      "pearson_centered": 0.21835823783331776,
+      "relative_l2": 0.9837825606772138,
+      "mean_abs_error": 0.33858436024853134,
+      "max_abs_error": 5.403341889381409,
+      "candidate_stats": {
+        "shape": [
+          128,
+          3584
+        ],
+        "dtype": "float32",
+        "size": 458752,
+        "min": -1.3154081106185913,
+        "max": 0.7408249378204346,
+        "mean": -0.0017542416462674737,
+        "std": 0.16055762767791748,
+        "abs_max": 1.3154081106185913,
+        "nonzero_count": 456001,
+        "allzero": false,
+        "constant": false,
+        "nan_count": 0,
+        "inf_count": 0
+      },
+      "reference_stats": {
+        "shape": [
+          128,
+          3584
+        ],
+        "dtype": "float32",
+        "size": 458752,
+        "min": -6.71875,
+        "max": 3.6875,
+        "mean": 0.0003436584956943989,
+        "std": 0.46835383772850037,
+        "abs_max": 6.71875,
+        "nonzero_count": 458299,
+        "allzero": false,
+        "constant": false,
+        "nan_count": 0,
+        "inf_count": 0
+      },
+      "case_id": "zeros",
+      "segment": 5,
+      "hf_path": "evidence/hf_boundaries_v11/zeros/layer_05_output.npy",
+      "bpu_path": "evidence/boundary_all_segments_v7/zeros/seg_05_output.npy",
+      "missing": false
+    },
+    {
+      "shape_mismatch": false,
+      "cosine": 0.16366927951327298,
+      "pearson_centered": 0.1636770311773294,
+      "relative_l2": 0.992727891127377,
+      "mean_abs_error": 0.4157295028487332,
+      "max_abs_error": 12.235661387443542,
+      "candidate_stats": {
+        "shape": [
+          128,
+          3584
+        ],
+        "dtype": "float32",
+        "size": 458752,
+        "min": -0.6393386125564575,
+        "max": 0.6393386125564575,
+        "mean": -0.0014877582434564829,
+        "std": 0.16899581253528595,
+        "abs_max": 0.6393386125564575,
+        "nonzero_count": 458292,
+        "allzero": false,
+        "constant": false,
+        "nan_count": 0,
+        "inf_count": 0
+      },
+      "reference_stats": {
+        "shape": [
+          128,
+          3584
+        ],
+        "dtype": "float32",
+        "size": 458752,
+        "min": -12.875,
+        "max": 4.5625,
+        "mean": 9.840200800681487e-05,
+        "std": 0.6155434846878052,
+        "abs_max": 12.875,
+        "nonzero_count": 458157,
+        "allzero": false,
+        "constant": false,
+        "nan_count": 0,
+        "inf_count": 0
+      },
+      "case_id": "zeros",
+      "segment": 6,
+      "hf_path": "evidence/hf_boundaries_v11/zeros/layer_06_output.npy",
+      "bpu_path": "evidence/boundary_all_segments_v7/zeros/seg_06_output.npy",
+      "missing": false
+    },
+    {
+      "shape_mismatch": false,
+      "cosine": 0.20048766399415613,
+      "pearson_centered": 0.2004278546264641,
+      "relative_l2": 0.9802103232358322,
+      "mean_abs_error": 0.4709383650155173,
+      "max_abs_error": 20.637270212173462,
+      "candidate_stats": {
+        "shape": [
+          128,
+          3584
+        ],
+        "dtype": "float32",
+        "size": 458752,
+        "min": -1.362729787826538,
+        "max": 0.8632082343101501,
+        "mean": -0.0030028836335986853,
+        "std": 0.18284817039966583,
+        "abs_max": 1.362729787826538,
+        "nonzero_count": 458379,
+        "allzero": false,
+        "constant": false,
+        "nan_count": 0,
+        "inf_count": 0
+      },
+      "reference_stats": {
+        "shape": [
+          128,
+          3584
+        ],
+        "dtype": "float32",
+        "size": 458752,
+        "min": -22.0,
+        "max": 5.5,
+        "mean": -0.004307935945689678,
+        "std": 0.7874521613121033,
+        "abs_max": 22.0,
+        "nonzero_count": 458365,
+        "allzero": false,
+        "constant": false,
+        "nan_count": 0,
+        "inf_count": 0
+      },
+      "case_id": "zeros",
+      "segment": 7,
+      "hf_path": "evidence/hf_boundaries_v11/zeros/layer_07_output.npy",
+      "bpu_path": "evidence/boundary_all_segments_v7/zeros/seg_07_output.npy",
+      "missing": false
+    },
+    {
+      "shape_mismatch": false,
+      "cosine": 0.11250812192051485,
+      "pearson_centered": 0.11244387771851859,
+      "relative_l2": 0.9965232116917777,
+      "mean_abs_error": 0.5522384005637687,
+      "max_abs_error": 27.469840228557587,
+      "candidate_stats": {
+        "shape": [
+          128,
+          3584
+        ],
+        "dtype": "float32",
+        "size": 458752,
+        "min": -0.5301597714424133,
+        "max": 0.5301597714424133,
+        "mean": -0.0033368978183716536,
+        "std": 0.17973417043685913,
+        "abs_max": 0.5301597714424133,
+        "nonzero_count": 458150,
+        "allzero": false,
+        "constant": false,
+        "nan_count": 0,
+        "inf_count": 0
+      },
+      "reference_stats": {
+        "shape": [
+          128,
+          3584
+        ],
+        "dtype": "float32",
+        "size": 458752,
+        "min": -28.0,
+        "max": 8.25,
+        "mean": -0.004365074913948774,
+        "std": 0.9555967450141907,
+        "abs_max": 28.0,
+        "nonzero_count": 458422,
+        "allzero": false,
+        "constant": false,
+        "nan_count": 0,
+        "inf_count": 0
+      },
+      "case_id": "zeros",
+      "segment": 8,
+      "hf_path": "evidence/hf_boundaries_v11/zeros/layer_08_output.npy",
+      "bpu_path": "evidence/boundary_all_segments_v7/zeros/seg_08_output.npy",
+      "missing": false
+    },
+    {
+      "shape_mismatch": false,
+      "cosine": 0.20595667038883939,
+      "pearson_centered": 0.20589503854156457,
+      "relative_l2": 0.9786417706534222,
+      "mean_abs_error": 0.5004234900980641,
+      "max_abs_error": 31.408951997756958,
+      "candidate_stats": {
+        "shape": [
+          128,
+          3584
+        ],
+        "dtype": "float32",
+        "size": 458752,
+        "min": -1.341048002243042,
+        "max": 0.8692174553871155,
+        "mean": -0.004078371915966272,
+        "std": 0.18930217623710632,
+        "abs_max": 1.341048002243042,
+        "nonzero_count": 458677,
+        "allzero": false,
+        "constant": false,
+        "nan_count": 0,
+        "inf_count": 0
+      },
+      "reference_stats": {
+        "shape": [
+          128,
+          3584
+        ],
+        "dtype": "float32",
+        "size": 458752,
+        "min": -32.75,
+        "max": 7.21875,
+        "mean": -0.005099709611386061,
+        "std": 0.9790648818016052,
+        "abs_max": 32.75,
+        "nonzero_count": 458030,
+        "allzero": false,
+        "constant": false,
+        "nan_count": 0,
+        "inf_count": 0
+      },
+      "case_id": "zeros",
+      "segment": 9,
+      "hf_path": "evidence/hf_boundaries_v11/zeros/layer_09_output.npy",
+      "bpu_path": "evidence/boundary_all_segments_v7/zeros/seg_09_output.npy",
+      "missing": false
+    },
+    {
+      "shape_mismatch": false,
+      "cosine": 0.17385545531137506,
+      "pearson_centered": 0.17379983248509323,
+      "relative_l2": 0.9867465021802957,
+      "mean_abs_error": 0.45735034031803246,
+      "max_abs_error": 31.236852884292603,
+      "candidate_stats": {
+        "shape": [
+          128,
+          3584
+        ],
+        "dtype": "float32",
+        "size": 458752,
+        "min": -1.0131471157073975,
+        "max": 1.0131471157073975,
+        "mean": -0.003793256124481559,
+        "std": 0.2201901227235794,
+        "abs_max": 1.0131471157073975,
+        "nonzero_count": 457948,
+        "allzero": false,
+        "constant": false,
+        "nan_count": 0,
+        "inf_count": 0
+      },
+      "reference_stats": {
+        "shape": [
+          128,
+          3584
+        ],
+        "dtype": "float32",
+        "size": 458752,
+        "min": -32.25,
+        "max": 6.59375,
+        "mean": -0.0045157261192798615,
+        "std": 0.9321079254150391,
+        "abs_max": 32.25,
+        "nonzero_count": 458366,
+        "allzero": false,
+        "constant": false,
+        "nan_count": 0,
+        "inf_count": 0
+      },
+      "case_id": "zeros",
+      "segment": 10,
+      "hf_path": "evidence/hf_boundaries_v11/zeros/layer_10_output.npy",
+      "bpu_path": "evidence/boundary_all_segments_v7/zeros/seg_10_output.npy",
+      "missing": false
+    },
+    {
+      "shape_mismatch": false,
+      "cosine": -0.2683502791881123,
+      "pearson_centered": -0.26834366174454116,
+      "relative_l2": 4.920926913237851,
+      "mean_abs_error": 4.059684992836233,
+      "max_abs_error": 131.1661148071289,
+      "candidate_stats": {
+        "shape": [
+          128,
+          3584
+        ],
+        "dtype": "float32",
+        "size": 458752,
+        "min": -25.320064544677734,
+        "max": 79.6661148071289,
+        "mean": 0.011648518033325672,
+        "std": 5.515547752380371,
+        "abs_max": 79.6661148071289,
+        "nonzero_count": 458573,
+        "allzero": false,
+        "constant": false,
+        "nan_count": 0,
+        "inf_count": 0
+      },
+      "reference_stats": {
+        "shape": [
+          128,
+          3584
+        ],
+        "dtype": "float32",
+        "size": 458752,
+        "min": -51.5,
+        "max": 11.875,
+        "mean": -0.012981580570340157,
+        "std": 1.2101823091506958,
+        "abs_max": 51.5,
+        "nonzero_count": 458482,
+        "allzero": false,
+        "constant": false,
+        "nan_count": 0,
+        "inf_count": 0
+      },
+      "case_id": "zeros",
+      "segment": 11,
+      "hf_path": "evidence/hf_boundaries_v11/zeros/layer_11_output.npy",
+      "bpu_path": "evidence/boundary_all_segments_v7/zeros/seg_11_output.npy",
+      "missing": false
+    },
+    {
+      "shape_mismatch": false,
+      "cosine": 0.039757921284675556,
+      "pearson_centered": 0.04015086077806914,
+      "relative_l2": 9.359980183558024,
+      "mean_abs_error": 14.628062919472752,
+      "max_abs_error": 62.373050689697266,
+      "candidate_stats": {
+        "shape": [
+          128,
+          3584
+        ],
+        "dtype": "float32",
+        "size": 458752,
+        "min": -34.12774658203125,
+        "max": 34.126705169677734,
+        "mean": 0.3882828652858734,
+        "std": 17.759449005126953,
+        "abs_max": 34.12774658203125,
+        "nonzero_count": 458730,
+        "allzero": false,
+        "constant": false,
+        "nan_count": 0,
+        "inf_count": 0
+      },
+      "reference_stats": {
+        "shape": [
+          128,
+          3584
+        ],
+        "dtype": "float32",
+        "size": 458752,
+        "min": -95.0,
+        "max": 20.0,
+        "mean": -0.03281266614794731,
+        "std": 1.900339126586914,
+        "abs_max": 95.0,
+        "nonzero_count": 458429,
+        "allzero": false,
+        "constant": false,
+        "nan_count": 0,
+        "inf_count": 0
+      },
+      "case_id": "zeros",
+      "segment": 12,
+      "hf_path": "evidence/hf_boundaries_v11/zeros/layer_12_output.npy",
+      "bpu_path": "evidence/boundary_all_segments_v7/zeros/seg_12_output.npy",
+      "missing": false
+    },
+    {
+      "shape_mismatch": false,
+      "cosine": 0.02000399071659815,
+      "pearson_centered": 0.019922588543322135,
+      "relative_l2": 1.7399167626541263,
+      "mean_abs_error": 3.4814661693954116,
+      "max_abs_error": 123.59440279006958,
+      "candidate_stats": {
+        "shape": [
+          128,
+          3584
+        ],
+        "dtype": "float32",
+        "size": 458752,
+        "min": -5.40559720993042,
+        "max": 5.405432224273682,
+        "mean": -0.019693713635206223,
+        "std": 3.7647533416748047,
+        "abs_max": 5.40559720993042,
+        "nonzero_count": 458741,
+        "allzero": false,
+        "constant": false,
+        "nan_count": 0,
+        "inf_count": 0
+      },
+      "reference_stats": {
+        "shape": [
+          128,
+          3584
+        ],
+        "dtype": "float32",
+        "size": 458752,
+        "min": -129.0,
+        "max": 29.0,
+        "mean": -0.041996654123067856,
+        "std": 2.6069016456604004,
+        "abs_max": 129.0,
+        "nonzero_count": 458351,
+        "allzero": false,
+        "constant": false,
+        "nan_count": 0,
+        "inf_count": 0
+      },
+      "case_id": "zeros",
+      "segment": 13,
+      "hf_path": "evidence/hf_boundaries_v11/zeros/layer_13_output.npy",
+      "bpu_path": "evidence/boundary_all_segments_v7/zeros/seg_13_output.npy",
+      "missing": false
+    },
+    {
+      "shape_mismatch": false,
+      "cosine": 0.01642308488459805,
+      "pearson_centered": 0.016314740325911566,
+      "relative_l2": 1.0021770910117562,
+      "mean_abs_error": 0.7162647233115139,
+      "max_abs_error": 134.76558247208595,
+      "candidate_stats": {
+        "shape": [
+          128,
+          3584
+        ],
+        "dtype": "float32",
+        "size": 458752,
+        "min": -0.23441752791404724,
+        "max": 0.23441752791404724,
+        "mean": -0.001748480717651546,
+        "std": 0.23181502521038055,
+        "abs_max": 0.23441752791404724,
+        "nonzero_count": 458715,
+        "allzero": false,
+        "constant": false,
+        "nan_count": 0,
+        "inf_count": 0
+      },
+      "reference_stats": {
+        "shape": [
+          128,
+          3584
+        ],
+        "dtype": "float32",
+        "size": 458752,
+        "min": -135.0,
+        "max": 30.25,
+        "mean": -0.040235962718725204,
+        "std": 2.74454665184021,
+        "abs_max": 135.0,
+        "nonzero_count": 458500,
+        "allzero": false,
+        "constant": false,
+        "nan_count": 0,
+        "inf_count": 0
+      },
+      "case_id": "zeros",
+      "segment": 14,
+      "hf_path": "evidence/hf_boundaries_v11/zeros/layer_14_output.npy",
+      "bpu_path": "evidence/boundary_all_segments_v7/zeros/seg_14_output.npy",
+      "missing": false
+    },
+    {
+      "shape_mismatch": false,
+      "cosine": 0.054780228760218645,
+      "pearson_centered": 0.05460374935909847,
+      "relative_l2": 0.9988390360474267,
+      "mean_abs_error": 0.7116078559723803,
+      "max_abs_error": 142.3875556588173,
+      "candidate_stats": {
+        "shape": [
+          128,
+          3584
+        ],
+        "dtype": "float32",
+        "size": 458752,
+        "min": -0.6124443411827087,
+        "max": 0.43004828691482544,
+        "mean": -0.00284260930493474,
+        "std": 0.2351149022579193,
+        "abs_max": 0.6124443411827087,
+        "nonzero_count": 458742,
+        "allzero": false,
+        "constant": false,
+        "nan_count": 0,
+        "inf_count": 0
+      },
+      "reference_stats": {
+        "shape": [
+          128,
+          3584
+        ],
+        "dtype": "float32",
+        "size": 458752,
+        "min": -143.0,
+        "max": 30.625,
+        "mean": -0.04497853294014931,
+        "std": 2.9074478149414062,
+        "abs_max": 143.0,
+        "nonzero_count": 458612,
+        "allzero": false,
+        "constant": false,
+        "nan_count": 0,
+        "inf_count": 0
+      },
+      "case_id": "zeros",
+      "segment": 15,
+      "hf_path": "evidence/hf_boundaries_v11/zeros/layer_15_output.npy",
+      "bpu_path": "evidence/boundary_all_segments_v7/zeros/seg_15_output.npy",
+      "missing": false
+    },
+    {
+      "shape_mismatch": false,
+      "cosine": 0.06487520099641286,
+      "pearson_centered": 0.06470348963172022,
+      "relative_l2": 0.9980446388199301,
+      "mean_abs_error": 0.7025732021588998,
+      "max_abs_error": 143.29513490200043,
+      "candidate_stats": {
+        "shape": [
+          128,
+          3584
+        ],
+        "dtype": "float32",
+        "size": 458752,
+        "min": -0.7048650979995728,
+        "max": 0.564596951007843,
+        "mean": -0.0029984195716679096,
+        "std": 0.23856280744075775,
+        "abs_max": 0.7048650979995728,
+        "nonzero_count": 458747,
+        "allzero": false,
+        "constant": false,
+        "nan_count": 0,
+        "inf_count": 0
+      },
+      "reference_stats": {
+        "shape": [
+          128,
+          3584
+        ],
+        "dtype": "float32",
+        "size": 458752,
+        "min": -144.0,
+        "max": 31.125,
+        "mean": -0.042407095432281494,
+        "std": 2.90036940574646,
+        "abs_max": 144.0,
+        "nonzero_count": 458591,
+        "allzero": false,
+        "constant": false,
+        "nan_count": 0,
+        "inf_count": 0
+      },
+      "case_id": "zeros",
+      "segment": 16,
+      "hf_path": "evidence/hf_boundaries_v11/zeros/layer_16_output.npy",
+      "bpu_path": "evidence/boundary_all_segments_v7/zeros/seg_16_output.npy",
+      "missing": false
+    },
+    {
+      "shape_mismatch": false,
+      "cosine": 0.03581671771026945,
+      "pearson_centered": 0.03562530895384752,
+      "relative_l2": 1.0006515862140093,
+      "mean_abs_error": 0.7010824018949303,
+      "max_abs_error": 138.53595235943794,
+      "candidate_stats": {
+        "shape": [
+          128,
+          3584
+        ],
+        "dtype": "float32",
+        "size": 458752,
+        "min": -0.4640476405620575,
+        "max": 0.4640476405620575,
+        "mean": -0.003524675266817212,
+        "std": 0.2414640486240387,
+        "abs_max": 0.4640476405620575,
+        "nonzero_count": 458747,
+        "allzero": false,
+        "constant": false,
+        "nan_count": 0,
+        "inf_count": 0
+      },
+      "reference_stats": {
+        "shape": [
+          128,
+          3584
+        ],
+        "dtype": "float32",
+        "size": 458752,
+        "min": -139.0,
+        "max": 30.625,
+        "mean": -0.03789195790886879,
+        "std": 2.785936117172241,
+        "abs_max": 139.0,
+        "nonzero_count": 458656,
+        "allzero": false,
+        "constant": false,
+        "nan_count": 0,
+        "inf_count": 0
+      },
+      "case_id": "zeros",
+      "segment": 17,
+      "hf_path": "evidence/hf_boundaries_v11/zeros/layer_17_output.npy",
+      "bpu_path": "evidence/boundary_all_segments_v7/zeros/seg_17_output.npy",
+      "missing": false
+    },
+    {
+      "shape_mismatch": false,
+      "cosine": 0.1600749994599536,
+      "pearson_centered": 0.15987538668750018,
+      "relative_l2": 0.9892701169716389,
+      "mean_abs_error": 0.7030084119697787,
+      "max_abs_error": 132.02649998664856,
+      "candidate_stats": {
+        "shape": [
+          128,
+          3584
+        ],
+        "dtype": "float32",
+        "size": 458752,
+        "min": -1.9735000133514404,
+        "max": 0.7593722343444824,
+        "mean": -0.004661105573177338,
+        "std": 0.2531595826148987,
+        "abs_max": 1.9735000133514404,
+        "nonzero_count": 458737,
+        "allzero": false,
+        "constant": false,
+        "nan_count": 0,
+        "inf_count": 0
+      },
+      "reference_stats": {
+        "shape": [
+          128,
+          3584
+        ],
+        "dtype": "float32",
+        "size": 458752,
+        "min": -134.0,
+        "max": 30.0,
+        "mean": -0.03492135927081108,
+        "std": 2.6746881008148193,
+        "abs_max": 134.0,
+        "nonzero_count": 458638,
+        "allzero": false,
+        "constant": false,
+        "nan_count": 0,
+        "inf_count": 0
+      },
+      "case_id": "zeros",
+      "segment": 18,
+      "hf_path": "evidence/hf_boundaries_v11/zeros/layer_18_output.npy",
+      "bpu_path": "evidence/boundary_all_segments_v7/zeros/seg_18_output.npy",
+      "missing": false
+    },
+    {
+      "shape_mismatch": false,
+      "cosine": 0.4913611599713025,
+      "pearson_centered": 0.4913460057136429,
+      "relative_l2": 0.9394004487408244,
+      "mean_abs_error": 0.7183954902570012,
+      "max_abs_error": 116.50477838516235,
+      "candidate_stats": {
+        "shape": [
+          128,
+          3584
+        ],
+        "dtype": "float32",
+        "size": 458752,
+        "min": -7.9952216148376465,
+        "max": 2.4518680572509766,
+        "mean": -0.011253469623625278,
+        "std": 0.34386301040649414,
+        "abs_max": 7.9952216148376465,
+        "nonzero_count": 458482,
+        "allzero": false,
+        "constant": false,
+        "nan_count": 0,
+        "inf_count": 0
+      },
+      "reference_stats": {
+        "shape": [
+          128,
+          3584
+        ],
+        "dtype": "float32",
+        "size": 458752,
+        "min": -124.5,
+        "max": 29.625,
+        "mean": -0.02253207378089428,
+        "std": 2.4687674045562744,
+        "abs_max": 124.5,
+        "nonzero_count": 458616,
+        "allzero": false,
+        "constant": false,
+        "nan_count": 0,
+        "inf_count": 0
+      },
+      "case_id": "zeros",
+      "segment": 19,
+      "hf_path": "evidence/hf_boundaries_v11/zeros/layer_19_output.npy",
+      "bpu_path": "evidence/boundary_all_segments_v7/zeros/seg_19_output.npy",
+      "missing": false
+    },
+    {
+      "shape_mismatch": false,
+      "cosine": -0.17828933934310298,
+      "pearson_centered": -0.17827101810618903,
+      "relative_l2": 1.5856007514404706,
+      "mean_abs_error": 1.8257138526630108,
+      "max_abs_error": 126.07480049133301,
+      "candidate_stats": {
+        "shape": [
+          128,
+          3584
+        ],
+        "dtype": "float32",
+        "size": 458752,
+        "min": -12.999689102172852,
+        "max": 23.074800491333008,
+        "mean": 0.007725059520453215,
+        "std": 2.225689649581909,
+        "abs_max": 23.074800491333008,
+        "nonzero_count": 458677,
+        "allzero": false,
+        "constant": false,
+        "nan_count": 0,
+        "inf_count": 0
+      },
+      "reference_stats": {
+        "shape": [
+          128,
+          3584
+        ],
+        "dtype": "float32",
+        "size": 458752,
+        "min": -103.0,
+        "max": 27.375,
+        "mean": -0.014131708070635796,
+        "std": 2.0896973609924316,
+        "abs_max": 103.0,
+        "nonzero_count": 458488,
+        "allzero": false,
+        "constant": false,
+        "nan_count": 0,
+        "inf_count": 0
+      },
+      "case_id": "zeros",
+      "segment": 20,
+      "hf_path": "evidence/hf_boundaries_v11/zeros/layer_20_output.npy",
+      "bpu_path": "evidence/boundary_all_segments_v7/zeros/seg_20_output.npy",
+      "missing": false
+    },
+    {
+      "shape_mismatch": false,
+      "cosine": -0.020762128618564683,
+      "pearson_centered": -0.02076929831464006,
+      "relative_l2": 1.45426198261444,
+      "mean_abs_error": 1.8278471114602526,
+      "max_abs_error": 101.78049802780151,
+      "candidate_stats": {
+        "shape": [
+          128,
+          3584
+        ],
+        "dtype": "float32",
+        "size": 458752,
+        "min": -6.280498027801514,
+        "max": 6.280498027801514,
+        "mean": -0.005066425073891878,
+        "std": 2.1083858013153076,
+        "abs_max": 6.280498027801514,
+        "nonzero_count": 458701,
+        "allzero": false,
+        "constant": false,
+        "nan_count": 0,
+        "inf_count": 0
+      },
+      "reference_stats": {
+        "shape": [
+          128,
+          3584
+        ],
+        "dtype": "float32",
+        "size": 458752,
+        "min": -95.5,
+        "max": 27.625,
+        "mean": -0.00595018221065402,
+        "std": 2.0364556312561035,
+        "abs_max": 95.5,
+        "nonzero_count": 458571,
+        "allzero": false,
+        "constant": false,
+        "nan_count": 0,
+        "inf_count": 0
+      },
+      "case_id": "zeros",
+      "segment": 21,
+      "hf_path": "evidence/hf_boundaries_v11/zeros/layer_21_output.npy",
+      "bpu_path": "evidence/boundary_all_segments_v7/zeros/seg_21_output.npy",
+      "missing": false
+    },
+    {
+      "shape_mismatch": false,
+      "cosine": -0.016517135772057778,
+      "pearson_centered": -0.016569830137921043,
+      "relative_l2": 14.766092345597782,
+      "mean_abs_error": 25.827863079243116,
+      "max_abs_error": 129.65718460083008,
+      "candidate_stats": {
+        "shape": [
+          128,
+          3584
+        ],
+        "dtype": "float32",
+        "size": 458752,
+        "min": -43.65851593017578,
+        "max": 43.65718460083008,
+        "mean": -0.2556152939796448,
+        "std": 29.7773380279541,
+        "abs_max": 43.65851593017578,
+        "nonzero_count": 458741,
+        "allzero": false,
+        "constant": false,
+        "nan_count": 0,
+        "inf_count": 0
+      },
+      "reference_stats": {
+        "shape": [
+          128,
+          3584
+        ],
+        "dtype": "float32",
+        "size": 458752,
+        "min": -90.5,
+        "max": 26.5,
+        "mean": -0.012207276187837124,
+        "std": 2.023548126220703,
+        "abs_max": 90.5,
+        "nonzero_count": 458523,
+        "allzero": false,
+        "constant": false,
+        "nan_count": 0,
+        "inf_count": 0
+      },
+      "case_id": "zeros",
+      "segment": 22,
+      "hf_path": "evidence/hf_boundaries_v11/zeros/layer_22_output.npy",
+      "bpu_path": "evidence/boundary_all_segments_v7/zeros/seg_22_output.npy",
+      "missing": false
+    },
+    {
+      "shape_mismatch": false,
+      "cosine": -0.01390290474665067,
+      "pearson_centered": -0.013885123086331904,
+      "relative_l2": 6.066959220890773,
+      "mean_abs_error": 11.970787424510759,
+      "max_abs_error": 97.89610862731934,
+      "candidate_stats": {
+        "shape": [
+          128,
+          3584
+        ],
+        "dtype": "float32",
+        "size": 458752,
+        "min": -13.896108627319336,
+        "max": 13.896108627319336,
+        "mean": -0.0875818207859993,
+        "std": 12.495685577392578,
+        "abs_max": 13.896108627319336,
+        "nonzero_count": 458734,
+        "allzero": false,
+        "constant": false,
+        "nan_count": 0,
+        "inf_count": 0
+      },
+      "reference_stats": {
+        "shape": [
+          128,
+          3584
+        ],
+        "dtype": "float32",
+        "size": 458752,
+        "min": -87.5,
+        "max": 25.625,
+        "mean": 0.0054260799661278725,
+        "std": 2.0930919647216797,
+        "abs_max": 87.5,
+        "nonzero_count": 458432,
+        "allzero": false,
+        "constant": false,
+        "nan_count": 0,
+        "inf_count": 0
+      },
+      "case_id": "zeros",
+      "segment": 23,
+      "hf_path": "evidence/hf_boundaries_v11/zeros/layer_23_output.npy",
+      "bpu_path": "evidence/boundary_all_segments_v7/zeros/seg_23_output.npy",
+      "missing": false
+    },
+    {
+      "shape_mismatch": false,
+      "cosine": -0.00892313655850303,
+      "pearson_centered": -0.00888200977612389,
+      "relative_l2": 5.446249246060147,
+      "mean_abs_error": 11.988459751325108,
+      "max_abs_error": 86.52023816108704,
+      "candidate_stats": {
+        "shape": [
+          128,
+          3584
+        ],
+        "dtype": "float32",
+        "size": 458752,
+        "min": -16.745126724243164,
+        "max": 16.74461555480957,
+        "mean": -0.09215830266475677,
+        "std": 12.493391036987305,
+        "abs_max": 16.745126724243164,
+        "nonzero_count": 458751,
+        "allzero": false,
+        "constant": false,
+        "nan_count": 0,
+        "inf_count": 0
+      },
+      "reference_stats": {
+        "shape": [
+          128,
+          3584
+        ],
+        "dtype": "float32",
+        "size": 458752,
+        "min": -92.0,
+        "max": 21.75,
+        "mean": 0.013154246844351292,
+        "std": 2.337538003921509,
+        "abs_max": 92.0,
+        "nonzero_count": 458384,
+        "allzero": false,
+        "constant": false,
+        "nan_count": 0,
+        "inf_count": 0
+      },
+      "case_id": "zeros",
+      "segment": 24,
+      "hf_path": "evidence/hf_boundaries_v11/zeros/layer_24_output.npy",
+      "bpu_path": "evidence/boundary_all_segments_v7/zeros/seg_24_output.npy",
+      "missing": false
+    },
+    {
+      "shape_mismatch": false,
+      "cosine": -0.008579502089128287,
+      "pearson_centered": -0.008579941929236811,
+      "relative_l2": 74.98204568801415,
+      "mean_abs_error": 195.73768317745808,
+      "max_abs_error": 366.41082763671875,
+      "candidate_stats": {
+        "shape": [
+          128,
+          3584
+        ],
+        "dtype": "float32",
+        "size": 458752,
+        "min": -258.418701171875,
+        "max": 258.41082763671875,
+        "mean": 0.016345173120498657,
+        "std": 212.87388610839844,
+        "abs_max": 258.418701171875,
+        "nonzero_count": 458751,
+        "allzero": false,
+        "constant": false,
+        "nan_count": 0,
+        "inf_count": 0
+      },
+      "reference_stats": {
+        "shape": [
+          128,
+          3584
+        ],
+        "dtype": "float32",
+        "size": 458752,
+        "min": -108.0,
+        "max": 29.75,
+        "mean": 0.012960372492671013,
+        "std": 2.839545965194702,
+        "abs_max": 108.0,
+        "nonzero_count": 458365,
+        "allzero": false,
+        "constant": false,
+        "nan_count": 0,
+        "inf_count": 0
+      },
+      "case_id": "zeros",
+      "segment": 25,
+      "hf_path": "evidence/hf_boundaries_v11/zeros/layer_25_output.npy",
+      "bpu_path": "evidence/boundary_all_segments_v7/zeros/seg_25_output.npy",
+      "missing": false
+    },
+    {
+      "shape_mismatch": false,
+      "cosine": -0.009879597879203523,
+      "pearson_centered": -0.009880002248551492,
+      "relative_l2": 4.707038701494925,
+      "mean_abs_error": 16.10415110194004,
+      "max_abs_error": 125.79678726196289,
+      "candidate_stats": {
+        "shape": [
+          128,
+          3584
+        ],
+        "dtype": "float32",
+        "size": 458752,
+        "min": -16.29678726196289,
+        "max": 16.29678726196289,
+        "mean": 0.005043779034167528,
+        "std": 16.12376594543457,
+        "abs_max": 16.29678726196289,
+        "nonzero_count": 458751,
+        "allzero": false,
+        "constant": false,
+        "nan_count": 0,
+        "inf_count": 0
+      },
+      "reference_stats": {
+        "shape": [
+          128,
+          3584
+        ],
+        "dtype": "float32",
+        "size": 458752,
+        "min": -109.5,
+        "max": 35.5,
+        "mean": 0.004446861334145069,
+        "std": 3.5130152702331543,
+        "abs_max": 109.5,
+        "nonzero_count": 458378,
+        "allzero": false,
+        "constant": false,
+        "nan_count": 0,
+        "inf_count": 0
+      },
+      "case_id": "zeros",
+      "segment": 26,
+      "hf_path": "evidence/hf_boundaries_v11/zeros/layer_26_output.npy",
+      "bpu_path": "evidence/boundary_all_segments_v7/zeros/seg_26_output.npy",
+      "missing": false
+    },
+    {
+      "shape_mismatch": true,
+      "candidate_shape": [
+        1,
+        152064
+      ],
+      "reference_shape": [
+        128,
+        3584
+      ],
+      "case_id": "zeros",
+      "segment": 27,
+      "hf_path": "evidence/hf_boundaries_v11/zeros/layer_27_output.npy",
+      "bpu_path": "evidence/boundary_all_segments_v7/zeros/seg_27_output.npy",
+      "missing": false
+    },
+    {
+      "shape_mismatch": false,
+      "cosine": 0.3421899156479325,
+      "pearson_centered": 0.34214507548507256,
+      "relative_l2": 0.9413658239718516,
+      "mean_abs_error": 0.08772680533510721,
+      "max_abs_error": 1.9965022206306458,
+      "candidate_stats": {
+        "shape": [
+          128,
+          3584
+        ],
+        "dtype": "float32",
+        "size": 458752,
+        "min": -0.9146485328674316,
+        "max": 0.7435043454170227,
+        "mean": -0.0005779584171250463,
+        "std": 0.05070845037698746,
+        "abs_max": 0.9146485328674316,
+        "nonzero_count": 458457,
+        "allzero": false,
+        "constant": false,
+        "nan_count": 0,
+        "inf_count": 0
+      },
+      "reference_stats": {
+        "shape": [
+          128,
+          3584
+        ],
+        "dtype": "float32",
+        "size": 458752,
+        "min": -2.390625,
+        "max": 1.515625,
+        "mean": -0.0008283673669211566,
+        "std": 0.12699337303638458,
+        "abs_max": 2.390625,
+        "nonzero_count": 458360,
+        "allzero": false,
+        "constant": false,
+        "nan_count": 0,
+        "inf_count": 0
+      },
+      "case_id": "ramp",
+      "segment": 0,
+      "hf_path": "evidence/hf_boundaries_v11/ramp/layer_00_output.npy",
+      "bpu_path": "evidence/boundary_all_segments_v7/ramp/seg_00_output.npy",
+      "missing": false
+    },
+    {
+      "shape_mismatch": false,
+      "cosine": 0.2914005783753946,
+      "pearson_centered": 0.29133741225055293,
+      "relative_l2": 0.9655449396618503,
+      "mean_abs_error": 0.14059160642205967,
+      "max_abs_error": 5.034765601158142,
+      "candidate_stats": {
+        "shape": [
+          128,
+          3584
+        ],
+        "dtype": "float32",
+        "size": 458752,
+        "min": -0.6892396211624146,
+        "max": 0.6892396211624146,
+        "mean": -0.00160598277579993,
+        "std": 0.08460577577352524,
+        "abs_max": 0.6892396211624146,
+        "nonzero_count": 458583,
+        "allzero": false,
+        "constant": false,
+        "nan_count": 0,
+        "inf_count": 0
+      },
+      "reference_stats": {
+        "shape": [
+          128,
+          3584
+        ],
+        "dtype": "float32",
+        "size": 458752,
+        "min": -5.1875,
+        "max": 2.34375,
+        "mean": -0.0012834392255172133,
+        "std": 0.20027460157871246,
+        "abs_max": 5.1875,
+        "nonzero_count": 458356,
+        "allzero": false,
+        "constant": false,
+        "nan_count": 0,
+        "inf_count": 0
+      },
+      "case_id": "ramp",
+      "segment": 1,
+      "hf_path": "evidence/hf_boundaries_v11/ramp/layer_01_output.npy",
+      "bpu_path": "evidence/boundary_all_segments_v7/ramp/seg_01_output.npy",
+      "missing": false
+    },
+    {
+      "shape_mismatch": false,
+      "cosine": 0.21976437502481028,
+      "pearson_centered": 0.21979587747314244,
+      "relative_l2": 0.9831071211156722,
+      "mean_abs_error": 0.1850296658386666,
+      "max_abs_error": 4.26322814822197,
+      "candidate_stats": {
+        "shape": [
+          128,
+          3584
+        ],
+        "dtype": "float32",
+        "size": 458752,
+        "min": -0.4555218517780304,
+        "max": 0.4555218517780304,
+        "mean": -0.0024974450934678316,
+        "std": 0.08787087351083755,
+        "abs_max": 0.4555218517780304,
+        "nonzero_count": 454375,
+        "allzero": false,
+        "constant": false,
+        "nan_count": 0,
+        "inf_count": 0
+      },
+      "reference_stats": {
+        "shape": [
+          128,
+          3584
+        ],
+        "dtype": "float32",
+        "size": 458752,
+        "min": -4.71875,
+        "max": 3.4375,
+        "mean": -0.0005226843641139567,
+        "std": 0.25748494267463684,
+        "abs_max": 4.71875,
+        "nonzero_count": 458345,
+        "allzero": false,
+        "constant": false,
+        "nan_count": 0,
+        "inf_count": 0
+      },
+      "case_id": "ramp",
+      "segment": 2,
+      "hf_path": "evidence/hf_boundaries_v11/ramp/layer_02_output.npy",
+      "bpu_path": "evidence/boundary_all_segments_v7/ramp/seg_02_output.npy",
+      "missing": false
+    },
+    {
+      "shape_mismatch": false,
+      "cosine": 0.16908153449425178,
+      "pearson_centered": 0.1691254283731667,
+      "relative_l2": 1.0237457658618687,
+      "mean_abs_error": 0.23063976023804247,
+      "max_abs_error": 19.17250233888626,
+      "candidate_stats": {
+        "shape": [
+          128,
+          3584
+        ],
+        "dtype": "float32",
+        "size": 458752,
+        "min": -0.6256224513053894,
+        "max": 0.6256224513053894,
+        "mean": -0.0014862240059301257,
+        "std": 0.13827840983867645,
+        "abs_max": 0.6256224513053894,
+        "nonzero_count": 423582,
+        "allzero": false,
+        "constant": false,
+        "nan_count": 0,
+        "inf_count": 0
+      },
+      "reference_stats": {
+        "shape": [
+          128,
+          3584
+        ],
+        "dtype": "float32",
+        "size": 458752,
+        "min": -19.75,
+        "max": 6.6875,
+        "mean": 0.000961237761657685,
+        "std": 0.3101077377796173,
+        "abs_max": 19.75,
+        "nonzero_count": 458360,
+        "allzero": false,
+        "constant": false,
+        "nan_count": 0,
+        "inf_count": 0
+      },
+      "case_id": "ramp",
+      "segment": 3,
+      "hf_path": "evidence/hf_boundaries_v11/ramp/layer_03_output.npy",
+      "bpu_path": "evidence/boundary_all_segments_v7/ramp/seg_03_output.npy",
+      "missing": false
+    },
+    {
+      "shape_mismatch": false,
+      "cosine": 0.1353598775941642,
+      "pearson_centered": 0.1353804101498863,
+      "relative_l2": 1.0233499859032955,
+      "mean_abs_error": 0.2630707798251386,
+      "max_abs_error": 5.998117595911026,
+      "candidate_stats": {
+        "shape": [
+          128,
+          3584
+        ],
+        "dtype": "float32",
+        "size": 458752,
+        "min": -0.439382404088974,
+        "max": 0.439382404088974,
+        "mean": -0.0015621960628777742,
+        "std": 0.13738973438739777,
+        "abs_max": 0.439382404088974,
+        "nonzero_count": 453358,
+        "allzero": false,
+        "constant": false,
+        "nan_count": 0,
+        "inf_count": 0
+      },
+      "reference_stats": {
+        "shape": [
+          128,
+          3584
+        ],
+        "dtype": "float32",
+        "size": 458752,
+        "min": -6.4375,
+        "max": 4.5,
+        "mean": 0.0003615273453760892,
+        "std": 0.3510246276855469,
+        "abs_max": 6.4375,
+        "nonzero_count": 458330,
+        "allzero": false,
+        "constant": false,
+        "nan_count": 0,
+        "inf_count": 0
+      },
+      "case_id": "ramp",
+      "segment": 4,
+      "hf_path": "evidence/hf_boundaries_v11/ramp/layer_04_output.npy",
+      "bpu_path": "evidence/boundary_all_segments_v7/ramp/seg_04_output.npy",
+      "missing": false
+    },
+    {
+      "shape_mismatch": false,
+      "cosine": 0.17160756791152748,
+      "pearson_centered": 0.171592737675082,
+      "relative_l2": 1.00357494413651,
+      "mean_abs_error": 0.31395776638461875,
+      "max_abs_error": 33.68459188938141,
+      "candidate_stats": {
+        "shape": [
+          128,
+          3584
+        ],
+        "dtype": "float32",
+        "size": 458752,
+        "min": -1.3154081106185913,
+        "max": 0.7408249378204346,
+        "mean": -0.0021483225282281637,
+        "std": 0.15963540971279144,
+        "abs_max": 1.3154081106185913,
+        "nonzero_count": 455504,
+        "allzero": false,
+        "constant": false,
+        "nan_count": 0,
+        "inf_count": 0
+      },
+      "reference_stats": {
+        "shape": [
+          128,
+          3584
+        ],
+        "dtype": "float32",
+        "size": 458752,
+        "min": -35.0,
+        "max": 16.625,
+        "mean": -0.0010073380544781685,
+        "std": 0.4398665428161621,
+        "abs_max": 35.0,
+        "nonzero_count": 458264,
+        "allzero": false,
+        "constant": false,
+        "nan_count": 0,
+        "inf_count": 0
+      },
+      "case_id": "ramp",
+      "segment": 5,
+      "hf_path": "evidence/hf_boundaries_v11/ramp/layer_05_output.npy",
+      "bpu_path": "evidence/boundary_all_segments_v7/ramp/seg_05_output.npy",
+      "missing": false
+    },
+    {
+      "shape_mismatch": false,
+      "cosine": 0.1085263767010259,
+      "pearson_centered": 0.10853673407761551,
+      "relative_l2": 1.0143347837998913,
+      "mean_abs_error": 0.34062558689221945,
+      "max_abs_error": 90.36066138744354,
+      "candidate_stats": {
+        "shape": [
+          128,
+          3584
+        ],
+        "dtype": "float32",
+        "size": 458752,
+        "min": -0.6393386125564575,
+        "max": 0.6393386125564575,
+        "mean": -0.0018771793693304062,
+        "std": 0.16804179549217224,
+        "abs_max": 0.6393386125564575,
+        "nonzero_count": 458204,
+        "allzero": false,
+        "constant": false,
+        "nan_count": 0,
+        "inf_count": 0
+      },
+      "reference_stats": {
+        "shape": [
+          128,
+          3584
+        ],
+        "dtype": "float32",
+        "size": 458752,
+        "min": -91.0,
+        "max": 27.125,
+        "mean": 0.00017367256805300713,
+        "std": 0.5418378710746765,
+        "abs_max": 91.0,
+        "nonzero_count": 458265,
+        "allzero": false,
+        "constant": false,
+        "nan_count": 0,
+        "inf_count": 0
+      },
+      "case_id": "ramp",
+      "segment": 6,
+      "hf_path": "evidence/hf_boundaries_v11/ramp/layer_06_output.npy",
+      "bpu_path": "evidence/boundary_all_segments_v7/ramp/seg_06_output.npy",
+      "missing": false
+    },
+    {
+      "shape_mismatch": false,
+      "cosine": 0.12644493685906272,
+      "pearson_centered": 0.12633677614667874,
+      "relative_l2": 1.0057564015038751,
+      "mean_abs_error": 0.3634393230954708,
+      "max_abs_error": 116.63727021217346,
+      "candidate_stats": {
+        "shape": [
+          128,
+          3584
+        ],
+        "dtype": "float32",
+        "size": 458752,
+        "min": -1.362729787826538,
+        "max": 0.9840719699859619,
+        "mean": -0.0033953411038964987,
+        "std": 0.1819995790719986,
+        "abs_max": 1.362729787826538,
+        "nonzero_count": 458386,
+        "allzero": false,
+        "constant": false,
+        "nan_count": 0,
+        "inf_count": 0
+      },
+      "reference_stats": {
+        "shape": [
+          128,
+          3584
+        ],
+        "dtype": "float32",
+        "size": 458752,
+        "min": -118.0,
+        "max": 32.5,
+        "mean": -0.004451601766049862,
+        "std": 0.622569739818573,
+        "abs_max": 118.0,
+        "nonzero_count": 458294,
+        "allzero": false,
+        "constant": false,
+        "nan_count": 0,
+        "inf_count": 0
+      },
+      "case_id": "ramp",
+      "segment": 7,
+      "hf_path": "evidence/hf_boundaries_v11/ramp/layer_07_output.npy",
+      "bpu_path": "evidence/boundary_all_segments_v7/ramp/seg_07_output.npy",
+      "missing": false
+    },
+    {
+      "shape_mismatch": false,
+      "cosine": 0.07371574996232166,
+      "pearson_centered": 0.07372417390565213,
+      "relative_l2": 1.016045394322404,
+      "mean_abs_error": 0.39129477780786964,
+      "max_abs_error": 126.96984022855759,
+      "candidate_stats": {
+        "shape": [
+          128,
+          3584
+        ],
+        "dtype": "float32",
+        "size": 458752,
+        "min": -0.5301597714424133,
+        "max": 0.5301597714424133,
+        "mean": -0.0037396533880382776,
+        "std": 0.17878058552742004,
+        "abs_max": 0.5301597714424133,
+        "nonzero_count": 458206,
+        "allzero": false,
+        "constant": false,
+        "nan_count": 0,
+        "inf_count": 0
+      },
+      "reference_stats": {
+        "shape": [
+          128,
+          3584
+        ],
+        "dtype": "float32",
+        "size": 458752,
+        "min": -127.5,
+        "max": 37.75,
+        "mean": -0.0002457326918374747,
+        "std": 0.6670077443122864,
+        "abs_max": 127.5,
+        "nonzero_count": 458347,
+        "allzero": false,
+        "constant": false,
+        "nan_count": 0,
+        "inf_count": 0
+      },
+      "case_id": "ramp",
+      "segment": 8,
+      "hf_path": "evidence/hf_boundaries_v11/ramp/layer_08_output.npy",
+      "bpu_path": "evidence/boundary_all_segments_v7/ramp/seg_08_output.npy",
+      "missing": false
+    },
+    {
+      "shape_mismatch": false,
+      "cosine": 0.1058466606530566,
+      "pearson_centered": 0.10591364186322622,
+      "relative_l2": 1.0056660743786892,
+      "mean_abs_error": 0.37157600099393434,
+      "max_abs_error": 171.65895199775696,
+      "candidate_stats": {
+        "shape": [
+          128,
+          3584
+        ],
+        "dtype": "float32",
+        "size": 458752,
+        "min": -1.341048002243042,
+        "max": 0.8692174553871155,
+        "mean": -0.004481317941099405,
+        "std": 0.18868191540241241,
+        "abs_max": 1.341048002243042,
+        "nonzero_count": 458661,
+        "allzero": false,
+        "constant": false,
+        "nan_count": 0,
+        "inf_count": 0
+      },
+      "reference_stats": {
+        "shape": [
+          128,
+          3584
+        ],
+        "dtype": "float32",
+        "size": 458752,
+        "min": -173.0,
+        "max": 51.25,
+        "mean": 0.0011482954723760486,
+        "std": 0.7370373010635376,
+        "abs_max": 173.0,
+        "nonzero_count": 458006,
+        "allzero": false,
+        "constant": false,
+        "nan_count": 0,
+        "inf_count": 0
+      },
+      "case_id": "ramp",
+      "segment": 9,
+      "hf_path": "evidence/hf_boundaries_v11/ramp/layer_09_output.npy",
+      "bpu_path": "evidence/boundary_all_segments_v7/ramp/seg_09_output.npy",
+      "missing": false
+    },
+    {
+      "shape_mismatch": false,
+      "cosine": 0.09667899954367562,
+      "pearson_centered": 0.09669001815775835,
+      "relative_l2": 1.0144655463308405,
+      "mean_abs_error": 0.3671920093127377,
+      "max_abs_error": 180.9868528842926,
+      "candidate_stats": {
+        "shape": [
+          128,
+          3584
+        ],
+        "dtype": "float32",
+        "size": 458752,
+        "min": -1.0131471157073975,
+        "max": 1.0131471157073975,
+        "mean": -0.0041832090355455875,
+        "std": 0.21980993449687958,
+        "abs_max": 1.0131471157073975,
+        "nonzero_count": 458046,
+        "allzero": false,
+        "constant": false,
+        "nan_count": 0,
+        "inf_count": 0
+      },
+      "reference_stats": {
+        "shape": [
+          128,
+          3584
+        ],
+        "dtype": "float32",
+        "size": 458752,
+        "min": -182.0,
+        "max": 53.25,
+        "mean": -0.00025612409808672965,
+        "std": 0.7506977915763855,
+        "abs_max": 182.0,
+        "nonzero_count": 458203,
+        "allzero": false,
+        "constant": false,
+        "nan_count": 0,
+        "inf_count": 0
+      },
+      "case_id": "ramp",
+      "segment": 10,
+      "hf_path": "evidence/hf_boundaries_v11/ramp/layer_10_output.npy",
+      "bpu_path": "evidence/boundary_all_segments_v7/ramp/seg_10_output.npy",
+      "missing": false
+    },
+    {
+      "shape_mismatch": false,
+      "cosine": -0.057715253167652636,
+      "pearson_centered": -0.05771483794644931,
+      "relative_l2": 3.7698419473301334,
+      "mean_abs_error": 4.008867032434524,
+      "max_abs_error": 495.6661148071289,
+      "candidate_stats": {
+        "shape": [
+          128,
+          3584
+        ],
+        "dtype": "float32",
+        "size": 458752,
+        "min": -25.384689331054688,
+        "max": 79.6661148071289,
+        "mean": 0.0043985419906675816,
+        "std": 5.4542012214660645,
+        "abs_max": 79.6661148071289,
+        "nonzero_count": 458601,
+        "allzero": false,
+        "constant": false,
+        "nan_count": 0,
+        "inf_count": 0
+      },
+      "reference_stats": {
+        "shape": [
+          128,
+          3584
+        ],
+        "dtype": "float32",
+        "size": 458752,
+        "min": -416.0,
+        "max": 138.0,
+        "mean": -0.0008368818089365959,
+        "std": 1.524570345878601,
+        "abs_max": 416.0,
+        "nonzero_count": 458289,
+        "allzero": false,
+        "constant": false,
+        "nan_count": 0,
+        "inf_count": 0
+      },
+      "case_id": "ramp",
+      "segment": 11,
+      "hf_path": "evidence/hf_boundaries_v11/ramp/layer_11_output.npy",
+      "bpu_path": "evidence/boundary_all_segments_v7/ramp/seg_11_output.npy",
+      "missing": false
+    },
+    {
+      "shape_mismatch": false,
+      "cosine": 0.018586043124887316,
+      "pearson_centered": 0.018615141538282975,
+      "relative_l2": 8.852752015779018,
+      "mean_abs_error": 14.359446317059442,
+      "max_abs_error": 495.37305068969727,
+      "candidate_stats": {
+        "shape": [
+          128,
+          3584
+        ],
+        "dtype": "float32",
+        "size": 458752,
+        "min": -34.12774658203125,
+        "max": 34.126705169677734,
+        "mean": 0.43226268887519836,
+        "std": 17.488529205322266,
+        "abs_max": 34.12774658203125,
+        "nonzero_count": 458740,
+        "allzero": false,
+        "constant": false,
+        "nan_count": 0,
+        "inf_count": 0
+      },
+      "reference_stats": {
+        "shape": [
+          128,
+          3584
+        ],
+        "dtype": "float32",
+        "size": 458752,
+        "min": -528.0,
+        "max": 160.0,
+        "mean": -0.0018799732206389308,
+        "std": 1.9846243858337402,
+        "abs_max": 528.0,
+        "nonzero_count": 458307,
+        "allzero": false,
+        "constant": false,
+        "nan_count": 0,
+        "inf_count": 0
+      },
+      "case_id": "ramp",
+      "segment": 12,
+      "hf_path": "evidence/hf_boundaries_v11/ramp/layer_12_output.npy",
+      "bpu_path": "evidence/boundary_all_segments_v7/ramp/seg_12_output.npy",
+      "missing": false
+    },
+    {
+      "shape_mismatch": false,
+      "cosine": 0.011215579591479627,
+      "pearson_centered": 0.011228402620050794,
+      "relative_l2": 1.940920170776453,
+      "mean_abs_error": 3.2764297972844107,
+      "max_abs_error": 574.5944027900696,
+      "candidate_stats": {
+        "shape": [
+          128,
+          3584
+        ],
+        "dtype": "float32",
+        "size": 458752,
+        "min": -5.40559720993042,
+        "max": 5.405432224273682,
+        "mean": 0.050473373383283615,
+        "std": 3.6804089546203613,
+        "abs_max": 5.40559720993042,
+        "nonzero_count": 458742,
+        "allzero": false,
+        "constant": false,
+        "nan_count": 0,
+        "inf_count": 0
+      },
+      "reference_stats": {
+        "shape": [
+          128,
+          3584
+        ],
+        "dtype": "float32",
+        "size": 458752,
+        "min": -580.0,
+        "max": 174.0,
+        "mean": -0.0018853367073461413,
+        "std": 2.197812557220459,
+        "abs_max": 580.0,
+        "nonzero_count": 458274,
+        "allzero": false,
+        "constant": false,
+        "nan_count": 0,
+        "inf_count": 0
+      },
+      "case_id": "ramp",
+      "segment": 13,
+      "hf_path": "evidence/hf_boundaries_v11/ramp/layer_13_output.npy",
+      "bpu_path": "evidence/boundary_all_segments_v7/ramp/seg_13_output.npy",
+      "missing": false
+    },
+    {
+      "shape_mismatch": false,
+      "cosine": 0.005986777411447969,
+      "pearson_centered": 0.006015405215494771,
+      "relative_l2": 1.0046733957146248,
+      "mean_abs_error": 0.49847937341091153,
+      "max_abs_error": 591.765582472086,
+      "candidate_stats": {
+        "shape": [
+          128,
+          3584
+        ],
+        "dtype": "float32",
+        "size": 458752,
+        "min": -0.23441752791404724,
+        "max": 0.23441752791404724,
+        "mean": 0.002613933989778161,
+        "std": 0.23161780834197998,
+        "abs_max": 0.23441752791404724,
+        "nonzero_count": 458704,
+        "allzero": false,
+        "constant": false,
+        "nan_count": 0,
+        "inf_count": 0
+      },
+      "reference_stats": {
+        "shape": [
+          128,
+          3584
+        ],
+        "dtype": "float32",
+        "size": 458752,
+        "min": -592.0,
+        "max": 176.0,
+        "mean": -0.0056269108317792416,
+        "std": 2.2496511936187744,
+        "abs_max": 592.0,
+        "nonzero_count": 458289,
+        "allzero": false,
+        "constant": false,
+        "nan_count": 0,
+        "inf_count": 0
+      },
+      "case_id": "ramp",
+      "segment": 14,
+      "hf_path": "evidence/hf_boundaries_v11/ramp/layer_14_output.npy",
+      "bpu_path": "evidence/boundary_all_segments_v7/ramp/seg_14_output.npy",
+      "missing": false
+    },
+    {
+      "shape_mismatch": false,
+      "cosine": 0.01868939211065535,
+      "pearson_centered": 0.018722525757934774,
+      "relative_l2": 1.0032416715518293,
+      "mean_abs_error": 0.5109586957017835,
+      "max_abs_error": 603.3875556588173,
+      "candidate_stats": {
+        "shape": [
+          128,
+          3584
+        ],
+        "dtype": "float32",
+        "size": 458752,
+        "min": -0.6124443411827087,
+        "max": 0.43031570315361023,
+        "mean": 0.0015195055166259408,
+        "std": 0.23460674285888672,
+        "abs_max": 0.6124443411827087,
+        "nonzero_count": 458742,
+        "allzero": false,
+        "constant": false,
+        "nan_count": 0,
+        "inf_count": 0
+      },
+      "reference_stats": {
+        "shape": [
+          128,
+          3584
+        ],
+        "dtype": "float32",
+        "size": 458752,
+        "min": -604.0,
+        "max": 178.0,
+        "mean": -0.011610663495957851,
+        "std": 2.313405752182007,
+        "abs_max": 604.0,
+        "nonzero_count": 458296,
+        "allzero": false,
+        "constant": false,
+        "nan_count": 0,
+        "inf_count": 0
+      },
+      "case_id": "ramp",
+      "segment": 15,
+      "hf_path": "evidence/hf_boundaries_v11/ramp/layer_15_output.npy",
+      "bpu_path": "evidence/boundary_all_segments_v7/ramp/seg_15_output.npy",
+      "missing": false
+    },
+    {
+      "shape_mismatch": false,
+      "cosine": 0.02174824941058944,
+      "pearson_centered": 0.021778398896406235,
+      "relative_l2": 1.0029620728765505,
+      "mean_abs_error": 0.5145214281173932,
+      "max_abs_error": 611.2951349020004,
+      "candidate_stats": {
+        "shape": [
+          128,
+          3584
+        ],
+        "dtype": "float32",
+        "size": 458752,
+        "min": -0.7048650979995728,
+        "max": 0.564596951007843,
+        "mean": 0.0013636986259371042,
+        "std": 0.23770169913768768,
+        "abs_max": 0.7048650979995728,
+        "nonzero_count": 458746,
+        "allzero": false,
+        "constant": false,
+        "nan_count": 0,
+        "inf_count": 0
+      },
+      "reference_stats": {
+        "shape": [
+          128,
+          3584
+        ],
+        "dtype": "float32",
+        "size": 458752,
+        "min": -612.0,
+        "max": 180.0,
+        "mean": -0.01201002299785614,
+        "std": 2.3353352546691895,
+        "abs_max": 612.0,
+        "nonzero_count": 458373,
+        "allzero": false,
+        "constant": false,
+        "nan_count": 0,
+        "inf_count": 0
+      },
+      "case_id": "ramp",
+      "segment": 16,
+      "hf_path": "evidence/hf_boundaries_v11/ramp/layer_16_output.npy",
+      "bpu_path": "evidence/boundary_all_segments_v7/ramp/seg_16_output.npy",
+      "missing": false
+    },
+    {
+      "shape_mismatch": false,
+      "cosine": 0.016981757733273522,
+      "pearson_centered": 0.016992814314124794,
+      "relative_l2": 1.0035601152619615,
+      "mean_abs_error": 0.5329747939040063,
+      "max_abs_error": 607.5359523594379,
+      "candidate_stats": {
+        "shape": [
+          128,
+          3584
+        ],
+        "dtype": "float32",
+        "size": 458752,
+        "min": -0.4640476405620575,
+        "max": 0.4640476405620575,
+        "mean": 0.000794940919149667,
+        "std": 0.2405606061220169,
+        "abs_max": 0.4640476405620575,
+        "nonzero_count": 458744,
+        "allzero": false,
+        "constant": false,
+        "nan_count": 0,
+        "inf_count": 0
+      },
+      "reference_stats": {
+        "shape": [
+          128,
+          3584
+        ],
+        "dtype": "float32",
+        "size": 458752,
+        "min": -608.0,
+        "max": 180.0,
+        "mean": -0.007674365770071745,
+        "std": 2.3326268196105957,
+        "abs_max": 608.0,
+        "nonzero_count": 458329,
+        "allzero": false,
+        "constant": false,
+        "nan_count": 0,
+        "inf_count": 0
+      },
+      "case_id": "ramp",
+      "segment": 17,
+      "hf_path": "evidence/hf_boundaries_v11/ramp/layer_17_output.npy",
+      "bpu_path": "evidence/boundary_all_segments_v7/ramp/seg_17_output.npy",
+      "missing": false
+    },
+    {
+      "shape_mismatch": false,
+      "cosine": 0.04897889590158561,
+      "pearson_centered": 0.04897306598253121,
+      "relative_l2": 1.0005611315692706,
+      "mean_abs_error": 0.5385142607123657,
+      "max_abs_error": 602.0264999866486,
+      "candidate_stats": {
+        "shape": [
+          128,
+          3584
+        ],
+        "dtype": "float32",
+        "size": 458752,
+        "min": -1.9735000133514404,
+        "max": 0.7593722343444824,
+        "mean": -0.00034128708648495376,
+        "std": 0.25190526247024536,
+        "abs_max": 1.9735000133514404,
+        "nonzero_count": 458729,
+        "allzero": false,
+        "constant": false,
+        "nan_count": 0,
+        "inf_count": 0
+      },
+      "reference_stats": {
+        "shape": [
+          128,
+          3584
+        ],
+        "dtype": "float32",
+        "size": 458752,
+        "min": -604.0,
+        "max": 180.0,
+        "mean": -0.011029626242816448,
+        "std": 2.3255155086517334,
+        "abs_max": 604.0,
+        "nonzero_count": 458275,
+        "allzero": false,
+        "constant": false,
+        "nan_count": 0,
+        "inf_count": 0
+      },
+      "case_id": "ramp",
+      "segment": 18,
+      "hf_path": "evidence/hf_boundaries_v11/ramp/layer_18_output.npy",
+      "bpu_path": "evidence/boundary_all_segments_v7/ramp/seg_18_output.npy",
+      "missing": false
+    },
+    {
+      "shape_mismatch": false,
+      "cosine": 0.15333940789520126,
+      "pearson_centered": 0.15328685277843074,
+      "relative_l2": 0.9881850891322072,
+      "mean_abs_error": 0.5632420375947119,
+      "max_abs_error": 588.0047783851624,
+      "candidate_stats": {
+        "shape": [
+          128,
+          3584
+        ],
+        "dtype": "float32",
+        "size": 458752,
+        "min": -7.9952216148376465,
+        "max": 2.4518680572509766,
+        "mean": -0.006934323348104954,
+        "std": 0.3429086208343506,
+        "abs_max": 7.9952216148376465,
+        "nonzero_count": 458490,
+        "allzero": false,
+        "constant": false,
+        "nan_count": 0,
+        "inf_count": 0
+      },
+      "reference_stats": {
+        "shape": [
+          128,
+          3584
+        ],
+        "dtype": "float32",
+        "size": 458752,
+        "min": -596.0,
+        "max": 180.0,
+        "mean": -0.009734014049172401,
+        "std": 2.3085076808929443,
+        "abs_max": 596.0,
+        "nonzero_count": 458215,
+        "allzero": false,
+        "constant": false,
+        "nan_count": 0,
+        "inf_count": 0
+      },
+      "case_id": "ramp",
+      "segment": 19,
+      "hf_path": "evidence/hf_boundaries_v11/ramp/layer_19_output.npy",
+      "bpu_path": "evidence/boundary_all_segments_v7/ramp/seg_19_output.npy",
+      "missing": false
+    },
+    {
+      "shape_mismatch": false,
+      "cosine": -0.0667121883297646,
+      "pearson_centered": -0.06667253026008242,
+      "relative_l2": 1.4914712077336842,
+      "mean_abs_error": 1.8513168405109692,
+      "max_abs_error": 571.074800491333,
+      "candidate_stats": {
+        "shape": [
+          128,
+          3584
+        ],
+        "dtype": "float32",
+        "size": 458752,
+        "min": -15.748214721679688,
+        "max": 23.074800491333008,
+        "mean": 0.02253982424736023,
+        "std": 2.259937286376953,
+        "abs_max": 23.074800491333008,
+        "nonzero_count": 458682,
+        "allzero": false,
+        "constant": false,
+        "nan_count": 0,
+        "inf_count": 0
+      },
+      "reference_stats": {
+        "shape": [
+          128,
+          3584
+        ],
+        "dtype": "float32",
+        "size": 458752,
+        "min": -548.0,
+        "max": 168.0,
+        "mean": -0.009485811926424503,
+        "std": 2.169219970703125,
+        "abs_max": 548.0,
+        "nonzero_count": 458325,
+        "allzero": false,
+        "constant": false,
+        "nan_count": 0,
+        "inf_count": 0
+      },
+      "case_id": "ramp",
+      "segment": 20,
+      "hf_path": "evidence/hf_boundaries_v11/ramp/layer_20_output.npy",
+      "bpu_path": "evidence/boundary_all_segments_v7/ramp/seg_20_output.npy",
+      "missing": false
+    },
+    {
+      "shape_mismatch": false,
+      "cosine": -0.02307368580037742,
+      "pearson_centered": -0.023043718332450266,
+      "relative_l2": 1.397217945847223,
+      "mean_abs_error": 1.8625618627104334,
+      "max_abs_error": 550.2804980278015,
+      "candidate_stats": {
+        "shape": [
+          128,
+          3584
+        ],
+        "dtype": "float32",
+        "size": 458752,
+        "min": -6.280498027801514,
+        "max": 6.280498027801514,
+        "mean": 0.00967677216976881,
+        "std": 2.1358649730682373,
+        "abs_max": 6.280498027801514,
+        "nonzero_count": 458683,
+        "allzero": false,
+        "constant": false,
+        "nan_count": 0,
+        "inf_count": 0
+      },
+      "reference_stats": {
+        "shape": [
+          128,
+          3584
+        ],
+        "dtype": "float32",
+        "size": 458752,
+        "min": -544.0,
+        "max": 169.0,
+        "mean": -0.015203646384179592,
+        "std": 2.241136074066162,
+        "abs_max": 544.0,
+        "nonzero_count": 458305,
+        "allzero": false,
+        "constant": false,
+        "nan_count": 0,
+        "inf_count": 0
+      },
+      "case_id": "ramp",
+      "segment": 21,
+      "hf_path": "evidence/hf_boundaries_v11/ramp/layer_21_output.npy",
+      "bpu_path": "evidence/boundary_all_segments_v7/ramp/seg_21_output.npy",
+      "missing": false
+    },
+    {
+      "shape_mismatch": false,
+      "cosine": 0.0037918757385767064,
+      "pearson_centered": 0.003737982152719204,
+      "relative_l2": 12.561802749406503,
+      "mean_abs_error": 25.35777114641877,
+      "max_abs_error": 579.6571846008301,
+      "candidate_stats": {
+        "shape": [
+          128,
+          3584
+        ],
+        "dtype": "float32",
+        "size": 458752,
+        "min": -43.65851593017578,
+        "max": 43.65718460083008,
+        "mean": -0.34665441513061523,
+        "std": 29.379671096801758,
+        "abs_max": 43.65851593017578,
+        "nonzero_count": 458746,
+        "allzero": false,
+        "constant": false,
+        "nan_count": 0,
+        "inf_count": 0
+      },
+      "reference_stats": {
+        "shape": [
+          128,
+          3584
+        ],
+        "dtype": "float32",
+        "size": 458752,
+        "min": -536.0,
+        "max": 171.0,
+        "mean": -0.010774554684758186,
+        "std": 2.34568452835083,
+        "abs_max": 536.0,
+        "nonzero_count": 458302,
+        "allzero": false,
+        "constant": false,
+        "nan_count": 0,
+        "inf_count": 0
+      },
+      "case_id": "ramp",
+      "segment": 22,
+      "hf_path": "evidence/hf_boundaries_v11/ramp/layer_22_output.npy",
+      "bpu_path": "evidence/boundary_all_segments_v7/ramp/seg_22_output.npy",
+      "missing": false
+    },
+    {
+      "shape_mismatch": false,
+      "cosine": 0.005488436562494529,
+      "pearson_centered": 0.005472565970689419,
+      "relative_l2": 5.045126135526519,
+      "mean_abs_error": 11.87531629385085,
+      "max_abs_error": 545.8961086273193,
+      "candidate_stats": {
+        "shape": [
+          128,
+          3584
+        ],
+        "dtype": "float32",
+        "size": 458752,
+        "min": -13.896108627319336,
+        "max": 13.896108627319336,
+        "mean": -0.1205671951174736,
+        "std": 12.457913398742676,
+        "abs_max": 13.896108627319336,
+        "nonzero_count": 458734,
+        "allzero": false,
+        "constant": false,
+        "nan_count": 0,
+        "inf_count": 0
+      },
+      "reference_stats": {
+        "shape": [
+          128,
+          3584
+        ],
+        "dtype": "float32",
+        "size": 458752,
+        "min": -532.0,
+        "max": 170.0,
+        "mean": -0.004195716697722673,
+        "std": 2.5166008472442627,
+        "abs_max": 532.0,
+        "nonzero_count": 458354,
+        "allzero": false,
+        "constant": false,
+        "nan_count": 0,
+        "inf_count": 0
+      },
+      "case_id": "ramp",
+      "segment": 23,
+      "hf_path": "evidence/hf_boundaries_v11/ramp/layer_23_output.npy",
+      "bpu_path": "evidence/boundary_all_segments_v7/ramp/seg_23_output.npy",
+      "missing": false
+    },
+    {
+      "shape_mismatch": false,
+      "cosine": 0.013269355975700073,
+      "pearson_centered": 0.013242166178776134,
+      "relative_l2": 4.624667779887283,
+      "mean_abs_error": 11.884501226348236,
+      "max_abs_error": 509.02023816108704,
+      "candidate_stats": {
+        "shape": [
+          128,
+          3584
+        ],
+        "dtype": "float32",
+        "size": 458752,
+        "min": -16.745126724243164,
+        "max": 16.74461555480957,
+        "mean": -0.12607745826244354,
+        "std": 12.457075119018555,
+        "abs_max": 16.745126724243164,
+        "nonzero_count": 458750,
+        "allzero": false,
+        "constant": false,
+        "nan_count": 0,
+        "inf_count": 0
+      },
+      "reference_stats": {
+        "shape": [
+          128,
+          3584
+        ],
+        "dtype": "float32",
+        "size": 458752,
+        "min": -512.0,
+        "max": 166.0,
+        "mean": -0.0075887455604970455,
+        "std": 2.7509188652038574,
+        "abs_max": 512.0,
+        "nonzero_count": 458371,
+        "allzero": false,
+        "constant": false,
+        "nan_count": 0,
+        "inf_count": 0
+      },
+      "case_id": "ramp",
+      "segment": 24,
+      "hf_path": "evidence/hf_boundaries_v11/ramp/layer_24_output.npy",
+      "bpu_path": "evidence/boundary_all_segments_v7/ramp/seg_24_output.npy",
+      "missing": false
+    },
+    {
+      "shape_mismatch": false,
+      "cosine": -0.00018872944499410054,
+      "pearson_centered": -0.00018010884037907457,
+      "relative_l2": 66.24878027082903,
+      "mean_abs_error": 194.3679758769965,
+      "max_abs_error": 810.4108276367188,
+      "candidate_stats": {
+        "shape": [
+          128,
+          3584
+        ],
+        "dtype": "float32",
+        "size": 458752,
+        "min": -258.418701171875,
+        "max": 258.41082763671875,
+        "mean": 1.0079923868179321,
+        "std": 211.82754516601562,
+        "abs_max": 258.418701171875,
+        "nonzero_count": 458749,
+        "allzero": false,
+        "constant": false,
+        "nan_count": 0,
+        "inf_count": 0
+      },
+      "reference_stats": {
+        "shape": [
+          128,
+          3584
+        ],
+        "dtype": "float32",
+        "size": 458752,
+        "min": -604.0,
+        "max": 169.0,
+        "mean": -0.0057948981411755085,
+        "std": 3.1978602409362793,
+        "abs_max": 604.0,
+        "nonzero_count": 458424,
+        "allzero": false,
+        "constant": false,
+        "nan_count": 0,
+        "inf_count": 0
+      },
+      "case_id": "ramp",
+      "segment": 25,
+      "hf_path": "evidence/hf_boundaries_v11/ramp/layer_25_output.npy",
+      "bpu_path": "evidence/boundary_all_segments_v7/ramp/seg_25_output.npy",
+      "missing": false
+    },
+    {
+      "shape_mismatch": false,
+      "cosine": -0.003305179040235372,
+      "pearson_centered": -0.003270211483324189,
+      "relative_l2": 4.6680876958788895,
+      "mean_abs_error": 16.079367248284424,
+      "max_abs_error": 514.2967872619629,
+      "candidate_stats": {
+        "shape": [
+          128,
+          3584
+        ],
+        "dtype": "float32",
+        "size": 458752,
+        "min": -16.29678726196289,
+        "max": 16.29678726196289,
+        "mean": 0.08678288012742996,
+        "std": 16.120622634887695,
+        "abs_max": 16.29678726196289,
+        "nonzero_count": 458752,
+        "allzero": false,
+        "constant": false,
+        "nan_count": 0,
+        "inf_count": 0
+      },
+      "reference_stats": {
+        "shape": [
+          128,
+          3584
+        ],
+        "dtype": "float32",
+        "size": 458752,
+        "min": -498.0,
+        "max": 123.0,
+        "mean": -0.023058593273162842,
+        "std": 3.5379815101623535,
+        "abs_max": 498.0,
+        "nonzero_count": 458379,
+        "allzero": false,
+        "constant": false,
+        "nan_count": 0,
+        "inf_count": 0
+      },
+      "case_id": "ramp",
+      "segment": 26,
+      "hf_path": "evidence/hf_boundaries_v11/ramp/layer_26_output.npy",
+      "bpu_path": "evidence/boundary_all_segments_v7/ramp/seg_26_output.npy",
+      "missing": false
+    },
+    {
+      "shape_mismatch": true,
+      "candidate_shape": [
+        1,
+        152064
+      ],
+      "reference_shape": [
+        128,
+        3584
+      ],
+      "case_id": "ramp",
+      "segment": 27,
+      "hf_path": "evidence/hf_boundaries_v11/ramp/layer_27_output.npy",
+      "bpu_path": "evidence/boundary_all_segments_v7/ramp/seg_27_output.npy",
+      "missing": false
+    },
+    {
+      "shape_mismatch": false,
+      "cosine": 0.2041439565167373,
+      "pearson_centered": 0.20413989847651026,
+      "relative_l2": 0.9816262682513912,
+      "mean_abs_error": 0.13940249921972472,
+      "max_abs_error": 1.8924031592905521,
+      "candidate_stats": {
+        "shape": [
+          128,
+          3584
+        ],
+        "dtype": "float32",
+        "size": 458752,
+        "min": -0.6131000518798828,
+        "max": 0.8125561475753784,
+        "mean": -0.00011516363883856684,
+        "std": 0.053335294127464294,
+        "abs_max": 0.8125561475753784,
+        "nonzero_count": 458480,
+        "allzero": false,
+        "constant": false,
+        "nan_count": 0,
+        "inf_count": 0
+      },
+      "reference_stats": {
+        "shape": [
+          128,
+          3584
+        ],
+        "dtype": "float32",
+        "size": 458752,
+        "min": -1.9375,
+        "max": 1.796875,
+        "mean": -0.00045565751497633755,
+        "std": 0.1927524358034134,
+        "abs_max": 1.9375,
+        "nonzero_count": 458255,
+        "allzero": false,
+        "constant": false,
+        "nan_count": 0,
+        "inf_count": 0
+      },
+      "case_id": "short_chinese_prompt_padded",
+      "segment": 0,
+      "hf_path": "evidence/hf_boundaries_v11/short_chinese_prompt_padded/layer_00_output.npy",
+      "bpu_path": "evidence/boundary_all_segments_v7/short_chinese_prompt_padded/seg_00_output.npy",
+      "missing": false
+    },
+    {
+      "shape_mismatch": false,
+      "cosine": 0.24998038012138085,
+      "pearson_centered": 0.2500921954195781,
+      "relative_l2": 0.9760521191182804,
+      "mean_abs_error": 0.16849795023121686,
+      "max_abs_error": 5.981375694274902,
+      "candidate_stats": {
+        "shape": [
+          128,
+          3584
+        ],
+        "dtype": "float32",
+        "size": 458752,
+        "min": -0.6892396211624146,
+        "max": 0.6892396211624146,
+        "mean": -0.001159852952696383,
+        "std": 0.0865679457783699,
+        "abs_max": 0.6892396211624146,
+        "nonzero_count": 458592,
+        "allzero": false,
+        "constant": false,
+        "nan_count": 0,
+        "inf_count": 0
+      },
+      "reference_stats": {
+        "shape": [
+          128,
+          3584
+        ],
+        "dtype": "float32",
+        "size": 458752,
+        "min": -6.34375,
+        "max": 2.515625,
+        "mean": 0.0014618440764024854,
+        "std": 0.2320156991481781,
+        "abs_max": 6.34375,
+        "nonzero_count": 458339,
+        "allzero": false,
+        "constant": false,
+        "nan_count": 0,
+        "inf_count": 0
+      },
+      "case_id": "short_chinese_prompt_padded",
+      "segment": 1,
+      "hf_path": "evidence/hf_boundaries_v11/short_chinese_prompt_padded/layer_01_output.npy",
+      "bpu_path": "evidence/boundary_all_segments_v7/short_chinese_prompt_padded/seg_01_output.npy",
+      "missing": false
+    },
+    {
+      "shape_mismatch": false,
+      "cosine": 0.22109842162872892,
+      "pearson_centered": 0.2211319521419074,
+      "relative_l2": 0.9831935164884199,
+      "mean_abs_error": 0.19126219477356393,
+      "max_abs_error": 4.70072814822197,
+      "candidate_stats": {
+        "shape": [
+          128,
+          3584
+        ],
+        "dtype": "float32",
+        "size": 458752,
+        "min": -0.4555218517780304,
+        "max": 0.4555218517780304,
+        "mean": -0.0020932035986334085,
+        "std": 0.0901661217212677,
+        "abs_max": 0.4555218517780304,
+        "nonzero_count": 454216,
+        "allzero": false,
+        "constant": false,
+        "nan_count": 0,
+        "inf_count": 0
+      },
+      "reference_stats": {
+        "shape": [
+          128,
+          3584
+        ],
+        "dtype": "float32",
+        "size": 458752,
+        "min": -5.15625,
+        "max": 2.78125,
+        "mean": -0.0002941264829132706,
+        "std": 0.2608058750629425,
+        "abs_max": 5.15625,
+        "nonzero_count": 458416,
+        "allzero": false,
+        "constant": false,
+        "nan_count": 0,
+        "inf_count": 0
+      },
+      "case_id": "short_chinese_prompt_padded",
+      "segment": 2,
+      "hf_path": "evidence/hf_boundaries_v11/short_chinese_prompt_padded/layer_02_output.npy",
+      "bpu_path": "evidence/boundary_all_segments_v7/short_chinese_prompt_padded/seg_02_output.npy",
+      "missing": false
+    },
+    {
+      "shape_mismatch": false,
+      "cosine": 0.15013986400130552,
+      "pearson_centered": 0.1502676183761956,
+      "relative_l2": 1.0267341166508241,
+      "mean_abs_error": 0.25246111083544875,
+      "max_abs_error": 4.391252338886261,
+      "candidate_stats": {
+        "shape": [
+          128,
+          3584
+        ],
+        "dtype": "float32",
+        "size": 458752,
+        "min": -0.6256224513053894,
+        "max": 0.6256224513053894,
+        "mean": -0.0011505845468491316,
+        "std": 0.13998335599899292,
+        "abs_max": 0.6256224513053894,
+        "nonzero_count": 423524,
+        "allzero": false,
+        "constant": false,
+        "nan_count": 0,
+        "inf_count": 0
+      },
+      "reference_stats": {
+        "shape": [
+          128,
+          3584
+        ],
+        "dtype": "float32",
+        "size": 458752,
+        "min": -4.96875,
+        "max": 3.328125,
+        "mean": 0.004361282102763653,
+        "std": 0.32771021127700806,
+        "abs_max": 4.96875,
+        "nonzero_count": 458330,
+        "allzero": false,
+        "constant": false,
+        "nan_count": 0,
+        "inf_count": 0
+      },
+      "case_id": "short_chinese_prompt_padded",
+      "segment": 3,
+      "hf_path": "evidence/hf_boundaries_v11/short_chinese_prompt_padded/layer_03_output.npy",
+      "bpu_path": "evidence/boundary_all_segments_v7/short_chinese_prompt_padded/seg_03_output.npy",
+      "missing": false
+    },
+    {
+      "shape_mismatch": false,
+      "cosine": 0.15635208281348123,
+      "pearson_centered": 0.15648034026863245,
+      "relative_l2": 1.003050550549726,
+      "mean_abs_error": 0.3025492810109322,
+      "max_abs_error": 6.185617595911026,
+      "candidate_stats": {
+        "shape": [
+          128,
+          3584
+        ],
+        "dtype": "float32",
+        "size": 458752,
+        "min": -0.439382404088974,
+        "max": 0.439382404088974,
+        "mean": -0.001245967810973525,
+        "std": 0.138799786567688,
+        "abs_max": 0.439382404088974,
+        "nonzero_count": 453069,
+        "allzero": false,
+        "constant": false,
+        "nan_count": 0,
+        "inf_count": 0
+      },
+      "reference_stats": {
+        "shape": [
+          128,
+          3584
+        ],
+        "dtype": "float32",
+        "size": 458752,
+        "min": -6.625,
+        "max": 3.6875,
+        "mean": 0.0051443250849843025,
+        "std": 0.419122576713562,
+        "abs_max": 6.625,
+        "nonzero_count": 458311,
+        "allzero": false,
+        "constant": false,
+        "nan_count": 0,
+        "inf_count": 0
+      },
+      "case_id": "short_chinese_prompt_padded",
+      "segment": 4,
+      "hf_path": "evidence/hf_boundaries_v11/short_chinese_prompt_padded/layer_04_output.npy",
+      "bpu_path": "evidence/boundary_all_segments_v7/short_chinese_prompt_padded/seg_04_output.npy",
+      "missing": false
+    },
+    {
+      "shape_mismatch": false,
+      "cosine": 0.21899316181252543,
+      "pearson_centered": 0.21905003169721532,
+      "relative_l2": 0.9826145356539727,
+      "mean_abs_error": 0.3365033522634156,
+      "max_abs_error": 10.309591889381409,
+      "candidate_stats": {
+        "shape": [
+          128,
+          3584
+        ],
+        "dtype": "float32",
+        "size": 458752,
+        "min": -1.3154081106185913,
+        "max": 0.7408249378204346,
+        "mean": -0.0018281947122886777,
+        "std": 0.1607726812362671,
+        "abs_max": 1.3154081106185913,
+        "nonzero_count": 455900,
+        "allzero": false,
+        "constant": false,
+        "nan_count": 0,
+        "inf_count": 0
+      },
+      "reference_stats": {
+        "shape": [
+          128,
+          3584
+        ],
+        "dtype": "float32",
+        "size": 458752,
+        "min": -11.625,
+        "max": 4.46875,
+        "mean": 0.0017411384033039212,
+        "std": 0.47975051403045654,
+        "abs_max": 11.625,
+        "nonzero_count": 458407,
+        "allzero": false,
+        "constant": false,
+        "nan_count": 0,
+        "inf_count": 0
+      },
+      "case_id": "short_chinese_prompt_padded",
+      "segment": 5,
+      "hf_path": "evidence/hf_boundaries_v11/short_chinese_prompt_padded/layer_05_output.npy",
+      "bpu_path": "evidence/boundary_all_segments_v7/short_chinese_prompt_padded/seg_05_output.npy",
+      "missing": false
+    },
+    {
+      "shape_mismatch": false,
+      "cosine": 0.15754703165567144,
+      "pearson_centered": 0.15769228973611585,
+      "relative_l2": 0.9980393810515993,
+      "mean_abs_error": 0.37766443351336854,
+      "max_abs_error": 16.485661387443542,
+      "candidate_stats": {
+        "shape": [
+          128,
+          3584
+        ],
+        "dtype": "float32",
+        "size": 458752,
+        "min": -0.6393386125564575,
+        "max": 0.6393386125564575,
+        "mean": -0.0015594115247949958,
+        "std": 0.16917122900485992,
+        "abs_max": 0.6393386125564575,
+        "nonzero_count": 458211,
+        "allzero": false,
+        "constant": false,
+        "nan_count": 0,
+        "inf_count": 0
+      },
+      "reference_stats": {
+        "shape": [
+          128,
+          3584
+        ],
+        "dtype": "float32",
+        "size": 458752,
+        "min": -17.125,
+        "max": 6.25,
+        "mean": 0.0075471713207662106,
+        "std": 0.5599051117897034,
+        "abs_max": 17.125,
+        "nonzero_count": 458214,
+        "allzero": false,
+        "constant": false,
+        "nan_count": 0,
+        "inf_count": 0
+      },
+      "case_id": "short_chinese_prompt_padded",
+      "segment": 6,
+      "hf_path": "evidence/hf_boundaries_v11/short_chinese_prompt_padded/layer_06_output.npy",
+      "bpu_path": "evidence/boundary_all_segments_v7/short_chinese_prompt_padded/seg_06_output.npy",
+      "missing": false
+    },
+    {
+      "shape_mismatch": false,
+      "cosine": 0.19446052092141583,
+      "pearson_centered": 0.19448433316436034,
+      "relative_l2": 0.9834889614955592,
+      "mean_abs_error": 0.4221767373077305,
+      "max_abs_error": 28.262270212173462,
+      "candidate_stats": {
+        "shape": [
+          128,
+          3584
+        ],
+        "dtype": "float32",
+        "size": 458752,
+        "min": -1.362729787826538,
+        "max": 0.9110425114631653,
+        "mean": -0.0030747076962143183,
+        "std": 0.1829857975244522,
+        "abs_max": 1.362729787826538,
+        "nonzero_count": 458382,
+        "allzero": false,
+        "constant": false,
+        "nan_count": 0,
+        "inf_count": 0
+      },
+      "reference_stats": {
+        "shape": [
+          128,
+          3584
+        ],
+        "dtype": "float32",
+        "size": 458752,
+        "min": -29.625,
+        "max": 6.5625,
+        "mean": -0.00014934821228962392,
+        "std": 0.6889657974243164,
+        "abs_max": 29.625,
+        "nonzero_count": 458397,
+        "allzero": false,
+        "constant": false,
+        "nan_count": 0,
+        "inf_count": 0
+      },
+      "case_id": "short_chinese_prompt_padded",
+      "segment": 7,
+      "hf_path": "evidence/hf_boundaries_v11/short_chinese_prompt_padded/layer_07_output.npy",
+      "bpu_path": "evidence/boundary_all_segments_v7/short_chinese_prompt_padded/seg_07_output.npy",
+      "missing": false
+    },
+    {
+      "shape_mismatch": false,
+      "cosine": 0.11786861058899634,
+      "pearson_centered": 0.11783913050600502,
+      "relative_l2": 0.9986925433306562,
+      "mean_abs_error": 0.4754216102630396,
+      "max_abs_error": 34.96984022855759,
+      "candidate_stats": {
+        "shape": [
+          128,
+          3584
+        ],
+        "dtype": "float32",
+        "size": 458752,
+        "min": -0.5301597714424133,
+        "max": 0.5301597714424133,
+        "mean": -0.0034050128888338804,
+        "std": 0.17984451353549957,
+        "abs_max": 0.5301597714424133,
+        "nonzero_count": 458109,
+        "allzero": false,
+        "constant": false,
+        "nan_count": 0,
+        "inf_count": 0
+      },
+      "reference_stats": {
+        "shape": [
+          128,
+          3584
+        ],
+        "dtype": "float32",
+        "size": 458752,
+        "min": -35.5,
+        "max": 9.25,
+        "mean": -0.002163725672289729,
+        "std": 0.8027493953704834,
+        "abs_max": 35.5,
+        "nonzero_count": 458415,
+        "allzero": false,
+        "constant": false,
+        "nan_count": 0,
+        "inf_count": 0
+      },
+      "case_id": "short_chinese_prompt_padded",
+      "segment": 8,
+      "hf_path": "evidence/hf_boundaries_v11/short_chinese_prompt_padded/layer_08_output.npy",
+      "bpu_path": "evidence/boundary_all_segments_v7/short_chinese_prompt_padded/seg_08_output.npy",
+      "missing": false
+    },
+    {
+      "shape_mismatch": false,
+      "cosine": 0.20817091202260526,
+      "pearson_centered": 0.20823486605837327,
+      "relative_l2": 0.9786230954685289,
+      "mean_abs_error": 0.42301920523221176,
+      "max_abs_error": 40.15895199775696,
+      "candidate_stats": {
+        "shape": [
+          128,
+          3584
+        ],
+        "dtype": "float32",
+        "size": 458752,
+        "min": -1.341048002243042,
+        "max": 0.8692174553871155,
+        "mean": -0.004146561026573181,
+        "std": 0.1894211620092392,
+        "abs_max": 1.341048002243042,
+        "nonzero_count": 458674,
+        "allzero": false,
+        "constant": false,
+        "nan_count": 0,
+        "inf_count": 0
+      },
+      "reference_stats": {
+        "shape": [
+          128,
+          3584
+        ],
+        "dtype": "float32",
+        "size": 458752,
+        "min": -41.5,
+        "max": 9.75,
+        "mean": 0.0005054657231085002,
+        "std": 0.7881516814231873,
+        "abs_max": 41.5,
+        "nonzero_count": 458143,
+        "allzero": false,
+        "constant": false,
+        "nan_count": 0,
+        "inf_count": 0
+      },
+      "case_id": "short_chinese_prompt_padded",
+      "segment": 9,
+      "hf_path": "evidence/hf_boundaries_v11/short_chinese_prompt_padded/layer_09_output.npy",
+      "bpu_path": "evidence/boundary_all_segments_v7/short_chinese_prompt_padded/seg_09_output.npy",
+      "missing": false
+    },
+    {
+      "shape_mismatch": false,
+      "cosine": 0.18354505880450436,
+      "pearson_centered": 0.1836249262912444,
+      "relative_l2": 0.9908085231704507,
+      "mean_abs_error": 0.381060050784844,
+      "max_abs_error": 41.9868528842926,
+      "candidate_stats": {
+        "shape": [
+          128,
+          3584
+        ],
+        "dtype": "float32",
+        "size": 458752,
+        "min": -1.0131471157073975,
+        "max": 1.0131471157073975,
+        "mean": -0.003857441246509552,
+        "std": 0.22030353546142578,
+        "abs_max": 1.0131471157073975,
+        "nonzero_count": 457975,
+        "allzero": false,
+        "constant": false,
+        "nan_count": 0,
+        "inf_count": 0
+      },
+      "reference_stats": {
+        "shape": [
+          128,
+          3584
+        ],
+        "dtype": "float32",
+        "size": 458752,
+        "min": -43.0,
+        "max": 8.5,
+        "mean": 0.002084551379084587,
+        "std": 0.7163016200065613,
+        "abs_max": 43.0,
+        "nonzero_count": 458303,
+        "allzero": false,
+        "constant": false,
+        "nan_count": 0,
+        "inf_count": 0
+      },
+      "case_id": "short_chinese_prompt_padded",
+      "segment": 10,
+      "hf_path": "evidence/hf_boundaries_v11/short_chinese_prompt_padded/layer_10_output.npy",
+      "bpu_path": "evidence/boundary_all_segments_v7/short_chinese_prompt_padded/seg_10_output.npy",
+      "missing": false
+    },
+    {
+      "shape_mismatch": false,
+      "cosine": -0.17245319878923715,
+      "pearson_centered": -0.17245245956736996,
+      "relative_l2": 6.599244177828413,
+      "mean_abs_error": 4.046333736521567,
+      "max_abs_error": 202.6661148071289,
+      "candidate_stats": {
+        "shape": [
+          128,
+          3584
+        ],
+        "dtype": "float32",
+        "size": 458752,
+        "min": -25.417001724243164,
+        "max": 79.6661148071289,
+        "mean": 0.01069381833076477,
+        "std": 5.522382736206055,
+        "abs_max": 79.6661148071289,
+        "nonzero_count": 458582,
+        "allzero": false,
+        "constant": false,
+        "nan_count": 0,
+        "inf_count": 0
+      },
+      "reference_stats": {
+        "shape": [
+          128,
+          3584
+        ],
+        "dtype": "float32",
+        "size": 458752,
+        "min": -123.0,
+        "max": 36.0,
+        "mean": -0.0004892450524494052,
+        "std": 0.8692760467529297,
+        "abs_max": 123.0,
+        "nonzero_count": 458384,
+        "allzero": false,
+        "constant": false,
+        "nan_count": 0,
+        "inf_count": 0
+      },
+      "case_id": "short_chinese_prompt_padded",
+      "segment": 11,
+      "hf_path": "evidence/hf_boundaries_v11/short_chinese_prompt_padded/layer_11_output.npy",
+      "bpu_path": "evidence/boundary_all_segments_v7/short_chinese_prompt_padded/seg_11_output.npy",
+      "missing": false
+    },
+    {
+      "shape_mismatch": false,
+      "cosine": 0.030632160791163314,
+      "pearson_centered": 0.030749327846815774,
+      "relative_l2": 14.463712119856893,
+      "mean_abs_error": 14.61459401178409,
+      "max_abs_error": 189.37305068969727,
+      "candidate_stats": {
+        "shape": [
+          128,
+          3584
+        ],
+        "dtype": "float32",
+        "size": 458752,
+        "min": -34.12774658203125,
+        "max": 34.126705169677734,
+        "mean": 0.3845466077327728,
+        "std": 17.749155044555664,
+        "abs_max": 34.12774658203125,
+        "nonzero_count": 458744,
+        "allzero": false,
+        "constant": false,
+        "nan_count": 0,
+        "inf_count": 0
+      },
+      "reference_stats": {
+        "shape": [
+          128,
+          3584
+        ],
+        "dtype": "float32",
+        "size": 458752,
+        "min": -222.0,
+        "max": 55.0,
+        "mean": -0.006210104562342167,
+        "std": 1.2277580499649048,
+        "abs_max": 222.0,
+        "nonzero_count": 458268,
+        "allzero": false,
+        "constant": false,
+        "nan_count": 0,
+        "inf_count": 0
+      },
+      "case_id": "short_chinese_prompt_padded",
+      "segment": 12,
+      "hf_path": "evidence/hf_boundaries_v11/short_chinese_prompt_padded/layer_12_output.npy",
+      "bpu_path": "evidence/boundary_all_segments_v7/short_chinese_prompt_padded/seg_12_output.npy",
+      "missing": false
+    },
+    {
+      "shape_mismatch": false,
+      "cosine": 0.011818082885118437,
+      "pearson_centered": 0.01175660547066753,
+      "relative_l2": 2.5934265310689972,
+      "mean_abs_error": 3.317976275541175,
+      "max_abs_error": 262.5944027900696,
+      "candidate_stats": {
+        "shape": [
+          128,
+          3584
+        ],
+        "dtype": "float32",
+        "size": 458752,
+        "min": -5.40559720993042,
+        "max": 5.405432224273682,
+        "mean": -0.037023745477199554,
+        "std": 3.704967975616455,
+        "abs_max": 5.40559720993042,
+        "nonzero_count": 458744,
+        "allzero": false,
+        "constant": false,
+        "nan_count": 0,
+        "inf_count": 0
+      },
+      "reference_stats": {
+        "shape": [
+          128,
+          3584
+        ],
+        "dtype": "float32",
+        "size": 458752,
+        "min": -268.0,
+        "max": 67.0,
+        "mean": -0.009605162777006626,
+        "std": 1.5407507419586182,
+        "abs_max": 268.0,
+        "nonzero_count": 458318,
+        "allzero": false,
+        "constant": false,
+        "nan_count": 0,
+        "inf_count": 0
+      },
+      "case_id": "short_chinese_prompt_padded",
+      "segment": 13,
+      "hf_path": "evidence/hf_boundaries_v11/short_chinese_prompt_padded/layer_13_output.npy",
+      "bpu_path": "evidence/boundary_all_segments_v7/short_chinese_prompt_padded/seg_13_output.npy",
+      "missing": false
+    },
+    {
+      "shape_mismatch": false,
+      "cosine": 0.008564180094026149,
+      "pearson_centered": 0.008522903895346962,
+      "relative_l2": 1.0091227234289764,
+      "mean_abs_error": 0.455294482400817,
+      "max_abs_error": 277.76558247208595,
+      "candidate_stats": {
+        "shape": [
+          128,
+          3584
+        ],
+        "dtype": "float32",
+        "size": 458752,
+        "min": -0.23441752791404724,
+        "max": 0.23441752791404724,
+        "mean": -0.002822923706844449,
+        "std": 0.23167279362678528,
+        "abs_max": 0.23441752791404724,
+        "nonzero_count": 458719,
+        "allzero": false,
+        "constant": false,
+        "nan_count": 0,
+        "inf_count": 0
+      },
+      "reference_stats": {
+        "shape": [
+          128,
+          3584
+        ],
+        "dtype": "float32",
+        "size": 458752,
+        "min": -278.0,
+        "max": 68.5,
+        "mean": -0.005532536190003157,
+        "std": 1.6065140962600708,
+        "abs_max": 278.0,
+        "nonzero_count": 458259,
+        "allzero": false,
+        "constant": false,
+        "nan_count": 0,
+        "inf_count": 0
+      },
+      "case_id": "short_chinese_prompt_padded",
+      "segment": 14,
+      "hf_path": "evidence/hf_boundaries_v11/short_chinese_prompt_padded/layer_14_output.npy",
+      "bpu_path": "evidence/boundary_all_segments_v7/short_chinese_prompt_padded/seg_14_output.npy",
+      "missing": false
+    },
+    {
+      "shape_mismatch": false,
+      "cosine": 0.03109992515711929,
+      "pearson_centered": 0.031020592347250506,
+      "relative_l2": 1.0052786788403267,
+      "mean_abs_error": 0.46869110366596345,
+      "max_abs_error": 289.3875556588173,
+      "candidate_stats": {
+        "shape": [
+          128,
+          3584
+        ],
+        "dtype": "float32",
+        "size": 458752,
+        "min": -0.6124443411827087,
+        "max": 0.43031570315361023,
+        "mean": -0.003917454741895199,
+        "std": 0.23491892218589783,
+        "abs_max": 0.6124443411827087,
+        "nonzero_count": 458744,
+        "allzero": false,
+        "constant": false,
+        "nan_count": 0,
+        "inf_count": 0
+      },
+      "reference_stats": {
+        "shape": [
+          128,
+          3584
+        ],
+        "dtype": "float32",
+        "size": 458752,
+        "min": -290.0,
+        "max": 69.0,
+        "mean": -0.008545284159481525,
+        "std": 1.6953742504119873,
+        "abs_max": 290.0,
+        "nonzero_count": 458370,
+        "allzero": false,
+        "constant": false,
+        "nan_count": 0,
+        "inf_count": 0
+      },
+      "case_id": "short_chinese_prompt_padded",
+      "segment": 15,
+      "hf_path": "evidence/hf_boundaries_v11/short_chinese_prompt_padded/layer_15_output.npy",
+      "bpu_path": "evidence/boundary_all_segments_v7/short_chinese_prompt_padded/seg_15_output.npy",
+      "missing": false
+    },
+    {
+      "shape_mismatch": false,
+      "cosine": 0.03574863366458366,
+      "pearson_centered": 0.035717530250951576,
+      "relative_l2": 1.0046971268095672,
+      "mean_abs_error": 0.483900382351566,
+      "max_abs_error": 293.2951349020004,
+      "candidate_stats": {
+        "shape": [
+          128,
+          3584
+        ],
+        "dtype": "float32",
+        "size": 458752,
+        "min": -0.7048650979995728,
+        "max": 0.564596951007843,
+        "mean": -0.004073567688465118,
+        "std": 0.2381768822669983,
+        "abs_max": 0.7048650979995728,
+        "nonzero_count": 458745,
+        "allzero": false,
+        "constant": false,
+        "nan_count": 0,
+        "inf_count": 0
+      },
+      "reference_stats": {
+        "shape": [
+          128,
+          3584
+        ],
+        "dtype": "float32",
+        "size": 458752,
+        "min": -294.0,
+        "max": 70.0,
+        "mean": -0.0036443364806473255,
+        "std": 1.7117570638656616,
+        "abs_max": 294.0,
+        "nonzero_count": 458405,
+        "allzero": false,
+        "constant": false,
+        "nan_count": 0,
+        "inf_count": 0
+      },
+      "case_id": "short_chinese_prompt_padded",
+      "segment": 16,
+      "hf_path": "evidence/hf_boundaries_v11/short_chinese_prompt_padded/layer_16_output.npy",
+      "bpu_path": "evidence/boundary_all_segments_v7/short_chinese_prompt_padded/seg_16_output.npy",
+      "missing": false
+    },
+    {
+      "shape_mismatch": false,
+      "cosine": 0.019962646726854504,
+      "pearson_centered": 0.019923785377453852,
+      "relative_l2": 1.0074563151594607,
+      "mean_abs_error": 0.5034017514935609,
+      "max_abs_error": 289.53595235943794,
+      "candidate_stats": {
+        "shape": [
+          128,
+          3584
+        ],
+        "dtype": "float32",
+        "size": 458752,
+        "min": -0.4640476405620575,
+        "max": 0.4640476405620575,
+        "mean": -0.004595791455358267,
+        "std": 0.24104143679141998,
+        "abs_max": 0.4640476405620575,
+        "nonzero_count": 458746,
+        "allzero": false,
+        "constant": false,
+        "nan_count": 0,
+        "inf_count": 0
+      },
+      "reference_stats": {
+        "shape": [
+          128,
+          3584
+        ],
+        "dtype": "float32",
+        "size": 458752,
+        "min": -290.0,
+        "max": 69.5,
+        "mean": -0.003737259190529585,
+        "std": 1.6750681400299072,
+        "abs_max": 290.0,
+        "nonzero_count": 458381,
+        "allzero": false,
+        "constant": false,
+        "nan_count": 0,
+        "inf_count": 0
+      },
+      "case_id": "short_chinese_prompt_padded",
+      "segment": 17,
+      "hf_path": "evidence/hf_boundaries_v11/short_chinese_prompt_padded/layer_17_output.npy",
+      "bpu_path": "evidence/boundary_all_segments_v7/short_chinese_prompt_padded/seg_17_output.npy",
+      "missing": false
+    },
+    {
+      "shape_mismatch": false,
+      "cosine": 0.08953903174778201,
+      "pearson_centered": 0.08952196905760149,
+      "relative_l2": 0.9980465171583403,
+      "mean_abs_error": 0.5119468838209961,
+      "max_abs_error": 284.02649998664856,
+      "candidate_stats": {
+        "shape": [
+          128,
+          3584
+        ],
+        "dtype": "float32",
+        "size": 458752,
+        "min": -1.9735000133514404,
+        "max": 0.7593722343444824,
+        "mean": -0.005731985904276371,
+        "std": 0.252582311630249,
+        "abs_max": 1.9735000133514404,
+        "nonzero_count": 458738,
+        "allzero": false,
+        "constant": false,
+        "nan_count": 0,
+        "inf_count": 0
+      },
+      "reference_stats": {
+        "shape": [
+          128,
+          3584
+        ],
+        "dtype": "float32",
+        "size": 458752,
+        "min": -286.0,
+        "max": 69.0,
+        "mean": -0.002916306257247925,
+        "std": 1.643978476524353,
+        "abs_max": 286.0,
+        "nonzero_count": 458357,
+        "allzero": false,
+        "constant": false,
+        "nan_count": 0,
+        "inf_count": 0
+      },
+      "case_id": "short_chinese_prompt_padded",
+      "segment": 18,
+      "hf_path": "evidence/hf_boundaries_v11/short_chinese_prompt_padded/layer_18_output.npy",
+      "bpu_path": "evidence/boundary_all_segments_v7/short_chinese_prompt_padded/seg_18_output.npy",
+      "missing": false
+    },
+    {
+      "shape_mismatch": false,
+      "cosine": 0.2832861203349702,
+      "pearson_centered": 0.28337612001704,
+      "relative_l2": 0.961493645480387,
+      "mean_abs_error": 0.5556747172435476,
+      "max_abs_error": 270.00477838516235,
+      "candidate_stats": {
+        "shape": [
+          128,
+          3584
+        ],
+        "dtype": "float32",
+        "size": 458752,
+        "min": -7.9952216148376465,
+        "max": 2.4518680572509766,
+        "mean": -0.012325363233685493,
+        "std": 0.3434344530105591,
+        "abs_max": 7.9952216148376465,
+        "nonzero_count": 458527,
+        "allzero": false,
+        "constant": false,
+        "nan_count": 0,
+        "inf_count": 0
+      },
+      "reference_stats": {
+        "shape": [
+          128,
+          3584
+        ],
+        "dtype": "float32",
+        "size": 458752,
+        "min": -278.0,
+        "max": 68.5,
+        "mean": -0.0041651250794529915,
+        "std": 1.601549506187439,
+        "abs_max": 278.0,
+        "nonzero_count": 458358,
+        "allzero": false,
+        "constant": false,
+        "nan_count": 0,
+        "inf_count": 0
+      },
+      "case_id": "short_chinese_prompt_padded",
+      "segment": 19,
+      "hf_path": "evidence/hf_boundaries_v11/short_chinese_prompt_padded/layer_19_output.npy",
+      "bpu_path": "evidence/boundary_all_segments_v7/short_chinese_prompt_padded/seg_19_output.npy",
+      "missing": false
+    },
+    {
+      "shape_mismatch": false,
+      "cosine": -0.09549111749718045,
+      "pearson_centered": -0.09550576957550048,
+      "relative_l2": 1.8710416065672022,
+      "mean_abs_error": 1.8465834479548424,
+      "max_abs_error": 271.074800491333,
+      "candidate_stats": {
+        "shape": [
+          128,
+          3584
+        ],
+        "dtype": "float32",
+        "size": 458752,
+        "min": -13.960229873657227,
+        "max": 23.074800491333008,
+        "mean": 0.029041558504104614,
+        "std": 2.2818922996520996,
+        "abs_max": 23.074800491333008,
+        "nonzero_count": 458664,
+        "allzero": false,
+        "constant": false,
+        "nan_count": 0,
+        "inf_count": 0
+      },
+      "reference_stats": {
+        "shape": [
+          128,
+          3584
+        ],
+        "dtype": "float32",
+        "size": 458752,
+        "min": -248.0,
+        "max": 63.25,
+        "mean": 0.0008316127932630479,
+        "std": 1.5328502655029297,
+        "abs_max": 248.0,
+        "nonzero_count": 458365,
+        "allzero": false,
+        "constant": false,
+        "nan_count": 0,
+        "inf_count": 0
+      },
+      "case_id": "short_chinese_prompt_padded",
+      "segment": 20,
+      "hf_path": "evidence/hf_boundaries_v11/short_chinese_prompt_padded/layer_20_output.npy",
+      "bpu_path": "evidence/boundary_all_segments_v7/short_chinese_prompt_padded/seg_20_output.npy",
+      "missing": false
+    },
+    {
+      "shape_mismatch": false,
+      "cosine": -0.025131794134364973,
+      "pearson_centered": -0.0251765269978433,
+      "relative_l2": 1.6598746744565693,
+      "mean_abs_error": 1.8676911502451883,
+      "max_abs_error": 251.2804980278015,
+      "candidate_stats": {
+        "shape": [
+          128,
+          3584
+        ],
+        "dtype": "float32",
+        "size": 458752,
+        "min": -6.280498027801514,
+        "max": 6.280498027801514,
+        "mean": 0.015532010234892368,
+        "std": 2.154677391052246,
+        "abs_max": 6.280498027801514,
+        "nonzero_count": 458698,
+        "allzero": false,
+        "constant": false,
+        "nan_count": 0,
+        "inf_count": 0
+      },
+      "reference_stats": {
+        "shape": [
+          128,
+          3584
+        ],
+        "dtype": "float32",
+        "size": 458752,
+        "min": -245.0,
+        "max": 64.0,
+        "mean": 0.010029986500740051,
+        "std": 1.6575331687927246,
+        "abs_max": 245.0,
+        "nonzero_count": 458360,
+        "allzero": false,
+        "constant": false,
+        "nan_count": 0,
+        "inf_count": 0
+      },
+      "case_id": "short_chinese_prompt_padded",
+      "segment": 21,
+      "hf_path": "evidence/hf_boundaries_v11/short_chinese_prompt_padded/layer_21_output.npy",
+      "bpu_path": "evidence/boundary_all_segments_v7/short_chinese_prompt_padded/seg_21_output.npy",
+      "missing": false
+    },
+    {
+      "shape_mismatch": false,
+      "cosine": -0.007129532397787502,
+      "pearson_centered": -0.007080488439599698,
+      "relative_l2": 16.31565967804577,
+      "mean_abs_error": 25.636512284235145,
+      "max_abs_error": 272.6571846008301,
+      "candidate_stats": {
+        "shape": [
+          128,
+          3584
+        ],
+        "dtype": "float32",
+        "size": 458752,
+        "min": -43.65851593017578,
+        "max": 43.65718460083008,
+        "mean": -0.17951513826847076,
+        "std": 29.623788833618164,
+        "abs_max": 43.65851593017578,
+        "nonzero_count": 458746,
+        "allzero": false,
+        "constant": false,
+        "nan_count": 0,
+        "inf_count": 0
+      },
+      "reference_stats": {
+        "shape": [
+          128,
+          3584
+        ],
+        "dtype": "float32",
+        "size": 458752,
+        "min": -242.0,
+        "max": 63.75,
+        "mean": 0.014839110895991325,
+        "std": 1.8198555707931519,
+        "abs_max": 242.0,
+        "nonzero_count": 458349,
+        "allzero": false,
+        "constant": false,
+        "nan_count": 0,
+        "inf_count": 0
+      },
+      "case_id": "short_chinese_prompt_padded",
+      "segment": 22,
+      "hf_path": "evidence/hf_boundaries_v11/short_chinese_prompt_padded/layer_22_output.npy",
+      "bpu_path": "evidence/boundary_all_segments_v7/short_chinese_prompt_padded/seg_22_output.npy",
+      "missing": false
+    },
+    {
+      "shape_mismatch": false,
+      "cosine": -0.007938073629203422,
+      "pearson_centered": -0.007884197110785002,
+      "relative_l2": 6.441565472390712,
+      "mean_abs_error": 11.927095530467215,
+      "max_abs_error": 233.89610862731934,
+      "candidate_stats": {
+        "shape": [
+          128,
+          3584
+        ],
+        "dtype": "float32",
+        "size": 458752,
+        "min": -13.896108627319336,
+        "max": 13.896108627319336,
+        "mean": -0.06653141230344772,
+        "std": 12.487549781799316,
+        "abs_max": 13.896108627319336,
+        "nonzero_count": 458732,
+        "allzero": false,
+        "constant": false,
+        "nan_count": 0,
+        "inf_count": 0
+      },
+      "reference_stats": {
+        "shape": [
+          128,
+          3584
+        ],
+        "dtype": "float32",
+        "size": 458752,
+        "min": -233.0,
+        "max": 62.75,
+        "mean": 0.02006235532462597,
+        "std": 1.9647550582885742,
+        "abs_max": 233.0,
+        "nonzero_count": 458376,
+        "allzero": false,
+        "constant": false,
+        "nan_count": 0,
+        "inf_count": 0
+      },
+      "case_id": "short_chinese_prompt_padded",
+      "segment": 23,
+      "hf_path": "evidence/hf_boundaries_v11/short_chinese_prompt_padded/layer_23_output.npy",
+      "bpu_path": "evidence/boundary_all_segments_v7/short_chinese_prompt_padded/seg_23_output.npy",
+      "missing": false
+    },
+    {
+      "shape_mismatch": false,
+      "cosine": 0.0008033685389017678,
+      "pearson_centered": 0.0008643606464966525,
+      "relative_l2": 5.395925928751622,
+      "mean_abs_error": 11.943679292459974,
+      "max_abs_error": 210.02023816108704,
+      "candidate_stats": {
+        "shape": [
+          128,
+          3584
+        ],
+        "dtype": "float32",
+        "size": 458752,
+        "min": -16.745126724243164,
+        "max": 16.74461555480957,
+        "mean": -0.07221764326095581,
+        "std": 12.48482894897461,
+        "abs_max": 16.745126724243164,
+        "nonzero_count": 458752,
+        "allzero": false,
+        "constant": false,
+        "nan_count": 0,
+        "inf_count": 0
+      },
+      "reference_stats": {
+        "shape": [
+          128,
+          3584
+        ],
+        "dtype": "float32",
+        "size": 458752,
+        "min": -226.0,
+        "max": 59.25,
+        "mean": 0.024798346683382988,
+        "std": 2.3540899753570557,
+        "abs_max": 226.0,
+        "nonzero_count": 458429,
+        "allzero": false,
+        "constant": false,
+        "nan_count": 0,
+        "inf_count": 0
+      },
+      "case_id": "short_chinese_prompt_padded",
+      "segment": 24,
+      "hf_path": "evidence/hf_boundaries_v11/short_chinese_prompt_padded/layer_24_output.npy",
+      "bpu_path": "evidence/boundary_all_segments_v7/short_chinese_prompt_padded/seg_24_output.npy",
+      "missing": false
+    },
+    {
+      "shape_mismatch": false,
+      "cosine": -0.002733411206867358,
+      "pearson_centered": -0.0027554491323109813,
+      "relative_l2": 73.39075586163209,
+      "mean_abs_error": 194.8594788223916,
+      "max_abs_error": 518.4108276367188,
+      "candidate_stats": {
+        "shape": [
+          128,
+          3584
+        ],
+        "dtype": "float32",
+        "size": 458752,
+        "min": -258.418701171875,
+        "max": 258.41082763671875,
+        "mean": 0.9413202404975891,
+        "std": 212.20448303222656,
+        "abs_max": 258.418701171875,
+        "nonzero_count": 458747,
+        "allzero": false,
+        "constant": false,
+        "nan_count": 0,
+        "inf_count": 0
+      },
+      "reference_stats": {
+        "shape": [
+          128,
+          3584
+        ],
+        "dtype": "float32",
+        "size": 458752,
+        "min": -260.0,
+        "max": 59.25,
+        "mean": 0.01432728674262762,
+        "std": 2.8918023109436035,
+        "abs_max": 260.0,
+        "nonzero_count": 458336,
+        "allzero": false,
+        "constant": false,
+        "nan_count": 0,
+        "inf_count": 0
+      },
+      "case_id": "short_chinese_prompt_padded",
+      "segment": 25,
+      "hf_path": "evidence/hf_boundaries_v11/short_chinese_prompt_padded/layer_25_output.npy",
+      "bpu_path": "evidence/boundary_all_segments_v7/short_chinese_prompt_padded/seg_25_output.npy",
+      "missing": false
+    },
+    {
+      "shape_mismatch": false,
+      "cosine": -0.00549112527173891,
+      "pearson_centered": -0.00550066700922489,
+      "relative_l2": 4.695951493582467,
+      "mean_abs_error": 16.103344767654104,
+      "max_abs_error": 223.2967872619629,
+      "candidate_stats": {
+        "shape": [
+          128,
+          3584
+        ],
+        "dtype": "float32",
+        "size": 458752,
+        "min": -16.29678726196289,
+        "max": 16.29678726196289,
+        "mean": 0.06199396401643753,
+        "std": 16.122926712036133,
+        "abs_max": 16.29678726196289,
+        "nonzero_count": 458752,
+        "allzero": false,
+        "constant": false,
+        "nan_count": 0,
+        "inf_count": 0
+      },
+      "reference_stats": {
+        "shape": [
+          128,
+          3584
+        ],
+        "dtype": "float32",
+        "size": 458752,
+        "min": -207.0,
+        "max": 50.0,
+        "mean": 0.008678115904331207,
+        "std": 3.5181899070739746,
+        "abs_max": 207.0,
+        "nonzero_count": 458334,
+        "allzero": false,
+        "constant": false,
+        "nan_count": 0,
+        "inf_count": 0
+      },
+      "case_id": "short_chinese_prompt_padded",
+      "segment": 26,
+      "hf_path": "evidence/hf_boundaries_v11/short_chinese_prompt_padded/layer_26_output.npy",
+      "bpu_path": "evidence/boundary_all_segments_v7/short_chinese_prompt_padded/seg_26_output.npy",
+      "missing": false
+    },
+    {
+      "shape_mismatch": true,
+      "candidate_shape": [
+        1,
+        152064
+      ],
+      "reference_shape": [
+        128,
+        3584
+      ],
+      "case_id": "short_chinese_prompt_padded",
+      "segment": 27,
+      "hf_path": "evidence/hf_boundaries_v11/short_chinese_prompt_padded/layer_27_output.npy",
+      "bpu_path": "evidence/boundary_all_segments_v7/short_chinese_prompt_padded/seg_27_output.npy",
+      "missing": false
+    }
+  ],
+  "raw_subset_root": "evidence/hf_bpu_boundary_subset_v11"
+}

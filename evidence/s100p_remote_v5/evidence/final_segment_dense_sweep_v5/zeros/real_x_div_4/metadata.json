@@ -1,0 +1,110 @@
+{
+  "variant_id": "real_x_div_4",
+  "why_included": "real seg26 hidden divided by 4.0",
+  "input_path": "/mnt/nas/openclaw/reports/models/dream7b_s100p_v5_execution_20260701/evidence/final_segment_dense_sweep_v5/zeros/real_x_div_4/input.npy",
+  "raw_output_path": "/mnt/nas/openclaw/reports/models/dream7b_s100p_v5_execution_20260701/evidence/final_segment_dense_sweep_v5/zeros/real_x_div_4/raw_output.npy",
+  "dequant_logits_path": "/mnt/nas/openclaw/reports/models/dream7b_s100p_v5_execution_20260701/evidence/final_segment_dense_sweep_v5/zeros/real_x_div_4/dequant_logits.npy",
+  "metadata_path": "/mnt/nas/openclaw/reports/models/dream7b_s100p_v5_execution_20260701/evidence/final_segment_dense_sweep_v5/zeros/real_x_div_4/metadata.json",
+  "input_stats": {
+    "shape": [
+      128,
+      3584
+    ],
+    "dtype": "float32",
+    "size": 458752,
+    "min": -4.074196815490723,
+    "max": 4.074196815490723,
+    "mean": 0.0012609455734491348,
+    "std": 4.030941963195801,
+    "abs_max": 4.074196815490723,
+    "nonzero_count": 458751,
+    "allzero": false,
+    "constant": false,
+    "nan_count": 0,
+    "inf_count": 0
+  },
+  "run_status": "pass",
+  "runtime_exception": null,
+  "raw_output_stats": {
+    "shape": [
+      1,
+      152064
+    ],
+    "dtype": "int16",
+    "size": 152064,
+    "min": -17760.0,
+    "max": 26164.0,
+    "mean": 8362.730185974327,
+    "std": 3244.647338415464,
+    "abs_max": 26164.0,
+    "nonzero_count": 152059,
+    "allzero": false,
+    "constant": false,
+    "nan_count": 0,
+    "inf_count": 0
+  },
+  "dequant_output_stats": {
+    "shape": [
+      152064
+    ],
+    "dtype": "float32",
+    "size": 152064,
+    "min": -17760.0,
+    "max": 26164.0,
+    "mean": 8362.73046875,
+    "std": 3244.647216796875,
+    "abs_max": 26164.0,
+    "nonzero_count": 152059,
+    "allzero": false,
+    "constant": false,
+    "nan_count": 0,
+    "inf_count": 0
+  },
+  "softmax": {
+    "entropy": 3.5264190128917594e-48,
+    "normalized_entropy": 2.9554158873748333e-49,
+    "top1_probability": 1.0
+  },
+  "top10_logits": [
+    {
+      "token": 76842,
+      "logit": 26164.0
+    },
+    {
+      "token": 85512,
+      "logit": 26050.0
+    },
+    {
+      "token": 45223,
+      "logit": 25815.0
+    },
+    {
+      "token": 82733,
+      "logit": 25308.0
+    },
+    {
+      "token": 33955,
+      "logit": 25192.0
+    },
+    {
+      "token": 74466,
+      "logit": 24807.0
+    },
+    {
+      "token": 54462,
+      "logit": 24133.0
+    },
+    {
+      "token": 95132,
+      "logit": 23807.0
+    },
+    {
+      "token": 86611,
+      "logit": 23739.0
+    },
+    {
+      "token": 22394,
+      "logit": 23340.0
+    }
+  ]
+}

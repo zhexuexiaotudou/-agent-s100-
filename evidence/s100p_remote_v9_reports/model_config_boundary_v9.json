@@ -1,0 +1,12 @@
+{
+  "schema_version": "dream7b_s100p_v9_boundary_model_config",
+  "created_at_unix": 1782907223.7940476,
+  "config_path": "/mnt/nas/openclaw/models/dream7b-hf/config.json",
+  "config_sha256": "11afc7fe7a1881e73dcd70cca6868aaaf8eb89ad45ea5fc6426c3fb82dec9340",
+  "model_type": "Dream",
+  "num_hidden_layers": 28,
+  "last_decoder_layer_index": 27,
+  "hidden_size": 3584,
+  "vocab_size": 152064,
+  "boundary_statement": "run_hf_exact_layer27_final_v9.py uses model.model.layers[-1]; with num_hidden_layers=28 this is decoder layer 27, followed by model.model.norm and model.lm_head."
+}

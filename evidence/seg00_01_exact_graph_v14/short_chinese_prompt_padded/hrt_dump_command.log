@@ -1,0 +1,32 @@
+COMMAND: hrt_model_exec infer --model_file /mnt/nas/openclaw/models/dream7b-hbm/seq128-b1-lmheadq16-lasttoken/seg00_01/dream7b_segment_0_1_seq128_q8.hbm --model_name dream_segment_00_01 --input_file evidence/seg00_01_exact_graph_v14/short_chinese_prompt_padded/hrt_inputs/input_0_tokens.npy,evidence/seg00_01_exact_graph_v14/short_chinese_prompt_padded/hrt_inputs/input_1_positions.npy --frame_count 1 --dump_intermediate 1 --enable_dump true --dump_path evidence/seg00_01_exact_graph_v14/short_chinese_prompt_padded/hrt_dump_raw --dump_format bin
+
+STDOUT:
+[UCP]: log level = 3
+[UCP]: UCP version = 3.13.6
+[VP]: log level = 3
+[DNN]: log level = 3
+[HPL]: log level = 3
+[UCPT]: log level = 6
+hrt_model_exec infer --model_file /mnt/nas/openclaw/models/dream7b-hbm/seq128-b1-lmheadq16-lasttoken/seg00_01/dream7b_segment_0_1_seq128_q8.hbm --model_name dream_segment_00_01 --input_file evidence/seg00_01_exact_graph_v14/short_chinese_prompt_padded/hrt_inputs/input_0_tokens.npy,evidence/seg00_01_exact_graph_v14/short_chinese_prompt_padded/hrt_inputs/input_1_positions.npy --frame_count 1 --dump_intermediate 1 --enable_dump true --dump_path evidence/seg00_01_exact_graph_v14/short_chinese_prompt_padded/hrt_dump_raw --dump_format bin
+[32m[I][738407][07-03][13:54:58:033][main.cpp:321][hrt_model_exec][HRT_MODEL_EXEC] dump_path: evidence/seg00_01_exact_graph_v14/short_chinese_prompt_padded/hrt_dump_raw exsit
+[m[K[BPU][[BPU_MONITOR]][281472977302816][INFO]BPULib verison(2, 2, 15)[f21ee84]!
+[DNN]: 3.13.6_(4.7.5 HBRT)
+Load model to DDR cost 6601.06ms.
+[32m[I][738407][07-03][13:55:04:635][file_util.cpp:578][hrt_model_exec][HRT_MODEL_EXEC] read file evidence/seg00_01_exact_graph_v14/short_chinese_prompt_padded/hrt_inputs/input_0_tokens.npy length: 512
+[m[K[32m[I][738407][07-03][13:55:04:635][file_util.cpp:578][hrt_model_exec][HRT_MODEL_EXEC] read file evidence/seg00_01_exact_graph_v14/short_chinese_prompt_padded/hrt_inputs/input_1_positions.npy length: 512
+[m[K[33m[1m[W][738427][07-03][13:55:04:660][hbrt4_exec_plan.cpp:1887][hrt_model_exec][DNN] [Plan] Dump variable hbir.gather_nd_id_7: 0 failed! unsupport dynamic stride: (-9223372036854775808,-9223372036854775808,-9223372036854775808), dim: (1,128,128)
+[m[K[33m[1m[W][738427][07-03][13:55:04:660][hbrt4_exec_plan.cpp:1887][hrt_model_exec][DNN] [Plan] Dump variable hbir.gather_nd_id_7: 0 failed! unsupport dynamic stride: (-9223372036854775808,-9223372036854775808,-9223372036854775808), dim: (2,128,128)
+[m[K[33m[1m[W][738427][07-03][13:55:04:660][hbrt4_exec_plan.cpp:1887][hrt_model_exec][DNN] [Plan] Dump variable hbir.gather_nd_id_7: 0 failed! unsupport dynamic stride: (-9223372036854775808,-9223372036854775808,-9223372036854775808), dim: (1,128,128)
+[m[K[33m[1m[W][738426][07-03][13:55:04:673][hbrt4_exec_plan.cpp:1887][hrt_model_exec][DNN] [Plan] Dump variable hbir.gather_nd_id_7: 0 failed! unsupport dynamic stride: (-9223372036854775808,-9223372036854775808,-9223372036854775808), dim: (1,128,128)
+[m[K[33m[1m[W][738426][07-03][13:55:04:673][hbrt4_exec_plan.cpp:1887][hrt_model_exec][DNN] [Plan] Dump variable hbir.gather_nd_id_7: 0 failed! unsupport dynamic stride: (-9223372036854775808,-9223372036854775808,-9223372036854775808), dim: (1,128,128)
+[m[K[33m[1m[W][738426][07-03][13:55:04:673][hbrt4_exec_plan.cpp:1887][hrt_model_exec][DNN] [Plan] Dump variable hbir.gather_nd_id_7: 0 failed! unsupport dynamic stride: (-9223372036854775808,-9223372036854775808,-9223372036854775808), dim: (2,128,128)
+[m[K
+---------------------Frame 0 begin---------------------
+Infer time: 55.612 ms
+---------------------Frame 0 end---------------------
+[32m[I][738407][07-03][13:55:04:692][function_util.cpp:1159][hrt_model_exec][HRT_MODEL_EXEC] Dump path: evidence/seg00_01_exact_graph_v14/short_chinese_prompt_padded/hrt_dump_raw/model_infer_input_0__input_0.bin
+[m[K[32m[I][738407][07-03][13:55:04:692][function_util.cpp:1159][hrt_model_exec][HRT_MODEL_EXEC] Dump path: evidence/seg00_01_exact_graph_v14/short_chinese_prompt_padded/hrt_dump_raw/model_infer_input_1__input_1.bin
+[m[K[32m[I][738407][07-03][13:55:04:702][function_util.cpp:1159][hrt_model_exec][HRT_MODEL_EXEC] Dump path: evidence/seg00_01_exact_graph_v14/short_chinese_prompt_padded/hrt_dump_raw/model_infer_output_0__output_0.bin
+[m[K
+
+STDERR:

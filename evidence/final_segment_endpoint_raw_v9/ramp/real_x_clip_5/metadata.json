@@ -1,0 +1,180 @@
+{
+  "case_id": "ramp",
+  "variant_id": "real_x_clip_5",
+  "source_directory": "evidence/raw_endpoint_subset_v6/final_segment_dense_sweep_v5/ramp/real_x_clip_5",
+  "runtime_command_or_log_pointer": "remote v5 final_segment_dense_sweep_v5 endpoint run; local raw subset packaged in v6",
+  "official_scale": 0.00025415877462364733,
+  "official_zero_point": 0.0,
+  "input_stats": {
+    "shape": [
+      128,
+      3584
+    ],
+    "dtype": "float32",
+    "size": 458752,
+    "min": -5.0,
+    "max": 5.0,
+    "mean": 0.026432620361447334,
+    "std": 4.983414649963379,
+    "abs_max": 5.0,
+    "nonzero_count": 458752,
+    "allzero": false,
+    "constant": false,
+    "nan_count": 0,
+    "inf_count": 0
+  },
+  "raw_output_stats": {
+    "shape": [
+      1,
+      152064
+    ],
+    "dtype": "int16",
+    "size": 152064,
+    "min": -21522.0,
+    "max": 22697.0,
+    "mean": -560.3762494739058,
+    "std": 3291.688611354879,
+    "abs_max": 22697.0,
+    "nonzero_count": 152041,
+    "allzero": false,
+    "constant": false,
+    "nan_count": 0,
+    "inf_count": 0,
+    "count_pos_32767": 0,
+    "count_neg_32768": 0,
+    "frac_pos_32767": 0.0,
+    "frac_neg_32768": 0.0
+  },
+  "official_dequant_stats": {
+    "shape": [
+      152064
+    ],
+    "dtype": "float32",
+    "size": 152064,
+    "min": -5.470005035400391,
+    "max": 5.768641471862793,
+    "mean": -0.142424538731575,
+    "std": 0.8366115093231201,
+    "abs_max": 5.768641471862793,
+    "nonzero_count": 152041,
+    "allzero": false,
+    "constant": false,
+    "nan_count": 0,
+    "inf_count": 0
+  },
+  "sha256": {
+    "input.npy": "1a4fcc4fbee5cc81c6cce04eb5e5312fe28dec85f16db8ef922aee3664596480",
+    "raw_output.npy": "b0d604ff647cc8c80a9b2cba1a6ef3b66d39a8f99e74e98a723b39b3abda8c1d",
+    "official_dequant_logits.npy": "0f3572efecaceab368c296c8a40c56c802f7659438016323cb509173c995b5c7"
+  },
+  "source_metadata": {
+    "variant_id": "real_x_clip_5",
+    "why_included": "real seg26 hidden clipped to +/-5",
+    "input_path": "/mnt/nas/openclaw/reports/models/dream7b_s100p_v5_execution_20260701/evidence/final_segment_dense_sweep_v5/ramp/real_x_clip_5/input.npy",
+    "raw_output_path": "/mnt/nas/openclaw/reports/models/dream7b_s100p_v5_execution_20260701/evidence/final_segment_dense_sweep_v5/ramp/real_x_clip_5/raw_output.npy",
+    "dequant_logits_path": "/mnt/nas/openclaw/reports/models/dream7b_s100p_v5_execution_20260701/evidence/final_segment_dense_sweep_v5/ramp/real_x_clip_5/dequant_logits.npy",
+    "metadata_path": "/mnt/nas/openclaw/reports/models/dream7b_s100p_v5_execution_20260701/evidence/final_segment_dense_sweep_v5/ramp/real_x_clip_5/metadata.json",
+    "input_stats": {
+      "shape": [
+        128,
+        3584
+      ],
+      "dtype": "float32",
+      "size": 458752,
+      "min": -5.0,
+      "max": 5.0,
+      "mean": 0.026432618498802185,
+      "std": 4.983415126800537,
+      "abs_max": 5.0,
+      "nonzero_count": 458752,
+      "allzero": false,
+      "constant": false,
+      "nan_count": 0,
+      "inf_count": 0
+    },
+    "run_status": "pass",
+    "runtime_exception": null,
+    "raw_output_stats": {
+      "shape": [
+        1,
+        152064
+      ],
+      "dtype": "int16",
+      "size": 152064,
+      "min": -21522.0,
+      "max": 22697.0,
+      "mean": -560.3762494739058,
+      "std": 3291.688611354879,
+      "abs_max": 22697.0,
+      "nonzero_count": 152041,
+      "allzero": false,
+      "constant": false,
+      "nan_count": 0,
+      "inf_count": 0
+    },
+    "dequant_output_stats": {
+      "shape": [
+        152064
+      ],
+      "dtype": "float32",
+      "size": 152064,
+      "min": -21522.0,
+      "max": 22697.0,
+      "mean": -560.3761596679688,
+      "std": 3291.68896484375,
+      "abs_max": 22697.0,
+      "nonzero_count": 152041,
+      "allzero": false,
+      "constant": false,
+      "nan_count": 0,
+      "inf_count": 0
+    },
+    "softmax": {
+      "entropy": -0.0,
+      "normalized_entropy": -0.0,
+      "top1_probability": 1.0
+    },
+    "top10_logits": [
+      {
+        "token": 61183,
+        "logit": 22697.0
+      },
+      {
+        "token": 44591,
+        "logit": 20549.0
+      },
+      {
+        "token": 1527,
+        "logit": 20058.0
+      },
+      {
+        "token": 62815,
+        "logit": 19295.0
+      },
+      {
+        "token": 57002,
+        "logit": 19287.0
+      },
+      {
+        "token": 35192,
+        "logit": 19036.0
+      },
+      {
+        "token": 21788,
+        "logit": 18706.0
+      },
+      {
+        "token": 477,
+        "logit": 18632.0
+      },
+      {
+        "token": 40,
+        "logit": 18615.0
+      },
+      {
+        "token": 295,
+        "logit": 18503.0
+      }
+    ]
+  }
+}

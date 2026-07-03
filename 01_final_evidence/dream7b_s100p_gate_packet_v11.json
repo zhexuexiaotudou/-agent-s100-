@@ -1,0 +1,111 @@
+{
+  "schema_version": "dream7b_s100p_v11_960_build_v11_gate_packet_and_paper_tables",
+  "created_at_utc": "2026-07-01T19:15:57.169476+00:00",
+  "run_commands": [
+    "C:\\Users\\zhexu\\AppData\\Local\\Python\\pythoncore-3.14-64\\python.exe tools\\build_v11_research_thread.py --root ."
+  ],
+  "git": {
+    "cwd": "F:\\Project\\Digua",
+    "git_dir_exists": true,
+    "git_head_exists": false,
+    "status": "unavailable_empty_or_incomplete_git_dir"
+  },
+  "input_artifacts": [],
+  "output_artifacts": [
+    {
+      "path": "reports/960_build_v11_gate_packet_and_paper_tables.json"
+    },
+    {
+      "path": "reports/960_build_v11_gate_packet_and_paper_tables.md"
+    }
+  ],
+  "blocking_or_failure_reasons": [],
+  "next_minimal_experiments": [],
+  "verdict_class": "B_current_deployment_falsified__F_final_segment_contract_falsified__G_upstream_hidden_invalid",
+  "verdicts": {
+    "B_current_deployment_falsified": true,
+    "F_final_segment_contract_falsified": true,
+    "G_upstream_hidden_invalid": true,
+    "H_repair_supported": false
+  },
+  "summary": "v11 hardens v10: repeat BF16 truth matches v10, source hashes are packaged, HF/BPU boundary alignment localizes divergence, and final-segment same-input failure remains. GGUF F16 and operator graph metadata remain unavailable.",
+  "v10_deployment_falsification_basis": {
+    "official_vs_full_truth_rows": 3,
+    "official_vs_full_truth_top1_agreement_rows": 0,
+    "official_vs_full_truth_median_relative_l2": 0.9999999999999998
+  },
+  "gate_status": {
+    "generation_quality": "not_run_by_design",
+    "product_routes_18888_18889": "not_enabled_modified_or_tested",
+    "repeat_truth": "pass",
+    "v10_official_vs_truth_falsification": "pass",
+    "source_hashes": "pass",
+    "boundary_alignment": "pass",
+    "suffix_localization": "pass",
+    "gguf_f16": "blocked_unavailable",
+    "operator_graph_metadata": "operator_graph_unavailable",
+    "repair": "not_supported"
+  },
+  "first_divergent_segment_global": 0,
+  "first_divergent_segment_by_case": {
+    "zeros": 0,
+    "ramp": 0,
+    "short_chinese_prompt_padded": 0
+  },
+  "repeat_truth_summary": {
+    "rows": 3,
+    "top1_agreement_rows": 3,
+    "median_relative_l2": 0.0,
+    "median_pearson_centered": 1.0,
+    "scope": "HF/PyTorch repeat bfloat16 on same S100P environment"
+  },
+  "suffix_summary_by_boundary": {
+    "8": {
+      "rows": 3,
+      "top1_agreement_rows": 0,
+      "median_relative_l2": 0.36483010734570137,
+      "median_pearson_centered": 0.7738799236962725
+    },
+    "11": {
+      "rows": 3,
+      "top1_agreement_rows": 0,
+      "median_relative_l2": 0.5439676217073303,
+      "median_pearson_centered": 0.7268482008437188
+    },
+    "12": {
+      "rows": 3,
+      "top1_agreement_rows": 0,
+      "median_relative_l2": 0.7695447913051602,
+      "median_pearson_centered": 0.39622286170800675
+    },
+    "13": {
+      "rows": 3,
+      "top1_agreement_rows": 0,
+      "median_relative_l2": 1.0143631234079535,
+      "median_pearson_centered": 0.34768120741850733
+    },
+    "20": {
+      "rows": 3,
+      "top1_agreement_rows": 0,
+      "median_relative_l2": 0.6944710626344935,
+      "median_pearson_centered": 0.6430598489163829
+    },
+    "26": {
+      "rows": 3,
+      "top1_agreement_rows": 0,
+      "median_relative_l2": 1.383325206753448,
+      "median_pearson_centered": -0.24282643221749534
+    }
+  },
+  "allowed_claims": [
+    "The current tested Dream7B seq128 segmented-HBM S100P path is falsified at logits level against HF/PyTorch BF16 truth for the canonical cases.",
+    "The same-input final-segment contract failure remains reproduced.",
+    "HF/BPU boundary alignment localizes the earliest observed hidden-state divergence under the reported thresholds."
+  ],
+  "forbidden_claims": [
+    "Do not claim generation-quality failure or success.",
+    "Do not claim product route readiness or failure.",
+    "Do not claim universal impossibility for Dream7B on S100P.",
+    "Do not claim GGUF F16 cross-check or operator-graph proof when those remain unavailable."
+  ]
+}

@@ -1,0 +1,355 @@
+{
+  "generated_at": "2026-07-03T17:23:46.257278+08:00",
+  "gate_id": "stage2_8_policy_first_shadow_contract_gate",
+  "verdict": "ok_stage2_8_policy_first_shadow_contract_gate",
+  "passed_count": 11,
+  "check_count": 11,
+  "failure_count": 0,
+  "failures": [],
+  "checks": [
+    {
+      "label": "policy-first architecture document written",
+      "ok": true,
+      "detail": "F:\\Project\\Digua\\docs\\STAGE3_POLICY_FIRST_ARCHITECTURE.md"
+    },
+    {
+      "label": "Qwen output does not directly decide tool execution",
+      "ok": true,
+      "detail": [
+        {
+          "workspace": "nas_search",
+          "policy_decision": {
+            "workspace": "nas_search",
+            "tool_id": "ai_nas_file_search",
+            "source": "deterministic_policy"
+          },
+          "qwen_advisory": {
+            "status": "optional",
+            "may_fail": true,
+            "may_override_policy": false
+          },
+          "final_tool_source": "policy",
+          "qwen_has_execution_authority": false,
+          "execution_path": "ai_nas_allowlisted_tool.sh"
+        },
+        {
+          "workspace": "document_rag",
+          "policy_decision": {
+            "workspace": "document_rag",
+            "tool_id": "ai_nas_folder_rag",
+            "source": "deterministic_policy"
+          },
+          "qwen_advisory": {
+            "status": "optional",
+            "may_fail": true,
+            "may_override_policy": false
+          },
+          "final_tool_source": "policy",
+          "qwen_has_execution_authority": false,
+          "execution_path": "ai_nas_allowlisted_tool.sh"
+        }
+      ]
+    },
+    {
+      "label": "final workspace/tool source is deterministic policy",
+      "ok": true,
+      "detail": [
+        {
+          "workspace": "nas_search",
+          "policy_decision": {
+            "workspace": "nas_search",
+            "tool_id": "ai_nas_file_search",
+            "source": "deterministic_policy"
+          },
+          "qwen_advisory": {
+            "status": "optional",
+            "may_fail": true,
+            "may_override_policy": false
+          },
+          "final_tool_source": "policy",
+          "qwen_has_execution_authority": false,
+          "execution_path": "ai_nas_allowlisted_tool.sh"
+        },
+        {
+          "workspace": "document_rag",
+          "policy_decision": {
+            "workspace": "document_rag",
+            "tool_id": "ai_nas_folder_rag",
+            "source": "deterministic_policy"
+          },
+          "qwen_advisory": {
+            "status": "optional",
+            "may_fail": true,
+            "may_override_policy": false
+          },
+          "final_tool_source": "policy",
+          "qwen_has_execution_authority": false,
+          "execution_path": "ai_nas_allowlisted_tool.sh"
+        }
+      ]
+    },
+    {
+      "label": "dispatcher remains sole execution path",
+      "ok": true,
+      "detail": "/mnt/nas/openclaw/scripts/probes/ai_nas_allowlisted_tool.sh"
+    },
+    {
+      "label": "Qwen advisory may be empty or failed without privilege escalation",
+      "ok": true,
+      "detail": "advisor failure leaves policy authoritative"
+    },
+    {
+      "label": "qwen_has_execution_authority=false",
+      "ok": true,
+      "detail": [
+        {
+          "workspace": "nas_search",
+          "policy_decision": {
+            "workspace": "nas_search",
+            "tool_id": "ai_nas_file_search",
+            "source": "deterministic_policy"
+          },
+          "qwen_advisory": {
+            "status": "optional",
+            "may_fail": true,
+            "may_override_policy": false
+          },
+          "final_tool_source": "policy",
+          "qwen_has_execution_authority": false,
+          "execution_path": "ai_nas_allowlisted_tool.sh"
+        },
+        {
+          "workspace": "document_rag",
+          "policy_decision": {
+            "workspace": "document_rag",
+            "tool_id": "ai_nas_folder_rag",
+            "source": "deterministic_policy"
+          },
+          "qwen_advisory": {
+            "status": "optional",
+            "may_fail": true,
+            "may_override_policy": false
+          },
+          "final_tool_source": "policy",
+          "qwen_has_execution_authority": false,
+          "execution_path": "ai_nas_allowlisted_tool.sh"
+        }
+      ]
+    },
+    {
+      "label": "final_tool_source=policy",
+      "ok": true,
+      "detail": [
+        {
+          "workspace": "nas_search",
+          "policy_decision": {
+            "workspace": "nas_search",
+            "tool_id": "ai_nas_file_search",
+            "source": "deterministic_policy"
+          },
+          "qwen_advisory": {
+            "status": "optional",
+            "may_fail": true,
+            "may_override_policy": false
+          },
+          "final_tool_source": "policy",
+          "qwen_has_execution_authority": false,
+          "execution_path": "ai_nas_allowlisted_tool.sh"
+        },
+        {
+          "workspace": "document_rag",
+          "policy_decision": {
+            "workspace": "document_rag",
+            "tool_id": "ai_nas_folder_rag",
+            "source": "deterministic_policy"
+          },
+          "qwen_advisory": {
+            "status": "optional",
+            "may_fail": true,
+            "may_override_policy": false
+          },
+          "final_tool_source": "policy",
+          "qwen_has_execution_authority": false,
+          "execution_path": "ai_nas_allowlisted_tool.sh"
+        }
+      ]
+    },
+    {
+      "label": "no write/destructive/admin/recovery tools in readonly Stage3 set",
+      "ok": true,
+      "detail": {
+        "document_rag": [
+          "ai_nas_case_packet",
+          "ai_nas_evidence_report",
+          "ai_nas_folder_rag",
+          "ai_nas_folder_rag_grounding_contract",
+          "ai_nas_folder_summary",
+          "ai_nas_ocr_readiness",
+          "ai_nas_ocr_extract",
+          "ai_nas_ocr_runtime_contract",
+          "ai_nas_document_pipeline_acceptance"
+        ],
+        "nas_search": [
+          "ai_nas_personal_inventory",
+          "ai_nas_index_status",
+          "ai_nas_permission_aware_search",
+          "ai_nas_file_search",
+          "ai_nas_search_evidence_contract",
+          "ai_nas_search_confidence_calibration_contract",
+          "ai_nas_embedding_search",
+          "ai_nas_semantic_query_acceptance",
+          "ai_nas_folder_summary"
+        ]
+      }
+    },
+    {
+      "label": "Cloud private egress disabled for Stage3 private content",
+      "ok": true,
+      "detail": {
+        "allowed_path_roots": [],
+        "denied_path_roots": [
+          "/mnt/nas",
+          "/mnt/data",
+          "/home",
+          "Personal",
+          "Inbox",
+          "Documents",
+          "Photos",
+          "Family",
+          "Finance",
+          "Medical",
+          "Private"
+        ],
+        "allow_absolute_path": false,
+        "allow_path_traversal": false,
+        "allow_private_snippet": false,
+        "allow_cloud_egress": true,
+        "max_egress_chars": 1200,
+        "required_acl_check": true,
+        "read_only": true,
+        "write_allowed": false
+      }
+    },
+    {
+      "label": "Dream7B foreground disabled",
+      "ok": true,
+      "detail": "Dream7B tools are not in the Stage3 readonly workspace set"
+    },
+    {
+      "label": "allowed readonly workspace args are read-only",
+      "ok": true,
+      "detail": {
+        "nas_search": {
+          "allowed_path_roots": [
+            "Personal"
+          ],
+          "denied_path_roots": [
+            "/mnt/nas",
+            "/mnt/data",
+            "/home",
+            ".."
+          ],
+          "allow_absolute_path": false,
+          "allow_path_traversal": false,
+          "allow_private_snippet": true,
+          "allow_cloud_egress": false,
+          "max_egress_chars": 0,
+          "required_acl_check": true,
+          "read_only": true,
+          "write_allowed": false
+        },
+        "document_rag": {
+          "allowed_path_roots": [
+            "Documents"
+          ],
+          "denied_path_roots": [
+            "/mnt/nas",
+            "/mnt/data",
+            "/home",
+            ".."
+          ],
+          "allow_absolute_path": false,
+          "allow_path_traversal": false,
+          "allow_private_snippet": true,
+          "allow_cloud_egress": false,
+          "max_egress_chars": 0,
+          "required_acl_check": true,
+          "read_only": true,
+          "write_allowed": false
+        }
+      }
+    }
+  ],
+  "detail": {
+    "architecture": "policy_first_deterministic_router_with_qwen_summarizer_advisor",
+    "doc": "F:\\Project\\Digua\\docs\\STAGE3_POLICY_FIRST_ARCHITECTURE.md",
+    "allowed_stage3_readonly_workspaces": [
+      "document_rag",
+      "nas_search"
+    ],
+    "disabled_stage3_workspaces": [
+      "admin_audit",
+      "nas_action",
+      "ops_recovery",
+      "web_cloud_research"
+    ],
+    "exposed_readonly_tools": {
+      "document_rag": [
+        "ai_nas_case_packet",
+        "ai_nas_evidence_report",
+        "ai_nas_folder_rag",
+        "ai_nas_folder_rag_grounding_contract",
+        "ai_nas_folder_summary",
+        "ai_nas_ocr_readiness",
+        "ai_nas_ocr_extract",
+        "ai_nas_ocr_runtime_contract",
+        "ai_nas_document_pipeline_acceptance"
+      ],
+      "nas_search": [
+        "ai_nas_personal_inventory",
+        "ai_nas_index_status",
+        "ai_nas_permission_aware_search",
+        "ai_nas_file_search",
+        "ai_nas_search_evidence_contract",
+        "ai_nas_search_confidence_calibration_contract",
+        "ai_nas_embedding_search",
+        "ai_nas_semantic_query_acceptance",
+        "ai_nas_folder_summary"
+      ]
+    },
+    "trace_schema": [
+      {
+        "workspace": "nas_search",
+        "policy_decision": {
+          "workspace": "nas_search",
+          "tool_id": "ai_nas_file_search",
+          "source": "deterministic_policy"
+        },
+        "qwen_advisory": {
+          "status": "optional",
+          "may_fail": true,
+          "may_override_policy": false
+        },
+        "final_tool_source": "policy",
+        "qwen_has_execution_authority": false,
+        "execution_path": "ai_nas_allowlisted_tool.sh"
+      },
+      {
+        "workspace": "document_rag",
+        "policy_decision": {
+          "workspace": "document_rag",
+          "tool_id": "ai_nas_folder_rag",
+          "source": "deterministic_policy"
+        },
+        "qwen_advisory": {
+          "status": "optional",
+          "may_fail": true,
+          "may_override_policy": false
+        },
+        "final_tool_source": "policy",
+        "qwen_has_execution_authority": false,
+        "execution_path": "ai_nas_allowlisted_tool.sh"
+      }
+    ]
+  }
+}

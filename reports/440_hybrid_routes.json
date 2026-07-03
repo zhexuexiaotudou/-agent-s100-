@@ -1,0 +1,65 @@
+{
+  "schema_version": "dream7b_s100p_v6_440_hybrid_routes",
+  "created_at_utc": "2026-07-01T09:34:34.794472+00:00",
+  "run_commands": [
+    "py tools/build_v6_research_thread.py --pack-root tmp\\dream7b_s100p_v6_after_v5_review_pack_20260701\\dream7b_s100p_v6_codex_after_v5_review_pack_20260701 --timestamp 20260701_v6_after_nas_hf"
+  ],
+  "git": {
+    "cwd": "F:\\Project\\Digua",
+    "git_dir_exists": true,
+    "git_head_exists": false,
+    "commit": null,
+    "dirty": null,
+    "status": "unavailable_empty_git_dir"
+  },
+  "input_artifacts": [
+    {
+      "path": "reports/420_verified_dream_bf16_wrapper.json",
+      "exists": true,
+      "size_bytes": 10498,
+      "sha256": "16fc6b678e10c97ac315e3c000f698707aff7500f44f7b1bcbdd689a7480eb0f"
+    },
+    {
+      "path": "reports/430_gguf_f16_q4_reference_matrix.json",
+      "exists": true,
+      "size_bytes": 5598,
+      "sha256": "d35247fcaa24e2c5ebc79c897b272f01f70d401353b2a25b1c26b6f460765333"
+    },
+    {
+      "path": "evidence/raw_endpoint_subset_v6",
+      "exists": true
+    }
+  ],
+  "output_artifacts": [
+    {
+      "path": "reports/440_hybrid_routes.json"
+    },
+    {
+      "path": "reports/440_hybrid_routes.md"
+    }
+  ],
+  "gate_status": {
+    "hybrid_routes": "blocked_hf_wrapper_or_boundary_missing_route_c_diagnostic_only"
+  },
+  "blocking_or_failure_reasons": [
+    "Task 420 blocked; Route A/B cannot run.",
+    "Task 430 missing BF16/F16 rows; Route C cannot be correctness-scored."
+  ],
+  "next_minimal_experiments": [
+    "After BF16 wrapper exists, run BPU seg0..26 -> CPU/HF lm_head for all Task 400 variants."
+  ],
+  "route_a_bpu_seg0_26_to_cpu_hf_final": {
+    "status": "blocked",
+    "reason": "HF weights/model load exist, but verified HF final norm/lm_head logits export did not complete"
+  },
+  "route_b_hf_seg26_to_bpu_seg27_28": {
+    "status": "blocked",
+    "reason": "HF seg26 boundary unavailable because BF16 forward/boundary export did not complete"
+  },
+  "route_c_bpu_seg26_to_bpu_seg27_28_corrected_scale": {
+    "status": "executed_raw_endpoint_packaged",
+    "reason": "Task 400 has all critical endpoint raw arrays",
+    "correctness": "unproven_reference_unavailable"
+  },
+  "verdict": "blocked_hf_wrapper_or_boundary_missing"
+}

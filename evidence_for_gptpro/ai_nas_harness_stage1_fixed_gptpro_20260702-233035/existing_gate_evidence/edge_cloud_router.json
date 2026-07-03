@@ -1,0 +1,311 @@
+{
+  "generated_at": "2026-07-02T22:49:43.375656+08:00",
+  "tool_id": "ai_nas_edge_cloud_router",
+  "verdict": "ok_ai_nas_edge_cloud_router",
+  "scope": "all queries enter local Qwen first; structured Qwen JSON is primary, policy is privacy/failure fallback",
+  "qwen_base_url": "http://127.0.0.1:18080",
+  "qwen_model": "Qwen2.5-1.5B-Instruct-S100P-official",
+  "qwen_classifier_enabled": false,
+  "qwen_structured_json_required": true,
+  "cloud_base_url": "http://127.0.0.1:50165",
+  "cloud_endpoint_kind": "controlled_cloud_endpoint",
+  "execute_cloud": true,
+  "require_cloud_call": true,
+  "require_qwen_touch": false,
+  "controlled_cloud_endpoint_enabled": true,
+  "summary": {
+    "query_count": 3,
+    "route_counts": {
+      "local": 2,
+      "cloud": 1
+    },
+    "privacy_counts": {
+      "high": 2,
+      "none": 1
+    },
+    "classifier_counts": {
+      "policy_only_qwen_disabled": 3
+    },
+    "privacy_query_sent_to_cloud": false,
+    "local_query_count": 2,
+    "cloud_query_count": 1,
+    "cloud_call_count": 1,
+    "controlled_cloud_call_count": 1,
+    "failures": []
+  },
+  "audit_events": [
+    {
+      "query_id": "simple_local",
+      "query_preview": "Summarize my Documents folder and list likely payment dates.",
+      "classification": {
+        "route": "local",
+        "reason": "privacy-sensitive query must stay on device",
+        "privacy_level": "high",
+        "task_complexity": "simple",
+        "privacy_hits": {
+          "finance": [
+            "payment"
+          ]
+        },
+        "simple_hits": {
+          "summary": [
+            "summarize"
+          ],
+          "local_file_qa": [
+            "folder",
+            "documents"
+          ]
+        },
+        "local_tool_id": "ai_nas_case_packet",
+        "classifier": "policy_only_qwen_disabled"
+      },
+      "expected_route": "local",
+      "cloud_request": {
+        "called": false,
+        "privacy_guard": true
+      },
+      "local_tool_would_run": "ai_nas_case_packet"
+    },
+    {
+      "query_id": "privacy_local",
+      "query_preview": "Find my child's beach photo and the renovation invoice screenshot in the NAS.",
+      "classification": {
+        "route": "local",
+        "reason": "privacy-sensitive query must stay on device",
+        "privacy_level": "high",
+        "task_complexity": "simple",
+        "privacy_hits": {
+          "invoice": [
+            "invoice"
+          ],
+          "family_photo": [
+            "child"
+          ],
+          "chat_screenshot": [
+            "screenshot"
+          ]
+        },
+        "simple_hits": {
+          "search": [
+            "find"
+          ]
+        },
+        "local_tool_id": "ai_nas_case_packet",
+        "classifier": "policy_only_qwen_disabled"
+      },
+      "expected_route": "local",
+      "cloud_request": {
+        "called": false,
+        "privacy_guard": true
+      },
+      "local_tool_would_run": "ai_nas_case_packet"
+    },
+    {
+      "query_id": "complex_cloud",
+      "query_preview": "Compare public 2026 AI NAS market trends and draft a strategic launch narrative.",
+      "classification": {
+        "route": "cloud",
+        "reason": "non-private complex query can be sent to cloud for broader reasoning",
+        "privacy_level": "none",
+        "task_complexity": "complex",
+        "privacy_hits": {},
+        "simple_hits": {},
+        "local_tool_id": null,
+        "classifier": "policy_only_qwen_disabled"
+      },
+      "expected_route": "cloud",
+      "cloud_request": {
+        "called": true,
+        "status": 200,
+        "elapsed_ms": 34.824,
+        "body_preview": "{\"ok\": true, \"provider\": \"controlled_cloud_endpoint\", \"received\": true, \"call_index\": 1, \"query_length\": 80}",
+        "endpoint_kind": "controlled_cloud_endpoint"
+      },
+      "local_tool_would_run": null
+    }
+  ],
+  "controlled_cloud_calls": [
+    {
+      "received_at": "2026-07-02T22:49:42.874601+08:00",
+      "endpoint_kind": "controlled_cloud_endpoint",
+      "path": "/route-demo",
+      "query_preview": "Compare public 2026 AI NAS market trends and draft a strategic launch narrative.",
+      "query_length": 80
+    }
+  ],
+  "policy": {
+    "privacy_terms": {
+      "id_card": [
+        "身份证",
+        "护照",
+        "驾驶证",
+        "id card",
+        "passport",
+        "driver license"
+      ],
+      "contract": [
+        "合同",
+        "协议",
+        "contract",
+        "agreement"
+      ],
+      "invoice": [
+        "发票",
+        "票据",
+        "收据",
+        "invoice",
+        "receipt",
+        "reimbursement"
+      ],
+      "family_photo": [
+        "家庭照片",
+        "孩子",
+        "小孩",
+        "宝宝",
+        "family photo",
+        "family",
+        "child",
+        "kid",
+        "baby"
+      ],
+      "face": [
+        "人脸",
+        "头像",
+        "face",
+        "portrait"
+      ],
+      "nas_private_path": [
+        "/mnt/nas",
+        "personal/",
+        "我的nas",
+        "我的 nas",
+        "私人目录",
+        "my nas",
+        "private folder"
+      ],
+      "chat_screenshot": [
+        "聊天截图",
+        "微信截图",
+        "chat screenshot",
+        "screenshot"
+      ],
+      "finance": [
+        "金额",
+        "付款",
+        "银行卡",
+        "工资",
+        "财务",
+        "报销",
+        "payment",
+        "bank",
+        "salary"
+      ]
+    },
+    "simple_terms": {
+      "summary": [
+        "summary",
+        "summarize",
+        "总结",
+        "摘要"
+      ],
+      "classification": [
+        "classify",
+        "分类",
+        "整理",
+        "sort"
+      ],
+      "search": [
+        "find",
+        "search",
+        "查找",
+        "搜索"
+      ],
+      "local_file_qa": [
+        "folder",
+        "documents",
+        "photos",
+        "movies",
+        "inbox",
+        "文件夹",
+        "文档",
+        "照片",
+        "电影",
+        "收件箱"
+      ],
+      "allowlisted_tool": [
+        "ai_nas_personal_inventory",
+        "ai_nas_file_search",
+        "ai_nas_folder_summary",
+        "ai_nas_case_packet",
+        "ai_nas_duplicate_report",
+        "ai_nas_movie_sort_enhanced"
+      ]
+    },
+    "local_tool_rules": [
+      [
+        "ai_nas_case_packet",
+        [
+          "contract",
+          "合同",
+          "invoice",
+          "发票",
+          "receipt",
+          "收据",
+          "chat screenshot",
+          "聊天截图",
+          "payment",
+          "付款",
+          "renovation"
+        ]
+      ],
+      [
+        "ai_nas_photo_semantic_search",
+        [
+          "photo",
+          "照片",
+          "image",
+          "图片",
+          "beach",
+          "car",
+          "screenshot",
+          "截图"
+        ]
+      ],
+      [
+        "ai_nas_folder_summary",
+        [
+          "summary",
+          "summarize",
+          "总结",
+          "摘要",
+          "folder",
+          "文件夹",
+          "documents",
+          "文档"
+        ]
+      ],
+      [
+        "ai_nas_file_search",
+        [
+          "find",
+          "查找",
+          "search",
+          "搜索"
+        ]
+      ],
+      [
+        "ai_nas_personal_inventory",
+        [
+          "inventory",
+          "清单",
+          "scan",
+          "扫描",
+          "index",
+          "索引"
+        ]
+      ]
+    ],
+    "privacy_floor": "policy may override Qwen only to prevent privacy-sensitive cloud routing",
+    "fallback_rule": "policy is used when Qwen does not return structured JSON or errors"
+  }
+}

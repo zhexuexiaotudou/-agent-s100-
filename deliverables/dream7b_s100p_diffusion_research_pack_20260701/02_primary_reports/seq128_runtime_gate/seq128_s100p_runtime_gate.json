@@ -1,0 +1,1069 @@
+{
+  "generated_at": "2026-07-01T01:45:28.331783+08:00",
+  "verdict": "ok_dream7b_seq128_s100p_runtime_gate",
+  "runtime_version": "3.13.6_(4.7.5 HBRT)",
+  "hbm_root": "/mnt/nas/openclaw/models/dream7b-hbm/seq128-b1-lmheadq16-lasttoken",
+  "seq_len": 128,
+  "batch_size": 1,
+  "artifact_mode": "segmented",
+  "final_logits_mode": "last-token",
+  "lm_head_w_bits": 16,
+  "representative_segments": [
+    0,
+    5,
+    27
+  ],
+  "gate_results": {
+    "representative_segments": {
+      "pass": true,
+      "executed_count": 3
+    },
+    "full_chain": {
+      "attempted": true,
+      "pass": true,
+      "executed_count": 28,
+      "final_shape": [
+        1,
+        152064
+      ]
+    }
+  },
+  "timing": {
+    "representative_total_load_ms": 25191.438,
+    "representative_total_run_ms": 80.688,
+    "full_chain_total_load_ms": 75503.263,
+    "full_chain_total_run_ms": 317.142,
+    "wall_ms": 101579.41
+  },
+  "representative_rows": [
+    {
+      "index": 0,
+      "model_name": "dream_segment_00_01",
+      "hbm_path": "/mnt/nas/openclaw/models/dream7b-hbm/seq128-b1-lmheadq16-lasttoken/seg00_01/dream7b_segment_0_1_seq128_q8.hbm",
+      "model_names": [
+        "dream_segment_00_01"
+      ],
+      "input_shapes": {
+        "_input_0": [
+          1,
+          128
+        ],
+        "_input_1": [
+          128
+        ]
+      },
+      "output_shape": [
+        128,
+        3584
+      ],
+      "expected_shape": [
+        128,
+        3584
+      ],
+      "output_dtype": "int16",
+      "output_quant_scale": 6.062494503566995e-05,
+      "load_ms": 7331.452,
+      "run_ms": 11.061,
+      "repeat_run_ms": [
+        11.061
+      ],
+      "hbm_size_bytes": 781225720
+    },
+    {
+      "index": 5,
+      "model_name": "dream_segment_05_06",
+      "hbm_path": "/mnt/nas/openclaw/models/dream7b-hbm/seq128-b1-lmheadq16-lasttoken/seg05_06/dream7b_segment_5_6_seq128_q8.hbm",
+      "model_names": [
+        "dream_segment_05_06"
+      ],
+      "input_shapes": {
+        "_input_0": [
+          128,
+          3584
+        ],
+        "_input_1": [
+          128
+        ]
+      },
+      "output_shape": [
+        128,
+        3584
+      ],
+      "expected_shape": [
+        128,
+        3584
+      ],
+      "output_dtype": "int16",
+      "output_quant_scale": 0.001613997737877071,
+      "load_ms": 1923.961,
+      "run_ms": 9.602,
+      "repeat_run_ms": [
+        9.602
+      ],
+      "hbm_size_bytes": 227156832
+    },
+    {
+      "index": 27,
+      "model_name": "dream_segment_27_28_last_token_logits",
+      "hbm_path": "/mnt/nas/openclaw/models/dream7b-hbm/seq128-b1-lmheadq16-lasttoken/seg27_28/dream7b_segment_27_28_seq128_q8_lmheadq16_last_token_logits.hbm",
+      "model_names": [
+        "dream_segment_27_28_last_token_logits"
+      ],
+      "input_shapes": {
+        "_input_0": [
+          128,
+          3584
+        ],
+        "_input_1": [
+          128
+        ]
+      },
+      "output_shape": [
+        1,
+        152064
+      ],
+      "expected_shape": [
+        1,
+        152064
+      ],
+      "output_dtype": "int16",
+      "output_quant_scale": 0.00025415877462364733,
+      "load_ms": 15936.025,
+      "run_ms": 60.025,
+      "repeat_run_ms": [
+        60.025
+      ],
+      "hbm_size_bytes": 1880386728
+    }
+  ],
+  "full_chain_rows": [
+    {
+      "index": 0,
+      "model_name": "dream_segment_00_01",
+      "hbm_path": "/mnt/nas/openclaw/models/dream7b-hbm/seq128-b1-lmheadq16-lasttoken/seg00_01/dream7b_segment_0_1_seq128_q8.hbm",
+      "model_names": [
+        "dream_segment_00_01"
+      ],
+      "input_shapes": {
+        "_input_0": [
+          1,
+          128
+        ],
+        "_input_1": [
+          128
+        ]
+      },
+      "output_shape": [
+        128,
+        3584
+      ],
+      "expected_shape": [
+        128,
+        3584
+      ],
+      "output_dtype": "int16",
+      "output_quant_scale": 6.062494503566995e-05,
+      "load_ms": 6597.284,
+      "run_ms": 10.337,
+      "repeat_run_ms": [
+        10.337
+      ],
+      "hbm_size_bytes": 781225720
+    },
+    {
+      "index": 1,
+      "model_name": "dream_segment_01_02",
+      "hbm_path": "/mnt/nas/openclaw/models/dream7b-hbm/seq128-b1-lmheadq16-lasttoken/seg01_02/dream7b_segment_1_2_seq128_q8.hbm",
+      "model_names": [
+        "dream_segment_01_02"
+      ],
+      "input_shapes": {
+        "_input_0": [
+          128,
+          3584
+        ],
+        "_input_1": [
+          128
+        ]
+      },
+      "output_shape": [
+        128,
+        3584
+      ],
+      "expected_shape": [
+        128,
+        3584
+      ],
+      "output_dtype": "int16",
+      "output_quant_scale": 4.552441168925725e-05,
+      "load_ms": 2015.952,
+      "run_ms": 9.345,
+      "repeat_run_ms": [
+        9.345
+      ],
+      "hbm_size_bytes": 227158880
+    },
+    {
+      "index": 2,
+      "model_name": "dream_segment_02_03",
+      "hbm_path": "/mnt/nas/openclaw/models/dream7b-hbm/seq128-b1-lmheadq16-lasttoken/seg02_03/dream7b_segment_2_3_seq128_q8.hbm",
+      "model_names": [
+        "dream_segment_02_03"
+      ],
+      "input_shapes": {
+        "_input_0": [
+          128,
+          3584
+        ],
+        "_input_1": [
+          128
+        ]
+      },
+      "output_shape": [
+        128,
+        3584
+      ],
+      "expected_shape": [
+        128,
+        3584
+      ],
+      "output_dtype": "int16",
+      "output_quant_scale": 0.0010667958995327353,
+      "load_ms": 2056.515,
+      "run_ms": 9.364,
+      "repeat_run_ms": [
+        9.364
+      ],
+      "hbm_size_bytes": 227158112
+    },
+    {
+      "index": 3,
+      "model_name": "dream_segment_03_04",
+      "hbm_path": "/mnt/nas/openclaw/models/dream7b-hbm/seq128-b1-lmheadq16-lasttoken/seg03_04/dream7b_segment_3_4_seq128_q8.hbm",
+      "model_names": [
+        "dream_segment_03_04"
+      ],
+      "input_shapes": {
+        "_input_0": [
+          128,
+          3584
+        ],
+        "_input_1": [
+          128
+        ]
+      },
+      "output_shape": [
+        128,
+        3584
+      ],
+      "expected_shape": [
+        128,
+        3584
+      ],
+      "output_dtype": "int16",
+      "output_quant_scale": 0.012031201273202896,
+      "load_ms": 2021.909,
+      "run_ms": 9.389,
+      "repeat_run_ms": [
+        9.389
+      ],
+      "hbm_size_bytes": 227149152
+    },
+    {
+      "index": 4,
+      "model_name": "dream_segment_04_05",
+      "hbm_path": "/mnt/nas/openclaw/models/dream7b-hbm/seq128-b1-lmheadq16-lasttoken/seg04_05/dream7b_segment_4_5_seq128_q8.hbm",
+      "model_names": [
+        "dream_segment_04_05"
+      ],
+      "input_shapes": {
+        "_input_0": [
+          128,
+          3584
+        ],
+        "_input_1": [
+          128
+        ]
+      },
+      "output_shape": [
+        128,
+        3584
+      ],
+      "expected_shape": [
+        128,
+        3584
+      ],
+      "output_dtype": "int16",
+      "output_quant_scale": 0.0023247746285051107,
+      "load_ms": 2032.86,
+      "run_ms": 9.636,
+      "repeat_run_ms": [
+        9.636
+      ],
+      "hbm_size_bytes": 227155296
+    },
+    {
+      "index": 5,
+      "model_name": "dream_segment_05_06",
+      "hbm_path": "/mnt/nas/openclaw/models/dream7b-hbm/seq128-b1-lmheadq16-lasttoken/seg05_06/dream7b_segment_5_6_seq128_q8.hbm",
+      "model_names": [
+        "dream_segment_05_06"
+      ],
+      "input_shapes": {
+        "_input_0": [
+          128,
+          3584
+        ],
+        "_input_1": [
+          128
+        ]
+      },
+      "output_shape": [
+        128,
+        3584
+      ],
+      "expected_shape": [
+        128,
+        3584
+      ],
+      "output_dtype": "int16",
+      "output_quant_scale": 0.001613997737877071,
+      "load_ms": 1922.986,
+      "run_ms": 9.618,
+      "repeat_run_ms": [
+        9.618
+      ],
+      "hbm_size_bytes": 227156832
+    },
+    {
+      "index": 6,
+      "model_name": "dream_segment_06_07",
+      "hbm_path": "/mnt/nas/openclaw/models/dream7b-hbm/seq128-b1-lmheadq16-lasttoken/seg06_07/dream7b_segment_6_7_seq128_q8.hbm",
+      "model_names": [
+        "dream_segment_06_07"
+      ],
+      "input_shapes": {
+        "_input_0": [
+          128,
+          3584
+        ],
+        "_input_1": [
+          128
+        ]
+      },
+      "output_shape": [
+        128,
+        3584
+      ],
+      "expected_shape": [
+        128,
+        3584
+      ],
+      "output_dtype": "int16",
+      "output_quant_scale": 0.0002458994567859918,
+      "load_ms": 2033.936,
+      "run_ms": 9.364,
+      "repeat_run_ms": [
+        9.364
+      ],
+      "hbm_size_bytes": 227112544
+    },
+    {
+      "index": 7,
+      "model_name": "dream_segment_07_08",
+      "hbm_path": "/mnt/nas/openclaw/models/dream7b-hbm/seq128-b1-lmheadq16-lasttoken/seg07_08/dream7b_segment_7_8_seq128_q8.hbm",
+      "model_names": [
+        "dream_segment_07_08"
+      ],
+      "input_shapes": {
+        "_input_0": [
+          128,
+          3584
+        ],
+        "_input_1": [
+          128
+        ]
+      },
+      "output_shape": [
+        128,
+        3584
+      ],
+      "expected_shape": [
+        128,
+        3584
+      ],
+      "output_dtype": "int16",
+      "output_quant_scale": 0.0003651473089121282,
+      "load_ms": 2027.871,
+      "run_ms": 9.334,
+      "repeat_run_ms": [
+        9.334
+      ],
+      "hbm_size_bytes": 227154528
+    },
+    {
+      "index": 8,
+      "model_name": "dream_segment_08_09",
+      "hbm_path": "/mnt/nas/openclaw/models/dream7b-hbm/seq128-b1-lmheadq16-lasttoken/seg08_09/dream7b_segment_8_9_seq128_q8.hbm",
+      "model_names": [
+        "dream_segment_08_09"
+      ],
+      "input_shapes": {
+        "_input_0": [
+          128,
+          3584
+        ],
+        "_input_1": [
+          128
+        ]
+      },
+      "output_shape": [
+        128,
+        3584
+      ],
+      "expected_shape": [
+        128,
+        3584
+      ],
+      "output_dtype": "int16",
+      "output_quant_scale": 0.0001341497409157455,
+      "load_ms": 2056.07,
+      "run_ms": 9.652,
+      "repeat_run_ms": [
+        9.652
+      ],
+      "hbm_size_bytes": 227152992
+    },
+    {
+      "index": 9,
+      "model_name": "dream_segment_09_10",
+      "hbm_path": "/mnt/nas/openclaw/models/dream7b-hbm/seq128-b1-lmheadq16-lasttoken/seg09_10/dream7b_segment_9_10_seq128_q8.hbm",
+      "model_names": [
+        "dream_segment_09_10"
+      ],
+      "input_shapes": {
+        "_input_0": [
+          128,
+          3584
+        ],
+        "_input_1": [
+          128
+        ]
+      },
+      "output_shape": [
+        128,
+        3584
+      ],
+      "expected_shape": [
+        128,
+        3584
+      ],
+      "output_dtype": "int16",
+      "output_quant_scale": 4.092553717782721e-05,
+      "load_ms": 2032.521,
+      "run_ms": 9.265,
+      "repeat_run_ms": [
+        9.265
+      ],
+      "hbm_size_bytes": 227153504
+    },
+    {
+      "index": 10,
+      "model_name": "dream_segment_10_11",
+      "hbm_path": "/mnt/nas/openclaw/models/dream7b-hbm/seq128-b1-lmheadq16-lasttoken/seg10_11/dream7b_segment_10_11_seq128_q8.hbm",
+      "model_names": [
+        "dream_segment_10_11"
+      ],
+      "input_shapes": {
+        "_input_0": [
+          128,
+          3584
+        ],
+        "_input_1": [
+          128
+        ]
+      },
+      "output_shape": [
+        128,
+        3584
+      ],
+      "expected_shape": [
+        128,
+        3584
+      ],
+      "output_dtype": "int16",
+      "output_quant_scale": 0.0007787448703311384,
+      "load_ms": 2119.101,
+      "run_ms": 9.33,
+      "repeat_run_ms": [
+        9.33
+      ],
+      "hbm_size_bytes": 227116128
+    },
+    {
+      "index": 11,
+      "model_name": "dream_segment_11_12",
+      "hbm_path": "/mnt/nas/openclaw/models/dream7b-hbm/seq128-b1-lmheadq16-lasttoken/seg11_12/dream7b_segment_11_12_seq128_q8.hbm",
+      "model_names": [
+        "dream_segment_11_12"
+      ],
+      "input_shapes": {
+        "_input_0": [
+          128,
+          3584
+        ],
+        "_input_1": [
+          128
+        ]
+      },
+      "output_shape": [
+        128,
+        3584
+      ],
+      "expected_shape": [
+        128,
+        3584
+      ],
+      "output_dtype": "int16",
+      "output_quant_scale": 0.002485527191311121,
+      "load_ms": 2032.697,
+      "run_ms": 9.622,
+      "repeat_run_ms": [
+        9.622
+      ],
+      "hbm_size_bytes": 227125088
+    },
+    {
+      "index": 12,
+      "model_name": "dream_segment_12_13",
+      "hbm_path": "/mnt/nas/openclaw/models/dream7b-hbm/seq128-b1-lmheadq16-lasttoken/seg12_13/dream7b_segment_12_13_seq128_q8.hbm",
+      "model_names": [
+        "dream_segment_12_13"
+      ],
+      "input_shapes": {
+        "_input_0": [
+          128,
+          3584
+        ],
+        "_input_1": [
+          128
+        ]
+      },
+      "output_shape": [
+        128,
+        3584
+      ],
+      "expected_shape": [
+        128,
+        3584
+      ],
+      "output_dtype": "int16",
+      "output_quant_scale": 0.0010414961725473404,
+      "load_ms": 2010.686,
+      "run_ms": 9.69,
+      "repeat_run_ms": [
+        9.69
+      ],
+      "hbm_size_bytes": 227126880
+    },
+    {
+      "index": 13,
+      "model_name": "dream_segment_13_14",
+      "hbm_path": "/mnt/nas/openclaw/models/dream7b-hbm/seq128-b1-lmheadq16-lasttoken/seg13_14/dream7b_segment_13_14_seq128_q8.hbm",
+      "model_names": [
+        "dream_segment_13_14"
+      ],
+      "input_shapes": {
+        "_input_0": [
+          128,
+          3584
+        ],
+        "_input_1": [
+          128
+        ]
+      },
+      "output_shape": [
+        128,
+        3584
+      ],
+      "expected_shape": [
+        128,
+        3584
+      ],
+      "output_dtype": "int16",
+      "output_quant_scale": 0.00016496573516633362,
+      "load_ms": 2100.228,
+      "run_ms": 9.411,
+      "repeat_run_ms": [
+        9.411
+      ],
+      "hbm_size_bytes": 227148640
+    },
+    {
+      "index": 14,
+      "model_name": "dream_segment_14_15",
+      "hbm_path": "/mnt/nas/openclaw/models/dream7b-hbm/seq128-b1-lmheadq16-lasttoken/seg14_15/dream7b_segment_14_15_seq128_q8.hbm",
+      "model_names": [
+        "dream_segment_14_15"
+      ],
+      "input_shapes": {
+        "_input_0": [
+          128,
+          3584
+        ],
+        "_input_1": [
+          128
+        ]
+      },
+      "output_shape": [
+        128,
+        3584
+      ],
+      "expected_shape": [
+        128,
+        3584
+      ],
+      "output_dtype": "int16",
+      "output_quant_scale": 0.0006284652044996619,
+      "load_ms": 2015.72,
+      "run_ms": 9.358,
+      "repeat_run_ms": [
+        9.358
+      ],
+      "hbm_size_bytes": 227156064
+    },
+    {
+      "index": 15,
+      "model_name": "dream_segment_15_16",
+      "hbm_path": "/mnt/nas/openclaw/models/dream7b-hbm/seq128-b1-lmheadq16-lasttoken/seg15_16/dream7b_segment_15_16_seq128_q8.hbm",
+      "model_names": [
+        "dream_segment_15_16"
+      ],
+      "input_shapes": {
+        "_input_0": [
+          128,
+          3584
+        ],
+        "_input_1": [
+          128
+        ]
+      },
+      "output_shape": [
+        128,
+        3584
+      ],
+      "expected_shape": [
+        128,
+        3584
+      ],
+      "output_dtype": "int16",
+      "output_quant_scale": 0.0002674429561011493,
+      "load_ms": 2010.491,
+      "run_ms": 9.599,
+      "repeat_run_ms": [
+        9.599
+      ],
+      "hbm_size_bytes": 227147616
+    },
+    {
+      "index": 16,
+      "model_name": "dream_segment_16_17",
+      "hbm_path": "/mnt/nas/openclaw/models/dream7b-hbm/seq128-b1-lmheadq16-lasttoken/seg16_17/dream7b_segment_16_17_seq128_q8.hbm",
+      "model_names": [
+        "dream_segment_16_17"
+      ],
+      "input_shapes": {
+        "_input_0": [
+          128,
+          3584
+        ],
+        "_input_1": [
+          128
+        ]
+      },
+      "output_shape": [
+        128,
+        3584
+      ],
+      "expected_shape": [
+        128,
+        3584
+      ],
+      "output_dtype": "int16",
+      "output_quant_scale": 0.0001409730175510049,
+      "load_ms": 2000.671,
+      "run_ms": 9.688,
+      "repeat_run_ms": [
+        9.688
+      ],
+      "hbm_size_bytes": 227149920
+    },
+    {
+      "index": 17,
+      "model_name": "dream_segment_17_18",
+      "hbm_path": "/mnt/nas/openclaw/models/dream7b-hbm/seq128-b1-lmheadq16-lasttoken/seg17_18/dream7b_segment_17_18_seq128_q8.hbm",
+      "model_names": [
+        "dream_segment_17_18"
+      ],
+      "input_shapes": {
+        "_input_0": [
+          128,
+          3584
+        ],
+        "_input_1": [
+          128
+        ]
+      },
+      "output_shape": [
+        128,
+        3584
+      ],
+      "expected_shape": [
+        128,
+        3584
+      ],
+      "output_dtype": "int16",
+      "output_quant_scale": 0.00018291195738129318,
+      "load_ms": 2009.657,
+      "run_ms": 9.603,
+      "repeat_run_ms": [
+        9.603
+      ],
+      "hbm_size_bytes": 227149152
+    },
+    {
+      "index": 18,
+      "model_name": "dream_segment_18_19",
+      "hbm_path": "/mnt/nas/openclaw/models/dream7b-hbm/seq128-b1-lmheadq16-lasttoken/seg18_19/dream7b_segment_18_19_seq128_q8.hbm",
+      "model_names": [
+        "dream_segment_18_19"
+      ],
+      "input_shapes": {
+        "_input_0": [
+          128,
+          3584
+        ],
+        "_input_1": [
+          128
+        ]
+      },
+      "output_shape": [
+        128,
+        3584
+      ],
+      "expected_shape": [
+        128,
+        3584
+      ],
+      "output_dtype": "int16",
+      "output_quant_scale": 0.00043392699444666505,
+      "load_ms": 2017.301,
+      "run_ms": 9.675,
+      "repeat_run_ms": [
+        9.675
+      ],
+      "hbm_size_bytes": 227166304
+    },
+    {
+      "index": 19,
+      "model_name": "dream_segment_19_20",
+      "hbm_path": "/mnt/nas/openclaw/models/dream7b-hbm/seq128-b1-lmheadq16-lasttoken/seg19_20/dream7b_segment_19_20_seq128_q8.hbm",
+      "model_names": [
+        "dream_segment_19_20"
+      ],
+      "input_shapes": {
+        "_input_0": [
+          128,
+          3584
+        ],
+        "_input_1": [
+          128
+        ]
+      },
+      "output_shape": [
+        128,
+        3584
+      ],
+      "expected_shape": [
+        128,
+        3584
+      ],
+      "output_dtype": "int16",
+      "output_quant_scale": 0.0005552237271331251,
+      "load_ms": 2011.945,
+      "run_ms": 9.608,
+      "repeat_run_ms": [
+        9.608
+      ],
+      "hbm_size_bytes": 227122528
+    },
+    {
+      "index": 20,
+      "model_name": "dream_segment_20_21",
+      "hbm_path": "/mnt/nas/openclaw/models/dream7b-hbm/seq128-b1-lmheadq16-lasttoken/seg20_21/dream7b_segment_20_21_seq128_q8.hbm",
+      "model_names": [
+        "dream_segment_20_21"
+      ],
+      "input_shapes": {
+        "_input_0": [
+          128,
+          3584
+        ],
+        "_input_1": [
+          128
+        ]
+      },
+      "output_shape": [
+        128,
+        3584
+      ],
+      "expected_shape": [
+        128,
+        3584
+      ],
+      "output_dtype": "int16",
+      "output_quant_scale": 0.0007042085053399205,
+      "load_ms": 2018.322,
+      "run_ms": 9.642,
+      "repeat_run_ms": [
+        9.642
+      ],
+      "hbm_size_bytes": 227114848
+    },
+    {
+      "index": 21,
+      "model_name": "dream_segment_21_22",
+      "hbm_path": "/mnt/nas/openclaw/models/dream7b-hbm/seq128-b1-lmheadq16-lasttoken/seg21_22/dream7b_segment_21_22_seq128_q8.hbm",
+      "model_names": [
+        "dream_segment_21_22"
+      ],
+      "input_shapes": {
+        "_input_0": [
+          128,
+          3584
+        ],
+        "_input_1": [
+          128
+        ]
+      },
+      "output_shape": [
+        128,
+        3584
+      ],
+      "expected_shape": [
+        128,
+        3584
+      ],
+      "output_dtype": "int16",
+      "output_quant_scale": 0.0007022023783065379,
+      "load_ms": 2007.287,
+      "run_ms": 9.625,
+      "repeat_run_ms": [
+        9.625
+      ],
+      "hbm_size_bytes": 227127136
+    },
+    {
+      "index": 22,
+      "model_name": "dream_segment_22_23",
+      "hbm_path": "/mnt/nas/openclaw/models/dream7b-hbm/seq128-b1-lmheadq16-lasttoken/seg22_23/dream7b_segment_22_23_seq128_q8.hbm",
+      "model_names": [
+        "dream_segment_22_23"
+      ],
+      "input_shapes": {
+        "_input_0": [
+          128,
+          3584
+        ],
+        "_input_1": [
+          128
+        ]
+      },
+      "output_shape": [
+        128,
+        3584
+      ],
+      "expected_shape": [
+        128,
+        3584
+      ],
+      "output_dtype": "int16",
+      "output_quant_scale": 0.0013323521707206964,
+      "load_ms": 2124.041,
+      "run_ms": 9.306,
+      "repeat_run_ms": [
+        9.306
+      ],
+      "hbm_size_bytes": 227124576
+    },
+    {
+      "index": 23,
+      "model_name": "dream_segment_23_24",
+      "hbm_path": "/mnt/nas/openclaw/models/dream7b-hbm/seq128-b1-lmheadq16-lasttoken/seg23_24/dream7b_segment_23_24_seq128_q8.hbm",
+      "model_names": [
+        "dream_segment_23_24"
+      ],
+      "input_shapes": {
+        "_input_0": [
+          128,
+          3584
+        ],
+        "_input_1": [
+          128
+        ]
+      },
+      "output_shape": [
+        128,
+        3584
+      ],
+      "expected_shape": [
+        128,
+        3584
+      ],
+      "output_dtype": "int16",
+      "output_quant_scale": 0.0031171173322945833,
+      "load_ms": 2001.928,
+      "run_ms": 9.316,
+      "repeat_run_ms": [
+        9.316
+      ],
+      "hbm_size_bytes": 227116128
+    },
+    {
+      "index": 24,
+      "model_name": "dream_segment_24_25",
+      "hbm_path": "/mnt/nas/openclaw/models/dream7b-hbm/seq128-b1-lmheadq16-lasttoken/seg24_25/dream7b_segment_24_25_seq128_q8.hbm",
+      "model_names": [
+        "dream_segment_24_25"
+      ],
+      "input_shapes": {
+        "_input_0": [
+          128,
+          3584
+        ],
+        "_input_1": [
+          128
+        ]
+      },
+      "output_shape": [
+        128,
+        3584
+      ],
+      "expected_shape": [
+        128,
+        3584
+      ],
+      "output_dtype": "int16",
+      "output_quant_scale": 0.0005110207130201161,
+      "load_ms": 1988.016,
+      "run_ms": 9.772,
+      "repeat_run_ms": [
+        9.772
+      ],
+      "hbm_size_bytes": 227151200
+    },
+    {
+      "index": 25,
+      "model_name": "dream_segment_25_26",
+      "hbm_path": "/mnt/nas/openclaw/models/dream7b-hbm/seq128-b1-lmheadq16-lasttoken/seg25_26/dream7b_segment_25_26_seq128_q8.hbm",
+      "model_names": [
+        "dream_segment_25_26"
+      ],
+      "input_shapes": {
+        "_input_0": [
+          128,
+          3584
+        ],
+        "_input_1": [
+          128
+        ]
+      },
+      "output_shape": [
+        128,
+        3584
+      ],
+      "expected_shape": [
+        128,
+        3584
+      ],
+      "output_dtype": "int16",
+      "output_quant_scale": 0.007886312901973724,
+      "load_ms": 2122.689,
+      "run_ms": 9.353,
+      "repeat_run_ms": [
+        9.353
+      ],
+      "hbm_size_bytes": 227156832
+    },
+    {
+      "index": 26,
+      "model_name": "dream_segment_26_27",
+      "hbm_path": "/mnt/nas/openclaw/models/dream7b-hbm/seq128-b1-lmheadq16-lasttoken/seg26_27/dream7b_segment_26_27_seq128_q8.hbm",
+      "model_names": [
+        "dream_segment_26_27"
+      ],
+      "input_shapes": {
+        "_input_0": [
+          128,
+          3584
+        ],
+        "_input_1": [
+          128
+        ]
+      },
+      "output_shape": [
+        128,
+        3584
+      ],
+      "expected_shape": [
+        128,
+        3584
+      ],
+      "output_dtype": "int16",
+      "output_quant_scale": 0.0008227791986428201,
+      "load_ms": 2162.667,
+      "run_ms": 9.252,
+      "repeat_run_ms": [
+        9.252
+      ],
+      "hbm_size_bytes": 227156576
+    },
+    {
+      "index": 27,
+      "model_name": "dream_segment_27_28_last_token_logits",
+      "hbm_path": "/mnt/nas/openclaw/models/dream7b-hbm/seq128-b1-lmheadq16-lasttoken/seg27_28/dream7b_segment_27_28_seq128_q8_lmheadq16_last_token_logits.hbm",
+      "model_names": [
+        "dream_segment_27_28_last_token_logits"
+      ],
+      "input_shapes": {
+        "_input_0": [
+          128,
+          3584
+        ],
+        "_input_1": [
+          128
+        ]
+      },
+      "output_shape": [
+        1,
+        152064
+      ],
+      "expected_shape": [
+        1,
+        152064
+      ],
+      "output_dtype": "int16",
+      "output_quant_scale": 0.00025415877462364733,
+      "load_ms": 15951.912,
+      "run_ms": 59.988,
+      "repeat_run_ms": [
+        59.988
+      ],
+      "hbm_size_bytes": 1880386728
+    }
+  ],
+  "errors": [],
+  "representative_errors": [],
+  "full_chain_errors": [],
+  "resource_exhausted_observed": false
+}

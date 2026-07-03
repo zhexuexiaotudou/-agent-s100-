@@ -1,0 +1,106 @@
+{
+  "schema_version": "dream7b_s100p_v15_1630_gathernd_official_quant_scale_closure",
+  "created_at_utc": "2026-07-03T09:13:05.520542+00:00",
+  "run_commands": [
+    "C:\\Users\\zhexu\\AppData\\Local\\Python\\pythoncore-3.14-64\\python.exe tools\\build_v15_research_thread.py --root ."
+  ],
+  "host_environment": {
+    "local_platform": "Windows-11-10.0.26200-SP0",
+    "python": "3.14.3 (tags/v3.14.3:323c59a, Feb  3 2026, 16:04:56) [MSC v.1944 64 bit (AMD64)]"
+  },
+  "git": {
+    "returncode": 128,
+    "stdout": "",
+    "stderr": "fatal: not a git repository (or any of the parent directories): .git"
+  },
+  "input_artifacts": [
+    {
+      "path": "reports/1430_gathernd_embedding_quant_audit.json",
+      "exists": true,
+      "size_bytes": 35334,
+      "sha256": "95ee83f8b5dd8bd9d80b263cd07b1d6f4ad6c453f8746a047efaa28a01d1df53"
+    },
+    {
+      "path": "evidence/compiler_source_graph_v15/targeted_search_results.json",
+      "exists": true,
+      "size_bytes": 197386,
+      "sha256": "ba02678d8ceff7c4dc1e4f4ef8221dabc7726baef938a3723f8d3e084e1814f9"
+    }
+  ],
+  "output_artifacts": [
+    {
+      "path": "reports/1630_gathernd_official_quant_scale_closure.json",
+      "exists": true,
+      "size_bytes": 3233,
+      "sha256": "c7a1e173f62b8533abeca3cc0e06ede056083cf94701e86f46736ae8660615ff"
+    },
+    {
+      "path": "reports/1630_gathernd_official_quant_scale_closure.md",
+      "exists": true,
+      "size_bytes": 321,
+      "sha256": "327714fb40008540fda48cd98e11f1dc7a4722353d1875be21fa04fd56bf24d3"
+    }
+  ],
+  "blocking_or_failure_reasons": [
+    "No official GatherND output scale/zero point was found for the tested seq128 B=1 artifact; diagnostic fits are not deployable repairs."
+  ],
+  "next_minimal_experiments": [],
+  "safety": {
+    "generation_quality_run": false,
+    "product_routes_18888_18889_touched": false,
+    "dream7b_frontend_openclaw_traffic_touched": false
+  },
+  "verdict": "official_scale_missing_reexport_recalibration_required",
+  "official_scale_available": false,
+  "quant_metadata_candidates": [],
+  "variant_summary": {
+    "raw_gathernd_int8_values_vs_hf_embedding": {
+      "rows": 3,
+      "strict_rows": 0,
+      "median_relative_l2": 147.32410452947533,
+      "mean_pearson": 0.9908078491592849
+    },
+    "gathernd_best_scalar_to_hf_embedding": {
+      "rows": 3,
+      "strict_rows": 0,
+      "median_relative_l2": 0.13524612305920727,
+      "mean_pearson": 0.9908078491311407
+    },
+    "hf_embedding_symmetric_int8_dequant_candidate": {
+      "rows": 3,
+      "strict_rows": 2,
+      "median_relative_l2": 0.0783004337184411,
+      "mean_pearson": 0.9957596311063392
+    },
+    "gathernd_sign_flip_best_scalar": {
+      "rows": 3,
+      "strict_rows": 0,
+      "median_relative_l2": 0.13524612305920727,
+      "mean_pearson": 0.9908078491311407
+    },
+    "gathernd_byteswap_unavailable_int8": {
+      "rows": 3,
+      "strict_rows": 0,
+      "median_relative_l2": 147.32410452947533,
+      "mean_pearson": 0.9908078491592849
+    },
+    "gathernd_transpose_not_shape_compatible": {
+      "rows": 3,
+      "strict_rows": 0,
+      "median_relative_l2": 147.32410452947533,
+      "mean_pearson": 0.9908078491592849
+    },
+    "per_channel_affine_fit_diagnostic": {
+      "rows": 3,
+      "strict_rows": 2,
+      "median_relative_l2": 0.04364213064754984,
+      "mean_pearson": 0.9966244315158107
+    }
+  },
+  "deployable_known_scale": [],
+  "diagnostic_only_variants": [
+    "gathernd_best_scalar_to_hf_embedding",
+    "per_channel_affine_fit_diagnostic",
+    "hf_embedding_symmetric_int8_dequant_candidate"
+  ]
+}

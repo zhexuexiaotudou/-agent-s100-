@@ -1,0 +1,77 @@
+{
+  "case_id": "short_chinese_prompt_padded",
+  "segment": 20,
+  "raw_path": "evidence/boundary_all_segments_v7/short_chinese_prompt_padded/seg_20_raw_output.npy",
+  "dequant_path": "evidence/boundary_all_segments_v7/short_chinese_prompt_padded/seg_20_output.npy",
+  "model_name": "dream_segment_20_21",
+  "hbm_path": "/mnt/nas/openclaw/models/dream7b-hbm/seq128-b1-lmheadq16-lasttoken/seg20_21/dream7b_segment_20_21_seq128_q8.hbm",
+  "quant_metadata": {
+    "available": true,
+    "repr": "<hbm_runtime.HB_HBMRuntime.QuantParams object at 0xffff73724e30>",
+    "scale": [
+      0.0007042085053399205
+    ],
+    "scale_first": 0.0007042085053399205,
+    "zero_point": [
+      0.0
+    ]
+  },
+  "raw_stats": {
+    "shape": [
+      128,
+      3584
+    ],
+    "dtype": "int16",
+    "size": 458752,
+    "min": -19824.0,
+    "max": 32767.0,
+    "mean": 41.24000113351004,
+    "std": 3240.3647052455644,
+    "abs_max": 32767.0,
+    "nonzero_count": 458664,
+    "constant": false,
+    "allzero": false,
+    "nan_count": 0,
+    "inf_count": 0,
+    "count_pos_32767": 256,
+    "count_neg_32768": 0,
+    "count_abs_19807": 0,
+    "frac_pos_32767": 0.0005580357142857143,
+    "frac_neg_32768": 0.0,
+    "frac_abs_19807": 0.0,
+    "p0": -19824.0,
+    "p1": -7457.0,
+    "p5": -4995.0,
+    "p50": 16.0,
+    "p95": 5080.0,
+    "p99": 7728.979999999981,
+    "p100": 32767.0
+  },
+  "dequant_stats": {
+    "shape": [
+      128,
+      3584
+    ],
+    "dtype": "float32",
+    "size": 458752,
+    "min": -13.960229873657227,
+    "max": 23.074800491333008,
+    "mean": 0.029041558504104614,
+    "std": 2.2818922996520996,
+    "abs_max": 23.074800491333008,
+    "nonzero_count": 458664,
+    "constant": false,
+    "allzero": false,
+    "nan_count": 0,
+    "inf_count": 0,
+    "p0": -13.960229873657227,
+    "p1": -5.251282691955566,
+    "p5": -3.517521381378174,
+    "p50": 0.011267336085438728,
+    "p95": 3.5773792266845703,
+    "p99": 5.442813396453857,
+    "p100": 23.074800491333008
+  },
+  "raw_sha256": "86a81b21996d73060c02c0f4618766200bdefbb37ce2689c5c538d0f5464c596",
+  "dequant_sha256": "7bd1f8b564201b5659eaedbb2eb39a1849cb73bc1e93fface9ebc59c2658b041"
+}

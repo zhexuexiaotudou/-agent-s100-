@@ -1,0 +1,648 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>AI-NAS Operator Portal Contract</title>
+  <style>
+    :root { color-scheme: light; font-family: Arial, sans-serif; background: #f4f6f4; color: #18212a; scroll-behavior: smooth; }
+    body { margin: 0; }
+    main { max-width: 1280px; margin: 0 auto; padding: 28px; }
+    header.portal-header { display: grid; gap: 14px; margin-bottom: 20px; }
+    h1 { font-size: 30px; margin: 0; letter-spacing: 0; }
+    h2 { font-size: 19px; margin: 0 0 12px; }
+    h3 { font-size: 16px; margin: 0; }
+    h4 { font-size: 13px; margin: 14px 0 6px; }
+    .topline { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 12px; align-items: end; }
+    .query { padding: 13px 15px; border: 1px solid #c6ccc4; background: #fff; }
+    nav.quick-actions { display: flex; flex-wrap: wrap; gap: 8px; }
+    nav.quick-actions a, .copy-token { border: 1px solid #aab4ac; background: #ffffff; color: #17251f; padding: 8px 10px; text-decoration: none; font-size: 13px; border-radius: 6px; transition: background 180ms ease, transform 180ms ease; }
+    nav.quick-actions a:hover { background: #edf3ee; transform: translateY(-1px); }
+    nav.quick-actions a:focus-visible { outline: 3px solid #7ba588; outline-offset: 2px; }
+    button { border: 1px solid #9da8a1; background: #fff; color: #18212a; border-radius: 6px; padding: 7px 9px; cursor: pointer; }
+    button:hover { background: #eef4ef; }
+    .row-actions { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 8px; }
+    .metrics { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 10px; margin-bottom: 18px; }
+    .metric { background: #fff; border: 1px solid #d5ddd6; padding: 12px; border-radius: 6px; }
+    .metric b { display: block; font-size: 20px; font-variant-numeric: tabular-nums; }
+    .metric span { display: block; color: #5f6f67; font-size: 12px; margin-top: 4px; }
+    .status { display: inline-block; padding: 3px 7px; border-radius: 4px; background: #e9efe9; color: #244c35; font-weight: 700; font-size: 12px; }
+    .status.limited { background: #f4e9d5; color: #714c12; }
+    .section { background: #fff; border: 1px solid #d5ddd6; border-radius: 6px; padding: 16px; margin: 14px 0; }
+    .command-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; align-items: start; }
+    .results { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 12px; }
+    .result-card { border: 1px solid #d1d8d2; padding: 12px; border-radius: 6px; }
+    .result-card header { display: flex; justify-content: space-between; gap: 10px; align-items: start; }
+    .confidence { white-space: nowrap; font-size: 12px; color: #315f49; }
+    .path { color: #59636e; font-size: 12px; overflow-wrap: anywhere; }
+    dl { display: grid; grid-template-columns: 72px 1fr; gap: 6px; font-size: 13px; }
+    table { width: 100%; border-collapse: collapse; font-size: 13px; }
+    th, td { text-align: left; border-bottom: 1px solid #e5e7eb; padding: 8px; vertical-align: top; }
+    code { overflow-wrap: anywhere; }
+    .audit-ok { color: #315f49; font-weight: 700; }
+    @media (max-width: 860px) { main { padding: 16px; } .metrics { grid-template-columns: repeat(2, minmax(0, 1fr)); } .command-grid { grid-template-columns: 1fr; } }
+  </style>
+</head>
+<body>
+<main>
+  <header class="portal-header">
+    <div class="topline">
+      <h1>AI-NAS Operator Portal</h1>
+      <nav class="quick-actions" aria-label="Operator actions">
+        <a href="#results">Related Files</a>
+        <a href="#approval">Approval Queue</a>
+        <a href="#production-readiness">Production Readiness</a>
+        <a href="#soak-watcher">Soak Watcher</a>
+        <a href="#dream7b-interaction">Dream7B</a>
+        <a href="#commands">Run Commands</a>
+        <a href="#report">One-Click Report</a>
+      </nav>
+    </div>
+    <div class="query" data-testid="query">Query: 2024 renovation payment contract invoice receipt chat screenshot</div>
+  </header>
+  <section class="metrics" aria-label="Portal metrics">
+    <div class="metric"><b>4</b><span>Related files</span></div>
+    <div class="metric"><b>2</b><span>Payment nodes</span></div>
+    <div class="metric"><b>4</b><span>Copy suggestions</span></div>
+    <div class="metric"><b>2/1</b><span>Ready / repair approvals</span></div>
+    <div class="metric"><b><span class="status limited">limited</span></b><span>Production gate</span></div>
+  </section>
+  <section class="section" data-testid="commands" id="commands"><h2>Run Commands</h2>
+    <div class="command-grid">
+      <table><thead><tr><th>Action</th><th>Allowlisted command</th></tr></thead><tbody><tr><td>Seed controlled Personal corpus</td><td><code>ai_nas_controlled_personal_seed --execute</code></td></tr><tr><td>Run NAS-backed long soak</td><td><code>ai_nas_nas_backed_long_soak --duration-seconds 21600 --min-duration-seconds 21600</code></td></tr><tr><td>Refresh production gate</td><td><code>ai_nas_production_readiness_gate</code></td></tr><tr><td>Check Dream7B identity</td><td><code>dream7b_perf_identity --max-tokens 16</code></td></tr></tbody></table>
+      <div>
+        <p>Approval phrase</p>
+        <p><code class="copy-token">APPROVE apm-10c05a2e9e409f75</code></p>
+        <p>Report JSON <code>F:\Project\Digua\reports\operator_portal_contract_20260625-001846-838613\operator_portal_report.json</code></p>
+      </div>
+    </div>
+  </section>
+  <section class="section" data-testid="results" id="results"><h2>Related Files</h2><div class="results">
+            <article class="result-card" data-testid="result-card">
+              <header>
+                <h3>Photos/2024_renovation_chat_invoice_screenshot.jpg</h3>
+                <span class="confidence">confidence 0.95</span>
+              </header>
+              <p class="path">F:\Project\Digua\reports\operator_portal_contract_20260625-001846-838613\appliance_experience_fixture\Personal\Photos\2024_renovation_chat_invoice_screenshot.jpg</p>
+              <p>content_not_extracted</p>
+              <dl>
+                <dt>Amounts</dt><dd></dd>
+                <dt>Dates</dt><dd></dd>
+              </dl>
+              <section><h4>Evidence</h4><ul><li>labels: invoice, screenshot; size: 720x420; phash: 951e6ae23f1c6ae0</li><li>labels: invoice, screenshot; size: 720x420; mean_rgb: [0.9424, 0.942, 0.9121]</li></ul></section>
+              <section><h4>Why Matched</h4><ul><li>keywords matches `invoice`</li><li>keywords matches `screen`</li><li>keywords matches `screenshot`</li><li>name matches `2024`</li><li>name matches `chat`</li><li>name matches `invoice`</li></ul></section>
+            </article>
+            
+            <article class="result-card" data-testid="result-card">
+              <header>
+                <h3>Documents/2024_renovation_invoice_receipt.txt</h3>
+                <span class="confidence">confidence 0.95</span>
+              </header>
+              <p class="path">F:\Project\Digua\reports\operator_portal_contract_20260625-001846-838613\appliance_experience_fixture\Personal\Documents\2024_renovation_invoice_receipt.txt</p>
+              <p>Invoice receipt for renovation reimbursement. Amount: 12000 CNY. Date: 2024-04-15. Receipt number RCPT-2024-0415.</p>
+              <dl>
+                <dt>Amounts</dt><dd>12000 CNY</dd>
+                <dt>Dates</dt><dd>2024-04-15</dd>
+              </dl>
+              <section><h4>Evidence</h4><ul><li>dates: 2024-04-15; amounts: 12000 CNY; payment: Invoice receipt for renovation reimbursement.</li></ul></section>
+              <section><h4>Why Matched</h4><ul><li>keywords matches `2024`</li><li>keywords matches `invoice`</li><li>keywords matches `receipt`</li><li>keywords matches `reimbursement`</li><li>keywords matches `renovation`</li><li>name matches `2024`</li></ul></section>
+            </article>
+            
+            <article class="result-card" data-testid="result-card">
+              <header>
+                <h3>Documents/2024_renovation_contract.txt</h3>
+                <span class="confidence">confidence 0.95</span>
+              </header>
+              <p class="path">F:\Project\Digua\reports\operator_portal_contract_20260625-001846-838613\appliance_experience_fixture\Personal\Documents\2024_renovation_contract.txt</p>
+              <p>Renovation contract 2024. Payment: deposit 20000 CNY on 2024-03-01; final payment 8000 CNY on 2024-05-20.</p>
+              <dl>
+                <dt>Amounts</dt><dd>20000 CNY, 8000 CNY</dd>
+                <dt>Dates</dt><dd>2024-03-01, 2024-05-20</dd>
+              </dl>
+              <section><h4>Evidence</h4><ul><li>dates: 2024-03-01, 2024-05-20; amounts: 20000 CNY, 8000 CNY; payment: Payment: deposit 20000 CNY on 2024-03-01; | final payment 8000 CNY on 2024-05-20.</li></ul></section>
+              <section><h4>Why Matched</h4><ul><li>keywords matches `2024`</li><li>keywords matches `payment`</li><li>name matches `2024`</li><li>name matches `contract`</li><li>name matches `renovation`</li><li>path matches `2024`</li></ul></section>
+            </article>
+            
+            <article class="result-card" data-testid="result-card">
+              <header>
+                <h3>Photos/2024_unrelated_beach_photo.jpg</h3>
+                <span class="confidence">confidence 0.83</span>
+              </header>
+              <p class="path">F:\Project\Digua\reports\operator_portal_contract_20260625-001846-838613\appliance_experience_fixture\Personal\Photos\2024_unrelated_beach_photo.jpg</p>
+              <p>content_not_extracted</p>
+              <dl>
+                <dt>Amounts</dt><dd></dd>
+                <dt>Dates</dt><dd></dd>
+              </dl>
+              <section><h4>Evidence</h4><ul><li>labels: beach; size: 720x420; phash: 85037af02f0f7af0</li><li>labels: beach; size: 720x420; mean_rgb: [0.3135, 0.6555, 0.8858]</li></ul></section>
+              <section><h4>Why Matched</h4><ul><li>name matches `2024`</li><li>path matches `2024`</li><li>semantic alias matches `contract-&gt;contract`</li><li>semantic alias matches `contract`</li><li>semantic alias matches `payment-&gt;contract`</li><li>sqlite fts matched query terms</li></ul></section>
+            </article>
+            </div></section>
+  <section class="section" data-testid="production-readiness" id="production-readiness"><h2>Production Readiness</h2>
+    <table><tbody>
+      <tr><th>Report</th><td><code>not found</code></td></tr>
+      <tr><th>Verdict</th><td>missing</td></tr>
+      <tr><th>Production ready</th><td></td></tr>
+      <tr><th>Categories</th><td>/ ready</td></tr>
+      <tr><th>Blockers</th><td></td></tr>
+      <tr><th>Warnings</th><td></td></tr>
+    </tbody></table>
+    <ul></ul>
+  </section>
+  <section class="section" data-testid="soak-watcher" id="soak-watcher"><h2>Long Soak / Gate Watcher</h2>
+    <table><tbody>
+      <tr><th>Status report</th><td><code>not found</code></td></tr>
+      <tr><th>Status</th><td>missing</td></tr>
+      <tr><th>PID</th><td></td></tr>
+      <tr><th>PID running</th><td></td></tr>
+      <tr><th>Soak elapsed</th><td> s /  s</td></tr>
+      <tr><th>Soak progress</th><td>%</td></tr>
+      <tr><th>Estimated remaining</th><td> s</td></tr>
+      <tr><th>Estimated completion</th><td></td></tr>
+      <tr><th>Wait elapsed seconds</th><td></td></tr>
+      <tr><th>Latest soak report</th><td><code>not found</code></td></tr>
+      <tr><th>Latest soak precheck</th><td></td></tr>
+      <tr><th>Fresh report</th><td></td></tr>
+      <tr><th>NAS backed</th><td></td></tr>
+      <tr><th>Final file count</th><td></td></tr>
+      <tr><th>Gate report</th><td><code>pending</code></td></tr>
+      <tr><th>Runbook report</th><td><code>pending</code></td></tr>
+    </tbody></table>
+  </section>
+  <section class="section" data-testid="dream7b-interaction" id="dream7b-interaction"><h2>Dream7B Interaction</h2>
+    <table><tbody>
+      <tr><th>Report</th><td><code>not found</code></td></tr>
+      <tr><th>Verdict</th><td>missing</td></tr>
+      <tr><th>Content</th><td></td></tr>
+      <tr><th>TTFT p50 ms</th><td></td></tr>
+      <tr><th>First progress p50 ms</th><td></td></tr>
+      <tr><th>Progress interval sec</th><td></td></tr>
+      <tr><th>First content p50 ms</th><td></td></tr>
+      <tr><th>Stream-supported cases</th><td></td></tr>
+      <tr><th>Progress-event cases</th><td></td></tr>
+      <tr><th>Total progress events</th><td></td></tr>
+      <tr><th>Streaming mode</th><td></td></tr>
+      <tr><th>Progress events</th><td></td></tr>
+      <tr><th>Backend invoked</th><td></td></tr>
+      <tr><th>Interaction gaps</th><td><code></code></td></tr>
+    </tbody></table>
+  </section>
+  <section class="section" data-testid="dream7b-service-guardrails" id="dream7b-service-guardrails"><h2>Dream7B Service Guardrails</h2>
+    <table><tbody>
+      <tr><th>Product packet</th><td><code>not found</code></td></tr>
+      <tr><th>Product verdict</th><td>missing</td></tr>
+      <tr><th>Production default</th><td></td></tr>
+      <tr><th>Queue remains default</th><td></td></tr>
+      <tr><th>runtime_experiment_gate</th><td>missing</td></tr>
+      <tr><th>s100p_runtime_experiment_now</th><td></td></tr>
+      <tr><th>allowed_s100p_runtime_experiments</th><td><code>[]</code></td></tr>
+      <tr><th>runtime_gate_blockers</th><td><code>[]</code></td></tr>
+      <tr><th>next_nonduplicate_runtime_candidate</th><td></td></tr>
+      <tr><th>runtime_gate_admission_evidence_ready</th><td></td></tr>
+      <tr><th>runtime_gate_final_logits_leverage_gate_ready</th><td></td></tr>
+      <tr><th>runtime_gate_runtime_refactor_gate_ready</th><td></td></tr>
+      <tr><th>runtime_gate_tuning_matrix_gate_ready</th><td></td></tr>
+      <tr><th>runtime_gate_admission_projected_saved_ms_per_request</th><td></td></tr>
+      <tr><th>runtime_gate_admission_standard_sweeps_blocked</th><td></td></tr>
+      <tr><th>runtime_command_guard</th><td>missing</td></tr>
+      <tr><th>runtime_command_guard_active</th><td></td></tr>
+      <tr><th>runtime_command_guard_standard_sweeps_blocked</th><td></td></tr>
+      <tr><th>runtime_command_guard_command_admitted</th><td></td></tr>
+      <tr><th>runtime_command_guard_would_start_runtime</th><td></td></tr>
+      <tr><th>runtime_gate_post_segment_blocks_standard_group_sweeps</th><td></td></tr>
+      <tr><th>runtime_gate_post_segment_group_size_tuning_implication</th><td></td></tr>
+      <tr><th>runtime_gate_post_segment_inner_order_tuning_implication</th><td></td></tr>
+      <tr><th>segment_stability_audit</th><td>missing</td></tr>
+      <tr><th>stable_primary_bottleneck</th><td></td></tr>
+      <tr><th>final_logits_rank1_rate</th><td></td></tr>
+      <tr><th>final_logits_cv_positive_excess</th><td></td></tr>
+      <tr><th>final_to_token_excess_ratio</th><td></td></tr>
+      <tr><th>final_to_max_hidden_excess_ratio</th><td></td></tr>
+      <tr><th>do_not_run_hidden_order_sweeps_now</th><td></td></tr>
+      <tr><th>segment_drag_breakdown</th><td>missing</td></tr>
+      <tr><th>segment_drag_final_vs_hidden_mean_ratio</th><td></td></tr>
+      <tr><th>segment_drag_final_excess_ms_per_request</th><td></td></tr>
+      <tr><th>segment_drag_token_excess_ms_per_request</th><td></td></tr>
+      <tr><th>segment_drag_top_group_by_accounted_ms</th><td></td></tr>
+      <tr><th>segment_drag_top_group_contains_final_logits</th><td></td></tr>
+      <tr><th>segment_drag_top_segments</th><td><code>[]</code></td></tr>
+      <tr><th>segment_group_schedule_scorecard</th><td>missing</td></tr>
+      <tr><th>segment_group_primary_schedule_bottleneck</th><td></td></tr>
+      <tr><th>segment_group_primary_code_target</th><td></td></tr>
+      <tr><th>segment_group_preferred_group_policy</th><td></td></tr>
+      <tr><th>segment_group_preferred_inner_order</th><td></td></tr>
+      <tr><th>segment_group_run_more_standard_sweeps_now</th><td></td></tr>
+      <tr><th>segment_group_run_s100p_runtime_now</th><td></td></tr>
+      <tr><th>segment_group_start_compile_now</th><td></td></tr>
+      <tr><th>segment_group_compile_preflight_only_now</th><td></td></tr>
+      <tr><th>segment_group_final_excess_to_group_switch_gap_ratio</th><td></td></tr>
+      <tr><th>group_order_candidates</th><td>missing</td></tr>
+      <tr><th>group_order_baseline</th><td></td></tr>
+      <tr><th>group_order_segment_major_preferred</th><td></td></tr>
+      <tr><th>group_order_best_nonbaseline_variant</th><td></td></tr>
+      <tr><th>group_order_best_nonbaseline_delta_ms_per_request</th><td></td></tr>
+      <tr><th>group_order_no_variant_beats_baseline</th><td></td></tr>
+      <tr><th>group_order_more_mb512_sweeps_deprioritized</th><td></td></tr>
+      <tr><th>group_order_only_capacity_probe_if_needed</th><td></td></tr>
+      <tr><th>group_partition_planner</th><td>missing</td></tr>
+      <tr><th>group_partition_candidate_count</th><td></td></tr>
+      <tr><th>group_partition_run_new_partition_now</th><td></td></tr>
+      <tr><th>group_partition_only_probe_if_memory_plan_changes</th><td></td></tr>
+      <tr><th>group_partition_top_capacity_probe_groups</th><td><code>[]</code></td></tr>
+      <tr><th>group_partition_top_capacity_probe_max_group_hbm_mib</th><td></td></tr>
+      <tr><th>group_partition_top_capacity_probe_peak_delta_pct</th><td></td></tr>
+      <tr><th>group_partition_best_observed_nonbaseline_delta_ms_per_request</th><td></td></tr>
+      <tr><th>group_inner_order_value_audit</th><td>missing</td></tr>
+      <tr><th>group_inner_order_run_more_sweeps_now</th><td></td></tr>
+      <tr><th>group_inner_order_best_nonbaseline_delta_ms_per_request</th><td></td></tr>
+      <tr><th>group_inner_order_slower_or_equal_nonbaseline_count</th><td></td></tr>
+      <tr><th>group_inner_order_capacity_probe_only_candidate_count</th><td></td></tr>
+      <tr><th>group_inner_order_top_value_lever</th><td></td></tr>
+      <tr><th>group_switch_accounting</th><td>missing</td></tr>
+      <tr><th>group_switch_gap_ms_per_request</th><td></td></tr>
+      <tr><th>group_release_ms_per_request</th><td></td></tr>
+      <tr><th>unaccounted_gap_ms_per_request</th><td></td></tr>
+      <tr><th>latest_gap_intra_segment_run_gap_ms_per_request</th><td></td></tr>
+      <tr><th>final_excess_to_switch_gap_ratio</th><td></td></tr>
+      <tr><th>group_release_and_unaccounted_gap_not_primary</th><td></td></tr>
+      <tr><th>scheduler_overhead_budget</th><td>missing</td></tr>
+      <tr><th>scheduler_primary_code_target</th><td></td></tr>
+      <tr><th>scheduler_final_excess_to_group_switch_gap</th><td></td></tr>
+      <tr><th>scheduler_final_excess_to_intra_segment_gap</th><td></td></tr>
+      <tr><th>deprioritize_python_inter_segment_gap_tuning</th><td></td></tr>
+      <tr><th>runtime_instrumentation_contract</th><td>missing</td></tr>
+      <tr><th>runtime_instrumentation_deployment</th><td>missing</td></tr>
+      <tr><th>runtime_instrumentation_new_fields</th><td><code>[]</code></td></tr>
+      <tr><th>runtime_instrumentation_default_cli_changed</th><td></td></tr>
+      <tr><th>runtime_instrumentation_runtime_order_changed</th><td></td></tr>
+      <tr><th>runtime_instrumentation_remote_probe_sha256</th><td><code></code></td></tr>
+      <tr><th>runtime_instrumentation_remote_backup</th><td><code></code></td></tr>
+      <tr><th>runtime_instrumentation_active_true_batch_python</th><td></td></tr>
+      <tr><th>runtime_instrumentation_active_compile_true_batch</th><td></td></tr>
+      <tr><th>hbm_load_accounting_contract</th><td>missing</td></tr>
+      <tr><th>hbm_per_segment_load_accounting_ready</th><td></td></tr>
+      <tr><th>hbm_group_load_accounting_ready</th><td></td></tr>
+      <tr><th>hbm_prewarm_accounting_ready</th><td></td></tr>
+      <tr><th>hbm_timing_summary_accounts_load_and_prewarm</th><td></td></tr>
+      <tr><th>hbm_prewarm_hbm_default_changed</th><td></td></tr>
+      <tr><th>hbm_accounting_runtime_started</th><td></td></tr>
+      <tr><th>hbm_accounting_compile_started</th><td></td></tr>
+      <tr><th>bottleneck_closure_model</th><td>missing</td></tr>
+      <tr><th>bottleneck_closure_latest_avg_bpu_gap_to_queue_points</th><td></td></tr>
+      <tr><th>bottleneck_closure_latest_nonzero_shortfall_points_for_93_avg</th><td></td></tr>
+      <tr><th>bottleneck_closure_primary_next_code_target</th><td></td></tr>
+      <tr><th>bottleneck_closure_final_logits_projection_saved_ms_per_request</th><td></td></tr>
+      <tr><th>bottleneck_closure_hbm_group_load_ms_per_request</th><td></td></tr>
+      <tr><th>bottleneck_closure_release_plus_unaccounted_gap_ms_per_request</th><td></td></tr>
+      <tr><th>bottleneck_closure_small_python_and_gap_optimizations_combined_ms_per_request</th><td></td></tr>
+      <tr><th>bottleneck_closure_group_size_or_inner_order_current_primary_lever</th><td></td></tr>
+      <tr><th>bottleneck_closure_projection_is_not_bpu_promotion_proof</th><td></td></tr>
+      <tr><th>bottleneck_closure_requires_real_runtime_result_before_promotion</th><td></td></tr>
+      <tr><th>post_instrumentation_telemetry_gate</th><td>missing</td></tr>
+      <tr><th>post_instrumentation_success_count</th><td></td></tr>
+      <tr><th>post_instrumentation_telemetry_ready</th><td></td></tr>
+      <tr><th>input_output_overhead_quantified</th><td></td></tr>
+      <tr><th>do_not_claim_input_output_overhead_yet</th><td></td></tr>
+      <tr><th>allow_one_post_instrumentation_baseline_measurement</th><td></td></tr>
+      <tr><th>post_instrumentation_next_measurement</th><td></td></tr>
+      <tr><th>post_instrumentation_overhead_analysis</th><td>missing</td></tr>
+      <tr><th>input_prepare_ms_per_request</th><td></td></tr>
+      <tr><th>output_postprocess_ms_per_request</th><td></td></tr>
+      <tr><th>hidden_materialize_ms_per_request</th><td></td></tr>
+      <tr><th>final_output_postprocess_ms_per_request</th><td></td></tr>
+      <tr><th>final_logits_compute_still_primary</th><td></td></tr>
+      <tr><th>secondary_local_runtime_code_target</th><td></td></tr>
+      <tr><th>post_instrumentation_segment_attribution</th><td>missing</td></tr>
+      <tr><th>post_segment_primary_single_segment_bottleneck</th><td></td></tr>
+      <tr><th>post_segment_final_compute_excess_ms_per_request</th><td></td></tr>
+      <tr><th>post_segment_top_group_by_segment_total</th><td></td></tr>
+      <tr><th>post_segment_top_group_contains_final_logits</th><td></td></tr>
+      <tr><th>post_segment_group_size_tuning_implication</th><td></td></tr>
+      <tr><th>post_segment_inner_order_tuning_implication</th><td></td></tr>
+      <tr><th>hidden_buffer_reuse_decision</th><td>missing</td></tr>
+      <tr><th>hidden_buffer_reuse_default</th><td></td></tr>
+      <tr><th>preallocate_hidden_experimental_flag_only</th><td></td></tr>
+      <tr><th>prealloc_ms_per_request_delta</th><td></td></tr>
+      <tr><th>prealloc_hidden_materialize_ms_per_request_delta</th><td></td></tr>
+      <tr><th>prealloc_reused_hidden_buffer_count</th><td></td></tr>
+      <tr><th>reuse_buffer_implementation_measured_slower</th><td></td></tr>
+      <tr><th>last_token_candidate</th><td></td></tr>
+      <tr><th>last_token_readiness_verdict</th><td></td></tr>
+      <tr><th>last_token_compile_ready</th><td></td></tr>
+      <tr><th>last_token_runtime_validation_ready</th><td></td></tr>
+      <tr><th>last_token_readiness_blockers</th><td><code>[]</code></td></tr>
+      <tr><th>last_token_target_shape</th><td><code></code></td></tr>
+      <tr><th>last_token_saved_ms_projection</th><td></td></tr>
+      <tr><th>last_token_remote_manifest_verified</th><td></td></tr>
+      <tr><th>last_token_remote_hbm_exists</th><td></td></tr>
+      <tr><th>last_token_experiment_gate</th><td>missing</td></tr>
+      <tr><th>last_token_gate_blockers</th><td><code>[]</code></td></tr>
+      <tr><th>last_token_validation_plan</th><td>missing</td></tr>
+      <tr><th>last_token_validation_plan_generated_at</th><td></td></tr>
+      <tr><th>last_token_validation_ready</th><td></td></tr>
+      <tr><th>last_token_validation_blockers</th><td><code>[]</code></td></tr>
+      <tr><th>last_token_validation_final_hbm_root_exists</th><td></td></tr>
+      <tr><th>last_token_validation_hbm_exists</th><td></td></tr>
+      <tr><th>last_token_validation_manifest_exists</th><td></td></tr>
+      <tr><th>last_token_validation_manifest_verified</th><td></td></tr>
+      <tr><th>last_token_validation_hbm_path</th><td><code></code></td></tr>
+      <tr><th>last_token_validation_compare</th><td>missing</td></tr>
+      <tr><th>last_token_compare_decision</th><td></td></tr>
+      <tr><th>last_token_candidate_result_exists</th><td></td></tr>
+      <tr><th>compile_capacity_plan</th><td>missing</td></tr>
+      <tr><th>compile_command_guard</th><td>missing</td></tr>
+      <tr><th>compile_command_guard_active</th><td></td></tr>
+      <tr><th>compile_command_guard_b8_full_compile_blocked</th><td></td></tr>
+      <tr><th>compile_command_guard_only_single_segment_last_token_compile_allowed</th><td></td></tr>
+      <tr><th>compile_command_guard_would_start_compile</th><td></td></tr>
+      <tr><th>next_action_admission_pack</th><td>missing</td></tr>
+      <tr><th>next_action_allowed_now_count</th><td></td></tr>
+      <tr><th>next_action_preflight_only_count</th><td></td></tr>
+      <tr><th>next_action_blocked_action_count</th><td></td></tr>
+      <tr><th>next_action_would_start_runtime</th><td></td></tr>
+      <tr><th>next_action_would_start_compile</th><td></td></tr>
+      <tr><th>next_action_only_future_runtime_candidate</th><td></td></tr>
+      <tr><th>compile_commit_headroom_gb</th><td></td></tr>
+      <tr><th>compile_commit_headroom_deficit_gb</th><td></td></tr>
+      <tr><th>compile_projected_headroom_after_reclaim_gb</th><td></td></tr>
+      <tr><th>compile_remaining_deficit_after_reclaim_gb</th><td></td></tr>
+      <tr><th>compile_recommended_additional_commit_limit_with_safety_gb</th><td></td></tr>
+      <tr><th>compile_do_not_start_compile_now</th><td></td></tr>
+      <tr><th>compile_largest_private_process</th><td></td></tr>
+      <tr><th>true_batch_nas_inventory</th><td>missing</td></tr>
+      <tr><th>nas_remote_group_major_report_count</th><td></td></tr>
+      <tr><th>nas_remote_group_major_report_json_count</th><td></td></tr>
+      <tr><th>nas_remote_b4_group_major_report_count</th><td></td></tr>
+      <tr><th>nas_remote_b4_group_major_report_json_count</th><td></td></tr>
+      <tr><th>nas_local_b4_json_count</th><td></td></tr>
+      <tr><th>nas_missing_report_json_dirs</th><td><code>[]</code></td></tr>
+      <tr><th>nas_b4_remote_json_local_count_match</th><td></td></tr>
+      <tr><th>nas_b4_hbm_count</th><td></td></tr>
+      <tr><th>nas_b4_manifest_count</th><td></td></tr>
+      <tr><th>nas_run_more_standard_b4_runtime_sweeps_now</th><td></td></tr>
+      <tr><th>nas_last_token_candidate_already_ran</th><td></td></tr>
+      <tr><th>nas_duplicate_stop_rules</th><td><code>[]</code></td></tr>
+      <tr><th>nas_remaining_nonduplicate_work</th><td><code>[]</code></td></tr>
+      <tr><th>runtime_refactor_backlog</th><td>missing</td></tr>
+      <tr><th>runtime_refactor_primary_target</th><td></td></tr>
+      <tr><th>runtime_refactor_secondary_target</th><td></td></tr>
+      <tr><th>runtime_refactor_preallocate_hidden_rejected</th><td></td></tr>
+      <tr><th>runtime_refactor_rank1_projected_saved_ms_per_request</th><td></td></tr>
+      <tr><th>runtime_refactor_rank1_not_bpu_promotion_proof</th><td></td></tr>
+      <tr><th>runtime_refactor_rank1_blocks_standard_sweeps</th><td></td></tr>
+      <tr><th>runtime_refactor_ready_local_count</th><td></td></tr>
+      <tr><th>runtime_refactor_do_not_change_defaults_now</th><td></td></tr>
+      <tr><th>runtime_refactor_do_not_start_s100p_now</th><td></td></tr>
+      <tr><th>runtime_refactor_top_items</th><td><code>[]</code></td></tr>
+      <tr><th>runtime_refactor_source_contract</th><td>missing</td></tr>
+      <tr><th>runtime_refactor_source_cli_defaults_preserved</th><td></td></tr>
+      <tr><th>runtime_refactor_source_last_token_path_supported</th><td></td></tr>
+      <tr><th>runtime_refactor_source_telemetry_contract_ready</th><td></td></tr>
+      <tr><th>runtime_refactor_source_protected_telemetry_field_count</th><td></td></tr>
+      <tr><th>runtime_refactor_source_protected_telemetry_missing_count</th><td></td></tr>
+      <tr><th>runtime_refactor_source_runtime_order_changed</th><td></td></tr>
+      <tr><th>runtime_refactor_source_default_promotes_experimental_flags</th><td></td></tr>
+      <tr><th>runtime_source_implementation_map</th><td>missing</td></tr>
+      <tr><th>runtime_source_implementation_area_count</th><td></td></tr>
+      <tr><th>runtime_source_pattern_count</th><td></td></tr>
+      <tr><th>runtime_source_missing_source_pattern_count</th><td></td></tr>
+      <tr><th>runtime_source_primary_runtime_refactor_target</th><td></td></tr>
+      <tr><th>runtime_source_primary_schedule_bottleneck</th><td></td></tr>
+      <tr><th>runtime_source_allowed_now</th><td><code>[]</code></td></tr>
+      <tr><th>runtime_source_duplicate_or_blocked_area_count</th><td></td></tr>
+      <tr><th>runtime_source_s100p_runtime_allowed_now</th><td></td></tr>
+      <tr><th>runtime_source_compile_start_allowed_now</th><td></td></tr>
+      <tr><th>runtime_source_runtime_default_change_allowed_now</th><td></td></tr>
+      <tr><th>runtime_source_standard_sweeps_blocked</th><td></td></tr>
+      <tr><th>runtime_source_runtime_compile_not_started</th><td></td></tr>
+      <tr><th>runtime_source_remote_access_not_performed</th><td></td></tr>
+      <tr><th>runtime_source_failed_checks</th><td><code>[]</code></td></tr>
+      <tr><th>runtime_refactor_admission_contract</th><td>missing</td></tr>
+      <tr><th>runtime_refactor_admission_local_report_only_allowed_now</th><td></td></tr>
+      <tr><th>runtime_refactor_admission_default_runtime_change_allowed_now</th><td></td></tr>
+      <tr><th>runtime_refactor_admission_s100p_runtime_allowed_now</th><td></td></tr>
+      <tr><th>runtime_refactor_admission_compile_start_allowed_now</th><td></td></tr>
+      <tr><th>runtime_refactor_admission_compile_preflight_only_allowed_now</th><td></td></tr>
+      <tr><th>runtime_refactor_admission_block_standard_sweeps</th><td></td></tr>
+      <tr><th>runtime_refactor_admission_block_prewarm_or_cache_default</th><td></td></tr>
+      <tr><th>Routing verdict</th><td></td></tr>
+      <tr><th>Fast status verdict</th><td></td></tr>
+      <tr><th>Fast regression verdict</th><td></td></tr>
+      <tr><th>first_response_slo_tier_guard</th><td>missing</td></tr>
+      <tr><th>fast_paths_satisfy_interactive_first_content_slo</th><td></td></tr>
+      <tr><th>sse_progress_satisfies_interactive_progress_slo</th><td></td></tr>
+      <tr><th>backend_first_content_latency_is_not_true_batch_work</th><td></td></tr>
+      <tr><th>slo_fast_path_max_first_content_ms</th><td></td></tr>
+      <tr><th>slo_first_progress_p50_ms</th><td></td></tr>
+      <tr><th>slo_backend_explicit_first_content_p50_ms</th><td></td></tr>
+      <tr><th>first_response_warning_triage</th><td>missing</td></tr>
+      <tr><th>first_response_warning_triaged</th><td></td></tr>
+      <tr><th>first_response_warning_source_verdict</th><td></td></tr>
+      <tr><th>first_response_warning_quickpath_delta_ms</th><td></td></tr>
+      <tr><th>first_response_warning_backend_not_true_batch_work</th><td></td></tr>
+      <tr><th>dream7b_default_service_freshness_gate</th><td><code>not found</code></td></tr>
+      <tr><th>Default freshness verdict</th><td>missing</td></tr>
+      <tr><th>freshness_failed_checks</th><td><code>[]</code></td></tr>
+      <tr><th>packet_age_minutes</th><td></td></tr>
+      <tr><th>queue_batch_service_remains_default</th><td></td></tr>
+      <tr><th>do_not_promote_true_batch</th><td></td></tr>
+      <tr><th>partial_batch_flush_ready</th><td></td></tr>
+      <tr><th>partial_batch_flush_live_summary_ready</th><td></td></tr>
+      <tr><th>partial_batch_flush_probe_ready</th><td></td></tr>
+      <tr><th>partial_batch_flush_health_snapshot_ready</th><td></td></tr>
+      <tr><th>partial_batch_flush_probe_or_health_ready</th><td>False</td></tr>
+      <tr><th>partial_batch_flush_readiness_source</th><td></td></tr>
+      <tr><th>partial_batch_probe_run_dir</th><td><code></code></td></tr>
+      <tr><th>partial_batch_probe_ms_per_request</th><td></td></tr>
+      <tr><th>per_run_evidence_matrix</th><td></td></tr>
+      <tr><th>per_run_matrix_runs</th><td> total,  ok,  failed</td></tr>
+      <tr><th>per_run_matrix_top_segment</th><td> @ </td></tr>
+      <tr><th>per_run_matrix_standard_sweep_status</th><td></td></tr>
+      <tr><th>queue_health_snapshot</th><td>missing</td></tr>
+      <tr><th>queue_health_queue_idle</th><td></td></tr>
+      <tr><th>queue_health_no_true_batch_or_compile_process</th><td></td></tr>
+      <tr><th>queue_health_quick_ready_first_content_ms</th><td></td></tr>
+      <tr><th>queue_health_latest_text_queue_ms_per_request</th><td></td></tr>
+      <tr><th>workstream_overlap_audit</th><td>missing</td></tr>
+      <tr><th>workstream_current_workstream</th><td></td></tr>
+      <tr><th>workstream_queue_work_duplicates_true_batch_rental</th><td></td></tr>
+      <tr><th>workstream_b4_records</th><td>/</td></tr>
+      <tr><th>workstream_b4_json_records</th><td>/</td></tr>
+      <tr><th>tuning_decision_matrix</th><td>missing</td></tr>
+      <tr><th>tuning_preferred_group_policy</th><td></td></tr>
+      <tr><th>tuning_preferred_inner_order</th><td></td></tr>
+      <tr><th>tuning_primary_code_target</th><td></td></tr>
+      <tr><th>tuning_primary_code_target_projected_saved_ms_per_request</th><td></td></tr>
+      <tr><th>tuning_primary_code_target_not_bpu_promotion_proof</th><td></td></tr>
+      <tr><th>tuning_standard_sweeps_blocked_by_final_logits_leverage</th><td></td></tr>
+      <tr><th>tuning_next_s100p_runtime_experiment_allowed</th><td></td></tr>
+      <tr><th>tuning_next_compile_allowed</th><td></td></tr>
+      <tr><th>final_logits_leverage_model</th><td>missing</td></tr>
+      <tr><th>final_logits_leverage_projection_saved_ms_per_request</th><td></td></tr>
+      <tr><th>final_logits_leverage_projection_capture_pct</th><td></td></tr>
+      <tr><th>final_logits_leverage_latest_projected_latency_reduction_pct</th><td></td></tr>
+      <tr><th>final_logits_leverage_latest_nonzero_shortfall_points</th><td></td></tr>
+      <tr><th>final_logits_leverage_not_bpu_promotion_proof</th><td></td></tr>
+      <tr><th>nas_inventory_prevents_duplicate_sweeps</th><td></td></tr>
+      <tr><th>group_order_partition_prevents_duplicate_sweeps</th><td></td></tr>
+      <tr><th>scheduler_overhead_deprioritizes_python_gap_tuning</th><td></td></tr>
+      <tr><th>freshness_next_runtime_candidate</th><td></td></tr>
+      <tr><th>Quick ready</th><td> ms via <code></code>; backend_invoked=</td></tr>
+      <tr><th>Localized status</th><td> ms via <code></code>; backend_invoked=</td></tr>
+      <tr><th>Guardrail report</th><td><code>not found</code></td></tr>
+      <tr><th>default_status_contract_ready</th><td></td></tr>
+      <tr><th>default_rollback_dry_run_ready</th><td></td></tr>
+      <tr><th>Status script sha256</th><td><code></code></td></tr>
+      <tr><th>Rollback script sha256</th><td><code></code></td></tr>
+      <tr><th>gateway_listener_ownership</th><td></td></tr>
+      <tr><th>gateway_listener_pid</th><td></td></tr>
+      <tr><th>gateway_main_pid</th><td></td></tr>
+      <tr><th>gateway_listener_matches_systemd_main_pid</th><td></td></tr>
+      <tr><th>gateway_orphan_listener_detected</th><td></td></tr>
+      <tr><th>gateway_listener_health_ok</th><td></td></tr>
+      <tr><th>gateway_listener_drift_gate</th><td></td></tr>
+      <tr><th>gateway_listener_drift_live_matches_systemd_main_pid</th><td></td></tr>
+      <tr><th>gateway_listener_drift_live_orphan_detected</th><td></td></tr>
+      <tr><th>Checks</th><td><code>{}</code></td></tr>
+    </tbody></table>
+  </section>
+  <section class="section" data-testid="operational-slo"><h2>Operational SLO</h2>
+    <table><tbody>
+      <tr><th>Report</th><td><code>not found</code></td></tr>
+      <tr><th>Verdict</th><td>missing</td></tr>
+      <tr><th>Required contracts</th><td>/</td></tr>
+      <tr><th>Limited evidence</th><td></td></tr>
+      <tr><th>Rollup blockers</th><td></td></tr>
+      <tr><th>Rollup warnings</th><td></td></tr>
+      <tr><th>slo_limited_evidence_triage</th><td>missing</td></tr>
+      <tr><th>slo_limited_evidence_triaged</th><td></td></tr>
+      <tr><th>slo_limited_evidence_release_blocker</th><td></td></tr>
+      <tr><th>slo_limited_warnings</th><td><code>[]</code></td></tr>
+    </tbody></table>
+    <p><b>Tail latency:</b> <code>{}</code></p>
+    <p><b>Queue:</b> <code>{}</code></p>
+    <p><b>BPU headroom:</b> <code>{}</code></p>
+  </section>
+  <section class="section" data-testid="objective-traceability"><h2>Objective Traceability</h2>
+    <table><tbody>
+      <tr><th>Report</th><td><code>not found</code></td></tr>
+      <tr><th>Verdict</th><td>missing</td></tr>
+      <tr><th>Rows</th><td>/ satisfied</td></tr>
+      <tr><th>Limited rows</th><td></td></tr>
+      <tr><th>Missing/failed rows</th><td></td></tr>
+      <tr><th>Active blockers</th><td></td></tr>
+    </tbody></table>
+    <table><thead><tr><th>Objective row</th><th>Area</th><th>Status</th><th>Evidence gap</th></tr></thead><tbody></tbody></table>
+  </section>
+  <section class="section" data-testid="dependency-bundle"><h2>Dependency Bundle</h2>
+    <table><tbody>
+      <tr><th>Report</th><td><code>not found</code></td></tr>
+      <tr><th>Verdict</th><td>missing</td></tr>
+      <tr><th>Dependencies</th><td>/ ready</td></tr>
+      <tr><th>Blocked</th><td></td></tr>
+    </tbody></table>
+    <table><thead><tr><th>Dependency</th><th>Ready</th><th>Blockers</th></tr></thead><tbody></tbody></table>
+  </section>
+  <section class="section" data-testid="production-runbook"><h2>Production Runbook</h2>
+    <table><tbody>
+      <tr><th>Report</th><td><code>not found</code></td></tr>
+      <tr><th>Verdict</th><td>missing</td></tr>
+      <tr><th>Items</th><td></td></tr>
+      <tr><th>Covered blockers</th><td>/</td></tr>
+      <tr><th>Verification commands</th><td></td></tr>
+    </tbody></table>
+    <table><thead><tr><th>Runbook</th><th>Owner</th><th>Covers</th><th>Verify with</th></tr></thead><tbody></tbody></table>
+  </section>
+  <section class="section" data-testid="payment-nodes"><h2>Payment Nodes</h2><table><thead><tr><th>Date</th><th>Amount</th><th>Evidence path</th></tr></thead><tbody><tr><td></td><td></td><td>Documents/2024_renovation_invoice_receipt.txt</td></tr><tr><td></td><td></td><td>Documents/2024_renovation_contract.txt</td></tr></tbody></table></section>
+  <section class="section" data-testid="copy-suggestions"><h2>Copy Suggestions</h2><ul><li><code>Photos/2024_renovation_chat_invoice_screenshot.jpg</code> -> <code>Collections/2024_renovation_payment_packet/screenshots/2024_renovation_chat_invoice_screenshot.jpg</code></li><li><code>Documents/2024_renovation_invoice_receipt.txt</code> -> <code>Collections/2024_renovation_payment_packet/invoice/2024_renovation_invoice_receipt.txt</code></li><li><code>Documents/2024_renovation_contract.txt</code> -> <code>Collections/2024_renovation_payment_packet/contract/2024_renovation_contract.txt</code></li><li><code>Photos/2024_unrelated_beach_photo.jpg</code> -> <code>Collections/2024_renovation_payment_packet/beach/2024_unrelated_beach_photo.jpg</code></li></ul></section>
+  <section class="section" data-testid="approval" id="approval"><h2>Approval Queue</h2><p>Exact phrase for active manifest: <code>APPROVE apm-10c05a2e9e409f75</code></p><p>Blocked destructive actions: delete, move, overwrite, rename</p><table><thead><tr><th>Manifest</th><th>Status</th><th>Risk</th><th>Actions</th><th>Phrase</th></tr></thead><tbody>
+        <tr data-testid="approval-row">
+          <td>apm-10c05a2e9e409f75</td>
+          <td>awaiting_human_confirmation</td>
+          <td>ready_for_operator_review</td>
+          <td>4</td>
+          <td>
+            <code>APPROVE apm-10c05a2e9e409f75</code>
+            <div class="row-actions">
+              <button type="button" data-manifest="apm-10c05a2e9e409f75" data-decision="approve" data-phrase="APPROVE apm-10c05a2e9e409f75">Approve</button>
+              <button type="button" data-manifest="apm-10c05a2e9e409f75" data-decision="rollback_draft" data-phrase="ROLLBACK apm-10c05a2e9e409f75">Rollback draft</button>
+              <button type="button" data-manifest="apm-10c05a2e9e409f75" data-decision="reject" data-phrase="REJECT apm-10c05a2e9e409f75">Reject</button>
+              <button type="button" data-manifest="apm-10c05a2e9e409f75" data-decision="needs_review" data-phrase="NEEDS_REVIEW apm-10c05a2e9e409f75">Needs review</button>
+            </div>
+          </td>
+        </tr>
+        
+        <tr data-testid="approval-row">
+          <td>apm-portal-needsreview</td>
+          <td>awaiting_human_confirmation</td>
+          <td>needs_manifest_repair</td>
+          <td>1</td>
+          <td>
+            <code>APPROVE apm-portal-needsreview</code>
+            <div class="row-actions">
+              <button type="button" data-manifest="apm-portal-needsreview" data-decision="approve" data-phrase="APPROVE apm-portal-needsreview">Approve</button>
+              <button type="button" data-manifest="apm-portal-needsreview" data-decision="rollback_draft" data-phrase="ROLLBACK apm-portal-needsreview">Rollback draft</button>
+              <button type="button" data-manifest="apm-portal-needsreview" data-decision="reject" data-phrase="REJECT apm-portal-needsreview">Reject</button>
+              <button type="button" data-manifest="apm-portal-needsreview" data-decision="needs_review" data-phrase="NEEDS_REVIEW apm-portal-needsreview">Needs review</button>
+            </div>
+          </td>
+        </tr>
+        
+        <tr data-testid="approval-row">
+          <td>apm-portal-approved</td>
+          <td>approved_for_execution</td>
+          <td>ready_for_operator_review</td>
+          <td>1</td>
+          <td>
+            <code>APPROVE apm-portal-approved</code>
+            <div class="row-actions">
+              <button type="button" data-manifest="apm-portal-approved" data-decision="approve" data-phrase="APPROVE apm-portal-approved">Approve</button>
+              <button type="button" data-manifest="apm-portal-approved" data-decision="rollback_draft" data-phrase="ROLLBACK apm-portal-approved">Rollback draft</button>
+              <button type="button" data-manifest="apm-portal-approved" data-decision="reject" data-phrase="REJECT apm-portal-approved">Reject</button>
+              <button type="button" data-manifest="apm-portal-approved" data-decision="needs_review" data-phrase="NEEDS_REVIEW apm-portal-approved">Needs review</button>
+            </div>
+          </td>
+        </tr>
+        </tbody></table><p id="operator-decision-status"><code>idle</code></p></section>
+  <section class="section" data-testid="report" id="report"><h2>One-Click Report</h2><p>JSON report: <code>F:\Project\Digua\reports\operator_portal_contract_20260625-001846-838613\operator_portal_report.json</code></p><p>Manifest SHA256: <code>b91e0fb281d9108f7a6f18fe02f251f2c764c36f6ea52876c2bc70c055db6422</code></p></section>
+  <section class="section" data-testid="audit"><h2>Audit Status</h2><p class="audit-ok">Source modified: False; delete: False; move: False; overwrite: False; execution: False</p></section>
+  <script>
+    async function recordOperatorDecision(event) {
+      const button = event.target.closest('button[data-decision]');
+      if (!button) return;
+      const status = document.getElementById('operator-decision-status');
+      status.innerHTML = '<code>recording</code>';
+      try {
+        const response = await fetch('/api/operator-decision', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            manifest_id: button.dataset.manifest,
+            decision: button.dataset.decision,
+            phrase: button.dataset.phrase
+          })
+        });
+        const payload = await response.json();
+        const record = payload.operator_decision || {};
+        status.innerHTML = '<code>' + (payload.ok ? 'recorded ' : 'failed ') + (record.path || payload.error || '') + '</code>';
+      } catch (error) {
+        status.innerHTML = '<code>failed ' + String(error).slice(0, 160) + '</code>';
+      }
+    }
+    document.getElementById('approval').addEventListener('click', recordOperatorDecision);
+  </script>
+
+    <section class="panel" id="official-route">
+      <h2>Official Route</h2>
+      <table>
+        <tr><th>Qwen2.5 text route</th><td></td></tr>
+        <tr><th>Qwen2.5 evidence</th><td><code></code></td></tr>
+        <tr><th>Official S100 vision route</th><td></td></tr>
+        <tr><th>Official S100 vision evidence</th><td><code></code></td></tr>
+      </table>
+      <p>Current product route: Qwen2.5 official text entry plus official S100 vision/Yolo evidence, with Dream7B retained only as historical runtime evidence.</p>
+    </section>
+    
+</main>
+</body>
+</html>

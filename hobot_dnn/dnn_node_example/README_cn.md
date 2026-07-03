@@ -1,6 +1,7 @@
 [English](./README.md) | 简体中文
 
-# Getting Started with Dnn Node Example
+Getting Started with Dnn Node Example
+=======
 
 
 # 功能介绍
@@ -95,7 +96,7 @@ hbm_img_msgs为自定义的图片消息格式，用于shared mem场景下的图�
 1、编译环境确认
 
   x86 ubuntu版本: ubuntu20.04
-
+  
 2、编译
 
 - 编译命令：
@@ -224,7 +225,7 @@ export COLCON_CURRENT_PREFIX=install
 source install/setup.bash
 
 # 使用feedback方式，启动命令中使用参数config_file切换算法
-ros2 launch dnn_node_example dnn_node_example_feedback.launch.py dnn_example_config_file:=config/mobilenetv2workconfig.json dnn_example_image:=config/target_class.jpg
+ros2 launch dnn_node_example dnn_node_example_feedback.launch.py dnn_example_config_file:=config/mobilenetv2workconfig.json dnn_example_image:=config/target_class.jpg 
 
 # 使用MIPI摄像头作为图像数据输入，启动命令中使用参数config_file切换算法
 export CAM_TYPE=usb
@@ -239,7 +240,7 @@ export COLCON_CURRENT_PREFIX=install
 source install/setup.bash
 
 # 使用feedback方式，启动命令中使用参数config_file切换算法
-ros2 launch dnn_node_example dnn_node_example_feedback.launch.py dnn_example_config_file:=config/mobilenetv2workconfig.json dnn_example_image:=config/target_class.jpg
+ros2 launch dnn_node_example dnn_node_example_feedback.launch.py dnn_example_config_file:=config/mobilenetv2workconfig.json dnn_example_image:=config/target_class.jpg 
 
 # 使用MIPI摄像头作为图像数据输入，启动命令中使用参数config_file切换算法
 export CAM_TYPE=mipi

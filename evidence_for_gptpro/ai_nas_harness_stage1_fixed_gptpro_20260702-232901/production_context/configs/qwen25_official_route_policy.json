@@ -1,0 +1,36 @@
+{
+  "model_id": "Qwen2.5-1.5B-Instruct-S100P-official",
+  "gateway": {
+    "host": "127.0.0.1",
+    "port": 18080,
+    "base_url": "http://127.0.0.1:18080/v1"
+  },
+  "official_runtime": {
+    "runtime_bin": "/mnt/nas/openclaw/toolchains/s100_llm_sdk/D-Robotics_LLM_S100_1.0.0_SDK/oellm_runtime/example/oellm_multichat/oellm_multichat",
+    "runtime_lib_dir": "/mnt/nas/openclaw/toolchains/s100_llm_sdk/D-Robotics_LLM_S100_1.0.0_SDK/oellm_runtime/lib",
+    "active_config": "/mnt/nas/openclaw/configs/qwen25_512_multichat_config.json",
+    "active_hbm_path": "/mnt/nas/openclaw/models/s100-official-qwen-fullflow/cache_len_512_chunk_128/qwen2_5-1_5b_chunk_128_cache_512_q8.hbm",
+    "active_profile": "cache_len_512_chunk_128_q8",
+    "priority_hbm_path": "/mnt/nas/openclaw/toolchains/s100_llm_sdk/D-Robotics_LLM_S100_1.0.0_SDK/oellm_runtime/model/Qwen2.5_1.5B_Instruct_1024.hbm",
+    "local_priority_hbm_path": "downloads/s100_official_llm/Qwen2.5_1.5B_Instruct_1024.hbm",
+    "priority_profile": "cache_len_1024_vendor_default",
+    "priority_status": "blocked_on_current_s100p_common_buffer_allocation",
+    "priority_latest_probe": "/mnt/nas/openclaw/reports/models/s100_official_qwen_runtime_20260623-004222/official_qwen_runtime_probe.json",
+    "chat_timeout_seconds": 90
+  },
+  "ai_nas": {
+    "tool_dispatcher": "/mnt/nas/openclaw/scripts/probes/ai_nas_allowlisted_tool.sh",
+    "personal_root": "/mnt/nas/openclaw/Personal",
+    "report_root": "/mnt/nas/openclaw/reports/qwen25_ai_nas",
+    "gateway_report_root": "/mnt/nas/openclaw/reports/qwen25_gateway",
+    "default_case_query": "2024 renovation payment contract invoice receipt chat screenshot"
+  },
+  "nodehub_submission_boundary": {
+    "primary_claim": "official Qwen2.5 text entry with AI-NAS allowlisted NAS evidence tools",
+    "not_claimed": [
+      "Dream7B promotion",
+      "Dream7B service name or model alias",
+      "1024-token HBM runtime completion on the current S100P memory layout"
+    ]
+  }
+}

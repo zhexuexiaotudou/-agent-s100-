@@ -1,0 +1,110 @@
+{
+  "variant_id": "real_x_div_2p75",
+  "why_included": "real seg26 hidden divided by 2.75",
+  "input_path": "/mnt/nas/openclaw/reports/models/dream7b_s100p_v5_execution_20260701/evidence/final_segment_dense_sweep_v5/ramp/real_x_div_2p75/input.npy",
+  "raw_output_path": "/mnt/nas/openclaw/reports/models/dream7b_s100p_v5_execution_20260701/evidence/final_segment_dense_sweep_v5/ramp/real_x_div_2p75/raw_output.npy",
+  "dequant_logits_path": "/mnt/nas/openclaw/reports/models/dream7b_s100p_v5_execution_20260701/evidence/final_segment_dense_sweep_v5/ramp/real_x_div_2p75/dequant_logits.npy",
+  "metadata_path": "/mnt/nas/openclaw/reports/models/dream7b_s100p_v5_execution_20260701/evidence/final_segment_dense_sweep_v5/ramp/real_x_div_2p75/metadata.json",
+  "input_stats": {
+    "shape": [
+      128,
+      3584
+    ],
+    "dtype": "float32",
+    "size": 458752,
+    "min": -5.926104545593262,
+    "max": 5.926104545593262,
+    "mean": 0.031557414680719376,
+    "std": 5.8620452880859375,
+    "abs_max": 5.926104545593262,
+    "nonzero_count": 458752,
+    "allzero": false,
+    "constant": false,
+    "nan_count": 0,
+    "inf_count": 0
+  },
+  "run_status": "pass",
+  "runtime_exception": null,
+  "raw_output_stats": {
+    "shape": [
+      1,
+      152064
+    ],
+    "dtype": "int16",
+    "size": 152064,
+    "min": -24024.0,
+    "max": 26797.0,
+    "mean": 272.7115293560606,
+    "std": 3770.3126040798447,
+    "abs_max": 26797.0,
+    "nonzero_count": 152046,
+    "allzero": false,
+    "constant": false,
+    "nan_count": 0,
+    "inf_count": 0
+  },
+  "dequant_output_stats": {
+    "shape": [
+      152064
+    ],
+    "dtype": "float32",
+    "size": 152064,
+    "min": -24024.0,
+    "max": 26797.0,
+    "mean": 272.7115478515625,
+    "std": 3770.312744140625,
+    "abs_max": 26797.0,
+    "nonzero_count": 152046,
+    "allzero": false,
+    "constant": false,
+    "nan_count": 0,
+    "inf_count": 0
+  },
+  "softmax": {
+    "entropy": -0.0,
+    "normalized_entropy": -0.0,
+    "top1_probability": 1.0
+  },
+  "top10_logits": [
+    {
+      "token": 61183,
+      "logit": 26797.0
+    },
+    {
+      "token": 44591,
+      "logit": 23494.0
+    },
+    {
+      "token": 1527,
+      "logit": 23483.0
+    },
+    {
+      "token": 21788,
+      "logit": 22082.0
+    },
+    {
+      "token": 57002,
+      "logit": 22004.0
+    },
+    {
+      "token": 40,
+      "logit": 21945.0
+    },
+    {
+      "token": 35192,
+      "logit": 21838.0
+    },
+    {
+      "token": 738,
+      "logit": 21810.0
+    },
+    {
+      "token": 295,
+      "logit": 21675.0
+    },
+    {
+      "token": 40647,
+      "logit": 21477.0
+    }
+  ]
+}

@@ -1,0 +1,70 @@
+{
+  "generated_at": "2026-07-03T13:03:16.803419+08:00",
+  "final_verdict": "ready_with_fixes_before_stage3",
+  "evidence_table": [
+    {
+      "report": "6000_stage2_7_baseline_lock",
+      "gate_id": "stage2_7_baseline_lock",
+      "verdict": "ok_stage2_7_baseline_lock",
+      "passed_count": 6,
+      "check_count": 6,
+      "failure_count": 0
+    },
+    {
+      "report": "6005_package_self_rerun_repair_gate",
+      "gate_id": "stage2_7_package_self_rerun_repair_gate",
+      "verdict": "ok_stage2_7_package_self_rerun_repair_gate",
+      "passed_count": 7,
+      "check_count": 7,
+      "failure_count": 0
+    },
+    {
+      "report": "6010_qwen_service_persistence_closure_gate",
+      "gate_id": "stage2_7_qwen_service_persistence_closure_gate",
+      "verdict": "ok_stage2_7_qwen_service_persistence_closure_gate_candidate_not_applied",
+      "passed_count": 7,
+      "check_count": 7,
+      "failure_count": 0
+    },
+    {
+      "report": "6020_qwen_structured_decision_contract_gate",
+      "gate_id": "stage2_7_qwen_structured_decision_contract_gate",
+      "verdict": "failed_stage2_7_qwen_structured_decision_contract_gate",
+      "passed_count": 8,
+      "check_count": 12,
+      "failure_count": 4
+    },
+    {
+      "report": "6030_qwen_driven_readonly_agent_loop_gate",
+      "gate_id": "stage2_7_qwen_driven_readonly_agent_loop_gate",
+      "verdict": "failed_stage2_7_qwen_driven_readonly_agent_loop_gate",
+      "passed_count": 0,
+      "check_count": 1,
+      "failure_count": 1
+    },
+    {
+      "report": "6040_qwen_driven_agent_loop_soak_gate",
+      "gate_id": "stage2_7_qwen_driven_agent_loop_soak_gate",
+      "verdict": "failed_stage2_7_qwen_driven_agent_loop_soak_gate",
+      "passed_count": 0,
+      "check_count": 1,
+      "failure_count": 1
+    },
+    {
+      "report": "6050_qwen_driven_vs_policy_first_architecture_decision",
+      "gate_id": "stage2_7_architecture_decision_gate",
+      "verdict": "ok_stage2_7_architecture_decision_gate",
+      "passed_count": 5,
+      "check_count": 5,
+      "failure_count": 0
+    },
+    {
+      "report": "6060_stage3_readonly_shadow_go_no_go_gate",
+      "gate_id": "stage2_7_stage3_readonly_shadow_go_no_go_gate",
+      "verdict": "failed_stage2_7_stage3_readonly_shadow_go_no_go_gate",
+      "passed_count": 11,
+      "check_count": 12,
+      "failure_count": 1
+    }
+  ]
+}

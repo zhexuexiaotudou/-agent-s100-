@@ -1,0 +1,616 @@
+{
+  "case_id": "ramp",
+  "island": [
+    8,
+    9,
+    10,
+    11
+  ],
+  "route": "HF/PyTorch prefix through layer 7, BPU island 8..11, HF/PyTorch suffix 12..27 + final norm + lm_head",
+  "input_source": {
+    "path": "/mnt/nas/openclaw/reports/models/dream7b_s100p_v11_execution_20260701/evidence/hf_boundaries_v11/ramp/layer_07_output.npy",
+    "sha256": "e0ff46be0f5f09615af4a051a3d49d3a40905b11f9453a7f7890ca468434ea17"
+  },
+  "segments": [
+    {
+      "segment": 8,
+      "bpu": {
+        "segment": 8,
+        "model_name": "dream_segment_08_09",
+        "hbm_path": "/mnt/nas/openclaw/models/dream7b-hbm/seq128-b1-lmheadq16-lasttoken/seg08_09/dream7b_segment_8_9_seq128_q8.hbm",
+        "hbm_sha256": "190d9a9f608f794b3d3c1252551f1613cb1067e7625cdc5f5ad212fe21150c64",
+        "input_contract": {
+          "kind": "hidden_plus_position_ids",
+          "input_0_shape": [
+            128,
+            3584
+          ],
+          "input_0_dtype": "float32",
+          "input_1_shape": [
+            128
+          ],
+          "input_1_dtype": "int32"
+        },
+        "load_seconds": 1.926,
+        "run_seconds": 0.01,
+        "quant_metadata": {
+          "available": true,
+          "scale": [
+            0.0001341497409157455
+          ],
+          "scale_first": 0.0001341497409157455,
+          "zero_point": [
+            0.0
+          ],
+          "repr": "<hbm_runtime.HB_HBMRuntime.QuantParams object at 0xffff270bf0b0>"
+        },
+        "raw_stats": {
+          "shape": [
+            128,
+            3584
+          ],
+          "dtype": "int16",
+          "size": 458752,
+          "min": -3952.0,
+          "max": 3952.0,
+          "mean": -30.657464163643972,
+          "std": 2467.070958401829,
+          "abs_max": 3952.0,
+          "nonzero_count": 458631,
+          "allzero": false,
+          "constant": false,
+          "nan_count": 0,
+          "inf_count": 0
+        },
+        "dequant_stats": {
+          "shape": [
+            128,
+            3584
+          ],
+          "dtype": "float32",
+          "size": 458752,
+          "min": -0.5301597714424133,
+          "max": 0.5301597714424133,
+          "mean": -0.00411269161850214,
+          "std": 0.33095690608024597,
+          "abs_max": 0.5301597714424133,
+          "nonzero_count": 458631,
+          "allzero": false,
+          "constant": false,
+          "nan_count": 0,
+          "inf_count": 0
+        }
+      },
+      "raw_output": {
+        "path": "evidence/bpu_island_reconstruction_v13/ramp/island_08_09_10_11/seg_08/bpu_raw_output.npy",
+        "sha256": "8b2bd3181be50067486afb5c48f62ab4caee919b9dfc5480526f33fff8664445",
+        "stats": {
+          "shape": [
+            128,
+            3584
+          ],
+          "dtype": "int16",
+          "size": 458752,
+          "min": -3952.0,
+          "max": 3952.0,
+          "mean": -30.657464163643972,
+          "std": 2467.070958401829,
+          "abs_max": 3952.0,
+          "nonzero_count": 458631,
+          "allzero": false,
+          "constant": false,
+          "nan_count": 0,
+          "inf_count": 0
+        }
+      },
+      "dequant_output": {
+        "path": "evidence/bpu_island_reconstruction_v13/ramp/island_08_09_10_11/seg_08/bpu_dequant_output.npy",
+        "sha256": "8bb1082a809a8c57cfdb3f4a0cca6270269e2a464c911f4406d357be48af57ae",
+        "stats": {
+          "shape": [
+            128,
+            3584
+          ],
+          "dtype": "float32",
+          "size": 458752,
+          "min": -0.5301597714424133,
+          "max": 0.5301597714424133,
+          "mean": -0.00411269161850214,
+          "std": 0.33095690608024597,
+          "abs_max": 0.5301597714424133,
+          "nonzero_count": 458631,
+          "allzero": false,
+          "constant": false,
+          "nan_count": 0,
+          "inf_count": 0
+        }
+      }
+    },
+    {
+      "segment": 9,
+      "bpu": {
+        "segment": 9,
+        "model_name": "dream_segment_09_10",
+        "hbm_path": "/mnt/nas/openclaw/models/dream7b-hbm/seq128-b1-lmheadq16-lasttoken/seg09_10/dream7b_segment_9_10_seq128_q8.hbm",
+        "hbm_sha256": "30ca8b2e9102e9ff0f0ed34d491f8093f8b719a5b16081f8c9f227400b8b713a",
+        "input_contract": {
+          "kind": "hidden_plus_position_ids",
+          "input_0_shape": [
+            128,
+            3584
+          ],
+          "input_0_dtype": "float32",
+          "input_1_shape": [
+            128
+          ],
+          "input_1_dtype": "int32"
+        },
+        "load_seconds": 1.926,
+        "run_seconds": 0.01,
+        "quant_metadata": {
+          "available": true,
+          "scale": [
+            4.092553717782721e-05
+          ],
+          "scale_first": 4.092553717782721e-05,
+          "zero_point": [
+            0.0
+          ],
+          "repr": "<hbm_runtime.HB_HBMRuntime.QuantParams object at 0xffff3b2e81b0>"
+        },
+        "raw_stats": {
+          "shape": [
+            128,
+            3584
+          ],
+          "dtype": "int16",
+          "size": 458752,
+          "min": -32768.0,
+          "max": 21232.0,
+          "mean": -120.32010541643415,
+          "std": 8239.329869530615,
+          "abs_max": 32689.0,
+          "nonzero_count": 458718,
+          "allzero": false,
+          "constant": false,
+          "nan_count": 0,
+          "inf_count": 0
+        },
+        "dequant_stats": {
+          "shape": [
+            128,
+            3584
+          ],
+          "dtype": "float32",
+          "size": 458752,
+          "min": -1.341048002243042,
+          "max": 0.868930995464325,
+          "mean": -0.004924164619296789,
+          "std": 0.33719900250434875,
+          "abs_max": 1.341048002243042,
+          "nonzero_count": 458718,
+          "allzero": false,
+          "constant": false,
+          "nan_count": 0,
+          "inf_count": 0
+        }
+      },
+      "raw_output": {
+        "path": "evidence/bpu_island_reconstruction_v13/ramp/island_08_09_10_11/seg_09/bpu_raw_output.npy",
+        "sha256": "f0a422d8ac6b3a6627b0080963d41f1d023e4fa1e5197bf4f9753b839ca171c1",
+        "stats": {
+          "shape": [
+            128,
+            3584
+          ],
+          "dtype": "int16",
+          "size": 458752,
+          "min": -32768.0,
+          "max": 21232.0,
+          "mean": -120.32010541643415,
+          "std": 8239.329869530615,
+          "abs_max": 32689.0,
+          "nonzero_count": 458718,
+          "allzero": false,
+          "constant": false,
+          "nan_count": 0,
+          "inf_count": 0
+        }
+      },
+      "dequant_output": {
+        "path": "evidence/bpu_island_reconstruction_v13/ramp/island_08_09_10_11/seg_09/bpu_dequant_output.npy",
+        "sha256": "ee303ef9d1158eabea0aa935fecfd6679608b78e9ae2de0d3eb874062cf5d3f1",
+        "stats": {
+          "shape": [
+            128,
+            3584
+          ],
+          "dtype": "float32",
+          "size": 458752,
+          "min": -1.341048002243042,
+          "max": 0.868930995464325,
+          "mean": -0.004924164619296789,
+          "std": 0.33719900250434875,
+          "abs_max": 1.341048002243042,
+          "nonzero_count": 458718,
+          "allzero": false,
+          "constant": false,
+          "nan_count": 0,
+          "inf_count": 0
+        }
+      }
+    },
+    {
+      "segment": 10,
+      "bpu": {
+        "segment": 10,
+        "model_name": "dream_segment_10_11",
+        "hbm_path": "/mnt/nas/openclaw/models/dream7b-hbm/seq128-b1-lmheadq16-lasttoken/seg10_11/dream7b_segment_10_11_seq128_q8.hbm",
+        "hbm_sha256": "ae77a6dfa5ea7a0cfcffc972f5f4497cd669150c42033043b56d67b5c7994ebd",
+        "input_contract": {
+          "kind": "hidden_plus_position_ids",
+          "input_0_shape": [
+            128,
+            3584
+          ],
+          "input_0_dtype": "float32",
+          "input_1_shape": [
+            128
+          ],
+          "input_1_dtype": "int32"
+        },
+        "load_seconds": 1.924,
+        "run_seconds": 0.01,
+        "quant_metadata": {
+          "available": true,
+          "scale": [
+            0.0007787448703311384
+          ],
+          "scale_first": 0.0007787448703311384,
+          "zero_point": [
+            0.0
+          ],
+          "repr": "<hbm_runtime.HB_HBMRuntime.QuantParams object at 0xffff3b2eb070>"
+        },
+        "raw_stats": {
+          "shape": [
+            128,
+            3584
+          ],
+          "dtype": "int16",
+          "size": 458752,
+          "min": -1301.0,
+          "max": 1301.0,
+          "mean": -5.68115234375,
+          "std": 453.14823908887246,
+          "abs_max": 1301.0,
+          "nonzero_count": 458383,
+          "allzero": false,
+          "constant": false,
+          "nan_count": 0,
+          "inf_count": 0
+        },
+        "dequant_stats": {
+          "shape": [
+            128,
+            3584
+          ],
+          "dtype": "float32",
+          "size": 458752,
+          "min": -1.0131471157073975,
+          "max": 1.0131471157073975,
+          "mean": -0.004424167796969414,
+          "std": 0.3528868556022644,
+          "abs_max": 1.0131471157073975,
+          "nonzero_count": 458383,
+          "allzero": false,
+          "constant": false,
+          "nan_count": 0,
+          "inf_count": 0
+        }
+      },
+      "raw_output": {
+        "path": "evidence/bpu_island_reconstruction_v13/ramp/island_08_09_10_11/seg_10/bpu_raw_output.npy",
+        "sha256": "ca2f6a3e5104790c56a7fc4b1a5b9c77b3d1a57e57c10a95c2154a7cfa1939db",
+        "stats": {
+          "shape": [
+            128,
+            3584
+          ],
+          "dtype": "int16",
+          "size": 458752,
+          "min": -1301.0,
+          "max": 1301.0,
+          "mean": -5.68115234375,
+          "std": 453.14823908887246,
+          "abs_max": 1301.0,
+          "nonzero_count": 458383,
+          "allzero": false,
+          "constant": false,
+          "nan_count": 0,
+          "inf_count": 0
+        }
+      },
+      "dequant_output": {
+        "path": "evidence/bpu_island_reconstruction_v13/ramp/island_08_09_10_11/seg_10/bpu_dequant_output.npy",
+        "sha256": "107738ad4c67741fa7718785ff864dc99412afcc3b69bee12343e967f8486f22",
+        "stats": {
+          "shape": [
+            128,
+            3584
+          ],
+          "dtype": "float32",
+          "size": 458752,
+          "min": -1.0131471157073975,
+          "max": 1.0131471157073975,
+          "mean": -0.004424167796969414,
+          "std": 0.3528868556022644,
+          "abs_max": 1.0131471157073975,
+          "nonzero_count": 458383,
+          "allzero": false,
+          "constant": false,
+          "nan_count": 0,
+          "inf_count": 0
+        }
+      }
+    },
+    {
+      "segment": 11,
+      "bpu": {
+        "segment": 11,
+        "model_name": "dream_segment_11_12",
+        "hbm_path": "/mnt/nas/openclaw/models/dream7b-hbm/seq128-b1-lmheadq16-lasttoken/seg11_12/dream7b_segment_11_12_seq128_q8.hbm",
+        "hbm_sha256": "c838fe5d4cae0bde7ee14f1fa4815b5eb39217f010ab1e72e1b552be20c766ae",
+        "input_contract": {
+          "kind": "hidden_plus_position_ids",
+          "input_0_shape": [
+            128,
+            3584
+          ],
+          "input_0_dtype": "float32",
+          "input_1_shape": [
+            128
+          ],
+          "input_1_dtype": "int32"
+        },
+        "load_seconds": 1.925,
+        "run_seconds": 0.009,
+        "quant_metadata": {
+          "available": true,
+          "scale": [
+            0.002485527191311121
+          ],
+          "scale_first": 0.002485527191311121,
+          "zero_point": [
+            0.0
+          ],
+          "repr": "<hbm_runtime.HB_HBMRuntime.QuantParams object at 0xffff3b2eb670>"
+        },
+        "raw_stats": {
+          "shape": [
+            128,
+            3584
+          ],
+          "dtype": "int16",
+          "size": 458752,
+          "min": -32768.0,
+          "max": 32767.0,
+          "mean": -93.88808986118862,
+          "std": 5767.395748091935,
+          "abs_max": 32767.0,
+          "nonzero_count": 458709,
+          "allzero": false,
+          "constant": false,
+          "nan_count": 0,
+          "inf_count": 0
+        },
+        "dequant_stats": {
+          "shape": [
+            128,
+            3584
+          ],
+          "dtype": "float32",
+          "size": 458752,
+          "min": -81.44575500488281,
+          "max": 81.44326782226562,
+          "mean": -0.2333614081144333,
+          "std": 14.335018157958984,
+          "abs_max": 81.44575500488281,
+          "nonzero_count": 458709,
+          "allzero": false,
+          "constant": false,
+          "nan_count": 0,
+          "inf_count": 0
+        }
+      },
+      "raw_output": {
+        "path": "evidence/bpu_island_reconstruction_v13/ramp/island_08_09_10_11/seg_11/bpu_raw_output.npy",
+        "sha256": "2fab01f5c808a7cadeee4719eedd587db633ed43ae9f86948ad54f9359ec4302",
+        "stats": {
+          "shape": [
+            128,
+            3584
+          ],
+          "dtype": "int16",
+          "size": 458752,
+          "min": -32768.0,
+          "max": 32767.0,
+          "mean": -93.88808986118862,
+          "std": 5767.395748091935,
+          "abs_max": 32767.0,
+          "nonzero_count": 458709,
+          "allzero": false,
+          "constant": false,
+          "nan_count": 0,
+          "inf_count": 0
+        }
+      },
+      "dequant_output": {
+        "path": "evidence/bpu_island_reconstruction_v13/ramp/island_08_09_10_11/seg_11/bpu_dequant_output.npy",
+        "sha256": "51462382a12051f95aaea0d484f8fcc1059e4d802daccc5a452527d5f0b1a19f",
+        "stats": {
+          "shape": [
+            128,
+            3584
+          ],
+          "dtype": "float32",
+          "size": 458752,
+          "min": -81.44575500488281,
+          "max": 81.44326782226562,
+          "mean": -0.2333614081144333,
+          "std": 14.335018157958984,
+          "abs_max": 81.44575500488281,
+          "nonzero_count": 458709,
+          "allzero": false,
+          "constant": false,
+          "nan_count": 0,
+          "inf_count": 0
+        }
+      }
+    }
+  ],
+  "hf_suffix_layers": [
+    12,
+    13,
+    14,
+    15,
+    16,
+    17,
+    18,
+    19,
+    20,
+    21,
+    22,
+    23,
+    24,
+    25,
+    26,
+    27
+  ],
+  "logits": {
+    "path": "evidence/bpu_island_reconstruction_v13/ramp/island_08_09_10_11/island_logits.npy",
+    "sha256": "e237a5d124a5819bdc31939e7306be8e5bcedf0735527d732844aa61040207e0",
+    "stats": {
+      "shape": [
+        152064
+      ],
+      "dtype": "float32",
+      "size": 152064,
+      "min": -9.125,
+      "max": 4.5,
+      "mean": -2.4215362071990967,
+      "std": 1.0859569311141968,
+      "abs_max": 9.125,
+      "nonzero_count": 152064,
+      "allzero": false,
+      "constant": false,
+      "nan_count": 0,
+      "inf_count": 0
+    }
+  },
+  "final_metrics": {
+    "shape_match": true,
+    "reference_top1": 151643,
+    "candidate_top1": 1211,
+    "top1_agreement": false,
+    "reference_top1_in_candidate_top5": false,
+    "top5_overlap": 0,
+    "cosine": 0.8212865106964351,
+    "pearson_centered": -0.03915476378731419,
+    "relative_l2": 0.6908208797695804,
+    "max_abs_error": 13.6875,
+    "mean_abs_error": 1.225333181106382,
+    "candidate_normalized_entropy": 0.8845883153345542,
+    "candidate_stats": {
+      "shape": [
+        152064
+      ],
+      "dtype": "float32",
+      "size": 152064,
+      "min": -9.125,
+      "max": 4.5,
+      "mean": -2.4215362071990967,
+      "std": 1.0859569311141968,
+      "abs_max": 9.125,
+      "nonzero_count": 152064,
+      "allzero": false,
+      "constant": false,
+      "nan_count": 0,
+      "inf_count": 0
+    },
+    "reference_stats": {
+      "shape": [
+        152064
+      ],
+      "dtype": "float32",
+      "size": 152064,
+      "min": -7.65625,
+      "max": 12.25,
+      "mean": -1.9889841079711914,
+      "std": 0.9208143353462219,
+      "abs_max": 12.25,
+      "nonzero_count": 152064,
+      "allzero": false,
+      "constant": false,
+      "nan_count": 0,
+      "inf_count": 0
+    }
+  },
+  "boundary_metrics": {
+    "shape_match": true,
+    "reference_top1": 407710,
+    "candidate_top1": 447146,
+    "top1_agreement": false,
+    "reference_top1_in_candidate_top5": false,
+    "top5_overlap": 0,
+    "cosine": 0.07616472296943345,
+    "pearson_centered": 0.07616588987435839,
+    "relative_l2": 9.380882876767206,
+    "max_abs_error": 334.5542449951172,
+    "mean_abs_error": 10.902239188102893,
+    "candidate_normalized_entropy": 0.3630470137501194,
+    "candidate_stats": {
+      "shape": [
+        458752
+      ],
+      "dtype": "float32",
+      "size": 458752,
+      "min": -81.44575500488281,
+      "max": 81.44326782226562,
+      "mean": -0.2333614081144333,
+      "std": 14.335018157958984,
+      "abs_max": 81.44575500488281,
+      "nonzero_count": 458709,
+      "allzero": false,
+      "constant": false,
+      "nan_count": 0,
+      "inf_count": 0
+    },
+    "reference_stats": {
+      "shape": [
+        458752
+      ],
+      "dtype": "float32",
+      "size": 458752,
+      "min": -416.0,
+      "max": 138.0,
+      "mean": -0.0008368823328055441,
+      "std": 1.524570345878601,
+      "abs_max": 416.0,
+      "nonzero_count": 458289,
+      "allzero": false,
+      "constant": false,
+      "nan_count": 0,
+      "inf_count": 0
+    }
+  },
+  "strict_thresholds": {
+    "top1_agreement": true,
+    "reference_top1_in_candidate_top5": true,
+    "mean_cosine_min": 0.95,
+    "relative_l2_max": 0.1,
+    "no_allzero_or_constant_logits": true
+  },
+  "elapsed_seconds": 653.652,
+  "status": "pass"
+}

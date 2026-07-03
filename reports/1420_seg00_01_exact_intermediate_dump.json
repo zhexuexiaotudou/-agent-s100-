@@ -1,0 +1,245 @@
+{
+  "schema_version": "dream7b_s100p_v14_1420_seg00_01_exact_intermediate_dump",
+  "created_at_utc": "2026-07-03T06:10:19.559547+00:00",
+  "run_commands": [
+    "C:\\Users\\zhexu\\AppData\\Local\\Python\\pythoncore-3.14-64\\python.exe tools\\build_v14_research_thread.py --root ."
+  ],
+  "host_environment": {
+    "local_platform": "Windows-11-10.0.26200-SP0",
+    "python": "3.14.3 (tags/v3.14.3:323c59a, Feb  3 2026, 16:04:56) [MSC v.1944 64 bit (AMD64)]"
+  },
+  "git": {
+    "returncode": 128,
+    "stdout": "",
+    "stderr": "fatal: not a git repository (or any of the parent directories): .git"
+  },
+  "input_artifacts": [
+    {
+      "path": "evidence/seg00_01_exact_graph_v14",
+      "exists": true
+    },
+    {
+      "path": "evidence/s100p_remote_v14_reports/1420_1440_v14_seg00_exact_graph_position_remote.json",
+      "exists": true,
+      "size_bytes": 109835,
+      "sha256": "a1768fd476adfbe2c5615081c5ef51cc679accfcf50a51dc39ffc9cdd10be4e1"
+    }
+  ],
+  "output_artifacts": [
+    {
+      "path": "reports/1420_seg00_01_exact_intermediate_dump.json",
+      "exists": true,
+      "size_bytes": 9969,
+      "sha256": "5b4604a6966b9546309dadb5e3a8f9d5aa75f19a3a5ac8f4bad1f0568e43159b"
+    },
+    {
+      "path": "reports/1420_seg00_01_exact_intermediate_dump.md",
+      "exists": true,
+      "size_bytes": 110,
+      "sha256": "7593e3d7a68f1cf764d5ec1c83337fbcc1d5f47be1404592b1efe969fc64c5a8"
+    }
+  ],
+  "blocking_or_failure_reasons": [],
+  "next_minimal_experiments": [],
+  "safety": {
+    "generation_quality_run": false,
+    "product_routes_18888_18889_touched": false,
+    "dream7b_frontend_openclaw_traffic_touched": false
+  },
+  "remote_status": "pass",
+  "rows": [
+    {
+      "case_id": "zeros",
+      "all_required_visible_files_present": true,
+      "files": {
+        "input_0_tokens.npy": {
+          "path": "evidence/seg00_01_exact_graph_v14/zeros/input_0_tokens.npy",
+          "exists": true,
+          "size_bytes": 640,
+          "sha256": "2d6534e269597fe9b206d7498acc56b17a3155e178701fecea077ea1851bde3d"
+        },
+        "input_1_positions.npy": {
+          "path": "evidence/seg00_01_exact_graph_v14/zeros/input_1_positions.npy",
+          "exists": true,
+          "size_bytes": 640,
+          "sha256": "4d1b78137baa0951a67882293c57aa7d5e199e3c1afcea36fa8b0832d3204bf0"
+        },
+        "gathernd_output_raw.bin": {
+          "path": "evidence/seg00_01_exact_graph_v14/zeros/gathernd_output_raw.bin",
+          "exists": true,
+          "size_bytes": 458752,
+          "sha256": "1c2a53674f9cfa49b85ca0c7b9e50313ba1ca30fcba4cd501ed67f4ab31d106f"
+        },
+        "gathernd_output_interpreted.npy": {
+          "path": "evidence/seg00_01_exact_graph_v14/zeros/gathernd_output_interpreted.npy",
+          "exists": true,
+          "size_bytes": 1835136,
+          "sha256": "4cf8f35b864e3cbca88eefe2f18392f51a8d92b07e4a52e4220ea6bce727c5db"
+        },
+        "mul_input.npy": {
+          "path": "evidence/seg00_01_exact_graph_v14/zeros/mul_input.npy",
+          "exists": true,
+          "size_bytes": 640,
+          "sha256": "4d1b78137baa0951a67882293c57aa7d5e199e3c1afcea36fa8b0832d3204bf0"
+        },
+        "add_input_embedding.npy": {
+          "path": "evidence/seg00_01_exact_graph_v14/zeros/add_input_embedding.npy",
+          "exists": true,
+          "size_bytes": 1835136,
+          "sha256": "4cf8f35b864e3cbca88eefe2f18392f51a8d92b07e4a52e4220ea6bce727c5db"
+        },
+        "add_output_raw.npy": {
+          "path": "evidence/seg00_01_exact_graph_v14/zeros/add_output_raw.npy",
+          "exists": true,
+          "size_bytes": 917632,
+          "sha256": "1f4dfbc6b3abb9d46267f76d664e200a1c69b0553ab588c0f7760adb56aaf2d7"
+        },
+        "add_output_dequant.npy": {
+          "path": "evidence/seg00_01_exact_graph_v14/zeros/add_output_dequant.npy",
+          "exists": true,
+          "size_bytes": 1835136,
+          "sha256": "19b88e072b709874c4352a7fd508aacf126b0ed1e8ec8f72fe85167c46254a6d"
+        },
+        "metadata.json": {
+          "path": "evidence/seg00_01_exact_graph_v14/zeros/metadata.json",
+          "exists": true,
+          "size_bytes": 32118,
+          "sha256": "df0688b3e30c2fb6e53f866e15dc295753ef4dc9c406acecd78ae9df63d2f1be"
+        }
+      },
+      "limitations": [
+        "mul_output_raw.bin and mul_output_interpreted.npy are not available from HRT dump",
+        "add_input_position.npy is not available from HRT dump"
+      ]
+    },
+    {
+      "case_id": "ramp",
+      "all_required_visible_files_present": true,
+      "files": {
+        "input_0_tokens.npy": {
+          "path": "evidence/seg00_01_exact_graph_v14/ramp/input_0_tokens.npy",
+          "exists": true,
+          "size_bytes": 640,
+          "sha256": "3cf5af65be91d3dc27b47feaf32ea882ee592e7597a49a2c4ef979b7d475a96d"
+        },
+        "input_1_positions.npy": {
+          "path": "evidence/seg00_01_exact_graph_v14/ramp/input_1_positions.npy",
+          "exists": true,
+          "size_bytes": 640,
+          "sha256": "4d1b78137baa0951a67882293c57aa7d5e199e3c1afcea36fa8b0832d3204bf0"
+        },
+        "gathernd_output_raw.bin": {
+          "path": "evidence/seg00_01_exact_graph_v14/ramp/gathernd_output_raw.bin",
+          "exists": true,
+          "size_bytes": 458752,
+          "sha256": "5c9098b48ed3f085c4071214beb9c28b21674d534dbde7682448600368acf846"
+        },
+        "gathernd_output_interpreted.npy": {
+          "path": "evidence/seg00_01_exact_graph_v14/ramp/gathernd_output_interpreted.npy",
+          "exists": true,
+          "size_bytes": 1835136,
+          "sha256": "ffb318e4b23db1fb1447ff2dae14d571cceb15989bd962a1329a9837222eb075"
+        },
+        "mul_input.npy": {
+          "path": "evidence/seg00_01_exact_graph_v14/ramp/mul_input.npy",
+          "exists": true,
+          "size_bytes": 640,
+          "sha256": "4d1b78137baa0951a67882293c57aa7d5e199e3c1afcea36fa8b0832d3204bf0"
+        },
+        "add_input_embedding.npy": {
+          "path": "evidence/seg00_01_exact_graph_v14/ramp/add_input_embedding.npy",
+          "exists": true,
+          "size_bytes": 1835136,
+          "sha256": "ffb318e4b23db1fb1447ff2dae14d571cceb15989bd962a1329a9837222eb075"
+        },
+        "add_output_raw.npy": {
+          "path": "evidence/seg00_01_exact_graph_v14/ramp/add_output_raw.npy",
+          "exists": true,
+          "size_bytes": 917632,
+          "sha256": "8b42873e5363dc222a0ba46edc4c36667af1308f23c8dfb7d1ec92a7349e246f"
+        },
+        "add_output_dequant.npy": {
+          "path": "evidence/seg00_01_exact_graph_v14/ramp/add_output_dequant.npy",
+          "exists": true,
+          "size_bytes": 1835136,
+          "sha256": "5979b821f007b443d209da853e9f33c9bbc84456efc1cd6da78e6f9ef2a18de9"
+        },
+        "metadata.json": {
+          "path": "evidence/seg00_01_exact_graph_v14/ramp/metadata.json",
+          "exists": true,
+          "size_bytes": 32252,
+          "sha256": "9454d14d88fc0efc52dc658627c8beb09d6f6e5e06b158ca9ff7a09f38730614"
+        }
+      },
+      "limitations": [
+        "mul_output_raw.bin and mul_output_interpreted.npy are not available from HRT dump",
+        "add_input_position.npy is not available from HRT dump"
+      ]
+    },
+    {
+      "case_id": "short_chinese_prompt_padded",
+      "all_required_visible_files_present": true,
+      "files": {
+        "input_0_tokens.npy": {
+          "path": "evidence/seg00_01_exact_graph_v14/short_chinese_prompt_padded/input_0_tokens.npy",
+          "exists": true,
+          "size_bytes": 640,
+          "sha256": "98d57911fe40f09431a8f02aa99af656f2a0c935e78e0b0870c6b97bf315fd2f"
+        },
+        "input_1_positions.npy": {
+          "path": "evidence/seg00_01_exact_graph_v14/short_chinese_prompt_padded/input_1_positions.npy",
+          "exists": true,
+          "size_bytes": 640,
+          "sha256": "4d1b78137baa0951a67882293c57aa7d5e199e3c1afcea36fa8b0832d3204bf0"
+        },
+        "gathernd_output_raw.bin": {
+          "path": "evidence/seg00_01_exact_graph_v14/short_chinese_prompt_padded/gathernd_output_raw.bin",
+          "exists": true,
+          "size_bytes": 458752,
+          "sha256": "7a063fadc1a9708ccddbd8a927f8e57a08318cbe414adf64b2933e40faf44a99"
+        },
+        "gathernd_output_interpreted.npy": {
+          "path": "evidence/seg00_01_exact_graph_v14/short_chinese_prompt_padded/gathernd_output_interpreted.npy",
+          "exists": true,
+          "size_bytes": 1835136,
+          "sha256": "b7c3c4d589dafcd6f80f6b445ca321960e8d591deebfcae6af21a52cb4771388"
+        },
+        "mul_input.npy": {
+          "path": "evidence/seg00_01_exact_graph_v14/short_chinese_prompt_padded/mul_input.npy",
+          "exists": true,
+          "size_bytes": 640,
+          "sha256": "4d1b78137baa0951a67882293c57aa7d5e199e3c1afcea36fa8b0832d3204bf0"
+        },
+        "add_input_embedding.npy": {
+          "path": "evidence/seg00_01_exact_graph_v14/short_chinese_prompt_padded/add_input_embedding.npy",
+          "exists": true,
+          "size_bytes": 1835136,
+          "sha256": "b7c3c4d589dafcd6f80f6b445ca321960e8d591deebfcae6af21a52cb4771388"
+        },
+        "add_output_raw.npy": {
+          "path": "evidence/seg00_01_exact_graph_v14/short_chinese_prompt_padded/add_output_raw.npy",
+          "exists": true,
+          "size_bytes": 917632,
+          "sha256": "3e316a3233e07be970266a026c737e19d076666bb066ab53a3b7160c79ff5b57"
+        },
+        "add_output_dequant.npy": {
+          "path": "evidence/seg00_01_exact_graph_v14/short_chinese_prompt_padded/add_output_dequant.npy",
+          "exists": true,
+          "size_bytes": 1835136,
+          "sha256": "650d1188123ff259e629d5ff682ee2a4b60016f9c6a27b263b9067eea36cdcf4"
+        },
+        "metadata.json": {
+          "path": "evidence/seg00_01_exact_graph_v14/short_chinese_prompt_padded/metadata.json",
+          "exists": true,
+          "size_bytes": 33584,
+          "sha256": "abbf06669634da0ea17aa10cf63b0985cb536182cd417e7f4557deddf6f270a1"
+        }
+      },
+      "limitations": [
+        "mul_output_raw.bin and mul_output_interpreted.npy are not available from HRT dump",
+        "add_input_position.npy is not available from HRT dump"
+      ]
+    }
+  ],
+  "status": "pass"
+}

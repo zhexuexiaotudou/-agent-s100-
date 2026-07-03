@@ -1,0 +1,77 @@
+{
+  "case_id": "ramp",
+  "segment": 11,
+  "raw_path": "evidence/boundary_all_segments_v7/ramp/seg_11_raw_output.npy",
+  "dequant_path": "evidence/boundary_all_segments_v7/ramp/seg_11_output.npy",
+  "model_name": "dream_segment_11_12",
+  "hbm_path": "/mnt/nas/openclaw/models/dream7b-hbm/seq128-b1-lmheadq16-lasttoken/seg11_12/dream7b_segment_11_12_seq128_q8.hbm",
+  "quant_metadata": {
+    "available": true,
+    "repr": "<hbm_runtime.HB_HBMRuntime.QuantParams object at 0xffffa65da2f0>",
+    "scale": [
+      0.002485527191311121
+    ],
+    "scale_first": 0.002485527191311121,
+    "zero_point": [
+      0.0
+    ]
+  },
+  "raw_stats": {
+    "shape": [
+      128,
+      3584
+    ],
+    "dtype": "int16",
+    "size": 458752,
+    "min": -10213.0,
+    "max": 32052.0,
+    "mean": 1.7696620396205358,
+    "std": 2194.3841697150924,
+    "abs_max": 32052.0,
+    "nonzero_count": 458601,
+    "constant": false,
+    "allzero": false,
+    "nan_count": 0,
+    "inf_count": 0,
+    "count_pos_32767": 0,
+    "count_neg_32768": 0,
+    "count_abs_19807": 0,
+    "frac_pos_32767": 0.0,
+    "frac_neg_32768": 0.0,
+    "frac_abs_19807": 0.0,
+    "p0": -10213.0,
+    "p1": -4849.49,
+    "p5": -3369.0,
+    "p50": 18.0,
+    "p95": 3306.0,
+    "p99": 5114.0,
+    "p100": 32052.0
+  },
+  "dequant_stats": {
+    "shape": [
+      128,
+      3584
+    ],
+    "dtype": "float32",
+    "size": 458752,
+    "min": -25.384689331054688,
+    "max": 79.6661148071289,
+    "mean": 0.0043985419906675816,
+    "std": 5.4542012214660645,
+    "abs_max": 79.6661148071289,
+    "nonzero_count": 458601,
+    "constant": false,
+    "allzero": false,
+    "nan_count": 0,
+    "inf_count": 0,
+    "p0": -25.384689331054688,
+    "p1": -12.053539276123047,
+    "p5": -8.373741149902344,
+    "p50": 0.0447394885122776,
+    "p95": 8.21715259552002,
+    "p99": 12.710986137390137,
+    "p100": 79.6661148071289
+  },
+  "raw_sha256": "ad59c0379f534d9b22355a0743ae8b1f8631af717b6e9eddc7ced6dfd89384e9",
+  "dequant_sha256": "4ecc928be3e08e9a791a263da89691ff27c18e4c6de0da51eed892c8ecce4da1"
+}

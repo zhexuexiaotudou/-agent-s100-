@@ -1,0 +1,26 @@
+# stage2_8_package_rerun
+
+- PASS required asset exists: config/workspace_registry.yaml
+- PASS required asset exists: config/workspace_tool_policy.yaml
+- PASS required asset exists: config/workspace_arg_policy.yaml
+- PASS required asset exists: config/qwen_advisor_schema.json
+- PASS required asset exists: config/prompts/qwen_workspace_advisor_json.md
+- PASS required asset exists: ai_nas_harness/qwen_advisor.py
+- PASS required asset exists: gates/stage2_8_gates.py
+- PASS required asset exists: scripts/probes/ai_nas_allowlisted_tool.sh
+- PASS required asset exists: scripts/run_stage2_8_gates_from_package.sh
+- PASS required asset exists: reports/7000_stage2_8_baseline_lock.json
+- PASS required asset exists: reports/7010_qwen_systemd_apply_verify_rollback_gate.json
+- PASS required asset exists: reports/7020_policy_first_shadow_contract_gate.json
+- PASS required asset exists: reports/7030_qwen_advisor_schema_gate.json
+- PASS required asset exists: reports/7040_policy_first_readonly_shadow_preflight_soak_gate.json
+- PASS required asset exists: reports/7050_stage2_8_stage3_go_no_go_gate.json
+- PASS required asset exists: 01_final_evidence/digua_ai_nas_harness_stage2_8_gate_packet.json
+- PASS required asset exists: docs/STAGE2_8_DECISION.md
+- PASS required asset exists: docs/STAGE3_POLICY_FIRST_ARCHITECTURE.md
+- PASS required asset exists: docs/STAGE3_READONLY_SHADOW_DRYRUN_PLAN_V3.md
+- PASS previous input scan supports known directories
+- PASS advisor schema parses
+- PASS advisor schema forbids tool_id/args/cloud_allowed
+- PASS stage2_8 packet verdict present
+- PASS stage2_8 does not claim qwen-driven autonomous loop

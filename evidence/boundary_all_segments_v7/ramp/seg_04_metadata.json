@@ -1,0 +1,77 @@
+{
+  "case_id": "ramp",
+  "segment": 4,
+  "raw_path": "evidence/boundary_all_segments_v7/ramp/seg_04_raw_output.npy",
+  "dequant_path": "evidence/boundary_all_segments_v7/ramp/seg_04_output.npy",
+  "model_name": "dream_segment_04_05",
+  "hbm_path": "/mnt/nas/openclaw/models/dream7b-hbm/seq128-b1-lmheadq16-lasttoken/seg04_05/dream7b_segment_4_5_seq128_q8.hbm",
+  "quant_metadata": {
+    "available": true,
+    "repr": "<hbm_runtime.HB_HBMRuntime.QuantParams object at 0xffffa65c77b0>",
+    "scale": [
+      0.0023247746285051107
+    ],
+    "scale_first": 0.0023247746285051107,
+    "zero_point": [
+      0.0
+    ]
+  },
+  "raw_stats": {
+    "shape": [
+      128,
+      3584
+    ],
+    "dtype": "int16",
+    "size": 458752,
+    "min": -189.0,
+    "max": 189.0,
+    "mean": -0.6719774518694196,
+    "std": 59.09808863183558,
+    "abs_max": 189.0,
+    "nonzero_count": 453358,
+    "constant": false,
+    "allzero": false,
+    "nan_count": 0,
+    "inf_count": 0,
+    "count_pos_32767": 0,
+    "count_neg_32768": 0,
+    "count_abs_19807": 0,
+    "frac_pos_32767": 0.0,
+    "frac_neg_32768": 0.0,
+    "frac_abs_19807": 0.0,
+    "p0": -189.0,
+    "p1": -165.0,
+    "p5": -96.0,
+    "p50": 0.0,
+    "p95": 93.0,
+    "p99": 156.0,
+    "p100": 189.0
+  },
+  "dequant_stats": {
+    "shape": [
+      128,
+      3584
+    ],
+    "dtype": "float32",
+    "size": 458752,
+    "min": -0.439382404088974,
+    "max": 0.439382404088974,
+    "mean": -0.0015621960628777742,
+    "std": 0.13738973438739777,
+    "abs_max": 0.439382404088974,
+    "nonzero_count": 453358,
+    "constant": false,
+    "allzero": false,
+    "nan_count": 0,
+    "inf_count": 0,
+    "p0": -0.439382404088974,
+    "p1": -0.3835878074169159,
+    "p5": -0.22317835688591003,
+    "p50": 0.0,
+    "p95": 0.21620404720306396,
+    "p99": 0.3626648485660553,
+    "p100": 0.439382404088974
+  },
+  "raw_sha256": "9fd2d93f285066cf814872436193a4185d6cb4f37283c92ff32383cb87787335",
+  "dequant_sha256": "3fa8edf2f19ee77043dffcbaad42fdd913cd355ae74d4463bb50a1d3b0622256"
+}

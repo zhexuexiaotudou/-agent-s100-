@@ -1,0 +1,946 @@
+{
+  "case_id": "short_chinese_prompt_padded",
+  "hrt_dump": {
+    "case_id": "short_chinese_prompt_padded",
+    "command": [
+      "hrt_model_exec",
+      "infer",
+      "--model_file",
+      "/mnt/nas/openclaw/models/dream7b-hbm/seq128-b1-lmheadq16-lasttoken/seg00_01/dream7b_segment_0_1_seq128_q8.hbm",
+      "--model_name",
+      "dream_segment_00_01",
+      "--input_file",
+      "evidence/seg00_01_exact_graph_v14/short_chinese_prompt_padded/hrt_inputs/input_0_tokens.npy,evidence/seg00_01_exact_graph_v14/short_chinese_prompt_padded/hrt_inputs/input_1_positions.npy",
+      "--frame_count",
+      "1",
+      "--dump_intermediate",
+      "1",
+      "--enable_dump",
+      "true",
+      "--dump_path",
+      "evidence/seg00_01_exact_graph_v14/short_chinese_prompt_padded/hrt_dump_raw",
+      "--dump_format",
+      "bin"
+    ],
+    "returncode": 0,
+    "log_path": "evidence/seg00_01_exact_graph_v14/short_chinese_prompt_padded/hrt_dump_command.log",
+    "input_0_tokens": {
+      "path": "evidence/seg00_01_exact_graph_v14/short_chinese_prompt_padded/input_0_tokens.npy",
+      "sha256": "98d57911fe40f09431a8f02aa99af656f2a0c935e78e0b0870c6b97bf315fd2f",
+      "stats": {
+        "shape": [
+          1,
+          128
+        ],
+        "dtype": "int32",
+        "size": 128,
+        "min": 0.0,
+        "max": 151645.0,
+        "mean": 4881.859375,
+        "std": 24394.630105098942,
+        "abs_max": 151645.0,
+        "nonzero_count": 10,
+        "allzero": false,
+        "constant": false,
+        "nan_count": 0,
+        "inf_count": 0
+      }
+    },
+    "input_1_positions": {
+      "path": "evidence/seg00_01_exact_graph_v14/short_chinese_prompt_padded/input_1_positions.npy",
+      "sha256": "4d1b78137baa0951a67882293c57aa7d5e199e3c1afcea36fa8b0832d3204bf0",
+      "stats": {
+        "shape": [
+          128
+        ],
+        "dtype": "int32",
+        "size": 128,
+        "min": 0.0,
+        "max": 127.0,
+        "mean": 63.5,
+        "std": 36.94928957368463,
+        "abs_max": 127.0,
+        "nonzero_count": 127,
+        "allzero": false,
+        "constant": false,
+        "nan_count": 0,
+        "inf_count": 0
+      }
+    },
+    "dumped_artifacts": {
+      "gathernd_output_raw_bin": {
+        "path": "evidence/seg00_01_exact_graph_v14/short_chinese_prompt_padded/gathernd_output_raw.bin",
+        "sha256": "7a063fadc1a9708ccddbd8a927f8e57a08318cbe414adf64b2933e40faf44a99",
+        "size_bytes": 458752
+      },
+      "gathernd_output_interpreted": {
+        "path": "evidence/seg00_01_exact_graph_v14/short_chinese_prompt_padded/gathernd_output_interpreted.npy",
+        "sha256": "b7c3c4d589dafcd6f80f6b445ca321960e8d591deebfcae6af21a52cb4771388",
+        "stats": {
+          "shape": [
+            128,
+            3584
+          ],
+          "dtype": "float32",
+          "size": 458752,
+          "min": -34.0,
+          "max": 72.0,
+          "mean": 0.0006125313811935484,
+          "std": 2.1119861602783203,
+          "abs_max": 72.0,
+          "nonzero_count": 360269,
+          "allzero": false,
+          "constant": false,
+          "nan_count": 0,
+          "inf_count": 0
+        }
+      },
+      "gathernd_input_indices": {
+        "path": "evidence/seg00_01_exact_graph_v14/short_chinese_prompt_padded/gathernd_input_indices.npy",
+        "sha256": "98d57911fe40f09431a8f02aa99af656f2a0c935e78e0b0870c6b97bf315fd2f",
+        "stats": {
+          "shape": [
+            1,
+            128
+          ],
+          "dtype": "int32",
+          "size": 128,
+          "min": 0.0,
+          "max": 151645.0,
+          "mean": 4881.859375,
+          "std": 24394.630105098942,
+          "abs_max": 151645.0,
+          "nonzero_count": 10,
+          "allzero": false,
+          "constant": false,
+          "nan_count": 0,
+          "inf_count": 0
+        }
+      },
+      "mul_input": {
+        "path": "evidence/seg00_01_exact_graph_v14/short_chinese_prompt_padded/mul_input.npy",
+        "sha256": "4d1b78137baa0951a67882293c57aa7d5e199e3c1afcea36fa8b0832d3204bf0",
+        "stats": {
+          "shape": [
+            128
+          ],
+          "dtype": "int32",
+          "size": 128,
+          "min": 0.0,
+          "max": 127.0,
+          "mean": 63.5,
+          "std": 36.94928957368463,
+          "abs_max": 127.0,
+          "nonzero_count": 127,
+          "allzero": false,
+          "constant": false,
+          "nan_count": 0,
+          "inf_count": 0
+        }
+      },
+      "add_input_embedding_raw_bin": {
+        "path": "evidence/seg00_01_exact_graph_v14/short_chinese_prompt_padded/add_input_embedding_raw.bin",
+        "sha256": "7a063fadc1a9708ccddbd8a927f8e57a08318cbe414adf64b2933e40faf44a99",
+        "size_bytes": 458752
+      },
+      "add_input_embedding": {
+        "path": "evidence/seg00_01_exact_graph_v14/short_chinese_prompt_padded/add_input_embedding.npy",
+        "sha256": "b7c3c4d589dafcd6f80f6b445ca321960e8d591deebfcae6af21a52cb4771388",
+        "stats": {
+          "shape": [
+            128,
+            3584
+          ],
+          "dtype": "float32",
+          "size": 458752,
+          "min": -34.0,
+          "max": 72.0,
+          "mean": 0.0006125313811935484,
+          "std": 2.1119861602783203,
+          "abs_max": 72.0,
+          "nonzero_count": 360269,
+          "allzero": false,
+          "constant": false,
+          "nan_count": 0,
+          "inf_count": 0
+        }
+      },
+      "add_output_raw_bin": {
+        "path": "evidence/seg00_01_exact_graph_v14/short_chinese_prompt_padded/add_output_raw.bin",
+        "sha256": "66b6bcfa0340b052751b087d47ffd40c2ee050e69838a722e4685864dc508cbc",
+        "size_bytes": 917504
+      },
+      "add_output_raw": {
+        "path": "evidence/seg00_01_exact_graph_v14/short_chinese_prompt_padded/add_output_raw.npy",
+        "sha256": "3e316a3233e07be970266a026c737e19d076666bb066ab53a3b7160c79ff5b57",
+        "stats": {
+          "shape": [
+            128,
+            3584
+          ],
+          "dtype": "int16",
+          "size": 458752,
+          "min": -10113.0,
+          "max": 13403.0,
+          "mean": -1.8996080671037947,
+          "std": 879.758213170049,
+          "abs_max": 13403.0,
+          "nonzero_count": 458480,
+          "allzero": false,
+          "constant": false,
+          "nan_count": 0,
+          "inf_count": 0
+        }
+      },
+      "add_output_dequant": {
+        "path": "evidence/seg00_01_exact_graph_v14/short_chinese_prompt_padded/add_output_dequant.npy",
+        "sha256": "650d1188123ff259e629d5ff682ee2a4b60016f9c6a27b263b9067eea36cdcf4",
+        "stats": {
+          "shape": [
+            128,
+            3584
+          ],
+          "dtype": "float32",
+          "size": 458752,
+          "min": -0.6131000518798828,
+          "max": 0.8125561475753784,
+          "mean": -0.00011516364611452445,
+          "std": 0.053335294127464294,
+          "abs_max": 0.8125561475753784,
+          "nonzero_count": 458480,
+          "allzero": false,
+          "constant": false,
+          "nan_count": 0,
+          "inf_count": 0
+        }
+      },
+      "model_infer_output_raw_bin": {
+        "path": "evidence/seg00_01_exact_graph_v14/short_chinese_prompt_padded/model_infer_output_raw.bin",
+        "sha256": "66b6bcfa0340b052751b087d47ffd40c2ee050e69838a722e4685864dc508cbc",
+        "size_bytes": 917504
+      }
+    },
+    "limitations": [
+      "mul_output was not dumped by hrt_model_exec; only hbir.mul input was visible.",
+      "separate add_input_position tensor was not dumped; only add input-0 and add output were visible."
+    ],
+    "raw_dump_file_listing": [
+      {
+        "path": "evidence/seg00_01_exact_graph_v14/short_chinese_prompt_padded/hrt_dump_raw/model_infer_input_0__input_0.bin",
+        "size_bytes": 512,
+        "sha256": "0c970e5d7439f82b493824b159402a490844d97a8390e630238d15068244239e"
+      },
+      {
+        "path": "evidence/seg00_01_exact_graph_v14/short_chinese_prompt_padded/hrt_dump_raw/model_infer_input_1__input_1.bin",
+        "size_bytes": 512,
+        "sha256": "1abb49eec50723c018c1197161b8cc46c61cab2dbfdd96287a7e3e20bbcdcc99"
+      },
+      {
+        "path": "evidence/seg00_01_exact_graph_v14/short_chinese_prompt_padded/hrt_dump_raw/model_infer_output_0__output_0.bin",
+        "size_bytes": 917504,
+        "sha256": "66b6bcfa0340b052751b087d47ffd40c2ee050e69838a722e4685864dc508cbc"
+      },
+      {
+        "path": "evidence/seg00_01_exact_graph_v14/short_chinese_prompt_padded/hrt_dump_raw/task-2-layer-0-BPU-hbir.mul_id_63_bpu_segment_0-input-0-_input_1-frame_247064785021.data.bin",
+        "size_bytes": 512,
+        "sha256": "1abb49eec50723c018c1197161b8cc46c61cab2dbfdd96287a7e3e20bbcdcc99"
+      },
+      {
+        "path": "evidence/seg00_01_exact_graph_v14/short_chinese_prompt_padded/hrt_dump_raw/task-2-layer-1-native::View-hbir.reshape_id_1_cpu_segment_1-input-0-_input_0-frame_247064809477.data.bin",
+        "size_bytes": 512,
+        "sha256": "0c970e5d7439f82b493824b159402a490844d97a8390e630238d15068244239e"
+      },
+      {
+        "path": "evidence/seg00_01_exact_graph_v14/short_chinese_prompt_padded/hrt_dump_raw/task-2-layer-1-native::View-hbir.reshape_id_1_cpu_segment_1-output-0-hbir.reshape_id_1: 0-frame_247064810267.data.bin",
+        "size_bytes": 512,
+        "sha256": "0c970e5d7439f82b493824b159402a490844d97a8390e630238d15068244239e"
+      },
+      {
+        "path": "evidence/seg00_01_exact_graph_v14/short_chinese_prompt_padded/hrt_dump_raw/task-2-layer-2-native::GatherND-qnt.const_fake_quant_id_3_cpu_segment_2-input-0-hbir.reshape_id_1: 0-frame_247064810862.data.bin",
+        "size_bytes": 512,
+        "sha256": "0c970e5d7439f82b493824b159402a490844d97a8390e630238d15068244239e"
+      },
+      {
+        "path": "evidence/seg00_01_exact_graph_v14/short_chinese_prompt_padded/hrt_dump_raw/task-2-layer-2-native::GatherND-qnt.const_fake_quant_id_3_cpu_segment_2-output-0-qnt.const_fake_quant_id_3: 0-frame_247064812186.data.bin",
+        "size_bytes": 458752,
+        "sha256": "7a063fadc1a9708ccddbd8a927f8e57a08318cbe414adf64b2933e40faf44a99"
+      },
+      {
+        "path": "evidence/seg00_01_exact_graph_v14/short_chinese_prompt_padded/hrt_dump_raw/task-2-layer-3-BPU-hbir.add_id_137_bpu_segment_3-input-0-qnt.const_fake_quant_id_3: 0-frame_247064817294.data.bin",
+        "size_bytes": 458752,
+        "sha256": "7a063fadc1a9708ccddbd8a927f8e57a08318cbe414adf64b2933e40faf44a99"
+      },
+      {
+        "path": "evidence/seg00_01_exact_graph_v14/short_chinese_prompt_padded/hrt_dump_raw/task-2-layer-3-BPU-hbir.add_id_137_bpu_segment_3-output-0-_output_0-frame_247064830906.data.bin",
+        "size_bytes": 917504,
+        "sha256": "66b6bcfa0340b052751b087d47ffd40c2ee050e69838a722e4685864dc508cbc"
+      }
+    ]
+  },
+  "position_audit": {
+    "quant_metadata": {
+      "available": true,
+      "scale": [
+        6.062494503566995e-05
+      ],
+      "scale_first": 6.062494503566995e-05,
+      "zero_point": [
+        0.0
+      ],
+      "repr": "<hbm_runtime.HB_HBMRuntime.QuantParams object at 0xffffa9206bb0>"
+    },
+    "rows": [
+      {
+        "variant": "canonical_0_to_127",
+        "positions": {
+          "path": "evidence/seg00_01_exact_graph_v14/short_chinese_prompt_padded/position_variants/canonical_0_to_127/positions.npy",
+          "sha256": "4d1b78137baa0951a67882293c57aa7d5e199e3c1afcea36fa8b0832d3204bf0",
+          "stats": {
+            "shape": [
+              128
+            ],
+            "dtype": "int32",
+            "size": 128,
+            "min": 0.0,
+            "max": 127.0,
+            "mean": 63.5,
+            "std": 36.94928957368463,
+            "abs_max": 127.0,
+            "nonzero_count": 127,
+            "allzero": false,
+            "constant": false,
+            "nan_count": 0,
+            "inf_count": 0
+          }
+        },
+        "raw_output": {
+          "path": "evidence/seg00_01_exact_graph_v14/short_chinese_prompt_padded/position_variants/canonical_0_to_127/raw_output.npy",
+          "sha256": "3e316a3233e07be970266a026c737e19d076666bb066ab53a3b7160c79ff5b57",
+          "stats": {
+            "shape": [
+              128,
+              3584
+            ],
+            "dtype": "int16",
+            "size": 458752,
+            "min": -10113.0,
+            "max": 13403.0,
+            "mean": -1.8996080671037947,
+            "std": 879.758213170049,
+            "abs_max": 13403.0,
+            "nonzero_count": 458480,
+            "allzero": false,
+            "constant": false,
+            "nan_count": 0,
+            "inf_count": 0
+          }
+        },
+        "dequant_output": {
+          "path": "evidence/seg00_01_exact_graph_v14/short_chinese_prompt_padded/position_variants/canonical_0_to_127/dequant_output.npy",
+          "sha256": "650d1188123ff259e629d5ff682ee2a4b60016f9c6a27b263b9067eea36cdcf4",
+          "stats": {
+            "shape": [
+              128,
+              3584
+            ],
+            "dtype": "float32",
+            "size": 458752,
+            "min": -0.6131000518798828,
+            "max": 0.8125561475753784,
+            "mean": -0.00011516364611452445,
+            "std": 0.053335294127464294,
+            "abs_max": 0.8125561475753784,
+            "nonzero_count": 458480,
+            "allzero": false,
+            "constant": false,
+            "nan_count": 0,
+            "inf_count": 0
+          }
+        },
+        "delta_vs_all_zero_positions": {
+          "path": "evidence/seg00_01_exact_graph_v14/short_chinese_prompt_padded/position_variants/canonical_0_to_127/delta_vs_all_zero_positions.npy",
+          "sha256": "c98c800164e6e8c567fb5a4feb647c1eccd008485181718c3b731675f5807eb9",
+          "stats": {
+            "shape": [
+              128,
+              3584
+            ],
+            "dtype": "float32",
+            "size": 458752,
+            "min": -0.44735145568847656,
+            "max": 0.42595088481903076,
+            "mean": -7.228443428175524e-05,
+            "std": 0.015638679265975952,
+            "abs_max": 0.44735145568847656,
+            "nonzero_count": 457534,
+            "allzero": false,
+            "constant": false,
+            "nan_count": 0,
+            "inf_count": 0
+          }
+        },
+        "delta_norm": 10.592347145080566,
+        "delta_abs_max": 0.44735145568847656,
+        "delta_std": 0.015638679265975952
+      },
+      {
+        "variant": "all_zero_positions",
+        "positions": {
+          "path": "evidence/seg00_01_exact_graph_v14/short_chinese_prompt_padded/position_variants/all_zero_positions/positions.npy",
+          "sha256": "48a36b55628bcbeaafe8bd57a48eeca48bac9bcbbaaa8d98863c0b5c2efd46c7",
+          "stats": {
+            "shape": [
+              128
+            ],
+            "dtype": "int32",
+            "size": 128,
+            "min": 0.0,
+            "max": 0.0,
+            "mean": 0.0,
+            "std": 0.0,
+            "abs_max": 0.0,
+            "nonzero_count": 0,
+            "allzero": true,
+            "constant": true,
+            "nan_count": 0,
+            "inf_count": 0
+          }
+        },
+        "raw_output": {
+          "path": "evidence/seg00_01_exact_graph_v14/short_chinese_prompt_padded/position_variants/all_zero_positions/raw_output.npy",
+          "sha256": "ed3b0158caf7c6a9f8e8c3ee4b34d03a02064f9f32ca7f81968ea6e315e079ed",
+          "stats": {
+            "shape": [
+              128,
+              3584
+            ],
+            "dtype": "int16",
+            "size": 458752,
+            "min": -9442.0,
+            "max": 8987.0,
+            "mean": -0.7072862897600446,
+            "std": 865.4146790106896,
+            "abs_max": 9442.0,
+            "nonzero_count": 458494,
+            "allzero": false,
+            "constant": false,
+            "nan_count": 0,
+            "inf_count": 0
+          }
+        },
+        "dequant_output": {
+          "path": "evidence/seg00_01_exact_graph_v14/short_chinese_prompt_padded/position_variants/all_zero_positions/dequant_output.npy",
+          "sha256": "83887b19f3b994f3b5105af9576c98f5346b9fac99b0b59303de84d61a4c181f",
+          "stats": {
+            "shape": [
+              128,
+              3584
+            ],
+            "dtype": "float32",
+            "size": 458752,
+            "min": -0.5724207162857056,
+            "max": 0.5448364019393921,
+            "mean": -4.287934643798508e-05,
+            "std": 0.05246572196483612,
+            "abs_max": 0.5724207162857056,
+            "nonzero_count": 458494,
+            "allzero": false,
+            "constant": false,
+            "nan_count": 0,
+            "inf_count": 0
+          }
+        },
+        "delta_vs_all_zero_positions": {
+          "path": "evidence/seg00_01_exact_graph_v14/short_chinese_prompt_padded/position_variants/all_zero_positions/delta_vs_all_zero_positions.npy",
+          "sha256": "15e9ce51964421ac25f7dab9a116580695751d693e3a537162329a58933752d3",
+          "stats": {
+            "shape": [
+              128,
+              3584
+            ],
+            "dtype": "float32",
+            "size": 458752,
+            "min": 0.0,
+            "max": 0.0,
+            "mean": 0.0,
+            "std": 0.0,
+            "abs_max": 0.0,
+            "nonzero_count": 0,
+            "allzero": true,
+            "constant": true,
+            "nan_count": 0,
+            "inf_count": 0
+          }
+        },
+        "delta_norm": 0.0,
+        "delta_abs_max": 0.0,
+        "delta_std": 0.0
+      },
+      {
+        "variant": "all_one_positions",
+        "positions": {
+          "path": "evidence/seg00_01_exact_graph_v14/short_chinese_prompt_padded/position_variants/all_one_positions/positions.npy",
+          "sha256": "e2607e45a0df031204f8d42c0f26211eeb0ba35061aef29b7404a33234d351ca",
+          "stats": {
+            "shape": [
+              128
+            ],
+            "dtype": "int32",
+            "size": 128,
+            "min": 1.0,
+            "max": 1.0,
+            "mean": 1.0,
+            "std": 0.0,
+            "abs_max": 1.0,
+            "nonzero_count": 128,
+            "allzero": false,
+            "constant": true,
+            "nan_count": 0,
+            "inf_count": 0
+          }
+        },
+        "raw_output": {
+          "path": "evidence/seg00_01_exact_graph_v14/short_chinese_prompt_padded/position_variants/all_one_positions/raw_output.npy",
+          "sha256": "3e686ba6dfef0834ed717edb58fed4d8ca833912ee5632118fe86d5525a29452",
+          "stats": {
+            "shape": [
+              128,
+              3584
+            ],
+            "dtype": "int16",
+            "size": 458752,
+            "min": -9458.0,
+            "max": 8988.0,
+            "mean": -0.9703281947544643,
+            "std": 864.8138124714535,
+            "abs_max": 9458.0,
+            "nonzero_count": 458610,
+            "allzero": false,
+            "constant": false,
+            "nan_count": 0,
+            "inf_count": 0
+          }
+        },
+        "dequant_output": {
+          "path": "evidence/seg00_01_exact_graph_v14/short_chinese_prompt_padded/position_variants/all_one_positions/dequant_output.npy",
+          "sha256": "f0056c6be5a2e44215db1df276e7c13d9c24fc73a5ca51438a3ad0d8216e4ab8",
+          "stats": {
+            "shape": [
+              128,
+              3584
+            ],
+            "dtype": "float32",
+            "size": 458752,
+            "min": -0.5733907222747803,
+            "max": 0.5448970198631287,
+            "mean": -5.8826197346206754e-05,
+            "std": 0.05242929607629776,
+            "abs_max": 0.5733907222747803,
+            "nonzero_count": 458610,
+            "allzero": false,
+            "constant": false,
+            "nan_count": 0,
+            "inf_count": 0
+          }
+        },
+        "delta_vs_all_zero_positions": {
+          "path": "evidence/seg00_01_exact_graph_v14/short_chinese_prompt_padded/position_variants/all_one_positions/delta_vs_all_zero_positions.npy",
+          "sha256": "e94f7900e24a915eabda29259df70fc5d819ef3ce5b1abc924342d3a86c03500",
+          "stats": {
+            "shape": [
+              128,
+              3584
+            ],
+            "dtype": "float32",
+            "size": 458752,
+            "min": -0.010063737630844116,
+            "max": 0.006668746471405029,
+            "mean": -1.594690365891438e-05,
+            "std": 0.0006911237142048776,
+            "abs_max": 0.010063737630844116,
+            "nonzero_count": 436453,
+            "allzero": false,
+            "constant": false,
+            "nan_count": 0,
+            "inf_count": 0
+          }
+        },
+        "delta_norm": 0.4682547450065613,
+        "delta_abs_max": 0.010063737630844116,
+        "delta_std": 0.0006911237142048776
+      },
+      {
+        "variant": "one_indexed_1_to_128",
+        "positions": {
+          "path": "evidence/seg00_01_exact_graph_v14/short_chinese_prompt_padded/position_variants/one_indexed_1_to_128/positions.npy",
+          "sha256": "7aa714ada6fc8a2c474e4f51bbecfbc31d1707229c27c06b55323c73950a5d45",
+          "stats": {
+            "shape": [
+              128
+            ],
+            "dtype": "int32",
+            "size": 128,
+            "min": 1.0,
+            "max": 128.0,
+            "mean": 64.5,
+            "std": 36.94928957368463,
+            "abs_max": 128.0,
+            "nonzero_count": 128,
+            "allzero": false,
+            "constant": false,
+            "nan_count": 0,
+            "inf_count": 0
+          }
+        },
+        "raw_output": {
+          "path": "evidence/seg00_01_exact_graph_v14/short_chinese_prompt_padded/position_variants/one_indexed_1_to_128/raw_output.npy",
+          "sha256": "2c080415ae65758ab15b41b444be1181dbf28768ab9c93e25ca78d4faa407aeb",
+          "stats": {
+            "shape": [
+              128,
+              3584
+            ],
+            "dtype": "int16",
+            "size": 458752,
+            "min": -10052.0,
+            "max": 11437.0,
+            "mean": -1.8487418038504464,
+            "std": 877.8372264424524,
+            "abs_max": 11437.0,
+            "nonzero_count": 458499,
+            "allzero": false,
+            "constant": false,
+            "nan_count": 0,
+            "inf_count": 0
+          }
+        },
+        "dequant_output": {
+          "path": "evidence/seg00_01_exact_graph_v14/short_chinese_prompt_padded/position_variants/one_indexed_1_to_128/dequant_output.npy",
+          "sha256": "8c4dd6833fac27331ce56a0cd0b687bdebde3dd036c3a5460e4a64c78ae99640",
+          "stats": {
+            "shape": [
+              128,
+              3584
+            ],
+            "dtype": "float32",
+            "size": 458752,
+            "min": -0.6094019412994385,
+            "max": 0.6933674812316895,
+            "mean": -0.00011207984789507464,
+            "std": 0.05321883037686348,
+            "abs_max": 0.6933674812316895,
+            "nonzero_count": 458499,
+            "allzero": false,
+            "constant": false,
+            "nan_count": 0,
+            "inf_count": 0
+          }
+        },
+        "delta_vs_all_zero_positions": {
+          "path": "evidence/seg00_01_exact_graph_v14/short_chinese_prompt_padded/position_variants/one_indexed_1_to_128/delta_vs_all_zero_positions.npy",
+          "sha256": "849d1c43316aa9a9ea8b23eef84d6b3b0b1ee87ba14a396ab2b49403ad96a8f3",
+          "stats": {
+            "shape": [
+              128,
+              3584
+            ],
+            "dtype": "float32",
+            "size": 458752,
+            "min": -0.4534139633178711,
+            "max": 0.4031558632850647,
+            "mean": -6.920065789017826e-05,
+            "std": 0.01535545289516449,
+            "abs_max": 0.4534139633178711,
+            "nonzero_count": 457642,
+            "allzero": false,
+            "constant": false,
+            "nan_count": 0,
+            "inf_count": 0
+          }
+        },
+        "delta_norm": 10.40049934387207,
+        "delta_abs_max": 0.4534139633178711,
+        "delta_std": 0.01535545289516449
+      },
+      {
+        "variant": "reverse_127_to_0",
+        "positions": {
+          "path": "evidence/seg00_01_exact_graph_v14/short_chinese_prompt_padded/position_variants/reverse_127_to_0/positions.npy",
+          "sha256": "2e2f90eaa5d8043c2ad8ef4fd3d122953d755bf83563b94e772315e5b430f811",
+          "stats": {
+            "shape": [
+              128
+            ],
+            "dtype": "int32",
+            "size": 128,
+            "min": 0.0,
+            "max": 127.0,
+            "mean": 63.5,
+            "std": 36.94928957368463,
+            "abs_max": 127.0,
+            "nonzero_count": 127,
+            "allzero": false,
+            "constant": false,
+            "nan_count": 0,
+            "inf_count": 0
+          }
+        },
+        "raw_output": {
+          "path": "evidence/seg00_01_exact_graph_v14/short_chinese_prompt_padded/position_variants/reverse_127_to_0/raw_output.npy",
+          "sha256": "aeb5b3d497c5e6a0333997a2716b1b620f6ddff233ca3e0228b883b0d5aa9448",
+          "stats": {
+            "shape": [
+              128,
+              3584
+            ],
+            "dtype": "int16",
+            "size": 458752,
+            "min": -9383.0,
+            "max": 13353.0,
+            "mean": -2.236238752092634,
+            "std": 881.5918213499116,
+            "abs_max": 13353.0,
+            "nonzero_count": 458524,
+            "allzero": false,
+            "constant": false,
+            "nan_count": 0,
+            "inf_count": 0
+          }
+        },
+        "dequant_output": {
+          "path": "evidence/seg00_01_exact_graph_v14/short_chinese_prompt_padded/position_variants/reverse_127_to_0/dequant_output.npy",
+          "sha256": "783fc3693f6a73437ad97688f2873a3df3b2afb7fc5e05a2a21a38c11a857c48",
+          "stats": {
+            "shape": [
+              128,
+              3584
+            ],
+            "dtype": "float32",
+            "size": 458752,
+            "min": -0.5688438415527344,
+            "max": 0.8095248937606812,
+            "mean": -0.00013557187048718333,
+            "std": 0.0534464530646801,
+            "abs_max": 0.8095248937606812,
+            "nonzero_count": 458524,
+            "allzero": false,
+            "constant": false,
+            "nan_count": 0,
+            "inf_count": 0
+          }
+        },
+        "delta_vs_all_zero_positions": {
+          "path": "evidence/seg00_01_exact_graph_v14/short_chinese_prompt_padded/position_variants/reverse_127_to_0/delta_vs_all_zero_positions.npy",
+          "sha256": "638b5c9318f5d22cdc14a8b8374a964ca7f0632886d12f7a2186ac6292d9c73a",
+          "stats": {
+            "shape": [
+              128,
+              3584
+            ],
+            "dtype": "float32",
+            "size": 458752,
+            "min": -0.44183456897735596,
+            "max": 0.43910646438598633,
+            "mean": -9.26926513784565e-05,
+            "std": 0.015874598175287247,
+            "abs_max": 0.44183456897735596,
+            "nonzero_count": 457526,
+            "allzero": false,
+            "constant": false,
+            "nan_count": 0,
+            "inf_count": 0
+          }
+        },
+        "delta_norm": 10.752208709716797,
+        "delta_abs_max": 0.44183456897735596,
+        "delta_std": 0.015874598175287247
+      },
+      {
+        "variant": "doubled_positions",
+        "positions": {
+          "path": "evidence/seg00_01_exact_graph_v14/short_chinese_prompt_padded/position_variants/doubled_positions/positions.npy",
+          "sha256": "7a8266e918fa3adb9f8ebc6186a2814b185380c6d433bb8980f6931f2f623770",
+          "stats": {
+            "shape": [
+              128
+            ],
+            "dtype": "int32",
+            "size": 128,
+            "min": 0.0,
+            "max": 254.0,
+            "mean": 127.0,
+            "std": 73.89857914736926,
+            "abs_max": 254.0,
+            "nonzero_count": 127,
+            "allzero": false,
+            "constant": false,
+            "nan_count": 0,
+            "inf_count": 0
+          }
+        },
+        "raw_output": {
+          "path": "evidence/seg00_01_exact_graph_v14/short_chinese_prompt_padded/position_variants/doubled_positions/raw_output.npy",
+          "sha256": "55333564febceded02c6215f04faf3d7553405a01dac5d070519c851c9e802c7",
+          "stats": {
+            "shape": [
+              128,
+              3584
+            ],
+            "dtype": "int16",
+            "size": 458752,
+            "min": -10212.0,
+            "max": 12891.0,
+            "mean": -2.09228515625,
+            "std": 872.5958959869919,
+            "abs_max": 12891.0,
+            "nonzero_count": 458576,
+            "allzero": false,
+            "constant": false,
+            "nan_count": 0,
+            "inf_count": 0
+          }
+        },
+        "dequant_output": {
+          "path": "evidence/seg00_01_exact_graph_v14/short_chinese_prompt_padded/position_variants/doubled_positions/dequant_output.npy",
+          "sha256": "1b2dc0c827a57da30b1132ec37a000d4275a769f6bff1086305017f02e3304ab",
+          "stats": {
+            "shape": [
+              128,
+              3584
+            ],
+            "dtype": "float32",
+            "size": 458752,
+            "min": -0.6191019415855408,
+            "max": 0.7815161943435669,
+            "mean": -0.00012684465036727488,
+            "std": 0.05290108174085617,
+            "abs_max": 0.7815161943435669,
+            "nonzero_count": 458576,
+            "allzero": false,
+            "constant": false,
+            "nan_count": 0,
+            "inf_count": 0
+          }
+        },
+        "delta_vs_all_zero_positions": {
+          "path": "evidence/seg00_01_exact_graph_v14/short_chinese_prompt_padded/position_variants/doubled_positions/delta_vs_all_zero_positions.npy",
+          "sha256": "3198c50a99dd64d07f8f6d368d938b6fd3b225bab086900d6757e1e6c51708da",
+          "stats": {
+            "shape": [
+              128,
+              3584
+            ],
+            "dtype": "float32",
+            "size": 458752,
+            "min": -0.44892770051956177,
+            "max": 0.4771789312362671,
+            "mean": -8.396547491429374e-05,
+            "std": 0.01665385067462921,
+            "abs_max": 0.4771789312362671,
+            "nonzero_count": 457770,
+            "allzero": false,
+            "constant": false,
+            "nan_count": 0,
+            "inf_count": 0
+          }
+        },
+        "delta_norm": 11.279953956604004,
+        "delta_abs_max": 0.4771789312362671,
+        "delta_std": 0.01665385067462921
+      },
+      {
+        "variant": "random_permutation_positions",
+        "positions": {
+          "path": "evidence/seg00_01_exact_graph_v14/short_chinese_prompt_padded/position_variants/random_permutation_positions/positions.npy",
+          "sha256": "58e506de9d8d210b331d46d341f7a2214a64328ba6dc5e569fbb13142231c109",
+          "stats": {
+            "shape": [
+              128
+            ],
+            "dtype": "int32",
+            "size": 128,
+            "min": 0.0,
+            "max": 127.0,
+            "mean": 63.5,
+            "std": 36.94928957368463,
+            "abs_max": 127.0,
+            "nonzero_count": 127,
+            "allzero": false,
+            "constant": false,
+            "nan_count": 0,
+            "inf_count": 0
+          }
+        },
+        "raw_output": {
+          "path": "evidence/seg00_01_exact_graph_v14/short_chinese_prompt_padded/position_variants/random_permutation_positions/raw_output.npy",
+          "sha256": "4adeacf12199575c0b5c2124f486055bb2a72b7d5190183755fdad6964a30ed0",
+          "stats": {
+            "shape": [
+              128,
+              3584
+            ],
+            "dtype": "int16",
+            "size": 458752,
+            "min": -10438.0,
+            "max": 13161.0,
+            "mean": -2.134425571986607,
+            "std": 879.6777134118703,
+            "abs_max": 13161.0,
+            "nonzero_count": 458499,
+            "allzero": false,
+            "constant": false,
+            "nan_count": 0,
+            "inf_count": 0
+          }
+        },
+        "dequant_output": {
+          "path": "evidence/seg00_01_exact_graph_v14/short_chinese_prompt_padded/position_variants/random_permutation_positions/dequant_output.npy",
+          "sha256": "aa3046f9b3e5030b722c27b4a94c63cb5c5926d5d438f44f07f9d0a849ee20a9",
+          "stats": {
+            "shape": [
+              128,
+              3584
+            ],
+            "dtype": "float32",
+            "size": 458752,
+            "min": -0.632803201675415,
+            "max": 0.7978848814964294,
+            "mean": -0.00012939941370859742,
+            "std": 0.05333041399717331,
+            "abs_max": 0.7978848814964294,
+            "nonzero_count": 458499,
+            "allzero": false,
+            "constant": false,
+            "nan_count": 0,
+            "inf_count": 0
+          }
+        },
+        "delta_vs_all_zero_positions": {
+          "path": "evidence/seg00_01_exact_graph_v14/short_chinese_prompt_padded/position_variants/random_permutation_positions/delta_vs_all_zero_positions.npy",
+          "sha256": "7769c510f68fc25b622aa9bb5335dfd7571eacc7da0a9491f75b9ec175d21dd3",
+          "stats": {
+            "shape": [
+              128,
+              3584
+            ],
+            "dtype": "float32",
+            "size": 458752,
+            "min": -0.41473525762557983,
+            "max": 0.43486273288726807,
+            "mean": -8.652022370370105e-05,
+            "std": 0.015609717927873135,
+            "abs_max": 0.43486273288726807,
+            "nonzero_count": 457600,
+            "allzero": false,
+            "constant": false,
+            "nan_count": 0,
+            "inf_count": 0
+          }
+        },
+        "delta_norm": 10.572779655456543,
+        "delta_abs_max": 0.43486273288726807,
+        "delta_std": 0.015609717927873135
+      }
+    ]
+  }
+}

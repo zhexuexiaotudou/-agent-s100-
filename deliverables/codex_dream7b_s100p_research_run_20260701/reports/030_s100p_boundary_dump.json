@@ -1,0 +1,1388 @@
+{
+  "created_at": "2026-07-01T14:13:06.032574+08:00",
+  "verdict": "failed_s100p_boundary_dump",
+  "case_count": 1,
+  "errors": [
+    "ramp:RuntimeError:DNN Error (code: -400001, desc: Memory alloc failed, please check error log) hbDNN initialize from /mnt/nas/openclaw/models/dream7b-hbm/seq128-b1-lmheadq16-lasttoken/seg27_28/dream7b_segment_27_28_seq128_q8_lmheadq16_last_token_logits.hbm file failed."
+  ],
+  "cases": [
+    {
+      "case_id": "zeros",
+      "case_dir": "evidence/s100p_boundaries/boundary_zeros_ramp/zeros",
+      "segments": [
+        {
+          "segment": 0,
+          "model_name": "dream_segment_00_01",
+          "raw_output": "evidence/s100p_boundaries/boundary_zeros_ramp/zeros/seg_00_raw_output.npy",
+          "dequant_output": "evidence/s100p_boundaries/boundary_zeros_ramp/zeros/seg_00_output.npy",
+          "raw_stats": {
+            "shape": [
+              128,
+              3584
+            ],
+            "dtype": "int16",
+            "min": -9110.0,
+            "max": 8986.0,
+            "mean": -1.8005567278180803,
+            "std": 876.2538121788294,
+            "nonzero_count": 458449,
+            "nan_count": 0,
+            "inf_count": 0,
+            "constant": false
+          },
+          "dequant_stats": {
+            "shape": [
+              128,
+              3584
+            ],
+            "dtype": "float32",
+            "min": -0.5522932410240173,
+            "max": 0.5447757840156555,
+            "mean": -0.00010915863094851375,
+            "std": 0.05312283709645271,
+            "nonzero_count": 458449,
+            "nan_count": 0,
+            "inf_count": 0,
+            "constant": false
+          },
+          "quant_metadata": {
+            "available": true,
+            "scale": [
+              6.062494503566995e-05
+            ],
+            "scale_first": 6.062494503566995e-05,
+            "zero_point": [
+              0.0
+            ],
+            "repr": "<hbm_runtime.HB_HBMRuntime.QuantParams object at 0xffff968a6070>"
+          },
+          "load_ms": 7363.996,
+          "run_ms": 11.0
+        },
+        {
+          "segment": 1,
+          "model_name": "dream_segment_01_02",
+          "raw_output": "evidence/s100p_boundaries/boundary_zeros_ramp/zeros/seg_01_raw_output.npy",
+          "dequant_output": "evidence/s100p_boundaries/boundary_zeros_ramp/zeros/seg_01_output.npy",
+          "raw_stats": {
+            "shape": [
+              128,
+              3584
+            ],
+            "dtype": "int16",
+            "min": -15140.0,
+            "max": 15140.0,
+            "mean": -25.347525460379465,
+            "std": 1894.4459224989862,
+            "nonzero_count": 458635,
+            "nan_count": 0,
+            "inf_count": 0,
+            "constant": false
+          },
+          "dequant_stats": {
+            "shape": [
+              128,
+              3584
+            ],
+            "dtype": "float32",
+            "min": -0.6892396211624146,
+            "max": 0.6892396211624146,
+            "mean": -0.0011539312545210123,
+            "std": 0.08624354004859924,
+            "nonzero_count": 458635,
+            "nan_count": 0,
+            "inf_count": 0,
+            "constant": false
+          },
+          "quant_metadata": {
+            "available": true,
+            "scale": [
+              4.552441168925725e-05
+            ],
+            "scale_first": 4.552441168925725e-05,
+            "zero_point": [
+              0.0
+            ],
+            "repr": "<hbm_runtime.HB_HBMRuntime.QuantParams object at 0xffff9d1daaf0>"
+          },
+          "load_ms": 1998.447,
+          "run_ms": 9.642
+        },
+        {
+          "segment": 2,
+          "model_name": "dream_segment_02_03",
+          "raw_output": "evidence/s100p_boundaries/boundary_zeros_ramp/zeros/seg_02_raw_output.npy",
+          "dequant_output": "evidence/s100p_boundaries/boundary_zeros_ramp/zeros/seg_02_output.npy",
+          "raw_stats": {
+            "shape": [
+              128,
+              3584
+            ],
+            "dtype": "int16",
+            "min": -427.0,
+            "max": 427.0,
+            "mean": -1.9540797642299108,
+            "std": 84.37861876649227,
+            "nonzero_count": 453959,
+            "nan_count": 0,
+            "inf_count": 0,
+            "constant": false
+          },
+          "dequant_stats": {
+            "shape": [
+              128,
+              3584
+            ],
+            "dtype": "float32",
+            "min": -0.4555218517780304,
+            "max": 0.4555218517780304,
+            "mean": -0.0020846042316406965,
+            "std": 0.09001476317644119,
+            "nonzero_count": 453959,
+            "nan_count": 0,
+            "inf_count": 0,
+            "constant": false
+          },
+          "quant_metadata": {
+            "available": true,
+            "scale": [
+              0.0010667958995327353
+            ],
+            "scale_first": 0.0010667958995327353,
+            "zero_point": [
+              0.0
+            ],
+            "repr": "<hbm_runtime.HB_HBMRuntime.QuantParams object at 0xffff9c8f92f0>"
+          },
+          "load_ms": 1978.13,
+          "run_ms": 9.35
+        },
+        {
+          "segment": 3,
+          "model_name": "dream_segment_03_04",
+          "raw_output": "evidence/s100p_boundaries/boundary_zeros_ramp/zeros/seg_03_raw_output.npy",
+          "dequant_output": "evidence/s100p_boundaries/boundary_zeros_ramp/zeros/seg_03_output.npy",
+          "raw_stats": {
+            "shape": [
+              128,
+              3584
+            ],
+            "dtype": "int16",
+            "min": -52.0,
+            "max": 52.0,
+            "mean": -0.08990042550223214,
+            "std": 11.613708574612023,
+            "nonzero_count": 423246,
+            "nan_count": 0,
+            "inf_count": 0,
+            "constant": false
+          },
+          "dequant_stats": {
+            "shape": [
+              128,
+              3584
+            ],
+            "dtype": "float32",
+            "min": -0.6256224513053894,
+            "max": 0.6256224513053894,
+            "mean": -0.0010816102148965001,
+            "std": 0.13972686231136322,
+            "nonzero_count": 423246,
+            "nan_count": 0,
+            "inf_count": 0,
+            "constant": false
+          },
+          "quant_metadata": {
+            "available": true,
+            "scale": [
+              0.012031201273202896
+            ],
+            "scale_first": 0.012031201273202896,
+            "zero_point": [
+              0.0
+            ],
+            "repr": "<hbm_runtime.HB_HBMRuntime.QuantParams object at 0xffff968a5ff0>"
+          },
+          "load_ms": 2047.357,
+          "run_ms": 9.651
+        },
+        {
+          "segment": 4,
+          "model_name": "dream_segment_04_05",
+          "raw_output": "evidence/s100p_boundaries/boundary_zeros_ramp/zeros/seg_04_raw_output.npy",
+          "dequant_output": "evidence/s100p_boundaries/boundary_zeros_ramp/zeros/seg_04_output.npy",
+          "raw_stats": {
+            "shape": [
+              128,
+              3584
+            ],
+            "dtype": "int16",
+            "min": -189.0,
+            "max": 189.0,
+            "mean": -0.5048348563058036,
+            "std": 59.60211847178102,
+            "nonzero_count": 452847,
+            "nan_count": 0,
+            "inf_count": 0,
+            "constant": false
+          },
+          "dequant_stats": {
+            "shape": [
+              128,
+              3584
+            ],
+            "dtype": "float32",
+            "min": -0.439382404088974,
+            "max": 0.439382404088974,
+            "mean": -0.0011736268643289804,
+            "std": 0.13856148719787598,
+            "nonzero_count": 452847,
+            "nan_count": 0,
+            "inf_count": 0,
+            "constant": false
+          },
+          "quant_metadata": {
+            "available": true,
+            "scale": [
+              0.0023247746285051107
+            ],
+            "scale_first": 0.0023247746285051107,
+            "zero_point": [
+              0.0
+            ],
+            "repr": "<hbm_runtime.HB_HBMRuntime.QuantParams object at 0xffff968a5eb0>"
+          },
+          "load_ms": 2021.842,
+          "run_ms": 9.31
+        },
+        {
+          "segment": 5,
+          "model_name": "dream_segment_05_06",
+          "raw_output": "evidence/s100p_boundaries/boundary_zeros_ramp/zeros/seg_05_raw_output.npy",
+          "dequant_output": "evidence/s100p_boundaries/boundary_zeros_ramp/zeros/seg_05_output.npy",
+          "raw_stats": {
+            "shape": [
+              128,
+              3584
+            ],
+            "dtype": "int16",
+            "min": -815.0,
+            "max": 459.0,
+            "mean": -1.0868922642299108,
+            "std": 99.47822051249803,
+            "nonzero_count": 456001,
+            "nan_count": 0,
+            "inf_count": 0,
+            "constant": false
+          },
+          "dequant_stats": {
+            "shape": [
+              128,
+              3584
+            ],
+            "dtype": "float32",
+            "min": -1.3154081106185913,
+            "max": 0.7408249378204346,
+            "mean": -0.0017542417626827955,
+            "std": 0.16055762767791748,
+            "nonzero_count": 456001,
+            "nan_count": 0,
+            "inf_count": 0,
+            "constant": false
+          },
+          "quant_metadata": {
+            "available": true,
+            "scale": [
+              0.001613997737877071
+            ],
+            "scale_first": 0.001613997737877071,
+            "zero_point": [
+              0.0
+            ],
+            "repr": "<hbm_runtime.HB_HBMRuntime.QuantParams object at 0xffff968a6a70>"
+          },
+          "load_ms": 1999.328,
+          "run_ms": 9.621
+        },
+        {
+          "segment": 6,
+          "model_name": "dream_segment_06_07",
+          "raw_output": "evidence/s100p_boundaries/boundary_zeros_ramp/zeros/seg_06_raw_output.npy",
+          "dequant_output": "evidence/s100p_boundaries/boundary_zeros_ramp/zeros/seg_06_output.npy",
+          "raw_stats": {
+            "shape": [
+              128,
+              3584
+            ],
+            "dtype": "int16",
+            "min": -2600.0,
+            "max": 2600.0,
+            "mean": -6.050271170479911,
+            "std": 687.2557777822781,
+            "nonzero_count": 458292,
+            "nan_count": 0,
+            "inf_count": 0,
+            "constant": false
+          },
+          "dequant_stats": {
+            "shape": [
+              128,
+              3584
+            ],
+            "dtype": "float32",
+            "min": -0.6393386125564575,
+            "max": 0.6393386125564575,
+            "mean": -0.0014877585927024484,
+            "std": 0.16899581253528595,
+            "nonzero_count": 458292,
+            "nan_count": 0,
+            "inf_count": 0,
+            "constant": false
+          },
+          "quant_metadata": {
+            "available": true,
+            "scale": [
+              0.0002458994567859918
+            ],
+            "scale_first": 0.0002458994567859918,
+            "zero_point": [
+              0.0
+            ],
+            "repr": "<hbm_runtime.HB_HBMRuntime.QuantParams object at 0xffff968a6f30>"
+          },
+          "load_ms": 1971.243,
+          "run_ms": 9.341
+        },
+        {
+          "segment": 7,
+          "model_name": "dream_segment_07_08",
+          "raw_output": "evidence/s100p_boundaries/boundary_zeros_ramp/zeros/seg_07_raw_output.npy",
+          "dequant_output": "evidence/s100p_boundaries/boundary_zeros_ramp/zeros/seg_07_output.npy",
+          "raw_stats": {
+            "shape": [
+              128,
+              3584
+            ],
+            "dtype": "int16",
+            "min": -3732.0,
+            "max": 2364.0,
+            "mean": -8.223759242466517,
+            "std": 500.75177689673916,
+            "nonzero_count": 458379,
+            "nan_count": 0,
+            "inf_count": 0,
+            "constant": false
+          },
+          "dequant_stats": {
+            "shape": [
+              128,
+              3584
+            ],
+            "dtype": "float32",
+            "min": -1.362729787826538,
+            "max": 0.8632082343101501,
+            "mean": -0.003002883167937398,
+            "std": 0.18284817039966583,
+            "nonzero_count": 458379,
+            "nan_count": 0,
+            "inf_count": 0,
+            "constant": false
+          },
+          "quant_metadata": {
+            "available": true,
+            "scale": [
+              0.0003651473089121282
+            ],
+            "scale_first": 0.0003651473089121282,
+            "zero_point": [
+              0.0
+            ],
+            "repr": "<hbm_runtime.HB_HBMRuntime.QuantParams object at 0xffff968a6f30>"
+          },
+          "load_ms": 2046.936,
+          "run_ms": 9.329
+        },
+        {
+          "segment": 8,
+          "model_name": "dream_segment_08_09",
+          "raw_output": "evidence/s100p_boundaries/boundary_zeros_ramp/zeros/seg_08_raw_output.npy",
+          "dequant_output": "evidence/s100p_boundaries/boundary_zeros_ramp/zeros/seg_08_output.npy",
+          "raw_stats": {
+            "shape": [
+              128,
+              3584
+            ],
+            "dtype": "int16",
+            "min": -3952.0,
+            "max": 3952.0,
+            "mean": -24.874426705496653,
+            "std": 1339.8026209303043,
+            "nonzero_count": 458150,
+            "nan_count": 0,
+            "inf_count": 0,
+            "constant": false
+          },
+          "dequant_stats": {
+            "shape": [
+              128,
+              3584
+            ],
+            "dtype": "float32",
+            "min": -0.5301597714424133,
+            "max": 0.5301597714424133,
+            "mean": -0.0033368985168635845,
+            "std": 0.17973418533802032,
+            "nonzero_count": 458150,
+            "nan_count": 0,
+            "inf_count": 0,
+            "constant": false
+          },
+          "quant_metadata": {
+            "available": true,
+            "scale": [
+              0.0001341497409157455
+            ],
+            "scale_first": 0.0001341497409157455,
+            "zero_point": [
+              0.0
+            ],
+            "repr": "<hbm_runtime.HB_HBMRuntime.QuantParams object at 0xffff968a6f30>"
+          },
+          "load_ms": 2006.032,
+          "run_ms": 9.343
+        },
+        {
+          "segment": 9,
+          "model_name": "dream_segment_09_10",
+          "raw_output": "evidence/s100p_boundaries/boundary_zeros_ramp/zeros/seg_09_raw_output.npy",
+          "dequant_output": "evidence/s100p_boundaries/boundary_zeros_ramp/zeros/seg_09_output.npy",
+          "raw_stats": {
+            "shape": [
+              128,
+              3584
+            ],
+            "dtype": "int16",
+            "min": -32768.0,
+            "max": 21239.0,
+            "mean": -99.6534663609096,
+            "std": 4625.526884457536,
+            "nonzero_count": 458677,
+            "nan_count": 0,
+            "inf_count": 0,
+            "constant": false
+          },
+          "dequant_stats": {
+            "shape": [
+              128,
+              3584
+            ],
+            "dtype": "float32",
+            "min": -1.341048002243042,
+            "max": 0.8692174553871155,
+            "mean": -0.004078371915966272,
+            "std": 0.18930216133594513,
+            "nonzero_count": 458677,
+            "nan_count": 0,
+            "inf_count": 0,
+            "constant": false
+          },
+          "quant_metadata": {
+            "available": true,
+            "scale": [
+              4.092553717782721e-05
+            ],
+            "scale_first": 4.092553717782721e-05,
+            "zero_point": [
+              0.0
+            ],
+            "repr": "<hbm_runtime.HB_HBMRuntime.QuantParams object at 0xffff968a7370>"
+          },
+          "load_ms": 1962.468,
+          "run_ms": 9.291
+        },
+        {
+          "segment": 10,
+          "model_name": "dream_segment_10_11",
+          "raw_output": "evidence/s100p_boundaries/boundary_zeros_ramp/zeros/seg_10_raw_output.npy",
+          "dequant_output": "evidence/s100p_boundaries/boundary_zeros_ramp/zeros/seg_10_output.npy",
+          "raw_stats": {
+            "shape": [
+              128,
+              3584
+            ],
+            "dtype": "int16",
+            "min": -1301.0,
+            "max": 1301.0,
+            "mean": -4.8709869384765625,
+            "std": 282.7500063963251,
+            "nonzero_count": 457948,
+            "nan_count": 0,
+            "inf_count": 0,
+            "constant": false
+          },
+          "dequant_stats": {
+            "shape": [
+              128,
+              3584
+            ],
+            "dtype": "float32",
+            "min": -1.0131471157073975,
+            "max": 1.0131471157073975,
+            "mean": -0.003793256124481559,
+            "std": 0.2201901376247406,
+            "nonzero_count": 457948,
+            "nan_count": 0,
+            "inf_count": 0,
+            "constant": false
+          },
+          "quant_metadata": {
+            "available": true,
+            "scale": [
+              0.0007787448703311384
+            ],
+            "scale_first": 0.0007787448703311384,
+            "zero_point": [
+              0.0
+            ],
+            "repr": "<hbm_runtime.HB_HBMRuntime.QuantParams object at 0xffff968bc270>"
+          },
+          "load_ms": 1966.958,
+          "run_ms": 9.284
+        },
+        {
+          "segment": 11,
+          "model_name": "dream_segment_11_12",
+          "raw_output": "evidence/s100p_boundaries/boundary_zeros_ramp/zeros/seg_11_raw_output.npy",
+          "dequant_output": "evidence/s100p_boundaries/boundary_zeros_ramp/zeros/seg_11_output.npy",
+          "raw_stats": {
+            "shape": [
+              128,
+              3584
+            ],
+            "dtype": "int16",
+            "min": -10187.0,
+            "max": 32052.0,
+            "mean": 4.6865386962890625,
+            "std": 2219.065568174145,
+            "nonzero_count": 458573,
+            "nan_count": 0,
+            "inf_count": 0,
+            "constant": false
+          },
+          "dequant_stats": {
+            "shape": [
+              128,
+              3584
+            ],
+            "dtype": "float32",
+            "min": -25.320064544677734,
+            "max": 79.6661148071289,
+            "mean": 0.011648518964648247,
+            "std": 5.515547752380371,
+            "nonzero_count": 458573,
+            "nan_count": 0,
+            "inf_count": 0,
+            "constant": false
+          },
+          "quant_metadata": {
+            "available": true,
+            "scale": [
+              0.002485527191311121
+            ],
+            "scale_first": 0.002485527191311121,
+            "zero_point": [
+              0.0
+            ],
+            "repr": "<hbm_runtime.HB_HBMRuntime.QuantParams object at 0xffff968bc6f0>"
+          },
+          "load_ms": 2092.837,
+          "run_ms": 9.445
+        },
+        {
+          "segment": 12,
+          "model_name": "dream_segment_12_13",
+          "raw_output": "evidence/s100p_boundaries/boundary_zeros_ramp/zeros/seg_12_raw_output.npy",
+          "dequant_output": "evidence/s100p_boundaries/boundary_zeros_ramp/zeros/seg_12_output.npy",
+          "raw_stats": {
+            "shape": [
+              128,
+              3584
+            ],
+            "dtype": "int16",
+            "min": -32768.0,
+            "max": 32767.0,
+            "mean": 372.8125893729074,
+            "std": 17051.86275412247,
+            "nonzero_count": 458730,
+            "nan_count": 0,
+            "inf_count": 0,
+            "constant": false
+          },
+          "dequant_stats": {
+            "shape": [
+              128,
+              3584
+            ],
+            "dtype": "float32",
+            "min": -34.12774658203125,
+            "max": 34.126705169677734,
+            "mean": 0.3882828652858734,
+            "std": 17.759449005126953,
+            "nonzero_count": 458730,
+            "nan_count": 0,
+            "inf_count": 0,
+            "constant": false
+          },
+          "quant_metadata": {
+            "available": true,
+            "scale": [
+              0.0010414961725473404
+            ],
+            "scale_first": 0.0010414961725473404,
+            "zero_point": [
+              0.0
+            ],
+            "repr": "<hbm_runtime.HB_HBMRuntime.QuantParams object at 0xffff968bcbb0>"
+          },
+          "load_ms": 1959.882,
+          "run_ms": 9.323
+        },
+        {
+          "segment": 13,
+          "model_name": "dream_segment_13_14",
+          "raw_output": "evidence/s100p_boundaries/boundary_zeros_ramp/zeros/seg_13_raw_output.npy",
+          "dequant_output": "evidence/s100p_boundaries/boundary_zeros_ramp/zeros/seg_13_output.npy",
+          "raw_stats": {
+            "shape": [
+              128,
+              3584
+            ],
+            "dtype": "int16",
+            "min": -32768.0,
+            "max": 32767.0,
+            "mean": -119.3804953438895,
+            "std": 22821.42575534393,
+            "nonzero_count": 458741,
+            "nan_count": 0,
+            "inf_count": 0,
+            "constant": false
+          },
+          "dequant_stats": {
+            "shape": [
+              128,
+              3584
+            ],
+            "dtype": "float32",
+            "min": -5.40559720993042,
+            "max": 5.405432224273682,
+            "mean": -0.019693713635206223,
+            "std": 3.7647531032562256,
+            "nonzero_count": 458741,
+            "nan_count": 0,
+            "inf_count": 0,
+            "constant": false
+          },
+          "quant_metadata": {
+            "available": true,
+            "scale": [
+              0.00016496573516633362
+            ],
+            "scale_first": 0.00016496573516633362,
+            "zero_point": [
+              0.0
+            ],
+            "repr": "<hbm_runtime.HB_HBMRuntime.QuantParams object at 0xffff968bd030>"
+          },
+          "load_ms": 1968.299,
+          "run_ms": 9.256
+        },
+        {
+          "segment": 14,
+          "model_name": "dream_segment_14_15",
+          "raw_output": "evidence/s100p_boundaries/boundary_zeros_ramp/zeros/seg_14_raw_output.npy",
+          "dequant_output": "evidence/s100p_boundaries/boundary_zeros_ramp/zeros/seg_14_output.npy",
+          "raw_stats": {
+            "shape": [
+              128,
+              3584
+            ],
+            "dtype": "int16",
+            "min": -373.0,
+            "max": 373.0,
+            "mean": -2.7821437290736606,
+            "std": 368.8589455844735,
+            "nonzero_count": 458715,
+            "nan_count": 0,
+            "inf_count": 0,
+            "constant": false
+          },
+          "dequant_stats": {
+            "shape": [
+              128,
+              3584
+            ],
+            "dtype": "float32",
+            "min": -0.23441752791404724,
+            "max": 0.23441752791404724,
+            "mean": -0.0017484804848209023,
+            "std": 0.23181504011154175,
+            "nonzero_count": 458715,
+            "nan_count": 0,
+            "inf_count": 0,
+            "constant": false
+          },
+          "quant_metadata": {
+            "available": true,
+            "scale": [
+              0.0006284652044996619
+            ],
+            "scale_first": 0.0006284652044996619,
+            "zero_point": [
+              0.0
+            ],
+            "repr": "<hbm_runtime.HB_HBMRuntime.QuantParams object at 0xffff968bd530>"
+          },
+          "load_ms": 1925.136,
+          "run_ms": 9.306
+        },
+        {
+          "segment": 15,
+          "model_name": "dream_segment_15_16",
+          "raw_output": "evidence/s100p_boundaries/boundary_zeros_ramp/zeros/seg_15_raw_output.npy",
+          "dequant_output": "evidence/s100p_boundaries/boundary_zeros_ramp/zeros/seg_15_output.npy",
+          "raw_stats": {
+            "shape": [
+              128,
+              3584
+            ],
+            "dtype": "int16",
+            "min": -2290.0,
+            "max": 1608.0,
+            "mean": -10.628843035016741,
+            "std": 879.121716654898,
+            "nonzero_count": 458742,
+            "nan_count": 0,
+            "inf_count": 0,
+            "constant": false
+          },
+          "dequant_stats": {
+            "shape": [
+              128,
+              3584
+            ],
+            "dtype": "float32",
+            "min": -0.6124443411827087,
+            "max": 0.43004828691482544,
+            "mean": -0.002842608606442809,
+            "std": 0.2351149022579193,
+            "nonzero_count": 458742,
+            "nan_count": 0,
+            "inf_count": 0,
+            "constant": false
+          },
+          "quant_metadata": {
+            "available": true,
+            "scale": [
+              0.0002674429561011493
+            ],
+            "scale_first": 0.0002674429561011493,
+            "zero_point": [
+              0.0
+            ],
+            "repr": "<hbm_runtime.HB_HBMRuntime.QuantParams object at 0xffff968bd530>"
+          },
+          "load_ms": 1949.018,
+          "run_ms": 9.323
+        },
+        {
+          "segment": 16,
+          "model_name": "dream_segment_16_17",
+          "raw_output": "evidence/s100p_boundaries/boundary_zeros_ramp/zeros/seg_16_raw_output.npy",
+          "dequant_output": "evidence/s100p_boundaries/boundary_zeros_ramp/zeros/seg_16_output.npy",
+          "raw_stats": {
+            "shape": [
+              128,
+              3584
+            ],
+            "dtype": "int16",
+            "min": -5000.0,
+            "max": 4005.0,
+            "mean": -21.269459315708705,
+            "std": 1692.258629825716,
+            "nonzero_count": 458747,
+            "nan_count": 0,
+            "inf_count": 0,
+            "constant": false
+          },
+          "dequant_stats": {
+            "shape": [
+              128,
+              3584
+            ],
+            "dtype": "float32",
+            "min": -0.7048650979995728,
+            "max": 0.564596951007843,
+            "mean": -0.0029984202701598406,
+            "std": 0.23856280744075775,
+            "nonzero_count": 458747,
+            "nan_count": 0,
+            "inf_count": 0,
+            "constant": false
+          },
+          "quant_metadata": {
+            "available": true,
+            "scale": [
+              0.0001409730175510049
+            ],
+            "scale_first": 0.0001409730175510049,
+            "zero_point": [
+              0.0
+            ],
+            "repr": "<hbm_runtime.HB_HBMRuntime.QuantParams object at 0xffff968bde30>"
+          },
+          "load_ms": 2003.653,
+          "run_ms": 9.395
+        },
+        {
+          "segment": 17,
+          "model_name": "dream_segment_17_18",
+          "raw_output": "evidence/s100p_boundaries/boundary_zeros_ramp/zeros/seg_17_raw_output.npy",
+          "dequant_output": "evidence/s100p_boundaries/boundary_zeros_ramp/zeros/seg_17_output.npy",
+          "raw_stats": {
+            "shape": [
+              128,
+              3584
+            ],
+            "dtype": "int16",
+            "min": -2537.0,
+            "max": 2537.0,
+            "mean": -19.269790649414062,
+            "std": 1320.1107529897527,
+            "nonzero_count": 458747,
+            "nan_count": 0,
+            "inf_count": 0,
+            "constant": false
+          },
+          "dequant_stats": {
+            "shape": [
+              128,
+              3584
+            ],
+            "dtype": "float32",
+            "min": -0.4640476405620575,
+            "max": 0.4640476405620575,
+            "mean": -0.0035246754996478558,
+            "std": 0.2414640486240387,
+            "nonzero_count": 458747,
+            "nan_count": 0,
+            "inf_count": 0,
+            "constant": false
+          },
+          "quant_metadata": {
+            "available": true,
+            "scale": [
+              0.00018291195738129318
+            ],
+            "scale_first": 0.00018291195738129318,
+            "zero_point": [
+              0.0
+            ],
+            "repr": "<hbm_runtime.HB_HBMRuntime.QuantParams object at 0xffff968bde30>"
+          },
+          "load_ms": 2024.81,
+          "run_ms": 9.32
+        },
+        {
+          "segment": 18,
+          "model_name": "dream_segment_18_19",
+          "raw_output": "evidence/s100p_boundaries/boundary_zeros_ramp/zeros/seg_18_raw_output.npy",
+          "dequant_output": "evidence/s100p_boundaries/boundary_zeros_ramp/zeros/seg_18_output.npy",
+          "raw_stats": {
+            "shape": [
+              128,
+              3584
+            ],
+            "dtype": "int16",
+            "min": -4548.0,
+            "max": 1750.0,
+            "mean": -10.74167960030692,
+            "std": 583.4151257214673,
+            "nonzero_count": 458737,
+            "nan_count": 0,
+            "inf_count": 0,
+            "constant": false
+          },
+          "dequant_stats": {
+            "shape": [
+              128,
+              3584
+            ],
+            "dtype": "float32",
+            "min": -1.9735000133514404,
+            "max": 0.7593722343444824,
+            "mean": -0.004661104176193476,
+            "std": 0.2531595826148987,
+            "nonzero_count": 458737,
+            "nan_count": 0,
+            "inf_count": 0,
+            "constant": false
+          },
+          "quant_metadata": {
+            "available": true,
+            "scale": [
+              0.00043392699444666505
+            ],
+            "scale_first": 0.00043392699444666505,
+            "zero_point": [
+              0.0
+            ],
+            "repr": "<hbm_runtime.HB_HBMRuntime.QuantParams object at 0xffff968be6f0>"
+          },
+          "load_ms": 2013.868,
+          "run_ms": 9.695
+        },
+        {
+          "segment": 19,
+          "model_name": "dream_segment_19_20",
+          "raw_output": "evidence/s100p_boundaries/boundary_zeros_ramp/zeros/seg_19_raw_output.npy",
+          "dequant_output": "evidence/s100p_boundaries/boundary_zeros_ramp/zeros/seg_19_output.npy",
+          "raw_stats": {
+            "shape": [
+              128,
+              3584
+            ],
+            "dtype": "int16",
+            "min": -14400.0,
+            "max": 4416.0,
+            "mean": -20.26835196358817,
+            "std": 619.3233143483203,
+            "nonzero_count": 458482,
+            "nan_count": 0,
+            "inf_count": 0,
+            "constant": false
+          },
+          "dequant_stats": {
+            "shape": [
+              128,
+              3584
+            ],
+            "dtype": "float32",
+            "min": -7.9952216148376465,
+            "max": 2.4518680572509766,
+            "mean": -0.011253469623625278,
+            "std": 0.34386301040649414,
+            "nonzero_count": 458482,
+            "nan_count": 0,
+            "inf_count": 0,
+            "constant": false
+          },
+          "quant_metadata": {
+            "available": true,
+            "scale": [
+              0.0005552237271331251
+            ],
+            "scale_first": 0.0005552237271331251,
+            "zero_point": [
+              0.0
+            ],
+            "repr": "<hbm_runtime.HB_HBMRuntime.QuantParams object at 0xffff968beaf0>"
+          },
+          "load_ms": 2054.332,
+          "run_ms": 9.308
+        },
+        {
+          "segment": 20,
+          "model_name": "dream_segment_20_21",
+          "raw_output": "evidence/s100p_boundaries/boundary_zeros_ramp/zeros/seg_20_raw_output.npy",
+          "dequant_output": "evidence/s100p_boundaries/boundary_zeros_ramp/zeros/seg_20_output.npy",
+          "raw_stats": {
+            "shape": [
+              128,
+              3584
+            ],
+            "dtype": "int16",
+            "min": -18460.0,
+            "max": 32767.0,
+            "mean": 10.969846452985491,
+            "std": 3160.555105727045,
+            "nonzero_count": 458677,
+            "nan_count": 0,
+            "inf_count": 0,
+            "constant": false
+          },
+          "dequant_stats": {
+            "shape": [
+              128,
+              3584
+            ],
+            "dtype": "float32",
+            "min": -12.999689102172852,
+            "max": 23.074800491333008,
+            "mean": 0.007725059520453215,
+            "std": 2.225689649581909,
+            "nonzero_count": 458677,
+            "nan_count": 0,
+            "inf_count": 0,
+            "constant": false
+          },
+          "quant_metadata": {
+            "available": true,
+            "scale": [
+              0.0007042085053399205
+            ],
+            "scale_first": 0.0007042085053399205,
+            "zero_point": [
+              0.0
+            ],
+            "repr": "<hbm_runtime.HB_HBMRuntime.QuantParams object at 0xffff968bee70>"
+          },
+          "load_ms": 2036.823,
+          "run_ms": 9.66
+        },
+        {
+          "segment": 21,
+          "model_name": "dream_segment_21_22",
+          "raw_output": "evidence/s100p_boundaries/boundary_zeros_ramp/zeros/seg_21_raw_output.npy",
+          "dequant_output": "evidence/s100p_boundaries/boundary_zeros_ramp/zeros/seg_21_output.npy",
+          "raw_stats": {
+            "shape": [
+              128,
+              3584
+            ],
+            "dtype": "int16",
+            "min": -8944.0,
+            "max": 8944.0,
+            "mean": -7.215050833565848,
+            "std": 3002.5329908980057,
+            "nonzero_count": 458701,
+            "nan_count": 0,
+            "inf_count": 0,
+            "constant": false
+          },
+          "dequant_stats": {
+            "shape": [
+              128,
+              3584
+            ],
+            "dtype": "float32",
+            "min": -6.280498027801514,
+            "max": 6.280498027801514,
+            "mean": -0.005066426005214453,
+            "std": 2.1083858013153076,
+            "nonzero_count": 458701,
+            "nan_count": 0,
+            "inf_count": 0,
+            "constant": false
+          },
+          "quant_metadata": {
+            "available": true,
+            "scale": [
+              0.0007022023783065379
+            ],
+            "scale_first": 0.0007022023783065379,
+            "zero_point": [
+              0.0
+            ],
+            "repr": "<hbm_runtime.HB_HBMRuntime.QuantParams object at 0xffff968bf270>"
+          },
+          "load_ms": 2025.373,
+          "run_ms": 9.289
+        },
+        {
+          "segment": 22,
+          "model_name": "dream_segment_22_23",
+          "raw_output": "evidence/s100p_boundaries/boundary_zeros_ramp/zeros/seg_22_raw_output.npy",
+          "dequant_output": "evidence/s100p_boundaries/boundary_zeros_ramp/zeros/seg_22_output.npy",
+          "raw_stats": {
+            "shape": [
+              128,
+              3584
+            ],
+            "dtype": "int16",
+            "min": -32768.0,
+            "max": 32767.0,
+            "mean": -191.85271998814173,
+            "std": 22349.450330017422,
+            "nonzero_count": 458741,
+            "nan_count": 0,
+            "inf_count": 0,
+            "constant": false
+          },
+          "dequant_stats": {
+            "shape": [
+              128,
+              3584
+            ],
+            "dtype": "float32",
+            "min": -43.65851593017578,
+            "max": 43.65718460083008,
+            "mean": -0.2556152939796448,
+            "std": 29.7773380279541,
+            "nonzero_count": 458741,
+            "nan_count": 0,
+            "inf_count": 0,
+            "constant": false
+          },
+          "quant_metadata": {
+            "available": true,
+            "scale": [
+              0.0013323521707206964
+            ],
+            "scale_first": 0.0013323521707206964,
+            "zero_point": [
+              0.0
+            ],
+            "repr": "<hbm_runtime.HB_HBMRuntime.QuantParams object at 0xffff968beeb0>"
+          },
+          "load_ms": 2005.857,
+          "run_ms": 9.321
+        },
+        {
+          "segment": 23,
+          "model_name": "dream_segment_23_24",
+          "raw_output": "evidence/s100p_boundaries/boundary_zeros_ramp/zeros/seg_23_raw_output.npy",
+          "dequant_output": "evidence/s100p_boundaries/boundary_zeros_ramp/zeros/seg_23_output.npy",
+          "raw_stats": {
+            "shape": [
+              128,
+              3584
+            ],
+            "dtype": "int16",
+            "min": -4458.0,
+            "max": 4458.0,
+            "mean": -28.097056797572545,
+            "std": 4008.731370037798,
+            "nonzero_count": 458734,
+            "nan_count": 0,
+            "inf_count": 0,
+            "constant": false
+          },
+          "dequant_stats": {
+            "shape": [
+              128,
+              3584
+            ],
+            "dtype": "float32",
+            "min": -13.896108627319336,
+            "max": 13.896108627319336,
+            "mean": -0.0875818207859993,
+            "std": 12.495684623718262,
+            "nonzero_count": 458734,
+            "nan_count": 0,
+            "inf_count": 0,
+            "constant": false
+          },
+          "quant_metadata": {
+            "available": true,
+            "scale": [
+              0.0031171173322945833
+            ],
+            "scale_first": 0.0031171173322945833,
+            "zero_point": [
+              0.0
+            ],
+            "repr": "<hbm_runtime.HB_HBMRuntime.QuantParams object at 0xffff968bf8f0>"
+          },
+          "load_ms": 2044.767,
+          "run_ms": 9.59
+        },
+        {
+          "segment": 24,
+          "model_name": "dream_segment_24_25",
+          "raw_output": "evidence/s100p_boundaries/boundary_zeros_ramp/zeros/seg_24_raw_output.npy",
+          "dequant_output": "evidence/s100p_boundaries/boundary_zeros_ramp/zeros/seg_24_output.npy",
+          "raw_stats": {
+            "shape": [
+              128,
+              3584
+            ],
+            "dtype": "int16",
+            "min": -32768.0,
+            "max": 32767.0,
+            "mean": -180.3416246686663,
+            "std": 24447.914359347382,
+            "nonzero_count": 458751,
+            "nan_count": 0,
+            "inf_count": 0,
+            "constant": false
+          },
+          "dequant_stats": {
+            "shape": [
+              128,
+              3584
+            ],
+            "dtype": "float32",
+            "min": -16.745126724243164,
+            "max": 16.74461555480957,
+            "mean": -0.09215831756591797,
+            "std": 12.493391036987305,
+            "nonzero_count": 458751,
+            "nan_count": 0,
+            "inf_count": 0,
+            "constant": false
+          },
+          "quant_metadata": {
+            "available": true,
+            "scale": [
+              0.0005110207130201161
+            ],
+            "scale_first": 0.0005110207130201161,
+            "zero_point": [
+              0.0
+            ],
+            "repr": "<hbm_runtime.HB_HBMRuntime.QuantParams object at 0xffff968bf8f0>"
+          },
+          "load_ms": 2012.099,
+          "run_ms": 9.348
+        },
+        {
+          "segment": 25,
+          "model_name": "dream_segment_25_26",
+          "raw_output": "evidence/s100p_boundaries/boundary_zeros_ramp/zeros/seg_25_raw_output.npy",
+          "dequant_output": "evidence/s100p_boundaries/boundary_zeros_ramp/zeros/seg_25_output.npy",
+          "raw_stats": {
+            "shape": [
+              128,
+              3584
+            ],
+            "dtype": "int16",
+            "min": -32768.0,
+            "max": 32767.0,
+            "mean": 2.0721239362444197,
+            "std": 26992.82897504049,
+            "nonzero_count": 458751,
+            "nan_count": 0,
+            "inf_count": 0,
+            "constant": false
+          },
+          "dequant_stats": {
+            "shape": [
+              128,
+              3584
+            ],
+            "dtype": "float32",
+            "min": -258.418701171875,
+            "max": 258.41082763671875,
+            "mean": 0.016345273703336716,
+            "std": 212.87388610839844,
+            "nonzero_count": 458751,
+            "nan_count": 0,
+            "inf_count": 0,
+            "constant": false
+          },
+          "quant_metadata": {
+            "available": true,
+            "scale": [
+              0.007886312901973724
+            ],
+            "scale_first": 0.007886312901973724,
+            "zero_point": [
+              0.0
+            ],
+            "repr": "<hbm_runtime.HB_HBMRuntime.QuantParams object at 0xffff968c40b0>"
+          },
+          "load_ms": 2048.128,
+          "run_ms": 9.619
+        },
+        {
+          "segment": 26,
+          "model_name": "dream_segment_26_27",
+          "raw_output": "evidence/s100p_boundaries/boundary_zeros_ramp/zeros/seg_26_raw_output.npy",
+          "dequant_output": "evidence/s100p_boundaries/boundary_zeros_ramp/zeros/seg_26_output.npy",
+          "raw_stats": {
+            "shape": [
+              128,
+              3584
+            ],
+            "dtype": "int16",
+            "min": -19807.0,
+            "max": 19807.0,
+            "mean": 6.130174909319196,
+            "std": 19596.711344721432,
+            "nonzero_count": 458751,
+            "nan_count": 0,
+            "inf_count": 0,
+            "constant": false
+          },
+          "dequant_stats": {
+            "shape": [
+              128,
+              3584
+            ],
+            "dtype": "float32",
+            "min": -16.29678726196289,
+            "max": 16.29678726196289,
+            "mean": 0.005043782293796539,
+            "std": 16.123767852783203,
+            "nonzero_count": 458751,
+            "nan_count": 0,
+            "inf_count": 0,
+            "constant": false
+          },
+          "quant_metadata": {
+            "available": true,
+            "scale": [
+              0.0008227791986428201
+            ],
+            "scale_first": 0.0008227791986428201,
+            "zero_point": [
+              0.0
+            ],
+            "repr": "<hbm_runtime.HB_HBMRuntime.QuantParams object at 0xffff968c4570>"
+          },
+          "load_ms": 2009.666,
+          "run_ms": 9.616
+        },
+        {
+          "segment": 27,
+          "model_name": "dream_segment_27_28_last_token_logits",
+          "raw_output": "evidence/s100p_boundaries/boundary_zeros_ramp/zeros/seg_27_raw_output.npy",
+          "dequant_output": "evidence/s100p_boundaries/boundary_zeros_ramp/zeros/seg_27_output.npy",
+          "raw_stats": {
+            "shape": [
+              1,
+              152064
+            ],
+            "dtype": "int16",
+            "min": 0.0,
+            "max": 0.0,
+            "mean": 0.0,
+            "std": 0.0,
+            "nonzero_count": 0,
+            "nan_count": 0,
+            "inf_count": 0,
+            "constant": true
+          },
+          "dequant_stats": {
+            "shape": [
+              1,
+              152064
+            ],
+            "dtype": "float32",
+            "min": 0.0,
+            "max": 0.0,
+            "mean": 0.0,
+            "std": 0.0,
+            "nonzero_count": 0,
+            "nan_count": 0,
+            "inf_count": 0,
+            "constant": true
+          },
+          "quant_metadata": {
+            "available": true,
+            "scale": [
+              0.00025415877462364733
+            ],
+            "scale_first": 0.00025415877462364733,
+            "zero_point": [
+              0.0
+            ],
+            "repr": "<hbm_runtime.HB_HBMRuntime.QuantParams object at 0xffff968c49b0>"
+          },
+          "load_ms": 16146.001,
+          "run_ms": 60.025
+        }
+      ]
+    }
+  ]
+}

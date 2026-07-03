@@ -1,0 +1,340 @@
+{
+  "generated_at": "2026-07-02T22:54:00.277375+08:00",
+  "runtime_trace_db": "reports\\harness_shadow_probe_20260702-225400-128474\\harness_runtime_trace.sqlite3",
+  "table_counts": {
+    "harness_runs": 6,
+    "harness_steps": 6,
+    "workspace_decisions": 6,
+    "tool_calls": 16,
+    "policy_denials": 7,
+    "memory_reads": 6,
+    "gate_results": 6
+  },
+  "runs": [
+    {
+      "run_id": "hr-e11835149dac4e53",
+      "scenario_id": "nas_search_read_only",
+      "user_request": "Find renovation invoice evidence in my NAS without changing files.",
+      "selected_workspace": "nas_search",
+      "status": "ok",
+      "started_at": "2026-07-02T22:54:00.156749+08:00",
+      "finished_at": "2026-07-02T22:54:00.174226+08:00",
+      "metadata_json": "{\"expected_workspace\": \"nas_search\"}",
+      "summary_json": "{\"selected_workspace\": \"nas_search\", \"exposed_tools\": [\"ai_nas_permission_aware_search\"], \"denied_tools\": [\"ai_nas_action_execute_copy\"]}"
+    },
+    {
+      "run_id": "hr-e63e747c319e4f02",
+      "scenario_id": "nas_denied_acl_search",
+      "user_request": "As guest, search for payment contracts and show denied results safely.",
+      "selected_workspace": "nas_search",
+      "status": "ok",
+      "started_at": "2026-07-02T22:54:00.176343+08:00",
+      "finished_at": "2026-07-02T22:54:00.192453+08:00",
+      "metadata_json": "{\"expected_workspace\": \"nas_search\"}",
+      "summary_json": "{\"selected_workspace\": \"nas_search\", \"exposed_tools\": [\"ai_nas_permission_aware_search\"], \"denied_tools\": [\"ai_nas_audit_trail_contract\"]}"
+    },
+    {
+      "run_id": "hr-07d11ba69b5049fb",
+      "scenario_id": "nas_destructive_action_requires_approval",
+      "user_request": "Delete an old invoice screenshot from Personal/Inbox.",
+      "selected_workspace": "nas_action",
+      "status": "ok",
+      "started_at": "2026-07-02T22:54:00.194569+08:00",
+      "finished_at": "2026-07-02T22:54:00.214156+08:00",
+      "metadata_json": "{\"expected_workspace\": \"nas_action\"}",
+      "summary_json": "{\"selected_workspace\": \"nas_action\", \"exposed_tools\": [\"ai_nas_action_approval_manifest\", \"ai_nas_action_execute_copy\"], \"denied_tools\": [\"ai_nas_file_search\"]}"
+    },
+    {
+      "run_id": "hr-276dc43b13e2425c",
+      "scenario_id": "document_report_generation",
+      "user_request": "Generate a grounded report for my Documents folder.",
+      "selected_workspace": "document_rag",
+      "status": "ok",
+      "started_at": "2026-07-02T22:54:00.216138+08:00",
+      "finished_at": "2026-07-02T22:54:00.233568+08:00",
+      "metadata_json": "{\"expected_workspace\": \"document_rag\"}",
+      "summary_json": "{\"selected_workspace\": \"document_rag\", \"exposed_tools\": [\"ai_nas_folder_rag\", \"ai_nas_evidence_report\"], \"denied_tools\": [\"ai_nas_photo_semantic_search\"]}"
+    },
+    {
+      "run_id": "hr-6e44c56baad34c56",
+      "scenario_id": "web_cloud_research_redacted",
+      "user_request": "Compare public AI-NAS market trends; redact my invoice, family photo, and /mnt/nas/Personal paths first.",
+      "selected_workspace": "web_cloud_research",
+      "status": "ok",
+      "started_at": "2026-07-02T22:54:00.235883+08:00",
+      "finished_at": "2026-07-02T22:54:00.254412+08:00",
+      "metadata_json": "{\"expected_workspace\": \"web_cloud_research\"}",
+      "summary_json": "{\"selected_workspace\": \"web_cloud_research\", \"exposed_tools\": [\"ai_nas_edge_cloud_router\", \"ai_nas_evidence_catalog_contract\"], \"denied_tools\": [\"ai_nas_file_search\"]}"
+    },
+    {
+      "run_id": "hr-37dac38678314d10",
+      "scenario_id": "ops_health_check",
+      "user_request": "Check AI-NAS service health without changing model routes.",
+      "selected_workspace": "ops_recovery",
+      "status": "ok",
+      "started_at": "2026-07-02T22:54:00.256505+08:00",
+      "finished_at": "2026-07-02T22:54:00.275018+08:00",
+      "metadata_json": "{\"expected_workspace\": \"ops_recovery\"}",
+      "summary_json": "{\"selected_workspace\": \"ops_recovery\", \"exposed_tools\": [\"ai_nas_index_daemon_readiness\", \"ai_nas_task_queue\"], \"denied_tools\": [\"dream7b_perf_identity\"]}"
+    }
+  ],
+  "tool_calls": [
+    {
+      "id": 1,
+      "run_id": "hr-e11835149dac4e53",
+      "workspace_id": "nas_search",
+      "tool_id": "ai_nas_permission_aware_search",
+      "status": "allowed_dry_run",
+      "args_json": "[\"shadow_probe\"]",
+      "result_json": "{\"status\": \"allowed_dry_run\", \"workspace_id\": \"nas_search\", \"tool_id\": \"ai_nas_permission_aware_search\", \"dispatcher_path\": \"F:\\\\Project\\\\Digua\\\\scripts\\\\probes\\\\ai_nas_allowlisted_tool.sh\", \"dispatcher_remote_path\": \"/mnt/nas/openclaw/scripts/probes/ai_nas_allowlisted_tool.sh\", \"args\": [\"shadow_probe\"]}",
+      "elapsed_ms": null,
+      "dispatcher_used": 1,
+      "created_at": "2026-07-02T22:54:00.163900+08:00"
+    },
+    {
+      "id": 2,
+      "run_id": "hr-e11835149dac4e53",
+      "workspace_id": "nas_search",
+      "tool_id": "ai_nas_action_execute_copy",
+      "status": "denied",
+      "args_json": "[\"shadow_probe\"]",
+      "result_json": "{\"status\": \"denied\", \"workspace_id\": \"nas_search\", \"tool_id\": \"ai_nas_action_execute_copy\", \"reason\": \"tool_not_allowed_in_workspace\", \"args\": [\"shadow_probe\"]}",
+      "elapsed_ms": null,
+      "dispatcher_used": 1,
+      "created_at": "2026-07-02T22:54:00.167842+08:00"
+    },
+    {
+      "id": 3,
+      "run_id": "hr-e63e747c319e4f02",
+      "workspace_id": "nas_search",
+      "tool_id": "ai_nas_permission_aware_search",
+      "status": "allowed_dry_run",
+      "args_json": "[\"shadow_probe\"]",
+      "result_json": "{\"status\": \"allowed_dry_run\", \"workspace_id\": \"nas_search\", \"tool_id\": \"ai_nas_permission_aware_search\", \"dispatcher_path\": \"F:\\\\Project\\\\Digua\\\\scripts\\\\probes\\\\ai_nas_allowlisted_tool.sh\", \"dispatcher_remote_path\": \"/mnt/nas/openclaw/scripts/probes/ai_nas_allowlisted_tool.sh\", \"args\": [\"shadow_probe\"]}",
+      "elapsed_ms": null,
+      "dispatcher_used": 1,
+      "created_at": "2026-07-02T22:54:00.182516+08:00"
+    },
+    {
+      "id": 4,
+      "run_id": "hr-e63e747c319e4f02",
+      "workspace_id": "nas_search",
+      "tool_id": "ai_nas_audit_trail_contract",
+      "status": "denied",
+      "args_json": "[\"shadow_probe\"]",
+      "result_json": "{\"status\": \"denied\", \"workspace_id\": \"nas_search\", \"tool_id\": \"ai_nas_audit_trail_contract\", \"reason\": \"tool_not_allowed_in_workspace\", \"args\": [\"shadow_probe\"]}",
+      "elapsed_ms": null,
+      "dispatcher_used": 1,
+      "created_at": "2026-07-02T22:54:00.186401+08:00"
+    },
+    {
+      "id": 5,
+      "run_id": "hr-07d11ba69b5049fb",
+      "workspace_id": "nas_action",
+      "tool_id": "ai_nas_action_approval_manifest",
+      "status": "allowed_dry_run",
+      "args_json": "[\"shadow_probe\"]",
+      "result_json": "{\"status\": \"allowed_dry_run\", \"workspace_id\": \"nas_action\", \"tool_id\": \"ai_nas_action_approval_manifest\", \"dispatcher_path\": \"F:\\\\Project\\\\Digua\\\\scripts\\\\probes\\\\ai_nas_allowlisted_tool.sh\", \"dispatcher_remote_path\": \"/mnt/nas/openclaw/scripts/probes/ai_nas_allowlisted_tool.sh\", \"args\": [\"shadow_probe\"]}",
+      "elapsed_ms": null,
+      "dispatcher_used": 1,
+      "created_at": "2026-07-02T22:54:00.200715+08:00"
+    },
+    {
+      "id": 6,
+      "run_id": "hr-07d11ba69b5049fb",
+      "workspace_id": "nas_action",
+      "tool_id": "ai_nas_action_execute_copy",
+      "status": "denied",
+      "args_json": "[\"shadow_probe\"]",
+      "result_json": "{\"status\": \"denied\", \"workspace_id\": \"nas_action\", \"tool_id\": \"ai_nas_action_execute_copy\", \"reason\": \"approval_required\", \"args\": [\"shadow_probe\"]}",
+      "elapsed_ms": null,
+      "dispatcher_used": 1,
+      "created_at": "2026-07-02T22:54:00.204772+08:00"
+    },
+    {
+      "id": 7,
+      "run_id": "hr-07d11ba69b5049fb",
+      "workspace_id": "nas_action",
+      "tool_id": "ai_nas_file_search",
+      "status": "denied",
+      "args_json": "[\"shadow_probe\"]",
+      "result_json": "{\"status\": \"denied\", \"workspace_id\": \"nas_action\", \"tool_id\": \"ai_nas_file_search\", \"reason\": \"tool_not_allowed_in_workspace\", \"args\": [\"shadow_probe\"]}",
+      "elapsed_ms": null,
+      "dispatcher_used": 1,
+      "created_at": "2026-07-02T22:54:00.208612+08:00"
+    },
+    {
+      "id": 8,
+      "run_id": "hr-276dc43b13e2425c",
+      "workspace_id": "document_rag",
+      "tool_id": "ai_nas_folder_rag",
+      "status": "allowed_dry_run",
+      "args_json": "[\"shadow_probe\"]",
+      "result_json": "{\"status\": \"allowed_dry_run\", \"workspace_id\": \"document_rag\", \"tool_id\": \"ai_nas_folder_rag\", \"dispatcher_path\": \"F:\\\\Project\\\\Digua\\\\scripts\\\\probes\\\\ai_nas_allowlisted_tool.sh\", \"dispatcher_remote_path\": \"/mnt/nas/openclaw/scripts/probes/ai_nas_allowlisted_tool.sh\", \"args\": [\"shadow_probe\"]}",
+      "elapsed_ms": null,
+      "dispatcher_used": 1,
+      "created_at": "2026-07-02T22:54:00.222383+08:00"
+    },
+    {
+      "id": 9,
+      "run_id": "hr-276dc43b13e2425c",
+      "workspace_id": "document_rag",
+      "tool_id": "ai_nas_evidence_report",
+      "status": "allowed_dry_run",
+      "args_json": "[\"shadow_probe\"]",
+      "result_json": "{\"status\": \"allowed_dry_run\", \"workspace_id\": \"document_rag\", \"tool_id\": \"ai_nas_evidence_report\", \"dispatcher_path\": \"F:\\\\Project\\\\Digua\\\\scripts\\\\probes\\\\ai_nas_allowlisted_tool.sh\", \"dispatcher_remote_path\": \"/mnt/nas/openclaw/scripts/probes/ai_nas_allowlisted_tool.sh\", \"args\": [\"shadow_probe\"]}",
+      "elapsed_ms": null,
+      "dispatcher_used": 1,
+      "created_at": "2026-07-02T22:54:00.224217+08:00"
+    },
+    {
+      "id": 10,
+      "run_id": "hr-276dc43b13e2425c",
+      "workspace_id": "document_rag",
+      "tool_id": "ai_nas_photo_semantic_search",
+      "status": "denied",
+      "args_json": "[\"shadow_probe\"]",
+      "result_json": "{\"status\": \"denied\", \"workspace_id\": \"document_rag\", \"tool_id\": \"ai_nas_photo_semantic_search\", \"reason\": \"tool_not_allowed_in_workspace\", \"args\": [\"shadow_probe\"]}",
+      "elapsed_ms": null,
+      "dispatcher_used": 1,
+      "created_at": "2026-07-02T22:54:00.228017+08:00"
+    },
+    {
+      "id": 11,
+      "run_id": "hr-6e44c56baad34c56",
+      "workspace_id": "web_cloud_research",
+      "tool_id": "ai_nas_edge_cloud_router",
+      "status": "allowed_dry_run",
+      "args_json": "[\"shadow_probe\"]",
+      "result_json": "{\"status\": \"allowed_dry_run\", \"workspace_id\": \"web_cloud_research\", \"tool_id\": \"ai_nas_edge_cloud_router\", \"dispatcher_path\": \"F:\\\\Project\\\\Digua\\\\scripts\\\\probes\\\\ai_nas_allowlisted_tool.sh\", \"dispatcher_remote_path\": \"/mnt/nas/openclaw/scripts/probes/ai_nas_allowlisted_tool.sh\", \"args\": [\"shadow_probe\"]}",
+      "elapsed_ms": null,
+      "dispatcher_used": 1,
+      "created_at": "2026-07-02T22:54:00.241971+08:00"
+    },
+    {
+      "id": 12,
+      "run_id": "hr-6e44c56baad34c56",
+      "workspace_id": "web_cloud_research",
+      "tool_id": "ai_nas_evidence_catalog_contract",
+      "status": "allowed_dry_run",
+      "args_json": "[\"shadow_probe\"]",
+      "result_json": "{\"status\": \"allowed_dry_run\", \"workspace_id\": \"web_cloud_research\", \"tool_id\": \"ai_nas_evidence_catalog_contract\", \"dispatcher_path\": \"F:\\\\Project\\\\Digua\\\\scripts\\\\probes\\\\ai_nas_allowlisted_tool.sh\", \"dispatcher_remote_path\": \"/mnt/nas/openclaw/scripts/probes/ai_nas_allowlisted_tool.sh\", \"args\": [\"shadow_probe\"]}",
+      "elapsed_ms": null,
+      "dispatcher_used": 1,
+      "created_at": "2026-07-02T22:54:00.243920+08:00"
+    },
+    {
+      "id": 13,
+      "run_id": "hr-6e44c56baad34c56",
+      "workspace_id": "web_cloud_research",
+      "tool_id": "ai_nas_file_search",
+      "status": "denied",
+      "args_json": "[\"shadow_probe\"]",
+      "result_json": "{\"status\": \"denied\", \"workspace_id\": \"web_cloud_research\", \"tool_id\": \"ai_nas_file_search\", \"reason\": \"tool_not_allowed_in_workspace\", \"args\": [\"shadow_probe\"]}",
+      "elapsed_ms": null,
+      "dispatcher_used": 1,
+      "created_at": "2026-07-02T22:54:00.247679+08:00"
+    },
+    {
+      "id": 14,
+      "run_id": "hr-37dac38678314d10",
+      "workspace_id": "ops_recovery",
+      "tool_id": "ai_nas_index_daemon_readiness",
+      "status": "allowed_dry_run",
+      "args_json": "[\"shadow_probe\"]",
+      "result_json": "{\"status\": \"allowed_dry_run\", \"workspace_id\": \"ops_recovery\", \"tool_id\": \"ai_nas_index_daemon_readiness\", \"dispatcher_path\": \"F:\\\\Project\\\\Digua\\\\scripts\\\\probes\\\\ai_nas_allowlisted_tool.sh\", \"dispatcher_remote_path\": \"/mnt/nas/openclaw/scripts/probes/ai_nas_allowlisted_tool.sh\", \"args\": [\"shadow_probe\"]}",
+      "elapsed_ms": null,
+      "dispatcher_used": 1,
+      "created_at": "2026-07-02T22:54:00.262798+08:00"
+    },
+    {
+      "id": 15,
+      "run_id": "hr-37dac38678314d10",
+      "workspace_id": "ops_recovery",
+      "tool_id": "ai_nas_task_queue",
+      "status": "allowed_dry_run",
+      "args_json": "[\"shadow_probe\"]",
+      "result_json": "{\"status\": \"allowed_dry_run\", \"workspace_id\": \"ops_recovery\", \"tool_id\": \"ai_nas_task_queue\", \"dispatcher_path\": \"F:\\\\Project\\\\Digua\\\\scripts\\\\probes\\\\ai_nas_allowlisted_tool.sh\", \"dispatcher_remote_path\": \"/mnt/nas/openclaw/scripts/probes/ai_nas_allowlisted_tool.sh\", \"args\": [\"shadow_probe\"]}",
+      "elapsed_ms": null,
+      "dispatcher_used": 1,
+      "created_at": "2026-07-02T22:54:00.264957+08:00"
+    },
+    {
+      "id": 16,
+      "run_id": "hr-37dac38678314d10",
+      "workspace_id": "ops_recovery",
+      "tool_id": "dream7b_perf_identity",
+      "status": "denied",
+      "args_json": "[\"shadow_probe\"]",
+      "result_json": "{\"status\": \"denied\", \"workspace_id\": \"ops_recovery\", \"tool_id\": \"dream7b_perf_identity\", \"reason\": \"tool_not_allowed_in_workspace\", \"args\": [\"shadow_probe\"]}",
+      "elapsed_ms": null,
+      "dispatcher_used": 1,
+      "created_at": "2026-07-02T22:54:00.269603+08:00"
+    }
+  ],
+  "policy_denials": [
+    {
+      "id": 1,
+      "run_id": "hr-e11835149dac4e53",
+      "workspace_id": "nas_search",
+      "tool_id": "ai_nas_action_execute_copy",
+      "reason": "tool_not_allowed_in_workspace",
+      "requested_args_json": "[\"shadow_probe\"]",
+      "created_at": "2026-07-02T22:54:00.165836+08:00"
+    },
+    {
+      "id": 2,
+      "run_id": "hr-e63e747c319e4f02",
+      "workspace_id": "nas_search",
+      "tool_id": "ai_nas_audit_trail_contract",
+      "reason": "tool_not_allowed_in_workspace",
+      "requested_args_json": "[\"shadow_probe\"]",
+      "created_at": "2026-07-02T22:54:00.184433+08:00"
+    },
+    {
+      "id": 3,
+      "run_id": "hr-07d11ba69b5049fb",
+      "workspace_id": "nas_action",
+      "tool_id": "ai_nas_action_execute_copy",
+      "reason": "approval_required",
+      "requested_args_json": "[\"shadow_probe\"]",
+      "created_at": "2026-07-02T22:54:00.202799+08:00"
+    },
+    {
+      "id": 4,
+      "run_id": "hr-07d11ba69b5049fb",
+      "workspace_id": "nas_action",
+      "tool_id": "ai_nas_file_search",
+      "reason": "tool_not_allowed_in_workspace",
+      "requested_args_json": "[\"shadow_probe\"]",
+      "created_at": "2026-07-02T22:54:00.206642+08:00"
+    },
+    {
+      "id": 5,
+      "run_id": "hr-276dc43b13e2425c",
+      "workspace_id": "document_rag",
+      "tool_id": "ai_nas_photo_semantic_search",
+      "reason": "tool_not_allowed_in_workspace",
+      "requested_args_json": "[\"shadow_probe\"]",
+      "created_at": "2026-07-02T22:54:00.226163+08:00"
+    },
+    {
+      "id": 6,
+      "run_id": "hr-6e44c56baad34c56",
+      "workspace_id": "web_cloud_research",
+      "tool_id": "ai_nas_file_search",
+      "reason": "tool_not_allowed_in_workspace",
+      "requested_args_json": "[\"shadow_probe\"]",
+      "created_at": "2026-07-02T22:54:00.245803+08:00"
+    },
+    {
+      "id": 7,
+      "run_id": "hr-37dac38678314d10",
+      "workspace_id": "ops_recovery",
+      "tool_id": "dream7b_perf_identity",
+      "reason": "tool_not_allowed_in_workspace",
+      "requested_args_json": "[\"shadow_probe\"]",
+      "created_at": "2026-07-02T22:54:00.267553+08:00"
+    }
+  ]
+}

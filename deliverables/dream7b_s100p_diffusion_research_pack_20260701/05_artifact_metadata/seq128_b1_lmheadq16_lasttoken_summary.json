@@ -1,0 +1,331 @@
+{
+  "generated_at": "2026-06-23T20:57:59.506209+08:00",
+  "model": "Dream7B",
+  "target": "S100 nash-e",
+  "seq_len": 128,
+  "batch_size": 1,
+  "w_bits": 8,
+  "final_segment": "27:28 lm_head_w_bits=16 final_logits_mode=last-token",
+  "output_root": "/data/dream7b-cloud/outputs/hbm/seq128_b1_lmheadq16_lasttoken_full",
+  "report_root": "/data/dream7b-cloud/reports/cloud_parallel_seq128_20260623-202200",
+  "segment_count": 28,
+  "hbm_count": 28,
+  "hbo_count": 28,
+  "total_hbm_bytes": 8567319904,
+  "missing_or_bad": [],
+  "notes": [
+    "leap_llm FakeQuantLinear was hotfixed on cloud to support w_bits=16 in build() for final lm_head.",
+    "compile_dream_true_batch_segments.sh was patched so BATCH_SIZE=1 filenames omit _b1 and link HBM correctly.",
+    "Only HBM files are required for the deployment package; BC/HBO intermediates remain on cloud output_root."
+  ],
+  "segments": [
+    {
+      "segment": "0:1",
+      "dir": "/data/dream7b-cloud/outputs/hbm/seq128_b1_lmheadq16_lasttoken_full/seg00_01",
+      "hbm": [
+        "dream7b_segment_0_1_seq128_q8.hbm"
+      ],
+      "hbo": [
+        "dream7b_segment_0_1_seq128_q8.hbo"
+      ],
+      "hbm_bytes": 781225720
+    },
+    {
+      "segment": "1:2",
+      "dir": "/data/dream7b-cloud/outputs/hbm/seq128_b1_lmheadq16_lasttoken_full/seg01_02",
+      "hbm": [
+        "dream7b_segment_1_2_seq128_q8.hbm"
+      ],
+      "hbo": [
+        "dream7b_segment_1_2_seq128_q8.hbo"
+      ],
+      "hbm_bytes": 227158880
+    },
+    {
+      "segment": "2:3",
+      "dir": "/data/dream7b-cloud/outputs/hbm/seq128_b1_lmheadq16_lasttoken_full/seg02_03",
+      "hbm": [
+        "dream7b_segment_2_3_seq128_q8.hbm"
+      ],
+      "hbo": [
+        "dream7b_segment_2_3_seq128_q8.hbo"
+      ],
+      "hbm_bytes": 227158112
+    },
+    {
+      "segment": "3:4",
+      "dir": "/data/dream7b-cloud/outputs/hbm/seq128_b1_lmheadq16_lasttoken_full/seg03_04",
+      "hbm": [
+        "dream7b_segment_3_4_seq128_q8.hbm"
+      ],
+      "hbo": [
+        "dream7b_segment_3_4_seq128_q8.hbo"
+      ],
+      "hbm_bytes": 227149152
+    },
+    {
+      "segment": "4:5",
+      "dir": "/data/dream7b-cloud/outputs/hbm/seq128_b1_lmheadq16_lasttoken_full/seg04_05",
+      "hbm": [
+        "dream7b_segment_4_5_seq128_q8.hbm"
+      ],
+      "hbo": [
+        "dream7b_segment_4_5_seq128_q8.hbo"
+      ],
+      "hbm_bytes": 227155296
+    },
+    {
+      "segment": "5:6",
+      "dir": "/data/dream7b-cloud/outputs/hbm/seq128_b1_lmheadq16_lasttoken_full/seg05_06",
+      "hbm": [
+        "dream7b_segment_5_6_seq128_q8.hbm"
+      ],
+      "hbo": [
+        "dream7b_segment_5_6_seq128_q8.hbo"
+      ],
+      "hbm_bytes": 227156832
+    },
+    {
+      "segment": "6:7",
+      "dir": "/data/dream7b-cloud/outputs/hbm/seq128_b1_lmheadq16_lasttoken_full/seg06_07",
+      "hbm": [
+        "dream7b_segment_6_7_seq128_q8.hbm"
+      ],
+      "hbo": [
+        "dream7b_segment_6_7_seq128_q8.hbo"
+      ],
+      "hbm_bytes": 227112544
+    },
+    {
+      "segment": "7:8",
+      "dir": "/data/dream7b-cloud/outputs/hbm/seq128_b1_lmheadq16_lasttoken_full/seg07_08",
+      "hbm": [
+        "dream7b_segment_7_8_seq128_q8.hbm"
+      ],
+      "hbo": [
+        "dream7b_segment_7_8_seq128_q8.hbo"
+      ],
+      "hbm_bytes": 227154528
+    },
+    {
+      "segment": "8:9",
+      "dir": "/data/dream7b-cloud/outputs/hbm/seq128_b1_lmheadq16_lasttoken_full/seg08_09",
+      "hbm": [
+        "dream7b_segment_8_9_seq128_q8.hbm"
+      ],
+      "hbo": [
+        "dream7b_segment_8_9_seq128_q8.hbo"
+      ],
+      "hbm_bytes": 227152992
+    },
+    {
+      "segment": "9:10",
+      "dir": "/data/dream7b-cloud/outputs/hbm/seq128_b1_lmheadq16_lasttoken_full/seg09_10",
+      "hbm": [
+        "dream7b_segment_9_10_seq128_q8.hbm"
+      ],
+      "hbo": [
+        "dream7b_segment_9_10_seq128_q8.hbo"
+      ],
+      "hbm_bytes": 227153504
+    },
+    {
+      "segment": "10:11",
+      "dir": "/data/dream7b-cloud/outputs/hbm/seq128_b1_lmheadq16_lasttoken_full/seg10_11",
+      "hbm": [
+        "dream7b_segment_10_11_seq128_q8.hbm"
+      ],
+      "hbo": [
+        "dream7b_segment_10_11_seq128_q8.hbo"
+      ],
+      "hbm_bytes": 227116128
+    },
+    {
+      "segment": "11:12",
+      "dir": "/data/dream7b-cloud/outputs/hbm/seq128_b1_lmheadq16_lasttoken_full/seg11_12",
+      "hbm": [
+        "dream7b_segment_11_12_seq128_q8.hbm"
+      ],
+      "hbo": [
+        "dream7b_segment_11_12_seq128_q8.hbo"
+      ],
+      "hbm_bytes": 227125088
+    },
+    {
+      "segment": "12:13",
+      "dir": "/data/dream7b-cloud/outputs/hbm/seq128_b1_lmheadq16_lasttoken_full/seg12_13",
+      "hbm": [
+        "dream7b_segment_12_13_seq128_q8.hbm"
+      ],
+      "hbo": [
+        "dream7b_segment_12_13_seq128_q8.hbo"
+      ],
+      "hbm_bytes": 227126880
+    },
+    {
+      "segment": "13:14",
+      "dir": "/data/dream7b-cloud/outputs/hbm/seq128_b1_lmheadq16_lasttoken_full/seg13_14",
+      "hbm": [
+        "dream7b_segment_13_14_seq128_q8.hbm"
+      ],
+      "hbo": [
+        "dream7b_segment_13_14_seq128_q8.hbo"
+      ],
+      "hbm_bytes": 227148640
+    },
+    {
+      "segment": "14:15",
+      "dir": "/data/dream7b-cloud/outputs/hbm/seq128_b1_lmheadq16_lasttoken_full/seg14_15",
+      "hbm": [
+        "dream7b_segment_14_15_seq128_q8.hbm"
+      ],
+      "hbo": [
+        "dream7b_segment_14_15_seq128_q8.hbo"
+      ],
+      "hbm_bytes": 227156064
+    },
+    {
+      "segment": "15:16",
+      "dir": "/data/dream7b-cloud/outputs/hbm/seq128_b1_lmheadq16_lasttoken_full/seg15_16",
+      "hbm": [
+        "dream7b_segment_15_16_seq128_q8.hbm"
+      ],
+      "hbo": [
+        "dream7b_segment_15_16_seq128_q8.hbo"
+      ],
+      "hbm_bytes": 227147616
+    },
+    {
+      "segment": "16:17",
+      "dir": "/data/dream7b-cloud/outputs/hbm/seq128_b1_lmheadq16_lasttoken_full/seg16_17",
+      "hbm": [
+        "dream7b_segment_16_17_seq128_q8.hbm"
+      ],
+      "hbo": [
+        "dream7b_segment_16_17_seq128_q8.hbo"
+      ],
+      "hbm_bytes": 227149920
+    },
+    {
+      "segment": "17:18",
+      "dir": "/data/dream7b-cloud/outputs/hbm/seq128_b1_lmheadq16_lasttoken_full/seg17_18",
+      "hbm": [
+        "dream7b_segment_17_18_seq128_q8.hbm"
+      ],
+      "hbo": [
+        "dream7b_segment_17_18_seq128_q8.hbo"
+      ],
+      "hbm_bytes": 227149152
+    },
+    {
+      "segment": "18:19",
+      "dir": "/data/dream7b-cloud/outputs/hbm/seq128_b1_lmheadq16_lasttoken_full/seg18_19",
+      "hbm": [
+        "dream7b_segment_18_19_seq128_q8.hbm"
+      ],
+      "hbo": [
+        "dream7b_segment_18_19_seq128_q8.hbo"
+      ],
+      "hbm_bytes": 227166304
+    },
+    {
+      "segment": "19:20",
+      "dir": "/data/dream7b-cloud/outputs/hbm/seq128_b1_lmheadq16_lasttoken_full/seg19_20",
+      "hbm": [
+        "dream7b_segment_19_20_seq128_q8.hbm"
+      ],
+      "hbo": [
+        "dream7b_segment_19_20_seq128_q8.hbo"
+      ],
+      "hbm_bytes": 227122528
+    },
+    {
+      "segment": "20:21",
+      "dir": "/data/dream7b-cloud/outputs/hbm/seq128_b1_lmheadq16_lasttoken_full/seg20_21",
+      "hbm": [
+        "dream7b_segment_20_21_seq128_q8.hbm"
+      ],
+      "hbo": [
+        "dream7b_segment_20_21_seq128_q8.hbo"
+      ],
+      "hbm_bytes": 227114848
+    },
+    {
+      "segment": "21:22",
+      "dir": "/data/dream7b-cloud/outputs/hbm/seq128_b1_lmheadq16_lasttoken_full/seg21_22",
+      "hbm": [
+        "dream7b_segment_21_22_seq128_q8.hbm"
+      ],
+      "hbo": [
+        "dream7b_segment_21_22_seq128_q8.hbo"
+      ],
+      "hbm_bytes": 227127136
+    },
+    {
+      "segment": "22:23",
+      "dir": "/data/dream7b-cloud/outputs/hbm/seq128_b1_lmheadq16_lasttoken_full/seg22_23",
+      "hbm": [
+        "dream7b_segment_22_23_seq128_q8.hbm"
+      ],
+      "hbo": [
+        "dream7b_segment_22_23_seq128_q8.hbo"
+      ],
+      "hbm_bytes": 227124576
+    },
+    {
+      "segment": "23:24",
+      "dir": "/data/dream7b-cloud/outputs/hbm/seq128_b1_lmheadq16_lasttoken_full/seg23_24",
+      "hbm": [
+        "dream7b_segment_23_24_seq128_q8.hbm"
+      ],
+      "hbo": [
+        "dream7b_segment_23_24_seq128_q8.hbo"
+      ],
+      "hbm_bytes": 227116128
+    },
+    {
+      "segment": "24:25",
+      "dir": "/data/dream7b-cloud/outputs/hbm/seq128_b1_lmheadq16_lasttoken_full/seg24_25",
+      "hbm": [
+        "dream7b_segment_24_25_seq128_q8.hbm"
+      ],
+      "hbo": [
+        "dream7b_segment_24_25_seq128_q8.hbo"
+      ],
+      "hbm_bytes": 227151200
+    },
+    {
+      "segment": "25:26",
+      "dir": "/data/dream7b-cloud/outputs/hbm/seq128_b1_lmheadq16_lasttoken_full/seg25_26",
+      "hbm": [
+        "dream7b_segment_25_26_seq128_q8.hbm"
+      ],
+      "hbo": [
+        "dream7b_segment_25_26_seq128_q8.hbo"
+      ],
+      "hbm_bytes": 227156832
+    },
+    {
+      "segment": "26:27",
+      "dir": "/data/dream7b-cloud/outputs/hbm/seq128_b1_lmheadq16_lasttoken_full/seg26_27",
+      "hbm": [
+        "dream7b_segment_26_27_seq128_q8.hbm"
+      ],
+      "hbo": [
+        "dream7b_segment_26_27_seq128_q8.hbo"
+      ],
+      "hbm_bytes": 227156576
+    },
+    {
+      "segment": "27:28",
+      "dir": "/data/dream7b-cloud/outputs/hbm/seq128_b1_lmheadq16_lasttoken_full/seg27_28",
+      "hbm": [
+        "dream7b_segment_27_28_seq128_q8_lmheadq16_last_token_logits.hbm"
+      ],
+      "hbo": [
+        "dream7b_segment_27_28_seq128_q8_lmheadq16_last_token_logits.hbo"
+      ],
+      "hbm_bytes": 1880386728
+    }
+  ]
+}

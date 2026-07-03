@@ -1,0 +1,199 @@
+{
+  "generated_at": "2026-07-03T09:24:57.319020+00:00",
+  "gate_id": "stage2_8_package_rerun",
+  "verdict": "ok_stage2_8_package_rerun",
+  "passed_count": 24,
+  "check_count": 24,
+  "failure_count": 0,
+  "failures": [],
+  "checks": [
+    {
+      "label": "required asset exists: config/workspace_registry.yaml",
+      "ok": true,
+      "detail": {
+        "path": "F:\\Project\\Digua\\config\\workspace_registry.yaml",
+        "sha256": "9fef8ed973f209bbffde4ed3d76050840c2f76d7d52db9677d70f391d8603a1c"
+      }
+    },
+    {
+      "label": "required asset exists: config/workspace_tool_policy.yaml",
+      "ok": true,
+      "detail": {
+        "path": "F:\\Project\\Digua\\config\\workspace_tool_policy.yaml",
+        "sha256": "4d83f8b376a88b86afeb8c810aea236464165006587daf625d84c69d312658c9"
+      }
+    },
+    {
+      "label": "required asset exists: config/workspace_arg_policy.yaml",
+      "ok": true,
+      "detail": {
+        "path": "F:\\Project\\Digua\\config\\workspace_arg_policy.yaml",
+        "sha256": "6a25bb032b92726525b68537ee03cc4891cf26bc14a17c0274e97ab4bbff3c2a"
+      }
+    },
+    {
+      "label": "required asset exists: config/qwen_advisor_schema.json",
+      "ok": true,
+      "detail": {
+        "path": "F:\\Project\\Digua\\config\\qwen_advisor_schema.json",
+        "sha256": "910bb0c297c49f45595a0e14953656afc0ecb32b1281a90bc411420c1558accc"
+      }
+    },
+    {
+      "label": "required asset exists: config/prompts/qwen_workspace_advisor_json.md",
+      "ok": true,
+      "detail": {
+        "path": "F:\\Project\\Digua\\config\\prompts\\qwen_workspace_advisor_json.md",
+        "sha256": "93f8710cf2ca5c558fb279ed24ddbe3cba90da3c4219c9cbfc037e95aeae8645"
+      }
+    },
+    {
+      "label": "required asset exists: ai_nas_harness/qwen_advisor.py",
+      "ok": true,
+      "detail": {
+        "path": "F:\\Project\\Digua\\ai_nas_harness\\qwen_advisor.py",
+        "sha256": "7dea99addf977592467cb45684cfb393774fd9fafe4dfc7f56c7f9fac61cff37"
+      }
+    },
+    {
+      "label": "required asset exists: gates/stage2_8_gates.py",
+      "ok": true,
+      "detail": {
+        "path": "F:\\Project\\Digua\\gates\\stage2_8_gates.py",
+        "sha256": "6b0d3a83d1ca169441ffeff502657fe25a2ce555127930af99fa73404240962c"
+      }
+    },
+    {
+      "label": "required asset exists: scripts/probes/ai_nas_allowlisted_tool.sh",
+      "ok": true,
+      "detail": {
+        "path": "F:\\Project\\Digua\\scripts\\probes\\ai_nas_allowlisted_tool.sh",
+        "sha256": "e62f2278e1264519ee4e4cd13df44bd34d4375a989715cce3b6223f44c1c21e2"
+      }
+    },
+    {
+      "label": "required asset exists: scripts/run_stage2_8_gates_from_package.sh",
+      "ok": true,
+      "detail": {
+        "path": "F:\\Project\\Digua\\scripts\\run_stage2_8_gates_from_package.sh",
+        "sha256": "fce85f0deeeefd3c8db8b143cabaea04f3e6493c793c47bee01849388a4642af"
+      }
+    },
+    {
+      "label": "required asset exists: reports/7000_stage2_8_baseline_lock.json",
+      "ok": true,
+      "detail": {
+        "path": "F:\\Project\\Digua\\reports\\7000_stage2_8_baseline_lock.json",
+        "sha256": "1a7fb00575177c40f5c139d65789043882b86f68ced42402369875efdc04fc41"
+      }
+    },
+    {
+      "label": "required asset exists: reports/7010_qwen_systemd_apply_verify_rollback_gate.json",
+      "ok": true,
+      "detail": {
+        "path": "F:\\Project\\Digua\\reports\\7010_qwen_systemd_apply_verify_rollback_gate.json",
+        "sha256": "9acad8c4f6a7c06b5732ca24759ad769fcb39ec268c43625890e5d44b56deadd"
+      }
+    },
+    {
+      "label": "required asset exists: reports/7020_policy_first_shadow_contract_gate.json",
+      "ok": true,
+      "detail": {
+        "path": "F:\\Project\\Digua\\reports\\7020_policy_first_shadow_contract_gate.json",
+        "sha256": "82825b8205b9a5f1eab644dc8826629676f47f80fff4ae548d9b79bb84deae19"
+      }
+    },
+    {
+      "label": "required asset exists: reports/7030_qwen_advisor_schema_gate.json",
+      "ok": true,
+      "detail": {
+        "path": "F:\\Project\\Digua\\reports\\7030_qwen_advisor_schema_gate.json",
+        "sha256": "3f0ba4abee51dabea19a13645c58d754f0540ccd083dfba032cf8c50757a76fa"
+      }
+    },
+    {
+      "label": "required asset exists: reports/7040_policy_first_readonly_shadow_preflight_soak_gate.json",
+      "ok": true,
+      "detail": {
+        "path": "F:\\Project\\Digua\\reports\\7040_policy_first_readonly_shadow_preflight_soak_gate.json",
+        "sha256": "06de240c6d21e99c799f7bff5247f534a19914794f81d3be9f35e0a6dcc1d3a0"
+      }
+    },
+    {
+      "label": "required asset exists: reports/7050_stage2_8_stage3_go_no_go_gate.json",
+      "ok": true,
+      "detail": {
+        "path": "F:\\Project\\Digua\\reports\\7050_stage2_8_stage3_go_no_go_gate.json",
+        "sha256": "3a582a954c4125a3294a342df0f6b051d37c9a2c945cbcb88c2ee30db8b75223"
+      }
+    },
+    {
+      "label": "required asset exists: 01_final_evidence/digua_ai_nas_harness_stage2_8_gate_packet.json",
+      "ok": true,
+      "detail": {
+        "path": "F:\\Project\\Digua\\01_final_evidence\\digua_ai_nas_harness_stage2_8_gate_packet.json",
+        "sha256": "60e59894113272ab573f059321c53f481683ae37143a4761339fb1f435f6de62"
+      }
+    },
+    {
+      "label": "required asset exists: docs/STAGE2_8_DECISION.md",
+      "ok": true,
+      "detail": {
+        "path": "F:\\Project\\Digua\\docs\\STAGE2_8_DECISION.md",
+        "sha256": "23457288e2acb188305187ff9001593f6a6f16509fe228061271b3485c64c736"
+      }
+    },
+    {
+      "label": "required asset exists: docs/STAGE3_POLICY_FIRST_ARCHITECTURE.md",
+      "ok": true,
+      "detail": {
+        "path": "F:\\Project\\Digua\\docs\\STAGE3_POLICY_FIRST_ARCHITECTURE.md",
+        "sha256": "1fc325dc402870effcc3e2300e860b6c9b7626a5a14591f9855efd2671cf0c90"
+      }
+    },
+    {
+      "label": "required asset exists: docs/STAGE3_READONLY_SHADOW_DRYRUN_PLAN_V3.md",
+      "ok": true,
+      "detail": {
+        "path": "F:\\Project\\Digua\\docs\\STAGE3_READONLY_SHADOW_DRYRUN_PLAN_V3.md",
+        "sha256": "fc92372652149b232cf618f36b560ca6dfc097837c5f16b7319155c24ac29c9b"
+      }
+    },
+    {
+      "label": "previous input scan supports known directories",
+      "ok": true,
+      "detail": []
+    },
+    {
+      "label": "advisor schema parses",
+      "ok": true,
+      "detail": [
+        "intent_summary",
+        "suggested_workspace",
+        "risk_tags",
+        "needs_clarification",
+        "clarification_question",
+        "confidence"
+      ]
+    },
+    {
+      "label": "advisor schema forbids tool_id/args/cloud_allowed",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "label": "stage2_8 packet verdict present",
+      "ok": true,
+      "detail": "blocked_by_no_operator_approval_for_qwen_persistence"
+    },
+    {
+      "label": "stage2_8 does not claim qwen-driven autonomous loop",
+      "ok": true,
+      "detail": "blocked_by_no_operator_approval_for_qwen_persistence"
+    }
+  ],
+  "detail": {
+    "package_root": "F:\\Project\\Digua",
+    "previous_inputs": []
+  }
+}

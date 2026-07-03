@@ -1,0 +1,113 @@
+{
+  "generated_at": "2026-07-02T23:28:15.861883+08:00",
+  "gate_id": "memory_boundary_gate",
+  "verdict": "ok_memory_boundary_gate",
+  "passed_count": 11,
+  "check_count": 11,
+  "failure_count": 0,
+  "failures": [],
+  "checks": [
+    {
+      "label": "long-term write skipped by default",
+      "ok": true,
+      "detail": {
+        "status": "skipped",
+        "reason": "long_term_memory_requires_policy_approval",
+        "policy_decision": "deny_by_default",
+        "memory_type": "case",
+        "scope": "nas_search"
+      }
+    },
+    {
+      "label": "policy-approved fixture write succeeds",
+      "ok": true,
+      "detail": {
+        "status": "written",
+        "memory_id": "mem-dfdff5aa9a554dff"
+      }
+    },
+    {
+      "label": "cloud research reads no private memory at privacy none",
+      "ok": true,
+      "detail": []
+    },
+    {
+      "label": "NAS search can read scoped high privacy memory",
+      "ok": true,
+      "detail": [
+        {
+          "memory_id": "mem-11123656f60b4b01",
+          "memory_type": "case",
+          "scope": "nas_search",
+          "privacy_level": "high",
+          "content": "high privacy NAS fixture",
+          "source_run_id": null,
+          "expires_at": null,
+          "long_term": 1,
+          "metadata_json": "{}",
+          "created_at": "2026-07-02T23:28:15.858856+08:00",
+          "updated_at": "2026-07-02T23:28:15.858856+08:00"
+        },
+        {
+          "memory_id": "mem-c89651efe73b435c",
+          "memory_type": "person",
+          "scope": "global",
+          "privacy_level": "low",
+          "content": "low privacy user preference fixture",
+          "source_run_id": null,
+          "expires_at": null,
+          "long_term": 1,
+          "metadata_json": "{}",
+          "created_at": "2026-07-02T23:28:15.856980+08:00",
+          "updated_at": "2026-07-02T23:28:15.856980+08:00"
+        }
+      ]
+    },
+    {
+      "label": "nas_search_read_only memory scoped to selected request",
+      "ok": true,
+      "detail": []
+    },
+    {
+      "label": "nas_denied_acl_search memory scoped to selected request",
+      "ok": true,
+      "detail": []
+    },
+    {
+      "label": "nas_destructive_action_requires_approval memory scoped to selected request",
+      "ok": true,
+      "detail": []
+    },
+    {
+      "label": "document_report_generation memory scoped to selected request",
+      "ok": true,
+      "detail": []
+    },
+    {
+      "label": "web_cloud_research_redacted memory scoped to selected request",
+      "ok": true,
+      "detail": []
+    },
+    {
+      "label": "ops_health_check memory scoped to selected request",
+      "ok": true,
+      "detail": []
+    },
+    {
+      "label": "web cloud scenario has no high privacy memory",
+      "ok": true,
+      "detail": [
+        {
+          "memory_type": "experience",
+          "scope": "global",
+          "privacy_level": "none",
+          "content_preview": "Use allowlist dispatcher only; never invoke arbitrary shell or script paths."
+        }
+      ]
+    }
+  ],
+  "detail": {
+    "memory_db": "reports\\harness_stage1_memory_boundary_gate.sqlite3",
+    "shadow_memory_db": "reports\\harness_shadow_probe_20260702-232815-136372\\harness_memory.sqlite3"
+  }
+}

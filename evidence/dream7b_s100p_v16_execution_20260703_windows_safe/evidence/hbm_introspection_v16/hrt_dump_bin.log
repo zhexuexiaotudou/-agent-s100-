@@ -1,0 +1,33 @@
+COMMAND: hrt_model_exec infer --model_file /mnt/nas/openclaw/models/dream7b-hbm/seq128-b1-lmheadq16-lasttoken/seg00_01/dream7b_segment_0_1_seq128_q8.hbm --model_name dream_segment_00_01 --input_file /mnt/nas/openclaw/reports/models/dream7b_s100p_v16_execution_20260703/evidence/hbm_introspection_v16/hrt_inputs/input_0_tokens.npy,/mnt/nas/openclaw/reports/models/dream7b_s100p_v16_execution_20260703/evidence/hbm_introspection_v16/hrt_inputs/input_1_positions.npy --frame_count 1 --dump_intermediate 1 --enable_dump true --dump_path /mnt/nas/openclaw/reports/models/dream7b_s100p_v16_execution_20260703/evidence/hbm_introspection_v16/hrt_dump_bin --dump_format bin
+ENV_OVERRIDES: {"HBRT_LOG_LEVEL": "debug", "DNN_LOG_LEVEL": "6", "UCPT_LOG_LEVEL": "6"}
+
+STDOUT:
+[UCP]: log level = 3
+[UCP]: UCP version = 3.13.6
+[VP]: log level = 3
+[DNN]: log level = 3
+[HPL]: log level = 3
+[UCPT]: log level = 6
+hrt_model_exec infer --model_file /mnt/nas/openclaw/models/dream7b-hbm/seq128-b1-lmheadq16-lasttoken/seg00_01/dream7b_segment_0_1_seq128_q8.hbm --model_name dream_segment_00_01 --input_file /mnt/nas/openclaw/reports/models/dream7b_s100p_v16_execution_20260703/evidence/hbm_introspection_v16/hrt_inputs/input_0_tokens.npy,/mnt/nas/openclaw/reports/models/dream7b_s100p_v16_execution_20260703/evidence/hbm_introspection_v16/hrt_inputs/input_1_positions.npy --frame_count 1 --dump_intermediate 1 --enable_dump true --dump_path /mnt/nas/openclaw/reports/models/dream7b_s100p_v16_execution_20260703/evidence/hbm_introspection_v16/hrt_dump_bin --dump_format bin
+[32m[I][785285][07-03][17:37:52:789][main.cpp:321][hrt_model_exec][HRT_MODEL_EXEC] dump_path: /mnt/nas/openclaw/reports/models/dream7b_s100p_v16_execution_20260703/evidence/hbm_introspection_v16/hrt_dump_bin exsit
+[m[K[BPU][[BPU_MONITOR]][281473864332576][INFO]BPULib verison(2, 2, 15)[f21ee84]!
+[DNN]: 3.13.6_(4.7.5 HBRT)
+Load model to DDR cost 7390.85ms.
+[32m[I][785285][07-03][17:38:00:181][file_util.cpp:578][hrt_model_exec][HRT_MODEL_EXEC] read file /mnt/nas/openclaw/reports/models/dream7b_s100p_v16_execution_20260703/evidence/hbm_introspection_v16/hrt_inputs/input_0_tokens.npy length: 512
+[m[K[32m[I][785285][07-03][17:38:00:181][file_util.cpp:578][hrt_model_exec][HRT_MODEL_EXEC] read file /mnt/nas/openclaw/reports/models/dream7b_s100p_v16_execution_20260703/evidence/hbm_introspection_v16/hrt_inputs/input_1_positions.npy length: 512
+[m[K[33m[1m[W][785305][07-03][17:38:00:198][hbrt4_exec_plan.cpp:1887][hrt_model_exec][DNN] [Plan] Dump variable hbir.gather_nd_id_7: 0 failed! unsupport dynamic stride: (-9223372036854775808,-9223372036854775808,-9223372036854775808), dim: (1,128,128)
+[m[K[33m[1m[W][785305][07-03][17:38:00:198][hbrt4_exec_plan.cpp:1887][hrt_model_exec][DNN] [Plan] Dump variable hbir.gather_nd_id_7: 0 failed! unsupport dynamic stride: (-9223372036854775808,-9223372036854775808,-9223372036854775808), dim: (2,128,128)
+[m[K[33m[1m[W][785305][07-03][17:38:00:198][hbrt4_exec_plan.cpp:1887][hrt_model_exec][DNN] [Plan] Dump variable hbir.gather_nd_id_7: 0 failed! unsupport dynamic stride: (-9223372036854775808,-9223372036854775808,-9223372036854775808), dim: (1,128,128)
+[m[K[33m[1m[W][785304][07-03][17:38:00:212][hbrt4_exec_plan.cpp:1887][hrt_model_exec][DNN] [Plan] Dump variable hbir.gather_nd_id_7: 0 failed! unsupport dynamic stride: (-9223372036854775808,-9223372036854775808,-9223372036854775808), dim: (1,128,128)
+[m[K[33m[1m[W][785304][07-03][17:38:00:212][hbrt4_exec_plan.cpp:1887][hrt_model_exec][DNN] [Plan] Dump variable hbir.gather_nd_id_7: 0 failed! unsupport dynamic stride: (-9223372036854775808,-9223372036854775808,-9223372036854775808), dim: (1,128,128)
+[m[K[33m[1m[W][785304][07-03][17:38:00:212][hbrt4_exec_plan.cpp:1887][hrt_model_exec][DNN] [Plan] Dump variable hbir.gather_nd_id_7: 0 failed! unsupport dynamic stride: (-9223372036854775808,-9223372036854775808,-9223372036854775808), dim: (2,128,128)
+[m[K
+---------------------Frame 0 begin---------------------
+Infer time: 50.892 ms
+---------------------Frame 0 end---------------------
+[32m[I][785285][07-03][17:38:00:234][function_util.cpp:1159][hrt_model_exec][HRT_MODEL_EXEC] Dump path: /mnt/nas/openclaw/reports/models/dream7b_s100p_v16_execution_20260703/evidence/hbm_introspection_v16/hrt_dump_bin/model_infer_input_0__input_0.bin
+[m[K[32m[I][785285][07-03][17:38:00:236][function_util.cpp:1159][hrt_model_exec][HRT_MODEL_EXEC] Dump path: /mnt/nas/openclaw/reports/models/dream7b_s100p_v16_execution_20260703/evidence/hbm_introspection_v16/hrt_dump_bin/model_infer_input_1__input_1.bin
+[m[K[32m[I][785285][07-03][17:38:00:246][function_util.cpp:1159][hrt_model_exec][HRT_MODEL_EXEC] Dump path: /mnt/nas/openclaw/reports/models/dream7b_s100p_v16_execution_20260703/evidence/hbm_introspection_v16/hrt_dump_bin/model_infer_output_0__output_0.bin
+[m[K
+
+STDERR:

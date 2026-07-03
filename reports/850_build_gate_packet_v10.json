@@ -1,0 +1,80 @@
+{
+  "schema_version": "dream7b_s100p_v10_850_build_gate_packet_v10",
+  "created_at_utc": "2026-07-01T13:25:08.553961+00:00",
+  "run_commands": [
+    "C:\\Users\\zhexu\\AppData\\Local\\Python\\pythoncore-3.14-64\\python.exe tools\\build_v10_research_thread.py --root ."
+  ],
+  "git": {
+    "cwd": "F:\\Project\\Digua",
+    "status": "unavailable_empty_or_incomplete_git_dir",
+    "git_dir_exists": true,
+    "git_head_exists": false
+  },
+  "input_artifacts": [],
+  "output_artifacts": [
+    {
+      "path": "reports/850_build_gate_packet_v10.json"
+    },
+    {
+      "path": "reports/850_build_gate_packet_v10.md"
+    }
+  ],
+  "blocking_or_failure_reasons": [],
+  "next_minimal_experiments": [],
+  "verdict_class": "B_full_deployment_falsified_against_bf16_or_f16_reference",
+  "verdict": "Full BF16 HF truth rows are available and the current S100P segmented-HBM deployment output fails against them for the three canonical real_x rows. The BPU seg26 hidden routed through the exact HF final boundary also fails against full truth, while the same-input seg27_28 final-segment contract failure persists. Therefore v10 falsifies the current deployment logits path and shows both upstream hidden mismatch and final-segment contract failure; it must not be over-localized to only one stage.",
+  "gate_status": {
+    "G0_safety": "pass",
+    "G1_v9_reproducibility": "pass",
+    "G2_canonical_cases": "pass",
+    "G3_full_truth_row": "pass",
+    "G4_hbm_mapping_evidence": "pass_with_operator_graph_uncertainty",
+    "G5_same_input_final_segment_contract": "fail",
+    "G6_upstream_hidden_validity": "evaluated",
+    "G7_remediation_experiment": "attempted_no_repair_supported"
+  },
+  "full_truth_availability": {
+    "available": true,
+    "truth_row_type": "HF/PyTorch bfloat16",
+    "blocking": []
+  },
+  "hbm_mapping_confidence": "manifest_level_high_operator_graph_unavailable",
+  "same_input_final_segment_summary": {
+    "top1_mismatch_rows": 42,
+    "real_x_allzero_fault_rows": 3,
+    "allzero_fault_rows": 15
+  },
+  "upstream_hidden_validity_summary": {
+    "testable": true,
+    "exact_final_vs_full_truth_top1_agreement_rows": 0,
+    "official_vs_full_truth_top1_agreement_rows": 0
+  },
+  "remediation_summary": {
+    "repair_supported": false,
+    "base_top1_agreement_rows": 0,
+    "affine_top1_agreement_rows": 0,
+    "interpretation": "Post-hoc output affine calibration cannot repair all-zero real_x rows because rank/top1 information is absent; existing input scale variants recover nonzero outputs in some rows but do not restore top1 agreement."
+  },
+  "generation_quality_run": false,
+  "product_routes_18888_18889_enabled_modified_or_tested": false,
+  "allowed_paper_claims": [
+    "v10 reproduces the v9 same-input final-segment contract failure for the tested artifact/runtime path.",
+    "Canonical seq128 token cases and HBM manifest-level mapping evidence are packaged.",
+    "The isolated calibration remediation attempted here does not repair the final-segment contract.",
+    "Because full BF16 HF truth rows are available in v10, the current segmented-HBM deployment logits path is falsified against BF16 truth for the three canonical real_x cases.",
+    "For these canonical rows, upstream hidden validity also fails: BPU seg26 hidden routed through exact HF final boundary does not match BF16 full truth."
+  ],
+  "forbidden_claims": [
+    "No generation-quality result is supported.",
+    "No product route readiness claim is supported.",
+    "Do not claim universal impossibility for Dream7B on S100P.",
+    "Do not over-localize the v10 full-truth failure to only seg27_28; upstream hidden mismatch is also observed."
+  ],
+  "source_reports": {
+    "800": "reports/800_reproduce_v9_and_cases.json",
+    "810": "reports/810_export_full_truth_on_capable_host.json",
+    "820": "reports/820_verify_seg27_28_hbm_mapping.json",
+    "830": "reports/830_compare_full_truth_and_upstream_hidden.json",
+    "840": "reports/840_isolated_final_segment_remediation.json"
+  }
+}

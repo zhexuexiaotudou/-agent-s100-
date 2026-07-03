@@ -1,0 +1,151 @@
+{
+  "schema_version": "dream7b_s100p_v5_310_hf_bf16_dream_wrapper",
+  "created_at_utc": "2026-07-01T08:11:21.618074+00:00",
+  "run_commands": [
+    "py tools/build_v5_research_thread.py --pack-root tmp\\dream7b_s100p_unified_v5_execution_pack_20260701 --remote-evidence-root evidence\\s100p_remote_v5"
+  ],
+  "git": {
+    "cwd": "F:\\Project\\Digua",
+    "git_dir_exists": true,
+    "git_head_exists": false,
+    "commit": null,
+    "dirty": null,
+    "status": "unavailable_empty_git_dir"
+  },
+  "input_artifacts": [
+    {
+      "path": "tmp/dream7b_s100p_unified_v5_execution_pack_20260701/reference/extracted_mainline_v3/reports/140_bf16_reference_status.json",
+      "exists": true,
+      "size_bytes": 11160,
+      "sha256": "904979d75a2a04aae308f53cd3a458e1391447a2d8840ac35522d9342ecf471b"
+    },
+    {
+      "path": "cases/seq128_logits_probe_battery.jsonl",
+      "exists": false
+    }
+  ],
+  "output_artifacts": [
+    {
+      "path": "reports/310_hf_bf16_dream_wrapper.json",
+      "sha256": "recorded_in_final_evidence_zip_manifest"
+    },
+    {
+      "path": "reports/310_hf_bf16_dream_wrapper.md",
+      "sha256": "recorded_in_final_evidence_zip_manifest"
+    }
+  ],
+  "model_checkpoint_tokenizer": {
+    "checkpoint_path": "/mnt/nas/openclaw/models/dream7b",
+    "checkpoint_exists": true,
+    "tokenizer_or_model_files_sample": [
+      {
+        "path": "/mnt/nas/openclaw/models/dream7b/dream-7b-q4km.gguf",
+        "sha256": "skipped_large_file",
+        "size_bytes": 5313916320
+      },
+      {
+        "path": "/mnt/nas/openclaw/models/dream7b/dream-7b-q4km.gguf.sha256",
+        "sha256": "a2caee58e2d432784424291601925097f9868af19bea83dc1eee7b2322e00846",
+        "size_bytes": 118
+      },
+      {
+        "path": "/mnt/nas/openclaw/models/dream7b/dream7b_deployment.json",
+        "sha256": "5eda0dc7203b0d00b49dd74a155b63392bf4798b987158c5d7d12163d67c1dca",
+        "size_bytes": 1740
+      },
+      {
+        "path": "/mnt/nas/openclaw/models/dream7b/hf-cache/hub/CACHEDIR.TAG",
+        "sha256": "f6572428f6d5e1575e73a1502895a8731f10757dfbb634909c6e154b849af91d",
+        "size_bytes": 191
+      },
+      {
+        "path": "/mnt/nas/openclaw/models/dream7b/hf-cache/hub/models--Dream-org--Dream-v0-Instruct-7B/.no_exist/05334cb9faaf763692dcf9d8737c642be2b2a6ae/chat_template.jinja",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "size_bytes": 0
+      },
+      {
+        "path": "/mnt/nas/openclaw/models/dream7b/hf-cache/hub/models--Dream-org--Dream-v0-Instruct-7B/.no_exist/05334cb9faaf763692dcf9d8737c642be2b2a6ae/tokenizer.json",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "size_bytes": 0
+      },
+      {
+        "path": "/mnt/nas/openclaw/models/dream7b/hf-cache/hub/models--Dream-org--Dream-v0-Instruct-7B/blobs/0354ebfbf540d2f770b6b24fda583294f513f962",
+        "sha256": "b0e9c1a6299d8832a1362d6b24f007de8a2acfe0243d8a3a1d1b57aa8250f7ee",
+        "size_bytes": 7486
+      },
+      {
+        "path": "/mnt/nas/openclaw/models/dream7b/hf-cache/hub/models--Dream-org--Dream-v0-Instruct-7B/blobs/23b4959a1efed046572621c2d183c3438cc0b6a4",
+        "sha256": "11afc7fe7a1881e73dcd70cca6868aaaf8eb89ad45ea5fc6426c3fb82dec9340",
+        "size_bytes": 927
+      },
+      {
+        "path": "/mnt/nas/openclaw/models/dream7b/hf-cache/hub/models--Dream-org--Dream-v0-Instruct-7B/blobs/31349551d90c7606f325fe0f11bbb8bd5fa0d7c7",
+        "sha256": "8831e4f1a044471340f7c0a83d7bd71306a5b867e95fd870f74d0c5308a904d5",
+        "size_bytes": 1671853
+      },
+      {
+        "path": "/mnt/nas/openclaw/models/dream7b/hf-cache/hub/models--Dream-org--Dream-v0-Instruct-7B/blobs/6bce3a0a3866c4791a74d83d78f6824c3af64ec3",
+        "sha256": "87a257b04b17642a0688c98cd1df89c398bda4fee532d6f88b38a659ecb4ac8d",
+        "size_bytes": 3383407
+      },
+      {
+        "path": "/mnt/nas/openclaw/models/dream7b/hf-cache/hub/models--Dream-org--Dream-v0-Instruct-7B/blobs/96d1598e69f108469c292fa6a86fb143be07d70c",
+        "sha256": "24d038962ccf16361595494461000ec0c1b043653c7494d7fc835c96f121f0b9",
+        "size_bytes": 3197
+      },
+      {
+        "path": "/mnt/nas/openclaw/models/dream7b/hf-cache/hub/models--Dream-org--Dream-v0-Instruct-7B/blobs/a3c908dc9df134c726061ae540546e5ef7db055d",
+        "sha256": "32ad9d49fafda64e737853737fe3be3e33cce3f719a159ed73f04cbd81a690ce",
+        "size_bytes": 656
+      }
+    ],
+    "cases_jsonl": "cases/seq128_logits_probe_battery.jsonl"
+  },
+  "s100p_runtime_hbrt_hbm": {
+    "s100p_bpu_raw_dequant": {
+      "case_count": 10,
+      "runtime_version": "3.13.6_(4.7.5 HBRT)",
+      "status": "available"
+    },
+    "hbm_root": "/mnt/nas/openclaw/models/dream7b-hbm/seq128-b1-lmheadq16-lasttoken",
+    "segment_count": 28,
+    "final_segment": "seg27_28 / dream7b_segment_27_28_seq128_q8_lmheadq16_last_token_logits.hbm",
+    "final_shape": [
+      1,
+      152064
+    ],
+    "runtime_validity_from_v3": "pass"
+  },
+  "gate_status": {
+    "hf_pytorch_bf16": "unavailable_verified_wrapper_missing"
+  },
+  "blocking_or_failure_reasons": [
+    "verified Dream7B diffusion forward wrapper unavailable",
+    "HF seg20..27 boundary mapping unavailable"
+  ],
+  "next_minimal_experiments": [
+    "Provide validated Dream architecture wrapper with final norm/lm_head-only entry point"
+  ],
+  "hf_bf16_status": {
+    "status": "blocked",
+    "bf16_reference_status": "unavailable",
+    "reason": "verified_dream7b_diffusion_forward_wrapper_not_available",
+    "dependency_imports_from_s100p_v3": {
+      "torch": {
+        "available": true,
+        "version": "1.8.0a0"
+      },
+      "transformers": {
+        "available": true,
+        "version": "4.30.2"
+      }
+    },
+    "wrapper_limitations": [
+      "No verified Dream7B diffusion PyTorch forward wrapper is available in this run.",
+      "Generic AutoModelForCausalLM loading is not accepted as ground truth for Dream7B diffusion semantics.",
+      "No BF16 logits or boundary activations were exported."
+    ],
+    "tool": "tools/export_hf_bf16_logits_and_boundaries.py"
+  },
+  "verdict": "blocked_verified_dream7b_bf16_wrapper_unavailable"
+}

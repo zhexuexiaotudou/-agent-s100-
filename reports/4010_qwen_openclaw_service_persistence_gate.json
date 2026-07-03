@@ -1,0 +1,275 @@
+{
+  "generated_at": "2026-07-03T11:48:45.939711+08:00",
+  "gate_id": "stage2_qwen_openclaw_service_persistence_gate",
+  "verdict": "ok_stage2_qwen_openclaw_service_persistence_gate",
+  "passed_count": 5,
+  "check_count": 5,
+  "failure_count": 0,
+  "failures": [],
+  "checks": [
+    {
+      "label": "OpenClaw unit present enabled and healthy",
+      "ok": true,
+      "detail": {
+        "active": true,
+        "enabled": true,
+        "health_before": {
+          "ok": true,
+          "returncode": 0,
+          "http_code": "200",
+          "time_total": 0.383006,
+          "json": {
+            "ok": true,
+            "tool_id": "ai_nas_operator_portal_server",
+            "operator_portal_contract": {
+              "found": true,
+              "filename": "operator_portal_contract.json",
+              "path": "/mnt/nas/openclaw/reports/ai_nas_mvp/operator_portal_contract_20260618-160406-445747/operator_portal_contract.json",
+              "verdict": "ok_ai_nas_operator_portal_contract",
+              "generated_at": "2026-06-18T16:04:08.346324+08:00",
+              "selection_policy": "generated_at_then_mtime"
+            },
+            "portal_html": "/mnt/nas/openclaw/reports/ai_nas_mvp/operator_portal_contract_20260618-160406-445747/operator_portal.html",
+            "refresh_on_start": null
+          },
+          "body_hash": "3f602e957754ba001c367fa58c76c536eda10a7318d8befc265f0d27698f100e",
+          "stderr_hash": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "stderr_tail": ""
+        },
+        "health_after": {
+          "ok": true,
+          "returncode": 0,
+          "http_code": "200",
+          "time_total": 0.403765,
+          "json": {
+            "ok": true,
+            "tool_id": "ai_nas_operator_portal_server",
+            "operator_portal_contract": {
+              "found": true,
+              "filename": "operator_portal_contract.json",
+              "path": "/mnt/nas/openclaw/reports/ai_nas_mvp/operator_portal_contract_20260618-160406-445747/operator_portal_contract.json",
+              "verdict": "ok_ai_nas_operator_portal_contract",
+              "generated_at": "2026-06-18T16:04:08.346324+08:00",
+              "selection_policy": "generated_at_then_mtime"
+            },
+            "portal_html": "/mnt/nas/openclaw/reports/ai_nas_mvp/operator_portal_contract_20260618-160406-445747/operator_portal.html",
+            "refresh_on_start": null
+          },
+          "body_hash": "3f602e957754ba001c367fa58c76c536eda10a7318d8befc265f0d27698f100e",
+          "stderr_hash": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "stderr_tail": ""
+        }
+      }
+    },
+    {
+      "label": "Qwen live health recorded",
+      "ok": true,
+      "detail": {
+        "health_before": {
+          "ok": true,
+          "returncode": 0,
+          "http_code": "200",
+          "time_total": 0.001023,
+          "json": {
+            "ok": true,
+            "model": "Qwen2.5-1.5B-Instruct-S100P-official",
+            "backend": "official-qwen2.5-oellm-multichat-plus-ai-nas-tools",
+            "port": 18080,
+            "active_profile": "qwen25_7b_instruct_cache_len_1024_q8",
+            "priority_profile": "qwen25_7b_instruct_cache_len_1024_q8_vendor_default",
+            "priority_status": "promoted_from_shadow_18081",
+            "active_hbm": {
+              "path": "/mnt/nas/openclaw/toolchains/s100_llm_sdk/D-Robotics_LLM_S100_1.0.0_SDK/oellm_runtime/model/Qwen2.5_1.5B_Instruct_512.hbm",
+              "exists": false,
+              "size_bytes": 0
+            },
+            "priority_hbm": {
+              "path": "/mnt/nas/openclaw/toolchains/s100_llm_sdk/D-Robotics_LLM_S100_1.0.0_SDK/oellm_runtime/model/Qwen2.5_1.5B_Instruct_512.hbm",
+              "exists": false,
+              "size_bytes": 0
+            },
+            "tool_dispatcher": "/mnt/nas/openclaw/scripts/probes/ai_nas_allowlisted_tool.sh",
+            "report_root": "/mnt/nas/openclaw/reports/qwen25_ai_nas"
+          },
+          "body_hash": "93f6c14eaa15d5be20371ecd6e2125c3534ad144dc5fcee349d782ded5be1812",
+          "stderr_hash": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "stderr_tail": ""
+        },
+        "health_after": {
+          "ok": true,
+          "returncode": 0,
+          "http_code": "200",
+          "time_total": 0.001137,
+          "json": {
+            "ok": true,
+            "model": "Qwen2.5-1.5B-Instruct-S100P-official",
+            "backend": "official-qwen2.5-oellm-multichat-plus-ai-nas-tools",
+            "port": 18080,
+            "active_profile": "qwen25_7b_instruct_cache_len_1024_q8",
+            "priority_profile": "qwen25_7b_instruct_cache_len_1024_q8_vendor_default",
+            "priority_status": "promoted_from_shadow_18081",
+            "active_hbm": {
+              "path": "/mnt/nas/openclaw/toolchains/s100_llm_sdk/D-Robotics_LLM_S100_1.0.0_SDK/oellm_runtime/model/Qwen2.5_1.5B_Instruct_512.hbm",
+              "exists": false,
+              "size_bytes": 0
+            },
+            "priority_hbm": {
+              "path": "/mnt/nas/openclaw/toolchains/s100_llm_sdk/D-Robotics_LLM_S100_1.0.0_SDK/oellm_runtime/model/Qwen2.5_1.5B_Instruct_512.hbm",
+              "exists": false,
+              "size_bytes": 0
+            },
+            "tool_dispatcher": "/mnt/nas/openclaw/scripts/probes/ai_nas_allowlisted_tool.sh",
+            "report_root": "/mnt/nas/openclaw/reports/qwen25_ai_nas"
+          },
+          "body_hash": "93f6c14eaa15d5be20371ecd6e2125c3534ad144dc5fcee349d782ded5be1812",
+          "stderr_hash": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "stderr_tail": ""
+        }
+      }
+    },
+    {
+      "label": "Qwen unit status recorded or Stage3 blocker marked",
+      "ok": true,
+      "detail": {
+        "active": false,
+        "enabled": false,
+        "unit_missing": true
+      }
+    },
+    {
+      "label": "service hashes recorded",
+      "ok": true,
+      "detail": {
+        "/mnt/nas/openclaw/scripts/probes/ai_nas_allowlisted_tool.sh": "d099f8071ab3710778520bf610ce2bca07fbc7976effe0a6d99791cf42ebb23a",
+        "/etc/systemd/system/openclaw-gateway.service": "06e3e3d3d1245454676c31033107f25cb71aeae60205c42f8b61d05a30386ccc",
+        "/etc/systemd/system/qwen25-local-openai-gateway.service": null
+      }
+    },
+    {
+      "label": "protected routes unchanged after checks",
+      "ok": true,
+      "detail": {
+        "before_openclaw": {
+          "ok": true,
+          "returncode": 0,
+          "http_code": "200",
+          "time_total": 0.383006,
+          "json": {
+            "ok": true,
+            "tool_id": "ai_nas_operator_portal_server",
+            "operator_portal_contract": {
+              "found": true,
+              "filename": "operator_portal_contract.json",
+              "path": "/mnt/nas/openclaw/reports/ai_nas_mvp/operator_portal_contract_20260618-160406-445747/operator_portal_contract.json",
+              "verdict": "ok_ai_nas_operator_portal_contract",
+              "generated_at": "2026-06-18T16:04:08.346324+08:00",
+              "selection_policy": "generated_at_then_mtime"
+            },
+            "portal_html": "/mnt/nas/openclaw/reports/ai_nas_mvp/operator_portal_contract_20260618-160406-445747/operator_portal.html",
+            "refresh_on_start": null
+          },
+          "body_hash": "3f602e957754ba001c367fa58c76c536eda10a7318d8befc265f0d27698f100e",
+          "stderr_hash": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "stderr_tail": ""
+        },
+        "before_qwen": {
+          "ok": true,
+          "returncode": 0,
+          "http_code": "200",
+          "time_total": 0.001023,
+          "json": {
+            "ok": true,
+            "model": "Qwen2.5-1.5B-Instruct-S100P-official",
+            "backend": "official-qwen2.5-oellm-multichat-plus-ai-nas-tools",
+            "port": 18080,
+            "active_profile": "qwen25_7b_instruct_cache_len_1024_q8",
+            "priority_profile": "qwen25_7b_instruct_cache_len_1024_q8_vendor_default",
+            "priority_status": "promoted_from_shadow_18081",
+            "active_hbm": {
+              "path": "/mnt/nas/openclaw/toolchains/s100_llm_sdk/D-Robotics_LLM_S100_1.0.0_SDK/oellm_runtime/model/Qwen2.5_1.5B_Instruct_512.hbm",
+              "exists": false,
+              "size_bytes": 0
+            },
+            "priority_hbm": {
+              "path": "/mnt/nas/openclaw/toolchains/s100_llm_sdk/D-Robotics_LLM_S100_1.0.0_SDK/oellm_runtime/model/Qwen2.5_1.5B_Instruct_512.hbm",
+              "exists": false,
+              "size_bytes": 0
+            },
+            "tool_dispatcher": "/mnt/nas/openclaw/scripts/probes/ai_nas_allowlisted_tool.sh",
+            "report_root": "/mnt/nas/openclaw/reports/qwen25_ai_nas"
+          },
+          "body_hash": "93f6c14eaa15d5be20371ecd6e2125c3534ad144dc5fcee349d782ded5be1812",
+          "stderr_hash": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "stderr_tail": ""
+        },
+        "after_openclaw": {
+          "ok": true,
+          "returncode": 0,
+          "http_code": "200",
+          "time_total": 0.403765,
+          "json": {
+            "ok": true,
+            "tool_id": "ai_nas_operator_portal_server",
+            "operator_portal_contract": {
+              "found": true,
+              "filename": "operator_portal_contract.json",
+              "path": "/mnt/nas/openclaw/reports/ai_nas_mvp/operator_portal_contract_20260618-160406-445747/operator_portal_contract.json",
+              "verdict": "ok_ai_nas_operator_portal_contract",
+              "generated_at": "2026-06-18T16:04:08.346324+08:00",
+              "selection_policy": "generated_at_then_mtime"
+            },
+            "portal_html": "/mnt/nas/openclaw/reports/ai_nas_mvp/operator_portal_contract_20260618-160406-445747/operator_portal.html",
+            "refresh_on_start": null
+          },
+          "body_hash": "3f602e957754ba001c367fa58c76c536eda10a7318d8befc265f0d27698f100e",
+          "stderr_hash": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "stderr_tail": ""
+        },
+        "after_qwen": {
+          "ok": true,
+          "returncode": 0,
+          "http_code": "200",
+          "time_total": 0.001137,
+          "json": {
+            "ok": true,
+            "model": "Qwen2.5-1.5B-Instruct-S100P-official",
+            "backend": "official-qwen2.5-oellm-multichat-plus-ai-nas-tools",
+            "port": 18080,
+            "active_profile": "qwen25_7b_instruct_cache_len_1024_q8",
+            "priority_profile": "qwen25_7b_instruct_cache_len_1024_q8_vendor_default",
+            "priority_status": "promoted_from_shadow_18081",
+            "active_hbm": {
+              "path": "/mnt/nas/openclaw/toolchains/s100_llm_sdk/D-Robotics_LLM_S100_1.0.0_SDK/oellm_runtime/model/Qwen2.5_1.5B_Instruct_512.hbm",
+              "exists": false,
+              "size_bytes": 0
+            },
+            "priority_hbm": {
+              "path": "/mnt/nas/openclaw/toolchains/s100_llm_sdk/D-Robotics_LLM_S100_1.0.0_SDK/oellm_runtime/model/Qwen2.5_1.5B_Instruct_512.hbm",
+              "exists": false,
+              "size_bytes": 0
+            },
+            "tool_dispatcher": "/mnt/nas/openclaw/scripts/probes/ai_nas_allowlisted_tool.sh",
+            "report_root": "/mnt/nas/openclaw/reports/qwen25_ai_nas"
+          },
+          "body_hash": "93f6c14eaa15d5be20371ecd6e2125c3534ad144dc5fcee349d782ded5be1812",
+          "stderr_hash": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "stderr_tail": ""
+        }
+      }
+    }
+  ],
+  "detail": {
+    "systemctl_output_hash": "7f5c6cb4f5befb7180c401468715ff2aca8feadb3c8ec4a4aab6f22ff0164b62",
+    "systemctl_stderr_hash": "4685a43df6b6f58dd13e06c4d2b4cc0244b794df386afe069e832582447c570d",
+    "systemctl_returncode": 0,
+    "hashes": {
+      "/mnt/nas/openclaw/scripts/probes/ai_nas_allowlisted_tool.sh": "d099f8071ab3710778520bf610ce2bca07fbc7976effe0a6d99791cf42ebb23a",
+      "/etc/systemd/system/openclaw-gateway.service": "06e3e3d3d1245454676c31033107f25cb71aeae60205c42f8b61d05a30386ccc",
+      "/etc/systemd/system/qwen25-local-openai-gateway.service": null
+    },
+    "qwen_stage3_blocker": true,
+    "qwen_active_hbm_exists": false,
+    "restart_attempted": false,
+    "restart_not_attempted_reason": "No explicit restart authorization; read-only validation only."
+  }
+}

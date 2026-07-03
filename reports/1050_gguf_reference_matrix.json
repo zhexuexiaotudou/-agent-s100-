@@ -1,0 +1,89 @@
+{
+  "schema_version": "dream7b_s100p_v12r_1050_gguf_reference_matrix",
+  "created_at_utc": "2026-07-02T18:13:18.515710+00:00",
+  "run_commands": [
+    "C:\\Users\\zhexu\\AppData\\Local\\Python\\pythoncore-3.14-64\\python.exe tools\\build_v12r_research_thread.py --root ."
+  ],
+  "git": {
+    "cwd": "F:\\Project\\Digua",
+    "returncode": 128,
+    "status": "unavailable_empty_or_incomplete_git_dir",
+    "stderr": "fatal: not a git repository (or any of the parent directories): .git"
+  },
+  "input_artifacts": [
+    {
+      "path": "reports/930_gguf_f16_reference_crosscheck.json",
+      "exists": true,
+      "size_bytes": 28158,
+      "sha256": "0a3ee06d921c45b74920a86dd4673ce6015eb870367804d50443107298302509"
+    }
+  ],
+  "output_artifacts": [
+    {
+      "path": "reports/1050_gguf_reference_matrix.json"
+    },
+    {
+      "path": "reports/1050_gguf_reference_matrix.md"
+    }
+  ],
+  "blocking_or_failure_reasons": [
+    "GGUF F16 artifact unavailable.",
+    "GGUF Q4_0 artifact unavailable.",
+    "diffuse-cli exposed no logits-only dump option; running generation-style CLI was forbidden by v12R safety bounds."
+  ],
+  "next_minimal_experiments": [],
+  "safety": {
+    "generation_quality_run": false,
+    "product_routes_18888_18889_enabled_modified_or_tested": false
+  },
+  "attempted_commands": [
+    {
+      "command": "command -v llama-cli; command -v diffuse-cpp; find GGUF F16/Q4_0/Q4_K_M",
+      "result": "diffuse-cpp found under /mnt/nas/openclaw/runtimes/diffuse-cpp/build; only dream-7b-q4km.gguf found"
+    },
+    {
+      "command": "/mnt/nas/openclaw/runtimes/diffuse-cpp/build/diffuse-cli --help",
+      "result": "CLI supports generation-style prompt/tokens options but no logits-dump option exposed in help"
+    },
+    {
+      "command": "/mnt/nas/openclaw/runtimes/diffuse-cpp/build/diffuse-cli --version",
+      "result": "no version flag; prints model path required and usage"
+    }
+  ],
+  "model_paths": {
+    "q4_k_m": "/mnt/nas/openclaw/models/dream7b/dream-7b-q4km.gguf",
+    "f16": null,
+    "q4_0": null
+  },
+  "tool_versions": {
+    "diffuse_cli_help_available": true,
+    "llama_cli_found": false
+  },
+  "rows": [
+    {
+      "case_id": "zeros",
+      "comparison": "HF_BF16_vs_GGUF_Q4_K_M_existing",
+      "metrics": {
+        "shape_match": true,
+        "reference_top1": 220,
+        "candidate_top1": 151643,
+        "top1_agreement": false,
+        "reference_top1_in_candidate_top5": true,
+        "top5_overlap": 3,
+        "cosine": 0.9973245665673424,
+        "pearson_centered": 0.9132746951298885,
+        "relative_l2": 0.07579342132966062,
+        "max_abs_error": 3.8771018981933594,
+        "mean_abs_error": 0.6647991651732056,
+        "candidate_normalized_entropy": 0.45586214206900666
+      },
+      "gguf_path": "evidence/reference_matrix_v6/gguf_q4_k_m/zeros/last_logits.npy"
+    }
+  ],
+  "gguf_f16_status": "blocked_artifact_unavailable",
+  "gguf_q4_0_status": "blocked_artifact_unavailable",
+  "gguf_q4_k_m_status": "artifact_available_existing_logits_partial",
+  "previous_inventory": [
+    "/mnt/nas/openclaw/models/dream7b/dream-7b-q4km.gguf"
+  ]
+}

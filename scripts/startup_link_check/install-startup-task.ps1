@@ -42,3 +42,7 @@ Register-ScheduledTask `
 
 Write-Host "Installed scheduled task: $TaskName"
 Get-ScheduledTask -TaskName $TaskName | Format-List TaskName,TaskPath,State
+
+
+
+

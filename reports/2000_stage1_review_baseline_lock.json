@@ -1,0 +1,92 @@
+{
+  "generated_at": "2026-07-03T01:33:34.090100+08:00",
+  "gate_id": "stage1_review_baseline_lock",
+  "verdict": "ok_stage1_review_baseline_lock",
+  "passed_count": 2,
+  "check_count": 2,
+  "failure_count": 0,
+  "failures": [],
+  "checks": [
+    {
+      "label": "stage1 package exists",
+      "ok": true,
+      "detail": "F:\\Project\\Digua\\evidence_for_gptpro\\ai_nas_harness_stage1_fixed_gptpro_20260702-233035.zip"
+    },
+    {
+      "label": "manifest present in package",
+      "ok": true,
+      "detail": "present"
+    }
+  ],
+  "detail": {
+    "package_file_count": 65,
+    "package_path": "F:\\Project\\Digua\\evidence_for_gptpro\\ai_nas_harness_stage1_fixed_gptpro_20260702-233035.zip",
+    "manifest_status": "present",
+    "sha_status": "present",
+    "stage1_reported_gates": [
+      {
+        "gate_id": "workspace_isolation_gate",
+        "verdict": "ok_workspace_isolation_gate"
+      },
+      {
+        "gate_id": "tool_exposure_minimization_gate",
+        "verdict": "ok_tool_exposure_minimization_gate"
+      },
+      {
+        "gate_id": "memory_boundary_gate",
+        "verdict": "ok_memory_boundary_gate"
+      },
+      {
+        "gate_id": "runtime_trace_completeness_gate",
+        "verdict": "ok_runtime_trace_completeness_gate"
+      },
+      {
+        "gate_id": "cloud_egress_redaction_gate",
+        "verdict": "ok_cloud_egress_redaction_gate"
+      }
+    ],
+    "evidence_backed_claims": [
+      "Stage1 gates have JSON report evidence",
+      "Shadow probe has JSON and SQLite trace evidence",
+      "Existing Qwen/OpenClaw/edge-cloud gates have latest JSON evidence"
+    ],
+    "inferred_claims": [
+      "Zleap sidecar product fit remains inference until real Zleap integration exists",
+      "Context-size reduction is an estimate from JSON prompt size, not tokenized model context"
+    ],
+    "protected_services_and_ports": {
+      "openclaw": 8765,
+      "qwen": 18080,
+      "dream7b": [
+        18888,
+        18889
+      ]
+    },
+    "protected_assets": {
+      "dispatcher": "F:\\Project\\Digua\\scripts\\probes\\ai_nas_allowlisted_tool.sh",
+      "qwen_gateway": "F:\\Project\\Digua\\scripts\\qwen25_openai_gateway.py",
+      "openclaw_service": "F:\\Project\\Digua\\configs\\systemd\\openclaw-gateway.service",
+      "qwen_service": "F:\\Project\\Digua\\configs\\systemd\\qwen25-local-openai-gateway.service",
+      "qwen_policy": "F:\\Project\\Digua\\configs\\qwen25_official_route_policy.json",
+      "dream7b_service": "F:\\Project\\Digua\\configs\\systemd\\dream7b-local-openai-gateway.service",
+      "dream7b_18889_service": "F:\\Project\\Digua\\configs\\systemd\\dream7b-bpu-experimental-gateway-18889.service"
+    },
+    "current_limitations": [
+      "git metadata is broken in this checkout",
+      "Stage2 sidecar remains mock/read-only and not foreground",
+      "write workspace remains disabled"
+    ],
+    "hard_constraints": [
+      "Do not replace OpenClaw",
+      "Do not replace local Qwen foreground gateway",
+      "Do not bypass ai_nas_allowlisted_tool.sh",
+      "Do not introduce arbitrary shell/script path",
+      "Do not modify 18888/18889",
+      "Do not attach Dream7B foreground",
+      "Cloud receives public/redacted content only",
+      "destructive/write action requires approval",
+      "Stage1/Stage2 default off and one-command rollback"
+    ],
+    "shadow_probe_verdict": "ok_harness_shadow_probe"
+  }
+}

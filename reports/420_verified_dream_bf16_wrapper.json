@@ -1,0 +1,255 @@
+{
+  "schema_version": "dream7b_s100p_v6_420_verified_dream_bf16_wrapper",
+  "created_at_utc": "2026-07-01T09:34:34.727586+00:00",
+  "run_commands": [
+    "py tools/build_v6_research_thread.py --pack-root tmp\\dream7b_s100p_v6_after_v5_review_pack_20260701\\dream7b_s100p_v6_codex_after_v5_review_pack_20260701 --timestamp 20260701_v6_after_nas_hf"
+  ],
+  "git": {
+    "cwd": "F:\\Project\\Digua",
+    "git_dir_exists": true,
+    "git_head_exists": false,
+    "commit": null,
+    "dirty": null,
+    "status": "unavailable_empty_git_dir"
+  },
+  "input_artifacts": [
+    {
+      "path": "evidence/model_inventory_v6.json",
+      "exists": true,
+      "size_bytes": 51138,
+      "sha256": "787bbf0b03c0e193e6588c13d709cdbab443266d4b9807db05aed62d22df2c03"
+    },
+    {
+      "path": "cases/canonical_seq128_cases_v6.jsonl",
+      "exists": true,
+      "size_bytes": 21040,
+      "sha256": "e00fff89b5a3ba30e698cad5862e29834b7b46ae165b8f8552342ef67c98711c"
+    },
+    {
+      "path": "evidence/hf_bf16_v6/wrapper_probe_status.json",
+      "exists": true,
+      "size_bytes": 3127,
+      "sha256": "a32f11560fc428df1d3b5bad3685c15743906cc480a100a65f22dddf0469fc5f"
+    }
+  ],
+  "output_artifacts": [
+    {
+      "path": "reports/420_verified_dream_bf16_wrapper.json"
+    },
+    {
+      "path": "reports/420_verified_dream_bf16_wrapper.md"
+    }
+  ],
+  "gate_status": {
+    "hf_pytorch_bf16_or_fp32": "blocked_verified_logits_export_missing_model_load_pass"
+  },
+  "blocking_or_failure_reasons": [
+    "Dream7B HF safetensors and wrapper files were found under /mnt/nas/openclaw/models/dream7b-hf.",
+    "Config/tokenizer and model load were made to pass with isolated transformers/tokenizers and torch compatibility shims.",
+    "A verified BF16/FP32 forward/logits export did not complete: torch 1.8 lacks required APIs and the shimmed CPU/S100P forward remained impractical, so no BF16 logits or BF16 segment boundaries were produced."
+  ],
+  "next_minimal_experiments": [
+    "Run the same Dream wrapper on a torch runtime that natively supports the required APIs, then export BF16/FP32 logits and seg20..27 boundary activations for the canonical cases."
+  ],
+  "checkpoint_roots": [
+    "/mnt/nas/openclaw/models/dream7b",
+    "/mnt/nas/openclaw/models/dream7b-hf"
+  ],
+  "hf_model_path": "/mnt/nas/openclaw/models/dream7b-hf",
+  "weight_like_files": [
+    {
+      "root": "/mnt/nas/openclaw/models/dream7b",
+      "relative_path": "dream-7b-q4km.gguf",
+      "path": "/mnt/nas/openclaw/models/dream7b/dream-7b-q4km.gguf",
+      "exists": true,
+      "size_bytes": 5313916320,
+      "sha256": "skipped_large_file_not_in_sha256sums"
+    },
+    {
+      "root": "/mnt/nas/openclaw/models/dream7b-hf",
+      "relative_path": "model-00001-of-00004.safetensors",
+      "path": "/mnt/nas/openclaw/models/dream7b-hf/model-00001-of-00004.safetensors",
+      "exists": true,
+      "size_bytes": 4877660776,
+      "sha256": "3014d84950f2f3afcce622508b6625e9cd911b9c340f4206e35e6a3177aec993"
+    },
+    {
+      "root": "/mnt/nas/openclaw/models/dream7b-hf",
+      "relative_path": "model-00002-of-00004.safetensors",
+      "path": "/mnt/nas/openclaw/models/dream7b-hf/model-00002-of-00004.safetensors",
+      "exists": true,
+      "size_bytes": 4932751008,
+      "sha256": "78fc44a7eae29c3d13bba010ca12584f4220798d41c9e617579a33c47222aa57"
+    },
+    {
+      "root": "/mnt/nas/openclaw/models/dream7b-hf",
+      "relative_path": "model-00003-of-00004.safetensors",
+      "path": "/mnt/nas/openclaw/models/dream7b-hf/model-00003-of-00004.safetensors",
+      "exists": true,
+      "size_bytes": 4330865200,
+      "sha256": "eac5afaf9a0e0b4a23c7ac1dbe5f538ccdf9fac5c0db7919fd9625a92c378e48"
+    },
+    {
+      "root": "/mnt/nas/openclaw/models/dream7b-hf",
+      "relative_path": "model-00004-of-00004.safetensors",
+      "path": "/mnt/nas/openclaw/models/dream7b-hf/model-00004-of-00004.safetensors",
+      "exists": true,
+      "size_bytes": 1089994880,
+      "sha256": "398da65f1f599ca8d594a9d7a077a3b7c4eb0ddfdff8e7e004c3d259712b3cb7"
+    }
+  ],
+  "hf_safetensors": [
+    {
+      "root": "/mnt/nas/openclaw/models/dream7b-hf",
+      "relative_path": "model-00001-of-00004.safetensors",
+      "path": "/mnt/nas/openclaw/models/dream7b-hf/model-00001-of-00004.safetensors",
+      "exists": true,
+      "size_bytes": 4877660776,
+      "sha256": "3014d84950f2f3afcce622508b6625e9cd911b9c340f4206e35e6a3177aec993"
+    },
+    {
+      "root": "/mnt/nas/openclaw/models/dream7b-hf",
+      "relative_path": "model-00002-of-00004.safetensors",
+      "path": "/mnt/nas/openclaw/models/dream7b-hf/model-00002-of-00004.safetensors",
+      "exists": true,
+      "size_bytes": 4932751008,
+      "sha256": "78fc44a7eae29c3d13bba010ca12584f4220798d41c9e617579a33c47222aa57"
+    },
+    {
+      "root": "/mnt/nas/openclaw/models/dream7b-hf",
+      "relative_path": "model-00003-of-00004.safetensors",
+      "path": "/mnt/nas/openclaw/models/dream7b-hf/model-00003-of-00004.safetensors",
+      "exists": true,
+      "size_bytes": 4330865200,
+      "sha256": "eac5afaf9a0e0b4a23c7ac1dbe5f538ccdf9fac5c0db7919fd9625a92c378e48"
+    },
+    {
+      "root": "/mnt/nas/openclaw/models/dream7b-hf",
+      "relative_path": "model-00004-of-00004.safetensors",
+      "path": "/mnt/nas/openclaw/models/dream7b-hf/model-00004-of-00004.safetensors",
+      "exists": true,
+      "size_bytes": 1089994880,
+      "sha256": "398da65f1f599ca8d594a9d7a077a3b7c4eb0ddfdff8e7e004c3d259712b3cb7"
+    }
+  ],
+  "hf_wrapper_code_files": [
+    {
+      "root": "/mnt/nas/openclaw/models/dream7b-hf",
+      "relative_path": "config.json",
+      "path": "/mnt/nas/openclaw/models/dream7b-hf/config.json",
+      "exists": true,
+      "size_bytes": 927,
+      "sha256": "11afc7fe7a1881e73dcd70cca6868aaaf8eb89ad45ea5fc6426c3fb82dec9340"
+    },
+    {
+      "root": "/mnt/nas/openclaw/models/dream7b-hf",
+      "relative_path": "configuration_dream.py",
+      "path": "/mnt/nas/openclaw/models/dream7b-hf/configuration_dream.py",
+      "exists": true,
+      "size_bytes": 3197,
+      "sha256": "24d038962ccf16361595494461000ec0c1b043653c7494d7fc835c96f121f0b9"
+    },
+    {
+      "root": "/mnt/nas/openclaw/models/dream7b-hf",
+      "relative_path": "generation_utils.py",
+      "path": "/mnt/nas/openclaw/models/dream7b-hf/generation_utils.py",
+      "exists": true,
+      "size_bytes": 22332,
+      "sha256": "7f8ad01484898946b3c9c9d5ebc85e5ac726061d0fa7b4a522c4b8110c13a921"
+    },
+    {
+      "root": "/mnt/nas/openclaw/models/dream7b-hf",
+      "relative_path": "model.safetensors.index.json",
+      "path": "/mnt/nas/openclaw/models/dream7b-hf/model.safetensors.index.json",
+      "exists": true,
+      "size_bytes": 27752,
+      "sha256": "998a078123ffc97763690de7f2a677eb89168af5eaf8a5e12e6bc24d18e25bdb"
+    },
+    {
+      "root": "/mnt/nas/openclaw/models/dream7b-hf",
+      "relative_path": "modeling_dream.py",
+      "path": "/mnt/nas/openclaw/models/dream7b-hf/modeling_dream.py",
+      "exists": true,
+      "size_bytes": 36763,
+      "sha256": "3166e789f0d69beb1f4fbdee2317953d1c1c3b9bc21479b109afc5dd059de5b3"
+    },
+    {
+      "root": "/mnt/nas/openclaw/models/dream7b-hf",
+      "relative_path": "tokenization_dream.py",
+      "path": "/mnt/nas/openclaw/models/dream7b-hf/tokenization_dream.py",
+      "exists": true,
+      "size_bytes": 14028,
+      "sha256": "1d7f04104fa673831f48256e3cd42cd0bbd1bddd801b4abea5c74cc47d98bdd2"
+    }
+  ],
+  "hf_weight_files_found": true,
+  "hf_config_tokenizer_load_status": "pass",
+  "hf_model_load_status": "pass",
+  "bf16_logits_export_status": "blocked_forward_runtime_or_timeout",
+  "wrapper_probe_status": {
+    "created_at_utc": "2026-07-01T09:27:38.9372242Z",
+    "schema_version": "dream7b_hf_wrapper_probe_v6",
+    "no_bf16_logits_exported": true,
+    "no_generation_quality_run": true,
+    "dependency_state": {
+      "isolated_transformers": "4.46.2",
+      "accelerate": "not_installed_to_avoid_torch_cuda_dependency",
+      "isolated_tokenizers": "0.20.3",
+      "system_transformers": "4.30.2",
+      "system_torch": "1.8.0a0"
+    },
+    "isolated_pydeps": "/mnt/nas/openclaw/reports/models/dream7b_s100p_v6_execution_20260701/pydeps",
+    "hf_model_path": "/mnt/nas/openclaw/models/dream7b-hf",
+    "probe_results": [
+      {
+        "step": "AutoConfig/AutoTokenizer with system transformers",
+        "status": "failed",
+        "reason": "transformers.modeling_rope_utils missing"
+      },
+      {
+        "step": "isolated transformers import before tokenizers upgrade",
+        "status": "failed",
+        "reason": "tokenizers 0.13.3 incompatible with transformers 4.46.2"
+      },
+      {
+        "config_class": "DreamConfig",
+        "step": "AutoConfig/AutoTokenizer with isolated transformers/tokenizers",
+        "tokenizer_class": "DreamTokenizer",
+        "status": "pass",
+        "vocab_size": 152064
+      },
+      {
+        "model_class": "DreamModel",
+        "step": "AutoModel load with isolated transformers plus torch compatibility shims",
+        "dtype": "torch.bfloat16",
+        "status": "pass",
+        "parameter_count": 7615616512
+      },
+      {
+        "step": "forward attempt 1",
+        "status": "failed",
+        "reason": "torch.autocast missing in torch 1.8"
+      },
+      {
+        "step": "forward attempt 2",
+        "status": "failed",
+        "reason": "torch.nn.functional.scaled_dot_product_attention missing in torch 1.8"
+      },
+      {
+        "step": "forward attempt 3 with no-op autocast and explicit SDPA shim",
+        "status": "stopped",
+        "reason": "zeros case CPU forward still running after more than 8 minutes; killed to avoid impractical v6 batch export"
+      }
+    ]
+  },
+  "verified_wrapper_attempt": {
+    "status": "blocked",
+    "reason": "HF safetensors and Dream wrapper code are present on NAS and AutoModel loads with isolated transformers plus torch compatibility shims, but verified BF16/FP32 logits were not exported because forward execution is blocked/impractical on the current S100P torch runtime.",
+    "generic_auto_model_rejected": false,
+    "config_tokenizer_load_pass": true,
+    "model_load_pass": true,
+    "forward_logits_export_pass": false,
+    "no_bf16_logits_fabricated": true
+  },
+  "verdict": "blocked_verified_dream_wrapper_unavailable"
+}

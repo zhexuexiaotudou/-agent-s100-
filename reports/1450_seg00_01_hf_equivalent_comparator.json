@@ -1,0 +1,698 @@
+{
+  "schema_version": "dream7b_s100p_v14_1450_seg00_01_hf_equivalent_comparator",
+  "created_at_utc": "2026-07-03T06:10:20.816276+00:00",
+  "run_commands": [
+    "C:\\Users\\zhexu\\AppData\\Local\\Python\\pythoncore-3.14-64\\python.exe tools\\build_v14_research_thread.py --root ."
+  ],
+  "host_environment": {
+    "local_platform": "Windows-11-10.0.26200-SP0",
+    "python": "3.14.3 (tags/v3.14.3:323c59a, Feb  3 2026, 16:04:56) [MSC v.1944 64 bit (AMD64)]"
+  },
+  "git": {
+    "returncode": 128,
+    "stdout": "",
+    "stderr": "fatal: not a git repository (or any of the parent directories): .git"
+  },
+  "input_artifacts": [
+    {
+      "path": "evidence/hf_remote_code_v14/modeling_dream.py",
+      "exists": true,
+      "size_bytes": 36763,
+      "sha256": "3166e789f0d69beb1f4fbdee2317953d1c1c3b9bc21479b109afc5dd059de5b3"
+    },
+    {
+      "path": "evidence/seg00_01_exact_graph_v14",
+      "exists": true
+    }
+  ],
+  "output_artifacts": [
+    {
+      "path": "reports/1450_seg00_01_hf_equivalent_comparator.json",
+      "exists": true,
+      "size_bytes": 22758,
+      "sha256": "eebca20aea16c0182764a26eb2ad5edb373f6a4c200d89f0d5faaee40e9a2652"
+    },
+    {
+      "path": "reports/1450_seg00_01_hf_equivalent_comparator.md",
+      "exists": true,
+      "size_bytes": 356,
+      "sha256": "644b8ee73a99595784c28ca9a5b3f5ad9834722c0afa27cddf24373b82d6cd38"
+    }
+  ],
+  "blocking_or_failure_reasons": [
+    "HRT did not dump mul_output or separate add_input_position/constants, so the exact HF equivalent of GatherND + position-derived term cannot be reconstructed from available evidence."
+  ],
+  "next_minimal_experiments": [],
+  "safety": {
+    "generation_quality_run": false,
+    "product_routes_18888_18889_touched": false,
+    "dream7b_frontend_openclaw_traffic_touched": false
+  },
+  "verdict": "exact_comparator_unresolved_missing_mul_position_constants",
+  "exact_comparator_buildable": false,
+  "hf_boundary_interpretation": {
+    "embedding": "self.embed_tokens(input_ids)",
+    "position": "position_embeddings = self.rotary_emb(hidden_states, position_ids); consumed inside decoder attention, not a learned absolute add to embeddings",
+    "seg00_01_visible_graph": "GatherND(token embedding-like int8 table) plus hidden hbir.mul/hbir.add path to int16 output"
+  },
+  "source_hashes": {
+    "config.json": "11afc7fe7a1881e73dcd70cca6868aaaf8eb89ad45ea5fc6426c3fb82dec9340",
+    "configuration_dream.py": "24d038962ccf16361595494461000ec0c1b043653c7494d7fc835c96f121f0b9",
+    "modeling_dream.py": "3166e789f0d69beb1f4fbdee2317953d1c1c3b9bc21479b109afc5dd059de5b3",
+    "tokenization_dream.py": "1d7f04104fa673831f48256e3cd42cd0bbd1bddd801b4abea5c74cc47d98bdd2"
+  },
+  "source_excerpts": {
+    "615": "613:         self.vocab_size = config.vocab_size\n614: \n615:         self.embed_tokens = nn.Embedding(config.vocab_size, config.hidden_size, self.padding_idx)\n616:         self.layers = nn.ModuleList(\n617:             [DreamDecoderLayer(config, layer_idx) for layer_idx in range(config.num_hidden_layers)]",
+    "665": "663: \n664:         if inputs_embeds is None:\n665:             inputs_embeds = self.embed_tokens(input_ids)\n666:         \n667:         if use_cache and past_key_values is None:",
+    "677": "675: \n676:         if position_ids is None:\n677:             position_ids = cache_position.unsqueeze(0)\n678: \n679:         hidden_states = inputs_embeds",
+    "679": "677:             position_ids = cache_position.unsqueeze(0)\n678: \n679:         hidden_states = inputs_embeds\n680: \n681:         # create position embeddings to be shared across the decoder layers",
+    "682": "680: \n681:         # create position embeddings to be shared across the decoder layers\n682:         position_embeddings = self.rotary_emb(hidden_states, position_ids)\n683: \n684:         # decoder layers",
+    "809": "807:         hidden_states = outputs[0]\n808:         # Only compute necessary logits, and do not upcast them to float if we are not computing the loss\n809:         logits = self.lm_head(hidden_states[:, -num_logits_to_keep:, :])\n810: \n811:         loss = None"
+  },
+  "comparison_rows": [
+    {
+      "case_id": "zeros",
+      "bpu_tensor": "add_output_dequant",
+      "hf_candidate": "token_embedding_output",
+      "metrics": {
+        "shape_match": true,
+        "reference_top1": 339794,
+        "candidate_top1": 144369,
+        "top1_agreement": false,
+        "reference_top1_in_candidate_top5": false,
+        "top5_overlap": 0,
+        "cosine": 0.2823281541071286,
+        "pearson_centered": 0.28232444701749576,
+        "relative_l2": 3.5388172494367383,
+        "max_abs_error": 0.5828108191490173,
+        "mean_abs_error": 0.03627354639096365,
+        "candidate_stats": {
+          "shape": [
+            458752
+          ],
+          "dtype": "float32",
+          "size": 458752,
+          "min": -0.5522932410240173,
+          "max": 0.5447757840156555,
+          "mean": -0.00010915865277638659,
+          "std": 0.05312284082174301,
+          "abs_max": 0.5522932410240173,
+          "nonzero_count": 458449,
+          "allzero": false,
+          "constant": false,
+          "nan_count": 0,
+          "inf_count": 0
+        },
+        "reference_stats": {
+          "shape": [
+            458752
+          ],
+          "dtype": "float32",
+          "size": 458752,
+          "min": -0.12255859375,
+          "max": 0.10009765625,
+          "mean": -3.652216400951147e-05,
+          "std": 0.014401739463210106,
+          "abs_max": 0.12255859375,
+          "nonzero_count": 458752,
+          "allzero": false,
+          "constant": false,
+          "nan_count": 0,
+          "inf_count": 0
+        }
+      }
+    },
+    {
+      "case_id": "zeros",
+      "bpu_tensor": "gathernd_output_interpreted_raw_int8",
+      "hf_candidate": "token_embedding_output",
+      "metrics": {
+        "shape_match": true,
+        "reference_top1": 339794,
+        "candidate_top1": 397138,
+        "top1_agreement": false,
+        "reference_top1_in_candidate_top5": false,
+        "top5_overlap": 0,
+        "cosine": 0.990966618808817,
+        "pearson_centered": 0.9909698052907756,
+        "relative_l2": 147.32410452947533,
+        "max_abs_error": 17.87744140625,
+        "mean_abs_error": 1.5829273202356748,
+        "candidate_stats": {
+          "shape": [
+            458752
+          ],
+          "dtype": "float32",
+          "size": 458752,
+          "min": -18.0,
+          "max": 15.0,
+          "mean": 0.0,
+          "std": 2.136000871658325,
+          "abs_max": 18.0,
+          "nonzero_count": 366848,
+          "allzero": false,
+          "constant": false,
+          "nan_count": 0,
+          "inf_count": 0
+        },
+        "reference_stats": {
+          "shape": [
+            458752
+          ],
+          "dtype": "float32",
+          "size": 458752,
+          "min": -0.12255859375,
+          "max": 0.10009765625,
+          "mean": -3.652216400951147e-05,
+          "std": 0.014401739463210106,
+          "abs_max": 0.12255859375,
+          "nonzero_count": 458752,
+          "allzero": false,
+          "constant": false,
+          "nan_count": 0,
+          "inf_count": 0
+        }
+      }
+    },
+    {
+      "case_id": "zeros",
+      "bpu_tensor": "add_output_dequant",
+      "hf_candidate": "layer0_pre_attention_norm_output",
+      "metrics": {
+        "shape_match": true,
+        "reference_top1": 242054,
+        "candidate_top1": 144369,
+        "top1_agreement": false,
+        "reference_top1_in_candidate_top5": false,
+        "top5_overlap": 0,
+        "cosine": 0.26776705079230867,
+        "pearson_centered": 0.26778097063257184,
+        "relative_l2": 0.9644179917411231,
+        "max_abs_error": 2.454470667988062,
+        "mean_abs_error": 0.17061187295113062,
+        "candidate_stats": {
+          "shape": [
+            458752
+          ],
+          "dtype": "float32",
+          "size": 458752,
+          "min": -0.5522932410240173,
+          "max": 0.5447757840156555,
+          "mean": -0.00010915865277638659,
+          "std": 0.05312284082174301,
+          "abs_max": 0.5522932410240173,
+          "nonzero_count": 458449,
+          "allzero": false,
+          "constant": false,
+          "nan_count": 0,
+          "inf_count": 0
+        },
+        "reference_stats": {
+          "shape": [
+            458752
+          ],
+          "dtype": "float32",
+          "size": 458752,
+          "min": -2.359375,
+          "max": 2.5,
+          "mean": 0.0011602024314925075,
+          "std": 0.2357577234506607,
+          "abs_max": 2.5,
+          "nonzero_count": 458752,
+          "allzero": false,
+          "constant": false,
+          "nan_count": 0,
+          "inf_count": 0
+        }
+      }
+    },
+    {
+      "case_id": "zeros",
+      "bpu_tensor": "add_output_dequant",
+      "hf_candidate": "layer0_final_output",
+      "metrics": {
+        "shape_match": true,
+        "reference_top1": 96465,
+        "candidate_top1": 144369,
+        "top1_agreement": false,
+        "reference_top1_in_candidate_top5": false,
+        "top5_overlap": 0,
+        "cosine": 0.15989362639112212,
+        "pearson_centered": 0.15989053015217652,
+        "relative_l2": 0.9904891043094913,
+        "max_abs_error": 1.9577000234276056,
+        "mean_abs_error": 0.1624425594384435,
+        "candidate_stats": {
+          "shape": [
+            458752
+          ],
+          "dtype": "float32",
+          "size": 458752,
+          "min": -0.5522932410240173,
+          "max": 0.5447757840156555,
+          "mean": -0.00010915865277638659,
+          "std": 0.05312284082174301,
+          "abs_max": 0.5522932410240173,
+          "nonzero_count": 458449,
+          "allzero": false,
+          "constant": false,
+          "nan_count": 0,
+          "inf_count": 0
+        },
+        "reference_stats": {
+          "shape": [
+            458752
+          ],
+          "dtype": "float32",
+          "size": 458752,
+          "min": -1.984375,
+          "max": 1.8984375,
+          "mean": -0.0003954665153287351,
+          "std": 0.2201099991798401,
+          "abs_max": 1.984375,
+          "nonzero_count": 458461,
+          "allzero": false,
+          "constant": false,
+          "nan_count": 0,
+          "inf_count": 0
+        }
+      }
+    },
+    {
+      "case_id": "ramp",
+      "bpu_tensor": "add_output_dequant",
+      "hf_candidate": "token_embedding_output",
+      "metrics": {
+        "shape_match": true,
+        "reference_top1": 37235,
+        "candidate_top1": 80540,
+        "top1_agreement": false,
+        "reference_top1_in_candidate_top5": true,
+        "top5_overlap": 1,
+        "cosine": 0.2728015327174646,
+        "pearson_centered": 0.27278930867440343,
+        "relative_l2": 3.4700889529374797,
+        "max_abs_error": 0.9734864234924316,
+        "mean_abs_error": 0.03304708423342241,
+        "candidate_stats": {
+          "shape": [
+            458752
+          ],
+          "dtype": "float32",
+          "size": 458752,
+          "min": -0.9146485328674316,
+          "max": 0.7435043454170227,
+          "mean": -0.0005779584171250463,
+          "std": 0.05070845037698746,
+          "abs_max": 0.9146485328674316,
+          "nonzero_count": 458457,
+          "allzero": false,
+          "constant": false,
+          "nan_count": 0,
+          "inf_count": 0
+        },
+        "reference_stats": {
+          "shape": [
+            458752
+          ],
+          "dtype": "float32",
+          "size": 458752,
+          "min": -0.26953125,
+          "max": 0.87109375,
+          "mean": -3.817711694864556e-05,
+          "std": 0.014059757813811302,
+          "abs_max": 0.87109375,
+          "nonzero_count": 458752,
+          "allzero": false,
+          "constant": false,
+          "nan_count": 0,
+          "inf_count": 0
+        }
+      }
+    },
+    {
+      "case_id": "ramp",
+      "bpu_tensor": "gathernd_output_interpreted_raw_int8",
+      "hf_candidate": "token_embedding_output",
+      "metrics": {
+        "shape_match": true,
+        "reference_top1": 37235,
+        "candidate_top1": 37235,
+        "top1_agreement": true,
+        "reference_top1_in_candidate_top5": true,
+        "top5_overlap": 5,
+        "cosine": 0.9906391378571806,
+        "pearson_centered": 0.9906390719878633,
+        "relative_l2": 147.20903231924726,
+        "max_abs_error": 126.12890625,
+        "mean_abs_error": 1.4909360553342645,
+        "candidate_stats": {
+          "shape": [
+            458752
+          ],
+          "dtype": "float32",
+          "size": 458752,
+          "min": -40.0,
+          "max": 127.0,
+          "mean": -0.0055367606692016125,
+          "std": 2.083650827407837,
+          "abs_max": 127.0,
+          "nonzero_count": 345742,
+          "allzero": false,
+          "constant": false,
+          "nan_count": 0,
+          "inf_count": 0
+        },
+        "reference_stats": {
+          "shape": [
+            458752
+          ],
+          "dtype": "float32",
+          "size": 458752,
+          "min": -0.26953125,
+          "max": 0.87109375,
+          "mean": -3.817711694864556e-05,
+          "std": 0.014059757813811302,
+          "abs_max": 0.87109375,
+          "nonzero_count": 458752,
+          "allzero": false,
+          "constant": false,
+          "nan_count": 0,
+          "inf_count": 0
+        }
+      }
+    },
+    {
+      "case_id": "ramp",
+      "bpu_tensor": "add_output_dequant",
+      "hf_candidate": "layer0_pre_attention_norm_output",
+      "metrics": {
+        "shape_match": true,
+        "reference_top1": 37235,
+        "candidate_top1": 80540,
+        "top1_agreement": false,
+        "reference_top1_in_candidate_top5": true,
+        "top5_overlap": 1,
+        "cosine": 0.26307774502889436,
+        "pearson_centered": 0.26309135349292984,
+        "relative_l2": 0.9657335413064755,
+        "max_abs_error": 17.26765066385269,
+        "mean_abs_error": 0.16390929260761666,
+        "candidate_stats": {
+          "shape": [
+            458752
+          ],
+          "dtype": "float32",
+          "size": 458752,
+          "min": -0.9146485328674316,
+          "max": 0.7435043454170227,
+          "mean": -0.0005779584171250463,
+          "std": 0.05070845037698746,
+          "abs_max": 0.9146485328674316,
+          "nonzero_count": 458457,
+          "allzero": false,
+          "constant": false,
+          "nan_count": 0,
+          "inf_count": 0
+        },
+        "reference_stats": {
+          "shape": [
+            458752
+          ],
+          "dtype": "float32",
+          "size": 458752,
+          "min": -4.4375,
+          "max": 18.0,
+          "mean": -7.058839400997385e-05,
+          "std": 0.23045293986797333,
+          "abs_max": 18.0,
+          "nonzero_count": 458752,
+          "allzero": false,
+          "constant": false,
+          "nan_count": 0,
+          "inf_count": 0
+        }
+      }
+    },
+    {
+      "case_id": "ramp",
+      "bpu_tensor": "add_output_dequant",
+      "hf_candidate": "layer0_final_output",
+      "metrics": {
+        "shape_match": true,
+        "reference_top1": 453276,
+        "candidate_top1": 80540,
+        "top1_agreement": false,
+        "reference_top1_in_candidate_top5": false,
+        "top5_overlap": 0,
+        "cosine": 0.3440026674710142,
+        "pearson_centered": 0.3439567969761554,
+        "relative_l2": 0.9405217046083041,
+        "max_abs_error": 2.0433772206306458,
+        "mean_abs_error": 0.08799551365831507,
+        "candidate_stats": {
+          "shape": [
+            458752
+          ],
+          "dtype": "float32",
+          "size": 458752,
+          "min": -0.9146485328674316,
+          "max": 0.7435043454170227,
+          "mean": -0.0005779584171250463,
+          "std": 0.05070845037698746,
+          "abs_max": 0.9146485328674316,
+          "nonzero_count": 458457,
+          "allzero": false,
+          "constant": false,
+          "nan_count": 0,
+          "inf_count": 0
+        },
+        "reference_stats": {
+          "shape": [
+            458752
+          ],
+          "dtype": "float32",
+          "size": 458752,
+          "min": -2.4375,
+          "max": 1.53125,
+          "mean": -0.0008476033108308911,
+          "std": 0.1274041384458542,
+          "abs_max": 2.4375,
+          "nonzero_count": 458345,
+          "allzero": false,
+          "constant": false,
+          "nan_count": 0,
+          "inf_count": 0
+        }
+      }
+    },
+    {
+      "case_id": "short_chinese_prompt_padded",
+      "bpu_tensor": "add_output_dequant",
+      "hf_candidate": "token_embedding_output",
+      "metrics": {
+        "shape_match": true,
+        "reference_top1": 10066,
+        "candidate_top1": 4593,
+        "top1_agreement": false,
+        "reference_top1_in_candidate_top5": false,
+        "top5_overlap": 0,
+        "cosine": 0.27995039261730575,
+        "pearson_centered": 0.2799472634364616,
+        "relative_l2": 3.596438602829236,
+        "max_abs_error": 0.8090466260910034,
+        "mean_abs_error": 0.036210234109288995,
+        "candidate_stats": {
+          "shape": [
+            458752
+          ],
+          "dtype": "float32",
+          "size": 458752,
+          "min": -0.6131000518798828,
+          "max": 0.8125561475753784,
+          "mean": -0.00011516363883856684,
+          "std": 0.053335294127464294,
+          "abs_max": 0.8125561475753784,
+          "nonzero_count": 458480,
+          "allzero": false,
+          "constant": false,
+          "nan_count": 0,
+          "inf_count": 0
+        },
+        "reference_stats": {
+          "shape": [
+            458752
+          ],
+          "dtype": "float32",
+          "size": 458752,
+          "min": -0.234375,
+          "max": 0.48828125,
+          "mean": -2.8683614800684154e-05,
+          "std": 0.014238351956009865,
+          "abs_max": 0.48828125,
+          "nonzero_count": 458752,
+          "allzero": false,
+          "constant": false,
+          "nan_count": 0,
+          "inf_count": 0
+        }
+      }
+    },
+    {
+      "case_id": "short_chinese_prompt_padded",
+      "bpu_tensor": "gathernd_output_interpreted_raw_int8",
+      "hf_candidate": "token_embedding_output",
+      "metrics": {
+        "shape_match": true,
+        "reference_top1": 10066,
+        "candidate_top1": 10066,
+        "top1_agreement": true,
+        "reference_top1_in_candidate_top5": true,
+        "top5_overlap": 4,
+        "cosine": 0.9908120337371956,
+        "pearson_centered": 0.9908146701992157,
+        "relative_l2": 147.33976860759222,
+        "max_abs_error": 71.51171875,
+        "mean_abs_error": 1.5423679384423354,
+        "candidate_stats": {
+          "shape": [
+            458752
+          ],
+          "dtype": "float32",
+          "size": 458752,
+          "min": -34.0,
+          "max": 72.0,
+          "mean": 0.0006125313811935484,
+          "std": 2.1119861602783203,
+          "abs_max": 72.0,
+          "nonzero_count": 360269,
+          "allzero": false,
+          "constant": false,
+          "nan_count": 0,
+          "inf_count": 0
+        },
+        "reference_stats": {
+          "shape": [
+            458752
+          ],
+          "dtype": "float32",
+          "size": 458752,
+          "min": -0.234375,
+          "max": 0.48828125,
+          "mean": -2.8683614800684154e-05,
+          "std": 0.014238351956009865,
+          "abs_max": 0.48828125,
+          "nonzero_count": 458752,
+          "allzero": false,
+          "constant": false,
+          "nan_count": 0,
+          "inf_count": 0
+        }
+      }
+    },
+    {
+      "case_id": "short_chinese_prompt_padded",
+      "bpu_tensor": "add_output_dequant",
+      "hf_candidate": "layer0_pre_attention_norm_output",
+      "metrics": {
+        "shape_match": true,
+        "reference_top1": 10066,
+        "candidate_top1": 4593,
+        "top1_agreement": false,
+        "reference_top1_in_candidate_top5": false,
+        "top5_overlap": 0,
+        "cosine": 0.2656772230006207,
+        "pearson_centered": 0.2656925177208762,
+        "relative_l2": 0.9648451447836214,
+        "max_abs_error": 9.577807873487473,
+        "mean_abs_error": 0.16840567229180411,
+        "candidate_stats": {
+          "shape": [
+            458752
+          ],
+          "dtype": "float32",
+          "size": 458752,
+          "min": -0.6131000518798828,
+          "max": 0.8125561475753784,
+          "mean": -0.00011516363883856684,
+          "std": 0.053335294127464294,
+          "abs_max": 0.8125561475753784,
+          "nonzero_count": 458480,
+          "allzero": false,
+          "constant": false,
+          "nan_count": 0,
+          "inf_count": 0
+        },
+        "reference_stats": {
+          "shape": [
+            458752
+          ],
+          "dtype": "float32",
+          "size": 458752,
+          "min": -6.0625,
+          "max": 10.0,
+          "mean": 0.0012131615076214075,
+          "std": 0.23514986038208008,
+          "abs_max": 10.0,
+          "nonzero_count": 458752,
+          "allzero": false,
+          "constant": false,
+          "nan_count": 0,
+          "inf_count": 0
+        }
+      }
+    },
+    {
+      "case_id": "short_chinese_prompt_padded",
+      "bpu_tensor": "add_output_dequant",
+      "hf_candidate": "layer0_final_output",
+      "metrics": {
+        "shape_match": true,
+        "reference_top1": 361681,
+        "candidate_top1": 4593,
+        "top1_agreement": false,
+        "reference_top1_in_candidate_top5": false,
+        "top5_overlap": 0,
+        "cosine": 0.20296474515246896,
+        "pearson_centered": 0.20296072236505286,
+        "relative_l2": 0.9818847552000158,
+        "max_abs_error": 1.9013069085776806,
+        "mean_abs_error": 0.13998965925643964,
+        "candidate_stats": {
+          "shape": [
+            458752
+          ],
+          "dtype": "float32",
+          "size": 458752,
+          "min": -0.6131000518798828,
+          "max": 0.8125561475753784,
+          "mean": -0.00011516363883856684,
+          "std": 0.053335294127464294,
+          "abs_max": 0.8125561475753784,
+          "nonzero_count": 458480,
+          "allzero": false,
+          "constant": false,
+          "nan_count": 0,
+          "inf_count": 0
+        },
+        "reference_stats": {
+          "shape": [
+            458752
+          ],
+          "dtype": "float32",
+          "size": 458752,
+          "min": -1.9375,
+          "max": 1.796875,
+          "mean": -0.0004525442491285503,
+          "std": 0.1934446543455124,
+          "abs_max": 1.9375,
+          "nonzero_count": 458272,
+          "allzero": false,
+          "constant": false,
+          "nan_count": 0,
+          "inf_count": 0
+        }
+      }
+    }
+  ]
+}

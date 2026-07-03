@@ -1,0 +1,74 @@
+{
+  "candidate_top1": 152063,
+  "reference_top1": 82733,
+  "top1_agreement": false,
+  "top5_overlap": 0,
+  "reference_top1_in_candidate_top5": false,
+  "candidate_max_tie_count": 152064,
+  "reference_max_tie_count": 1,
+  "reference_top1_in_candidate_max_tie_set": true,
+  "candidate_top1_in_reference_max_tie_set": false,
+  "rank_interval_for_reference_top1_under_candidate_ties": [
+    1,
+    152064
+  ],
+  "rank_interval_for_candidate_top1_under_reference_ties": [
+    65066,
+    71616
+  ],
+  "cosine": 0.0,
+  "pearson_centered": 0.0,
+  "relative_l2": 0.9999999999999987,
+  "mean_abs_error": 1.8220916102210731,
+  "max_abs_error": 8.625,
+  "candidate_stats": {
+    "shape": [
+      152064
+    ],
+    "dtype": "float32",
+    "size": 152064,
+    "min": 0.0,
+    "max": 0.0,
+    "mean": 0.0,
+    "std": 0.0,
+    "abs_max": 0.0,
+    "nonzero_count": 0,
+    "allzero": true,
+    "constant": true,
+    "nan_count": 0,
+    "inf_count": 0
+  },
+  "reference_stats": {
+    "shape": [
+      152064
+    ],
+    "dtype": "float32",
+    "size": 152064,
+    "min": -6.59375,
+    "max": 8.625,
+    "mean": 1.7082290649414062,
+    "std": 1.0530613660812378,
+    "abs_max": 8.625,
+    "nonzero_count": 152064,
+    "allzero": false,
+    "constant": false,
+    "nan_count": 0,
+    "inf_count": 0
+  },
+  "candidate_entropy": {
+    "entropy": 11.932056763842207,
+    "normalized_entropy": 1.0,
+    "top1_probability": 6.576178451178451e-06
+  },
+  "reference_entropy": {
+    "entropy": 11.112469324344708,
+    "normalized_entropy": 0.9313121404198227,
+    "top1_probability": 0.003610465494742596
+  },
+  "case_id": "zeros",
+  "variant_id": "real_x_div_2",
+  "candidate": "S100P seg27_28 official-dequant logits",
+  "reference": "HF exact layer27 + final norm + lm_head logits",
+  "candidate_path": "evidence/final_segment_endpoint_raw_v9/zeros/real_x_div_2/official_dequant_logits.npy",
+  "reference_path": "evidence/hf_exact_final_segment_v9/zeros/real_x_div_2/exact_hf_final_logits.npy"
+}

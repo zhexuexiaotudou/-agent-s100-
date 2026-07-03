@@ -1,0 +1,26 @@
+{
+  "generated_at": "2026-07-03T01:33:35.235428+08:00",
+  "gate_id": "existing_gate_hard_fail_test",
+  "verdict": "ok_existing_gate_hard_fail_test",
+  "passed_count": 2,
+  "check_count": 2,
+  "failure_count": 0,
+  "failures": [],
+  "checks": [
+    {
+      "label": "normal production context passes shadow probe",
+      "ok": true,
+      "detail": "F:\\Project\\Digua\\tmp\\existing_gate_hard_fail_good\\harness_shadow_probe_20260703-013334-577541\\harness_shadow_probe.json\nF:\\Project\\Digua\\tmp\\existing_gate_hard_fail_good\\harness_shadow_probe_20260703-013334-577541\\harness_shadow_probe.md\n"
+    },
+    {
+      "label": "missing dispatcher makes shadow probe fail",
+      "ok": true,
+      "detail": {
+        "returncode": 1,
+        "stdout": "F:\\Project\\Digua\\tmp\\existing_gate_hard_fail_bad_context\\reports\\harness_shadow_probe_20260703-013335-027437\\harness_shadow_probe.json\nF:\\Project\\Digua\\tmp\\existing_gate_hard_fail_bad_context\\reports\\harness_shadow_probe_20260703-013335-027437\\harness_shadow_probe.md\n",
+        "stderr": ""
+      }
+    }
+  ],
+  "detail": {}
+}

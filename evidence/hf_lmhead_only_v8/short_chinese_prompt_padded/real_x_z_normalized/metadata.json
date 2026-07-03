@@ -1,0 +1,101 @@
+{
+  "case_id": "short_chinese_prompt_padded",
+  "variant": "real_x_z_normalized",
+  "model_dir": "/mnt/nas/openclaw/models/dream7b-hf",
+  "endpoint_input_path": "/mnt/nas/openclaw/reports/models/dream7b_s100p_v5_execution_20260701/evidence/final_segment_dense_sweep_v5/short_chinese_prompt_padded/real_x_z_normalized/input.npy",
+  "last_token_index": 127,
+  "norm_type": "rms_norm",
+  "eps": 1e-06,
+  "norm_tensor": "model.norm.weight",
+  "norm_shape": [
+    3584
+  ],
+  "norm_shard": "model-00003-of-00004.safetensors",
+  "norm_shard_sha256": "eac5afaf9a0e0b4a23c7ac1dbe5f538ccdf9fac5c0db7919fd9625a92c378e48",
+  "lm_tensor": "lm_head.weight",
+  "lm_shape": [
+    152064,
+    3584
+  ],
+  "lm_shard": "model-00004-of-00004.safetensors",
+  "lm_shard_sha256": "398da65f1f599ca8d594a9d7a077a3b7c4eb0ddfdff8e7e004c3d259712b3cb7",
+  "hidden_stats": {
+    "shape": [
+      128,
+      3584
+    ],
+    "dtype": "float32",
+    "size": 458752,
+    "min": -1.014628529548645,
+    "max": 1.0069383382797241,
+    "mean": 1.4834638406568956e-08,
+    "std": 1.0000001192092896,
+    "abs_max": 1.014628529548645,
+    "nonzero_count": 458752,
+    "constant": false,
+    "allzero": false,
+    "nan_count": 0,
+    "inf_count": 0
+  },
+  "logits_path": "evidence/hf_lmhead_only_v8/short_chinese_prompt_padded/real_x_z_normalized/hf_final_lmhead_logits.npy",
+  "logits_sha256": "b0731f2f1e182bb577ee4d157ac04b742d689b8a212a963c5c27a04878566ded",
+  "logits_stats": {
+    "shape": [
+      152064
+    ],
+    "dtype": "float32",
+    "size": 152064,
+    "min": -8.454251289367676,
+    "max": 9.528717041015625,
+    "mean": 1.5137817859649658,
+    "std": 1.115280032157898,
+    "abs_max": 9.528717041015625,
+    "nonzero_count": 152064,
+    "constant": false,
+    "allzero": false,
+    "nan_count": 0,
+    "inf_count": 0
+  },
+  "top10": [
+    {
+      "token": 57992,
+      "logit": 9.528717041015625
+    },
+    {
+      "token": 50564,
+      "logit": 8.069297790527344
+    },
+    {
+      "token": 58375,
+      "logit": 7.637336730957031
+    },
+    {
+      "token": 36343,
+      "logit": 7.237793922424316
+    },
+    {
+      "token": 10749,
+      "logit": 7.148441314697266
+    },
+    {
+      "token": 5379,
+      "logit": 6.964057922363281
+    },
+    {
+      "token": 32903,
+      "logit": 6.639611721038818
+    },
+    {
+      "token": 11302,
+      "logit": 6.635222434997559
+    },
+    {
+      "token": 84602,
+      "logit": 6.538505554199219
+    },
+    {
+      "token": 56981,
+      "logit": 6.523791790008545
+    }
+  ]
+}

@@ -1,0 +1,646 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+report_root="${1:-/mnt/nas/openclaw/reports/models}"
+base_hbm_dir="${DREAM7B_BPU_HBM_DIR:-/home/sunrise/.cache/openclaw/dream7b-hbm/segments6}"
+fine_hbm_dir="${DREAM7B_BPU_FINE_HBM_DIR:-/home/sunrise/.cache/openclaw/dream7b-hbm/fine-seq16}"
+topology_json="${DREAM7B_BPU_SELECTED_TRIPLET_TOPOLOGY_JSON:-}"
+forward_cmd="${DREAM7B_BPU_SELECTED_TRIPLET_BASELINE_FORWARD_CMD:-dream7b-bpu-fine-batch-forward}"
+batch_count="${DREAM7B_BPU_SELECTED_TRIPLET_BATCH_COUNT:-4}"
+top_k="${DREAM7B_BPU_SELECTED_TRIPLET_TOP_K:-3}"
+timeout_sec="${DREAM7B_BPU_SELECTED_TRIPLET_TIMEOUT_SEC:-900}"
+
+case "$report_root" in
+  /tmp/*|/mnt/nas/openclaw/reports|/mnt/nas/openclaw/reports/*|/root/.openclaw/workspace/reports|/root/.openclaw/workspace/reports/*) ;;
+  *)
+    echo "Refusing output path outside approved report directories: $report_root" >&2
+    exit 2
+    ;;
+esac
+
+case "$base_hbm_dir" in
+  /mnt/nas/openclaw/models/dream7b-hbm/segments6|/mnt/nas/openclaw/models/dream7b-hbm/segments6/|/home/sunrise/.cache/openclaw/dream7b-hbm/segments6|/home/sunrise/.cache/openclaw/dream7b-hbm/segments6/) ;;
+  *)
+    echo "Refusing base HBM path outside approved Dream 7B HBM directories: $base_hbm_dir" >&2
+    exit 2
+    ;;
+esac
+
+case "$fine_hbm_dir" in
+  /mnt/nas/openclaw/models/dream7b-hbm/fine-seq16|/mnt/nas/openclaw/models/dream7b-hbm/fine-seq16/|/home/sunrise/.cache/openclaw/dream7b-hbm/fine-seq16|/home/sunrise/.cache/openclaw/dream7b-hbm/fine-seq16/) ;;
+  *)
+    echo "Refusing fine HBM path outside approved Dream 7B HBM directories: $fine_hbm_dir" >&2
+    exit 2
+    ;;
+esac
+
+if [[ -n "$topology_json" ]]; then
+  case "$topology_json" in
+    /tmp/*|/mnt/nas/openclaw/reports/models/dream7b_bpu_persistent_triplet_topology_*/*|/root/.openclaw/workspace/reports/*) ;;
+    *)
+      echo "Refusing topology JSON path outside approved report directories: $topology_json" >&2
+      exit 2
+      ;;
+  esac
+fi
+if ! [[ "$batch_count" =~ ^[1-9][0-9]*$ ]] || (( batch_count > 16 )); then
+  echo "DREAM7B_BPU_SELECTED_TRIPLET_BATCH_COUNT must be an integer from 1 to 16." >&2
+  exit 2
+fi
+if ! [[ "$top_k" =~ ^[0-9]+$ ]]; then
+  echo "DREAM7B_BPU_SELECTED_TRIPLET_TOP_K must be a non-negative integer." >&2
+  exit 2
+fi
+if ! [[ "$timeout_sec" =~ ^[1-9][0-9]*$ ]]; then
+  echo "DREAM7B_BPU_SELECTED_TRIPLET_TIMEOUT_SEC must be a positive integer." >&2
+  exit 2
+fi
+if ! command -v "$forward_cmd" >/dev/null 2>&1; then
+  echo "Missing deployed S100P command: $forward_cmd" >&2
+  exit 4
+fi
+
+mkdir -p "$report_root"
+
+set +e
+python3 - "$report_root" "$topology_json" "$batch_count" "$top_k" <<'PY'
+import json
+import os
+import sys
+from datetime import datetime
+from pathlib import Path
+
+report_root = Path(sys.argv[1])
+topology_json_arg = sys.argv[2]
+batch_count = int(sys.argv[3])
+top_k = int(sys.argv[4])
+
+if os.environ.get("DREAM7B_BPU_SELECTED_TRIPLET_ALLOW_CRASH_RETRY") == "1":
+    raise SystemExit(0)
+
+incomplete = []
+for path in report_root.glob("dream7b_bpu_selected_triplet_forward_path_*"):
+    if not path.is_dir():
+        continue
+    if not (path / "tokens_batch.json").is_file():
+        continue
+    if (path / "selected_triplet_forward_path_probe.json").is_file():
+        continue
+    incomplete.append(path)
+
+if not incomplete:
+    raise SystemExit(0)
+
+run_dir = max(incomplete, key=lambda item: item.stat().st_mtime)
+if topology_json_arg:
+    topology_path = Path(topology_json_arg)
+else:
+    topology_paths = [
+        path
+        for path in report_root.glob("dream7b_bpu_persistent_triplet_topology_*/persistent_triplet_topology_probe.json")
+        if path.is_file()
+    ]
+    topology_path = max(topology_paths, key=lambda item: item.stat().st_mtime) if topology_paths else None
+
+topology_report = {}
+if topology_path and topology_path.is_file():
+    topology_report = json.loads(topology_path.read_text(encoding="utf-8"))
+
+selected_topology = topology_report.get("selected_topology") or []
+selected_segments = topology_report.get("selected_segments") or []
+tokens_batch_json = run_dir / "tokens_batch.json"
+payload = {
+    "generated_at": datetime.now().astimezone().isoformat(),
+    "verdict": "ok_dream7b_bpu_selected_triplet_forward_path_probe",
+    "run_dir": str(run_dir),
+    "topology_json": str(topology_path) if topology_path else "",
+    "batch_count": batch_count,
+    "top_k": top_k,
+    "tokens_batch_json": str(tokens_batch_json),
+    "selected_triplet_forward_supported": False,
+    "reboot_or_disconnect_observed": True,
+    "expected_reboot_guard_observed": True,
+    "source_incomplete_run_dir": str(run_dir),
+    "source_incomplete_files": sorted(item.name for item in run_dir.iterdir()),
+    "selected": {
+        "selected_topology": selected_topology,
+        "selected_segments": selected_segments,
+        "selected_worker_count": len(selected_topology),
+    },
+    "baseline": {
+        "returncode": None,
+        "verdict": None,
+    },
+    "comparison": {
+        "warm_path_load_improved": False,
+        "total_path_load_improved": False,
+        "reason": "selected triplet forward path did not complete before SSH disconnect or board reboot",
+    },
+    "warnings": [
+        "selected triplet residency is stable as a hold test, but the selected triplet forward-path attempt did not complete",
+        "the probe is recording the previous incomplete run and will not retry unless DREAM7B_BPU_SELECTED_TRIPLET_ALLOW_CRASH_RETRY=1",
+    ],
+    "errors": [],
+    "next_optimization_target": "do not promote selected triplet forward path; test smaller resident sets or vendor-supported multi-segment HBM residency instead",
+}
+
+(run_dir / "selected_triplet_forward_path_probe.json").write_text(
+    json.dumps(payload, ensure_ascii=False, indent=2) + "\n",
+    encoding="utf-8",
+)
+(run_dir / "selected_triplet_forward_path_probe.md").write_text(
+    "\n".join(
+        [
+            "# Dream 7B BPU Selected Triplet Forward Path Probe",
+            "",
+            f"- generated_at: {payload['generated_at']}",
+            f"- verdict: {payload['verdict']}",
+            f"- selected_triplet_forward_supported: {payload['selected_triplet_forward_supported']}",
+            f"- reboot_or_disconnect_observed: {payload['reboot_or_disconnect_observed']}",
+            f"- source_incomplete_run_dir: {payload['source_incomplete_run_dir']}",
+            f"- selected_topology: {payload['selected']['selected_topology']}",
+            f"- next_optimization_target: {payload['next_optimization_target']}",
+            "",
+        ]
+    ),
+    encoding="utf-8",
+)
+print(run_dir / "selected_triplet_forward_path_probe.json")
+raise SystemExit(77)
+PY
+guard_rc=$?
+set -e
+if (( guard_rc == 77 )); then
+  exit 0
+fi
+if (( guard_rc != 0 )); then
+  exit "$guard_rc"
+fi
+
+stamp="$(date +%Y%m%d-%H%M%S)"
+run_dir="$report_root/dream7b_bpu_selected_triplet_forward_path_$stamp"
+mkdir -p "$run_dir"
+
+python3 - \
+  "$run_dir" \
+  "$report_root" \
+  "$base_hbm_dir" \
+  "$fine_hbm_dir" \
+  "$topology_json" \
+  "$forward_cmd" \
+  "$batch_count" \
+  "$top_k" \
+  "$timeout_sec" <<'PY'
+import gc
+import json
+import os
+import subprocess
+import sys
+import time
+from datetime import datetime
+from multiprocessing import Pipe, Process
+from pathlib import Path
+
+import numpy as np
+from hbm_runtime import HB_HBMRuntime
+
+run_dir = Path(sys.argv[1])
+report_root = Path(sys.argv[2])
+base_hbm_dir = Path(sys.argv[3])
+fine_hbm_dir = Path(sys.argv[4])
+topology_json_arg = sys.argv[5]
+forward_cmd = sys.argv[6]
+batch_count = int(sys.argv[7])
+top_k = int(sys.argv[8])
+timeout_sec = int(sys.argv[9])
+
+seq_len = 16
+hidden_size = 3584
+vocab_size = 152064
+position_ids = np.arange(seq_len, dtype=np.int32)
+
+
+def latest_topology_json():
+    if topology_json_arg:
+        path = Path(topology_json_arg)
+        if not path.is_file():
+            raise SystemExit(f"missing DREAM7B_BPU_SELECTED_TRIPLET_TOPOLOGY_JSON: {path}")
+        return path
+    paths = list(report_root.glob("dream7b_bpu_persistent_triplet_topology_*/persistent_triplet_topology_probe.json"))
+    paths = [path for path in paths if path.is_file()]
+    if not paths:
+        raise SystemExit("missing persistent triplet topology report")
+    return max(paths, key=lambda path: path.stat().st_mtime)
+
+
+segments = [
+    ("seg00_02", "fine", fine_hbm_dir / "seg00_02/dream7b_segment_0_2_seq16_q8.hbm", "dream_segment_00_02", "tokens"),
+    ("seg02_04", "fine", fine_hbm_dir / "seg02_04/dream7b_segment_2_4_seq16_q8.hbm", "dream_segment_02_04", "hidden"),
+    ("seg04_07", "base", base_hbm_dir / "dream7b_segment_4_7_seq16_q8.hbm", "dream_segment_04_07", "hidden"),
+    ("seg07_10", "fine", fine_hbm_dir / "seg07_10/dream7b_segment_7_10_seq16_q8.hbm", "dream_segment_07_10", "hidden"),
+    ("seg10_14", "fine", fine_hbm_dir / "seg10_14/dream7b_segment_10_14_seq16_q8.hbm", "dream_segment_10_14", "hidden"),
+    ("seg14_17", "fine", fine_hbm_dir / "seg14_17/dream7b_segment_14_17_seq16_q8.hbm", "dream_segment_14_17", "hidden"),
+    ("seg17_21", "fine", fine_hbm_dir / "seg17_21/dream7b_segment_17_21_seq16_q8.hbm", "dream_segment_17_21", "hidden"),
+    ("seg21_24", "base", base_hbm_dir / "dream7b_segment_21_24_seq16_q8.hbm", "dream_segment_21_24", "hidden"),
+    ("seg24_26", "fine", fine_hbm_dir / "seg24_26/dream7b_segment_24_26_seq16_q8.hbm", "dream_segment_24_26", "hidden"),
+    ("seg26_28", "fine", fine_hbm_dir / "seg26_28/dream7b_segment_26_28_seq16_q8.hbm", "dream_segment_26_28", "hidden"),
+]
+
+missing = [str(item[2]) for item in segments if not item[2].exists()]
+if missing:
+    raise SystemExit("missing HBM files: " + ", ".join(missing))
+
+topology_json_path = latest_topology_json()
+topology_report = json.loads(topology_json_path.read_text(encoding="utf-8"))
+selected_topology = [int(item) for item in (topology_report.get("selected_topology") or [])]
+if len(selected_topology) != 3:
+    raise SystemExit(f"selected_topology must contain exactly 3 segment indexes: {selected_topology}")
+if sorted(selected_topology) != selected_topology or any(index < 0 or index >= len(segments) for index in selected_topology):
+    raise SystemExit(f"invalid selected_topology: {selected_topology}")
+
+tokens_batch = []
+for batch_index in range(batch_count):
+    base = (batch_index + 1) * 100
+    tokens_batch.append([base + offset for offset in range(1, seq_len + 1)])
+tokens_batch_np = np.asarray(tokens_batch, dtype=np.int32)
+tokens_batch_json = run_dir / "tokens_batch.json"
+tokens_batch_json.write_text(json.dumps(tokens_batch, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
+
+
+def first_scale(runtime, model_name, output_name):
+    quant = runtime.output_quants[model_name][output_name]
+    scale = np.asarray(quant.scale).reshape(-1)
+    if scale.size == 0:
+        return 1.0
+    return float(scale[0])
+
+
+def run_loaded_segment(runtime, model_file, model_name, input_array):
+    inputs = {"_input_0": input_array, "_input_1": position_ids}
+    t0 = time.perf_counter()
+    output = runtime.run(inputs, model_name=model_name)
+    t1 = time.perf_counter()
+    output_name = runtime.output_names[model_name][0]
+    arr = output[model_name][output_name]
+    scale = first_scale(runtime, model_name, output_name)
+    dequantized = arr.astype(np.float32) * scale
+    result = {
+        "model_name": model_name,
+        "model_file": str(model_file),
+        "output_name": output_name,
+        "output_shape": list(arr.shape),
+        "output_dtype": str(arr.dtype),
+        "output_scale": scale,
+        "run_ms": round((t1 - t0) * 1000, 3),
+    }
+    del output, arr
+    return dequantized, result
+
+
+def selected_worker_main(conn, worker_payload):
+    segment_index = worker_payload["segment_index"]
+    segment_id = worker_payload["segment"]
+    model_file = worker_payload["model_file"]
+    model_name = worker_payload["model_name"]
+    try:
+        load_start = time.perf_counter()
+        runtime = HB_HBMRuntime(str(model_file))
+        load_end = time.perf_counter()
+        conn.send(
+            {
+                "segment_index": segment_index,
+                "segment": segment_id,
+                "status": "ready",
+                "resident_load_ms": round((load_end - load_start) * 1000, 3),
+                "runtime_version": HB_HBMRuntime.version,
+            }
+        )
+        while True:
+            message = conn.recv()
+            if message.get("cmd") == "stop":
+                break
+            if message.get("cmd") != "run":
+                raise ValueError(f"unsupported worker command: {message}")
+            output, result = run_loaded_segment(runtime, model_file, model_name, message["input"])
+            result.update(
+                {
+                    "segment_index": segment_index,
+                    "segment": segment_id,
+                    "batch_index": message["batch_index"],
+                    "load_ms": 0.0,
+                    "resident_worker": True,
+                }
+            )
+            conn.send({"ok": True, "output": output, "result": result})
+        del runtime
+        gc.collect()
+    except Exception as exc:
+        conn.send(
+            {
+                "segment_index": segment_index,
+                "segment": segment_id,
+                "status": "failed",
+                "exception_type": type(exc).__name__,
+                "exception": str(exc),
+            }
+        )
+
+
+def start_selected_workers():
+    workers = {}
+    ready_records = []
+    for segment_index in selected_topology:
+        segment_id, source, model_file, model_name, input_kind = segments[segment_index]
+        parent_conn, child_conn = Pipe()
+        payload = {
+            "segment_index": segment_index,
+            "segment": segment_id,
+            "source": source,
+            "model_file": str(model_file),
+            "model_name": model_name,
+            "input_kind": input_kind,
+        }
+        proc = Process(target=selected_worker_main, args=(child_conn, payload))
+        proc.start()
+        ready = parent_conn.recv()
+        ready_records.append(ready)
+        if ready.get("status") != "ready":
+            raise RuntimeError(f"selected worker failed: {ready}")
+        workers[segment_index] = {
+            "process": proc,
+            "conn": parent_conn,
+            "ready": ready,
+            "payload": payload,
+        }
+    return workers, ready_records
+
+
+def stop_selected_workers(workers):
+    for worker in workers.values():
+        try:
+            worker["conn"].send({"cmd": "stop"})
+        except Exception:
+            pass
+    for worker in workers.values():
+        proc = worker["process"]
+        proc.join(timeout=15)
+        if proc.is_alive():
+            proc.kill()
+            proc.join(timeout=15)
+
+
+def run_selected_triplet_forward():
+    workers, ready_records = start_selected_workers()
+    segment_results = []
+    selected_resident_load_ms = round(sum(float(item.get("resident_load_ms", 0.0)) for item in ready_records), 3)
+    forward_load_ms = 0.0
+    forward_run_ms = 0.0
+    started = time.perf_counter()
+    batch_outputs = [tokens_batch_np[index].reshape(1, seq_len).copy() for index in range(batch_count)]
+    try:
+        for segment_index, (segment_id, source, model_file, model_name, input_kind) in enumerate(segments):
+            if segment_index in workers:
+                worker = workers[segment_index]
+                for batch_index, current_input in enumerate(batch_outputs):
+                    worker["conn"].send({"cmd": "run", "batch_index": batch_index, "input": current_input})
+                    response = worker["conn"].recv()
+                    if not response.get("ok"):
+                        raise RuntimeError(f"selected worker run failed: {response}")
+                    batch_outputs[batch_index] = response["output"]
+                    result = response["result"]
+                    forward_run_ms += float(result.get("run_ms", 0.0))
+                    segment_results.append(result)
+                continue
+
+            load_start = time.perf_counter()
+            runtime = HB_HBMRuntime(str(model_file))
+            load_end = time.perf_counter()
+            load_ms = round((load_end - load_start) * 1000, 3)
+            forward_load_ms += load_ms
+            try:
+                for batch_index, current_input in enumerate(batch_outputs):
+                    output, result = run_loaded_segment(runtime, model_file, model_name, current_input)
+                    result.update(
+                        {
+                            "segment_index": segment_index,
+                            "segment": segment_id,
+                            "batch_index": batch_index,
+                            "load_ms": load_ms if batch_index == 0 else 0.0,
+                            "resident_worker": False,
+                        }
+                    )
+                    forward_run_ms += float(result.get("run_ms", 0.0))
+                    batch_outputs[batch_index] = output
+                    segment_results.append(result)
+            finally:
+                del runtime
+                gc.collect()
+    finally:
+        stop_selected_workers(workers)
+    wall_ms = round((time.perf_counter() - started) * 1000, 3)
+    final_shapes = [list(item.shape) for item in batch_outputs]
+    for batch_index, shape in enumerate(final_shapes):
+        if shape != [1, seq_len, vocab_size]:
+            raise ValueError(f"Expected final logits shape {[1, seq_len, vocab_size]} for batch {batch_index}, got {shape}")
+    topk_last_position_by_batch = []
+    if top_k > 0:
+        for batch_index, logits in enumerate(batch_outputs):
+            last = logits[0, -1].astype(np.float32, copy=False)
+            k = min(top_k, int(last.shape[0]))
+            indices = np.argpartition(last, -k)[-k:]
+            indices = indices[np.argsort(last[indices])[::-1]]
+            topk_last_position_by_batch.append(
+                {
+                    "batch_index": batch_index,
+                    "topk_last_position": [{"token_id": int(idx), "score": float(last[idx])} for idx in indices],
+                }
+            )
+    selected_total_load_ms = round(selected_resident_load_ms + forward_load_ms, 3)
+    warm_load_ms_per_forward = round(forward_load_ms / batch_count, 3)
+    return {
+        "verdict": "ok_selected_triplet_forward",
+        "batch_count": batch_count,
+        "segment_plan": "fine-adjacent",
+        "selected_topology": selected_topology,
+        "selected_segments": [segments[index][0] for index in selected_topology],
+        "selected_worker_count": len(workers),
+        "selected_worker_ready_records": ready_records,
+        "selected_resident_load_ms": selected_resident_load_ms,
+        "forward_load_ms": round(forward_load_ms, 3),
+        "selected_total_load_ms": selected_total_load_ms,
+        "run_ms": round(forward_run_ms, 3),
+        "wall_ms": wall_ms,
+        "load_share_including_resident_load": round(selected_total_load_ms / max(wall_ms, 0.001), 6),
+        "warm_load_share_excluding_resident_load": round(forward_load_ms / max(wall_ms, 0.001), 6),
+        "amortized_total_load_ms_per_forward": round(selected_total_load_ms / batch_count, 3),
+        "amortized_warm_load_ms_per_forward": warm_load_ms_per_forward,
+        "amortized_run_ms_per_forward": round(forward_run_ms / batch_count, 3),
+        "amortized_wall_ms_per_forward": round(wall_ms / batch_count, 3),
+        "final_shapes": final_shapes,
+        "final_shape": final_shapes[0],
+        "top_k": top_k,
+        "topk_last_position_by_batch": topk_last_position_by_batch,
+        "segments": segment_results,
+    }
+
+
+def run_baseline_forward():
+    baseline_dir = run_dir / "baseline_pair_window_forward"
+    baseline_dir.mkdir(parents=True, exist_ok=True)
+    stdout_path = run_dir / "baseline.forward.stdout"
+    stderr_path = run_dir / "baseline.forward.stderr"
+    cmd = [
+        forward_cmd,
+        "--tokens-batch-json",
+        str(tokens_batch_json),
+        "--top-k",
+        str(top_k),
+        "--output-dir",
+        str(baseline_dir),
+    ]
+    started = time.monotonic()
+    proc = subprocess.run(cmd, text=True, capture_output=True, timeout=timeout_sec)
+    wall_ms = round((time.monotonic() - started) * 1000, 3)
+    stdout_path.write_text(proc.stdout, encoding="utf-8")
+    stderr_path.write_text(proc.stderr, encoding="utf-8")
+    summary_path = baseline_dir / "summary.json"
+    summary = {}
+    if summary_path.is_file():
+        summary = json.loads(summary_path.read_text(encoding="utf-8"))
+    return {
+        "command": cmd,
+        "returncode": proc.returncode,
+        "wall_ms_from_subprocess": wall_ms,
+        "stdout": str(stdout_path),
+        "stderr": str(stderr_path),
+        "summary_json": str(summary_path) if summary_path.is_file() else "",
+        "summary": summary,
+    }
+
+
+selected_started = time.monotonic()
+selected_summary = run_selected_triplet_forward()
+selected_elapsed_ms = round((time.monotonic() - selected_started) * 1000, 3)
+selected_summary["subprocess_wall_ms"] = selected_elapsed_ms
+selected_summary_path = run_dir / "selected_triplet_forward_summary.json"
+selected_summary_path.write_text(json.dumps(selected_summary, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
+
+baseline = run_baseline_forward()
+baseline_summary = baseline.get("summary") or {}
+baseline_load_ms = float(baseline_summary.get("load_ms") or 0.0)
+baseline_run_ms = float(baseline_summary.get("run_ms") or 0.0)
+baseline_wall_ms = float(baseline_summary.get("wall_ms") or baseline.get("wall_ms_from_subprocess") or 0.0)
+selected_warm_load_ms = float(selected_summary.get("forward_load_ms") or 0.0)
+selected_total_load_ms = float(selected_summary.get("selected_total_load_ms") or 0.0)
+
+errors = []
+if selected_summary.get("verdict") != "ok_selected_triplet_forward":
+    errors.append(f"unexpected selected verdict: {selected_summary.get('verdict')}")
+if baseline.get("returncode") != 0:
+    errors.append(f"baseline forward returned {baseline.get('returncode')}")
+if baseline_summary.get("verdict") != "ok_dream7b_segmented_hbm_python_forward":
+    errors.append(f"unexpected baseline verdict: {baseline_summary.get('verdict')}")
+if baseline_summary.get("batch_count") != batch_count:
+    errors.append(f"unexpected baseline batch_count: {baseline_summary.get('batch_count')}")
+if selected_summary.get("final_shapes") != [[1, seq_len, vocab_size] for _ in range(batch_count)]:
+    errors.append(f"unexpected selected final_shapes: {selected_summary.get('final_shapes')}")
+
+warm_load_ms_delta = round(baseline_load_ms - selected_warm_load_ms, 3)
+total_load_ms_delta = round(baseline_load_ms - selected_total_load_ms, 3)
+warm_load_ms_delta_ratio = round(warm_load_ms_delta / baseline_load_ms, 6) if baseline_load_ms else 0.0
+total_load_ms_delta_ratio = round(total_load_ms_delta / baseline_load_ms, 6) if baseline_load_ms else 0.0
+
+if warm_load_ms_delta <= 0:
+    errors.append(f"selected warm forward_load_ms did not improve baseline load_ms: baseline={baseline_load_ms}, selected_warm={selected_warm_load_ms}")
+
+payload = {
+    "generated_at": datetime.now().astimezone().isoformat(),
+    "verdict": "ok_dream7b_bpu_selected_triplet_forward_path_probe" if not errors else "failed_dream7b_bpu_selected_triplet_forward_path_probe",
+    "run_dir": str(run_dir),
+    "topology_json": str(topology_json_path),
+    "forward_cmd": forward_cmd,
+    "base_hbm_dir": str(base_hbm_dir),
+    "fine_hbm_dir": str(fine_hbm_dir),
+    "batch_count": batch_count,
+    "top_k": top_k,
+    "timeout_sec": timeout_sec,
+    "tokens_batch_json": str(tokens_batch_json),
+    "selected_summary_json": str(selected_summary_path),
+    "selected": {
+        "selected_topology": selected_summary.get("selected_topology"),
+        "selected_segments": selected_summary.get("selected_segments"),
+        "selected_worker_count": selected_summary.get("selected_worker_count"),
+        "selected_resident_load_ms": selected_summary.get("selected_resident_load_ms"),
+        "forward_load_ms": selected_summary.get("forward_load_ms"),
+        "selected_total_load_ms": selected_summary.get("selected_total_load_ms"),
+        "run_ms": selected_summary.get("run_ms"),
+        "wall_ms": selected_summary.get("wall_ms"),
+        "load_share_including_resident_load": selected_summary.get("load_share_including_resident_load"),
+        "warm_load_share_excluding_resident_load": selected_summary.get("warm_load_share_excluding_resident_load"),
+        "amortized_total_load_ms_per_forward": selected_summary.get("amortized_total_load_ms_per_forward"),
+        "amortized_warm_load_ms_per_forward": selected_summary.get("amortized_warm_load_ms_per_forward"),
+        "amortized_run_ms_per_forward": selected_summary.get("amortized_run_ms_per_forward"),
+        "amortized_wall_ms_per_forward": selected_summary.get("amortized_wall_ms_per_forward"),
+        "final_shapes": selected_summary.get("final_shapes"),
+    },
+    "baseline": {
+        "summary_json": baseline.get("summary_json"),
+        "returncode": baseline.get("returncode"),
+        "verdict": baseline_summary.get("verdict"),
+        "batch_count": baseline_summary.get("batch_count"),
+        "execution_mode": baseline_summary.get("execution_mode"),
+        "residency_window_size": baseline_summary.get("residency_window_size"),
+        "window_execution_mode": baseline_summary.get("window_execution_mode"),
+        "load_ms": round(baseline_load_ms, 3),
+        "run_ms": round(baseline_run_ms, 3),
+        "wall_ms": round(baseline_wall_ms, 3),
+        "load_share": round(baseline_load_ms / max(baseline_wall_ms, 0.001), 6),
+        "amortized_load_ms_per_forward": baseline_summary.get("amortized_load_ms_per_forward"),
+        "amortized_run_ms_per_forward": baseline_summary.get("amortized_run_ms_per_forward"),
+        "amortized_wall_ms_per_forward": baseline_summary.get("amortized_wall_ms_per_forward"),
+    },
+    "comparison": {
+        "warm_load_ms_delta_vs_baseline": warm_load_ms_delta,
+        "warm_load_ms_delta_ratio_vs_baseline": warm_load_ms_delta_ratio,
+        "total_load_ms_delta_vs_baseline": total_load_ms_delta,
+        "total_load_ms_delta_ratio_vs_baseline": total_load_ms_delta_ratio,
+        "warm_path_load_improved": warm_load_ms_delta > 0,
+        "total_path_load_improved": total_load_ms_delta > 0,
+    },
+    "next_optimization_target": "turn the selected triplet worker into a reusable forward driver only if the warm-path load improvement survives batch16 and telemetry probes",
+    "errors": errors,
+}
+(run_dir / "selected_triplet_forward_path_probe.json").write_text(json.dumps(payload, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
+
+lines = [
+    "# Dream 7B BPU Selected Triplet Forward Path Probe",
+    "",
+    f"- generated_at: {payload['generated_at']}",
+    f"- verdict: {payload['verdict']}",
+    f"- selected_topology: {payload['selected']['selected_topology']}",
+    f"- selected_segments: {payload['selected']['selected_segments']}",
+    f"- batch_count: {payload['batch_count']}",
+    f"- selected.forward_load_ms: {payload['selected']['forward_load_ms']}",
+    f"- selected.selected_total_load_ms: {payload['selected']['selected_total_load_ms']}",
+    f"- baseline.load_ms: {payload['baseline']['load_ms']}",
+    f"- comparison.warm_load_ms_delta_vs_baseline: {payload['comparison']['warm_load_ms_delta_vs_baseline']}",
+    f"- comparison.warm_load_ms_delta_ratio_vs_baseline: {payload['comparison']['warm_load_ms_delta_ratio_vs_baseline']}",
+    f"- comparison.total_load_ms_delta_vs_baseline: {payload['comparison']['total_load_ms_delta_vs_baseline']}",
+    f"- next_optimization_target: {payload['next_optimization_target']}",
+    "",
+    "## Errors",
+    "",
+]
+lines.extend(f"- {item}" for item in errors) if errors else lines.append("- none")
+lines.extend(
+    [
+        "",
+        "## Boundary",
+        "",
+        "- This probe runs a complete fine-adjacent forward path with the selected triplet held as resident workers.",
+        "- It is an experiment path and does not change the production `dream7b-bpu-fine-batch-forward` default.",
+    ]
+)
+(run_dir / "selected_triplet_forward_path_probe.md").write_text("\n".join(lines) + "\n", encoding="utf-8")
+print(run_dir / "selected_triplet_forward_path_probe.md")
+PY

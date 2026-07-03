@@ -1,0 +1,1063 @@
+{
+  "schema_version": "dream7b_s100p_v10_840_isolated_final_segment_remediation",
+  "created_at_utc": "2026-07-01T13:25:08.422531+00:00",
+  "run_commands": [
+    "C:\\Users\\zhexu\\AppData\\Local\\Python\\pythoncore-3.14-64\\python.exe tools\\build_v10_research_thread.py --root ."
+  ],
+  "git": {
+    "cwd": "F:\\Project\\Digua",
+    "status": "unavailable_empty_or_incomplete_git_dir",
+    "git_dir_exists": true,
+    "git_head_exists": false
+  },
+  "input_artifacts": [
+    {
+      "path": "evidence/final_segment_endpoint_raw_v9",
+      "exists": true
+    },
+    {
+      "path": "evidence/hf_exact_final_segment_v9",
+      "exists": true
+    }
+  ],
+  "output_artifacts": [
+    {
+      "path": "reports/840_isolated_final_segment_remediation.json"
+    },
+    {
+      "path": "reports/840_isolated_final_segment_remediation.md"
+    }
+  ],
+  "blocking_or_failure_reasons": [],
+  "next_minimal_experiments": [],
+  "remediation_scope": "offline isolated calibration analysis only; no recompile and no product route interaction",
+  "methods": [
+    "existing input scale/clip variant selection from v9/v5 endpoint sweep",
+    "per-row affine output calibration candidate = a * official_dequant + b"
+  ],
+  "rows": [
+    {
+      "case_id": "zeros",
+      "variant_id": "real_x",
+      "base_relative_l2": 0.9999999999999994,
+      "base_pearson_centered": 0.0,
+      "base_top1_agreement": false,
+      "base_allzero": true,
+      "affine_params": {
+        "scale": 0.0,
+        "bias": 3.8705091194378256
+      },
+      "affine_relative_l2": 0.3229984490125226,
+      "affine_pearson_centered": 0.0,
+      "affine_top1_agreement": false,
+      "affine_output": {
+        "path": "evidence/final_segment_remediation_v10/affine_output_calibration/zeros/real_x/affine_calibrated_logits.npy",
+        "exists": true,
+        "size_bytes": 608384,
+        "sha256": "8ef85ceef079917d3564215f4f1407b1225671680d63dc0609bb9ab8749b1189"
+      }
+    },
+    {
+      "case_id": "zeros",
+      "variant_id": "real_x_div_2",
+      "base_relative_l2": 0.9999999999999987,
+      "base_pearson_centered": 0.0,
+      "base_top1_agreement": false,
+      "base_allzero": true,
+      "affine_params": {
+        "scale": 0.0,
+        "bias": 1.708228982900354
+      },
+      "affine_relative_l2": 0.524763599159093,
+      "affine_pearson_centered": 0.0,
+      "affine_top1_agreement": false,
+      "affine_output": {
+        "path": "evidence/final_segment_remediation_v10/affine_output_calibration/zeros/real_x_div_2/affine_calibrated_logits.npy",
+        "exists": true,
+        "size_bytes": 608384,
+        "sha256": "3a7c893a0634e0919b1a2b4665719eb1f1f2e8101f591fdcb760750cdbc4bd73"
+      }
+    },
+    {
+      "case_id": "zeros",
+      "variant_id": "real_x_div_2p25",
+      "base_relative_l2": 0.9999999999999984,
+      "base_pearson_centered": 0.0,
+      "base_top1_agreement": false,
+      "base_allzero": true,
+      "affine_params": {
+        "scale": 0.0,
+        "bias": 1.2708256650164955
+      },
+      "affine_relative_l2": 0.6329696493164925,
+      "affine_pearson_centered": 0.0,
+      "affine_top1_agreement": false,
+      "affine_output": {
+        "path": "evidence/final_segment_remediation_v10/affine_output_calibration/zeros/real_x_div_2p25/affine_calibrated_logits.npy",
+        "exists": true,
+        "size_bytes": 608384,
+        "sha256": "204639393aedf8e02d1cd749d9542b1af669982b2586cf97b6ee120a6906eed3"
+      }
+    },
+    {
+      "case_id": "zeros",
+      "variant_id": "real_x_div_2p5",
+      "base_relative_l2": 0.9999999999999977,
+      "base_pearson_centered": 0.0,
+      "base_top1_agreement": false,
+      "base_allzero": true,
+      "affine_params": {
+        "scale": 0.0,
+        "bias": 0.515304868595568
+      },
+      "affine_relative_l2": 0.8944477376346316,
+      "affine_pearson_centered": 0.0,
+      "affine_top1_agreement": false,
+      "affine_output": {
+        "path": "evidence/final_segment_remediation_v10/affine_output_calibration/zeros/real_x_div_2p5/affine_calibrated_logits.npy",
+        "exists": true,
+        "size_bytes": 608384,
+        "sha256": "7d6022b4dd6977184785a3ada110c9a0d83971078dd9f54381d1f0042e71f960"
+      }
+    },
+    {
+      "case_id": "zeros",
+      "variant_id": "real_x_div_2p75",
+      "base_relative_l2": 3.5805985857288536,
+      "base_pearson_centered": 0.5213634692568099,
+      "base_top1_agreement": false,
+      "base_allzero": false,
+      "affine_params": {
+        "scale": 0.44961833780002103,
+        "bias": -1.6777479062353382
+      },
+      "affine_relative_l2": 0.8493961184094437,
+      "affine_pearson_centered": 0.5213634692131982,
+      "affine_top1_agreement": false,
+      "affine_output": {
+        "path": "evidence/final_segment_remediation_v10/affine_output_calibration/zeros/real_x_div_2p75/affine_calibrated_logits.npy",
+        "exists": true,
+        "size_bytes": 608384,
+        "sha256": "877568835eb9bc7a9e77ec0e3925b040fa8d7bb1e42e08da524f564b4697da08"
+      }
+    },
+    {
+      "case_id": "zeros",
+      "variant_id": "real_x_div_3",
+      "base_relative_l2": 3.173913098472892,
+      "base_pearson_centered": 0.42188465589681157,
+      "base_top1_agreement": false,
+      "base_allzero": false,
+      "affine_params": {
+        "scale": 0.4135239237815493,
+        "bias": -1.8521660298356344
+      },
+      "affine_relative_l2": 0.8079232239819818,
+      "affine_pearson_centered": 0.4218846558111807,
+      "affine_top1_agreement": false,
+      "affine_output": {
+        "path": "evidence/final_segment_remediation_v10/affine_output_calibration/zeros/real_x_div_3/affine_calibrated_logits.npy",
+        "exists": true,
+        "size_bytes": 608384,
+        "sha256": "1aefbe909a1a561b6e601b91b05dd323753b647bbc0d7bf9813384a0c60042d0"
+      }
+    },
+    {
+      "case_id": "zeros",
+      "variant_id": "real_x_div_3p25",
+      "base_relative_l2": 2.5967943664660846,
+      "base_pearson_centered": 0.31750337675124524,
+      "base_top1_agreement": false,
+      "base_allzero": false,
+      "affine_params": {
+        "scale": 0.35187009475575987,
+        "bias": -2.1227285133230804
+      },
+      "affine_relative_l2": 0.6713944744137693,
+      "affine_pearson_centered": 0.3175033762902143,
+      "affine_top1_agreement": false,
+      "affine_output": {
+        "path": "evidence/final_segment_remediation_v10/affine_output_calibration/zeros/real_x_div_3p25/affine_calibrated_logits.npy",
+        "exists": true,
+        "size_bytes": 608384,
+        "sha256": "4426123e2d5046e65ce6357bd8a725b226e0dc648d9800a15b812f2e80ab44f5"
+      }
+    },
+    {
+      "case_id": "zeros",
+      "variant_id": "real_x_div_3p5",
+      "base_relative_l2": 2.2057469149340454,
+      "base_pearson_centered": 0.23498643631602295,
+      "base_top1_agreement": false,
+      "base_allzero": false,
+      "affine_params": {
+        "scale": 0.29196027697270005,
+        "bias": -2.33330724979901
+      },
+      "affine_relative_l2": 0.5786710173273377,
+      "affine_pearson_centered": 0.23498643596086646,
+      "affine_top1_agreement": false,
+      "affine_output": {
+        "path": "evidence/final_segment_remediation_v10/affine_output_calibration/zeros/real_x_div_3p5/affine_calibrated_logits.npy",
+        "exists": true,
+        "size_bytes": 608384,
+        "sha256": "21858b73a05cc0817f62ba91db2c746185ba258c0550e4521c42c30a8220e67f"
+      }
+    },
+    {
+      "case_id": "zeros",
+      "variant_id": "real_x_div_4",
+      "base_relative_l2": 1.7788151977734474,
+      "base_pearson_centered": 0.1042944632175907,
+      "base_top1_agreement": false,
+      "base_allzero": false,
+      "affine_params": {
+        "scale": 0.16003649630434202,
+        "bias": -2.6123623457801406
+      },
+      "affine_relative_l2": 0.4838907131994274,
+      "affine_pearson_centered": 0.1042944580003626,
+      "affine_top1_agreement": false,
+      "affine_output": {
+        "path": "evidence/final_segment_remediation_v10/affine_output_calibration/zeros/real_x_div_4/affine_calibrated_logits.npy",
+        "exists": true,
+        "size_bytes": 608384,
+        "sha256": "7459d95efa793f5a331783c4e6f1adf7681b42517c4676b60ef25d8717bc9762"
+      }
+    },
+    {
+      "case_id": "zeros",
+      "variant_id": "real_x_clip_8",
+      "base_relative_l2": 0.9999999999999988,
+      "base_pearson_centered": 0.0,
+      "base_top1_agreement": false,
+      "base_allzero": true,
+      "affine_params": {
+        "scale": 0.0,
+        "bias": 1.7988132259562324
+      },
+      "affine_relative_l2": 0.511104362074439,
+      "affine_pearson_centered": 0.0,
+      "affine_top1_agreement": false,
+      "affine_output": {
+        "path": "evidence/final_segment_remediation_v10/affine_output_calibration/zeros/real_x_clip_8/affine_calibrated_logits.npy",
+        "exists": true,
+        "size_bytes": 608384,
+        "sha256": "6ba8ffbe8002b983250112f7fc70430aa583240ed6a2d4d9d105575a6f000c3f"
+      }
+    },
+    {
+      "case_id": "zeros",
+      "variant_id": "real_x_clip_6",
+      "base_relative_l2": 3.521752430294529,
+      "base_pearson_centered": 0.5451318535853029,
+      "base_top1_agreement": false,
+      "base_allzero": false,
+      "affine_params": {
+        "scale": 0.4514533836120138,
+        "bias": -1.5611027958130272
+      },
+      "affine_relative_l2": 0.8379056417329458,
+      "affine_pearson_centered": 0.545131853861825,
+      "affine_top1_agreement": false,
+      "affine_output": {
+        "path": "evidence/final_segment_remediation_v10/affine_output_calibration/zeros/real_x_clip_6/affine_calibrated_logits.npy",
+        "exists": true,
+        "size_bytes": 608384,
+        "sha256": "c187d24b40e835825a44db48f44009dc525a772a36cfd87d05d5716c01d6f26e"
+      }
+    },
+    {
+      "case_id": "zeros",
+      "variant_id": "real_x_clip_5",
+      "base_relative_l2": 2.6222386509587206,
+      "base_pearson_centered": 0.3208704415809313,
+      "base_top1_agreement": false,
+      "base_allzero": false,
+      "affine_params": {
+        "scale": 0.3464273451781298,
+        "bias": -2.022874034678374
+      },
+      "affine_relative_l2": 0.6884371652180971,
+      "affine_pearson_centered": 0.3208704417607397,
+      "affine_top1_agreement": false,
+      "affine_output": {
+        "path": "evidence/final_segment_remediation_v10/affine_output_calibration/zeros/real_x_clip_5/affine_calibrated_logits.npy",
+        "exists": true,
+        "size_bytes": 608384,
+        "sha256": "167caa9740ffa282e2d928d5f5cee2c933c9355462468b574e809b82a7f2b578"
+      }
+    },
+    {
+      "case_id": "zeros",
+      "variant_id": "real_x_clip_4",
+      "base_relative_l2": 1.7598180133173602,
+      "base_pearson_centered": 0.07741721108205372,
+      "base_top1_agreement": false,
+      "base_allzero": false,
+      "affine_params": {
+        "scale": 0.11897516326679825,
+        "bias": -2.447606737179289
+      },
+      "affine_relative_l2": 0.49650340575614815,
+      "affine_pearson_centered": 0.07741721502436168,
+      "affine_top1_agreement": false,
+      "affine_output": {
+        "path": "evidence/final_segment_remediation_v10/affine_output_calibration/zeros/real_x_clip_4/affine_calibrated_logits.npy",
+        "exists": true,
+        "size_bytes": 608384,
+        "sha256": "c639e94753ae8e801abe0d45835f610372adc53ea56caeacbc65b1ede6366e67"
+      }
+    },
+    {
+      "case_id": "zeros",
+      "variant_id": "real_x_z_normalized",
+      "base_relative_l2": 0.9790667984629177,
+      "base_pearson_centered": -0.2849240964627543,
+      "base_top1_agreement": false,
+      "base_allzero": false,
+      "affine_params": {
+        "scale": -1.0438744721502977,
+        "bias": -2.5767493624826785
+      },
+      "affine_relative_l2": 0.48369515251931433,
+      "affine_pearson_centered": 0.2849240944448383,
+      "affine_top1_agreement": false,
+      "affine_output": {
+        "path": "evidence/final_segment_remediation_v10/affine_output_calibration/zeros/real_x_z_normalized/affine_calibrated_logits.npy",
+        "exists": true,
+        "size_bytes": 608384,
+        "sha256": "0a4a0a6ae0baa8bd670b595c27cc2b8bb7862c3c6849f576a68ecd5867c89cbe"
+      }
+    },
+    {
+      "case_id": "ramp",
+      "variant_id": "real_x",
+      "base_relative_l2": 0.9999999999999981,
+      "base_pearson_centered": 0.0,
+      "base_top1_agreement": false,
+      "base_allzero": true,
+      "affine_params": {
+        "scale": 0.0,
+        "bias": 0.8850488653923902
+      },
+      "affine_relative_l2": 0.7632560483702115,
+      "affine_pearson_centered": 0.0,
+      "affine_top1_agreement": false,
+      "affine_output": {
+        "path": "evidence/final_segment_remediation_v10/affine_output_calibration/ramp/real_x/affine_calibrated_logits.npy",
+        "exists": true,
+        "size_bytes": 608384,
+        "sha256": "27c720a28b1dcebadfed069ee8363f55a2f84585cf325e145192cd799218a30e"
+      }
+    },
+    {
+      "case_id": "ramp",
+      "variant_id": "real_x_div_2",
+      "base_relative_l2": 0.9999999999999986,
+      "base_pearson_centered": 0.0,
+      "base_top1_agreement": false,
+      "base_allzero": true,
+      "affine_params": {
+        "scale": 0.0,
+        "bias": 1.465521887358692
+      },
+      "affine_relative_l2": 0.5613604578753673,
+      "affine_pearson_centered": 0.0,
+      "affine_top1_agreement": false,
+      "affine_output": {
+        "path": "evidence/final_segment_remediation_v10/affine_output_calibration/ramp/real_x_div_2/affine_calibrated_logits.npy",
+        "exists": true,
+        "size_bytes": 608384,
+        "sha256": "2f7d595b11420a4cdc882ba0a4465ca7c39ff871d586d04b7dfe5935176a253e"
+      }
+    },
+    {
+      "case_id": "ramp",
+      "variant_id": "real_x_div_2p25",
+      "base_relative_l2": 0.9999999999999986,
+      "base_pearson_centered": 0.0,
+      "base_top1_agreement": false,
+      "base_allzero": true,
+      "affine_params": {
+        "scale": 0.0,
+        "bias": 1.564364699544918
+      },
+      "affine_relative_l2": 0.533509947271709,
+      "affine_pearson_centered": 0.0,
+      "affine_top1_agreement": false,
+      "affine_output": {
+        "path": "evidence/final_segment_remediation_v10/affine_output_calibration/ramp/real_x_div_2p25/affine_calibrated_logits.npy",
+        "exists": true,
+        "size_bytes": 608384,
+        "sha256": "9b80053833122d78e46af81df0543ed3158f47a2c7deb1aa3aab56bcac4d7b9a"
+      }
+    },
+    {
+      "case_id": "ramp",
+      "variant_id": "real_x_div_2p5",
+      "base_relative_l2": 0.9999999999999987,
+      "base_pearson_centered": 0.0,
+      "base_top1_agreement": false,
+      "base_allzero": true,
+      "affine_params": {
+        "scale": 0.0,
+        "bias": 1.7811378647921363
+      },
+      "affine_relative_l2": 0.4825209883221938,
+      "affine_pearson_centered": 0.0,
+      "affine_top1_agreement": false,
+      "affine_output": {
+        "path": "evidence/final_segment_remediation_v10/affine_output_calibration/ramp/real_x_div_2p5/affine_calibrated_logits.npy",
+        "exists": true,
+        "size_bytes": 608384,
+        "sha256": "f7446be4369ab7bc8d461d1bd1b42f885a862f40f61c78ddcdac46e5ba61a173"
+      }
+    },
+    {
+      "case_id": "ramp",
+      "variant_id": "real_x_div_2p75",
+      "base_relative_l2": 0.9203505361563868,
+      "base_pearson_centered": 0.7200181500193413,
+      "base_top1_agreement": false,
+      "base_allzero": false,
+      "affine_params": {
+        "scale": 0.7363210108053797,
+        "bias": 1.834288563143949
+      },
+      "affine_relative_l2": 0.32005182790147574,
+      "affine_pearson_centered": 0.7200181504485272,
+      "affine_top1_agreement": false,
+      "affine_output": {
+        "path": "evidence/final_segment_remediation_v10/affine_output_calibration/ramp/real_x_div_2p75/affine_calibrated_logits.npy",
+        "exists": true,
+        "size_bytes": 608384,
+        "sha256": "6af7b95925ca95de35561ed9a798aebae4416dcec833e612d8b292865b3af748"
+      }
+    },
+    {
+      "case_id": "ramp",
+      "variant_id": "real_x_div_3",
+      "base_relative_l2": 0.9695241961440892,
+      "base_pearson_centered": 0.6491860798858125,
+      "base_top1_agreement": false,
+      "base_allzero": false,
+      "affine_params": {
+        "scale": 0.7153858611303889,
+        "bias": 1.988371554517086
+      },
+      "affine_relative_l2": 0.33787066765464513,
+      "affine_pearson_centered": 0.6491860796763192,
+      "affine_top1_agreement": false,
+      "affine_output": {
+        "path": "evidence/final_segment_remediation_v10/affine_output_calibration/ramp/real_x_div_3/affine_calibrated_logits.npy",
+        "exists": true,
+        "size_bytes": 608384,
+        "sha256": "8c89093a0881fb1594d14d92d4b9983c41d807c1b43b0a842d7272c5755b5e49"
+      }
+    },
+    {
+      "case_id": "ramp",
+      "variant_id": "real_x_div_3p25",
+      "base_relative_l2": 1.01212952346109,
+      "base_pearson_centered": 0.5674906105312454,
+      "base_top1_agreement": false,
+      "base_allzero": false,
+      "affine_params": {
+        "scale": 0.6708217839966795,
+        "bias": 2.207736626397306
+      },
+      "affine_relative_l2": 0.3434554752893329,
+      "affine_pearson_centered": 0.567490611096114,
+      "affine_top1_agreement": false,
+      "affine_output": {
+        "path": "evidence/final_segment_remediation_v10/affine_output_calibration/ramp/real_x_div_3p25/affine_calibrated_logits.npy",
+        "exists": true,
+        "size_bytes": 608384,
+        "sha256": "e5461b6e54a6d30749462c987c163343d9360c937356851c32938440d865031b"
+      }
+    },
+    {
+      "case_id": "ramp",
+      "variant_id": "real_x_div_3p5",
+      "base_relative_l2": 1.041988011161049,
+      "base_pearson_centered": 0.49402870713059377,
+      "base_top1_agreement": false,
+      "base_allzero": false,
+      "affine_params": {
+        "scale": 0.6235228518600081,
+        "bias": 2.2739107639197607
+      },
+      "affine_relative_l2": 0.36023537996410926,
+      "affine_pearson_centered": 0.4940287073303414,
+      "affine_top1_agreement": false,
+      "affine_output": {
+        "path": "evidence/final_segment_remediation_v10/affine_output_calibration/ramp/real_x_div_3p5/affine_calibrated_logits.npy",
+        "exists": true,
+        "size_bytes": 608384,
+        "sha256": "2e07a4abcfed3aebd3c1151d2842e80b27b497b359743b8e8915fd3009e6dc73"
+      }
+    },
+    {
+      "case_id": "ramp",
+      "variant_id": "real_x_div_4",
+      "base_relative_l2": 1.0919951385275948,
+      "base_pearson_centered": 0.34643027624536327,
+      "base_top1_agreement": false,
+      "base_allzero": false,
+      "affine_params": {
+        "scale": 0.49203719202168505,
+        "bias": 2.334887024688045
+      },
+      "affine_relative_l2": 0.3904602438030592,
+      "affine_pearson_centered": 0.34643027699275436,
+      "affine_top1_agreement": false,
+      "affine_output": {
+        "path": "evidence/final_segment_remediation_v10/affine_output_calibration/ramp/real_x_div_4/affine_calibrated_logits.npy",
+        "exists": true,
+        "size_bytes": 608384,
+        "sha256": "8382d580ca021bca28eaf12d94ee6cd0987801a574c8d756ae53bb2160692982"
+      }
+    },
+    {
+      "case_id": "ramp",
+      "variant_id": "real_x_clip_8",
+      "base_relative_l2": 0.9999999999999988,
+      "base_pearson_centered": 0.0,
+      "base_top1_agreement": false,
+      "base_allzero": true,
+      "affine_params": {
+        "scale": 0.0,
+        "bias": 1.862169274832953
+      },
+      "affine_relative_l2": 0.46942667783453823,
+      "affine_pearson_centered": 0.0,
+      "affine_top1_agreement": false,
+      "affine_output": {
+        "path": "evidence/final_segment_remediation_v10/affine_output_calibration/ramp/real_x_clip_8/affine_calibrated_logits.npy",
+        "exists": true,
+        "size_bytes": 608384,
+        "sha256": "a938b7709d54bdc1eb88029dda1d80c078a48844a7c4c78acb63c4af9dceeaec"
+      }
+    },
+    {
+      "case_id": "ramp",
+      "variant_id": "real_x_clip_6",
+      "base_relative_l2": 0.9305712413790865,
+      "base_pearson_centered": 0.7365971455712896,
+      "base_top1_agreement": false,
+      "base_allzero": false,
+      "affine_params": {
+        "scale": 0.7433803533062627,
+        "bias": 1.8408097246669113
+      },
+      "affine_relative_l2": 0.31441250378894625,
+      "affine_pearson_centered": 0.7365971455518048,
+      "affine_top1_agreement": false,
+      "affine_output": {
+        "path": "evidence/final_segment_remediation_v10/affine_output_calibration/ramp/real_x_clip_6/affine_calibrated_logits.npy",
+        "exists": true,
+        "size_bytes": 608384,
+        "sha256": "b45fe685a397bcf8698c630ec13c08dfac8576e4f027edb2be9ff51e0fd705f7"
+      }
+    },
+    {
+      "case_id": "ramp",
+      "variant_id": "real_x_clip_5",
+      "base_relative_l2": 1.03428048150659,
+      "base_pearson_centered": 0.5666584041939365,
+      "base_top1_agreement": false,
+      "base_allzero": false,
+      "affine_params": {
+        "scale": 0.672716116960832,
+        "bias": 2.230804977318466
+      },
+      "affine_relative_l2": 0.3475363781478137,
+      "affine_pearson_centered": 0.5666584044800843,
+      "affine_top1_agreement": false,
+      "affine_output": {
+        "path": "evidence/final_segment_remediation_v10/affine_output_calibration/ramp/real_x_clip_5/affine_calibrated_logits.npy",
+        "exists": true,
+        "size_bytes": 608384,
+        "sha256": "b153804245db13af0ae141c17c8ec1c1f1ddc30d2f02d1a04a865ddda27b5ec0"
+      }
+    },
+    {
+      "case_id": "ramp",
+      "variant_id": "real_x_clip_4",
+      "base_relative_l2": 1.1203812624915133,
+      "base_pearson_centered": 0.31364476358879256,
+      "base_top1_agreement": false,
+      "base_allzero": false,
+      "affine_params": {
+        "scale": 0.45934077205652196,
+        "bias": 2.306301775111317
+      },
+      "affine_relative_l2": 0.4105094752472235,
+      "affine_pearson_centered": 0.3136447667841501,
+      "affine_top1_agreement": false,
+      "affine_output": {
+        "path": "evidence/final_segment_remediation_v10/affine_output_calibration/ramp/real_x_clip_4/affine_calibrated_logits.npy",
+        "exists": true,
+        "size_bytes": 608384,
+        "sha256": "2cb6cf5ba3834e5ca09ccc152e5bec11a762aec8e674c2ebbf6535a5b33a7ba0"
+      }
+    },
+    {
+      "case_id": "ramp",
+      "variant_id": "real_x_z_normalized",
+      "base_relative_l2": 0.8014574741712204,
+      "base_pearson_centered": -0.37110471323561095,
+      "base_top1_agreement": false,
+      "base_allzero": false,
+      "affine_params": {
+        "scale": -0.9475546742726503,
+        "bias": -2.603415134495438
+      },
+      "affine_relative_l2": 0.4778315680895043,
+      "affine_pearson_centered": 0.3711047150608868,
+      "affine_top1_agreement": false,
+      "affine_output": {
+        "path": "evidence/final_segment_remediation_v10/affine_output_calibration/ramp/real_x_z_normalized/affine_calibrated_logits.npy",
+        "exists": true,
+        "size_bytes": 608384,
+        "sha256": "df0d7f3df645c713f610ffaa8abee9296764a6a4ae7fba8663c90eff5033f19c"
+      }
+    },
+    {
+      "case_id": "short_chinese_prompt_padded",
+      "variant_id": "real_x",
+      "base_relative_l2": 0.9999999999999979,
+      "base_pearson_centered": 0.0,
+      "base_top1_agreement": false,
+      "base_allzero": true,
+      "affine_params": {
+        "scale": 0.0,
+        "bias": 0.7074333900924433
+      },
+      "affine_relative_l2": 0.8214588189966225,
+      "affine_pearson_centered": 0.0,
+      "affine_top1_agreement": false,
+      "affine_output": {
+        "path": "evidence/final_segment_remediation_v10/affine_output_calibration/short_chinese_prompt_padded/real_x/affine_calibrated_logits.npy",
+        "exists": true,
+        "size_bytes": 608384,
+        "sha256": "c19b56e49aff5ac2381a5c144b3823b0b42508158fa362b5ec3eba813b97a400"
+      }
+    },
+    {
+      "case_id": "short_chinese_prompt_padded",
+      "variant_id": "real_x_div_2",
+      "base_relative_l2": 0.9999999999999976,
+      "base_pearson_centered": 0.0,
+      "base_top1_agreement": false,
+      "base_allzero": true,
+      "affine_params": {
+        "scale": 0.0,
+        "bias": 0.41261497587326174
+      },
+      "affine_relative_l2": 0.922628605050416,
+      "affine_pearson_centered": 0.0,
+      "affine_top1_agreement": false,
+      "affine_output": {
+        "path": "evidence/final_segment_remediation_v10/affine_output_calibration/short_chinese_prompt_padded/real_x_div_2/affine_calibrated_logits.npy",
+        "exists": true,
+        "size_bytes": 608384,
+        "sha256": "6ed33d5383406c0d4a610d0b385f7666d8512370332ca1d4f083d9e18207ea1b"
+      }
+    },
+    {
+      "case_id": "short_chinese_prompt_padded",
+      "variant_id": "real_x_div_2p25",
+      "base_relative_l2": 0.9999999999999977,
+      "base_pearson_centered": 0.0,
+      "base_top1_agreement": false,
+      "base_allzero": true,
+      "affine_params": {
+        "scale": 0.0,
+        "bias": 0.509422936262751
+      },
+      "affine_relative_l2": 0.890644128551817,
+      "affine_pearson_centered": 0.0,
+      "affine_top1_agreement": false,
+      "affine_output": {
+        "path": "evidence/final_segment_remediation_v10/affine_output_calibration/short_chinese_prompt_padded/real_x_div_2p25/affine_calibrated_logits.npy",
+        "exists": true,
+        "size_bytes": 608384,
+        "sha256": "b4a5789dec22d7b1d395b05071644a89c2352903313355d8880b49aeb912559e"
+      }
+    },
+    {
+      "case_id": "short_chinese_prompt_padded",
+      "variant_id": "real_x_div_2p5",
+      "base_relative_l2": 0.9999999999999977,
+      "base_pearson_centered": 0.0,
+      "base_top1_agreement": false,
+      "base_allzero": true,
+      "affine_params": {
+        "scale": 0.0,
+        "bias": 0.5176208137623928
+      },
+      "affine_relative_l2": 0.890766808518094,
+      "affine_pearson_centered": 0.0,
+      "affine_top1_agreement": false,
+      "affine_output": {
+        "path": "evidence/final_segment_remediation_v10/affine_output_calibration/short_chinese_prompt_padded/real_x_div_2p5/affine_calibrated_logits.npy",
+        "exists": true,
+        "size_bytes": 608384,
+        "sha256": "32a70a0660e794300c4a7c1495f5f41c9b79794f5e9b2d05832bb4b52c6a833b"
+      }
+    },
+    {
+      "case_id": "short_chinese_prompt_padded",
+      "variant_id": "real_x_div_2p75",
+      "base_relative_l2": 0.7497096245901889,
+      "base_pearson_centered": 0.6223782728466775,
+      "base_top1_agreement": false,
+      "base_allzero": false,
+      "affine_params": {
+        "scale": 0.6919847139947054,
+        "bias": 0.332343104432543
+      },
+      "affine_relative_l2": 0.6841878934656624,
+      "affine_pearson_centered": 0.6223782728510767,
+      "affine_top1_agreement": false,
+      "affine_output": {
+        "path": "evidence/final_segment_remediation_v10/affine_output_calibration/short_chinese_prompt_padded/real_x_div_2p75/affine_calibrated_logits.npy",
+        "exists": true,
+        "size_bytes": 608384,
+        "sha256": "7eec4fee196bcfdc913f0a883e5b782314bdb767c513bba2a7b19e4784e94e60"
+      }
+    },
+    {
+      "case_id": "short_chinese_prompt_padded",
+      "variant_id": "real_x_div_3",
+      "base_relative_l2": 0.8205160818135728,
+      "base_pearson_centered": 0.5399818271691642,
+      "base_top1_agreement": false,
+      "base_allzero": false,
+      "affine_params": {
+        "scale": 0.6692683469762416,
+        "bias": 0.49452995646419873
+      },
+      "affine_relative_l2": 0.7169601532329962,
+      "affine_pearson_centered": 0.5399818272180458,
+      "affine_top1_agreement": false,
+      "affine_output": {
+        "path": "evidence/final_segment_remediation_v10/affine_output_calibration/short_chinese_prompt_padded/real_x_div_3/affine_calibrated_logits.npy",
+        "exists": true,
+        "size_bytes": 608384,
+        "sha256": "a00fd5c23ca1420749545d6b7a825eeba2fde8d75e6ce0fe8ee765fc2065dcc3"
+      }
+    },
+    {
+      "case_id": "short_chinese_prompt_padded",
+      "variant_id": "real_x_div_3p25",
+      "base_relative_l2": 0.8895973616386683,
+      "base_pearson_centered": 0.4563508088393858,
+      "base_top1_agreement": false,
+      "base_allzero": false,
+      "affine_params": {
+        "scale": 0.6275004275462357,
+        "bias": 0.5815095455937651
+      },
+      "affine_relative_l2": 0.7592797799822671,
+      "affine_pearson_centered": 0.45635080888012053,
+      "affine_top1_agreement": false,
+      "affine_output": {
+        "path": "evidence/final_segment_remediation_v10/affine_output_calibration/short_chinese_prompt_padded/real_x_div_3p25/affine_calibrated_logits.npy",
+        "exists": true,
+        "size_bytes": 608384,
+        "sha256": "1cdfc66696f40351479a0b872fb689cd61c7d2559790e9e529d4a635db52b7d3"
+      }
+    },
+    {
+      "case_id": "short_chinese_prompt_padded",
+      "variant_id": "real_x_div_3p5",
+      "base_relative_l2": 0.9421333072472362,
+      "base_pearson_centered": 0.3877548328963684,
+      "base_top1_agreement": false,
+      "base_allzero": false,
+      "affine_params": {
+        "scale": 0.5807962484286229,
+        "bias": 0.7107205500291144
+      },
+      "affine_relative_l2": 0.7674479665029688,
+      "affine_pearson_centered": 0.3877548328091185,
+      "affine_top1_agreement": false,
+      "affine_output": {
+        "path": "evidence/final_segment_remediation_v10/affine_output_calibration/short_chinese_prompt_padded/real_x_div_3p5/affine_calibrated_logits.npy",
+        "exists": true,
+        "size_bytes": 608384,
+        "sha256": "f24501db1007ccc1881743ecca4cce5f0f728e6f1205681b12784ab8de4d8d86"
+      }
+    },
+    {
+      "case_id": "short_chinese_prompt_padded",
+      "variant_id": "real_x_div_4",
+      "base_relative_l2": 1.0296880567783775,
+      "base_pearson_centered": 0.24777749886948633,
+      "base_top1_agreement": false,
+      "base_allzero": false,
+      "affine_params": {
+        "scale": 0.4391073008355608,
+        "bias": 0.8719298634857037
+      },
+      "affine_relative_l2": 0.7930196869981478,
+      "affine_pearson_centered": 0.2477774997863754,
+      "affine_top1_agreement": false,
+      "affine_output": {
+        "path": "evidence/final_segment_remediation_v10/affine_output_calibration/short_chinese_prompt_padded/real_x_div_4/affine_calibrated_logits.npy",
+        "exists": true,
+        "size_bytes": 608384,
+        "sha256": "3129f880f5b508faef5b75b133eb7e01af89907a02964ae34f3084806bfddb74"
+      }
+    },
+    {
+      "case_id": "short_chinese_prompt_padded",
+      "variant_id": "real_x_clip_8",
+      "base_relative_l2": 0.9999999999999977,
+      "base_pearson_centered": 0.0,
+      "base_top1_agreement": false,
+      "base_allzero": true,
+      "affine_params": {
+        "scale": 0.0,
+        "bias": 0.5665701782998789
+      },
+      "affine_relative_l2": 0.8695782695710114,
+      "affine_pearson_centered": 0.0,
+      "affine_top1_agreement": false,
+      "affine_output": {
+        "path": "evidence/final_segment_remediation_v10/affine_output_calibration/short_chinese_prompt_padded/real_x_clip_8/affine_calibrated_logits.npy",
+        "exists": true,
+        "size_bytes": 608384,
+        "sha256": "4b70ae836f71e0e317f76ede18f496d836cb2ca24b2baa7eaf1be2ff366f1f0d"
+      }
+    },
+    {
+      "case_id": "short_chinese_prompt_padded",
+      "variant_id": "real_x_clip_6",
+      "base_relative_l2": 0.69782000291203,
+      "base_pearson_centered": 0.6233606778037973,
+      "base_top1_agreement": false,
+      "base_allzero": false,
+      "affine_params": {
+        "scale": 0.6950787396099153,
+        "bias": 0.27294451080012705
+      },
+      "affine_relative_l2": 0.6553400880891606,
+      "affine_pearson_centered": 0.6233606773701207,
+      "affine_top1_agreement": false,
+      "affine_output": {
+        "path": "evidence/final_segment_remediation_v10/affine_output_calibration/short_chinese_prompt_padded/real_x_clip_6/affine_calibrated_logits.npy",
+        "exists": true,
+        "size_bytes": 608384,
+        "sha256": "89d66f61245c29ad2fcd54eca7bb0dbe5ced13ec5168bf2843924e39faf0c102"
+      }
+    },
+    {
+      "case_id": "short_chinese_prompt_padded",
+      "variant_id": "real_x_clip_5",
+      "base_relative_l2": 0.8141065379254462,
+      "base_pearson_centered": 0.46713906471761985,
+      "base_top1_agreement": false,
+      "base_allzero": false,
+      "affine_params": {
+        "scale": 0.6521645599789336,
+        "bias": 0.43507272262844365
+      },
+      "affine_relative_l2": 0.753737236131692,
+      "affine_pearson_centered": 0.4671390646765398,
+      "affine_top1_agreement": false,
+      "affine_output": {
+        "path": "evidence/final_segment_remediation_v10/affine_output_calibration/short_chinese_prompt_padded/real_x_clip_5/affine_calibrated_logits.npy",
+        "exists": true,
+        "size_bytes": 608384,
+        "sha256": "3fcdad221a2065612c582e9d7a7b6c58254c37235419698fd25fd852e063b688"
+      }
+    },
+    {
+      "case_id": "short_chinese_prompt_padded",
+      "variant_id": "real_x_clip_4",
+      "base_relative_l2": 0.9344878913425276,
+      "base_pearson_centered": 0.27742430121332773,
+      "base_top1_agreement": false,
+      "base_allzero": false,
+      "affine_params": {
+        "scale": 0.4993798775112449,
+        "bias": 0.7025739449652484
+      },
+      "affine_relative_l2": 0.8044494107030946,
+      "affine_pearson_centered": 0.2774243014507729,
+      "affine_top1_agreement": false,
+      "affine_output": {
+        "path": "evidence/final_segment_remediation_v10/affine_output_calibration/short_chinese_prompt_padded/real_x_clip_4/affine_calibrated_logits.npy",
+        "exists": true,
+        "size_bytes": 608384,
+        "sha256": "705c8f65f1f07460a5526c3ac029f078283560aeb5804d8ede0a6acfa0630ec0"
+      }
+    },
+    {
+      "case_id": "short_chinese_prompt_padded",
+      "variant_id": "real_x_z_normalized",
+      "base_relative_l2": 1.183242198682743,
+      "base_pearson_centered": -0.37287948114431757,
+      "base_top1_agreement": false,
+      "base_allzero": false,
+      "affine_params": {
+        "scale": -1.1978818959129132,
+        "bias": -1.0833188912385157
+      },
+      "affine_relative_l2": 0.9138148190515877,
+      "affine_pearson_centered": 0.3728794811450149,
+      "affine_top1_agreement": false,
+      "affine_output": {
+        "path": "evidence/final_segment_remediation_v10/affine_output_calibration/short_chinese_prompt_padded/real_x_z_normalized/affine_calibrated_logits.npy",
+        "exists": true,
+        "size_bytes": 608384,
+        "sha256": "ebb64b743e42b95864bf38d3d7beffde2422af0a936e943a86e959bb9ed7d7ae"
+      }
+    }
+  ],
+  "best_by_case": {
+    "zeros": {
+      "best_existing_input_variant_by_relative_l2": {
+        "case_id": "zeros",
+        "variant_id": "real_x_z_normalized",
+        "base_relative_l2": 0.9790667984629177,
+        "base_pearson_centered": -0.2849240964627543,
+        "base_top1_agreement": false,
+        "base_allzero": false,
+        "affine_params": {
+          "scale": -1.0438744721502977,
+          "bias": -2.5767493624826785
+        },
+        "affine_relative_l2": 0.48369515251931433,
+        "affine_pearson_centered": 0.2849240944448383,
+        "affine_top1_agreement": false,
+        "affine_output": {
+          "path": "evidence/final_segment_remediation_v10/affine_output_calibration/zeros/real_x_z_normalized/affine_calibrated_logits.npy",
+          "exists": true,
+          "size_bytes": 608384,
+          "sha256": "0a4a0a6ae0baa8bd670b595c27cc2b8bb7862c3c6849f576a68ecd5867c89cbe"
+        }
+      },
+      "best_affine_output_calibration_by_relative_l2": {
+        "case_id": "zeros",
+        "variant_id": "real_x",
+        "base_relative_l2": 0.9999999999999994,
+        "base_pearson_centered": 0.0,
+        "base_top1_agreement": false,
+        "base_allzero": true,
+        "affine_params": {
+          "scale": 0.0,
+          "bias": 3.8705091194378256
+        },
+        "affine_relative_l2": 0.3229984490125226,
+        "affine_pearson_centered": 0.0,
+        "affine_top1_agreement": false,
+        "affine_output": {
+          "path": "evidence/final_segment_remediation_v10/affine_output_calibration/zeros/real_x/affine_calibrated_logits.npy",
+          "exists": true,
+          "size_bytes": 608384,
+          "sha256": "8ef85ceef079917d3564215f4f1407b1225671680d63dc0609bb9ab8749b1189"
+        }
+      }
+    },
+    "ramp": {
+      "best_existing_input_variant_by_relative_l2": {
+        "case_id": "ramp",
+        "variant_id": "real_x_z_normalized",
+        "base_relative_l2": 0.8014574741712204,
+        "base_pearson_centered": -0.37110471323561095,
+        "base_top1_agreement": false,
+        "base_allzero": false,
+        "affine_params": {
+          "scale": -0.9475546742726503,
+          "bias": -2.603415134495438
+        },
+        "affine_relative_l2": 0.4778315680895043,
+        "affine_pearson_centered": 0.3711047150608868,
+        "affine_top1_agreement": false,
+        "affine_output": {
+          "path": "evidence/final_segment_remediation_v10/affine_output_calibration/ramp/real_x_z_normalized/affine_calibrated_logits.npy",
+          "exists": true,
+          "size_bytes": 608384,
+          "sha256": "df0d7f3df645c713f610ffaa8abee9296764a6a4ae7fba8663c90eff5033f19c"
+        }
+      },
+      "best_affine_output_calibration_by_relative_l2": {
+        "case_id": "ramp",
+        "variant_id": "real_x_clip_6",
+        "base_relative_l2": 0.9305712413790865,
+        "base_pearson_centered": 0.7365971455712896,
+        "base_top1_agreement": false,
+        "base_allzero": false,
+        "affine_params": {
+          "scale": 0.7433803533062627,
+          "bias": 1.8408097246669113
+        },
+        "affine_relative_l2": 0.31441250378894625,
+        "affine_pearson_centered": 0.7365971455518048,
+        "affine_top1_agreement": false,
+        "affine_output": {
+          "path": "evidence/final_segment_remediation_v10/affine_output_calibration/ramp/real_x_clip_6/affine_calibrated_logits.npy",
+          "exists": true,
+          "size_bytes": 608384,
+          "sha256": "b45fe685a397bcf8698c630ec13c08dfac8576e4f027edb2be9ff51e0fd705f7"
+        }
+      }
+    },
+    "short_chinese_prompt_padded": {
+      "best_existing_input_variant_by_relative_l2": {
+        "case_id": "short_chinese_prompt_padded",
+        "variant_id": "real_x_clip_6",
+        "base_relative_l2": 0.69782000291203,
+        "base_pearson_centered": 0.6233606778037973,
+        "base_top1_agreement": false,
+        "base_allzero": false,
+        "affine_params": {
+          "scale": 0.6950787396099153,
+          "bias": 0.27294451080012705
+        },
+        "affine_relative_l2": 0.6553400880891606,
+        "affine_pearson_centered": 0.6233606773701207,
+        "affine_top1_agreement": false,
+        "affine_output": {
+          "path": "evidence/final_segment_remediation_v10/affine_output_calibration/short_chinese_prompt_padded/real_x_clip_6/affine_calibrated_logits.npy",
+          "exists": true,
+          "size_bytes": 608384,
+          "sha256": "89d66f61245c29ad2fcd54eca7bb0dbe5ced13ec5168bf2843924e39faf0c102"
+        }
+      },
+      "best_affine_output_calibration_by_relative_l2": {
+        "case_id": "short_chinese_prompt_padded",
+        "variant_id": "real_x_clip_6",
+        "base_relative_l2": 0.69782000291203,
+        "base_pearson_centered": 0.6233606778037973,
+        "base_top1_agreement": false,
+        "base_allzero": false,
+        "affine_params": {
+          "scale": 0.6950787396099153,
+          "bias": 0.27294451080012705
+        },
+        "affine_relative_l2": 0.6553400880891606,
+        "affine_pearson_centered": 0.6233606773701207,
+        "affine_top1_agreement": false,
+        "affine_output": {
+          "path": "evidence/final_segment_remediation_v10/affine_output_calibration/short_chinese_prompt_padded/real_x_clip_6/affine_calibrated_logits.npy",
+          "exists": true,
+          "size_bytes": 608384,
+          "sha256": "89d66f61245c29ad2fcd54eca7bb0dbe5ced13ec5168bf2843924e39faf0c102"
+        }
+      }
+    }
+  },
+  "base_top1_agreement_rows": 0,
+  "affine_top1_agreement_rows": 0,
+  "real_x_allzero_rows": 3,
+  "median_base_relative_l2": 0.9999999999999986,
+  "median_affine_relative_l2": 0.6441548687028265,
+  "repair_supported": false,
+  "interpretation": "Post-hoc output affine calibration cannot repair all-zero real_x rows because rank/top1 information is absent; existing input scale variants recover nonzero outputs in some rows but do not restore top1 agreement."
+}

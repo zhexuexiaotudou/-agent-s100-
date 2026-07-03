@@ -1,0 +1,261 @@
+{
+  "created_at_utc": "2026-07-01T07:19:52Z",
+  "file_count": 20,
+  "files": [
+    {
+      "case_id": "zeros",
+      "dtype": "float32",
+      "relative_path": "raw_evidence_subset/bpu_full_chain/zeros/dequant_logits.npy",
+      "sha256": "c5446456b2eaa03e29c1e66c2511a51606f3a4c35988047d31ce7f9d921deb67",
+      "shape": [
+        152064
+      ],
+      "size_bytes": 608384,
+      "source_report": "reports/020_s100p_dump_logits_run.json",
+      "why_included": "required BPU full-chain raw/dequant final logits"
+    },
+    {
+      "case_id": "zeros",
+      "dtype": "int16",
+      "relative_path": "raw_evidence_subset/bpu_full_chain/zeros/raw_output.npy",
+      "sha256": "f5984f81235af99ba68d00422604dff6513b2338cec45b8185958ed61386239e",
+      "shape": [
+        1,
+        152064
+      ],
+      "size_bytes": 304256,
+      "source_report": "reports/020_s100p_dump_logits_run.json",
+      "why_included": "required BPU full-chain raw/dequant final logits"
+    },
+    {
+      "case_id": "zeros",
+      "dtype": "float32",
+      "relative_path": "raw_evidence_subset/bpu_seg26_boundary/zeros/seg_26_output.npy",
+      "segment": 26,
+      "sha256": "f534056b9455cfefc25185a78366a2c1a83530a4b7631bf7b2210fe49ca28cc5",
+      "shape": [
+        128,
+        3584
+      ],
+      "size_bytes": 1835136,
+      "source_report": "reports/130_s100p_boundary_dump_subprocess.json",
+      "why_included": "required BPU seg26 raw/dequant boundary output"
+    },
+    {
+      "case_id": "zeros",
+      "dtype": "int16",
+      "relative_path": "raw_evidence_subset/bpu_seg26_boundary/zeros/seg_26_raw_output.npy",
+      "segment": 26,
+      "sha256": "8d2561908db702c55e83d293e220e20805743cefdec14ddb91d6ee23d4277f7e",
+      "shape": [
+        128,
+        3584
+      ],
+      "size_bytes": 917632,
+      "source_report": "reports/130_s100p_boundary_dump_subprocess.json",
+      "why_included": "required BPU seg26 raw/dequant boundary output"
+    },
+    {
+      "dtype": "float32",
+      "relative_path": "raw_evidence_subset/final_segment_input_sweep/real_x/dequant_logits.npy",
+      "sha256": "c5446456b2eaa03e29c1e66c2511a51606f3a4c35988047d31ce7f9d921deb67",
+      "shape": [
+        152064
+      ],
+      "size_bytes": 608384,
+      "source_report": "reports/120_final_segment_input_sweep.json",
+      "variant_id": "real_x",
+      "why_included": "required isolated seg27_28 input/output or representative input sweep variant"
+    },
+    {
+      "dtype": "float32",
+      "relative_path": "raw_evidence_subset/final_segment_input_sweep/real_x/input.npy",
+      "sha256": "f534056b9455cfefc25185a78366a2c1a83530a4b7631bf7b2210fe49ca28cc5",
+      "shape": [
+        128,
+        3584
+      ],
+      "size_bytes": 1835136,
+      "source_report": "reports/120_final_segment_input_sweep.json",
+      "variant_id": "real_x",
+      "why_included": "required isolated seg27_28 input/output or representative input sweep variant"
+    },
+    {
+      "dtype": "int16",
+      "relative_path": "raw_evidence_subset/final_segment_input_sweep/real_x/raw_output.npy",
+      "sha256": "f5984f81235af99ba68d00422604dff6513b2338cec45b8185958ed61386239e",
+      "shape": [
+        1,
+        152064
+      ],
+      "size_bytes": 304256,
+      "source_report": "reports/120_final_segment_input_sweep.json",
+      "variant_id": "real_x",
+      "why_included": "required isolated seg27_28 input/output or representative input sweep variant"
+    },
+    {
+      "dtype": "float32",
+      "relative_path": "raw_evidence_subset/final_segment_input_sweep/real_x_clip_4/dequant_logits.npy",
+      "sha256": "98426593ec9c2794a232c68fafccc58ec4f9c0c4466474ad05e53aaea5c87a93",
+      "shape": [
+        152064
+      ],
+      "size_bytes": 608384,
+      "source_report": "reports/120_final_segment_input_sweep.json",
+      "variant_id": "real_x_clip_4",
+      "why_included": "required isolated seg27_28 input/output or representative input sweep variant"
+    },
+    {
+      "dtype": "float32",
+      "relative_path": "raw_evidence_subset/final_segment_input_sweep/real_x_clip_4/input.npy",
+      "sha256": "a39523e509e80ac0e883ba6690ffe15aa6c45924372400c96e6a366bf64b0b5a",
+      "shape": [
+        128,
+        3584
+      ],
+      "size_bytes": 1835136,
+      "source_report": "reports/120_final_segment_input_sweep.json",
+      "variant_id": "real_x_clip_4",
+      "why_included": "required isolated seg27_28 input/output or representative input sweep variant"
+    },
+    {
+      "dtype": "int16",
+      "relative_path": "raw_evidence_subset/final_segment_input_sweep/real_x_clip_4/raw_output.npy",
+      "sha256": "9241bc88868d553c13341e955779fbfc1f8d9a167d43653d6c49db77949f8b96",
+      "shape": [
+        1,
+        152064
+      ],
+      "size_bytes": 304256,
+      "source_report": "reports/120_final_segment_input_sweep.json",
+      "variant_id": "real_x_clip_4",
+      "why_included": "required isolated seg27_28 input/output or representative input sweep variant"
+    },
+    {
+      "dtype": "float32",
+      "relative_path": "raw_evidence_subset/final_segment_input_sweep/real_x_div_4/dequant_logits.npy",
+      "sha256": "82c410490ebccf39e7cc081e0d1e15b662419d1416a9830644d7f7060805c451",
+      "shape": [
+        152064
+      ],
+      "size_bytes": 608384,
+      "source_report": "reports/120_final_segment_input_sweep.json",
+      "variant_id": "real_x_div_4",
+      "why_included": "required isolated seg27_28 input/output or representative input sweep variant"
+    },
+    {
+      "dtype": "float32",
+      "relative_path": "raw_evidence_subset/final_segment_input_sweep/real_x_div_4/input.npy",
+      "sha256": "014169daff7432efc79797993fdf3761b0c1cfe97b3d4fd1b4cccd20f6b9a19a",
+      "shape": [
+        128,
+        3584
+      ],
+      "size_bytes": 1835136,
+      "source_report": "reports/120_final_segment_input_sweep.json",
+      "variant_id": "real_x_div_4",
+      "why_included": "required isolated seg27_28 input/output or representative input sweep variant"
+    },
+    {
+      "dtype": "int16",
+      "relative_path": "raw_evidence_subset/final_segment_input_sweep/real_x_div_4/raw_output.npy",
+      "sha256": "80b44f938a51ac16d237e2782c1456f8ec25321c3635846c531a7938b5ec829c",
+      "shape": [
+        1,
+        152064
+      ],
+      "size_bytes": 304256,
+      "source_report": "reports/120_final_segment_input_sweep.json",
+      "variant_id": "real_x_div_4",
+      "why_included": "required isolated seg27_28 input/output or representative input sweep variant"
+    },
+    {
+      "dtype": "float32",
+      "relative_path": "raw_evidence_subset/final_segment_input_sweep/synthetic_ones/dequant_logits.npy",
+      "sha256": "15a834fb2d7144364751f3a414c44724cd52ddb7a777181f1ab1acd60f67a6ad",
+      "shape": [
+        152064
+      ],
+      "size_bytes": 608384,
+      "source_report": "reports/120_final_segment_input_sweep.json",
+      "variant_id": "synthetic_ones",
+      "why_included": "required isolated seg27_28 input/output or representative input sweep variant"
+    },
+    {
+      "dtype": "float32",
+      "relative_path": "raw_evidence_subset/final_segment_input_sweep/synthetic_ones/input.npy",
+      "sha256": "050d972cac898d51f3ffc7a60752f4f17f5f5cc6f86ae5c42ea2c1aff5c77247",
+      "shape": [
+        128,
+        3584
+      ],
+      "size_bytes": 1835136,
+      "source_report": "reports/120_final_segment_input_sweep.json",
+      "variant_id": "synthetic_ones",
+      "why_included": "required isolated seg27_28 input/output or representative input sweep variant"
+    },
+    {
+      "dtype": "int16",
+      "relative_path": "raw_evidence_subset/final_segment_input_sweep/synthetic_ones/raw_output.npy",
+      "sha256": "38afbbbed8a9c998fad29bb0fcb4da061ad72aa23cda9fd9a7a83fe623ff4ce9",
+      "shape": [
+        1,
+        152064
+      ],
+      "size_bytes": 304256,
+      "source_report": "reports/120_final_segment_input_sweep.json",
+      "variant_id": "synthetic_ones",
+      "why_included": "required isolated seg27_28 input/output or representative input sweep variant"
+    },
+    {
+      "dtype": "float32",
+      "relative_path": "raw_evidence_subset/final_segment_input_sweep/synthetic_zeros/dequant_logits.npy",
+      "sha256": "e93a6eadf154397b510c6410f2d46ef620dec1f9d4c54eab4a17988d6066f08d",
+      "shape": [
+        152064
+      ],
+      "size_bytes": 608384,
+      "source_report": "reports/120_final_segment_input_sweep.json",
+      "variant_id": "synthetic_zeros",
+      "why_included": "required isolated seg27_28 input/output or representative input sweep variant"
+    },
+    {
+      "dtype": "float32",
+      "relative_path": "raw_evidence_subset/final_segment_input_sweep/synthetic_zeros/input.npy",
+      "sha256": "15e9ce51964421ac25f7dab9a116580695751d693e3a537162329a58933752d3",
+      "shape": [
+        128,
+        3584
+      ],
+      "size_bytes": 1835136,
+      "source_report": "reports/120_final_segment_input_sweep.json",
+      "variant_id": "synthetic_zeros",
+      "why_included": "required isolated seg27_28 input/output or representative input sweep variant"
+    },
+    {
+      "dtype": "int16",
+      "relative_path": "raw_evidence_subset/final_segment_input_sweep/synthetic_zeros/raw_output.npy",
+      "sha256": "be89ac3066c3ec97bb9f35d5183a339c1231212dd10d4a18003bfa39e27774a0",
+      "shape": [
+        1,
+        152064
+      ],
+      "size_bytes": 304256,
+      "source_report": "reports/120_final_segment_input_sweep.json",
+      "variant_id": "synthetic_zeros",
+      "why_included": "required isolated seg27_28 input/output or representative input sweep variant"
+    },
+    {
+      "case_id": "zeros",
+      "dtype": "float32",
+      "relative_path": "raw_evidence_subset/gguf_reference/zeros/gguf_last_logits.npy",
+      "sha256": "c20ad7d7a20b5e87b85b13b2cbfa8ecca6b2e1f62dbb21696b4690f30ad1968f",
+      "shape": [
+        152064
+      ],
+      "size_bytes": 608384,
+      "source_report": "reports/070_logits_probe_battery_triplet.json",
+      "why_included": "required GGUF last-logits deployment reference sample"
+    }
+  ]
+}

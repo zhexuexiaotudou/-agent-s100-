@@ -1,0 +1,4200 @@
+{
+  "schema_version": "dream7b_s100p_final_segment_dense_sweep_v5",
+  "created_at_utc": "2026-07-01T08:04:33.231660+00:00",
+  "hbm_path": "/mnt/nas/openclaw/models/dream7b-hbm/seq128-b1-lmheadq16-lasttoken/seg27_28/dream7b_segment_27_28_seq128_q8_lmheadq16_last_token_logits.hbm",
+  "model_name": "dream_segment_27_28_last_token_logits",
+  "real_seg26_dequant_source": "evidence/s100p_boundaries_subprocess/v3_run_20260701/short_chinese_prompt_padded/seg_26_output.npy",
+  "quant_metadata": {
+    "available": false,
+    "error": "AttributeError:'hbm_runtime.HB_HBMRuntime.HB_HBMRuntime' object has no attribute 'get_output_quant_params'"
+  },
+  "summary": {
+    "first_nonzero_divisor_variant": "real_x_div_2p75",
+    "first_nonzero_clip_variant": "real_x_clip_6",
+    "nonzero_recovery_is_correctness": false,
+    "reference_compare_status": "blocked_reference_logits_unavailable_in_this_sweep",
+    "contract_hypothesis": "seg26 dequant/input magnitude is above seg27_28 accepted float input range; /4 or tighter clipping restores nonzero diagnostic output only."
+  },
+  "variants": [
+    {
+      "variant_id": "real_x",
+      "why_included": "real seg26 hidden divided by 1.0",
+      "input_path": "/mnt/nas/openclaw/reports/models/dream7b_s100p_v5_execution_20260701/evidence/final_segment_dense_sweep_v5/short_chinese_prompt_padded/real_x/input.npy",
+      "raw_output_path": "/mnt/nas/openclaw/reports/models/dream7b_s100p_v5_execution_20260701/evidence/final_segment_dense_sweep_v5/short_chinese_prompt_padded/real_x/raw_output.npy",
+      "dequant_logits_path": "/mnt/nas/openclaw/reports/models/dream7b_s100p_v5_execution_20260701/evidence/final_segment_dense_sweep_v5/short_chinese_prompt_padded/real_x/dequant_logits.npy",
+      "metadata_path": "/mnt/nas/openclaw/reports/models/dream7b_s100p_v5_execution_20260701/evidence/final_segment_dense_sweep_v5/short_chinese_prompt_padded/real_x/metadata.json",
+      "input_stats": {
+        "shape": [
+          128,
+          3584
+        ],
+        "dtype": "float32",
+        "size": 458752,
+        "min": -16.29678726196289,
+        "max": 16.29678726196289,
+        "mean": 0.06199396401643753,
+        "std": 16.122926712036133,
+        "abs_max": 16.29678726196289,
+        "nonzero_count": 458752,
+        "allzero": false,
+        "constant": false,
+        "nan_count": 0,
+        "inf_count": 0
+      },
+      "run_status": "pass",
+      "runtime_exception": null,
+      "raw_output_stats": {
+        "shape": [
+          1,
+          152064
+        ],
+        "dtype": "int16",
+        "size": 152064,
+        "min": 0.0,
+        "max": 0.0,
+        "mean": 0.0,
+        "std": 0.0,
+        "abs_max": 0.0,
+        "nonzero_count": 0,
+        "allzero": true,
+        "constant": true,
+        "nan_count": 0,
+        "inf_count": 0
+      },
+      "dequant_output_stats": {
+        "shape": [
+          152064
+        ],
+        "dtype": "float32",
+        "size": 152064,
+        "min": 0.0,
+        "max": 0.0,
+        "mean": 0.0,
+        "std": 0.0,
+        "abs_max": 0.0,
+        "nonzero_count": 0,
+        "allzero": true,
+        "constant": true,
+        "nan_count": 0,
+        "inf_count": 0
+      },
+      "softmax": {
+        "entropy": 11.932056763842207,
+        "normalized_entropy": 1.0,
+        "top1_probability": 6.576178451178451e-06
+      },
+      "top10_logits": [
+        {
+          "token": 152063,
+          "logit": 0.0
+        },
+        {
+          "token": 50693,
+          "logit": 0.0
+        },
+        {
+          "token": 50691,
+          "logit": 0.0
+        },
+        {
+          "token": 50690,
+          "logit": 0.0
+        },
+        {
+          "token": 50689,
+          "logit": 0.0
+        },
+        {
+          "token": 50688,
+          "logit": 0.0
+        },
+        {
+          "token": 50687,
+          "logit": 0.0
+        },
+        {
+          "token": 50686,
+          "logit": 0.0
+        },
+        {
+          "token": 50685,
+          "logit": 0.0
+        },
+        {
+          "token": 50684,
+          "logit": 0.0
+        }
+      ]
+    },
+    {
+      "variant_id": "real_x_div_1p125",
+      "why_included": "real seg26 hidden divided by 1.125",
+      "input_path": "/mnt/nas/openclaw/reports/models/dream7b_s100p_v5_execution_20260701/evidence/final_segment_dense_sweep_v5/short_chinese_prompt_padded/real_x_div_1p125/input.npy",
+      "raw_output_path": "/mnt/nas/openclaw/reports/models/dream7b_s100p_v5_execution_20260701/evidence/final_segment_dense_sweep_v5/short_chinese_prompt_padded/real_x_div_1p125/raw_output.npy",
+      "dequant_logits_path": "/mnt/nas/openclaw/reports/models/dream7b_s100p_v5_execution_20260701/evidence/final_segment_dense_sweep_v5/short_chinese_prompt_padded/real_x_div_1p125/dequant_logits.npy",
+      "metadata_path": "/mnt/nas/openclaw/reports/models/dream7b_s100p_v5_execution_20260701/evidence/final_segment_dense_sweep_v5/short_chinese_prompt_padded/real_x_div_1p125/metadata.json",
+      "input_stats": {
+        "shape": [
+          128,
+          3584
+        ],
+        "dtype": "float32",
+        "size": 458752,
+        "min": -14.48603343963623,
+        "max": 14.48603343963623,
+        "mean": 0.055105745792388916,
+        "std": 14.331493377685547,
+        "abs_max": 14.48603343963623,
+        "nonzero_count": 458752,
+        "allzero": false,
+        "constant": false,
+        "nan_count": 0,
+        "inf_count": 0
+      },
+      "run_status": "pass",
+      "runtime_exception": null,
+      "raw_output_stats": {
+        "shape": [
+          1,
+          152064
+        ],
+        "dtype": "int16",
+        "size": 152064,
+        "min": 0.0,
+        "max": 0.0,
+        "mean": 0.0,
+        "std": 0.0,
+        "abs_max": 0.0,
+        "nonzero_count": 0,
+        "allzero": true,
+        "constant": true,
+        "nan_count": 0,
+        "inf_count": 0
+      },
+      "dequant_output_stats": {
+        "shape": [
+          152064
+        ],
+        "dtype": "float32",
+        "size": 152064,
+        "min": 0.0,
+        "max": 0.0,
+        "mean": 0.0,
+        "std": 0.0,
+        "abs_max": 0.0,
+        "nonzero_count": 0,
+        "allzero": true,
+        "constant": true,
+        "nan_count": 0,
+        "inf_count": 0
+      },
+      "softmax": {
+        "entropy": 11.932056763842207,
+        "normalized_entropy": 1.0,
+        "top1_probability": 6.576178451178451e-06
+      },
+      "top10_logits": [
+        {
+          "token": 152063,
+          "logit": 0.0
+        },
+        {
+          "token": 50693,
+          "logit": 0.0
+        },
+        {
+          "token": 50691,
+          "logit": 0.0
+        },
+        {
+          "token": 50690,
+          "logit": 0.0
+        },
+        {
+          "token": 50689,
+          "logit": 0.0
+        },
+        {
+          "token": 50688,
+          "logit": 0.0
+        },
+        {
+          "token": 50687,
+          "logit": 0.0
+        },
+        {
+          "token": 50686,
+          "logit": 0.0
+        },
+        {
+          "token": 50685,
+          "logit": 0.0
+        },
+        {
+          "token": 50684,
+          "logit": 0.0
+        }
+      ]
+    },
+    {
+      "variant_id": "real_x_div_1p25",
+      "why_included": "real seg26 hidden divided by 1.25",
+      "input_path": "/mnt/nas/openclaw/reports/models/dream7b_s100p_v5_execution_20260701/evidence/final_segment_dense_sweep_v5/short_chinese_prompt_padded/real_x_div_1p25/input.npy",
+      "raw_output_path": "/mnt/nas/openclaw/reports/models/dream7b_s100p_v5_execution_20260701/evidence/final_segment_dense_sweep_v5/short_chinese_prompt_padded/real_x_div_1p25/raw_output.npy",
+      "dequant_logits_path": "/mnt/nas/openclaw/reports/models/dream7b_s100p_v5_execution_20260701/evidence/final_segment_dense_sweep_v5/short_chinese_prompt_padded/real_x_div_1p25/dequant_logits.npy",
+      "metadata_path": "/mnt/nas/openclaw/reports/models/dream7b_s100p_v5_execution_20260701/evidence/final_segment_dense_sweep_v5/short_chinese_prompt_padded/real_x_div_1p25/metadata.json",
+      "input_stats": {
+        "shape": [
+          128,
+          3584
+        ],
+        "dtype": "float32",
+        "size": 458752,
+        "min": -13.037429809570312,
+        "max": 13.037429809570312,
+        "mean": 0.0495951771736145,
+        "std": 12.89834213256836,
+        "abs_max": 13.037429809570312,
+        "nonzero_count": 458752,
+        "allzero": false,
+        "constant": false,
+        "nan_count": 0,
+        "inf_count": 0
+      },
+      "run_status": "pass",
+      "runtime_exception": null,
+      "raw_output_stats": {
+        "shape": [
+          1,
+          152064
+        ],
+        "dtype": "int16",
+        "size": 152064,
+        "min": 0.0,
+        "max": 0.0,
+        "mean": 0.0,
+        "std": 0.0,
+        "abs_max": 0.0,
+        "nonzero_count": 0,
+        "allzero": true,
+        "constant": true,
+        "nan_count": 0,
+        "inf_count": 0
+      },
+      "dequant_output_stats": {
+        "shape": [
+          152064
+        ],
+        "dtype": "float32",
+        "size": 152064,
+        "min": 0.0,
+        "max": 0.0,
+        "mean": 0.0,
+        "std": 0.0,
+        "abs_max": 0.0,
+        "nonzero_count": 0,
+        "allzero": true,
+        "constant": true,
+        "nan_count": 0,
+        "inf_count": 0
+      },
+      "softmax": {
+        "entropy": 11.932056763842207,
+        "normalized_entropy": 1.0,
+        "top1_probability": 6.576178451178451e-06
+      },
+      "top10_logits": [
+        {
+          "token": 152063,
+          "logit": 0.0
+        },
+        {
+          "token": 50693,
+          "logit": 0.0
+        },
+        {
+          "token": 50691,
+          "logit": 0.0
+        },
+        {
+          "token": 50690,
+          "logit": 0.0
+        },
+        {
+          "token": 50689,
+          "logit": 0.0
+        },
+        {
+          "token": 50688,
+          "logit": 0.0
+        },
+        {
+          "token": 50687,
+          "logit": 0.0
+        },
+        {
+          "token": 50686,
+          "logit": 0.0
+        },
+        {
+          "token": 50685,
+          "logit": 0.0
+        },
+        {
+          "token": 50684,
+          "logit": 0.0
+        }
+      ]
+    },
+    {
+      "variant_id": "real_x_div_1p375",
+      "why_included": "real seg26 hidden divided by 1.375",
+      "input_path": "/mnt/nas/openclaw/reports/models/dream7b_s100p_v5_execution_20260701/evidence/final_segment_dense_sweep_v5/short_chinese_prompt_padded/real_x_div_1p375/input.npy",
+      "raw_output_path": "/mnt/nas/openclaw/reports/models/dream7b_s100p_v5_execution_20260701/evidence/final_segment_dense_sweep_v5/short_chinese_prompt_padded/real_x_div_1p375/raw_output.npy",
+      "dequant_logits_path": "/mnt/nas/openclaw/reports/models/dream7b_s100p_v5_execution_20260701/evidence/final_segment_dense_sweep_v5/short_chinese_prompt_padded/real_x_div_1p375/dequant_logits.npy",
+      "metadata_path": "/mnt/nas/openclaw/reports/models/dream7b_s100p_v5_execution_20260701/evidence/final_segment_dense_sweep_v5/short_chinese_prompt_padded/real_x_div_1p375/metadata.json",
+      "input_stats": {
+        "shape": [
+          128,
+          3584
+        ],
+        "dtype": "float32",
+        "size": 458752,
+        "min": -11.852209091186523,
+        "max": 11.852209091186523,
+        "mean": 0.04508652538061142,
+        "std": 11.725767135620117,
+        "abs_max": 11.852209091186523,
+        "nonzero_count": 458752,
+        "allzero": false,
+        "constant": false,
+        "nan_count": 0,
+        "inf_count": 0
+      },
+      "run_status": "pass",
+      "runtime_exception": null,
+      "raw_output_stats": {
+        "shape": [
+          1,
+          152064
+        ],
+        "dtype": "int16",
+        "size": 152064,
+        "min": 0.0,
+        "max": 0.0,
+        "mean": 0.0,
+        "std": 0.0,
+        "abs_max": 0.0,
+        "nonzero_count": 0,
+        "allzero": true,
+        "constant": true,
+        "nan_count": 0,
+        "inf_count": 0
+      },
+      "dequant_output_stats": {
+        "shape": [
+          152064
+        ],
+        "dtype": "float32",
+        "size": 152064,
+        "min": 0.0,
+        "max": 0.0,
+        "mean": 0.0,
+        "std": 0.0,
+        "abs_max": 0.0,
+        "nonzero_count": 0,
+        "allzero": true,
+        "constant": true,
+        "nan_count": 0,
+        "inf_count": 0
+      },
+      "softmax": {
+        "entropy": 11.932056763842207,
+        "normalized_entropy": 1.0,
+        "top1_probability": 6.576178451178451e-06
+      },
+      "top10_logits": [
+        {
+          "token": 152063,
+          "logit": 0.0
+        },
+        {
+          "token": 50693,
+          "logit": 0.0
+        },
+        {
+          "token": 50691,
+          "logit": 0.0
+        },
+        {
+          "token": 50690,
+          "logit": 0.0
+        },
+        {
+          "token": 50689,
+          "logit": 0.0
+        },
+        {
+          "token": 50688,
+          "logit": 0.0
+        },
+        {
+          "token": 50687,
+          "logit": 0.0
+        },
+        {
+          "token": 50686,
+          "logit": 0.0
+        },
+        {
+          "token": 50685,
+          "logit": 0.0
+        },
+        {
+          "token": 50684,
+          "logit": 0.0
+        }
+      ]
+    },
+    {
+      "variant_id": "real_x_div_1p5",
+      "why_included": "real seg26 hidden divided by 1.5",
+      "input_path": "/mnt/nas/openclaw/reports/models/dream7b_s100p_v5_execution_20260701/evidence/final_segment_dense_sweep_v5/short_chinese_prompt_padded/real_x_div_1p5/input.npy",
+      "raw_output_path": "/mnt/nas/openclaw/reports/models/dream7b_s100p_v5_execution_20260701/evidence/final_segment_dense_sweep_v5/short_chinese_prompt_padded/real_x_div_1p5/raw_output.npy",
+      "dequant_logits_path": "/mnt/nas/openclaw/reports/models/dream7b_s100p_v5_execution_20260701/evidence/final_segment_dense_sweep_v5/short_chinese_prompt_padded/real_x_div_1p5/dequant_logits.npy",
+      "metadata_path": "/mnt/nas/openclaw/reports/models/dream7b_s100p_v5_execution_20260701/evidence/final_segment_dense_sweep_v5/short_chinese_prompt_padded/real_x_div_1p5/metadata.json",
+      "input_stats": {
+        "shape": [
+          128,
+          3584
+        ],
+        "dtype": "float32",
+        "size": 458752,
+        "min": -10.864524841308594,
+        "max": 10.864524841308594,
+        "mean": 0.041329313069581985,
+        "std": 10.748618125915527,
+        "abs_max": 10.864524841308594,
+        "nonzero_count": 458752,
+        "allzero": false,
+        "constant": false,
+        "nan_count": 0,
+        "inf_count": 0
+      },
+      "run_status": "pass",
+      "runtime_exception": null,
+      "raw_output_stats": {
+        "shape": [
+          1,
+          152064
+        ],
+        "dtype": "int16",
+        "size": 152064,
+        "min": 0.0,
+        "max": 0.0,
+        "mean": 0.0,
+        "std": 0.0,
+        "abs_max": 0.0,
+        "nonzero_count": 0,
+        "allzero": true,
+        "constant": true,
+        "nan_count": 0,
+        "inf_count": 0
+      },
+      "dequant_output_stats": {
+        "shape": [
+          152064
+        ],
+        "dtype": "float32",
+        "size": 152064,
+        "min": 0.0,
+        "max": 0.0,
+        "mean": 0.0,
+        "std": 0.0,
+        "abs_max": 0.0,
+        "nonzero_count": 0,
+        "allzero": true,
+        "constant": true,
+        "nan_count": 0,
+        "inf_count": 0
+      },
+      "softmax": {
+        "entropy": 11.932056763842207,
+        "normalized_entropy": 1.0,
+        "top1_probability": 6.576178451178451e-06
+      },
+      "top10_logits": [
+        {
+          "token": 152063,
+          "logit": 0.0
+        },
+        {
+          "token": 50693,
+          "logit": 0.0
+        },
+        {
+          "token": 50691,
+          "logit": 0.0
+        },
+        {
+          "token": 50690,
+          "logit": 0.0
+        },
+        {
+          "token": 50689,
+          "logit": 0.0
+        },
+        {
+          "token": 50688,
+          "logit": 0.0
+        },
+        {
+          "token": 50687,
+          "logit": 0.0
+        },
+        {
+          "token": 50686,
+          "logit": 0.0
+        },
+        {
+          "token": 50685,
+          "logit": 0.0
+        },
+        {
+          "token": 50684,
+          "logit": 0.0
+        }
+      ]
+    },
+    {
+      "variant_id": "real_x_div_1p75",
+      "why_included": "real seg26 hidden divided by 1.75",
+      "input_path": "/mnt/nas/openclaw/reports/models/dream7b_s100p_v5_execution_20260701/evidence/final_segment_dense_sweep_v5/short_chinese_prompt_padded/real_x_div_1p75/input.npy",
+      "raw_output_path": "/mnt/nas/openclaw/reports/models/dream7b_s100p_v5_execution_20260701/evidence/final_segment_dense_sweep_v5/short_chinese_prompt_padded/real_x_div_1p75/raw_output.npy",
+      "dequant_logits_path": "/mnt/nas/openclaw/reports/models/dream7b_s100p_v5_execution_20260701/evidence/final_segment_dense_sweep_v5/short_chinese_prompt_padded/real_x_div_1p75/dequant_logits.npy",
+      "metadata_path": "/mnt/nas/openclaw/reports/models/dream7b_s100p_v5_execution_20260701/evidence/final_segment_dense_sweep_v5/short_chinese_prompt_padded/real_x_div_1p75/metadata.json",
+      "input_stats": {
+        "shape": [
+          128,
+          3584
+        ],
+        "dtype": "float32",
+        "size": 458752,
+        "min": -9.31244945526123,
+        "max": 9.31244945526123,
+        "mean": 0.03542512282729149,
+        "std": 9.21310043334961,
+        "abs_max": 9.31244945526123,
+        "nonzero_count": 458752,
+        "allzero": false,
+        "constant": false,
+        "nan_count": 0,
+        "inf_count": 0
+      },
+      "run_status": "pass",
+      "runtime_exception": null,
+      "raw_output_stats": {
+        "shape": [
+          1,
+          152064
+        ],
+        "dtype": "int16",
+        "size": 152064,
+        "min": 0.0,
+        "max": 0.0,
+        "mean": 0.0,
+        "std": 0.0,
+        "abs_max": 0.0,
+        "nonzero_count": 0,
+        "allzero": true,
+        "constant": true,
+        "nan_count": 0,
+        "inf_count": 0
+      },
+      "dequant_output_stats": {
+        "shape": [
+          152064
+        ],
+        "dtype": "float32",
+        "size": 152064,
+        "min": 0.0,
+        "max": 0.0,
+        "mean": 0.0,
+        "std": 0.0,
+        "abs_max": 0.0,
+        "nonzero_count": 0,
+        "allzero": true,
+        "constant": true,
+        "nan_count": 0,
+        "inf_count": 0
+      },
+      "softmax": {
+        "entropy": 11.932056763842207,
+        "normalized_entropy": 1.0,
+        "top1_probability": 6.576178451178451e-06
+      },
+      "top10_logits": [
+        {
+          "token": 152063,
+          "logit": 0.0
+        },
+        {
+          "token": 50693,
+          "logit": 0.0
+        },
+        {
+          "token": 50691,
+          "logit": 0.0
+        },
+        {
+          "token": 50690,
+          "logit": 0.0
+        },
+        {
+          "token": 50689,
+          "logit": 0.0
+        },
+        {
+          "token": 50688,
+          "logit": 0.0
+        },
+        {
+          "token": 50687,
+          "logit": 0.0
+        },
+        {
+          "token": 50686,
+          "logit": 0.0
+        },
+        {
+          "token": 50685,
+          "logit": 0.0
+        },
+        {
+          "token": 50684,
+          "logit": 0.0
+        }
+      ]
+    },
+    {
+      "variant_id": "real_x_div_2",
+      "why_included": "real seg26 hidden divided by 2.0",
+      "input_path": "/mnt/nas/openclaw/reports/models/dream7b_s100p_v5_execution_20260701/evidence/final_segment_dense_sweep_v5/short_chinese_prompt_padded/real_x_div_2/input.npy",
+      "raw_output_path": "/mnt/nas/openclaw/reports/models/dream7b_s100p_v5_execution_20260701/evidence/final_segment_dense_sweep_v5/short_chinese_prompt_padded/real_x_div_2/raw_output.npy",
+      "dequant_logits_path": "/mnt/nas/openclaw/reports/models/dream7b_s100p_v5_execution_20260701/evidence/final_segment_dense_sweep_v5/short_chinese_prompt_padded/real_x_div_2/dequant_logits.npy",
+      "metadata_path": "/mnt/nas/openclaw/reports/models/dream7b_s100p_v5_execution_20260701/evidence/final_segment_dense_sweep_v5/short_chinese_prompt_padded/real_x_div_2/metadata.json",
+      "input_stats": {
+        "shape": [
+          128,
+          3584
+        ],
+        "dtype": "float32",
+        "size": 458752,
+        "min": -8.148393630981445,
+        "max": 8.148393630981445,
+        "mean": 0.030996982008218765,
+        "std": 8.061463356018066,
+        "abs_max": 8.148393630981445,
+        "nonzero_count": 458752,
+        "allzero": false,
+        "constant": false,
+        "nan_count": 0,
+        "inf_count": 0
+      },
+      "run_status": "pass",
+      "runtime_exception": null,
+      "raw_output_stats": {
+        "shape": [
+          1,
+          152064
+        ],
+        "dtype": "int16",
+        "size": 152064,
+        "min": 0.0,
+        "max": 0.0,
+        "mean": 0.0,
+        "std": 0.0,
+        "abs_max": 0.0,
+        "nonzero_count": 0,
+        "allzero": true,
+        "constant": true,
+        "nan_count": 0,
+        "inf_count": 0
+      },
+      "dequant_output_stats": {
+        "shape": [
+          152064
+        ],
+        "dtype": "float32",
+        "size": 152064,
+        "min": 0.0,
+        "max": 0.0,
+        "mean": 0.0,
+        "std": 0.0,
+        "abs_max": 0.0,
+        "nonzero_count": 0,
+        "allzero": true,
+        "constant": true,
+        "nan_count": 0,
+        "inf_count": 0
+      },
+      "softmax": {
+        "entropy": 11.932056763842207,
+        "normalized_entropy": 1.0,
+        "top1_probability": 6.576178451178451e-06
+      },
+      "top10_logits": [
+        {
+          "token": 152063,
+          "logit": 0.0
+        },
+        {
+          "token": 50693,
+          "logit": 0.0
+        },
+        {
+          "token": 50691,
+          "logit": 0.0
+        },
+        {
+          "token": 50690,
+          "logit": 0.0
+        },
+        {
+          "token": 50689,
+          "logit": 0.0
+        },
+        {
+          "token": 50688,
+          "logit": 0.0
+        },
+        {
+          "token": 50687,
+          "logit": 0.0
+        },
+        {
+          "token": 50686,
+          "logit": 0.0
+        },
+        {
+          "token": 50685,
+          "logit": 0.0
+        },
+        {
+          "token": 50684,
+          "logit": 0.0
+        }
+      ]
+    },
+    {
+      "variant_id": "real_x_div_2p25",
+      "why_included": "real seg26 hidden divided by 2.25",
+      "input_path": "/mnt/nas/openclaw/reports/models/dream7b_s100p_v5_execution_20260701/evidence/final_segment_dense_sweep_v5/short_chinese_prompt_padded/real_x_div_2p25/input.npy",
+      "raw_output_path": "/mnt/nas/openclaw/reports/models/dream7b_s100p_v5_execution_20260701/evidence/final_segment_dense_sweep_v5/short_chinese_prompt_padded/real_x_div_2p25/raw_output.npy",
+      "dequant_logits_path": "/mnt/nas/openclaw/reports/models/dream7b_s100p_v5_execution_20260701/evidence/final_segment_dense_sweep_v5/short_chinese_prompt_padded/real_x_div_2p25/dequant_logits.npy",
+      "metadata_path": "/mnt/nas/openclaw/reports/models/dream7b_s100p_v5_execution_20260701/evidence/final_segment_dense_sweep_v5/short_chinese_prompt_padded/real_x_div_2p25/metadata.json",
+      "input_stats": {
+        "shape": [
+          128,
+          3584
+        ],
+        "dtype": "float32",
+        "size": 458752,
+        "min": -7.243016719818115,
+        "max": 7.243016719818115,
+        "mean": 0.027552872896194458,
+        "std": 7.165746688842773,
+        "abs_max": 7.243016719818115,
+        "nonzero_count": 458752,
+        "allzero": false,
+        "constant": false,
+        "nan_count": 0,
+        "inf_count": 0
+      },
+      "run_status": "pass",
+      "runtime_exception": null,
+      "raw_output_stats": {
+        "shape": [
+          1,
+          152064
+        ],
+        "dtype": "int16",
+        "size": 152064,
+        "min": 0.0,
+        "max": 0.0,
+        "mean": 0.0,
+        "std": 0.0,
+        "abs_max": 0.0,
+        "nonzero_count": 0,
+        "allzero": true,
+        "constant": true,
+        "nan_count": 0,
+        "inf_count": 0
+      },
+      "dequant_output_stats": {
+        "shape": [
+          152064
+        ],
+        "dtype": "float32",
+        "size": 152064,
+        "min": 0.0,
+        "max": 0.0,
+        "mean": 0.0,
+        "std": 0.0,
+        "abs_max": 0.0,
+        "nonzero_count": 0,
+        "allzero": true,
+        "constant": true,
+        "nan_count": 0,
+        "inf_count": 0
+      },
+      "softmax": {
+        "entropy": 11.932056763842207,
+        "normalized_entropy": 1.0,
+        "top1_probability": 6.576178451178451e-06
+      },
+      "top10_logits": [
+        {
+          "token": 152063,
+          "logit": 0.0
+        },
+        {
+          "token": 50693,
+          "logit": 0.0
+        },
+        {
+          "token": 50691,
+          "logit": 0.0
+        },
+        {
+          "token": 50690,
+          "logit": 0.0
+        },
+        {
+          "token": 50689,
+          "logit": 0.0
+        },
+        {
+          "token": 50688,
+          "logit": 0.0
+        },
+        {
+          "token": 50687,
+          "logit": 0.0
+        },
+        {
+          "token": 50686,
+          "logit": 0.0
+        },
+        {
+          "token": 50685,
+          "logit": 0.0
+        },
+        {
+          "token": 50684,
+          "logit": 0.0
+        }
+      ]
+    },
+    {
+      "variant_id": "real_x_div_2p5",
+      "why_included": "real seg26 hidden divided by 2.5",
+      "input_path": "/mnt/nas/openclaw/reports/models/dream7b_s100p_v5_execution_20260701/evidence/final_segment_dense_sweep_v5/short_chinese_prompt_padded/real_x_div_2p5/input.npy",
+      "raw_output_path": "/mnt/nas/openclaw/reports/models/dream7b_s100p_v5_execution_20260701/evidence/final_segment_dense_sweep_v5/short_chinese_prompt_padded/real_x_div_2p5/raw_output.npy",
+      "dequant_logits_path": "/mnt/nas/openclaw/reports/models/dream7b_s100p_v5_execution_20260701/evidence/final_segment_dense_sweep_v5/short_chinese_prompt_padded/real_x_div_2p5/dequant_logits.npy",
+      "metadata_path": "/mnt/nas/openclaw/reports/models/dream7b_s100p_v5_execution_20260701/evidence/final_segment_dense_sweep_v5/short_chinese_prompt_padded/real_x_div_2p5/metadata.json",
+      "input_stats": {
+        "shape": [
+          128,
+          3584
+        ],
+        "dtype": "float32",
+        "size": 458752,
+        "min": -6.518714904785156,
+        "max": 6.518714904785156,
+        "mean": 0.02479758858680725,
+        "std": 6.44917106628418,
+        "abs_max": 6.518714904785156,
+        "nonzero_count": 458752,
+        "allzero": false,
+        "constant": false,
+        "nan_count": 0,
+        "inf_count": 0
+      },
+      "run_status": "pass",
+      "runtime_exception": null,
+      "raw_output_stats": {
+        "shape": [
+          1,
+          152064
+        ],
+        "dtype": "int16",
+        "size": 152064,
+        "min": 0.0,
+        "max": 0.0,
+        "mean": 0.0,
+        "std": 0.0,
+        "abs_max": 0.0,
+        "nonzero_count": 0,
+        "allzero": true,
+        "constant": true,
+        "nan_count": 0,
+        "inf_count": 0
+      },
+      "dequant_output_stats": {
+        "shape": [
+          152064
+        ],
+        "dtype": "float32",
+        "size": 152064,
+        "min": 0.0,
+        "max": 0.0,
+        "mean": 0.0,
+        "std": 0.0,
+        "abs_max": 0.0,
+        "nonzero_count": 0,
+        "allzero": true,
+        "constant": true,
+        "nan_count": 0,
+        "inf_count": 0
+      },
+      "softmax": {
+        "entropy": 11.932056763842207,
+        "normalized_entropy": 1.0,
+        "top1_probability": 6.576178451178451e-06
+      },
+      "top10_logits": [
+        {
+          "token": 152063,
+          "logit": 0.0
+        },
+        {
+          "token": 50693,
+          "logit": 0.0
+        },
+        {
+          "token": 50691,
+          "logit": 0.0
+        },
+        {
+          "token": 50690,
+          "logit": 0.0
+        },
+        {
+          "token": 50689,
+          "logit": 0.0
+        },
+        {
+          "token": 50688,
+          "logit": 0.0
+        },
+        {
+          "token": 50687,
+          "logit": 0.0
+        },
+        {
+          "token": 50686,
+          "logit": 0.0
+        },
+        {
+          "token": 50685,
+          "logit": 0.0
+        },
+        {
+          "token": 50684,
+          "logit": 0.0
+        }
+      ]
+    },
+    {
+      "variant_id": "real_x_div_2p75",
+      "why_included": "real seg26 hidden divided by 2.75",
+      "input_path": "/mnt/nas/openclaw/reports/models/dream7b_s100p_v5_execution_20260701/evidence/final_segment_dense_sweep_v5/short_chinese_prompt_padded/real_x_div_2p75/input.npy",
+      "raw_output_path": "/mnt/nas/openclaw/reports/models/dream7b_s100p_v5_execution_20260701/evidence/final_segment_dense_sweep_v5/short_chinese_prompt_padded/real_x_div_2p75/raw_output.npy",
+      "dequant_logits_path": "/mnt/nas/openclaw/reports/models/dream7b_s100p_v5_execution_20260701/evidence/final_segment_dense_sweep_v5/short_chinese_prompt_padded/real_x_div_2p75/dequant_logits.npy",
+      "metadata_path": "/mnt/nas/openclaw/reports/models/dream7b_s100p_v5_execution_20260701/evidence/final_segment_dense_sweep_v5/short_chinese_prompt_padded/real_x_div_2p75/metadata.json",
+      "input_stats": {
+        "shape": [
+          128,
+          3584
+        ],
+        "dtype": "float32",
+        "size": 458752,
+        "min": -5.926104545593262,
+        "max": 5.926104545593262,
+        "mean": 0.02254326269030571,
+        "std": 5.862883567810059,
+        "abs_max": 5.926104545593262,
+        "nonzero_count": 458752,
+        "allzero": false,
+        "constant": false,
+        "nan_count": 0,
+        "inf_count": 0
+      },
+      "run_status": "pass",
+      "runtime_exception": null,
+      "raw_output_stats": {
+        "shape": [
+          1,
+          152064
+        ],
+        "dtype": "int16",
+        "size": 152064,
+        "min": -26389.0,
+        "max": 24908.0,
+        "mean": 1392.5514322916667,
+        "std": 3676.3329750318353,
+        "abs_max": 26389.0,
+        "nonzero_count": 152046,
+        "allzero": false,
+        "constant": false,
+        "nan_count": 0,
+        "inf_count": 0
+      },
+      "dequant_output_stats": {
+        "shape": [
+          152064
+        ],
+        "dtype": "float32",
+        "size": 152064,
+        "min": -26389.0,
+        "max": 24908.0,
+        "mean": 1392.5513916015625,
+        "std": 3676.332763671875,
+        "abs_max": 26389.0,
+        "nonzero_count": 152046,
+        "allzero": false,
+        "constant": false,
+        "nan_count": 0,
+        "inf_count": 0
+      },
+      "softmax": {
+        "entropy": -0.0,
+        "normalized_entropy": -0.0,
+        "top1_probability": 1.0
+      },
+      "top10_logits": [
+        {
+          "token": 72869,
+          "logit": 24908.0
+        },
+        {
+          "token": 37355,
+          "logit": 23706.0
+        },
+        {
+          "token": 58375,
+          "logit": 23611.0
+        },
+        {
+          "token": 5379,
+          "logit": 23302.0
+        },
+        {
+          "token": 84602,
+          "logit": 23040.0
+        },
+        {
+          "token": 31069,
+          "logit": 22865.0
+        },
+        {
+          "token": 36343,
+          "logit": 22159.0
+        },
+        {
+          "token": 32903,
+          "logit": 22086.0
+        },
+        {
+          "token": 97982,
+          "logit": 21920.0
+        },
+        {
+          "token": 50564,
+          "logit": 21885.0
+        }
+      ]
+    },
+    {
+      "variant_id": "real_x_div_3",
+      "why_included": "real seg26 hidden divided by 3.0",
+      "input_path": "/mnt/nas/openclaw/reports/models/dream7b_s100p_v5_execution_20260701/evidence/final_segment_dense_sweep_v5/short_chinese_prompt_padded/real_x_div_3/input.npy",
+      "raw_output_path": "/mnt/nas/openclaw/reports/models/dream7b_s100p_v5_execution_20260701/evidence/final_segment_dense_sweep_v5/short_chinese_prompt_padded/real_x_div_3/raw_output.npy",
+      "dequant_logits_path": "/mnt/nas/openclaw/reports/models/dream7b_s100p_v5_execution_20260701/evidence/final_segment_dense_sweep_v5/short_chinese_prompt_padded/real_x_div_3/dequant_logits.npy",
+      "metadata_path": "/mnt/nas/openclaw/reports/models/dream7b_s100p_v5_execution_20260701/evidence/final_segment_dense_sweep_v5/short_chinese_prompt_padded/real_x_div_3/metadata.json",
+      "input_stats": {
+        "shape": [
+          128,
+          3584
+        ],
+        "dtype": "float32",
+        "size": 458752,
+        "min": -5.432262420654297,
+        "max": 5.432262420654297,
+        "mean": 0.020664656534790993,
+        "std": 5.374309062957764,
+        "abs_max": 5.432262420654297,
+        "nonzero_count": 458752,
+        "allzero": false,
+        "constant": false,
+        "nan_count": 0,
+        "inf_count": 0
+      },
+      "run_status": "pass",
+      "runtime_exception": null,
+      "raw_output_stats": {
+        "shape": [
+          1,
+          152064
+        ],
+        "dtype": "int16",
+        "size": 152064,
+        "min": -24072.0,
+        "max": 23224.0,
+        "mean": 970.4870120475589,
+        "std": 3405.0357402823465,
+        "abs_max": 24072.0,
+        "nonzero_count": 152053,
+        "allzero": false,
+        "constant": false,
+        "nan_count": 0,
+        "inf_count": 0
+      },
+      "dequant_output_stats": {
+        "shape": [
+          152064
+        ],
+        "dtype": "float32",
+        "size": 152064,
+        "min": -24072.0,
+        "max": 23224.0,
+        "mean": 970.487060546875,
+        "std": 3405.03564453125,
+        "abs_max": 24072.0,
+        "nonzero_count": 152053,
+        "allzero": false,
+        "constant": false,
+        "nan_count": 0,
+        "inf_count": 0
+      },
+      "softmax": {
+        "entropy": -0.0,
+        "normalized_entropy": -0.0,
+        "top1_probability": 1.0
+      },
+      "top10_logits": [
+        {
+          "token": 72869,
+          "logit": 23224.0
+        },
+        {
+          "token": 37355,
+          "logit": 22268.0
+        },
+        {
+          "token": 58375,
+          "logit": 21503.0
+        },
+        {
+          "token": 5379,
+          "logit": 21384.0
+        },
+        {
+          "token": 84602,
+          "logit": 21238.0
+        },
+        {
+          "token": 31069,
+          "logit": 21072.0
+        },
+        {
+          "token": 97982,
+          "logit": 20382.0
+        },
+        {
+          "token": 32903,
+          "logit": 20253.0
+        },
+        {
+          "token": 36343,
+          "logit": 20159.0
+        },
+        {
+          "token": 83613,
+          "logit": 19847.0
+        }
+      ]
+    },
+    {
+      "variant_id": "real_x_div_3p25",
+      "why_included": "real seg26 hidden divided by 3.25",
+      "input_path": "/mnt/nas/openclaw/reports/models/dream7b_s100p_v5_execution_20260701/evidence/final_segment_dense_sweep_v5/short_chinese_prompt_padded/real_x_div_3p25/input.npy",
+      "raw_output_path": "/mnt/nas/openclaw/reports/models/dream7b_s100p_v5_execution_20260701/evidence/final_segment_dense_sweep_v5/short_chinese_prompt_padded/real_x_div_3p25/raw_output.npy",
+      "dequant_logits_path": "/mnt/nas/openclaw/reports/models/dream7b_s100p_v5_execution_20260701/evidence/final_segment_dense_sweep_v5/short_chinese_prompt_padded/real_x_div_3p25/dequant_logits.npy",
+      "metadata_path": "/mnt/nas/openclaw/reports/models/dream7b_s100p_v5_execution_20260701/evidence/final_segment_dense_sweep_v5/short_chinese_prompt_padded/real_x_div_3p25/metadata.json",
+      "input_stats": {
+        "shape": [
+          128,
+          3584
+        ],
+        "dtype": "float32",
+        "size": 458752,
+        "min": -5.0143961906433105,
+        "max": 5.0143961906433105,
+        "mean": 0.019075069576501846,
+        "std": 4.96090030670166,
+        "abs_max": 5.0143961906433105,
+        "nonzero_count": 458752,
+        "allzero": false,
+        "constant": false,
+        "nan_count": 0,
+        "inf_count": 0
+      },
+      "run_status": "pass",
+      "runtime_exception": null,
+      "raw_output_stats": {
+        "shape": [
+          1,
+          152064
+        ],
+        "dtype": "int16",
+        "size": 152064,
+        "min": -22102.0,
+        "max": 21799.0,
+        "mean": 613.0612571022727,
+        "std": 3181.067871375324,
+        "abs_max": 22102.0,
+        "nonzero_count": 152052,
+        "allzero": false,
+        "constant": false,
+        "nan_count": 0,
+        "inf_count": 0
+      },
+      "dequant_output_stats": {
+        "shape": [
+          152064
+        ],
+        "dtype": "float32",
+        "size": 152064,
+        "min": -22102.0,
+        "max": 21799.0,
+        "mean": 613.0612182617188,
+        "std": 3181.06787109375,
+        "abs_max": 22102.0,
+        "nonzero_count": 152052,
+        "allzero": false,
+        "constant": false,
+        "nan_count": 0,
+        "inf_count": 0
+      },
+      "softmax": {
+        "entropy": -0.0,
+        "normalized_entropy": -0.0,
+        "top1_probability": 1.0
+      },
+      "top10_logits": [
+        {
+          "token": 72869,
+          "logit": 21799.0
+        },
+        {
+          "token": 37355,
+          "logit": 21052.0
+        },
+        {
+          "token": 5379,
+          "logit": 19765.0
+        },
+        {
+          "token": 58375,
+          "logit": 19722.0
+        },
+        {
+          "token": 84602,
+          "logit": 19713.0
+        },
+        {
+          "token": 31069,
+          "logit": 19576.0
+        },
+        {
+          "token": 97982,
+          "logit": 19085.0
+        },
+        {
+          "token": 32903,
+          "logit": 18706.0
+        },
+        {
+          "token": 36343,
+          "logit": 18484.0
+        },
+        {
+          "token": 83613,
+          "logit": 18461.0
+        }
+      ]
+    },
+    {
+      "variant_id": "real_x_div_3p5",
+      "why_included": "real seg26 hidden divided by 3.5",
+      "input_path": "/mnt/nas/openclaw/reports/models/dream7b_s100p_v5_execution_20260701/evidence/final_segment_dense_sweep_v5/short_chinese_prompt_padded/real_x_div_3p5/input.npy",
+      "raw_output_path": "/mnt/nas/openclaw/reports/models/dream7b_s100p_v5_execution_20260701/evidence/final_segment_dense_sweep_v5/short_chinese_prompt_padded/real_x_div_3p5/raw_output.npy",
+      "dequant_logits_path": "/mnt/nas/openclaw/reports/models/dream7b_s100p_v5_execution_20260701/evidence/final_segment_dense_sweep_v5/short_chinese_prompt_padded/real_x_div_3p5/dequant_logits.npy",
+      "metadata_path": "/mnt/nas/openclaw/reports/models/dream7b_s100p_v5_execution_20260701/evidence/final_segment_dense_sweep_v5/short_chinese_prompt_padded/real_x_div_3p5/metadata.json",
+      "input_stats": {
+        "shape": [
+          128,
+          3584
+        ],
+        "dtype": "float32",
+        "size": 458752,
+        "min": -4.656224727630615,
+        "max": 4.656224727630615,
+        "mean": 0.017712561413645744,
+        "std": 4.606550216674805,
+        "abs_max": 4.656224727630615,
+        "nonzero_count": 458752,
+        "allzero": false,
+        "constant": false,
+        "nan_count": 0,
+        "inf_count": 0
+      },
+      "run_status": "pass",
+      "runtime_exception": null,
+      "raw_output_stats": {
+        "shape": [
+          1,
+          152064
+        ],
+        "dtype": "int16",
+        "size": 152064,
+        "min": -20426.0,
+        "max": 20589.0,
+        "mean": 320.8616832386364,
+        "std": 2993.294363334295,
+        "abs_max": 20589.0,
+        "nonzero_count": 152035,
+        "allzero": false,
+        "constant": false,
+        "nan_count": 0,
+        "inf_count": 0
+      },
+      "dequant_output_stats": {
+        "shape": [
+          152064
+        ],
+        "dtype": "float32",
+        "size": 152064,
+        "min": -20426.0,
+        "max": 20589.0,
+        "mean": 320.8616943359375,
+        "std": 2993.29443359375,
+        "abs_max": 20589.0,
+        "nonzero_count": 152035,
+        "allzero": false,
+        "constant": false,
+        "nan_count": 0,
+        "inf_count": 0
+      },
+      "softmax": {
+        "entropy": 2.375013991671941e-243,
+        "normalized_entropy": 1.9904481169323315e-244,
+        "top1_probability": 1.0
+      },
+      "top10_logits": [
+        {
+          "token": 72869,
+          "logit": 20589.0
+        },
+        {
+          "token": 37355,
+          "logit": 20024.0
+        },
+        {
+          "token": 84602,
+          "logit": 18419.0
+        },
+        {
+          "token": 5379,
+          "logit": 18380.0
+        },
+        {
+          "token": 31069,
+          "logit": 18289.0
+        },
+        {
+          "token": 58375,
+          "logit": 18208.0
+        },
+        {
+          "token": 97982,
+          "logit": 17981.0
+        },
+        {
+          "token": 32903,
+          "logit": 17392.0
+        },
+        {
+          "token": 83613,
+          "logit": 17295.0
+        },
+        {
+          "token": 26269,
+          "logit": 17063.0
+        }
+      ]
+    },
+    {
+      "variant_id": "real_x_div_3p75",
+      "why_included": "real seg26 hidden divided by 3.75",
+      "input_path": "/mnt/nas/openclaw/reports/models/dream7b_s100p_v5_execution_20260701/evidence/final_segment_dense_sweep_v5/short_chinese_prompt_padded/real_x_div_3p75/input.npy",
+      "raw_output_path": "/mnt/nas/openclaw/reports/models/dream7b_s100p_v5_execution_20260701/evidence/final_segment_dense_sweep_v5/short_chinese_prompt_padded/real_x_div_3p75/raw_output.npy",
+      "dequant_logits_path": "/mnt/nas/openclaw/reports/models/dream7b_s100p_v5_execution_20260701/evidence/final_segment_dense_sweep_v5/short_chinese_prompt_padded/real_x_div_3p75/dequant_logits.npy",
+      "metadata_path": "/mnt/nas/openclaw/reports/models/dream7b_s100p_v5_execution_20260701/evidence/final_segment_dense_sweep_v5/short_chinese_prompt_padded/real_x_div_3p75/metadata.json",
+      "input_stats": {
+        "shape": [
+          128,
+          3584
+        ],
+        "dtype": "float32",
+        "size": 458752,
+        "min": -4.3458099365234375,
+        "max": 4.3458099365234375,
+        "mean": 0.016531726345419884,
+        "std": 4.299447536468506,
+        "abs_max": 4.3458099365234375,
+        "nonzero_count": 458752,
+        "allzero": false,
+        "constant": false,
+        "nan_count": 0,
+        "inf_count": 0
+      },
+      "run_status": "pass",
+      "runtime_exception": null,
+      "raw_output_stats": {
+        "shape": [
+          1,
+          152064
+        ],
+        "dtype": "int16",
+        "size": 152064,
+        "min": -18946.0,
+        "max": 19522.0,
+        "mean": 48.64010548190236,
+        "std": 2833.8377543911038,
+        "abs_max": 19522.0,
+        "nonzero_count": 152036,
+        "allzero": false,
+        "constant": false,
+        "nan_count": 0,
+        "inf_count": 0
+      },
+      "dequant_output_stats": {
+        "shape": [
+          152064
+        ],
+        "dtype": "float32",
+        "size": 152064,
+        "min": -18946.0,
+        "max": 19522.0,
+        "mean": 48.64011764526367,
+        "std": 2833.837646484375,
+        "abs_max": 19522.0,
+        "nonzero_count": 152036,
+        "allzero": false,
+        "constant": false,
+        "nan_count": 0,
+        "inf_count": 0
+      },
+      "softmax": {
+        "entropy": 1.3146488311992928e-176,
+        "normalized_entropy": 1.1017788946354011e-177,
+        "top1_probability": 1.0
+      },
+      "top10_logits": [
+        {
+          "token": 72869,
+          "logit": 19522.0
+        },
+        {
+          "token": 37355,
+          "logit": 19111.0
+        },
+        {
+          "token": 84602,
+          "logit": 17276.0
+        },
+        {
+          "token": 31069,
+          "logit": 17164.0
+        },
+        {
+          "token": 5379,
+          "logit": 17162.0
+        },
+        {
+          "token": 97982,
+          "logit": 17009.0
+        },
+        {
+          "token": 58375,
+          "logit": 16873.0
+        },
+        {
+          "token": 83613,
+          "logit": 16251.0
+        },
+        {
+          "token": 32903,
+          "logit": 16227.0
+        },
+        {
+          "token": 26269,
+          "logit": 16187.0
+        }
+      ]
+    },
+    {
+      "variant_id": "real_x_div_4",
+      "why_included": "real seg26 hidden divided by 4.0",
+      "input_path": "/mnt/nas/openclaw/reports/models/dream7b_s100p_v5_execution_20260701/evidence/final_segment_dense_sweep_v5/short_chinese_prompt_padded/real_x_div_4/input.npy",
+      "raw_output_path": "/mnt/nas/openclaw/reports/models/dream7b_s100p_v5_execution_20260701/evidence/final_segment_dense_sweep_v5/short_chinese_prompt_padded/real_x_div_4/raw_output.npy",
+      "dequant_logits_path": "/mnt/nas/openclaw/reports/models/dream7b_s100p_v5_execution_20260701/evidence/final_segment_dense_sweep_v5/short_chinese_prompt_padded/real_x_div_4/dequant_logits.npy",
+      "metadata_path": "/mnt/nas/openclaw/reports/models/dream7b_s100p_v5_execution_20260701/evidence/final_segment_dense_sweep_v5/short_chinese_prompt_padded/real_x_div_4/metadata.json",
+      "input_stats": {
+        "shape": [
+          128,
+          3584
+        ],
+        "dtype": "float32",
+        "size": 458752,
+        "min": -4.074196815490723,
+        "max": 4.074196815490723,
+        "mean": 0.015498491004109383,
+        "std": 4.030731678009033,
+        "abs_max": 4.074196815490723,
+        "nonzero_count": 458752,
+        "allzero": false,
+        "constant": false,
+        "nan_count": 0,
+        "inf_count": 0
+      },
+      "run_status": "pass",
+      "runtime_exception": null,
+      "raw_output_stats": {
+        "shape": [
+          1,
+          152064
+        ],
+        "dtype": "int16",
+        "size": 152064,
+        "min": -17951.0,
+        "max": 18616.0,
+        "mean": -169.99175347222223,
+        "std": 2698.416375765232,
+        "abs_max": 18616.0,
+        "nonzero_count": 152040,
+        "allzero": false,
+        "constant": false,
+        "nan_count": 0,
+        "inf_count": 0
+      },
+      "dequant_output_stats": {
+        "shape": [
+          152064
+        ],
+        "dtype": "float32",
+        "size": 152064,
+        "min": -17951.0,
+        "max": 18616.0,
+        "mean": -169.99171447753906,
+        "std": 2698.41650390625,
+        "abs_max": 18616.0,
+        "nonzero_count": 152040,
+        "allzero": false,
+        "constant": false,
+        "nan_count": 0,
+        "inf_count": 0
+      },
+      "softmax": {
+        "entropy": 6.993637187362701e-120,
+        "normalized_entropy": 5.861216826050952e-121,
+        "top1_probability": 1.0
+      },
+      "top10_logits": [
+        {
+          "token": 72869,
+          "logit": 18616.0
+        },
+        {
+          "token": 37355,
+          "logit": 18336.0
+        },
+        {
+          "token": 84602,
+          "logit": 16292.0
+        },
+        {
+          "token": 31069,
+          "logit": 16192.0
+        },
+        {
+          "token": 97982,
+          "logit": 16173.0
+        },
+        {
+          "token": 5379,
+          "logit": 16111.0
+        },
+        {
+          "token": 58375,
+          "logit": 15729.0
+        },
+        {
+          "token": 26269,
+          "logit": 15444.0
+        },
+        {
+          "token": 83613,
+          "logit": 15369.0
+        },
+        {
+          "token": 97281,
+          "logit": 15350.0
+        }
+      ]
+    },
+    {
+      "variant_id": "real_x_div_4p25",
+      "why_included": "real seg26 hidden divided by 4.25",
+      "input_path": "/mnt/nas/openclaw/reports/models/dream7b_s100p_v5_execution_20260701/evidence/final_segment_dense_sweep_v5/short_chinese_prompt_padded/real_x_div_4p25/input.npy",
+      "raw_output_path": "/mnt/nas/openclaw/reports/models/dream7b_s100p_v5_execution_20260701/evidence/final_segment_dense_sweep_v5/short_chinese_prompt_padded/real_x_div_4p25/raw_output.npy",
+      "dequant_logits_path": "/mnt/nas/openclaw/reports/models/dream7b_s100p_v5_execution_20260701/evidence/final_segment_dense_sweep_v5/short_chinese_prompt_padded/real_x_div_4p25/dequant_logits.npy",
+      "metadata_path": "/mnt/nas/openclaw/reports/models/dream7b_s100p_v5_execution_20260701/evidence/final_segment_dense_sweep_v5/short_chinese_prompt_padded/real_x_div_4p25/metadata.json",
+      "input_stats": {
+        "shape": [
+          128,
+          3584
+        ],
+        "dtype": "float32",
+        "size": 458752,
+        "min": -3.834538221359253,
+        "max": 3.834538221359253,
+        "mean": 0.014586814679205418,
+        "std": 3.7936296463012695,
+        "abs_max": 3.834538221359253,
+        "nonzero_count": 458752,
+        "allzero": false,
+        "constant": false,
+        "nan_count": 0,
+        "inf_count": 0
+      },
+      "run_status": "pass",
+      "runtime_exception": null,
+      "raw_output_stats": {
+        "shape": [
+          1,
+          152064
+        ],
+        "dtype": "int16",
+        "size": 152064,
+        "min": -17425.0,
+        "max": 17802.0,
+        "mean": -369.29148253367003,
+        "std": 2583.241956020159,
+        "abs_max": 17802.0,
+        "nonzero_count": 152031,
+        "allzero": false,
+        "constant": false,
+        "nan_count": 0,
+        "inf_count": 0
+      },
+      "dequant_output_stats": {
+        "shape": [
+          152064
+        ],
+        "dtype": "float32",
+        "size": 152064,
+        "min": -17425.0,
+        "max": 17802.0,
+        "mean": -369.29144287109375,
+        "std": 2583.241943359375,
+        "abs_max": 17802.0,
+        "nonzero_count": 152031,
+        "allzero": false,
+        "constant": false,
+        "nan_count": 0,
+        "inf_count": 0
+      },
+      "softmax": {
+        "entropy": 3.985751148408376e-64,
+        "normalized_entropy": 3.3403722654810237e-65,
+        "top1_probability": 1.0
+      },
+      "top10_logits": [
+        {
+          "token": 72869,
+          "logit": 17802.0
+        },
+        {
+          "token": 37355,
+          "logit": 17651.0
+        },
+        {
+          "token": 97982,
+          "logit": 15441.0
+        },
+        {
+          "token": 84602,
+          "logit": 15433.0
+        },
+        {
+          "token": 31069,
+          "logit": 15335.0
+        },
+        {
+          "token": 5379,
+          "logit": 15196.0
+        },
+        {
+          "token": 26269,
+          "logit": 14783.0
+        },
+        {
+          "token": 58375,
+          "logit": 14716.0
+        },
+        {
+          "token": 97281,
+          "logit": 14681.0
+        },
+        {
+          "token": 55573,
+          "logit": 14607.0
+        }
+      ]
+    },
+    {
+      "variant_id": "real_x_div_4p5",
+      "why_included": "real seg26 hidden divided by 4.5",
+      "input_path": "/mnt/nas/openclaw/reports/models/dream7b_s100p_v5_execution_20260701/evidence/final_segment_dense_sweep_v5/short_chinese_prompt_padded/real_x_div_4p5/input.npy",
+      "raw_output_path": "/mnt/nas/openclaw/reports/models/dream7b_s100p_v5_execution_20260701/evidence/final_segment_dense_sweep_v5/short_chinese_prompt_padded/real_x_div_4p5/raw_output.npy",
+      "dequant_logits_path": "/mnt/nas/openclaw/reports/models/dream7b_s100p_v5_execution_20260701/evidence/final_segment_dense_sweep_v5/short_chinese_prompt_padded/real_x_div_4p5/dequant_logits.npy",
+      "metadata_path": "/mnt/nas/openclaw/reports/models/dream7b_s100p_v5_execution_20260701/evidence/final_segment_dense_sweep_v5/short_chinese_prompt_padded/real_x_div_4p5/metadata.json",
+      "input_stats": {
+        "shape": [
+          128,
+          3584
+        ],
+        "dtype": "float32",
+        "size": 458752,
+        "min": -3.6215083599090576,
+        "max": 3.6215083599090576,
+        "mean": 0.013776436448097229,
+        "std": 3.5828733444213867,
+        "abs_max": 3.6215083599090576,
+        "nonzero_count": 458752,
+        "allzero": false,
+        "constant": false,
+        "nan_count": 0,
+        "inf_count": 0
+      },
+      "run_status": "pass",
+      "runtime_exception": null,
+      "raw_output_stats": {
+        "shape": [
+          1,
+          152064
+        ],
+        "dtype": "int16",
+        "size": 152064,
+        "min": -16944.0,
+        "max": 17080.0,
+        "mean": -555.2847945601852,
+        "std": 2483.218047468637,
+        "abs_max": 17080.0,
+        "nonzero_count": 152029,
+        "allzero": false,
+        "constant": false,
+        "nan_count": 0,
+        "inf_count": 0
+      },
+      "dequant_output_stats": {
+        "shape": [
+          152064
+        ],
+        "dtype": "float32",
+        "size": 152064,
+        "min": -16944.0,
+        "max": 17080.0,
+        "mean": -555.2848510742188,
+        "std": 2483.218017578125,
+        "abs_max": 17080.0,
+        "nonzero_count": 152029,
+        "allzero": false,
+        "constant": false,
+        "nan_count": 0,
+        "inf_count": 0
+      },
+      "softmax": {
+        "entropy": 1.3573451162272064e-21,
+        "normalized_entropy": 1.1375617323078605e-22,
+        "top1_probability": 1.0
+      },
+      "top10_logits": [
+        {
+          "token": 72869,
+          "logit": 17080.0
+        },
+        {
+          "token": 37355,
+          "logit": 17028.0
+        },
+        {
+          "token": 97982,
+          "logit": 14770.0
+        },
+        {
+          "token": 84602,
+          "logit": 14650.0
+        },
+        {
+          "token": 31069,
+          "logit": 14559.0
+        },
+        {
+          "token": 5379,
+          "logit": 14365.0
+        },
+        {
+          "token": 26269,
+          "logit": 14186.0
+        },
+        {
+          "token": 55573,
+          "logit": 14094.0
+        },
+        {
+          "token": 66906,
+          "logit": 14089.0
+        },
+        {
+          "token": 88222,
+          "logit": 14078.0
+        }
+      ]
+    },
+    {
+      "variant_id": "real_x_div_5",
+      "why_included": "real seg26 hidden divided by 5.0",
+      "input_path": "/mnt/nas/openclaw/reports/models/dream7b_s100p_v5_execution_20260701/evidence/final_segment_dense_sweep_v5/short_chinese_prompt_padded/real_x_div_5/input.npy",
+      "raw_output_path": "/mnt/nas/openclaw/reports/models/dream7b_s100p_v5_execution_20260701/evidence/final_segment_dense_sweep_v5/short_chinese_prompt_padded/real_x_div_5/raw_output.npy",
+      "dequant_logits_path": "/mnt/nas/openclaw/reports/models/dream7b_s100p_v5_execution_20260701/evidence/final_segment_dense_sweep_v5/short_chinese_prompt_padded/real_x_div_5/dequant_logits.npy",
+      "metadata_path": "/mnt/nas/openclaw/reports/models/dream7b_s100p_v5_execution_20260701/evidence/final_segment_dense_sweep_v5/short_chinese_prompt_padded/real_x_div_5/metadata.json",
+      "input_stats": {
+        "shape": [
+          128,
+          3584
+        ],
+        "dtype": "float32",
+        "size": 458752,
+        "min": -3.259357452392578,
+        "max": 3.259357452392578,
+        "mean": 0.012398794293403625,
+        "std": 3.22458553314209,
+        "abs_max": 3.259357452392578,
+        "nonzero_count": 458752,
+        "allzero": false,
+        "constant": false,
+        "nan_count": 0,
+        "inf_count": 0
+      },
+      "run_status": "pass",
+      "runtime_exception": null,
+      "raw_output_stats": {
+        "shape": [
+          1,
+          152064
+        ],
+        "dtype": "int16",
+        "size": 152064,
+        "min": -16125.0,
+        "max": 15972.0,
+        "mean": -858.662372422138,
+        "std": 2319.3318121358225,
+        "abs_max": 16125.0,
+        "nonzero_count": 151995,
+        "allzero": false,
+        "constant": false,
+        "nan_count": 0,
+        "inf_count": 0
+      },
+      "dequant_output_stats": {
+        "shape": [
+          152064
+        ],
+        "dtype": "float32",
+        "size": 152064,
+        "min": -16125.0,
+        "max": 15972.0,
+        "mean": -858.6622924804688,
+        "std": 2319.331787109375,
+        "abs_max": 16125.0,
+        "nonzero_count": 151995,
+        "allzero": false,
+        "constant": false,
+        "nan_count": 0,
+        "inf_count": 0
+      },
+      "softmax": {
+        "entropy": 8.879827295740315e-54,
+        "normalized_entropy": 7.441992165716909e-55,
+        "top1_probability": 1.0
+      },
+      "top10_logits": [
+        {
+          "token": 37355,
+          "logit": 15972.0
+        },
+        {
+          "token": 72869,
+          "logit": 15845.0
+        },
+        {
+          "token": 97982,
+          "logit": 13648.0
+        },
+        {
+          "token": 66906,
+          "logit": 13548.0
+        },
+        {
+          "token": 88222,
+          "logit": 13331.0
+        },
+        {
+          "token": 84602,
+          "logit": 13329.0
+        },
+        {
+          "token": 54462,
+          "logit": 13301.0
+        },
+        {
+          "token": 31069,
+          "logit": 13248.0
+        },
+        {
+          "token": 55573,
+          "logit": 13241.0
+        },
+        {
+          "token": 26269,
+          "logit": 13175.0
+        }
+      ]
+    },
+    {
+      "variant_id": "real_x_div_6",
+      "why_included": "real seg26 hidden divided by 6.0",
+      "input_path": "/mnt/nas/openclaw/reports/models/dream7b_s100p_v5_execution_20260701/evidence/final_segment_dense_sweep_v5/short_chinese_prompt_padded/real_x_div_6/input.npy",
+      "raw_output_path": "/mnt/nas/openclaw/reports/models/dream7b_s100p_v5_execution_20260701/evidence/final_segment_dense_sweep_v5/short_chinese_prompt_padded/real_x_div_6/raw_output.npy",
+      "dequant_logits_path": "/mnt/nas/openclaw/reports/models/dream7b_s100p_v5_execution_20260701/evidence/final_segment_dense_sweep_v5/short_chinese_prompt_padded/real_x_div_6/dequant_logits.npy",
+      "metadata_path": "/mnt/nas/openclaw/reports/models/dream7b_s100p_v5_execution_20260701/evidence/final_segment_dense_sweep_v5/short_chinese_prompt_padded/real_x_div_6/metadata.json",
+      "input_stats": {
+        "shape": [
+          128,
+          3584
+        ],
+        "dtype": "float32",
+        "size": 458752,
+        "min": -2.7161312103271484,
+        "max": 2.7161312103271484,
+        "mean": 0.010332328267395496,
+        "std": 2.687154531478882,
+        "abs_max": 2.7161312103271484,
+        "nonzero_count": 458752,
+        "allzero": false,
+        "constant": false,
+        "nan_count": 0,
+        "inf_count": 0
+      },
+      "run_status": "pass",
+      "runtime_exception": null,
+      "raw_output_stats": {
+        "shape": [
+          1,
+          152064
+        ],
+        "dtype": "int16",
+        "size": 152064,
+        "min": -14916.0,
+        "max": 14404.0,
+        "mean": -1326.8761311026935,
+        "std": 2098.6297034931554,
+        "abs_max": 14916.0,
+        "nonzero_count": 152050,
+        "allzero": false,
+        "constant": false,
+        "nan_count": 0,
+        "inf_count": 0
+      },
+      "dequant_output_stats": {
+        "shape": [
+          152064
+        ],
+        "dtype": "float32",
+        "size": 152064,
+        "min": -14916.0,
+        "max": 14404.0,
+        "mean": -1326.876220703125,
+        "std": 2098.6298828125,
+        "abs_max": 14916.0,
+        "nonzero_count": 152050,
+        "allzero": false,
+        "constant": false,
+        "nan_count": 0,
+        "inf_count": 0
+      },
+      "softmax": {
+        "entropy": 2.825251599160617e-172,
+        "normalized_entropy": 2.3677825668094343e-173,
+        "top1_probability": 1.0
+      },
+      "top10_logits": [
+        {
+          "token": 37355,
+          "logit": 14404.0
+        },
+        {
+          "token": 72869,
+          "logit": 14003.0
+        },
+        {
+          "token": 66906,
+          "logit": 12732.0
+        },
+        {
+          "token": 54462,
+          "logit": 12323.0
+        },
+        {
+          "token": 88222,
+          "logit": 12201.0
+        },
+        {
+          "token": 58113,
+          "logit": 12151.0
+        },
+        {
+          "token": 97982,
+          "logit": 11962.0
+        },
+        {
+          "token": 55573,
+          "logit": 11938.0
+        },
+        {
+          "token": 82761,
+          "logit": 11713.0
+        },
+        {
+          "token": 26269,
+          "logit": 11659.0
+        }
+      ]
+    },
+    {
+      "variant_id": "real_x_div_8",
+      "why_included": "real seg26 hidden divided by 8.0",
+      "input_path": "/mnt/nas/openclaw/reports/models/dream7b_s100p_v5_execution_20260701/evidence/final_segment_dense_sweep_v5/short_chinese_prompt_padded/real_x_div_8/input.npy",
+      "raw_output_path": "/mnt/nas/openclaw/reports/models/dream7b_s100p_v5_execution_20260701/evidence/final_segment_dense_sweep_v5/short_chinese_prompt_padded/real_x_div_8/raw_output.npy",
+      "dequant_logits_path": "/mnt/nas/openclaw/reports/models/dream7b_s100p_v5_execution_20260701/evidence/final_segment_dense_sweep_v5/short_chinese_prompt_padded/real_x_div_8/dequant_logits.npy",
+      "metadata_path": "/mnt/nas/openclaw/reports/models/dream7b_s100p_v5_execution_20260701/evidence/final_segment_dense_sweep_v5/short_chinese_prompt_padded/real_x_div_8/metadata.json",
+      "input_stats": {
+        "shape": [
+          128,
+          3584
+        ],
+        "dtype": "float32",
+        "size": 458752,
+        "min": -2.0370984077453613,
+        "max": 2.0370984077453613,
+        "mean": 0.007749245502054691,
+        "std": 2.0153658390045166,
+        "abs_max": 2.0370984077453613,
+        "nonzero_count": 458752,
+        "allzero": false,
+        "constant": false,
+        "nan_count": 0,
+        "inf_count": 0
+      },
+      "run_status": "pass",
+      "runtime_exception": null,
+      "raw_output_stats": {
+        "shape": [
+          1,
+          152064
+        ],
+        "dtype": "int16",
+        "size": 152064,
+        "min": -13988.0,
+        "max": 12431.0,
+        "mean": -1901.3486492529462,
+        "std": 1870.0878539689313,
+        "abs_max": 13988.0,
+        "nonzero_count": 152050,
+        "allzero": false,
+        "constant": false,
+        "nan_count": 0,
+        "inf_count": 0
+      },
+      "dequant_output_stats": {
+        "shape": [
+          152064
+        ],
+        "dtype": "float32",
+        "size": 152064,
+        "min": -13988.0,
+        "max": 12431.0,
+        "mean": -1901.3487548828125,
+        "std": 1870.0880126953125,
+        "abs_max": 13988.0,
+        "nonzero_count": 152050,
+        "allzero": false,
+        "constant": false,
+        "nan_count": 0,
+        "inf_count": 0
+      },
+      "softmax": {
+        "entropy": 8.405223659708055e-306,
+        "normalized_entropy": 7.04423707166602e-307,
+        "top1_probability": 1.0
+      },
+      "top10_logits": [
+        {
+          "token": 37355,
+          "logit": 12431.0
+        },
+        {
+          "token": 66906,
+          "logit": 11722.0
+        },
+        {
+          "token": 72869,
+          "logit": 11701.0
+        },
+        {
+          "token": 54462,
+          "logit": 11101.0
+        },
+        {
+          "token": 58113,
+          "logit": 11088.0
+        },
+        {
+          "token": 88222,
+          "logit": 10805.0
+        },
+        {
+          "token": 40745,
+          "logit": 10507.0
+        },
+        {
+          "token": 55573,
+          "logit": 10329.0
+        },
+        {
+          "token": 82761,
+          "logit": 10059.0
+        },
+        {
+          "token": 45223,
+          "logit": 9993.0
+        }
+      ]
+    },
+    {
+      "variant_id": "real_x_div_12",
+      "why_included": "real seg26 hidden divided by 12.0",
+      "input_path": "/mnt/nas/openclaw/reports/models/dream7b_s100p_v5_execution_20260701/evidence/final_segment_dense_sweep_v5/short_chinese_prompt_padded/real_x_div_12/input.npy",
+      "raw_output_path": "/mnt/nas/openclaw/reports/models/dream7b_s100p_v5_execution_20260701/evidence/final_segment_dense_sweep_v5/short_chinese_prompt_padded/real_x_div_12/raw_output.npy",
+      "dequant_logits_path": "/mnt/nas/openclaw/reports/models/dream7b_s100p_v5_execution_20260701/evidence/final_segment_dense_sweep_v5/short_chinese_prompt_padded/real_x_div_12/dequant_logits.npy",
+      "metadata_path": "/mnt/nas/openclaw/reports/models/dream7b_s100p_v5_execution_20260701/evidence/final_segment_dense_sweep_v5/short_chinese_prompt_padded/real_x_div_12/metadata.json",
+      "input_stats": {
+        "shape": [
+          128,
+          3584
+        ],
+        "dtype": "float32",
+        "size": 458752,
+        "min": -1.3580656051635742,
+        "max": 1.3580656051635742,
+        "mean": 0.005166164133697748,
+        "std": 1.343577265739441,
+        "abs_max": 1.3580656051635742,
+        "nonzero_count": 458752,
+        "allzero": false,
+        "constant": false,
+        "nan_count": 0,
+        "inf_count": 0
+      },
+      "run_status": "pass",
+      "runtime_exception": null,
+      "raw_output_stats": {
+        "shape": [
+          1,
+          152064
+        ],
+        "dtype": "int16",
+        "size": 152064,
+        "min": -13215.0,
+        "max": 10717.0,
+        "mean": -2471.2383470117843,
+        "std": 1716.832587474166,
+        "abs_max": 13215.0,
+        "nonzero_count": 152059,
+        "allzero": false,
+        "constant": false,
+        "nan_count": 0,
+        "inf_count": 0
+      },
+      "dequant_output_stats": {
+        "shape": [
+          152064
+        ],
+        "dtype": "float32",
+        "size": 152064,
+        "min": -13215.0,
+        "max": 10717.0,
+        "mean": -2471.23828125,
+        "std": 1716.83251953125,
+        "abs_max": 13215.0,
+        "nonzero_count": 152059,
+        "allzero": false,
+        "constant": false,
+        "nan_count": 0,
+        "inf_count": 0
+      },
+      "softmax": {
+        "entropy": 1.8066472036420268e-106,
+        "normalized_entropy": 1.5141121429431364e-107,
+        "top1_probability": 1.0
+      },
+      "top10_logits": [
+        {
+          "token": 66906,
+          "logit": 10717.0
+        },
+        {
+          "token": 37355,
+          "logit": 10468.0
+        },
+        {
+          "token": 58113,
+          "logit": 10035.0
+        },
+        {
+          "token": 54462,
+          "logit": 9888.0
+        },
+        {
+          "token": 40745,
+          "logit": 9524.0
+        },
+        {
+          "token": 88222,
+          "logit": 9403.0
+        },
+        {
+          "token": 72869,
+          "logit": 9394.0
+        },
+        {
+          "token": 41810,
+          "logit": 9023.0
+        },
+        {
+          "token": 55573,
+          "logit": 8723.0
+        },
+        {
+          "token": 36542,
+          "logit": 8668.0
+        }
+      ]
+    },
+    {
+      "variant_id": "real_x_div_16",
+      "why_included": "real seg26 hidden divided by 16.0",
+      "input_path": "/mnt/nas/openclaw/reports/models/dream7b_s100p_v5_execution_20260701/evidence/final_segment_dense_sweep_v5/short_chinese_prompt_padded/real_x_div_16/input.npy",
+      "raw_output_path": "/mnt/nas/openclaw/reports/models/dream7b_s100p_v5_execution_20260701/evidence/final_segment_dense_sweep_v5/short_chinese_prompt_padded/real_x_div_16/raw_output.npy",
+      "dequant_logits_path": "/mnt/nas/openclaw/reports/models/dream7b_s100p_v5_execution_20260701/evidence/final_segment_dense_sweep_v5/short_chinese_prompt_padded/real_x_div_16/dequant_logits.npy",
+      "metadata_path": "/mnt/nas/openclaw/reports/models/dream7b_s100p_v5_execution_20260701/evidence/final_segment_dense_sweep_v5/short_chinese_prompt_padded/real_x_div_16/metadata.json",
+      "input_stats": {
+        "shape": [
+          128,
+          3584
+        ],
+        "dtype": "float32",
+        "size": 458752,
+        "min": -1.0185492038726807,
+        "max": 1.0185492038726807,
+        "mean": 0.0038746227510273457,
+        "std": 1.0076829195022583,
+        "abs_max": 1.0185492038726807,
+        "nonzero_count": 458752,
+        "allzero": false,
+        "constant": false,
+        "nan_count": 0,
+        "inf_count": 0
+      },
+      "run_status": "pass",
+      "runtime_exception": null,
+      "raw_output_stats": {
+        "shape": [
+          1,
+          152064
+        ],
+        "dtype": "int16",
+        "size": 152064,
+        "min": -12830.0,
+        "max": 10203.0,
+        "mean": -2768.026015361953,
+        "std": 1675.8485304702838,
+        "abs_max": 12830.0,
+        "nonzero_count": 152061,
+        "allzero": false,
+        "constant": false,
+        "nan_count": 0,
+        "inf_count": 0
+      },
+      "dequant_output_stats": {
+        "shape": [
+          152064
+        ],
+        "dtype": "float32",
+        "size": 152064,
+        "min": -12830.0,
+        "max": 10203.0,
+        "mean": -2768.026123046875,
+        "std": 1675.8486328125,
+        "abs_max": 12830.0,
+        "nonzero_count": 152061,
+        "allzero": false,
+        "constant": false,
+        "nan_count": 0,
+        "inf_count": 0
+      },
+      "softmax": {
+        "entropy": 2.2847766722647053e-305,
+        "normalized_entropy": 1.9148221614133448e-306,
+        "top1_probability": 1.0
+      },
+      "top10_logits": [
+        {
+          "token": 66906,
+          "logit": 10203.0
+        },
+        {
+          "token": 58113,
+          "logit": 9495.0
+        },
+        {
+          "token": 37355,
+          "logit": 9472.0
+        },
+        {
+          "token": 54462,
+          "logit": 9250.0
+        },
+        {
+          "token": 40745,
+          "logit": 9016.0
+        },
+        {
+          "token": 88222,
+          "logit": 8688.0
+        },
+        {
+          "token": 41810,
+          "logit": 8576.0
+        },
+        {
+          "token": 72869,
+          "logit": 8222.0
+        },
+        {
+          "token": 36542,
+          "logit": 8042.0
+        },
+        {
+          "token": 36593,
+          "logit": 7950.0
+        }
+      ]
+    },
+    {
+      "variant_id": "real_x_div_32",
+      "why_included": "real seg26 hidden divided by 32.0",
+      "input_path": "/mnt/nas/openclaw/reports/models/dream7b_s100p_v5_execution_20260701/evidence/final_segment_dense_sweep_v5/short_chinese_prompt_padded/real_x_div_32/input.npy",
+      "raw_output_path": "/mnt/nas/openclaw/reports/models/dream7b_s100p_v5_execution_20260701/evidence/final_segment_dense_sweep_v5/short_chinese_prompt_padded/real_x_div_32/raw_output.npy",
+      "dequant_logits_path": "/mnt/nas/openclaw/reports/models/dream7b_s100p_v5_execution_20260701/evidence/final_segment_dense_sweep_v5/short_chinese_prompt_padded/real_x_div_32/dequant_logits.npy",
+      "metadata_path": "/mnt/nas/openclaw/reports/models/dream7b_s100p_v5_execution_20260701/evidence/final_segment_dense_sweep_v5/short_chinese_prompt_padded/real_x_div_32/metadata.json",
+      "input_stats": {
+        "shape": [
+          128,
+          3584
+        ],
+        "dtype": "float32",
+        "size": 458752,
+        "min": -0.5092746019363403,
+        "max": 0.5092746019363403,
+        "mean": 0.0019373113755136728,
+        "std": 0.5038414597511292,
+        "abs_max": 0.5092746019363403,
+        "nonzero_count": 458752,
+        "allzero": false,
+        "constant": false,
+        "nan_count": 0,
+        "inf_count": 0
+      },
+      "run_status": "pass",
+      "runtime_exception": null,
+      "raw_output_stats": {
+        "shape": [
+          1,
+          152064
+        ],
+        "dtype": "int16",
+        "size": 152064,
+        "min": -12462.0,
+        "max": 9449.0,
+        "mean": -3194.097465540825,
+        "std": 1661.9115922941696,
+        "abs_max": 12462.0,
+        "nonzero_count": 152060,
+        "allzero": false,
+        "constant": false,
+        "nan_count": 0,
+        "inf_count": 0
+      },
+      "dequant_output_stats": {
+        "shape": [
+          152064
+        ],
+        "dtype": "float32",
+        "size": 152064,
+        "min": -12462.0,
+        "max": 9449.0,
+        "mean": -3194.09765625,
+        "std": 1661.9114990234375,
+        "abs_max": 12462.0,
+        "nonzero_count": 152060,
+        "allzero": false,
+        "constant": false,
+        "nan_count": 0,
+        "inf_count": 0
+      },
+      "softmax": {
+        "entropy": -0.0,
+        "normalized_entropy": -0.0,
+        "top1_probability": 1.0
+      },
+      "top10_logits": [
+        {
+          "token": 66906,
+          "logit": 9449.0
+        },
+        {
+          "token": 58113,
+          "logit": 8702.0
+        },
+        {
+          "token": 54462,
+          "logit": 8340.0
+        },
+        {
+          "token": 40745,
+          "logit": 8286.0
+        },
+        {
+          "token": 51735,
+          "logit": 8253.0
+        },
+        {
+          "token": 37355,
+          "logit": 7998.0
+        },
+        {
+          "token": 41810,
+          "logit": 7921.0
+        },
+        {
+          "token": 49752,
+          "logit": 7859.0
+        },
+        {
+          "token": 88222,
+          "logit": 7633.0
+        },
+        {
+          "token": 36593,
+          "logit": 7418.0
+        }
+      ]
+    },
+    {
+      "variant_id": "real_x_clip_16",
+      "why_included": "real seg26 hidden clipped to +/-16",
+      "input_path": "/mnt/nas/openclaw/reports/models/dream7b_s100p_v5_execution_20260701/evidence/final_segment_dense_sweep_v5/short_chinese_prompt_padded/real_x_clip_16/input.npy",
+      "raw_output_path": "/mnt/nas/openclaw/reports/models/dream7b_s100p_v5_execution_20260701/evidence/final_segment_dense_sweep_v5/short_chinese_prompt_padded/real_x_clip_16/raw_output.npy",
+      "dequant_logits_path": "/mnt/nas/openclaw/reports/models/dream7b_s100p_v5_execution_20260701/evidence/final_segment_dense_sweep_v5/short_chinese_prompt_padded/real_x_clip_16/dequant_logits.npy",
+      "metadata_path": "/mnt/nas/openclaw/reports/models/dream7b_s100p_v5_execution_20260701/evidence/final_segment_dense_sweep_v5/short_chinese_prompt_padded/real_x_clip_16/metadata.json",
+      "input_stats": {
+        "shape": [
+          128,
+          3584
+        ],
+        "dtype": "float32",
+        "size": 458752,
+        "min": -16.0,
+        "max": 16.0,
+        "mean": 0.06083344295620918,
+        "std": 15.832479476928711,
+        "abs_max": 16.0,
+        "nonzero_count": 458752,
+        "allzero": false,
+        "constant": false,
+        "nan_count": 0,
+        "inf_count": 0
+      },
+      "run_status": "pass",
+      "runtime_exception": null,
+      "raw_output_stats": {
+        "shape": [
+          1,
+          152064
+        ],
+        "dtype": "int16",
+        "size": 152064,
+        "min": 0.0,
+        "max": 0.0,
+        "mean": 0.0,
+        "std": 0.0,
+        "abs_max": 0.0,
+        "nonzero_count": 0,
+        "allzero": true,
+        "constant": true,
+        "nan_count": 0,
+        "inf_count": 0
+      },
+      "dequant_output_stats": {
+        "shape": [
+          152064
+        ],
+        "dtype": "float32",
+        "size": 152064,
+        "min": 0.0,
+        "max": 0.0,
+        "mean": 0.0,
+        "std": 0.0,
+        "abs_max": 0.0,
+        "nonzero_count": 0,
+        "allzero": true,
+        "constant": true,
+        "nan_count": 0,
+        "inf_count": 0
+      },
+      "softmax": {
+        "entropy": 11.932056763842207,
+        "normalized_entropy": 1.0,
+        "top1_probability": 6.576178451178451e-06
+      },
+      "top10_logits": [
+        {
+          "token": 152063,
+          "logit": 0.0
+        },
+        {
+          "token": 50693,
+          "logit": 0.0
+        },
+        {
+          "token": 50691,
+          "logit": 0.0
+        },
+        {
+          "token": 50690,
+          "logit": 0.0
+        },
+        {
+          "token": 50689,
+          "logit": 0.0
+        },
+        {
+          "token": 50688,
+          "logit": 0.0
+        },
+        {
+          "token": 50687,
+          "logit": 0.0
+        },
+        {
+          "token": 50686,
+          "logit": 0.0
+        },
+        {
+          "token": 50685,
+          "logit": 0.0
+        },
+        {
+          "token": 50684,
+          "logit": 0.0
+        }
+      ]
+    },
+    {
+      "variant_id": "real_x_clip_14",
+      "why_included": "real seg26 hidden clipped to +/-14",
+      "input_path": "/mnt/nas/openclaw/reports/models/dream7b_s100p_v5_execution_20260701/evidence/final_segment_dense_sweep_v5/short_chinese_prompt_padded/real_x_clip_14/input.npy",
+      "raw_output_path": "/mnt/nas/openclaw/reports/models/dream7b_s100p_v5_execution_20260701/evidence/final_segment_dense_sweep_v5/short_chinese_prompt_padded/real_x_clip_14/raw_output.npy",
+      "dequant_logits_path": "/mnt/nas/openclaw/reports/models/dream7b_s100p_v5_execution_20260701/evidence/final_segment_dense_sweep_v5/short_chinese_prompt_padded/real_x_clip_14/dequant_logits.npy",
+      "metadata_path": "/mnt/nas/openclaw/reports/models/dream7b_s100p_v5_execution_20260701/evidence/final_segment_dense_sweep_v5/short_chinese_prompt_padded/real_x_clip_14/metadata.json",
+      "input_stats": {
+        "shape": [
+          128,
+          3584
+        ],
+        "dtype": "float32",
+        "size": 458752,
+        "min": -14.0,
+        "max": 14.0,
+        "mean": 0.05301060527563095,
+        "std": 13.872075080871582,
+        "abs_max": 14.0,
+        "nonzero_count": 458752,
+        "allzero": false,
+        "constant": false,
+        "nan_count": 0,
+        "inf_count": 0
+      },
+      "run_status": "pass",
+      "runtime_exception": null,
+      "raw_output_stats": {
+        "shape": [
+          1,
+          152064
+        ],
+        "dtype": "int16",
+        "size": 152064,
+        "min": 0.0,
+        "max": 0.0,
+        "mean": 0.0,
+        "std": 0.0,
+        "abs_max": 0.0,
+        "nonzero_count": 0,
+        "allzero": true,
+        "constant": true,
+        "nan_count": 0,
+        "inf_count": 0
+      },
+      "dequant_output_stats": {
+        "shape": [
+          152064
+        ],
+        "dtype": "float32",
+        "size": 152064,
+        "min": 0.0,
+        "max": 0.0,
+        "mean": 0.0,
+        "std": 0.0,
+        "abs_max": 0.0,
+        "nonzero_count": 0,
+        "allzero": true,
+        "constant": true,
+        "nan_count": 0,
+        "inf_count": 0
+      },
+      "softmax": {
+        "entropy": 11.932056763842207,
+        "normalized_entropy": 1.0,
+        "top1_probability": 6.576178451178451e-06
+      },
+      "top10_logits": [
+        {
+          "token": 152063,
+          "logit": 0.0
+        },
+        {
+          "token": 50693,
+          "logit": 0.0
+        },
+        {
+          "token": 50691,
+          "logit": 0.0
+        },
+        {
+          "token": 50690,
+          "logit": 0.0
+        },
+        {
+          "token": 50689,
+          "logit": 0.0
+        },
+        {
+          "token": 50688,
+          "logit": 0.0
+        },
+        {
+          "token": 50687,
+          "logit": 0.0
+        },
+        {
+          "token": 50686,
+          "logit": 0.0
+        },
+        {
+          "token": 50685,
+          "logit": 0.0
+        },
+        {
+          "token": 50684,
+          "logit": 0.0
+        }
+      ]
+    },
+    {
+      "variant_id": "real_x_clip_12",
+      "why_included": "real seg26 hidden clipped to +/-12",
+      "input_path": "/mnt/nas/openclaw/reports/models/dream7b_s100p_v5_execution_20260701/evidence/final_segment_dense_sweep_v5/short_chinese_prompt_padded/real_x_clip_12/input.npy",
+      "raw_output_path": "/mnt/nas/openclaw/reports/models/dream7b_s100p_v5_execution_20260701/evidence/final_segment_dense_sweep_v5/short_chinese_prompt_padded/real_x_clip_12/raw_output.npy",
+      "dequant_logits_path": "/mnt/nas/openclaw/reports/models/dream7b_s100p_v5_execution_20260701/evidence/final_segment_dense_sweep_v5/short_chinese_prompt_padded/real_x_clip_12/dequant_logits.npy",
+      "metadata_path": "/mnt/nas/openclaw/reports/models/dream7b_s100p_v5_execution_20260701/evidence/final_segment_dense_sweep_v5/short_chinese_prompt_padded/real_x_clip_12/metadata.json",
+      "input_stats": {
+        "shape": [
+          128,
+          3584
+        ],
+        "dtype": "float32",
+        "size": 458752,
+        "min": -12.0,
+        "max": 12.0,
+        "mean": 0.04538608342409134,
+        "std": 11.906150817871094,
+        "abs_max": 12.0,
+        "nonzero_count": 458752,
+        "allzero": false,
+        "constant": false,
+        "nan_count": 0,
+        "inf_count": 0
+      },
+      "run_status": "pass",
+      "runtime_exception": null,
+      "raw_output_stats": {
+        "shape": [
+          1,
+          152064
+        ],
+        "dtype": "int16",
+        "size": 152064,
+        "min": 0.0,
+        "max": 0.0,
+        "mean": 0.0,
+        "std": 0.0,
+        "abs_max": 0.0,
+        "nonzero_count": 0,
+        "allzero": true,
+        "constant": true,
+        "nan_count": 0,
+        "inf_count": 0
+      },
+      "dequant_output_stats": {
+        "shape": [
+          152064
+        ],
+        "dtype": "float32",
+        "size": 152064,
+        "min": 0.0,
+        "max": 0.0,
+        "mean": 0.0,
+        "std": 0.0,
+        "abs_max": 0.0,
+        "nonzero_count": 0,
+        "allzero": true,
+        "constant": true,
+        "nan_count": 0,
+        "inf_count": 0
+      },
+      "softmax": {
+        "entropy": 11.932056763842207,
+        "normalized_entropy": 1.0,
+        "top1_probability": 6.576178451178451e-06
+      },
+      "top10_logits": [
+        {
+          "token": 152063,
+          "logit": 0.0
+        },
+        {
+          "token": 50693,
+          "logit": 0.0
+        },
+        {
+          "token": 50691,
+          "logit": 0.0
+        },
+        {
+          "token": 50690,
+          "logit": 0.0
+        },
+        {
+          "token": 50689,
+          "logit": 0.0
+        },
+        {
+          "token": 50688,
+          "logit": 0.0
+        },
+        {
+          "token": 50687,
+          "logit": 0.0
+        },
+        {
+          "token": 50686,
+          "logit": 0.0
+        },
+        {
+          "token": 50685,
+          "logit": 0.0
+        },
+        {
+          "token": 50684,
+          "logit": 0.0
+        }
+      ]
+    },
+    {
+      "variant_id": "real_x_clip_10",
+      "why_included": "real seg26 hidden clipped to +/-10",
+      "input_path": "/mnt/nas/openclaw/reports/models/dream7b_s100p_v5_execution_20260701/evidence/final_segment_dense_sweep_v5/short_chinese_prompt_padded/real_x_clip_10/input.npy",
+      "raw_output_path": "/mnt/nas/openclaw/reports/models/dream7b_s100p_v5_execution_20260701/evidence/final_segment_dense_sweep_v5/short_chinese_prompt_padded/real_x_clip_10/raw_output.npy",
+      "dequant_logits_path": "/mnt/nas/openclaw/reports/models/dream7b_s100p_v5_execution_20260701/evidence/final_segment_dense_sweep_v5/short_chinese_prompt_padded/real_x_clip_10/dequant_logits.npy",
+      "metadata_path": "/mnt/nas/openclaw/reports/models/dream7b_s100p_v5_execution_20260701/evidence/final_segment_dense_sweep_v5/short_chinese_prompt_padded/real_x_clip_10/metadata.json",
+      "input_stats": {
+        "shape": [
+          128,
+          3584
+        ],
+        "dtype": "float32",
+        "size": 458752,
+        "min": -10.0,
+        "max": 10.0,
+        "mean": 0.03781122341752052,
+        "std": 9.935036659240723,
+        "abs_max": 10.0,
+        "nonzero_count": 458752,
+        "allzero": false,
+        "constant": false,
+        "nan_count": 0,
+        "inf_count": 0
+      },
+      "run_status": "pass",
+      "runtime_exception": null,
+      "raw_output_stats": {
+        "shape": [
+          1,
+          152064
+        ],
+        "dtype": "int16",
+        "size": 152064,
+        "min": 0.0,
+        "max": 0.0,
+        "mean": 0.0,
+        "std": 0.0,
+        "abs_max": 0.0,
+        "nonzero_count": 0,
+        "allzero": true,
+        "constant": true,
+        "nan_count": 0,
+        "inf_count": 0
+      },
+      "dequant_output_stats": {
+        "shape": [
+          152064
+        ],
+        "dtype": "float32",
+        "size": 152064,
+        "min": 0.0,
+        "max": 0.0,
+        "mean": 0.0,
+        "std": 0.0,
+        "abs_max": 0.0,
+        "nonzero_count": 0,
+        "allzero": true,
+        "constant": true,
+        "nan_count": 0,
+        "inf_count": 0
+      },
+      "softmax": {
+        "entropy": 11.932056763842207,
+        "normalized_entropy": 1.0,
+        "top1_probability": 6.576178451178451e-06
+      },
+      "top10_logits": [
+        {
+          "token": 152063,
+          "logit": 0.0
+        },
+        {
+          "token": 50693,
+          "logit": 0.0
+        },
+        {
+          "token": 50691,
+          "logit": 0.0
+        },
+        {
+          "token": 50690,
+          "logit": 0.0
+        },
+        {
+          "token": 50689,
+          "logit": 0.0
+        },
+        {
+          "token": 50688,
+          "logit": 0.0
+        },
+        {
+          "token": 50687,
+          "logit": 0.0
+        },
+        {
+          "token": 50686,
+          "logit": 0.0
+        },
+        {
+          "token": 50685,
+          "logit": 0.0
+        },
+        {
+          "token": 50684,
+          "logit": 0.0
+        }
+      ]
+    },
+    {
+      "variant_id": "real_x_clip_8",
+      "why_included": "real seg26 hidden clipped to +/-8",
+      "input_path": "/mnt/nas/openclaw/reports/models/dream7b_s100p_v5_execution_20260701/evidence/final_segment_dense_sweep_v5/short_chinese_prompt_padded/real_x_clip_8/input.npy",
+      "raw_output_path": "/mnt/nas/openclaw/reports/models/dream7b_s100p_v5_execution_20260701/evidence/final_segment_dense_sweep_v5/short_chinese_prompt_padded/real_x_clip_8/raw_output.npy",
+      "dequant_logits_path": "/mnt/nas/openclaw/reports/models/dream7b_s100p_v5_execution_20260701/evidence/final_segment_dense_sweep_v5/short_chinese_prompt_padded/real_x_clip_8/dequant_logits.npy",
+      "metadata_path": "/mnt/nas/openclaw/reports/models/dream7b_s100p_v5_execution_20260701/evidence/final_segment_dense_sweep_v5/short_chinese_prompt_padded/real_x_clip_8/metadata.json",
+      "input_stats": {
+        "shape": [
+          128,
+          3584
+        ],
+        "dtype": "float32",
+        "size": 458752,
+        "min": -8.0,
+        "max": 8.0,
+        "mean": 0.03006989322602749,
+        "std": 7.958582401275635,
+        "abs_max": 8.0,
+        "nonzero_count": 458752,
+        "allzero": false,
+        "constant": false,
+        "nan_count": 0,
+        "inf_count": 0
+      },
+      "run_status": "pass",
+      "runtime_exception": null,
+      "raw_output_stats": {
+        "shape": [
+          1,
+          152064
+        ],
+        "dtype": "int16",
+        "size": 152064,
+        "min": 0.0,
+        "max": 0.0,
+        "mean": 0.0,
+        "std": 0.0,
+        "abs_max": 0.0,
+        "nonzero_count": 0,
+        "allzero": true,
+        "constant": true,
+        "nan_count": 0,
+        "inf_count": 0
+      },
+      "dequant_output_stats": {
+        "shape": [
+          152064
+        ],
+        "dtype": "float32",
+        "size": 152064,
+        "min": 0.0,
+        "max": 0.0,
+        "mean": 0.0,
+        "std": 0.0,
+        "abs_max": 0.0,
+        "nonzero_count": 0,
+        "allzero": true,
+        "constant": true,
+        "nan_count": 0,
+        "inf_count": 0
+      },
+      "softmax": {
+        "entropy": 11.932056763842207,
+        "normalized_entropy": 1.0,
+        "top1_probability": 6.576178451178451e-06
+      },
+      "top10_logits": [
+        {
+          "token": 152063,
+          "logit": 0.0
+        },
+        {
+          "token": 50693,
+          "logit": 0.0
+        },
+        {
+          "token": 50691,
+          "logit": 0.0
+        },
+        {
+          "token": 50690,
+          "logit": 0.0
+        },
+        {
+          "token": 50689,
+          "logit": 0.0
+        },
+        {
+          "token": 50688,
+          "logit": 0.0
+        },
+        {
+          "token": 50687,
+          "logit": 0.0
+        },
+        {
+          "token": 50686,
+          "logit": 0.0
+        },
+        {
+          "token": 50685,
+          "logit": 0.0
+        },
+        {
+          "token": 50684,
+          "logit": 0.0
+        }
+      ]
+    },
+    {
+      "variant_id": "real_x_clip_6",
+      "why_included": "real seg26 hidden clipped to +/-6",
+      "input_path": "/mnt/nas/openclaw/reports/models/dream7b_s100p_v5_execution_20260701/evidence/final_segment_dense_sweep_v5/short_chinese_prompt_padded/real_x_clip_6/input.npy",
+      "raw_output_path": "/mnt/nas/openclaw/reports/models/dream7b_s100p_v5_execution_20260701/evidence/final_segment_dense_sweep_v5/short_chinese_prompt_padded/real_x_clip_6/raw_output.npy",
+      "dequant_logits_path": "/mnt/nas/openclaw/reports/models/dream7b_s100p_v5_execution_20260701/evidence/final_segment_dense_sweep_v5/short_chinese_prompt_padded/real_x_clip_6/dequant_logits.npy",
+      "metadata_path": "/mnt/nas/openclaw/reports/models/dream7b_s100p_v5_execution_20260701/evidence/final_segment_dense_sweep_v5/short_chinese_prompt_padded/real_x_clip_6/metadata.json",
+      "input_stats": {
+        "shape": [
+          128,
+          3584
+        ],
+        "dtype": "float32",
+        "size": 458752,
+        "min": -6.0,
+        "max": 6.0,
+        "mean": 0.022296462208032608,
+        "std": 5.976783752441406,
+        "abs_max": 6.0,
+        "nonzero_count": 458752,
+        "allzero": false,
+        "constant": false,
+        "nan_count": 0,
+        "inf_count": 0
+      },
+      "run_status": "pass",
+      "runtime_exception": null,
+      "raw_output_stats": {
+        "shape": [
+          1,
+          152064
+        ],
+        "dtype": "int16",
+        "size": 152064,
+        "min": -26176.0,
+        "max": 25972.0,
+        "mean": 2370.22163694234,
+        "std": 3749.627578446116,
+        "abs_max": 26176.0,
+        "nonzero_count": 152047,
+        "allzero": false,
+        "constant": false,
+        "nan_count": 0,
+        "inf_count": 0
+      },
+      "dequant_output_stats": {
+        "shape": [
+          152064
+        ],
+        "dtype": "float32",
+        "size": 152064,
+        "min": -26176.0,
+        "max": 25972.0,
+        "mean": 2370.22119140625,
+        "std": 3749.627685546875,
+        "abs_max": 26176.0,
+        "nonzero_count": 152047,
+        "allzero": false,
+        "constant": false,
+        "nan_count": 0,
+        "inf_count": 0
+      },
+      "softmax": {
+        "entropy": 9.783125982032732e-277,
+        "normalized_entropy": 8.199027356020134e-278,
+        "top1_probability": 1.0
+      },
+      "top10_logits": [
+        {
+          "token": 72869,
+          "logit": 25972.0
+        },
+        {
+          "token": 58375,
+          "logit": 25330.0
+        },
+        {
+          "token": 37355,
+          "logit": 24903.0
+        },
+        {
+          "token": 84602,
+          "logit": 24566.0
+        },
+        {
+          "token": 31069,
+          "logit": 24563.0
+        },
+        {
+          "token": 5379,
+          "logit": 24446.0
+        },
+        {
+          "token": 50564,
+          "logit": 23584.0
+        },
+        {
+          "token": 36343,
+          "logit": 23492.0
+        },
+        {
+          "token": 32903,
+          "logit": 23312.0
+        },
+        {
+          "token": 97982,
+          "logit": 23208.0
+        }
+      ]
+    },
+    {
+      "variant_id": "real_x_clip_5",
+      "why_included": "real seg26 hidden clipped to +/-5",
+      "input_path": "/mnt/nas/openclaw/reports/models/dream7b_s100p_v5_execution_20260701/evidence/final_segment_dense_sweep_v5/short_chinese_prompt_padded/real_x_clip_5/input.npy",
+      "raw_output_path": "/mnt/nas/openclaw/reports/models/dream7b_s100p_v5_execution_20260701/evidence/final_segment_dense_sweep_v5/short_chinese_prompt_padded/real_x_clip_5/raw_output.npy",
+      "dequant_logits_path": "/mnt/nas/openclaw/reports/models/dream7b_s100p_v5_execution_20260701/evidence/final_segment_dense_sweep_v5/short_chinese_prompt_padded/real_x_clip_5/dequant_logits.npy",
+      "metadata_path": "/mnt/nas/openclaw/reports/models/dream7b_s100p_v5_execution_20260701/evidence/final_segment_dense_sweep_v5/short_chinese_prompt_padded/real_x_clip_5/metadata.json",
+      "input_stats": {
+        "shape": [
+          128,
+          3584
+        ],
+        "dtype": "float32",
+        "size": 458752,
+        "min": -5.0,
+        "max": 5.0,
+        "mean": 0.018542861565947533,
+        "std": 4.983898639678955,
+        "abs_max": 5.0,
+        "nonzero_count": 458752,
+        "allzero": false,
+        "constant": false,
+        "nan_count": 0,
+        "inf_count": 0
+      },
+      "run_status": "pass",
+      "runtime_exception": null,
+      "raw_output_stats": {
+        "shape": [
+          1,
+          152064
+        ],
+        "dtype": "int16",
+        "size": 152064,
+        "min": -21552.0,
+        "max": 22590.0,
+        "mean": 1571.5806568287037,
+        "std": 3196.540524015312,
+        "abs_max": 22590.0,
+        "nonzero_count": 152054,
+        "allzero": false,
+        "constant": false,
+        "nan_count": 0,
+        "inf_count": 0
+      },
+      "dequant_output_stats": {
+        "shape": [
+          152064
+        ],
+        "dtype": "float32",
+        "size": 152064,
+        "min": -21552.0,
+        "max": 22590.0,
+        "mean": 1571.58056640625,
+        "std": 3196.5400390625,
+        "abs_max": 22590.0,
+        "nonzero_count": 152054,
+        "allzero": false,
+        "constant": false,
+        "nan_count": 0,
+        "inf_count": 0
+      },
+      "softmax": {
+        "entropy": 1.7486990871111096e-242,
+        "normalized_entropy": 1.4655470735022016e-243,
+        "top1_probability": 1.0
+      },
+      "top10_logits": [
+        {
+          "token": 72869,
+          "logit": 22590.0
+        },
+        {
+          "token": 37355,
+          "logit": 22027.0
+        },
+        {
+          "token": 58375,
+          "logit": 21056.0
+        },
+        {
+          "token": 84602,
+          "logit": 20922.0
+        },
+        {
+          "token": 31069,
+          "logit": 20886.0
+        },
+        {
+          "token": 5379,
+          "logit": 20567.0
+        },
+        {
+          "token": 97982,
+          "logit": 20181.0
+        },
+        {
+          "token": 97281,
+          "logit": 19776.0
+        },
+        {
+          "token": 32903,
+          "logit": 19716.0
+        },
+        {
+          "token": 83613,
+          "logit": 19484.0
+        }
+      ]
+    },
+    {
+      "variant_id": "real_x_clip_4p5",
+      "why_included": "real seg26 hidden clipped to +/-4.5",
+      "input_path": "/mnt/nas/openclaw/reports/models/dream7b_s100p_v5_execution_20260701/evidence/final_segment_dense_sweep_v5/short_chinese_prompt_padded/real_x_clip_4p5/input.npy",
+      "raw_output_path": "/mnt/nas/openclaw/reports/models/dream7b_s100p_v5_execution_20260701/evidence/final_segment_dense_sweep_v5/short_chinese_prompt_padded/real_x_clip_4p5/raw_output.npy",
+      "dequant_logits_path": "/mnt/nas/openclaw/reports/models/dream7b_s100p_v5_execution_20260701/evidence/final_segment_dense_sweep_v5/short_chinese_prompt_padded/real_x_clip_4p5/dequant_logits.npy",
+      "metadata_path": "/mnt/nas/openclaw/reports/models/dream7b_s100p_v5_execution_20260701/evidence/final_segment_dense_sweep_v5/short_chinese_prompt_padded/real_x_clip_4p5/metadata.json",
+      "input_stats": {
+        "shape": [
+          128,
+          3584
+        ],
+        "dtype": "float32",
+        "size": 458752,
+        "min": -4.5,
+        "max": 4.5,
+        "mean": 0.016688641160726547,
+        "std": 4.4869608879089355,
+        "abs_max": 4.5,
+        "nonzero_count": 458752,
+        "allzero": false,
+        "constant": false,
+        "nan_count": 0,
+        "inf_count": 0
+      },
+      "run_status": "pass",
+      "runtime_exception": null,
+      "raw_output_stats": {
+        "shape": [
+          1,
+          152064
+        ],
+        "dtype": "int16",
+        "size": 152064,
+        "min": -19223.0,
+        "max": 20915.0,
+        "mean": 1177.7234782723065,
+        "std": 2930.584857369208,
+        "abs_max": 20915.0,
+        "nonzero_count": 152041,
+        "allzero": false,
+        "constant": false,
+        "nan_count": 0,
+        "inf_count": 0
+      },
+      "dequant_output_stats": {
+        "shape": [
+          152064
+        ],
+        "dtype": "float32",
+        "size": 152064,
+        "min": -19223.0,
+        "max": 20915.0,
+        "mean": 1177.7236328125,
+        "std": 2930.584716796875,
+        "abs_max": 20915.0,
+        "nonzero_count": 152041,
+        "allzero": false,
+        "constant": false,
+        "nan_count": 0,
+        "inf_count": 0
+      },
+      "softmax": {
+        "entropy": 7.766308032273782e-130,
+        "normalized_entropy": 6.5087756335589e-131,
+        "top1_probability": 1.0
+      },
+      "top10_logits": [
+        {
+          "token": 72869,
+          "logit": 20915.0
+        },
+        {
+          "token": 37355,
+          "logit": 20612.0
+        },
+        {
+          "token": 84602,
+          "logit": 19104.0
+        },
+        {
+          "token": 31069,
+          "logit": 19040.0
+        },
+        {
+          "token": 58375,
+          "logit": 18940.0
+        },
+        {
+          "token": 97982,
+          "logit": 18661.0
+        },
+        {
+          "token": 5379,
+          "logit": 18631.0
+        },
+        {
+          "token": 97281,
+          "logit": 18340.0
+        },
+        {
+          "token": 32903,
+          "logit": 17908.0
+        },
+        {
+          "token": 26269,
+          "logit": 17891.0
+        }
+      ]
+    },
+    {
+      "variant_id": "real_x_clip_4",
+      "why_included": "real seg26 hidden clipped to +/-4",
+      "input_path": "/mnt/nas/openclaw/reports/models/dream7b_s100p_v5_execution_20260701/evidence/final_segment_dense_sweep_v5/short_chinese_prompt_padded/real_x_clip_4/input.npy",
+      "raw_output_path": "/mnt/nas/openclaw/reports/models/dream7b_s100p_v5_execution_20260701/evidence/final_segment_dense_sweep_v5/short_chinese_prompt_padded/real_x_clip_4/raw_output.npy",
+      "dequant_logits_path": "/mnt/nas/openclaw/reports/models/dream7b_s100p_v5_execution_20260701/evidence/final_segment_dense_sweep_v5/short_chinese_prompt_padded/real_x_clip_4/dequant_logits.npy",
+      "metadata_path": "/mnt/nas/openclaw/reports/models/dream7b_s100p_v5_execution_20260701/evidence/final_segment_dense_sweep_v5/short_chinese_prompt_padded/real_x_clip_4/metadata.json",
+      "input_stats": {
+        "shape": [
+          128,
+          3584
+        ],
+        "dtype": "float32",
+        "size": 458752,
+        "min": -4.0,
+        "max": 4.0,
+        "mean": 0.014855925925076008,
+        "std": 3.9897098541259766,
+        "abs_max": 4.0,
+        "nonzero_count": 458752,
+        "allzero": false,
+        "constant": false,
+        "nan_count": 0,
+        "inf_count": 0
+      },
+      "run_status": "pass",
+      "runtime_exception": null,
+      "raw_output_stats": {
+        "shape": [
+          1,
+          152064
+        ],
+        "dtype": "int16",
+        "size": 152064,
+        "min": -16898.0,
+        "max": 19216.0,
+        "mean": 759.6362649936868,
+        "std": 2674.6940765901263,
+        "abs_max": 19216.0,
+        "nonzero_count": 152043,
+        "allzero": false,
+        "constant": false,
+        "nan_count": 0,
+        "inf_count": 0
+      },
+      "dequant_output_stats": {
+        "shape": [
+          152064
+        ],
+        "dtype": "float32",
+        "size": 152064,
+        "min": -16898.0,
+        "max": 19216.0,
+        "mean": 759.63623046875,
+        "std": 2674.694091796875,
+        "abs_max": 19216.0,
+        "nonzero_count": 152043,
+        "allzero": false,
+        "constant": false,
+        "nan_count": 0,
+        "inf_count": 0
+      },
+      "softmax": {
+        "entropy": 1.907619428988436e-22,
+        "normalized_entropy": 1.598734792118244e-23,
+        "top1_probability": 1.0
+      },
+      "top10_logits": [
+        {
+          "token": 72869,
+          "logit": 19216.0
+        },
+        {
+          "token": 37355,
+          "logit": 19162.0
+        },
+        {
+          "token": 84602,
+          "logit": 17287.0
+        },
+        {
+          "token": 31069,
+          "logit": 17175.0
+        },
+        {
+          "token": 97982,
+          "logit": 17109.0
+        },
+        {
+          "token": 97281,
+          "logit": 16871.0
+        },
+        {
+          "token": 58375,
+          "logit": 16805.0
+        },
+        {
+          "token": 5379,
+          "logit": 16680.0
+        },
+        {
+          "token": 26269,
+          "logit": 16479.0
+        },
+        {
+          "token": 88222,
+          "logit": 16402.0
+        }
+      ]
+    },
+    {
+      "variant_id": "real_x_clip_3p5",
+      "why_included": "real seg26 hidden clipped to +/-3.5",
+      "input_path": "/mnt/nas/openclaw/reports/models/dream7b_s100p_v5_execution_20260701/evidence/final_segment_dense_sweep_v5/short_chinese_prompt_padded/real_x_clip_3p5/input.npy",
+      "raw_output_path": "/mnt/nas/openclaw/reports/models/dream7b_s100p_v5_execution_20260701/evidence/final_segment_dense_sweep_v5/short_chinese_prompt_padded/real_x_clip_3p5/raw_output.npy",
+      "dequant_logits_path": "/mnt/nas/openclaw/reports/models/dream7b_s100p_v5_execution_20260701/evidence/final_segment_dense_sweep_v5/short_chinese_prompt_padded/real_x_clip_3p5/dequant_logits.npy",
+      "metadata_path": "/mnt/nas/openclaw/reports/models/dream7b_s100p_v5_execution_20260701/evidence/final_segment_dense_sweep_v5/short_chinese_prompt_padded/real_x_clip_3p5/metadata.json",
+      "input_stats": {
+        "shape": [
+          128,
+          3584
+        ],
+        "dtype": "float32",
+        "size": 458752,
+        "min": -3.5,
+        "max": 3.5,
+        "mean": 0.013027213513851166,
+        "std": 3.49212646484375,
+        "abs_max": 3.5,
+        "nonzero_count": 458752,
+        "allzero": false,
+        "constant": false,
+        "nan_count": 0,
+        "inf_count": 0
+      },
+      "run_status": "pass",
+      "runtime_exception": null,
+      "raw_output_stats": {
+        "shape": [
+          1,
+          152064
+        ],
+        "dtype": "int16",
+        "size": 152064,
+        "min": -15570.0,
+        "max": 17725.0,
+        "mean": 362.0941971801347,
+        "std": 2431.314262216681,
+        "abs_max": 17725.0,
+        "nonzero_count": 152028,
+        "allzero": false,
+        "constant": false,
+        "nan_count": 0,
+        "inf_count": 0
+      },
+      "dequant_output_stats": {
+        "shape": [
+          152064
+        ],
+        "dtype": "float32",
+        "size": 152064,
+        "min": -15570.0,
+        "max": 17725.0,
+        "mean": 362.0942077636719,
+        "std": 2431.314208984375,
+        "abs_max": 17725.0,
+        "nonzero_count": 152028,
+        "allzero": false,
+        "constant": false,
+        "nan_count": 0,
+        "inf_count": 0
+      },
+      "softmax": {
+        "entropy": 7.920647816861155e-82,
+        "normalized_entropy": 6.638124485682257e-83,
+        "top1_probability": 1.0
+      },
+      "top10_logits": [
+        {
+          "token": 37355,
+          "logit": 17725.0
+        },
+        {
+          "token": 72869,
+          "logit": 17533.0
+        },
+        {
+          "token": 97982,
+          "logit": 15575.0
+        },
+        {
+          "token": 84602,
+          "logit": 15477.0
+        },
+        {
+          "token": 97281,
+          "logit": 15419.0
+        },
+        {
+          "token": 88222,
+          "logit": 15337.0
+        },
+        {
+          "token": 31069,
+          "logit": 15331.0
+        },
+        {
+          "token": 54462,
+          "logit": 15164.0
+        },
+        {
+          "token": 26269,
+          "logit": 15073.0
+        },
+        {
+          "token": 82761,
+          "logit": 15031.0
+        }
+      ]
+    },
+    {
+      "variant_id": "real_x_clip_3",
+      "why_included": "real seg26 hidden clipped to +/-3",
+      "input_path": "/mnt/nas/openclaw/reports/models/dream7b_s100p_v5_execution_20260701/evidence/final_segment_dense_sweep_v5/short_chinese_prompt_padded/real_x_clip_3/input.npy",
+      "raw_output_path": "/mnt/nas/openclaw/reports/models/dream7b_s100p_v5_execution_20260701/evidence/final_segment_dense_sweep_v5/short_chinese_prompt_padded/real_x_clip_3/raw_output.npy",
+      "dequant_logits_path": "/mnt/nas/openclaw/reports/models/dream7b_s100p_v5_execution_20260701/evidence/final_segment_dense_sweep_v5/short_chinese_prompt_padded/real_x_clip_3/dequant_logits.npy",
+      "metadata_path": "/mnt/nas/openclaw/reports/models/dream7b_s100p_v5_execution_20260701/evidence/final_segment_dense_sweep_v5/short_chinese_prompt_padded/real_x_clip_3/metadata.json",
+      "input_stats": {
+        "shape": [
+          128,
+          3584
+        ],
+        "dtype": "float32",
+        "size": 458752,
+        "min": -3.0,
+        "max": 3.0,
+        "mean": 0.011195546016097069,
+        "std": 2.9942057132720947,
+        "abs_max": 3.0,
+        "nonzero_count": 458752,
+        "allzero": false,
+        "constant": false,
+        "nan_count": 0,
+        "inf_count": 0
+      },
+      "run_status": "pass",
+      "runtime_exception": null,
+      "raw_output_stats": {
+        "shape": [
+          1,
+          152064
+        ],
+        "dtype": "int16",
+        "size": 152064,
+        "min": -14432.0,
+        "max": 16297.0,
+        "mean": -30.31561053240741,
+        "std": 2204.722164855464,
+        "abs_max": 16297.0,
+        "nonzero_count": 152029,
+        "allzero": false,
+        "constant": false,
+        "nan_count": 0,
+        "inf_count": 0
+      },
+      "dequant_output_stats": {
+        "shape": [
+          152064
+        ],
+        "dtype": "float32",
+        "size": 152064,
+        "min": -14432.0,
+        "max": 16297.0,
+        "mean": -30.315610885620117,
+        "std": 2204.722412109375,
+        "abs_max": 16297.0,
+        "nonzero_count": 152029,
+        "allzero": false,
+        "constant": false,
+        "nan_count": 0,
+        "inf_count": 0
+      },
+      "softmax": {
+        "entropy": 1.0477738725427338e-185,
+        "normalized_entropy": 8.781167348430743e-187,
+        "top1_probability": 1.0
+      },
+      "top10_logits": [
+        {
+          "token": 37355,
+          "logit": 16297.0
+        },
+        {
+          "token": 72869,
+          "logit": 15865.0
+        },
+        {
+          "token": 88222,
+          "logit": 14277.0
+        },
+        {
+          "token": 66906,
+          "logit": 14244.0
+        },
+        {
+          "token": 54462,
+          "logit": 14239.0
+        },
+        {
+          "token": 97982,
+          "logit": 14033.0
+        },
+        {
+          "token": 97281,
+          "logit": 13985.0
+        },
+        {
+          "token": 58113,
+          "logit": 13855.0
+        },
+        {
+          "token": 82761,
+          "logit": 13792.0
+        },
+        {
+          "token": 55573,
+          "logit": 13707.0
+        }
+      ]
+    },
+    {
+      "variant_id": "real_x_clip_2",
+      "why_included": "real seg26 hidden clipped to +/-2",
+      "input_path": "/mnt/nas/openclaw/reports/models/dream7b_s100p_v5_execution_20260701/evidence/final_segment_dense_sweep_v5/short_chinese_prompt_padded/real_x_clip_2/input.npy",
+      "raw_output_path": "/mnt/nas/openclaw/reports/models/dream7b_s100p_v5_execution_20260701/evidence/final_segment_dense_sweep_v5/short_chinese_prompt_padded/real_x_clip_2/raw_output.npy",
+      "dequant_logits_path": "/mnt/nas/openclaw/reports/models/dream7b_s100p_v5_execution_20260701/evidence/final_segment_dense_sweep_v5/short_chinese_prompt_padded/real_x_clip_2/dequant_logits.npy",
+      "metadata_path": "/mnt/nas/openclaw/reports/models/dream7b_s100p_v5_execution_20260701/evidence/final_segment_dense_sweep_v5/short_chinese_prompt_padded/real_x_clip_2/metadata.json",
+      "input_stats": {
+        "shape": [
+          128,
+          3584
+        ],
+        "dtype": "float32",
+        "size": 458752,
+        "min": -2.0,
+        "max": 2.0,
+        "mean": 0.007493837270885706,
+        "std": 1.997383952140808,
+        "abs_max": 2.0,
+        "nonzero_count": 458752,
+        "allzero": false,
+        "constant": false,
+        "nan_count": 0,
+        "inf_count": 0
+      },
+      "run_status": "pass",
+      "runtime_exception": null,
+      "raw_output_stats": {
+        "shape": [
+          1,
+          152064
+        ],
+        "dtype": "int16",
+        "size": 152064,
+        "min": -12743.0,
+        "max": 13412.0,
+        "mean": -861.9983559553872,
+        "std": 1830.74705429281,
+        "abs_max": 13412.0,
+        "nonzero_count": 152048,
+        "allzero": false,
+        "constant": false,
+        "nan_count": 0,
+        "inf_count": 0
+      },
+      "dequant_output_stats": {
+        "shape": [
+          152064
+        ],
+        "dtype": "float32",
+        "size": 152064,
+        "min": -12743.0,
+        "max": 13412.0,
+        "mean": -861.9984130859375,
+        "std": 1830.7469482421875,
+        "abs_max": 13412.0,
+        "nonzero_count": 152048,
+        "allzero": false,
+        "constant": false,
+        "nan_count": 0,
+        "inf_count": 0
+      },
+      "softmax": {
+        "entropy": 3.8313275419480136e-287,
+        "normalized_entropy": 3.2109531640497316e-288,
+        "top1_probability": 1.0
+      },
+      "top10_logits": [
+        {
+          "token": 37355,
+          "logit": 13412.0
+        },
+        {
+          "token": 66906,
+          "logit": 12746.0
+        },
+        {
+          "token": 72869,
+          "logit": 12498.0
+        },
+        {
+          "token": 54462,
+          "logit": 12358.0
+        },
+        {
+          "token": 58113,
+          "logit": 12262.0
+        },
+        {
+          "token": 88222,
+          "logit": 12121.0
+        },
+        {
+          "token": 40745,
+          "logit": 11749.0
+        },
+        {
+          "token": 55573,
+          "logit": 11382.0
+        },
+        {
+          "token": 82761,
+          "logit": 11274.0
+        },
+        {
+          "token": 41810,
+          "logit": 11229.0
+        }
+      ]
+    },
+    {
+      "variant_id": "real_x_clip_1",
+      "why_included": "real seg26 hidden clipped to +/-1",
+      "input_path": "/mnt/nas/openclaw/reports/models/dream7b_s100p_v5_execution_20260701/evidence/final_segment_dense_sweep_v5/short_chinese_prompt_padded/real_x_clip_1/input.npy",
+      "raw_output_path": "/mnt/nas/openclaw/reports/models/dream7b_s100p_v5_execution_20260701/evidence/final_segment_dense_sweep_v5/short_chinese_prompt_padded/real_x_clip_1/raw_output.npy",
+      "dequant_logits_path": "/mnt/nas/openclaw/reports/models/dream7b_s100p_v5_execution_20260701/evidence/final_segment_dense_sweep_v5/short_chinese_prompt_padded/real_x_clip_1/dequant_logits.npy",
+      "metadata_path": "/mnt/nas/openclaw/reports/models/dream7b_s100p_v5_execution_20260701/evidence/final_segment_dense_sweep_v5/short_chinese_prompt_padded/real_x_clip_1/metadata.json",
+      "input_stats": {
+        "shape": [
+          128,
+          3584
+        ],
+        "dtype": "float32",
+        "size": 458752,
+        "min": -1.0,
+        "max": 1.0,
+        "mean": 0.0037574495654553175,
+        "std": 0.9993430376052856,
+        "abs_max": 1.0,
+        "nonzero_count": 458752,
+        "allzero": false,
+        "constant": false,
+        "nan_count": 0,
+        "inf_count": 0
+      },
+      "run_status": "pass",
+      "runtime_exception": null,
+      "raw_output_stats": {
+        "shape": [
+          1,
+          152064
+        ],
+        "dtype": "int16",
+        "size": 152064,
+        "min": -12178.0,
+        "max": 10715.0,
+        "mean": -2237.1795757049663,
+        "std": 1645.5441249929488,
+        "abs_max": 12178.0,
+        "nonzero_count": 152050,
+        "allzero": false,
+        "constant": false,
+        "nan_count": 0,
+        "inf_count": 0
+      },
+      "dequant_output_stats": {
+        "shape": [
+          152064
+        ],
+        "dtype": "float32",
+        "size": 152064,
+        "min": -12178.0,
+        "max": 10715.0,
+        "mean": -2237.1796875,
+        "std": 1645.544189453125,
+        "abs_max": 12178.0,
+        "nonzero_count": 152050,
+        "allzero": false,
+        "constant": false,
+        "nan_count": 0,
+        "inf_count": 0
+      },
+      "softmax": {
+        "entropy": 1.0804230057924626e-260,
+        "normalized_entropy": 9.054792708215031e-262,
+        "top1_probability": 1.0
+      },
+      "top10_logits": [
+        {
+          "token": 66906,
+          "logit": 10715.0
+        },
+        {
+          "token": 58113,
+          "logit": 10110.0
+        },
+        {
+          "token": 37355,
+          "logit": 9980.0
+        },
+        {
+          "token": 54462,
+          "logit": 9895.0
+        },
+        {
+          "token": 40745,
+          "logit": 9678.0
+        },
+        {
+          "token": 88222,
+          "logit": 9374.0
+        },
+        {
+          "token": 41810,
+          "logit": 9247.0
+        },
+        {
+          "token": 36542,
+          "logit": 8654.0
+        },
+        {
+          "token": 72869,
+          "logit": 8637.0
+        },
+        {
+          "token": 55573,
+          "logit": 8435.0
+        }
+      ]
+    },
+    {
+      "variant_id": "real_x_z_normalized",
+      "why_included": "z-normalized real seg26 hidden",
+      "input_path": "/mnt/nas/openclaw/reports/models/dream7b_s100p_v5_execution_20260701/evidence/final_segment_dense_sweep_v5/short_chinese_prompt_padded/real_x_z_normalized/input.npy",
+      "raw_output_path": "/mnt/nas/openclaw/reports/models/dream7b_s100p_v5_execution_20260701/evidence/final_segment_dense_sweep_v5/short_chinese_prompt_padded/real_x_z_normalized/raw_output.npy",
+      "dequant_logits_path": "/mnt/nas/openclaw/reports/models/dream7b_s100p_v5_execution_20260701/evidence/final_segment_dense_sweep_v5/short_chinese_prompt_padded/real_x_z_normalized/dequant_logits.npy",
+      "metadata_path": "/mnt/nas/openclaw/reports/models/dream7b_s100p_v5_execution_20260701/evidence/final_segment_dense_sweep_v5/short_chinese_prompt_padded/real_x_z_normalized/metadata.json",
+      "input_stats": {
+        "shape": [
+          128,
+          3584
+        ],
+        "dtype": "float32",
+        "size": 458752,
+        "min": -1.014628529548645,
+        "max": 1.0069383382797241,
+        "mean": 1.4834638406568956e-08,
+        "std": 1.0000001192092896,
+        "abs_max": 1.014628529548645,
+        "nonzero_count": 458752,
+        "allzero": false,
+        "constant": false,
+        "nan_count": 0,
+        "inf_count": 0
+      },
+      "run_status": "pass",
+      "runtime_exception": null,
+      "raw_output_stats": {
+        "shape": [
+          1,
+          152064
+        ],
+        "dtype": "int16",
+        "size": 152064,
+        "min": -12827.0,
+        "max": 10204.0,
+        "mean": -2767.328651094276,
+        "std": 1674.5002862558454,
+        "abs_max": 12827.0,
+        "nonzero_count": 152061,
+        "allzero": false,
+        "constant": false,
+        "nan_count": 0,
+        "inf_count": 0
+      },
+      "dequant_output_stats": {
+        "shape": [
+          152064
+        ],
+        "dtype": "float32",
+        "size": 152064,
+        "min": -12827.0,
+        "max": 10204.0,
+        "mean": -2767.328857421875,
+        "std": 1674.500244140625,
+        "abs_max": 12827.0,
+        "nonzero_count": 152061,
+        "allzero": false,
+        "constant": false,
+        "nan_count": 0,
+        "inf_count": 0
+      },
+      "softmax": {
+        "entropy": 4.1847144468276986e-307,
+        "normalized_entropy": 3.5071191242641985e-308,
+        "top1_probability": 1.0
+      },
+      "top10_logits": [
+        {
+          "token": 66906,
+          "logit": 10204.0
+        },
+        {
+          "token": 58113,
+          "logit": 9492.0
+        },
+        {
+          "token": 37355,
+          "logit": 9458.0
+        },
+        {
+          "token": 54462,
+          "logit": 9244.0
+        },
+        {
+          "token": 40745,
+          "logit": 9011.0
+        },
+        {
+          "token": 88222,
+          "logit": 8680.0
+        },
+        {
+          "token": 41810,
+          "logit": 8566.0
+        },
+        {
+          "token": 72869,
+          "logit": 8210.0
+        },
+        {
+          "token": 36542,
+          "logit": 8040.0
+        },
+        {
+          "token": 36593,
+          "logit": 7954.0
+        }
+      ]
+    },
+    {
+      "variant_id": "real_x_mean_centered",
+      "why_included": "mean-centered real seg26 hidden",
+      "input_path": "/mnt/nas/openclaw/reports/models/dream7b_s100p_v5_execution_20260701/evidence/final_segment_dense_sweep_v5/short_chinese_prompt_padded/real_x_mean_centered/input.npy",
+      "raw_output_path": "/mnt/nas/openclaw/reports/models/dream7b_s100p_v5_execution_20260701/evidence/final_segment_dense_sweep_v5/short_chinese_prompt_padded/real_x_mean_centered/raw_output.npy",
+      "dequant_logits_path": "/mnt/nas/openclaw/reports/models/dream7b_s100p_v5_execution_20260701/evidence/final_segment_dense_sweep_v5/short_chinese_prompt_padded/real_x_mean_centered/dequant_logits.npy",
+      "metadata_path": "/mnt/nas/openclaw/reports/models/dream7b_s100p_v5_execution_20260701/evidence/final_segment_dense_sweep_v5/short_chinese_prompt_padded/real_x_mean_centered/metadata.json",
+      "input_stats": {
+        "shape": [
+          128,
+          3584
+        ],
+        "dtype": "float32",
+        "size": 458752,
+        "min": -16.358781814575195,
+        "max": 16.234792709350586,
+        "mean": -8.461730516273747e-08,
+        "std": 16.122926712036133,
+        "abs_max": 16.358781814575195,
+        "nonzero_count": 458752,
+        "allzero": false,
+        "constant": false,
+        "nan_count": 0,
+        "inf_count": 0
+      },
+      "run_status": "pass",
+      "runtime_exception": null,
+      "raw_output_stats": {
+        "shape": [
+          1,
+          152064
+        ],
+        "dtype": "int16",
+        "size": 152064,
+        "min": 0.0,
+        "max": 0.0,
+        "mean": 0.0,
+        "std": 0.0,
+        "abs_max": 0.0,
+        "nonzero_count": 0,
+        "allzero": true,
+        "constant": true,
+        "nan_count": 0,
+        "inf_count": 0
+      },
+      "dequant_output_stats": {
+        "shape": [
+          152064
+        ],
+        "dtype": "float32",
+        "size": 152064,
+        "min": 0.0,
+        "max": 0.0,
+        "mean": 0.0,
+        "std": 0.0,
+        "abs_max": 0.0,
+        "nonzero_count": 0,
+        "allzero": true,
+        "constant": true,
+        "nan_count": 0,
+        "inf_count": 0
+      },
+      "softmax": {
+        "entropy": 11.932056763842207,
+        "normalized_entropy": 1.0,
+        "top1_probability": 6.576178451178451e-06
+      },
+      "top10_logits": [
+        {
+          "token": 152063,
+          "logit": 0.0
+        },
+        {
+          "token": 50693,
+          "logit": 0.0
+        },
+        {
+          "token": 50691,
+          "logit": 0.0
+        },
+        {
+          "token": 50690,
+          "logit": 0.0
+        },
+        {
+          "token": 50689,
+          "logit": 0.0
+        },
+        {
+          "token": 50688,
+          "logit": 0.0
+        },
+        {
+          "token": 50687,
+          "logit": 0.0
+        },
+        {
+          "token": 50686,
+          "logit": 0.0
+        },
+        {
+          "token": 50685,
+          "logit": 0.0
+        },
+        {
+          "token": 50684,
+          "logit": 0.0
+        }
+      ]
+    }
+  ]
+}

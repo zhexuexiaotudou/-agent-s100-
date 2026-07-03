@@ -112,3 +112,4 @@ These are useful local or historical assets, but not core NodeHub source:
 - Dream7B-specific deployment artifacts
 - WSL VHDX or build roots
 - raw HBM blobs unless NodeHub asks for model artifacts
+

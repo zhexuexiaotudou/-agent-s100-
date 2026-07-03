@@ -1,0 +1,111 @@
+{
+  "generated_at": "2026-07-03T04:59:31.053850+00:00",
+  "gate_id": "stage2_7_package_rerun",
+  "verdict": "ok_stage2_7_package_rerun",
+  "passed_count": 12,
+  "check_count": 12,
+  "failure_count": 0,
+  "failures": [],
+  "checks": [
+    {
+      "label": "required asset exists: config/workspace_registry.yaml",
+      "ok": true,
+      "detail": {
+        "path": "F:\\Project\\Digua\\config\\workspace_registry.yaml",
+        "sha256": "9fef8ed973f209bbffde4ed3d76050840c2f76d7d52db9677d70f391d8603a1c"
+      }
+    },
+    {
+      "label": "required asset exists: config/workspace_tool_policy.yaml",
+      "ok": true,
+      "detail": {
+        "path": "F:\\Project\\Digua\\config\\workspace_tool_policy.yaml",
+        "sha256": "4d83f8b376a88b86afeb8c810aea236464165006587daf625d84c69d312658c9"
+      }
+    },
+    {
+      "label": "required asset exists: config/workspace_arg_policy.yaml",
+      "ok": true,
+      "detail": {
+        "path": "F:\\Project\\Digua\\config\\workspace_arg_policy.yaml",
+        "sha256": "6a25bb032b92726525b68537ee03cc4891cf26bc14a17c0274e97ab4bbff3c2a"
+      }
+    },
+    {
+      "label": "required asset exists: config/qwen_structured_decision_schema.json",
+      "ok": true,
+      "detail": {
+        "path": "F:\\Project\\Digua\\config\\qwen_structured_decision_schema.json",
+        "sha256": "7d787caf75243cf93133c9f448cee6efc3895054deec83f513eaff07fc4de52b"
+      }
+    },
+    {
+      "label": "required asset exists: config/prompts/qwen_workspace_decision_json.md",
+      "ok": true,
+      "detail": {
+        "path": "F:\\Project\\Digua\\config\\prompts\\qwen_workspace_decision_json.md",
+        "sha256": "c96925a74e545b5455acf9667df0aa13df77628777d5f9529f67a5a6cc15f22d"
+      }
+    },
+    {
+      "label": "required asset exists: ai_nas_harness/qwen_structured_decision.py",
+      "ok": true,
+      "detail": {
+        "path": "F:\\Project\\Digua\\ai_nas_harness\\qwen_structured_decision.py",
+        "sha256": "e40de012c8695fd33dbe1ab6067268509ea407bb31306c501f2c1314d4c20334"
+      }
+    },
+    {
+      "label": "required asset exists: scripts/probes/ai_nas_allowlisted_tool.sh",
+      "ok": true,
+      "detail": {
+        "path": "F:\\Project\\Digua\\scripts\\probes\\ai_nas_allowlisted_tool.sh",
+        "sha256": "e62f2278e1264519ee4e4cd13df44bd34d4375a989715cce3b6223f44c1c21e2"
+      }
+    },
+    {
+      "label": "required asset exists: scripts/run_stage2_6_gates_from_package.sh",
+      "ok": true,
+      "detail": {
+        "path": "F:\\Project\\Digua\\scripts\\run_stage2_6_gates_from_package.sh",
+        "sha256": "62e24cae92e1b5512a71e3b1c5ad8575055470df404ba6a42fed73e79c526b68"
+      }
+    },
+    {
+      "label": "required asset exists: scripts/run_stage2_7_gates_from_package.sh",
+      "ok": true,
+      "detail": {
+        "path": "F:\\Project\\Digua\\scripts\\run_stage2_7_gates_from_package.sh",
+        "sha256": "1f16de13fece6a5e1ba556ecb3c59d3947f9493b0aee7e295cddffa8f8ebe420"
+      }
+    },
+    {
+      "label": "previous input scan supports known directories",
+      "ok": true,
+      "detail": []
+    },
+    {
+      "label": "current package has stage2_6 packet if no previous zip",
+      "ok": true,
+      "detail": "F:\\Project\\Digua\\01_final_evidence\\digua_ai_nas_harness_stage2_6_gate_packet.json"
+    },
+    {
+      "label": "structured decision schema parses",
+      "ok": true,
+      "detail": [
+        "workspace_id",
+        "tool_id",
+        "args",
+        "cloud_allowed",
+        "requires_approval",
+        "deny_reason",
+        "reason_code",
+        "confidence"
+      ]
+    }
+  ],
+  "detail": {
+    "package_root": "F:\\Project\\Digua",
+    "previous_inputs": []
+  }
+}

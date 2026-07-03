@@ -1,0 +1,40 @@
+{
+  "model_id": "Qwen2.5-7B-Instruct-S100P-official-shadow",
+  "gateway": {
+    "host": "127.0.0.1",
+    "port": 18081,
+    "base_url": "http://127.0.0.1:18081/v1"
+  },
+  "official_runtime": {
+    "runtime_bin": "/mnt/nas/openclaw/toolchains/s100_llm_sdk/D-Robotics_LLM_S100_1.0.0_SDK/oellm_runtime/example/oellm_multichat/oellm_multichat",
+    "runtime_lib_dir": "/mnt/nas/openclaw/toolchains/s100_llm_sdk/D-Robotics_LLM_S100_1.0.0_SDK/oellm_runtime/lib",
+    "active_config": "/mnt/nas/openclaw/configs/qwen25_7b_1024_multichat_config.json",
+    "active_hbm_path": "/mnt/nas/openclaw/toolchains/s100_llm_sdk/D-Robotics_LLM_S100_1.0.0_SDK/oellm_runtime/model/Qwen2.5_7B_Instruct_1024.hbm",
+    "active_profile": "qwen25_7b_instruct_cache_len_1024_q8_shadow",
+    "priority_hbm_path": "/mnt/nas/openclaw/toolchains/s100_llm_sdk/D-Robotics_LLM_S100_1.0.0_SDK/oellm_runtime/model/Qwen2.5_7B_Instruct_1024.hbm",
+    "local_priority_hbm_path": "downloads/s100_official_llm/Qwen2.5_7B_Instruct_1024.hbm",
+    "priority_profile": "qwen25_7b_instruct_cache_len_1024_q8_vendor_default",
+    "priority_status": "shadow_candidate_not_promoted",
+    "priority_latest_probe": "",
+    "chat_timeout_seconds": 300
+  },
+  "ai_nas": {
+    "tool_dispatcher": "/mnt/nas/openclaw/scripts/probes/ai_nas_allowlisted_tool.sh",
+    "personal_root": "/mnt/nas/openclaw/Personal",
+    "report_root": "/mnt/nas/openclaw/reports/qwen25_7b_ai_nas",
+    "gateway_report_root": "/mnt/nas/openclaw/reports/qwen25_7b_gateway",
+    "default_case_query": "2024 renovation payment contract invoice receipt chat screenshot"
+  },
+  "promotion_boundary": {
+    "baseline_service": "qwen25-local-openai-gateway.service",
+    "baseline_port": 18080,
+    "shadow_service": "qwen25-7b-shadow-openai-gateway.service",
+    "shadow_port": 18081,
+    "required_verdict_before_promotion": "ok_qwen25_7b_shadow_acceptance_packet",
+    "not_claimed_until_promotion": [
+      "7B is the production text route",
+      "1024 context is stable on the current S100P memory layout",
+      "1.5B baseline can be removed"
+    ]
+  }
+}

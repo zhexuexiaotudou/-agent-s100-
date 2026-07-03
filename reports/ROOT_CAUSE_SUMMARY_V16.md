@@ -1,0 +1,3 @@
+# Root Cause Summary v16
+
+v16 advanced beyond the v15 vendor-blocked state by running a fresh HBM/HRT introspection escalation and a denser finite-difference matrix with 25 position variants per canonical case. Introspection recovered official model I/O and output scale, but still did not expose hbir.mul output, hbir.add input-1, GatherND scale, source graph, or quant table. The position path could not be promoted to an exact source-level formula, and no non-target-fitted GatherND scale met the all-case rel L2/Pearson gate. The strongest root-cause locus remains the seg00_01 input/position/quant/export contract.

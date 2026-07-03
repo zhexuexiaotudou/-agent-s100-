@@ -1,0 +1,343 @@
+{
+  "cases": [
+    {
+      "case_id": "zeros",
+      "s100p_segments_0_26_dump_available": true,
+      "seg26_dequant_stats": {
+        "abs_max": 16.29678726196289,
+        "allzero": false,
+        "constant": false,
+        "dtype": "float32",
+        "inf_count": 0,
+        "max": 16.29678726196289,
+        "mean": 0.005043780339334804,
+        "min": -16.29678726196289,
+        "nan_count": 0,
+        "nonzero_count": 458751,
+        "p0": -16.29678726196289,
+        "p1": -16.29678726196289,
+        "p100": 16.29678726196289,
+        "p5": -16.29678726196289,
+        "p50": 0.27563104033470154,
+        "p95": 16.29678726196289,
+        "p99": 16.29678726196289,
+        "shape": [
+          128,
+          3584
+        ],
+        "std": 16.123766137608065
+      },
+      "seg26_raw_stats": {
+        "abs_max": 19807.0,
+        "allzero": false,
+        "constant": false,
+        "dtype": "int16",
+        "inf_count": 0,
+        "max": 19807.0,
+        "mean": 6.130174909319196,
+        "min": -19807.0,
+        "nan_count": 0,
+        "nonzero_count": 458751,
+        "p0": -19807.0,
+        "p1": -19807.0,
+        "p100": 19807.0,
+        "p5": -19807.0,
+        "p50": 335.0,
+        "p95": 19807.0,
+        "p99": 19807.0,
+        "shape": [
+          128,
+          3584
+        ],
+        "std": 19596.711344721432
+      },
+      "seg27_bpu_output_stats": {
+        "abs_max": 0.0,
+        "allzero": true,
+        "constant": true,
+        "dtype": "float32",
+        "inf_count": 0,
+        "max": 0.0,
+        "mean": 0.0,
+        "min": 0.0,
+        "nan_count": 0,
+        "nonzero_count": 0,
+        "p0": 0.0,
+        "p1": 0.0,
+        "p100": 0.0,
+        "p5": 0.0,
+        "p50": 0.0,
+        "p95": 0.0,
+        "p99": 0.0,
+        "shape": [
+          1,
+          152064
+        ],
+        "std": 0.0
+      },
+      "seg27_raw_stats": {
+        "abs_max": 0.0,
+        "allzero": true,
+        "constant": true,
+        "dtype": "int16",
+        "inf_count": 0,
+        "max": 0.0,
+        "mean": 0.0,
+        "min": 0.0,
+        "nan_count": 0,
+        "nonzero_count": 0,
+        "p0": 0.0,
+        "p1": 0.0,
+        "p100": 0.0,
+        "p5": 0.0,
+        "p50": 0.0,
+        "p95": 0.0,
+        "p99": 0.0,
+        "shape": [
+          1,
+          152064
+        ],
+        "std": 0.0
+      }
+    },
+    {
+      "case_id": "ramp",
+      "s100p_segments_0_26_dump_available": true,
+      "seg26_dequant_stats": {
+        "abs_max": 16.29678726196289,
+        "allzero": false,
+        "constant": false,
+        "dtype": "float32",
+        "inf_count": 0,
+        "max": 16.29678726196289,
+        "mean": 0.08678288324044255,
+        "min": -16.29678726196289,
+        "nan_count": 0,
+        "nonzero_count": 458752,
+        "p0": -16.29678726196289,
+        "p1": -16.29678726196289,
+        "p100": 16.29678726196289,
+        "p5": -16.29678726196289,
+        "p50": 2.661279320716858,
+        "p95": 16.29678726196289,
+        "p99": 16.29678726196289,
+        "shape": [
+          128,
+          3584
+        ],
+        "std": 16.120623348033856
+      },
+      "seg26_raw_stats": {
+        "abs_max": 19807.0,
+        "allzero": false,
+        "constant": false,
+        "dtype": "int16",
+        "inf_count": 0,
+        "max": 19807.0,
+        "mean": 105.47530255998883,
+        "min": -19807.0,
+        "nan_count": 0,
+        "nonzero_count": 458752,
+        "p0": -19807.0,
+        "p1": -19807.0,
+        "p100": 19807.0,
+        "p5": -19807.0,
+        "p50": 3234.5,
+        "p95": 19807.0,
+        "p99": 19807.0,
+        "shape": [
+          128,
+          3584
+        ],
+        "std": 19592.891620509945
+      },
+      "seg27_bpu_output_stats": {
+        "abs_max": 0.0,
+        "allzero": true,
+        "constant": true,
+        "dtype": "float32",
+        "inf_count": 0,
+        "max": 0.0,
+        "mean": 0.0,
+        "min": 0.0,
+        "nan_count": 0,
+        "nonzero_count": 0,
+        "p0": 0.0,
+        "p1": 0.0,
+        "p100": 0.0,
+        "p5": 0.0,
+        "p50": 0.0,
+        "p95": 0.0,
+        "p99": 0.0,
+        "shape": [
+          1,
+          152064
+        ],
+        "std": 0.0
+      },
+      "seg27_raw_stats": {
+        "abs_max": 0.0,
+        "allzero": true,
+        "constant": true,
+        "dtype": "int16",
+        "inf_count": 0,
+        "max": 0.0,
+        "mean": 0.0,
+        "min": 0.0,
+        "nan_count": 0,
+        "nonzero_count": 0,
+        "p0": 0.0,
+        "p1": 0.0,
+        "p100": 0.0,
+        "p5": 0.0,
+        "p50": 0.0,
+        "p95": 0.0,
+        "p99": 0.0,
+        "shape": [
+          1,
+          152064
+        ],
+        "std": 0.0
+      }
+    },
+    {
+      "case_id": "short_chinese_prompt_padded",
+      "s100p_segments_0_26_dump_available": true,
+      "seg26_dequant_stats": {
+        "abs_max": 16.29678726196289,
+        "allzero": false,
+        "constant": false,
+        "dtype": "float32",
+        "inf_count": 0,
+        "max": 16.29678726196289,
+        "mean": 0.06199397187599498,
+        "min": -16.29678726196289,
+        "nan_count": 0,
+        "nonzero_count": 458752,
+        "p0": -16.29678726196289,
+        "p1": -16.29678726196289,
+        "p100": 16.29678726196289,
+        "p5": -16.29678726196289,
+        "p50": 1.9277716875076294,
+        "p95": 16.29678726196289,
+        "p99": 16.29678726196289,
+        "shape": [
+          128,
+          3584
+        ],
+        "std": 16.12292779310649
+      },
+      "seg26_raw_stats": {
+        "abs_max": 19807.0,
+        "allzero": false,
+        "constant": false,
+        "dtype": "int16",
+        "inf_count": 0,
+        "max": 19807.0,
+        "mean": 75.34703499930245,
+        "min": -19807.0,
+        "nan_count": 0,
+        "nonzero_count": 458752,
+        "p0": -19807.0,
+        "p1": -19807.0,
+        "p100": 19807.0,
+        "p5": -19807.0,
+        "p50": 2343.0,
+        "p95": 19807.0,
+        "p99": 19807.0,
+        "shape": [
+          128,
+          3584
+        ],
+        "std": 19595.692426654958
+      },
+      "seg27_bpu_output_stats": {
+        "abs_max": 0.0,
+        "allzero": true,
+        "constant": true,
+        "dtype": "float32",
+        "inf_count": 0,
+        "max": 0.0,
+        "mean": 0.0,
+        "min": 0.0,
+        "nan_count": 0,
+        "nonzero_count": 0,
+        "p0": 0.0,
+        "p1": 0.0,
+        "p100": 0.0,
+        "p5": 0.0,
+        "p50": 0.0,
+        "p95": 0.0,
+        "p99": 0.0,
+        "shape": [
+          1,
+          152064
+        ],
+        "std": 0.0
+      },
+      "seg27_raw_stats": {
+        "abs_max": 0.0,
+        "allzero": true,
+        "constant": true,
+        "dtype": "int16",
+        "inf_count": 0,
+        "max": 0.0,
+        "mean": 0.0,
+        "min": 0.0,
+        "nan_count": 0,
+        "nonzero_count": 0,
+        "p0": 0.0,
+        "p1": 0.0,
+        "p100": 0.0,
+        "p5": 0.0,
+        "p50": 0.0,
+        "p95": 0.0,
+        "p99": 0.0,
+        "shape": [
+          1,
+          152064
+        ],
+        "std": 0.0
+      }
+    }
+  ],
+  "cpu_hf_reference_status": {
+    "bf16_boundary_status": "unavailable",
+    "bf16_reference_status": "unavailable",
+    "reason": "verified_dream7b_diffusion_forward_wrapper_not_available"
+  },
+  "created_at_utc": "2026-07-01T07:36:19Z",
+  "decision_rule": {
+    "current_outcome": "decision_rule_not_executed_cpu_hf_lmhead_unavailable",
+    "if_hybrid_logits_fail": "earlier hidden path or input alignment likely fault",
+    "if_hybrid_logits_recover": "seg27_28/lm_head/output contract likely fault"
+  },
+  "hybrid_steps": {
+    "compare_hybrid_logits_to_gguf_logits": "blocked_cpu_lmhead_unavailable",
+    "compare_hybrid_logits_to_hf_full_logits": "blocked_cpu_lmhead_or_hf_full_logits_unavailable",
+    "compute_final_lm_head_on_cpu_hf_reference": "unavailable",
+    "dump_seg26_hidden_state": "available_from_boundary_dump",
+    "run_s100p_bpu_segments_0_26": "available_from_boundary_dump"
+  },
+  "localization_from_non_hybrid_evidence": {
+    "final_segment_input_sweep_verdict": "pass",
+    "interpretation": "The hybrid llada.cpp-style CPU lm_head test is blocked, but the existing final-segment sweep shows real BPU seg26 hidden produces all-zero logits at x and x/2, while x/4 and narrower clipped/normalized variants produce nonconstant logits. This localizes the current fault to the seg26 hidden range/scale or final-segment input contract, without proving BF16 ground-truth failure.",
+    "likely_issue_class": "input_range_or_scale",
+    "real_hidden_constant_output": true,
+    "smallest_recovery_variant": "real_x_div_4",
+    "synthetic_controls_nonconstant": true
+  },
+  "missing_artifacts": [
+    "verified Dream-7B HF/PyTorch BF16 full logits for the same seq128 cases",
+    "verified HF/PyTorch lm_head path that accepts dumped seg26 hidden",
+    "verified segment-to-PyTorch-layer mapping for seg26 hidden"
+  ],
+  "schema_version": "dream7b_hybrid_bpu_hidden_cpu_lmhead_v1",
+  "scope": "llada.cpp-inspired hybrid diagnostic; no generation and no product route",
+  "source_reports": {
+    "bf16_boundary_status": "F:\\Project\\Digua\\deliverables\\dream7b_s100p_v3_execution_20260701\\reports\\140_bf16_boundary_status.json",
+    "bf16_status": "F:\\Project\\Digua\\deliverables\\dream7b_s100p_v3_execution_20260701\\reports\\140_bf16_reference_status.json",
+    "boundary_dump": "F:\\Project\\Digua\\deliverables\\dream7b_s100p_v3_execution_20260701\\reports\\130_s100p_boundary_dump_subprocess.json",
+    "final_segment_sweep": "F:\\Project\\Digua\\deliverables\\dream7b_s100p_v3_execution_20260701\\reports\\120_final_segment_input_sweep.json"
+  }
+}

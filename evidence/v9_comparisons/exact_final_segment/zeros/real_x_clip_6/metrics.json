@@ -1,0 +1,74 @@
+{
+  "candidate_top1": 76842,
+  "reference_top1": 69379,
+  "top1_agreement": false,
+  "top5_overlap": 0,
+  "reference_top1_in_candidate_top5": false,
+  "candidate_max_tie_count": 11,
+  "reference_max_tie_count": 1,
+  "reference_top1_in_candidate_max_tie_set": false,
+  "candidate_top1_in_reference_max_tie_set": false,
+  "rank_interval_for_reference_top1_under_candidate_ties": [
+    67,
+    67
+  ],
+  "rank_interval_for_candidate_top1_under_reference_ties": [
+    68,
+    73
+  ],
+  "cosine": 0.21348296068284325,
+  "pearson_centered": 0.5451318535853029,
+  "relative_l2": 3.521752430294529,
+  "mean_abs_error": 3.502852391105686,
+  "max_abs_error": 7.10819673538208,
+  "candidate_stats": {
+    "shape": [
+      152064
+    ],
+    "dtype": "float32",
+    "size": 152064,
+    "min": -6.949209213256836,
+    "max": 8.328020095825195,
+    "mean": 3.5331649780273438,
+    "std": 1.2583831548690796,
+    "abs_max": 8.328020095825195,
+    "nonzero_count": 152064,
+    "allzero": false,
+    "constant": false,
+    "nan_count": 0,
+    "inf_count": 0
+  },
+  "reference_stats": {
+    "shape": [
+      152064
+    ],
+    "dtype": "float32",
+    "size": 152064,
+    "min": -6.65625,
+    "max": 6.8125,
+    "mean": 0.033956512808799744,
+    "std": 1.0421355962753296,
+    "abs_max": 6.8125,
+    "nonzero_count": 152064,
+    "allzero": false,
+    "constant": false,
+    "nan_count": 0,
+    "inf_count": 0
+  },
+  "candidate_entropy": {
+    "entropy": 11.463017973417587,
+    "normalized_entropy": 0.9606908683299302,
+    "top1_probability": 0.000460957131985957
+  },
+  "reference_entropy": {
+    "entropy": 10.861726678798323,
+    "normalized_entropy": 0.9102979388861683,
+    "top1_probability": 0.0027074980090967195
+  },
+  "case_id": "zeros",
+  "variant_id": "real_x_clip_6",
+  "candidate": "S100P seg27_28 official-dequant logits",
+  "reference": "HF exact layer27 + final norm + lm_head logits",
+  "candidate_path": "evidence/final_segment_endpoint_raw_v9/zeros/real_x_clip_6/official_dequant_logits.npy",
+  "reference_path": "evidence/hf_exact_final_segment_v9/zeros/real_x_clip_6/exact_hf_final_logits.npy"
+}

@@ -1,0 +1,19 @@
+[Unit]
+Description=Dream7B BPU experimental OpenAI-compatible gateway on 18889
+After=network-online.target dream7b-bpu-batch-queue.service dream7b-local-openai-gateway.service
+Wants=network-online.target
+
+[Service]
+Type=simple
+WorkingDirectory=/root/.openclaw/workspace
+Environment=DREAM7B_EXPERIMENTAL_HOST=127.0.0.1
+Environment=DREAM7B_EXPERIMENTAL_PORT=18889
+Environment=DREAM7B_QUEUE_ADAPTER_POLICY=/root/.openclaw/workspace/configs/dream7b_queue_adapter_policy.json
+ExecStart=/usr/bin/python3 /root/.openclaw/workspace/scripts/dream7b_experimental_18889_gateway.py --config ${DREAM7B_QUEUE_ADAPTER_POLICY}
+Restart=on-failure
+RestartSec=5s
+StartLimitIntervalSec=300
+StartLimitBurst=5
+
+[Install]
+WantedBy=default.target

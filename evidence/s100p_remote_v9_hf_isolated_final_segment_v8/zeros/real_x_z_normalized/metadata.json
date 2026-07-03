@@ -1,0 +1,51 @@
+{
+  "case_id": "zeros",
+  "variant": "real_x_z_normalized",
+  "boundary_hypothesis": "seg27_28 == final_decoder_layer_27 + final_rmsnorm + lm_head",
+  "input_hidden_path": "/mnt/nas/openclaw/reports/models/dream7b_s100p_v5_execution_20260701/evidence/final_segment_dense_sweep_v5/zeros/real_x_z_normalized/input.npy",
+  "input_hidden_stats": {
+    "shape": [
+      128,
+      3584
+    ],
+    "dtype": "float32",
+    "min": -1.0110434293746948,
+    "max": 1.0104179382324219,
+    "mean": 4.671580455806179e-08,
+    "std": 0.9999999403953552,
+    "abs_max": 1.0110434293746948,
+    "nonzero_count": 458752,
+    "allzero": false,
+    "constant": false
+  },
+  "dtype": "bfloat16",
+  "logits_path": "evidence/hf_isolated_final_segment_v8/zeros/real_x_z_normalized/layer27_norm_lmhead_logits.npy",
+  "logits_sha256": "6b6d4b0df1792264d84b2f2eee3101bb3353c768d07308fa6e9b9f891dbc451e",
+  "logits_stats": {
+    "shape": [
+      152064
+    ],
+    "dtype": "float32",
+    "min": -7.625,
+    "max": 4.6875,
+    "mean": -2.402456045150757,
+    "std": 1.4041942358016968,
+    "abs_max": 7.625,
+    "nonzero_count": 152064,
+    "allzero": false,
+    "constant": false
+  },
+  "top10": [
+    83008,
+    77043,
+    89013,
+    47656,
+    80126,
+    94621,
+    68466,
+    97653,
+    84422,
+    81123
+  ],
+  "elapsed_seconds": 40.554
+}

@@ -1,0 +1,110 @@
+{
+  "variant_id": "real_x_div_3",
+  "why_included": "real seg26 hidden divided by 3.0",
+  "input_path": "/mnt/nas/openclaw/reports/models/dream7b_s100p_v5_execution_20260701/evidence/final_segment_dense_sweep_v5/ramp/real_x_div_3/input.npy",
+  "raw_output_path": "/mnt/nas/openclaw/reports/models/dream7b_s100p_v5_execution_20260701/evidence/final_segment_dense_sweep_v5/ramp/real_x_div_3/raw_output.npy",
+  "dequant_logits_path": "/mnt/nas/openclaw/reports/models/dream7b_s100p_v5_execution_20260701/evidence/final_segment_dense_sweep_v5/ramp/real_x_div_3/dequant_logits.npy",
+  "metadata_path": "/mnt/nas/openclaw/reports/models/dream7b_s100p_v5_execution_20260701/evidence/final_segment_dense_sweep_v5/ramp/real_x_div_3/metadata.json",
+  "input_stats": {
+    "shape": [
+      128,
+      3584
+    ],
+    "dtype": "float32",
+    "size": 458752,
+    "min": -5.432262420654297,
+    "max": 5.432262420654297,
+    "mean": 0.028927629813551903,
+    "std": 5.373540878295898,
+    "abs_max": 5.432262420654297,
+    "nonzero_count": 458752,
+    "allzero": false,
+    "constant": false,
+    "nan_count": 0,
+    "inf_count": 0
+  },
+  "run_status": "pass",
+  "runtime_exception": null,
+  "raw_output_stats": {
+    "shape": [
+      1,
+      152064
+    ],
+    "dtype": "int16",
+    "size": 152064,
+    "min": -22934.0,
+    "max": 24652.0,
+    "mean": -48.22696364688552,
+    "std": 3504.336466851068,
+    "abs_max": 24652.0,
+    "nonzero_count": 152043,
+    "allzero": false,
+    "constant": false,
+    "nan_count": 0,
+    "inf_count": 0
+  },
+  "dequant_output_stats": {
+    "shape": [
+      152064
+    ],
+    "dtype": "float32",
+    "size": 152064,
+    "min": -22934.0,
+    "max": 24652.0,
+    "mean": -48.22697067260742,
+    "std": 3504.336669921875,
+    "abs_max": 24652.0,
+    "nonzero_count": 152043,
+    "allzero": false,
+    "constant": false,
+    "nan_count": 0,
+    "inf_count": 0
+  },
+  "softmax": {
+    "entropy": -0.0,
+    "normalized_entropy": -0.0,
+    "top1_probability": 1.0
+  },
+  "top10_logits": [
+    {
+      "token": 61183,
+      "logit": 24652.0
+    },
+    {
+      "token": 1527,
+      "logit": 21799.0
+    },
+    {
+      "token": 44591,
+      "logit": 21594.0
+    },
+    {
+      "token": 57002,
+      "logit": 20552.0
+    },
+    {
+      "token": 40,
+      "logit": 20240.0
+    },
+    {
+      "token": 21788,
+      "logit": 20218.0
+    },
+    {
+      "token": 35192,
+      "logit": 20181.0
+    },
+    {
+      "token": 738,
+      "logit": 20090.0
+    },
+    {
+      "token": 62815,
+      "logit": 20042.0
+    },
+    {
+      "token": 295,
+      "logit": 20022.0
+    }
+  ]
+}

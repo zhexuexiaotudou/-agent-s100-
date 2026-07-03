@@ -1,0 +1,61 @@
+{
+  "schema_version": "dream7b_s100p_v13_1350_gguf_f16_logits_reference",
+  "created_at_utc": "2026-07-03T05:26:14.842972+00:00",
+  "run_commands": [
+    "C:\\Users\\zhexu\\AppData\\Local\\Python\\pythoncore-3.14-64\\python.exe tools\\build_v13_research_thread.py --root ."
+  ],
+  "host_environment": {
+    "local_platform": "Windows-11-10.0.26200-SP0",
+    "python": "3.14.3 (tags/v3.14.3:323c59a, Feb  3 2026, 16:04:56) [MSC v.1944 64 bit (AMD64)]"
+  },
+  "git": {
+    "returncode": 128,
+    "stdout": "",
+    "stderr": "fatal: not a git repository (or any of the parent directories): .git"
+  },
+  "input_artifacts": [
+    {
+      "path": "evidence/gguf_f16_reference_v13/gguf_artifact_and_runner_probe.log",
+      "exists": true,
+      "size_bytes": 2563,
+      "sha256": "a4f0c5b86c165d61c03b5d42c7e38d98cc0799776323dd4cbfd01e5ee1e3baa6"
+    }
+  ],
+  "output_artifacts": [
+    {
+      "path": "reports/1350_gguf_f16_logits_reference.json",
+      "exists": true,
+      "size_bytes": 1696,
+      "sha256": "f621c6fd3d1b6ad80757e39a716693e25ffbfa6890610a640807650c9def52a7"
+    },
+    {
+      "path": "reports/1350_gguf_f16_logits_reference.md",
+      "exists": true,
+      "size_bytes": 265,
+      "sha256": "753dc0b6d75a8926221d2d8898bd4032def101489ed9d0cb131fa90fc20ed85e"
+    }
+  ],
+  "blocking_or_failure_reasons": [
+    "Dream7B GGUF F16 and Q4_0 artifacts were not found; diffuse-cli exposes generation-style options and no logits-only dump option."
+  ],
+  "next_minimal_experiments": [],
+  "safety": {
+    "generation_quality_run": false,
+    "product_routes_18888_18889_touched": false,
+    "dream7b_frontend_openclaw_traffic_touched": false
+  },
+  "verdict": "gguf_f16_blocked_no_artifact",
+  "gguf_artifacts": {
+    "f16": [],
+    "q4_0": [],
+    "q4_k_m": [
+      "/mnt/nas/openclaw/models/dream7b/dream-7b-q4km.gguf"
+    ],
+    "all": [
+      "/mnt/nas/openclaw/models/dream7b/dream-7b-q4km.gguf"
+    ]
+  },
+  "diffuse_cpp_status": "available_generation_style_cli_only_no_logits_dump",
+  "logits_runner_status": "missing",
+  "comparisons": []
+}

@@ -1,0 +1,53 @@
+{
+  "created_at": "2026-07-01T14:02:46.713618+08:00",
+  "reference_type": "bf16_pytorch",
+  "host": {
+    "host": "MSI",
+    "platform": "Windows-11-10.0.26200-SP0",
+    "python": "3.14.3 (tags/v3.14.3:323c59a, Feb  3 2026, 16:04:56) [MSC v.1944 64 bit (AMD64)]",
+    "cwd": "F:\\Project\\Digua\\deliverables\\codex_dream7b_s100p_research_run_20260701"
+  },
+  "model_path": "",
+  "model_sha256": null,
+  "device": "cpu",
+  "case_count": 6,
+  "cases": [
+    {
+      "case_id": "zeros",
+      "expected_seq_len": 128,
+      "last_token_index": 127
+    },
+    {
+      "case_id": "ramp",
+      "expected_seq_len": 128,
+      "last_token_index": 127
+    },
+    {
+      "case_id": "single_token_repeat",
+      "expected_seq_len": 128,
+      "last_token_index": 127
+    },
+    {
+      "case_id": "alternating_tokens",
+      "expected_seq_len": 128,
+      "last_token_index": 127
+    },
+    {
+      "case_id": "real_prompt_padded",
+      "expected_seq_len": 128,
+      "last_token_index": 127
+    },
+    {
+      "case_id": "real_prompt_mask_tail",
+      "expected_seq_len": 128,
+      "last_token_index": 127
+    }
+  ],
+  "verdict": "blocked_bf16_reference_export",
+  "blockers": [
+    "bf16_model_path_not_provided",
+    "bf16_dependency_unavailable:ModuleNotFoundError:No module named 'torch'",
+    "dream_bf16_forward_wrapper_not_verified"
+  ],
+  "boundary": "No BF16 logits are emitted unless a verified Dream7B PyTorch forward wrapper and checkpoint path are provided."
+}

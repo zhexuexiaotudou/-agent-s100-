@@ -1,0 +1,327 @@
+{
+  "generated_at": "2026-07-03T01:33:35.236558+08:00",
+  "gate_id": "stage1_cloud_redaction_hardening_gate",
+  "verdict": "ok_stage1_cloud_redaction_hardening_gate",
+  "passed_count": 12,
+  "check_count": 12,
+  "failure_count": 0,
+  "failures": [],
+  "checks": [
+    {
+      "label": "redacts /mnt/nas/Personal/Finance/invo",
+      "ok": true,
+      "detail": {
+        "egress_payload_hash": "d1af62ce29500f20497b348b8417f7e20fa6c5d74c6fd0e3cc31853d4619c095",
+        "redacted_text": "[REDACTED_NAS_CONTEXT]",
+        "redacted_preview": "[REDACTED_NAS_CONTEXT]",
+        "redaction_applied": true,
+        "redaction_summary": {
+          "redacted_terms": [],
+          "redacted_patterns": [
+            "(?i)(?:/mnt/(?:nas|data)|/home)/[^\\s,;\\\"'<>]+"
+          ],
+          "leak_count": 0,
+          "leak_markers": []
+        }
+      }
+    },
+    {
+      "label": "hash exists /mnt/nas/Personal/Finance/invo",
+      "ok": true,
+      "detail": {
+        "egress_payload_hash": "d1af62ce29500f20497b348b8417f7e20fa6c5d74c6fd0e3cc31853d4619c095",
+        "redacted_text": "[REDACTED_NAS_CONTEXT]",
+        "redacted_preview": "[REDACTED_NAS_CONTEXT]",
+        "redaction_applied": true,
+        "redaction_summary": {
+          "redacted_terms": [],
+          "redacted_patterns": [
+            "(?i)(?:/mnt/(?:nas|data)|/home)/[^\\s,;\\\"'<>]+"
+          ],
+          "leak_count": 0,
+          "leak_markers": []
+        }
+      }
+    },
+    {
+      "label": "redacts /home/sunrise/Personal/Family/",
+      "ok": true,
+      "detail": {
+        "egress_payload_hash": "fd1efc623651eb8cf92f745bc33d5c486fa604ee9755de69784907d2778e9d55",
+        "redacted_text": "[REDACTED_NAS_CONTEXT]",
+        "redacted_preview": "[REDACTED_NAS_CONTEXT]",
+        "redaction_applied": true,
+        "redaction_summary": {
+          "redacted_terms": [],
+          "redacted_patterns": [
+            "(?i)(?:/mnt/(?:nas|data)|/home)/[^\\s,;\\\"'<>]+"
+          ],
+          "leak_count": 0,
+          "leak_markers": []
+        }
+      }
+    },
+    {
+      "label": "hash exists /home/sunrise/Personal/Family/",
+      "ok": true,
+      "detail": {
+        "egress_payload_hash": "fd1efc623651eb8cf92f745bc33d5c486fa604ee9755de69784907d2778e9d55",
+        "redacted_text": "[REDACTED_NAS_CONTEXT]",
+        "redacted_preview": "[REDACTED_NAS_CONTEXT]",
+        "redaction_applied": true,
+        "redaction_summary": {
+          "redacted_terms": [],
+          "redacted_patterns": [
+            "(?i)(?:/mnt/(?:nas|data)|/home)/[^\\s,;\\\"'<>]+"
+          ],
+          "leak_count": 0,
+          "leak_markers": []
+        }
+      }
+    },
+    {
+      "label": "redacts C:\\Users\\zhexu\\Documents\\Priva",
+      "ok": true,
+      "detail": {
+        "egress_payload_hash": "11496514c3e64affe7613e14393eb0d94ba5820de81c488b1d35b01b9b35a76d",
+        "redacted_text": "[REDACTED_NAS_CONTEXT]",
+        "redacted_preview": "[REDACTED_NAS_CONTEXT]",
+        "redaction_applied": true,
+        "redaction_summary": {
+          "redacted_terms": [],
+          "redacted_patterns": [
+            "(?i)(?:[A-Za-z]:\\\\|\\\\\\\\)[^\\s,;\\\"'<>]+"
+          ],
+          "leak_count": 0,
+          "leak_markers": []
+        }
+      }
+    },
+    {
+      "label": "hash exists C:\\Users\\zhexu\\Documents\\Priva",
+      "ok": true,
+      "detail": {
+        "egress_payload_hash": "11496514c3e64affe7613e14393eb0d94ba5820de81c488b1d35b01b9b35a76d",
+        "redacted_text": "[REDACTED_NAS_CONTEXT]",
+        "redacted_preview": "[REDACTED_NAS_CONTEXT]",
+        "redaction_applied": true,
+        "redaction_summary": {
+          "redacted_terms": [],
+          "redacted_patterns": [
+            "(?i)(?:[A-Za-z]:\\\\|\\\\\\\\)[^\\s,;\\\"'<>]+"
+          ],
+          "leak_count": 0,
+          "leak_markers": []
+        }
+      }
+    },
+    {
+      "label": "redacts ../Personal/Inbox/denied.txt",
+      "ok": true,
+      "detail": {
+        "egress_payload_hash": "7526a25b603eba9f2e908c285a17600d03aa1b9a9cabaddc37a3c5d1eb45b872",
+        "redacted_text": "[REDACTED_NAS_CONTEXT][REDACTED_NAS_CONTEXT]/[REDACTED_NAS_CONTEXT]/denied.txt",
+        "redacted_preview": "[REDACTED_NAS_CONTEXT][REDACTED_NAS_CONTEXT]/[REDACTED_NAS_CONTEXT]/denied.txt",
+        "redaction_applied": true,
+        "redaction_summary": {
+          "redacted_terms": [
+            "Inbox",
+            "Personal"
+          ],
+          "redacted_patterns": [
+            "(?i)\\.\\.(?:/|\\\\)"
+          ],
+          "leak_count": 0,
+          "leak_markers": []
+        }
+      }
+    },
+    {
+      "label": "hash exists ../Personal/Inbox/denied.txt",
+      "ok": true,
+      "detail": {
+        "egress_payload_hash": "7526a25b603eba9f2e908c285a17600d03aa1b9a9cabaddc37a3c5d1eb45b872",
+        "redacted_text": "[REDACTED_NAS_CONTEXT][REDACTED_NAS_CONTEXT]/[REDACTED_NAS_CONTEXT]/denied.txt",
+        "redacted_preview": "[REDACTED_NAS_CONTEXT][REDACTED_NAS_CONTEXT]/[REDACTED_NAS_CONTEXT]/denied.txt",
+        "redaction_applied": true,
+        "redaction_summary": {
+          "redacted_terms": [
+            "Inbox",
+            "Personal"
+          ],
+          "redacted_patterns": [
+            "(?i)\\.\\.(?:/|\\\\)"
+          ],
+          "leak_count": 0,
+          "leak_markers": []
+        }
+      }
+    },
+    {
+      "label": "redacts denied_acl_snippet: Personal/P",
+      "ok": true,
+      "detail": {
+        "egress_payload_hash": "7f27496c477fd80df65e7c42b1706dc1fabca0d55e9aff75a479f436e015f621",
+        "redacted_text": "[REDACTED_NAS_CONTEXT]",
+        "redacted_preview": "[REDACTED_NAS_CONTEXT]",
+        "redaction_applied": true,
+        "redaction_summary": {
+          "redacted_terms": [],
+          "redacted_patterns": [
+            "(?i)(?:^|[\\s,;])(?:Personal|Inbox|Documents|Photos|Family|Finance|Medical|Private)(?:[/\\\\][^\\s,;\\\"'<>]+)?",
+            "(?i)denied[_ -]?acl[_ -]?snippet[:=][^\\n]+"
+          ],
+          "leak_count": 0,
+          "leak_markers": []
+        }
+      }
+    },
+    {
+      "label": "hash exists denied_acl_snippet: Personal/P",
+      "ok": true,
+      "detail": {
+        "egress_payload_hash": "7f27496c477fd80df65e7c42b1706dc1fabca0d55e9aff75a479f436e015f621",
+        "redacted_text": "[REDACTED_NAS_CONTEXT]",
+        "redacted_preview": "[REDACTED_NAS_CONTEXT]",
+        "redaction_applied": true,
+        "redaction_summary": {
+          "redacted_terms": [],
+          "redacted_patterns": [
+            "(?i)(?:^|[\\s,;])(?:Personal|Inbox|Documents|Photos|Family|Finance|Medical|Private)(?:[/\\\\][^\\s,;\\\"'<>]+)?",
+            "(?i)denied[_ -]?acl[_ -]?snippet[:=][^\\n]+"
+          ],
+          "leak_count": 0,
+          "leak_markers": []
+        }
+      }
+    },
+    {
+      "label": "redacts summarize /mnt/nas/Personal/Ph",
+      "ok": true,
+      "detail": {
+        "egress_payload_hash": "ff6824a6f469f4e10db2415a7f22909b26fc3751b3c4a5cca7b7597da5413326",
+        "redacted_text": "summarize [REDACTED_NAS_CONTEXT] without leaking privacy",
+        "redacted_preview": "summarize [REDACTED_NAS_CONTEXT] without leaking privacy",
+        "redaction_applied": true,
+        "redaction_summary": {
+          "redacted_terms": [],
+          "redacted_patterns": [
+            "(?i)(?:/mnt/(?:nas|data)|/home)/[^\\s,;\\\"'<>]+"
+          ],
+          "leak_count": 0,
+          "leak_markers": []
+        }
+      }
+    },
+    {
+      "label": "hash exists summarize /mnt/nas/Personal/Ph",
+      "ok": true,
+      "detail": {
+        "egress_payload_hash": "ff6824a6f469f4e10db2415a7f22909b26fc3751b3c4a5cca7b7597da5413326",
+        "redacted_text": "summarize [REDACTED_NAS_CONTEXT] without leaking privacy",
+        "redacted_preview": "summarize [REDACTED_NAS_CONTEXT] without leaking privacy",
+        "redaction_applied": true,
+        "redaction_summary": {
+          "redacted_terms": [],
+          "redacted_patterns": [
+            "(?i)(?:/mnt/(?:nas|data)|/home)/[^\\s,;\\\"'<>]+"
+          ],
+          "leak_count": 0,
+          "leak_markers": []
+        }
+      }
+    }
+  ],
+  "detail": {
+    "cases": [
+      {
+        "egress_payload_hash": "d1af62ce29500f20497b348b8417f7e20fa6c5d74c6fd0e3cc31853d4619c095",
+        "redacted_text": "[REDACTED_NAS_CONTEXT]",
+        "redacted_preview": "[REDACTED_NAS_CONTEXT]",
+        "redaction_applied": true,
+        "redaction_summary": {
+          "redacted_terms": [],
+          "redacted_patterns": [
+            "(?i)(?:/mnt/(?:nas|data)|/home)/[^\\s,;\\\"'<>]+"
+          ],
+          "leak_count": 0,
+          "leak_markers": []
+        }
+      },
+      {
+        "egress_payload_hash": "fd1efc623651eb8cf92f745bc33d5c486fa604ee9755de69784907d2778e9d55",
+        "redacted_text": "[REDACTED_NAS_CONTEXT]",
+        "redacted_preview": "[REDACTED_NAS_CONTEXT]",
+        "redaction_applied": true,
+        "redaction_summary": {
+          "redacted_terms": [],
+          "redacted_patterns": [
+            "(?i)(?:/mnt/(?:nas|data)|/home)/[^\\s,;\\\"'<>]+"
+          ],
+          "leak_count": 0,
+          "leak_markers": []
+        }
+      },
+      {
+        "egress_payload_hash": "11496514c3e64affe7613e14393eb0d94ba5820de81c488b1d35b01b9b35a76d",
+        "redacted_text": "[REDACTED_NAS_CONTEXT]",
+        "redacted_preview": "[REDACTED_NAS_CONTEXT]",
+        "redaction_applied": true,
+        "redaction_summary": {
+          "redacted_terms": [],
+          "redacted_patterns": [
+            "(?i)(?:[A-Za-z]:\\\\|\\\\\\\\)[^\\s,;\\\"'<>]+"
+          ],
+          "leak_count": 0,
+          "leak_markers": []
+        }
+      },
+      {
+        "egress_payload_hash": "7526a25b603eba9f2e908c285a17600d03aa1b9a9cabaddc37a3c5d1eb45b872",
+        "redacted_text": "[REDACTED_NAS_CONTEXT][REDACTED_NAS_CONTEXT]/[REDACTED_NAS_CONTEXT]/denied.txt",
+        "redacted_preview": "[REDACTED_NAS_CONTEXT][REDACTED_NAS_CONTEXT]/[REDACTED_NAS_CONTEXT]/denied.txt",
+        "redaction_applied": true,
+        "redaction_summary": {
+          "redacted_terms": [
+            "Inbox",
+            "Personal"
+          ],
+          "redacted_patterns": [
+            "(?i)\\.\\.(?:/|\\\\)"
+          ],
+          "leak_count": 0,
+          "leak_markers": []
+        }
+      },
+      {
+        "egress_payload_hash": "7f27496c477fd80df65e7c42b1706dc1fabca0d55e9aff75a479f436e015f621",
+        "redacted_text": "[REDACTED_NAS_CONTEXT]",
+        "redacted_preview": "[REDACTED_NAS_CONTEXT]",
+        "redaction_applied": true,
+        "redaction_summary": {
+          "redacted_terms": [],
+          "redacted_patterns": [
+            "(?i)(?:^|[\\s,;])(?:Personal|Inbox|Documents|Photos|Family|Finance|Medical|Private)(?:[/\\\\][^\\s,;\\\"'<>]+)?",
+            "(?i)denied[_ -]?acl[_ -]?snippet[:=][^\\n]+"
+          ],
+          "leak_count": 0,
+          "leak_markers": []
+        }
+      },
+      {
+        "egress_payload_hash": "ff6824a6f469f4e10db2415a7f22909b26fc3751b3c4a5cca7b7597da5413326",
+        "redacted_text": "summarize [REDACTED_NAS_CONTEXT] without leaking privacy",
+        "redacted_preview": "summarize [REDACTED_NAS_CONTEXT] without leaking privacy",
+        "redaction_applied": true,
+        "redaction_summary": {
+          "redacted_terms": [],
+          "redacted_patterns": [
+            "(?i)(?:/mnt/(?:nas|data)|/home)/[^\\s,;\\\"'<>]+"
+          ],
+          "leak_count": 0,
+          "leak_markers": []
+        }
+      }
+    ]
+  }
+}

@@ -1,0 +1,55 @@
+{
+  "generated_at": "2026-07-03T11:49:20.451087+08:00",
+  "final_verdict": "ready_for_more_readonly_sidecar_trials_on_s100p",
+  "evidence_table": [
+    {
+      "report": "4000_stage2_package_release_integrity_gate",
+      "gate_id": "stage2_package_release_integrity_gate",
+      "verdict": "ok_stage2_package_release_integrity_gate",
+      "passed_count": 8,
+      "check_count": 8,
+      "failure_count": 0
+    },
+    {
+      "report": "4010_qwen_openclaw_service_persistence_gate",
+      "gate_id": "stage2_qwen_openclaw_service_persistence_gate",
+      "verdict": "ok_stage2_qwen_openclaw_service_persistence_gate",
+      "passed_count": 5,
+      "check_count": 5,
+      "failure_count": 0
+    },
+    {
+      "report": "4020_real_agent_loop_sidecar_gate",
+      "gate_id": "stage2_real_agent_loop_sidecar_gate",
+      "verdict": "ok_stage2_real_agent_loop_sidecar_gate",
+      "passed_count": 10,
+      "check_count": 10,
+      "failure_count": 0
+    },
+    {
+      "report": "4030_readonly_sidecar_soak_concurrency_gate",
+      "gate_id": "stage2_readonly_sidecar_soak_concurrency_gate",
+      "verdict": "ok_stage2_readonly_sidecar_soak_concurrency_gate",
+      "passed_count": 7,
+      "check_count": 7,
+      "failure_count": 0
+    },
+    {
+      "report": "4040_public_only_cloud_egress_stub_gate",
+      "gate_id": "stage2_public_only_cloud_egress_stub_gate",
+      "verdict": "ok_stage2_public_only_cloud_egress_stub_gate",
+      "passed_count": 5,
+      "check_count": 5,
+      "failure_count": 0
+    },
+    {
+      "report": "4050_real_zleap_lab_only_gate",
+      "gate_id": "stage2_real_zleap_lab_only_gate",
+      "verdict": "ok_stage2_real_zleap_lab_only_gate",
+      "passed_count": 3,
+      "check_count": 3,
+      "failure_count": 0
+    }
+  ],
+  "stage3_blocked_by_qwen_unit": true
+}

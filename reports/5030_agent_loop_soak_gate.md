@@ -1,0 +1,382 @@
+# stage2_6_agent_loop_soak_gate
+
+- verdict: `failed_stage2_6_agent_loop_soak_gate`
+- generated_at: `2026-07-03T12:27:32.011838+08:00`
+- passed: `8/9`
+
+## Checks
+
+- `PASS` run_count >= 100
+- `PASS` concurrency >= 4
+- `PASS` allowed success rate >= 0.98
+- `FAIL` allowed Qwen semantic success rate >= 0.95
+- `PASS` denial correctness = 1.0
+- `PASS` leak_count = 0
+- `PASS` protected ports unchanged
+- `PASS` OpenClaw/Qwen health remains OK
+- `PASS` sidecar stops cleanly
+
+## Failures
+
+- `allowed Qwen semantic success rate >= 0.95`
+
+## Detail
+
+```json
+{
+  "remote_root": "/tmp/digua_stage2_6_soak_20260703-122444",
+  "sidecar_port": 19085,
+  "summary": {
+    "mode": "soak",
+    "run_count": 100,
+    "concurrency": 4,
+    "allowed_count": 85,
+    "denied_count": 15,
+    "allowed_success_rate": 1.0,
+    "allowed_qwen_http_ok_rate": 0.9411764705882353,
+    "allowed_qwen_semantic_success_rate": 0.0,
+    "valid_structured_response_rate": 0.0,
+    "denial_correctness": 1.0,
+    "leak_count": 0,
+    "fallback_count": 85,
+    "qwen_latency_ms": {
+      "p50": 3136.682,
+      "p95": 3255.102,
+      "p99": 3261.594
+    },
+    "dispatcher_latency_ms": {
+      "p50": 165.117,
+      "p95": 265.669,
+      "p99": 957.572
+    },
+    "qwen_health_ms_before": {
+      "p50": 2.047,
+      "p95": 4.201,
+      "p99": 4.201,
+      "ok": true
+    },
+    "qwen_health_ms_during": {
+      "p50": 1.997,
+      "p95": 5.427,
+      "p99": 6.522,
+      "ok": true
+    },
+    "qwen_health_ms_after": {
+      "p50": 1.144,
+      "p95": 1.46,
+      "p99": 1.46,
+      "ok": true
+    },
+    "openclaw_health_ms_before": {
+      "p50": 439.711,
+      "p95": 462.548,
+      "p99": 462.548,
+      "ok": true
+    },
+    "openclaw_health_ms_during": {
+      "p50": 1268.321,
+      "p95": 1461.163,
+      "p99": 1530.898,
+      "ok": true
+    },
+    "openclaw_health_ms_after": {
+      "p50": 605.446,
+      "p95": 612.098,
+      "p99": 612.098,
+      "ok": true
+    }
+  },
+  "status_counts": {
+    "denied": 15,
+    "executed": 85
+  },
+  "before_resource": {
+    "generated_at_epoch": 1783052763.887472,
+    "dream_rows": [
+      {
+        "pid": 41889,
+        "ppid": 1613,
+        "pcpu": 0.0,
+        "pmem": 0.0,
+        "rss_kb": 17664,
+        "comm": "python",
+        "args_hash_source_len": 126
+      },
+      {
+        "pid": 697792,
+        "ppid": 1,
+        "pcpu": 0.0,
+        "pmem": 0.0,
+        "rss_kb": 640,
+        "comm": "bash",
+        "args_hash_source_len": 882
+      },
+      {
+        "pid": 697793,
+        "ppid": 697792,
+        "pcpu": 0.0,
+        "pmem": 0.0,
+        "rss_kb": 512,
+        "comm": "timeout",
+        "args_hash_source_len": 616
+      },
+      {
+        "pid": 697794,
+        "ppid": 697793,
+        "pcpu": 115.0,
+        "pmem": 57.5,
+        "rss_kb": 12841216,
+        "comm": "python3",
+        "args_hash_source_len": 602
+      }
+    ],
+    "dream_stdout_hash": "5a1b47f398655db4cf62277a59e0d90fc10ea1f8bcf26691f11f6310f0cd769f",
+    "sidecar": {
+      "pid": 720038,
+      "ps": [
+        {
+          "pid": 720038,
+          "ppid": 1,
+          "pcpu": 3.5,
+          "pmem": 0.0,
+          "rss_kb": 17920,
+          "comm": "python3",
+          "args_hash_source_len": 113
+        }
+      ]
+    },
+    "mem_stdout": "               total        used        free      shared  buff/cache   available\nMem:           21783        2990        1690          46       17102       18525\nSwap:              0           0           0\n",
+    "loadavg": "9.27 7.04 6.39 4/810 720156",
+    "ports_stdout": "LISTEN 0      5          127.0.0.1:19085      0.0.0.0:*    users:((\"python3\",pid=720038,fd=3))\nLISTEN 0      511        127.0.0.1:18765      0.0.0.0:*                                       \nLISTEN 0      5          127.0.0.1:18888      0.0.0.0:*                                       \nLISTEN 0      5          127.0.0.1:18080      0.0.0.0:*    users:((\"python3\",pid=42829,fd=3)) \nLISTEN 0      5          127.0.0.1:8765       0.0.0.0:*    users:((\"python3\",pid=42831,fd=3)) \nLISTEN 0      511            [::1]:18765         [::]:*                                       \n",
+    "qwen_health": [
+      {
+        "ok": true,
+        "ms": 4.169
+      },
+      {
+        "ok": true,
+        "ms": 1.777
+      },
+      {
+        "ok": true,
+        "ms": 1.553
+      }
+    ],
+    "openclaw_health": [
+      {
+        "ok": true,
+        "ms": 467.056
+      },
+      {
+        "ok": true,
+        "ms": 442.795
+      },
+      {
+        "ok": true,
+        "ms": 430.235
+      }
+    ]
+  },
+  "during_resource": {
+    "generated_at_epoch": 1783052845.655963,
+    "dream_rows": [
+      {
+        "pid": 41889,
+        "ppid": 1613,
+        "pcpu": 0.0,
+        "pmem": 0.0,
+        "rss_kb": 17664,
+        "comm": "python",
+        "args_hash_source_len": 126
+      },
+      {
+        "pid": 697792,
+        "ppid": 1,
+        "pcpu": 0.0,
+        "pmem": 0.0,
+        "rss_kb": 640,
+        "comm": "bash",
+        "args_hash_source_len": 882
+      },
+      {
+        "pid": 697793,
+        "ppid": 697792,
+        "pcpu": 0.0,
+        "pmem": 0.0,
+        "rss_kb": 512,
+        "comm": "timeout",
+        "args_hash_source_len": 616
+      },
+      {
+        "pid": 697794,
+        "ppid": 697793,
+        "pcpu": 114.0,
+        "pmem": 57.5,
+        "rss_kb": 12841216,
+        "comm": "python3",
+        "args_hash_source_len": 602
+      }
+    ],
+    "dream_stdout_hash": "ad6faa292ecaa56d46b1009cd424f6c9468fd3d054f4c3c56668c2eece1b9c65",
+    "sidecar": {
+      "pid": 720038,
+      "ps": [
+        {
+          "pid": 720038,
+          "ppid": 1,
+          "pcpu": 0.0,
+          "pmem": 0.0,
+          "rss_kb": 17920,
+          "comm": "python3",
+          "args_hash_source_len": 113
+        }
+      ]
+    },
+    "mem_stdout": "               total        used        free      shared  buff/cache   available\nMem:           21783        2989        1583          46       17211       18526\nSwap:              0           0           0\n",
+    "loadavg": "13.73 9.05 7.16 3/814 722090",
+    "ports_stdout": "LISTEN 0      5          127.0.0.1:19085      0.0.0.0:*    users:((\"python3\",pid=720038,fd=3))\nLISTEN 0      511        127.0.0.1:18765      0.0.0.0:*                                       \nLISTEN 0      5          127.0.0.1:18888      0.0.0.0:*                                       \nLISTEN 0      5          127.0.0.1:18080      0.0.0.0:*    users:((\"python3\",pid=42829,fd=3)) \nLISTEN 0      5          127.0.0.1:8765       0.0.0.0:*    users:((\"python3\",pid=42831,fd=3)) \nLISTEN 0      511            [::1]:18765         [::]:*                                       \n",
+    "qwen_health": [
+      {
+        "ok": true,
+        "ms": 4.158
+      },
+      {
+        "ok": true,
+        "ms": 1.377
+      },
+      {
+        "ok": true,
+        "ms": 1.548
+      }
+    ],
+    "openclaw_health": [
+      {
+        "ok": true,
+        "ms": 612.884
+      },
+      {
+        "ok": true,
+        "ms": 585.399
+      },
+      {
+        "ok": true,
+        "ms": 601.03
+      }
+    ]
+  },
+  "after_resource": {
+    "generated_at_epoch": 1783052849.822151,
+    "dream_rows": [
+      {
+        "pid": 41889,
+        "ppid": 1613,
+        "pcpu": 0.0,
+        "pmem": 0.0,
+        "rss_kb": 17664,
+        "comm": "python",
+        "args_hash_source_len": 126
+      },
+      {
+        "pid": 697792,
+        "ppid": 1,
+        "pcpu": 0.0,
+        "pmem": 0.0,
+        "rss_kb": 640,
+        "comm": "bash",
+        "args_hash_source_len": 882
+      },
+      {
+        "pid": 697793,
+        "ppid": 697792,
+        "pcpu": 0.0,
+        "pmem": 0.0,
+        "rss_kb": 512,
+        "comm": "timeout",
+        "args_hash_source_len": 616
+      },
+      {
+        "pid": 697794,
+        "ppid": 697793,
+        "pcpu": 114.0,
+        "pmem": 57.5,
+        "rss_kb": 12841216,
+        "comm": "python3",
+        "args_hash_source_len": 602
+      }
+    ],
+    "dream_stdout_hash": "ad6faa292ecaa56d46b1009cd424f6c9468fd3d054f4c3c56668c2eece1b9c65",
+    "sidecar": {
+      "pid": null,
+      "ps": []
+    },
+    "mem_stdout": "               total        used        free      shared  buff/cache   available\nMem:           21783        2976        1594          46       17211       18538\nSwap:              0           0           0\n",
+    "loadavg": "13.83 9.15 7.20 2/814 722260",
+    "ports_stdout": "LISTEN 0      511        127.0.0.1:18765      0.0.0.0:*                                      \nLISTEN 0      5          127.0.0.1:18888      0.0.0.0:*                                      \nLISTEN 0      5          127.0.0.1:18080      0.0.0.0:*    users:((\"python3\",pid=42829,fd=3))\nLISTEN 0      5          127.0.0.1:8765       0.0.0.0:*    users:((\"python3\",pid=42831,fd=3))\nLISTEN 0      511            [::1]:18765         [::]:*                                      \n",
+    "qwen_health": [
+      {
+        "ok": true,
+        "ms": 4.064
+      },
+      {
+        "ok": true,
+        "ms": 1.294
+      },
+      {
+        "ok": true,
+        "ms": 1.14
+      }
+    ],
+    "openclaw_health": [
+      {
+        "ok": true,
+        "ms": 583.023
+      },
+      {
+        "ok": true,
+        "ms": 602.643
+      },
+      {
+        "ok": true,
+        "ms": 625.953
+      }
+    ]
+  },
+  "before_ports": {
+    "ports": [
+      8765,
+      18080,
+      18888,
+      18889,
+      19085
+    ],
+    "stdout": "LISTEN 0      511        127.0.0.1:18765      0.0.0.0:*                                      \nLISTEN 0      5          127.0.0.1:18888      0.0.0.0:*                                      \nLISTEN 0      5          127.0.0.1:18080      0.0.0.0:*    users:((\"python3\",pid=42829,fd=3))\nLISTEN 0      5          127.0.0.1:8765       0.0.0.0:*    users:((\"python3\",pid=42831,fd=3))\nLISTEN 0      511            [::1]:18765         [::]:*                                      \n",
+    "stdout_hash": "422810341c68e53763d7c0622c403e9e6f6508f45b9e4c37057bbae81a2e6fdc",
+    "returncode": 0
+  },
+  "after_ports": {
+    "ports": [
+      8765,
+      18080,
+      18888,
+      18889,
+      19085
+    ],
+    "stdout": "LISTEN 0      511        127.0.0.1:18765      0.0.0.0:*                                      \nLISTEN 0      5          127.0.0.1:18888      0.0.0.0:*                                      \nLISTEN 0      5          127.0.0.1:18080      0.0.0.0:*    users:((\"python3\",pid=42829,fd=3))\nLISTEN 0      5          127.0.0.1:8765       0.0.0.0:*    users:((\"python3\",pid=42831,fd=3))\nLISTEN 0      511            [::1]:18765         [::]:*                                      \n",
+    "stdout_hash": "422810341c68e53763d7c0622c403e9e6f6508f45b9e4c37057bbae81a2e6fdc",
+    "returncode": 0
+  },
+  "runner": {
+    "returncode": 0,
+    "elapsed_ms": 78392.263,
+    "stdout_hash": "1fe460534ff79050d0f6c5159e35ff9a0bd39656c2c222f7c737f71afd9862d2",
+    "stderr_hash": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  "stop": {
+    "returncode": 0,
+    "elapsed_ms": 1388.257,
+    "stdout_hash": "d9f3da636aa2def2546409fc2a84e38bcb867728cd58af90ee96982d49f1f8b8",
+    "stderr_hash": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "stdout_tail": "stopped_pid=720038\n"
+  }
+}
+```

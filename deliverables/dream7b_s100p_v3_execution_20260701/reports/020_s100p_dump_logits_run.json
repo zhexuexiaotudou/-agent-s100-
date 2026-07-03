@@ -1,0 +1,952 @@
+{
+  "created_at": "2026-07-01T14:10:17.751184+08:00",
+  "verdict": "blocked_s100p_dump_logits_anomaly",
+  "runtime_version": "3.13.6_(4.7.5 HBRT)",
+  "hbm_root": "/mnt/nas/openclaw/models/dream7b-hbm/seq128-b1-lmheadq16-lasttoken",
+  "case_count": 10,
+  "blocking_anomaly_cases": [
+    "zeros",
+    "ramp",
+    "repeated_frequent_token",
+    "repeated_rare_token",
+    "alternating_two_tokens",
+    "short_english_prompt_padded",
+    "short_chinese_prompt_padded",
+    "openclaw_style_prompt_padded",
+    "exactly_128_token_synthetic_prompt",
+    "prompt_with_mask_tail"
+  ],
+  "errors": [],
+  "cases": [
+    {
+      "case_id": "zeros",
+      "case_dir": "evidence/s100p_logits/battery_segment_major/zeros",
+      "segment_count": 28,
+      "total_load_ms": 75341.264,
+      "total_run_ms": 311.411,
+      "final_tensor_metadata": {
+        "case_id": "zeros",
+        "token_count": 128,
+        "final_tensor_shape": [
+          1,
+          152064
+        ],
+        "final_raw_output": "evidence/s100p_logits/battery_segment_major/zeros/raw_output.npy",
+        "final_dequant_logits": "evidence/s100p_logits/battery_segment_major/zeros/dequant_logits.npy",
+        "final_segment": {
+          "segment": 27,
+          "model_name": "dream_segment_27_28_last_token_logits",
+          "hbm_path": "/mnt/nas/openclaw/models/dream7b-hbm/seq128-b1-lmheadq16-lasttoken/seg27_28/dream7b_segment_27_28_seq128_q8_lmheadq16_last_token_logits.hbm",
+          "load_ms": 16003.743,
+          "run_ms": 59.937,
+          "raw_stats": {
+            "shape": [
+              1,
+              152064
+            ],
+            "dtype": "int16",
+            "min": 0.0,
+            "max": 0.0,
+            "mean": 0.0,
+            "std": 0.0,
+            "nonzero_count": 0,
+            "nan_count": 0,
+            "inf_count": 0,
+            "constant": true
+          },
+          "dequant_stats": {
+            "shape": [
+              1,
+              152064
+            ],
+            "dtype": "float32",
+            "min": 0.0,
+            "max": 0.0,
+            "mean": 0.0,
+            "std": 0.0,
+            "nonzero_count": 0,
+            "nan_count": 0,
+            "inf_count": 0,
+            "constant": true
+          },
+          "quant_metadata": {
+            "available": true,
+            "scale": [
+              0.00025415877462364733
+            ],
+            "scale_first": 0.00025415877462364733,
+            "zero_point": [
+              0.0
+            ],
+            "repr": "<hbm_runtime.HB_HBMRuntime.QuantParams object at 0xffff779d10f0>"
+          }
+        },
+        "top5": [
+          {
+            "token": 152063,
+            "logit": 0.0
+          },
+          {
+            "token": 50687,
+            "logit": 0.0
+          },
+          {
+            "token": 50686,
+            "logit": 0.0
+          },
+          {
+            "token": 50689,
+            "logit": 0.0
+          },
+          {
+            "token": 50692,
+            "logit": 0.0
+          }
+        ],
+        "softmax": {
+          "top1_probability": 6.576178451178451e-06,
+          "entropy": 11.932056763842207,
+          "normalized_entropy": 1.0
+        },
+        "blocking_anomaly": true
+      }
+    },
+    {
+      "case_id": "ramp",
+      "case_dir": "evidence/s100p_logits/battery_segment_major/ramp",
+      "segment_count": 28,
+      "total_load_ms": 75341.264,
+      "total_run_ms": 304.725,
+      "final_tensor_metadata": {
+        "case_id": "ramp",
+        "token_count": 128,
+        "final_tensor_shape": [
+          1,
+          152064
+        ],
+        "final_raw_output": "evidence/s100p_logits/battery_segment_major/ramp/raw_output.npy",
+        "final_dequant_logits": "evidence/s100p_logits/battery_segment_major/ramp/dequant_logits.npy",
+        "final_segment": {
+          "segment": 27,
+          "model_name": "dream_segment_27_28_last_token_logits",
+          "hbm_path": "/mnt/nas/openclaw/models/dream7b-hbm/seq128-b1-lmheadq16-lasttoken/seg27_28/dream7b_segment_27_28_seq128_q8_lmheadq16_last_token_logits.hbm",
+          "load_ms": 16003.743,
+          "run_ms": 59.842,
+          "raw_stats": {
+            "shape": [
+              1,
+              152064
+            ],
+            "dtype": "int16",
+            "min": 0.0,
+            "max": 0.0,
+            "mean": 0.0,
+            "std": 0.0,
+            "nonzero_count": 0,
+            "nan_count": 0,
+            "inf_count": 0,
+            "constant": true
+          },
+          "dequant_stats": {
+            "shape": [
+              1,
+              152064
+            ],
+            "dtype": "float32",
+            "min": 0.0,
+            "max": 0.0,
+            "mean": 0.0,
+            "std": 0.0,
+            "nonzero_count": 0,
+            "nan_count": 0,
+            "inf_count": 0,
+            "constant": true
+          },
+          "quant_metadata": {
+            "available": true,
+            "scale": [
+              0.00025415877462364733
+            ],
+            "scale_first": 0.00025415877462364733,
+            "zero_point": [
+              0.0
+            ],
+            "repr": "<hbm_runtime.HB_HBMRuntime.QuantParams object at 0xffff779d10f0>"
+          }
+        },
+        "top5": [
+          {
+            "token": 152063,
+            "logit": 0.0
+          },
+          {
+            "token": 50687,
+            "logit": 0.0
+          },
+          {
+            "token": 50686,
+            "logit": 0.0
+          },
+          {
+            "token": 50689,
+            "logit": 0.0
+          },
+          {
+            "token": 50692,
+            "logit": 0.0
+          }
+        ],
+        "softmax": {
+          "top1_probability": 6.576178451178451e-06,
+          "entropy": 11.932056763842207,
+          "normalized_entropy": 1.0
+        },
+        "blocking_anomaly": true
+      }
+    },
+    {
+      "case_id": "repeated_frequent_token",
+      "case_dir": "evidence/s100p_logits/battery_segment_major/repeated_frequent_token",
+      "segment_count": 28,
+      "total_load_ms": 75341.264,
+      "total_run_ms": 304.612,
+      "final_tensor_metadata": {
+        "case_id": "repeated_frequent_token",
+        "token_count": 128,
+        "final_tensor_shape": [
+          1,
+          152064
+        ],
+        "final_raw_output": "evidence/s100p_logits/battery_segment_major/repeated_frequent_token/raw_output.npy",
+        "final_dequant_logits": "evidence/s100p_logits/battery_segment_major/repeated_frequent_token/dequant_logits.npy",
+        "final_segment": {
+          "segment": 27,
+          "model_name": "dream_segment_27_28_last_token_logits",
+          "hbm_path": "/mnt/nas/openclaw/models/dream7b-hbm/seq128-b1-lmheadq16-lasttoken/seg27_28/dream7b_segment_27_28_seq128_q8_lmheadq16_last_token_logits.hbm",
+          "load_ms": 16003.743,
+          "run_ms": 59.892,
+          "raw_stats": {
+            "shape": [
+              1,
+              152064
+            ],
+            "dtype": "int16",
+            "min": 0.0,
+            "max": 0.0,
+            "mean": 0.0,
+            "std": 0.0,
+            "nonzero_count": 0,
+            "nan_count": 0,
+            "inf_count": 0,
+            "constant": true
+          },
+          "dequant_stats": {
+            "shape": [
+              1,
+              152064
+            ],
+            "dtype": "float32",
+            "min": 0.0,
+            "max": 0.0,
+            "mean": 0.0,
+            "std": 0.0,
+            "nonzero_count": 0,
+            "nan_count": 0,
+            "inf_count": 0,
+            "constant": true
+          },
+          "quant_metadata": {
+            "available": true,
+            "scale": [
+              0.00025415877462364733
+            ],
+            "scale_first": 0.00025415877462364733,
+            "zero_point": [
+              0.0
+            ],
+            "repr": "<hbm_runtime.HB_HBMRuntime.QuantParams object at 0xffff779d10f0>"
+          }
+        },
+        "top5": [
+          {
+            "token": 152063,
+            "logit": 0.0
+          },
+          {
+            "token": 50687,
+            "logit": 0.0
+          },
+          {
+            "token": 50686,
+            "logit": 0.0
+          },
+          {
+            "token": 50689,
+            "logit": 0.0
+          },
+          {
+            "token": 50692,
+            "logit": 0.0
+          }
+        ],
+        "softmax": {
+          "top1_probability": 6.576178451178451e-06,
+          "entropy": 11.932056763842207,
+          "normalized_entropy": 1.0
+        },
+        "blocking_anomaly": true
+      }
+    },
+    {
+      "case_id": "repeated_rare_token",
+      "case_dir": "evidence/s100p_logits/battery_segment_major/repeated_rare_token",
+      "segment_count": 28,
+      "total_load_ms": 75341.264,
+      "total_run_ms": 303.506,
+      "final_tensor_metadata": {
+        "case_id": "repeated_rare_token",
+        "token_count": 128,
+        "final_tensor_shape": [
+          1,
+          152064
+        ],
+        "final_raw_output": "evidence/s100p_logits/battery_segment_major/repeated_rare_token/raw_output.npy",
+        "final_dequant_logits": "evidence/s100p_logits/battery_segment_major/repeated_rare_token/dequant_logits.npy",
+        "final_segment": {
+          "segment": 27,
+          "model_name": "dream_segment_27_28_last_token_logits",
+          "hbm_path": "/mnt/nas/openclaw/models/dream7b-hbm/seq128-b1-lmheadq16-lasttoken/seg27_28/dream7b_segment_27_28_seq128_q8_lmheadq16_last_token_logits.hbm",
+          "load_ms": 16003.743,
+          "run_ms": 59.816,
+          "raw_stats": {
+            "shape": [
+              1,
+              152064
+            ],
+            "dtype": "int16",
+            "min": 0.0,
+            "max": 0.0,
+            "mean": 0.0,
+            "std": 0.0,
+            "nonzero_count": 0,
+            "nan_count": 0,
+            "inf_count": 0,
+            "constant": true
+          },
+          "dequant_stats": {
+            "shape": [
+              1,
+              152064
+            ],
+            "dtype": "float32",
+            "min": 0.0,
+            "max": 0.0,
+            "mean": 0.0,
+            "std": 0.0,
+            "nonzero_count": 0,
+            "nan_count": 0,
+            "inf_count": 0,
+            "constant": true
+          },
+          "quant_metadata": {
+            "available": true,
+            "scale": [
+              0.00025415877462364733
+            ],
+            "scale_first": 0.00025415877462364733,
+            "zero_point": [
+              0.0
+            ],
+            "repr": "<hbm_runtime.HB_HBMRuntime.QuantParams object at 0xffff779d10f0>"
+          }
+        },
+        "top5": [
+          {
+            "token": 152063,
+            "logit": 0.0
+          },
+          {
+            "token": 50687,
+            "logit": 0.0
+          },
+          {
+            "token": 50686,
+            "logit": 0.0
+          },
+          {
+            "token": 50689,
+            "logit": 0.0
+          },
+          {
+            "token": 50692,
+            "logit": 0.0
+          }
+        ],
+        "softmax": {
+          "top1_probability": 6.576178451178451e-06,
+          "entropy": 11.932056763842207,
+          "normalized_entropy": 1.0
+        },
+        "blocking_anomaly": true
+      }
+    },
+    {
+      "case_id": "alternating_two_tokens",
+      "case_dir": "evidence/s100p_logits/battery_segment_major/alternating_two_tokens",
+      "segment_count": 28,
+      "total_load_ms": 75341.264,
+      "total_run_ms": 304.685,
+      "final_tensor_metadata": {
+        "case_id": "alternating_two_tokens",
+        "token_count": 128,
+        "final_tensor_shape": [
+          1,
+          152064
+        ],
+        "final_raw_output": "evidence/s100p_logits/battery_segment_major/alternating_two_tokens/raw_output.npy",
+        "final_dequant_logits": "evidence/s100p_logits/battery_segment_major/alternating_two_tokens/dequant_logits.npy",
+        "final_segment": {
+          "segment": 27,
+          "model_name": "dream_segment_27_28_last_token_logits",
+          "hbm_path": "/mnt/nas/openclaw/models/dream7b-hbm/seq128-b1-lmheadq16-lasttoken/seg27_28/dream7b_segment_27_28_seq128_q8_lmheadq16_last_token_logits.hbm",
+          "load_ms": 16003.743,
+          "run_ms": 59.857,
+          "raw_stats": {
+            "shape": [
+              1,
+              152064
+            ],
+            "dtype": "int16",
+            "min": 0.0,
+            "max": 0.0,
+            "mean": 0.0,
+            "std": 0.0,
+            "nonzero_count": 0,
+            "nan_count": 0,
+            "inf_count": 0,
+            "constant": true
+          },
+          "dequant_stats": {
+            "shape": [
+              1,
+              152064
+            ],
+            "dtype": "float32",
+            "min": 0.0,
+            "max": 0.0,
+            "mean": 0.0,
+            "std": 0.0,
+            "nonzero_count": 0,
+            "nan_count": 0,
+            "inf_count": 0,
+            "constant": true
+          },
+          "quant_metadata": {
+            "available": true,
+            "scale": [
+              0.00025415877462364733
+            ],
+            "scale_first": 0.00025415877462364733,
+            "zero_point": [
+              0.0
+            ],
+            "repr": "<hbm_runtime.HB_HBMRuntime.QuantParams object at 0xffff779d10f0>"
+          }
+        },
+        "top5": [
+          {
+            "token": 152063,
+            "logit": 0.0
+          },
+          {
+            "token": 50687,
+            "logit": 0.0
+          },
+          {
+            "token": 50686,
+            "logit": 0.0
+          },
+          {
+            "token": 50689,
+            "logit": 0.0
+          },
+          {
+            "token": 50692,
+            "logit": 0.0
+          }
+        ],
+        "softmax": {
+          "top1_probability": 6.576178451178451e-06,
+          "entropy": 11.932056763842207,
+          "normalized_entropy": 1.0
+        },
+        "blocking_anomaly": true
+      }
+    },
+    {
+      "case_id": "short_english_prompt_padded",
+      "case_dir": "evidence/s100p_logits/battery_segment_major/short_english_prompt_padded",
+      "segment_count": 28,
+      "total_load_ms": 75341.264,
+      "total_run_ms": 303.777,
+      "final_tensor_metadata": {
+        "case_id": "short_english_prompt_padded",
+        "token_count": 128,
+        "final_tensor_shape": [
+          1,
+          152064
+        ],
+        "final_raw_output": "evidence/s100p_logits/battery_segment_major/short_english_prompt_padded/raw_output.npy",
+        "final_dequant_logits": "evidence/s100p_logits/battery_segment_major/short_english_prompt_padded/dequant_logits.npy",
+        "final_segment": {
+          "segment": 27,
+          "model_name": "dream_segment_27_28_last_token_logits",
+          "hbm_path": "/mnt/nas/openclaw/models/dream7b-hbm/seq128-b1-lmheadq16-lasttoken/seg27_28/dream7b_segment_27_28_seq128_q8_lmheadq16_last_token_logits.hbm",
+          "load_ms": 16003.743,
+          "run_ms": 59.86,
+          "raw_stats": {
+            "shape": [
+              1,
+              152064
+            ],
+            "dtype": "int16",
+            "min": 0.0,
+            "max": 0.0,
+            "mean": 0.0,
+            "std": 0.0,
+            "nonzero_count": 0,
+            "nan_count": 0,
+            "inf_count": 0,
+            "constant": true
+          },
+          "dequant_stats": {
+            "shape": [
+              1,
+              152064
+            ],
+            "dtype": "float32",
+            "min": 0.0,
+            "max": 0.0,
+            "mean": 0.0,
+            "std": 0.0,
+            "nonzero_count": 0,
+            "nan_count": 0,
+            "inf_count": 0,
+            "constant": true
+          },
+          "quant_metadata": {
+            "available": true,
+            "scale": [
+              0.00025415877462364733
+            ],
+            "scale_first": 0.00025415877462364733,
+            "zero_point": [
+              0.0
+            ],
+            "repr": "<hbm_runtime.HB_HBMRuntime.QuantParams object at 0xffff779d10f0>"
+          }
+        },
+        "top5": [
+          {
+            "token": 152063,
+            "logit": 0.0
+          },
+          {
+            "token": 50687,
+            "logit": 0.0
+          },
+          {
+            "token": 50686,
+            "logit": 0.0
+          },
+          {
+            "token": 50689,
+            "logit": 0.0
+          },
+          {
+            "token": 50692,
+            "logit": 0.0
+          }
+        ],
+        "softmax": {
+          "top1_probability": 6.576178451178451e-06,
+          "entropy": 11.932056763842207,
+          "normalized_entropy": 1.0
+        },
+        "blocking_anomaly": true
+      }
+    },
+    {
+      "case_id": "short_chinese_prompt_padded",
+      "case_dir": "evidence/s100p_logits/battery_segment_major/short_chinese_prompt_padded",
+      "segment_count": 28,
+      "total_load_ms": 75341.264,
+      "total_run_ms": 304.176,
+      "final_tensor_metadata": {
+        "case_id": "short_chinese_prompt_padded",
+        "token_count": 128,
+        "final_tensor_shape": [
+          1,
+          152064
+        ],
+        "final_raw_output": "evidence/s100p_logits/battery_segment_major/short_chinese_prompt_padded/raw_output.npy",
+        "final_dequant_logits": "evidence/s100p_logits/battery_segment_major/short_chinese_prompt_padded/dequant_logits.npy",
+        "final_segment": {
+          "segment": 27,
+          "model_name": "dream_segment_27_28_last_token_logits",
+          "hbm_path": "/mnt/nas/openclaw/models/dream7b-hbm/seq128-b1-lmheadq16-lasttoken/seg27_28/dream7b_segment_27_28_seq128_q8_lmheadq16_last_token_logits.hbm",
+          "load_ms": 16003.743,
+          "run_ms": 59.902,
+          "raw_stats": {
+            "shape": [
+              1,
+              152064
+            ],
+            "dtype": "int16",
+            "min": 0.0,
+            "max": 0.0,
+            "mean": 0.0,
+            "std": 0.0,
+            "nonzero_count": 0,
+            "nan_count": 0,
+            "inf_count": 0,
+            "constant": true
+          },
+          "dequant_stats": {
+            "shape": [
+              1,
+              152064
+            ],
+            "dtype": "float32",
+            "min": 0.0,
+            "max": 0.0,
+            "mean": 0.0,
+            "std": 0.0,
+            "nonzero_count": 0,
+            "nan_count": 0,
+            "inf_count": 0,
+            "constant": true
+          },
+          "quant_metadata": {
+            "available": true,
+            "scale": [
+              0.00025415877462364733
+            ],
+            "scale_first": 0.00025415877462364733,
+            "zero_point": [
+              0.0
+            ],
+            "repr": "<hbm_runtime.HB_HBMRuntime.QuantParams object at 0xffff779d10f0>"
+          }
+        },
+        "top5": [
+          {
+            "token": 152063,
+            "logit": 0.0
+          },
+          {
+            "token": 50687,
+            "logit": 0.0
+          },
+          {
+            "token": 50686,
+            "logit": 0.0
+          },
+          {
+            "token": 50689,
+            "logit": 0.0
+          },
+          {
+            "token": 50692,
+            "logit": 0.0
+          }
+        ],
+        "softmax": {
+          "top1_probability": 6.576178451178451e-06,
+          "entropy": 11.932056763842207,
+          "normalized_entropy": 1.0
+        },
+        "blocking_anomaly": true
+      }
+    },
+    {
+      "case_id": "openclaw_style_prompt_padded",
+      "case_dir": "evidence/s100p_logits/battery_segment_major/openclaw_style_prompt_padded",
+      "segment_count": 28,
+      "total_load_ms": 75341.264,
+      "total_run_ms": 303.494,
+      "final_tensor_metadata": {
+        "case_id": "openclaw_style_prompt_padded",
+        "token_count": 128,
+        "final_tensor_shape": [
+          1,
+          152064
+        ],
+        "final_raw_output": "evidence/s100p_logits/battery_segment_major/openclaw_style_prompt_padded/raw_output.npy",
+        "final_dequant_logits": "evidence/s100p_logits/battery_segment_major/openclaw_style_prompt_padded/dequant_logits.npy",
+        "final_segment": {
+          "segment": 27,
+          "model_name": "dream_segment_27_28_last_token_logits",
+          "hbm_path": "/mnt/nas/openclaw/models/dream7b-hbm/seq128-b1-lmheadq16-lasttoken/seg27_28/dream7b_segment_27_28_seq128_q8_lmheadq16_last_token_logits.hbm",
+          "load_ms": 16003.743,
+          "run_ms": 60.142,
+          "raw_stats": {
+            "shape": [
+              1,
+              152064
+            ],
+            "dtype": "int16",
+            "min": 0.0,
+            "max": 0.0,
+            "mean": 0.0,
+            "std": 0.0,
+            "nonzero_count": 0,
+            "nan_count": 0,
+            "inf_count": 0,
+            "constant": true
+          },
+          "dequant_stats": {
+            "shape": [
+              1,
+              152064
+            ],
+            "dtype": "float32",
+            "min": 0.0,
+            "max": 0.0,
+            "mean": 0.0,
+            "std": 0.0,
+            "nonzero_count": 0,
+            "nan_count": 0,
+            "inf_count": 0,
+            "constant": true
+          },
+          "quant_metadata": {
+            "available": true,
+            "scale": [
+              0.00025415877462364733
+            ],
+            "scale_first": 0.00025415877462364733,
+            "zero_point": [
+              0.0
+            ],
+            "repr": "<hbm_runtime.HB_HBMRuntime.QuantParams object at 0xffff779d10f0>"
+          }
+        },
+        "top5": [
+          {
+            "token": 152063,
+            "logit": 0.0
+          },
+          {
+            "token": 50687,
+            "logit": 0.0
+          },
+          {
+            "token": 50686,
+            "logit": 0.0
+          },
+          {
+            "token": 50689,
+            "logit": 0.0
+          },
+          {
+            "token": 50692,
+            "logit": 0.0
+          }
+        ],
+        "softmax": {
+          "top1_probability": 6.576178451178451e-06,
+          "entropy": 11.932056763842207,
+          "normalized_entropy": 1.0
+        },
+        "blocking_anomaly": true
+      }
+    },
+    {
+      "case_id": "exactly_128_token_synthetic_prompt",
+      "case_dir": "evidence/s100p_logits/battery_segment_major/exactly_128_token_synthetic_prompt",
+      "segment_count": 28,
+      "total_load_ms": 75341.264,
+      "total_run_ms": 305.273,
+      "final_tensor_metadata": {
+        "case_id": "exactly_128_token_synthetic_prompt",
+        "token_count": 128,
+        "final_tensor_shape": [
+          1,
+          152064
+        ],
+        "final_raw_output": "evidence/s100p_logits/battery_segment_major/exactly_128_token_synthetic_prompt/raw_output.npy",
+        "final_dequant_logits": "evidence/s100p_logits/battery_segment_major/exactly_128_token_synthetic_prompt/dequant_logits.npy",
+        "final_segment": {
+          "segment": 27,
+          "model_name": "dream_segment_27_28_last_token_logits",
+          "hbm_path": "/mnt/nas/openclaw/models/dream7b-hbm/seq128-b1-lmheadq16-lasttoken/seg27_28/dream7b_segment_27_28_seq128_q8_lmheadq16_last_token_logits.hbm",
+          "load_ms": 16003.743,
+          "run_ms": 59.96,
+          "raw_stats": {
+            "shape": [
+              1,
+              152064
+            ],
+            "dtype": "int16",
+            "min": 0.0,
+            "max": 0.0,
+            "mean": 0.0,
+            "std": 0.0,
+            "nonzero_count": 0,
+            "nan_count": 0,
+            "inf_count": 0,
+            "constant": true
+          },
+          "dequant_stats": {
+            "shape": [
+              1,
+              152064
+            ],
+            "dtype": "float32",
+            "min": 0.0,
+            "max": 0.0,
+            "mean": 0.0,
+            "std": 0.0,
+            "nonzero_count": 0,
+            "nan_count": 0,
+            "inf_count": 0,
+            "constant": true
+          },
+          "quant_metadata": {
+            "available": true,
+            "scale": [
+              0.00025415877462364733
+            ],
+            "scale_first": 0.00025415877462364733,
+            "zero_point": [
+              0.0
+            ],
+            "repr": "<hbm_runtime.HB_HBMRuntime.QuantParams object at 0xffff779d10f0>"
+          }
+        },
+        "top5": [
+          {
+            "token": 152063,
+            "logit": 0.0
+          },
+          {
+            "token": 50687,
+            "logit": 0.0
+          },
+          {
+            "token": 50686,
+            "logit": 0.0
+          },
+          {
+            "token": 50689,
+            "logit": 0.0
+          },
+          {
+            "token": 50692,
+            "logit": 0.0
+          }
+        ],
+        "softmax": {
+          "top1_probability": 6.576178451178451e-06,
+          "entropy": 11.932056763842207,
+          "normalized_entropy": 1.0
+        },
+        "blocking_anomaly": true
+      }
+    },
+    {
+      "case_id": "prompt_with_mask_tail",
+      "case_dir": "evidence/s100p_logits/battery_segment_major/prompt_with_mask_tail",
+      "segment_count": 28,
+      "total_load_ms": 75341.264,
+      "total_run_ms": 304.466,
+      "final_tensor_metadata": {
+        "case_id": "prompt_with_mask_tail",
+        "token_count": 128,
+        "final_tensor_shape": [
+          1,
+          152064
+        ],
+        "final_raw_output": "evidence/s100p_logits/battery_segment_major/prompt_with_mask_tail/raw_output.npy",
+        "final_dequant_logits": "evidence/s100p_logits/battery_segment_major/prompt_with_mask_tail/dequant_logits.npy",
+        "final_segment": {
+          "segment": 27,
+          "model_name": "dream_segment_27_28_last_token_logits",
+          "hbm_path": "/mnt/nas/openclaw/models/dream7b-hbm/seq128-b1-lmheadq16-lasttoken/seg27_28/dream7b_segment_27_28_seq128_q8_lmheadq16_last_token_logits.hbm",
+          "load_ms": 16003.743,
+          "run_ms": 59.904,
+          "raw_stats": {
+            "shape": [
+              1,
+              152064
+            ],
+            "dtype": "int16",
+            "min": 0.0,
+            "max": 0.0,
+            "mean": 0.0,
+            "std": 0.0,
+            "nonzero_count": 0,
+            "nan_count": 0,
+            "inf_count": 0,
+            "constant": true
+          },
+          "dequant_stats": {
+            "shape": [
+              1,
+              152064
+            ],
+            "dtype": "float32",
+            "min": 0.0,
+            "max": 0.0,
+            "mean": 0.0,
+            "std": 0.0,
+            "nonzero_count": 0,
+            "nan_count": 0,
+            "inf_count": 0,
+            "constant": true
+          },
+          "quant_metadata": {
+            "available": true,
+            "scale": [
+              0.00025415877462364733
+            ],
+            "scale_first": 0.00025415877462364733,
+            "zero_point": [
+              0.0
+            ],
+            "repr": "<hbm_runtime.HB_HBMRuntime.QuantParams object at 0xffff779d10f0>"
+          }
+        },
+        "top5": [
+          {
+            "token": 152063,
+            "logit": 0.0
+          },
+          {
+            "token": 50687,
+            "logit": 0.0
+          },
+          {
+            "token": 50686,
+            "logit": 0.0
+          },
+          {
+            "token": 50689,
+            "logit": 0.0
+          },
+          {
+            "token": 50692,
+            "logit": 0.0
+          }
+        ],
+        "softmax": {
+          "top1_probability": 6.576178451178451e-06,
+          "entropy": 11.932056763842207,
+          "normalized_entropy": 1.0
+        },
+        "blocking_anomaly": true
+      }
+    }
+  ]
+}

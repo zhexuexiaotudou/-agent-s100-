@@ -1,0 +1,246 @@
+{
+  "generated_at": "2026-07-03T01:38:13.290719+08:00",
+  "gate_id": "stage2_s100p_sidecar_isolation_gate",
+  "verdict": "ok_stage2_s100p_sidecar_isolation_gate",
+  "passed_count": 6,
+  "check_count": 6,
+  "failure_count": 0,
+  "failures": [],
+  "checks": [
+    {
+      "label": "sidecar starts on isolated localhost port",
+      "ok": true,
+      "detail": {
+        "port": 19081,
+        "health": {
+          "ok": true,
+          "returncode": 0,
+          "http_code": "200",
+          "time_total": 0.00096,
+          "json": {
+            "ok": true,
+            "runtime": "stage2_sidecar_mock",
+            "foreground_route": false,
+            "provider_base_url": "http://127.0.0.1:18080/v1",
+            "tools": [
+              "mock.nas_search",
+              "mock.document_rag"
+            ]
+          },
+          "body_hash": "76e20ed479a5a1dd16aa92a1fff83ee32a46cf6335d7eba7a99cd60d42c4f194",
+          "stderr_hash": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "stderr_tail": ""
+        }
+      }
+    },
+    {
+      "label": "provider points to local Qwen",
+      "ok": true,
+      "detail": {
+        "ok": true,
+        "runtime": "stage2_sidecar_mock",
+        "foreground_route": false,
+        "provider_base_url": "http://127.0.0.1:18080/v1",
+        "tools": [
+          "mock.nas_search",
+          "mock.document_rag"
+        ]
+      }
+    },
+    {
+      "label": "only read-only sidecar tools exposed",
+      "ok": true,
+      "detail": [
+        "mock.nas_search",
+        "mock.document_rag"
+      ]
+    },
+    {
+      "label": "OpenClaw health unchanged after sidecar start",
+      "ok": true,
+      "detail": {
+        "before": {
+          "ok": true,
+          "returncode": 0,
+          "http_code": "200",
+          "time_total": 0.360401,
+          "json": {
+            "ok": true,
+            "tool_id": "ai_nas_operator_portal_server",
+            "operator_portal_contract": {
+              "found": true,
+              "filename": "operator_portal_contract.json",
+              "path": "/mnt/nas/openclaw/reports/ai_nas_mvp/operator_portal_contract_20260618-160406-445747/operator_portal_contract.json",
+              "verdict": "ok_ai_nas_operator_portal_contract",
+              "generated_at": "2026-06-18T16:04:08.346324+08:00",
+              "selection_policy": "generated_at_then_mtime"
+            },
+            "portal_html": "/mnt/nas/openclaw/reports/ai_nas_mvp/operator_portal_contract_20260618-160406-445747/operator_portal.html",
+            "refresh_on_start": null
+          },
+          "body_hash": "3f602e957754ba001c367fa58c76c536eda10a7318d8befc265f0d27698f100e",
+          "stderr_hash": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "stderr_tail": ""
+        },
+        "after": {
+          "ok": true,
+          "returncode": 0,
+          "http_code": "200",
+          "time_total": 0.360605,
+          "json": {
+            "ok": true,
+            "tool_id": "ai_nas_operator_portal_server",
+            "operator_portal_contract": {
+              "found": true,
+              "filename": "operator_portal_contract.json",
+              "path": "/mnt/nas/openclaw/reports/ai_nas_mvp/operator_portal_contract_20260618-160406-445747/operator_portal_contract.json",
+              "verdict": "ok_ai_nas_operator_portal_contract",
+              "generated_at": "2026-06-18T16:04:08.346324+08:00",
+              "selection_policy": "generated_at_then_mtime"
+            },
+            "portal_html": "/mnt/nas/openclaw/reports/ai_nas_mvp/operator_portal_contract_20260618-160406-445747/operator_portal.html",
+            "refresh_on_start": null
+          },
+          "body_hash": "3f602e957754ba001c367fa58c76c536eda10a7318d8befc265f0d27698f100e",
+          "stderr_hash": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "stderr_tail": ""
+        }
+      }
+    },
+    {
+      "label": "Qwen health unchanged after sidecar start",
+      "ok": true,
+      "detail": {
+        "before": {
+          "ok": true,
+          "returncode": 0,
+          "http_code": "200",
+          "time_total": 0.001071,
+          "json": {
+            "ok": true,
+            "model": "Qwen2.5-1.5B-Instruct-S100P-official",
+            "backend": "official-qwen2.5-oellm-multichat-plus-ai-nas-tools",
+            "port": 18080,
+            "active_profile": "qwen25_7b_instruct_cache_len_1024_q8",
+            "priority_profile": "qwen25_7b_instruct_cache_len_1024_q8_vendor_default",
+            "priority_status": "promoted_from_shadow_18081",
+            "active_hbm": {
+              "path": "/mnt/nas/openclaw/toolchains/s100_llm_sdk/D-Robotics_LLM_S100_1.0.0_SDK/oellm_runtime/model/Qwen2.5_1.5B_Instruct_512.hbm",
+              "exists": false,
+              "size_bytes": 0
+            },
+            "priority_hbm": {
+              "path": "/mnt/nas/openclaw/toolchains/s100_llm_sdk/D-Robotics_LLM_S100_1.0.0_SDK/oellm_runtime/model/Qwen2.5_1.5B_Instruct_512.hbm",
+              "exists": false,
+              "size_bytes": 0
+            },
+            "tool_dispatcher": "/mnt/nas/openclaw/scripts/probes/ai_nas_allowlisted_tool.sh",
+            "report_root": "/mnt/nas/openclaw/reports/qwen25_ai_nas"
+          },
+          "body_hash": "93f6c14eaa15d5be20371ecd6e2125c3534ad144dc5fcee349d782ded5be1812",
+          "stderr_hash": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "stderr_tail": ""
+        },
+        "after": {
+          "ok": true,
+          "returncode": 0,
+          "http_code": "200",
+          "time_total": 0.00107,
+          "json": {
+            "ok": true,
+            "model": "Qwen2.5-1.5B-Instruct-S100P-official",
+            "backend": "official-qwen2.5-oellm-multichat-plus-ai-nas-tools",
+            "port": 18080,
+            "active_profile": "qwen25_7b_instruct_cache_len_1024_q8",
+            "priority_profile": "qwen25_7b_instruct_cache_len_1024_q8_vendor_default",
+            "priority_status": "promoted_from_shadow_18081",
+            "active_hbm": {
+              "path": "/mnt/nas/openclaw/toolchains/s100_llm_sdk/D-Robotics_LLM_S100_1.0.0_SDK/oellm_runtime/model/Qwen2.5_1.5B_Instruct_512.hbm",
+              "exists": false,
+              "size_bytes": 0
+            },
+            "priority_hbm": {
+              "path": "/mnt/nas/openclaw/toolchains/s100_llm_sdk/D-Robotics_LLM_S100_1.0.0_SDK/oellm_runtime/model/Qwen2.5_1.5B_Instruct_512.hbm",
+              "exists": false,
+              "size_bytes": 0
+            },
+            "tool_dispatcher": "/mnt/nas/openclaw/scripts/probes/ai_nas_allowlisted_tool.sh",
+            "report_root": "/mnt/nas/openclaw/reports/qwen25_ai_nas"
+          },
+          "body_hash": "93f6c14eaa15d5be20371ecd6e2125c3534ad144dc5fcee349d782ded5be1812",
+          "stderr_hash": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "stderr_tail": ""
+        }
+      }
+    },
+    {
+      "label": "protected hashes unchanged",
+      "ok": true,
+      "detail": {
+        "before": {
+          "/mnt/nas/openclaw/scripts/probes/ai_nas_allowlisted_tool.sh": "d099f8071ab3710778520bf610ce2bca07fbc7976effe0a6d99791cf42ebb23a",
+          "/etc/systemd/system/openclaw-gateway.service": "06e3e3d3d1245454676c31033107f25cb71aeae60205c42f8b61d05a30386ccc",
+          "/etc/systemd/system/qwen25-local-openai-gateway.service": null
+        },
+        "after": {
+          "/mnt/nas/openclaw/scripts/probes/ai_nas_allowlisted_tool.sh": "d099f8071ab3710778520bf610ce2bca07fbc7976effe0a6d99791cf42ebb23a",
+          "/etc/systemd/system/openclaw-gateway.service": "06e3e3d3d1245454676c31033107f25cb71aeae60205c42f8b61d05a30386ccc",
+          "/etc/systemd/system/qwen25-local-openai-gateway.service": null
+        }
+      }
+    }
+  ],
+  "detail": {
+    "remote_root": "/tmp/digua_stage2_s100p_live_20260703-013757",
+    "port": 19081,
+    "start": {
+      "scp_mock_server": {
+        "returncode": 0,
+        "elapsed_ms": null,
+        "stdout_hash": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "stderr_hash": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "stdout_tail": ""
+      },
+      "scp_mock_tools": {
+        "returncode": 0,
+        "elapsed_ms": null,
+        "stdout_hash": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "stderr_hash": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "stdout_tail": ""
+      },
+      "start": {
+        "returncode": 0,
+        "elapsed_ms": 1224.198,
+        "stdout_hash": "76e20ed479a5a1dd16aa92a1fff83ee32a46cf6335d7eba7a99cd60d42c4f194",
+        "stderr_hash": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "stdout_tail": "{\"ok\": true, \"runtime\": \"stage2_sidecar_mock\", \"foreground_route\": false, \"provider_base_url\": \"http://127.0.0.1:18080/v1\", \"tools\": [\"mock.nas_search\", \"mock.document_rag\"]}"
+      }
+    },
+    "tools": {
+      "ok": true,
+      "returncode": 0,
+      "http_code": "200",
+      "time_total": 0.001088,
+      "json": {
+        "version": "stage2_sidecar_mock_tools_v1",
+        "tools": [
+          {
+            "id": "mock.nas_search",
+            "workspace_id": "nas_search",
+            "read_only": true,
+            "write_allowed": false
+          },
+          {
+            "id": "mock.document_rag",
+            "workspace_id": "document_rag",
+            "read_only": true,
+            "write_allowed": false
+          }
+        ]
+      },
+      "body_hash": "2336d368aa3e6816ccdc05d1383f84d08e0f2164149294ab2cd89a69515c5ec6",
+      "stderr_hash": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr_tail": ""
+    }
+  }
+}

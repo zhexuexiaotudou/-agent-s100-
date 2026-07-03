@@ -1,0 +1,263 @@
+{
+  "generated_at": "2026-07-02T23:28:15.847708+08:00",
+  "gate_id": "tool_exposure_minimization_gate",
+  "verdict": "ok_tool_exposure_minimization_gate",
+  "passed_count": 37,
+  "check_count": 37,
+  "failure_count": 0,
+  "failures": [],
+  "checks": [
+    {
+      "label": "six shadow scenarios executed",
+      "ok": true,
+      "detail": 6
+    },
+    {
+      "label": "nas_search_read_only exposes subset of workspace tools",
+      "ok": true,
+      "detail": []
+    },
+    {
+      "label": "nas_search_read_only denies at least one out-of-scope or unapproved tool",
+      "ok": true,
+      "detail": [
+        "ai_nas_action_execute_copy"
+      ]
+    },
+    {
+      "label": "nas_search_read_only has no unauthorized context tools",
+      "ok": true,
+      "detail": []
+    },
+    {
+      "label": "nas_search_read_only context smaller than all-tools baseline",
+      "ok": true,
+      "detail": {
+        "before": 15748,
+        "after": 1397
+      }
+    },
+    {
+      "label": "nas_search_read_only exposed tool count below dispatcher total",
+      "ok": true,
+      "detail": {
+        "exposed": 1,
+        "dispatcher": 78
+      }
+    },
+    {
+      "label": "nas_denied_acl_search exposes subset of workspace tools",
+      "ok": true,
+      "detail": []
+    },
+    {
+      "label": "nas_denied_acl_search denies at least one out-of-scope or unapproved tool",
+      "ok": true,
+      "detail": [
+        "ai_nas_audit_trail_contract"
+      ]
+    },
+    {
+      "label": "nas_denied_acl_search has no unauthorized context tools",
+      "ok": true,
+      "detail": []
+    },
+    {
+      "label": "nas_denied_acl_search context smaller than all-tools baseline",
+      "ok": true,
+      "detail": {
+        "before": 15752,
+        "after": 1405
+      }
+    },
+    {
+      "label": "nas_denied_acl_search exposed tool count below dispatcher total",
+      "ok": true,
+      "detail": {
+        "exposed": 1,
+        "dispatcher": 78
+      }
+    },
+    {
+      "label": "nas_destructive_action_requires_approval exposes subset of workspace tools",
+      "ok": true,
+      "detail": []
+    },
+    {
+      "label": "nas_destructive_action_requires_approval denies at least one out-of-scope or unapproved tool",
+      "ok": true,
+      "detail": [
+        "ai_nas_file_search"
+      ]
+    },
+    {
+      "label": "nas_destructive_action_requires_approval has no unauthorized context tools",
+      "ok": true,
+      "detail": []
+    },
+    {
+      "label": "nas_destructive_action_requires_approval context smaller than all-tools baseline",
+      "ok": true,
+      "detail": {
+        "before": 15735,
+        "after": 1447
+      }
+    },
+    {
+      "label": "nas_destructive_action_requires_approval exposed tool count below dispatcher total",
+      "ok": true,
+      "detail": {
+        "exposed": 2,
+        "dispatcher": 78
+      }
+    },
+    {
+      "label": "document_report_generation exposes subset of workspace tools",
+      "ok": true,
+      "detail": []
+    },
+    {
+      "label": "document_report_generation denies at least one out-of-scope or unapproved tool",
+      "ok": true,
+      "detail": [
+        "ai_nas_photo_semantic_search"
+      ]
+    },
+    {
+      "label": "document_report_generation has no unauthorized context tools",
+      "ok": true,
+      "detail": []
+    },
+    {
+      "label": "document_report_generation context smaller than all-tools baseline",
+      "ok": true,
+      "detail": {
+        "before": 15733,
+        "after": 1512
+      }
+    },
+    {
+      "label": "document_report_generation exposed tool count below dispatcher total",
+      "ok": true,
+      "detail": {
+        "exposed": 2,
+        "dispatcher": 78
+      }
+    },
+    {
+      "label": "web_cloud_research_redacted exposes subset of workspace tools",
+      "ok": true,
+      "detail": []
+    },
+    {
+      "label": "web_cloud_research_redacted denies at least one out-of-scope or unapproved tool",
+      "ok": true,
+      "detail": [
+        "ai_nas_file_search"
+      ]
+    },
+    {
+      "label": "web_cloud_research_redacted has no unauthorized context tools",
+      "ok": true,
+      "detail": []
+    },
+    {
+      "label": "web_cloud_research_redacted context smaller than all-tools baseline",
+      "ok": true,
+      "detail": {
+        "before": 15786,
+        "after": 1486
+      }
+    },
+    {
+      "label": "web_cloud_research_redacted exposed tool count below dispatcher total",
+      "ok": true,
+      "detail": {
+        "exposed": 2,
+        "dispatcher": 78
+      }
+    },
+    {
+      "label": "ops_health_check exposes subset of workspace tools",
+      "ok": true,
+      "detail": []
+    },
+    {
+      "label": "ops_health_check denies at least one out-of-scope or unapproved tool",
+      "ok": true,
+      "detail": [
+        "dream7b_perf_identity"
+      ]
+    },
+    {
+      "label": "ops_health_check has no unauthorized context tools",
+      "ok": true,
+      "detail": []
+    },
+    {
+      "label": "ops_health_check context smaller than all-tools baseline",
+      "ok": true,
+      "detail": {
+        "before": 15740,
+        "after": 1576
+      }
+    },
+    {
+      "label": "ops_health_check exposed tool count below dispatcher total",
+      "ok": true,
+      "detail": {
+        "exposed": 2,
+        "dispatcher": 78
+      }
+    },
+    {
+      "label": "destructive/copy action denied without approval",
+      "ok": true,
+      "detail": {
+        "status": "denied",
+        "workspace_id": "nas_action",
+        "tool_id": "ai_nas_action_execute_copy",
+        "reason": "approval_required",
+        "args": [
+          {
+            "args_hash": "e0287bbb42679e4c26111d2d8382abdb3a1baca6f36a717b4b809e2dd6d84694",
+            "arg_count": 1,
+            "leak_count": 0
+          }
+        ]
+      }
+    },
+    {
+      "label": "Dream7B attempted tool denied in ops scenario",
+      "ok": true,
+      "detail": [
+        "dream7b_perf_identity"
+      ]
+    },
+    {
+      "label": "probe did not bypass dispatcher",
+      "ok": true
+    },
+    {
+      "label": "probe did not attach Dream7B foreground",
+      "ok": true
+    },
+    {
+      "label": "probe did not modify protected ports",
+      "ok": true
+    },
+    {
+      "label": "average context size reduced",
+      "ok": true,
+      "detail": {
+        "before": 15749.0,
+        "after": 1470.5
+      }
+    }
+  ],
+  "detail": {
+    "dispatcher_tool_count": 78,
+    "avg_context_before_chars": 15749.0,
+    "avg_context_after_chars": 1470.5
+  }
+}

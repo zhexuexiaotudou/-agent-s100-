@@ -1,0 +1,50 @@
+{
+  "schema_version": "dream7b_s100p_v14_1470_seg00_01_corrected_recompile_candidates",
+  "created_at_utc": "2026-07-03T06:10:20.919362+00:00",
+  "run_commands": [
+    "C:\\Users\\zhexu\\AppData\\Local\\Python\\pythoncore-3.14-64\\python.exe tools\\build_v14_research_thread.py --root ."
+  ],
+  "host_environment": {
+    "local_platform": "Windows-11-10.0.26200-SP0",
+    "python": "3.14.3 (tags/v3.14.3:323c59a, Feb  3 2026, 16:04:56) [MSC v.1944 64 bit (AMD64)]"
+  },
+  "git": {
+    "returncode": 128,
+    "stdout": "",
+    "stderr": "fatal: not a git repository (or any of the parent directories): .git"
+  },
+  "input_artifacts": [
+    {
+      "path": "reports/1460_compiler_graph_artifact_search.json",
+      "exists": true,
+      "size_bytes": 34421,
+      "sha256": "6612a03ec0f4cb7a32884de41f0a305e8348894fee3123ce8131df131f8a026b"
+    }
+  ],
+  "output_artifacts": [
+    {
+      "path": "reports/1470_seg00_01_corrected_recompile_candidates.json",
+      "exists": true,
+      "size_bytes": 1485,
+      "sha256": "8fbf22cc8793c4cf77b5fdb3ba612464754894204b19f5160b8f7e119bc156f5"
+    },
+    {
+      "path": "reports/1470_seg00_01_corrected_recompile_candidates.md",
+      "exists": true,
+      "size_bytes": 238,
+      "sha256": "4f923cd6405da6e71b4a92bb1ef4b40d29f133d2380f106d29c4683e231e310b"
+    }
+  ],
+  "blocking_or_failure_reasons": [
+    "Corrected/recompiled seg00_01 candidates require compiler/vendor artifacts; no offline candidate was fabricated."
+  ],
+  "next_minimal_experiments": [],
+  "safety": {
+    "generation_quality_run": false,
+    "product_routes_18888_18889_touched": false,
+    "dream7b_frontend_openclaw_traffic_touched": false
+  },
+  "verdict": "not_run_compiler_unavailable",
+  "executed_candidates": [],
+  "reason": "No accessible seq128 B=1 compiler/export pipeline plus source graph and quant metadata was available for safe corrected recompile."
+}

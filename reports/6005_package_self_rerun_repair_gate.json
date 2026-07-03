@@ -1,0 +1,105 @@
+{
+  "generated_at": "2026-07-03T13:03:11.521307+08:00",
+  "gate_id": "stage2_7_package_self_rerun_repair_gate",
+  "verdict": "ok_stage2_7_package_self_rerun_repair_gate",
+  "passed_count": 7,
+  "check_count": 7,
+  "failure_count": 0,
+  "failures": [],
+  "checks": [
+    {
+      "label": "bash available",
+      "ok": true,
+      "detail": "F:\\Program\\Git\\bin\\bash.exe"
+    },
+    {
+      "label": "clean extract rerun passes",
+      "ok": true,
+      "detail": {
+        "returncode": 0,
+        "stdout_hash": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "stderr_hash": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "stdout_tail": "",
+        "stderr_tail": ""
+      }
+    },
+    {
+      "label": "all rerun outputs have JSON/Markdown reports",
+      "ok": true,
+      "detail": {
+        "json": "F:\\Project\\Digua\\tmp\\stage2_7_package_rerun_candidate_20260703-130304\\reports\\package_rerun\\stage2_7_package_rerun.json",
+        "md": "F:\\Project\\Digua\\tmp\\stage2_7_package_rerun_candidate_20260703-130304\\reports\\package_rerun\\stage2_7_package_rerun.md"
+      }
+    },
+    {
+      "label": "previous_stage2_6_input package present",
+      "ok": true,
+      "detail": "F:\\Project\\Digua\\tmp\\stage2_7_package_rerun_candidate_20260703-130304\\previous_stage2_6_input"
+    },
+    {
+      "label": "previous_stage2_5_input can be recognized",
+      "ok": true,
+      "detail": {
+        "returncode": 0,
+        "stdout_hash": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "stderr_hash": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "stdout_tail": "",
+        "stderr_tail": ""
+      }
+    },
+    {
+      "label": "negative missing-policy test fails",
+      "ok": true,
+      "detail": {
+        "returncode": 1,
+        "stdout_hash": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "stderr_hash": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "stdout_tail": "",
+        "stderr_tail": ""
+      }
+    },
+    {
+      "label": "negative missing-dispatcher test fails",
+      "ok": true,
+      "detail": {
+        "returncode": 1,
+        "stdout_hash": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "stderr_hash": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "stdout_tail": "",
+        "stderr_tail": ""
+      }
+    }
+  ],
+  "detail": {
+    "candidate_root": "F:\\Project\\Digua\\tmp\\stage2_7_package_rerun_candidate_20260703-130304",
+    "clean": {
+      "returncode": 0,
+      "stdout_hash": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr_hash": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stdout_tail": "",
+      "stderr_tail": ""
+    },
+    "previous_stage2_5_input": {
+      "returncode": 0,
+      "stdout_hash": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr_hash": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stdout_tail": "",
+      "stderr_tail": ""
+    },
+    "negative_missing_policy": {
+      "returncode": 1,
+      "stdout_hash": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr_hash": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stdout_tail": "",
+      "stderr_tail": ""
+    },
+    "negative_missing_dispatcher": {
+      "returncode": 1,
+      "stdout_hash": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr_hash": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stdout_tail": "",
+      "stderr_tail": ""
+    },
+    "package_runner_external_path_dependency": false
+  }
+}

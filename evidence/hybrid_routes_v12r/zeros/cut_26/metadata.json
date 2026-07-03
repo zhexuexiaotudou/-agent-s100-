@@ -1,0 +1,150 @@
+{
+  "case_id": "zeros",
+  "cut": 26,
+  "route": "BPU segments 0..26 then HF/PyTorch CPU suffix 27..27 + final norm + lm_head",
+  "input_boundary": {
+    "path": "evidence/bpu_boundaries_v12r/zeros/seg_26_output.npy",
+    "sha256": "f534056b9455cfefc25185a78366a2c1a83530a4b7631bf7b2210fe49ca28cc5",
+    "stats": {
+      "shape": [
+        128,
+        3584
+      ],
+      "dtype": "float32",
+      "size": 458752,
+      "min": -16.29678726196289,
+      "max": 16.29678726196289,
+      "mean": 0.005043782293796539,
+      "std": 16.123767852783203,
+      "abs_max": 16.29678726196289,
+      "nonzero_count": 458751,
+      "allzero": false,
+      "constant": false,
+      "nan_count": 0,
+      "inf_count": 0
+    }
+  },
+  "hf_suffix_layers": [
+    27
+  ],
+  "logits": {
+    "path": "evidence/hybrid_routes_v12r/zeros/cut_26/hybrid_logits.npy",
+    "sha256": "6585b88056532bd72a9f4eba7a1b3d2864d7a8d3ccf614e5bc8ab949ef64a591",
+    "stats": {
+      "shape": [
+        152064
+      ],
+      "dtype": "float32",
+      "size": 152064,
+      "min": -7.40625,
+      "max": 10.6875,
+      "mean": 3.870508909225464,
+      "std": 1.32097327709198,
+      "abs_max": 10.6875,
+      "nonzero_count": 152064,
+      "allzero": false,
+      "constant": false,
+      "nan_count": 0,
+      "inf_count": 0
+    }
+  },
+  "final_metrics": {
+    "shape_match": true,
+    "reference_top1": 220,
+    "candidate_top1": 82733,
+    "top1_agreement": false,
+    "reference_top1_in_candidate_top5": false,
+    "top5_overlap": 0,
+    "cosine": -0.9632912650721812,
+    "pearson_centered": -0.5578625105907454,
+    "relative_l2": 1.383325206753448,
+    "max_abs_error": 21.625,
+    "mean_abs_error": 14.103310672412642,
+    "candidate_normalized_entropy": 0.9496826980185031,
+    "candidate_stats": {
+      "shape": [
+        152064
+      ],
+      "dtype": "float32",
+      "size": 152064,
+      "min": -7.40625,
+      "max": 10.6875,
+      "mean": 3.870508909225464,
+      "std": 1.32097327709198,
+      "abs_max": 10.6875,
+      "nonzero_count": 152064,
+      "allzero": false,
+      "constant": false,
+      "nan_count": 0,
+      "inf_count": 0
+    },
+    "reference_stats": {
+      "shape": [
+        152064
+      ],
+      "dtype": "float32",
+      "size": 152064,
+      "min": -14.25,
+      "max": 1.75,
+      "mean": -10.231769561767578,
+      "std": 1.7890510559082031,
+      "abs_max": 14.25,
+      "nonzero_count": 152064,
+      "allzero": false,
+      "constant": false,
+      "nan_count": 0,
+      "inf_count": 0
+    }
+  },
+  "boundary_metrics": {
+    "shape_match": true,
+    "reference_top1": 41191,
+    "candidate_top1": 458751,
+    "top1_agreement": false,
+    "reference_top1_in_candidate_top5": false,
+    "top5_overlap": 0,
+    "cosine": -0.00987959787920746,
+    "pearson_centered": -0.009880002248552842,
+    "relative_l2": 4.70703870149316,
+    "max_abs_error": 125.79678726196289,
+    "mean_abs_error": 16.10415110194004,
+    "candidate_normalized_entropy": 0.9446846811522468,
+    "candidate_stats": {
+      "shape": [
+        458752
+      ],
+      "dtype": "float32",
+      "size": 458752,
+      "min": -16.29678726196289,
+      "max": 16.29678726196289,
+      "mean": 0.005043782293796539,
+      "std": 16.123767852783203,
+      "abs_max": 16.29678726196289,
+      "nonzero_count": 458751,
+      "allzero": false,
+      "constant": false,
+      "nan_count": 0,
+      "inf_count": 0
+    },
+    "reference_stats": {
+      "shape": [
+        458752
+      ],
+      "dtype": "float32",
+      "size": 458752,
+      "min": -109.5,
+      "max": 35.5,
+      "mean": 0.004446861799806356,
+      "std": 3.5130152702331543,
+      "abs_max": 109.5,
+      "nonzero_count": 458378,
+      "allzero": false,
+      "constant": false,
+      "nan_count": 0,
+      "inf_count": 0
+    }
+  },
+  "layout_scale_variant_used": "existing_full_chain_bpu_dequant_boundary_direct_float32_seq_hidden",
+  "elapsed_seconds": 40.776,
+  "status": "pass"
+}

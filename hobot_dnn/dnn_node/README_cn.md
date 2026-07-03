@@ -1,6 +1,7 @@
 [English](./README.md) | 简体中文
 
-# Getting Started with Dnn Node
+Getting Started with Dnn Node
+=======
 
 
 # 功能介绍
@@ -76,16 +77,16 @@ Dnn Node package中的DnnNode是一个虚基类，定义了模型集成开发的
 
 2、编译
 
-- 编译dnn_node package：
+- 编译dnn_node package： 
 
   ```shell
-
+  
   # RDK X3
   bash robot_dev_config/build.sh -p X3 -s dnn_node
 
   # RDK Ultra
   bash robot_dev_config/build.sh -p Rdkultra -s dnn_node
-
+  
   # RDK X5
   bash robot_dev_config/build.sh -p X5 -s dnn_node
   ```
@@ -95,7 +96,7 @@ Dnn Node package中的DnnNode是一个虚基类，定义了模型集成开发的
 1、编译环境确认
 
   x86 ubuntu版本: ubuntu20.04
-
+  
 2、编译
 
 - 编译命令：
@@ -282,13 +283,13 @@ perception_common.h为定义的解析后的感知结果数据类型。
 ```C++
     // 1 创建解析输出数据，DnnParserResult是hobot_dnn中内置的解析方法对应的算法输出数据类型
     std::shared_ptr<DnnParserResult> det_result = nullptr;
-
+    
     // 2 开始解析
     if (hobot::dnn_node::parser_yolov5::Parse(node_output, det_result) < 0) {
       RCLCPP_ERROR(rclcpp::get_logger("dnn_node_sample"),
                   "Parse output_tensors fail!");
       return -1;
     }
-
+    
     // 3 使用解析后的算法结果det_result
 ```

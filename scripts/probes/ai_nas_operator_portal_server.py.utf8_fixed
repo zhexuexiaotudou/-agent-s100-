@@ -1,0 +1,1046 @@
+#!/usr/bin/env python3
+from __future__ import annotations
+
+import argparse
+import json
+import os
+import platform
+import shutil
+import subprocess
+import sys
+import tarfile
+import time
+import urllib.error
+import urllib.request
+import threading
+import tempfile
+from http import HTTPStatus
+from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
+from pathlib import Path
+from urllib.parse import urlparse
+
+from ai_nas_common import DEFAULT_REPORT_ROOT
+from ai_nas_operator_portal_contract_probe import latest_report, read_json
+
+
+TOOL_ID = "ai_nas_operator_portal_server"
+REPORT_FILENAMES = {
+    "operator_portal_contract": "operator_portal_contract.json",
+    "production_readiness_gate": "production_readiness_gate.json",
+    "operational_slo_rollup_contract": "operational_slo_rollup_contract.json",
+    "objective_traceability_contract": "objective_traceability_contract.json",
+    "production_dependency_bundle": "production_dependency_bundle.json",
+    "production_blocker_runbook_contract": "production_blocker_runbook_contract.json",
+    "dream7b_perf_identity": "dream7b_perf_identity.json",
+    "nas_backed_long_soak": "nas_backed_long_soak.json",
+    "soak_completion_gate_watcher": "soak_completion_gate_watcher_latest.json",
+    "goal_completion_audit": "goal_completion_audit.json",
+    "goal_completion_finalizer": "goal_completion_finalizer_latest.json",
+}
+REMOTE_SYNC_EXTRA_FILENAMES = [
+    "model_service_real_recovery_drill.json",
+    "index_systemd_daemon_install.json",
+    "services.json",
+]
+OPERATOR_DECISION_DIRNAME = "operator_decisions"
+
+
+def iso_timestamp() -> str:
+    return time.strftime("%Y-%m-%dT%H:%M:%S%z")
+
+
+def compact_timestamp() -> str:
+    return time.strftime("%Y%m%d-%H%M%S")
+
+
+def default_evidence_roots(report_root: Path) -> list[Path]:
+    roots = [report_root]
+    tmp_root = Path("tmp")
+    if tmp_root.exists():
+        roots.append(tmp_root)
+    return roots
+
+
+def report_without_payload(report: dict) -> dict:
+    return {key: value for key, value in report.items() if key != "payload"}
+
+
+def run_checked(cmd: list[str], timeout: int = 5, env: dict[str, str] | None = None) -> dict:
+    started = time.perf_counter()
+    try:
+        merged_env = os.environ.copy()
+        if env:
+            merged_env.update(env)
+        completed = subprocess.run(cmd, text=True, capture_output=True, timeout=timeout, env=merged_env, check=False)
+        elapsed_ms = round((time.perf_counter() - started) * 1000, 3)
+        return {
+            "ok": completed.returncode == 0,
+            "returncode": completed.returncode,
+            "elapsed_ms": elapsed_ms,
+            "stdout": completed.stdout.strip()[:2000],
+            "stderr": completed.stderr.strip()[:2000],
+            "command": cmd,
+        }
+    except Exception as exc:
+        elapsed_ms = round((time.perf_counter() - started) * 1000, 3)
+        return {
+            "ok": False,
+            "returncode": None,
+            "elapsed_ms": elapsed_ms,
+            "stdout": "",
+            "stderr": f"{type(exc).__name__}: {exc}",
+            "command": cmd,
+        }
+
+
+def http_health(name: str, url: str, timeout: int = 5) -> dict:
+    started = time.perf_counter()
+    try:
+        req = urllib.request.Request(url, headers={"Accept": "application/json"})
+        with urllib.request.urlopen(req, timeout=timeout) as resp:
+            raw = resp.read(4096).decode("utf-8", errors="replace")
+            elapsed_ms = round((time.perf_counter() - started) * 1000, 3)
+            payload = {}
+            try:
+                payload = json.loads(raw)
+            except json.JSONDecodeError:
+                payload = {"raw": raw[:1000]}
+            return {
+                "name": name,
+                "kind": "http",
+                "ok": 200 <= resp.status < 300,
+                "status": resp.status,
+                "elapsed_ms": elapsed_ms,
+                "url": url,
+                "payload": payload,
+            }
+    except urllib.error.URLError as exc:
+        elapsed_ms = round((time.perf_counter() - started) * 1000, 3)
+        return {
+            "name": name,
+            "kind": "http",
+            "ok": False,
+            "status": None,
+            "elapsed_ms": elapsed_ms,
+            "url": url,
+            "error": str(exc),
+        }
+
+
+def generate_portal(report_root: Path, evidence_roots: list[Path]) -> dict:
+    script_path = Path(__file__).with_name("ai_nas_operator_portal_contract_probe.py")
+    cmd = [sys.executable, str(script_path), "--report-root", str(report_root)]
+    for root in evidence_roots:
+        cmd.extend(["--evidence-root", str(root)])
+    completed = subprocess.run(cmd, text=True, capture_output=True, timeout=120)
+    return {
+        "command": cmd,
+        "returncode": completed.returncode,
+        "stdout": completed.stdout.strip(),
+        "stderr": completed.stderr.strip(),
+    }
+
+
+def run_remote_evidence_sync(host: str, key: Path | None, remote_report_root: str, local_sync_dir: Path, timeout: int = 60) -> dict:
+    started = time.perf_counter()
+    local_sync_dir = local_sync_dir.resolve()
+    local_sync_dir.mkdir(parents=True, exist_ok=True)
+    filenames = sorted(set(REPORT_FILENAMES.values()) | set(REMOTE_SYNC_EXTRA_FILENAMES))
+    remote_script = f"""set -eu
+out=$(mktemp -d /tmp/ai_nas_portal_latest.XXXXXX)
+export AI_NAS_PORTAL_SYNC_OUT="$out"
+python3 - <<'PY'
+import os
+import json, pathlib, shutil, subprocess, time, urllib.request
+src=pathlib.Path({remote_report_root!r})
+out=pathlib.Path(os.environ['AI_NAS_PORTAL_SYNC_OUT'])
+filenames={filenames!r}
+def sort_key(p):
+    try:
+        d=json.load(open(p, encoding='utf-8'))
+        ga=d.get('generated_at') or ''
+    except Exception:
+        ga=''
+    return (ga, p.stat().st_mtime, str(p))
+manifest=[]
+for name in filenames:
+    candidates=[p for p in src.rglob(name) if p.is_file()]
+    if not candidates:
+        continue
+    selected=max(candidates, key=sort_key)
+    sub=out/name.replace('.json','')
+    sub.mkdir(parents=True, exist_ok=True)
+    target=sub/name
+    shutil.copy2(selected, target)
+    manifest.append({{'filename':name,'source':str(selected),'copied':str(target)}})
+status=src/'long_soak_jobs/soak_completion_gate_watcher_latest.json'
+if status.exists():
+    sub=out/'soak_completion_gate_watcher_latest'
+    sub.mkdir(parents=True, exist_ok=True)
+    target=sub/'soak_completion_gate_watcher_latest.json'
+    shutil.copy2(status, target)
+    manifest.append({{'filename':'soak_completion_gate_watcher_latest.json','source':str(status),'copied':str(target)}})
+svc=src/'operator_portal_server_services_validation2/services.json'
+if svc.exists():
+    sub=out/'service_status'
+    sub.mkdir(parents=True, exist_ok=True)
+    target=sub/'services.json'
+    shutil.copy2(svc, target)
+    manifest.append({{'filename':'services.json','source':str(svc),'copied':str(target)}})
+def http_health(name, url):
+    started=time.perf_counter()
+    try:
+        with urllib.request.urlopen(url, timeout=5) as resp:
+            raw=resp.read().decode('utf-8', errors='replace')
+            elapsed_ms=round((time.perf_counter()-started)*1000, 3)
+            payload=json.loads(raw) if raw.strip().startswith('{{') else {{}}
+            return {{'name':name,'kind':'http','ok':200 <= resp.status < 300,'status':resp.status,'elapsed_ms':elapsed_ms,'url':url,'payload':payload}}
+    except Exception as exc:
+        return {{'name':name,'kind':'http','ok':False,'status':None,'elapsed_ms':round((time.perf_counter()-started)*1000, 3),'url':url,'error':f'{{type(exc).__name__}}: {{exc}}'}}
+def run_checked(name, kind, cmd, env=None):
+    started=time.perf_counter()
+    merged=os.environ.copy()
+    if env:
+        merged.update(env)
+    try:
+        proc=subprocess.run(cmd, text=True, capture_output=True, timeout=8, check=False, env=merged)
+        stdout=proc.stdout.strip()
+        return {{'name':name,'kind':kind,'ok':proc.returncode == 0,'returncode':proc.returncode,'elapsed_ms':round((time.perf_counter()-started)*1000, 3),'stdout':stdout,'stderr':proc.stderr.strip()[:1000],'command':cmd,'status':stdout or proc.returncode}}
+    except Exception as exc:
+        return {{'name':name,'kind':kind,'ok':False,'returncode':None,'elapsed_ms':round((time.perf_counter()-started)*1000, 3),'stdout':'','stderr':f'{{type(exc).__name__}}: {{exc}}','command':cmd,'status':'error'}}
+user_systemctl_prefix=['sudo','-n','env','XDG_RUNTIME_DIR=/run/user/0'] if pathlib.Path('/run/user/0').exists() else []
+checks=[
+    http_health('dream7b_openai_gateway','http://127.0.0.1:18888/health'),
+    http_health('openclaw_gateway','http://127.0.0.1:18789/health'),
+    run_checked('ai_nas_index_daemon','systemd_system',['systemctl','is-active','ai-nas-index-daemon.service']),
+    run_checked('dream7b_local_openai_gateway','systemd_user',user_systemctl_prefix+['systemctl','--user','is-active','dream7b-local-openai-gateway.service']),
+    run_checked('openclaw_gateway','systemd_user',user_systemctl_prefix+['systemctl','--user','is-active','openclaw-gateway.service']),
+]
+live_services={{
+    'generated_at_epoch': time.time(),
+    'generated_at': time.strftime('%Y-%m-%dT%H:%M:%S%z'),
+    'ok_count': sum(1 for item in checks if item.get('ok') is True),
+    'failed_count': sum(1 for item in checks if item.get('ok') is False),
+    'unknown_count': sum(1 for item in checks if item.get('ok') is None),
+    'checks': checks,
+    'source': 'live_remote_sync_probe',
+    'audit': {{'remote_read_only': True, 'service_restart_performed': False, 'delete_performed': False, 'move_performed': False, 'overwrite_performed': False}},
+}}
+sub=out/'service_status'
+sub.mkdir(parents=True, exist_ok=True)
+target=sub/'services.json'
+target.write_text(json.dumps(live_services, ensure_ascii=False, indent=2)+'\\n', encoding='utf-8')
+manifest.append({{'filename':'services.json','source':'live_remote_sync_probe','copied':str(target)}})
+(out/'manifest.json').write_text(json.dumps(manifest, ensure_ascii=False, indent=2)+'\\n', encoding='utf-8')
+print(json.dumps(manifest, ensure_ascii=False))
+PY
+tar_path="${{out}}.tgz"
+tar -C "$(dirname "$out")" -czf "$tar_path" "$(basename "$out")"
+echo "AI_NAS_PORTAL_TAR=$tar_path"
+"""
+    ssh_cmd = ["ssh", "-o", "BatchMode=yes", "-o", "ConnectTimeout=8"]
+    scp_cmd = ["scp", "-o", "BatchMode=yes", "-o", "ConnectTimeout=8"]
+    if key:
+        ssh_cmd.extend(["-i", str(key)])
+        scp_cmd.extend(["-i", str(key)])
+    ssh_cmd.extend([host, "bash", "-s"])
+    remote_input = remote_script.replace("\r\n", "\n").replace("\r", "\n").encode("utf-8")
+    remote = subprocess.run(ssh_cmd, input=remote_input, capture_output=True, timeout=timeout, check=False)
+    remote_stdout = remote.stdout.decode("utf-8", errors="replace")
+    remote_stderr = remote.stderr.decode("utf-8", errors="replace")
+    tar_path = local_sync_dir.parent / f"{local_sync_dir.name}.tgz"
+    scp_result = None
+    manifest: list[dict] = []
+    if remote.returncode == 0:
+        remote_tar_path = ""
+        for line in remote_stdout.splitlines():
+            if line.startswith("AI_NAS_PORTAL_TAR="):
+                remote_tar_path = line.split("=", 1)[1].strip()
+        if not remote_tar_path:
+            remote_tar_path = "/tmp/ai_nas_portal_latest.tgz"
+        scp_cmd.extend([f"{host}:{remote_tar_path}", str(tar_path)])
+        scp_result = subprocess.run(scp_cmd, text=True, capture_output=True, timeout=timeout, check=False)
+        if scp_result.returncode == 0:
+            with tempfile.TemporaryDirectory(prefix="ai_nas_portal_sync_") as tmp:
+                tmp_path = Path(tmp)
+                with tarfile.open(tar_path, "r:gz") as archive:
+                    archive.extractall(tmp_path)
+                extracted_dirs = [path for path in tmp_path.iterdir() if path.is_dir()]
+                extracted = extracted_dirs[0] if extracted_dirs else tmp_path / "ai_nas_portal_latest"
+                if extracted.exists():
+                    for child in local_sync_dir.iterdir():
+                        if child.is_dir():
+                            shutil.rmtree(child)
+                        else:
+                            child.unlink()
+                    for child in extracted.iterdir():
+                        shutil.move(str(child), str(local_sync_dir / child.name))
+                    manifest_path = local_sync_dir / "manifest.json"
+                    if manifest_path.exists():
+                        try:
+                            payload = json.loads(manifest_path.read_text(encoding="utf-8"))
+                            if isinstance(payload, list):
+                                manifest = payload
+                        except Exception:
+                            manifest = []
+    return {
+        "ok": remote.returncode == 0 and scp_result is not None and scp_result.returncode == 0,
+        "host": host,
+        "remote_report_root": remote_report_root,
+        "local_sync_dir": str(local_sync_dir),
+        "elapsed_ms": round((time.perf_counter() - started) * 1000, 3),
+        "ssh_returncode": remote.returncode,
+        "ssh_stdout": remote_stdout.strip()[-4000:],
+        "ssh_stderr": remote_stderr.strip()[-4000:],
+        "scp_returncode": scp_result.returncode if scp_result else None,
+        "scp_stdout": scp_result.stdout.strip()[-1000:] if scp_result else "",
+        "scp_stderr": scp_result.stderr.strip()[-1000:] if scp_result else "",
+        "manifest_count": len(manifest),
+        "manifest": manifest,
+        "audit": {
+            "remote_read_only": True,
+            "local_copy_performed": remote.returncode == 0 and scp_result is not None and scp_result.returncode == 0,
+            "nas_delete_move_overwrite_performed": False,
+        },
+    }
+
+
+def render_service_status_html(service_status: dict) -> str:
+    rows = []
+    for item in service_status.get("checks") or []:
+        status = item.get("status")
+        if status is None:
+            status = "ok" if item.get("ok") is True else "failed" if item.get("ok") is False else "unknown"
+        detail = item.get("url") or " ".join(str(part) for part in item.get("command") or [])
+        if item.get("payload"):
+            detail = f"{detail} {json.dumps(item.get('payload'), ensure_ascii=False)[:300]}"
+        if item.get("error"):
+            detail = f"{detail} {item.get('error')}"
+        if item.get("stderr"):
+            detail = f"{detail} {item.get('stderr')}"
+        rows.append(
+            "<tr>"
+            f"<td>{html_escape(item.get('name'))}</td>"
+            f"<td>{html_escape(item.get('kind'))}</td>"
+            f"<td>{html_escape(status)}</td>"
+            f"<td>{html_escape(item.get('elapsed_ms'))}</td>"
+            f"<td><code>{html_escape(detail)}</code></td>"
+            "</tr>"
+        )
+    return f"""
+  <section class="section" data-testid="service-status" id="service-status"><h2>Service Status</h2>
+    <table><tbody>
+      <tr><th>Source</th><td>{html_escape(service_status.get('source') or 'live_local_probe')}</td><th>Generated</th><td colspan="3">{html_escape(service_status.get('generated_at') or service_status.get('generated_at_epoch'))}</td></tr>
+      <tr><th>OK</th><td>{html_escape(service_status.get('ok_count'))}</td><th>Failed</th><td>{html_escape(service_status.get('failed_count'))}</td><th>Unknown</th><td>{html_escape(service_status.get('unknown_count'))}</td></tr>
+    </tbody></table>
+    <table><thead><tr><th>Service</th><th>Kind</th><th>Status</th><th>ms</th><th>Detail</th></tr></thead><tbody>{''.join(rows)}</tbody></table>
+  </section>
+"""
+
+
+def render_operator_decisions_html(decisions: list[dict]) -> str:
+    rows = []
+    for item in decisions[:10]:
+        audit = item.get("audit") or {}
+        rows.append(
+            "<tr>"
+            f"<td>{html_escape(item.get('generated_at'))}</td>"
+            f"<td>{html_escape(item.get('manifest_id'))}</td>"
+            f"<td>{html_escape(item.get('decision'))}</td>"
+            f"<td>{html_escape(item.get('risk_level'))}</td>"
+            f"<td>{html_escape(audit.get('execution_performed'))}</td>"
+            f"<td><code>{html_escape(item.get('path'))}</code></td>"
+            "</tr>"
+        )
+    empty = "<tr><td colspan=\"6\">No operator decisions recorded in this local portal session.</td></tr>"
+    return f"""
+  <section class="section" data-testid="operator-decisions" id="operator-decisions"><h2>Operator Decisions</h2>
+    <table><thead><tr><th>Time</th><th>Manifest</th><th>Decision</th><th>Risk</th><th>Executed</th><th>Audit record</th></tr></thead><tbody>{''.join(rows) or empty}</tbody></table>
+  </section>
+"""
+
+
+def render_goal_progress_html(goal_progress: dict) -> str:
+    rows = []
+    for key in ["goal_completion", "goal_finalizer", "nas_soak", "operator_portal", "dream7b_interaction"]:
+        item = goal_progress.get(key) or {}
+        if key == "goal_completion":
+            evidence = (
+                f"passed={item.get('passed_check_count')}/{item.get('check_count')}; "
+                f"blockers={item.get('blocker_count')}; "
+                f"verdict={item.get('verdict')}"
+            )
+            gap = item.get("remaining_gap")
+        elif key == "goal_finalizer":
+            evidence = (
+                f"pid={item.get('finalizer_pid')}; "
+                f"watcher_ready={item.get('watcher_ready')}; "
+                f"audit_rc={item.get('audit_returncode')}; "
+                f"verdict={item.get('verdict')}"
+            )
+            gap = item.get("remaining_gap")
+        elif key == "nas_soak":
+            evidence = (
+                f"progress={item.get('progress_percent')}%; "
+                f"eta={item.get('estimated_completion_at')}; "
+                f"gate={item.get('production_gate_verdict')}"
+            )
+            gap = item.get("next_required_evidence")
+        elif key == "operator_portal":
+            evidence = (
+                f"contract={item.get('contract_verdict')}; "
+                f"services={item.get('service_ok_count')} ok/{item.get('service_failed_count')} failed; "
+                f"decisions={item.get('operator_decision_count')}"
+            )
+            gap = item.get("remaining_gap")
+        else:
+            evidence = (
+                f"ttft={item.get('ttft_p50_ms')}ms; "
+                f"first_progress={item.get('first_progress_p50_ms')}ms; "
+                f"interval={item.get('progress_interval_sec')}s"
+            )
+            gap = item.get("remaining_gap")
+        rows.append(
+            "<tr>"
+            f"<td>{html_escape(item.get('label') or key)}</td>"
+            f"<td>{html_escape(item.get('status'))}</td>"
+            f"<td><code>{html_escape(evidence)}</code></td>"
+            f"<td>{html_escape(gap)}</td>"
+            "</tr>"
+        )
+    return f"""
+  <section class="section" data-testid="goal-progress" id="goal-progress"><h2>Goal Progress</h2>
+    <table><thead><tr><th>Workstream</th><th>Status</th><th>Evidence</th><th>Remaining</th></tr></thead><tbody>{''.join(rows)}</tbody></table>
+  </section>
+"""
+
+
+def render_live_controls_html() -> str:
+    return """
+  <section class="section" data-testid="live-controls" id="live-controls"><h2>Live Controls</h2>
+    <div class="command-grid">
+      <div>
+        <button id="refresh-portal" type="button">Refresh Evidence</button>
+        <label><input id="auto-refresh-portal" type="checkbox"> Auto</label>
+        <input id="refresh-interval-sec" type="number" min="15" max="900" step="15" value="60" aria-label="Refresh interval seconds">
+      </div>
+      <p id="refresh-status"><code>idle</code></p>
+    </div>
+    <script>
+      let aiNasRefreshTimer = null;
+      async function refreshPortalEvidence() {
+        const status = document.getElementById('refresh-status');
+        status.innerHTML = '<code>refreshing</code>';
+        try {
+          const response = await fetch('/api/refresh', { method: 'POST' });
+          const payload = await response.json();
+          const latestResponse = await fetch('/api/latest');
+          const latest = await latestResponse.json();
+          const soak = latest.soak_watcher_status || {};
+          const remote = payload.remote_sync || {};
+          status.innerHTML = '<code>' + (payload.ok ? 'refreshed' : 'failed') +
+            ' remote=' + (remote.ok === true ? 'ok' : remote.ok === false ? 'failed' : 'n/a') +
+            ' progress=' + (soak.progress_percent ?? 'n/a') + '%' +
+            ' remaining=' + (soak.remaining_seconds ?? 'n/a') + 's' +
+            ' eta=' + (soak.estimated_completion_at ?? 'n/a') +
+            ' fresh=' + (soak.latest_soak_fresh_after_min_mtime ?? 'n/a') + '</code>';
+          if (payload.ok) setTimeout(() => window.location.reload(), 800);
+        } catch (error) {
+          status.innerHTML = '<code>failed: ' + String(error).slice(0, 160) + '</code>';
+        }
+      }
+      document.getElementById('refresh-portal').addEventListener('click', refreshPortalEvidence);
+      document.getElementById('auto-refresh-portal').addEventListener('change', (event) => {
+        if (aiNasRefreshTimer) {
+          clearInterval(aiNasRefreshTimer);
+          aiNasRefreshTimer = null;
+        }
+        if (event.target.checked) {
+          const input = document.getElementById('refresh-interval-sec');
+          const seconds = Math.max(15, Math.min(900, Number(input.value || 60)));
+          aiNasRefreshTimer = setInterval(refreshPortalEvidence, seconds * 1000);
+          refreshPortalEvidence();
+        }
+      });
+    </script>
+  </section>
+"""
+
+
+def html_escape(value: object) -> str:
+    import html
+
+    return html.escape("" if value is None else str(value), quote=True)
+
+
+def inject_runtime_sections(html_text: str, latest_bundle: dict) -> str:
+    marker = "</main>"
+    service_status = latest_bundle.get("service_status") or {}
+    decisions = ((latest_bundle.get("operator_decisions") or {}).get("items") or [])
+    goal_progress = latest_bundle.get("goal_progress") or {}
+    section = (
+        render_goal_progress_html(goal_progress)
+        + render_live_controls_html()
+        + render_service_status_html(service_status)
+        + render_operator_decisions_html(decisions)
+    )
+    if marker in html_text:
+        return html_text.replace(marker, section + "\n</main>", 1)
+    return html_text + section
+
+
+class PortalState:
+    def __init__(
+        self,
+        report_root: Path,
+        evidence_roots: list[Path],
+        refresh_on_start: bool,
+        service_status_json: Path | None = None,
+        remote_sync_host: str | None = None,
+        remote_sync_key: Path | None = None,
+        remote_report_root: str = "/mnt/nas/openclaw/reports/ai_nas_mvp",
+        remote_sync_dir: Path | None = None,
+    ) -> None:
+        self.report_root = report_root
+        self.evidence_roots = evidence_roots
+        self.service_status_json = service_status_json
+        self.remote_sync_host = remote_sync_host
+        self.remote_sync_key = remote_sync_key
+        self.remote_report_root = remote_report_root
+        self.remote_sync_dir = remote_sync_dir
+        self.last_remote_sync_result: dict | None = None
+        self.refresh_lock = threading.Lock()
+        self.refresh_result: dict | None = None
+        if refresh_on_start:
+            self.refresh_result = self.refresh()
+
+    def refresh(self) -> dict:
+        with self.refresh_lock:
+            if self.remote_sync_host and self.remote_sync_dir:
+                self.last_remote_sync_result = run_remote_evidence_sync(
+                    self.remote_sync_host,
+                    self.remote_sync_key,
+                    self.remote_report_root,
+                    self.remote_sync_dir,
+                )
+            self.refresh_result = generate_portal(self.report_root, self.evidence_roots)
+            return self.refresh_result
+
+    def latest(self, filename: str) -> dict:
+        return latest_report(self.evidence_roots, filename)
+
+    def portal_contract(self) -> dict:
+        return self.latest("operator_portal_contract.json")
+
+    def portal_payload(self) -> dict:
+        return self.portal_contract().get("payload") or {}
+
+    def portal_html_path(self) -> Path | None:
+        path_value = self.portal_payload().get("portal_html")
+        return Path(path_value) if path_value else None
+
+    def portal_report_path(self) -> Path | None:
+        path_value = self.portal_payload().get("portal_report_json")
+        return Path(path_value) if path_value else None
+
+    def portal_report_payload(self) -> dict:
+        report_path = self.portal_report_path()
+        if not report_path:
+            return {}
+        payload = read_json(report_path)
+        return payload if isinstance(payload, dict) else {}
+
+    def operator_decision_dir(self) -> Path:
+        path = self.report_root / OPERATOR_DECISION_DIRNAME
+        path.mkdir(parents=True, exist_ok=True)
+        return path
+
+    def latest_operator_decisions(self, limit: int = 20) -> list[dict]:
+        decision_dir = self.report_root / OPERATOR_DECISION_DIRNAME
+        if not decision_dir.exists():
+            return []
+        decisions: list[dict] = []
+        for path in sorted(decision_dir.glob("operator_decision_*.json"), key=lambda p: p.stat().st_mtime, reverse=True)[:limit]:
+            payload = read_json(path)
+            if isinstance(payload, dict):
+                decisions.append({"path": str(path), **payload})
+        return decisions
+
+    def record_operator_decision(self, request_payload: dict) -> tuple[int, dict]:
+        portal_report = self.portal_report_payload()
+        inbox_rows = portal_report.get("approval_inbox") or []
+        manifest = portal_report.get("approval_manifest") or {}
+        manifest_id = str(request_payload.get("manifest_id") or "").strip()
+        decision = str(request_payload.get("decision") or "").strip()
+        phrase = str(request_payload.get("phrase") or "").strip()
+        allowed_decisions = {
+            "approve": "APPROVE",
+            "rollback_draft": "ROLLBACK",
+            "reject": "REJECT",
+            "needs_review": "NEEDS_REVIEW",
+        }
+        if decision not in allowed_decisions:
+            return HTTPStatus.BAD_REQUEST, {"ok": False, "error": "unsupported_decision", "allowed_decisions": sorted(allowed_decisions)}
+        row = next((item for item in inbox_rows if str(item.get("manifest_id")) == manifest_id), None)
+        if not row:
+            return HTTPStatus.NOT_FOUND, {"ok": False, "error": "manifest_not_in_current_portal_report", "manifest_id": manifest_id}
+        expected_phrase = row.get("approval_phrase") if decision == "approve" else f"{allowed_decisions[decision]} {manifest_id}"
+        if phrase != expected_phrase:
+            return HTTPStatus.BAD_REQUEST, {
+                "ok": False,
+                "error": "phrase_mismatch",
+                "manifest_id": manifest_id,
+                "decision": decision,
+                "expected_phrase": expected_phrase,
+            }
+        decision_dir = self.operator_decision_dir()
+        record = {
+            "generated_at": iso_timestamp(),
+            "tool_id": TOOL_ID,
+            "decision_id": f"opd-{int(time.time() * 1000)}",
+            "decision": decision,
+            "manifest_id": manifest_id,
+            "phrase": phrase,
+            "manifest_path": row.get("path"),
+            "manifest_sha256": manifest.get("manifest_sha256") if manifest.get("manifest_id") == manifest_id else None,
+            "approval_status": row.get("status"),
+            "risk_level": row.get("risk_level"),
+            "action_count": row.get("action_count"),
+            "portal_report_json": str(self.portal_report_path()) if self.portal_report_path() else None,
+            "decision_effect": "local_operator_decision_record_only",
+            "next_step": {
+                "approve": "run bounded execution tool with exact manifest path and phrase after source hashes are rechecked",
+                "rollback_draft": "prepare rollback manifest only after a previous bounded execution manifest exists",
+                "reject": "leave proposed actions unexecuted",
+                "needs_review": "repair or re-review manifest evidence before any execution",
+            }[decision],
+            "audit": {
+                "remote_read_only_sync": bool(self.last_remote_sync_result),
+                "source_files_modified": False,
+                "execution_performed": False,
+                "rollback_performed": False,
+                "delete_performed": False,
+                "move_performed": False,
+                "overwrite_performed": False,
+                "copy_performed": False,
+                "writes": "local operator decision JSON/JSONL audit record only",
+            },
+        }
+        json_path = decision_dir / f"operator_decision_{compact_timestamp()}_{record['decision_id']}.json"
+        json_path.write_text(json.dumps(record, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
+        with (decision_dir / "operator_decisions.jsonl").open("a", encoding="utf-8") as handle:
+            handle.write(json.dumps({"path": str(json_path), **record}, ensure_ascii=False) + "\n")
+        return HTTPStatus.OK, {"ok": True, "operator_decision": {"path": str(json_path), **record}}
+
+    def latest_bundle(self) -> dict:
+        reports = {key: report_without_payload(self.latest(filename)) for key, filename in REPORT_FILENAMES.items()}
+        portal_payload = self.portal_payload()
+        service_status = self.service_status()
+        soak_watcher_payload = self.latest("soak_completion_gate_watcher_latest.json").get("payload") or {}
+        latest_soak = soak_watcher_payload.get("latest_soak") or {}
+        soak_process = soak_watcher_payload.get("soak_process") or ((soak_watcher_payload.get("summary") or {}).get("final_soak_process") or {})
+        operator_decisions = self.latest_operator_decisions(limit=10)
+        dream_report = self.latest("dream7b_perf_identity.json")
+        dream_payload = dream_report.get("payload") or {}
+        dream_summary = dream_payload.get("summary") or {}
+        first_progress = dream_summary.get("first_progress_ms") or {}
+        ttft = dream_summary.get("ttft_ms") or {}
+        first_content = dream_summary.get("first_content_ms") or {}
+        progress_interval = dream_summary.get("progress_interval_sec") or {}
+        finalizer_report = self.latest("goal_completion_finalizer_latest.json")
+        finalizer_payload = finalizer_report.get("payload") or {}
+        finalizer_summary = finalizer_payload.get("summary") or {}
+        goal_audit_report = self.latest("goal_completion_audit.json")
+        goal_audit_payload = goal_audit_report.get("payload") or {}
+        goal_audit_summary = goal_audit_payload.get("summary") or {}
+        goal_audit_blockers = goal_audit_summary.get("blockers") or []
+        dream_health_interval = None
+        for item in service_status.get("checks") or []:
+            if item.get("name") == "dream7b_openai_gateway":
+                dream_health_interval = (item.get("payload") or {}).get("progress_interval_sec")
+                break
+        soak_status = {
+            "status": soak_watcher_payload.get("status") or soak_watcher_payload.get("verdict"),
+            "pid": soak_watcher_payload.get("pid"),
+            "pid_running": soak_watcher_payload.get("pid_running"),
+            "elapsed_seconds": soak_process.get("elapsed_seconds"),
+            "target_seconds": soak_process.get("target_seconds"),
+            "remaining_seconds": soak_process.get("remaining_seconds"),
+            "estimated_completion_epoch": soak_process.get("estimated_completion_epoch"),
+            "estimated_completion_at": soak_process.get("estimated_completion_at"),
+            "progress_percent": soak_process.get("progress_percent"),
+            "watcher_started_at": soak_watcher_payload.get("watcher_started_at"),
+            "min_soak_report_mtime_epoch": soak_watcher_payload.get("min_soak_report_mtime_epoch"),
+            "latest_soak_report": soak_watcher_payload.get("latest_soak_report")
+            or latest_soak.get("path"),
+            "latest_soak_meets_precheck": soak_watcher_payload.get("latest_soak_meets_precheck")
+            if "latest_soak_meets_precheck" in soak_watcher_payload
+            else latest_soak.get("meets_precheck"),
+            "latest_soak_fresh_after_min_mtime": latest_soak.get("fresh_after_min_mtime"),
+            "latest_soak_precheck_without_freshness": latest_soak.get("precheck_without_freshness"),
+            "latest_soak_mtime_epoch": latest_soak.get("path_mtime_epoch"),
+            "gate_report": soak_watcher_payload.get("gate_report") or ((soak_watcher_payload.get("summary") or {}).get("latest_gate_report")),
+            "runbook_report": soak_watcher_payload.get("runbook_report") or ((soak_watcher_payload.get("summary") or {}).get("latest_runbook_report")),
+        }
+        soak_gate_verified = (
+            soak_status.get("latest_soak_meets_precheck") is True
+            and bool(soak_status.get("gate_report"))
+            and bool(soak_status.get("runbook_report"))
+        )
+        if soak_status.get("pid_running"):
+            nas_progress_status = "waiting_for_6h_soak"
+            nas_next_evidence = "fresh 21600-second NAS-backed soak report, then watcher final gate/runbook"
+        elif soak_gate_verified:
+            nas_progress_status = "final_gate_verified"
+            nas_next_evidence = "none"
+        else:
+            nas_progress_status = "ready_for_final_gate"
+            nas_next_evidence = "watcher final gate/runbook"
+        finalizer_complete = (finalizer_payload.get("verdict") or finalizer_report.get("verdict")) == "ok_ai_nas_goal_completion_finalizer"
+        goal_progress = {
+            "goal_completion": {
+                "label": "Full goal completion audit",
+                "status": "complete_ready" if goal_audit_report.get("verdict") == "ok_ai_nas_goal_completion_audit" else "waiting_on_evidence",
+                "verdict": goal_audit_report.get("verdict"),
+                "check_count": goal_audit_summary.get("check_count"),
+                "passed_check_count": goal_audit_summary.get("passed_check_count"),
+                "blocker_count": goal_audit_summary.get("blocker_count"),
+                "blockers": goal_audit_blockers,
+                "remaining_gap": "; ".join(goal_audit_blockers[:3]) if goal_audit_blockers else "none",
+            },
+            "goal_finalizer": {
+                "label": "Post-soak finalizer",
+                "status": finalizer_payload.get("status") or ("missing" if not finalizer_report.get("found") else finalizer_report.get("verdict")),
+                "verdict": finalizer_payload.get("verdict") or finalizer_report.get("verdict"),
+                "finalizer_pid": finalizer_payload.get("finalizer_pid") or finalizer_summary.get("finalizer_pid"),
+                "watcher_ready": finalizer_payload.get("watcher_ready") if "watcher_ready" in finalizer_payload else finalizer_summary.get("watcher_ready"),
+                "watcher_verdict": finalizer_payload.get("watcher_verdict"),
+                "audit_returncode": finalizer_summary.get("audit_returncode"),
+                "latest_goal_audit_verdict": finalizer_summary.get("latest_goal_audit_verdict"),
+                "latest_goal_audit_report": finalizer_summary.get("latest_goal_audit_report"),
+                "remaining_gap": "none" if finalizer_complete else "waiting for watcher final gate/runbook, then strict goal audit",
+            },
+            "nas_soak": {
+                "label": "Controlled NAS Personal soak",
+                "status": nas_progress_status,
+                "progress_percent": soak_status.get("progress_percent"),
+                "estimated_completion_at": soak_status.get("estimated_completion_at"),
+                "latest_soak_meets_precheck": soak_status.get("latest_soak_meets_precheck"),
+                "production_gate_verdict": reports.get("production_readiness_gate", {}).get("verdict"),
+                "next_required_evidence": nas_next_evidence,
+            },
+            "operator_portal": {
+                "label": "Operator Portal demo surface",
+                "status": "demo_ready" if reports.get("operator_portal_contract", {}).get("verdict") == "ok_ai_nas_operator_portal_contract" and int(service_status.get("failed_count") or 0) == 0 else "needs_attention",
+                "contract_verdict": reports.get("operator_portal_contract", {}).get("verdict"),
+                "service_ok_count": service_status.get("ok_count"),
+                "service_failed_count": service_status.get("failed_count"),
+                "service_source": service_status.get("source") or "live_local_probe",
+                "operator_decision_count": len(operator_decisions),
+                "latest_decision": (operator_decisions[0] if operator_decisions else {}).get("decision"),
+                "remaining_gap": "none",
+            },
+            "dream7b_interaction": {
+                "label": "Dream7B interaction latency",
+                "status": "interactive_stream_feedback_ready" if dream_report.get("verdict") == "ok_dream7b_perf_identity" and (first_progress.get("p50_ms") or 999999) <= 500 else "needs_attention",
+                "verdict": dream_report.get("verdict"),
+                "ttft_p50_ms": ttft.get("p50_ms"),
+                "first_progress_p50_ms": first_progress.get("p50_ms"),
+                "first_content_p50_ms": first_content.get("p50_ms"),
+                "progress_interval_sec": progress_interval.get("p50") if progress_interval else dream_health_interval,
+                "health_progress_interval_sec": dream_health_interval,
+                "remaining_gap": "backend final content latency still needs model/runtime work",
+            },
+        }
+        return {
+            "tool_id": TOOL_ID,
+            "report_root": str(self.report_root),
+            "evidence_roots": [str(root) for root in self.evidence_roots],
+            "portal_html": str(self.portal_html_path()) if self.portal_html_path() else None,
+            "portal_report_json": str(self.portal_report_path()) if self.portal_report_path() else None,
+            "portal_summary": portal_payload.get("summary") or {},
+            "reports": reports,
+            "service_status": service_status,
+            "soak_watcher_status": soak_status,
+            "goal_progress": goal_progress,
+            "remote_sync": self.last_remote_sync_result,
+            "refresh_on_start": self.refresh_result,
+            "operator_decisions": {
+                "count": len(operator_decisions),
+                "latest": operator_decisions[0] if operator_decisions else None,
+                "items": operator_decisions,
+            },
+            "audit": {
+                "server_executes_actions": bool(self.remote_sync_host),
+                "delete_performed": False,
+                "move_performed": False,
+                "overwrite_performed": False,
+                "copy_performed": bool(self.last_remote_sync_result and self.last_remote_sync_result.get("ok")),
+                "writes": "optional bounded operator_portal_contract report refresh plus optional read-only remote evidence sync",
+            },
+        }
+
+    def service_status(self) -> dict:
+        service_status_json = self.service_status_json
+        if service_status_json is None and self.remote_sync_dir:
+            candidate = self.remote_sync_dir / "service_status" / "services.json"
+            if candidate.exists():
+                service_status_json = candidate
+        if service_status_json:
+            payload = read_json(service_status_json)
+            if isinstance(payload, dict):
+                payload.setdefault("source", "service_status_json")
+                payload.setdefault("source_path", str(service_status_json))
+                return payload
+        checks = [
+            http_health("dream7b_openai_gateway", "http://127.0.0.1:18888/health"),
+            http_health("openclaw_gateway", "http://127.0.0.1:18789/health"),
+        ]
+        is_linux = platform.system().lower() == "linux"
+        if is_linux:
+            systemd_env = None
+            if Path("/run/user/0").exists():
+                systemd_env = {"XDG_RUNTIME_DIR": "/run/user/0"}
+            checks.extend(
+                [
+                    {
+                        "name": "ai_nas_index_daemon",
+                        "kind": "systemd_system",
+                        **run_checked(["systemctl", "is-active", "ai-nas-index-daemon.service"]),
+                    },
+                    {
+                        "name": "dream7b_local_openai_gateway",
+                        "kind": "systemd_user",
+                        **run_checked(["systemctl", "--user", "is-active", "dream7b-local-openai-gateway.service"], env=systemd_env),
+                    },
+                    {
+                        "name": "openclaw_gateway",
+                        "kind": "systemd_user",
+                        **run_checked(["systemctl", "--user", "is-active", "openclaw-gateway.service"], env=systemd_env),
+                    },
+                ]
+            )
+        else:
+            checks.append(
+                {
+                    "name": "systemd_services",
+                    "kind": "systemd",
+                    "ok": None,
+                    "status": "not_applicable",
+                    "platform": platform.system(),
+                    "note": "systemd service checks are available only on the S100P/Linux deployment.",
+                }
+            )
+        return {
+            "generated_at_epoch": time.time(),
+            "ok_count": sum(1 for item in checks if item.get("ok") is True),
+            "failed_count": sum(1 for item in checks if item.get("ok") is False),
+            "unknown_count": sum(1 for item in checks if item.get("ok") is None),
+            "checks": checks,
+        }
+
+
+class PortalHandler(BaseHTTPRequestHandler):
+    server_version = "AINASOperatorPortal/1.0"
+
+    @property
+    def state(self) -> PortalState:
+        return self.server.state  # type: ignore[attr-defined]
+
+    def log_message(self, fmt: str, *args: object) -> None:
+        sys.stderr.write("%s - - [%s] %s\n" % (self.address_string(), self.log_date_time_string(), fmt % args))
+
+    def send_json(self, payload: dict, status: int = HTTPStatus.OK) -> None:
+        raw = json.dumps(payload, ensure_ascii=False, indent=2).encode("utf-8")
+        self.send_response(status)
+        self.send_header("Content-Type", "application/json; charset=utf-8")
+        self.send_header("Cache-Control", "no-store")
+        self.send_header("Content-Length", str(len(raw)))
+        self.end_headers()
+        self.wfile.write(raw)
+
+    def send_text(self, text: str, content_type: str, status: int = HTTPStatus.OK) -> None:
+        raw = text.encode("utf-8")
+        self.send_response(status)
+        self.send_header("Content-Type", content_type)
+        self.send_header("Cache-Control", "no-store")
+        self.send_header("Content-Length", str(len(raw)))
+        self.end_headers()
+        self.wfile.write(raw)
+
+    def send_file_text(self, path: Path, content_type: str) -> None:
+        try:
+            text = path.read_text(encoding="utf-8")
+        except OSError as exc:
+            self.send_json({"ok": False, "error": f"read_failed:{type(exc).__name__}:{exc}", "path": str(path)}, HTTPStatus.NOT_FOUND)
+            return
+        self.send_text(text, content_type)
+
+    def send_portal_html(self, path: Path) -> None:
+        try:
+            text = path.read_text(encoding="utf-8")
+        except OSError as exc:
+            self.send_json({"ok": False, "error": f"read_failed:{type(exc).__name__}:{exc}", "path": str(path)}, HTTPStatus.NOT_FOUND)
+            return
+        self.send_text(inject_runtime_sections(text, self.state.latest_bundle()), "text/html; charset=utf-8")
+
+    def do_GET(self) -> None:
+        route = urlparse(self.path).path.rstrip("/") or "/"
+        if route in {"/", "/operator_portal.html"}:
+            html_path = self.state.portal_html_path()
+            if not html_path:
+                self.send_json({"ok": False, "error": "operator_portal_html_not_found"}, HTTPStatus.NOT_FOUND)
+                return
+            self.send_portal_html(html_path)
+            return
+        if route == "/api/health":
+            contract = self.state.portal_contract()
+            self.send_json(
+                {
+                    "ok": bool(contract.get("found")),
+                    "tool_id": TOOL_ID,
+                    "operator_portal_contract": report_without_payload(contract),
+                    "portal_html": str(self.state.portal_html_path()) if self.state.portal_html_path() else None,
+                    "refresh_on_start": self.state.refresh_result,
+                }
+            )
+            return
+        if route == "/api/latest":
+            self.send_json(self.state.latest_bundle())
+            return
+        if route == "/api/latest.goal_progress":
+            self.send_json({"ok": True, "goal_progress": self.state.latest_bundle().get("goal_progress") or {}})
+            return
+        if route == "/api/latest.operator_decisions":
+            self.send_json({"ok": True, "operator_decisions": self.state.latest_operator_decisions(limit=50)})
+            return
+        if route == "/api/services":
+            self.send_json(self.state.service_status())
+            return
+        if route == "/api/contracts/operator-portal":
+            self.send_json(self.state.portal_contract())
+            return
+        if route == "/api/portal-report":
+            report_path = self.state.portal_report_path()
+            if not report_path:
+                self.send_json({"ok": False, "error": "portal_report_json_not_found"}, HTTPStatus.NOT_FOUND)
+                return
+            payload = read_json(report_path)
+            if payload is None:
+                self.send_json({"ok": False, "error": "portal_report_json_unreadable", "path": str(report_path)}, HTTPStatus.NOT_FOUND)
+                return
+            self.send_json(payload)
+            return
+        if route == "/api/operator-decisions":
+            self.send_json({"ok": True, "operator_decisions": self.state.latest_operator_decisions(limit=50)})
+            return
+        self.send_json(
+            {
+                "ok": False,
+                "error": "not_found",
+                "routes": [
+                    "/",
+                    "/api/health",
+                    "/api/latest",
+                    "/api/latest.goal_progress",
+                    "/api/latest.operator_decisions",
+                    "/api/services",
+                    "/api/portal-report",
+                    "/api/operator-decisions",
+                    "/api/contracts/operator-portal",
+                    "POST /api/refresh",
+                    "POST /api/operator-decision",
+                ],
+            },
+            HTTPStatus.NOT_FOUND,
+        )
+
+    def do_POST(self) -> None:
+        route = urlparse(self.path).path.rstrip("/") or "/"
+        if route == "/api/refresh":
+            result = self.state.refresh()
+            contract = self.state.portal_contract()
+            self.send_json(
+                {
+                    "ok": result.get("returncode") == 0 and bool(contract.get("found")),
+                    "tool_id": TOOL_ID,
+                    "refresh_result": result,
+                    "remote_sync": self.state.last_remote_sync_result,
+                    "operator_portal_contract": report_without_payload(contract),
+                    "portal_html": str(self.state.portal_html_path()) if self.state.portal_html_path() else None,
+                    "portal_report_json": str(self.state.portal_report_path()) if self.state.portal_report_path() else None,
+                    "audit": {
+                        "server_executes_actions": bool(self.state.remote_sync_host),
+                        "remote_read_only_sync": bool(self.state.last_remote_sync_result),
+                        "delete_performed": False,
+                        "move_performed": False,
+                        "overwrite_performed": False,
+                        "copy_performed": bool(self.state.last_remote_sync_result and self.state.last_remote_sync_result.get("ok")),
+                        "writes": "bounded operator_portal_contract report refresh plus optional local evidence snapshot copy",
+                    },
+                },
+                HTTPStatus.OK if result.get("returncode") == 0 else HTTPStatus.INTERNAL_SERVER_ERROR,
+            )
+            return
+        if route == "/api/operator-decision":
+            length = int(self.headers.get("Content-Length", "0") or "0")
+            try:
+                payload = json.loads(self.rfile.read(length).decode("utf-8") or "{}")
+            except json.JSONDecodeError as exc:
+                self.send_json({"ok": False, "error": f"invalid_json:{exc}"}, HTTPStatus.BAD_REQUEST)
+                return
+            status, result = self.state.record_operator_decision(payload)
+            self.send_json(result, status)
+            return
+        self.send_json(
+            {
+                "ok": False,
+                "error": "not_found",
+                "routes": ["POST /api/refresh", "POST /api/operator-decision"],
+            },
+            HTTPStatus.NOT_FOUND,
+        )
+
+
+def parse_args() -> argparse.Namespace:
+    parser = argparse.ArgumentParser(description="Serve the latest AI-NAS operator portal HTML plus small JSON status APIs.")
+    parser.add_argument("--report-root", type=Path, default=DEFAULT_REPORT_ROOT)
+    parser.add_argument("--evidence-root", action="append", type=Path, default=[])
+    parser.add_argument("--bind", default="127.0.0.1")
+    parser.add_argument("--port", type=int, default=8765)
+    parser.add_argument("--service-status-json", type=Path, default=None, help="Serve a captured service status JSON instead of probing this host.")
+    parser.add_argument("--remote-sync-host", default=None, help="Optional SSH host, for example sunrise@192.168.127.10, used to read latest S100P report JSON before refresh.")
+    parser.add_argument("--remote-sync-key", type=Path, default=None, help="Optional SSH private key for --remote-sync-host.")
+    parser.add_argument("--remote-report-root", default="/mnt/nas/openclaw/reports/ai_nas_mvp")
+    parser.add_argument("--remote-sync-dir", type=Path, default=None, help="Local evidence directory populated by read-only remote sync before portal refresh.")
+    parser.add_argument("--no-refresh", action="store_true", help="Serve the latest existing portal report without generating a fresh one on start.")
+    return parser.parse_args()
+
+
+def main() -> int:
+    args = parse_args()
+    evidence_roots = args.evidence_root or default_evidence_roots(args.report_root)
+    state = PortalState(
+        args.report_root,
+        evidence_roots,
+        refresh_on_start=not args.no_refresh,
+        service_status_json=args.service_status_json,
+        remote_sync_host=args.remote_sync_host,
+        remote_sync_key=args.remote_sync_key,
+        remote_report_root=args.remote_report_root,
+        remote_sync_dir=args.remote_sync_dir,
+    )
+    server = ThreadingHTTPServer((args.bind, args.port), PortalHandler)
+    server.state = state  # type: ignore[attr-defined]
+    print(f"http://{args.bind}:{args.port}/", flush=True)
+    try:
+        server.serve_forever()
+    except KeyboardInterrupt:
+        return 130
+    finally:
+        server.server_close()
+    return 0
+
+
+if __name__ == "__main__":
+    raise SystemExit(main())

@@ -1,0 +1,50 @@
+{
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "intent_summary",
+    "suggested_workspace",
+    "risk_tags",
+    "needs_clarification",
+    "clarification_question",
+    "confidence"
+  ],
+  "properties": {
+    "intent_summary": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 240
+    },
+    "suggested_workspace": {
+      "type": "string",
+      "enum": ["nas_search", "document_rag", "uncertain"]
+    },
+    "risk_tags": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "enum": [
+          "readonly",
+          "private_possible",
+          "prompt_injection",
+          "destructive_request",
+          "cloud_sensitive"
+        ]
+      },
+      "uniqueItems": true,
+      "maxItems": 5
+    },
+    "needs_clarification": {
+      "type": "boolean"
+    },
+    "clarification_question": {
+      "type": ["string", "null"],
+      "maxLength": 200
+    },
+    "confidence": {
+      "type": "number",
+      "minimum": 0,
+      "maximum": 1
+    }
+  }
+}

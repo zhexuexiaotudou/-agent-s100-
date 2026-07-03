@@ -1,0 +1,73 @@
+{
+  "full_truth_available": false,
+  "truth_row_type": null,
+  "required_minimum": "full HF BF16/FP32 logits or GGUF F16 logits for zeros, ramp, short_chinese_prompt_padded",
+  "status": "blocked",
+  "primary_blocker": "S100P full HF forward reached model-load stage in v8 isolated modern runtime but produced no logits before the evidence-run timeout; no GGUF F16 artifact/tool was found locally or on NAS during prior inventory.",
+  "v8_remote_attempt": {
+    "schema_version": "dream7b_s100p_v8_hf_full_and_isolated_final",
+    "started_at_unix": 1782903066.8499522,
+    "python": "3.10.12 (main, Aug 15 2025, 14:32:43) [GCC 11.4.0]",
+    "platform": "Linux-6.1.158-rt58-DR-4.0.5-2603031328-g9f678e-g6caa4d-aarch64-with-glibc2.35",
+    "machine": "aarch64",
+    "model_dir": "/mnt/nas/openclaw/models/dream7b-hf",
+    "cases_path": "/mnt/nas/openclaw/reports/models/dream7b_s100p_v7_execution_20260701/cases/seq128_logits_probe_battery.jsonl",
+    "endpoint_root": "/mnt/nas/openclaw/reports/models/dream7b_s100p_v5_execution_20260701/evidence/final_segment_dense_sweep_v5",
+    "requested_case_ids": [
+      "zeros",
+      "ramp",
+      "short_chinese_prompt_padded"
+    ],
+    "requested_variants": [
+      "real_x",
+      "real_x_div_2",
+      "real_x_div_2p25",
+      "real_x_div_2p5",
+      "real_x_div_2p75",
+      "real_x_div_3",
+      "real_x_div_3p25",
+      "real_x_div_3p5",
+      "real_x_div_4",
+      "real_x_clip_8",
+      "real_x_clip_6",
+      "real_x_clip_5",
+      "real_x_clip_4",
+      "real_x_z_normalized"
+    ],
+    "dtype_requested": "bfloat16",
+    "full_forward_requested": true,
+    "isolated_final_requested": true,
+    "full_forward_rows": [],
+    "isolated_final_rows": [],
+    "errors": [
+      {
+        "type": "RuntimeError",
+        "message": "Failed to import transformers.models.auto.modeling_auto because of the following error (look up to see its traceback):\nFailed to import transformers.generation.utils because of the following error (look up to see its traceback):\nmodule 'numpy' has no attribute '_core'"
+      },
+      {
+        "type": "TimeoutStoppedAfterModelLoad",
+        "message": "second attempt loaded model under torch 2.2.2/transformers 4.46.2, then no logits were produced before timeout"
+      }
+    ],
+    "status": "stopped_timeout_after_model_load",
+    "elapsed_total_seconds": 2.994,
+    "runtime_versions_second_attempt": {
+      "torch": "2.2.2",
+      "transformers": "4.46.2",
+      "tokenizers": "0.20.3",
+      "safetensors": "0.8.0",
+      "numpy": "2.2.6"
+    },
+    "modern_runtime_install": "success in isolated pydeps_modern; accelerate installed with --no-deps after CUDA dependency path was rejected",
+    "second_attempt_observation": "checkpoint shards loaded successfully; first BF16 full forward produced no logits within evidence-run budget and process was terminated; no generation was run",
+    "stopped_at_unix": 1782903767.585333
+  },
+  "model_inventory_pointer": {
+    "path": "evidence/model_inventory_v6.json",
+    "exists": true,
+    "size_bytes": 51138,
+    "sha256": "787bbf0b03c0e193e6588c13d709cdbab443266d4b9807db05aed62d22df2c03"
+  },
+  "known_gguf_observation": "NAS inventory previously found dream-7b-q4km.gguf, but no GGUF F16 truth artifact sufficient for v9 truth row.",
+  "next_command": "On S100P, run a longer full-reference job with the isolated modern runtime or provide a GGUF F16 runner/artifact; then place per-case logits under evidence/full_reference_v9/{case}/full_truth_logits.npy."
+}

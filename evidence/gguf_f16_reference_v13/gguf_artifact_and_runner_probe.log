@@ -1,0 +1,34 @@
+## GGUF artifact search
+/mnt/nas/openclaw/models/dream7b/dream-7b-q4km.gguf
+## diffuse
+-rwxrwxr-x 1 sunrise sunrise 19512 Jun  1 04:49 /mnt/nas/openclaw/runtimes/diffuse-cpp/build/diffuse-cli
+Usage: /mnt/nas/openclaw/runtimes/diffuse-cpp/build/diffuse-cli [options]
+
+Options:
+  -m PATH     Model file (GGUF)
+  -p TEXT     Prompt text
+  -n INT      Tokens to generate (default: 128)
+  -s INT      Diffusion steps (default: 32)
+  -t INT      Threads (default: 4)
+  --temp F    Temperature (default: 0 = argmax)
+  --seed INT  Random seed (default: 42)
+  --schedule  cosine|linear (default: cosine)
+  --remasking low_confidence|random|entropy_exit|maskgit_plus|topk_margin (default: low_confidence)
+  --entropy-threshold F  Entropy threshold for entropy_exit (default: 1.5)
+  --cache-refresh INT   Force full forward every N steps (default: 0 = never)
+  --cache-keep-active INT  Keep recently-changed positions active N extra steps (default: 0)
+
+Note: Tokenization is currently external. Use --tokens to pass
+      pre-tokenized input as comma-separated IDs.
+  --tokens IDs  Comma-separated token IDs (bypasses prompt)
+## llama
+/mnt/nas/openclaw/reports/models/dream7b_s100p_v6_execution_20260701/pydeps/transformers/models/llama/convert_llama_weights_to_hf.py
+/mnt/nas/openclaw/reports/models/dream7b_s100p_v6_execution_20260701/pydeps/transformers/models/llama/__pycache__/convert_llama_weights_to_hf.cpython-310.pyc
+/mnt/nas/openclaw/reports/models/dream7b_s100p_v6_execution_20260701/pydeps/transformers/models/mllama/convert_mllama_weights_to_hf.py
+/mnt/nas/openclaw/reports/models/dream7b_s100p_v6_execution_20260701/pydeps/transformers/models/mllama/__pycache__/convert_mllama_weights_to_hf.cpython-310.pyc
+/mnt/nas/openclaw/reports/models/dream7b_s100p_v8_execution_20260701/pydeps_modern/transformers/models/llama/convert_llama_weights_to_hf.py
+/mnt/nas/openclaw/reports/models/dream7b_s100p_v8_execution_20260701/pydeps_modern/transformers/models/llama/__pycache__/convert_llama_weights_to_hf.cpython-310.pyc
+/mnt/nas/openclaw/reports/models/dream7b_s100p_v8_execution_20260701/pydeps_modern/transformers/models/mllama/convert_mllama_weights_to_hf.py
+/mnt/nas/openclaw/reports/models/dream7b_s100p_v8_execution_20260701/pydeps_modern/transformers/models/mllama/__pycache__/convert_mllama_weights_to_hf.cpython-310.pyc
+/mnt/nas/openclaw/runtimes/ai-nas-embedding-py310/transformers/models/llama/__pycache__/convert_llama_weights_to_hf.cpython-310.pyc
+/mnt/nas/openclaw/runtimes/ai-nas-embedding-py310/transformers/models/llama/convert_llama_weights_to_hf.py

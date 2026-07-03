@@ -1,0 +1,101 @@
+{
+  "case_id": "zeros",
+  "variant": "real_x_clip_5",
+  "model_dir": "/mnt/nas/openclaw/models/dream7b-hf",
+  "endpoint_input_path": "/mnt/nas/openclaw/reports/models/dream7b_s100p_v5_execution_20260701/evidence/final_segment_dense_sweep_v5/zeros/real_x_clip_5/input.npy",
+  "last_token_index": 127,
+  "norm_type": "rms_norm",
+  "eps": 1e-06,
+  "norm_tensor": "model.norm.weight",
+  "norm_shape": [
+    3584
+  ],
+  "norm_shard": "model-00003-of-00004.safetensors",
+  "norm_shard_sha256": "eac5afaf9a0e0b4a23c7ac1dbe5f538ccdf9fac5c0db7919fd9625a92c378e48",
+  "lm_tensor": "lm_head.weight",
+  "lm_shape": [
+    152064,
+    3584
+  ],
+  "lm_shard": "model-00004-of-00004.safetensors",
+  "lm_shard_sha256": "398da65f1f599ca8d594a9d7a077a3b7c4eb0ddfdff8e7e004c3d259712b3cb7",
+  "hidden_stats": {
+    "shape": [
+      128,
+      3584
+    ],
+    "dtype": "float32",
+    "size": 458752,
+    "min": -5.0,
+    "max": 5.0,
+    "mean": 0.0023105773143470287,
+    "std": 4.98382043838501,
+    "abs_max": 5.0,
+    "nonzero_count": 458751,
+    "constant": false,
+    "allzero": false,
+    "nan_count": 0,
+    "inf_count": 0
+  },
+  "logits_path": "evidence/hf_lmhead_only_v8/zeros/real_x_clip_5/hf_final_lmhead_logits.npy",
+  "logits_sha256": "0f09559c81529496b713b300da27fee73de72ed5f2a8756b011bf386ecdbc1eb",
+  "logits_stats": {
+    "shape": [
+      152064
+    ],
+    "dtype": "float32",
+    "size": 152064,
+    "min": -8.724385261535645,
+    "max": 11.317747116088867,
+    "mean": 5.185315132141113,
+    "std": 1.6395446062088013,
+    "abs_max": 11.317747116088867,
+    "nonzero_count": 152064,
+    "constant": false,
+    "allzero": false,
+    "nan_count": 0,
+    "inf_count": 0
+  },
+  "top10": [
+    {
+      "token": 75337,
+      "logit": 11.317747116088867
+    },
+    {
+      "token": 82733,
+      "logit": 11.03991985321045
+    },
+    {
+      "token": 94222,
+      "logit": 10.876030921936035
+    },
+    {
+      "token": 86611,
+      "logit": 10.748908042907715
+    },
+    {
+      "token": 76842,
+      "logit": 10.57896614074707
+    },
+    {
+      "token": 71851,
+      "logit": 10.515205383300781
+    },
+    {
+      "token": 95814,
+      "logit": 10.372740745544434
+    },
+    {
+      "token": 81835,
+      "logit": 10.370779037475586
+    },
+    {
+      "token": 21188,
+      "logit": 10.2381591796875
+    },
+    {
+      "token": 94697,
+      "logit": 10.236169815063477
+    }
+  ]
+}

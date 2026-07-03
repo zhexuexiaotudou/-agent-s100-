@@ -1,0 +1,1998 @@
+{
+  "case_dir": "evidence/boundary_all_segments_v7/zeros",
+  "case_id": "zeros",
+  "errors": [],
+  "saved_segments": [
+    0,
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9,
+    10,
+    11,
+    12,
+    13,
+    14,
+    15,
+    16,
+    17,
+    18,
+    19,
+    20,
+    21,
+    22,
+    23,
+    24,
+    25,
+    26,
+    27
+  ],
+  "segments": [
+    {
+      "dequant_output": "evidence/boundary_all_segments_v7/zeros/seg_00_output.npy",
+      "dequant_stats": {
+        "abs_max": 0.5522932410240173,
+        "allzero": false,
+        "constant": false,
+        "dtype": "float32",
+        "inf_count": 0,
+        "max": 0.5447757840156555,
+        "mean": -0.00010915865939629756,
+        "min": -0.5522932410240173,
+        "nan_count": 0,
+        "nonzero_count": 458449,
+        "p0": -0.5522932410240173,
+        "p1": -0.12482675909996033,
+        "p100": 0.5447757840156555,
+        "p5": -0.07687243074178696,
+        "p50": 0.0,
+        "p95": 0.0763874277472496,
+        "p99": 0.12512989342212677,
+        "shape": [
+          128,
+          3584
+        ],
+        "size": 458752,
+        "std": 0.053122839217348984
+      },
+      "hbm_path": "/mnt/nas/openclaw/models/dream7b-hbm/seq128-b1-lmheadq16-lasttoken/seg00_01/dream7b_segment_0_1_seq128_q8.hbm",
+      "load_ms": 7405.898,
+      "model_name": "dream_segment_00_01",
+      "quant_metadata": {
+        "available": true,
+        "repr": "<hbm_runtime.HB_HBMRuntime.QuantParams object at 0xffff80bd5f30>",
+        "scale": [
+          6.062494503566995e-05
+        ],
+        "scale_first": 6.062494503566995e-05,
+        "zero_point": [
+          0.0
+        ]
+      },
+      "raw_output": "evidence/boundary_all_segments_v7/zeros/seg_00_raw_output.npy",
+      "raw_stats": {
+        "abs_max": 9110.0,
+        "allzero": false,
+        "constant": false,
+        "dtype": "int16",
+        "inf_count": 0,
+        "max": 8986.0,
+        "mean": -1.8005567278180803,
+        "min": -9110.0,
+        "nan_count": 0,
+        "nonzero_count": 458449,
+        "p0": -9110.0,
+        "p1": -2059.0,
+        "p100": 8986.0,
+        "p5": -1268.0,
+        "p50": 0.0,
+        "p95": 1260.0,
+        "p99": 2064.0,
+        "shape": [
+          128,
+          3584
+        ],
+        "size": 458752,
+        "std": 876.2538121788294
+      },
+      "run_ms": 15.045,
+      "segment": 0
+    },
+    {
+      "dequant_output": "evidence/boundary_all_segments_v7/zeros/seg_01_output.npy",
+      "dequant_stats": {
+        "abs_max": 0.6892396211624146,
+        "allzero": false,
+        "constant": false,
+        "dtype": "float32",
+        "inf_count": 0,
+        "max": 0.6892396211624146,
+        "mean": -0.0011539311748516618,
+        "min": -0.6892396211624146,
+        "nan_count": 0,
+        "nonzero_count": 458635,
+        "p0": -0.6892396211624146,
+        "p1": -0.20171867311000824,
+        "p100": 0.6892396211624146,
+        "p5": -0.12314353138208389,
+        "p50": -0.0004552441241685301,
+        "p95": 0.11918290704488754,
+        "p99": 0.20854732394218445,
+        "shape": [
+          128,
+          3584
+        ],
+        "size": 458752,
+        "std": 0.08624353643775623
+      },
+      "hbm_path": "/mnt/nas/openclaw/models/dream7b-hbm/seq128-b1-lmheadq16-lasttoken/seg01_02/dream7b_segment_1_2_seq128_q8.hbm",
+      "load_ms": 1991.475,
+      "model_name": "dream_segment_01_02",
+      "quant_metadata": {
+        "available": true,
+        "repr": "<hbm_runtime.HB_HBMRuntime.QuantParams object at 0xffff80bd5ff0>",
+        "scale": [
+          4.552441168925725e-05
+        ],
+        "scale_first": 4.552441168925725e-05,
+        "zero_point": [
+          0.0
+        ]
+      },
+      "raw_output": "evidence/boundary_all_segments_v7/zeros/seg_01_raw_output.npy",
+      "raw_stats": {
+        "abs_max": 15140.0,
+        "allzero": false,
+        "constant": false,
+        "dtype": "int16",
+        "inf_count": 0,
+        "max": 15140.0,
+        "mean": -25.347525460379465,
+        "min": -15140.0,
+        "nan_count": 0,
+        "nonzero_count": 458635,
+        "p0": -15140.0,
+        "p1": -4431.0,
+        "p100": 15140.0,
+        "p5": -2705.0,
+        "p50": -10.0,
+        "p95": 2618.0,
+        "p99": 4581.0,
+        "shape": [
+          128,
+          3584
+        ],
+        "size": 458752,
+        "std": 1894.4459224989862
+      },
+      "run_ms": 9.364,
+      "segment": 1
+    },
+    {
+      "dequant_output": "evidence/boundary_all_segments_v7/zeros/seg_02_output.npy",
+      "dequant_stats": {
+        "abs_max": 0.4555218517780304,
+        "allzero": false,
+        "constant": false,
+        "dtype": "float32",
+        "inf_count": 0,
+        "max": 0.4555218517780304,
+        "mean": -0.002084604244273639,
+        "min": -0.4555218517780304,
+        "nan_count": 0,
+        "nonzero_count": 453959,
+        "p0": -0.4555218517780304,
+        "p1": -0.2506970465183258,
+        "p100": 0.4555218517780304,
+        "p5": -0.13014909625053406,
+        "p50": -0.0021335917990654707,
+        "p95": 0.13228268921375275,
+        "p99": 0.2336283028125763,
+        "shape": [
+          128,
+          3584
+        ],
+        "size": 458752,
+        "std": 0.09001476449406712
+      },
+      "hbm_path": "/mnt/nas/openclaw/models/dream7b-hbm/seq128-b1-lmheadq16-lasttoken/seg02_03/dream7b_segment_2_3_seq128_q8.hbm",
+      "load_ms": 2044.301,
+      "model_name": "dream_segment_02_03",
+      "quant_metadata": {
+        "available": true,
+        "repr": "<hbm_runtime.HB_HBMRuntime.QuantParams object at 0xffff80bd6870>",
+        "scale": [
+          0.0010667958995327353
+        ],
+        "scale_first": 0.0010667958995327353,
+        "zero_point": [
+          0.0
+        ]
+      },
+      "raw_output": "evidence/boundary_all_segments_v7/zeros/seg_02_raw_output.npy",
+      "raw_stats": {
+        "abs_max": 427.0,
+        "allzero": false,
+        "constant": false,
+        "dtype": "int16",
+        "inf_count": 0,
+        "max": 427.0,
+        "mean": -1.9540797642299108,
+        "min": -427.0,
+        "nan_count": 0,
+        "nonzero_count": 453959,
+        "p0": -427.0,
+        "p1": -235.0,
+        "p100": 427.0,
+        "p5": -122.0,
+        "p50": -2.0,
+        "p95": 124.0,
+        "p99": 219.0,
+        "shape": [
+          128,
+          3584
+        ],
+        "size": 458752,
+        "std": 84.37861876649227
+      },
+      "run_ms": 9.321,
+      "segment": 2
+    },
+    {
+      "dequant_output": "evidence/boundary_all_segments_v7/zeros/seg_03_output.npy",
+      "dequant_stats": {
+        "abs_max": 0.6256224513053894,
+        "allzero": false,
+        "constant": false,
+        "dtype": "float32",
+        "inf_count": 0,
+        "max": 0.6256224513053894,
+        "mean": -0.0010816100995206007,
+        "min": -0.6256224513053894,
+        "nan_count": 0,
+        "nonzero_count": 423246,
+        "p0": -0.6256224513053894,
+        "p1": -0.3849984407424927,
+        "p100": 0.6256224513053894,
+        "p5": -0.21656161546707153,
+        "p50": 0.0,
+        "p95": 0.21656161546707153,
+        "p99": 0.3368736505508423,
+        "shape": [
+          128,
+          3584
+        ],
+        "size": 458752,
+        "std": 0.13972686560637754
+      },
+      "hbm_path": "/mnt/nas/openclaw/models/dream7b-hbm/seq128-b1-lmheadq16-lasttoken/seg03_04/dream7b_segment_3_4_seq128_q8.hbm",
+      "load_ms": 2009.604,
+      "model_name": "dream_segment_03_04",
+      "quant_metadata": {
+        "available": true,
+        "repr": "<hbm_runtime.HB_HBMRuntime.QuantParams object at 0xffff80bd6eb0>",
+        "scale": [
+          0.012031201273202896
+        ],
+        "scale_first": 0.012031201273202896,
+        "zero_point": [
+          0.0
+        ]
+      },
+      "raw_output": "evidence/boundary_all_segments_v7/zeros/seg_03_raw_output.npy",
+      "raw_stats": {
+        "abs_max": 52.0,
+        "allzero": false,
+        "constant": false,
+        "dtype": "int16",
+        "inf_count": 0,
+        "max": 52.0,
+        "mean": -0.08990042550223214,
+        "min": -52.0,
+        "nan_count": 0,
+        "nonzero_count": 423246,
+        "p0": -52.0,
+        "p1": -32.0,
+        "p100": 52.0,
+        "p5": -18.0,
+        "p50": 0.0,
+        "p95": 18.0,
+        "p99": 28.0,
+        "shape": [
+          128,
+          3584
+        ],
+        "size": 458752,
+        "std": 11.613708574612023
+      },
+      "run_ms": 9.331,
+      "segment": 3
+    },
+    {
+      "dequant_output": "evidence/boundary_all_segments_v7/zeros/seg_04_output.npy",
+      "dequant_stats": {
+        "abs_max": 0.439382404088974,
+        "allzero": false,
+        "constant": false,
+        "dtype": "float32",
+        "inf_count": 0,
+        "max": 0.439382404088974,
+        "mean": -0.0011736272158517278,
+        "min": -0.439382404088974,
+        "nan_count": 0,
+        "nonzero_count": 452847,
+        "p0": -0.439382404088974,
+        "p1": -0.39986124634742737,
+        "p100": 0.439382404088974,
+        "p5": -0.22317835688591003,
+        "p50": 0.0,
+        "p95": 0.21852882206439972,
+        "p99": 0.35569050908088684,
+        "shape": [
+          128,
+          3584
+        ],
+        "size": 458752,
+        "std": 0.1385614932019414
+      },
+      "hbm_path": "/mnt/nas/openclaw/models/dream7b-hbm/seq128-b1-lmheadq16-lasttoken/seg04_05/dream7b_segment_4_5_seq128_q8.hbm",
+      "load_ms": 2040.505,
+      "model_name": "dream_segment_04_05",
+      "quant_metadata": {
+        "available": true,
+        "repr": "<hbm_runtime.HB_HBMRuntime.QuantParams object at 0xffff80bd77b0>",
+        "scale": [
+          0.0023247746285051107
+        ],
+        "scale_first": 0.0023247746285051107,
+        "zero_point": [
+          0.0
+        ]
+      },
+      "raw_output": "evidence/boundary_all_segments_v7/zeros/seg_04_raw_output.npy",
+      "raw_stats": {
+        "abs_max": 189.0,
+        "allzero": false,
+        "constant": false,
+        "dtype": "int16",
+        "inf_count": 0,
+        "max": 189.0,
+        "mean": -0.5048348563058036,
+        "min": -189.0,
+        "nan_count": 0,
+        "nonzero_count": 452847,
+        "p0": -189.0,
+        "p1": -172.0,
+        "p100": 189.0,
+        "p5": -96.0,
+        "p50": 0.0,
+        "p95": 94.0,
+        "p99": 153.0,
+        "shape": [
+          128,
+          3584
+        ],
+        "size": 458752,
+        "std": 59.60211847178102
+      },
+      "run_ms": 9.62,
+      "segment": 4
+    },
+    {
+      "dequant_output": "evidence/boundary_all_segments_v7/zeros/seg_05_output.npy",
+      "dequant_stats": {
+        "abs_max": 1.3154081106185913,
+        "allzero": false,
+        "constant": false,
+        "dtype": "float32",
+        "inf_count": 0,
+        "max": 0.7408249378204346,
+        "mean": -0.001754241732847106,
+        "min": -1.3154081106185913,
+        "nan_count": 0,
+        "nonzero_count": 456001,
+        "p0": -1.3154081106185913,
+        "p1": -0.4373933970928192,
+        "p100": 0.7408249378204346,
+        "p5": -0.2517836391925812,
+        "p50": 0.003227995475754142,
+        "p95": 0.24694165587425232,
+        "p99": 0.416411429643631,
+        "shape": [
+          128,
+          3584
+        ],
+        "size": 458752,
+        "std": 0.16055762230924905
+      },
+      "hbm_path": "/mnt/nas/openclaw/models/dream7b-hbm/seq128-b1-lmheadq16-lasttoken/seg05_06/dream7b_segment_5_6_seq128_q8.hbm",
+      "load_ms": 2058.817,
+      "model_name": "dream_segment_05_06",
+      "quant_metadata": {
+        "available": true,
+        "repr": "<hbm_runtime.HB_HBMRuntime.QuantParams object at 0xffff80bd7e30>",
+        "scale": [
+          0.001613997737877071
+        ],
+        "scale_first": 0.001613997737877071,
+        "zero_point": [
+          0.0
+        ]
+      },
+      "raw_output": "evidence/boundary_all_segments_v7/zeros/seg_05_raw_output.npy",
+      "raw_stats": {
+        "abs_max": 815.0,
+        "allzero": false,
+        "constant": false,
+        "dtype": "int16",
+        "inf_count": 0,
+        "max": 459.0,
+        "mean": -1.0868922642299108,
+        "min": -815.0,
+        "nan_count": 0,
+        "nonzero_count": 456001,
+        "p0": -815.0,
+        "p1": -271.0,
+        "p100": 459.0,
+        "p5": -156.0,
+        "p50": 2.0,
+        "p95": 153.0,
+        "p99": 258.0,
+        "shape": [
+          128,
+          3584
+        ],
+        "size": 458752,
+        "std": 99.47822051249803
+      },
+      "run_ms": 9.649,
+      "segment": 5
+    },
+    {
+      "dequant_output": "evidence/boundary_all_segments_v7/zeros/seg_06_output.npy",
+      "dequant_stats": {
+        "abs_max": 0.6393386125564575,
+        "allzero": false,
+        "constant": false,
+        "dtype": "float32",
+        "inf_count": 0,
+        "max": 0.6393386125564575,
+        "mean": -0.0014877583186930618,
+        "min": -0.6393386125564575,
+        "nan_count": 0,
+        "nonzero_count": 458292,
+        "p0": -0.6393386125564575,
+        "p1": -0.45688119530677795,
+        "p100": 0.6393386125564575,
+        "p5": -0.27663689851760864,
+        "p50": 0.0004917989135719836,
+        "p95": 0.26434192061424255,
+        "p99": 0.43548792600631714,
+        "shape": [
+          128,
+          3584
+        ],
+        "size": 458752,
+        "std": 0.16899582270965527
+      },
+      "hbm_path": "/mnt/nas/openclaw/models/dream7b-hbm/seq128-b1-lmheadq16-lasttoken/seg06_07/dream7b_segment_6_7_seq128_q8.hbm",
+      "load_ms": 2097.716,
+      "model_name": "dream_segment_06_07",
+      "quant_metadata": {
+        "available": true,
+        "repr": "<hbm_runtime.HB_HBMRuntime.QuantParams object at 0xffff80be84f0>",
+        "scale": [
+          0.0002458994567859918
+        ],
+        "scale_first": 0.0002458994567859918,
+        "zero_point": [
+          0.0
+        ]
+      },
+      "raw_output": "evidence/boundary_all_segments_v7/zeros/seg_06_raw_output.npy",
+      "raw_stats": {
+        "abs_max": 2600.0,
+        "allzero": false,
+        "constant": false,
+        "dtype": "int16",
+        "inf_count": 0,
+        "max": 2600.0,
+        "mean": -6.050271170479911,
+        "min": -2600.0,
+        "nan_count": 0,
+        "nonzero_count": 458292,
+        "p0": -2600.0,
+        "p1": -1858.0,
+        "p100": 2600.0,
+        "p5": -1125.0,
+        "p50": 2.0,
+        "p95": 1075.0,
+        "p99": 1771.0,
+        "shape": [
+          128,
+          3584
+        ],
+        "size": 458752,
+        "std": 687.2557777822781
+      },
+      "run_ms": 9.68,
+      "segment": 6
+    },
+    {
+      "dequant_output": "evidence/boundary_all_segments_v7/zeros/seg_07_output.npy",
+      "dequant_stats": {
+        "abs_max": 1.362729787826538,
+        "allzero": false,
+        "constant": false,
+        "dtype": "float32",
+        "inf_count": 0,
+        "max": 0.8632082343101501,
+        "mean": -0.0030028834715754016,
+        "min": -1.362729787826538,
+        "nan_count": 0,
+        "nonzero_count": 458379,
+        "p0": -1.362729787826538,
+        "p1": -0.47907325625419617,
+        "p100": 0.8632082343101501,
+        "p5": -0.29357844591140747,
+        "p50": 0.0003651473089121282,
+        "p95": 0.2716695964336395,
+        "p99": 0.48162931203842163,
+        "shape": [
+          128,
+          3584
+        ],
+        "size": 458752,
+        "std": 0.18284816379819216
+      },
+      "hbm_path": "/mnt/nas/openclaw/models/dream7b-hbm/seq128-b1-lmheadq16-lasttoken/seg07_08/dream7b_segment_7_8_seq128_q8.hbm",
+      "load_ms": 2178.801,
+      "model_name": "dream_segment_07_08",
+      "quant_metadata": {
+        "available": true,
+        "repr": "<hbm_runtime.HB_HBMRuntime.QuantParams object at 0xffff80be8b70>",
+        "scale": [
+          0.0003651473089121282
+        ],
+        "scale_first": 0.0003651473089121282,
+        "zero_point": [
+          0.0
+        ]
+      },
+      "raw_output": "evidence/boundary_all_segments_v7/zeros/seg_07_raw_output.npy",
+      "raw_stats": {
+        "abs_max": 3732.0,
+        "allzero": false,
+        "constant": false,
+        "dtype": "int16",
+        "inf_count": 0,
+        "max": 2364.0,
+        "mean": -8.223759242466517,
+        "min": -3732.0,
+        "nan_count": 0,
+        "nonzero_count": 458379,
+        "p0": -3732.0,
+        "p1": -1312.0,
+        "p100": 2364.0,
+        "p5": -804.0,
+        "p50": 1.0,
+        "p95": 744.0,
+        "p99": 1319.0,
+        "shape": [
+          128,
+          3584
+        ],
+        "size": 458752,
+        "std": 500.75177689673916
+      },
+      "run_ms": 9.382,
+      "segment": 7
+    },
+    {
+      "dequant_output": "evidence/boundary_all_segments_v7/zeros/seg_08_output.npy",
+      "dequant_stats": {
+        "abs_max": 0.5301597714424133,
+        "allzero": false,
+        "constant": false,
+        "dtype": "float32",
+        "inf_count": 0,
+        "max": 0.5301597714424133,
+        "mean": -0.0033368979732476384,
+        "min": -0.5301597714424133,
+        "nan_count": 0,
+        "nonzero_count": 458150,
+        "p0": -0.5301597714424133,
+        "p1": -0.5058786869049072,
+        "p100": 0.5301597714424133,
+        "p5": -0.3077394962310791,
+        "p50": 0.000536598963662982,
+        "p95": 0.28077539801597595,
+        "p99": 0.4919270873069763,
+        "shape": [
+          128,
+          3584
+        ],
+        "size": 458752,
+        "std": 0.17973417427098784
+      },
+      "hbm_path": "/mnt/nas/openclaw/models/dream7b-hbm/seq128-b1-lmheadq16-lasttoken/seg08_09/dream7b_segment_8_9_seq128_q8.hbm",
+      "load_ms": 1999.623,
+      "model_name": "dream_segment_08_09",
+      "quant_metadata": {
+        "available": true,
+        "repr": "<hbm_runtime.HB_HBMRuntime.QuantParams object at 0xffff80be91b0>",
+        "scale": [
+          0.0001341497409157455
+        ],
+        "scale_first": 0.0001341497409157455,
+        "zero_point": [
+          0.0
+        ]
+      },
+      "raw_output": "evidence/boundary_all_segments_v7/zeros/seg_08_raw_output.npy",
+      "raw_stats": {
+        "abs_max": 3952.0,
+        "allzero": false,
+        "constant": false,
+        "dtype": "int16",
+        "inf_count": 0,
+        "max": 3952.0,
+        "mean": -24.874426705496653,
+        "min": -3952.0,
+        "nan_count": 0,
+        "nonzero_count": 458150,
+        "p0": -3952.0,
+        "p1": -3771.0,
+        "p100": 3952.0,
+        "p5": -2294.0,
+        "p50": 4.0,
+        "p95": 2093.0,
+        "p99": 3667.0,
+        "shape": [
+          128,
+          3584
+        ],
+        "size": 458752,
+        "std": 1339.8026209303043
+      },
+      "run_ms": 9.663,
+      "segment": 8
+    },
+    {
+      "dequant_output": "evidence/boundary_all_segments_v7/zeros/seg_09_output.npy",
+      "dequant_stats": {
+        "abs_max": 1.341048002243042,
+        "allzero": false,
+        "constant": false,
+        "dtype": "float32",
+        "inf_count": 0,
+        "max": 0.8692174553871155,
+        "mean": -0.004078371640908486,
+        "min": -1.341048002243042,
+        "nan_count": 0,
+        "nonzero_count": 458677,
+        "p0": -1.341048002243042,
+        "p1": -0.5188539624214172,
+        "p100": 0.8692174553871155,
+        "p5": -0.3109297245740889,
+        "p50": -0.0008185107726603746,
+        "p95": 0.2872563600540161,
+        "p99": 0.4859498143196106,
+        "shape": [
+          128,
+          3584
+        ],
+        "size": 458752,
+        "std": 0.18930217248663656
+      },
+      "hbm_path": "/mnt/nas/openclaw/models/dream7b-hbm/seq128-b1-lmheadq16-lasttoken/seg09_10/dream7b_segment_9_10_seq128_q8.hbm",
+      "load_ms": 1979.76,
+      "model_name": "dream_segment_09_10",
+      "quant_metadata": {
+        "available": true,
+        "repr": "<hbm_runtime.HB_HBMRuntime.QuantParams object at 0xffff80be9530>",
+        "scale": [
+          4.092553717782721e-05
+        ],
+        "scale_first": 4.092553717782721e-05,
+        "zero_point": [
+          0.0
+        ]
+      },
+      "raw_output": "evidence/boundary_all_segments_v7/zeros/seg_09_raw_output.npy",
+      "raw_stats": {
+        "abs_max": 32768.0,
+        "allzero": false,
+        "constant": false,
+        "dtype": "int16",
+        "inf_count": 0,
+        "max": 21239.0,
+        "mean": -99.6534663609096,
+        "min": -32768.0,
+        "nan_count": 0,
+        "nonzero_count": 458677,
+        "p0": -32768.0,
+        "p1": -12678.0,
+        "p100": 21239.0,
+        "p5": -7597.449999999997,
+        "p50": -20.0,
+        "p95": 7019.0,
+        "p99": 11874.0,
+        "shape": [
+          128,
+          3584
+        ],
+        "size": 458752,
+        "std": 4625.526884457536
+      },
+      "run_ms": 9.334,
+      "segment": 9
+    },
+    {
+      "dequant_output": "evidence/boundary_all_segments_v7/zeros/seg_10_output.npy",
+      "dequant_stats": {
+        "abs_max": 1.0131471157073975,
+        "allzero": false,
+        "constant": false,
+        "dtype": "float32",
+        "inf_count": 0,
+        "max": 1.0131471157073975,
+        "mean": -0.003793256152373914,
+        "min": -1.0131471157073975,
+        "nan_count": 0,
+        "nonzero_count": 457948,
+        "p0": -1.0131471157073975,
+        "p1": -0.6152084469795227,
+        "p100": 1.0131471157073975,
+        "p5": -0.33797526359558105,
+        "p50": 0.0007787448703311384,
+        "p95": 0.32629409432411194,
+        "p99": 0.5459001660346985,
+        "shape": [
+          128,
+          3584
+        ],
+        "size": 458752,
+        "std": 0.22019011757429385
+      },
+      "hbm_path": "/mnt/nas/openclaw/models/dream7b-hbm/seq128-b1-lmheadq16-lasttoken/seg10_11/dream7b_segment_10_11_seq128_q8.hbm",
+      "load_ms": 2007.018,
+      "model_name": "dream_segment_10_11",
+      "quant_metadata": {
+        "available": true,
+        "repr": "<hbm_runtime.HB_HBMRuntime.QuantParams object at 0xffff80be9d70>",
+        "scale": [
+          0.0007787448703311384
+        ],
+        "scale_first": 0.0007787448703311384,
+        "zero_point": [
+          0.0
+        ]
+      },
+      "raw_output": "evidence/boundary_all_segments_v7/zeros/seg_10_raw_output.npy",
+      "raw_stats": {
+        "abs_max": 1301.0,
+        "allzero": false,
+        "constant": false,
+        "dtype": "int16",
+        "inf_count": 0,
+        "max": 1301.0,
+        "mean": -4.8709869384765625,
+        "min": -1301.0,
+        "nan_count": 0,
+        "nonzero_count": 457948,
+        "p0": -1301.0,
+        "p1": -790.0,
+        "p100": 1301.0,
+        "p5": -434.0,
+        "p50": 1.0,
+        "p95": 419.0,
+        "p99": 701.0,
+        "shape": [
+          128,
+          3584
+        ],
+        "size": 458752,
+        "std": 282.7500063963251
+      },
+      "run_ms": 9.294,
+      "segment": 10
+    },
+    {
+      "dequant_output": "evidence/boundary_all_segments_v7/zeros/seg_11_output.npy",
+      "dequant_stats": {
+        "abs_max": 79.6661148071289,
+        "allzero": false,
+        "constant": false,
+        "dtype": "float32",
+        "inf_count": 0,
+        "max": 79.6661148071289,
+        "mean": 0.011648517591891863,
+        "min": -25.320064544677734,
+        "nan_count": 0,
+        "nonzero_count": 458573,
+        "p0": -25.320064544677734,
+        "p1": -12.087068910598754,
+        "p100": 79.6661148071289,
+        "p5": -8.505474090576172,
+        "p50": 0.06959476321935654,
+        "p95": 8.42593765258789,
+        "p99": 12.917284965515137,
+        "shape": [
+          128,
+          3584
+        ],
+        "size": 458752,
+        "std": 5.5155477874606325
+      },
+      "hbm_path": "/mnt/nas/openclaw/models/dream7b-hbm/seq128-b1-lmheadq16-lasttoken/seg11_12/dream7b_segment_11_12_seq128_q8.hbm",
+      "load_ms": 2015.032,
+      "model_name": "dream_segment_11_12",
+      "quant_metadata": {
+        "available": true,
+        "repr": "<hbm_runtime.HB_HBMRuntime.QuantParams object at 0xffff80bea2f0>",
+        "scale": [
+          0.002485527191311121
+        ],
+        "scale_first": 0.002485527191311121,
+        "zero_point": [
+          0.0
+        ]
+      },
+      "raw_output": "evidence/boundary_all_segments_v7/zeros/seg_11_raw_output.npy",
+      "raw_stats": {
+        "abs_max": 32052.0,
+        "allzero": false,
+        "constant": false,
+        "dtype": "int16",
+        "inf_count": 0,
+        "max": 32052.0,
+        "mean": 4.6865386962890625,
+        "min": -10187.0,
+        "nan_count": 0,
+        "nonzero_count": 458573,
+        "p0": -10187.0,
+        "p1": -4862.98,
+        "p100": 32052.0,
+        "p5": -3422.0,
+        "p50": 28.0,
+        "p95": 3390.0,
+        "p99": 5197.0,
+        "shape": [
+          128,
+          3584
+        ],
+        "size": 458752,
+        "std": 2219.065568174145
+      },
+      "run_ms": 9.589,
+      "segment": 11
+    },
+    {
+      "dequant_output": "evidence/boundary_all_segments_v7/zeros/seg_12_output.npy",
+      "dequant_stats": {
+        "abs_max": 34.12774658203125,
+        "allzero": false,
+        "constant": false,
+        "dtype": "float32",
+        "inf_count": 0,
+        "max": 34.126705169677734,
+        "mean": 0.38828288951915674,
+        "min": -34.12774658203125,
+        "nan_count": 0,
+        "nonzero_count": 458730,
+        "p0": -34.12774658203125,
+        "p1": -34.12774658203125,
+        "p100": 34.126705169677734,
+        "p5": -30.66164779663086,
+        "p50": 0.44159436225891113,
+        "p95": 31.510467529296875,
+        "p99": 34.126705169677734,
+        "shape": [
+          128,
+          3584
+        ],
+        "size": 458752,
+        "std": 17.759449762220346
+      },
+      "hbm_path": "/mnt/nas/openclaw/models/dream7b-hbm/seq128-b1-lmheadq16-lasttoken/seg12_13/dream7b_segment_12_13_seq128_q8.hbm",
+      "load_ms": 1982.064,
+      "model_name": "dream_segment_12_13",
+      "quant_metadata": {
+        "available": true,
+        "repr": "<hbm_runtime.HB_HBMRuntime.QuantParams object at 0xffff80bea870>",
+        "scale": [
+          0.0010414961725473404
+        ],
+        "scale_first": 0.0010414961725473404,
+        "zero_point": [
+          0.0
+        ]
+      },
+      "raw_output": "evidence/boundary_all_segments_v7/zeros/seg_12_raw_output.npy",
+      "raw_stats": {
+        "abs_max": 32768.0,
+        "allzero": false,
+        "constant": false,
+        "dtype": "int16",
+        "inf_count": 0,
+        "max": 32767.0,
+        "mean": 372.8125893729074,
+        "min": -32768.0,
+        "nan_count": 0,
+        "nonzero_count": 458730,
+        "p0": -32768.0,
+        "p1": -32768.0,
+        "p100": 32767.0,
+        "p5": -29440.0,
+        "p50": 424.0,
+        "p95": 30255.0,
+        "p99": 32767.0,
+        "shape": [
+          128,
+          3584
+        ],
+        "size": 458752,
+        "std": 17051.86275412247
+      },
+      "run_ms": 9.6,
+      "segment": 12
+    },
+    {
+      "dequant_output": "evidence/boundary_all_segments_v7/zeros/seg_13_output.npy",
+      "dequant_stats": {
+        "abs_max": 5.40559720993042,
+        "allzero": false,
+        "constant": false,
+        "dtype": "float32",
+        "inf_count": 0,
+        "max": 5.405432224273682,
+        "mean": -0.019693695359273455,
+        "min": -5.40559720993042,
+        "nan_count": 0,
+        "nonzero_count": 458741,
+        "p0": -5.40559720993042,
+        "p1": -5.40559720993042,
+        "p100": 5.405432224273682,
+        "p5": -5.40559720993042,
+        "p50": -0.05443869158625603,
+        "p95": 5.405432224273682,
+        "p99": 5.405432224273682,
+        "shape": [
+          128,
+          3584
+        ],
+        "size": 458752,
+        "std": 3.764753263736988
+      },
+      "hbm_path": "/mnt/nas/openclaw/models/dream7b-hbm/seq128-b1-lmheadq16-lasttoken/seg13_14/dream7b_segment_13_14_seq128_q8.hbm",
+      "load_ms": 1994.055,
+      "model_name": "dream_segment_13_14",
+      "quant_metadata": {
+        "available": true,
+        "repr": "<hbm_runtime.HB_HBMRuntime.QuantParams object at 0xffff80bead70>",
+        "scale": [
+          0.00016496573516633362
+        ],
+        "scale_first": 0.00016496573516633362,
+        "zero_point": [
+          0.0
+        ]
+      },
+      "raw_output": "evidence/boundary_all_segments_v7/zeros/seg_13_raw_output.npy",
+      "raw_stats": {
+        "abs_max": 32768.0,
+        "allzero": false,
+        "constant": false,
+        "dtype": "int16",
+        "inf_count": 0,
+        "max": 32767.0,
+        "mean": -119.3804953438895,
+        "min": -32768.0,
+        "nan_count": 0,
+        "nonzero_count": 458741,
+        "p0": -32768.0,
+        "p1": -32768.0,
+        "p100": 32767.0,
+        "p5": -32768.0,
+        "p50": -330.0,
+        "p95": 32767.0,
+        "p99": 32767.0,
+        "shape": [
+          128,
+          3584
+        ],
+        "size": 458752,
+        "std": 22821.42575534393
+      },
+      "run_ms": 9.654,
+      "segment": 13
+    },
+    {
+      "dequant_output": "evidence/boundary_all_segments_v7/zeros/seg_14_output.npy",
+      "dequant_stats": {
+        "abs_max": 0.23441752791404724,
+        "allzero": false,
+        "constant": false,
+        "dtype": "float32",
+        "inf_count": 0,
+        "max": 0.23441752791404724,
+        "mean": -0.0017484805742081935,
+        "min": -0.23441752791404724,
+        "nan_count": 0,
+        "nonzero_count": 458715,
+        "p0": -0.23441752791404724,
+        "p1": -0.23441752791404724,
+        "p100": 0.23441752791404724,
+        "p5": -0.23441752791404724,
+        "p50": -0.05404800921678543,
+        "p95": 0.23441752791404724,
+        "p99": 0.23441752791404724,
+        "shape": [
+          128,
+          3584
+        ],
+        "size": 458752,
+        "std": 0.23181501915897718
+      },
+      "hbm_path": "/mnt/nas/openclaw/models/dream7b-hbm/seq128-b1-lmheadq16-lasttoken/seg14_15/dream7b_segment_14_15_seq128_q8.hbm",
+      "load_ms": 1986.733,
+      "model_name": "dream_segment_14_15",
+      "quant_metadata": {
+        "available": true,
+        "repr": "<hbm_runtime.HB_HBMRuntime.QuantParams object at 0xffff80beb2b0>",
+        "scale": [
+          0.0006284652044996619
+        ],
+        "scale_first": 0.0006284652044996619,
+        "zero_point": [
+          0.0
+        ]
+      },
+      "raw_output": "evidence/boundary_all_segments_v7/zeros/seg_14_raw_output.npy",
+      "raw_stats": {
+        "abs_max": 373.0,
+        "allzero": false,
+        "constant": false,
+        "dtype": "int16",
+        "inf_count": 0,
+        "max": 373.0,
+        "mean": -2.7821437290736606,
+        "min": -373.0,
+        "nan_count": 0,
+        "nonzero_count": 458715,
+        "p0": -373.0,
+        "p1": -373.0,
+        "p100": 373.0,
+        "p5": -373.0,
+        "p50": -86.0,
+        "p95": 373.0,
+        "p99": 373.0,
+        "shape": [
+          128,
+          3584
+        ],
+        "size": 458752,
+        "std": 368.8589455844735
+      },
+      "run_ms": 9.719,
+      "segment": 14
+    },
+    {
+      "dequant_output": "evidence/boundary_all_segments_v7/zeros/seg_15_output.npy",
+      "dequant_stats": {
+        "abs_max": 0.6124443411827087,
+        "allzero": false,
+        "constant": false,
+        "dtype": "float32",
+        "inf_count": 0,
+        "max": 0.43004828691482544,
+        "mean": -0.0028426090619683314,
+        "min": -0.6124443411827087,
+        "nan_count": 0,
+        "nonzero_count": 458742,
+        "p0": -0.6124443411827087,
+        "p1": -0.2965942323207855,
+        "p100": 0.43004828691482544,
+        "p5": -0.270384818315506,
+        "p50": -0.05134904757142067,
+        "p95": 0.26931506395339966,
+        "p99": 0.29739657044410706,
+        "shape": [
+          128,
+          3584
+        ],
+        "size": 458752,
+        "std": 0.23511491021430017
+      },
+      "hbm_path": "/mnt/nas/openclaw/models/dream7b-hbm/seq128-b1-lmheadq16-lasttoken/seg15_16/dream7b_segment_15_16_seq128_q8.hbm",
+      "load_ms": 2018.38,
+      "model_name": "dream_segment_15_16",
+      "quant_metadata": {
+        "available": true,
+        "repr": "<hbm_runtime.HB_HBMRuntime.QuantParams object at 0xffff80beb730>",
+        "scale": [
+          0.0002674429561011493
+        ],
+        "scale_first": 0.0002674429561011493,
+        "zero_point": [
+          0.0
+        ]
+      },
+      "raw_output": "evidence/boundary_all_segments_v7/zeros/seg_15_raw_output.npy",
+      "raw_stats": {
+        "abs_max": 2290.0,
+        "allzero": false,
+        "constant": false,
+        "dtype": "int16",
+        "inf_count": 0,
+        "max": 1608.0,
+        "mean": -10.628843035016741,
+        "min": -2290.0,
+        "nan_count": 0,
+        "nonzero_count": 458742,
+        "p0": -2290.0,
+        "p1": -1109.0,
+        "p100": 1608.0,
+        "p5": -1011.0,
+        "p50": -192.0,
+        "p95": 1007.0,
+        "p99": 1112.0,
+        "shape": [
+          128,
+          3584
+        ],
+        "size": 458752,
+        "std": 879.121716654898
+      },
+      "run_ms": 9.308,
+      "segment": 15
+    },
+    {
+      "dequant_output": "evidence/boundary_all_segments_v7/zeros/seg_16_output.npy",
+      "dequant_stats": {
+        "abs_max": 0.7048650979995728,
+        "allzero": false,
+        "constant": false,
+        "dtype": "float32",
+        "inf_count": 0,
+        "max": 0.564596951007843,
+        "mean": -0.0029984198162232695,
+        "min": -0.7048650979995728,
+        "nan_count": 0,
+        "nonzero_count": 458747,
+        "p0": -0.7048650979995728,
+        "p1": -0.32776227593421936,
+        "p100": 0.564596951007843,
+        "p5": -0.2864571809768677,
+        "p50": -0.04743742011487484,
+        "p95": 0.28434258699417114,
+        "p99": 0.326775461435318,
+        "shape": [
+          128,
+          3584
+        ],
+        "size": 458752,
+        "std": 0.238562805549109
+      },
+      "hbm_path": "/mnt/nas/openclaw/models/dream7b-hbm/seq128-b1-lmheadq16-lasttoken/seg16_17/dream7b_segment_16_17_seq128_q8.hbm",
+      "load_ms": 1964.294,
+      "model_name": "dream_segment_16_17",
+      "quant_metadata": {
+        "available": true,
+        "repr": "<hbm_runtime.HB_HBMRuntime.QuantParams object at 0xffff80bebc70>",
+        "scale": [
+          0.0001409730175510049
+        ],
+        "scale_first": 0.0001409730175510049,
+        "zero_point": [
+          0.0
+        ]
+      },
+      "raw_output": "evidence/boundary_all_segments_v7/zeros/seg_16_raw_output.npy",
+      "raw_stats": {
+        "abs_max": 5000.0,
+        "allzero": false,
+        "constant": false,
+        "dtype": "int16",
+        "inf_count": 0,
+        "max": 4005.0,
+        "mean": -21.269459315708705,
+        "min": -5000.0,
+        "nan_count": 0,
+        "nonzero_count": 458747,
+        "p0": -5000.0,
+        "p1": -2325.0,
+        "p100": 4005.0,
+        "p5": -2032.0,
+        "p50": -336.5,
+        "p95": 2017.0,
+        "p99": 2318.0,
+        "shape": [
+          128,
+          3584
+        ],
+        "size": 458752,
+        "std": 1692.258629825716
+      },
+      "run_ms": 9.344,
+      "segment": 16
+    },
+    {
+      "dequant_output": "evidence/boundary_all_segments_v7/zeros/seg_17_output.npy",
+      "dequant_stats": {
+        "abs_max": 0.4640476405620575,
+        "allzero": false,
+        "constant": false,
+        "dtype": "float32",
+        "inf_count": 0,
+        "max": 0.4640476405620575,
+        "mean": -0.0035246750395466287,
+        "min": -0.4640476405620575,
+        "nan_count": 0,
+        "nonzero_count": 458747,
+        "p0": -0.4640476405620575,
+        "p1": -0.3641777038574219,
+        "p100": 0.4640476405620575,
+        "p5": -0.30601170659065247,
+        "p50": -0.045087797567248344,
+        "p95": 0.3049142360687256,
+        "p99": 0.356678307056427,
+        "shape": [
+          128,
+          3584
+        ],
+        "size": 458752,
+        "std": 0.2414640418101623
+      },
+      "hbm_path": "/mnt/nas/openclaw/models/dream7b-hbm/seq128-b1-lmheadq16-lasttoken/seg17_18/dream7b_segment_17_18_seq128_q8.hbm",
+      "load_ms": 1990.47,
+      "model_name": "dream_segment_17_18",
+      "quant_metadata": {
+        "available": true,
+        "repr": "<hbm_runtime.HB_HBMRuntime.QuantParams object at 0xffff80bf8170>",
+        "scale": [
+          0.00018291195738129318
+        ],
+        "scale_first": 0.00018291195738129318,
+        "zero_point": [
+          0.0
+        ]
+      },
+      "raw_output": "evidence/boundary_all_segments_v7/zeros/seg_17_raw_output.npy",
+      "raw_stats": {
+        "abs_max": 2537.0,
+        "allzero": false,
+        "constant": false,
+        "dtype": "int16",
+        "inf_count": 0,
+        "max": 2537.0,
+        "mean": -19.269790649414062,
+        "min": -2537.0,
+        "nan_count": 0,
+        "nonzero_count": 458747,
+        "p0": -2537.0,
+        "p1": -1991.0,
+        "p100": 2537.0,
+        "p5": -1673.0,
+        "p50": -246.5,
+        "p95": 1667.0,
+        "p99": 1950.0,
+        "shape": [
+          128,
+          3584
+        ],
+        "size": 458752,
+        "std": 1320.1107529897527
+      },
+      "run_ms": 9.41,
+      "segment": 17
+    },
+    {
+      "dequant_output": "evidence/boundary_all_segments_v7/zeros/seg_18_output.npy",
+      "dequant_stats": {
+        "abs_max": 1.9735000133514404,
+        "allzero": false,
+        "constant": false,
+        "dtype": "float32",
+        "inf_count": 0,
+        "max": 0.7593722343444824,
+        "mean": -0.004661104885776471,
+        "min": -1.9735000133514404,
+        "nan_count": 0,
+        "nonzero_count": 458737,
+        "p0": -1.9735000133514404,
+        "p1": -0.3983449935913086,
+        "p100": 0.7593722343444824,
+        "p5": -0.3293505907058716,
+        "p50": -0.03558201342821121,
+        "p95": 0.3263131082057953,
+        "p99": 0.404853880405426,
+        "shape": [
+          128,
+          3584
+        ],
+        "size": 458752,
+        "std": 0.2531595720517201
+      },
+      "hbm_path": "/mnt/nas/openclaw/models/dream7b-hbm/seq128-b1-lmheadq16-lasttoken/seg18_19/dream7b_segment_18_19_seq128_q8.hbm",
+      "load_ms": 1984.724,
+      "model_name": "dream_segment_18_19",
+      "quant_metadata": {
+        "available": true,
+        "repr": "<hbm_runtime.HB_HBMRuntime.QuantParams object at 0xffff80bf8470>",
+        "scale": [
+          0.00043392699444666505
+        ],
+        "scale_first": 0.00043392699444666505,
+        "zero_point": [
+          0.0
+        ]
+      },
+      "raw_output": "evidence/boundary_all_segments_v7/zeros/seg_18_raw_output.npy",
+      "raw_stats": {
+        "abs_max": 4548.0,
+        "allzero": false,
+        "constant": false,
+        "dtype": "int16",
+        "inf_count": 0,
+        "max": 1750.0,
+        "mean": -10.74167960030692,
+        "min": -4548.0,
+        "nan_count": 0,
+        "nonzero_count": 458737,
+        "p0": -4548.0,
+        "p1": -918.0,
+        "p100": 1750.0,
+        "p5": -759.0,
+        "p50": -82.0,
+        "p95": 752.0,
+        "p99": 933.0,
+        "shape": [
+          128,
+          3584
+        ],
+        "size": 458752,
+        "std": 583.4151257214673
+      },
+      "run_ms": 9.782,
+      "segment": 18
+    },
+    {
+      "dequant_output": "evidence/boundary_all_segments_v7/zeros/seg_19_output.npy",
+      "dequant_stats": {
+        "abs_max": 7.9952216148376465,
+        "allzero": false,
+        "constant": false,
+        "dtype": "float32",
+        "inf_count": 0,
+        "max": 2.4518680572509766,
+        "mean": -0.01125346984723663,
+        "min": -7.9952216148376465,
+        "nan_count": 0,
+        "nonzero_count": 458482,
+        "p0": -7.9952216148376465,
+        "p1": -0.5502156132459638,
+        "p100": 2.4518680572509766,
+        "p5": -0.4158625602722168,
+        "p50": -0.007773132063448429,
+        "p95": 0.40253719687461853,
+        "p99": 0.5524476170539856,
+        "shape": [
+          128,
+          3584
+        ],
+        "size": 458752,
+        "std": 0.34386299815229804
+      },
+      "hbm_path": "/mnt/nas/openclaw/models/dream7b-hbm/seq128-b1-lmheadq16-lasttoken/seg19_20/dream7b_segment_19_20_seq128_q8.hbm",
+      "load_ms": 2018.738,
+      "model_name": "dream_segment_19_20",
+      "quant_metadata": {
+        "available": true,
+        "repr": "<hbm_runtime.HB_HBMRuntime.QuantParams object at 0xffff80bf89f0>",
+        "scale": [
+          0.0005552237271331251
+        ],
+        "scale_first": 0.0005552237271331251,
+        "zero_point": [
+          0.0
+        ]
+      },
+      "raw_output": "evidence/boundary_all_segments_v7/zeros/seg_19_raw_output.npy",
+      "raw_stats": {
+        "abs_max": 14400.0,
+        "allzero": false,
+        "constant": false,
+        "dtype": "int16",
+        "inf_count": 0,
+        "max": 4416.0,
+        "mean": -20.26835196358817,
+        "min": -14400.0,
+        "nan_count": 0,
+        "nonzero_count": 458482,
+        "p0": -14400.0,
+        "p1": -990.9799999999996,
+        "p100": 4416.0,
+        "p5": -749.0,
+        "p50": -14.0,
+        "p95": 725.0,
+        "p99": 995.0,
+        "shape": [
+          128,
+          3584
+        ],
+        "size": 458752,
+        "std": 619.3233143483203
+      },
+      "run_ms": 9.297,
+      "segment": 19
+    },
+    {
+      "dequant_output": "evidence/boundary_all_segments_v7/zeros/seg_20_output.npy",
+      "dequant_stats": {
+        "abs_max": 23.074800491333008,
+        "allzero": false,
+        "constant": false,
+        "dtype": "float32",
+        "inf_count": 0,
+        "max": 23.074800491333008,
+        "mean": 0.0077250594755885315,
+        "min": -12.999689102172852,
+        "nan_count": 0,
+        "nonzero_count": 458677,
+        "p0": -12.999689102172852,
+        "p1": -5.104448189735413,
+        "p100": 23.074800491333008,
+        "p5": -3.433720588684082,
+        "p50": -0.021830463781952858,
+        "p95": 3.48371958732605,
+        "p99": 5.232973575592041,
+        "shape": [
+          128,
+          3584
+        ],
+        "size": 458752,
+        "std": 2.2256897895259558
+      },
+      "hbm_path": "/mnt/nas/openclaw/models/dream7b-hbm/seq128-b1-lmheadq16-lasttoken/seg20_21/dream7b_segment_20_21_seq128_q8.hbm",
+      "load_ms": 2003.144,
+      "model_name": "dream_segment_20_21",
+      "quant_metadata": {
+        "available": true,
+        "repr": "<hbm_runtime.HB_HBMRuntime.QuantParams object at 0xffff80bf8e70>",
+        "scale": [
+          0.0007042085053399205
+        ],
+        "scale_first": 0.0007042085053399205,
+        "zero_point": [
+          0.0
+        ]
+      },
+      "raw_output": "evidence/boundary_all_segments_v7/zeros/seg_20_raw_output.npy",
+      "raw_stats": {
+        "abs_max": 32767.0,
+        "allzero": false,
+        "constant": false,
+        "dtype": "int16",
+        "inf_count": 0,
+        "max": 32767.0,
+        "mean": 10.969846452985491,
+        "min": -18460.0,
+        "nan_count": 0,
+        "nonzero_count": 458677,
+        "p0": -18460.0,
+        "p1": -7248.49,
+        "p100": 32767.0,
+        "p5": -4876.0,
+        "p50": -31.0,
+        "p95": 4947.0,
+        "p99": 7431.0,
+        "shape": [
+          128,
+          3584
+        ],
+        "size": 458752,
+        "std": 3160.555105727045
+      },
+      "run_ms": 9.316,
+      "segment": 20
+    },
+    {
+      "dequant_output": "evidence/boundary_all_segments_v7/zeros/seg_21_output.npy",
+      "dequant_stats": {
+        "abs_max": 6.280498027801514,
+        "allzero": false,
+        "constant": false,
+        "dtype": "float32",
+        "inf_count": 0,
+        "max": 6.280498027801514,
+        "mean": -0.005066425851015894,
+        "min": -6.280498027801514,
+        "nan_count": 0,
+        "nonzero_count": 458701,
+        "p0": -6.280498027801514,
+        "p1": -5.06077241897583,
+        "p100": 6.280498027801514,
+        "p5": -3.4155123233795166,
+        "p50": -0.021768273785710335,
+        "p95": 3.461155414581299,
+        "p99": 5.203319549560547,
+        "shape": [
+          128,
+          3584
+        ],
+        "size": 458752,
+        "std": 2.1083858056833997
+      },
+      "hbm_path": "/mnt/nas/openclaw/models/dream7b-hbm/seq128-b1-lmheadq16-lasttoken/seg21_22/dream7b_segment_21_22_seq128_q8.hbm",
+      "load_ms": 2053.53,
+      "model_name": "dream_segment_21_22",
+      "quant_metadata": {
+        "available": true,
+        "repr": "<hbm_runtime.HB_HBMRuntime.QuantParams object at 0xffff80bf8ef0>",
+        "scale": [
+          0.0007022023783065379
+        ],
+        "scale_first": 0.0007022023783065379,
+        "zero_point": [
+          0.0
+        ]
+      },
+      "raw_output": "evidence/boundary_all_segments_v7/zeros/seg_21_raw_output.npy",
+      "raw_stats": {
+        "abs_max": 8944.0,
+        "allzero": false,
+        "constant": false,
+        "dtype": "int16",
+        "inf_count": 0,
+        "max": 8944.0,
+        "mean": -7.215050833565848,
+        "min": -8944.0,
+        "nan_count": 0,
+        "nonzero_count": 458701,
+        "p0": -8944.0,
+        "p1": -7207.0,
+        "p100": 8944.0,
+        "p5": -4864.0,
+        "p50": -31.0,
+        "p95": 4929.0,
+        "p99": 7410.0,
+        "shape": [
+          128,
+          3584
+        ],
+        "size": 458752,
+        "std": 3002.5329908980057
+      },
+      "run_ms": 9.293,
+      "segment": 21
+    },
+    {
+      "dequant_output": "evidence/boundary_all_segments_v7/zeros/seg_22_output.npy",
+      "dequant_stats": {
+        "abs_max": 43.65851593017578,
+        "allzero": false,
+        "constant": false,
+        "dtype": "float32",
+        "inf_count": 0,
+        "max": 43.65718460083008,
+        "mean": -0.2556152590742156,
+        "min": -43.65851593017578,
+        "nan_count": 0,
+        "nonzero_count": 458741,
+        "p0": -43.65851593017578,
+        "p1": -43.65851593017578,
+        "p100": 43.65718460083008,
+        "p5": -43.65851593017578,
+        "p50": -0.3104380667209625,
+        "p95": 43.65718460083008,
+        "p99": 43.65718460083008,
+        "shape": [
+          128,
+          3584
+        ],
+        "size": 458752,
+        "std": 29.777338850687432
+      },
+      "hbm_path": "/mnt/nas/openclaw/models/dream7b-hbm/seq128-b1-lmheadq16-lasttoken/seg22_23/dream7b_segment_22_23_seq128_q8.hbm",
+      "load_ms": 2041.82,
+      "model_name": "dream_segment_22_23",
+      "quant_metadata": {
+        "available": true,
+        "repr": "<hbm_runtime.HB_HBMRuntime.QuantParams object at 0xffff80bf9970>",
+        "scale": [
+          0.0013323521707206964
+        ],
+        "scale_first": 0.0013323521707206964,
+        "zero_point": [
+          0.0
+        ]
+      },
+      "raw_output": "evidence/boundary_all_segments_v7/zeros/seg_22_raw_output.npy",
+      "raw_stats": {
+        "abs_max": 32768.0,
+        "allzero": false,
+        "constant": false,
+        "dtype": "int16",
+        "inf_count": 0,
+        "max": 32767.0,
+        "mean": -191.85271998814173,
+        "min": -32768.0,
+        "nan_count": 0,
+        "nonzero_count": 458741,
+        "p0": -32768.0,
+        "p1": -32768.0,
+        "p100": 32767.0,
+        "p5": -32768.0,
+        "p50": -233.0,
+        "p95": 32767.0,
+        "p99": 32767.0,
+        "shape": [
+          128,
+          3584
+        ],
+        "size": 458752,
+        "std": 22349.450330017422
+      },
+      "run_ms": 9.597,
+      "segment": 22
+    },
+    {
+      "dequant_output": "evidence/boundary_all_segments_v7/zeros/seg_23_output.npy",
+      "dequant_stats": {
+        "abs_max": 13.896108627319336,
+        "allzero": false,
+        "constant": false,
+        "dtype": "float32",
+        "inf_count": 0,
+        "max": 13.896108627319336,
+        "mean": -0.08758181995055583,
+        "min": -13.896108627319336,
+        "nan_count": 0,
+        "nonzero_count": 458734,
+        "p0": -13.896108627319336,
+        "p1": -13.896108627319336,
+        "p100": 13.896108627319336,
+        "p5": -13.896108627319336,
+        "p50": -0.3023603856563568,
+        "p95": 13.896108627319336,
+        "p99": 13.896108627319336,
+        "shape": [
+          128,
+          3584
+        ],
+        "size": 458752,
+        "std": 12.495685683993086
+      },
+      "hbm_path": "/mnt/nas/openclaw/models/dream7b-hbm/seq128-b1-lmheadq16-lasttoken/seg23_24/dream7b_segment_23_24_seq128_q8.hbm",
+      "load_ms": 2069.762,
+      "model_name": "dream_segment_23_24",
+      "quant_metadata": {
+        "available": true,
+        "repr": "<hbm_runtime.HB_HBMRuntime.QuantParams object at 0xffff80bf9df0>",
+        "scale": [
+          0.0031171173322945833
+        ],
+        "scale_first": 0.0031171173322945833,
+        "zero_point": [
+          0.0
+        ]
+      },
+      "raw_output": "evidence/boundary_all_segments_v7/zeros/seg_23_raw_output.npy",
+      "raw_stats": {
+        "abs_max": 4458.0,
+        "allzero": false,
+        "constant": false,
+        "dtype": "int16",
+        "inf_count": 0,
+        "max": 4458.0,
+        "mean": -28.097056797572545,
+        "min": -4458.0,
+        "nan_count": 0,
+        "nonzero_count": 458734,
+        "p0": -4458.0,
+        "p1": -4458.0,
+        "p100": 4458.0,
+        "p5": -4458.0,
+        "p50": -97.0,
+        "p95": 4458.0,
+        "p99": 4458.0,
+        "shape": [
+          128,
+          3584
+        ],
+        "size": 458752,
+        "std": 4008.731370037798
+      },
+      "run_ms": 9.472,
+      "segment": 23
+    },
+    {
+      "dequant_output": "evidence/boundary_all_segments_v7/zeros/seg_24_output.npy",
+      "dequant_stats": {
+        "abs_max": 16.745126724243164,
+        "allzero": false,
+        "constant": false,
+        "dtype": "float32",
+        "inf_count": 0,
+        "max": 16.74461555480957,
+        "mean": -0.09215831014240664,
+        "min": -16.745126724243164,
+        "nan_count": 0,
+        "nonzero_count": 458751,
+        "p0": -16.745126724243164,
+        "p1": -14.354061126708984,
+        "p100": 16.74461555480957,
+        "p5": -14.141986846923828,
+        "p50": -0.32040998339653015,
+        "p95": 14.126886558532691,
+        "p99": 14.334131240844727,
+        "shape": [
+          128,
+          3584
+        ],
+        "size": 458752,
+        "std": 12.49339062908385
+      },
+      "hbm_path": "/mnt/nas/openclaw/models/dream7b-hbm/seq128-b1-lmheadq16-lasttoken/seg24_25/dream7b_segment_24_25_seq128_q8.hbm",
+      "load_ms": 2055.576,
+      "model_name": "dream_segment_24_25",
+      "quant_metadata": {
+        "available": true,
+        "repr": "<hbm_runtime.HB_HBMRuntime.QuantParams object at 0xffff80bfa270>",
+        "scale": [
+          0.0005110207130201161
+        ],
+        "scale_first": 0.0005110207130201161,
+        "zero_point": [
+          0.0
+        ]
+      },
+      "raw_output": "evidence/boundary_all_segments_v7/zeros/seg_24_raw_output.npy",
+      "raw_stats": {
+        "abs_max": 32768.0,
+        "allzero": false,
+        "constant": false,
+        "dtype": "int16",
+        "inf_count": 0,
+        "max": 32767.0,
+        "mean": -180.3416246686663,
+        "min": -32768.0,
+        "nan_count": 0,
+        "nonzero_count": 458751,
+        "p0": -32768.0,
+        "p1": -28089.0,
+        "p100": 32767.0,
+        "p5": -27674.0,
+        "p50": -627.0,
+        "p95": 27644.449999999953,
+        "p99": 28050.0,
+        "shape": [
+          128,
+          3584
+        ],
+        "size": 458752,
+        "std": 24447.914359347382
+      },
+      "run_ms": 9.647,
+      "segment": 24
+    },
+    {
+      "dequant_output": "evidence/boundary_all_segments_v7/zeros/seg_25_output.npy",
+      "dequant_stats": {
+        "abs_max": 258.418701171875,
+        "allzero": false,
+        "constant": false,
+        "dtype": "float32",
+        "inf_count": 0,
+        "max": 258.41082763671875,
+        "mean": 0.01634480858660936,
+        "min": -258.418701171875,
+        "nan_count": 0,
+        "nonzero_count": 458751,
+        "p0": -258.418701171875,
+        "p1": -258.418701171875,
+        "p100": 258.41082763671875,
+        "p5": -258.418701171875,
+        "p50": 0.2523620128631592,
+        "p95": 258.41082763671875,
+        "p99": 258.41082763671875,
+        "shape": [
+          128,
+          3584
+        ],
+        "size": 458752,
+        "std": 212.87389952463363
+      },
+      "hbm_path": "/mnt/nas/openclaw/models/dream7b-hbm/seq128-b1-lmheadq16-lasttoken/seg25_26/dream7b_segment_25_26_seq128_q8.hbm",
+      "load_ms": 2142.752,
+      "model_name": "dream_segment_25_26",
+      "quant_metadata": {
+        "available": true,
+        "repr": "<hbm_runtime.HB_HBMRuntime.QuantParams object at 0xffff80bfa3b0>",
+        "scale": [
+          0.007886312901973724
+        ],
+        "scale_first": 0.007886312901973724,
+        "zero_point": [
+          0.0
+        ]
+      },
+      "raw_output": "evidence/boundary_all_segments_v7/zeros/seg_25_raw_output.npy",
+      "raw_stats": {
+        "abs_max": 32768.0,
+        "allzero": false,
+        "constant": false,
+        "dtype": "int16",
+        "inf_count": 0,
+        "max": 32767.0,
+        "mean": 2.0721239362444197,
+        "min": -32768.0,
+        "nan_count": 0,
+        "nonzero_count": 458751,
+        "p0": -32768.0,
+        "p1": -32768.0,
+        "p100": 32767.0,
+        "p5": -32768.0,
+        "p50": 32.0,
+        "p95": 32767.0,
+        "p99": 32767.0,
+        "shape": [
+          128,
+          3584
+        ],
+        "size": 458752,
+        "std": 26992.82897504049
+      },
+      "run_ms": 9.334,
+      "segment": 25
+    },
+    {
+      "dequant_output": "evidence/boundary_all_segments_v7/zeros/seg_26_output.npy",
+      "dequant_stats": {
+        "abs_max": 16.29678726196289,
+        "allzero": false,
+        "constant": false,
+        "dtype": "float32",
+        "inf_count": 0,
+        "max": 16.29678726196289,
+        "mean": 0.005043780339334804,
+        "min": -16.29678726196289,
+        "nan_count": 0,
+        "nonzero_count": 458751,
+        "p0": -16.29678726196289,
+        "p1": -16.29678726196289,
+        "p100": 16.29678726196289,
+        "p5": -16.29678726196289,
+        "p50": 0.27563104033470154,
+        "p95": 16.29678726196289,
+        "p99": 16.29678726196289,
+        "shape": [
+          128,
+          3584
+        ],
+        "size": 458752,
+        "std": 16.123766137608065
+      },
+      "hbm_path": "/mnt/nas/openclaw/models/dream7b-hbm/seq128-b1-lmheadq16-lasttoken/seg26_27/dream7b_segment_26_27_seq128_q8.hbm",
+      "load_ms": 2010.384,
+      "model_name": "dream_segment_26_27",
+      "quant_metadata": {
+        "available": true,
+        "repr": "<hbm_runtime.HB_HBMRuntime.QuantParams object at 0xffff80bfab30>",
+        "scale": [
+          0.0008227791986428201
+        ],
+        "scale_first": 0.0008227791986428201,
+        "zero_point": [
+          0.0
+        ]
+      },
+      "raw_output": "evidence/boundary_all_segments_v7/zeros/seg_26_raw_output.npy",
+      "raw_stats": {
+        "abs_max": 19807.0,
+        "allzero": false,
+        "constant": false,
+        "dtype": "int16",
+        "inf_count": 0,
+        "max": 19807.0,
+        "mean": 6.130174909319196,
+        "min": -19807.0,
+        "nan_count": 0,
+        "nonzero_count": 458751,
+        "p0": -19807.0,
+        "p1": -19807.0,
+        "p100": 19807.0,
+        "p5": -19807.0,
+        "p50": 335.0,
+        "p95": 19807.0,
+        "p99": 19807.0,
+        "shape": [
+          128,
+          3584
+        ],
+        "size": 458752,
+        "std": 19596.711344721432
+      },
+      "run_ms": 9.297,
+      "segment": 26
+    },
+    {
+      "dequant_output": "evidence/boundary_all_segments_v7/zeros/seg_27_output.npy",
+      "dequant_stats": {
+        "abs_max": 0.0,
+        "allzero": true,
+        "constant": true,
+        "dtype": "float32",
+        "inf_count": 0,
+        "max": 0.0,
+        "mean": 0.0,
+        "min": 0.0,
+        "nan_count": 0,
+        "nonzero_count": 0,
+        "p0": 0.0,
+        "p1": 0.0,
+        "p100": 0.0,
+        "p5": 0.0,
+        "p50": 0.0,
+        "p95": 0.0,
+        "p99": 0.0,
+        "shape": [
+          1,
+          152064
+        ],
+        "size": 152064,
+        "std": 0.0
+      },
+      "hbm_path": "/mnt/nas/openclaw/models/dream7b-hbm/seq128-b1-lmheadq16-lasttoken/seg27_28/dream7b_segment_27_28_seq128_q8_lmheadq16_last_token_logits.hbm",
+      "load_ms": 15982.795,
+      "model_name": "dream_segment_27_28_last_token_logits",
+      "quant_metadata": {
+        "available": true,
+        "repr": "<hbm_runtime.HB_HBMRuntime.QuantParams object at 0xffff80bfb0b0>",
+        "scale": [
+          0.00025415877462364733
+        ],
+        "scale_first": 0.00025415877462364733,
+        "zero_point": [
+          0.0
+        ]
+      },
+      "raw_output": "evidence/boundary_all_segments_v7/zeros/seg_27_raw_output.npy",
+      "raw_stats": {
+        "abs_max": 0.0,
+        "allzero": true,
+        "constant": true,
+        "dtype": "int16",
+        "inf_count": 0,
+        "max": 0.0,
+        "mean": 0.0,
+        "min": 0.0,
+        "nan_count": 0,
+        "nonzero_count": 0,
+        "p0": 0.0,
+        "p1": 0.0,
+        "p100": 0.0,
+        "p5": 0.0,
+        "p50": 0.0,
+        "p95": 0.0,
+        "p99": 0.0,
+        "shape": [
+          1,
+          152064
+        ],
+        "size": 152064,
+        "std": 0.0
+      },
+      "run_ms": 60.079,
+      "segment": 27
+    }
+  ],
+  "status": "pass"
+}

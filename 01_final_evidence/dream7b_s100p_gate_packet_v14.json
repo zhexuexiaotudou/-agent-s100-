@@ -1,0 +1,53 @@
+{
+  "schema_version": "dream7b_s100p_gate_packet_v14",
+  "created_at_utc": "2026-07-03T06:10:21.353931+00:00",
+  "verdict": "B_seg00_01_exact_comparator_still_unresolved_compiler_artifacts_required",
+  "generation_quality_run": false,
+  "product_routes_18888_18889_touched": false,
+  "dream7b_frontend_openclaw_traffic_touched": false,
+  "current_full_bpu_path": "falsified_against_HF_PyTorch_BF16_logits_truth",
+  "v13_verdict": "all_bpu_and_hybrid_candidates_fail_logits",
+  "seg00_01": {
+    "exact_dump": "pass",
+    "gathernd_verdict": "gathernd_matches_hf_embedding_only_after_unacceptable_affine_fit",
+    "position_verdict": "position_input_contract_suspicious",
+    "hf_comparator_verdict": "exact_comparator_unresolved_missing_mul_position_constants",
+    "compiler_artifacts": "seq16_hbo_available_seq128_b1_source_graph_missing",
+    "corrected_recompile": "not_run_compiler_unavailable"
+  },
+  "bpu_island_diagnostic_calibration": {
+    "verdict": "runtime_timeout_no_rows_after_model_load",
+    "deployable_pass": [],
+    "diagnostic_pass": []
+  },
+  "gguf_reference": "gguf_f16_blocked_no_artifact",
+  "bf16_truth_hashes": {
+    "zeros": {
+      "path": "evidence/full_truth_bf16_v14/zeros/full_truth_logits.npy",
+      "exists": true,
+      "size_bytes": 608384,
+      "sha256": "661ae552e7e368d829971c052f36bca50d0ba7f3b36e32c0b40d23179b77d56c"
+    },
+    "ramp": {
+      "path": "evidence/full_truth_bf16_v14/ramp/full_truth_logits.npy",
+      "exists": true,
+      "size_bytes": 608384,
+      "sha256": "c5ba9211687cd11d69e6825ae32e2e253db9f3ddbe11d9df4a72b2e790a5c154"
+    },
+    "short_chinese_prompt_padded": {
+      "path": "evidence/full_truth_bf16_v14/short_chinese_prompt_padded/full_truth_logits.npy",
+      "exists": true,
+      "size_bytes": 608384,
+      "sha256": "e46398de01f01c3646ca333aee4bce5e89705190d79290ac34ae6e40b3d6a5a6"
+    }
+  },
+  "claim_boundary": "The tested Dream7B S100P full-BPU and hybrid BPU-island routes remain logits-invalid. v14 closes evidence around seg00_01 but cannot build an exact comparator/recompile without compiler source graph and quant metadata.",
+  "commands": [
+    "C:\\Users\\zhexu\\AppData\\Local\\Python\\pythoncore-3.14-64\\python.exe tools\\build_v14_research_thread.py --root ."
+  ],
+  "strict_thresholds": {
+    "relative_l2_max": 0.1,
+    "pearson_min": 0.95,
+    "cosine_min": 0.95
+  }
+}

@@ -1,0 +1,1005 @@
+{
+  "schema_version": "dream7b_s100p_v12r_1010_input_contract_audit",
+  "created_at_utc": "2026-07-02T18:13:15.781389+00:00",
+  "run_commands": [
+    "C:\\Users\\zhexu\\AppData\\Local\\Python\\pythoncore-3.14-64\\python.exe tools\\build_v12r_research_thread.py --root ."
+  ],
+  "git": {
+    "cwd": "F:\\Project\\Digua",
+    "returncode": 128,
+    "status": "unavailable_empty_or_incomplete_git_dir",
+    "stderr": "fatal: not a git repository (or any of the parent directories): .git"
+  },
+  "input_artifacts": [
+    {
+      "path": "cases/canonical_seq128_cases_v10.jsonl",
+      "exists": true,
+      "size_bytes": 8726,
+      "sha256": "8b854976148b8cd3e98e754448d8c2ab75c12d62f6d7ef1798cf46c9734191b3"
+    },
+    {
+      "path": "reports/900_repeat_full_truth_reference.json",
+      "exists": true,
+      "size_bytes": 10607,
+      "sha256": "2e1f2c34d6efefcb624ce74671f74b100c56f4a7d3c1e371ffce0938d978e61c"
+    }
+  ],
+  "output_artifacts": [
+    {
+      "path": "reports/1010_input_contract_audit.json"
+    },
+    {
+      "path": "reports/1010_input_contract_audit.md"
+    }
+  ],
+  "blocking_or_failure_reasons": [],
+  "next_minimal_experiments": [
+    "Input metadata is internally consistent; seg0 mismatch should be tested under HF-prefix/BPU-single-segment substitution before attributing root cause to later graph stages."
+  ],
+  "safety": {
+    "generation_quality_run": false,
+    "product_routes_18888_18889_enabled_modified_or_tested": false
+  },
+  "verdict": "input_contract_valid",
+  "rows": [
+    {
+      "case_id": "zeros",
+      "token_ids": {
+        "length": 128,
+        "first16": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "last16": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "sha256": "5f70bf18a086007016e948b04aed3b82103a36bea41755b6cddfaf10ace3c6ef"
+      },
+      "position_ids": {
+        "length": 128,
+        "first16": [
+          0,
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11,
+          12,
+          13,
+          14,
+          15
+        ],
+        "last16": [
+          112,
+          113,
+          114,
+          115,
+          116,
+          117,
+          118,
+          119,
+          120,
+          121,
+          122,
+          123,
+          124,
+          125,
+          126,
+          127
+        ],
+        "policy": "0..127"
+      },
+      "attention_mask": {
+        "length": 128,
+        "first16": [
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1
+        ],
+        "last16": [
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1
+        ],
+        "policy": "explicit all-ones mask in v11 HF export unless case overrides"
+      },
+      "diffusion_mask_policy": "not used; logits-only canonical forward, no generation-quality diffusion loop",
+      "padding_policy": "zeros diagnostic all positions",
+      "last_token_index": 127,
+      "case_kind": "diagnostic",
+      "tokenizer_sources": {
+        "tokenization_dream.py": {
+          "name": "tokenization_dream.py",
+          "path": "/mnt/nas/openclaw/models/dream7b-hf/tokenization_dream.py",
+          "exists": true,
+          "size_bytes": 14028,
+          "sha256": "1d7f04104fa673831f48256e3cd42cd0bbd1bddd801b4abea5c74cc47d98bdd2"
+        },
+        "tokenizer_config.json": {
+          "name": "tokenizer_config.json",
+          "path": "/mnt/nas/openclaw/models/dream7b-hf/tokenizer_config.json",
+          "exists": true,
+          "size_bytes": 7486,
+          "sha256": "b0e9c1a6299d8832a1362d6b24f007de8a2acfe0243d8a3a1d1b57aa8250f7ee"
+        },
+        "vocab.json": {
+          "name": "vocab.json",
+          "path": "/mnt/nas/openclaw/models/dream7b-hf/vocab.json",
+          "exists": true,
+          "size_bytes": 3383407,
+          "sha256": "87a257b04b17642a0688c98cd1df89c398bda4fee532d6f88b38a659ecb4ac8d"
+        },
+        "merges.txt": {
+          "name": "merges.txt",
+          "path": "/mnt/nas/openclaw/models/dream7b-hf/merges.txt",
+          "exists": true,
+          "size_bytes": 1671853,
+          "sha256": "8831e4f1a044471340f7c0a83d7bd71306a5b867e95fd870f74d0c5308a904d5"
+        }
+      },
+      "dream_config_sources": {
+        "config.json": {
+          "name": "config.json",
+          "path": "/mnt/nas/openclaw/models/dream7b-hf/config.json",
+          "exists": true,
+          "size_bytes": 927,
+          "sha256": "11afc7fe7a1881e73dcd70cca6868aaaf8eb89ad45ea5fc6426c3fb82dec9340"
+        },
+        "configuration_dream.py": {
+          "name": "configuration_dream.py",
+          "path": "/mnt/nas/openclaw/models/dream7b-hf/configuration_dream.py",
+          "exists": true,
+          "size_bytes": 3197,
+          "sha256": "24d038962ccf16361595494461000ec0c1b043653c7494d7fc835c96f121f0b9"
+        },
+        "modeling_dream.py": {
+          "name": "modeling_dream.py",
+          "path": "/mnt/nas/openclaw/models/dream7b-hf/modeling_dream.py",
+          "exists": true,
+          "size_bytes": 36763,
+          "sha256": "3166e789f0d69beb1f4fbdee2317953d1c1c3b9bc21479b109afc5dd059de5b3"
+        }
+      },
+      "bpu_runtime_input_tensor": {
+        "segment": 0,
+        "model_name": "dream_segment_00_01",
+        "input_0": {
+          "name": "_input_0",
+          "dtype": "int32",
+          "shape": [
+            1,
+            128
+          ],
+          "layout": "batch,seq token ids"
+        },
+        "input_1": {
+          "name": "_input_1",
+          "dtype": "int32",
+          "shape": [
+            128
+          ],
+          "layout": "seq position ids"
+        },
+        "source": "run_s100p_hbm_chain_dump_boundaries_v6.py"
+      },
+      "hf_model_input_tensor": {
+        "input_ids": {
+          "dtype": "torch.long",
+          "shape": [
+            1,
+            128
+          ]
+        },
+        "position_ids": {
+          "dtype": "torch.long",
+          "shape": [
+            1,
+            128
+          ]
+        },
+        "attention_mask": {
+          "dtype": "torch.bool",
+          "shape": [
+            1,
+            128
+          ]
+        },
+        "num_logits_to_keep": 1,
+        "source": "tools/export_hf_boundaries_repeat_v11.py"
+      },
+      "bpu_seg0_output_stats": {
+        "shape": [
+          128,
+          3584
+        ],
+        "dtype": "float32",
+        "size": 458752,
+        "min": -0.5522932410240173,
+        "max": 0.5447757840156555,
+        "mean": -0.00010915865277638659,
+        "std": 0.05312284082174301,
+        "abs_max": 0.5522932410240173,
+        "nonzero_count": 458449,
+        "constant": false,
+        "allzero": false,
+        "nan_count": 0,
+        "inf_count": 0,
+        "p0": -0.5522932410240173,
+        "p1": -0.12482675909996033,
+        "p5": -0.07687243074178696,
+        "p50": 0.0,
+        "p95": 0.0763874277472496,
+        "p99": 0.12512989342212677,
+        "p100": 0.5447757840156555
+      },
+      "bpu_seg0_raw_stats": {
+        "shape": [
+          128,
+          3584
+        ],
+        "dtype": "int16",
+        "size": 458752,
+        "min": -9110.0,
+        "max": 8986.0,
+        "mean": -1.8005567278180803,
+        "std": 876.2538121788295,
+        "abs_max": 9110.0,
+        "nonzero_count": 458449,
+        "constant": false,
+        "allzero": false,
+        "nan_count": 0,
+        "inf_count": 0,
+        "count_pos_32767": 0,
+        "count_neg_32768": 0,
+        "count_abs_19807": 0,
+        "frac_pos_32767": 0.0,
+        "frac_neg_32768": 0.0,
+        "frac_abs_19807": 0.0,
+        "p0": -9110.0,
+        "p1": -2059.0,
+        "p5": -1268.0,
+        "p50": 0.0,
+        "p95": 1260.0,
+        "p99": 2064.0,
+        "p100": 8986.0
+      },
+      "hf_embedding_output_stats": {
+        "shape": [
+          128,
+          3584
+        ],
+        "dtype": "float32",
+        "size": 458752,
+        "min": -0.12255859375,
+        "max": 0.10009765625,
+        "mean": -3.6522171285469085e-05,
+        "std": 0.014401739463210106,
+        "abs_max": 0.12255859375,
+        "nonzero_count": 458752,
+        "allzero": false,
+        "constant": false,
+        "nan_count": 0,
+        "inf_count": 0
+      },
+      "hf_layer0_output_stats": {
+        "shape": [
+          128,
+          3584
+        ],
+        "dtype": "float32",
+        "size": 458752,
+        "min": -1.984375,
+        "max": 1.8984375,
+        "mean": -0.0003966305230278522,
+        "std": 0.2201046347618103,
+        "abs_max": 1.984375,
+        "nonzero_count": 458465,
+        "allzero": false,
+        "constant": false,
+        "nan_count": 0,
+        "inf_count": 0
+      }
+    },
+    {
+      "case_id": "ramp",
+      "token_ids": {
+        "length": 128,
+        "first16": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11,
+          12,
+          13,
+          14,
+          15,
+          16
+        ],
+        "last16": [
+          113,
+          114,
+          115,
+          116,
+          117,
+          118,
+          119,
+          120,
+          121,
+          122,
+          123,
+          124,
+          125,
+          126,
+          127,
+          128
+        ],
+        "sha256": "2e57ad6a5b7a6afe5606f67a7460097f5c9ca125c6b3e4e097e5aa5b11964bbf"
+      },
+      "position_ids": {
+        "length": 128,
+        "first16": [
+          0,
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11,
+          12,
+          13,
+          14,
+          15
+        ],
+        "last16": [
+          112,
+          113,
+          114,
+          115,
+          116,
+          117,
+          118,
+          119,
+          120,
+          121,
+          122,
+          123,
+          124,
+          125,
+          126,
+          127
+        ],
+        "policy": "0..127"
+      },
+      "attention_mask": {
+        "length": 128,
+        "first16": [
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1
+        ],
+        "last16": [
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1
+        ],
+        "policy": "explicit all-ones mask in v11 HF export unless case overrides"
+      },
+      "diffusion_mask_policy": "not used; logits-only canonical forward, no generation-quality diffusion loop",
+      "padding_policy": "no padding; diagnostic ramp tokens 1..128",
+      "last_token_index": 127,
+      "case_kind": "diagnostic",
+      "tokenizer_sources": {
+        "tokenization_dream.py": {
+          "name": "tokenization_dream.py",
+          "path": "/mnt/nas/openclaw/models/dream7b-hf/tokenization_dream.py",
+          "exists": true,
+          "size_bytes": 14028,
+          "sha256": "1d7f04104fa673831f48256e3cd42cd0bbd1bddd801b4abea5c74cc47d98bdd2"
+        },
+        "tokenizer_config.json": {
+          "name": "tokenizer_config.json",
+          "path": "/mnt/nas/openclaw/models/dream7b-hf/tokenizer_config.json",
+          "exists": true,
+          "size_bytes": 7486,
+          "sha256": "b0e9c1a6299d8832a1362d6b24f007de8a2acfe0243d8a3a1d1b57aa8250f7ee"
+        },
+        "vocab.json": {
+          "name": "vocab.json",
+          "path": "/mnt/nas/openclaw/models/dream7b-hf/vocab.json",
+          "exists": true,
+          "size_bytes": 3383407,
+          "sha256": "87a257b04b17642a0688c98cd1df89c398bda4fee532d6f88b38a659ecb4ac8d"
+        },
+        "merges.txt": {
+          "name": "merges.txt",
+          "path": "/mnt/nas/openclaw/models/dream7b-hf/merges.txt",
+          "exists": true,
+          "size_bytes": 1671853,
+          "sha256": "8831e4f1a044471340f7c0a83d7bd71306a5b867e95fd870f74d0c5308a904d5"
+        }
+      },
+      "dream_config_sources": {
+        "config.json": {
+          "name": "config.json",
+          "path": "/mnt/nas/openclaw/models/dream7b-hf/config.json",
+          "exists": true,
+          "size_bytes": 927,
+          "sha256": "11afc7fe7a1881e73dcd70cca6868aaaf8eb89ad45ea5fc6426c3fb82dec9340"
+        },
+        "configuration_dream.py": {
+          "name": "configuration_dream.py",
+          "path": "/mnt/nas/openclaw/models/dream7b-hf/configuration_dream.py",
+          "exists": true,
+          "size_bytes": 3197,
+          "sha256": "24d038962ccf16361595494461000ec0c1b043653c7494d7fc835c96f121f0b9"
+        },
+        "modeling_dream.py": {
+          "name": "modeling_dream.py",
+          "path": "/mnt/nas/openclaw/models/dream7b-hf/modeling_dream.py",
+          "exists": true,
+          "size_bytes": 36763,
+          "sha256": "3166e789f0d69beb1f4fbdee2317953d1c1c3b9bc21479b109afc5dd059de5b3"
+        }
+      },
+      "bpu_runtime_input_tensor": {
+        "segment": 0,
+        "model_name": "dream_segment_00_01",
+        "input_0": {
+          "name": "_input_0",
+          "dtype": "int32",
+          "shape": [
+            1,
+            128
+          ],
+          "layout": "batch,seq token ids"
+        },
+        "input_1": {
+          "name": "_input_1",
+          "dtype": "int32",
+          "shape": [
+            128
+          ],
+          "layout": "seq position ids"
+        },
+        "source": "run_s100p_hbm_chain_dump_boundaries_v6.py"
+      },
+      "hf_model_input_tensor": {
+        "input_ids": {
+          "dtype": "torch.long",
+          "shape": [
+            1,
+            128
+          ]
+        },
+        "position_ids": {
+          "dtype": "torch.long",
+          "shape": [
+            1,
+            128
+          ]
+        },
+        "attention_mask": {
+          "dtype": "torch.bool",
+          "shape": [
+            1,
+            128
+          ]
+        },
+        "num_logits_to_keep": 1,
+        "source": "tools/export_hf_boundaries_repeat_v11.py"
+      },
+      "bpu_seg0_output_stats": {
+        "shape": [
+          128,
+          3584
+        ],
+        "dtype": "float32",
+        "size": 458752,
+        "min": -0.9146485328674316,
+        "max": 0.7435043454170227,
+        "mean": -0.0005779584171250463,
+        "std": 0.05070845037698746,
+        "abs_max": 0.9146485328674316,
+        "nonzero_count": 458457,
+        "constant": false,
+        "allzero": false,
+        "nan_count": 0,
+        "inf_count": 0,
+        "p0": -0.9146485328674316,
+        "p1": -0.12252301722764969,
+        "p5": -0.07129493355751038,
+        "p50": -0.0007274993695318699,
+        "p95": 0.06923368573188782,
+        "p99": 0.11970334500074387,
+        "p100": 0.7435043454170227
+      },
+      "bpu_seg0_raw_stats": {
+        "shape": [
+          128,
+          3584
+        ],
+        "dtype": "int16",
+        "size": 458752,
+        "min": -15087.0,
+        "max": 12264.0,
+        "mean": -9.533342633928571,
+        "std": 836.4288206112309,
+        "abs_max": 15087.0,
+        "nonzero_count": 458457,
+        "constant": false,
+        "allzero": false,
+        "nan_count": 0,
+        "inf_count": 0,
+        "count_pos_32767": 0,
+        "count_neg_32768": 0,
+        "count_abs_19807": 0,
+        "frac_pos_32767": 0.0,
+        "frac_neg_32768": 0.0,
+        "frac_abs_19807": 0.0,
+        "p0": -15087.0,
+        "p1": -2021.0,
+        "p5": -1176.0,
+        "p50": -12.0,
+        "p95": 1142.0,
+        "p99": 1974.4899999999907,
+        "p100": 12264.0
+      },
+      "hf_embedding_output_stats": {
+        "shape": [
+          128,
+          3584
+        ],
+        "dtype": "float32",
+        "size": 458752,
+        "min": -0.26953125,
+        "max": 0.87109375,
+        "mean": -3.8177124224603176e-05,
+        "std": 0.014059757813811302,
+        "abs_max": 0.87109375,
+        "nonzero_count": 458752,
+        "allzero": false,
+        "constant": false,
+        "nan_count": 0,
+        "inf_count": 0
+      },
+      "hf_layer0_output_stats": {
+        "shape": [
+          128,
+          3584
+        ],
+        "dtype": "float32",
+        "size": 458752,
+        "min": -2.390625,
+        "max": 1.515625,
+        "mean": -0.0008283672505058348,
+        "std": 0.12699337303638458,
+        "abs_max": 2.390625,
+        "nonzero_count": 458360,
+        "allzero": false,
+        "constant": false,
+        "nan_count": 0,
+        "inf_count": 0
+      }
+    },
+    {
+      "case_id": "short_chinese_prompt_padded",
+      "token_ids": {
+        "length": 128,
+        "first16": [
+          151643,
+          104859,
+          3837,
+          100644,
+          109944,
+          151645,
+          220,
+          16,
+          15,
+          2055,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "last16": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "sha256": "0ac63d3423886653b2a20642a0465449434db8821662320dba9b396d0a7ae1a7"
+      },
+      "position_ids": {
+        "length": 128,
+        "first16": [
+          0,
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11,
+          12,
+          13,
+          14,
+          15
+        ],
+        "last16": [
+          112,
+          113,
+          114,
+          115,
+          116,
+          117,
+          118,
+          119,
+          120,
+          121,
+          122,
+          123,
+          124,
+          125,
+          126,
+          127
+        ],
+        "policy": "0..127"
+      },
+      "attention_mask": {
+        "length": 128,
+        "first16": [
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1
+        ],
+        "last16": [
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1
+        ],
+        "policy": "explicit all-ones mask in v11 HF export unless case overrides"
+      },
+      "diffusion_mask_policy": "not used; logits-only canonical forward, no generation-quality diffusion loop",
+      "padding_policy": "semantic prompt padded with token id 0 to seq128",
+      "last_token_index": 127,
+      "case_kind": "semantic",
+      "tokenizer_sources": {
+        "tokenization_dream.py": {
+          "name": "tokenization_dream.py",
+          "path": "/mnt/nas/openclaw/models/dream7b-hf/tokenization_dream.py",
+          "exists": true,
+          "size_bytes": 14028,
+          "sha256": "1d7f04104fa673831f48256e3cd42cd0bbd1bddd801b4abea5c74cc47d98bdd2"
+        },
+        "tokenizer_config.json": {
+          "name": "tokenizer_config.json",
+          "path": "/mnt/nas/openclaw/models/dream7b-hf/tokenizer_config.json",
+          "exists": true,
+          "size_bytes": 7486,
+          "sha256": "b0e9c1a6299d8832a1362d6b24f007de8a2acfe0243d8a3a1d1b57aa8250f7ee"
+        },
+        "vocab.json": {
+          "name": "vocab.json",
+          "path": "/mnt/nas/openclaw/models/dream7b-hf/vocab.json",
+          "exists": true,
+          "size_bytes": 3383407,
+          "sha256": "87a257b04b17642a0688c98cd1df89c398bda4fee532d6f88b38a659ecb4ac8d"
+        },
+        "merges.txt": {
+          "name": "merges.txt",
+          "path": "/mnt/nas/openclaw/models/dream7b-hf/merges.txt",
+          "exists": true,
+          "size_bytes": 1671853,
+          "sha256": "8831e4f1a044471340f7c0a83d7bd71306a5b867e95fd870f74d0c5308a904d5"
+        }
+      },
+      "dream_config_sources": {
+        "config.json": {
+          "name": "config.json",
+          "path": "/mnt/nas/openclaw/models/dream7b-hf/config.json",
+          "exists": true,
+          "size_bytes": 927,
+          "sha256": "11afc7fe7a1881e73dcd70cca6868aaaf8eb89ad45ea5fc6426c3fb82dec9340"
+        },
+        "configuration_dream.py": {
+          "name": "configuration_dream.py",
+          "path": "/mnt/nas/openclaw/models/dream7b-hf/configuration_dream.py",
+          "exists": true,
+          "size_bytes": 3197,
+          "sha256": "24d038962ccf16361595494461000ec0c1b043653c7494d7fc835c96f121f0b9"
+        },
+        "modeling_dream.py": {
+          "name": "modeling_dream.py",
+          "path": "/mnt/nas/openclaw/models/dream7b-hf/modeling_dream.py",
+          "exists": true,
+          "size_bytes": 36763,
+          "sha256": "3166e789f0d69beb1f4fbdee2317953d1c1c3b9bc21479b109afc5dd059de5b3"
+        }
+      },
+      "bpu_runtime_input_tensor": {
+        "segment": 0,
+        "model_name": "dream_segment_00_01",
+        "input_0": {
+          "name": "_input_0",
+          "dtype": "int32",
+          "shape": [
+            1,
+            128
+          ],
+          "layout": "batch,seq token ids"
+        },
+        "input_1": {
+          "name": "_input_1",
+          "dtype": "int32",
+          "shape": [
+            128
+          ],
+          "layout": "seq position ids"
+        },
+        "source": "run_s100p_hbm_chain_dump_boundaries_v6.py"
+      },
+      "hf_model_input_tensor": {
+        "input_ids": {
+          "dtype": "torch.long",
+          "shape": [
+            1,
+            128
+          ]
+        },
+        "position_ids": {
+          "dtype": "torch.long",
+          "shape": [
+            1,
+            128
+          ]
+        },
+        "attention_mask": {
+          "dtype": "torch.bool",
+          "shape": [
+            1,
+            128
+          ]
+        },
+        "num_logits_to_keep": 1,
+        "source": "tools/export_hf_boundaries_repeat_v11.py"
+      },
+      "bpu_seg0_output_stats": {
+        "shape": [
+          128,
+          3584
+        ],
+        "dtype": "float32",
+        "size": 458752,
+        "min": -0.6131000518798828,
+        "max": 0.8125561475753784,
+        "mean": -0.00011516363883856684,
+        "std": 0.053335294127464294,
+        "abs_max": 0.8125561475753784,
+        "nonzero_count": 458480,
+        "constant": false,
+        "allzero": false,
+        "nan_count": 0,
+        "inf_count": 0,
+        "p0": -0.6131000518798828,
+        "p1": -0.12852488458156586,
+        "p5": -0.07772117853164673,
+        "p50": -6.062494503566995e-05,
+        "p95": 0.07687243074178696,
+        "p99": 0.12434176355600357,
+        "p100": 0.8125561475753784
+      },
+      "bpu_seg0_raw_stats": {
+        "shape": [
+          128,
+          3584
+        ],
+        "dtype": "int16",
+        "size": 458752,
+        "min": -10113.0,
+        "max": 13403.0,
+        "mean": -1.8996080671037947,
+        "std": 879.7582131700492,
+        "abs_max": 13403.0,
+        "nonzero_count": 458480,
+        "constant": false,
+        "allzero": false,
+        "nan_count": 0,
+        "inf_count": 0,
+        "count_pos_32767": 0,
+        "count_neg_32768": 0,
+        "count_abs_19807": 0,
+        "frac_pos_32767": 0.0,
+        "frac_neg_32768": 0.0,
+        "frac_abs_19807": 0.0,
+        "p0": -10113.0,
+        "p1": -2120.0,
+        "p5": -1282.0,
+        "p50": -1.0,
+        "p95": 1268.0,
+        "p99": 2051.0,
+        "p100": 13403.0
+      },
+      "hf_embedding_output_stats": {
+        "shape": [
+          128,
+          3584
+        ],
+        "dtype": "float32",
+        "size": 458752,
+        "min": -0.234375,
+        "max": 0.48828125,
+        "mean": -2.8683616619673558e-05,
+        "std": 0.014238351956009865,
+        "abs_max": 0.48828125,
+        "nonzero_count": 458752,
+        "allzero": false,
+        "constant": false,
+        "nan_count": 0,
+        "inf_count": 0
+      },
+      "hf_layer0_output_stats": {
+        "shape": [
+          128,
+          3584
+        ],
+        "dtype": "float32",
+        "size": 458752,
+        "min": -1.9375,
+        "max": 1.796875,
+        "mean": -0.0004556574858725071,
+        "std": 0.1927524358034134,
+        "abs_max": 1.9375,
+        "nonzero_count": 458255,
+        "allzero": false,
+        "constant": false,
+        "nan_count": 0,
+        "inf_count": 0
+      }
+    }
+  ],
+  "invalid_reasons": [],
+  "output_root": "evidence/input_contract_v12r"
+}

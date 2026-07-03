@@ -1,0 +1,23 @@
+{
+  "version": 1,
+  "policy_state": "disabled_template",
+  "description": "Disabled-by-default B-010 service convergence confirmation template. It is safe to validate, but it must not execute service or firewall changes.",
+  "confirmations": {
+    "gateway_loopback_only": false,
+    "ssh_management_required": false,
+    "nfs_rpc_client_only": false,
+    "x11vnc_unused": false,
+    "iiod_unused_or_firewall": false
+  },
+  "operator": {
+    "name": "",
+    "confirmed_at": "",
+    "notes": "Copy to /root/.openclaw/workspace/config/service_convergence_confirmations.json only after review. Set each confirmation deliberately."
+  },
+  "execution_policy": {
+    "mode": "preflight-only",
+    "service_changes_allowed": false,
+    "firewall_changes_allowed": false,
+    "rollback_required": true
+  }
+}

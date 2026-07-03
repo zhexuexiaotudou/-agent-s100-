@@ -1,0 +1,40 @@
+{
+  "model_id": "Qwen2.5-7B-Instruct-S100P-official",
+  "gateway": {
+    "host": "127.0.0.1",
+    "port": 18080,
+    "base_url": "http://127.0.0.1:18080/v1"
+  },
+  "official_runtime": {
+    "runtime_bin": "/mnt/nas/openclaw/toolchains/s100_llm_sdk/D-Robotics_LLM_S100_1.0.0_SDK/oellm_runtime/example/oellm_multichat/oellm_multichat",
+    "runtime_lib_dir": "/mnt/nas/openclaw/toolchains/s100_llm_sdk/D-Robotics_LLM_S100_1.0.0_SDK/oellm_runtime/lib",
+    "active_config": "/mnt/nas/openclaw/configs/qwen25_7b_1024_multichat_config.json",
+    "active_hbm_path": "/mnt/nas/openclaw/toolchains/s100_llm_sdk/D-Robotics_LLM_S100_1.0.0_SDK/oellm_runtime/model/Qwen2.5_7B_Instruct_1024.hbm",
+    "active_profile": "qwen25_7b_instruct_cache_len_1024_q8",
+    "priority_hbm_path": "/mnt/nas/openclaw/toolchains/s100_llm_sdk/D-Robotics_LLM_S100_1.0.0_SDK/oellm_runtime/model/Qwen2.5_7B_Instruct_1024.hbm",
+    "local_priority_hbm_path": "downloads/s100_official_llm/Qwen2.5_7B_Instruct_1024.hbm",
+    "priority_profile": "qwen25_7b_instruct_cache_len_1024_q8_vendor_default",
+    "priority_status": "promoted_from_shadow_18081",
+    "priority_latest_probe": "",
+    "chat_timeout_seconds": 300
+  },
+  "ai_nas": {
+    "tool_dispatcher": "/mnt/nas/openclaw/scripts/probes/ai_nas_allowlisted_tool.sh",
+    "personal_root": "/mnt/nas/openclaw/Personal",
+    "report_root": "/mnt/nas/openclaw/reports/qwen25_ai_nas",
+    "gateway_report_root": "/mnt/nas/openclaw/reports/qwen25_gateway",
+    "default_case_query": "2024 renovation payment contract invoice receipt chat screenshot"
+  },
+  "promotion_boundary": {
+    "promoted_from": "qwen25-7b-shadow-openai-gateway.service",
+    "promoted_port": 18081,
+    "promotion_verdict": "ok_qwen25_7b_shadow_acceptance_packet",
+    "promotion_date": "2026-06-25",
+    "promotion_doc": "docs/qwen25_7b_promotion_decision_2026-06-25.md",
+    "previous_baseline_backup": "/mnt/nas/openclaw/configs/qwen25_official_route_policy_1.5B_backup.json",
+    "not_claimed": [
+      "1024 context is stable on all S100P workloads",
+      "1.5B baseline can be permanently removed"
+    ]
+  }
+}

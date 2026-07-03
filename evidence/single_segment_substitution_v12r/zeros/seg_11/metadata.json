@@ -1,0 +1,261 @@
+{
+  "case_id": "zeros",
+  "segment": 11,
+  "input_source": {
+    "kind": "hf_layer_output",
+    "path": "/mnt/nas/openclaw/reports/models/dream7b_s100p_v11_execution_20260701/evidence/hf_boundaries_v11/zeros/layer_10_output.npy",
+    "sha256": "1cd43d18fbc27dc0a9afbb22e7d00f6a53f4020c2c4fa06ecba7fb8f2132b641"
+  },
+  "layout_scale_variant_used": "direct_float32_seq_hidden_or_token_ids",
+  "bpu": {
+    "segment": 11,
+    "model_name": "dream_segment_11_12",
+    "hbm_path": "/mnt/nas/openclaw/models/dream7b-hbm/seq128-b1-lmheadq16-lasttoken/seg11_12/dream7b_segment_11_12_seq128_q8.hbm",
+    "hbm_sha256": "c838fe5d4cae0bde7ee14f1fa4815b5eb39217f010ab1e72e1b552be20c766ae",
+    "input_contract": {
+      "kind": "hidden_plus_position_ids",
+      "input_0_shape": [
+        128,
+        3584
+      ],
+      "input_0_dtype": "float32",
+      "input_1_shape": [
+        128
+      ],
+      "input_1_dtype": "int32"
+    },
+    "load_seconds": 2.049,
+    "run_seconds": 0.009,
+    "quant_metadata": {
+      "available": true,
+      "scale": [
+        0.002485527191311121
+      ],
+      "scale_first": 0.002485527191311121,
+      "zero_point": [
+        0.0
+      ],
+      "repr": "<hbm_runtime.HB_HBMRuntime.QuantParams object at 0xffff63f953b0>"
+    },
+    "raw_stats": {
+      "shape": [
+        128,
+        3584
+      ],
+      "dtype": "int16",
+      "size": 458752,
+      "min": -32768.0,
+      "max": 32767.0,
+      "mean": -143.2646767752511,
+      "std": 11519.98005020061,
+      "abs_max": 32767.0,
+      "nonzero_count": 458725,
+      "allzero": false,
+      "constant": false,
+      "nan_count": 0,
+      "inf_count": 0
+    },
+    "dequant_stats": {
+      "shape": [
+        128,
+        3584
+      ],
+      "dtype": "float32",
+      "size": 458752,
+      "min": -81.44575500488281,
+      "max": 81.44326782226562,
+      "mean": -0.35608822107315063,
+      "std": 28.633222579956055,
+      "abs_max": 81.44575500488281,
+      "nonzero_count": 458725,
+      "allzero": false,
+      "constant": false,
+      "nan_count": 0,
+      "inf_count": 0
+    }
+  },
+  "raw_output": {
+    "path": "evidence/single_segment_substitution_v12r/zeros/seg_11/bpu_raw_output.npy",
+    "sha256": "d6a7eb7eb627831c8c1fbe3fab06317b4ff7e03f3a893a8dc1d7cf9355339d82",
+    "stats": {
+      "shape": [
+        128,
+        3584
+      ],
+      "dtype": "int16",
+      "size": 458752,
+      "min": -32768.0,
+      "max": 32767.0,
+      "mean": -143.2646767752511,
+      "std": 11519.98005020061,
+      "abs_max": 32767.0,
+      "nonzero_count": 458725,
+      "allzero": false,
+      "constant": false,
+      "nan_count": 0,
+      "inf_count": 0
+    }
+  },
+  "dequant_output": {
+    "path": "evidence/single_segment_substitution_v12r/zeros/seg_11/bpu_dequant_output.npy",
+    "sha256": "9676fedcabc13c9bc2369f6ecf7e5c1db3104c3134124cca1f26c7593db40379",
+    "stats": {
+      "shape": [
+        128,
+        3584
+      ],
+      "dtype": "float32",
+      "size": 458752,
+      "min": -81.44575500488281,
+      "max": 81.44326782226562,
+      "mean": -0.35608822107315063,
+      "std": 28.633222579956055,
+      "abs_max": 81.44575500488281,
+      "nonzero_count": 458725,
+      "allzero": false,
+      "constant": false,
+      "nan_count": 0,
+      "inf_count": 0
+    }
+  },
+  "suffix": {
+    "kind": "hf_suffix",
+    "hf_suffix_layers": [
+      12,
+      13,
+      14,
+      15,
+      16,
+      17,
+      18,
+      19,
+      20,
+      21,
+      22,
+      23,
+      24,
+      25,
+      26,
+      27
+    ]
+  },
+  "logits": {
+    "path": "evidence/single_segment_substitution_v12r/zeros/seg_11/substitution_logits.npy",
+    "sha256": "bfab8b69974c64df51262a9a0e29d59f736bc464c48fdb2e5754bfc151085972",
+    "stats": {
+      "shape": [
+        152064
+      ],
+      "dtype": "float32",
+      "size": 152064,
+      "min": -11.0,
+      "max": 5.21875,
+      "mean": -2.5309500694274902,
+      "std": 1.0593900680541992,
+      "abs_max": 11.0,
+      "nonzero_count": 152064,
+      "allzero": false,
+      "constant": false,
+      "nan_count": 0,
+      "inf_count": 0
+    }
+  },
+  "final_metrics": {
+    "shape_match": true,
+    "reference_top1": 220,
+    "candidate_top1": 3132,
+    "top1_agreement": false,
+    "reference_top1_in_candidate_top5": false,
+    "top5_overlap": 0,
+    "cosine": 0.9184278085448745,
+    "pearson_centered": 0.1467983638737996,
+    "relative_l2": 0.7645719393290273,
+    "max_abs_error": 15.796875,
+    "mean_abs_error": 7.701668976050384,
+    "candidate_normalized_entropy": 0.8816497041771595,
+    "candidate_stats": {
+      "shape": [
+        152064
+      ],
+      "dtype": "float32",
+      "size": 152064,
+      "min": -11.0,
+      "max": 5.21875,
+      "mean": -2.5309500694274902,
+      "std": 1.0593900680541992,
+      "abs_max": 11.0,
+      "nonzero_count": 152064,
+      "allzero": false,
+      "constant": false,
+      "nan_count": 0,
+      "inf_count": 0
+    },
+    "reference_stats": {
+      "shape": [
+        152064
+      ],
+      "dtype": "float32",
+      "size": 152064,
+      "min": -14.25,
+      "max": 1.75,
+      "mean": -10.231769561767578,
+      "std": 1.7890510559082031,
+      "abs_max": 14.25,
+      "nonzero_count": 152064,
+      "allzero": false,
+      "constant": false,
+      "nan_count": 0,
+      "inf_count": 0
+    }
+  },
+  "boundary_metrics": {
+    "shape_match": true,
+    "reference_top1": 163998,
+    "candidate_top1": 423691,
+    "top1_agreement": false,
+    "reference_top1_in_candidate_top5": false,
+    "top5_overlap": 0,
+    "cosine": 0.242869158986919,
+    "pearson_centered": 0.24276851049842696,
+    "relative_l2": 23.437940495573567,
+    "max_abs_error": 80.90029907226562,
+    "mean_abs_error": 22.512779836298197,
+    "candidate_normalized_entropy": 0.5354538751254406,
+    "candidate_stats": {
+      "shape": [
+        458752
+      ],
+      "dtype": "float32",
+      "size": 458752,
+      "min": -81.44575500488281,
+      "max": 81.44326782226562,
+      "mean": -0.35608822107315063,
+      "std": 28.633222579956055,
+      "abs_max": 81.44575500488281,
+      "nonzero_count": 458725,
+      "allzero": false,
+      "constant": false,
+      "nan_count": 0,
+      "inf_count": 0
+    },
+    "reference_stats": {
+      "shape": [
+        458752
+      ],
+      "dtype": "float32",
+      "size": 458752,
+      "min": -51.5,
+      "max": 11.875,
+      "mean": -0.012981580570340157,
+      "std": 1.2101821899414062,
+      "abs_max": 51.5,
+      "nonzero_count": 458482,
+      "allzero": false,
+      "constant": false,
+      "nan_count": 0,
+      "inf_count": 0
+    }
+  },
+  "elapsed_seconds": 642.512,
+  "status": "pass"
+}

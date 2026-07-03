@@ -1,0 +1,562 @@
+{
+  "schema_version": "dream7b_s100p_v16_1710_hbm_hrt_hbrt_introspection_escalation",
+  "created_at_utc": "2026-07-03T09:55:54.245004+00:00",
+  "run_commands": [
+    "C:\\Users\\zhexu\\AppData\\Local\\Python\\pythoncore-3.14-64\\python.exe tools\\build_v16_research_thread.py --root ."
+  ],
+  "host_environment": {
+    "local_platform": "Windows-11-10.0.26200-SP0",
+    "python": "3.14.3 (tags/v3.14.3:323c59a, Feb  3 2026, 16:04:56) [MSC v.1944 64 bit (AMD64)]"
+  },
+  "git": {
+    "returncode": 128,
+    "stdout": "",
+    "stderr": "fatal: not a git repository (or any of the parent directories): .git"
+  },
+  "input_artifacts": [
+    {
+      "path": "evidence/dream7b_s100p_v16_execution_20260703_windows_safe/v16_remote_collection_report.json",
+      "exists": true,
+      "size_bytes": 202698,
+      "sha256": "c38532f72d52e21dca79748c1cd3b9e87ad7094f81e075ae95159d31c24deddf"
+    },
+    {
+      "path": "evidence/dream7b_s100p_v16_execution_20260703_windows_safe/evidence/hbm_introspection_v16/hrt_model_exec_model_info.log",
+      "exists": true,
+      "size_bytes": 1318,
+      "sha256": "c5dcf999de95bf34ebe8e653a9233d4eb5bcc9c5dcbbb1477c48165d22ca274b"
+    },
+    {
+      "path": "evidence/dream7b_s100p_v16_execution_20260703_windows_safe/evidence/hbm_introspection_v16/hbm_strings_filtered.log",
+      "exists": true,
+      "size_bytes": 12325,
+      "sha256": "1123f283f82c61e9ee577400b761c1158c07cb4ea236e6c938a472abf943b82b"
+    }
+  ],
+  "output_artifacts": [
+    {
+      "path": "reports/1710_hbm_hrt_hbrt_introspection_escalation.json",
+      "exists": true,
+      "size_bytes": 29872,
+      "sha256": "190c2de1c24d05ffd8d0061c6d7a06208bfefa053baef27850aaf2e9c32dc52c"
+    },
+    {
+      "path": "reports/1710_hbm_hrt_hbrt_introspection_escalation.md",
+      "exists": true,
+      "size_bytes": 381,
+      "sha256": "8794971a0837ff07c6cf4279144265934c7c7cfb70808d5a1d53ad67d931cc62"
+    }
+  ],
+  "blocking_or_failure_reasons": [
+    "HRT/HBRT/HBM introspection recovered model I/O and output scale only; hbir.mul output/add input-1 and source quant metadata remain unavailable."
+  ],
+  "next_minimal_experiments": [],
+  "safety": {
+    "generation_quality_run": false,
+    "product_routes_18888_18889_touched": false,
+    "dream7b_frontend_openclaw_traffic_touched": false
+  },
+  "verdict": "introspection_exhausted_vendor_artifacts_required",
+  "remote_status": "pass",
+  "remote_elapsed_total_seconds": 75.881,
+  "hbm_sha256": "d31aac20f491edad44dc4c9d09c0daad05abd1bc3736b4ca06fb294ebbd3c244",
+  "hbm_size_bytes": 781225720,
+  "tool_enumeration": {
+    "tools": [
+      {
+        "tool": "hrt_model_exec",
+        "path": "/usr/hobot/bin/hrt_model_exec",
+        "version_probe": {
+          "cmd": [
+            "hrt_model_exec",
+            "--help"
+          ],
+          "returncode": 0,
+          "elapsed_seconds": 0.051,
+          "stdout_path": "/mnt/nas/openclaw/reports/models/dream7b_s100p_v16_execution_20260703/evidence/hbm_introspection_v16/tool_help/hrt_model_exec.help.log",
+          "stderr_path": "/mnt/nas/openclaw/reports/models/dream7b_s100p_v16_execution_20260703/evidence/hbm_introspection_v16/tool_help/hrt_model_exec.help.log",
+          "stdout_len": 7075,
+          "stderr_len": 0
+        }
+      },
+      {
+        "tool": "hb_model_info",
+        "path": null
+      },
+      {
+        "tool": "hb_mapper",
+        "path": null
+      },
+      {
+        "tool": "hbdk-cc",
+        "path": null
+      },
+      {
+        "tool": "hbdk-cc-4",
+        "path": null
+      },
+      {
+        "tool": "hbdk3",
+        "path": null
+      },
+      {
+        "tool": "hbdk4",
+        "path": null
+      },
+      {
+        "tool": "hbm-info",
+        "path": null
+      },
+      {
+        "tool": "hbm_model_info",
+        "path": null
+      },
+      {
+        "tool": "strings",
+        "path": "/usr/bin/strings",
+        "version_probe": {
+          "cmd": [
+            "strings",
+            "--help"
+          ],
+          "returncode": 0,
+          "elapsed_seconds": 0.006,
+          "stdout_path": "/mnt/nas/openclaw/reports/models/dream7b_s100p_v16_execution_20260703/evidence/hbm_introspection_v16/tool_help/strings.help.log",
+          "stderr_path": "/mnt/nas/openclaw/reports/models/dream7b_s100p_v16_execution_20260703/evidence/hbm_introspection_v16/tool_help/strings.help.log",
+          "stdout_len": 1592,
+          "stderr_len": 0
+        }
+      },
+      {
+        "tool": "readelf",
+        "path": "/usr/bin/readelf",
+        "version_probe": {
+          "cmd": [
+            "readelf",
+            "--help"
+          ],
+          "returncode": 0,
+          "elapsed_seconds": 0.006,
+          "stdout_path": "/mnt/nas/openclaw/reports/models/dream7b_s100p_v16_execution_20260703/evidence/hbm_introspection_v16/tool_help/readelf.help.log",
+          "stderr_path": "/mnt/nas/openclaw/reports/models/dream7b_s100p_v16_execution_20260703/evidence/hbm_introspection_v16/tool_help/readelf.help.log",
+          "stdout_len": 4598,
+          "stderr_len": 0
+        }
+      },
+      {
+        "tool": "file",
+        "path": "/usr/bin/file",
+        "version_probe": {
+          "cmd": [
+            "file",
+            "--help"
+          ],
+          "returncode": 0,
+          "elapsed_seconds": 0.003,
+          "stdout_path": "/mnt/nas/openclaw/reports/models/dream7b_s100p_v16_execution_20260703/evidence/hbm_introspection_v16/tool_help/file.help.log",
+          "stderr_path": "/mnt/nas/openclaw/reports/models/dream7b_s100p_v16_execution_20260703/evidence/hbm_introspection_v16/tool_help/file.help.log",
+          "stdout_len": 3196,
+          "stderr_len": 0
+        }
+      },
+      {
+        "tool": "python3",
+        "path": "/usr/bin/python3",
+        "version_probe": {
+          "cmd": [
+            "python3",
+            "--help"
+          ],
+          "returncode": 0,
+          "elapsed_seconds": 0.002,
+          "stdout_path": "/mnt/nas/openclaw/reports/models/dream7b_s100p_v16_execution_20260703/evidence/hbm_introspection_v16/tool_help/python3.help.log",
+          "stderr_path": "/mnt/nas/openclaw/reports/models/dream7b_s100p_v16_execution_20260703/evidence/hbm_introspection_v16/tool_help/python3.help.log",
+          "stdout_len": 6383,
+          "stderr_len": 0
+        }
+      }
+    ],
+    "compgen": {
+      "cmd": [
+        "bash",
+        "-lc",
+        "compgen -c | grep -E '^(hrt|hb_|hbdk|hbm|hb_mapper)' | sort -u"
+      ],
+      "returncode": 0,
+      "elapsed_seconds": 0.161,
+      "stdout_path": "/mnt/nas/openclaw/reports/models/dream7b_s100p_v16_execution_20260703/evidence/hbm_introspection_v16/tool_compgen.log",
+      "stderr_path": "/mnt/nas/openclaw/reports/models/dream7b_s100p_v16_execution_20260703/evidence/hbm_introspection_v16/tool_compgen.log",
+      "stdout_len": 164,
+      "stderr_len": 0
+    }
+  },
+  "official_model_io_output_scale_recovered": true,
+  "recovered_tensor_visibility": {
+    "mul_input": [
+      "/mnt/nas/openclaw/reports/models/dream7b_s100p_v16_execution_20260703/evidence/hbm_introspection_v16/hrt_dump_bin/task-2-layer-0-BPU-hbir.mul_id_63_bpu_segment_0-input-0-_input_1-frame_260440331107.data.bin",
+      "/mnt/nas/openclaw/reports/models/dream7b_s100p_v16_execution_20260703/evidence/hbm_introspection_v16/hrt_dump_txt/task-2-layer-0-BPU-hbir.mul_id_63_bpu_segment_0-input-0-_input_1-frame_260448472638.data.bin",
+      "/mnt/nas/openclaw/reports/models/dream7b_s100p_v16_execution_20260703/evidence/hbm_introspection_v16/hrt_dump_npy/task-2-layer-0-BPU-hbir.mul_id_63_bpu_segment_0-input-0-_input_1-frame_260458339066.data.bin"
+    ],
+    "mul_output": [],
+    "add_input0": [
+      "/mnt/nas/openclaw/reports/models/dream7b_s100p_v16_execution_20260703/evidence/hbm_introspection_v16/hrt_dump_bin/task-2-layer-3-BPU-hbir.add_id_137_bpu_segment_3-input-0-qnt.const_fake_quant_id_3: 0-frame_260440356438.data.bin",
+      "/mnt/nas/openclaw/reports/models/dream7b_s100p_v16_execution_20260703/evidence/hbm_introspection_v16/hrt_dump_txt/task-2-layer-3-BPU-hbir.add_id_137_bpu_segment_3-input-0-qnt.const_fake_quant_id_3: 0-frame_260448504449.data.bin",
+      "/mnt/nas/openclaw/reports/models/dream7b_s100p_v16_execution_20260703/evidence/hbm_introspection_v16/hrt_dump_npy/task-2-layer-3-BPU-hbir.add_id_137_bpu_segment_3-input-0-qnt.const_fake_quant_id_3: 0-frame_260458367726.data.bin"
+    ],
+    "add_input1": [],
+    "add_output": [
+      "/mnt/nas/openclaw/reports/models/dream7b_s100p_v16_execution_20260703/evidence/hbm_introspection_v16/hrt_dump_bin/task-2-layer-3-BPU-hbir.add_id_137_bpu_segment_3-output-0-_output_0-frame_260440370396.data.bin",
+      "/mnt/nas/openclaw/reports/models/dream7b_s100p_v16_execution_20260703/evidence/hbm_introspection_v16/hrt_dump_txt/task-2-layer-3-BPU-hbir.add_id_137_bpu_segment_3-output-0-_output_0-frame_260448518064.data.bin",
+      "/mnt/nas/openclaw/reports/models/dream7b_s100p_v16_execution_20260703/evidence/hbm_introspection_v16/hrt_dump_npy/task-2-layer-3-BPU-hbir.add_id_137_bpu_segment_3-output-0-_output_0-frame_260458381525.data.bin"
+    ],
+    "gathernd_output": [
+      "/mnt/nas/openclaw/reports/models/dream7b_s100p_v16_execution_20260703/evidence/hbm_introspection_v16/hrt_dump_bin/task-2-layer-2-native::GatherND-qnt.const_fake_quant_id_3_cpu_segment_2-output-0-qnt.const_fake_quant_id_3: 0-frame_260440351127.data.bin",
+      "/mnt/nas/openclaw/reports/models/dream7b_s100p_v16_execution_20260703/evidence/hbm_introspection_v16/hrt_dump_txt/task-2-layer-2-native::GatherND-qnt.const_fake_quant_id_3_cpu_segment_2-output-0-qnt.const_fake_quant_id_3: 0-frame_260448499333.data.bin",
+      "/mnt/nas/openclaw/reports/models/dream7b_s100p_v16_execution_20260703/evidence/hbm_introspection_v16/hrt_dump_npy/task-2-layer-2-native::GatherND-qnt.const_fake_quant_id_3_cpu_segment_2-output-0-qnt.const_fake_quant_id_3: 0-frame_260458362590.data.bin"
+    ]
+  },
+  "hbm_commands": [
+    {
+      "cmd": [
+        "sha256sum",
+        "/mnt/nas/openclaw/models/dream7b-hbm/seq128-b1-lmheadq16-lasttoken/seg00_01/dream7b_segment_0_1_seq128_q8.hbm"
+      ],
+      "returncode": 0,
+      "elapsed_seconds": 6.601,
+      "stdout_path": "/mnt/nas/openclaw/reports/models/dream7b_s100p_v16_execution_20260703/evidence/hbm_introspection_v16/hbm_sha256.log",
+      "stderr_path": "/mnt/nas/openclaw/reports/models/dream7b_s100p_v16_execution_20260703/evidence/hbm_introspection_v16/hbm_sha256.log",
+      "stdout_len": 176,
+      "stderr_len": 0
+    },
+    {
+      "cmd": [
+        "file",
+        "/mnt/nas/openclaw/models/dream7b-hbm/seq128-b1-lmheadq16-lasttoken/seg00_01/dream7b_segment_0_1_seq128_q8.hbm"
+      ],
+      "returncode": 0,
+      "elapsed_seconds": 0.019,
+      "stdout_path": "/mnt/nas/openclaw/reports/models/dream7b_s100p_v16_execution_20260703/evidence/hbm_introspection_v16/hbm_file.log",
+      "stderr_path": "/mnt/nas/openclaw/reports/models/dream7b_s100p_v16_execution_20260703/evidence/hbm_introspection_v16/hbm_file.log",
+      "stdout_len": 183,
+      "stderr_len": 0
+    },
+    {
+      "cmd": [
+        "readelf",
+        "-h",
+        "/mnt/nas/openclaw/models/dream7b-hbm/seq128-b1-lmheadq16-lasttoken/seg00_01/dream7b_segment_0_1_seq128_q8.hbm"
+      ],
+      "returncode": 0,
+      "elapsed_seconds": 0.006,
+      "stdout_path": "/mnt/nas/openclaw/reports/models/dream7b_s100p_v16_execution_20260703/evidence/hbm_introspection_v16/hbm_readelf_h.log",
+      "stderr_path": "/mnt/nas/openclaw/reports/models/dream7b_s100p_v16_execution_20260703/evidence/hbm_introspection_v16/hbm_readelf_h.log",
+      "stdout_len": 951,
+      "stderr_len": 0
+    },
+    {
+      "cmd": [
+        "hrt_model_exec",
+        "model_info",
+        "--model_file",
+        "/mnt/nas/openclaw/models/dream7b-hbm/seq128-b1-lmheadq16-lasttoken/seg00_01/dream7b_segment_0_1_seq128_q8.hbm"
+      ],
+      "returncode": 0,
+      "elapsed_seconds": 8.075,
+      "stdout_path": "/mnt/nas/openclaw/reports/models/dream7b_s100p_v16_execution_20260703/evidence/hbm_introspection_v16/hrt_model_exec_model_info.log",
+      "stderr_path": "/mnt/nas/openclaw/reports/models/dream7b_s100p_v16_execution_20260703/evidence/hbm_introspection_v16/hrt_model_exec_model_info.log",
+      "stdout_len": 1123,
+      "stderr_len": 0
+    },
+    {
+      "cmd": [
+        "hb_model_info",
+        "--model_file",
+        "/mnt/nas/openclaw/models/dream7b-hbm/seq128-b1-lmheadq16-lasttoken/seg00_01/dream7b_segment_0_1_seq128_q8.hbm"
+      ],
+      "exception": "FileNotFoundError",
+      "message": "[Errno 2] No such file or directory: 'hb_model_info'",
+      "elapsed_seconds": 0.002,
+      "log_path": "/mnt/nas/openclaw/reports/models/dream7b_s100p_v16_execution_20260703/evidence/hbm_introspection_v16/hb_model_info_model_file.log"
+    },
+    {
+      "cmd": [
+        "hb_model_info",
+        "/mnt/nas/openclaw/models/dream7b-hbm/seq128-b1-lmheadq16-lasttoken/seg00_01/dream7b_segment_0_1_seq128_q8.hbm"
+      ],
+      "exception": "FileNotFoundError",
+      "message": "[Errno 2] No such file or directory: 'hb_model_info'",
+      "elapsed_seconds": 0.002,
+      "log_path": "/mnt/nas/openclaw/reports/models/dream7b_s100p_v16_execution_20260703/evidence/hbm_introspection_v16/hb_model_info_positional.log"
+    },
+    {
+      "cmd": [
+        "bash",
+        "-lc",
+        "strings -a '/mnt/nas/openclaw/models/dream7b-hbm/seq128-b1-lmheadq16-lasttoken/seg00_01/dream7b_segment_0_1_seq128_q8.hbm' | grep -Ei 'scale|zero_point|zero-point|qnt|quant|const_fake_quant|hbir.mul|hbir.add|GatherND|_input_0|_input_1|_output_0|dream_segment_00_01' | head -2000"
+      ],
+      "returncode": 0,
+      "elapsed_seconds": 6.938,
+      "stdout_path": "/mnt/nas/openclaw/reports/models/dream7b_s100p_v16_execution_20260703/evidence/hbm_introspection_v16/hbm_strings_filtered.log",
+      "stderr_path": "/mnt/nas/openclaw/reports/models/dream7b_s100p_v16_execution_20260703/evidence/hbm_introspection_v16/hbm_strings_filtered.log",
+      "stdout_len": 11991,
+      "stderr_len": 0
+    },
+    {
+      "cmd": [
+        "bash",
+        "-lc",
+        "strings -a '/mnt/nas/openclaw/models/dream7b-hbm/seq128-b1-lmheadq16-lasttoken/seg00_01/dream7b_segment_0_1_seq128_q8.hbm' | grep -Ei 'hbir|GatherND|qnt|scale|zero|input|output' | head -5000"
+      ],
+      "returncode": 0,
+      "elapsed_seconds": 5.641,
+      "stdout_path": "/mnt/nas/openclaw/reports/models/dream7b_s100p_v16_execution_20260703/evidence/hbm_introspection_v16/hbm_strings_broad.log",
+      "stderr_path": "/mnt/nas/openclaw/reports/models/dream7b_s100p_v16_execution_20260703/evidence/hbm_introspection_v16/hbm_strings_broad.log",
+      "stdout_len": 514,
+      "stderr_len": 0
+    }
+  ],
+  "hrt_dump_rows": [
+    {
+      "cmd": [
+        "hrt_model_exec",
+        "infer",
+        "--model_file",
+        "/mnt/nas/openclaw/models/dream7b-hbm/seq128-b1-lmheadq16-lasttoken/seg00_01/dream7b_segment_0_1_seq128_q8.hbm",
+        "--model_name",
+        "dream_segment_00_01",
+        "--input_file",
+        "/mnt/nas/openclaw/reports/models/dream7b_s100p_v16_execution_20260703/evidence/hbm_introspection_v16/hrt_inputs/input_0_tokens.npy,/mnt/nas/openclaw/reports/models/dream7b_s100p_v16_execution_20260703/evidence/hbm_introspection_v16/hrt_inputs/input_1_positions.npy",
+        "--frame_count",
+        "1",
+        "--dump_intermediate",
+        "1",
+        "--enable_dump",
+        "true",
+        "--dump_path",
+        "/mnt/nas/openclaw/reports/models/dream7b_s100p_v16_execution_20260703/evidence/hbm_introspection_v16/hrt_dump_bin",
+        "--dump_format",
+        "bin"
+      ],
+      "returncode": 0,
+      "elapsed_seconds": 8.165,
+      "stdout_path": "/mnt/nas/openclaw/reports/models/dream7b_s100p_v16_execution_20260703/evidence/hbm_introspection_v16/hrt_dump_bin.log",
+      "stderr_path": "/mnt/nas/openclaw/reports/models/dream7b_s100p_v16_execution_20260703/evidence/hbm_introspection_v16/hrt_dump_bin.log",
+      "stdout_len": 4093,
+      "stderr_len": 0,
+      "dump_file_listing": [
+        {
+          "path": "/mnt/nas/openclaw/reports/models/dream7b_s100p_v16_execution_20260703/evidence/hbm_introspection_v16/hrt_dump_bin/model_infer_input_0__input_0.bin",
+          "size_bytes": 512,
+          "sha256": "076a27c79e5ace2a3d47f9dd2e83e4ff6ea8872b3c2218f66c92b89b55f36560"
+        },
+        {
+          "path": "/mnt/nas/openclaw/reports/models/dream7b_s100p_v16_execution_20260703/evidence/hbm_introspection_v16/hrt_dump_bin/model_infer_input_1__input_1.bin",
+          "size_bytes": 512,
+          "sha256": "1abb49eec50723c018c1197161b8cc46c61cab2dbfdd96287a7e3e20bbcdcc99"
+        },
+        {
+          "path": "/mnt/nas/openclaw/reports/models/dream7b_s100p_v16_execution_20260703/evidence/hbm_introspection_v16/hrt_dump_bin/model_infer_output_0__output_0.bin",
+          "size_bytes": 917504,
+          "sha256": "9740a05d80bdd43470ce441fce1a188f579062acb21ca85fa2b251d185d2755e"
+        },
+        {
+          "path": "/mnt/nas/openclaw/reports/models/dream7b_s100p_v16_execution_20260703/evidence/hbm_introspection_v16/hrt_dump_bin/task-2-layer-0-BPU-hbir.mul_id_63_bpu_segment_0-input-0-_input_1-frame_260440331107.data.bin",
+          "size_bytes": 512,
+          "sha256": "1abb49eec50723c018c1197161b8cc46c61cab2dbfdd96287a7e3e20bbcdcc99"
+        },
+        {
+          "path": "/mnt/nas/openclaw/reports/models/dream7b_s100p_v16_execution_20260703/evidence/hbm_introspection_v16/hrt_dump_bin/task-2-layer-1-native::View-hbir.reshape_id_1_cpu_segment_1-input-0-_input_0-frame_260440347423.data.bin",
+          "size_bytes": 512,
+          "sha256": "076a27c79e5ace2a3d47f9dd2e83e4ff6ea8872b3c2218f66c92b89b55f36560"
+        },
+        {
+          "path": "/mnt/nas/openclaw/reports/models/dream7b_s100p_v16_execution_20260703/evidence/hbm_introspection_v16/hrt_dump_bin/task-2-layer-1-native::View-hbir.reshape_id_1_cpu_segment_1-output-0-hbir.reshape_id_1: 0-frame_260440348177.data.bin",
+          "size_bytes": 512,
+          "sha256": "076a27c79e5ace2a3d47f9dd2e83e4ff6ea8872b3c2218f66c92b89b55f36560"
+        },
+        {
+          "path": "/mnt/nas/openclaw/reports/models/dream7b_s100p_v16_execution_20260703/evidence/hbm_introspection_v16/hrt_dump_bin/task-2-layer-2-native::GatherND-qnt.const_fake_quant_id_3_cpu_segment_2-input-0-hbir.reshape_id_1: 0-frame_260440348827.data.bin",
+          "size_bytes": 512,
+          "sha256": "076a27c79e5ace2a3d47f9dd2e83e4ff6ea8872b3c2218f66c92b89b55f36560"
+        },
+        {
+          "path": "/mnt/nas/openclaw/reports/models/dream7b_s100p_v16_execution_20260703/evidence/hbm_introspection_v16/hrt_dump_bin/task-2-layer-2-native::GatherND-qnt.const_fake_quant_id_3_cpu_segment_2-output-0-qnt.const_fake_quant_id_3: 0-frame_260440351127.data.bin",
+          "size_bytes": 458752,
+          "sha256": "1c2a53674f9cfa49b85ca0c7b9e50313ba1ca30fcba4cd501ed67f4ab31d106f"
+        },
+        {
+          "path": "/mnt/nas/openclaw/reports/models/dream7b_s100p_v16_execution_20260703/evidence/hbm_introspection_v16/hrt_dump_bin/task-2-layer-3-BPU-hbir.add_id_137_bpu_segment_3-input-0-qnt.const_fake_quant_id_3: 0-frame_260440356438.data.bin",
+          "size_bytes": 458752,
+          "sha256": "1c2a53674f9cfa49b85ca0c7b9e50313ba1ca30fcba4cd501ed67f4ab31d106f"
+        },
+        {
+          "path": "/mnt/nas/openclaw/reports/models/dream7b_s100p_v16_execution_20260703/evidence/hbm_introspection_v16/hrt_dump_bin/task-2-layer-3-BPU-hbir.add_id_137_bpu_segment_3-output-0-_output_0-frame_260440370396.data.bin",
+          "size_bytes": 917504,
+          "sha256": "9740a05d80bdd43470ce441fce1a188f579062acb21ca85fa2b251d185d2755e"
+        }
+      ]
+    },
+    {
+      "cmd": [
+        "hrt_model_exec",
+        "infer",
+        "--model_file",
+        "/mnt/nas/openclaw/models/dream7b-hbm/seq128-b1-lmheadq16-lasttoken/seg00_01/dream7b_segment_0_1_seq128_q8.hbm",
+        "--model_name",
+        "dream_segment_00_01",
+        "--input_file",
+        "/mnt/nas/openclaw/reports/models/dream7b_s100p_v16_execution_20260703/evidence/hbm_introspection_v16/hrt_inputs/input_0_tokens.npy,/mnt/nas/openclaw/reports/models/dream7b_s100p_v16_execution_20260703/evidence/hbm_introspection_v16/hrt_inputs/input_1_positions.npy",
+        "--frame_count",
+        "1",
+        "--dump_intermediate",
+        "1",
+        "--enable_dump",
+        "true",
+        "--dump_path",
+        "/mnt/nas/openclaw/reports/models/dream7b_s100p_v16_execution_20260703/evidence/hbm_introspection_v16/hrt_dump_txt",
+        "--dump_format",
+        "txt"
+      ],
+      "returncode": 0,
+      "elapsed_seconds": 9.822,
+      "stdout_path": "/mnt/nas/openclaw/reports/models/dream7b_s100p_v16_execution_20260703/evidence/hbm_introspection_v16/hrt_dump_txt.log",
+      "stderr_path": "/mnt/nas/openclaw/reports/models/dream7b_s100p_v16_execution_20260703/evidence/hbm_introspection_v16/hrt_dump_txt.log",
+      "stdout_len": 4617,
+      "stderr_len": 0,
+      "dump_file_listing": [
+        {
+          "path": "/mnt/nas/openclaw/reports/models/dream7b_s100p_v16_execution_20260703/evidence/hbm_introspection_v16/hrt_dump_txt/model_infer_input_0__input_0.txt",
+          "size_bytes": 384,
+          "sha256": "63fbf18e4cd96ce4571db1e4d35ef804423030a98640e95dcd1bb033b5804153"
+        },
+        {
+          "path": "/mnt/nas/openclaw/reports/models/dream7b_s100p_v16_execution_20260703/evidence/hbm_introspection_v16/hrt_dump_txt/model_infer_input_1__input_1.txt",
+          "size_bytes": 530,
+          "sha256": "88aca39045c20404a78649ffc71bb51322174a28bce2c04977f8448f35c10467"
+        },
+        {
+          "path": "/mnt/nas/openclaw/reports/models/dream7b_s100p_v16_execution_20260703/evidence/hbm_introspection_v16/hrt_dump_txt/model_infer_output_0__output_0.txt",
+          "size_bytes": 2556660,
+          "sha256": "ffb9cc2ae758d6af813a6537e94c9ba0ba30744d00bedac4a3fc71410b6d93b1"
+        },
+        {
+          "path": "/mnt/nas/openclaw/reports/models/dream7b_s100p_v16_execution_20260703/evidence/hbm_introspection_v16/hrt_dump_txt/task-2-layer-0-BPU-hbir.mul_id_63_bpu_segment_0-input-0-_input_1-frame_260448472638.data.bin",
+          "size_bytes": 512,
+          "sha256": "1abb49eec50723c018c1197161b8cc46c61cab2dbfdd96287a7e3e20bbcdcc99"
+        },
+        {
+          "path": "/mnt/nas/openclaw/reports/models/dream7b_s100p_v16_execution_20260703/evidence/hbm_introspection_v16/hrt_dump_txt/task-2-layer-1-native::View-hbir.reshape_id_1_cpu_segment_1-input-0-_input_0-frame_260448496696.data.bin",
+          "size_bytes": 512,
+          "sha256": "076a27c79e5ace2a3d47f9dd2e83e4ff6ea8872b3c2218f66c92b89b55f36560"
+        },
+        {
+          "path": "/mnt/nas/openclaw/reports/models/dream7b_s100p_v16_execution_20260703/evidence/hbm_introspection_v16/hrt_dump_txt/task-2-layer-1-native::View-hbir.reshape_id_1_cpu_segment_1-output-0-hbir.reshape_id_1: 0-frame_260448497473.data.bin",
+          "size_bytes": 512,
+          "sha256": "076a27c79e5ace2a3d47f9dd2e83e4ff6ea8872b3c2218f66c92b89b55f36560"
+        },
+        {
+          "path": "/mnt/nas/openclaw/reports/models/dream7b_s100p_v16_execution_20260703/evidence/hbm_introspection_v16/hrt_dump_txt/task-2-layer-2-native::GatherND-qnt.const_fake_quant_id_3_cpu_segment_2-input-0-hbir.reshape_id_1: 0-frame_260448498085.data.bin",
+          "size_bytes": 512,
+          "sha256": "076a27c79e5ace2a3d47f9dd2e83e4ff6ea8872b3c2218f66c92b89b55f36560"
+        },
+        {
+          "path": "/mnt/nas/openclaw/reports/models/dream7b_s100p_v16_execution_20260703/evidence/hbm_introspection_v16/hrt_dump_txt/task-2-layer-2-native::GatherND-qnt.const_fake_quant_id_3_cpu_segment_2-output-0-qnt.const_fake_quant_id_3: 0-frame_260448499333.data.bin",
+          "size_bytes": 458752,
+          "sha256": "1c2a53674f9cfa49b85ca0c7b9e50313ba1ca30fcba4cd501ed67f4ab31d106f"
+        },
+        {
+          "path": "/mnt/nas/openclaw/reports/models/dream7b_s100p_v16_execution_20260703/evidence/hbm_introspection_v16/hrt_dump_txt/task-2-layer-3-BPU-hbir.add_id_137_bpu_segment_3-input-0-qnt.const_fake_quant_id_3: 0-frame_260448504449.data.bin",
+          "size_bytes": 458752,
+          "sha256": "1c2a53674f9cfa49b85ca0c7b9e50313ba1ca30fcba4cd501ed67f4ab31d106f"
+        },
+        {
+          "path": "/mnt/nas/openclaw/reports/models/dream7b_s100p_v16_execution_20260703/evidence/hbm_introspection_v16/hrt_dump_txt/task-2-layer-3-BPU-hbir.add_id_137_bpu_segment_3-output-0-_output_0-frame_260448518064.data.bin",
+          "size_bytes": 917504,
+          "sha256": "9740a05d80bdd43470ce441fce1a188f579062acb21ca85fa2b251d185d2755e"
+        }
+      ]
+    },
+    {
+      "cmd": [
+        "hrt_model_exec",
+        "infer",
+        "--model_file",
+        "/mnt/nas/openclaw/models/dream7b-hbm/seq128-b1-lmheadq16-lasttoken/seg00_01/dream7b_segment_0_1_seq128_q8.hbm",
+        "--model_name",
+        "dream_segment_00_01",
+        "--input_file",
+        "/mnt/nas/openclaw/reports/models/dream7b_s100p_v16_execution_20260703/evidence/hbm_introspection_v16/hrt_inputs/input_0_tokens.npy,/mnt/nas/openclaw/reports/models/dream7b_s100p_v16_execution_20260703/evidence/hbm_introspection_v16/hrt_inputs/input_1_positions.npy",
+        "--frame_count",
+        "1",
+        "--dump_intermediate",
+        "1",
+        "--enable_dump",
+        "true",
+        "--dump_path",
+        "/mnt/nas/openclaw/reports/models/dream7b_s100p_v16_execution_20260703/evidence/hbm_introspection_v16/hrt_dump_npy",
+        "--dump_format",
+        "npy"
+      ],
+      "returncode": 0,
+      "elapsed_seconds": 9.11,
+      "stdout_path": "/mnt/nas/openclaw/reports/models/dream7b_s100p_v16_execution_20260703/evidence/hbm_introspection_v16/hrt_dump_npy.log",
+      "stderr_path": "/mnt/nas/openclaw/reports/models/dream7b_s100p_v16_execution_20260703/evidence/hbm_introspection_v16/hrt_dump_npy.log",
+      "stdout_len": 4286,
+      "stderr_len": 0,
+      "dump_file_listing": [
+        {
+          "path": "/mnt/nas/openclaw/reports/models/dream7b_s100p_v16_execution_20260703/evidence/hbm_introspection_v16/hrt_dump_npy/model_infer_input_0__input_0.npy",
+          "size_bytes": 592,
+          "sha256": "f2bf321a2574d39ceeb79a525edff93f742247e9149c973da7ea08e51ec60350"
+        },
+        {
+          "path": "/mnt/nas/openclaw/reports/models/dream7b_s100p_v16_execution_20260703/evidence/hbm_introspection_v16/hrt_dump_npy/model_infer_input_1__input_1.npy",
+          "size_bytes": 592,
+          "sha256": "70101bdbc6620fa0ca4bbca117a9c1fff7a51469d041a79cbce1d98355740a81"
+        },
+        {
+          "path": "/mnt/nas/openclaw/reports/models/dream7b_s100p_v16_execution_20260703/evidence/hbm_introspection_v16/hrt_dump_npy/model_infer_output_0__output_0.npy",
+          "size_bytes": 917584,
+          "sha256": "8e5d9db9b03e487816e0e261715d707892bc738f950ee876aeddc1689d7c3bf8"
+        },
+        {
+          "path": "/mnt/nas/openclaw/reports/models/dream7b_s100p_v16_execution_20260703/evidence/hbm_introspection_v16/hrt_dump_npy/task-2-layer-0-BPU-hbir.mul_id_63_bpu_segment_0-input-0-_input_1-frame_260458339066.data.bin",
+          "size_bytes": 512,
+          "sha256": "1abb49eec50723c018c1197161b8cc46c61cab2dbfdd96287a7e3e20bbcdcc99"
+        },
+        {
+          "path": "/mnt/nas/openclaw/reports/models/dream7b_s100p_v16_execution_20260703/evidence/hbm_introspection_v16/hrt_dump_npy/task-2-layer-1-native::View-hbir.reshape_id_1_cpu_segment_1-input-0-_input_0-frame_260458359833.data.bin",
+          "size_bytes": 512,
+          "sha256": "076a27c79e5ace2a3d47f9dd2e83e4ff6ea8872b3c2218f66c92b89b55f36560"
+        },
+        {
+          "path": "/mnt/nas/openclaw/reports/models/dream7b_s100p_v16_execution_20260703/evidence/hbm_introspection_v16/hrt_dump_npy/task-2-layer-1-native::View-hbir.reshape_id_1_cpu_segment_1-output-0-hbir.reshape_id_1: 0-frame_260458360676.data.bin",
+          "size_bytes": 512,
+          "sha256": "076a27c79e5ace2a3d47f9dd2e83e4ff6ea8872b3c2218f66c92b89b55f36560"
+        },
+        {
+          "path": "/mnt/nas/openclaw/reports/models/dream7b_s100p_v16_execution_20260703/evidence/hbm_introspection_v16/hrt_dump_npy/task-2-layer-2-native::GatherND-qnt.const_fake_quant_id_3_cpu_segment_2-input-0-hbir.reshape_id_1: 0-frame_260458361335.data.bin",
+          "size_bytes": 512,
+          "sha256": "076a27c79e5ace2a3d47f9dd2e83e4ff6ea8872b3c2218f66c92b89b55f36560"
+        },
+        {
+          "path": "/mnt/nas/openclaw/reports/models/dream7b_s100p_v16_execution_20260703/evidence/hbm_introspection_v16/hrt_dump_npy/task-2-layer-2-native::GatherND-qnt.const_fake_quant_id_3_cpu_segment_2-output-0-qnt.const_fake_quant_id_3: 0-frame_260458362590.data.bin",
+          "size_bytes": 458752,
+          "sha256": "1c2a53674f9cfa49b85ca0c7b9e50313ba1ca30fcba4cd501ed67f4ab31d106f"
+        },
+        {
+          "path": "/mnt/nas/openclaw/reports/models/dream7b_s100p_v16_execution_20260703/evidence/hbm_introspection_v16/hrt_dump_npy/task-2-layer-3-BPU-hbir.add_id_137_bpu_segment_3-input-0-qnt.const_fake_quant_id_3: 0-frame_260458367726.data.bin",
+          "size_bytes": 458752,
+          "sha256": "1c2a53674f9cfa49b85ca0c7b9e50313ba1ca30fcba4cd501ed67f4ab31d106f"
+        },
+        {
+          "path": "/mnt/nas/openclaw/reports/models/dream7b_s100p_v16_execution_20260703/evidence/hbm_introspection_v16/hrt_dump_npy/task-2-layer-3-BPU-hbir.add_id_137_bpu_segment_3-output-0-_output_0-frame_260458381525.data.bin",
+          "size_bytes": 917504,
+          "sha256": "9740a05d80bdd43470ce441fce1a188f579062acb21ca85fa2b251d185d2755e"
+        }
+      ]
+    }
+  ],
+  "evidence_root": "evidence/dream7b_s100p_v16_execution_20260703_windows_safe/evidence/hbm_introspection_v16",
+  "partial_metadata_boundary": "model I/O and output scale are official metadata, but they do not expose GatherND scale, hbir.mul output, hbir.add input-1, source graph, or quant table."
+}

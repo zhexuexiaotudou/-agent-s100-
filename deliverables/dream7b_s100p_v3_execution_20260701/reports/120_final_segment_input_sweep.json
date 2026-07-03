@@ -1,0 +1,3477 @@
+{
+  "created_at_utc": "2026-07-01T07:10:44Z",
+  "final_segment_input_sweep_verdict": "pass",
+  "hbm_path": "/mnt/nas/openclaw/models/dream7b-hbm/seq128-b1-lmheadq16-lasttoken/seg27_28/dream7b_segment_27_28_seq128_q8_lmheadq16_last_token_logits.hbm",
+  "likely_issue_class": "input_range_or_scale",
+  "model_name": "dream_segment_27_28_last_token_logits",
+  "real_hidden_constant_output": true,
+  "real_seg26_dequant_source": "/mnt/nas/openclaw/reports/models/codex_dream7b_s100p_research_run_20260701/evidence/s100p_boundaries/boundary_zeros_ramp/zeros/seg_26_output.npy",
+  "real_seg26_raw_source": "/mnt/nas/openclaw/reports/models/codex_dream7b_s100p_research_run_20260701/evidence/s100p_boundaries/boundary_zeros_ramp/zeros/seg_26_raw_output.npy",
+  "run_id": "v3_run_20260701",
+  "schema_version": "dream7b_s100p_final_segment_input_sweep_v3",
+  "smallest_recovery_variant": "real_x_div_4",
+  "synthetic_controls_nonconstant": true,
+  "synthetic_nonconstant_variants": [
+    "synthetic_zeros",
+    "synthetic_ones",
+    "synthetic_ramp",
+    "synthetic_last_token_impulse"
+  ],
+  "variants": [
+    {
+      "dequant_logits_path": "evidence/final_segment_input_sweep/v3_run_20260701/real_x/dequant_logits.npy",
+      "dequant_output_stats": {
+        "abs_max": 0.0,
+        "allzero": true,
+        "constant": true,
+        "dtype": "float32",
+        "inf_count": 0,
+        "max": 0.0,
+        "mean": 0.0,
+        "min": 0.0,
+        "nan_count": 0,
+        "nonzero_count": 0,
+        "p0": 0.0,
+        "p1": 0.0,
+        "p100": 0.0,
+        "p5": 0.0,
+        "p50": 0.0,
+        "p95": 0.0,
+        "p99": 0.0,
+        "shape": [
+          152064
+        ],
+        "size": 152064,
+        "std": 0.0
+      },
+      "entropy": 11.932056763842207,
+      "input_path": "evidence/final_segment_input_sweep/v3_run_20260701/real_x/input.npy",
+      "input_stats": {
+        "abs_max": 16.29678726196289,
+        "allzero": false,
+        "constant": false,
+        "dtype": "float32",
+        "inf_count": 0,
+        "max": 16.29678726196289,
+        "mean": 0.005043780339334804,
+        "min": -16.29678726196289,
+        "nan_count": 0,
+        "nonzero_count": 458751,
+        "p0": -16.29678726196289,
+        "p1": -16.29678726196289,
+        "p100": 16.29678726196289,
+        "p5": -16.29678726196289,
+        "p50": 0.27563104033470154,
+        "p95": 16.29678726196289,
+        "p99": 16.29678726196289,
+        "shape": [
+          128,
+          3584
+        ],
+        "size": 458752,
+        "std": 16.123766137608065
+      },
+      "metadata_path": "evidence/final_segment_input_sweep/v3_run_20260701/real_x/metadata.json",
+      "normalized_entropy": 1.0,
+      "quant_metadata": {
+        "available": true,
+        "repr": "<hbm_runtime.HB_HBMRuntime.QuantParams object at 0xffff9d550230>",
+        "scale": [
+          0.00025415877462364733
+        ],
+        "scale_first": 0.00025415877462364733,
+        "zero_point": [
+          0.0
+        ]
+      },
+      "raw_output_path": "evidence/final_segment_input_sweep/v3_run_20260701/real_x/raw_output.npy",
+      "raw_output_stats": {
+        "abs_max": 0.0,
+        "allzero": true,
+        "constant": true,
+        "dtype": "int16",
+        "inf_count": 0,
+        "max": 0.0,
+        "mean": 0.0,
+        "min": 0.0,
+        "nan_count": 0,
+        "nonzero_count": 0,
+        "p0": 0.0,
+        "p1": 0.0,
+        "p100": 0.0,
+        "p5": 0.0,
+        "p50": 0.0,
+        "p95": 0.0,
+        "p99": 0.0,
+        "shape": [
+          1,
+          152064
+        ],
+        "size": 152064,
+        "std": 0.0
+      },
+      "run_status": "pass",
+      "runtime_exception": null,
+      "top1_probability": 6.576178451178451e-06,
+      "top20_logits": [
+        {
+          "index": 0,
+          "value": 0.0
+        },
+        {
+          "index": 17,
+          "value": 0.0
+        },
+        {
+          "index": 16,
+          "value": 0.0
+        },
+        {
+          "index": 15,
+          "value": 0.0
+        },
+        {
+          "index": 14,
+          "value": 0.0
+        },
+        {
+          "index": 13,
+          "value": 0.0
+        },
+        {
+          "index": 12,
+          "value": 0.0
+        },
+        {
+          "index": 11,
+          "value": 0.0
+        },
+        {
+          "index": 10,
+          "value": 0.0
+        },
+        {
+          "index": 9,
+          "value": 0.0
+        },
+        {
+          "index": 8,
+          "value": 0.0
+        },
+        {
+          "index": 7,
+          "value": 0.0
+        },
+        {
+          "index": 6,
+          "value": 0.0
+        },
+        {
+          "index": 5,
+          "value": 0.0
+        },
+        {
+          "index": 4,
+          "value": 0.0
+        },
+        {
+          "index": 3,
+          "value": 0.0
+        },
+        {
+          "index": 2,
+          "value": 0.0
+        },
+        {
+          "index": 1,
+          "value": 0.0
+        },
+        {
+          "index": 18,
+          "value": 0.0
+        },
+        {
+          "index": 19,
+          "value": 0.0
+        }
+      ],
+      "variant_id": "real_x",
+      "why_included": "real seg26 dequant output"
+    },
+    {
+      "dequant_logits_path": "evidence/final_segment_input_sweep/v3_run_20260701/real_x_div_2/dequant_logits.npy",
+      "dequant_output_stats": {
+        "abs_max": 0.0,
+        "allzero": true,
+        "constant": true,
+        "dtype": "float32",
+        "inf_count": 0,
+        "max": 0.0,
+        "mean": 0.0,
+        "min": 0.0,
+        "nan_count": 0,
+        "nonzero_count": 0,
+        "p0": 0.0,
+        "p1": 0.0,
+        "p100": 0.0,
+        "p5": 0.0,
+        "p50": 0.0,
+        "p95": 0.0,
+        "p99": 0.0,
+        "shape": [
+          152064
+        ],
+        "size": 152064,
+        "std": 0.0
+      },
+      "entropy": 11.932056763842207,
+      "input_path": "evidence/final_segment_input_sweep/v3_run_20260701/real_x_div_2/input.npy",
+      "input_stats": {
+        "abs_max": 8.148393630981445,
+        "allzero": false,
+        "constant": false,
+        "dtype": "float32",
+        "inf_count": 0,
+        "max": 8.148393630981445,
+        "mean": 0.002521890169667402,
+        "min": -8.148393630981445,
+        "nan_count": 0,
+        "nonzero_count": 458751,
+        "p0": -8.148393630981445,
+        "p1": -8.148393630981445,
+        "p100": 8.148393630981445,
+        "p5": -8.148393630981445,
+        "p50": 0.13781552016735077,
+        "p95": 8.148393630981445,
+        "p99": 8.148393630981445,
+        "shape": [
+          128,
+          3584
+        ],
+        "size": 458752,
+        "std": 8.061883068804033
+      },
+      "metadata_path": "evidence/final_segment_input_sweep/v3_run_20260701/real_x_div_2/metadata.json",
+      "normalized_entropy": 1.0,
+      "quant_metadata": {
+        "available": true,
+        "repr": "<hbm_runtime.HB_HBMRuntime.QuantParams object at 0xffff9d550230>",
+        "scale": [
+          0.00025415877462364733
+        ],
+        "scale_first": 0.00025415877462364733,
+        "zero_point": [
+          0.0
+        ]
+      },
+      "raw_output_path": "evidence/final_segment_input_sweep/v3_run_20260701/real_x_div_2/raw_output.npy",
+      "raw_output_stats": {
+        "abs_max": 0.0,
+        "allzero": true,
+        "constant": true,
+        "dtype": "int16",
+        "inf_count": 0,
+        "max": 0.0,
+        "mean": 0.0,
+        "min": 0.0,
+        "nan_count": 0,
+        "nonzero_count": 0,
+        "p0": 0.0,
+        "p1": 0.0,
+        "p100": 0.0,
+        "p5": 0.0,
+        "p50": 0.0,
+        "p95": 0.0,
+        "p99": 0.0,
+        "shape": [
+          1,
+          152064
+        ],
+        "size": 152064,
+        "std": 0.0
+      },
+      "run_status": "pass",
+      "runtime_exception": null,
+      "top1_probability": 6.576178451178451e-06,
+      "top20_logits": [
+        {
+          "index": 0,
+          "value": 0.0
+        },
+        {
+          "index": 17,
+          "value": 0.0
+        },
+        {
+          "index": 16,
+          "value": 0.0
+        },
+        {
+          "index": 15,
+          "value": 0.0
+        },
+        {
+          "index": 14,
+          "value": 0.0
+        },
+        {
+          "index": 13,
+          "value": 0.0
+        },
+        {
+          "index": 12,
+          "value": 0.0
+        },
+        {
+          "index": 11,
+          "value": 0.0
+        },
+        {
+          "index": 10,
+          "value": 0.0
+        },
+        {
+          "index": 9,
+          "value": 0.0
+        },
+        {
+          "index": 8,
+          "value": 0.0
+        },
+        {
+          "index": 7,
+          "value": 0.0
+        },
+        {
+          "index": 6,
+          "value": 0.0
+        },
+        {
+          "index": 5,
+          "value": 0.0
+        },
+        {
+          "index": 4,
+          "value": 0.0
+        },
+        {
+          "index": 3,
+          "value": 0.0
+        },
+        {
+          "index": 2,
+          "value": 0.0
+        },
+        {
+          "index": 1,
+          "value": 0.0
+        },
+        {
+          "index": 18,
+          "value": 0.0
+        },
+        {
+          "index": 19,
+          "value": 0.0
+        }
+      ],
+      "variant_id": "real_x_div_2",
+      "why_included": "real seg26 dequant divided by 2"
+    },
+    {
+      "dequant_logits_path": "evidence/final_segment_input_sweep/v3_run_20260701/real_x_div_4/dequant_logits.npy",
+      "dequant_output_stats": {
+        "abs_max": 6.649810314178467,
+        "allzero": false,
+        "constant": false,
+        "dtype": "float32",
+        "inf_count": 0,
+        "max": 6.649810314178467,
+        "mean": 2.1254612579155183,
+        "min": -4.513859748840332,
+        "nan_count": 0,
+        "nonzero_count": 152059,
+        "p0": -4.513859748840332,
+        "p1": -0.546281259059906,
+        "p100": 6.649810314178467,
+        "p5": 0.42800337076187134,
+        "p50": 2.365201473236084,
+        "p95": 3.103024482727051,
+        "p99": 3.8377974033355713,
+        "shape": [
+          152064
+        ],
+        "size": 152064,
+        "std": 0.8246555921828305
+      },
+      "entropy": 11.677925612461761,
+      "input_path": "evidence/final_segment_input_sweep/v3_run_20260701/real_x_div_4/input.npy",
+      "input_stats": {
+        "abs_max": 4.074196815490723,
+        "allzero": false,
+        "constant": false,
+        "dtype": "float32",
+        "inf_count": 0,
+        "max": 4.074196815490723,
+        "mean": 0.001260945084833701,
+        "min": -4.074196815490723,
+        "nan_count": 0,
+        "nonzero_count": 458751,
+        "p0": -4.074196815490723,
+        "p1": -4.074196815490723,
+        "p100": 4.074196815490723,
+        "p5": -4.074196815490723,
+        "p50": 0.06890776008367538,
+        "p95": 4.074196815490723,
+        "p99": 4.074196815490723,
+        "shape": [
+          128,
+          3584
+        ],
+        "size": 458752,
+        "std": 4.030941534402016
+      },
+      "metadata_path": "evidence/final_segment_input_sweep/v3_run_20260701/real_x_div_4/metadata.json",
+      "normalized_entropy": 0.9787018150843415,
+      "quant_metadata": {
+        "available": true,
+        "repr": "<hbm_runtime.HB_HBMRuntime.QuantParams object at 0xffff9d550230>",
+        "scale": [
+          0.00025415877462364733
+        ],
+        "scale_first": 0.00025415877462364733,
+        "zero_point": [
+          0.0
+        ]
+      },
+      "raw_output_path": "evidence/final_segment_input_sweep/v3_run_20260701/real_x_div_4/raw_output.npy",
+      "raw_output_stats": {
+        "abs_max": 26164.0,
+        "allzero": false,
+        "constant": false,
+        "dtype": "int16",
+        "inf_count": 0,
+        "max": 26164.0,
+        "mean": 8362.730185974327,
+        "min": -17760.0,
+        "nan_count": 0,
+        "nonzero_count": 152059,
+        "p0": -17760.0,
+        "p1": -2149.37,
+        "p100": 26164.0,
+        "p5": 1684.0,
+        "p50": 9306.0,
+        "p95": 12209.0,
+        "p99": 15100.0,
+        "shape": [
+          1,
+          152064
+        ],
+        "size": 152064,
+        "std": 3244.647338415464
+      },
+      "run_status": "pass",
+      "runtime_exception": null,
+      "top1_probability": 0.00046087827639068043,
+      "top20_logits": [
+        {
+          "index": 76842,
+          "value": 6.649810314178467
+        },
+        {
+          "index": 85512,
+          "value": 6.62083625793457
+        },
+        {
+          "index": 45223,
+          "value": 6.561108589172363
+        },
+        {
+          "index": 82733,
+          "value": 6.432250499725342
+        },
+        {
+          "index": 33955,
+          "value": 6.402767658233643
+        },
+        {
+          "index": 74466,
+          "value": 6.304916858673096
+        },
+        {
+          "index": 54462,
+          "value": 6.133613586425781
+        },
+        {
+          "index": 95132,
+          "value": 6.050757884979248
+        },
+        {
+          "index": 86611,
+          "value": 6.033474922180176
+        },
+        {
+          "index": 22394,
+          "value": 5.932065963745117
+        },
+        {
+          "index": 71851,
+          "value": 5.880217552185059
+        },
+        {
+          "index": 53252,
+          "value": 5.723655700683594
+        },
+        {
+          "index": 97281,
+          "value": 5.6977314949035645
+        },
+        {
+          "index": 75204,
+          "value": 5.68934440612793
+        },
+        {
+          "index": 91842,
+          "value": 5.642833232879639
+        },
+        {
+          "index": 88153,
+          "value": 5.5942888259887695
+        },
+        {
+          "index": 80892,
+          "value": 5.580309867858887
+        },
+        {
+          "index": 6901,
+          "value": 5.552098274230957
+        },
+        {
+          "index": 21164,
+          "value": 5.54904842376709
+        },
+        {
+          "index": 94222,
+          "value": 5.5304951667785645
+        }
+      ],
+      "variant_id": "real_x_div_4",
+      "why_included": "real seg26 dequant divided by 4"
+    },
+    {
+      "dequant_logits_path": "evidence/final_segment_input_sweep/v3_run_20260701/real_x_div_8/dequant_logits.npy",
+      "dequant_output_stats": {
+        "abs_max": 4.1201677322387695,
+        "allzero": false,
+        "constant": false,
+        "dtype": "float32",
+        "inf_count": 0,
+        "max": 4.1201677322387695,
+        "mean": 0.600477592497736,
+        "min": -2.5863196849823,
+        "nan_count": 0,
+        "nonzero_count": 152058,
+        "p0": -2.5863196849823,
+        "p1": -0.8139104276895522,
+        "p100": 4.1201677322387695,
+        "p5": -0.26813751459121704,
+        "p50": 0.6773331165313721,
+        "p95": 1.2837560176849365,
+        "p99": 1.8645087480545044,
+        "shape": [
+          152064
+        ],
+        "size": 152064,
+        "std": 0.4637689703929305
+      },
+      "entropy": 11.815670677193614,
+      "input_path": "evidence/final_segment_input_sweep/v3_run_20260701/real_x_div_8/input.npy",
+      "input_stats": {
+        "abs_max": 2.0370984077453613,
+        "allzero": false,
+        "constant": false,
+        "dtype": "float32",
+        "inf_count": 0,
+        "max": 2.0370984077453613,
+        "mean": 0.0006304725424168505,
+        "min": -2.0370984077453613,
+        "nan_count": 0,
+        "nonzero_count": 458751,
+        "p0": -2.0370984077453613,
+        "p1": -2.0370984077453613,
+        "p100": 2.0370984077453613,
+        "p5": -2.0370984077453613,
+        "p50": 0.03445388004183769,
+        "p95": 2.0370984077453613,
+        "p99": 2.0370984077453613,
+        "shape": [
+          128,
+          3584
+        ],
+        "size": 458752,
+        "std": 2.015470767201008
+      },
+      "metadata_path": "evidence/final_segment_input_sweep/v3_run_20260701/real_x_div_8/metadata.json",
+      "normalized_entropy": 0.990245932536855,
+      "quant_metadata": {
+        "available": true,
+        "repr": "<hbm_runtime.HB_HBMRuntime.QuantParams object at 0xffff9d550230>",
+        "scale": [
+          0.00025415877462364733
+        ],
+        "scale_first": 0.00025415877462364733,
+        "zero_point": [
+          0.0
+        ]
+      },
+      "raw_output_path": "evidence/final_segment_input_sweep/v3_run_20260701/real_x_div_8/raw_output.npy",
+      "raw_output_stats": {
+        "abs_max": 16211.0,
+        "allzero": false,
+        "constant": false,
+        "dtype": "int16",
+        "inf_count": 0,
+        "max": 16211.0,
+        "mean": 2362.608151830808,
+        "min": -10176.0,
+        "nan_count": 0,
+        "nonzero_count": 152058,
+        "p0": -10176.0,
+        "p1": -3202.37,
+        "p100": 16211.0,
+        "p5": -1055.0,
+        "p50": 2665.0,
+        "p95": 5051.0,
+        "p99": 7336.0,
+        "shape": [
+          1,
+          152064
+        ],
+        "size": 152064,
+        "std": 1824.7214608513664
+      },
+      "run_status": "pass",
+      "runtime_exception": null,
+      "top1_probability": 0.0001993827377657308,
+      "top20_logits": [
+        {
+          "index": 85512,
+          "value": 4.1201677322387695
+        },
+        {
+          "index": 54462,
+          "value": 4.010117053985596
+        },
+        {
+          "index": 45223,
+          "value": 3.9765682220458984
+        },
+        {
+          "index": 58113,
+          "value": 3.7592623233795166
+        },
+        {
+          "index": 91842,
+          "value": 3.6527698040008545
+        },
+        {
+          "index": 76842,
+          "value": 3.529757022857666
+        },
+        {
+          "index": 22394,
+          "value": 3.502053737640381
+        },
+        {
+          "index": 41810,
+          "value": 3.454780340194702
+        },
+        {
+          "index": 55573,
+          "value": 3.448934555053711
+        },
+        {
+          "index": 53252,
+          "value": 3.383615732192993
+        },
+        {
+          "index": 74466,
+          "value": 3.349304437637329
+        },
+        {
+          "index": 97281,
+          "value": 3.3345630168914795
+        },
+        {
+          "index": 33955,
+          "value": 3.3259217739105225
+        },
+        {
+          "index": 38261,
+          "value": 3.302539110183716
+        },
+        {
+          "index": 27447,
+          "value": 3.2911019325256348
+        },
+        {
+          "index": 51735,
+          "value": 3.2839856147766113
+        },
+        {
+          "index": 88758,
+          "value": 3.2763607501983643
+        },
+        {
+          "index": 72869,
+          "value": 3.274327516555786
+        },
+        {
+          "index": 95132,
+          "value": 3.2669568061828613
+        },
+        {
+          "index": 66906,
+          "value": 3.248403310775757
+        }
+      ],
+      "variant_id": "real_x_div_8",
+      "why_included": "real seg26 dequant divided by 8"
+    },
+    {
+      "dequant_logits_path": "evidence/final_segment_input_sweep/v3_run_20260701/real_x_div_16/dequant_logits.npy",
+      "dequant_output_stats": {
+        "abs_max": 2.9500207901000977,
+        "allzero": false,
+        "constant": false,
+        "dtype": "float32",
+        "inf_count": 0,
+        "max": 2.9500207901000977,
+        "mean": -0.15926077466280095,
+        "min": -2.692049741744995,
+        "nan_count": 0,
+        "nonzero_count": 152038,
+        "p0": -2.692049741744995,
+        "p1": -1.194894413948059,
+        "p100": 2.9500207901000977,
+        "p5": -0.7525641322135925,
+        "p50": -0.15325774252414703,
+        "p95": 0.5301752090454102,
+        "p99": 1.0687376260757446,
+        "shape": [
+          152064
+        ],
+        "size": 152064,
+        "std": 0.38345359806250856
+      },
+      "entropy": 11.833521601412658,
+      "input_path": "evidence/final_segment_input_sweep/v3_run_20260701/real_x_div_16/input.npy",
+      "input_stats": {
+        "abs_max": 1.0185492038726807,
+        "allzero": false,
+        "constant": false,
+        "dtype": "float32",
+        "inf_count": 0,
+        "max": 1.0185492038726807,
+        "mean": 0.0003152362712084252,
+        "min": -1.0185492038726807,
+        "nan_count": 0,
+        "nonzero_count": 458751,
+        "p0": -1.0185492038726807,
+        "p1": -1.0185492038726807,
+        "p100": 1.0185492038726807,
+        "p5": -1.0185492038726807,
+        "p50": 0.017226940020918846,
+        "p95": 1.0185492038726807,
+        "p99": 1.0185492038726807,
+        "shape": [
+          128,
+          3584
+        ],
+        "size": 458752,
+        "std": 1.007735383600504
+      },
+      "metadata_path": "evidence/final_segment_input_sweep/v3_run_20260701/real_x_div_16/metadata.json",
+      "normalized_entropy": 0.9917419800810753,
+      "quant_metadata": {
+        "available": true,
+        "repr": "<hbm_runtime.HB_HBMRuntime.QuantParams object at 0xffff9d550230>",
+        "scale": [
+          0.00025415877462364733
+        ],
+        "scale_first": 0.00025415877462364733,
+        "zero_point": [
+          0.0
+        ]
+      },
+      "raw_output_path": "evidence/final_segment_input_sweep/v3_run_20260701/real_x_div_16/raw_output.npy",
+      "raw_output_stats": {
+        "abs_max": 11607.0,
+        "allzero": false,
+        "constant": false,
+        "dtype": "int16",
+        "inf_count": 0,
+        "max": 11607.0,
+        "mean": -626.6192261153199,
+        "min": -10592.0,
+        "nan_count": 0,
+        "nonzero_count": 152038,
+        "p0": -10592.0,
+        "p1": -4701.37,
+        "p100": 11607.0,
+        "p5": -2961.0,
+        "p50": -603.0,
+        "p95": 2086.0,
+        "p99": 4205.0,
+        "shape": [
+          1,
+          152064
+        ],
+        "size": 152064,
+        "std": 1508.7167400936796
+      },
+      "run_status": "pass",
+      "runtime_exception": null,
+      "top1_probability": 0.00013555784145106404,
+      "top20_logits": [
+        {
+          "index": 54462,
+          "value": 2.9500207901000977
+        },
+        {
+          "index": 58113,
+          "value": 2.8859729766845703
+        },
+        {
+          "index": 85512,
+          "value": 2.8712317943573
+        },
+        {
+          "index": 51735,
+          "value": 2.7484729290008545
+        },
+        {
+          "index": 66906,
+          "value": 2.72991943359375
+        },
+        {
+          "index": 45223,
+          "value": 2.6877291202545166
+        },
+        {
+          "index": 91842,
+          "value": 2.662313222885132
+        },
+        {
+          "index": 41810,
+          "value": 2.651130199432373
+        },
+        {
+          "index": 49752,
+          "value": 2.642742872238159
+        },
+        {
+          "index": 40745,
+          "value": 2.534217119216919
+        },
+        {
+          "index": 55573,
+          "value": 2.423912286758423
+        },
+        {
+          "index": 81830,
+          "value": 2.4140000343322754
+        },
+        {
+          "index": 88222,
+          "value": 2.3941757678985596
+        },
+        {
+          "index": 38261,
+          "value": 2.390871524810791
+        },
+        {
+          "index": 36593,
+          "value": 2.385025978088379
+        },
+        {
+          "index": 98710,
+          "value": 2.3835010528564453
+        },
+        {
+          "index": 66072,
+          "value": 2.375622034072876
+        },
+        {
+          "index": 62815,
+          "value": 2.3723180294036865
+        },
+        {
+          "index": 69705,
+          "value": 2.3674890995025635
+        },
+        {
+          "index": 51428,
+          "value": 2.341310739517212
+        }
+      ],
+      "variant_id": "real_x_div_16",
+      "why_included": "real seg26 dequant divided by 16"
+    },
+    {
+      "dequant_logits_path": "evidence/final_segment_input_sweep/v3_run_20260701/real_x_div_32/dequant_logits.npy",
+      "dequant_output_stats": {
+        "abs_max": 3.0781168937683105,
+        "allzero": false,
+        "constant": false,
+        "dtype": "float32",
+        "inf_count": 0,
+        "max": 2.479318857192993,
+        "mean": -0.5402123829245136,
+        "min": -3.0781168937683105,
+        "nan_count": 0,
+        "nonzero_count": 152053,
+        "p0": -3.0781168937683105,
+        "p1": -1.4870829582214355,
+        "p100": 2.479318857192993,
+        "p5": -1.0738208293914795,
+        "p50": -0.5733821988105774,
+        "p95": 0.22594715654850006,
+        "p99": 0.7538349032402039,
+        "shape": [
+          152064
+        ],
+        "size": 152064,
+        "std": 0.3925311739573611
+      },
+      "entropy": 11.820859334558525,
+      "input_path": "evidence/final_segment_input_sweep/v3_run_20260701/real_x_div_32/input.npy",
+      "input_stats": {
+        "abs_max": 0.5092746019363403,
+        "allzero": false,
+        "constant": false,
+        "dtype": "float32",
+        "inf_count": 0,
+        "max": 0.5092746019363403,
+        "mean": 0.0001576181356042126,
+        "min": -0.5092746019363403,
+        "nan_count": 0,
+        "nonzero_count": 458751,
+        "p0": -0.5092746019363403,
+        "p1": -0.5092746019363403,
+        "p100": 0.5092746019363403,
+        "p5": -0.5092746019363403,
+        "p50": 0.008613470010459423,
+        "p95": 0.5092746019363403,
+        "p99": 0.5092746019363403,
+        "shape": [
+          128,
+          3584
+        ],
+        "size": 458752,
+        "std": 0.503867691800252
+      },
+      "metadata_path": "evidence/final_segment_input_sweep/v3_run_20260701/real_x_div_32/metadata.json",
+      "normalized_entropy": 0.9906807827447952,
+      "quant_metadata": {
+        "available": true,
+        "repr": "<hbm_runtime.HB_HBMRuntime.QuantParams object at 0xffff9d550230>",
+        "scale": [
+          0.00025415877462364733
+        ],
+        "scale_first": 0.00025415877462364733,
+        "zero_point": [
+          0.0
+        ]
+      },
+      "raw_output_path": "evidence/final_segment_input_sweep/v3_run_20260701/real_x_div_32/raw_output.npy",
+      "raw_output_stats": {
+        "abs_max": 12111.0,
+        "allzero": false,
+        "constant": false,
+        "dtype": "int16",
+        "inf_count": 0,
+        "max": 9755.0,
+        "mean": -2125.491766624579,
+        "min": -12111.0,
+        "nan_count": 0,
+        "nonzero_count": 152053,
+        "p0": -12111.0,
+        "p1": -5851.0,
+        "p100": 9755.0,
+        "p5": -4225.0,
+        "p50": -2256.0,
+        "p95": 889.0,
+        "p99": 2966.0,
+        "shape": [
+          1,
+          152064
+        ],
+        "size": 152064,
+        "std": 1544.4329024126596
+      },
+      "run_status": "pass",
+      "runtime_exception": null,
+      "top1_probability": 0.00012291262248174893,
+      "top20_logits": [
+        {
+          "index": 51735,
+          "value": 2.479318857192993
+        },
+        {
+          "index": 66906,
+          "value": 2.4691524505615234
+        },
+        {
+          "index": 58113,
+          "value": 2.447803258895874
+        },
+        {
+          "index": 54462,
+          "value": 2.420354127883911
+        },
+        {
+          "index": 49752,
+          "value": 2.3781635761260986
+        },
+        {
+          "index": 41810,
+          "value": 2.247525930404663
+        },
+        {
+          "index": 85512,
+          "value": 2.245492696762085
+        },
+        {
+          "index": 40745,
+          "value": 2.2277016639709473
+        },
+        {
+          "index": 91842,
+          "value": 2.1633994579315186
+        },
+        {
+          "index": 36593,
+          "value": 2.067073345184326
+        },
+        {
+          "index": 45223,
+          "value": 2.0398783683776855
+        },
+        {
+          "index": 88222,
+          "value": 2.0332701206207275
+        },
+        {
+          "index": 98710,
+          "value": 2.020562171936035
+        },
+        {
+          "index": 69705,
+          "value": 2.0124292373657227
+        },
+        {
+          "index": 81830,
+          "value": 2.009124994277954
+        },
+        {
+          "index": 78901,
+          "value": 2.002262830734253
+        },
+        {
+          "index": 88414,
+          "value": 1.9976879358291626
+        },
+        {
+          "index": 66072,
+          "value": 1.966680645942688
+        },
+        {
+          "index": 58718,
+          "value": 1.9613432884216309
+        },
+        {
+          "index": 62815,
+          "value": 1.944822907447815
+        }
+      ],
+      "variant_id": "real_x_div_32",
+      "why_included": "real seg26 dequant divided by 32"
+    },
+    {
+      "dequant_logits_path": "evidence/final_segment_input_sweep/v3_run_20260701/real_x_div_64/dequant_logits.npy",
+      "dequant_output_stats": {
+        "abs_max": 8.027350425720215,
+        "allzero": false,
+        "constant": false,
+        "dtype": "float32",
+        "inf_count": 0,
+        "max": 4.621368885040283,
+        "mean": -1.8425837486410326,
+        "min": -8.027350425720215,
+        "nan_count": 0,
+        "nonzero_count": 152060,
+        "p0": -8.027350425720215,
+        "p1": -4.29232750415802,
+        "p100": 4.621368885040283,
+        "p5": -3.18765926361084,
+        "p50": -2.0275516510009766,
+        "p95": 0.42292019724845886,
+        "p99": 1.388215184211731,
+        "shape": [
+          152064
+        ],
+        "size": 152064,
+        "std": 1.248871348203516
+      },
+      "entropy": 10.8571444516926,
+      "input_path": "evidence/final_segment_input_sweep/v3_run_20260701/real_x_div_64/input.npy",
+      "input_stats": {
+        "abs_max": 0.25463730096817017,
+        "allzero": false,
+        "constant": false,
+        "dtype": "float32",
+        "inf_count": 0,
+        "max": 0.25463730096817017,
+        "mean": 7.88090678021063e-05,
+        "min": -0.25463730096817017,
+        "nan_count": 0,
+        "nonzero_count": 458751,
+        "p0": -0.25463730096817017,
+        "p1": -0.25463730096817017,
+        "p100": 0.25463730096817017,
+        "p5": -0.25463730096817017,
+        "p50": 0.0043067350052297115,
+        "p95": 0.25463730096817017,
+        "p99": 0.25463730096817017,
+        "shape": [
+          128,
+          3584
+        ],
+        "size": 458752,
+        "std": 0.251933845900126
+      },
+      "metadata_path": "evidence/final_segment_input_sweep/v3_run_20260701/real_x_div_64/metadata.json",
+      "normalized_entropy": 0.9099139122932334,
+      "quant_metadata": {
+        "available": true,
+        "repr": "<hbm_runtime.HB_HBMRuntime.QuantParams object at 0xffff9d550230>",
+        "scale": [
+          0.00025415877462364733
+        ],
+        "scale_first": 0.00025415877462364733,
+        "zero_point": [
+          0.0
+        ]
+      },
+      "raw_output_path": "evidence/final_segment_input_sweep/v3_run_20260701/real_x_div_64/raw_output.npy",
+      "raw_output_stats": {
+        "abs_max": 31584.0,
+        "allzero": false,
+        "constant": false,
+        "dtype": "int16",
+        "inf_count": 0,
+        "max": 18183.0,
+        "mean": -7249.734947127526,
+        "min": -31584.0,
+        "nan_count": 0,
+        "nonzero_count": 152060,
+        "p0": -31584.0,
+        "p1": -16888.37,
+        "p100": 18183.0,
+        "p5": -12542.0,
+        "p50": -7977.5,
+        "p95": 1664.0,
+        "p99": 5462.0,
+        "shape": [
+          1,
+          152064
+        ],
+        "size": 152064,
+        "std": 4913.744772401451
+      },
+      "run_status": "pass",
+      "runtime_exception": null,
+      "top1_probability": 0.0016413884315059038,
+      "top20_logits": [
+        {
+          "index": 32216,
+          "value": 4.621368885040283
+        },
+        {
+          "index": 47656,
+          "value": 4.297316551208496
+        },
+        {
+          "index": 89013,
+          "value": 4.285117149353027
+        },
+        {
+          "index": 91529,
+          "value": 4.134146690368652
+        },
+        {
+          "index": 88677,
+          "value": 4.119405269622803
+        },
+        {
+          "index": 94233,
+          "value": 3.9976632595062256
+        },
+        {
+          "index": 97653,
+          "value": 3.95521879196167
+        },
+        {
+          "index": 94621,
+          "value": 3.9292945861816406
+        },
+        {
+          "index": 72951,
+          "value": 3.9282779693603516
+        },
+        {
+          "index": 59173,
+          "value": 3.875667095184326
+        },
+        {
+          "index": 25381,
+          "value": 3.8405933380126953
+        },
+        {
+          "index": 89880,
+          "value": 3.8329684734344482
+        },
+        {
+          "index": 83008,
+          "value": 3.8103482723236084
+        },
+        {
+          "index": 74023,
+          "value": 3.790778160095215
+        },
+        {
+          "index": 80126,
+          "value": 3.7516376972198486
+        },
+        {
+          "index": 6195,
+          "value": 3.707159996032715
+        },
+        {
+          "index": 60118,
+          "value": 3.6705610752105713
+        },
+        {
+          "index": 71006,
+          "value": 3.612358570098877
+        },
+        {
+          "index": 81978,
+          "value": 3.560256004333496
+        },
+        {
+          "index": 74111,
+          "value": 3.5246739387512207
+        }
+      ],
+      "variant_id": "real_x_div_64",
+      "why_included": "real seg26 dequant divided by 64"
+    },
+    {
+      "dequant_logits_path": "evidence/final_segment_input_sweep/v3_run_20260701/real_x_clip_16/dequant_logits.npy",
+      "dequant_output_stats": {
+        "abs_max": 0.0,
+        "allzero": true,
+        "constant": true,
+        "dtype": "float32",
+        "inf_count": 0,
+        "max": 0.0,
+        "mean": 0.0,
+        "min": 0.0,
+        "nan_count": 0,
+        "nonzero_count": 0,
+        "p0": 0.0,
+        "p1": 0.0,
+        "p100": 0.0,
+        "p5": 0.0,
+        "p50": 0.0,
+        "p95": 0.0,
+        "p99": 0.0,
+        "shape": [
+          152064
+        ],
+        "size": 152064,
+        "std": 0.0
+      },
+      "entropy": 11.932056763842207,
+      "input_path": "evidence/final_segment_input_sweep/v3_run_20260701/real_x_clip_16/input.npy",
+      "input_stats": {
+        "abs_max": 16.0,
+        "allzero": false,
+        "constant": false,
+        "dtype": "float32",
+        "inf_count": 0,
+        "max": 16.0,
+        "mean": 0.004985472045690997,
+        "min": -16.0,
+        "nan_count": 0,
+        "nonzero_count": 458751,
+        "p0": -16.0,
+        "p1": -16.0,
+        "p100": 16.0,
+        "p5": -16.0,
+        "p50": 0.27563104033470154,
+        "p95": 16.0,
+        "p99": 16.0,
+        "shape": [
+          128,
+          3584
+        ],
+        "size": 458752,
+        "std": 15.833238864992092
+      },
+      "metadata_path": "evidence/final_segment_input_sweep/v3_run_20260701/real_x_clip_16/metadata.json",
+      "normalized_entropy": 1.0,
+      "quant_metadata": {
+        "available": true,
+        "repr": "<hbm_runtime.HB_HBMRuntime.QuantParams object at 0xffff9d550230>",
+        "scale": [
+          0.00025415877462364733
+        ],
+        "scale_first": 0.00025415877462364733,
+        "zero_point": [
+          0.0
+        ]
+      },
+      "raw_output_path": "evidence/final_segment_input_sweep/v3_run_20260701/real_x_clip_16/raw_output.npy",
+      "raw_output_stats": {
+        "abs_max": 0.0,
+        "allzero": true,
+        "constant": true,
+        "dtype": "int16",
+        "inf_count": 0,
+        "max": 0.0,
+        "mean": 0.0,
+        "min": 0.0,
+        "nan_count": 0,
+        "nonzero_count": 0,
+        "p0": 0.0,
+        "p1": 0.0,
+        "p100": 0.0,
+        "p5": 0.0,
+        "p50": 0.0,
+        "p95": 0.0,
+        "p99": 0.0,
+        "shape": [
+          1,
+          152064
+        ],
+        "size": 152064,
+        "std": 0.0
+      },
+      "run_status": "pass",
+      "runtime_exception": null,
+      "top1_probability": 6.576178451178451e-06,
+      "top20_logits": [
+        {
+          "index": 0,
+          "value": 0.0
+        },
+        {
+          "index": 17,
+          "value": 0.0
+        },
+        {
+          "index": 16,
+          "value": 0.0
+        },
+        {
+          "index": 15,
+          "value": 0.0
+        },
+        {
+          "index": 14,
+          "value": 0.0
+        },
+        {
+          "index": 13,
+          "value": 0.0
+        },
+        {
+          "index": 12,
+          "value": 0.0
+        },
+        {
+          "index": 11,
+          "value": 0.0
+        },
+        {
+          "index": 10,
+          "value": 0.0
+        },
+        {
+          "index": 9,
+          "value": 0.0
+        },
+        {
+          "index": 8,
+          "value": 0.0
+        },
+        {
+          "index": 7,
+          "value": 0.0
+        },
+        {
+          "index": 6,
+          "value": 0.0
+        },
+        {
+          "index": 5,
+          "value": 0.0
+        },
+        {
+          "index": 4,
+          "value": 0.0
+        },
+        {
+          "index": 3,
+          "value": 0.0
+        },
+        {
+          "index": 2,
+          "value": 0.0
+        },
+        {
+          "index": 1,
+          "value": 0.0
+        },
+        {
+          "index": 18,
+          "value": 0.0
+        },
+        {
+          "index": 19,
+          "value": 0.0
+        }
+      ],
+      "variant_id": "real_x_clip_16",
+      "why_included": "real seg26 dequant clipped to +/-16"
+    },
+    {
+      "dequant_logits_path": "evidence/final_segment_input_sweep/v3_run_20260701/real_x_clip_8/dequant_logits.npy",
+      "dequant_output_stats": {
+        "abs_max": 0.0,
+        "allzero": true,
+        "constant": true,
+        "dtype": "float32",
+        "inf_count": 0,
+        "max": 0.0,
+        "mean": 0.0,
+        "min": 0.0,
+        "nan_count": 0,
+        "nonzero_count": 0,
+        "p0": 0.0,
+        "p1": 0.0,
+        "p100": 0.0,
+        "p5": 0.0,
+        "p50": 0.0,
+        "p95": 0.0,
+        "p99": 0.0,
+        "shape": [
+          152064
+        ],
+        "size": 152064,
+        "std": 0.0
+      },
+      "entropy": 11.932056763842207,
+      "input_path": "evidence/final_segment_input_sweep/v3_run_20260701/real_x_clip_8/input.npy",
+      "input_stats": {
+        "abs_max": 8.0,
+        "allzero": false,
+        "constant": false,
+        "dtype": "float32",
+        "inf_count": 0,
+        "max": 8.0,
+        "mean": 0.002993985257662146,
+        "min": -8.0,
+        "nan_count": 0,
+        "nonzero_count": 458751,
+        "p0": -8.0,
+        "p1": -8.0,
+        "p100": 8.0,
+        "p5": -8.0,
+        "p50": 0.27563104033470154,
+        "p95": 8.0,
+        "p99": 8.0,
+        "shape": [
+          128,
+          3584
+        ],
+        "size": 458752,
+        "std": 7.958622932933026
+      },
+      "metadata_path": "evidence/final_segment_input_sweep/v3_run_20260701/real_x_clip_8/metadata.json",
+      "normalized_entropy": 1.0,
+      "quant_metadata": {
+        "available": true,
+        "repr": "<hbm_runtime.HB_HBMRuntime.QuantParams object at 0xffff9d550230>",
+        "scale": [
+          0.00025415877462364733
+        ],
+        "scale_first": 0.00025415877462364733,
+        "zero_point": [
+          0.0
+        ]
+      },
+      "raw_output_path": "evidence/final_segment_input_sweep/v3_run_20260701/real_x_clip_8/raw_output.npy",
+      "raw_output_stats": {
+        "abs_max": 0.0,
+        "allzero": true,
+        "constant": true,
+        "dtype": "int16",
+        "inf_count": 0,
+        "max": 0.0,
+        "mean": 0.0,
+        "min": 0.0,
+        "nan_count": 0,
+        "nonzero_count": 0,
+        "p0": 0.0,
+        "p1": 0.0,
+        "p100": 0.0,
+        "p5": 0.0,
+        "p50": 0.0,
+        "p95": 0.0,
+        "p99": 0.0,
+        "shape": [
+          1,
+          152064
+        ],
+        "size": 152064,
+        "std": 0.0
+      },
+      "run_status": "pass",
+      "runtime_exception": null,
+      "top1_probability": 6.576178451178451e-06,
+      "top20_logits": [
+        {
+          "index": 0,
+          "value": 0.0
+        },
+        {
+          "index": 17,
+          "value": 0.0
+        },
+        {
+          "index": 16,
+          "value": 0.0
+        },
+        {
+          "index": 15,
+          "value": 0.0
+        },
+        {
+          "index": 14,
+          "value": 0.0
+        },
+        {
+          "index": 13,
+          "value": 0.0
+        },
+        {
+          "index": 12,
+          "value": 0.0
+        },
+        {
+          "index": 11,
+          "value": 0.0
+        },
+        {
+          "index": 10,
+          "value": 0.0
+        },
+        {
+          "index": 9,
+          "value": 0.0
+        },
+        {
+          "index": 8,
+          "value": 0.0
+        },
+        {
+          "index": 7,
+          "value": 0.0
+        },
+        {
+          "index": 6,
+          "value": 0.0
+        },
+        {
+          "index": 5,
+          "value": 0.0
+        },
+        {
+          "index": 4,
+          "value": 0.0
+        },
+        {
+          "index": 3,
+          "value": 0.0
+        },
+        {
+          "index": 2,
+          "value": 0.0
+        },
+        {
+          "index": 1,
+          "value": 0.0
+        },
+        {
+          "index": 18,
+          "value": 0.0
+        },
+        {
+          "index": 19,
+          "value": 0.0
+        }
+      ],
+      "variant_id": "real_x_clip_8",
+      "why_included": "real seg26 dequant clipped to +/-8"
+    },
+    {
+      "dequant_logits_path": "evidence/final_segment_input_sweep/v3_run_20260701/real_x_clip_4/dequant_logits.npy",
+      "dequant_output_stats": {
+        "abs_max": 6.458428859710693,
+        "allzero": false,
+        "constant": false,
+        "dtype": "float32",
+        "inf_count": 0,
+        "max": 6.458428859710693,
+        "mean": 2.027415617921771,
+        "min": -4.461248874664307,
+        "nan_count": 0,
+        "nonzero_count": 152064,
+        "p0": -4.461248874664307,
+        "p1": -0.6400658297538757,
+        "p100": 6.458428859710693,
+        "p5": 0.3265940248966217,
+        "p50": 2.272179365158081,
+        "p95": 2.974165916442871,
+        "p99": 3.7041378641128504,
+        "shape": [
+          152064
+        ],
+        "size": 152064,
+        "std": 0.8244867287435699
+      },
+      "entropy": 11.685759264019431,
+      "input_path": "evidence/final_segment_input_sweep/v3_run_20260701/real_x_clip_4/input.npy",
+      "input_stats": {
+        "abs_max": 4.0,
+        "allzero": false,
+        "constant": false,
+        "dtype": "float32",
+        "inf_count": 0,
+        "max": 4.0,
+        "mean": 0.0019538872258539897,
+        "min": -4.0,
+        "nan_count": 0,
+        "nonzero_count": 458751,
+        "p0": -4.0,
+        "p1": -4.0,
+        "p100": 4.0,
+        "p5": -4.0,
+        "p50": 0.27563104033470154,
+        "p95": 4.0,
+        "p99": 4.0,
+        "shape": [
+          128,
+          3584
+        ],
+        "size": 458752,
+        "std": 3.989647984222361
+      },
+      "metadata_path": "evidence/final_segment_input_sweep/v3_run_20260701/real_x_clip_4/metadata.json",
+      "normalized_entropy": 0.9793583365636399,
+      "quant_metadata": {
+        "available": true,
+        "repr": "<hbm_runtime.HB_HBMRuntime.QuantParams object at 0xffff9d550230>",
+        "scale": [
+          0.00025415877462364733
+        ],
+        "scale_first": 0.00025415877462364733,
+        "zero_point": [
+          0.0
+        ]
+      },
+      "raw_output_path": "evidence/final_segment_input_sweep/v3_run_20260701/real_x_clip_4/raw_output.npy",
+      "raw_output_stats": {
+        "abs_max": 25411.0,
+        "allzero": false,
+        "constant": false,
+        "dtype": "int16",
+        "inf_count": 0,
+        "max": 25411.0,
+        "mean": 7976.964870054714,
+        "min": -17553.0,
+        "nan_count": 0,
+        "nonzero_count": 152064,
+        "p0": -17553.0,
+        "p1": -2518.37,
+        "p100": 25411.0,
+        "p5": 1285.0,
+        "p50": 8940.0,
+        "p95": 11702.0,
+        "p99": 14574.109999999986,
+        "shape": [
+          1,
+          152064
+        ],
+        "size": 152064,
+        "std": 3243.9829364508887
+      },
+      "run_status": "pass",
+      "runtime_exception": null,
+      "top1_probability": 0.0004210601989050061,
+      "top20_logits": [
+        {
+          "index": 85512,
+          "value": 6.458428859710693
+        },
+        {
+          "index": 45223,
+          "value": 6.4500412940979
+        },
+        {
+          "index": 76842,
+          "value": 6.428183555603027
+        },
+        {
+          "index": 74466,
+          "value": 6.145813465118408
+        },
+        {
+          "index": 82733,
+          "value": 6.124209880828857
+        },
+        {
+          "index": 33955,
+          "value": 6.061686992645264
+        },
+        {
+          "index": 54462,
+          "value": 6.02610445022583
+        },
+        {
+          "index": 71851,
+          "value": 5.855309963226318
+        },
+        {
+          "index": 95132,
+          "value": 5.850735187530518
+        },
+        {
+          "index": 22394,
+          "value": 5.810577869415283
+        },
+        {
+          "index": 86611,
+          "value": 5.76609992980957
+        },
+        {
+          "index": 60605,
+          "value": 5.591493129730225
+        },
+        {
+          "index": 75204,
+          "value": 5.571922779083252
+        },
+        {
+          "index": 21164,
+          "value": 5.553623199462891
+        },
+        {
+          "index": 53252,
+          "value": 5.545236110687256
+        },
+        {
+          "index": 91842,
+          "value": 5.539644718170166
+        },
+        {
+          "index": 97281,
+          "value": 5.517786979675293
+        },
+        {
+          "index": 94222,
+          "value": 5.491862773895264
+        },
+        {
+          "index": 6901,
+          "value": 5.441793441772461
+        },
+        {
+          "index": 25898,
+          "value": 5.4298481941223145
+        }
+      ],
+      "variant_id": "real_x_clip_4",
+      "why_included": "real seg26 dequant clipped to +/-4"
+    },
+    {
+      "dequant_logits_path": "evidence/final_segment_input_sweep/v3_run_20260701/real_x_clip_2/dequant_logits.npy",
+      "dequant_output_stats": {
+        "abs_max": 4.040107727050781,
+        "allzero": false,
+        "constant": false,
+        "dtype": "float32",
+        "inf_count": 0,
+        "max": 4.040107727050781,
+        "mean": 0.5505152250606253,
+        "min": -2.6783251762390137,
+        "nan_count": 0,
+        "nonzero_count": 152056,
+        "p0": -2.6783251762390137,
+        "p1": -0.867698073387146,
+        "p100": 4.040107727050781,
+        "p5": -0.325323224067688,
+        "p50": 0.6313303709030151,
+        "p95": 1.2201781511306777,
+        "p99": 1.7943609952926636,
+        "shape": [
+          152064
+        ],
+        "size": 152064,
+        "std": 0.46447696766555446
+      },
+      "entropy": 11.817758094284336,
+      "input_path": "evidence/final_segment_input_sweep/v3_run_20260701/real_x_clip_2/input.npy",
+      "input_stats": {
+        "abs_max": 2.0,
+        "allzero": false,
+        "constant": false,
+        "dtype": "float32",
+        "inf_count": 0,
+        "max": 2.0,
+        "mean": 0.0011107782438981267,
+        "min": -2.0,
+        "nan_count": 0,
+        "nonzero_count": 458751,
+        "p0": -2.0,
+        "p1": -2.0,
+        "p100": 2.0,
+        "p5": -2.0,
+        "p50": 0.27563104033470154,
+        "p95": 2.0,
+        "p99": 2.0,
+        "shape": [
+          128,
+          3584
+        ],
+        "size": 458752,
+        "std": 1.9973820039024972
+      },
+      "metadata_path": "evidence/final_segment_input_sweep/v3_run_20260701/real_x_clip_2/metadata.json",
+      "normalized_entropy": 0.9904208744711783,
+      "quant_metadata": {
+        "available": true,
+        "repr": "<hbm_runtime.HB_HBMRuntime.QuantParams object at 0xffff9d550230>",
+        "scale": [
+          0.00025415877462364733
+        ],
+        "scale_first": 0.00025415877462364733,
+        "zero_point": [
+          0.0
+        ]
+      },
+      "raw_output_path": "evidence/final_segment_input_sweep/v3_run_20260701/real_x_clip_2/raw_output.npy",
+      "raw_output_stats": {
+        "abs_max": 15896.0,
+        "allzero": false,
+        "constant": false,
+        "dtype": "int16",
+        "inf_count": 0,
+        "max": 15896.0,
+        "mean": 2166.028797085438,
+        "min": -10538.0,
+        "nan_count": 0,
+        "nonzero_count": 152056,
+        "p0": -10538.0,
+        "p1": -3414.0,
+        "p100": 15896.0,
+        "p5": -1280.0,
+        "p50": 2484.0,
+        "p95": 4800.850000000006,
+        "p99": 7060.0,
+        "shape": [
+          1,
+          152064
+        ],
+        "size": 152064,
+        "std": 1827.507109615757
+      },
+      "run_status": "pass",
+      "runtime_exception": null,
+      "top1_probability": 0.00019362109057509289,
+      "top20_logits": [
+        {
+          "index": 85512,
+          "value": 4.040107727050781
+        },
+        {
+          "index": 54462,
+          "value": 3.962843656539917
+        },
+        {
+          "index": 45223,
+          "value": 3.924973964691162
+        },
+        {
+          "index": 58113,
+          "value": 3.6565823554992676
+        },
+        {
+          "index": 91842,
+          "value": 3.5920259952545166
+        },
+        {
+          "index": 22394,
+          "value": 3.443089008331299
+        },
+        {
+          "index": 76842,
+          "value": 3.3960695266723633
+        },
+        {
+          "index": 41810,
+          "value": 3.3942904472351074
+        },
+        {
+          "index": 55573,
+          "value": 3.354133367538452
+        },
+        {
+          "index": 51735,
+          "value": 3.332275629043579
+        },
+        {
+          "index": 53252,
+          "value": 3.2898311614990234
+        },
+        {
+          "index": 74466,
+          "value": 3.2794106006622314
+        },
+        {
+          "index": 97281,
+          "value": 3.2412867546081543
+        },
+        {
+          "index": 60605,
+          "value": 3.236203670501709
+        },
+        {
+          "index": 76657,
+          "value": 3.22959566116333
+        },
+        {
+          "index": 38261,
+          "value": 3.2262914180755615
+        },
+        {
+          "index": 41347,
+          "value": 3.220954179763794
+        },
+        {
+          "index": 72869,
+          "value": 3.2054505348205566
+        },
+        {
+          "index": 27447,
+          "value": 3.1968090534210205
+        },
+        {
+          "index": 88758,
+          "value": 3.173680543899536
+        }
+      ],
+      "variant_id": "real_x_clip_2",
+      "why_included": "real seg26 dequant clipped to +/-2"
+    },
+    {
+      "dequant_logits_path": "evidence/final_segment_input_sweep/v3_run_20260701/real_x_clip_1/dequant_logits.npy",
+      "dequant_output_stats": {
+        "abs_max": 2.9251134395599365,
+        "allzero": false,
+        "constant": false,
+        "dtype": "float32",
+        "inf_count": 0,
+        "max": 2.9251134395599365,
+        "mean": -0.19076321195778195,
+        "min": -2.7685515880584717,
+        "nan_count": 0,
+        "nonzero_count": 152044,
+        "p0": -2.7685515880584717,
+        "p1": -1.2335265684127807,
+        "p100": 2.9251134395599365,
+        "p5": -0.7904337644577026,
+        "p50": -0.1814693659543991,
+        "p95": 0.4950631797313705,
+        "p99": 1.029182891845702,
+        "shape": [
+          152064
+        ],
+        "size": 152064,
+        "std": 0.38368675009826936
+      },
+      "entropy": 11.834230484697091,
+      "input_path": "evidence/final_segment_input_sweep/v3_run_20260701/real_x_clip_1/input.npy",
+      "input_stats": {
+        "abs_max": 1.0,
+        "allzero": false,
+        "constant": false,
+        "dtype": "float32",
+        "inf_count": 0,
+        "max": 1.0,
+        "mean": 0.0005551775540784121,
+        "min": -1.0,
+        "nan_count": 0,
+        "nonzero_count": 458751,
+        "p0": -1.0,
+        "p1": -1.0,
+        "p100": 1.0,
+        "p5": -1.0,
+        "p50": 0.27563104033470154,
+        "p95": 1.0,
+        "p99": 1.0,
+        "shape": [
+          128,
+          3584
+        ],
+        "size": 458752,
+        "std": 0.99933469364508
+      },
+      "metadata_path": "evidence/final_segment_input_sweep/v3_run_20260701/real_x_clip_1/metadata.json",
+      "normalized_entropy": 0.9918013900636511,
+      "quant_metadata": {
+        "available": true,
+        "repr": "<hbm_runtime.HB_HBMRuntime.QuantParams object at 0xffff9d550230>",
+        "scale": [
+          0.00025415877462364733
+        ],
+        "scale_first": 0.00025415877462364733,
+        "zero_point": [
+          0.0
+        ]
+      },
+      "raw_output_path": "evidence/final_segment_input_sweep/v3_run_20260701/real_x_clip_1/raw_output.npy",
+      "raw_output_stats": {
+        "abs_max": 11509.0,
+        "allzero": false,
+        "constant": false,
+        "dtype": "int16",
+        "inf_count": 0,
+        "max": 11509.0,
+        "mean": -750.5670901725589,
+        "min": -10893.0,
+        "nan_count": 0,
+        "nonzero_count": 152044,
+        "p0": -10893.0,
+        "p1": -4853.37,
+        "p100": 11509.0,
+        "p5": -3110.0,
+        "p50": -714.0,
+        "p95": 1947.8500000000058,
+        "p99": 4049.3699999999953,
+        "shape": [
+          1,
+          152064
+        ],
+        "size": 152064,
+        "std": 1509.6340887566757
+      },
+      "run_status": "pass",
+      "runtime_exception": null,
+      "top1_probability": 0.00013649417229413433,
+      "top20_logits": [
+        {
+          "index": 54462,
+          "value": 2.9251134395599365
+        },
+        {
+          "index": 58113,
+          "value": 2.829549551010132
+        },
+        {
+          "index": 85512,
+          "value": 2.8275163173675537
+        },
+        {
+          "index": 51735,
+          "value": 2.768805742263794
+        },
+        {
+          "index": 66906,
+          "value": 2.67680025100708
+        },
+        {
+          "index": 45223,
+          "value": 2.6590092182159424
+        },
+        {
+          "index": 91842,
+          "value": 2.6280016899108887
+        },
+        {
+          "index": 41810,
+          "value": 2.6145312786102295
+        },
+        {
+          "index": 49752,
+          "value": 2.6043648719787598
+        },
+        {
+          "index": 40745,
+          "value": 2.4874520301818848
+        },
+        {
+          "index": 98710,
+          "value": 2.3768928050994873
+        },
+        {
+          "index": 55573,
+          "value": 2.369776487350464
+        },
+        {
+          "index": 88222,
+          "value": 2.3616433143615723
+        },
+        {
+          "index": 36593,
+          "value": 2.352747678756714
+        },
+        {
+          "index": 38261,
+          "value": 2.345377206802368
+        },
+        {
+          "index": 62815,
+          "value": 2.3446147441864014
+        },
+        {
+          "index": 81830,
+          "value": 2.3324151039123535
+        },
+        {
+          "index": 51428,
+          "value": 2.3293652534484863
+        },
+        {
+          "index": 88414,
+          "value": 2.3133530616760254
+        },
+        {
+          "index": 66072,
+          "value": 2.3123364448547363
+        }
+      ],
+      "variant_id": "real_x_clip_1",
+      "why_included": "real seg26 dequant clipped to +/-1"
+    },
+    {
+      "dequant_logits_path": "evidence/final_segment_input_sweep/v3_run_20260701/real_x_z_normalized/dequant_logits.npy",
+      "dequant_output_stats": {
+        "abs_max": 2.9393463134765625,
+        "allzero": false,
+        "constant": false,
+        "dtype": "float32",
+        "inf_count": 0,
+        "max": 2.9393463134765625,
+        "mean": -0.16696751305597685,
+        "min": -2.6991662979125977,
+        "nan_count": 0,
+        "nonzero_count": 152042,
+        "p0": -2.6991662979125977,
+        "p1": -1.201154351234436,
+        "p100": 2.9393463134765625,
+        "p5": -0.7589181065559387,
+        "p50": -0.16139082610607147,
+        "p95": 0.5230587720870972,
+        "p99": 1.0607926464080788,
+        "shape": [
+          152064
+        ],
+        "size": 152064,
+        "std": 0.38327288099064066
+      },
+      "entropy": 11.833507701638542,
+      "input_path": "evidence/final_segment_input_sweep/v3_run_20260701/real_x_z_normalized/input.npy",
+      "input_stats": {
+        "abs_max": 1.0110434293746948,
+        "allzero": false,
+        "constant": false,
+        "dtype": "float32",
+        "inf_count": 0,
+        "max": 1.0104179382324219,
+        "mean": 6.84052877754558e-08,
+        "min": -1.0110434293746948,
+        "nan_count": 0,
+        "nonzero_count": 458752,
+        "p0": -1.0110434293746948,
+        "p1": -1.0110434293746948,
+        "p100": 1.0104179382324219,
+        "p5": -1.0110434293746948,
+        "p50": 0.016781887970864773,
+        "p95": 1.0104179382324219,
+        "p99": 1.0104179382324219,
+        "shape": [
+          128,
+          3584
+        ],
+        "size": 458752,
+        "std": 0.9999998720934398
+      },
+      "metadata_path": "evidence/final_segment_input_sweep/v3_run_20260701/real_x_z_normalized/metadata.json",
+      "normalized_entropy": 0.9917408151709185,
+      "quant_metadata": {
+        "available": true,
+        "repr": "<hbm_runtime.HB_HBMRuntime.QuantParams object at 0xffff9d550230>",
+        "scale": [
+          0.00025415877462364733
+        ],
+        "scale_first": 0.00025415877462364733,
+        "zero_point": [
+          0.0
+        ]
+      },
+      "raw_output_path": "evidence/final_segment_input_sweep/v3_run_20260701/real_x_z_normalized/raw_output.npy",
+      "raw_output_stats": {
+        "abs_max": 11565.0,
+        "allzero": false,
+        "constant": false,
+        "dtype": "int16",
+        "inf_count": 0,
+        "max": 11565.0,
+        "mean": -656.9417613636364,
+        "min": -10620.0,
+        "nan_count": 0,
+        "nonzero_count": 152042,
+        "p0": -10620.0,
+        "p1": -4726.0,
+        "p100": 11565.0,
+        "p5": -2986.0,
+        "p50": -635.0,
+        "p95": 2058.0,
+        "p99": 4173.739999999991,
+        "shape": [
+          1,
+          152064
+        ],
+        "size": 152064,
+        "std": 1508.005700777672
+      },
+      "run_status": "pass",
+      "runtime_exception": null,
+      "top1_probability": 0.00013515909015644997,
+      "top20_logits": [
+        {
+          "index": 54462,
+          "value": 2.9393463134765625
+        },
+        {
+          "index": 58113,
+          "value": 2.8765690326690674
+        },
+        {
+          "index": 85512,
+          "value": 2.859032154083252
+        },
+        {
+          "index": 51735,
+          "value": 2.7426273822784424
+        },
+        {
+          "index": 66906,
+          "value": 2.722294569015503
+        },
+        {
+          "index": 45223,
+          "value": 2.6755294799804688
+        },
+        {
+          "index": 91842,
+          "value": 2.651130199432373
+        },
+        {
+          "index": 41810,
+          "value": 2.6429970264434814
+        },
+        {
+          "index": 49752,
+          "value": 2.637913942337036
+        },
+        {
+          "index": 40745,
+          "value": 2.5273549556732178
+        },
+        {
+          "index": 55573,
+          "value": 2.4132375717163086
+        },
+        {
+          "index": 81830,
+          "value": 2.4053585529327393
+        },
+        {
+          "index": 88222,
+          "value": 2.385280132293701
+        },
+        {
+          "index": 38261,
+          "value": 2.37943434715271
+        },
+        {
+          "index": 36593,
+          "value": 2.3758761882781982
+        },
+        {
+          "index": 98710,
+          "value": 2.3753678798675537
+        },
+        {
+          "index": 66072,
+          "value": 2.367997407913208
+        },
+        {
+          "index": 62815,
+          "value": 2.3629140853881836
+        },
+        {
+          "index": 69705,
+          "value": 2.360626697540283
+        },
+        {
+          "index": 51428,
+          "value": 2.332923412322998
+        }
+      ],
+      "variant_id": "real_x_z_normalized",
+      "why_included": "z-normalized real seg26 dequant output"
+    },
+    {
+      "dequant_logits_path": "evidence/final_segment_input_sweep/v3_run_20260701/synthetic_match_mean_std_normal/dequant_logits.npy",
+      "dequant_output_stats": {
+        "abs_max": 0.0,
+        "allzero": true,
+        "constant": true,
+        "dtype": "float32",
+        "inf_count": 0,
+        "max": 0.0,
+        "mean": 0.0,
+        "min": 0.0,
+        "nan_count": 0,
+        "nonzero_count": 0,
+        "p0": 0.0,
+        "p1": 0.0,
+        "p100": 0.0,
+        "p5": 0.0,
+        "p50": 0.0,
+        "p95": 0.0,
+        "p99": 0.0,
+        "shape": [
+          152064
+        ],
+        "size": 152064,
+        "std": 0.0
+      },
+      "entropy": 11.932056763842207,
+      "input_path": "evidence/final_segment_input_sweep/v3_run_20260701/synthetic_match_mean_std_normal/input.npy",
+      "input_stats": {
+        "abs_max": 74.40174865722656,
+        "allzero": false,
+        "constant": false,
+        "dtype": "float32",
+        "inf_count": 0,
+        "max": 74.40174865722656,
+        "mean": -0.03524691634721695,
+        "min": -71.52452850341797,
+        "nan_count": 0,
+        "nonzero_count": 458752,
+        "p0": -71.52452850341797,
+        "p1": -37.47890197753906,
+        "p100": 74.40174865722656,
+        "p5": -26.54474229812622,
+        "p50": -0.057428477331995964,
+        "p95": 26.479979228973374,
+        "p99": 37.43836635589599,
+        "shape": [
+          128,
+          3584
+        ],
+        "size": 458752,
+        "std": 16.11673659029371
+      },
+      "metadata_path": "evidence/final_segment_input_sweep/v3_run_20260701/synthetic_match_mean_std_normal/metadata.json",
+      "normalized_entropy": 1.0,
+      "quant_metadata": {
+        "available": true,
+        "repr": "<hbm_runtime.HB_HBMRuntime.QuantParams object at 0xffff9d550230>",
+        "scale": [
+          0.00025415877462364733
+        ],
+        "scale_first": 0.00025415877462364733,
+        "zero_point": [
+          0.0
+        ]
+      },
+      "raw_output_path": "evidence/final_segment_input_sweep/v3_run_20260701/synthetic_match_mean_std_normal/raw_output.npy",
+      "raw_output_stats": {
+        "abs_max": 0.0,
+        "allzero": true,
+        "constant": true,
+        "dtype": "int16",
+        "inf_count": 0,
+        "max": 0.0,
+        "mean": 0.0,
+        "min": 0.0,
+        "nan_count": 0,
+        "nonzero_count": 0,
+        "p0": 0.0,
+        "p1": 0.0,
+        "p100": 0.0,
+        "p5": 0.0,
+        "p50": 0.0,
+        "p95": 0.0,
+        "p99": 0.0,
+        "shape": [
+          1,
+          152064
+        ],
+        "size": 152064,
+        "std": 0.0
+      },
+      "run_status": "pass",
+      "runtime_exception": null,
+      "top1_probability": 6.576178451178451e-06,
+      "top20_logits": [
+        {
+          "index": 0,
+          "value": 0.0
+        },
+        {
+          "index": 17,
+          "value": 0.0
+        },
+        {
+          "index": 16,
+          "value": 0.0
+        },
+        {
+          "index": 15,
+          "value": 0.0
+        },
+        {
+          "index": 14,
+          "value": 0.0
+        },
+        {
+          "index": 13,
+          "value": 0.0
+        },
+        {
+          "index": 12,
+          "value": 0.0
+        },
+        {
+          "index": 11,
+          "value": 0.0
+        },
+        {
+          "index": 10,
+          "value": 0.0
+        },
+        {
+          "index": 9,
+          "value": 0.0
+        },
+        {
+          "index": 8,
+          "value": 0.0
+        },
+        {
+          "index": 7,
+          "value": 0.0
+        },
+        {
+          "index": 6,
+          "value": 0.0
+        },
+        {
+          "index": 5,
+          "value": 0.0
+        },
+        {
+          "index": 4,
+          "value": 0.0
+        },
+        {
+          "index": 3,
+          "value": 0.0
+        },
+        {
+          "index": 2,
+          "value": 0.0
+        },
+        {
+          "index": 1,
+          "value": 0.0
+        },
+        {
+          "index": 18,
+          "value": 0.0
+        },
+        {
+          "index": 19,
+          "value": 0.0
+        }
+      ],
+      "variant_id": "synthetic_match_mean_std_normal",
+      "why_included": "synthetic normal with real mean/std"
+    },
+    {
+      "dequant_logits_path": "evidence/final_segment_input_sweep/v3_run_20260701/synthetic_match_min_max_uniform/dequant_logits.npy",
+      "dequant_output_stats": {
+        "abs_max": 0.0,
+        "allzero": true,
+        "constant": true,
+        "dtype": "float32",
+        "inf_count": 0,
+        "max": 0.0,
+        "mean": 0.0,
+        "min": 0.0,
+        "nan_count": 0,
+        "nonzero_count": 0,
+        "p0": 0.0,
+        "p1": 0.0,
+        "p100": 0.0,
+        "p5": 0.0,
+        "p50": 0.0,
+        "p95": 0.0,
+        "p99": 0.0,
+        "shape": [
+          152064
+        ],
+        "size": 152064,
+        "std": 0.0
+      },
+      "entropy": 11.932056763842207,
+      "input_path": "evidence/final_segment_input_sweep/v3_run_20260701/synthetic_match_min_max_uniform/input.npy",
+      "input_stats": {
+        "abs_max": 16.296770095825195,
+        "allzero": false,
+        "constant": false,
+        "dtype": "float32",
+        "inf_count": 0,
+        "max": 16.29673957824707,
+        "mean": -0.015169225859073047,
+        "min": -16.296770095825195,
+        "nan_count": 0,
+        "nonzero_count": 458752,
+        "p0": -16.296770095825195,
+        "p1": -15.97359495162964,
+        "p100": 16.29673957824707,
+        "p5": -14.679250240325928,
+        "p50": -0.008454217575490475,
+        "p95": 14.655778646469113,
+        "p99": 15.974023294448852,
+        "shape": [
+          128,
+          3584
+        ],
+        "size": 458752,
+        "std": 9.408869044562202
+      },
+      "metadata_path": "evidence/final_segment_input_sweep/v3_run_20260701/synthetic_match_min_max_uniform/metadata.json",
+      "normalized_entropy": 1.0,
+      "quant_metadata": {
+        "available": true,
+        "repr": "<hbm_runtime.HB_HBMRuntime.QuantParams object at 0xffff9d550230>",
+        "scale": [
+          0.00025415877462364733
+        ],
+        "scale_first": 0.00025415877462364733,
+        "zero_point": [
+          0.0
+        ]
+      },
+      "raw_output_path": "evidence/final_segment_input_sweep/v3_run_20260701/synthetic_match_min_max_uniform/raw_output.npy",
+      "raw_output_stats": {
+        "abs_max": 0.0,
+        "allzero": true,
+        "constant": true,
+        "dtype": "int16",
+        "inf_count": 0,
+        "max": 0.0,
+        "mean": 0.0,
+        "min": 0.0,
+        "nan_count": 0,
+        "nonzero_count": 0,
+        "p0": 0.0,
+        "p1": 0.0,
+        "p100": 0.0,
+        "p5": 0.0,
+        "p50": 0.0,
+        "p95": 0.0,
+        "p99": 0.0,
+        "shape": [
+          1,
+          152064
+        ],
+        "size": 152064,
+        "std": 0.0
+      },
+      "run_status": "pass",
+      "runtime_exception": null,
+      "top1_probability": 6.576178451178451e-06,
+      "top20_logits": [
+        {
+          "index": 0,
+          "value": 0.0
+        },
+        {
+          "index": 17,
+          "value": 0.0
+        },
+        {
+          "index": 16,
+          "value": 0.0
+        },
+        {
+          "index": 15,
+          "value": 0.0
+        },
+        {
+          "index": 14,
+          "value": 0.0
+        },
+        {
+          "index": 13,
+          "value": 0.0
+        },
+        {
+          "index": 12,
+          "value": 0.0
+        },
+        {
+          "index": 11,
+          "value": 0.0
+        },
+        {
+          "index": 10,
+          "value": 0.0
+        },
+        {
+          "index": 9,
+          "value": 0.0
+        },
+        {
+          "index": 8,
+          "value": 0.0
+        },
+        {
+          "index": 7,
+          "value": 0.0
+        },
+        {
+          "index": 6,
+          "value": 0.0
+        },
+        {
+          "index": 5,
+          "value": 0.0
+        },
+        {
+          "index": 4,
+          "value": 0.0
+        },
+        {
+          "index": 3,
+          "value": 0.0
+        },
+        {
+          "index": 2,
+          "value": 0.0
+        },
+        {
+          "index": 1,
+          "value": 0.0
+        },
+        {
+          "index": 18,
+          "value": 0.0
+        },
+        {
+          "index": 19,
+          "value": 0.0
+        }
+      ],
+      "variant_id": "synthetic_match_min_max_uniform",
+      "why_included": "synthetic uniform with real min/max"
+    },
+    {
+      "dequant_logits_path": "evidence/final_segment_input_sweep/v3_run_20260701/synthetic_zeros/dequant_logits.npy",
+      "dequant_output_stats": {
+        "abs_max": 8.23474407196045,
+        "allzero": false,
+        "constant": false,
+        "dtype": "float32",
+        "inf_count": 0,
+        "max": 5.0956292152404785,
+        "mean": -1.3007605133471545,
+        "min": -8.23474407196045,
+        "nan_count": 0,
+        "nonzero_count": 152062,
+        "p0": -8.23474407196045,
+        "p1": -3.961506805419922,
+        "p100": 5.0956292152404785,
+        "p5": -2.707515263557434,
+        "p50": -1.5023325681686401,
+        "p95": 0.9629694461822524,
+        "p99": 1.9046658277511597,
+        "shape": [
+          152064
+        ],
+        "size": 152064,
+        "std": 1.2518448336849501
+      },
+      "entropy": 10.878191502554653,
+      "input_path": "evidence/final_segment_input_sweep/v3_run_20260701/synthetic_zeros/input.npy",
+      "input_stats": {
+        "abs_max": 0.0,
+        "allzero": true,
+        "constant": true,
+        "dtype": "float32",
+        "inf_count": 0,
+        "max": 0.0,
+        "mean": 0.0,
+        "min": 0.0,
+        "nan_count": 0,
+        "nonzero_count": 0,
+        "p0": 0.0,
+        "p1": 0.0,
+        "p100": 0.0,
+        "p5": 0.0,
+        "p50": 0.0,
+        "p95": 0.0,
+        "p99": 0.0,
+        "shape": [
+          128,
+          3584
+        ],
+        "size": 458752,
+        "std": 0.0
+      },
+      "metadata_path": "evidence/final_segment_input_sweep/v3_run_20260701/synthetic_zeros/metadata.json",
+      "normalized_entropy": 0.9116778203334492,
+      "quant_metadata": {
+        "available": true,
+        "repr": "<hbm_runtime.HB_HBMRuntime.QuantParams object at 0xffff9d550230>",
+        "scale": [
+          0.00025415877462364733
+        ],
+        "scale_first": 0.00025415877462364733,
+        "zero_point": [
+          0.0
+        ]
+      },
+      "raw_output_path": "evidence/final_segment_input_sweep/v3_run_20260701/synthetic_zeros/raw_output.npy",
+      "raw_output_stats": {
+        "abs_max": 32400.0,
+        "allzero": false,
+        "constant": false,
+        "dtype": "int16",
+        "inf_count": 0,
+        "max": 20049.0,
+        "mean": -5117.90519123527,
+        "min": -32400.0,
+        "nan_count": 0,
+        "nonzero_count": 152062,
+        "p0": -32400.0,
+        "p1": -15586.74,
+        "p100": 20049.0,
+        "p5": -10652.849999999999,
+        "p50": -5911.0,
+        "p95": 3788.850000000006,
+        "p99": 7494.0,
+        "shape": [
+          1,
+          152064
+        ],
+        "size": 152064,
+        "std": 4925.444082575505
+      },
+      "run_status": "pass",
+      "runtime_exception": null,
+      "top1_probability": 0.0015490736388442854,
+      "top20_logits": [
+        {
+          "index": 32216,
+          "value": 5.0956292152404785
+        },
+        {
+          "index": 47656,
+          "value": 4.721761703491211
+        },
+        {
+          "index": 91529,
+          "value": 4.695329189300537
+        },
+        {
+          "index": 89013,
+          "value": 4.682875633239746
+        },
+        {
+          "index": 88677,
+          "value": 4.641701698303223
+        },
+        {
+          "index": 94233,
+          "value": 4.590107440948486
+        },
+        {
+          "index": 59173,
+          "value": 4.562404155731201
+        },
+        {
+          "index": 97653,
+          "value": 4.479294300079346
+        },
+        {
+          "index": 74023,
+          "value": 4.440407752990723
+        },
+        {
+          "index": 89880,
+          "value": 4.403809070587158
+        },
+        {
+          "index": 6195,
+          "value": 4.365177154541016
+        },
+        {
+          "index": 94621,
+          "value": 4.342048645019531
+        },
+        {
+          "index": 72951,
+          "value": 4.303162097930908
+        },
+        {
+          "index": 81978,
+          "value": 4.194128036499023
+        },
+        {
+          "index": 80126,
+          "value": 4.157529354095459
+        },
+        {
+          "index": 25381,
+          "value": 4.152446269989014
+        },
+        {
+          "index": 60118,
+          "value": 4.151683807373047
+        },
+        {
+          "index": 97043,
+          "value": 4.142787933349609
+        },
+        {
+          "index": 74648,
+          "value": 4.141263008117676
+        },
+        {
+          "index": 71006,
+          "value": 4.053070068359375
+        }
+      ],
+      "variant_id": "synthetic_zeros",
+      "why_included": "zeros control"
+    },
+    {
+      "dequant_logits_path": "evidence/final_segment_input_sweep/v3_run_20260701/synthetic_ones/dequant_logits.npy",
+      "dequant_output_stats": {
+        "abs_max": 3.237220287322998,
+        "allzero": false,
+        "constant": false,
+        "dtype": "float32",
+        "inf_count": 0,
+        "max": 2.6043648719787598,
+        "mean": -0.7182529527457314,
+        "min": -3.237220287322998,
+        "nan_count": 0,
+        "nonzero_count": 152061,
+        "p0": -3.237220287322998,
+        "p1": -1.7430208921432495,
+        "p100": 2.6043648719787598,
+        "p5": -1.310150408744812,
+        "p50": -0.747989296913147,
+        "p95": 0.12602462768554834,
+        "p99": 0.6798086380958533,
+        "shape": [
+          152064
+        ],
+        "size": 152064,
+        "std": 0.42579590471044604
+      },
+      "entropy": 11.79849144574467,
+      "input_path": "evidence/final_segment_input_sweep/v3_run_20260701/synthetic_ones/input.npy",
+      "input_stats": {
+        "abs_max": 1.0,
+        "allzero": false,
+        "constant": true,
+        "dtype": "float32",
+        "inf_count": 0,
+        "max": 1.0,
+        "mean": 1.0,
+        "min": 1.0,
+        "nan_count": 0,
+        "nonzero_count": 458752,
+        "p0": 1.0,
+        "p1": 1.0,
+        "p100": 1.0,
+        "p5": 1.0,
+        "p50": 1.0,
+        "p95": 1.0,
+        "p99": 1.0,
+        "shape": [
+          128,
+          3584
+        ],
+        "size": 458752,
+        "std": 0.0
+      },
+      "metadata_path": "evidence/final_segment_input_sweep/v3_run_20260701/synthetic_ones/metadata.json",
+      "normalized_entropy": 0.9888061781182369,
+      "quant_metadata": {
+        "available": true,
+        "repr": "<hbm_runtime.HB_HBMRuntime.QuantParams object at 0xffff9d550230>",
+        "scale": [
+          0.00025415877462364733
+        ],
+        "scale_first": 0.00025415877462364733,
+        "zero_point": [
+          0.0
+        ]
+      },
+      "raw_output_path": "evidence/final_segment_input_sweep/v3_run_20260701/synthetic_ones/raw_output.npy",
+      "raw_output_stats": {
+        "abs_max": 12737.0,
+        "allzero": false,
+        "constant": false,
+        "dtype": "int16",
+        "inf_count": 0,
+        "max": 10247.0,
+        "mean": -2826.001006155303,
+        "min": -12737.0,
+        "nan_count": 0,
+        "nonzero_count": 152061,
+        "p0": -12737.0,
+        "p1": -6858.0,
+        "p100": 10247.0,
+        "p5": -5154.849999999999,
+        "p50": -2943.0,
+        "p95": 495.8500000000058,
+        "p99": 2674.7399999999907,
+        "shape": [
+          1,
+          152064
+        ],
+        "size": 152064,
+        "std": 1675.3145953216854
+      },
+      "run_status": "pass",
+      "runtime_exception": null,
+      "top1_probability": 0.0001635685428608425,
+      "top20_logits": [
+        {
+          "index": 51735,
+          "value": 2.6043648719787598
+        },
+        {
+          "index": 54462,
+          "value": 2.335719108581543
+        },
+        {
+          "index": 49752,
+          "value": 2.2508301734924316
+        },
+        {
+          "index": 41810,
+          "value": 2.1936442852020264
+        },
+        {
+          "index": 52269,
+          "value": 2.182969808578491
+        },
+        {
+          "index": 40745,
+          "value": 2.1578080654144287
+        },
+        {
+          "index": 81830,
+          "value": 2.1529788970947266
+        },
+        {
+          "index": 78901,
+          "value": 2.129596471786499
+        },
+        {
+          "index": 87214,
+          "value": 2.080289602279663
+        },
+        {
+          "index": 58718,
+          "value": 2.074697971343994
+        },
+        {
+          "index": 66906,
+          "value": 2.043944835662842
+        },
+        {
+          "index": 88414,
+          "value": 2.043944835662842
+        },
+        {
+          "index": 66072,
+          "value": 1.975830316543579
+        },
+        {
+          "index": 30131,
+          "value": 1.9554976224899292
+        },
+        {
+          "index": 59881,
+          "value": 1.9415189027786255
+        },
+        {
+          "index": 83397,
+          "value": 1.9351649284362793
+        },
+        {
+          "index": 39727,
+          "value": 1.9323691129684448
+        },
+        {
+          "index": 72087,
+          "value": 1.892720341682434
+        },
+        {
+          "index": 69705,
+          "value": 1.880774974822998
+        },
+        {
+          "index": 71932,
+          "value": 1.878487467765808
+        }
+      ],
+      "variant_id": "synthetic_ones",
+      "why_included": "ones control"
+    },
+    {
+      "dequant_logits_path": "evidence/final_segment_input_sweep/v3_run_20260701/synthetic_ramp/dequant_logits.npy",
+      "dequant_output_stats": {
+        "abs_max": 3.3096556663513184,
+        "allzero": false,
+        "constant": false,
+        "dtype": "float32",
+        "inf_count": 0,
+        "max": 2.504734754562378,
+        "mean": -0.8005174409027793,
+        "min": -3.3096556663513184,
+        "nan_count": 0,
+        "nonzero_count": 152052,
+        "p0": -3.3096556663513184,
+        "p1": -1.751662254333496,
+        "p100": 2.504734754562378,
+        "p5": -1.352632999420166,
+        "p50": -0.8570233583450317,
+        "p95": 0.07239712812006621,
+        "p99": 0.6192248272895802,
+        "shape": [
+          152064
+        ],
+        "size": 152064,
+        "std": 0.42846334553574744
+      },
+      "entropy": 11.79287078947892,
+      "input_path": "evidence/final_segment_input_sweep/v3_run_20260701/synthetic_ramp/input.npy",
+      "input_stats": {
+        "abs_max": 0.9921259880065918,
+        "allzero": false,
+        "constant": false,
+        "dtype": "float32",
+        "inf_count": 0,
+        "max": 0.9921259880065918,
+        "mean": 0.4960392027155324,
+        "min": 0.0,
+        "nan_count": 0,
+        "nonzero_count": 455139,
+        "p0": 0.0,
+        "p1": 0.007874015718698502,
+        "p100": 0.9921259880065918,
+        "p5": 0.04724409431219101,
+        "p50": 0.4960629940032959,
+        "p95": 0.9448819160461426,
+        "p99": 0.9842519760131836,
+        "shape": [
+          128,
+          3584
+        ],
+        "size": 458752,
+        "std": 0.2886738628712057
+      },
+      "metadata_path": "evidence/final_segment_input_sweep/v3_run_20260701/synthetic_ramp/metadata.json",
+      "normalized_entropy": 0.9883351230120643,
+      "quant_metadata": {
+        "available": true,
+        "repr": "<hbm_runtime.HB_HBMRuntime.QuantParams object at 0xffff9d550230>",
+        "scale": [
+          0.00025415877462364733
+        ],
+        "scale_first": 0.00025415877462364733,
+        "zero_point": [
+          0.0
+        ]
+      },
+      "raw_output_path": "evidence/final_segment_input_sweep/v3_run_20260701/synthetic_ramp/raw_output.npy",
+      "raw_output_stats": {
+        "abs_max": 13022.0,
+        "allzero": false,
+        "constant": false,
+        "dtype": "int16",
+        "inf_count": 0,
+        "max": 9855.0,
+        "mean": -3149.6746172664143,
+        "min": -13022.0,
+        "nan_count": 0,
+        "nonzero_count": 152052,
+        "p0": -13022.0,
+        "p1": -6892.0,
+        "p100": 9855.0,
+        "p5": -5322.0,
+        "p50": -3372.0,
+        "p95": 284.8500000000058,
+        "p99": 2436.3699999999953,
+        "shape": [
+          1,
+          152064
+        ],
+        "size": 152064,
+        "std": 1685.8097701186941
+      },
+      "run_status": "pass",
+      "runtime_exception": null,
+      "top1_probability": 0.00016017285529378316,
+      "top20_logits": [
+        {
+          "index": 51735,
+          "value": 2.504734754562378
+        },
+        {
+          "index": 54462,
+          "value": 2.2081315517425537
+        },
+        {
+          "index": 49752,
+          "value": 2.1689910888671875
+        },
+        {
+          "index": 66906,
+          "value": 2.1631453037261963
+        },
+        {
+          "index": 40745,
+          "value": 2.1578080654144287
+        },
+        {
+          "index": 41810,
+          "value": 2.0149707794189453
+        },
+        {
+          "index": 78901,
+          "value": 2.0055668354034424
+        },
+        {
+          "index": 51428,
+          "value": 1.9321149587631226
+        },
+        {
+          "index": 58718,
+          "value": 1.9321149587631226
+        },
+        {
+          "index": 88414,
+          "value": 1.9056824445724487
+        },
+        {
+          "index": 69705,
+          "value": 1.87645423412323
+        },
+        {
+          "index": 98710,
+          "value": 1.8723876476287842
+        },
+        {
+          "index": 52269,
+          "value": 1.8698461055755615
+        },
+        {
+          "index": 85512,
+          "value": 1.8467177152633667
+        },
+        {
+          "index": 81830,
+          "value": 1.8411262035369873
+        },
+        {
+          "index": 58113,
+          "value": 1.837567925453186
+        },
+        {
+          "index": 36593,
+          "value": 1.835534691810608
+        },
+        {
+          "index": 30131,
+          "value": 1.828418254852295
+        },
+        {
+          "index": 59881,
+          "value": 1.808085560798645
+        },
+        {
+          "index": 37355,
+          "value": 1.8075772523880005
+        }
+      ],
+      "variant_id": "synthetic_ramp",
+      "why_included": "prior ramp control"
+    },
+    {
+      "dequant_logits_path": "evidence/final_segment_input_sweep/v3_run_20260701/synthetic_last_token_impulse/dequant_logits.npy",
+      "dequant_output_stats": {
+        "abs_max": 3.4524927139282227,
+        "allzero": false,
+        "constant": false,
+        "dtype": "float32",
+        "inf_count": 0,
+        "max": 2.2297348976135254,
+        "mean": -0.9186549474713857,
+        "min": -3.4524927139282227,
+        "nan_count": 0,
+        "nonzero_count": 152060,
+        "p0": -3.4524927139282227,
+        "p1": -1.8305455255508423,
+        "p100": 2.2297348976135254,
+        "p5": -1.4487049579620361,
+        "p50": -0.9978273510932922,
+        "p95": -0.01321625616401434,
+        "p99": 0.5231528091430653,
+        "shape": [
+          152064
+        ],
+        "size": 152064,
+        "std": 0.43524578378288403
+      },
+      "entropy": 11.785945210732994,
+      "input_path": "evidence/final_segment_input_sweep/v3_run_20260701/synthetic_last_token_impulse/input.npy",
+      "input_stats": {
+        "abs_max": 1.0,
+        "allzero": false,
+        "constant": false,
+        "dtype": "float32",
+        "inf_count": 0,
+        "max": 1.0,
+        "mean": 0.00027901785714285713,
+        "min": 0.0,
+        "nan_count": 0,
+        "nonzero_count": 128,
+        "p0": 0.0,
+        "p1": 0.0,
+        "p100": 1.0,
+        "p5": 0.0,
+        "p50": 0.0,
+        "p95": 0.0,
+        "p99": 0.0,
+        "shape": [
+          128,
+          3584
+        ],
+        "size": 458752,
+        "std": 0.01670149712385846
+      },
+      "metadata_path": "evidence/final_segment_input_sweep/v3_run_20260701/synthetic_last_token_impulse/metadata.json",
+      "normalized_entropy": 0.9877547051609764,
+      "quant_metadata": {
+        "available": true,
+        "repr": "<hbm_runtime.HB_HBMRuntime.QuantParams object at 0xffff9d550230>",
+        "scale": [
+          0.00025415877462364733
+        ],
+        "scale_first": 0.00025415877462364733,
+        "zero_point": [
+          0.0
+        ]
+      },
+      "raw_output_path": "evidence/final_segment_input_sweep/v3_run_20260701/synthetic_last_token_impulse/raw_output.npy",
+      "raw_output_stats": {
+        "abs_max": 13584.0,
+        "allzero": false,
+        "constant": false,
+        "dtype": "int16",
+        "inf_count": 0,
+        "max": 8773.0,
+        "mean": -3614.4923519044614,
+        "min": -13584.0,
+        "nan_count": 0,
+        "nonzero_count": 152060,
+        "p0": -13584.0,
+        "p1": -7202.37,
+        "p100": 8773.0,
+        "p5": -5700.0,
+        "p50": -3926.0,
+        "p95": -52.0,
+        "p99": 2058.3699999999953,
+        "shape": [
+          1,
+          152064
+        ],
+        "size": 152064,
+        "std": 1712.4956018790472
+      },
+      "run_status": "pass",
+      "runtime_exception": null,
+      "top1_probability": 0.0001362317652192694,
+      "top20_logits": [
+        {
+          "index": 66906,
+          "value": 2.2297348976135254
+        },
+        {
+          "index": 51735,
+          "value": 2.2078771591186523
+        },
+        {
+          "index": 49752,
+          "value": 2.1232423782348633
+        },
+        {
+          "index": 58113,
+          "value": 2.038353443145752
+        },
+        {
+          "index": 11,
+          "value": 2.0248830318450928
+        },
+        {
+          "index": 41810,
+          "value": 1.9476187229156494
+        },
+        {
+          "index": 220,
+          "value": 1.9438062906265259
+        },
+        {
+          "index": 54462,
+          "value": 1.8967869281768799
+        },
+        {
+          "index": 40745,
+          "value": 1.8883997201919556
+        },
+        {
+          "index": 36593,
+          "value": 1.7821613550186157
+        },
+        {
+          "index": 98710,
+          "value": 1.7270088195800781
+        },
+        {
+          "index": 52269,
+          "value": 1.7214174270629883
+        },
+        {
+          "index": 51757,
+          "value": 1.7120134830474854
+        },
+        {
+          "index": 88222,
+          "value": 1.7066761255264282
+        },
+        {
+          "index": 58718,
+          "value": 1.7018471956253052
+        },
+        {
+          "index": 69705,
+          "value": 1.684056043624878
+        },
+        {
+          "index": 88414,
+          "value": 1.669823169708252
+        },
+        {
+          "index": 59881,
+          "value": 1.6690607070922852
+        },
+        {
+          "index": 78901,
+          "value": 1.642374038696289
+        },
+        {
+          "index": 37355,
+          "value": 1.6385616064071655
+        }
+      ],
+      "variant_id": "synthetic_last_token_impulse",
+      "why_included": "last-token impulse control"
+    },
+    {
+      "dequant_logits_path": "evidence/final_segment_input_sweep/v3_run_20260701/real_raw_int16_as_input/dequant_logits.npy",
+      "input_path": "evidence/final_segment_input_sweep/v3_run_20260701/real_raw_int16_as_input/input.npy",
+      "input_stats": {
+        "abs_max": 19807.0,
+        "allzero": false,
+        "constant": false,
+        "dtype": "int16",
+        "inf_count": 0,
+        "max": 19807.0,
+        "mean": 6.130174909319196,
+        "min": -19807.0,
+        "nan_count": 0,
+        "nonzero_count": 458751,
+        "p0": -19807.0,
+        "p1": -19807.0,
+        "p100": 19807.0,
+        "p5": -19807.0,
+        "p50": 335.0,
+        "p95": 19807.0,
+        "p99": 19807.0,
+        "shape": [
+          128,
+          3584
+        ],
+        "size": 458752,
+        "std": 19596.711344721432
+      },
+      "metadata_path": "evidence/final_segment_input_sweep/v3_run_20260701/real_raw_int16_as_input/metadata.json",
+      "raw_output_path": "evidence/final_segment_input_sweep/v3_run_20260701/real_raw_int16_as_input/raw_output.npy",
+      "run_status": "fail",
+      "runtime_exception": "RuntimeError:Data type mismatch for input tensor '_input_0' in model 'dream_segment_27_28_last_token_logits': expected numpy dtype format 'f', but received 'h'",
+      "variant_id": "real_raw_int16_as_input",
+      "why_included": "raw seg26 int16 tensor fed directly if runtime accepts it"
+    }
+  ]
+}

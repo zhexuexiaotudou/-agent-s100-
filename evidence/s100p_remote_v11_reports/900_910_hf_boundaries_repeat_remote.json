@@ -1,0 +1,2411 @@
+{
+  "schema_version": "dream7b_s100p_v11_hf_boundaries_repeat",
+  "started_at_unix": 1782921081.3252878,
+  "python": "3.10.12 (main, Aug 15 2025, 14:32:43) [GCC 11.4.0]",
+  "platform": "Linux-6.1.158-rt58-DR-4.0.5-2603031328-g9f678e-g6caa4d-aarch64-with-glibc2.35",
+  "machine": "aarch64",
+  "model_dir": "/mnt/nas/openclaw/models/dream7b-hf",
+  "cases_path": "canonical_seq128_cases_v10.jsonl",
+  "dtype_requested": "bfloat16",
+  "case_ids": [
+    "zeros",
+    "ramp",
+    "short_chinese_prompt_padded"
+  ],
+  "source_hashes": [
+    {
+      "name": "config.json",
+      "path": "/mnt/nas/openclaw/models/dream7b-hf/config.json",
+      "exists": true,
+      "size_bytes": 927,
+      "sha256": "11afc7fe7a1881e73dcd70cca6868aaaf8eb89ad45ea5fc6426c3fb82dec9340"
+    },
+    {
+      "name": "configuration_dream.py",
+      "path": "/mnt/nas/openclaw/models/dream7b-hf/configuration_dream.py",
+      "exists": true,
+      "size_bytes": 3197,
+      "sha256": "24d038962ccf16361595494461000ec0c1b043653c7494d7fc835c96f121f0b9"
+    },
+    {
+      "name": "modeling_dream.py",
+      "path": "/mnt/nas/openclaw/models/dream7b-hf/modeling_dream.py",
+      "exists": true,
+      "size_bytes": 36763,
+      "sha256": "3166e789f0d69beb1f4fbdee2317953d1c1c3b9bc21479b109afc5dd059de5b3"
+    },
+    {
+      "name": "generation_utils.py",
+      "path": "/mnt/nas/openclaw/models/dream7b-hf/generation_utils.py",
+      "exists": true,
+      "size_bytes": 22332,
+      "sha256": "7f8ad01484898946b3c9c9d5ebc85e5ac726061d0fa7b4a522c4b8110c13a921"
+    },
+    {
+      "name": "tokenization_dream.py",
+      "path": "/mnt/nas/openclaw/models/dream7b-hf/tokenization_dream.py",
+      "exists": true,
+      "size_bytes": 14028,
+      "sha256": "1d7f04104fa673831f48256e3cd42cd0bbd1bddd801b4abea5c74cc47d98bdd2"
+    },
+    {
+      "name": "tokenizer_config.json",
+      "path": "/mnt/nas/openclaw/models/dream7b-hf/tokenizer_config.json",
+      "exists": true,
+      "size_bytes": 7486,
+      "sha256": "b0e9c1a6299d8832a1362d6b24f007de8a2acfe0243d8a3a1d1b57aa8250f7ee"
+    },
+    {
+      "name": "vocab.json",
+      "path": "/mnt/nas/openclaw/models/dream7b-hf/vocab.json",
+      "exists": true,
+      "size_bytes": 3383407,
+      "sha256": "87a257b04b17642a0688c98cd1df89c398bda4fee532d6f88b38a659ecb4ac8d"
+    },
+    {
+      "name": "merges.txt",
+      "path": "/mnt/nas/openclaw/models/dream7b-hf/merges.txt",
+      "exists": true,
+      "size_bytes": 1671853,
+      "sha256": "8831e4f1a044471340f7c0a83d7bd71306a5b867e95fd870f74d0c5308a904d5"
+    },
+    {
+      "name": "model.safetensors.index.json",
+      "path": "/mnt/nas/openclaw/models/dream7b-hf/model.safetensors.index.json",
+      "exists": true,
+      "size_bytes": 27752,
+      "sha256": "998a078123ffc97763690de7f2a677eb89168af5eaf8a5e12e6bc24d18e25bdb"
+    },
+    {
+      "name": "SHA256SUMS",
+      "path": "/mnt/nas/openclaw/models/dream7b-hf/SHA256SUMS",
+      "exists": true,
+      "size_bytes": 550,
+      "sha256": "00943b62e19d3080f930603f6a65e210f11e239dc8b1c7a65d9b98090330ff8a"
+    }
+  ],
+  "rows": [
+    {
+      "case_id": "zeros",
+      "elapsed_seconds": 1128.776,
+      "hidden_states_count": 29,
+      "boundaries": [
+        {
+          "boundary": "embedding_output",
+          "path": "evidence/hf_boundaries_v11/zeros/embedding_output.npy",
+          "sha256": "80c4f9059691e98aaa53feb1cea9a663de77809dde0dc71a45bdb0887dd3e2ba",
+          "stats": {
+            "shape": [
+              128,
+              3584
+            ],
+            "dtype": "float32",
+            "size": 458752,
+            "min": -0.12255859375,
+            "max": 0.10009765625,
+            "mean": -3.6522171285469085e-05,
+            "std": 0.014401739463210106,
+            "abs_max": 0.12255859375,
+            "nonzero_count": 458752,
+            "allzero": false,
+            "constant": false,
+            "nan_count": 0,
+            "inf_count": 0
+          }
+        },
+        {
+          "boundary": "layer_00_output",
+          "layer_index": 0,
+          "path": "evidence/hf_boundaries_v11/zeros/layer_00_output.npy",
+          "sha256": "aa5220f24da99bfd15b3dec39b825a0eba66e2662cebdbf515a8843aee74cab3",
+          "stats": {
+            "shape": [
+              128,
+              3584
+            ],
+            "dtype": "float32",
+            "size": 458752,
+            "min": -1.984375,
+            "max": 1.8984375,
+            "mean": -0.0003966305230278522,
+            "std": 0.2201046347618103,
+            "abs_max": 1.984375,
+            "nonzero_count": 458465,
+            "allzero": false,
+            "constant": false,
+            "nan_count": 0,
+            "inf_count": 0
+          }
+        },
+        {
+          "boundary": "layer_01_output",
+          "layer_index": 1,
+          "path": "evidence/hf_boundaries_v11/zeros/layer_01_output.npy",
+          "sha256": "1234916feba57a09b3a430c5b0440ebbceb28c1f57ae4c1a885403abfe1ac6c7",
+          "stats": {
+            "shape": [
+              128,
+              3584
+            ],
+            "dtype": "float32",
+            "size": 458752,
+            "min": -4.34375,
+            "max": 2.234375,
+            "mean": 0.00032433943124487996,
+            "std": 0.26784956455230713,
+            "abs_max": 4.34375,
+            "nonzero_count": 458307,
+            "allzero": false,
+            "constant": false,
+            "nan_count": 0,
+            "inf_count": 0
+          }
+        },
+        {
+          "boundary": "layer_02_output",
+          "layer_index": 2,
+          "path": "evidence/hf_boundaries_v11/zeros/layer_02_output.npy",
+          "sha256": "ee72a6981df6f604fe7151382aa45f7402275f61fc6b05953549676d45e7780a",
+          "stats": {
+            "shape": [
+              128,
+              3584
+            ],
+            "dtype": "float32",
+            "size": 458752,
+            "min": -2.234375,
+            "max": 2.75,
+            "mean": -0.0008620392181910574,
+            "std": 0.27892228960990906,
+            "abs_max": 2.75,
+            "nonzero_count": 458348,
+            "allzero": false,
+            "constant": false,
+            "nan_count": 0,
+            "inf_count": 0
+          }
+        },
+        {
+          "boundary": "layer_03_output",
+          "layer_index": 3,
+          "path": "evidence/hf_boundaries_v11/zeros/layer_03_output.npy",
+          "sha256": "cb6da64e5447802a00cbe01a879268dcd2fd960e005c83427d34a2e5e172700a",
+          "stats": {
+            "shape": [
+              128,
+              3584
+            ],
+            "dtype": "float32",
+            "size": 458752,
+            "min": -1.734375,
+            "max": 3.546875,
+            "mean": 0.003501633647829294,
+            "std": 0.3379703164100647,
+            "abs_max": 3.546875,
+            "nonzero_count": 458060,
+            "allzero": false,
+            "constant": false,
+            "nan_count": 0,
+            "inf_count": 0
+          }
+        },
+        {
+          "boundary": "layer_04_output",
+          "layer_index": 4,
+          "path": "evidence/hf_boundaries_v11/zeros/layer_04_output.npy",
+          "sha256": "15ddfc5859b1a6f7c9db7a5040ec76f489455955a9ab26653d8eb93bdf4a5d12",
+          "stats": {
+            "shape": [
+              128,
+              3584
+            ],
+            "dtype": "float32",
+            "size": 458752,
+            "min": -4.4375,
+            "max": 3.34375,
+            "mean": 0.0033150205854326487,
+            "std": 0.421688437461853,
+            "abs_max": 4.4375,
+            "nonzero_count": 458390,
+            "allzero": false,
+            "constant": false,
+            "nan_count": 0,
+            "inf_count": 0
+          }
+        },
+        {
+          "boundary": "layer_05_output",
+          "layer_index": 5,
+          "path": "evidence/hf_boundaries_v11/zeros/layer_05_output.npy",
+          "sha256": "c1e72bc5581fc26a8a8310f8acb20bf290275734b107bd1ba2b6840f1e8a261b",
+          "stats": {
+            "shape": [
+              128,
+              3584
+            ],
+            "dtype": "float32",
+            "size": 458752,
+            "min": -6.71875,
+            "max": 3.6875,
+            "mean": 0.0003436584956943989,
+            "std": 0.46835383772850037,
+            "abs_max": 6.71875,
+            "nonzero_count": 458299,
+            "allzero": false,
+            "constant": false,
+            "nan_count": 0,
+            "inf_count": 0
+          }
+        },
+        {
+          "boundary": "layer_06_output",
+          "layer_index": 6,
+          "path": "evidence/hf_boundaries_v11/zeros/layer_06_output.npy",
+          "sha256": "ca7747405544164fce5717f2d6a8cbb567fc823f5d9246dde3a5ca59b69f638b",
+          "stats": {
+            "shape": [
+              128,
+              3584
+            ],
+            "dtype": "float32",
+            "size": 458752,
+            "min": -12.875,
+            "max": 4.5625,
+            "mean": 9.840199345489964e-05,
+            "std": 0.61554354429245,
+            "abs_max": 12.875,
+            "nonzero_count": 458157,
+            "allzero": false,
+            "constant": false,
+            "nan_count": 0,
+            "inf_count": 0
+          }
+        },
+        {
+          "boundary": "layer_07_output",
+          "layer_index": 7,
+          "path": "evidence/hf_boundaries_v11/zeros/layer_07_output.npy",
+          "sha256": "6c9a439a2466ea14f3a90ad47f53f8e5a5c97619fd74bff36ba11d7c072720f7",
+          "stats": {
+            "shape": [
+              128,
+              3584
+            ],
+            "dtype": "float32",
+            "size": 458752,
+            "min": -22.0,
+            "max": 5.5,
+            "mean": -0.004307935945689678,
+            "std": 0.7874521613121033,
+            "abs_max": 22.0,
+            "nonzero_count": 458365,
+            "allzero": false,
+            "constant": false,
+            "nan_count": 0,
+            "inf_count": 0
+          }
+        },
+        {
+          "boundary": "layer_08_output",
+          "layer_index": 8,
+          "path": "evidence/hf_boundaries_v11/zeros/layer_08_output.npy",
+          "sha256": "aa4548c8bd46c9253adb2bc3c639ec2a6c2243bd845012b9ad09dfa999e69d52",
+          "stats": {
+            "shape": [
+              128,
+              3584
+            ],
+            "dtype": "float32",
+            "size": 458752,
+            "min": -28.0,
+            "max": 8.25,
+            "mean": -0.004365074913948774,
+            "std": 0.9555966854095459,
+            "abs_max": 28.0,
+            "nonzero_count": 458422,
+            "allzero": false,
+            "constant": false,
+            "nan_count": 0,
+            "inf_count": 0
+          }
+        },
+        {
+          "boundary": "layer_09_output",
+          "layer_index": 9,
+          "path": "evidence/hf_boundaries_v11/zeros/layer_09_output.npy",
+          "sha256": "62676bc43fb75518bdf9a8707ab6c33e4e1eae48414874ccf6069604170211fd",
+          "stats": {
+            "shape": [
+              128,
+              3584
+            ],
+            "dtype": "float32",
+            "size": 458752,
+            "min": -32.75,
+            "max": 7.21875,
+            "mean": -0.005099710542708635,
+            "std": 0.9790648818016052,
+            "abs_max": 32.75,
+            "nonzero_count": 458030,
+            "allzero": false,
+            "constant": false,
+            "nan_count": 0,
+            "inf_count": 0
+          }
+        },
+        {
+          "boundary": "layer_10_output",
+          "layer_index": 10,
+          "path": "evidence/hf_boundaries_v11/zeros/layer_10_output.npy",
+          "sha256": "1cd43d18fbc27dc0a9afbb22e7d00f6a53f4020c2c4fa06ecba7fb8f2132b641",
+          "stats": {
+            "shape": [
+              128,
+              3584
+            ],
+            "dtype": "float32",
+            "size": 458752,
+            "min": -32.25,
+            "max": 6.59375,
+            "mean": -0.0045157261192798615,
+            "std": 0.9321079254150391,
+            "abs_max": 32.25,
+            "nonzero_count": 458366,
+            "allzero": false,
+            "constant": false,
+            "nan_count": 0,
+            "inf_count": 0
+          }
+        },
+        {
+          "boundary": "layer_11_output",
+          "layer_index": 11,
+          "path": "evidence/hf_boundaries_v11/zeros/layer_11_output.npy",
+          "sha256": "c36cdf5c4e19d06808af1f8942f866d6099a7a791fc166a0ce06ccdb3b654328",
+          "stats": {
+            "shape": [
+              128,
+              3584
+            ],
+            "dtype": "float32",
+            "size": 458752,
+            "min": -51.5,
+            "max": 11.875,
+            "mean": -0.012981580570340157,
+            "std": 1.2101821899414062,
+            "abs_max": 51.5,
+            "nonzero_count": 458482,
+            "allzero": false,
+            "constant": false,
+            "nan_count": 0,
+            "inf_count": 0
+          }
+        },
+        {
+          "boundary": "layer_12_output",
+          "layer_index": 12,
+          "path": "evidence/hf_boundaries_v11/zeros/layer_12_output.npy",
+          "sha256": "bce8e4c2c84b07ba4155bce052c0badad3e6997716e6bb6aef029b6a4e03f0ee",
+          "stats": {
+            "shape": [
+              128,
+              3584
+            ],
+            "dtype": "float32",
+            "size": 458752,
+            "min": -95.0,
+            "max": 20.0,
+            "mean": -0.03281266614794731,
+            "std": 1.900339126586914,
+            "abs_max": 95.0,
+            "nonzero_count": 458429,
+            "allzero": false,
+            "constant": false,
+            "nan_count": 0,
+            "inf_count": 0
+          }
+        },
+        {
+          "boundary": "layer_13_output",
+          "layer_index": 13,
+          "path": "evidence/hf_boundaries_v11/zeros/layer_13_output.npy",
+          "sha256": "0c8b75b75de57f8668e74ac2d3c3398b280d8d80ac7d1abeeb6f78384a419629",
+          "stats": {
+            "shape": [
+              128,
+              3584
+            ],
+            "dtype": "float32",
+            "size": 458752,
+            "min": -129.0,
+            "max": 29.0,
+            "mean": -0.041996657848358154,
+            "std": 2.606901168823242,
+            "abs_max": 129.0,
+            "nonzero_count": 458351,
+            "allzero": false,
+            "constant": false,
+            "nan_count": 0,
+            "inf_count": 0
+          }
+        },
+        {
+          "boundary": "layer_14_output",
+          "layer_index": 14,
+          "path": "evidence/hf_boundaries_v11/zeros/layer_14_output.npy",
+          "sha256": "d9c7bc7e5d20140c0ada146cdfcf71a21bce5706ead87ae254f812ec12163886",
+          "stats": {
+            "shape": [
+              128,
+              3584
+            ],
+            "dtype": "float32",
+            "size": 458752,
+            "min": -135.0,
+            "max": 30.25,
+            "mean": -0.040235958993434906,
+            "std": 2.74454665184021,
+            "abs_max": 135.0,
+            "nonzero_count": 458500,
+            "allzero": false,
+            "constant": false,
+            "nan_count": 0,
+            "inf_count": 0
+          }
+        },
+        {
+          "boundary": "layer_15_output",
+          "layer_index": 15,
+          "path": "evidence/hf_boundaries_v11/zeros/layer_15_output.npy",
+          "sha256": "1a81225fcfc397359f2e492d3ad5a4d4f524f955a7750b68020944839277cfd7",
+          "stats": {
+            "shape": [
+              128,
+              3584
+            ],
+            "dtype": "float32",
+            "size": 458752,
+            "min": -143.0,
+            "max": 30.625,
+            "mean": -0.044978540390729904,
+            "std": 2.907447576522827,
+            "abs_max": 143.0,
+            "nonzero_count": 458612,
+            "allzero": false,
+            "constant": false,
+            "nan_count": 0,
+            "inf_count": 0
+          }
+        },
+        {
+          "boundary": "layer_16_output",
+          "layer_index": 16,
+          "path": "evidence/hf_boundaries_v11/zeros/layer_16_output.npy",
+          "sha256": "276d0e7fa2d8bfc7e40381c3adec1793b7477a6fbda61f0f9a8fafcc152e2f4e",
+          "stats": {
+            "shape": [
+              128,
+              3584
+            ],
+            "dtype": "float32",
+            "size": 458752,
+            "min": -144.0,
+            "max": 31.125,
+            "mean": -0.04240710288286209,
+            "std": 2.900369644165039,
+            "abs_max": 144.0,
+            "nonzero_count": 458591,
+            "allzero": false,
+            "constant": false,
+            "nan_count": 0,
+            "inf_count": 0
+          }
+        },
+        {
+          "boundary": "layer_17_output",
+          "layer_index": 17,
+          "path": "evidence/hf_boundaries_v11/zeros/layer_17_output.npy",
+          "sha256": "8407a38326548bfe37b2ce12fcfb187d7932c5607afd52f1950ab48c76aedadd",
+          "stats": {
+            "shape": [
+              128,
+              3584
+            ],
+            "dtype": "float32",
+            "size": 458752,
+            "min": -139.0,
+            "max": 30.625,
+            "mean": -0.03789195045828819,
+            "std": 2.785935640335083,
+            "abs_max": 139.0,
+            "nonzero_count": 458656,
+            "allzero": false,
+            "constant": false,
+            "nan_count": 0,
+            "inf_count": 0
+          }
+        },
+        {
+          "boundary": "layer_18_output",
+          "layer_index": 18,
+          "path": "evidence/hf_boundaries_v11/zeros/layer_18_output.npy",
+          "sha256": "493b1ddfbfdbdcb8ff983c803a40fbedeea89e19817230a136eee566499a742c",
+          "stats": {
+            "shape": [
+              128,
+              3584
+            ],
+            "dtype": "float32",
+            "size": 458752,
+            "min": -134.0,
+            "max": 30.0,
+            "mean": -0.03492136672139168,
+            "std": 2.6746881008148193,
+            "abs_max": 134.0,
+            "nonzero_count": 458638,
+            "allzero": false,
+            "constant": false,
+            "nan_count": 0,
+            "inf_count": 0
+          }
+        },
+        {
+          "boundary": "layer_19_output",
+          "layer_index": 19,
+          "path": "evidence/hf_boundaries_v11/zeros/layer_19_output.npy",
+          "sha256": "1d569659a597b10e3cb2c8edf970b45092d41fc467beb6740c4a71766fa6ce0c",
+          "stats": {
+            "shape": [
+              128,
+              3584
+            ],
+            "dtype": "float32",
+            "size": 458752,
+            "min": -124.5,
+            "max": 29.625,
+            "mean": -0.02253207191824913,
+            "std": 2.4687671661376953,
+            "abs_max": 124.5,
+            "nonzero_count": 458616,
+            "allzero": false,
+            "constant": false,
+            "nan_count": 0,
+            "inf_count": 0
+          }
+        },
+        {
+          "boundary": "layer_20_output",
+          "layer_index": 20,
+          "path": "evidence/hf_boundaries_v11/zeros/layer_20_output.npy",
+          "sha256": "7185b332ac3c435eae3912353621adedccf38c3dee10f02ac3d06bd9302bce34",
+          "stats": {
+            "shape": [
+              128,
+              3584
+            ],
+            "dtype": "float32",
+            "size": 458752,
+            "min": -103.0,
+            "max": 27.375,
+            "mean": -0.014131708070635796,
+            "std": 2.0896971225738525,
+            "abs_max": 103.0,
+            "nonzero_count": 458488,
+            "allzero": false,
+            "constant": false,
+            "nan_count": 0,
+            "inf_count": 0
+          }
+        },
+        {
+          "boundary": "layer_21_output",
+          "layer_index": 21,
+          "path": "evidence/hf_boundaries_v11/zeros/layer_21_output.npy",
+          "sha256": "2deb8db1efad8a4f80d426a9b6dea57d3da854197ccd0064351d70d9d457037e",
+          "stats": {
+            "shape": [
+              128,
+              3584
+            ],
+            "dtype": "float32",
+            "size": 458752,
+            "min": -95.5,
+            "max": 27.625,
+            "mean": -0.005950182676315308,
+            "std": 2.0364558696746826,
+            "abs_max": 95.5,
+            "nonzero_count": 458571,
+            "allzero": false,
+            "constant": false,
+            "nan_count": 0,
+            "inf_count": 0
+          }
+        },
+        {
+          "boundary": "layer_22_output",
+          "layer_index": 22,
+          "path": "evidence/hf_boundaries_v11/zeros/layer_22_output.npy",
+          "sha256": "1fcce43ce107b81551c86d2fbfc8b133430da8771a80d3e53b2256c4da0f38c1",
+          "stats": {
+            "shape": [
+              128,
+              3584
+            ],
+            "dtype": "float32",
+            "size": 458752,
+            "min": -90.5,
+            "max": 26.5,
+            "mean": -0.01220727525651455,
+            "std": 2.023547887802124,
+            "abs_max": 90.5,
+            "nonzero_count": 458523,
+            "allzero": false,
+            "constant": false,
+            "nan_count": 0,
+            "inf_count": 0
+          }
+        },
+        {
+          "boundary": "layer_23_output",
+          "layer_index": 23,
+          "path": "evidence/hf_boundaries_v11/zeros/layer_23_output.npy",
+          "sha256": "db773e12e106e1a1f2272ae403af54e7519482326d97b2be97f17fa435e4642f",
+          "stats": {
+            "shape": [
+              128,
+              3584
+            ],
+            "dtype": "float32",
+            "size": 458752,
+            "min": -87.5,
+            "max": 25.625,
+            "mean": 0.005426079500466585,
+            "std": 2.0930919647216797,
+            "abs_max": 87.5,
+            "nonzero_count": 458432,
+            "allzero": false,
+            "constant": false,
+            "nan_count": 0,
+            "inf_count": 0
+          }
+        },
+        {
+          "boundary": "layer_24_output",
+          "layer_index": 24,
+          "path": "evidence/hf_boundaries_v11/zeros/layer_24_output.npy",
+          "sha256": "239e8233875985c7c8a3a66982c528ee9421344d515357f12b50579d65dd2ab7",
+          "stats": {
+            "shape": [
+              128,
+              3584
+            ],
+            "dtype": "float32",
+            "size": 458752,
+            "min": -92.0,
+            "max": 21.75,
+            "mean": 0.013154245913028717,
+            "std": 2.337538003921509,
+            "abs_max": 92.0,
+            "nonzero_count": 458384,
+            "allzero": false,
+            "constant": false,
+            "nan_count": 0,
+            "inf_count": 0
+          }
+        },
+        {
+          "boundary": "layer_25_output",
+          "layer_index": 25,
+          "path": "evidence/hf_boundaries_v11/zeros/layer_25_output.npy",
+          "sha256": "a15adc8e94f835f4cfdb33d472b8ffdae8e888bef5f1354018a3fa97f3775045",
+          "stats": {
+            "shape": [
+              128,
+              3584
+            ],
+            "dtype": "float32",
+            "size": 458752,
+            "min": -108.0,
+            "max": 29.75,
+            "mean": 0.012960374355316162,
+            "std": 2.8395464420318604,
+            "abs_max": 108.0,
+            "nonzero_count": 458365,
+            "allzero": false,
+            "constant": false,
+            "nan_count": 0,
+            "inf_count": 0
+          }
+        },
+        {
+          "boundary": "layer_26_output",
+          "layer_index": 26,
+          "path": "evidence/hf_boundaries_v11/zeros/layer_26_output.npy",
+          "sha256": "9b774113769e30e6b112ea6f46dec8e36ab120f9a16777df7a2e4258574484bc",
+          "stats": {
+            "shape": [
+              128,
+              3584
+            ],
+            "dtype": "float32",
+            "size": 458752,
+            "min": -109.5,
+            "max": 35.5,
+            "mean": 0.004446861799806356,
+            "std": 3.5130152702331543,
+            "abs_max": 109.5,
+            "nonzero_count": 458378,
+            "allzero": false,
+            "constant": false,
+            "nan_count": 0,
+            "inf_count": 0
+          }
+        },
+        {
+          "boundary": "layer_27_output",
+          "layer_index": 27,
+          "path": "evidence/hf_boundaries_v11/zeros/layer_27_output.npy",
+          "sha256": "342a01e68cf9712fa304e6a5f08c1edbb4be77dea4312b31e2492b88810e8a4a",
+          "stats": {
+            "shape": [
+              128,
+              3584
+            ],
+            "dtype": "float32",
+            "size": 458752,
+            "min": -99.5,
+            "max": 88.5,
+            "mean": 0.011121368035674095,
+            "std": 5.8019866943359375,
+            "abs_max": 99.5,
+            "nonzero_count": 458365,
+            "allzero": false,
+            "constant": false,
+            "nan_count": 0,
+            "inf_count": 0
+          }
+        },
+        {
+          "boundary": "final_norm_output",
+          "path": "evidence/hf_boundaries_v11/zeros/final_norm_output.npy",
+          "sha256": "5e32890c02f93747d8e2500ca12f979861082d3c8ae6bfe161e6c8c15b5e8a28",
+          "stats": {
+            "shape": [
+              128,
+              3584
+            ],
+            "dtype": "float32",
+            "size": 458752,
+            "min": -157.0,
+            "max": 142.0,
+            "mean": -0.04257337003946304,
+            "std": 7.112908363342285,
+            "abs_max": 157.0,
+            "nonzero_count": 458365,
+            "allzero": false,
+            "constant": false,
+            "nan_count": 0,
+            "inf_count": 0
+          }
+        }
+      ],
+      "repeat_truth": {
+        "case_id": "zeros",
+        "truth_row_type": "HF/PyTorch repeat bfloat16",
+        "dtype": "bfloat16",
+        "device": "cpu",
+        "seq_len": 128,
+        "last_token_index": 127,
+        "vocab_size": 152064,
+        "token_ids_sha256": "1b912946d3fd584649a7924a6d699d2bd0ee0da2ebc320bd53135fa9b1ec21a0",
+        "logits": {
+          "path": "evidence/full_truth_repeat_v11/zeros/repeat_full_truth_logits.npy",
+          "sha256": "661ae552e7e368d829971c052f36bca50d0ba7f3b36e32c0b40d23179b77d56c",
+          "stats": {
+            "shape": [
+              152064
+            ],
+            "dtype": "float32",
+            "size": 152064,
+            "min": -14.25,
+            "max": 1.75,
+            "mean": -10.231769561767578,
+            "std": 1.7890510559082031,
+            "abs_max": 14.25,
+            "nonzero_count": 152064,
+            "allzero": false,
+            "constant": false,
+            "nan_count": 0,
+            "inf_count": 0
+          }
+        },
+        "top10": [
+          220,
+          151643,
+          16,
+          15,
+          576,
+          279,
+          600,
+          17,
+          0,
+          518
+        ],
+        "elapsed_seconds": 1128.776
+      }
+    },
+    {
+      "case_id": "ramp",
+      "elapsed_seconds": 1122.307,
+      "hidden_states_count": 29,
+      "boundaries": [
+        {
+          "boundary": "embedding_output",
+          "path": "evidence/hf_boundaries_v11/ramp/embedding_output.npy",
+          "sha256": "ab8427dd8c6eb1c3efc85e670fb0374941aa8b67f4f61cdc3cd7c802292c8143",
+          "stats": {
+            "shape": [
+              128,
+              3584
+            ],
+            "dtype": "float32",
+            "size": 458752,
+            "min": -0.26953125,
+            "max": 0.87109375,
+            "mean": -3.8177124224603176e-05,
+            "std": 0.014059757813811302,
+            "abs_max": 0.87109375,
+            "nonzero_count": 458752,
+            "allzero": false,
+            "constant": false,
+            "nan_count": 0,
+            "inf_count": 0
+          }
+        },
+        {
+          "boundary": "layer_00_output",
+          "layer_index": 0,
+          "path": "evidence/hf_boundaries_v11/ramp/layer_00_output.npy",
+          "sha256": "33d792d7db1b499fe47e2bb3f355851ec152725a3f39f281f55c037f0c6c5bb4",
+          "stats": {
+            "shape": [
+              128,
+              3584
+            ],
+            "dtype": "float32",
+            "size": 458752,
+            "min": -2.390625,
+            "max": 1.515625,
+            "mean": -0.0008283672505058348,
+            "std": 0.12699337303638458,
+            "abs_max": 2.390625,
+            "nonzero_count": 458360,
+            "allzero": false,
+            "constant": false,
+            "nan_count": 0,
+            "inf_count": 0
+          }
+        },
+        {
+          "boundary": "layer_01_output",
+          "layer_index": 1,
+          "path": "evidence/hf_boundaries_v11/ramp/layer_01_output.npy",
+          "sha256": "630c8e63faa63aebda8115587ed15953da94e5151257814d1e1feca535129e0c",
+          "stats": {
+            "shape": [
+              128,
+              3584
+            ],
+            "dtype": "float32",
+            "size": 458752,
+            "min": -5.1875,
+            "max": 2.34375,
+            "mean": -0.0012834391091018915,
+            "std": 0.20027461647987366,
+            "abs_max": 5.1875,
+            "nonzero_count": 458356,
+            "allzero": false,
+            "constant": false,
+            "nan_count": 0,
+            "inf_count": 0
+          }
+        },
+        {
+          "boundary": "layer_02_output",
+          "layer_index": 2,
+          "path": "evidence/hf_boundaries_v11/ramp/layer_02_output.npy",
+          "sha256": "cc601cb84c87444c3d35cdae1b3fb88f11d8381f559eed9c2d2c9a26ddfb2ce5",
+          "stats": {
+            "shape": [
+              128,
+              3584
+            ],
+            "dtype": "float32",
+            "size": 458752,
+            "min": -4.71875,
+            "max": 3.4375,
+            "mean": -0.0005226843641139567,
+            "std": 0.25748497247695923,
+            "abs_max": 4.71875,
+            "nonzero_count": 458345,
+            "allzero": false,
+            "constant": false,
+            "nan_count": 0,
+            "inf_count": 0
+          }
+        },
+        {
+          "boundary": "layer_03_output",
+          "layer_index": 3,
+          "path": "evidence/hf_boundaries_v11/ramp/layer_03_output.npy",
+          "sha256": "8fd6760a1fd98b8d53203237af57bb8db275d788c3e4a4c25e97a7284f1bcf3d",
+          "stats": {
+            "shape": [
+              128,
+              3584
+            ],
+            "dtype": "float32",
+            "size": 458752,
+            "min": -19.75,
+            "max": 6.6875,
+            "mean": 0.0009612377034500241,
+            "std": 0.3101077675819397,
+            "abs_max": 19.75,
+            "nonzero_count": 458360,
+            "allzero": false,
+            "constant": false,
+            "nan_count": 0,
+            "inf_count": 0
+          }
+        },
+        {
+          "boundary": "layer_04_output",
+          "layer_index": 4,
+          "path": "evidence/hf_boundaries_v11/ramp/layer_04_output.npy",
+          "sha256": "6a42b116a4e8fc4c0fe92a3a0f7c7b9904d7284a83d431b985f971e7a2098803",
+          "stats": {
+            "shape": [
+              128,
+              3584
+            ],
+            "dtype": "float32",
+            "size": 458752,
+            "min": -6.4375,
+            "max": 4.5,
+            "mean": 0.00036152731627225876,
+            "std": 0.3510246276855469,
+            "abs_max": 6.4375,
+            "nonzero_count": 458330,
+            "allzero": false,
+            "constant": false,
+            "nan_count": 0,
+            "inf_count": 0
+          }
+        },
+        {
+          "boundary": "layer_05_output",
+          "layer_index": 5,
+          "path": "evidence/hf_boundaries_v11/ramp/layer_05_output.npy",
+          "sha256": "e798d293ccc6fb4d050c7efe2ad6f337be79e37e65ae673144a2f1f76cbfd323",
+          "stats": {
+            "shape": [
+              128,
+              3584
+            ],
+            "dtype": "float32",
+            "size": 458752,
+            "min": -35.0,
+            "max": 16.625,
+            "mean": -0.0010073382873088121,
+            "std": 0.4398665428161621,
+            "abs_max": 35.0,
+            "nonzero_count": 458264,
+            "allzero": false,
+            "constant": false,
+            "nan_count": 0,
+            "inf_count": 0
+          }
+        },
+        {
+          "boundary": "layer_06_output",
+          "layer_index": 6,
+          "path": "evidence/hf_boundaries_v11/ramp/layer_06_output.npy",
+          "sha256": "105ecceef1789e77e6a015892482f2073d238ce03dabf9da040e43ad3798adf6",
+          "stats": {
+            "shape": [
+              128,
+              3584
+            ],
+            "dtype": "float32",
+            "size": 458752,
+            "min": -91.0,
+            "max": 27.125,
+            "mean": 0.00017367264081258327,
+            "std": 0.5418378710746765,
+            "abs_max": 91.0,
+            "nonzero_count": 458265,
+            "allzero": false,
+            "constant": false,
+            "nan_count": 0,
+            "inf_count": 0
+          }
+        },
+        {
+          "boundary": "layer_07_output",
+          "layer_index": 7,
+          "path": "evidence/hf_boundaries_v11/ramp/layer_07_output.npy",
+          "sha256": "e0ff46be0f5f09615af4a051a3d49d3a40905b11f9453a7f7890ca468434ea17",
+          "stats": {
+            "shape": [
+              128,
+              3584
+            ],
+            "dtype": "float32",
+            "size": 458752,
+            "min": -118.0,
+            "max": 32.5,
+            "mean": -0.004451601766049862,
+            "std": 0.6225697994232178,
+            "abs_max": 118.0,
+            "nonzero_count": 458294,
+            "allzero": false,
+            "constant": false,
+            "nan_count": 0,
+            "inf_count": 0
+          }
+        },
+        {
+          "boundary": "layer_08_output",
+          "layer_index": 8,
+          "path": "evidence/hf_boundaries_v11/ramp/layer_08_output.npy",
+          "sha256": "5ce4d8a86c5be4bcd8903ca5c78ce930d0771bd551fe73c435a7b2219f394088",
+          "stats": {
+            "shape": [
+              128,
+              3584
+            ],
+            "dtype": "float32",
+            "size": 458752,
+            "min": -127.5,
+            "max": 37.75,
+            "mean": -0.00024573272094130516,
+            "std": 0.6670078039169312,
+            "abs_max": 127.5,
+            "nonzero_count": 458347,
+            "allzero": false,
+            "constant": false,
+            "nan_count": 0,
+            "inf_count": 0
+          }
+        },
+        {
+          "boundary": "layer_09_output",
+          "layer_index": 9,
+          "path": "evidence/hf_boundaries_v11/ramp/layer_09_output.npy",
+          "sha256": "edd92a8e055341de38026390a114557f267f5a7b0e91b52cdeed1e6209260588",
+          "stats": {
+            "shape": [
+              128,
+              3584
+            ],
+            "dtype": "float32",
+            "size": 458752,
+            "min": -173.0,
+            "max": 51.25,
+            "mean": 0.001148295239545405,
+            "std": 0.7370373010635376,
+            "abs_max": 173.0,
+            "nonzero_count": 458006,
+            "allzero": false,
+            "constant": false,
+            "nan_count": 0,
+            "inf_count": 0
+          }
+        },
+        {
+          "boundary": "layer_10_output",
+          "layer_index": 10,
+          "path": "evidence/hf_boundaries_v11/ramp/layer_10_output.npy",
+          "sha256": "846b06dbb46c5bef8ee2cdbdd26104c60c3f308dafb870cfccb07fe11d799e2a",
+          "stats": {
+            "shape": [
+              128,
+              3584
+            ],
+            "dtype": "float32",
+            "size": 458752,
+            "min": -182.0,
+            "max": 53.25,
+            "mean": -0.00025612415629439056,
+            "std": 0.7506978511810303,
+            "abs_max": 182.0,
+            "nonzero_count": 458203,
+            "allzero": false,
+            "constant": false,
+            "nan_count": 0,
+            "inf_count": 0
+          }
+        },
+        {
+          "boundary": "layer_11_output",
+          "layer_index": 11,
+          "path": "evidence/hf_boundaries_v11/ramp/layer_11_output.npy",
+          "sha256": "1f3c4ca156f10cf142c1febfe1d276cd3ef2367a813b8b82086615803de7c4a1",
+          "stats": {
+            "shape": [
+              128,
+              3584
+            ],
+            "dtype": "float32",
+            "size": 458752,
+            "min": -416.0,
+            "max": 138.0,
+            "mean": -0.0008368823328055441,
+            "std": 1.524570345878601,
+            "abs_max": 416.0,
+            "nonzero_count": 458289,
+            "allzero": false,
+            "constant": false,
+            "nan_count": 0,
+            "inf_count": 0
+          }
+        },
+        {
+          "boundary": "layer_12_output",
+          "layer_index": 12,
+          "path": "evidence/hf_boundaries_v11/ramp/layer_12_output.npy",
+          "sha256": "fc3143ccde176babf6df434f3d0938f18bafb3fc1208ecd07b60f2dd40b2dd72",
+          "stats": {
+            "shape": [
+              128,
+              3584
+            ],
+            "dtype": "float32",
+            "size": 458752,
+            "min": -528.0,
+            "max": 160.0,
+            "mean": -0.0018799735698848963,
+            "std": 1.9846242666244507,
+            "abs_max": 528.0,
+            "nonzero_count": 458307,
+            "allzero": false,
+            "constant": false,
+            "nan_count": 0,
+            "inf_count": 0
+          }
+        },
+        {
+          "boundary": "layer_13_output",
+          "layer_index": 13,
+          "path": "evidence/hf_boundaries_v11/ramp/layer_13_output.npy",
+          "sha256": "d7e27e9283ee4eada491742d95c5b7308ff32a602e483c8c2d86412e0fea57ac",
+          "stats": {
+            "shape": [
+              128,
+              3584
+            ],
+            "dtype": "float32",
+            "size": 458752,
+            "min": -580.0,
+            "max": 174.0,
+            "mean": -0.0018853368237614632,
+            "std": 2.19781231880188,
+            "abs_max": 580.0,
+            "nonzero_count": 458274,
+            "allzero": false,
+            "constant": false,
+            "nan_count": 0,
+            "inf_count": 0
+          }
+        },
+        {
+          "boundary": "layer_14_output",
+          "layer_index": 14,
+          "path": "evidence/hf_boundaries_v11/ramp/layer_14_output.npy",
+          "sha256": "fbc6b70ee31685e091401763ccdb8f0e2720774f973420779fb6146aedc545a3",
+          "stats": {
+            "shape": [
+              128,
+              3584
+            ],
+            "dtype": "float32",
+            "size": 458752,
+            "min": -592.0,
+            "max": 176.0,
+            "mean": -0.005626911763101816,
+            "std": 2.2496514320373535,
+            "abs_max": 592.0,
+            "nonzero_count": 458289,
+            "allzero": false,
+            "constant": false,
+            "nan_count": 0,
+            "inf_count": 0
+          }
+        },
+        {
+          "boundary": "layer_15_output",
+          "layer_index": 15,
+          "path": "evidence/hf_boundaries_v11/ramp/layer_15_output.npy",
+          "sha256": "8485df480e4e99a44698e6bf32f8be8ce005e0767ede0fcbf906fa6566d068cf",
+          "stats": {
+            "shape": [
+              128,
+              3584
+            ],
+            "dtype": "float32",
+            "size": 458752,
+            "min": -604.0,
+            "max": 178.0,
+            "mean": -0.011610663495957851,
+            "std": 2.313405752182007,
+            "abs_max": 604.0,
+            "nonzero_count": 458296,
+            "allzero": false,
+            "constant": false,
+            "nan_count": 0,
+            "inf_count": 0
+          }
+        },
+        {
+          "boundary": "layer_16_output",
+          "layer_index": 16,
+          "path": "evidence/hf_boundaries_v11/ramp/layer_16_output.npy",
+          "sha256": "8c4bb947f370597ac9291f5f2e6e81f81872eb6991c60719e69851675377788f",
+          "stats": {
+            "shape": [
+              128,
+              3584
+            ],
+            "dtype": "float32",
+            "size": 458752,
+            "min": -612.0,
+            "max": 180.0,
+            "mean": -0.01201002299785614,
+            "std": 2.3353350162506104,
+            "abs_max": 612.0,
+            "nonzero_count": 458373,
+            "allzero": false,
+            "constant": false,
+            "nan_count": 0,
+            "inf_count": 0
+          }
+        },
+        {
+          "boundary": "layer_17_output",
+          "layer_index": 17,
+          "path": "evidence/hf_boundaries_v11/ramp/layer_17_output.npy",
+          "sha256": "ef05c553ed44f4b29243927aca2510b4d23ded5a135891a733b2cfd11b4cd2e8",
+          "stats": {
+            "shape": [
+              128,
+              3584
+            ],
+            "dtype": "float32",
+            "size": 458752,
+            "min": -608.0,
+            "max": 180.0,
+            "mean": -0.007674366235733032,
+            "std": 2.3326268196105957,
+            "abs_max": 608.0,
+            "nonzero_count": 458329,
+            "allzero": false,
+            "constant": false,
+            "nan_count": 0,
+            "inf_count": 0
+          }
+        },
+        {
+          "boundary": "layer_18_output",
+          "layer_index": 18,
+          "path": "evidence/hf_boundaries_v11/ramp/layer_18_output.npy",
+          "sha256": "f8c405ec0edc4c8e3cab4ff916cee0fa926a2c3d66e98d296bc5d7abdae0102c",
+          "stats": {
+            "shape": [
+              128,
+              3584
+            ],
+            "dtype": "float32",
+            "size": 458752,
+            "min": -604.0,
+            "max": 180.0,
+            "mean": -0.011029629036784172,
+            "std": 2.3255155086517334,
+            "abs_max": 604.0,
+            "nonzero_count": 458275,
+            "allzero": false,
+            "constant": false,
+            "nan_count": 0,
+            "inf_count": 0
+          }
+        },
+        {
+          "boundary": "layer_19_output",
+          "layer_index": 19,
+          "path": "evidence/hf_boundaries_v11/ramp/layer_19_output.npy",
+          "sha256": "b18ab5a56eef5fc54b98278cae81c659df7cbc98e6d7f3e915fb5b0065da93c2",
+          "stats": {
+            "shape": [
+              128,
+              3584
+            ],
+            "dtype": "float32",
+            "size": 458752,
+            "min": -596.0,
+            "max": 180.0,
+            "mean": -0.009734016843140125,
+            "std": 2.3085076808929443,
+            "abs_max": 596.0,
+            "nonzero_count": 458215,
+            "allzero": false,
+            "constant": false,
+            "nan_count": 0,
+            "inf_count": 0
+          }
+        },
+        {
+          "boundary": "layer_20_output",
+          "layer_index": 20,
+          "path": "evidence/hf_boundaries_v11/ramp/layer_20_output.npy",
+          "sha256": "cc69f8ed374569f4d9ac01ef65d2e7138792e31818aa2d829107a2fbf5020df8",
+          "stats": {
+            "shape": [
+              128,
+              3584
+            ],
+            "dtype": "float32",
+            "size": 458752,
+            "min": -548.0,
+            "max": 168.0,
+            "mean": -0.009485813789069653,
+            "std": 2.169219732284546,
+            "abs_max": 548.0,
+            "nonzero_count": 458325,
+            "allzero": false,
+            "constant": false,
+            "nan_count": 0,
+            "inf_count": 0
+          }
+        },
+        {
+          "boundary": "layer_21_output",
+          "layer_index": 21,
+          "path": "evidence/hf_boundaries_v11/ramp/layer_21_output.npy",
+          "sha256": "5054921e4ee9a3d970bdca47d3a78ef044c18d7c46d7924de3b0273ee8ffc51a",
+          "stats": {
+            "shape": [
+              128,
+              3584
+            ],
+            "dtype": "float32",
+            "size": 458752,
+            "min": -544.0,
+            "max": 169.0,
+            "mean": -0.015203645452857018,
+            "std": 2.241136312484741,
+            "abs_max": 544.0,
+            "nonzero_count": 458305,
+            "allzero": false,
+            "constant": false,
+            "nan_count": 0,
+            "inf_count": 0
+          }
+        },
+        {
+          "boundary": "layer_22_output",
+          "layer_index": 22,
+          "path": "evidence/hf_boundaries_v11/ramp/layer_22_output.npy",
+          "sha256": "a09655b70a1272abb7969a39140d5b9bf7dc772eb1705b6aed0cb4ffec7c6012",
+          "stats": {
+            "shape": [
+              128,
+              3584
+            ],
+            "dtype": "float32",
+            "size": 458752,
+            "min": -536.0,
+            "max": 171.0,
+            "mean": -0.010774554684758186,
+            "std": 2.34568452835083,
+            "abs_max": 536.0,
+            "nonzero_count": 458302,
+            "allzero": false,
+            "constant": false,
+            "nan_count": 0,
+            "inf_count": 0
+          }
+        },
+        {
+          "boundary": "layer_23_output",
+          "layer_index": 23,
+          "path": "evidence/hf_boundaries_v11/ramp/layer_23_output.npy",
+          "sha256": "b6596fa42ab74dea2f2b55f424fcfd3d08e157f61c7cff71dc2e802fa3a9f016",
+          "stats": {
+            "shape": [
+              128,
+              3584
+            ],
+            "dtype": "float32",
+            "size": 458752,
+            "min": -532.0,
+            "max": 170.0,
+            "mean": -0.004195715766400099,
+            "std": 2.5166008472442627,
+            "abs_max": 532.0,
+            "nonzero_count": 458354,
+            "allzero": false,
+            "constant": false,
+            "nan_count": 0,
+            "inf_count": 0
+          }
+        },
+        {
+          "boundary": "layer_24_output",
+          "layer_index": 24,
+          "path": "evidence/hf_boundaries_v11/ramp/layer_24_output.npy",
+          "sha256": "92e82e644215c54d519aa1bc0b6a261b9032e3021e6a142e19befa5d5f1b76ef",
+          "stats": {
+            "shape": [
+              128,
+              3584
+            ],
+            "dtype": "float32",
+            "size": 458752,
+            "min": -512.0,
+            "max": 166.0,
+            "mean": -0.00758874649181962,
+            "std": 2.7509188652038574,
+            "abs_max": 512.0,
+            "nonzero_count": 458371,
+            "allzero": false,
+            "constant": false,
+            "nan_count": 0,
+            "inf_count": 0
+          }
+        },
+        {
+          "boundary": "layer_25_output",
+          "layer_index": 25,
+          "path": "evidence/hf_boundaries_v11/ramp/layer_25_output.npy",
+          "sha256": "f40c8dc8ab66e5242c066b360cfc1e80bde4a27eb40c5541052707663d0d3545",
+          "stats": {
+            "shape": [
+              128,
+              3584
+            ],
+            "dtype": "float32",
+            "size": 458752,
+            "min": -604.0,
+            "max": 169.0,
+            "mean": -0.0057948981411755085,
+            "std": 3.1978602409362793,
+            "abs_max": 604.0,
+            "nonzero_count": 458424,
+            "allzero": false,
+            "constant": false,
+            "nan_count": 0,
+            "inf_count": 0
+          }
+        },
+        {
+          "boundary": "layer_26_output",
+          "layer_index": 26,
+          "path": "evidence/hf_boundaries_v11/ramp/layer_26_output.npy",
+          "sha256": "a96b25f3c009c051f5fca5d3a5e94c3ffccb7b9ed3a5a1c51dbe45b36def3e10",
+          "stats": {
+            "shape": [
+              128,
+              3584
+            ],
+            "dtype": "float32",
+            "size": 458752,
+            "min": -498.0,
+            "max": 123.0,
+            "mean": -0.023058591410517693,
+            "std": 3.5379815101623535,
+            "abs_max": 498.0,
+            "nonzero_count": 458379,
+            "allzero": false,
+            "constant": false,
+            "nan_count": 0,
+            "inf_count": 0
+          }
+        },
+        {
+          "boundary": "layer_27_output",
+          "layer_index": 27,
+          "path": "evidence/hf_boundaries_v11/ramp/layer_27_output.npy",
+          "sha256": "1f55a79fdabb8bc6a1ed438e812531f11b578dcf4f550faf130c3ce6fc56af08",
+          "stats": {
+            "shape": [
+              128,
+              3584
+            ],
+            "dtype": "float32",
+            "size": 458752,
+            "min": -103.5,
+            "max": 87.5,
+            "mean": -0.013066387735307217,
+            "std": 5.097068786621094,
+            "abs_max": 103.5,
+            "nonzero_count": 458220,
+            "allzero": false,
+            "constant": false,
+            "nan_count": 0,
+            "inf_count": 0
+          }
+        },
+        {
+          "boundary": "final_norm_output",
+          "path": "evidence/hf_boundaries_v11/ramp/final_norm_output.npy",
+          "sha256": "ccf8951baf9663e27b999350372d7d177eb0d9f97eb0233d3252718cd1aea516",
+          "stats": {
+            "shape": [
+              128,
+              3584
+            ],
+            "dtype": "float32",
+            "size": 458752,
+            "min": -142.0,
+            "max": 156.0,
+            "mean": -0.044951360672712326,
+            "std": 5.794974327087402,
+            "abs_max": 156.0,
+            "nonzero_count": 458220,
+            "allzero": false,
+            "constant": false,
+            "nan_count": 0,
+            "inf_count": 0
+          }
+        }
+      ],
+      "repeat_truth": {
+        "case_id": "ramp",
+        "truth_row_type": "HF/PyTorch repeat bfloat16",
+        "dtype": "bfloat16",
+        "device": "cpu",
+        "seq_len": 128,
+        "last_token_index": 127,
+        "vocab_size": 152064,
+        "token_ids_sha256": "f0d76dfdfbf5467a030817361d4cedd8ddc8e86a9b24ee55e7749eb72a658b53",
+        "logits": {
+          "path": "evidence/full_truth_repeat_v11/ramp/repeat_full_truth_logits.npy",
+          "sha256": "c5ba9211687cd11d69e6825ae32e2e253db9f3ddbe11d9df4a72b2e790a5c154",
+          "stats": {
+            "shape": [
+              152064
+            ],
+            "dtype": "float32",
+            "size": 152064,
+            "min": -7.65625,
+            "max": 12.25,
+            "mean": -1.9889841079711914,
+            "std": 0.9208143353462219,
+            "abs_max": 12.25,
+            "nonzero_count": 152064,
+            "allzero": false,
+            "constant": false,
+            "nan_count": 0,
+            "inf_count": 0
+          }
+        },
+        "top10": [
+          151643,
+          126,
+          122,
+          245,
+          242,
+          107,
+          230,
+          123,
+          246,
+          253
+        ],
+        "elapsed_seconds": 1122.307
+      }
+    },
+    {
+      "case_id": "short_chinese_prompt_padded",
+      "elapsed_seconds": 1120.615,
+      "hidden_states_count": 29,
+      "boundaries": [
+        {
+          "boundary": "embedding_output",
+          "path": "evidence/hf_boundaries_v11/short_chinese_prompt_padded/embedding_output.npy",
+          "sha256": "a9afb6ecdd35a32870ac10fd1f7df4c3024cbaadb2dc8ecaa8bc4d89a72a6c35",
+          "stats": {
+            "shape": [
+              128,
+              3584
+            ],
+            "dtype": "float32",
+            "size": 458752,
+            "min": -0.234375,
+            "max": 0.48828125,
+            "mean": -2.8683616619673558e-05,
+            "std": 0.014238351956009865,
+            "abs_max": 0.48828125,
+            "nonzero_count": 458752,
+            "allzero": false,
+            "constant": false,
+            "nan_count": 0,
+            "inf_count": 0
+          }
+        },
+        {
+          "boundary": "layer_00_output",
+          "layer_index": 0,
+          "path": "evidence/hf_boundaries_v11/short_chinese_prompt_padded/layer_00_output.npy",
+          "sha256": "e4d5628ef144b924846a823016c0f645ce837ac1c0109a9af84694d8f7e6c0d6",
+          "stats": {
+            "shape": [
+              128,
+              3584
+            ],
+            "dtype": "float32",
+            "size": 458752,
+            "min": -1.9375,
+            "max": 1.796875,
+            "mean": -0.0004556574858725071,
+            "std": 0.1927524358034134,
+            "abs_max": 1.9375,
+            "nonzero_count": 458255,
+            "allzero": false,
+            "constant": false,
+            "nan_count": 0,
+            "inf_count": 0
+          }
+        },
+        {
+          "boundary": "layer_01_output",
+          "layer_index": 1,
+          "path": "evidence/hf_boundaries_v11/short_chinese_prompt_padded/layer_01_output.npy",
+          "sha256": "8e2bf066fedfc5b6e838a8da833525f7fbda99394b71a51e4a5235f1d0c801b3",
+          "stats": {
+            "shape": [
+              128,
+              3584
+            ],
+            "dtype": "float32",
+            "size": 458752,
+            "min": -6.34375,
+            "max": 2.515625,
+            "mean": 0.0014618439599871635,
+            "std": 0.2320157140493393,
+            "abs_max": 6.34375,
+            "nonzero_count": 458339,
+            "allzero": false,
+            "constant": false,
+            "nan_count": 0,
+            "inf_count": 0
+          }
+        },
+        {
+          "boundary": "layer_02_output",
+          "layer_index": 2,
+          "path": "evidence/hf_boundaries_v11/short_chinese_prompt_padded/layer_02_output.npy",
+          "sha256": "118bf3e56f304978ba05d040c49a4b2bd1a6a610fbdb988ef7298c83b71c439e",
+          "stats": {
+            "shape": [
+              128,
+              3584
+            ],
+            "dtype": "float32",
+            "size": 458752,
+            "min": -5.15625,
+            "max": 2.78125,
+            "mean": -0.0002941264829132706,
+            "std": 0.2608058750629425,
+            "abs_max": 5.15625,
+            "nonzero_count": 458416,
+            "allzero": false,
+            "constant": false,
+            "nan_count": 0,
+            "inf_count": 0
+          }
+        },
+        {
+          "boundary": "layer_03_output",
+          "layer_index": 3,
+          "path": "evidence/hf_boundaries_v11/short_chinese_prompt_padded/layer_03_output.npy",
+          "sha256": "5f7d4c672054b12ca2e6c25e329fdf409686f337d6511f6681095be473168526",
+          "stats": {
+            "shape": [
+              128,
+              3584
+            ],
+            "dtype": "float32",
+            "size": 458752,
+            "min": -4.96875,
+            "max": 3.328125,
+            "mean": 0.004361282102763653,
+            "std": 0.32771024107933044,
+            "abs_max": 4.96875,
+            "nonzero_count": 458330,
+            "allzero": false,
+            "constant": false,
+            "nan_count": 0,
+            "inf_count": 0
+          }
+        },
+        {
+          "boundary": "layer_04_output",
+          "layer_index": 4,
+          "path": "evidence/hf_boundaries_v11/short_chinese_prompt_padded/layer_04_output.npy",
+          "sha256": "bc43ca3e4aa364e8327180b534b081c7f2c86456aca8eb1e36b43709145b3740",
+          "stats": {
+            "shape": [
+              128,
+              3584
+            ],
+            "dtype": "float32",
+            "size": 458752,
+            "min": -6.625,
+            "max": 3.6875,
+            "mean": 0.0051443264819681644,
+            "std": 0.419122576713562,
+            "abs_max": 6.625,
+            "nonzero_count": 458311,
+            "allzero": false,
+            "constant": false,
+            "nan_count": 0,
+            "inf_count": 0
+          }
+        },
+        {
+          "boundary": "layer_05_output",
+          "layer_index": 5,
+          "path": "evidence/hf_boundaries_v11/short_chinese_prompt_padded/layer_05_output.npy",
+          "sha256": "c7ee9e11c9e13d45863e7d4a89614129c611a0f1b039aeaa5b826a136fee521e",
+          "stats": {
+            "shape": [
+              128,
+              3584
+            ],
+            "dtype": "float32",
+            "size": 458752,
+            "min": -11.625,
+            "max": 4.46875,
+            "mean": 0.001741138519719243,
+            "std": 0.47975051403045654,
+            "abs_max": 11.625,
+            "nonzero_count": 458407,
+            "allzero": false,
+            "constant": false,
+            "nan_count": 0,
+            "inf_count": 0
+          }
+        },
+        {
+          "boundary": "layer_06_output",
+          "layer_index": 6,
+          "path": "evidence/hf_boundaries_v11/short_chinese_prompt_padded/layer_06_output.npy",
+          "sha256": "727a8bd249b786dfdf2b2e52a7f84a7a900906f018a1f255896d1b1abd716694",
+          "stats": {
+            "shape": [
+              128,
+              3584
+            ],
+            "dtype": "float32",
+            "size": 458752,
+            "min": -17.125,
+            "max": 6.25,
+            "mean": 0.007547169923782349,
+            "std": 0.5599050521850586,
+            "abs_max": 17.125,
+            "nonzero_count": 458214,
+            "allzero": false,
+            "constant": false,
+            "nan_count": 0,
+            "inf_count": 0
+          }
+        },
+        {
+          "boundary": "layer_07_output",
+          "layer_index": 7,
+          "path": "evidence/hf_boundaries_v11/short_chinese_prompt_padded/layer_07_output.npy",
+          "sha256": "f6d9fdf8c46abe2ab43593d8205baa05730c243420d3475ff63a80bfa6629015",
+          "stats": {
+            "shape": [
+              128,
+              3584
+            ],
+            "dtype": "float32",
+            "size": 458752,
+            "min": -29.625,
+            "max": 6.5625,
+            "mean": -0.00014934818318579346,
+            "std": 0.6889657974243164,
+            "abs_max": 29.625,
+            "nonzero_count": 458397,
+            "allzero": false,
+            "constant": false,
+            "nan_count": 0,
+            "inf_count": 0
+          }
+        },
+        {
+          "boundary": "layer_08_output",
+          "layer_index": 8,
+          "path": "evidence/hf_boundaries_v11/short_chinese_prompt_padded/layer_08_output.npy",
+          "sha256": "02d1dd712284595ceb0d83cccca4892a3ae00da4d62738f55286eb244a548a7b",
+          "stats": {
+            "shape": [
+              128,
+              3584
+            ],
+            "dtype": "float32",
+            "size": 458752,
+            "min": -35.5,
+            "max": 9.25,
+            "mean": -0.002163725672289729,
+            "std": 0.8027493953704834,
+            "abs_max": 35.5,
+            "nonzero_count": 458415,
+            "allzero": false,
+            "constant": false,
+            "nan_count": 0,
+            "inf_count": 0
+          }
+        },
+        {
+          "boundary": "layer_09_output",
+          "layer_index": 9,
+          "path": "evidence/hf_boundaries_v11/short_chinese_prompt_padded/layer_09_output.npy",
+          "sha256": "5e8631b6840d3aca0fda507105aeadf864d12dd9e03620cdef9663cf82c7027d",
+          "stats": {
+            "shape": [
+              128,
+              3584
+            ],
+            "dtype": "float32",
+            "size": 458752,
+            "min": -41.5,
+            "max": 9.75,
+            "mean": 0.0005054656649008393,
+            "std": 0.7881516814231873,
+            "abs_max": 41.5,
+            "nonzero_count": 458143,
+            "allzero": false,
+            "constant": false,
+            "nan_count": 0,
+            "inf_count": 0
+          }
+        },
+        {
+          "boundary": "layer_10_output",
+          "layer_index": 10,
+          "path": "evidence/hf_boundaries_v11/short_chinese_prompt_padded/layer_10_output.npy",
+          "sha256": "32eb96a7557bb49979772e5567087679cba4d018f148e0bccee76fd32716338e",
+          "stats": {
+            "shape": [
+              128,
+              3584
+            ],
+            "dtype": "float32",
+            "size": 458752,
+            "min": -43.0,
+            "max": 8.5,
+            "mean": 0.0020845518447458744,
+            "std": 0.7163016200065613,
+            "abs_max": 43.0,
+            "nonzero_count": 458303,
+            "allzero": false,
+            "constant": false,
+            "nan_count": 0,
+            "inf_count": 0
+          }
+        },
+        {
+          "boundary": "layer_11_output",
+          "layer_index": 11,
+          "path": "evidence/hf_boundaries_v11/short_chinese_prompt_padded/layer_11_output.npy",
+          "sha256": "b5a2d22a9f5caba65dbf7643b0e16b9e6f8a0f36da5c2df5e14d9a917cb8a638",
+          "stats": {
+            "shape": [
+              128,
+              3584
+            ],
+            "dtype": "float32",
+            "size": 458752,
+            "min": -123.0,
+            "max": 36.0,
+            "mean": -0.0004892452852800488,
+            "std": 0.8692760467529297,
+            "abs_max": 123.0,
+            "nonzero_count": 458384,
+            "allzero": false,
+            "constant": false,
+            "nan_count": 0,
+            "inf_count": 0
+          }
+        },
+        {
+          "boundary": "layer_12_output",
+          "layer_index": 12,
+          "path": "evidence/hf_boundaries_v11/short_chinese_prompt_padded/layer_12_output.npy",
+          "sha256": "78ea66c5d31ef23103408cbbbb2caed37873fdb144b0fe08da221aa433c259e7",
+          "stats": {
+            "shape": [
+              128,
+              3584
+            ],
+            "dtype": "float32",
+            "size": 458752,
+            "min": -222.0,
+            "max": 55.0,
+            "mean": -0.006210104562342167,
+            "std": 1.2277580499649048,
+            "abs_max": 222.0,
+            "nonzero_count": 458268,
+            "allzero": false,
+            "constant": false,
+            "nan_count": 0,
+            "inf_count": 0
+          }
+        },
+        {
+          "boundary": "layer_13_output",
+          "layer_index": 13,
+          "path": "evidence/hf_boundaries_v11/short_chinese_prompt_padded/layer_13_output.npy",
+          "sha256": "5a25cd38e1a105e6393521120664436caa084fb1234ab634056493dfb598e62c",
+          "stats": {
+            "shape": [
+              128,
+              3584
+            ],
+            "dtype": "float32",
+            "size": 458752,
+            "min": -268.0,
+            "max": 67.0,
+            "mean": -0.009605162777006626,
+            "std": 1.5407507419586182,
+            "abs_max": 268.0,
+            "nonzero_count": 458318,
+            "allzero": false,
+            "constant": false,
+            "nan_count": 0,
+            "inf_count": 0
+          }
+        },
+        {
+          "boundary": "layer_14_output",
+          "layer_index": 14,
+          "path": "evidence/hf_boundaries_v11/short_chinese_prompt_padded/layer_14_output.npy",
+          "sha256": "269cded1cd5adc56f977eacff66f595f953bf70c881b9cd2fed57b0a5689c082",
+          "stats": {
+            "shape": [
+              128,
+              3584
+            ],
+            "dtype": "float32",
+            "size": 458752,
+            "min": -278.0,
+            "max": 68.5,
+            "mean": -0.005532537121325731,
+            "std": 1.6065142154693604,
+            "abs_max": 278.0,
+            "nonzero_count": 458259,
+            "allzero": false,
+            "constant": false,
+            "nan_count": 0,
+            "inf_count": 0
+          }
+        },
+        {
+          "boundary": "layer_15_output",
+          "layer_index": 15,
+          "path": "evidence/hf_boundaries_v11/short_chinese_prompt_padded/layer_15_output.npy",
+          "sha256": "22e129a347b93b1b5514a720a7536460b2568d8d0600aced12d75c646af5f92f",
+          "stats": {
+            "shape": [
+              128,
+              3584
+            ],
+            "dtype": "float32",
+            "size": 458752,
+            "min": -290.0,
+            "max": 69.0,
+            "mean": -0.008545284159481525,
+            "std": 1.6953743696212769,
+            "abs_max": 290.0,
+            "nonzero_count": 458370,
+            "allzero": false,
+            "constant": false,
+            "nan_count": 0,
+            "inf_count": 0
+          }
+        },
+        {
+          "boundary": "layer_16_output",
+          "layer_index": 16,
+          "path": "evidence/hf_boundaries_v11/short_chinese_prompt_padded/layer_16_output.npy",
+          "sha256": "8a92947ed3de335a56160f09cacf102671b42227c6245caf16fafbfec59065bf",
+          "stats": {
+            "shape": [
+              128,
+              3584
+            ],
+            "dtype": "float32",
+            "size": 458752,
+            "min": -294.0,
+            "max": 70.0,
+            "mean": -0.0036443371791392565,
+            "std": 1.7117570638656616,
+            "abs_max": 294.0,
+            "nonzero_count": 458405,
+            "allzero": false,
+            "constant": false,
+            "nan_count": 0,
+            "inf_count": 0
+          }
+        },
+        {
+          "boundary": "layer_17_output",
+          "layer_index": 17,
+          "path": "evidence/hf_boundaries_v11/short_chinese_prompt_padded/layer_17_output.npy",
+          "sha256": "20adb86b5f03ffad587f04d732d7b4976ed3e95ef12abd6552f40205bf5356c6",
+          "stats": {
+            "shape": [
+              128,
+              3584
+            ],
+            "dtype": "float32",
+            "size": 458752,
+            "min": -290.0,
+            "max": 69.5,
+            "mean": -0.003737258492037654,
+            "std": 1.6750680208206177,
+            "abs_max": 290.0,
+            "nonzero_count": 458381,
+            "allzero": false,
+            "constant": false,
+            "nan_count": 0,
+            "inf_count": 0
+          }
+        },
+        {
+          "boundary": "layer_18_output",
+          "layer_index": 18,
+          "path": "evidence/hf_boundaries_v11/short_chinese_prompt_padded/layer_18_output.npy",
+          "sha256": "dcb98eb6cc04b75aa5dddad34f2732cc9f44a22e28da438b0f01ac3647b69701",
+          "stats": {
+            "shape": [
+              128,
+              3584
+            ],
+            "dtype": "float32",
+            "size": 458752,
+            "min": -286.0,
+            "max": 69.0,
+            "mean": -0.002916305558755994,
+            "std": 1.643978476524353,
+            "abs_max": 286.0,
+            "nonzero_count": 458357,
+            "allzero": false,
+            "constant": false,
+            "nan_count": 0,
+            "inf_count": 0
+          }
+        },
+        {
+          "boundary": "layer_19_output",
+          "layer_index": 19,
+          "path": "evidence/hf_boundaries_v11/short_chinese_prompt_padded/layer_19_output.npy",
+          "sha256": "4726d1a92c27d89db6c892da18cf7621bf66cf9f3754df51bdcdb142d0db91df",
+          "stats": {
+            "shape": [
+              128,
+              3584
+            ],
+            "dtype": "float32",
+            "size": 458752,
+            "min": -278.0,
+            "max": 68.5,
+            "mean": -0.004165124613791704,
+            "std": 1.6015496253967285,
+            "abs_max": 278.0,
+            "nonzero_count": 458358,
+            "allzero": false,
+            "constant": false,
+            "nan_count": 0,
+            "inf_count": 0
+          }
+        },
+        {
+          "boundary": "layer_20_output",
+          "layer_index": 20,
+          "path": "evidence/hf_boundaries_v11/short_chinese_prompt_padded/layer_20_output.npy",
+          "sha256": "1265419304e93fdb6a4fa81c96020d84b8ba37b5b6f4402971391450e4fdfd43",
+          "stats": {
+            "shape": [
+              128,
+              3584
+            ],
+            "dtype": "float32",
+            "size": 458752,
+            "min": -248.0,
+            "max": 63.25,
+            "mean": 0.0008316132007166743,
+            "std": 1.5328501462936401,
+            "abs_max": 248.0,
+            "nonzero_count": 458365,
+            "allzero": false,
+            "constant": false,
+            "nan_count": 0,
+            "inf_count": 0
+          }
+        },
+        {
+          "boundary": "layer_21_output",
+          "layer_index": 21,
+          "path": "evidence/hf_boundaries_v11/short_chinese_prompt_padded/layer_21_output.npy",
+          "sha256": "3a51bbbca61e0c26bfe25680d462262c95db4dda32f4c2b6ba95e0e3064f7f3e",
+          "stats": {
+            "shape": [
+              128,
+              3584
+            ],
+            "dtype": "float32",
+            "size": 458752,
+            "min": -245.0,
+            "max": 64.0,
+            "mean": 0.010029986500740051,
+            "std": 1.6575332880020142,
+            "abs_max": 245.0,
+            "nonzero_count": 458360,
+            "allzero": false,
+            "constant": false,
+            "nan_count": 0,
+            "inf_count": 0
+          }
+        },
+        {
+          "boundary": "layer_22_output",
+          "layer_index": 22,
+          "path": "evidence/hf_boundaries_v11/short_chinese_prompt_padded/layer_22_output.npy",
+          "sha256": "483ceb298191fe7bf81107aa0e838ca4d3e4e7640f8e6285ac0648072a1b40d0",
+          "stats": {
+            "shape": [
+              128,
+              3584
+            ],
+            "dtype": "float32",
+            "size": 458752,
+            "min": -242.0,
+            "max": 63.75,
+            "mean": 0.014839110895991325,
+            "std": 1.8198555707931519,
+            "abs_max": 242.0,
+            "nonzero_count": 458349,
+            "allzero": false,
+            "constant": false,
+            "nan_count": 0,
+            "inf_count": 0
+          }
+        },
+        {
+          "boundary": "layer_23_output",
+          "layer_index": 23,
+          "path": "evidence/hf_boundaries_v11/short_chinese_prompt_padded/layer_23_output.npy",
+          "sha256": "aeaf7d1edc61be00f7f3870e6e648e697944644ae068445174a26764eca43101",
+          "stats": {
+            "shape": [
+              128,
+              3584
+            ],
+            "dtype": "float32",
+            "size": 458752,
+            "min": -233.0,
+            "max": 62.75,
+            "mean": 0.02006235346198082,
+            "std": 1.9647549390792847,
+            "abs_max": 233.0,
+            "nonzero_count": 458376,
+            "allzero": false,
+            "constant": false,
+            "nan_count": 0,
+            "inf_count": 0
+          }
+        },
+        {
+          "boundary": "layer_24_output",
+          "layer_index": 24,
+          "path": "evidence/hf_boundaries_v11/short_chinese_prompt_padded/layer_24_output.npy",
+          "sha256": "9551f76923c81f72adadd536a66660e98b6ff14cde40a3d8ba8ddc0749c0fde0",
+          "stats": {
+            "shape": [
+              128,
+              3584
+            ],
+            "dtype": "float32",
+            "size": 458752,
+            "min": -226.0,
+            "max": 59.25,
+            "mean": 0.02479834295809269,
+            "std": 2.3540899753570557,
+            "abs_max": 226.0,
+            "nonzero_count": 458429,
+            "allzero": false,
+            "constant": false,
+            "nan_count": 0,
+            "inf_count": 0
+          }
+        },
+        {
+          "boundary": "layer_25_output",
+          "layer_index": 25,
+          "path": "evidence/hf_boundaries_v11/short_chinese_prompt_padded/layer_25_output.npy",
+          "sha256": "a720a5eb348c4278fb57170b793819a17a59f2617060c11158998f2deac29a4e",
+          "stats": {
+            "shape": [
+              128,
+              3584
+            ],
+            "dtype": "float32",
+            "size": 458752,
+            "min": -260.0,
+            "max": 59.25,
+            "mean": 0.014327289536595345,
+            "std": 2.8918023109436035,
+            "abs_max": 260.0,
+            "nonzero_count": 458336,
+            "allzero": false,
+            "constant": false,
+            "nan_count": 0,
+            "inf_count": 0
+          }
+        },
+        {
+          "boundary": "layer_26_output",
+          "layer_index": 26,
+          "path": "evidence/hf_boundaries_v11/short_chinese_prompt_padded/layer_26_output.npy",
+          "sha256": "6066363216390af6a805aa1abe536dbd66bab1540631b6b8602d93720fc8bc66",
+          "stats": {
+            "shape": [
+              128,
+              3584
+            ],
+            "dtype": "float32",
+            "size": 458752,
+            "min": -207.0,
+            "max": 50.0,
+            "mean": 0.008678114041686058,
+            "std": 3.5181899070739746,
+            "abs_max": 207.0,
+            "nonzero_count": 458334,
+            "allzero": false,
+            "constant": false,
+            "nan_count": 0,
+            "inf_count": 0
+          }
+        },
+        {
+          "boundary": "layer_27_output",
+          "layer_index": 27,
+          "path": "evidence/hf_boundaries_v11/short_chinese_prompt_padded/layer_27_output.npy",
+          "sha256": "5d5c7bc918d03a3009a7e5e41da8021012030920e0812399fee1dad0149c8343",
+          "stats": {
+            "shape": [
+              128,
+              3584
+            ],
+            "dtype": "float32",
+            "size": 458752,
+            "min": -140.0,
+            "max": 139.0,
+            "mean": -0.07218974828720093,
+            "std": 5.724126815795898,
+            "abs_max": 140.0,
+            "nonzero_count": 458227,
+            "allzero": false,
+            "constant": false,
+            "nan_count": 0,
+            "inf_count": 0
+          }
+        },
+        {
+          "boundary": "final_norm_output",
+          "path": "evidence/hf_boundaries_v11/short_chinese_prompt_padded/final_norm_output.npy",
+          "sha256": "7fa2f52134ef5b791783111542a909afe4fb0321ef5157a47456213172a63075",
+          "stats": {
+            "shape": [
+              128,
+              3584
+            ],
+            "dtype": "float32",
+            "size": 458752,
+            "min": -217.0,
+            "max": 199.0,
+            "mean": -0.14601291716098785,
+            "std": 6.880546569824219,
+            "abs_max": 217.0,
+            "nonzero_count": 458227,
+            "allzero": false,
+            "constant": false,
+            "nan_count": 0,
+            "inf_count": 0
+          }
+        }
+      ],
+      "repeat_truth": {
+        "case_id": "short_chinese_prompt_padded",
+        "truth_row_type": "HF/PyTorch repeat bfloat16",
+        "dtype": "bfloat16",
+        "device": "cpu",
+        "seq_len": 128,
+        "last_token_index": 127,
+        "vocab_size": 152064,
+        "token_ids_sha256": "ac26ad530204a4bc2196cff5fd05bf83a46048a578fdabab2b9073439addd01a",
+        "logits": {
+          "path": "evidence/full_truth_repeat_v11/short_chinese_prompt_padded/repeat_full_truth_logits.npy",
+          "sha256": "e46398de01f01c3646ca333aee4bce5e89705190d79290ac34ae6e40b3d6a5a6",
+          "stats": {
+            "shape": [
+              152064
+            ],
+            "dtype": "float32",
+            "size": 152064,
+            "min": -12.5,
+            "max": 9.125,
+            "mean": -8.877497673034668,
+            "std": 1.8784396648406982,
+            "abs_max": 12.5,
+            "nonzero_count": 152064,
+            "allzero": false,
+            "constant": false,
+            "nan_count": 0,
+            "inf_count": 0
+          }
+        },
+        "top10": [
+          151643,
+          0,
+          2055,
+          6313,
+          2219,
+          4894,
+          220,
+          576,
+          3555,
+          4102
+        ],
+        "elapsed_seconds": 1120.615
+      }
+    }
+  ],
+  "errors": [],
+  "status": "pass",
+  "runtime_versions": {
+    "torch": "2.2.2",
+    "transformers": "4.46.2",
+    "numpy": "2.2.6"
+  },
+  "torch_num_threads": 4,
+  "model_load_seconds": 1.748,
+  "model_class": "DreamModel",
+  "parameter_count": 7615616512,
+  "parameter_dtypes": [
+    "torch.bfloat16"
+  ],
+  "elapsed_total_seconds": 3380.039
+}

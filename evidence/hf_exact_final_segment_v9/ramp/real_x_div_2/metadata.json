@@ -1,0 +1,79 @@
+{
+  "case_id": "ramp",
+  "variant_id": "real_x_div_2",
+  "boundary": "HF Dream decoder layer 27 -> final RMSNorm -> lm_head",
+  "reference_semantics": "same BPU seg26 hidden endpoint input is passed through exact HF final decoder layer, final norm, and lm_head",
+  "source_path": "evidence/s100p_remote_v9_hf_isolated_final_segment_v8/ramp/real_x_div_2/layer27_norm_lmhead_logits.npy",
+  "exact_hf_final_logits_path": "evidence/hf_exact_final_segment_v9/ramp/real_x_div_2/exact_hf_final_logits.npy",
+  "exact_hf_final_stats": {
+    "shape": [
+      152064
+    ],
+    "dtype": "float32",
+    "size": 152064,
+    "min": -5.75,
+    "max": 8.25,
+    "mean": 1.4655219316482544,
+    "std": 0.9940967559814453,
+    "abs_max": 8.25,
+    "nonzero_count": 152064,
+    "allzero": false,
+    "constant": false,
+    "nan_count": 0,
+    "inf_count": 0
+  },
+  "sha256": {
+    "exact_hf_final_logits.npy": "4b8e461a133c92025644216f84a044dcbdb44b063991c1d5843ee2c841e820db"
+  },
+  "source_metadata": {
+    "case_id": "ramp",
+    "variant": "real_x_div_2",
+    "boundary_hypothesis": "seg27_28 == final_decoder_layer_27 + final_rmsnorm + lm_head",
+    "input_hidden_path": "/mnt/nas/openclaw/reports/models/dream7b_s100p_v5_execution_20260701/evidence/final_segment_dense_sweep_v5/ramp/real_x_div_2/input.npy",
+    "input_hidden_stats": {
+      "shape": [
+        128,
+        3584
+      ],
+      "dtype": "float32",
+      "min": -8.148393630981445,
+      "max": 8.148393630981445,
+      "mean": 0.043391432613134384,
+      "std": 8.060311317443848,
+      "abs_max": 8.148393630981445,
+      "nonzero_count": 458752,
+      "allzero": false,
+      "constant": false
+    },
+    "dtype": "bfloat16",
+    "logits_path": "evidence/hf_isolated_final_segment_v8/ramp/real_x_div_2/layer27_norm_lmhead_logits.npy",
+    "logits_sha256": "4b8e461a133c92025644216f84a044dcbdb44b063991c1d5843ee2c841e820db",
+    "logits_stats": {
+      "shape": [
+        152064
+      ],
+      "dtype": "float32",
+      "min": -5.75,
+      "max": 8.25,
+      "mean": 1.4655219316482544,
+      "std": 0.9940967559814453,
+      "abs_max": 8.25,
+      "nonzero_count": 152064,
+      "allzero": false,
+      "constant": false
+    },
+    "top10": [
+      576,
+      3461,
+      40647,
+      61183,
+      40,
+      54827,
+      2573,
+      785,
+      358,
+      34452
+    ],
+    "elapsed_seconds": 40.627
+  }
+}

@@ -1,0 +1,93 @@
+# workspace_isolation_gate
+
+- verdict: `ok_workspace_isolation_gate`
+- generated_at: `2026-07-02T23:28:15.826188+08:00`
+- passed: `81/81`
+
+## Checks
+
+- `PASS` shadow default disabled in registry
+- `PASS` shadow default disabled in policy
+- `PASS` dispatcher forbids arbitrary script path
+- `PASS` dispatcher local path is fixed allowlisted script
+- `PASS` policy tool catalog is subset of dispatcher
+- `PASS` registry protects Dream7B foreground
+- `PASS` policy denies Dream7B ports
+- `PASS` main_router exists in registry
+- `PASS` main_router exists in policy
+- `PASS` main_router registry fields complete
+- `PASS` main_router registry and policy allowed tools match
+- `PASS` main_router registry and policy approvals match
+- `PASS` main_router allowed tools are cataloged
+- `PASS` main_router allowed tools are dispatcher exposed
+- `PASS` main_router approval tools are allowed subset
+- `PASS` main_router context exposes only workspace tools
+- `PASS` nas_search exists in registry
+- `PASS` nas_search exists in policy
+- `PASS` nas_search registry fields complete
+- `PASS` nas_search registry and policy allowed tools match
+- `PASS` nas_search registry and policy approvals match
+- `PASS` nas_search allowed tools are cataloged
+- `PASS` nas_search allowed tools are dispatcher exposed
+- `PASS` nas_search approval tools are allowed subset
+- `PASS` nas_search context exposes only workspace tools
+- `PASS` nas_action exists in registry
+- `PASS` nas_action exists in policy
+- `PASS` nas_action registry fields complete
+- `PASS` nas_action registry and policy allowed tools match
+- `PASS` nas_action registry and policy approvals match
+- `PASS` nas_action allowed tools are cataloged
+- `PASS` nas_action allowed tools are dispatcher exposed
+- `PASS` nas_action approval tools are allowed subset
+- `PASS` nas_action context exposes only workspace tools
+- `PASS` media_photo exists in registry
+- `PASS` media_photo exists in policy
+- `PASS` media_photo registry fields complete
+- `PASS` media_photo registry and policy allowed tools match
+- `PASS` media_photo registry and policy approvals match
+- `PASS` media_photo allowed tools are cataloged
+- `PASS` media_photo allowed tools are dispatcher exposed
+- `PASS` media_photo approval tools are allowed subset
+- `PASS` media_photo context exposes only workspace tools
+- `PASS` document_rag exists in registry
+- `PASS` document_rag exists in policy
+- `PASS` document_rag registry fields complete
+- `PASS` document_rag registry and policy allowed tools match
+- `PASS` document_rag registry and policy approvals match
+- `PASS` document_rag allowed tools are cataloged
+- `PASS` document_rag allowed tools are dispatcher exposed
+- `PASS` document_rag approval tools are allowed subset
+- `PASS` document_rag context exposes only workspace tools
+- `PASS` ops_recovery exists in registry
+- `PASS` ops_recovery exists in policy
+- `PASS` ops_recovery registry fields complete
+- `PASS` ops_recovery registry and policy allowed tools match
+- `PASS` ops_recovery registry and policy approvals match
+- `PASS` ops_recovery allowed tools are cataloged
+- `PASS` ops_recovery allowed tools are dispatcher exposed
+- `PASS` ops_recovery approval tools are allowed subset
+- `PASS` ops_recovery context exposes only workspace tools
+- `PASS` web_cloud_research exists in registry
+- `PASS` web_cloud_research exists in policy
+- `PASS` web_cloud_research registry fields complete
+- `PASS` web_cloud_research registry and policy allowed tools match
+- `PASS` web_cloud_research registry and policy approvals match
+- `PASS` web_cloud_research allowed tools are cataloged
+- `PASS` web_cloud_research allowed tools are dispatcher exposed
+- `PASS` web_cloud_research approval tools are allowed subset
+- `PASS` web_cloud_research context exposes only workspace tools
+- `PASS` admin_audit exists in registry
+- `PASS` admin_audit exists in policy
+- `PASS` admin_audit registry fields complete
+- `PASS` admin_audit registry and policy allowed tools match
+- `PASS` admin_audit registry and policy approvals match
+- `PASS` admin_audit allowed tools are cataloged
+- `PASS` admin_audit allowed tools are dispatcher exposed
+- `PASS` admin_audit approval tools are allowed subset
+- `PASS` admin_audit context exposes only workspace tools
+- `PASS` Dream7B dispatcher id is not exposed to any workspace
+- `PASS` no workspace sees the full dispatcher catalog
+
+## Failures
+
+- none

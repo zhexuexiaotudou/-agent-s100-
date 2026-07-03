@@ -1,0 +1,4021 @@
+{
+  "schema_version": "dream7b_s100p_v7_520_final_segment_functional_compare",
+  "created_at_utc": "2026-07-01T10:13:18.595956+00:00",
+  "run_commands": [
+    "py tools/build_v7_research_thread.py --timestamp 20260701_v7_allseg_hfhead"
+  ],
+  "git": {
+    "cwd": "F:\\Project\\Digua",
+    "git_dir_exists": true,
+    "status": "unavailable:CalledProcessError"
+  },
+  "input_artifacts": [
+    {
+      "path": "evidence/hf_lmhead_only_v7",
+      "exists": true
+    },
+    {
+      "path": "evidence/raw_endpoint_subset_v6",
+      "exists": true
+    },
+    {
+      "path": "evidence/reference_matrix_v6/gguf_q4_k_m/zeros/last_logits.npy",
+      "exists": true,
+      "size_bytes": 608384,
+      "sha256": "c20ad7d7a20b5e87b85b13b2cbfa8ecca6b2e1f62dbb21696b4690f30ad1968f"
+    },
+    {
+      "path": "evidence/final_segment_functional_compare_v7",
+      "exists": true
+    }
+  ],
+  "output_artifacts": [
+    {
+      "path": "reports/520_final_segment_functional_compare.json"
+    },
+    {
+      "path": "reports/520_final_segment_functional_compare.md"
+    }
+  ],
+  "gate_status": {
+    "final_segment_functional_comparison": "pass_mismatch_quantified"
+  },
+  "blocking_or_failure_reasons": [],
+  "next_minimal_experiments": [],
+  "comparisons": [
+    {
+      "candidate_top1": 152063,
+      "reference_top1": 82733,
+      "top1_agreement": false,
+      "candidate_topk": [
+        152063,
+        152062,
+        152061,
+        152060,
+        152059
+      ],
+      "reference_topk": [
+        82733,
+        75337,
+        86611,
+        94222,
+        76842
+      ],
+      "top5_overlap": 0,
+      "reference_top1_in_candidate_top5": false,
+      "cosine": 0.0,
+      "relative_l2": 0.9999999999999996,
+      "max_abs_error": 11.421207427978516,
+      "mean_abs_error": 5.2969495612945705,
+      "candidate_stats": {
+        "shape": [
+          152064
+        ],
+        "dtype": "float32",
+        "size": 152064,
+        "min": 0.0,
+        "max": 0.0,
+        "mean": 0.0,
+        "std": 0.0,
+        "abs_max": 0.0,
+        "nonzero_count": 0,
+        "constant": true,
+        "allzero": true,
+        "nan_count": 0,
+        "inf_count": 0,
+        "p0": 0.0,
+        "p1": 0.0,
+        "p5": 0.0,
+        "p50": 0.0,
+        "p95": 0.0,
+        "p99": 0.0,
+        "p100": 0.0
+      },
+      "reference_stats": {
+        "shape": [
+          152064
+        ],
+        "dtype": "float32",
+        "size": 152064,
+        "min": -8.718948364257812,
+        "max": 11.421207427978516,
+        "mean": 5.271865367889404,
+        "std": 1.621358871459961,
+        "abs_max": 11.421207427978516,
+        "nonzero_count": 152064,
+        "constant": false,
+        "allzero": false,
+        "nan_count": 0,
+        "inf_count": 0,
+        "p0": -8.718948364257812,
+        "p1": -0.07881788164377213,
+        "p5": 1.8064920902252197,
+        "p50": 5.892507553100586,
+        "p95": 6.909707069396973,
+        "p99": 7.8787007331848145,
+        "p100": 11.421207427978516
+      },
+      "candidate_entropy": {
+        "entropy": 11.932056763842207,
+        "normalized_entropy": 1.0,
+        "top1_probability": 6.576178451178451e-06
+      },
+      "reference_entropy": {
+        "entropy": 11.35169548642249,
+        "normalized_entropy": 0.9513611702570516,
+        "top1_probability": 0.0014392405583469995
+      },
+      "case_id": "zeros",
+      "variant": "real_x",
+      "candidate": "bpu_seg27_28",
+      "reference": "hf_final_norm_lmhead_same_input",
+      "bpu_logits_path": "evidence/raw_endpoint_subset_v6/final_segment_dense_sweep_v5/zeros/real_x/dequant_logits.npy",
+      "hf_logits_path": "evidence/hf_lmhead_only_v7/zeros/real_x/hf_final_lmhead_logits.npy",
+      "metrics_path": "evidence/final_segment_functional_compare_v7/zeros/real_x/metrics.json"
+    },
+    {
+      "candidate_top1": 152063,
+      "reference_top1": 82733,
+      "top1_agreement": false,
+      "candidate_topk": [
+        152063,
+        152062,
+        152061,
+        152060,
+        152059
+      ],
+      "reference_topk": [
+        82733,
+        75337,
+        86611,
+        94222,
+        76842
+      ],
+      "top5_overlap": 0,
+      "reference_top1_in_candidate_top5": false,
+      "cosine": 0.0,
+      "relative_l2": 0.9999999999999996,
+      "max_abs_error": 11.421207427978516,
+      "mean_abs_error": 5.2969495612945705,
+      "candidate_stats": {
+        "shape": [
+          152064
+        ],
+        "dtype": "float32",
+        "size": 152064,
+        "min": 0.0,
+        "max": 0.0,
+        "mean": 0.0,
+        "std": 0.0,
+        "abs_max": 0.0,
+        "nonzero_count": 0,
+        "constant": true,
+        "allzero": true,
+        "nan_count": 0,
+        "inf_count": 0,
+        "p0": 0.0,
+        "p1": 0.0,
+        "p5": 0.0,
+        "p50": 0.0,
+        "p95": 0.0,
+        "p99": 0.0,
+        "p100": 0.0
+      },
+      "reference_stats": {
+        "shape": [
+          152064
+        ],
+        "dtype": "float32",
+        "size": 152064,
+        "min": -8.718948364257812,
+        "max": 11.421207427978516,
+        "mean": 5.271865367889404,
+        "std": 1.621358871459961,
+        "abs_max": 11.421207427978516,
+        "nonzero_count": 152064,
+        "constant": false,
+        "allzero": false,
+        "nan_count": 0,
+        "inf_count": 0,
+        "p0": -8.718948364257812,
+        "p1": -0.07881788164377213,
+        "p5": 1.8064920902252197,
+        "p50": 5.892507553100586,
+        "p95": 6.909707069396973,
+        "p99": 7.8787007331848145,
+        "p100": 11.421207427978516
+      },
+      "candidate_entropy": {
+        "entropy": 11.932056763842207,
+        "normalized_entropy": 1.0,
+        "top1_probability": 6.576178451178451e-06
+      },
+      "reference_entropy": {
+        "entropy": 11.35169548642249,
+        "normalized_entropy": 0.9513611702570516,
+        "top1_probability": 0.0014392405583469995
+      },
+      "case_id": "zeros",
+      "variant": "real_x_div_2",
+      "candidate": "bpu_seg27_28",
+      "reference": "hf_final_norm_lmhead_same_input",
+      "bpu_logits_path": "evidence/raw_endpoint_subset_v6/final_segment_dense_sweep_v5/zeros/real_x_div_2/dequant_logits.npy",
+      "hf_logits_path": "evidence/hf_lmhead_only_v7/zeros/real_x_div_2/hf_final_lmhead_logits.npy",
+      "metrics_path": "evidence/final_segment_functional_compare_v7/zeros/real_x_div_2/metrics.json"
+    },
+    {
+      "candidate_top1": 152063,
+      "reference_top1": 82733,
+      "top1_agreement": false,
+      "candidate_topk": [
+        152063,
+        152062,
+        152061,
+        152060,
+        152059
+      ],
+      "reference_topk": [
+        82733,
+        75337,
+        86611,
+        94222,
+        76842
+      ],
+      "top5_overlap": 0,
+      "reference_top1_in_candidate_top5": false,
+      "cosine": 0.0,
+      "relative_l2": 0.9999999999999996,
+      "max_abs_error": 11.421195030212402,
+      "mean_abs_error": 5.296948332045204,
+      "candidate_stats": {
+        "shape": [
+          152064
+        ],
+        "dtype": "float32",
+        "size": 152064,
+        "min": 0.0,
+        "max": 0.0,
+        "mean": 0.0,
+        "std": 0.0,
+        "abs_max": 0.0,
+        "nonzero_count": 0,
+        "constant": true,
+        "allzero": true,
+        "nan_count": 0,
+        "inf_count": 0,
+        "p0": 0.0,
+        "p1": 0.0,
+        "p5": 0.0,
+        "p50": 0.0,
+        "p95": 0.0,
+        "p99": 0.0,
+        "p100": 0.0
+      },
+      "reference_stats": {
+        "shape": [
+          152064
+        ],
+        "dtype": "float32",
+        "size": 152064,
+        "min": -8.718952178955078,
+        "max": 11.421195030212402,
+        "mean": 5.271864414215088,
+        "std": 1.6213585138320923,
+        "abs_max": 11.421195030212402,
+        "nonzero_count": 152064,
+        "constant": false,
+        "allzero": false,
+        "nan_count": 0,
+        "inf_count": 0,
+        "p0": -8.718952178955078,
+        "p1": -0.07881831377744675,
+        "p5": 1.8064923286437988,
+        "p50": 5.892505168914795,
+        "p95": 6.909701824188232,
+        "p99": 7.878700256347656,
+        "p100": 11.421195030212402
+      },
+      "candidate_entropy": {
+        "entropy": 11.932056763842207,
+        "normalized_entropy": 1.0,
+        "top1_probability": 6.576178451178451e-06
+      },
+      "reference_entropy": {
+        "entropy": 11.35169581623726,
+        "normalized_entropy": 0.9513611978981178,
+        "top1_probability": 0.001439224923944936
+      },
+      "case_id": "zeros",
+      "variant": "real_x_div_2p5",
+      "candidate": "bpu_seg27_28",
+      "reference": "hf_final_norm_lmhead_same_input",
+      "bpu_logits_path": "evidence/raw_endpoint_subset_v6/final_segment_dense_sweep_v5/zeros/real_x_div_2p5/dequant_logits.npy",
+      "hf_logits_path": "evidence/hf_lmhead_only_v7/zeros/real_x_div_2p5/hf_final_lmhead_logits.npy",
+      "metrics_path": "evidence/final_segment_functional_compare_v7/zeros/real_x_div_2p5/metrics.json"
+    },
+    {
+      "candidate_top1": 74466,
+      "reference_top1": 82733,
+      "top1_agreement": false,
+      "candidate_topk": [
+        74466,
+        86611,
+        45223,
+        94222,
+        33955
+      ],
+      "reference_topk": [
+        82733,
+        75337,
+        86611,
+        94222,
+        76842
+      ],
+      "top5_overlap": 2,
+      "reference_top1_in_candidate_top5": false,
+      "cosine": 0.9944805704876357,
+      "relative_l2": 2646.7779247079,
+      "max_abs_error": 32758.344086647034,
+      "mean_abs_error": 13907.294091526557,
+      "candidate_stats": {
+        "shape": [
+          152064
+        ],
+        "dtype": "float32",
+        "size": 152064,
+        "min": -26768.0,
+        "max": 32767.0,
+        "mean": 13795.8564453125,
+        "std": 4790.5458984375,
+        "abs_max": 32767.0,
+        "nonzero_count": 152062,
+        "constant": false,
+        "allzero": false,
+        "nan_count": 0,
+        "inf_count": 0,
+        "p0": -26768.0,
+        "p1": -1903.3699951171875,
+        "p5": 3739.14990234375,
+        "p50": 15359.0,
+        "p95": 19109.849609375,
+        "p99": 22812.849609375,
+        "p100": 32767.0
+      },
+      "reference_stats": {
+        "shape": [
+          152064
+        ],
+        "dtype": "float32",
+        "size": 152064,
+        "min": -8.718952178955078,
+        "max": 11.421195030212402,
+        "mean": 5.271864414215088,
+        "std": 1.6213585138320923,
+        "abs_max": 11.421195030212402,
+        "nonzero_count": 152064,
+        "constant": false,
+        "allzero": false,
+        "nan_count": 0,
+        "inf_count": 0,
+        "p0": -8.718952178955078,
+        "p1": -0.07881831377744675,
+        "p5": 1.8064923286437988,
+        "p50": 5.892505168914795,
+        "p95": 6.909701824188232,
+        "p99": 7.878700256347656,
+        "p100": 11.421195030212402
+      },
+      "candidate_entropy": {
+        "entropy": 2.302585092994046,
+        "normalized_entropy": 0.19297470155954882,
+        "top1_probability": 0.1
+      },
+      "reference_entropy": {
+        "entropy": 11.351695815844181,
+        "normalized_entropy": 0.9513611978651747,
+        "top1_probability": 0.0014392249278638565
+      },
+      "case_id": "zeros",
+      "variant": "real_x_div_2p75",
+      "candidate": "bpu_seg27_28",
+      "reference": "hf_final_norm_lmhead_same_input",
+      "bpu_logits_path": "evidence/raw_endpoint_subset_v6/final_segment_dense_sweep_v5/zeros/real_x_div_2p75/dequant_logits.npy",
+      "hf_logits_path": "evidence/hf_lmhead_only_v7/zeros/real_x_div_2p75/hf_final_lmhead_logits.npy",
+      "metrics_path": "evidence/final_segment_functional_compare_v7/zeros/real_x_div_2p75/metrics.json"
+    },
+    {
+      "candidate_top1": 76842,
+      "reference_top1": 82733,
+      "top1_agreement": false,
+      "candidate_topk": [
+        76842,
+        82733,
+        33955,
+        85512,
+        45223
+      ],
+      "reference_topk": [
+        82733,
+        75337,
+        86611,
+        94222,
+        76842
+      ],
+      "top5_overlap": 2,
+      "reference_top1_in_candidate_top5": true,
+      "cosine": 0.9931326417503369,
+      "relative_l2": 2373.826321433099,
+      "max_abs_error": 32756.349556922913,
+      "mean_abs_error": 12456.450045083546,
+      "candidate_stats": {
+        "shape": [
+          152064
+        ],
+        "dtype": "float32",
+        "size": 152064,
+        "min": -24367.0,
+        "max": 32767.0,
+        "mean": 12348.009765625,
+        "std": 4369.90625,
+        "abs_max": 32767.0,
+        "nonzero_count": 152063,
+        "constant": false,
+        "allzero": false,
+        "nan_count": 0,
+        "inf_count": 0,
+        "p0": -24367.0,
+        "p1": -1945.1099853515625,
+        "p5": 3217.14990234375,
+        "p50": 13745.0,
+        "p95": 17253.0,
+        "p99": 20747.0,
+        "p100": 32767.0
+      },
+      "reference_stats": {
+        "shape": [
+          152064
+        ],
+        "dtype": "float32",
+        "size": 152064,
+        "min": -8.718950271606445,
+        "max": 11.421199798583984,
+        "mean": 5.271864891052246,
+        "std": 1.6213587522506714,
+        "abs_max": 11.421199798583984,
+        "nonzero_count": 152064,
+        "constant": false,
+        "allzero": false,
+        "nan_count": 0,
+        "inf_count": 0,
+        "p0": -8.718950271606445,
+        "p1": -0.07881796360015869,
+        "p5": 1.806492805480957,
+        "p50": 5.8925065994262695,
+        "p95": 6.90970516204834,
+        "p99": 7.878701686859131,
+        "p100": 11.421199798583984
+      },
+      "candidate_entropy": {
+        "entropy": 1.0986122886681096,
+        "normalized_entropy": 0.09207233173724431,
+        "top1_probability": 0.3333333333333333
+      },
+      "reference_entropy": {
+        "entropy": 11.351695758329498,
+        "normalized_entropy": 0.9513611930449929,
+        "top1_probability": 0.0014392304873372427
+      },
+      "case_id": "zeros",
+      "variant": "real_x_div_3",
+      "candidate": "bpu_seg27_28",
+      "reference": "hf_final_norm_lmhead_same_input",
+      "bpu_logits_path": "evidence/raw_endpoint_subset_v6/final_segment_dense_sweep_v5/zeros/real_x_div_3/dequant_logits.npy",
+      "hf_logits_path": "evidence/hf_lmhead_only_v7/zeros/real_x_div_3/hf_final_lmhead_logits.npy",
+      "metrics_path": "evidence/final_segment_functional_compare_v7/zeros/real_x_div_3/metrics.json"
+    },
+    {
+      "candidate_top1": 152063,
+      "reference_top1": 75337,
+      "top1_agreement": false,
+      "candidate_topk": [
+        152063,
+        152062,
+        152061,
+        152060,
+        152059
+      ],
+      "reference_topk": [
+        75337,
+        82733,
+        86611,
+        94222,
+        76842
+      ],
+      "top5_overlap": 0,
+      "reference_top1_in_candidate_top5": false,
+      "cosine": 0.0,
+      "relative_l2": 0.9999999999999996,
+      "max_abs_error": 11.345026016235352,
+      "mean_abs_error": 5.270525210135125,
+      "candidate_stats": {
+        "shape": [
+          152064
+        ],
+        "dtype": "float32",
+        "size": 152064,
+        "min": 0.0,
+        "max": 0.0,
+        "mean": 0.0,
+        "std": 0.0,
+        "abs_max": 0.0,
+        "nonzero_count": 0,
+        "constant": true,
+        "allzero": true,
+        "nan_count": 0,
+        "inf_count": 0,
+        "p0": 0.0,
+        "p1": 0.0,
+        "p5": 0.0,
+        "p50": 0.0,
+        "p95": 0.0,
+        "p99": 0.0,
+        "p100": 0.0
+      },
+      "reference_stats": {
+        "shape": [
+          152064
+        ],
+        "dtype": "float32",
+        "size": 152064,
+        "min": -8.749491691589355,
+        "max": 11.345026016235352,
+        "mean": 5.243555545806885,
+        "std": 1.6453777551651,
+        "abs_max": 11.345026016235352,
+        "nonzero_count": 152064,
+        "constant": false,
+        "allzero": false,
+        "nan_count": 0,
+        "inf_count": 0,
+        "p0": -8.749491691589355,
+        "p1": -0.16559933125972748,
+        "p5": 1.7274495363235474,
+        "p50": 5.883904457092285,
+        "p95": 6.868473529815674,
+        "p99": 7.824169158935547,
+        "p100": 11.345026016235352
+      },
+      "candidate_entropy": {
+        "entropy": 11.932056763842207,
+        "normalized_entropy": 1.0,
+        "top1_probability": 6.576178451178451e-06
+      },
+      "reference_entropy": {
+        "entropy": 11.368328735518498,
+        "normalized_entropy": 0.9527551670696055,
+        "top1_probability": 0.0013617380672839678
+      },
+      "case_id": "zeros",
+      "variant": "real_x_clip_8",
+      "candidate": "bpu_seg27_28",
+      "reference": "hf_final_norm_lmhead_same_input",
+      "bpu_logits_path": "evidence/raw_endpoint_subset_v6/final_segment_dense_sweep_v5/zeros/real_x_clip_8/dequant_logits.npy",
+      "hf_logits_path": "evidence/hf_lmhead_only_v7/zeros/real_x_clip_8/hf_final_lmhead_logits.npy",
+      "metrics_path": "evidence/final_segment_functional_compare_v7/zeros/real_x_clip_8/metrics.json"
+    },
+    {
+      "candidate_top1": 76842,
+      "reference_top1": 75337,
+      "top1_agreement": false,
+      "candidate_topk": [
+        76842,
+        75337,
+        95132,
+        86611,
+        74466
+      ],
+      "reference_topk": [
+        75337,
+        82733,
+        94222,
+        86611,
+        76842
+      ],
+      "top5_overlap": 3,
+      "reference_top1_in_candidate_top5": true,
+      "cosine": 0.9945703041881807,
+      "relative_l2": 2706.4481023073085,
+      "max_abs_error": 32758.512320518494,
+      "mean_abs_error": 14027.211146009318,
+      "candidate_stats": {
+        "shape": [
+          152064
+        ],
+        "dtype": "float32",
+        "size": 152064,
+        "min": -27342.0,
+        "max": 32767.0,
+        "mean": 13901.4091796875,
+        "std": 4951.16943359375,
+        "abs_max": 32767.0,
+        "nonzero_count": 152064,
+        "constant": false,
+        "allzero": false,
+        "nan_count": 0,
+        "inf_count": 0,
+        "p0": -27342.0,
+        "p1": -2269.110107421875,
+        "p5": 3513.14990234375,
+        "p50": 15553.0,
+        "p95": 19221.0,
+        "p99": 22965.369140625,
+        "p100": 32767.0
+      },
+      "reference_stats": {
+        "shape": [
+          152064
+        ],
+        "dtype": "float32",
+        "size": 152064,
+        "min": -8.720139503479004,
+        "max": 11.31958293914795,
+        "mean": 5.197841644287109,
+        "std": 1.640102505683899,
+        "abs_max": 11.31958293914795,
+        "nonzero_count": 152064,
+        "constant": false,
+        "allzero": false,
+        "nan_count": 0,
+        "inf_count": 0,
+        "p0": -8.720139503479004,
+        "p1": -0.18182972073554993,
+        "p5": 1.693576455116272,
+        "p50": 5.835182189941406,
+        "p95": 6.816226005554199,
+        "p99": 7.772299289703369,
+        "p100": 11.31958293914795
+      },
+      "candidate_entropy": {
+        "entropy": 2.3978952727983707,
+        "normalized_entropy": 0.20096244262470567,
+        "top1_probability": 0.09090909090909091
+      },
+      "reference_entropy": {
+        "entropy": 11.37058909674202,
+        "normalized_entropy": 0.9529446030795289,
+        "top1_probability": 0.0013940995878324325
+      },
+      "case_id": "zeros",
+      "variant": "real_x_clip_6",
+      "candidate": "bpu_seg27_28",
+      "reference": "hf_final_norm_lmhead_same_input",
+      "bpu_logits_path": "evidence/raw_endpoint_subset_v6/final_segment_dense_sweep_v5/zeros/real_x_clip_6/dequant_logits.npy",
+      "hf_logits_path": "evidence/hf_lmhead_only_v7/zeros/real_x_clip_6/hf_final_lmhead_logits.npy",
+      "metrics_path": "evidence/final_segment_functional_compare_v7/zeros/real_x_clip_6/metrics.json"
+    },
+    {
+      "candidate_top1": 76842,
+      "reference_top1": 75337,
+      "top1_agreement": false,
+      "candidate_topk": [
+        76842,
+        45223,
+        82733,
+        85512,
+        74466
+      ],
+      "reference_topk": [
+        75337,
+        82733,
+        94222,
+        86611,
+        76842
+      ],
+      "top5_overlap": 2,
+      "reference_top1_in_candidate_top5": false,
+      "cosine": 0.9913067762438197,
+      "relative_l2": 2147.798382785615,
+      "max_abs_error": 31340.421033859253,
+      "mean_abs_error": 11070.569458814298,
+      "candidate_stats": {
+        "shape": [
+          152064
+        ],
+        "dtype": "float32",
+        "size": 152064,
+        "min": -22475.0,
+        "max": 31351.0,
+        "mean": 10948.974609375,
+        "std": 4084.030029296875,
+        "abs_max": 31351.0,
+        "nonzero_count": 152063,
+        "constant": false,
+        "allzero": false,
+        "nan_count": 0,
+        "inf_count": 0,
+        "p0": -22475.0,
+        "p1": -2372.739990234375,
+        "p5": 2431.0,
+        "p50": 12253.0,
+        "p95": 15448.849609375,
+        "p99": 18719.58984375,
+        "p100": 31351.0
+      },
+      "reference_stats": {
+        "shape": [
+          152064
+        ],
+        "dtype": "float32",
+        "size": 152064,
+        "min": -8.724385261535645,
+        "max": 11.317747116088867,
+        "mean": 5.185315132141113,
+        "std": 1.6395444869995117,
+        "abs_max": 11.317747116088867,
+        "nonzero_count": 152064,
+        "constant": false,
+        "allzero": false,
+        "nan_count": 0,
+        "inf_count": 0,
+        "p0": -8.724385261535645,
+        "p1": -0.1863149255514145,
+        "p5": 1.6827149391174316,
+        "p50": 5.822683334350586,
+        "p95": 6.802119255065918,
+        "p99": 7.758528232574463,
+        "p100": 11.317747116088867
+      },
+      "candidate_entropy": {
+        "entropy": -0.0,
+        "normalized_entropy": -0.0,
+        "top1_probability": 1.0
+      },
+      "reference_entropy": {
+        "entropy": 11.370935744174972,
+        "normalized_entropy": 0.9529736548549111,
+        "top1_probability": 0.0014095687229912699
+      },
+      "case_id": "zeros",
+      "variant": "real_x_clip_5",
+      "candidate": "bpu_seg27_28",
+      "reference": "hf_final_norm_lmhead_same_input",
+      "bpu_logits_path": "evidence/raw_endpoint_subset_v6/final_segment_dense_sweep_v5/zeros/real_x_clip_5/dequant_logits.npy",
+      "hf_logits_path": "evidence/hf_lmhead_only_v7/zeros/real_x_clip_5/hf_final_lmhead_logits.npy",
+      "metrics_path": "evidence/final_segment_functional_compare_v7/zeros/real_x_clip_5/metrics.json"
+    },
+    {
+      "candidate_top1": 54462,
+      "reference_top1": 82733,
+      "top1_agreement": false,
+      "candidate_topk": [
+        54462,
+        58113,
+        85512,
+        51735,
+        66906
+      ],
+      "reference_topk": [
+        82733,
+        75337,
+        86611,
+        94222,
+        76842
+      ],
+      "top5_overlap": 0,
+      "reference_top1_in_candidate_top5": false,
+      "cosine": -0.363271901882,
+      "relative_l2": 298.61694785374056,
+      "max_abs_error": 11557.653017044067,
+      "mean_abs_error": 1231.3546445318834,
+      "candidate_stats": {
+        "shape": [
+          152064
+        ],
+        "dtype": "float32",
+        "size": 152064,
+        "min": -10620.0,
+        "max": 11565.0,
+        "mean": -656.9417724609375,
+        "std": 1508.0057373046875,
+        "abs_max": 11565.0,
+        "nonzero_count": 152042,
+        "constant": false,
+        "allzero": false,
+        "nan_count": 0,
+        "inf_count": 0,
+        "p0": -10620.0,
+        "p1": -4726.0,
+        "p5": -2986.0,
+        "p50": -635.0,
+        "p95": 2058.0,
+        "p99": 4173.740234375,
+        "p100": 11565.0
+      },
+      "reference_stats": {
+        "shape": [
+          152064
+        ],
+        "dtype": "float32",
+        "size": 152064,
+        "min": -8.718955039978027,
+        "max": 11.42078685760498,
+        "mean": 5.2714128494262695,
+        "std": 1.6212329864501953,
+        "abs_max": 11.42078685760498,
+        "nonzero_count": 152064,
+        "constant": false,
+        "allzero": false,
+        "nan_count": 0,
+        "inf_count": 0,
+        "p0": -8.718955039978027,
+        "p1": -0.07879231870174408,
+        "p5": 1.8063693046569824,
+        "p50": 5.891949653625488,
+        "p95": 6.909343242645264,
+        "p99": 7.878296852111816,
+        "p100": 11.42078685760498
+      },
+      "candidate_entropy": {
+        "entropy": 1.3242193301428592e-105,
+        "normalized_entropy": 1.1097997238461437e-106,
+        "top1_probability": 1.0
+      },
+      "reference_entropy": {
+        "entropy": 11.351666195699718,
+        "normalized_entropy": 0.9513587154646087,
+        "top1_probability": 0.0014393626094528092
+      },
+      "case_id": "zeros",
+      "variant": "real_x_z_normalized",
+      "candidate": "bpu_seg27_28",
+      "reference": "hf_final_norm_lmhead_same_input",
+      "bpu_logits_path": "evidence/raw_endpoint_subset_v6/final_segment_dense_sweep_v5/zeros/real_x_z_normalized/dequant_logits.npy",
+      "hf_logits_path": "evidence/hf_lmhead_only_v7/zeros/real_x_z_normalized/hf_final_lmhead_logits.npy",
+      "metrics_path": "evidence/final_segment_functional_compare_v7/zeros/real_x_z_normalized/metrics.json"
+    },
+    {
+      "candidate_top1": 152063,
+      "reference_top1": 61183,
+      "top1_agreement": false,
+      "candidate_topk": [
+        152063,
+        152062,
+        152061,
+        152060,
+        152059
+      ],
+      "reference_topk": [
+        61183,
+        3461,
+        40647,
+        36623,
+        44591
+      ],
+      "top5_overlap": 0,
+      "reference_top1_in_candidate_top5": false,
+      "cosine": 0.0,
+      "relative_l2": 0.9999999999999982,
+      "max_abs_error": 7.666618347167969,
+      "mean_abs_error": 1.255543516973207,
+      "candidate_stats": {
+        "shape": [
+          152064
+        ],
+        "dtype": "float32",
+        "size": 152064,
+        "min": 0.0,
+        "max": 0.0,
+        "mean": 0.0,
+        "std": 0.0,
+        "abs_max": 0.0,
+        "nonzero_count": 0,
+        "constant": true,
+        "allzero": true,
+        "nan_count": 0,
+        "inf_count": 0,
+        "p0": 0.0,
+        "p1": 0.0,
+        "p5": 0.0,
+        "p50": 0.0,
+        "p95": 0.0,
+        "p99": 0.0,
+        "p100": 0.0
+      },
+      "reference_stats": {
+        "shape": [
+          152064
+        ],
+        "dtype": "float32",
+        "size": 152064,
+        "min": -6.209233283996582,
+        "max": 7.666618347167969,
+        "mean": 0.9564507007598877,
+        "std": 1.086326003074646,
+        "abs_max": 7.666618347167969,
+        "nonzero_count": 152064,
+        "constant": false,
+        "allzero": false,
+        "nan_count": 0,
+        "inf_count": 0,
+        "p0": -6.209233283996582,
+        "p1": -2.3840272426605225,
+        "p5": -1.1386137008666992,
+        "p50": 1.2330987453460693,
+        "p95": 2.3185133934020996,
+        "p99": 3.528196096420288,
+        "p100": 7.666618347167969
+      },
+      "candidate_entropy": {
+        "entropy": 11.932056763842207,
+        "normalized_entropy": 1.0,
+        "top1_probability": 6.576178451178451e-06
+      },
+      "reference_entropy": {
+        "entropy": 11.244678647026756,
+        "normalized_entropy": 0.9423923192438695,
+        "top1_probability": 0.003089684385036778
+      },
+      "case_id": "ramp",
+      "variant": "real_x",
+      "candidate": "bpu_seg27_28",
+      "reference": "hf_final_norm_lmhead_same_input",
+      "bpu_logits_path": "evidence/raw_endpoint_subset_v6/final_segment_dense_sweep_v5/ramp/real_x/dequant_logits.npy",
+      "hf_logits_path": "evidence/hf_lmhead_only_v7/ramp/real_x/hf_final_lmhead_logits.npy",
+      "metrics_path": "evidence/final_segment_functional_compare_v7/ramp/real_x/metrics.json"
+    },
+    {
+      "candidate_top1": 152063,
+      "reference_top1": 61183,
+      "top1_agreement": false,
+      "candidate_topk": [
+        152063,
+        152062,
+        152061,
+        152060,
+        152059
+      ],
+      "reference_topk": [
+        61183,
+        3461,
+        40647,
+        36623,
+        44591
+      ],
+      "top5_overlap": 0,
+      "reference_top1_in_candidate_top5": false,
+      "cosine": 0.0,
+      "relative_l2": 0.9999999999999982,
+      "max_abs_error": 7.666618347167969,
+      "mean_abs_error": 1.255543516973207,
+      "candidate_stats": {
+        "shape": [
+          152064
+        ],
+        "dtype": "float32",
+        "size": 152064,
+        "min": 0.0,
+        "max": 0.0,
+        "mean": 0.0,
+        "std": 0.0,
+        "abs_max": 0.0,
+        "nonzero_count": 0,
+        "constant": true,
+        "allzero": true,
+        "nan_count": 0,
+        "inf_count": 0,
+        "p0": 0.0,
+        "p1": 0.0,
+        "p5": 0.0,
+        "p50": 0.0,
+        "p95": 0.0,
+        "p99": 0.0,
+        "p100": 0.0
+      },
+      "reference_stats": {
+        "shape": [
+          152064
+        ],
+        "dtype": "float32",
+        "size": 152064,
+        "min": -6.209233283996582,
+        "max": 7.666618347167969,
+        "mean": 0.9564507007598877,
+        "std": 1.086326003074646,
+        "abs_max": 7.666618347167969,
+        "nonzero_count": 152064,
+        "constant": false,
+        "allzero": false,
+        "nan_count": 0,
+        "inf_count": 0,
+        "p0": -6.209233283996582,
+        "p1": -2.3840272426605225,
+        "p5": -1.1386137008666992,
+        "p50": 1.2330987453460693,
+        "p95": 2.3185133934020996,
+        "p99": 3.528196096420288,
+        "p100": 7.666618347167969
+      },
+      "candidate_entropy": {
+        "entropy": 11.932056763842207,
+        "normalized_entropy": 1.0,
+        "top1_probability": 6.576178451178451e-06
+      },
+      "reference_entropy": {
+        "entropy": 11.244678647026756,
+        "normalized_entropy": 0.9423923192438695,
+        "top1_probability": 0.003089684385036778
+      },
+      "case_id": "ramp",
+      "variant": "real_x_div_2",
+      "candidate": "bpu_seg27_28",
+      "reference": "hf_final_norm_lmhead_same_input",
+      "bpu_logits_path": "evidence/raw_endpoint_subset_v6/final_segment_dense_sweep_v5/ramp/real_x_div_2/dequant_logits.npy",
+      "hf_logits_path": "evidence/hf_lmhead_only_v7/ramp/real_x_div_2/hf_final_lmhead_logits.npy",
+      "metrics_path": "evidence/final_segment_functional_compare_v7/ramp/real_x_div_2/metrics.json"
+    },
+    {
+      "candidate_top1": 152063,
+      "reference_top1": 61183,
+      "top1_agreement": false,
+      "candidate_topk": [
+        152063,
+        152062,
+        152061,
+        152060,
+        152059
+      ],
+      "reference_topk": [
+        61183,
+        3461,
+        40647,
+        36623,
+        44591
+      ],
+      "top5_overlap": 0,
+      "reference_top1_in_candidate_top5": false,
+      "cosine": 0.0,
+      "relative_l2": 0.9999999999999982,
+      "max_abs_error": 7.666616916656494,
+      "mean_abs_error": 1.255543264009972,
+      "candidate_stats": {
+        "shape": [
+          152064
+        ],
+        "dtype": "float32",
+        "size": 152064,
+        "min": 0.0,
+        "max": 0.0,
+        "mean": 0.0,
+        "std": 0.0,
+        "abs_max": 0.0,
+        "nonzero_count": 0,
+        "constant": true,
+        "allzero": true,
+        "nan_count": 0,
+        "inf_count": 0,
+        "p0": 0.0,
+        "p1": 0.0,
+        "p5": 0.0,
+        "p50": 0.0,
+        "p95": 0.0,
+        "p99": 0.0,
+        "p100": 0.0
+      },
+      "reference_stats": {
+        "shape": [
+          152064
+        ],
+        "dtype": "float32",
+        "size": 152064,
+        "min": -6.209233283996582,
+        "max": 7.666616916656494,
+        "mean": 0.9564504623413086,
+        "std": 1.0863258838653564,
+        "abs_max": 7.666616916656494,
+        "nonzero_count": 152064,
+        "constant": false,
+        "allzero": false,
+        "nan_count": 0,
+        "inf_count": 0,
+        "p0": -6.209233283996582,
+        "p1": -2.3840270042419434,
+        "p5": -1.1386147737503052,
+        "p50": 1.233098030090332,
+        "p95": 2.3185153007507324,
+        "p99": 3.5281944274902344,
+        "p100": 7.666616916656494
+      },
+      "candidate_entropy": {
+        "entropy": 11.932056763842207,
+        "normalized_entropy": 1.0,
+        "top1_probability": 6.576178451178451e-06
+      },
+      "reference_entropy": {
+        "entropy": 11.244678792238943,
+        "normalized_entropy": 0.9423923314137903,
+        "top1_probability": 0.0030896811566797204
+      },
+      "case_id": "ramp",
+      "variant": "real_x_div_2p5",
+      "candidate": "bpu_seg27_28",
+      "reference": "hf_final_norm_lmhead_same_input",
+      "bpu_logits_path": "evidence/raw_endpoint_subset_v6/final_segment_dense_sweep_v5/ramp/real_x_div_2p5/dequant_logits.npy",
+      "hf_logits_path": "evidence/hf_lmhead_only_v7/ramp/real_x_div_2p5/hf_final_lmhead_logits.npy",
+      "metrics_path": "evidence/final_segment_functional_compare_v7/ramp/real_x_div_2p5/metrics.json"
+    },
+    {
+      "candidate_top1": 61183,
+      "reference_top1": 61183,
+      "top1_agreement": true,
+      "candidate_topk": [
+        61183,
+        44591,
+        1527,
+        21788,
+        57002
+      ],
+      "reference_topk": [
+        61183,
+        3461,
+        40647,
+        36623,
+        44591
+      ],
+      "top5_overlap": 2,
+      "reference_top1_in_candidate_top5": true,
+      "cosine": 0.7253168408289339,
+      "relative_l2": 2611.0067068451503,
+      "max_abs_error": 26789.333381652832,
+      "mean_abs_error": 2755.4601490560076,
+      "candidate_stats": {
+        "shape": [
+          152064
+        ],
+        "dtype": "float32",
+        "size": 152064,
+        "min": -24024.0,
+        "max": 26797.0,
+        "mean": 272.7115478515625,
+        "std": 3770.3125,
+        "abs_max": 26797.0,
+        "nonzero_count": 152046,
+        "constant": false,
+        "allzero": false,
+        "nan_count": 0,
+        "inf_count": 0,
+        "p0": -24024.0,
+        "p1": -10834.0,
+        "p5": -6511.85009765625,
+        "p50": 923.0,
+        "p95": 6003.85009765625,
+        "p99": 10607.0,
+        "p100": 26797.0
+      },
+      "reference_stats": {
+        "shape": [
+          152064
+        ],
+        "dtype": "float32",
+        "size": 152064,
+        "min": -6.209233283996582,
+        "max": 7.666618347167969,
+        "mean": 0.9564507007598877,
+        "std": 1.086326003074646,
+        "abs_max": 7.666618347167969,
+        "nonzero_count": 152064,
+        "constant": false,
+        "allzero": false,
+        "nan_count": 0,
+        "inf_count": 0,
+        "p0": -6.209233283996582,
+        "p1": -2.3840272426605225,
+        "p5": -1.1386137008666992,
+        "p50": 1.2330987453460693,
+        "p95": 2.3185133934020996,
+        "p99": 3.528196096420288,
+        "p100": 7.666618347167969
+      },
+      "candidate_entropy": {
+        "entropy": -0.0,
+        "normalized_entropy": -0.0,
+        "top1_probability": 1.0
+      },
+      "reference_entropy": {
+        "entropy": 11.244678650702806,
+        "normalized_entropy": 0.9423923195519512,
+        "top1_probability": 0.0030896843433675736
+      },
+      "case_id": "ramp",
+      "variant": "real_x_div_2p75",
+      "candidate": "bpu_seg27_28",
+      "reference": "hf_final_norm_lmhead_same_input",
+      "bpu_logits_path": "evidence/raw_endpoint_subset_v6/final_segment_dense_sweep_v5/ramp/real_x_div_2p75/dequant_logits.npy",
+      "hf_logits_path": "evidence/hf_lmhead_only_v7/ramp/real_x_div_2p75/hf_final_lmhead_logits.npy",
+      "metrics_path": "evidence/final_segment_functional_compare_v7/ramp/real_x_div_2p75/metrics.json"
+    },
+    {
+      "candidate_top1": 61183,
+      "reference_top1": 61183,
+      "top1_agreement": true,
+      "candidate_topk": [
+        61183,
+        1527,
+        44591,
+        57002,
+        40
+      ],
+      "reference_topk": [
+        61183,
+        3461,
+        40647,
+        36623,
+        44591
+      ],
+      "top5_overlap": 2,
+      "reference_top1_in_candidate_top5": true,
+      "cosine": 0.6575555062702241,
+      "relative_l2": 2420.734258411185,
+      "max_abs_error": 24644.333381652832,
+      "mean_abs_error": 2497.0908964283153,
+      "candidate_stats": {
+        "shape": [
+          152064
+        ],
+        "dtype": "float32",
+        "size": 152064,
+        "min": -22934.0,
+        "max": 24652.0,
+        "mean": -48.22697067260742,
+        "std": 3504.336669921875,
+        "abs_max": 24652.0,
+        "nonzero_count": 152043,
+        "constant": false,
+        "allzero": false,
+        "nan_count": 0,
+        "inf_count": 0,
+        "p0": -22934.0,
+        "p1": -10306.740234375,
+        "p5": -6304.85009765625,
+        "p50": 529.0,
+        "p95": 5369.0,
+        "p99": 9688.2197265625,
+        "p100": 24652.0
+      },
+      "reference_stats": {
+        "shape": [
+          152064
+        ],
+        "dtype": "float32",
+        "size": 152064,
+        "min": -6.209233283996582,
+        "max": 7.666618347167969,
+        "mean": 0.9564507007598877,
+        "std": 1.086326003074646,
+        "abs_max": 7.666618347167969,
+        "nonzero_count": 152064,
+        "constant": false,
+        "allzero": false,
+        "nan_count": 0,
+        "inf_count": 0,
+        "p0": -6.209233283996582,
+        "p1": -2.3840272426605225,
+        "p5": -1.1386137008666992,
+        "p50": 1.2330987453460693,
+        "p95": 2.3185133934020996,
+        "p99": 3.528196096420288,
+        "p100": 7.666618347167969
+      },
+      "candidate_entropy": {
+        "entropy": -0.0,
+        "normalized_entropy": -0.0,
+        "top1_probability": 1.0
+      },
+      "reference_entropy": {
+        "entropy": 11.244678644072113,
+        "normalized_entropy": 0.9423923189962472,
+        "top1_probability": 0.003089684360421334
+      },
+      "case_id": "ramp",
+      "variant": "real_x_div_3",
+      "candidate": "bpu_seg27_28",
+      "reference": "hf_final_norm_lmhead_same_input",
+      "bpu_logits_path": "evidence/raw_endpoint_subset_v6/final_segment_dense_sweep_v5/ramp/real_x_div_3/dequant_logits.npy",
+      "hf_logits_path": "evidence/hf_lmhead_only_v7/ramp/real_x_div_3/hf_final_lmhead_logits.npy",
+      "metrics_path": "evidence/final_segment_functional_compare_v7/ramp/real_x_div_3/metrics.json"
+    },
+    {
+      "candidate_top1": 152063,
+      "reference_top1": 61183,
+      "top1_agreement": false,
+      "candidate_topk": [
+        152063,
+        152062,
+        152061,
+        152060,
+        152059
+      ],
+      "reference_topk": [
+        61183,
+        3461,
+        40647,
+        36623,
+        44591
+      ],
+      "top5_overlap": 0,
+      "reference_top1_in_candidate_top5": false,
+      "cosine": 0.0,
+      "relative_l2": 0.9999999999999982,
+      "max_abs_error": 7.66985559463501,
+      "mean_abs_error": 1.2425056985554501,
+      "candidate_stats": {
+        "shape": [
+          152064
+        ],
+        "dtype": "float32",
+        "size": 152064,
+        "min": 0.0,
+        "max": 0.0,
+        "mean": 0.0,
+        "std": 0.0,
+        "abs_max": 0.0,
+        "nonzero_count": 0,
+        "constant": true,
+        "allzero": true,
+        "nan_count": 0,
+        "inf_count": 0,
+        "p0": 0.0,
+        "p1": 0.0,
+        "p5": 0.0,
+        "p50": 0.0,
+        "p95": 0.0,
+        "p99": 0.0,
+        "p100": 0.0
+      },
+      "reference_stats": {
+        "shape": [
+          152064
+        ],
+        "dtype": "float32",
+        "size": 152064,
+        "min": -6.162309646606445,
+        "max": 7.66985559463501,
+        "mean": 0.9389628767967224,
+        "std": 1.0841350555419922,
+        "abs_max": 7.66985559463501,
+        "nonzero_count": 152064,
+        "constant": false,
+        "allzero": false,
+        "nan_count": 0,
+        "inf_count": 0,
+        "p0": -6.162309646606445,
+        "p1": -2.398519277572632,
+        "p5": -1.150448203086853,
+        "p50": 1.2158923149108887,
+        "p95": 2.3062639236450195,
+        "p99": 3.5152065753936768,
+        "p100": 7.66985559463501
+      },
+      "candidate_entropy": {
+        "entropy": 11.932056763842207,
+        "normalized_entropy": 1.0,
+        "top1_probability": 6.576178451178451e-06
+      },
+      "reference_entropy": {
+        "entropy": 11.23955446441294,
+        "normalized_entropy": 0.941962872526071,
+        "top1_probability": 0.003153497571596441
+      },
+      "case_id": "ramp",
+      "variant": "real_x_clip_8",
+      "candidate": "bpu_seg27_28",
+      "reference": "hf_final_norm_lmhead_same_input",
+      "bpu_logits_path": "evidence/raw_endpoint_subset_v6/final_segment_dense_sweep_v5/ramp/real_x_clip_8/dequant_logits.npy",
+      "hf_logits_path": "evidence/hf_lmhead_only_v7/ramp/real_x_clip_8/hf_final_lmhead_logits.npy",
+      "metrics_path": "evidence/final_segment_functional_compare_v7/ramp/real_x_clip_8/metrics.json"
+    },
+    {
+      "candidate_top1": 61183,
+      "reference_top1": 61183,
+      "top1_agreement": true,
+      "candidate_topk": [
+        61183,
+        44591,
+        1527,
+        21788,
+        35192
+      ],
+      "reference_topk": [
+        61183,
+        3461,
+        40647,
+        44591,
+        36623
+      ],
+      "top5_overlap": 2,
+      "reference_top1_in_candidate_top5": true,
+      "cosine": 0.7231690525323988,
+      "relative_l2": 2720.8308301446127,
+      "max_abs_error": 27132.37642288208,
+      "mean_abs_error": 2763.718268538996,
+      "candidate_stats": {
+        "shape": [
+          152064
+        ],
+        "dtype": "float32",
+        "size": 152064,
+        "min": -23629.0,
+        "max": 27140.0,
+        "mean": 145.63836669921875,
+        "std": 3824.544677734375,
+        "abs_max": 27140.0,
+        "nonzero_count": 152045,
+        "constant": false,
+        "allzero": false,
+        "nan_count": 0,
+        "inf_count": 0,
+        "p0": -23629.0,
+        "p1": -11129.0,
+        "p5": -6720.85009765625,
+        "p50": 805.0,
+        "p95": 5985.0,
+        "p99": 10656.2197265625,
+        "p100": 27140.0
+      },
+      "reference_stats": {
+        "shape": [
+          152064
+        ],
+        "dtype": "float32",
+        "size": 152064,
+        "min": -6.181671142578125,
+        "max": 7.623577117919922,
+        "mean": 0.8970714807510376,
+        "std": 1.0830223560333252,
+        "abs_max": 7.623577117919922,
+        "nonzero_count": 152064,
+        "constant": false,
+        "allzero": false,
+        "nan_count": 0,
+        "inf_count": 0,
+        "p0": -6.181671142578125,
+        "p1": -2.4342713356018066,
+        "p5": -1.187418818473816,
+        "p50": 1.171778678894043,
+        "p95": 2.2668850421905518,
+        "p99": 3.479623794555664,
+        "p100": 7.623577117919922
+      },
+      "candidate_entropy": {
+        "entropy": -0.0,
+        "normalized_entropy": -0.0,
+        "top1_probability": 1.0
+      },
+      "reference_entropy": {
+        "entropy": 11.234748273015379,
+        "normalized_entropy": 0.9415600759678008,
+        "top1_probability": 0.003135097950997739
+      },
+      "case_id": "ramp",
+      "variant": "real_x_clip_6",
+      "candidate": "bpu_seg27_28",
+      "reference": "hf_final_norm_lmhead_same_input",
+      "bpu_logits_path": "evidence/raw_endpoint_subset_v6/final_segment_dense_sweep_v5/ramp/real_x_clip_6/dequant_logits.npy",
+      "hf_logits_path": "evidence/hf_lmhead_only_v7/ramp/real_x_clip_6/hf_final_lmhead_logits.npy",
+      "metrics_path": "evidence/final_segment_functional_compare_v7/ramp/real_x_clip_6/metrics.json"
+    },
+    {
+      "candidate_top1": 61183,
+      "reference_top1": 61183,
+      "top1_agreement": true,
+      "candidate_topk": [
+        61183,
+        44591,
+        1527,
+        62815,
+        57002
+      ],
+      "reference_topk": [
+        61183,
+        3461,
+        40647,
+        44591,
+        36623
+      ],
+      "top5_overlap": 2,
+      "reference_top1_in_candidate_top5": true,
+      "cosine": 0.5629736737121669,
+      "relative_l2": 2400.5442681068616,
+      "max_abs_error": 22689.406742095947,
+      "mean_abs_error": 2300.4118334267323,
+      "candidate_stats": {
+        "shape": [
+          152064
+        ],
+        "dtype": "float32",
+        "size": 152064,
+        "min": -21522.0,
+        "max": 22697.0,
+        "mean": -560.3762817382812,
+        "std": 3291.688720703125,
+        "abs_max": 22697.0,
+        "nonzero_count": 152041,
+        "constant": false,
+        "allzero": false,
+        "nan_count": 0,
+        "inf_count": 0,
+        "p0": -21522.0,
+        "p1": -10119.0,
+        "p5": -6365.0,
+        "p50": -55.0,
+        "p95": 4644.0,
+        "p99": 8710.3701171875,
+        "p100": 22697.0
+      },
+      "reference_stats": {
+        "shape": [
+          152064
+        ],
+        "dtype": "float32",
+        "size": 152064,
+        "min": -6.191827297210693,
+        "max": 7.593257904052734,
+        "mean": 0.8728083968162537,
+        "std": 1.0826135873794556,
+        "abs_max": 7.593257904052734,
+        "nonzero_count": 152064,
+        "constant": false,
+        "allzero": false,
+        "nan_count": 0,
+        "inf_count": 0,
+        "p0": -6.191827297210693,
+        "p1": -2.455610513687134,
+        "p5": -1.209020733833313,
+        "p50": 1.1464446783065796,
+        "p95": 2.2440388202667236,
+        "p99": 3.458693742752075,
+        "p100": 7.593257904052734
+      },
+      "candidate_entropy": {
+        "entropy": -0.0,
+        "normalized_entropy": -0.0,
+        "top1_probability": 1.0
+      },
+      "reference_entropy": {
+        "entropy": 11.232983729281795,
+        "normalized_entropy": 0.9414121933547268,
+        "top1_probability": 0.003114457386761357
+      },
+      "case_id": "ramp",
+      "variant": "real_x_clip_5",
+      "candidate": "bpu_seg27_28",
+      "reference": "hf_final_norm_lmhead_same_input",
+      "bpu_logits_path": "evidence/raw_endpoint_subset_v6/final_segment_dense_sweep_v5/ramp/real_x_clip_5/dequant_logits.npy",
+      "hf_logits_path": "evidence/hf_lmhead_only_v7/ramp/real_x_clip_5/hf_final_lmhead_logits.npy",
+      "metrics_path": "evidence/final_segment_functional_compare_v7/ramp/real_x_clip_5/metrics.json"
+    },
+    {
+      "candidate_top1": 54462,
+      "reference_top1": 61183,
+      "top1_agreement": false,
+      "candidate_topk": [
+        54462,
+        49752,
+        66906,
+        51735,
+        58113
+      ],
+      "reference_topk": [
+        61183,
+        3461,
+        40647,
+        36623,
+        44591
+      ],
+      "top5_overlap": 0,
+      "reference_top1_in_candidate_top5": false,
+      "cosine": -0.476697583773848,
+      "relative_l2": 2405.909854432789,
+      "max_abs_error": 13238.80824136734,
+      "mean_abs_error": 3193.8795834718057,
+      "candidate_stats": {
+        "shape": [
+          152064
+        ],
+        "dtype": "float32",
+        "size": 152064,
+        "min": -13243.0,
+        "max": 9450.0,
+        "mean": -2999.98095703125,
+        "std": 1739.4205322265625,
+        "abs_max": 13243.0,
+        "nonzero_count": 152060,
+        "constant": false,
+        "allzero": false,
+        "nan_count": 0,
+        "inf_count": 0,
+        "p0": -13243.0,
+        "p1": -7097.740234375,
+        "p5": -5389.0,
+        "p50": -3112.0,
+        "p95": 468.8500061035156,
+        "p99": 2701.0,
+        "p100": 9450.0
+      },
+      "reference_stats": {
+        "shape": [
+          152064
+        ],
+        "dtype": "float32",
+        "size": 152064,
+        "min": -6.216206073760986,
+        "max": 7.655673980712891,
+        "mean": 0.9487791657447815,
+        "std": 1.0854276418685913,
+        "abs_max": 7.655673980712891,
+        "nonzero_count": 152064,
+        "constant": false,
+        "allzero": false,
+        "nan_count": 0,
+        "inf_count": 0,
+        "p0": -6.216206073760986,
+        "p1": -2.3906145095825195,
+        "p5": -1.1435457468032837,
+        "p50": 1.2249119281768799,
+        "p95": 2.311389446258545,
+        "p99": 3.5238819122314453,
+        "p100": 7.655673980712891
+      },
+      "candidate_entropy": {
+        "entropy": 5.1387267733824605e-239,
+        "normalized_entropy": 4.30665632513112e-240,
+        "top1_probability": 1.0
+      },
+      "reference_entropy": {
+        "entropy": 11.242906437636748,
+        "normalized_entropy": 0.9422437941886267,
+        "top1_probability": 0.003078842455184353
+      },
+      "case_id": "ramp",
+      "variant": "real_x_z_normalized",
+      "candidate": "bpu_seg27_28",
+      "reference": "hf_final_norm_lmhead_same_input",
+      "bpu_logits_path": "evidence/raw_endpoint_subset_v6/final_segment_dense_sweep_v5/ramp/real_x_z_normalized/dequant_logits.npy",
+      "hf_logits_path": "evidence/hf_lmhead_only_v7/ramp/real_x_z_normalized/hf_final_lmhead_logits.npy",
+      "metrics_path": "evidence/final_segment_functional_compare_v7/ramp/real_x_z_normalized/metrics.json"
+    },
+    {
+      "candidate_top1": 152063,
+      "reference_top1": 57992,
+      "top1_agreement": false,
+      "candidate_topk": [
+        152063,
+        152062,
+        152061,
+        152060,
+        152059
+      ],
+      "reference_topk": [
+        57992,
+        50564,
+        58375,
+        36343,
+        10749
+      ],
+      "top5_overlap": 0,
+      "reference_top1_in_candidate_top5": false,
+      "cosine": 0.0,
+      "relative_l2": 0.9999999999999986,
+      "max_abs_error": 9.538158416748047,
+      "mean_abs_error": 1.7060557709963615,
+      "candidate_stats": {
+        "shape": [
+          152064
+        ],
+        "dtype": "float32",
+        "size": 152064,
+        "min": 0.0,
+        "max": 0.0,
+        "mean": 0.0,
+        "std": 0.0,
+        "abs_max": 0.0,
+        "nonzero_count": 0,
+        "constant": true,
+        "allzero": true,
+        "nan_count": 0,
+        "inf_count": 0,
+        "p0": 0.0,
+        "p1": 0.0,
+        "p5": 0.0,
+        "p50": 0.0,
+        "p95": 0.0,
+        "p99": 0.0,
+        "p100": 0.0
+      },
+      "reference_stats": {
+        "shape": [
+          152064
+        ],
+        "dtype": "float32",
+        "size": 152064,
+        "min": -8.450885772705078,
+        "max": 9.538158416748047,
+        "mean": 1.5190887451171875,
+        "std": 1.1161718368530273,
+        "abs_max": 9.538158416748047,
+        "nonzero_count": 152064,
+        "constant": false,
+        "allzero": false,
+        "nan_count": 0,
+        "inf_count": 0,
+        "p0": -8.450885772705078,
+        "p1": -2.058478832244873,
+        "p5": -0.7091807126998901,
+        "p50": 1.8103693723678589,
+        "p95": 2.8582184314727783,
+        "p99": 3.9570231437683105,
+        "p100": 9.538158416748047
+      },
+      "candidate_entropy": {
+        "entropy": 11.932056763842207,
+        "normalized_entropy": 1.0,
+        "top1_probability": 6.576178451178451e-06
+      },
+      "reference_entropy": {
+        "entropy": 11.282027787302109,
+        "normalized_entropy": 0.9455224703162757,
+        "top1_probability": 0.011664865300296591
+      },
+      "case_id": "short_chinese_prompt_padded",
+      "variant": "real_x",
+      "candidate": "bpu_seg27_28",
+      "reference": "hf_final_norm_lmhead_same_input",
+      "bpu_logits_path": "evidence/raw_endpoint_subset_v6/final_segment_dense_sweep_v5/short_chinese_prompt_padded/real_x/dequant_logits.npy",
+      "hf_logits_path": "evidence/hf_lmhead_only_v7/short_chinese_prompt_padded/real_x/hf_final_lmhead_logits.npy",
+      "metrics_path": "evidence/final_segment_functional_compare_v7/short_chinese_prompt_padded/real_x/metrics.json"
+    },
+    {
+      "candidate_top1": 152063,
+      "reference_top1": 57992,
+      "top1_agreement": false,
+      "candidate_topk": [
+        152063,
+        152062,
+        152061,
+        152060,
+        152059
+      ],
+      "reference_topk": [
+        57992,
+        50564,
+        58375,
+        36343,
+        10749
+      ],
+      "top5_overlap": 0,
+      "reference_top1_in_candidate_top5": false,
+      "cosine": 0.0,
+      "relative_l2": 0.9999999999999986,
+      "max_abs_error": 9.538158416748047,
+      "mean_abs_error": 1.7060557709963615,
+      "candidate_stats": {
+        "shape": [
+          152064
+        ],
+        "dtype": "float32",
+        "size": 152064,
+        "min": 0.0,
+        "max": 0.0,
+        "mean": 0.0,
+        "std": 0.0,
+        "abs_max": 0.0,
+        "nonzero_count": 0,
+        "constant": true,
+        "allzero": true,
+        "nan_count": 0,
+        "inf_count": 0,
+        "p0": 0.0,
+        "p1": 0.0,
+        "p5": 0.0,
+        "p50": 0.0,
+        "p95": 0.0,
+        "p99": 0.0,
+        "p100": 0.0
+      },
+      "reference_stats": {
+        "shape": [
+          152064
+        ],
+        "dtype": "float32",
+        "size": 152064,
+        "min": -8.450885772705078,
+        "max": 9.538158416748047,
+        "mean": 1.5190887451171875,
+        "std": 1.1161718368530273,
+        "abs_max": 9.538158416748047,
+        "nonzero_count": 152064,
+        "constant": false,
+        "allzero": false,
+        "nan_count": 0,
+        "inf_count": 0,
+        "p0": -8.450885772705078,
+        "p1": -2.058478832244873,
+        "p5": -0.7091807126998901,
+        "p50": 1.8103693723678589,
+        "p95": 2.8582184314727783,
+        "p99": 3.9570231437683105,
+        "p100": 9.538158416748047
+      },
+      "candidate_entropy": {
+        "entropy": 11.932056763842207,
+        "normalized_entropy": 1.0,
+        "top1_probability": 6.576178451178451e-06
+      },
+      "reference_entropy": {
+        "entropy": 11.282027787302109,
+        "normalized_entropy": 0.9455224703162757,
+        "top1_probability": 0.011664865300296591
+      },
+      "case_id": "short_chinese_prompt_padded",
+      "variant": "real_x_div_2",
+      "candidate": "bpu_seg27_28",
+      "reference": "hf_final_norm_lmhead_same_input",
+      "bpu_logits_path": "evidence/raw_endpoint_subset_v6/final_segment_dense_sweep_v5/short_chinese_prompt_padded/real_x_div_2/dequant_logits.npy",
+      "hf_logits_path": "evidence/hf_lmhead_only_v7/short_chinese_prompt_padded/real_x_div_2/hf_final_lmhead_logits.npy",
+      "metrics_path": "evidence/final_segment_functional_compare_v7/short_chinese_prompt_padded/real_x_div_2/metrics.json"
+    },
+    {
+      "candidate_top1": 152063,
+      "reference_top1": 57992,
+      "top1_agreement": false,
+      "candidate_topk": [
+        152063,
+        152062,
+        152061,
+        152060,
+        152059
+      ],
+      "reference_topk": [
+        57992,
+        50564,
+        58375,
+        36343,
+        10749
+      ],
+      "top5_overlap": 0,
+      "reference_top1_in_candidate_top5": false,
+      "cosine": 0.0,
+      "relative_l2": 0.9999999999999986,
+      "max_abs_error": 9.538152694702148,
+      "mean_abs_error": 1.7060555853745014,
+      "candidate_stats": {
+        "shape": [
+          152064
+        ],
+        "dtype": "float32",
+        "size": 152064,
+        "min": 0.0,
+        "max": 0.0,
+        "mean": 0.0,
+        "std": 0.0,
+        "abs_max": 0.0,
+        "nonzero_count": 0,
+        "constant": true,
+        "allzero": true,
+        "nan_count": 0,
+        "inf_count": 0,
+        "p0": 0.0,
+        "p1": 0.0,
+        "p5": 0.0,
+        "p50": 0.0,
+        "p95": 0.0,
+        "p99": 0.0,
+        "p100": 0.0
+      },
+      "reference_stats": {
+        "shape": [
+          152064
+        ],
+        "dtype": "float32",
+        "size": 152064,
+        "min": -8.45088005065918,
+        "max": 9.538152694702148,
+        "mean": 1.5190887451171875,
+        "std": 1.1161717176437378,
+        "abs_max": 9.538152694702148,
+        "nonzero_count": 152064,
+        "constant": false,
+        "allzero": false,
+        "nan_count": 0,
+        "inf_count": 0,
+        "p0": -8.45088005065918,
+        "p1": -2.058476686477661,
+        "p5": -0.7091803550720215,
+        "p50": 1.8103697299957275,
+        "p95": 2.8582184314727783,
+        "p99": 3.9570224285125732,
+        "p100": 9.538152694702148
+      },
+      "candidate_entropy": {
+        "entropy": 11.932056763842207,
+        "normalized_entropy": 1.0,
+        "top1_probability": 6.576178451178451e-06
+      },
+      "reference_entropy": {
+        "entropy": 11.282028458203573,
+        "normalized_entropy": 0.9455225265430837,
+        "top1_probability": 0.011664802844433587
+      },
+      "case_id": "short_chinese_prompt_padded",
+      "variant": "real_x_div_2p5",
+      "candidate": "bpu_seg27_28",
+      "reference": "hf_final_norm_lmhead_same_input",
+      "bpu_logits_path": "evidence/raw_endpoint_subset_v6/final_segment_dense_sweep_v5/short_chinese_prompt_padded/real_x_div_2p5/dequant_logits.npy",
+      "hf_logits_path": "evidence/hf_lmhead_only_v7/short_chinese_prompt_padded/real_x_div_2p5/hf_final_lmhead_logits.npy",
+      "metrics_path": "evidence/final_segment_functional_compare_v7/short_chinese_prompt_padded/real_x_div_2p5/metrics.json"
+    },
+    {
+      "candidate_top1": 72869,
+      "reference_top1": 57992,
+      "top1_agreement": false,
+      "candidate_topk": [
+        72869,
+        37355,
+        58375,
+        5379,
+        84602
+      ],
+      "reference_topk": [
+        57992,
+        50564,
+        58375,
+        36343,
+        10749
+      ],
+      "top5_overlap": 1,
+      "reference_top1_in_candidate_top5": false,
+      "cosine": 0.7795182457213348,
+      "relative_l2": 2084.6854956101524,
+      "max_abs_error": 26380.54911994934,
+      "mean_abs_error": 3065.896282855244,
+      "candidate_stats": {
+        "shape": [
+          152064
+        ],
+        "dtype": "float32",
+        "size": 152064,
+        "min": -26389.0,
+        "max": 24908.0,
+        "mean": 1392.5513916015625,
+        "std": 3676.3330078125,
+        "abs_max": 26389.0,
+        "nonzero_count": 152046,
+        "constant": false,
+        "allzero": false,
+        "nan_count": 0,
+        "inf_count": 0,
+        "p0": -26389.0,
+        "p1": -9910.0,
+        "p5": -5448.0,
+        "p50": 2005.0,
+        "p95": 6714.0,
+        "p99": 11023.740234375,
+        "p100": 24908.0
+      },
+      "reference_stats": {
+        "shape": [
+          152064
+        ],
+        "dtype": "float32",
+        "size": 152064,
+        "min": -8.45088005065918,
+        "max": 9.538151741027832,
+        "mean": 1.5190887451171875,
+        "std": 1.1161717176437378,
+        "abs_max": 9.538151741027832,
+        "nonzero_count": 152064,
+        "constant": false,
+        "allzero": false,
+        "nan_count": 0,
+        "inf_count": 0,
+        "p0": -8.45088005065918,
+        "p1": -2.058476686477661,
+        "p5": -0.7091803550720215,
+        "p50": 1.8103697299957275,
+        "p95": 2.8582184314727783,
+        "p99": 3.9570224285125732,
+        "p100": 9.538151741027832
+      },
+      "candidate_entropy": {
+        "entropy": -0.0,
+        "normalized_entropy": -0.0,
+        "top1_probability": 1.0
+      },
+      "reference_entropy": {
+        "entropy": 11.28202853304734,
+        "normalized_entropy": 0.9455225328155786,
+        "top1_probability": 0.011664791705197696
+      },
+      "case_id": "short_chinese_prompt_padded",
+      "variant": "real_x_div_2p75",
+      "candidate": "bpu_seg27_28",
+      "reference": "hf_final_norm_lmhead_same_input",
+      "bpu_logits_path": "evidence/raw_endpoint_subset_v6/final_segment_dense_sweep_v5/short_chinese_prompt_padded/real_x_div_2p75/dequant_logits.npy",
+      "hf_logits_path": "evidence/hf_lmhead_only_v7/short_chinese_prompt_padded/real_x_div_2p75/hf_final_lmhead_logits.npy",
+      "metrics_path": "evidence/final_segment_functional_compare_v7/short_chinese_prompt_padded/real_x_div_2p75/metrics.json"
+    },
+    {
+      "candidate_top1": 72869,
+      "reference_top1": 57992,
+      "top1_agreement": false,
+      "candidate_topk": [
+        72869,
+        37355,
+        58375,
+        5379,
+        84602
+      ],
+      "reference_topk": [
+        57992,
+        50564,
+        58375,
+        36343,
+        10749
+      ],
+      "top5_overlap": 1,
+      "reference_top1_in_candidate_top5": false,
+      "cosine": 0.7180913212064746,
+      "relative_l2": 1877.5393387532495,
+      "max_abs_error": 24063.549114227295,
+      "mean_abs_error": 2687.8117696098907,
+      "candidate_stats": {
+        "shape": [
+          152064
+        ],
+        "dtype": "float32",
+        "size": 152064,
+        "min": -24072.0,
+        "max": 23224.0,
+        "mean": 970.4869384765625,
+        "std": 3405.03564453125,
+        "abs_max": 24072.0,
+        "nonzero_count": 152053,
+        "constant": false,
+        "allzero": false,
+        "nan_count": 0,
+        "inf_count": 0,
+        "p0": -24072.0,
+        "p1": -9449.0,
+        "p5": -5312.0,
+        "p50": 1509.0,
+        "p95": 5980.85009765625,
+        "p99": 10001.0,
+        "p100": 23224.0
+      },
+      "reference_stats": {
+        "shape": [
+          152064
+        ],
+        "dtype": "float32",
+        "size": 152064,
+        "min": -8.450885772705078,
+        "max": 9.538158416748047,
+        "mean": 1.5190887451171875,
+        "std": 1.1161718368530273,
+        "abs_max": 9.538158416748047,
+        "nonzero_count": 152064,
+        "constant": false,
+        "allzero": false,
+        "nan_count": 0,
+        "inf_count": 0,
+        "p0": -8.450885772705078,
+        "p1": -2.058478832244873,
+        "p5": -0.7091807126998901,
+        "p50": 1.8103693723678589,
+        "p95": 2.8582184314727783,
+        "p99": 3.9570231437683105,
+        "p100": 9.538158416748047
+      },
+      "candidate_entropy": {
+        "entropy": -0.0,
+        "normalized_entropy": -0.0,
+        "top1_probability": 1.0
+      },
+      "reference_entropy": {
+        "entropy": 11.282027791019162,
+        "normalized_entropy": 0.9455224706277939,
+        "top1_probability": 0.01166486539395386
+      },
+      "case_id": "short_chinese_prompt_padded",
+      "variant": "real_x_div_3",
+      "candidate": "bpu_seg27_28",
+      "reference": "hf_final_norm_lmhead_same_input",
+      "bpu_logits_path": "evidence/raw_endpoint_subset_v6/final_segment_dense_sweep_v5/short_chinese_prompt_padded/real_x_div_3/dequant_logits.npy",
+      "hf_logits_path": "evidence/hf_lmhead_only_v7/short_chinese_prompt_padded/real_x_div_3/hf_final_lmhead_logits.npy",
+      "metrics_path": "evidence/final_segment_functional_compare_v7/short_chinese_prompt_padded/real_x_div_3/metrics.json"
+    },
+    {
+      "candidate_top1": 152063,
+      "reference_top1": 57992,
+      "top1_agreement": false,
+      "candidate_topk": [
+        152063,
+        152062,
+        152061,
+        152060,
+        152059
+      ],
+      "reference_topk": [
+        57992,
+        50564,
+        58375,
+        36343,
+        10749
+      ],
+      "top5_overlap": 0,
+      "reference_top1_in_candidate_top5": false,
+      "cosine": 0.0,
+      "relative_l2": 0.9999999999999987,
+      "max_abs_error": 9.787398338317871,
+      "mean_abs_error": 1.840780473736096,
+      "candidate_stats": {
+        "shape": [
+          152064
+        ],
+        "dtype": "float32",
+        "size": 152064,
+        "min": 0.0,
+        "max": 0.0,
+        "mean": 0.0,
+        "std": 0.0,
+        "abs_max": 0.0,
+        "nonzero_count": 0,
+        "constant": true,
+        "allzero": true,
+        "nan_count": 0,
+        "inf_count": 0,
+        "p0": 0.0,
+        "p1": 0.0,
+        "p5": 0.0,
+        "p50": 0.0,
+        "p95": 0.0,
+        "p99": 0.0,
+        "p100": 0.0
+      },
+      "reference_stats": {
+        "shape": [
+          152064
+        ],
+        "dtype": "float32",
+        "size": 152064,
+        "min": -8.240924835205078,
+        "max": 9.787398338317871,
+        "mean": 1.679815411567688,
+        "std": 1.121888518333435,
+        "abs_max": 9.787398338317871,
+        "nonzero_count": 152064,
+        "constant": false,
+        "allzero": false,
+        "nan_count": 0,
+        "inf_count": 0,
+        "p0": -8.240924835205078,
+        "p1": -1.9353491067886353,
+        "p5": -0.5670986175537109,
+        "p50": 1.971916913986206,
+        "p95": 3.0354435443878174,
+        "p99": 4.137510299682617,
+        "p100": 9.787398338317871
+      },
+      "candidate_entropy": {
+        "entropy": 11.932056763842207,
+        "normalized_entropy": 1.0,
+        "top1_probability": 6.576178451178451e-06
+      },
+      "reference_entropy": {
+        "entropy": 11.265381515523762,
+        "normalized_entropy": 0.9441273821007393,
+        "top1_probability": 0.012661797684117744
+      },
+      "case_id": "short_chinese_prompt_padded",
+      "variant": "real_x_clip_8",
+      "candidate": "bpu_seg27_28",
+      "reference": "hf_final_norm_lmhead_same_input",
+      "bpu_logits_path": "evidence/raw_endpoint_subset_v6/final_segment_dense_sweep_v5/short_chinese_prompt_padded/real_x_clip_8/dequant_logits.npy",
+      "hf_logits_path": "evidence/hf_lmhead_only_v7/short_chinese_prompt_padded/real_x_clip_8/hf_final_lmhead_logits.npy",
+      "metrics_path": "evidence/final_segment_functional_compare_v7/short_chinese_prompt_padded/real_x_clip_8/metrics.json"
+    },
+    {
+      "candidate_top1": 72869,
+      "reference_top1": 57992,
+      "top1_agreement": false,
+      "candidate_topk": [
+        72869,
+        58375,
+        37355,
+        84602,
+        31069
+      ],
+      "reference_topk": [
+        57992,
+        50564,
+        58375,
+        36343,
+        10749
+      ],
+      "top5_overlap": 1,
+      "reference_top1_in_candidate_top5": false,
+      "cosine": 0.8575171471170487,
+      "relative_l2": 2105.8819858368943,
+      "max_abs_error": 26167.777163505554,
+      "mean_abs_error": 3643.439363168637,
+      "candidate_stats": {
+        "shape": [
+          152064
+        ],
+        "dtype": "float32",
+        "size": 152064,
+        "min": -26176.0,
+        "max": 25972.0,
+        "mean": 2370.2216796875,
+        "std": 3749.62744140625,
+        "abs_max": 26176.0,
+        "nonzero_count": 152047,
+        "constant": false,
+        "allzero": false,
+        "nan_count": 0,
+        "inf_count": 0,
+        "p0": -26176.0,
+        "p1": -9206.48046875,
+        "p5": -4660.0,
+        "p50": 3004.0,
+        "p95": 7783.85009765625,
+        "p99": 12130.1103515625,
+        "p100": 25972.0
+      },
+      "reference_stats": {
+        "shape": [
+          152064
+        ],
+        "dtype": "float32",
+        "size": 152064,
+        "min": -8.2228364944458,
+        "max": 9.915154457092285,
+        "mean": 1.7783443927764893,
+        "std": 1.1274052858352661,
+        "abs_max": 9.915154457092285,
+        "nonzero_count": 152064,
+        "constant": false,
+        "allzero": false,
+        "nan_count": 0,
+        "inf_count": 0,
+        "p0": -8.2228364944458,
+        "p1": -1.8577877283096313,
+        "p5": -0.4849624037742615,
+        "p50": 2.073495864868164,
+        "p95": 3.13775634765625,
+        "p99": 4.231623649597168,
+        "p100": 9.915154457092285
+      },
+      "candidate_entropy": {
+        "entropy": 9.783125982032732e-277,
+        "normalized_entropy": 8.199027356020134e-278,
+        "top1_probability": 1.0
+      },
+      "reference_entropy": {
+        "entropy": 11.262166155004818,
+        "normalized_entropy": 0.9438579096549924,
+        "top1_probability": 0.013001587675249572
+      },
+      "case_id": "short_chinese_prompt_padded",
+      "variant": "real_x_clip_6",
+      "candidate": "bpu_seg27_28",
+      "reference": "hf_final_norm_lmhead_same_input",
+      "bpu_logits_path": "evidence/raw_endpoint_subset_v6/final_segment_dense_sweep_v5/short_chinese_prompt_padded/real_x_clip_6/dequant_logits.npy",
+      "hf_logits_path": "evidence/hf_lmhead_only_v7/short_chinese_prompt_padded/real_x_clip_6/hf_final_lmhead_logits.npy",
+      "metrics_path": "evidence/final_segment_functional_compare_v7/short_chinese_prompt_padded/real_x_clip_6/metrics.json"
+    },
+    {
+      "candidate_top1": 72869,
+      "reference_top1": 57992,
+      "top1_agreement": false,
+      "candidate_topk": [
+        72869,
+        37355,
+        58375,
+        84602,
+        31069
+      ],
+      "reference_topk": [
+        57992,
+        50564,
+        58375,
+        36343,
+        10749
+      ],
+      "top5_overlap": 1,
+      "reference_top1_in_candidate_top5": false,
+      "cosine": 0.77736276293157,
+      "relative_l2": 1643.2027945089637,
+      "max_abs_error": 22583.657029628754,
+      "mean_abs_error": 2819.3158414185273,
+      "candidate_stats": {
+        "shape": [
+          152064
+        ],
+        "dtype": "float32",
+        "size": 152064,
+        "min": -21552.0,
+        "max": 22590.0,
+        "mean": 1571.5806884765625,
+        "std": 3196.54052734375,
+        "abs_max": 22590.0,
+        "nonzero_count": 152054,
+        "constant": false,
+        "allzero": false,
+        "nan_count": 0,
+        "inf_count": 0,
+        "p0": -21552.0,
+        "p1": -8203.740234375,
+        "p5": -4309.0,
+        "p50": 2054.0,
+        "p95": 6333.0,
+        "p99": 10144.740234375,
+        "p100": 22590.0
+      },
+      "reference_stats": {
+        "shape": [
+          152064
+        ],
+        "dtype": "float32",
+        "size": 152064,
+        "min": -8.210672378540039,
+        "max": 9.975857734680176,
+        "mean": 1.848341464996338,
+        "std": 1.1305540800094604,
+        "abs_max": 9.975857734680176,
+        "nonzero_count": 152064,
+        "constant": false,
+        "allzero": false,
+        "nan_count": 0,
+        "inf_count": 0,
+        "p0": -8.210672378540039,
+        "p1": -1.8008811473846436,
+        "p5": -0.42473286390304565,
+        "p50": 2.1445746421813965,
+        "p95": 3.210197687149048,
+        "p99": 4.306527137756348,
+        "p100": 9.975857734680176
+      },
+      "candidate_entropy": {
+        "entropy": 1.7486990871111096e-242,
+        "normalized_entropy": 1.4655470735022016e-243,
+        "top1_probability": 1.0
+      },
+      "reference_entropy": {
+        "entropy": 11.262082548592787,
+        "normalized_entropy": 0.9438509027815182,
+        "top1_probability": 0.012860802072095043
+      },
+      "case_id": "short_chinese_prompt_padded",
+      "variant": "real_x_clip_5",
+      "candidate": "bpu_seg27_28",
+      "reference": "hf_final_norm_lmhead_same_input",
+      "bpu_logits_path": "evidence/raw_endpoint_subset_v6/final_segment_dense_sweep_v5/short_chinese_prompt_padded/real_x_clip_5/dequant_logits.npy",
+      "hf_logits_path": "evidence/hf_lmhead_only_v7/short_chinese_prompt_padded/real_x_clip_5/hf_final_lmhead_logits.npy",
+      "metrics_path": "evidence/final_segment_functional_compare_v7/short_chinese_prompt_padded/real_x_clip_5/metrics.json"
+    },
+    {
+      "candidate_top1": 66906,
+      "reference_top1": 57992,
+      "top1_agreement": false,
+      "candidate_topk": [
+        66906,
+        58113,
+        37355,
+        54462,
+        40745
+      ],
+      "reference_topk": [
+        57992,
+        50564,
+        58375,
+        36343,
+        10749
+      ],
+      "top5_overlap": 0,
+      "reference_top1_in_candidate_top5": false,
+      "cosine": -0.6478213910036575,
+      "relative_l2": 1720.8926134293963,
+      "max_abs_error": 12824.949483394623,
+      "mean_abs_error": 2966.660902698805,
+      "candidate_stats": {
+        "shape": [
+          152064
+        ],
+        "dtype": "float32",
+        "size": 152064,
+        "min": -12827.0,
+        "max": 10204.0,
+        "mean": -2767.32861328125,
+        "std": 1674.500244140625,
+        "abs_max": 12827.0,
+        "nonzero_count": 152061,
+        "constant": false,
+        "allzero": false,
+        "nan_count": 0,
+        "inf_count": 0,
+        "p0": -12827.0,
+        "p1": -6822.740234375,
+        "p5": -5083.0,
+        "p50": -2879.0,
+        "p95": 537.0,
+        "p99": 2716.0,
+        "p100": 10204.0
+      },
+      "reference_stats": {
+        "shape": [
+          152064
+        ],
+        "dtype": "float32",
+        "size": 152064,
+        "min": -8.454251289367676,
+        "max": 9.528717041015625,
+        "mean": 1.5137817859649658,
+        "std": 1.1152801513671875,
+        "abs_max": 9.528717041015625,
+        "nonzero_count": 152064,
+        "constant": false,
+        "allzero": false,
+        "nan_count": 0,
+        "inf_count": 0,
+        "p0": -8.454251289367676,
+        "p1": -2.0622634887695312,
+        "p5": -0.7116715312004089,
+        "p50": 1.8043749332427979,
+        "p95": 2.854138135910034,
+        "p99": 3.9527993202209473,
+        "p100": 9.528717041015625
+      },
+      "candidate_entropy": {
+        "entropy": 4.184714446831368e-307,
+        "normalized_entropy": 3.5071191242672736e-308,
+        "top1_probability": 1.0
+      },
+      "reference_entropy": {
+        "entropy": 11.28184743589236,
+        "normalized_entropy": 0.9455073554527346,
+        "top1_probability": 0.011619251253462632
+      },
+      "case_id": "short_chinese_prompt_padded",
+      "variant": "real_x_z_normalized",
+      "candidate": "bpu_seg27_28",
+      "reference": "hf_final_norm_lmhead_same_input",
+      "bpu_logits_path": "evidence/raw_endpoint_subset_v6/final_segment_dense_sweep_v5/short_chinese_prompt_padded/real_x_z_normalized/dequant_logits.npy",
+      "hf_logits_path": "evidence/hf_lmhead_only_v7/short_chinese_prompt_padded/real_x_z_normalized/hf_final_lmhead_logits.npy",
+      "metrics_path": "evidence/final_segment_functional_compare_v7/short_chinese_prompt_padded/real_x_z_normalized/metrics.json"
+    }
+  ],
+  "errors": [],
+  "q4_k_m_zeros_comparisons": [
+    {
+      "variant": "real_x",
+      "row": "bpu_seg27_28",
+      "candidate_top1": 152063,
+      "reference_top1": 151643,
+      "top1_agreement": false,
+      "candidate_topk": [
+        152063,
+        152062,
+        152061,
+        152060,
+        152059
+      ],
+      "reference_topk": [
+        151643,
+        220,
+        2055,
+        576,
+        358
+      ],
+      "top5_overlap": 0,
+      "reference_top1_in_candidate_top5": false,
+      "cosine": 0.0,
+      "relative_l2": 0.9999999999999998,
+      "max_abs_error": 13.72036361694336,
+      "mean_abs_error": 10.055129873579363,
+      "candidate_stats": {
+        "shape": [
+          152064
+        ],
+        "dtype": "float32",
+        "size": 152064,
+        "min": 0.0,
+        "max": 0.0,
+        "mean": 0.0,
+        "std": 0.0,
+        "abs_max": 0.0,
+        "nonzero_count": 0,
+        "constant": true,
+        "allzero": true,
+        "nan_count": 0,
+        "inf_count": 0,
+        "p0": 0.0,
+        "p1": 0.0,
+        "p5": 0.0,
+        "p50": 0.0,
+        "p95": 0.0,
+        "p99": 0.0,
+        "p100": 0.0
+      },
+      "reference_stats": {
+        "shape": [
+          152064
+        ],
+        "dtype": "float32",
+        "size": 152064,
+        "min": -13.72036361694336,
+        "max": 3.696929931640625,
+        "mean": -10.055034637451172,
+        "std": 1.3941816091537476,
+        "abs_max": 13.72036361694336,
+        "nonzero_count": 152064,
+        "constant": false,
+        "allzero": false,
+        "nan_count": 0,
+        "inf_count": 0,
+        "p0": -13.72036361694336,
+        "p1": -11.674409866333008,
+        "p5": -11.482946395874023,
+        "p50": -10.539864540100098,
+        "p95": -7.226962566375732,
+        "p99": -5.557005405426025,
+        "p100": 3.696929931640625
+      },
+      "candidate_entropy": {
+        "entropy": 11.932056763842207,
+        "normalized_entropy": 1.0,
+        "top1_probability": 6.576178451178451e-06
+      },
+      "reference_entropy": {
+        "entropy": 5.439372955654088,
+        "normalized_entropy": 0.45586214206900666,
+        "top1_probability": 0.37817404048986697
+      }
+    },
+    {
+      "variant": "real_x",
+      "row": "hf_lmhead_only",
+      "candidate_top1": 82733,
+      "reference_top1": 151643,
+      "top1_agreement": false,
+      "candidate_topk": [
+        82733,
+        75337,
+        86611,
+        94222,
+        76842
+      ],
+      "reference_topk": [
+        151643,
+        220,
+        2055,
+        576,
+        358
+      ],
+      "top5_overlap": 0,
+      "reference_top1_in_candidate_top5": false,
+      "cosine": -0.9738589160664275,
+      "relative_l2": 1.5341081262541592,
+      "max_abs_error": 22.458721160888672,
+      "mean_abs_error": 15.328939722834383,
+      "candidate_stats": {
+        "shape": [
+          152064
+        ],
+        "dtype": "float32",
+        "size": 152064,
+        "min": -8.718948364257812,
+        "max": 11.421207427978516,
+        "mean": 5.271865367889404,
+        "std": 1.621358871459961,
+        "abs_max": 11.421207427978516,
+        "nonzero_count": 152064,
+        "constant": false,
+        "allzero": false,
+        "nan_count": 0,
+        "inf_count": 0,
+        "p0": -8.718948364257812,
+        "p1": -0.07881788164377213,
+        "p5": 1.8064920902252197,
+        "p50": 5.892507553100586,
+        "p95": 6.909707069396973,
+        "p99": 7.8787007331848145,
+        "p100": 11.421207427978516
+      },
+      "reference_stats": {
+        "shape": [
+          152064
+        ],
+        "dtype": "float32",
+        "size": 152064,
+        "min": -13.72036361694336,
+        "max": 3.696929931640625,
+        "mean": -10.055034637451172,
+        "std": 1.3941816091537476,
+        "abs_max": 13.72036361694336,
+        "nonzero_count": 152064,
+        "constant": false,
+        "allzero": false,
+        "nan_count": 0,
+        "inf_count": 0,
+        "p0": -13.72036361694336,
+        "p1": -11.674409866333008,
+        "p5": -11.482946395874023,
+        "p50": -10.539864540100098,
+        "p95": -7.226962566375732,
+        "p99": -5.557005405426025,
+        "p100": 3.696929931640625
+      },
+      "candidate_entropy": {
+        "entropy": 11.35169548642249,
+        "normalized_entropy": 0.9513611702570516,
+        "top1_probability": 0.0014392405583469995
+      },
+      "reference_entropy": {
+        "entropy": 5.439372955654088,
+        "normalized_entropy": 0.45586214206900666,
+        "top1_probability": 0.37817404048986697
+      }
+    },
+    {
+      "variant": "real_x_div_2",
+      "row": "bpu_seg27_28",
+      "candidate_top1": 152063,
+      "reference_top1": 151643,
+      "top1_agreement": false,
+      "candidate_topk": [
+        152063,
+        152062,
+        152061,
+        152060,
+        152059
+      ],
+      "reference_topk": [
+        151643,
+        220,
+        2055,
+        576,
+        358
+      ],
+      "top5_overlap": 0,
+      "reference_top1_in_candidate_top5": false,
+      "cosine": 0.0,
+      "relative_l2": 0.9999999999999998,
+      "max_abs_error": 13.72036361694336,
+      "mean_abs_error": 10.055129873579363,
+      "candidate_stats": {
+        "shape": [
+          152064
+        ],
+        "dtype": "float32",
+        "size": 152064,
+        "min": 0.0,
+        "max": 0.0,
+        "mean": 0.0,
+        "std": 0.0,
+        "abs_max": 0.0,
+        "nonzero_count": 0,
+        "constant": true,
+        "allzero": true,
+        "nan_count": 0,
+        "inf_count": 0,
+        "p0": 0.0,
+        "p1": 0.0,
+        "p5": 0.0,
+        "p50": 0.0,
+        "p95": 0.0,
+        "p99": 0.0,
+        "p100": 0.0
+      },
+      "reference_stats": {
+        "shape": [
+          152064
+        ],
+        "dtype": "float32",
+        "size": 152064,
+        "min": -13.72036361694336,
+        "max": 3.696929931640625,
+        "mean": -10.055034637451172,
+        "std": 1.3941816091537476,
+        "abs_max": 13.72036361694336,
+        "nonzero_count": 152064,
+        "constant": false,
+        "allzero": false,
+        "nan_count": 0,
+        "inf_count": 0,
+        "p0": -13.72036361694336,
+        "p1": -11.674409866333008,
+        "p5": -11.482946395874023,
+        "p50": -10.539864540100098,
+        "p95": -7.226962566375732,
+        "p99": -5.557005405426025,
+        "p100": 3.696929931640625
+      },
+      "candidate_entropy": {
+        "entropy": 11.932056763842207,
+        "normalized_entropy": 1.0,
+        "top1_probability": 6.576178451178451e-06
+      },
+      "reference_entropy": {
+        "entropy": 5.439372955654088,
+        "normalized_entropy": 0.45586214206900666,
+        "top1_probability": 0.37817404048986697
+      }
+    },
+    {
+      "variant": "real_x_div_2",
+      "row": "hf_lmhead_only",
+      "candidate_top1": 82733,
+      "reference_top1": 151643,
+      "top1_agreement": false,
+      "candidate_topk": [
+        82733,
+        75337,
+        86611,
+        94222,
+        76842
+      ],
+      "reference_topk": [
+        151643,
+        220,
+        2055,
+        576,
+        358
+      ],
+      "top5_overlap": 0,
+      "reference_top1_in_candidate_top5": false,
+      "cosine": -0.9738589160664275,
+      "relative_l2": 1.5341081262541592,
+      "max_abs_error": 22.458721160888672,
+      "mean_abs_error": 15.328939722834383,
+      "candidate_stats": {
+        "shape": [
+          152064
+        ],
+        "dtype": "float32",
+        "size": 152064,
+        "min": -8.718948364257812,
+        "max": 11.421207427978516,
+        "mean": 5.271865367889404,
+        "std": 1.621358871459961,
+        "abs_max": 11.421207427978516,
+        "nonzero_count": 152064,
+        "constant": false,
+        "allzero": false,
+        "nan_count": 0,
+        "inf_count": 0,
+        "p0": -8.718948364257812,
+        "p1": -0.07881788164377213,
+        "p5": 1.8064920902252197,
+        "p50": 5.892507553100586,
+        "p95": 6.909707069396973,
+        "p99": 7.8787007331848145,
+        "p100": 11.421207427978516
+      },
+      "reference_stats": {
+        "shape": [
+          152064
+        ],
+        "dtype": "float32",
+        "size": 152064,
+        "min": -13.72036361694336,
+        "max": 3.696929931640625,
+        "mean": -10.055034637451172,
+        "std": 1.3941816091537476,
+        "abs_max": 13.72036361694336,
+        "nonzero_count": 152064,
+        "constant": false,
+        "allzero": false,
+        "nan_count": 0,
+        "inf_count": 0,
+        "p0": -13.72036361694336,
+        "p1": -11.674409866333008,
+        "p5": -11.482946395874023,
+        "p50": -10.539864540100098,
+        "p95": -7.226962566375732,
+        "p99": -5.557005405426025,
+        "p100": 3.696929931640625
+      },
+      "candidate_entropy": {
+        "entropy": 11.35169548642249,
+        "normalized_entropy": 0.9513611702570516,
+        "top1_probability": 0.0014392405583469995
+      },
+      "reference_entropy": {
+        "entropy": 5.439372955654088,
+        "normalized_entropy": 0.45586214206900666,
+        "top1_probability": 0.37817404048986697
+      }
+    },
+    {
+      "variant": "real_x_div_2p5",
+      "row": "bpu_seg27_28",
+      "candidate_top1": 152063,
+      "reference_top1": 151643,
+      "top1_agreement": false,
+      "candidate_topk": [
+        152063,
+        152062,
+        152061,
+        152060,
+        152059
+      ],
+      "reference_topk": [
+        151643,
+        220,
+        2055,
+        576,
+        358
+      ],
+      "top5_overlap": 0,
+      "reference_top1_in_candidate_top5": false,
+      "cosine": 0.0,
+      "relative_l2": 0.9999999999999998,
+      "max_abs_error": 13.72036361694336,
+      "mean_abs_error": 10.055129873579363,
+      "candidate_stats": {
+        "shape": [
+          152064
+        ],
+        "dtype": "float32",
+        "size": 152064,
+        "min": 0.0,
+        "max": 0.0,
+        "mean": 0.0,
+        "std": 0.0,
+        "abs_max": 0.0,
+        "nonzero_count": 0,
+        "constant": true,
+        "allzero": true,
+        "nan_count": 0,
+        "inf_count": 0,
+        "p0": 0.0,
+        "p1": 0.0,
+        "p5": 0.0,
+        "p50": 0.0,
+        "p95": 0.0,
+        "p99": 0.0,
+        "p100": 0.0
+      },
+      "reference_stats": {
+        "shape": [
+          152064
+        ],
+        "dtype": "float32",
+        "size": 152064,
+        "min": -13.72036361694336,
+        "max": 3.696929931640625,
+        "mean": -10.055034637451172,
+        "std": 1.3941816091537476,
+        "abs_max": 13.72036361694336,
+        "nonzero_count": 152064,
+        "constant": false,
+        "allzero": false,
+        "nan_count": 0,
+        "inf_count": 0,
+        "p0": -13.72036361694336,
+        "p1": -11.674409866333008,
+        "p5": -11.482946395874023,
+        "p50": -10.539864540100098,
+        "p95": -7.226962566375732,
+        "p99": -5.557005405426025,
+        "p100": 3.696929931640625
+      },
+      "candidate_entropy": {
+        "entropy": 11.932056763842207,
+        "normalized_entropy": 1.0,
+        "top1_probability": 6.576178451178451e-06
+      },
+      "reference_entropy": {
+        "entropy": 5.439372955654088,
+        "normalized_entropy": 0.45586214206900666,
+        "top1_probability": 0.37817404048986697
+      }
+    },
+    {
+      "variant": "real_x_div_2p5",
+      "row": "hf_lmhead_only",
+      "candidate_top1": 82733,
+      "reference_top1": 151643,
+      "top1_agreement": false,
+      "candidate_topk": [
+        82733,
+        75337,
+        86611,
+        94222,
+        76842
+      ],
+      "reference_topk": [
+        151643,
+        220,
+        2055,
+        576,
+        358
+      ],
+      "top5_overlap": 0,
+      "reference_top1_in_candidate_top5": false,
+      "cosine": -0.9738589149096868,
+      "relative_l2": 1.5341080013648944,
+      "max_abs_error": 22.458717346191406,
+      "mean_abs_error": 15.328938498415921,
+      "candidate_stats": {
+        "shape": [
+          152064
+        ],
+        "dtype": "float32",
+        "size": 152064,
+        "min": -8.718952178955078,
+        "max": 11.421195030212402,
+        "mean": 5.271864414215088,
+        "std": 1.6213585138320923,
+        "abs_max": 11.421195030212402,
+        "nonzero_count": 152064,
+        "constant": false,
+        "allzero": false,
+        "nan_count": 0,
+        "inf_count": 0,
+        "p0": -8.718952178955078,
+        "p1": -0.07881831377744675,
+        "p5": 1.8064923286437988,
+        "p50": 5.892505168914795,
+        "p95": 6.909701824188232,
+        "p99": 7.878700256347656,
+        "p100": 11.421195030212402
+      },
+      "reference_stats": {
+        "shape": [
+          152064
+        ],
+        "dtype": "float32",
+        "size": 152064,
+        "min": -13.72036361694336,
+        "max": 3.696929931640625,
+        "mean": -10.055034637451172,
+        "std": 1.3941816091537476,
+        "abs_max": 13.72036361694336,
+        "nonzero_count": 152064,
+        "constant": false,
+        "allzero": false,
+        "nan_count": 0,
+        "inf_count": 0,
+        "p0": -13.72036361694336,
+        "p1": -11.674409866333008,
+        "p5": -11.482946395874023,
+        "p50": -10.539864540100098,
+        "p95": -7.226962566375732,
+        "p99": -5.557005405426025,
+        "p100": 3.696929931640625
+      },
+      "candidate_entropy": {
+        "entropy": 11.35169581623726,
+        "normalized_entropy": 0.9513611978981178,
+        "top1_probability": 0.001439224923944936
+      },
+      "reference_entropy": {
+        "entropy": 5.439372955654088,
+        "normalized_entropy": 0.45586214206900666,
+        "top1_probability": 0.37817404048986697
+      }
+    },
+    {
+      "variant": "real_x_div_2p75",
+      "row": "bpu_seg27_28",
+      "candidate_top1": 74466,
+      "reference_top1": 151643,
+      "top1_agreement": false,
+      "candidate_topk": [
+        74466,
+        86611,
+        45223,
+        94222,
+        33955
+      ],
+      "reference_topk": [
+        151643,
+        220,
+        2055,
+        576,
+        358
+      ],
+      "top5_overlap": 0,
+      "reference_top1_in_candidate_top5": false,
+      "cosine": -0.9619453486164745,
+      "relative_l2": 1439.599136369183,
+      "max_abs_error": 32778.004819869995,
+      "mean_abs_error": 13922.375725103982,
+      "candidate_stats": {
+        "shape": [
+          152064
+        ],
+        "dtype": "float32",
+        "size": 152064,
+        "min": -26768.0,
+        "max": 32767.0,
+        "mean": 13795.8564453125,
+        "std": 4790.5458984375,
+        "abs_max": 32767.0,
+        "nonzero_count": 152062,
+        "constant": false,
+        "allzero": false,
+        "nan_count": 0,
+        "inf_count": 0,
+        "p0": -26768.0,
+        "p1": -1903.3699951171875,
+        "p5": 3739.14990234375,
+        "p50": 15359.0,
+        "p95": 19109.849609375,
+        "p99": 22812.849609375,
+        "p100": 32767.0
+      },
+      "reference_stats": {
+        "shape": [
+          152064
+        ],
+        "dtype": "float32",
+        "size": 152064,
+        "min": -13.72036361694336,
+        "max": 3.696929931640625,
+        "mean": -10.055034637451172,
+        "std": 1.3941816091537476,
+        "abs_max": 13.72036361694336,
+        "nonzero_count": 152064,
+        "constant": false,
+        "allzero": false,
+        "nan_count": 0,
+        "inf_count": 0,
+        "p0": -13.72036361694336,
+        "p1": -11.674409866333008,
+        "p5": -11.482946395874023,
+        "p50": -10.539864540100098,
+        "p95": -7.226962566375732,
+        "p99": -5.557005405426025,
+        "p100": 3.696929931640625
+      },
+      "candidate_entropy": {
+        "entropy": 2.302585092994046,
+        "normalized_entropy": 0.19297470155954882,
+        "top1_probability": 0.1
+      },
+      "reference_entropy": {
+        "entropy": 5.439372955654088,
+        "normalized_entropy": 0.45586214206900666,
+        "top1_probability": 0.37817404048986697
+      }
+    },
+    {
+      "variant": "real_x_div_2p75",
+      "row": "hf_lmhead_only",
+      "candidate_top1": 82733,
+      "reference_top1": 151643,
+      "top1_agreement": false,
+      "candidate_topk": [
+        82733,
+        75337,
+        86611,
+        94222,
+        76842
+      ],
+      "reference_topk": [
+        151643,
+        220,
+        2055,
+        576,
+        358
+      ],
+      "top5_overlap": 0,
+      "reference_top1_in_candidate_top5": false,
+      "cosine": -0.9738589147852957,
+      "relative_l2": 1.5341080009860024,
+      "max_abs_error": 22.458717346191406,
+      "mean_abs_error": 15.32893849420959,
+      "candidate_stats": {
+        "shape": [
+          152064
+        ],
+        "dtype": "float32",
+        "size": 152064,
+        "min": -8.718952178955078,
+        "max": 11.421195030212402,
+        "mean": 5.271864414215088,
+        "std": 1.6213585138320923,
+        "abs_max": 11.421195030212402,
+        "nonzero_count": 152064,
+        "constant": false,
+        "allzero": false,
+        "nan_count": 0,
+        "inf_count": 0,
+        "p0": -8.718952178955078,
+        "p1": -0.07881831377744675,
+        "p5": 1.8064923286437988,
+        "p50": 5.892505168914795,
+        "p95": 6.909701824188232,
+        "p99": 7.878700256347656,
+        "p100": 11.421195030212402
+      },
+      "reference_stats": {
+        "shape": [
+          152064
+        ],
+        "dtype": "float32",
+        "size": 152064,
+        "min": -13.72036361694336,
+        "max": 3.696929931640625,
+        "mean": -10.055034637451172,
+        "std": 1.3941816091537476,
+        "abs_max": 13.72036361694336,
+        "nonzero_count": 152064,
+        "constant": false,
+        "allzero": false,
+        "nan_count": 0,
+        "inf_count": 0,
+        "p0": -13.72036361694336,
+        "p1": -11.674409866333008,
+        "p5": -11.482946395874023,
+        "p50": -10.539864540100098,
+        "p95": -7.226962566375732,
+        "p99": -5.557005405426025,
+        "p100": 3.696929931640625
+      },
+      "candidate_entropy": {
+        "entropy": 11.351695815844181,
+        "normalized_entropy": 0.9513611978651747,
+        "top1_probability": 0.0014392249278638565
+      },
+      "reference_entropy": {
+        "entropy": 5.439372955654088,
+        "normalized_entropy": 0.45586214206900666,
+        "top1_probability": 0.37817404048986697
+      }
+    },
+    {
+      "variant": "real_x_div_3",
+      "row": "bpu_seg27_28",
+      "candidate_top1": 76842,
+      "reference_top1": 151643,
+      "top1_agreement": false,
+      "candidate_topk": [
+        76842,
+        82733,
+        33955,
+        85512,
+        45223
+      ],
+      "reference_topk": [
+        151643,
+        220,
+        2055,
+        576,
+        358
+      ],
+      "top5_overlap": 0,
+      "reference_top1_in_candidate_top5": false,
+      "cosine": -0.95988407702789,
+      "relative_l2": 1291.2913683310146,
+      "max_abs_error": 32777.15276527405,
+      "mean_abs_error": 12471.506951155165,
+      "candidate_stats": {
+        "shape": [
+          152064
+        ],
+        "dtype": "float32",
+        "size": 152064,
+        "min": -24367.0,
+        "max": 32767.0,
+        "mean": 12348.009765625,
+        "std": 4369.90625,
+        "abs_max": 32767.0,
+        "nonzero_count": 152063,
+        "constant": false,
+        "allzero": false,
+        "nan_count": 0,
+        "inf_count": 0,
+        "p0": -24367.0,
+        "p1": -1945.1099853515625,
+        "p5": 3217.14990234375,
+        "p50": 13745.0,
+        "p95": 17253.0,
+        "p99": 20747.0,
+        "p100": 32767.0
+      },
+      "reference_stats": {
+        "shape": [
+          152064
+        ],
+        "dtype": "float32",
+        "size": 152064,
+        "min": -13.72036361694336,
+        "max": 3.696929931640625,
+        "mean": -10.055034637451172,
+        "std": 1.3941816091537476,
+        "abs_max": 13.72036361694336,
+        "nonzero_count": 152064,
+        "constant": false,
+        "allzero": false,
+        "nan_count": 0,
+        "inf_count": 0,
+        "p0": -13.72036361694336,
+        "p1": -11.674409866333008,
+        "p5": -11.482946395874023,
+        "p50": -10.539864540100098,
+        "p95": -7.226962566375732,
+        "p99": -5.557005405426025,
+        "p100": 3.696929931640625
+      },
+      "candidate_entropy": {
+        "entropy": 1.0986122886681096,
+        "normalized_entropy": 0.09207233173724431,
+        "top1_probability": 0.3333333333333333
+      },
+      "reference_entropy": {
+        "entropy": 5.439372955654088,
+        "normalized_entropy": 0.45586214206900666,
+        "top1_probability": 0.37817404048986697
+      }
+    },
+    {
+      "variant": "real_x_div_3",
+      "row": "hf_lmhead_only",
+      "candidate_top1": 82733,
+      "reference_top1": 151643,
+      "top1_agreement": false,
+      "candidate_topk": [
+        82733,
+        75337,
+        86611,
+        94222,
+        76842
+      ],
+      "reference_topk": [
+        151643,
+        220,
+        2055,
+        576,
+        358
+      ],
+      "top5_overlap": 0,
+      "reference_top1_in_candidate_top5": false,
+      "cosine": -0.9738589163609356,
+      "relative_l2": 1.534108078850178,
+      "max_abs_error": 22.458720207214355,
+      "mean_abs_error": 15.328939252398781,
+      "candidate_stats": {
+        "shape": [
+          152064
+        ],
+        "dtype": "float32",
+        "size": 152064,
+        "min": -8.718950271606445,
+        "max": 11.421199798583984,
+        "mean": 5.271864891052246,
+        "std": 1.6213587522506714,
+        "abs_max": 11.421199798583984,
+        "nonzero_count": 152064,
+        "constant": false,
+        "allzero": false,
+        "nan_count": 0,
+        "inf_count": 0,
+        "p0": -8.718950271606445,
+        "p1": -0.07881796360015869,
+        "p5": 1.806492805480957,
+        "p50": 5.8925065994262695,
+        "p95": 6.90970516204834,
+        "p99": 7.878701686859131,
+        "p100": 11.421199798583984
+      },
+      "reference_stats": {
+        "shape": [
+          152064
+        ],
+        "dtype": "float32",
+        "size": 152064,
+        "min": -13.72036361694336,
+        "max": 3.696929931640625,
+        "mean": -10.055034637451172,
+        "std": 1.3941816091537476,
+        "abs_max": 13.72036361694336,
+        "nonzero_count": 152064,
+        "constant": false,
+        "allzero": false,
+        "nan_count": 0,
+        "inf_count": 0,
+        "p0": -13.72036361694336,
+        "p1": -11.674409866333008,
+        "p5": -11.482946395874023,
+        "p50": -10.539864540100098,
+        "p95": -7.226962566375732,
+        "p99": -5.557005405426025,
+        "p100": 3.696929931640625
+      },
+      "candidate_entropy": {
+        "entropy": 11.351695758329498,
+        "normalized_entropy": 0.9513611930449929,
+        "top1_probability": 0.0014392304873372427
+      },
+      "reference_entropy": {
+        "entropy": 5.439372955654088,
+        "normalized_entropy": 0.45586214206900666,
+        "top1_probability": 0.37817404048986697
+      }
+    },
+    {
+      "variant": "real_x_clip_8",
+      "row": "bpu_seg27_28",
+      "candidate_top1": 152063,
+      "reference_top1": 151643,
+      "top1_agreement": false,
+      "candidate_topk": [
+        152063,
+        152062,
+        152061,
+        152060,
+        152059
+      ],
+      "reference_topk": [
+        151643,
+        220,
+        2055,
+        576,
+        358
+      ],
+      "top5_overlap": 0,
+      "reference_top1_in_candidate_top5": false,
+      "cosine": 0.0,
+      "relative_l2": 0.9999999999999998,
+      "max_abs_error": 13.72036361694336,
+      "mean_abs_error": 10.055129873579363,
+      "candidate_stats": {
+        "shape": [
+          152064
+        ],
+        "dtype": "float32",
+        "size": 152064,
+        "min": 0.0,
+        "max": 0.0,
+        "mean": 0.0,
+        "std": 0.0,
+        "abs_max": 0.0,
+        "nonzero_count": 0,
+        "constant": true,
+        "allzero": true,
+        "nan_count": 0,
+        "inf_count": 0,
+        "p0": 0.0,
+        "p1": 0.0,
+        "p5": 0.0,
+        "p50": 0.0,
+        "p95": 0.0,
+        "p99": 0.0,
+        "p100": 0.0
+      },
+      "reference_stats": {
+        "shape": [
+          152064
+        ],
+        "dtype": "float32",
+        "size": 152064,
+        "min": -13.72036361694336,
+        "max": 3.696929931640625,
+        "mean": -10.055034637451172,
+        "std": 1.3941816091537476,
+        "abs_max": 13.72036361694336,
+        "nonzero_count": 152064,
+        "constant": false,
+        "allzero": false,
+        "nan_count": 0,
+        "inf_count": 0,
+        "p0": -13.72036361694336,
+        "p1": -11.674409866333008,
+        "p5": -11.482946395874023,
+        "p50": -10.539864540100098,
+        "p95": -7.226962566375732,
+        "p99": -5.557005405426025,
+        "p100": 3.696929931640625
+      },
+      "candidate_entropy": {
+        "entropy": 11.932056763842207,
+        "normalized_entropy": 1.0,
+        "top1_probability": 6.576178451178451e-06
+      },
+      "reference_entropy": {
+        "entropy": 5.439372955654088,
+        "normalized_entropy": 0.45586214206900666,
+        "top1_probability": 0.37817404048986697
+      }
+    },
+    {
+      "variant": "real_x_clip_8",
+      "row": "hf_lmhead_only",
+      "candidate_top1": 75337,
+      "reference_top1": 151643,
+      "top1_agreement": false,
+      "candidate_topk": [
+        75337,
+        82733,
+        86611,
+        94222,
+        76842
+      ],
+      "reference_topk": [
+        151643,
+        220,
+        2055,
+        576,
+        358
+      ],
+      "top5_overlap": 0,
+      "reference_top1_in_candidate_top5": false,
+      "cosine": -0.9730500178036163,
+      "relative_l2": 1.531882609254316,
+      "max_abs_error": 22.310476303100586,
+      "mean_abs_error": 15.300763652297148,
+      "candidate_stats": {
+        "shape": [
+          152064
+        ],
+        "dtype": "float32",
+        "size": 152064,
+        "min": -8.749491691589355,
+        "max": 11.345026016235352,
+        "mean": 5.243555545806885,
+        "std": 1.6453777551651,
+        "abs_max": 11.345026016235352,
+        "nonzero_count": 152064,
+        "constant": false,
+        "allzero": false,
+        "nan_count": 0,
+        "inf_count": 0,
+        "p0": -8.749491691589355,
+        "p1": -0.16559933125972748,
+        "p5": 1.7274495363235474,
+        "p50": 5.883904457092285,
+        "p95": 6.868473529815674,
+        "p99": 7.824169158935547,
+        "p100": 11.345026016235352
+      },
+      "reference_stats": {
+        "shape": [
+          152064
+        ],
+        "dtype": "float32",
+        "size": 152064,
+        "min": -13.72036361694336,
+        "max": 3.696929931640625,
+        "mean": -10.055034637451172,
+        "std": 1.3941816091537476,
+        "abs_max": 13.72036361694336,
+        "nonzero_count": 152064,
+        "constant": false,
+        "allzero": false,
+        "nan_count": 0,
+        "inf_count": 0,
+        "p0": -13.72036361694336,
+        "p1": -11.674409866333008,
+        "p5": -11.482946395874023,
+        "p50": -10.539864540100098,
+        "p95": -7.226962566375732,
+        "p99": -5.557005405426025,
+        "p100": 3.696929931640625
+      },
+      "candidate_entropy": {
+        "entropy": 11.368328735518498,
+        "normalized_entropy": 0.9527551670696055,
+        "top1_probability": 0.0013617380672839678
+      },
+      "reference_entropy": {
+        "entropy": 5.439372955654088,
+        "normalized_entropy": 0.45586214206900666,
+        "top1_probability": 0.37817404048986697
+      }
+    },
+    {
+      "variant": "real_x_clip_6",
+      "row": "bpu_seg27_28",
+      "candidate_top1": 76842,
+      "reference_top1": 151643,
+      "top1_agreement": false,
+      "candidate_topk": [
+        76842,
+        75337,
+        95132,
+        86611,
+        74466
+      ],
+      "reference_topk": [
+        151643,
+        220,
+        2055,
+        576,
+        358
+      ],
+      "top5_overlap": 0,
+      "reference_top1_in_candidate_top5": false,
+      "cosine": -0.9605541397236782,
+      "relative_l2": 1454.6566730633338,
+      "max_abs_error": 32778.004819869995,
+      "mean_abs_error": 14042.194950941446,
+      "candidate_stats": {
+        "shape": [
+          152064
+        ],
+        "dtype": "float32",
+        "size": 152064,
+        "min": -27342.0,
+        "max": 32767.0,
+        "mean": 13901.4091796875,
+        "std": 4951.16943359375,
+        "abs_max": 32767.0,
+        "nonzero_count": 152064,
+        "constant": false,
+        "allzero": false,
+        "nan_count": 0,
+        "inf_count": 0,
+        "p0": -27342.0,
+        "p1": -2269.110107421875,
+        "p5": 3513.14990234375,
+        "p50": 15553.0,
+        "p95": 19221.0,
+        "p99": 22965.369140625,
+        "p100": 32767.0
+      },
+      "reference_stats": {
+        "shape": [
+          152064
+        ],
+        "dtype": "float32",
+        "size": 152064,
+        "min": -13.72036361694336,
+        "max": 3.696929931640625,
+        "mean": -10.055034637451172,
+        "std": 1.3941816091537476,
+        "abs_max": 13.72036361694336,
+        "nonzero_count": 152064,
+        "constant": false,
+        "allzero": false,
+        "nan_count": 0,
+        "inf_count": 0,
+        "p0": -13.72036361694336,
+        "p1": -11.674409866333008,
+        "p5": -11.482946395874023,
+        "p50": -10.539864540100098,
+        "p95": -7.226962566375732,
+        "p99": -5.557005405426025,
+        "p100": 3.696929931640625
+      },
+      "candidate_entropy": {
+        "entropy": 2.3978952727983707,
+        "normalized_entropy": 0.20096244262470567,
+        "top1_probability": 0.09090909090909091
+      },
+      "reference_entropy": {
+        "entropy": 5.439372955654088,
+        "normalized_entropy": 0.45586214206900666,
+        "top1_probability": 0.37817404048986697
+      }
+    },
+    {
+      "variant": "real_x_clip_6",
+      "row": "hf_lmhead_only",
+      "candidate_top1": 75337,
+      "reference_top1": 151643,
+      "top1_agreement": false,
+      "candidate_topk": [
+        75337,
+        82733,
+        94222,
+        86611,
+        76842
+      ],
+      "reference_topk": [
+        151643,
+        220,
+        2055,
+        576,
+        358
+      ],
+      "top5_overlap": 0,
+      "reference_top1_in_candidate_top5": false,
+      "cosine": -0.9726892462408163,
+      "relative_l2": 1.5273550732232974,
+      "max_abs_error": 22.266448974609375,
+      "mean_abs_error": 15.255015535293932,
+      "candidate_stats": {
+        "shape": [
+          152064
+        ],
+        "dtype": "float32",
+        "size": 152064,
+        "min": -8.720139503479004,
+        "max": 11.31958293914795,
+        "mean": 5.197841644287109,
+        "std": 1.640102505683899,
+        "abs_max": 11.31958293914795,
+        "nonzero_count": 152064,
+        "constant": false,
+        "allzero": false,
+        "nan_count": 0,
+        "inf_count": 0,
+        "p0": -8.720139503479004,
+        "p1": -0.18182972073554993,
+        "p5": 1.693576455116272,
+        "p50": 5.835182189941406,
+        "p95": 6.816226005554199,
+        "p99": 7.772299289703369,
+        "p100": 11.31958293914795
+      },
+      "reference_stats": {
+        "shape": [
+          152064
+        ],
+        "dtype": "float32",
+        "size": 152064,
+        "min": -13.72036361694336,
+        "max": 3.696929931640625,
+        "mean": -10.055034637451172,
+        "std": 1.3941816091537476,
+        "abs_max": 13.72036361694336,
+        "nonzero_count": 152064,
+        "constant": false,
+        "allzero": false,
+        "nan_count": 0,
+        "inf_count": 0,
+        "p0": -13.72036361694336,
+        "p1": -11.674409866333008,
+        "p5": -11.482946395874023,
+        "p50": -10.539864540100098,
+        "p95": -7.226962566375732,
+        "p99": -5.557005405426025,
+        "p100": 3.696929931640625
+      },
+      "candidate_entropy": {
+        "entropy": 11.37058909674202,
+        "normalized_entropy": 0.9529446030795289,
+        "top1_probability": 0.0013940995878324325
+      },
+      "reference_entropy": {
+        "entropy": 5.439372955654088,
+        "normalized_entropy": 0.45586214206900666,
+        "top1_probability": 0.37817404048986697
+      }
+    },
+    {
+      "variant": "real_x_clip_5",
+      "row": "bpu_seg27_28",
+      "candidate_top1": 76842,
+      "reference_top1": 151643,
+      "top1_agreement": false,
+      "candidate_topk": [
+        76842,
+        45223,
+        82733,
+        85512,
+        74466
+      ],
+      "reference_topk": [
+        151643,
+        220,
+        2055,
+        576,
+        358
+      ],
+      "top5_overlap": 0,
+      "reference_top1_in_candidate_top5": false,
+      "cosine": -0.9553635480105199,
+      "relative_l2": 1152.1321814778769,
+      "max_abs_error": 31361.152765274048,
+      "mean_abs_error": 11085.46895114242,
+      "candidate_stats": {
+        "shape": [
+          152064
+        ],
+        "dtype": "float32",
+        "size": 152064,
+        "min": -22475.0,
+        "max": 31351.0,
+        "mean": 10948.974609375,
+        "std": 4084.030029296875,
+        "abs_max": 31351.0,
+        "nonzero_count": 152063,
+        "constant": false,
+        "allzero": false,
+        "nan_count": 0,
+        "inf_count": 0,
+        "p0": -22475.0,
+        "p1": -2372.739990234375,
+        "p5": 2431.0,
+        "p50": 12253.0,
+        "p95": 15448.849609375,
+        "p99": 18719.58984375,
+        "p100": 31351.0
+      },
+      "reference_stats": {
+        "shape": [
+          152064
+        ],
+        "dtype": "float32",
+        "size": 152064,
+        "min": -13.72036361694336,
+        "max": 3.696929931640625,
+        "mean": -10.055034637451172,
+        "std": 1.3941816091537476,
+        "abs_max": 13.72036361694336,
+        "nonzero_count": 152064,
+        "constant": false,
+        "allzero": false,
+        "nan_count": 0,
+        "inf_count": 0,
+        "p0": -13.72036361694336,
+        "p1": -11.674409866333008,
+        "p5": -11.482946395874023,
+        "p50": -10.539864540100098,
+        "p95": -7.226962566375732,
+        "p99": -5.557005405426025,
+        "p100": 3.696929931640625
+      },
+      "candidate_entropy": {
+        "entropy": -0.0,
+        "normalized_entropy": -0.0,
+        "top1_probability": 1.0
+      },
+      "reference_entropy": {
+        "entropy": 5.439372955654088,
+        "normalized_entropy": 0.45586214206900666,
+        "top1_probability": 0.37817404048986697
+      }
+    },
+    {
+      "variant": "real_x_clip_5",
+      "row": "hf_lmhead_only",
+      "candidate_top1": 75337,
+      "reference_top1": 151643,
+      "top1_agreement": false,
+      "candidate_topk": [
+        75337,
+        82733,
+        94222,
+        86611,
+        76842
+      ],
+      "reference_topk": [
+        151643,
+        220,
+        2055,
+        576,
+        358
+      ],
+      "top5_overlap": 0,
+      "reference_top1_in_candidate_top5": false,
+      "cosine": -0.9725662532861982,
+      "relative_l2": 1.5261325129608425,
+      "max_abs_error": 22.25446605682373,
+      "mean_abs_error": 15.242482746713083,
+      "candidate_stats": {
+        "shape": [
+          152064
+        ],
+        "dtype": "float32",
+        "size": 152064,
+        "min": -8.724385261535645,
+        "max": 11.317747116088867,
+        "mean": 5.185315132141113,
+        "std": 1.6395444869995117,
+        "abs_max": 11.317747116088867,
+        "nonzero_count": 152064,
+        "constant": false,
+        "allzero": false,
+        "nan_count": 0,
+        "inf_count": 0,
+        "p0": -8.724385261535645,
+        "p1": -0.1863149255514145,
+        "p5": 1.6827149391174316,
+        "p50": 5.822683334350586,
+        "p95": 6.802119255065918,
+        "p99": 7.758528232574463,
+        "p100": 11.317747116088867
+      },
+      "reference_stats": {
+        "shape": [
+          152064
+        ],
+        "dtype": "float32",
+        "size": 152064,
+        "min": -13.72036361694336,
+        "max": 3.696929931640625,
+        "mean": -10.055034637451172,
+        "std": 1.3941816091537476,
+        "abs_max": 13.72036361694336,
+        "nonzero_count": 152064,
+        "constant": false,
+        "allzero": false,
+        "nan_count": 0,
+        "inf_count": 0,
+        "p0": -13.72036361694336,
+        "p1": -11.674409866333008,
+        "p5": -11.482946395874023,
+        "p50": -10.539864540100098,
+        "p95": -7.226962566375732,
+        "p99": -5.557005405426025,
+        "p100": 3.696929931640625
+      },
+      "candidate_entropy": {
+        "entropy": 11.370935744174972,
+        "normalized_entropy": 0.9529736548549111,
+        "top1_probability": 0.0014095687229912699
+      },
+      "reference_entropy": {
+        "entropy": 5.439372955654088,
+        "normalized_entropy": 0.45586214206900666,
+        "top1_probability": 0.37817404048986697
+      }
+    },
+    {
+      "variant": "real_x_z_normalized",
+      "row": "bpu_seg27_28",
+      "candidate_top1": 54462,
+      "reference_top1": 151643,
+      "top1_agreement": false,
+      "candidate_topk": [
+        54462,
+        58113,
+        85512,
+        51735,
+        66906
+      ],
+      "reference_topk": [
+        151643,
+        220,
+        2055,
+        576,
+        358
+      ],
+      "top5_overlap": 0,
+      "reference_top1_in_candidate_top5": false,
+      "cosine": 0.4118278059967013,
+      "relative_l2": 161.62894954099127,
+      "max_abs_error": 11576.061939239502,
+      "mean_abs_error": 1221.4037105630332,
+      "candidate_stats": {
+        "shape": [
+          152064
+        ],
+        "dtype": "float32",
+        "size": 152064,
+        "min": -10620.0,
+        "max": 11565.0,
+        "mean": -656.9417724609375,
+        "std": 1508.0057373046875,
+        "abs_max": 11565.0,
+        "nonzero_count": 152042,
+        "constant": false,
+        "allzero": false,
+        "nan_count": 0,
+        "inf_count": 0,
+        "p0": -10620.0,
+        "p1": -4726.0,
+        "p5": -2986.0,
+        "p50": -635.0,
+        "p95": 2058.0,
+        "p99": 4173.740234375,
+        "p100": 11565.0
+      },
+      "reference_stats": {
+        "shape": [
+          152064
+        ],
+        "dtype": "float32",
+        "size": 152064,
+        "min": -13.72036361694336,
+        "max": 3.696929931640625,
+        "mean": -10.055034637451172,
+        "std": 1.3941816091537476,
+        "abs_max": 13.72036361694336,
+        "nonzero_count": 152064,
+        "constant": false,
+        "allzero": false,
+        "nan_count": 0,
+        "inf_count": 0,
+        "p0": -13.72036361694336,
+        "p1": -11.674409866333008,
+        "p5": -11.482946395874023,
+        "p50": -10.539864540100098,
+        "p95": -7.226962566375732,
+        "p99": -5.557005405426025,
+        "p100": 3.696929931640625
+      },
+      "candidate_entropy": {
+        "entropy": 1.3242193301428592e-105,
+        "normalized_entropy": 1.1097997238461437e-106,
+        "top1_probability": 1.0
+      },
+      "reference_entropy": {
+        "entropy": 5.439372955654088,
+        "normalized_entropy": 0.45586214206900666,
+        "top1_probability": 0.37817404048986697
+      }
+    },
+    {
+      "variant": "real_x_z_normalized",
+      "row": "hf_lmhead_only",
+      "candidate_top1": 82733,
+      "reference_top1": 151643,
+      "top1_agreement": false,
+      "candidate_topk": [
+        82733,
+        75337,
+        86611,
+        94222,
+        76842
+      ],
+      "reference_topk": [
+        151643,
+        220,
+        2055,
+        576,
+        358
+      ],
+      "top5_overlap": 0,
+      "reference_top1_in_candidate_top5": false,
+      "cosine": -0.9738570456651413,
+      "relative_l2": 1.5340617098271996,
+      "max_abs_error": 22.459023475646973,
+      "mean_abs_error": 15.328486431868303,
+      "candidate_stats": {
+        "shape": [
+          152064
+        ],
+        "dtype": "float32",
+        "size": 152064,
+        "min": -8.718955039978027,
+        "max": 11.42078685760498,
+        "mean": 5.2714128494262695,
+        "std": 1.6212329864501953,
+        "abs_max": 11.42078685760498,
+        "nonzero_count": 152064,
+        "constant": false,
+        "allzero": false,
+        "nan_count": 0,
+        "inf_count": 0,
+        "p0": -8.718955039978027,
+        "p1": -0.07879231870174408,
+        "p5": 1.8063693046569824,
+        "p50": 5.891949653625488,
+        "p95": 6.909343242645264,
+        "p99": 7.878296852111816,
+        "p100": 11.42078685760498
+      },
+      "reference_stats": {
+        "shape": [
+          152064
+        ],
+        "dtype": "float32",
+        "size": 152064,
+        "min": -13.72036361694336,
+        "max": 3.696929931640625,
+        "mean": -10.055034637451172,
+        "std": 1.3941816091537476,
+        "abs_max": 13.72036361694336,
+        "nonzero_count": 152064,
+        "constant": false,
+        "allzero": false,
+        "nan_count": 0,
+        "inf_count": 0,
+        "p0": -13.72036361694336,
+        "p1": -11.674409866333008,
+        "p5": -11.482946395874023,
+        "p50": -10.539864540100098,
+        "p95": -7.226962566375732,
+        "p99": -5.557005405426025,
+        "p100": 3.696929931640625
+      },
+      "candidate_entropy": {
+        "entropy": 11.351666195699718,
+        "normalized_entropy": 0.9513587154646087,
+        "top1_probability": 0.0014393626094528092
+      },
+      "reference_entropy": {
+        "entropy": 5.439372955654088,
+        "normalized_entropy": 0.45586214206900666,
+        "top1_probability": 0.37817404048986697
+      }
+    }
+  ],
+  "mismatch_count": 23,
+  "real_x_bpu_allzero_hf_nonzero_cases": [
+    "zeros",
+    "ramp",
+    "short_chinese_prompt_padded"
+  ],
+  "functional_compare_manifest": {
+    "path": "evidence/final_segment_functional_compare_v7/MANIFEST.json",
+    "file_count": 27
+  },
+  "verdict": "pass_final_segment_mismatch_quantified_same_input"
+}

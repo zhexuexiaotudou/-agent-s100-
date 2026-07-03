@@ -1,0 +1,70 @@
+{
+  "generated_at": "2026-07-03T13:03:11.523545+08:00",
+  "gate_id": "stage2_7_architecture_decision_gate",
+  "verdict": "ok_stage2_7_architecture_decision_gate",
+  "passed_count": 5,
+  "check_count": 5,
+  "failure_count": 0,
+  "failures": [],
+  "checks": [
+    {
+      "label": "architecture decision explicit",
+      "ok": true,
+      "detail": "policy_first_deterministic_router_with_qwen_summarizer_advisor"
+    },
+    {
+      "label": "claim boundary explicit",
+      "ok": true,
+      "detail": "Do not claim Qwen-driven agent loop. Claim policy-first audited routing with Qwen as local summarizer/advisor only."
+    },
+    {
+      "label": "if Qwen-driven selected, structured gates pass",
+      "ok": true,
+      "detail": {
+        "qwen_driven_pass": false
+      }
+    },
+    {
+      "label": "if policy-first selected, Stage3 claim downgraded",
+      "ok": true,
+      "detail": {
+        "safety": "Policy router is deterministic and audited; Qwen cannot bypass policy.",
+        "reliability": "Matches Stage2.5/2.6 dispatcher and redaction evidence.",
+        "product_story": "Privacy-first NAS policy router with local Qwen assisting summaries/advice.",
+        "user_experience": "Less magical but more predictable.",
+        "traceability": "Policy decision, Qwen advisory output, dispatcher call, and redaction are separable.",
+        "local_model_role": "Summarizer/advisor, not authority for tool execution.",
+        "stage3_readiness": true
+      }
+    },
+    {
+      "label": "no production route changes",
+      "ok": true
+    }
+  ],
+  "detail": {
+    "decision": "policy_first_deterministic_router_with_qwen_summarizer_advisor",
+    "stage3_claim_boundary": "Do not claim Qwen-driven agent loop. Claim policy-first audited routing with Qwen as local summarizer/advisor only.",
+    "comparison": {
+      "qwen_driven_structured_decision": {
+        "safety": "Depends on JSON validity plus policy enforcement; failed if Qwen cannot produce structured contract.",
+        "reliability": "Current evidence weak unless 6020-6040 pass.",
+        "product_story": "Local Qwen chooses workspace/tool.",
+        "user_experience": "More natural if stable, but current gateway returns evidence-flow summaries.",
+        "traceability": "Good only when structured decision parses.",
+        "local_model_role": "Router/classifier.",
+        "stage3_readiness": false
+      },
+      "policy_first_deterministic_router_with_qwen_summarizer_advisor": {
+        "safety": "Policy router is deterministic and audited; Qwen cannot bypass policy.",
+        "reliability": "Matches Stage2.5/2.6 dispatcher and redaction evidence.",
+        "product_story": "Privacy-first NAS policy router with local Qwen assisting summaries/advice.",
+        "user_experience": "Less magical but more predictable.",
+        "traceability": "Policy decision, Qwen advisory output, dispatcher call, and redaction are separable.",
+        "local_model_role": "Summarizer/advisor, not authority for tool execution.",
+        "stage3_readiness": true
+      }
+    }
+  },
+  "architecture_decision": "policy_first_deterministic_router_with_qwen_summarizer_advisor"
+}

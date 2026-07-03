@@ -1,0 +1,1916 @@
+{
+  "case_id": "zeros",
+  "quant_metadata": {
+    "available": true,
+    "scale": [
+      6.062494503566995e-05
+    ],
+    "scale_first": 6.062494503566995e-05,
+    "zero_point": [
+      0.0
+    ],
+    "repr": "<hbm_runtime.HB_HBMRuntime.QuantParams object at 0xffffa7b83870>"
+  },
+  "variants": [
+    {
+      "variant": "all_zero_positions",
+      "positions_stats": {
+        "shape": [
+          128
+        ],
+        "dtype": "int32",
+        "size": 128,
+        "min": 0.0,
+        "max": 0.0,
+        "mean": 0.0,
+        "std": 0.0,
+        "abs_max": 0.0,
+        "nonzero_count": 0,
+        "allzero": true,
+        "constant": true,
+        "nan_count": 0,
+        "inf_count": 0
+      },
+      "raw_stats": {
+        "shape": [
+          128,
+          3584
+        ],
+        "dtype": "int16",
+        "size": 458752,
+        "min": -8984.0,
+        "max": 8843.0,
+        "mean": -1.9115513392857142,
+        "std": 866.275987319199,
+        "abs_max": 8984.0,
+        "nonzero_count": 458496,
+        "allzero": false,
+        "constant": false,
+        "nan_count": 0,
+        "inf_count": 0
+      },
+      "dequant_stats": {
+        "shape": [
+          128,
+          3584
+        ],
+        "dtype": "float32",
+        "size": 458752,
+        "min": -0.5446544885635376,
+        "max": 0.5361064076423645,
+        "mean": -0.00011588769120862707,
+        "std": 0.05251793563365936,
+        "abs_max": 0.5446544885635376,
+        "nonzero_count": 458496,
+        "allzero": false,
+        "constant": false,
+        "nan_count": 0,
+        "inf_count": 0
+      },
+      "delta_stats": {
+        "shape": [
+          128,
+          3584
+        ],
+        "dtype": "float32",
+        "size": 458752,
+        "min": 0.0,
+        "max": 0.0,
+        "mean": 0.0,
+        "std": 0.0,
+        "abs_max": 0.0,
+        "nonzero_count": 0,
+        "allzero": true,
+        "constant": true,
+        "nan_count": 0,
+        "inf_count": 0
+      },
+      "delta_norm": 0.0,
+      "delta_abs_max": 0.0
+    },
+    {
+      "variant": "all_one_positions",
+      "positions_stats": {
+        "shape": [
+          128
+        ],
+        "dtype": "int32",
+        "size": 128,
+        "min": 1.0,
+        "max": 1.0,
+        "mean": 1.0,
+        "std": 0.0,
+        "abs_max": 1.0,
+        "nonzero_count": 128,
+        "allzero": false,
+        "constant": true,
+        "nan_count": 0,
+        "inf_count": 0
+      },
+      "raw_stats": {
+        "shape": [
+          128,
+          3584
+        ],
+        "dtype": "int16",
+        "size": 458752,
+        "min": -8984.0,
+        "max": 8843.0,
+        "mean": -1.9115513392857142,
+        "std": 866.275987319199,
+        "abs_max": 8984.0,
+        "nonzero_count": 458496,
+        "allzero": false,
+        "constant": false,
+        "nan_count": 0,
+        "inf_count": 0
+      },
+      "dequant_stats": {
+        "shape": [
+          128,
+          3584
+        ],
+        "dtype": "float32",
+        "size": 458752,
+        "min": -0.5446544885635376,
+        "max": 0.5361064076423645,
+        "mean": -0.00011588769120862707,
+        "std": 0.05251793563365936,
+        "abs_max": 0.5446544885635376,
+        "nonzero_count": 458496,
+        "allzero": false,
+        "constant": false,
+        "nan_count": 0,
+        "inf_count": 0
+      },
+      "delta_stats": {
+        "shape": [
+          128,
+          3584
+        ],
+        "dtype": "float32",
+        "size": 458752,
+        "min": 0.0,
+        "max": 0.0,
+        "mean": 0.0,
+        "std": 0.0,
+        "abs_max": 0.0,
+        "nonzero_count": 0,
+        "allzero": true,
+        "constant": true,
+        "nan_count": 0,
+        "inf_count": 0
+      },
+      "delta_norm": 0.0,
+      "delta_abs_max": 0.0
+    },
+    {
+      "variant": "canonical_0_to_127",
+      "positions_stats": {
+        "shape": [
+          128
+        ],
+        "dtype": "int32",
+        "size": 128,
+        "min": 0.0,
+        "max": 127.0,
+        "mean": 63.5,
+        "std": 36.94928957368463,
+        "abs_max": 127.0,
+        "nonzero_count": 127,
+        "allzero": false,
+        "constant": false,
+        "nan_count": 0,
+        "inf_count": 0
+      },
+      "raw_stats": {
+        "shape": [
+          128,
+          3584
+        ],
+        "dtype": "int16",
+        "size": 458752,
+        "min": -9110.0,
+        "max": 8986.0,
+        "mean": -1.8005567278180803,
+        "std": 876.2538121788294,
+        "abs_max": 9110.0,
+        "nonzero_count": 458449,
+        "allzero": false,
+        "constant": false,
+        "nan_count": 0,
+        "inf_count": 0
+      },
+      "dequant_stats": {
+        "shape": [
+          128,
+          3584
+        ],
+        "dtype": "float32",
+        "size": 458752,
+        "min": -0.5522932410240173,
+        "max": 0.5447757840156555,
+        "mean": -0.00010915863094851375,
+        "std": 0.05312283709645271,
+        "abs_max": 0.5522932410240173,
+        "nonzero_count": 458449,
+        "allzero": false,
+        "constant": false,
+        "nan_count": 0,
+        "inf_count": 0
+      },
+      "delta_stats": {
+        "shape": [
+          128,
+          3584
+        ],
+        "dtype": "float32",
+        "size": 458752,
+        "min": -0.007638752460479736,
+        "max": 0.00885125994682312,
+        "mean": 6.729027063556714e-06,
+        "std": 0.0006965818465687335,
+        "abs_max": 0.00885125994682312,
+        "nonzero_count": 437731,
+        "allzero": false,
+        "constant": false,
+        "nan_count": 0,
+        "inf_count": 0
+      },
+      "delta_norm": 0.4718486964702606,
+      "delta_abs_max": 0.00885125994682312
+    },
+    {
+      "variant": "one_indexed_1_to_128",
+      "positions_stats": {
+        "shape": [
+          128
+        ],
+        "dtype": "int32",
+        "size": 128,
+        "min": 1.0,
+        "max": 128.0,
+        "mean": 64.5,
+        "std": 36.94928957368463,
+        "abs_max": 128.0,
+        "nonzero_count": 128,
+        "allzero": false,
+        "constant": false,
+        "nan_count": 0,
+        "inf_count": 0
+      },
+      "raw_stats": {
+        "shape": [
+          128,
+          3584
+        ],
+        "dtype": "int16",
+        "size": 458752,
+        "min": -9113.0,
+        "max": 8994.0,
+        "mean": -1.8105599539620536,
+        "std": 876.1670327150823,
+        "abs_max": 9113.0,
+        "nonzero_count": 458486,
+        "allzero": false,
+        "constant": false,
+        "nan_count": 0,
+        "inf_count": 0
+      },
+      "dequant_stats": {
+        "shape": [
+          128,
+          3584
+        ],
+        "dtype": "float32",
+        "size": 458752,
+        "min": -0.552475094795227,
+        "max": 0.5452607274055481,
+        "mean": -0.00010976508929161355,
+        "std": 0.053117576986551285,
+        "abs_max": 0.552475094795227,
+        "nonzero_count": 458486,
+        "allzero": false,
+        "constant": false,
+        "nan_count": 0,
+        "inf_count": 0
+      },
+      "delta_stats": {
+        "shape": [
+          128,
+          3584
+        ],
+        "dtype": "float32",
+        "size": 458752,
+        "min": -0.007820606231689453,
+        "max": 0.009154319763183594,
+        "mean": 6.122584181866841e-06,
+        "std": 0.0007023429498076439,
+        "abs_max": 0.009154319763183594,
+        "nonzero_count": 434504,
+        "allzero": false,
+        "constant": false,
+        "nan_count": 0,
+        "inf_count": 0
+      },
+      "delta_norm": 0.47574618458747864,
+      "delta_abs_max": 0.009154319763183594
+    },
+    {
+      "variant": "reverse_127_to_0",
+      "positions_stats": {
+        "shape": [
+          128
+        ],
+        "dtype": "int32",
+        "size": 128,
+        "min": 0.0,
+        "max": 127.0,
+        "mean": 63.5,
+        "std": 36.94928957368463,
+        "abs_max": 127.0,
+        "nonzero_count": 127,
+        "allzero": false,
+        "constant": false,
+        "nan_count": 0,
+        "inf_count": 0
+      },
+      "raw_stats": {
+        "shape": [
+          128,
+          3584
+        ],
+        "dtype": "int16",
+        "size": 458752,
+        "min": -9110.0,
+        "max": 8986.0,
+        "mean": -1.8005567278180803,
+        "std": 876.2538121788294,
+        "abs_max": 9110.0,
+        "nonzero_count": 458449,
+        "allzero": false,
+        "constant": false,
+        "nan_count": 0,
+        "inf_count": 0
+      },
+      "dequant_stats": {
+        "shape": [
+          128,
+          3584
+        ],
+        "dtype": "float32",
+        "size": 458752,
+        "min": -0.5522932410240173,
+        "max": 0.5447757840156555,
+        "mean": -0.00010915862367255613,
+        "std": 0.05312284082174301,
+        "abs_max": 0.5522932410240173,
+        "nonzero_count": 458449,
+        "allzero": false,
+        "constant": false,
+        "nan_count": 0,
+        "inf_count": 0
+      },
+      "delta_stats": {
+        "shape": [
+          128,
+          3584
+        ],
+        "dtype": "float32",
+        "size": 458752,
+        "min": -0.007638752460479736,
+        "max": 0.00885125994682312,
+        "mean": 6.729026154062012e-06,
+        "std": 0.0006965818465687335,
+        "abs_max": 0.00885125994682312,
+        "nonzero_count": 437731,
+        "allzero": false,
+        "constant": false,
+        "nan_count": 0,
+        "inf_count": 0
+      },
+      "delta_norm": 0.4718487560749054,
+      "delta_abs_max": 0.00885125994682312
+    },
+    {
+      "variant": "doubled_positions",
+      "positions_stats": {
+        "shape": [
+          128
+        ],
+        "dtype": "int32",
+        "size": 128,
+        "min": 0.0,
+        "max": 254.0,
+        "mean": 127.0,
+        "std": 73.89857914736926,
+        "abs_max": 254.0,
+        "nonzero_count": 127,
+        "allzero": false,
+        "constant": false,
+        "nan_count": 0,
+        "inf_count": 0
+      },
+      "raw_stats": {
+        "shape": [
+          128,
+          3584
+        ],
+        "dtype": "int16",
+        "size": 458752,
+        "min": -9129.0,
+        "max": 8983.0,
+        "mean": -1.8661084856305803,
+        "std": 871.4056897264862,
+        "abs_max": 9129.0,
+        "nonzero_count": 458487,
+        "allzero": false,
+        "constant": false,
+        "nan_count": 0,
+        "inf_count": 0
+      },
+      "dequant_stats": {
+        "shape": [
+          128,
+          3584
+        ],
+        "dtype": "float32",
+        "size": 458752,
+        "min": -0.5534451007843018,
+        "max": 0.544593870639801,
+        "mean": -0.00011313270806567743,
+        "std": 0.052828919142484665,
+        "abs_max": 0.5534451007843018,
+        "nonzero_count": 458487,
+        "allzero": false,
+        "constant": false,
+        "nan_count": 0,
+        "inf_count": 0
+      },
+      "delta_stats": {
+        "shape": [
+          128,
+          3584
+        ],
+        "dtype": "float32",
+        "size": 458752,
+        "min": -0.00879061222076416,
+        "max": 0.010366886854171753,
+        "mean": 2.7549665446713334e-06,
+        "std": 0.0005263837520033121,
+        "abs_max": 0.010366886854171753,
+        "nonzero_count": 219359,
+        "allzero": false,
+        "constant": false,
+        "nan_count": 0,
+        "inf_count": 0
+      },
+      "delta_norm": 0.35653311014175415,
+      "delta_abs_max": 0.010366886854171753
+    },
+    {
+      "variant": "random_permutation_positions",
+      "positions_stats": {
+        "shape": [
+          128
+        ],
+        "dtype": "int32",
+        "size": 128,
+        "min": 0.0,
+        "max": 127.0,
+        "mean": 63.5,
+        "std": 36.94928957368463,
+        "abs_max": 127.0,
+        "nonzero_count": 127,
+        "allzero": false,
+        "constant": false,
+        "nan_count": 0,
+        "inf_count": 0
+      },
+      "raw_stats": {
+        "shape": [
+          128,
+          3584
+        ],
+        "dtype": "int16",
+        "size": 458752,
+        "min": -9110.0,
+        "max": 8986.0,
+        "mean": -1.8005567278180803,
+        "std": 876.2538121788294,
+        "abs_max": 9110.0,
+        "nonzero_count": 458449,
+        "allzero": false,
+        "constant": false,
+        "nan_count": 0,
+        "inf_count": 0
+      },
+      "dequant_stats": {
+        "shape": [
+          128,
+          3584
+        ],
+        "dtype": "float32",
+        "size": 458752,
+        "min": -0.5522932410240173,
+        "max": 0.5447757840156555,
+        "mean": -0.00010915862367255613,
+        "std": 0.05312283709645271,
+        "abs_max": 0.5522932410240173,
+        "nonzero_count": 458449,
+        "allzero": false,
+        "constant": false,
+        "nan_count": 0,
+        "inf_count": 0
+      },
+      "delta_stats": {
+        "shape": [
+          128,
+          3584
+        ],
+        "dtype": "float32",
+        "size": 458752,
+        "min": -0.007638752460479736,
+        "max": 0.00885125994682312,
+        "mean": 6.729026154062012e-06,
+        "std": 0.0006965818465687335,
+        "abs_max": 0.00885125994682312,
+        "nonzero_count": 437731,
+        "allzero": false,
+        "constant": false,
+        "nan_count": 0,
+        "inf_count": 0
+      },
+      "delta_norm": 0.47184813022613525,
+      "delta_abs_max": 0.00885125994682312
+    },
+    {
+      "variant": "constant_0_positions",
+      "positions_stats": {
+        "shape": [
+          128
+        ],
+        "dtype": "int32",
+        "size": 128,
+        "min": 0.0,
+        "max": 0.0,
+        "mean": 0.0,
+        "std": 0.0,
+        "abs_max": 0.0,
+        "nonzero_count": 0,
+        "allzero": true,
+        "constant": true,
+        "nan_count": 0,
+        "inf_count": 0
+      },
+      "raw_stats": {
+        "shape": [
+          128,
+          3584
+        ],
+        "dtype": "int16",
+        "size": 458752,
+        "min": -8984.0,
+        "max": 8843.0,
+        "mean": -1.9115513392857142,
+        "std": 866.275987319199,
+        "abs_max": 8984.0,
+        "nonzero_count": 458496,
+        "allzero": false,
+        "constant": false,
+        "nan_count": 0,
+        "inf_count": 0
+      },
+      "dequant_stats": {
+        "shape": [
+          128,
+          3584
+        ],
+        "dtype": "float32",
+        "size": 458752,
+        "min": -0.5446544885635376,
+        "max": 0.5361064076423645,
+        "mean": -0.00011588769120862707,
+        "std": 0.05251793563365936,
+        "abs_max": 0.5446544885635376,
+        "nonzero_count": 458496,
+        "allzero": false,
+        "constant": false,
+        "nan_count": 0,
+        "inf_count": 0
+      },
+      "delta_stats": {
+        "shape": [
+          128,
+          3584
+        ],
+        "dtype": "float32",
+        "size": 458752,
+        "min": 0.0,
+        "max": 0.0,
+        "mean": 0.0,
+        "std": 0.0,
+        "abs_max": 0.0,
+        "nonzero_count": 0,
+        "allzero": true,
+        "constant": true,
+        "nan_count": 0,
+        "inf_count": 0
+      },
+      "delta_norm": 0.0,
+      "delta_abs_max": 0.0
+    },
+    {
+      "variant": "constant_1_positions",
+      "positions_stats": {
+        "shape": [
+          128
+        ],
+        "dtype": "int32",
+        "size": 128,
+        "min": 1.0,
+        "max": 1.0,
+        "mean": 1.0,
+        "std": 0.0,
+        "abs_max": 1.0,
+        "nonzero_count": 128,
+        "allzero": false,
+        "constant": true,
+        "nan_count": 0,
+        "inf_count": 0
+      },
+      "raw_stats": {
+        "shape": [
+          128,
+          3584
+        ],
+        "dtype": "int16",
+        "size": 458752,
+        "min": -8984.0,
+        "max": 8843.0,
+        "mean": -1.9115513392857142,
+        "std": 866.275987319199,
+        "abs_max": 8984.0,
+        "nonzero_count": 458496,
+        "allzero": false,
+        "constant": false,
+        "nan_count": 0,
+        "inf_count": 0
+      },
+      "dequant_stats": {
+        "shape": [
+          128,
+          3584
+        ],
+        "dtype": "float32",
+        "size": 458752,
+        "min": -0.5446544885635376,
+        "max": 0.5361064076423645,
+        "mean": -0.00011588769120862707,
+        "std": 0.05251793563365936,
+        "abs_max": 0.5446544885635376,
+        "nonzero_count": 458496,
+        "allzero": false,
+        "constant": false,
+        "nan_count": 0,
+        "inf_count": 0
+      },
+      "delta_stats": {
+        "shape": [
+          128,
+          3584
+        ],
+        "dtype": "float32",
+        "size": 458752,
+        "min": 0.0,
+        "max": 0.0,
+        "mean": 0.0,
+        "std": 0.0,
+        "abs_max": 0.0,
+        "nonzero_count": 0,
+        "allzero": true,
+        "constant": true,
+        "nan_count": 0,
+        "inf_count": 0
+      },
+      "delta_norm": 0.0,
+      "delta_abs_max": 0.0
+    },
+    {
+      "variant": "constant_2_positions",
+      "positions_stats": {
+        "shape": [
+          128
+        ],
+        "dtype": "int32",
+        "size": 128,
+        "min": 2.0,
+        "max": 2.0,
+        "mean": 2.0,
+        "std": 0.0,
+        "abs_max": 2.0,
+        "nonzero_count": 128,
+        "allzero": false,
+        "constant": true,
+        "nan_count": 0,
+        "inf_count": 0
+      },
+      "raw_stats": {
+        "shape": [
+          128,
+          3584
+        ],
+        "dtype": "int16",
+        "size": 458752,
+        "min": -8984.0,
+        "max": 8843.0,
+        "mean": -1.9115513392857142,
+        "std": 866.275987319199,
+        "abs_max": 8984.0,
+        "nonzero_count": 458496,
+        "allzero": false,
+        "constant": false,
+        "nan_count": 0,
+        "inf_count": 0
+      },
+      "dequant_stats": {
+        "shape": [
+          128,
+          3584
+        ],
+        "dtype": "float32",
+        "size": 458752,
+        "min": -0.5446544885635376,
+        "max": 0.5361064076423645,
+        "mean": -0.00011588769120862707,
+        "std": 0.05251793563365936,
+        "abs_max": 0.5446544885635376,
+        "nonzero_count": 458496,
+        "allzero": false,
+        "constant": false,
+        "nan_count": 0,
+        "inf_count": 0
+      },
+      "delta_stats": {
+        "shape": [
+          128,
+          3584
+        ],
+        "dtype": "float32",
+        "size": 458752,
+        "min": 0.0,
+        "max": 0.0,
+        "mean": 0.0,
+        "std": 0.0,
+        "abs_max": 0.0,
+        "nonzero_count": 0,
+        "allzero": true,
+        "constant": true,
+        "nan_count": 0,
+        "inf_count": 0
+      },
+      "delta_norm": 0.0,
+      "delta_abs_max": 0.0
+    },
+    {
+      "variant": "constant_4_positions",
+      "positions_stats": {
+        "shape": [
+          128
+        ],
+        "dtype": "int32",
+        "size": 128,
+        "min": 4.0,
+        "max": 4.0,
+        "mean": 4.0,
+        "std": 0.0,
+        "abs_max": 4.0,
+        "nonzero_count": 128,
+        "allzero": false,
+        "constant": true,
+        "nan_count": 0,
+        "inf_count": 0
+      },
+      "raw_stats": {
+        "shape": [
+          128,
+          3584
+        ],
+        "dtype": "int16",
+        "size": 458752,
+        "min": -8984.0,
+        "max": 8843.0,
+        "mean": -1.9115513392857142,
+        "std": 866.275987319199,
+        "abs_max": 8984.0,
+        "nonzero_count": 458496,
+        "allzero": false,
+        "constant": false,
+        "nan_count": 0,
+        "inf_count": 0
+      },
+      "dequant_stats": {
+        "shape": [
+          128,
+          3584
+        ],
+        "dtype": "float32",
+        "size": 458752,
+        "min": -0.5446544885635376,
+        "max": 0.5361064076423645,
+        "mean": -0.00011588769120862707,
+        "std": 0.05251793563365936,
+        "abs_max": 0.5446544885635376,
+        "nonzero_count": 458496,
+        "allzero": false,
+        "constant": false,
+        "nan_count": 0,
+        "inf_count": 0
+      },
+      "delta_stats": {
+        "shape": [
+          128,
+          3584
+        ],
+        "dtype": "float32",
+        "size": 458752,
+        "min": 0.0,
+        "max": 0.0,
+        "mean": 0.0,
+        "std": 0.0,
+        "abs_max": 0.0,
+        "nonzero_count": 0,
+        "allzero": true,
+        "constant": true,
+        "nan_count": 0,
+        "inf_count": 0
+      },
+      "delta_norm": 0.0,
+      "delta_abs_max": 0.0
+    },
+    {
+      "variant": "constant_8_positions",
+      "positions_stats": {
+        "shape": [
+          128
+        ],
+        "dtype": "int32",
+        "size": 128,
+        "min": 8.0,
+        "max": 8.0,
+        "mean": 8.0,
+        "std": 0.0,
+        "abs_max": 8.0,
+        "nonzero_count": 128,
+        "allzero": false,
+        "constant": true,
+        "nan_count": 0,
+        "inf_count": 0
+      },
+      "raw_stats": {
+        "shape": [
+          128,
+          3584
+        ],
+        "dtype": "int16",
+        "size": 458752,
+        "min": -8984.0,
+        "max": 8843.0,
+        "mean": -1.9115513392857142,
+        "std": 866.275987319199,
+        "abs_max": 8984.0,
+        "nonzero_count": 458496,
+        "allzero": false,
+        "constant": false,
+        "nan_count": 0,
+        "inf_count": 0
+      },
+      "dequant_stats": {
+        "shape": [
+          128,
+          3584
+        ],
+        "dtype": "float32",
+        "size": 458752,
+        "min": -0.5446544885635376,
+        "max": 0.5361064076423645,
+        "mean": -0.00011588769120862707,
+        "std": 0.05251793563365936,
+        "abs_max": 0.5446544885635376,
+        "nonzero_count": 458496,
+        "allzero": false,
+        "constant": false,
+        "nan_count": 0,
+        "inf_count": 0
+      },
+      "delta_stats": {
+        "shape": [
+          128,
+          3584
+        ],
+        "dtype": "float32",
+        "size": 458752,
+        "min": 0.0,
+        "max": 0.0,
+        "mean": 0.0,
+        "std": 0.0,
+        "abs_max": 0.0,
+        "nonzero_count": 0,
+        "allzero": true,
+        "constant": true,
+        "nan_count": 0,
+        "inf_count": 0
+      },
+      "delta_norm": 0.0,
+      "delta_abs_max": 0.0
+    },
+    {
+      "variant": "constant_16_positions",
+      "positions_stats": {
+        "shape": [
+          128
+        ],
+        "dtype": "int32",
+        "size": 128,
+        "min": 16.0,
+        "max": 16.0,
+        "mean": 16.0,
+        "std": 0.0,
+        "abs_max": 16.0,
+        "nonzero_count": 128,
+        "allzero": false,
+        "constant": true,
+        "nan_count": 0,
+        "inf_count": 0
+      },
+      "raw_stats": {
+        "shape": [
+          128,
+          3584
+        ],
+        "dtype": "int16",
+        "size": 458752,
+        "min": -8984.0,
+        "max": 8843.0,
+        "mean": -1.9115513392857142,
+        "std": 866.275987319199,
+        "abs_max": 8984.0,
+        "nonzero_count": 458496,
+        "allzero": false,
+        "constant": false,
+        "nan_count": 0,
+        "inf_count": 0
+      },
+      "dequant_stats": {
+        "shape": [
+          128,
+          3584
+        ],
+        "dtype": "float32",
+        "size": 458752,
+        "min": -0.5446544885635376,
+        "max": 0.5361064076423645,
+        "mean": -0.00011588769120862707,
+        "std": 0.05251793563365936,
+        "abs_max": 0.5446544885635376,
+        "nonzero_count": 458496,
+        "allzero": false,
+        "constant": false,
+        "nan_count": 0,
+        "inf_count": 0
+      },
+      "delta_stats": {
+        "shape": [
+          128,
+          3584
+        ],
+        "dtype": "float32",
+        "size": 458752,
+        "min": 0.0,
+        "max": 0.0,
+        "mean": 0.0,
+        "std": 0.0,
+        "abs_max": 0.0,
+        "nonzero_count": 0,
+        "allzero": true,
+        "constant": true,
+        "nan_count": 0,
+        "inf_count": 0
+      },
+      "delta_norm": 0.0,
+      "delta_abs_max": 0.0
+    },
+    {
+      "variant": "constant_32_positions",
+      "positions_stats": {
+        "shape": [
+          128
+        ],
+        "dtype": "int32",
+        "size": 128,
+        "min": 32.0,
+        "max": 32.0,
+        "mean": 32.0,
+        "std": 0.0,
+        "abs_max": 32.0,
+        "nonzero_count": 128,
+        "allzero": false,
+        "constant": true,
+        "nan_count": 0,
+        "inf_count": 0
+      },
+      "raw_stats": {
+        "shape": [
+          128,
+          3584
+        ],
+        "dtype": "int16",
+        "size": 458752,
+        "min": -8984.0,
+        "max": 8843.0,
+        "mean": -1.9115513392857142,
+        "std": 866.275987319199,
+        "abs_max": 8984.0,
+        "nonzero_count": 458496,
+        "allzero": false,
+        "constant": false,
+        "nan_count": 0,
+        "inf_count": 0
+      },
+      "dequant_stats": {
+        "shape": [
+          128,
+          3584
+        ],
+        "dtype": "float32",
+        "size": 458752,
+        "min": -0.5446544885635376,
+        "max": 0.5361064076423645,
+        "mean": -0.00011588769120862707,
+        "std": 0.05251793563365936,
+        "abs_max": 0.5446544885635376,
+        "nonzero_count": 458496,
+        "allzero": false,
+        "constant": false,
+        "nan_count": 0,
+        "inf_count": 0
+      },
+      "delta_stats": {
+        "shape": [
+          128,
+          3584
+        ],
+        "dtype": "float32",
+        "size": 458752,
+        "min": 0.0,
+        "max": 0.0,
+        "mean": 0.0,
+        "std": 0.0,
+        "abs_max": 0.0,
+        "nonzero_count": 0,
+        "allzero": true,
+        "constant": true,
+        "nan_count": 0,
+        "inf_count": 0
+      },
+      "delta_norm": 0.0,
+      "delta_abs_max": 0.0
+    },
+    {
+      "variant": "constant_64_positions",
+      "positions_stats": {
+        "shape": [
+          128
+        ],
+        "dtype": "int32",
+        "size": 128,
+        "min": 64.0,
+        "max": 64.0,
+        "mean": 64.0,
+        "std": 0.0,
+        "abs_max": 64.0,
+        "nonzero_count": 128,
+        "allzero": false,
+        "constant": true,
+        "nan_count": 0,
+        "inf_count": 0
+      },
+      "raw_stats": {
+        "shape": [
+          128,
+          3584
+        ],
+        "dtype": "int16",
+        "size": 458752,
+        "min": -8984.0,
+        "max": 8843.0,
+        "mean": -1.9115513392857142,
+        "std": 866.275987319199,
+        "abs_max": 8984.0,
+        "nonzero_count": 458496,
+        "allzero": false,
+        "constant": false,
+        "nan_count": 0,
+        "inf_count": 0
+      },
+      "dequant_stats": {
+        "shape": [
+          128,
+          3584
+        ],
+        "dtype": "float32",
+        "size": 458752,
+        "min": -0.5446544885635376,
+        "max": 0.5361064076423645,
+        "mean": -0.00011588769120862707,
+        "std": 0.05251793563365936,
+        "abs_max": 0.5446544885635376,
+        "nonzero_count": 458496,
+        "allzero": false,
+        "constant": false,
+        "nan_count": 0,
+        "inf_count": 0
+      },
+      "delta_stats": {
+        "shape": [
+          128,
+          3584
+        ],
+        "dtype": "float32",
+        "size": 458752,
+        "min": 0.0,
+        "max": 0.0,
+        "mean": 0.0,
+        "std": 0.0,
+        "abs_max": 0.0,
+        "nonzero_count": 0,
+        "allzero": true,
+        "constant": true,
+        "nan_count": 0,
+        "inf_count": 0
+      },
+      "delta_norm": 0.0,
+      "delta_abs_max": 0.0
+    },
+    {
+      "variant": "constant_127_positions",
+      "positions_stats": {
+        "shape": [
+          128
+        ],
+        "dtype": "int32",
+        "size": 128,
+        "min": 127.0,
+        "max": 127.0,
+        "mean": 127.0,
+        "std": 0.0,
+        "abs_max": 127.0,
+        "nonzero_count": 128,
+        "allzero": false,
+        "constant": true,
+        "nan_count": 0,
+        "inf_count": 0
+      },
+      "raw_stats": {
+        "shape": [
+          128,
+          3584
+        ],
+        "dtype": "int16",
+        "size": 458752,
+        "min": -8984.0,
+        "max": 8843.0,
+        "mean": -1.9115513392857142,
+        "std": 866.275987319199,
+        "abs_max": 8984.0,
+        "nonzero_count": 458496,
+        "allzero": false,
+        "constant": false,
+        "nan_count": 0,
+        "inf_count": 0
+      },
+      "dequant_stats": {
+        "shape": [
+          128,
+          3584
+        ],
+        "dtype": "float32",
+        "size": 458752,
+        "min": -0.5446544885635376,
+        "max": 0.5361064076423645,
+        "mean": -0.00011588769120862707,
+        "std": 0.05251793563365936,
+        "abs_max": 0.5446544885635376,
+        "nonzero_count": 458496,
+        "allzero": false,
+        "constant": false,
+        "nan_count": 0,
+        "inf_count": 0
+      },
+      "delta_stats": {
+        "shape": [
+          128,
+          3584
+        ],
+        "dtype": "float32",
+        "size": 458752,
+        "min": 0.0,
+        "max": 0.0,
+        "mean": 0.0,
+        "std": 0.0,
+        "abs_max": 0.0,
+        "nonzero_count": 0,
+        "allzero": true,
+        "constant": true,
+        "nan_count": 0,
+        "inf_count": 0
+      },
+      "delta_norm": 0.0,
+      "delta_abs_max": 0.0
+    },
+    {
+      "variant": "sparse_index_000_value_127",
+      "positions_stats": {
+        "shape": [
+          128
+        ],
+        "dtype": "int32",
+        "size": 128,
+        "min": 0.0,
+        "max": 127.0,
+        "mean": 0.9921875,
+        "std": 11.181385265916015,
+        "abs_max": 127.0,
+        "nonzero_count": 1,
+        "allzero": false,
+        "constant": false,
+        "nan_count": 0,
+        "inf_count": 0
+      },
+      "raw_stats": {
+        "shape": [
+          128,
+          3584
+        ],
+        "dtype": "int16",
+        "size": 458752,
+        "min": -9087.0,
+        "max": 8925.0,
+        "mean": -1.7505427769252233,
+        "std": 872.8379532468693,
+        "abs_max": 9087.0,
+        "nonzero_count": 458371,
+        "allzero": false,
+        "constant": false,
+        "nan_count": 0,
+        "inf_count": 0
+      },
+      "dequant_stats": {
+        "shape": [
+          128,
+          3584
+        ],
+        "dtype": "float32",
+        "size": 458752,
+        "min": -0.5508988499641418,
+        "max": 0.5410776138305664,
+        "mean": -0.0001061265284079127,
+        "std": 0.052915751934051514,
+        "abs_max": 0.5508988499641418,
+        "nonzero_count": 458371,
+        "allzero": false,
+        "constant": false,
+        "nan_count": 0,
+        "inf_count": 0
+      },
+      "delta_stats": {
+        "shape": [
+          128,
+          3584
+        ],
+        "dtype": "float32",
+        "size": 458752,
+        "min": -0.006244361400604248,
+        "max": 0.00588061660528183,
+        "mean": 9.761128239915706e-06,
+        "std": 0.000811523525044322,
+        "abs_max": 0.006244361400604248,
+        "nonzero_count": 438118,
+        "allzero": false,
+        "constant": false,
+        "nan_count": 0,
+        "inf_count": 0
+      },
+      "delta_norm": 0.5497143268585205,
+      "delta_abs_max": 0.006244361400604248
+    },
+    {
+      "variant": "sparse_index_001_value_127",
+      "positions_stats": {
+        "shape": [
+          128
+        ],
+        "dtype": "int32",
+        "size": 128,
+        "min": 0.0,
+        "max": 127.0,
+        "mean": 0.9921875,
+        "std": 11.181385265916015,
+        "abs_max": 127.0,
+        "nonzero_count": 1,
+        "allzero": false,
+        "constant": false,
+        "nan_count": 0,
+        "inf_count": 0
+      },
+      "raw_stats": {
+        "shape": [
+          128,
+          3584
+        ],
+        "dtype": "int16",
+        "size": 458752,
+        "min": -9087.0,
+        "max": 8925.0,
+        "mean": -1.7505427769252233,
+        "std": 872.8379532468693,
+        "abs_max": 9087.0,
+        "nonzero_count": 458371,
+        "allzero": false,
+        "constant": false,
+        "nan_count": 0,
+        "inf_count": 0
+      },
+      "dequant_stats": {
+        "shape": [
+          128,
+          3584
+        ],
+        "dtype": "float32",
+        "size": 458752,
+        "min": -0.5508988499641418,
+        "max": 0.5410776138305664,
+        "mean": -0.0001061265284079127,
+        "std": 0.052915751934051514,
+        "abs_max": 0.5508988499641418,
+        "nonzero_count": 458371,
+        "allzero": false,
+        "constant": false,
+        "nan_count": 0,
+        "inf_count": 0
+      },
+      "delta_stats": {
+        "shape": [
+          128,
+          3584
+        ],
+        "dtype": "float32",
+        "size": 458752,
+        "min": -0.006244361400604248,
+        "max": 0.00588061660528183,
+        "mean": 9.761128239915706e-06,
+        "std": 0.000811523525044322,
+        "abs_max": 0.006244361400604248,
+        "nonzero_count": 438118,
+        "allzero": false,
+        "constant": false,
+        "nan_count": 0,
+        "inf_count": 0
+      },
+      "delta_norm": 0.5497143268585205,
+      "delta_abs_max": 0.006244361400604248
+    },
+    {
+      "variant": "sparse_index_002_value_127",
+      "positions_stats": {
+        "shape": [
+          128
+        ],
+        "dtype": "int32",
+        "size": 128,
+        "min": 0.0,
+        "max": 127.0,
+        "mean": 0.9921875,
+        "std": 11.181385265916015,
+        "abs_max": 127.0,
+        "nonzero_count": 1,
+        "allzero": false,
+        "constant": false,
+        "nan_count": 0,
+        "inf_count": 0
+      },
+      "raw_stats": {
+        "shape": [
+          128,
+          3584
+        ],
+        "dtype": "int16",
+        "size": 458752,
+        "min": -9087.0,
+        "max": 8925.0,
+        "mean": -1.7505427769252233,
+        "std": 872.8379532468693,
+        "abs_max": 9087.0,
+        "nonzero_count": 458371,
+        "allzero": false,
+        "constant": false,
+        "nan_count": 0,
+        "inf_count": 0
+      },
+      "dequant_stats": {
+        "shape": [
+          128,
+          3584
+        ],
+        "dtype": "float32",
+        "size": 458752,
+        "min": -0.5508988499641418,
+        "max": 0.5410776138305664,
+        "mean": -0.0001061265284079127,
+        "std": 0.052915751934051514,
+        "abs_max": 0.5508988499641418,
+        "nonzero_count": 458371,
+        "allzero": false,
+        "constant": false,
+        "nan_count": 0,
+        "inf_count": 0
+      },
+      "delta_stats": {
+        "shape": [
+          128,
+          3584
+        ],
+        "dtype": "float32",
+        "size": 458752,
+        "min": -0.006244361400604248,
+        "max": 0.00588061660528183,
+        "mean": 9.761128239915706e-06,
+        "std": 0.000811523525044322,
+        "abs_max": 0.006244361400604248,
+        "nonzero_count": 438118,
+        "allzero": false,
+        "constant": false,
+        "nan_count": 0,
+        "inf_count": 0
+      },
+      "delta_norm": 0.5497143268585205,
+      "delta_abs_max": 0.006244361400604248
+    },
+    {
+      "variant": "sparse_index_004_value_127",
+      "positions_stats": {
+        "shape": [
+          128
+        ],
+        "dtype": "int32",
+        "size": 128,
+        "min": 0.0,
+        "max": 127.0,
+        "mean": 0.9921875,
+        "std": 11.181385265916015,
+        "abs_max": 127.0,
+        "nonzero_count": 1,
+        "allzero": false,
+        "constant": false,
+        "nan_count": 0,
+        "inf_count": 0
+      },
+      "raw_stats": {
+        "shape": [
+          128,
+          3584
+        ],
+        "dtype": "int16",
+        "size": 458752,
+        "min": -9087.0,
+        "max": 8925.0,
+        "mean": -1.7505427769252233,
+        "std": 872.8379532468693,
+        "abs_max": 9087.0,
+        "nonzero_count": 458371,
+        "allzero": false,
+        "constant": false,
+        "nan_count": 0,
+        "inf_count": 0
+      },
+      "dequant_stats": {
+        "shape": [
+          128,
+          3584
+        ],
+        "dtype": "float32",
+        "size": 458752,
+        "min": -0.5508988499641418,
+        "max": 0.5410776138305664,
+        "mean": -0.0001061265284079127,
+        "std": 0.052915751934051514,
+        "abs_max": 0.5508988499641418,
+        "nonzero_count": 458371,
+        "allzero": false,
+        "constant": false,
+        "nan_count": 0,
+        "inf_count": 0
+      },
+      "delta_stats": {
+        "shape": [
+          128,
+          3584
+        ],
+        "dtype": "float32",
+        "size": 458752,
+        "min": -0.006244361400604248,
+        "max": 0.00588061660528183,
+        "mean": 9.761128239915706e-06,
+        "std": 0.000811523525044322,
+        "abs_max": 0.006244361400604248,
+        "nonzero_count": 438118,
+        "allzero": false,
+        "constant": false,
+        "nan_count": 0,
+        "inf_count": 0
+      },
+      "delta_norm": 0.5497143864631653,
+      "delta_abs_max": 0.006244361400604248
+    },
+    {
+      "variant": "sparse_index_008_value_127",
+      "positions_stats": {
+        "shape": [
+          128
+        ],
+        "dtype": "int32",
+        "size": 128,
+        "min": 0.0,
+        "max": 127.0,
+        "mean": 0.9921875,
+        "std": 11.181385265916015,
+        "abs_max": 127.0,
+        "nonzero_count": 1,
+        "allzero": false,
+        "constant": false,
+        "nan_count": 0,
+        "inf_count": 0
+      },
+      "raw_stats": {
+        "shape": [
+          128,
+          3584
+        ],
+        "dtype": "int16",
+        "size": 458752,
+        "min": -9087.0,
+        "max": 8925.0,
+        "mean": -1.7505427769252233,
+        "std": 872.8379532468693,
+        "abs_max": 9087.0,
+        "nonzero_count": 458371,
+        "allzero": false,
+        "constant": false,
+        "nan_count": 0,
+        "inf_count": 0
+      },
+      "dequant_stats": {
+        "shape": [
+          128,
+          3584
+        ],
+        "dtype": "float32",
+        "size": 458752,
+        "min": -0.5508988499641418,
+        "max": 0.5410776138305664,
+        "mean": -0.0001061265284079127,
+        "std": 0.052915751934051514,
+        "abs_max": 0.5508988499641418,
+        "nonzero_count": 458371,
+        "allzero": false,
+        "constant": false,
+        "nan_count": 0,
+        "inf_count": 0
+      },
+      "delta_stats": {
+        "shape": [
+          128,
+          3584
+        ],
+        "dtype": "float32",
+        "size": 458752,
+        "min": -0.006244361400604248,
+        "max": 0.00588061660528183,
+        "mean": 9.761128239915706e-06,
+        "std": 0.000811523525044322,
+        "abs_max": 0.006244361400604248,
+        "nonzero_count": 438118,
+        "allzero": false,
+        "constant": false,
+        "nan_count": 0,
+        "inf_count": 0
+      },
+      "delta_norm": 0.5497143268585205,
+      "delta_abs_max": 0.006244361400604248
+    },
+    {
+      "variant": "sparse_index_016_value_127",
+      "positions_stats": {
+        "shape": [
+          128
+        ],
+        "dtype": "int32",
+        "size": 128,
+        "min": 0.0,
+        "max": 127.0,
+        "mean": 0.9921875,
+        "std": 11.181385265916015,
+        "abs_max": 127.0,
+        "nonzero_count": 1,
+        "allzero": false,
+        "constant": false,
+        "nan_count": 0,
+        "inf_count": 0
+      },
+      "raw_stats": {
+        "shape": [
+          128,
+          3584
+        ],
+        "dtype": "int16",
+        "size": 458752,
+        "min": -9087.0,
+        "max": 8925.0,
+        "mean": -1.7505427769252233,
+        "std": 872.8379532468693,
+        "abs_max": 9087.0,
+        "nonzero_count": 458371,
+        "allzero": false,
+        "constant": false,
+        "nan_count": 0,
+        "inf_count": 0
+      },
+      "dequant_stats": {
+        "shape": [
+          128,
+          3584
+        ],
+        "dtype": "float32",
+        "size": 458752,
+        "min": -0.5508988499641418,
+        "max": 0.5410776138305664,
+        "mean": -0.0001061265284079127,
+        "std": 0.052915751934051514,
+        "abs_max": 0.5508988499641418,
+        "nonzero_count": 458371,
+        "allzero": false,
+        "constant": false,
+        "nan_count": 0,
+        "inf_count": 0
+      },
+      "delta_stats": {
+        "shape": [
+          128,
+          3584
+        ],
+        "dtype": "float32",
+        "size": 458752,
+        "min": -0.006244361400604248,
+        "max": 0.00588061660528183,
+        "mean": 9.761128239915706e-06,
+        "std": 0.000811523525044322,
+        "abs_max": 0.006244361400604248,
+        "nonzero_count": 438118,
+        "allzero": false,
+        "constant": false,
+        "nan_count": 0,
+        "inf_count": 0
+      },
+      "delta_norm": 0.5497143864631653,
+      "delta_abs_max": 0.006244361400604248
+    },
+    {
+      "variant": "sparse_index_032_value_127",
+      "positions_stats": {
+        "shape": [
+          128
+        ],
+        "dtype": "int32",
+        "size": 128,
+        "min": 0.0,
+        "max": 127.0,
+        "mean": 0.9921875,
+        "std": 11.181385265916015,
+        "abs_max": 127.0,
+        "nonzero_count": 1,
+        "allzero": false,
+        "constant": false,
+        "nan_count": 0,
+        "inf_count": 0
+      },
+      "raw_stats": {
+        "shape": [
+          128,
+          3584
+        ],
+        "dtype": "int16",
+        "size": 458752,
+        "min": -9087.0,
+        "max": 8925.0,
+        "mean": -1.7505427769252233,
+        "std": 872.8379532468693,
+        "abs_max": 9087.0,
+        "nonzero_count": 458371,
+        "allzero": false,
+        "constant": false,
+        "nan_count": 0,
+        "inf_count": 0
+      },
+      "dequant_stats": {
+        "shape": [
+          128,
+          3584
+        ],
+        "dtype": "float32",
+        "size": 458752,
+        "min": -0.5508988499641418,
+        "max": 0.5410776138305664,
+        "mean": -0.0001061265284079127,
+        "std": 0.052915751934051514,
+        "abs_max": 0.5508988499641418,
+        "nonzero_count": 458371,
+        "allzero": false,
+        "constant": false,
+        "nan_count": 0,
+        "inf_count": 0
+      },
+      "delta_stats": {
+        "shape": [
+          128,
+          3584
+        ],
+        "dtype": "float32",
+        "size": 458752,
+        "min": -0.006244361400604248,
+        "max": 0.00588061660528183,
+        "mean": 9.761128239915706e-06,
+        "std": 0.000811523525044322,
+        "abs_max": 0.006244361400604248,
+        "nonzero_count": 438118,
+        "allzero": false,
+        "constant": false,
+        "nan_count": 0,
+        "inf_count": 0
+      },
+      "delta_norm": 0.5497143268585205,
+      "delta_abs_max": 0.006244361400604248
+    },
+    {
+      "variant": "sparse_index_064_value_127",
+      "positions_stats": {
+        "shape": [
+          128
+        ],
+        "dtype": "int32",
+        "size": 128,
+        "min": 0.0,
+        "max": 127.0,
+        "mean": 0.9921875,
+        "std": 11.181385265916015,
+        "abs_max": 127.0,
+        "nonzero_count": 1,
+        "allzero": false,
+        "constant": false,
+        "nan_count": 0,
+        "inf_count": 0
+      },
+      "raw_stats": {
+        "shape": [
+          128,
+          3584
+        ],
+        "dtype": "int16",
+        "size": 458752,
+        "min": -9087.0,
+        "max": 8925.0,
+        "mean": -1.7505427769252233,
+        "std": 872.8379532468693,
+        "abs_max": 9087.0,
+        "nonzero_count": 458371,
+        "allzero": false,
+        "constant": false,
+        "nan_count": 0,
+        "inf_count": 0
+      },
+      "dequant_stats": {
+        "shape": [
+          128,
+          3584
+        ],
+        "dtype": "float32",
+        "size": 458752,
+        "min": -0.5508988499641418,
+        "max": 0.5410776138305664,
+        "mean": -0.0001061265284079127,
+        "std": 0.052915751934051514,
+        "abs_max": 0.5508988499641418,
+        "nonzero_count": 458371,
+        "allzero": false,
+        "constant": false,
+        "nan_count": 0,
+        "inf_count": 0
+      },
+      "delta_stats": {
+        "shape": [
+          128,
+          3584
+        ],
+        "dtype": "float32",
+        "size": 458752,
+        "min": -0.006244361400604248,
+        "max": 0.00588061660528183,
+        "mean": 9.761128239915706e-06,
+        "std": 0.000811523525044322,
+        "abs_max": 0.006244361400604248,
+        "nonzero_count": 438118,
+        "allzero": false,
+        "constant": false,
+        "nan_count": 0,
+        "inf_count": 0
+      },
+      "delta_norm": 0.5497145652770996,
+      "delta_abs_max": 0.006244361400604248
+    },
+    {
+      "variant": "sparse_index_127_value_127",
+      "positions_stats": {
+        "shape": [
+          128
+        ],
+        "dtype": "int32",
+        "size": 128,
+        "min": 0.0,
+        "max": 127.0,
+        "mean": 0.9921875,
+        "std": 11.181385265916015,
+        "abs_max": 127.0,
+        "nonzero_count": 1,
+        "allzero": false,
+        "constant": false,
+        "nan_count": 0,
+        "inf_count": 0
+      },
+      "raw_stats": {
+        "shape": [
+          128,
+          3584
+        ],
+        "dtype": "int16",
+        "size": 458752,
+        "min": -9087.0,
+        "max": 8925.0,
+        "mean": -1.7505427769252233,
+        "std": 872.8379532468693,
+        "abs_max": 9087.0,
+        "nonzero_count": 458371,
+        "allzero": false,
+        "constant": false,
+        "nan_count": 0,
+        "inf_count": 0
+      },
+      "dequant_stats": {
+        "shape": [
+          128,
+          3584
+        ],
+        "dtype": "float32",
+        "size": 458752,
+        "min": -0.5508988499641418,
+        "max": 0.5410776138305664,
+        "mean": -0.00010612653568387032,
+        "std": 0.052915751934051514,
+        "abs_max": 0.5508988499641418,
+        "nonzero_count": 458371,
+        "allzero": false,
+        "constant": false,
+        "nan_count": 0,
+        "inf_count": 0
+      },
+      "delta_stats": {
+        "shape": [
+          128,
+          3584
+        ],
+        "dtype": "float32",
+        "size": 458752,
+        "min": -0.006244361400604248,
+        "max": 0.00588061660528183,
+        "mean": 9.761128239915706e-06,
+        "std": 0.000811523525044322,
+        "abs_max": 0.006244361400604248,
+        "nonzero_count": 438118,
+        "allzero": false,
+        "constant": false,
+        "nan_count": 0,
+        "inf_count": 0
+      },
+      "delta_norm": 0.5497145652770996,
+      "delta_abs_max": 0.006244361400604248
+    }
+  ]
+}

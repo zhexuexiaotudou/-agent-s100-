@@ -1,6 +1,7 @@
 English| [简体中文](./README_cn.md)
 
-# Getting Started with Hobot Dnn
+Getting Started with Hobot Dnn
+=======
 
 The repository contains four parts: dnn_node, dnn_node_sample, dnn_node_example, and dnn_benchmark_example. Users can implement model inference on the RDK X3 development board using the BPU processor, as well as evaluate model performance.
 

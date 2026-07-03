@@ -954,3 +954,4 @@ try {
   $notifyIcon.Visible = $false
   $notifyIcon.Dispose()
 }
+

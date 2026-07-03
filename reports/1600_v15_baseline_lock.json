@@ -1,0 +1,154 @@
+{
+  "schema_version": "dream7b_s100p_v15_1600_v15_baseline_lock",
+  "created_at_utc": "2026-07-03T09:13:02.743580+00:00",
+  "run_commands": [
+    "C:\\Users\\zhexu\\AppData\\Local\\Python\\pythoncore-3.14-64\\python.exe tools\\build_v15_research_thread.py --root ."
+  ],
+  "host_environment": {
+    "local_platform": "Windows-11-10.0.26200-SP0",
+    "python": "3.14.3 (tags/v3.14.3:323c59a, Feb  3 2026, 16:04:56) [MSC v.1944 64 bit (AMD64)]"
+  },
+  "git": {
+    "returncode": 128,
+    "stdout": "",
+    "stderr": "fatal: not a git repository (or any of the parent directories): .git"
+  },
+  "input_artifacts": [
+    {
+      "path": "evidence_for_gptpro/dream7b_s100p_v14_for_gptpro_20260703_141021.zip",
+      "exists": true,
+      "size_bytes": 59948886,
+      "sha256": "4d6c0ccd1b2d09e5bcbd506ba5efdd14c5cf071e947978855457e9d2e314e8d0"
+    },
+    {
+      "path": "01_final_evidence/dream7b_s100p_gate_packet_v14.json",
+      "exists": true,
+      "size_bytes": 2418,
+      "sha256": "7aaf34f1b650ea6c809f681e03832f72d9a2466d9d198a366d733c770077da2e"
+    }
+  ],
+  "output_artifacts": [
+    {
+      "path": "reports/1600_v15_baseline_lock.json",
+      "exists": true,
+      "size_bytes": 6018,
+      "sha256": "50c4b69527a362d3b3af5b2fdd2b3626cc40fb8c7e4077f89e6ea330ebaabfcf"
+    },
+    {
+      "path": "reports/1600_v15_baseline_lock.md",
+      "exists": true,
+      "size_bytes": 200,
+      "sha256": "e6ed4bca5f0035ac6ddf3aff7181612ce7ab8c49d1557a2c69cee8d52cbb89fe"
+    }
+  ],
+  "blocking_or_failure_reasons": [],
+  "next_minimal_experiments": [],
+  "safety": {
+    "generation_quality_run": false,
+    "product_routes_18888_18889_touched": false,
+    "dream7b_frontend_openclaw_traffic_touched": false
+  },
+  "v14_zip": {
+    "path": "F:\\Project\\Digua\\evidence_for_gptpro\\dream7b_s100p_v14_for_gptpro_20260703_141021.zip",
+    "exists": true,
+    "size_bytes": 59948886,
+    "sha256": "4d6c0ccd1b2d09e5bcbd506ba5efdd14c5cf071e947978855457e9d2e314e8d0",
+    "testzip_bad_member": null,
+    "member_count": 207,
+    "manifest_entries": 205,
+    "manifest_missing": [],
+    "manifest_bad_size": [],
+    "manifest_bad_sha256": []
+  },
+  "v14_gate_packet": {
+    "schema_version": "dream7b_s100p_gate_packet_v14",
+    "created_at_utc": "2026-07-03T06:10:21.353931+00:00",
+    "verdict": "B_seg00_01_exact_comparator_still_unresolved_compiler_artifacts_required",
+    "generation_quality_run": false,
+    "product_routes_18888_18889_touched": false,
+    "dream7b_frontend_openclaw_traffic_touched": false,
+    "current_full_bpu_path": "falsified_against_HF_PyTorch_BF16_logits_truth",
+    "v13_verdict": "all_bpu_and_hybrid_candidates_fail_logits",
+    "seg00_01": {
+      "exact_dump": "pass",
+      "gathernd_verdict": "gathernd_matches_hf_embedding_only_after_unacceptable_affine_fit",
+      "position_verdict": "position_input_contract_suspicious",
+      "hf_comparator_verdict": "exact_comparator_unresolved_missing_mul_position_constants",
+      "compiler_artifacts": "seq16_hbo_available_seq128_b1_source_graph_missing",
+      "corrected_recompile": "not_run_compiler_unavailable"
+    },
+    "bpu_island_diagnostic_calibration": {
+      "verdict": "runtime_timeout_no_rows_after_model_load",
+      "deployable_pass": [],
+      "diagnostic_pass": []
+    },
+    "gguf_reference": "gguf_f16_blocked_no_artifact",
+    "bf16_truth_hashes": {
+      "zeros": {
+        "path": "evidence/full_truth_bf16_v14/zeros/full_truth_logits.npy",
+        "exists": true,
+        "size_bytes": 608384,
+        "sha256": "661ae552e7e368d829971c052f36bca50d0ba7f3b36e32c0b40d23179b77d56c"
+      },
+      "ramp": {
+        "path": "evidence/full_truth_bf16_v14/ramp/full_truth_logits.npy",
+        "exists": true,
+        "size_bytes": 608384,
+        "sha256": "c5ba9211687cd11d69e6825ae32e2e253db9f3ddbe11d9df4a72b2e790a5c154"
+      },
+      "short_chinese_prompt_padded": {
+        "path": "evidence/full_truth_bf16_v14/short_chinese_prompt_padded/full_truth_logits.npy",
+        "exists": true,
+        "size_bytes": 608384,
+        "sha256": "e46398de01f01c3646ca333aee4bce5e89705190d79290ac34ae6e40b3d6a5a6"
+      }
+    },
+    "claim_boundary": "The tested Dream7B S100P full-BPU and hybrid BPU-island routes remain logits-invalid. v14 closes evidence around seg00_01 but cannot build an exact comparator/recompile without compiler source graph and quant metadata.",
+    "commands": [
+      "C:\\Users\\zhexu\\AppData\\Local\\Python\\pythoncore-3.14-64\\python.exe tools\\build_v14_research_thread.py --root ."
+    ],
+    "strict_thresholds": {
+      "relative_l2_max": 0.1,
+      "pearson_min": 0.95,
+      "cosine_min": 0.95
+    }
+  },
+  "required_reports": {
+    "1420_seg00_01_exact_intermediate_dump": {
+      "path": "reports/1420_seg00_01_exact_intermediate_dump.json",
+      "exists": true,
+      "size_bytes": 10405,
+      "sha256": "303c23376383f23ef10f0c42231dbee0d245aba01edbd1cd7806da6e642e9b9a"
+    },
+    "1430_gathernd_embedding_quant_audit": {
+      "path": "reports/1430_gathernd_embedding_quant_audit.json",
+      "exists": true,
+      "size_bytes": 35334,
+      "sha256": "95ee83f8b5dd8bd9d80b263cd07b1d6f4ad6c453f8746a047efaa28a01d1df53"
+    },
+    "1440_seg00_01_position_input_audit": {
+      "path": "reports/1440_seg00_01_position_input_audit.json",
+      "exists": true,
+      "size_bytes": 16749,
+      "sha256": "337f366184cb2ae162b75799506f68b8e083aa0e0fe7eeab92fc02970c817067"
+    },
+    "1450_seg00_01_hf_equivalent_comparator": {
+      "path": "reports/1450_seg00_01_hf_equivalent_comparator.json",
+      "exists": true,
+      "size_bytes": 23197,
+      "sha256": "67e34a343c95096908e5f029104c75f8df00c0cc552566691e560c135a39f950"
+    },
+    "1460_compiler_graph_artifact_search": {
+      "path": "reports/1460_compiler_graph_artifact_search.json",
+      "exists": true,
+      "size_bytes": 34421,
+      "sha256": "6612a03ec0f4cb7a32884de41f0a305e8348894fee3123ce8131df131f8a026b"
+    }
+  },
+  "baseline_facts": [
+    "full-BPU path has been falsified against HF/PyTorch BF16 logits truth",
+    "v14 narrowed the strongest root-cause locus to seg00_01 or its input/embedding/position/quant graph contract",
+    "v14 still lacks hbir.mul output, add input-1, source graph, and quant table",
+    "generation/product routes remain locked"
+  ]
+}

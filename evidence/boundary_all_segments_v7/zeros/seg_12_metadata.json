@@ -1,0 +1,77 @@
+{
+  "case_id": "zeros",
+  "segment": 12,
+  "raw_path": "evidence/boundary_all_segments_v7/zeros/seg_12_raw_output.npy",
+  "dequant_path": "evidence/boundary_all_segments_v7/zeros/seg_12_output.npy",
+  "model_name": "dream_segment_12_13",
+  "hbm_path": "/mnt/nas/openclaw/models/dream7b-hbm/seq128-b1-lmheadq16-lasttoken/seg12_13/dream7b_segment_12_13_seq128_q8.hbm",
+  "quant_metadata": {
+    "available": true,
+    "repr": "<hbm_runtime.HB_HBMRuntime.QuantParams object at 0xffff80bea870>",
+    "scale": [
+      0.0010414961725473404
+    ],
+    "scale_first": 0.0010414961725473404,
+    "zero_point": [
+      0.0
+    ]
+  },
+  "raw_stats": {
+    "shape": [
+      128,
+      3584
+    ],
+    "dtype": "int16",
+    "size": 458752,
+    "min": -32768.0,
+    "max": 32767.0,
+    "mean": 372.8125893729074,
+    "std": 17051.862754122467,
+    "abs_max": 32767.0,
+    "nonzero_count": 458730,
+    "constant": false,
+    "allzero": false,
+    "nan_count": 0,
+    "inf_count": 0,
+    "count_pos_32767": 12257,
+    "count_neg_32768": 10697,
+    "count_abs_19807": 13,
+    "frac_pos_32767": 0.0267181396484375,
+    "frac_neg_32768": 0.023317609514508928,
+    "frac_abs_19807": 2.833775111607143e-05,
+    "p0": -32768.0,
+    "p1": -32768.0,
+    "p5": -29440.0,
+    "p50": 424.0,
+    "p95": 30255.0,
+    "p99": 32767.0,
+    "p100": 32767.0
+  },
+  "dequant_stats": {
+    "shape": [
+      128,
+      3584
+    ],
+    "dtype": "float32",
+    "size": 458752,
+    "min": -34.12774658203125,
+    "max": 34.126705169677734,
+    "mean": 0.3882828652858734,
+    "std": 17.759449005126953,
+    "abs_max": 34.12774658203125,
+    "nonzero_count": 458730,
+    "constant": false,
+    "allzero": false,
+    "nan_count": 0,
+    "inf_count": 0,
+    "p0": -34.12774658203125,
+    "p1": -34.12774658203125,
+    "p5": -30.66164779663086,
+    "p50": 0.44159436225891113,
+    "p95": 31.510467529296875,
+    "p99": 34.126705169677734,
+    "p100": 34.126705169677734
+  },
+  "raw_sha256": "d16c98dc30e8de20a239d9dba001f458a2eff6f552621c046745df37a38ff85e",
+  "dequant_sha256": "103bc913b2fad003508e60a3eb6d087f85da36a7daf6b4647388f83530a4bd76"
+}

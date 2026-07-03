@@ -1,0 +1,65 @@
+{
+  "case_id": "ramp",
+  "bpu_boundary_segment": 20,
+  "hf_suffix_layers": [
+    21,
+    22,
+    23,
+    24,
+    25,
+    26,
+    27
+  ],
+  "input_hidden_path": "evidence/bpu_suffix_boundaries_v11/ramp/seg_20_output.npy",
+  "input_hidden_sha256": "804ea9da6664ec1cfea63a72e5cb5e45c313c22ad33e94fd53044cca019979cf",
+  "input_hidden_stats": {
+    "shape": [
+      128,
+      3584
+    ],
+    "dtype": "float32",
+    "size": 458752,
+    "min": -15.748214721679688,
+    "max": 23.074800491333008,
+    "mean": 0.022539827972650528,
+    "std": 2.259937286376953,
+    "abs_max": 23.074800491333008,
+    "nonzero_count": 458682,
+    "allzero": false,
+    "constant": false,
+    "nan_count": 0,
+    "inf_count": 0
+  },
+  "logits_path": "evidence/hf_suffix_route_v11/ramp/seg_20_to_logits/suffix_logits.npy",
+  "logits_sha256": "1ba7be066dc76c84f2632ee09e425faf20493aee87b862d8865af30f7bd6c763",
+  "logits_stats": {
+    "shape": [
+      152064
+    ],
+    "dtype": "float32",
+    "size": 152064,
+    "min": -6.5625,
+    "max": 8.8125,
+    "mean": -2.422563076019287,
+    "std": 1.68817138671875,
+    "abs_max": 8.8125,
+    "nonzero_count": 152064,
+    "allzero": false,
+    "constant": false,
+    "nan_count": 0,
+    "inf_count": 0
+  },
+  "top10": [
+    1103,
+    4102,
+    482,
+    594,
+    300,
+    638,
+    809,
+    6,
+    5380,
+    1515
+  ],
+  "elapsed_seconds": 279.517
+}

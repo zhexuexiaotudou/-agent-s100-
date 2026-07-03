@@ -1,0 +1,18 @@
+COMMAND: bash -lc compgen -c | grep -E '^(hrt|hb_|hbdk|hbm|hb_mapper)' | sort -u
+ENV_OVERRIDES: {}
+
+STDOUT:
+resize:  can't open terminal /dev/tty
+hb_dtb_tool
+hb_gpioinfo
+hb_monitor
+hb_pms
+hb_powerctl
+hb_st_server
+hb_switch_ion.sh
+hb_version
+hrt_model_exec
+hrt_ucp_monitor
+
+
+STDERR:

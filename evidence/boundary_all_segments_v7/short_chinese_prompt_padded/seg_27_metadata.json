@@ -1,0 +1,77 @@
+{
+  "case_id": "short_chinese_prompt_padded",
+  "segment": 27,
+  "raw_path": "evidence/boundary_all_segments_v7/short_chinese_prompt_padded/seg_27_raw_output.npy",
+  "dequant_path": "evidence/boundary_all_segments_v7/short_chinese_prompt_padded/seg_27_output.npy",
+  "model_name": "dream_segment_27_28_last_token_logits",
+  "hbm_path": "/mnt/nas/openclaw/models/dream7b-hbm/seq128-b1-lmheadq16-lasttoken/seg27_28/dream7b_segment_27_28_seq128_q8_lmheadq16_last_token_logits.hbm",
+  "quant_metadata": {
+    "available": true,
+    "repr": "<hbm_runtime.HB_HBMRuntime.QuantParams object at 0xffff737272f0>",
+    "scale": [
+      0.00025415877462364733
+    ],
+    "scale_first": 0.00025415877462364733,
+    "zero_point": [
+      0.0
+    ]
+  },
+  "raw_stats": {
+    "shape": [
+      1,
+      152064
+    ],
+    "dtype": "int16",
+    "size": 152064,
+    "min": 0.0,
+    "max": 0.0,
+    "mean": 0.0,
+    "std": 0.0,
+    "abs_max": 0.0,
+    "nonzero_count": 0,
+    "constant": true,
+    "allzero": true,
+    "nan_count": 0,
+    "inf_count": 0,
+    "count_pos_32767": 0,
+    "count_neg_32768": 0,
+    "count_abs_19807": 0,
+    "frac_pos_32767": 0.0,
+    "frac_neg_32768": 0.0,
+    "frac_abs_19807": 0.0,
+    "p0": 0.0,
+    "p1": 0.0,
+    "p5": 0.0,
+    "p50": 0.0,
+    "p95": 0.0,
+    "p99": 0.0,
+    "p100": 0.0
+  },
+  "dequant_stats": {
+    "shape": [
+      1,
+      152064
+    ],
+    "dtype": "float32",
+    "size": 152064,
+    "min": 0.0,
+    "max": 0.0,
+    "mean": 0.0,
+    "std": 0.0,
+    "abs_max": 0.0,
+    "nonzero_count": 0,
+    "constant": true,
+    "allzero": true,
+    "nan_count": 0,
+    "inf_count": 0,
+    "p0": 0.0,
+    "p1": 0.0,
+    "p5": 0.0,
+    "p50": 0.0,
+    "p95": 0.0,
+    "p99": 0.0,
+    "p100": 0.0
+  },
+  "raw_sha256": "f5984f81235af99ba68d00422604dff6513b2338cec45b8185958ed61386239e",
+  "dequant_sha256": "b5fed3b0480918775e26d833d03df3116a603d86f9e4431feb4669d32391efaf"
+}

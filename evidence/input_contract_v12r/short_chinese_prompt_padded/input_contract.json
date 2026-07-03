@@ -1,0 +1,319 @@
+{
+  "case_id": "short_chinese_prompt_padded",
+  "token_ids": {
+    "length": 128,
+    "first16": [
+      151643,
+      104859,
+      3837,
+      100644,
+      109944,
+      151645,
+      220,
+      16,
+      15,
+      2055,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0
+    ],
+    "last16": [
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0
+    ],
+    "sha256": "0ac63d3423886653b2a20642a0465449434db8821662320dba9b396d0a7ae1a7"
+  },
+  "position_ids": {
+    "length": 128,
+    "first16": [
+      0,
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7,
+      8,
+      9,
+      10,
+      11,
+      12,
+      13,
+      14,
+      15
+    ],
+    "last16": [
+      112,
+      113,
+      114,
+      115,
+      116,
+      117,
+      118,
+      119,
+      120,
+      121,
+      122,
+      123,
+      124,
+      125,
+      126,
+      127
+    ],
+    "policy": "0..127"
+  },
+  "attention_mask": {
+    "length": 128,
+    "first16": [
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1
+    ],
+    "last16": [
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1
+    ],
+    "policy": "explicit all-ones mask in v11 HF export unless case overrides"
+  },
+  "diffusion_mask_policy": "not used; logits-only canonical forward, no generation-quality diffusion loop",
+  "padding_policy": "semantic prompt padded with token id 0 to seq128",
+  "last_token_index": 127,
+  "case_kind": "semantic",
+  "tokenizer_sources": {
+    "tokenization_dream.py": {
+      "name": "tokenization_dream.py",
+      "path": "/mnt/nas/openclaw/models/dream7b-hf/tokenization_dream.py",
+      "exists": true,
+      "size_bytes": 14028,
+      "sha256": "1d7f04104fa673831f48256e3cd42cd0bbd1bddd801b4abea5c74cc47d98bdd2"
+    },
+    "tokenizer_config.json": {
+      "name": "tokenizer_config.json",
+      "path": "/mnt/nas/openclaw/models/dream7b-hf/tokenizer_config.json",
+      "exists": true,
+      "size_bytes": 7486,
+      "sha256": "b0e9c1a6299d8832a1362d6b24f007de8a2acfe0243d8a3a1d1b57aa8250f7ee"
+    },
+    "vocab.json": {
+      "name": "vocab.json",
+      "path": "/mnt/nas/openclaw/models/dream7b-hf/vocab.json",
+      "exists": true,
+      "size_bytes": 3383407,
+      "sha256": "87a257b04b17642a0688c98cd1df89c398bda4fee532d6f88b38a659ecb4ac8d"
+    },
+    "merges.txt": {
+      "name": "merges.txt",
+      "path": "/mnt/nas/openclaw/models/dream7b-hf/merges.txt",
+      "exists": true,
+      "size_bytes": 1671853,
+      "sha256": "8831e4f1a044471340f7c0a83d7bd71306a5b867e95fd870f74d0c5308a904d5"
+    }
+  },
+  "dream_config_sources": {
+    "config.json": {
+      "name": "config.json",
+      "path": "/mnt/nas/openclaw/models/dream7b-hf/config.json",
+      "exists": true,
+      "size_bytes": 927,
+      "sha256": "11afc7fe7a1881e73dcd70cca6868aaaf8eb89ad45ea5fc6426c3fb82dec9340"
+    },
+    "configuration_dream.py": {
+      "name": "configuration_dream.py",
+      "path": "/mnt/nas/openclaw/models/dream7b-hf/configuration_dream.py",
+      "exists": true,
+      "size_bytes": 3197,
+      "sha256": "24d038962ccf16361595494461000ec0c1b043653c7494d7fc835c96f121f0b9"
+    },
+    "modeling_dream.py": {
+      "name": "modeling_dream.py",
+      "path": "/mnt/nas/openclaw/models/dream7b-hf/modeling_dream.py",
+      "exists": true,
+      "size_bytes": 36763,
+      "sha256": "3166e789f0d69beb1f4fbdee2317953d1c1c3b9bc21479b109afc5dd059de5b3"
+    }
+  },
+  "bpu_runtime_input_tensor": {
+    "segment": 0,
+    "model_name": "dream_segment_00_01",
+    "input_0": {
+      "name": "_input_0",
+      "dtype": "int32",
+      "shape": [
+        1,
+        128
+      ],
+      "layout": "batch,seq token ids"
+    },
+    "input_1": {
+      "name": "_input_1",
+      "dtype": "int32",
+      "shape": [
+        128
+      ],
+      "layout": "seq position ids"
+    },
+    "source": "run_s100p_hbm_chain_dump_boundaries_v6.py"
+  },
+  "hf_model_input_tensor": {
+    "input_ids": {
+      "dtype": "torch.long",
+      "shape": [
+        1,
+        128
+      ]
+    },
+    "position_ids": {
+      "dtype": "torch.long",
+      "shape": [
+        1,
+        128
+      ]
+    },
+    "attention_mask": {
+      "dtype": "torch.bool",
+      "shape": [
+        1,
+        128
+      ]
+    },
+    "num_logits_to_keep": 1,
+    "source": "tools/export_hf_boundaries_repeat_v11.py"
+  },
+  "bpu_seg0_output_stats": {
+    "shape": [
+      128,
+      3584
+    ],
+    "dtype": "float32",
+    "size": 458752,
+    "min": -0.6131000518798828,
+    "max": 0.8125561475753784,
+    "mean": -0.00011516363883856684,
+    "std": 0.053335294127464294,
+    "abs_max": 0.8125561475753784,
+    "nonzero_count": 458480,
+    "constant": false,
+    "allzero": false,
+    "nan_count": 0,
+    "inf_count": 0,
+    "p0": -0.6131000518798828,
+    "p1": -0.12852488458156586,
+    "p5": -0.07772117853164673,
+    "p50": -6.062494503566995e-05,
+    "p95": 0.07687243074178696,
+    "p99": 0.12434176355600357,
+    "p100": 0.8125561475753784
+  },
+  "bpu_seg0_raw_stats": {
+    "shape": [
+      128,
+      3584
+    ],
+    "dtype": "int16",
+    "size": 458752,
+    "min": -10113.0,
+    "max": 13403.0,
+    "mean": -1.8996080671037947,
+    "std": 879.7582131700492,
+    "abs_max": 13403.0,
+    "nonzero_count": 458480,
+    "constant": false,
+    "allzero": false,
+    "nan_count": 0,
+    "inf_count": 0,
+    "count_pos_32767": 0,
+    "count_neg_32768": 0,
+    "count_abs_19807": 0,
+    "frac_pos_32767": 0.0,
+    "frac_neg_32768": 0.0,
+    "frac_abs_19807": 0.0,
+    "p0": -10113.0,
+    "p1": -2120.0,
+    "p5": -1282.0,
+    "p50": -1.0,
+    "p95": 1268.0,
+    "p99": 2051.0,
+    "p100": 13403.0
+  },
+  "hf_embedding_output_stats": {
+    "shape": [
+      128,
+      3584
+    ],
+    "dtype": "float32",
+    "size": 458752,
+    "min": -0.234375,
+    "max": 0.48828125,
+    "mean": -2.8683616619673558e-05,
+    "std": 0.014238351956009865,
+    "abs_max": 0.48828125,
+    "nonzero_count": 458752,
+    "allzero": false,
+    "constant": false,
+    "nan_count": 0,
+    "inf_count": 0
+  },
+  "hf_layer0_output_stats": {
+    "shape": [
+      128,
+      3584
+    ],
+    "dtype": "float32",
+    "size": 458752,
+    "min": -1.9375,
+    "max": 1.796875,
+    "mean": -0.0004556574858725071,
+    "std": 0.1927524358034134,
+    "abs_max": 1.9375,
+    "nonzero_count": 458255,
+    "allzero": false,
+    "constant": false,
+    "nan_count": 0,
+    "inf_count": 0
+  }
+}

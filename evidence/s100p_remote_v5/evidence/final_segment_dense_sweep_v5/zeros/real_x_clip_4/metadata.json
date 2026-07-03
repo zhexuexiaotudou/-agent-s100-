@@ -1,0 +1,110 @@
+{
+  "variant_id": "real_x_clip_4",
+  "why_included": "real seg26 hidden clipped to +/-4",
+  "input_path": "/mnt/nas/openclaw/reports/models/dream7b_s100p_v5_execution_20260701/evidence/final_segment_dense_sweep_v5/zeros/real_x_clip_4/input.npy",
+  "raw_output_path": "/mnt/nas/openclaw/reports/models/dream7b_s100p_v5_execution_20260701/evidence/final_segment_dense_sweep_v5/zeros/real_x_clip_4/raw_output.npy",
+  "dequant_logits_path": "/mnt/nas/openclaw/reports/models/dream7b_s100p_v5_execution_20260701/evidence/final_segment_dense_sweep_v5/zeros/real_x_clip_4/dequant_logits.npy",
+  "metadata_path": "/mnt/nas/openclaw/reports/models/dream7b_s100p_v5_execution_20260701/evidence/final_segment_dense_sweep_v5/zeros/real_x_clip_4/metadata.json",
+  "input_stats": {
+    "shape": [
+      128,
+      3584
+    ],
+    "dtype": "float32",
+    "size": 458752,
+    "min": -4.0,
+    "max": 4.0,
+    "mean": 0.001953887054696679,
+    "std": 3.9896481037139893,
+    "abs_max": 4.0,
+    "nonzero_count": 458751,
+    "allzero": false,
+    "constant": false,
+    "nan_count": 0,
+    "inf_count": 0
+  },
+  "run_status": "pass",
+  "runtime_exception": null,
+  "raw_output_stats": {
+    "shape": [
+      1,
+      152064
+    ],
+    "dtype": "int16",
+    "size": 152064,
+    "min": -17553.0,
+    "max": 25411.0,
+    "mean": 7976.964870054714,
+    "std": 3243.9829364508887,
+    "abs_max": 25411.0,
+    "nonzero_count": 152064,
+    "allzero": false,
+    "constant": false,
+    "nan_count": 0,
+    "inf_count": 0
+  },
+  "dequant_output_stats": {
+    "shape": [
+      152064
+    ],
+    "dtype": "float32",
+    "size": 152064,
+    "min": -17553.0,
+    "max": 25411.0,
+    "mean": 7976.96484375,
+    "std": 3243.983154296875,
+    "abs_max": 25411.0,
+    "nonzero_count": 152064,
+    "allzero": false,
+    "constant": false,
+    "nan_count": 0,
+    "inf_count": 0
+  },
+  "softmax": {
+    "entropy": 1.584061794918371e-13,
+    "normalized_entropy": 1.3275681018536254e-14,
+    "top1_probability": 0.9999999999999953
+  },
+  "top10_logits": [
+    {
+      "token": 85512,
+      "logit": 25411.0
+    },
+    {
+      "token": 45223,
+      "logit": 25378.0
+    },
+    {
+      "token": 76842,
+      "logit": 25292.0
+    },
+    {
+      "token": 74466,
+      "logit": 24181.0
+    },
+    {
+      "token": 82733,
+      "logit": 24096.0
+    },
+    {
+      "token": 33955,
+      "logit": 23850.0
+    },
+    {
+      "token": 54462,
+      "logit": 23710.0
+    },
+    {
+      "token": 71851,
+      "logit": 23038.0
+    },
+    {
+      "token": 95132,
+      "logit": 23020.0
+    },
+    {
+      "token": 22394,
+      "logit": 22862.0
+    }
+  ]
+}

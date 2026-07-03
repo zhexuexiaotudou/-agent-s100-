@@ -1,0 +1,82 @@
+{
+  "generated_at": "2026-06-22T19:03:52.608208+08:00",
+  "verdict": "blocked_dream7b_bpu_quality_logits_diagnostics",
+  "candidate_id": "seg27_28_lmheadq16_last_token_sentinel",
+  "ready": false,
+  "errors": [
+    "candidate_artifact_missing",
+    "candidate_manifest_not_verified",
+    "metrics_json_missing",
+    "argmax_agreement_below_threshold",
+    "top1_probability_below_threshold",
+    "top_probabilities_not_non_uniform"
+  ],
+  "summary": {
+    "argmax_agreement": 0.0,
+    "top1_probability": 0.0,
+    "non_uniform_top_probabilities": false,
+    "sample_count": 0,
+    "reference": "gguf"
+  },
+  "thresholds": {
+    "min_argmax_agreement": 0.8,
+    "min_top1_probability": 0.05,
+    "non_uniform_top_probabilities": true
+  },
+  "source": {
+    "rollback": {
+      "path": "tmp\\product_guardrail_snapshots\\dream7b_bpu_quality_rollback_report_latest.json",
+      "exists": true,
+      "loaded": true,
+      "verdict": "blocked_dream7b_bpu_quality_rollback_report",
+      "summary": {
+        "candidate_id": "seg27_28_lmheadq16_last_token_sentinel",
+        "rollback_ready": false,
+        "production_path_unchanged": true,
+        "service_restarted": false,
+        "overwrote_18888": false,
+        "seq16_baseline_deleted": false,
+        "candidate_artifact_present": false,
+        "candidate_manifest_verified": false,
+        "route_a_ready": true,
+        "gateway_backend": "diffuse-resident",
+        "candidate_remote_output_root": "/mnt/nas/openclaw/models/dream7b-hbm/bpu-quality-seq16-b4-lmheadq16-last-token"
+      },
+      "candidate_artifact_present": false,
+      "candidate_manifest_verified": false,
+      "production_path_unchanged": true
+    },
+    "metrics_json": null,
+    "metrics_loaded": false
+  },
+  "policy": {
+    "compile_started_by_this_probe": false,
+    "runtime_started_by_this_probe": false,
+    "service_restarted_by_this_probe": false,
+    "production_write_performed_by_this_probe": false,
+    "do_not_replace_18888": true,
+    "do_not_delete_seq16_baseline": true
+  },
+  "report_dir": "tmp\\product_guardrail_snapshots\\dream7b_bpu_quality_logits_diagnostics_20260622-190352",
+  "sync": {
+    "ok": true,
+    "remote_dir": "/mnt/nas/openclaw/reports/models/dream7b_bpu_quality_logits_diagnostics_20260622-190352",
+    "scp": {
+      "args": [
+        "scp.exe",
+        "-i",
+        "C:\\Users\\zhexu\\.ssh\\s100p_linkcheck_ed25519",
+        "-o",
+        "StrictHostKeyChecking=no",
+        "-o",
+        "UserKnownHostsFile=C:\\Users\\zhexu\\.ssh\\known_hosts",
+        "tmp\\product_guardrail_snapshots\\dream7b_bpu_quality_logits_diagnostics_20260622-190352\\dream7b_bpu_quality_logits_diagnostics.json",
+        "tmp\\product_guardrail_snapshots\\dream7b_bpu_quality_logits_diagnostics_20260622-190352\\dream7b_bpu_quality_logits_diagnostics.md",
+        "sunrise@192.168.127.10:/mnt/nas/openclaw/reports/models/dream7b_bpu_quality_logits_diagnostics_20260622-190352/"
+      ],
+      "returncode": 0,
+      "stdout": "",
+      "stderr": ""
+    }
+  }
+}

@@ -1,0 +1,48 @@
+{
+  "generated_at": "2026-07-03T01:33:35.238425+08:00",
+  "gate_id": "approval_token_schema_gate",
+  "verdict": "ok_approval_token_schema_gate",
+  "passed_count": 6,
+  "check_count": 6,
+  "failure_count": 0,
+  "failures": [],
+  "checks": [
+    {
+      "label": "unsigned token rejected",
+      "ok": true
+    },
+    {
+      "label": "expired token rejected",
+      "ok": true
+    },
+    {
+      "label": "wrong tool rejected",
+      "ok": true
+    },
+    {
+      "label": "wrong args rejected",
+      "ok": true
+    },
+    {
+      "label": "correct token accepted only in test mode",
+      "ok": true
+    },
+    {
+      "label": "correct token does not unlock stage2 write mode",
+      "ok": true
+    }
+  ],
+  "detail": {
+    "token_schema_fields": [
+      "action_type",
+      "approval_id",
+      "args_hash",
+      "expires_at",
+      "nonce",
+      "signature",
+      "tool_id",
+      "user_id",
+      "workspace_id"
+    ]
+  }
+}

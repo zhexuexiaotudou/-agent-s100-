@@ -1,0 +1,67 @@
+{
+  "generated_at": "2026-07-03T11:49:20.449839+08:00",
+  "final_verdict": "ready_for_more_readonly_sidecar_trials_on_s100p",
+  "all_stage2_5_gates_pass": true,
+  "stage3_blocked_by_qwen_unit": true,
+  "evidence_table": [
+    {
+      "report": "4000_stage2_package_release_integrity_gate",
+      "gate_id": "stage2_package_release_integrity_gate",
+      "verdict": "ok_stage2_package_release_integrity_gate",
+      "passed_count": 8,
+      "check_count": 8,
+      "failure_count": 0
+    },
+    {
+      "report": "4010_qwen_openclaw_service_persistence_gate",
+      "gate_id": "stage2_qwen_openclaw_service_persistence_gate",
+      "verdict": "ok_stage2_qwen_openclaw_service_persistence_gate",
+      "passed_count": 5,
+      "check_count": 5,
+      "failure_count": 0
+    },
+    {
+      "report": "4020_real_agent_loop_sidecar_gate",
+      "gate_id": "stage2_real_agent_loop_sidecar_gate",
+      "verdict": "ok_stage2_real_agent_loop_sidecar_gate",
+      "passed_count": 10,
+      "check_count": 10,
+      "failure_count": 0
+    },
+    {
+      "report": "4030_readonly_sidecar_soak_concurrency_gate",
+      "gate_id": "stage2_readonly_sidecar_soak_concurrency_gate",
+      "verdict": "ok_stage2_readonly_sidecar_soak_concurrency_gate",
+      "passed_count": 7,
+      "check_count": 7,
+      "failure_count": 0
+    },
+    {
+      "report": "4040_public_only_cloud_egress_stub_gate",
+      "gate_id": "stage2_public_only_cloud_egress_stub_gate",
+      "verdict": "ok_stage2_public_only_cloud_egress_stub_gate",
+      "passed_count": 5,
+      "check_count": 5,
+      "failure_count": 0
+    },
+    {
+      "report": "4050_real_zleap_lab_only_gate",
+      "gate_id": "stage2_real_zleap_lab_only_gate",
+      "verdict": "ok_stage2_real_zleap_lab_only_gate",
+      "passed_count": 3,
+      "check_count": 3,
+      "failure_count": 0
+    }
+  ],
+  "environment": {
+    "repo_root": "F:\\Project\\Digua",
+    "platform": "Windows-11-10.0.26200-SP0",
+    "python": "3.14.3"
+  },
+  "final_package": {
+    "zip_path": "F:\\Project\\Digua\\evidence_for_gptpro\\digua_ai_nas_harness_stage2_5_for_gptpro_20260703-114833.zip",
+    "sha256": "00154873e25ad8aa316705ae13a9bdcd1229b19c96c24dc00ef8740c8cfbb337",
+    "sha256_file": "F:\\Project\\Digua\\evidence_for_gptpro\\digua_ai_nas_harness_stage2_5_for_gptpro_20260703-114833.zip.sha256.txt",
+    "file_count": 435
+  }
+}

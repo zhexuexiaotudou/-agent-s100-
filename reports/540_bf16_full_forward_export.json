@@ -1,0 +1,100 @@
+{
+  "schema_version": "dream7b_s100p_v7_540_bf16_full_forward_export",
+  "created_at_utc": "2026-07-01T10:13:19.504042+00:00",
+  "run_commands": [
+    "py tools/build_v7_research_thread.py --timestamp 20260701_v7_allseg_hfhead"
+  ],
+  "git": {
+    "cwd": "F:\\Project\\Digua",
+    "git_dir_exists": true,
+    "status": "unavailable:CalledProcessError"
+  },
+  "input_artifacts": [
+    {
+      "path": "evidence/hf_bf16_v6/wrapper_probe_status.json",
+      "exists": true,
+      "size_bytes": 3127,
+      "sha256": "a32f11560fc428df1d3b5bad3685c15743906cc480a100a65f22dddf0469fc5f"
+    }
+  ],
+  "output_artifacts": [
+    {
+      "path": "reports/540_bf16_full_forward_export.json"
+    },
+    {
+      "path": "reports/540_bf16_full_forward_export.md"
+    }
+  ],
+  "gate_status": {
+    "bf16_full_forward_export": "blocked_no_capable_torch_runtime"
+  },
+  "blocking_or_failure_reasons": [
+    "No capable PyTorch runtime for full 7.6B BF16/FP32 Dream forward was available in this run."
+  ],
+  "next_minimal_experiments": [
+    "Run Dream HF full forward on PyTorch >=2.2 with enough memory and export canonical-case logits plus boundary hooks."
+  ],
+  "attempted_in_v7": false,
+  "v6_wrapper_probe": {
+    "created_at_utc": "2026-07-01T09:27:38.9372242Z",
+    "schema_version": "dream7b_hf_wrapper_probe_v6",
+    "no_bf16_logits_exported": true,
+    "no_generation_quality_run": true,
+    "dependency_state": {
+      "isolated_transformers": "4.46.2",
+      "accelerate": "not_installed_to_avoid_torch_cuda_dependency",
+      "isolated_tokenizers": "0.20.3",
+      "system_transformers": "4.30.2",
+      "system_torch": "1.8.0a0"
+    },
+    "isolated_pydeps": "/mnt/nas/openclaw/reports/models/dream7b_s100p_v6_execution_20260701/pydeps",
+    "hf_model_path": "/mnt/nas/openclaw/models/dream7b-hf",
+    "probe_results": [
+      {
+        "step": "AutoConfig/AutoTokenizer with system transformers",
+        "status": "failed",
+        "reason": "transformers.modeling_rope_utils missing"
+      },
+      {
+        "step": "isolated transformers import before tokenizers upgrade",
+        "status": "failed",
+        "reason": "tokenizers 0.13.3 incompatible with transformers 4.46.2"
+      },
+      {
+        "config_class": "DreamConfig",
+        "step": "AutoConfig/AutoTokenizer with isolated transformers/tokenizers",
+        "tokenizer_class": "DreamTokenizer",
+        "status": "pass",
+        "vocab_size": 152064
+      },
+      {
+        "model_class": "DreamModel",
+        "step": "AutoModel load with isolated transformers plus torch compatibility shims",
+        "dtype": "torch.bfloat16",
+        "status": "pass",
+        "parameter_count": 7615616512
+      },
+      {
+        "step": "forward attempt 1",
+        "status": "failed",
+        "reason": "torch.autocast missing in torch 1.8"
+      },
+      {
+        "step": "forward attempt 2",
+        "status": "failed",
+        "reason": "torch.nn.functional.scaled_dot_product_attention missing in torch 1.8"
+      },
+      {
+        "step": "forward attempt 3 with no-op autocast and explicit SDPA shim",
+        "status": "stopped",
+        "reason": "zeros case CPU forward still running after more than 8 minutes; killed to avoid impractical v6 batch export"
+      }
+    ]
+  },
+  "runtime_assessment": {
+    "s100p_torch": "1.8.0a0",
+    "known_blocker": "S100P torch 1.8 lacks required APIs; prior shimmed full forward did not complete.",
+    "v7_progress_without_full_forward": "HF final-norm+lm_head-only route avoids full model forward and exports comparable final-head logits."
+  },
+  "verdict": "blocked_no_capable_torch_runtime"
+}

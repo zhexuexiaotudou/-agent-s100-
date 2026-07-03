@@ -1,0 +1,55 @@
+{
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "workspace_id",
+    "tool_id",
+    "args",
+    "cloud_allowed",
+    "requires_approval",
+    "deny_reason",
+    "reason_code",
+    "confidence"
+  ],
+  "properties": {
+    "workspace_id": {
+      "type": "string",
+      "enum": ["nas_search", "document_rag", "denied"]
+    },
+    "tool_id": {
+      "type": ["string", "null"],
+      "enum": [
+        "ai_nas_permission_aware_search",
+        "ai_nas_file_search",
+        "ai_nas_index_status",
+        "ai_nas_folder_rag",
+        "ai_nas_evidence_report",
+        "ai_nas_folder_summary",
+        null
+      ]
+    },
+    "args": {
+      "type": "object"
+    },
+    "cloud_allowed": {
+      "type": "boolean",
+      "const": false
+    },
+    "requires_approval": {
+      "type": "boolean",
+      "const": false
+    },
+    "deny_reason": {
+      "type": ["string", "null"]
+    },
+    "reason_code": {
+      "type": "string",
+      "minLength": 1
+    },
+    "confidence": {
+      "type": "number",
+      "minimum": 0,
+      "maximum": 1
+    }
+  }
+}

@@ -1,0 +1,267 @@
+{
+  "generated_at": "2026-06-22T18:00:21.528050+08:00",
+  "verdict": "ok_dream7b_bpu_quality_candidate_gate",
+  "local": {
+    "diagnosis_docs": {
+      "logits_diagnosis": {
+        "path": "docs\\dream7b_bpu_logits_diagnosis_2026-06-22.md",
+        "exists": true,
+        "contains": {
+          "seg21_24": true,
+          "seg24_26": true,
+          "lm_head": true,
+          "argmax match >80%": true
+        }
+      },
+      "seq16_quality_root_cause": {
+        "path": "docs\\dream7b_bpu_seq16_quality_root_cause_2026-06-22.md",
+        "exists": true,
+        "contains": {
+          "truncate_prompt_keep_min_masks": true,
+          "fine-seq128": true,
+          "fine-seq256": true
+        }
+      }
+    },
+    "compiler_capability": {
+      "script": {
+        "path": "tmp\\wsl_compile_dream_full_forward.py",
+        "exists": true,
+        "contains": {
+          "--seq-len": true,
+          "--w-bits": true,
+          "--lm-head-w-bits": true,
+          "--segment-start": true,
+          "--segment-end": true,
+          "--final-logits-mode": true,
+          "lm_head": true
+        }
+      }
+    }
+  },
+  "remote": {
+    "generated_at": "2026-06-22T18:00:21.745596+08:00",
+    "host": "ubuntu",
+    "services": {
+      "dream7b_bpu_batch_queue": {
+        "name": "dream7b-bpu-batch-queue.service",
+        "root_user": false,
+        "active": true,
+        "result": {
+          "command": "systemctl is-active dream7b-bpu-batch-queue.service",
+          "returncode": 0,
+          "stdout": "active",
+          "stderr": ""
+        }
+      },
+      "dream7b_local_openai_gateway": {
+        "name": "dream7b-local-openai-gateway.service",
+        "root_user": true,
+        "active": true,
+        "result": {
+          "command": "sudo -n env XDG_RUNTIME_DIR=/run/user/0 systemctl --user is-active dream7b-local-openai-gateway.service",
+          "returncode": 0,
+          "stdout": "active",
+          "stderr": ""
+        }
+      },
+      "openclaw_gateway": {
+        "name": "openclaw-gateway.service",
+        "root_user": true,
+        "active": true,
+        "result": {
+          "command": "sudo -n env XDG_RUNTIME_DIR=/run/user/0 systemctl --user is-active openclaw-gateway.service",
+          "returncode": 0,
+          "stdout": "active",
+          "stderr": ""
+        }
+      }
+    },
+    "health": {
+      "gateway_18888": {
+        "url": "http://127.0.0.1:18888/health",
+        "ok": true,
+        "status": 200,
+        "json": {
+          "ok": true,
+          "model": "Dream7B-S100P-local",
+          "backend": "diffuse-resident",
+          "progress_interval_sec": 0.25,
+          "default_steps": 4,
+          "default_max_tokens": 16,
+          "inline_tokenizer_enabled": false,
+          "inline_tokenizer_loaded": true,
+          "inline_tokenizer": {
+            "tokenizer_dir": "/mnt/nas/openclaw/models/dream7b/tokenizer",
+            "tokenizer_load_ms": 4160
+          },
+          "resident_enabled": true,
+          "resident_available": true,
+          "resident_cmd": "/mnt/nas/openclaw/runtimes/diffuse-cpp/build/diffuse-resident",
+          "resident_running": true,
+          "resident": {
+            "resident_cmd": "/mnt/nas/openclaw/runtimes/diffuse-cpp/build/diffuse-resident",
+            "resident_ready_line": "READY\t7938",
+            "resident_start_ms": 7942,
+            "dream_runtime": "/mnt/nas/openclaw/runtimes/diffuse-cpp",
+            "dream_model": "/mnt/nas/openclaw/models/dream7b/dream-7b-q4km.gguf",
+            "threads": "8"
+          },
+          "quick_response_enabled": true,
+          "quick_max_tokens": 3,
+          "quick_steps": 2
+        },
+        "error": ""
+      },
+      "openclaw_18789": {
+        "url": "http://127.0.0.1:18789/health",
+        "ok": true,
+        "status": 200,
+        "json": {
+          "ok": true,
+          "status": "live"
+        },
+        "error": ""
+      }
+    },
+    "tools": {
+      "dream7b_default_status": {
+        "name": "dream7b-default-status",
+        "exists": true,
+        "path": "/usr/local/bin/dream7b-default-status"
+      }
+    },
+    "baseline_paths": {
+      "fine_seq16": {
+        "path": "/home/sunrise/.cache/openclaw/dream7b-hbm/fine-seq16",
+        "exists": true,
+        "is_dir": true,
+        "manifest_sha256_exists": false
+      },
+      "true_batch_seq16_b4": {
+        "path": "/mnt/nas/openclaw/models/dream7b-hbm/true-batch-seq16-b4",
+        "exists": true,
+        "is_dir": true,
+        "manifest_sha256_exists": false
+      },
+      "last_token_final_candidate_root": {
+        "path": "/mnt/nas/openclaw/models/dream7b-hbm/true-batch-seq16-b4-last-token-final",
+        "exists": false,
+        "is_dir": false,
+        "manifest_sha256_exists": false
+      },
+      "reports_models_root": {
+        "path": "/mnt/nas/openclaw/reports/models",
+        "exists": true,
+        "is_dir": true,
+        "manifest_sha256_exists": false
+      }
+    },
+    "route_a_evidence": {
+      "fast_path_regression": {
+        "path": "/mnt/nas/openclaw/reports/models/dream7b_fast_path_regression_20260622-174547/dream7b_fast_path_regression.json",
+        "exists": true,
+        "is_dir": false,
+        "manifest_sha256_exists": false
+      },
+      "first_response_slo": {
+        "path": "/mnt/nas/openclaw/reports/models/dream7b_first_response_slo_tier_guard_20260622-174823/dream7b_first_response_slo_tier_guard.json",
+        "exists": true,
+        "is_dir": false,
+        "manifest_sha256_exists": false
+      },
+      "openclaw_entry_demo": {
+        "path": "/mnt/nas/openclaw/reports/models/openclaw_entry_demo_20260622-174732/openclaw_entry_demo.json",
+        "exists": true,
+        "is_dir": false,
+        "manifest_sha256_exists": false
+      }
+    },
+    "compile_processes": {
+      "active": false,
+      "ps": {
+        "command": "ps -eo pid,comm,args | grep -E '(oellm|hbdk|compile_dream|Compile-Dream|cmake|ninja|make|gcc|g\\+\\+)' | grep -v grep || true",
+        "returncode": 0,
+        "stdout": "",
+        "stderr": ""
+      }
+    },
+    "audit": {
+      "compile_started": false,
+      "runtime_started": false,
+      "service_restarted": false,
+      "production_write_performed": false
+    },
+    "ok": true
+  },
+  "evaluation": {
+    "verdict": "ok_dream7b_bpu_quality_candidate_gate",
+    "errors": [],
+    "warnings": [],
+    "route_b_decision": {
+      "production_chat_default": "OpenClaw -> 18888 -> diffuse-resident -> Dream7B GGUF",
+      "bpu_current_role": "queue-batch throughput and telemetry baseline",
+      "do_not_replace_18888": true,
+      "do_not_delete_seq16_baseline": true,
+      "do_not_start_compile_from_this_gate": true,
+      "next_admitted_work": [
+        "prepare BPU quality compile bundle",
+        "verify compiler parameter support for seq_len, w_bits, segment selection, final logits mode",
+        "write a separate compile capacity gate before any HBM build"
+      ]
+    },
+    "route_b_candidates": [
+      {
+        "id": "bpu_logits_quality_candidate",
+        "purpose": "Recover BPU logits quality before any chat promotion.",
+        "compile_scope": [
+          "lm_head with w_bits=16",
+          "late segments seg21_24, seg24_26, seg26_28 with higher precision or calibration"
+        ],
+        "must_verify": [
+          "argmax_match_gt_80_percent",
+          "top1_probability_gt_5_percent",
+          "three_prompt_readable_chinese_generation"
+        ],
+        "admitted_next_action": "prepare_compile_bundle_and_parameter_plan_only",
+        "compile_now_admitted": false
+      },
+      {
+        "id": "bpu_larger_window_candidate",
+        "purpose": "Remove seq16 truncation for future BPU chat experiments.",
+        "compile_scope": [
+          "isolated fine-seq128 or fine-seq256 HBM artifacts"
+        ],
+        "must_verify": [
+          "no_truncate_prompt_keep_min_masks_for_normal_prompts",
+          "readable_chinese_generation",
+          "same_workload_latency_and_memory_report"
+        ],
+        "admitted_next_action": "verify_seq_len_parameterization_and_capacity_plan_only",
+        "compile_now_admitted": false
+      }
+    ]
+  },
+  "report_dir": "tmp\\product_guardrail_snapshots\\dream7b_bpu_quality_candidate_gate_20260622-180021",
+  "sync": {
+    "ok": true,
+    "remote_dir": "/mnt/nas/openclaw/reports/models/dream7b_bpu_quality_candidate_gate_20260622-180021",
+    "scp": {
+      "args": [
+        "scp.exe",
+        "-i",
+        "C:\\Users\\zhexu\\.ssh\\s100p_linkcheck_ed25519",
+        "-o",
+        "StrictHostKeyChecking=no",
+        "-o",
+        "UserKnownHostsFile=C:\\Users\\zhexu\\.ssh\\known_hosts",
+        "tmp\\product_guardrail_snapshots\\dream7b_bpu_quality_candidate_gate_20260622-180021\\dream7b_bpu_quality_candidate_gate.json",
+        "tmp\\product_guardrail_snapshots\\dream7b_bpu_quality_candidate_gate_20260622-180021\\dream7b_bpu_quality_candidate_gate.md",
+        "sunrise@192.168.127.10:/mnt/nas/openclaw/reports/models/dream7b_bpu_quality_candidate_gate_20260622-180021/"
+      ],
+      "returncode": 0,
+      "stdout": "",
+      "stderr": ""
+    }
+  }
+}

@@ -1,6 +1,7 @@
 [English](./README.md) | 简体中文
 
-# Getting Started with Dnn Node Sample
+Getting Started with Dnn Node Sample
+=======
 
 
 # 功能介绍
@@ -79,7 +80,7 @@ cp -r /opt/tros/${TROS_DISTRO}/lib/dnn_node_sample/config/ .
 # 配置MIPI摄像头
 export CAM_TYPE=mipi
 
-ros2 launch dnn_node_sample dnn_node_sample.launch.py
+ros2 launch dnn_node_sample dnn_node_sample.launch.py 
 ```
 
 **使用USB摄像头发布图片**
@@ -94,7 +95,7 @@ cp -r /opt/tros/${TROS_DISTRO}/lib/dnn_node_sample/config/ .
 # 配置USB摄像头
 export CAM_TYPE=usb
 
-ros2 launch dnn_node_sample dnn_node_sample.launch.py
+ros2 launch dnn_node_sample dnn_node_sample.launch.py 
 ```
 
 **使用本地图片回灌**
@@ -110,7 +111,7 @@ cp -r /opt/tros/${TROS_DISTRO}/lib/dnn_node_sample/config/ .
 export CAM_TYPE=fb
 
 # 使用的本地图片为/opt/tros/${TROS_DISTRO}/lib/dnn_node_sample/config/target.jpg
-ros2 launch dnn_node_sample dnn_node_sample.launch.py
+ros2 launch dnn_node_sample dnn_node_sample.launch.py 
 ```
 
 ## 注意事项

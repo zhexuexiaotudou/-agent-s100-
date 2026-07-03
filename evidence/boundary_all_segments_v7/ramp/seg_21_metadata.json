@@ -1,0 +1,77 @@
+{
+  "case_id": "ramp",
+  "segment": 21,
+  "raw_path": "evidence/boundary_all_segments_v7/ramp/seg_21_raw_output.npy",
+  "dequant_path": "evidence/boundary_all_segments_v7/ramp/seg_21_output.npy",
+  "model_name": "dream_segment_21_22",
+  "hbm_path": "/mnt/nas/openclaw/models/dream7b-hbm/seq128-b1-lmheadq16-lasttoken/seg21_22/dream7b_segment_21_22_seq128_q8.hbm",
+  "quant_metadata": {
+    "available": true,
+    "repr": "<hbm_runtime.HB_HBMRuntime.QuantParams object at 0xffffa65e9530>",
+    "scale": [
+      0.0007022023783065379
+    ],
+    "scale_first": 0.0007022023783065379,
+    "zero_point": [
+      0.0
+    ]
+  },
+  "raw_stats": {
+    "shape": [
+      128,
+      3584
+    ],
+    "dtype": "int16",
+    "size": 458752,
+    "min": -8944.0,
+    "max": 8944.0,
+    "mean": 13.780604771205358,
+    "std": 3041.665892065171,
+    "abs_max": 8944.0,
+    "nonzero_count": 458683,
+    "constant": false,
+    "allzero": false,
+    "nan_count": 0,
+    "inf_count": 0,
+    "count_pos_32767": 0,
+    "count_neg_32768": 0,
+    "count_abs_19807": 0,
+    "frac_pos_32767": 0.0,
+    "frac_neg_32768": 0.0,
+    "frac_abs_19807": 0.0,
+    "p0": -8944.0,
+    "p1": -7413.49,
+    "p5": -4944.0,
+    "p50": -4.0,
+    "p95": 5023.0,
+    "p99": 7661.0,
+    "p100": 8944.0
+  },
+  "dequant_stats": {
+    "shape": [
+      128,
+      3584
+    ],
+    "dtype": "float32",
+    "size": 458752,
+    "min": -6.280498027801514,
+    "max": 6.280498027801514,
+    "mean": 0.00967677216976881,
+    "std": 2.1358649730682373,
+    "abs_max": 6.280498027801514,
+    "nonzero_count": 458683,
+    "constant": false,
+    "allzero": false,
+    "nan_count": 0,
+    "inf_count": 0,
+    "p0": -6.280498027801514,
+    "p1": -5.205770492553711,
+    "p5": -3.4716885089874268,
+    "p50": -0.0028088095132261515,
+    "p95": 3.527162551879883,
+    "p99": 5.37957239151001,
+    "p100": 6.280498027801514
+  },
+  "raw_sha256": "8731062b00f37242fd10847dc808e7135e2498f177aae9a49d9c2994a213cbb3",
+  "dequant_sha256": "d323076ec88088530fdc70a369c1f711806ab19bb6064dcb105cf75f98a504b9"
+}

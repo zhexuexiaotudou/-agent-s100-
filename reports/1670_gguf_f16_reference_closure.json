@@ -1,0 +1,89 @@
+{
+  "schema_version": "dream7b_s100p_v15_1670_gguf_f16_reference_closure",
+  "created_at_utc": "2026-07-03T09:13:08.802704+00:00",
+  "run_commands": [
+    "C:\\Users\\zhexu\\AppData\\Local\\Python\\pythoncore-3.14-64\\python.exe tools\\build_v15_research_thread.py --root ."
+  ],
+  "host_environment": {
+    "local_platform": "Windows-11-10.0.26200-SP0",
+    "python": "3.14.3 (tags/v3.14.3:323c59a, Feb  3 2026, 16:04:56) [MSC v.1944 64 bit (AMD64)]"
+  },
+  "git": {
+    "returncode": 128,
+    "stdout": "",
+    "stderr": "fatal: not a git repository (or any of the parent directories): .git"
+  },
+  "input_artifacts": [
+    {
+      "path": "evidence/gguf_f16_reference_v15/gguf_f16_reference_probe.log",
+      "exists": true,
+      "size_bytes": 1171,
+      "sha256": "1f71d61be09ee5dd5c126eae6d008218efb9cd29d6029c4b1c662c0f536d5795"
+    },
+    {
+      "path": "evidence/gguf_f16_reference_v14/historical_q4km_control",
+      "exists": true
+    }
+  ],
+  "output_artifacts": [
+    {
+      "path": "reports/1670_gguf_f16_reference_closure.json",
+      "exists": true,
+      "size_bytes": 4032,
+      "sha256": "dc768a53feaba2519e1ad7b2949f80affda0f1847eebd0f4d493c5f3f8e65caf"
+    },
+    {
+      "path": "reports/1670_gguf_f16_reference_closure.md",
+      "exists": true,
+      "size_bytes": 234,
+      "sha256": "d895706a9764c4c525c924485923415e5bbb83ceb5826440c355f06812112321"
+    }
+  ],
+  "blocking_or_failure_reasons": [
+    "No Dream7B GGUF F16 artifact and no all-case logits-only F16 runner were available."
+  ],
+  "next_minimal_experiments": [],
+  "safety": {
+    "generation_quality_run": false,
+    "product_routes_18888_18889_touched": false,
+    "dream7b_frontend_openclaw_traffic_touched": false
+  },
+  "verdict": "gguf_f16_blocked_no_artifact_no_logits_runner",
+  "gguf_artifacts": {
+    "f16": [],
+    "q4_k_m": [
+      "/mnt/nas/openclaw/models/dream7b/dream-7b-q4km.gguf 5313916320"
+    ],
+    "all": [
+      "/mnt/nas/openclaw/models/dream7b/dream-7b-q4km.gguf 5313916320"
+    ]
+  },
+  "probe_log_excerpt": "## date\n2026-07-03T17:10:16+08:00\n## gguf artifacts\n/mnt/nas/openclaw/models/dream7b/dream-7b-q4km.gguf 5313916320\n## converter scripts\n## diffuse cli help\nUsage: /mnt/nas/openclaw/runtimes/diffuse-cpp/build/diffuse-cli [options]\n\nOptions:\n  -m PATH     Model file (GGUF)\n  -p TEXT     Prompt text\n  -n INT      Tokens to generate (default: 128)\n  -s INT      Diffusion steps (default: 32)\n  -t INT      Threads (default: 4)\n  --temp F    Temperature (default: 0 = argmax)\n  --seed INT  Random seed (default: 42)\n  --schedule  cosine|linear (default: cosine)\n  --remasking low_confidence|random|entropy_exit|maskgit_plus|topk_margin (default: low_confidence)\n  --entropy-threshold F  Entropy threshold for entropy_exit (default: 1.5)\n  --cache-refresh INT   Force full forward every N steps (default: 0 = never)\n  --cache-keep-active INT  Keep recently-changed positions active N extra steps (default: 0)\n\nNote: Tokenization is currently external. Use --tokens to pass\n      pre-tokenized input as comma-separated IDs.\n  --tokens IDs  Comma-separated token IDs (bypasses prompt)\n## attempted conversion status\nmissing_llama_cpp_convert_hf_to_gguf_py\nf16_artifact_missing\n",
+  "historical_q4km_control": [
+    {
+      "path": "evidence/gguf_f16_reference_v14/historical_q4km_control/ramp_gguf_last_logits.npy",
+      "exists": true,
+      "size_bytes": 608384,
+      "sha256": "04a603a6dce71a08ac65451a78e202e4a8e2fde92dd7a3613478a173c40333fb"
+    },
+    {
+      "path": "evidence/gguf_f16_reference_v14/historical_q4km_control/seq128_logits_reference_compare.json",
+      "exists": true,
+      "size_bytes": 36557,
+      "sha256": "7d9e2a31e577639f335550240124b706138be468c3248f3b869601cc2402a306"
+    },
+    {
+      "path": "evidence/gguf_f16_reference_v14/historical_q4km_control/seq128_logits_reference_compare.md",
+      "exists": true,
+      "size_bytes": 1177,
+      "sha256": "c8075712f1aaaa36d530009cee09103073aadaa6abd64d45e53139a72a739a65"
+    },
+    {
+      "path": "evidence/gguf_f16_reference_v14/historical_q4km_control/zeros_gguf_last_logits.npy",
+      "exists": true,
+      "size_bytes": 608384,
+      "sha256": "c20ad7d7a20b5e87b85b13b2cbfa8ecca6b2e1f62dbb21696b4690f30ad1968f"
+    }
+  ],
+  "truth_boundary": "Q4_K_M historical outputs are deployment-control references only, not BF16 truth."
+}

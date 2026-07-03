@@ -1,0 +1,328 @@
+{
+  "schema_version": "dream7b_s100p_v11_900_repeat_full_truth_reference",
+  "created_at_utc": "2026-07-01T19:15:50.433147+00:00",
+  "run_commands": [
+    "C:\\Users\\zhexu\\AppData\\Local\\Python\\pythoncore-3.14-64\\python.exe tools\\build_v11_research_thread.py --root ."
+  ],
+  "git": {
+    "cwd": "F:\\Project\\Digua",
+    "git_dir_exists": true,
+    "git_head_exists": false,
+    "status": "unavailable_empty_or_incomplete_git_dir"
+  },
+  "input_artifacts": [
+    {
+      "path": "evidence_for_gptpro/dream7b_s100p_v10_for_gptpro_20260701_b.zip",
+      "exists": true,
+      "size_bytes": 48140906,
+      "sha256": "0777a522fe351661d5b0c6cf53aa31a5e0be7cc5e95f0488638f2bf0bc12c793"
+    },
+    {
+      "path": "evidence/full_truth_repeat_v11",
+      "exists": true
+    },
+    {
+      "path": "evidence/s100p_remote_v11_reports/900_910_hf_boundaries_repeat_remote.json",
+      "exists": true,
+      "size_bytes": 74744,
+      "sha256": "0e496739c301861c4af0cbc291b751030443f280440979388e4ddcff6e6561be"
+    }
+  ],
+  "output_artifacts": [
+    {
+      "path": "reports/900_repeat_full_truth_reference.json"
+    },
+    {
+      "path": "reports/900_repeat_full_truth_reference.md"
+    }
+  ],
+  "blocking_or_failure_reasons": [
+    "FP32 or genuinely independent-host repeat truth was not executed because no such ready high-memory/runtime asset is available in the current workspace/NAS evidence; v11 provides a same-S100P BF16 repeat instead."
+  ],
+  "next_minimal_experiments": [
+    "For publication robustness, repeat FP32 or BF16 on a genuinely independent high-memory host when available."
+  ],
+  "v10_zip_validation": {
+    "zip_path": "F:\\Project\\Digua\\evidence_for_gptpro\\dream7b_s100p_v10_for_gptpro_20260701_b.zip",
+    "exists": true,
+    "testzip_bad_member": null,
+    "manifest_check": {
+      "entries": 406,
+      "missing": [],
+      "bad_size": [],
+      "bad_sha256": []
+    },
+    "zip_sha256": "0777a522fe351661d5b0c6cf53aa31a5e0be7cc5e95f0488638f2bf0bc12c793"
+  },
+  "repeat_truth_rows": 3,
+  "repeat_truth_dtype": "HF/PyTorch repeat bfloat16 on same S100P environment",
+  "fp32_or_second_environment_status": "blocked_unavailable_in_current_workspace",
+  "source_hashes": [
+    {
+      "name": "config.json",
+      "path": "/mnt/nas/openclaw/models/dream7b-hf/config.json",
+      "exists": true,
+      "size_bytes": 927,
+      "sha256": "11afc7fe7a1881e73dcd70cca6868aaaf8eb89ad45ea5fc6426c3fb82dec9340"
+    },
+    {
+      "name": "configuration_dream.py",
+      "path": "/mnt/nas/openclaw/models/dream7b-hf/configuration_dream.py",
+      "exists": true,
+      "size_bytes": 3197,
+      "sha256": "24d038962ccf16361595494461000ec0c1b043653c7494d7fc835c96f121f0b9"
+    },
+    {
+      "name": "modeling_dream.py",
+      "path": "/mnt/nas/openclaw/models/dream7b-hf/modeling_dream.py",
+      "exists": true,
+      "size_bytes": 36763,
+      "sha256": "3166e789f0d69beb1f4fbdee2317953d1c1c3b9bc21479b109afc5dd059de5b3"
+    },
+    {
+      "name": "generation_utils.py",
+      "path": "/mnt/nas/openclaw/models/dream7b-hf/generation_utils.py",
+      "exists": true,
+      "size_bytes": 22332,
+      "sha256": "7f8ad01484898946b3c9c9d5ebc85e5ac726061d0fa7b4a522c4b8110c13a921"
+    },
+    {
+      "name": "tokenization_dream.py",
+      "path": "/mnt/nas/openclaw/models/dream7b-hf/tokenization_dream.py",
+      "exists": true,
+      "size_bytes": 14028,
+      "sha256": "1d7f04104fa673831f48256e3cd42cd0bbd1bddd801b4abea5c74cc47d98bdd2"
+    },
+    {
+      "name": "tokenizer_config.json",
+      "path": "/mnt/nas/openclaw/models/dream7b-hf/tokenizer_config.json",
+      "exists": true,
+      "size_bytes": 7486,
+      "sha256": "b0e9c1a6299d8832a1362d6b24f007de8a2acfe0243d8a3a1d1b57aa8250f7ee"
+    },
+    {
+      "name": "vocab.json",
+      "path": "/mnt/nas/openclaw/models/dream7b-hf/vocab.json",
+      "exists": true,
+      "size_bytes": 3383407,
+      "sha256": "87a257b04b17642a0688c98cd1df89c398bda4fee532d6f88b38a659ecb4ac8d"
+    },
+    {
+      "name": "merges.txt",
+      "path": "/mnt/nas/openclaw/models/dream7b-hf/merges.txt",
+      "exists": true,
+      "size_bytes": 1671853,
+      "sha256": "8831e4f1a044471340f7c0a83d7bd71306a5b867e95fd870f74d0c5308a904d5"
+    },
+    {
+      "name": "model.safetensors.index.json",
+      "path": "/mnt/nas/openclaw/models/dream7b-hf/model.safetensors.index.json",
+      "exists": true,
+      "size_bytes": 27752,
+      "sha256": "998a078123ffc97763690de7f2a677eb89168af5eaf8a5e12e6bc24d18e25bdb"
+    },
+    {
+      "name": "SHA256SUMS",
+      "path": "/mnt/nas/openclaw/models/dream7b-hf/SHA256SUMS",
+      "exists": true,
+      "size_bytes": 550,
+      "sha256": "00943b62e19d3080f930603f6a65e210f11e239dc8b1c7a65d9b98090330ff8a"
+    }
+  ],
+  "source_hashes_present": {
+    "config.json": true,
+    "configuration_dream.py": true,
+    "modeling_dream.py": true,
+    "generation_utils.py": true,
+    "tokenization_dream.py": true,
+    "tokenizer_config.json": true,
+    "vocab.json": true,
+    "merges.txt": true,
+    "model.safetensors.index.json": true,
+    "SHA256SUMS": true
+  },
+  "v10_vs_repeat_rows": [
+    {
+      "shape_mismatch": false,
+      "cosine": 1.0000000000000002,
+      "pearson_centered": 1.0,
+      "relative_l2": 0.0,
+      "mean_abs_error": 0.0,
+      "max_abs_error": 0.0,
+      "candidate_stats": {
+        "shape": [
+          152064
+        ],
+        "dtype": "float32",
+        "size": 152064,
+        "min": -14.25,
+        "max": 1.75,
+        "mean": -10.231769561767578,
+        "std": 1.7890512943267822,
+        "abs_max": 14.25,
+        "nonzero_count": 152064,
+        "allzero": false,
+        "constant": false,
+        "nan_count": 0,
+        "inf_count": 0
+      },
+      "reference_stats": {
+        "shape": [
+          152064
+        ],
+        "dtype": "float32",
+        "size": 152064,
+        "min": -14.25,
+        "max": 1.75,
+        "mean": -10.231769561767578,
+        "std": 1.7890512943267822,
+        "abs_max": 14.25,
+        "nonzero_count": 152064,
+        "allzero": false,
+        "constant": false,
+        "nan_count": 0,
+        "inf_count": 0
+      },
+      "candidate_top1": 220,
+      "reference_top1": 220,
+      "top1_agreement": true,
+      "top5_overlap": 5,
+      "candidate_entropy": {
+        "entropy": 7.571224949104677,
+        "normalized_entropy": 0.6345280699676028,
+        "top1_probability": 0.0663488567541616
+      },
+      "reference_entropy": {
+        "entropy": 7.571224949104677,
+        "normalized_entropy": 0.6345280699676028,
+        "top1_probability": 0.0663488567541616
+      },
+      "case_id": "zeros",
+      "repeat_path": "evidence/full_truth_repeat_v11/zeros/repeat_full_truth_logits.npy",
+      "v10_path": "evidence/full_truth_v10/zeros/full_truth_logits.npy"
+    },
+    {
+      "shape_mismatch": false,
+      "cosine": 0.9999999999999999,
+      "pearson_centered": 1.0,
+      "relative_l2": 0.0,
+      "mean_abs_error": 0.0,
+      "max_abs_error": 0.0,
+      "candidate_stats": {
+        "shape": [
+          152064
+        ],
+        "dtype": "float32",
+        "size": 152064,
+        "min": -7.65625,
+        "max": 12.25,
+        "mean": -1.9889841079711914,
+        "std": 0.9208143353462219,
+        "abs_max": 12.25,
+        "nonzero_count": 152064,
+        "allzero": false,
+        "constant": false,
+        "nan_count": 0,
+        "inf_count": 0
+      },
+      "reference_stats": {
+        "shape": [
+          152064
+        ],
+        "dtype": "float32",
+        "size": 152064,
+        "min": -7.65625,
+        "max": 12.25,
+        "mean": -1.9889841079711914,
+        "std": 0.9208143353462219,
+        "abs_max": 12.25,
+        "nonzero_count": 152064,
+        "allzero": false,
+        "constant": false,
+        "nan_count": 0,
+        "inf_count": 0
+      },
+      "candidate_top1": 151643,
+      "reference_top1": 151643,
+      "top1_agreement": true,
+      "top5_overlap": 5,
+      "candidate_entropy": {
+        "entropy": 2.2516018927699237,
+        "normalized_entropy": 0.18870190926286642,
+        "top1_probability": 0.8155245210005765
+      },
+      "reference_entropy": {
+        "entropy": 2.2516018927699237,
+        "normalized_entropy": 0.18870190926286642,
+        "top1_probability": 0.8155245210005765
+      },
+      "case_id": "ramp",
+      "repeat_path": "evidence/full_truth_repeat_v11/ramp/repeat_full_truth_logits.npy",
+      "v10_path": "evidence/full_truth_v10/ramp/full_truth_logits.npy"
+    },
+    {
+      "shape_mismatch": false,
+      "cosine": 1.0,
+      "pearson_centered": 1.0,
+      "relative_l2": 0.0,
+      "mean_abs_error": 0.0,
+      "max_abs_error": 0.0,
+      "candidate_stats": {
+        "shape": [
+          152064
+        ],
+        "dtype": "float32",
+        "size": 152064,
+        "min": -12.5,
+        "max": 9.125,
+        "mean": -8.877497673034668,
+        "std": 1.8784396648406982,
+        "abs_max": 12.5,
+        "nonzero_count": 152064,
+        "allzero": false,
+        "constant": false,
+        "nan_count": 0,
+        "inf_count": 0
+      },
+      "reference_stats": {
+        "shape": [
+          152064
+        ],
+        "dtype": "float32",
+        "size": 152064,
+        "min": -12.5,
+        "max": 9.125,
+        "mean": -8.877497673034668,
+        "std": 1.8784396648406982,
+        "abs_max": 12.5,
+        "nonzero_count": 152064,
+        "allzero": false,
+        "constant": false,
+        "nan_count": 0,
+        "inf_count": 0
+      },
+      "candidate_top1": 151643,
+      "reference_top1": 151643,
+      "top1_agreement": true,
+      "top5_overlap": 5,
+      "candidate_entropy": {
+        "entropy": 0.4009702328313241,
+        "normalized_entropy": 0.033604452339380995,
+        "top1_probability": 0.9639511998170708
+      },
+      "reference_entropy": {
+        "entropy": 0.4009702328313241,
+        "normalized_entropy": 0.033604452339380995,
+        "top1_probability": 0.9639511998170708
+      },
+      "case_id": "short_chinese_prompt_padded",
+      "repeat_path": "evidence/full_truth_repeat_v11/short_chinese_prompt_padded/repeat_full_truth_logits.npy",
+      "v10_path": "evidence/full_truth_v10/short_chinese_prompt_padded/full_truth_logits.npy"
+    }
+  ],
+  "top1_agreement_rows": 3,
+  "median_relative_l2": 0.0,
+  "median_pearson_centered": 1.0,
+  "remote_status": "pass",
+  "remote_errors": []
+}

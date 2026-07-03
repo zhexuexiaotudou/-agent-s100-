@@ -1,0 +1,21 @@
+{
+  "name": "s100p-allowlisted-tools",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "configSchema": {
+    "type": "object",
+    "additionalProperties": false,
+    "properties": {}
+  },
+  "openclaw": {
+    "extensions": [
+      "./index.js"
+    ],
+    "configSchema": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {}
+    }
+  }
+}

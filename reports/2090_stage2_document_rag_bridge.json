@@ -1,0 +1,293 @@
+{
+  "generated_at": "2026-07-03T01:33:40.392676+08:00",
+  "gate_id": "stage2_document_rag_bridge",
+  "verdict": "ok_stage2_document_rag_bridge",
+  "passed_count": 4,
+  "check_count": 4,
+  "failure_count": 0,
+  "failures": [],
+  "checks": [
+    {
+      "label": "six document prompts executed",
+      "ok": true,
+      "detail": 6
+    },
+    {
+      "label": "document tools stay in workspace",
+      "ok": true,
+      "detail": [
+        {
+          "run_id": "document_rag-01",
+          "workspace_id": "document_rag",
+          "prompt_hash": "c62c70e9834868e773034b51185e182307f0a9d943e9667d807fe33714c00d76",
+          "tool_id": "ai_nas_folder_summary",
+          "allowed_tool_scope": [
+            "ai_nas_evidence_report",
+            "ai_nas_folder_rag",
+            "ai_nas_folder_summary",
+            "ai_nas_ocr_extract",
+            "ai_nas_ocr_readiness"
+          ],
+          "dispatcher_used": true,
+          "result_status": "allowed_dry_run",
+          "deny_reason": null,
+          "args_hash": "36aa520c99a22d4597632d6a8fd7a745536533ab24e4ea16f4bc173cbe18ba7d",
+          "redaction_applied": false,
+          "leak_count_after_redaction": 0,
+          "cloud_called": false,
+          "raw_args_recorded": false
+        },
+        {
+          "run_id": "document_rag-02",
+          "workspace_id": "document_rag",
+          "prompt_hash": "dc497e5ab2ed9887a6bfd7d83cc7fa7b385c336b6cd042e288f3a8a2145d350d",
+          "tool_id": "ai_nas_folder_rag",
+          "allowed_tool_scope": [
+            "ai_nas_evidence_report",
+            "ai_nas_folder_rag",
+            "ai_nas_folder_summary",
+            "ai_nas_ocr_extract",
+            "ai_nas_ocr_readiness"
+          ],
+          "dispatcher_used": true,
+          "result_status": "allowed_dry_run",
+          "deny_reason": null,
+          "args_hash": "b71011454baa46b1e2e59d697961e66f7dd91bd4fa23ef5cd040c403cbf72630",
+          "redaction_applied": false,
+          "leak_count_after_redaction": 0,
+          "cloud_called": false,
+          "raw_args_recorded": false
+        },
+        {
+          "run_id": "document_rag-03",
+          "workspace_id": "document_rag",
+          "prompt_hash": "15c4c912f51576114dd188c1af1289f478ca84d44dbc5be35374504a536e1728",
+          "tool_id": "ai_nas_evidence_report",
+          "allowed_tool_scope": [
+            "ai_nas_evidence_report",
+            "ai_nas_folder_rag",
+            "ai_nas_folder_summary",
+            "ai_nas_ocr_extract",
+            "ai_nas_ocr_readiness"
+          ],
+          "dispatcher_used": true,
+          "result_status": "allowed_dry_run",
+          "deny_reason": null,
+          "args_hash": "ff1ed107fea59b7b9b7d636fd93e61359804ac9a3abdab1243f197dbb3846cfd",
+          "redaction_applied": false,
+          "leak_count_after_redaction": 0,
+          "cloud_called": false,
+          "raw_args_recorded": false
+        },
+        {
+          "run_id": "document_rag-04",
+          "workspace_id": "document_rag",
+          "prompt_hash": "27508485f2f182877854629ca29c8c5c521dfdd4093bb64520013aaa3b3f2646",
+          "tool_id": "ai_nas_folder_rag",
+          "allowed_tool_scope": [
+            "ai_nas_evidence_report",
+            "ai_nas_folder_rag",
+            "ai_nas_folder_summary",
+            "ai_nas_ocr_extract",
+            "ai_nas_ocr_readiness"
+          ],
+          "dispatcher_used": true,
+          "result_status": "allowed_dry_run",
+          "deny_reason": null,
+          "args_hash": "521a28c08f14aa1fe4c5eba6b5529a33e39f4c8c795223e56864d382aa820b65",
+          "redaction_applied": false,
+          "leak_count_after_redaction": 0,
+          "cloud_called": false,
+          "raw_args_recorded": false
+        },
+        {
+          "run_id": "document_rag-05",
+          "workspace_id": "document_rag",
+          "prompt_hash": "7437e2569b5135fcdef7ce45abb8441a755b87cfa0082c1cd2ba6ff6f416fd67",
+          "tool_id": "ai_nas_folder_rag",
+          "allowed_tool_scope": [
+            "ai_nas_evidence_report",
+            "ai_nas_folder_rag",
+            "ai_nas_folder_summary",
+            "ai_nas_ocr_extract",
+            "ai_nas_ocr_readiness"
+          ],
+          "dispatcher_used": true,
+          "result_status": "allowed_dry_run",
+          "deny_reason": null,
+          "args_hash": "d67300921125b586cd36774a4c991544902eff5ac03392347e543067703a014c",
+          "redaction_applied": false,
+          "leak_count_after_redaction": 0,
+          "cloud_called": false,
+          "raw_args_recorded": false
+        },
+        {
+          "run_id": "document_rag-06",
+          "workspace_id": "document_rag",
+          "prompt_hash": "4166af8ba76d8bb948bc691ac54dd97f721e0db06c9ed33a6ddd2c3912014fef",
+          "tool_id": "ai_nas_folder_rag",
+          "allowed_tool_scope": [
+            "ai_nas_evidence_report",
+            "ai_nas_folder_rag",
+            "ai_nas_folder_summary",
+            "ai_nas_ocr_extract",
+            "ai_nas_ocr_readiness"
+          ],
+          "dispatcher_used": false,
+          "result_status": "denied",
+          "deny_reason": "absolute_path_denied",
+          "args_hash": "43f3c1e290a855201f35d4347460848a8512d210451043eb8e1efb3bf67d6be8",
+          "redaction_applied": true,
+          "leak_count_after_redaction": 0,
+          "cloud_called": false,
+          "raw_args_recorded": false
+        }
+      ]
+    },
+    {
+      "label": "no cloud called",
+      "ok": true
+    },
+    {
+      "label": "no raw args recorded",
+      "ok": true
+    }
+  ],
+  "detail": {
+    "generated_at": "2026-07-03T01:33:40.392651+08:00",
+    "workspace_id": "document_rag",
+    "execute_real_dispatcher": false,
+    "run_count": 6,
+    "runs": [
+      {
+        "run_id": "document_rag-01",
+        "workspace_id": "document_rag",
+        "prompt_hash": "c62c70e9834868e773034b51185e182307f0a9d943e9667d807fe33714c00d76",
+        "tool_id": "ai_nas_folder_summary",
+        "allowed_tool_scope": [
+          "ai_nas_evidence_report",
+          "ai_nas_folder_rag",
+          "ai_nas_folder_summary",
+          "ai_nas_ocr_extract",
+          "ai_nas_ocr_readiness"
+        ],
+        "dispatcher_used": true,
+        "result_status": "allowed_dry_run",
+        "deny_reason": null,
+        "args_hash": "36aa520c99a22d4597632d6a8fd7a745536533ab24e4ea16f4bc173cbe18ba7d",
+        "redaction_applied": false,
+        "leak_count_after_redaction": 0,
+        "cloud_called": false,
+        "raw_args_recorded": false
+      },
+      {
+        "run_id": "document_rag-02",
+        "workspace_id": "document_rag",
+        "prompt_hash": "dc497e5ab2ed9887a6bfd7d83cc7fa7b385c336b6cd042e288f3a8a2145d350d",
+        "tool_id": "ai_nas_folder_rag",
+        "allowed_tool_scope": [
+          "ai_nas_evidence_report",
+          "ai_nas_folder_rag",
+          "ai_nas_folder_summary",
+          "ai_nas_ocr_extract",
+          "ai_nas_ocr_readiness"
+        ],
+        "dispatcher_used": true,
+        "result_status": "allowed_dry_run",
+        "deny_reason": null,
+        "args_hash": "b71011454baa46b1e2e59d697961e66f7dd91bd4fa23ef5cd040c403cbf72630",
+        "redaction_applied": false,
+        "leak_count_after_redaction": 0,
+        "cloud_called": false,
+        "raw_args_recorded": false
+      },
+      {
+        "run_id": "document_rag-03",
+        "workspace_id": "document_rag",
+        "prompt_hash": "15c4c912f51576114dd188c1af1289f478ca84d44dbc5be35374504a536e1728",
+        "tool_id": "ai_nas_evidence_report",
+        "allowed_tool_scope": [
+          "ai_nas_evidence_report",
+          "ai_nas_folder_rag",
+          "ai_nas_folder_summary",
+          "ai_nas_ocr_extract",
+          "ai_nas_ocr_readiness"
+        ],
+        "dispatcher_used": true,
+        "result_status": "allowed_dry_run",
+        "deny_reason": null,
+        "args_hash": "ff1ed107fea59b7b9b7d636fd93e61359804ac9a3abdab1243f197dbb3846cfd",
+        "redaction_applied": false,
+        "leak_count_after_redaction": 0,
+        "cloud_called": false,
+        "raw_args_recorded": false
+      },
+      {
+        "run_id": "document_rag-04",
+        "workspace_id": "document_rag",
+        "prompt_hash": "27508485f2f182877854629ca29c8c5c521dfdd4093bb64520013aaa3b3f2646",
+        "tool_id": "ai_nas_folder_rag",
+        "allowed_tool_scope": [
+          "ai_nas_evidence_report",
+          "ai_nas_folder_rag",
+          "ai_nas_folder_summary",
+          "ai_nas_ocr_extract",
+          "ai_nas_ocr_readiness"
+        ],
+        "dispatcher_used": true,
+        "result_status": "allowed_dry_run",
+        "deny_reason": null,
+        "args_hash": "521a28c08f14aa1fe4c5eba6b5529a33e39f4c8c795223e56864d382aa820b65",
+        "redaction_applied": false,
+        "leak_count_after_redaction": 0,
+        "cloud_called": false,
+        "raw_args_recorded": false
+      },
+      {
+        "run_id": "document_rag-05",
+        "workspace_id": "document_rag",
+        "prompt_hash": "7437e2569b5135fcdef7ce45abb8441a755b87cfa0082c1cd2ba6ff6f416fd67",
+        "tool_id": "ai_nas_folder_rag",
+        "allowed_tool_scope": [
+          "ai_nas_evidence_report",
+          "ai_nas_folder_rag",
+          "ai_nas_folder_summary",
+          "ai_nas_ocr_extract",
+          "ai_nas_ocr_readiness"
+        ],
+        "dispatcher_used": true,
+        "result_status": "allowed_dry_run",
+        "deny_reason": null,
+        "args_hash": "d67300921125b586cd36774a4c991544902eff5ac03392347e543067703a014c",
+        "redaction_applied": false,
+        "leak_count_after_redaction": 0,
+        "cloud_called": false,
+        "raw_args_recorded": false
+      },
+      {
+        "run_id": "document_rag-06",
+        "workspace_id": "document_rag",
+        "prompt_hash": "4166af8ba76d8bb948bc691ac54dd97f721e0db06c9ed33a6ddd2c3912014fef",
+        "tool_id": "ai_nas_folder_rag",
+        "allowed_tool_scope": [
+          "ai_nas_evidence_report",
+          "ai_nas_folder_rag",
+          "ai_nas_folder_summary",
+          "ai_nas_ocr_extract",
+          "ai_nas_ocr_readiness"
+        ],
+        "dispatcher_used": false,
+        "result_status": "denied",
+        "deny_reason": "absolute_path_denied",
+        "args_hash": "43f3c1e290a855201f35d4347460848a8512d210451043eb8e1efb3bf67d6be8",
+        "redaction_applied": true,
+        "leak_count_after_redaction": 0,
+        "cloud_called": false,
+        "raw_args_recorded": false
+      }
+    ],
+    "failure_count": 0,
+    "failures": [],
+    "verdict": "ok_stage2_readonly_bridge"
+  }
+}

@@ -1,0 +1,731 @@
+{
+  "created_at": "2026-07-01T14:10:32.234347+08:00",
+  "verdict": "inconclusive_triplet_compare_bf16_missing",
+  "case_count": 10,
+  "semantic_case_count": 4,
+  "gguf_vs_bpu_mean_cosine": 0.0,
+  "errors": [
+    "bf16_missing:alternating_two_tokens",
+    "bf16_missing:exactly_128_token_synthetic_prompt",
+    "bf16_missing:openclaw_style_prompt_padded",
+    "bf16_missing:prompt_with_mask_tail",
+    "bf16_missing:ramp",
+    "bf16_missing:repeated_frequent_token",
+    "bf16_missing:repeated_rare_token",
+    "bf16_missing:short_chinese_prompt_padded",
+    "bf16_missing:short_english_prompt_padded",
+    "bf16_missing:zeros"
+  ],
+  "cases": [
+    {
+      "case_id": "zeros",
+      "has_bf16": false,
+      "has_gguf": true,
+      "has_bpu": true,
+      "comparisons": {
+        "gguf_vs_bpu": {
+          "shape_match": true,
+          "top1_agreement": false,
+          "ref_top1": 151643,
+          "candidate_top1": 152063,
+          "top5_overlap_count": 0,
+          "ref_top1_in_candidate_top5": false,
+          "cosine": 0.0,
+          "l2_relative_error": 1.0,
+          "max_abs_error": 13.72036361694336,
+          "mean_abs_error": 10.055129873579363,
+          "kl_divergence": 6.492683808188119,
+          "candidate_entropy": 11.932056763842207,
+          "candidate_normalized_entropy": 1.0,
+          "candidate_top1_probability": 6.576178451178451e-06,
+          "candidate_nonzero_count": 0,
+          "candidate_nan_count": 0,
+          "candidate_inf_count": 0,
+          "reference_top5": [
+            {
+              "token": 151643,
+              "logit": 3.696929931640625
+            },
+            {
+              "token": 220,
+              "logit": 1.787798285484314
+            },
+            {
+              "token": 2055,
+              "logit": 0.9036298394203186
+            },
+            {
+              "token": 576,
+              "logit": 0.38368701934814453
+            },
+            {
+              "token": 358,
+              "logit": 0.2285497933626175
+            }
+          ],
+          "candidate_top5": [
+            {
+              "token": 152063,
+              "logit": 0.0
+            },
+            {
+              "token": 50687,
+              "logit": 0.0
+            },
+            {
+              "token": 50686,
+              "logit": 0.0
+            },
+            {
+              "token": 50689,
+              "logit": 0.0
+            },
+            {
+              "token": 50692,
+              "logit": 0.0
+            }
+          ]
+        }
+      }
+    },
+    {
+      "case_id": "ramp",
+      "has_bf16": false,
+      "has_gguf": true,
+      "has_bpu": true,
+      "comparisons": {
+        "gguf_vs_bpu": {
+          "shape_match": true,
+          "top1_agreement": false,
+          "ref_top1": 151643,
+          "candidate_top1": 152063,
+          "top5_overlap_count": 0,
+          "ref_top1_in_candidate_top5": false,
+          "cosine": 0.0,
+          "l2_relative_error": 1.0,
+          "max_abs_error": 12.238977432250977,
+          "mean_abs_error": 2.197137448058452,
+          "kl_divergence": 9.876726974006848,
+          "candidate_entropy": 11.932056763842207,
+          "candidate_normalized_entropy": 1.0,
+          "candidate_top1_probability": 6.576178451178451e-06,
+          "candidate_nonzero_count": 0,
+          "candidate_nan_count": 0,
+          "candidate_inf_count": 0,
+          "reference_top5": [
+            {
+              "token": 151643,
+              "logit": 12.238977432250977
+            },
+            {
+              "token": 126,
+              "logit": 8.096656799316406
+            },
+            {
+              "token": 122,
+              "logit": 7.474593639373779
+            },
+            {
+              "token": 230,
+              "logit": 6.829896450042725
+            },
+            {
+              "token": 242,
+              "logit": 6.526216506958008
+            }
+          ],
+          "candidate_top5": [
+            {
+              "token": 152063,
+              "logit": 0.0
+            },
+            {
+              "token": 50687,
+              "logit": 0.0
+            },
+            {
+              "token": 50686,
+              "logit": 0.0
+            },
+            {
+              "token": 50689,
+              "logit": 0.0
+            },
+            {
+              "token": 50692,
+              "logit": 0.0
+            }
+          ]
+        }
+      }
+    },
+    {
+      "case_id": "repeated_frequent_token",
+      "has_bf16": false,
+      "has_gguf": true,
+      "has_bpu": true,
+      "comparisons": {
+        "gguf_vs_bpu": {
+          "shape_match": true,
+          "top1_agreement": false,
+          "ref_top1": 220,
+          "candidate_top1": 152063,
+          "top5_overlap_count": 0,
+          "ref_top1_in_candidate_top5": false,
+          "cosine": 0.0,
+          "l2_relative_error": 1.0,
+          "max_abs_error": 12.791715621948242,
+          "mean_abs_error": 8.417411518970118,
+          "kl_divergence": 8.140109249670855,
+          "candidate_entropy": 11.932056763842207,
+          "candidate_normalized_entropy": 1.0,
+          "candidate_top1_probability": 6.576178451178451e-06,
+          "candidate_nonzero_count": 0,
+          "candidate_nan_count": 0,
+          "candidate_inf_count": 0,
+          "reference_top5": [
+            {
+              "token": 220,
+              "logit": 5.4459638595581055
+            },
+            {
+              "token": 16,
+              "logit": 5.4119181632995605
+            },
+            {
+              "token": 17,
+              "logit": 5.31685209274292
+            },
+            {
+              "token": 15,
+              "logit": 4.601502895355225
+            },
+            {
+              "token": 19,
+              "logit": 4.592913627624512
+            }
+          ],
+          "candidate_top5": [
+            {
+              "token": 152063,
+              "logit": 0.0
+            },
+            {
+              "token": 50687,
+              "logit": 0.0
+            },
+            {
+              "token": 50686,
+              "logit": 0.0
+            },
+            {
+              "token": 50689,
+              "logit": 0.0
+            },
+            {
+              "token": 50692,
+              "logit": 0.0
+            }
+          ]
+        }
+      }
+    },
+    {
+      "case_id": "repeated_rare_token",
+      "has_bf16": false,
+      "has_gguf": true,
+      "has_bpu": true,
+      "comparisons": {
+        "gguf_vs_bpu": {
+          "shape_match": true,
+          "top1_agreement": false,
+          "ref_top1": 151643,
+          "candidate_top1": 152063,
+          "top5_overlap_count": 0,
+          "ref_top1_in_candidate_top5": false,
+          "cosine": 0.0,
+          "l2_relative_error": 1.0,
+          "max_abs_error": 11.54983139038086,
+          "mean_abs_error": 7.210444516069225,
+          "kl_divergence": 8.163134114559242,
+          "candidate_entropy": 11.932056763842207,
+          "candidate_normalized_entropy": 1.0,
+          "candidate_top1_probability": 6.576178451178451e-06,
+          "candidate_nonzero_count": 0,
+          "candidate_nan_count": 0,
+          "candidate_inf_count": 0,
+          "reference_top5": [
+            {
+              "token": 151643,
+              "logit": 6.798874378204346
+            },
+            {
+              "token": 220,
+              "logit": 3.8899405002593994
+            },
+            {
+              "token": 1124,
+              "logit": 3.364880323410034
+            },
+            {
+              "token": 262,
+              "logit": 3.3013417720794678
+            },
+            {
+              "token": 576,
+              "logit": 2.0545473098754883
+            }
+          ],
+          "candidate_top5": [
+            {
+              "token": 152063,
+              "logit": 0.0
+            },
+            {
+              "token": 50687,
+              "logit": 0.0
+            },
+            {
+              "token": 50686,
+              "logit": 0.0
+            },
+            {
+              "token": 50689,
+              "logit": 0.0
+            },
+            {
+              "token": 50692,
+              "logit": 0.0
+            }
+          ]
+        }
+      }
+    },
+    {
+      "case_id": "alternating_two_tokens",
+      "has_bf16": false,
+      "has_gguf": true,
+      "has_bpu": true,
+      "comparisons": {
+        "gguf_vs_bpu": {
+          "shape_match": true,
+          "top1_agreement": false,
+          "ref_top1": 15,
+          "candidate_top1": 152063,
+          "top5_overlap_count": 0,
+          "ref_top1_in_candidate_top5": false,
+          "cosine": 0.0,
+          "l2_relative_error": 1.0,
+          "max_abs_error": 15.85426139831543,
+          "mean_abs_error": 11.747155705455892,
+          "kl_divergence": 11.237634940420136,
+          "candidate_entropy": 11.932056763842207,
+          "candidate_normalized_entropy": 1.0,
+          "candidate_top1_probability": 6.576178451178451e-06,
+          "candidate_nonzero_count": 0,
+          "candidate_nan_count": 0,
+          "candidate_inf_count": 0,
+          "reference_top5": [
+            {
+              "token": 15,
+              "logit": 8.74356746673584
+            },
+            {
+              "token": 151643,
+              "logit": 8.215911865234375
+            },
+            {
+              "token": 16,
+              "logit": 3.06258225440979
+            },
+            {
+              "token": 17,
+              "logit": 1.299838662147522
+            },
+            {
+              "token": 18,
+              "logit": 1.0779614448547363
+            }
+          ],
+          "candidate_top5": [
+            {
+              "token": 152063,
+              "logit": 0.0
+            },
+            {
+              "token": 50687,
+              "logit": 0.0
+            },
+            {
+              "token": 50686,
+              "logit": 0.0
+            },
+            {
+              "token": 50689,
+              "logit": 0.0
+            },
+            {
+              "token": 50692,
+              "logit": 0.0
+            }
+          ]
+        }
+      }
+    },
+    {
+      "case_id": "short_english_prompt_padded",
+      "has_bf16": false,
+      "has_gguf": true,
+      "has_bpu": true,
+      "comparisons": {
+        "gguf_vs_bpu": {
+          "shape_match": true,
+          "top1_agreement": false,
+          "ref_top1": 151643,
+          "candidate_top1": 152063,
+          "top5_overlap_count": 0,
+          "ref_top1_in_candidate_top5": false,
+          "cosine": 0.0,
+          "l2_relative_error": 1.0,
+          "max_abs_error": 13.520686149597168,
+          "mean_abs_error": 9.641468869242322,
+          "kl_divergence": 9.458346807883085,
+          "candidate_entropy": 11.932056763842207,
+          "candidate_normalized_entropy": 1.0,
+          "candidate_top1_probability": 6.576178451178451e-06,
+          "candidate_nonzero_count": 0,
+          "candidate_nan_count": 0,
+          "candidate_inf_count": 0,
+          "reference_top5": [
+            {
+              "token": 151643,
+              "logit": 5.809816360473633
+            },
+            {
+              "token": 0,
+              "logit": 3.5840566158294678
+            },
+            {
+              "token": 220,
+              "logit": 1.8682376146316528
+            },
+            {
+              "token": 2219,
+              "logit": 0.9713961482048035
+            },
+            {
+              "token": 2055,
+              "logit": 0.9227456450462341
+            }
+          ],
+          "candidate_top5": [
+            {
+              "token": 152063,
+              "logit": 0.0
+            },
+            {
+              "token": 50687,
+              "logit": 0.0
+            },
+            {
+              "token": 50686,
+              "logit": 0.0
+            },
+            {
+              "token": 50689,
+              "logit": 0.0
+            },
+            {
+              "token": 50692,
+              "logit": 0.0
+            }
+          ]
+        }
+      }
+    },
+    {
+      "case_id": "short_chinese_prompt_padded",
+      "has_bf16": false,
+      "has_gguf": true,
+      "has_bpu": true,
+      "comparisons": {
+        "gguf_vs_bpu": {
+          "shape_match": true,
+          "top1_agreement": false,
+          "ref_top1": 151643,
+          "candidate_top1": 152063,
+          "top5_overlap_count": 0,
+          "ref_top1_in_candidate_top5": false,
+          "cosine": 0.0,
+          "l2_relative_error": 1.0,
+          "max_abs_error": 12.114394187927246,
+          "mean_abs_error": 8.34226488245386,
+          "kl_divergence": 11.495200074257461,
+          "candidate_entropy": 11.932056763842207,
+          "candidate_normalized_entropy": 1.0,
+          "candidate_top1_probability": 6.576178451178451e-06,
+          "candidate_nonzero_count": 0,
+          "candidate_nan_count": 0,
+          "candidate_inf_count": 0,
+          "reference_top5": [
+            {
+              "token": 151643,
+              "logit": 10.49389362335205
+            },
+            {
+              "token": 0,
+              "logit": 7.747244834899902
+            },
+            {
+              "token": 2219,
+              "logit": 3.719210624694824
+            },
+            {
+              "token": 4894,
+              "logit": 3.2823822498321533
+            },
+            {
+              "token": 220,
+              "logit": 2.9449822902679443
+            }
+          ],
+          "candidate_top5": [
+            {
+              "token": 152063,
+              "logit": 0.0
+            },
+            {
+              "token": 50687,
+              "logit": 0.0
+            },
+            {
+              "token": 50686,
+              "logit": 0.0
+            },
+            {
+              "token": 50689,
+              "logit": 0.0
+            },
+            {
+              "token": 50692,
+              "logit": 0.0
+            }
+          ]
+        }
+      }
+    },
+    {
+      "case_id": "openclaw_style_prompt_padded",
+      "has_bf16": false,
+      "has_gguf": true,
+      "has_bpu": true,
+      "comparisons": {
+        "gguf_vs_bpu": {
+          "shape_match": true,
+          "top1_agreement": false,
+          "ref_top1": 151643,
+          "candidate_top1": 152063,
+          "top5_overlap_count": 0,
+          "ref_top1_in_candidate_top5": false,
+          "cosine": 0.0,
+          "l2_relative_error": 1.0,
+          "max_abs_error": 13.924449920654297,
+          "mean_abs_error": 9.982362304866635,
+          "kl_divergence": 10.713767480641941,
+          "candidate_entropy": 11.932056763842207,
+          "candidate_normalized_entropy": 1.0,
+          "candidate_top1_probability": 6.576178451178451e-06,
+          "candidate_nonzero_count": 0,
+          "candidate_nan_count": 0,
+          "candidate_inf_count": 0,
+          "reference_top5": [
+            {
+              "token": 151643,
+              "logit": 6.517802715301514
+            },
+            {
+              "token": 0,
+              "logit": 3.5274605751037598
+            },
+            {
+              "token": 2055,
+              "logit": 1.1170014142990112
+            },
+            {
+              "token": 220,
+              "logit": 0.9972988963127136
+            },
+            {
+              "token": 2219,
+              "logit": 0.9250375628471375
+            }
+          ],
+          "candidate_top5": [
+            {
+              "token": 152063,
+              "logit": 0.0
+            },
+            {
+              "token": 50687,
+              "logit": 0.0
+            },
+            {
+              "token": 50686,
+              "logit": 0.0
+            },
+            {
+              "token": 50689,
+              "logit": 0.0
+            },
+            {
+              "token": 50692,
+              "logit": 0.0
+            }
+          ]
+        }
+      }
+    },
+    {
+      "case_id": "exactly_128_token_synthetic_prompt",
+      "has_bf16": false,
+      "has_gguf": true,
+      "has_bpu": true,
+      "comparisons": {
+        "gguf_vs_bpu": {
+          "shape_match": true,
+          "top1_agreement": false,
+          "ref_top1": 151643,
+          "candidate_top1": 152063,
+          "top5_overlap_count": 0,
+          "ref_top1_in_candidate_top5": false,
+          "cosine": 0.0,
+          "l2_relative_error": 1.0,
+          "max_abs_error": 10.727234840393066,
+          "mean_abs_error": 6.958827444306105,
+          "kl_divergence": 3.5271420342161237,
+          "candidate_entropy": 11.932056763842207,
+          "candidate_normalized_entropy": 1.0,
+          "candidate_top1_probability": 6.576178451178451e-06,
+          "candidate_nonzero_count": 0,
+          "candidate_nan_count": 0,
+          "candidate_inf_count": 0,
+          "reference_top5": [
+            {
+              "token": 151643,
+              "logit": 4.63268518447876
+            },
+            {
+              "token": 198,
+              "logit": 2.202777624130249
+            },
+            {
+              "token": 220,
+              "logit": 1.6490352153778076
+            },
+            {
+              "token": 291,
+              "logit": 1.401000738143921
+            },
+            {
+              "token": 11,
+              "logit": 1.1099090576171875
+            }
+          ],
+          "candidate_top5": [
+            {
+              "token": 152063,
+              "logit": 0.0
+            },
+            {
+              "token": 50687,
+              "logit": 0.0
+            },
+            {
+              "token": 50686,
+              "logit": 0.0
+            },
+            {
+              "token": 50689,
+              "logit": 0.0
+            },
+            {
+              "token": 50692,
+              "logit": 0.0
+            }
+          ]
+        }
+      }
+    },
+    {
+      "case_id": "prompt_with_mask_tail",
+      "has_bf16": false,
+      "has_gguf": true,
+      "has_bpu": true,
+      "comparisons": {
+        "gguf_vs_bpu": {
+          "shape_match": true,
+          "top1_agreement": false,
+          "ref_top1": 151643,
+          "candidate_top1": 152063,
+          "top5_overlap_count": 0,
+          "ref_top1_in_candidate_top5": false,
+          "cosine": 0.0,
+          "l2_relative_error": 1.0,
+          "max_abs_error": 13.648308753967285,
+          "mean_abs_error": 9.69750400430968,
+          "kl_divergence": 11.23520659093059,
+          "candidate_entropy": 11.932056763842207,
+          "candidate_normalized_entropy": 1.0,
+          "candidate_top1_probability": 6.576178451178451e-06,
+          "candidate_nonzero_count": 0,
+          "candidate_nan_count": 0,
+          "candidate_inf_count": 0,
+          "reference_top5": [
+            {
+              "token": 151643,
+              "logit": 7.543087005615234
+            },
+            {
+              "token": 0,
+              "logit": 5.79305362701416
+            },
+            {
+              "token": 16,
+              "logit": 1.5541306734085083
+            },
+            {
+              "token": 785,
+              "logit": 0.3619096875190735
+            },
+            {
+              "token": 220,
+              "logit": 0.18047580122947693
+            }
+          ],
+          "candidate_top5": [
+            {
+              "token": 152063,
+              "logit": 0.0
+            },
+            {
+              "token": 50687,
+              "logit": 0.0
+            },
+            {
+              "token": 50686,
+              "logit": 0.0
+            },
+            {
+              "token": 50689,
+              "logit": 0.0
+            },
+            {
+              "token": 50692,
+              "logit": 0.0
+            }
+          ]
+        }
+      }
+    }
+  ]
+}

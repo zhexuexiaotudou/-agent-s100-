@@ -1,0 +1,238 @@
+{
+  "generated_at": "2026-07-03T11:49:16.210916+08:00",
+  "gate_id": "stage2_readonly_sidecar_soak_concurrency_gate",
+  "verdict": "ok_stage2_readonly_sidecar_soak_concurrency_gate",
+  "passed_count": 7,
+  "check_count": 7,
+  "failure_count": 0,
+  "failures": [],
+  "checks": [
+    {
+      "label": "50-100 prompts completed",
+      "ok": true,
+      "detail": 60
+    },
+    {
+      "label": "concurrency at least 4",
+      "ok": true,
+      "detail": 4
+    },
+    {
+      "label": "allowed success rate >= 0.98",
+      "ok": true,
+      "detail": {
+        "run_count": 60,
+        "concurrency": 4,
+        "allowed_success_rate": 1.0,
+        "denial_correctness": 1.0,
+        "leak_count": 0,
+        "dispatcher_latency_ms": {
+          "p50": 154.749,
+          "p95": 730.647,
+          "p99": 742.903
+        },
+        "qwen_health_ms_before": {
+          "p50": 1.395,
+          "p95": 3.866,
+          "p99": 3.866
+        },
+        "qwen_health_ms_after": {
+          "p50": 1.223,
+          "p95": 1.404,
+          "p99": 1.404
+        },
+        "openclaw_health_ms_before": {
+          "p50": 362.962,
+          "p95": 383.454,
+          "p99": 383.454
+        },
+        "openclaw_health_ms_after": {
+          "p50": 364.611,
+          "p95": 372.781,
+          "p99": 372.781
+        },
+        "status_counts": {
+          "denied": 12,
+          "executed": 48
+        },
+        "nonzero_by_tool": {}
+      }
+    },
+    {
+      "label": "denial correctness = 1.0",
+      "ok": true,
+      "detail": {
+        "run_count": 60,
+        "concurrency": 4,
+        "allowed_success_rate": 1.0,
+        "denial_correctness": 1.0,
+        "leak_count": 0,
+        "dispatcher_latency_ms": {
+          "p50": 154.749,
+          "p95": 730.647,
+          "p99": 742.903
+        },
+        "qwen_health_ms_before": {
+          "p50": 1.395,
+          "p95": 3.866,
+          "p99": 3.866
+        },
+        "qwen_health_ms_after": {
+          "p50": 1.223,
+          "p95": 1.404,
+          "p99": 1.404
+        },
+        "openclaw_health_ms_before": {
+          "p50": 362.962,
+          "p95": 383.454,
+          "p99": 383.454
+        },
+        "openclaw_health_ms_after": {
+          "p50": 364.611,
+          "p95": 372.781,
+          "p99": 372.781
+        },
+        "status_counts": {
+          "denied": 12,
+          "executed": 48
+        },
+        "nonzero_by_tool": {}
+      }
+    },
+    {
+      "label": "redaction leak count zero",
+      "ok": true,
+      "detail": {
+        "run_count": 60,
+        "concurrency": 4,
+        "allowed_success_rate": 1.0,
+        "denial_correctness": 1.0,
+        "leak_count": 0,
+        "dispatcher_latency_ms": {
+          "p50": 154.749,
+          "p95": 730.647,
+          "p99": 742.903
+        },
+        "qwen_health_ms_before": {
+          "p50": 1.395,
+          "p95": 3.866,
+          "p99": 3.866
+        },
+        "qwen_health_ms_after": {
+          "p50": 1.223,
+          "p95": 1.404,
+          "p99": 1.404
+        },
+        "openclaw_health_ms_before": {
+          "p50": 362.962,
+          "p95": 383.454,
+          "p99": 383.454
+        },
+        "openclaw_health_ms_after": {
+          "p50": 364.611,
+          "p95": 372.781,
+          "p99": 372.781
+        },
+        "status_counts": {
+          "denied": 12,
+          "executed": 48
+        },
+        "nonzero_by_tool": {}
+      }
+    },
+    {
+      "label": "sidecar stopped after soak",
+      "ok": true,
+      "detail": {
+        "returncode": 0,
+        "elapsed_ms": 702.784,
+        "stdout_hash": "eb974b0cea16c997ac77dc67d5de1bad2c68972917dd46dc98772195dc6aed66",
+        "stderr_hash": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "stdout_tail": "stopped_pid=711843\n"
+      }
+    },
+    {
+      "label": "Dream process observed and not modified",
+      "ok": true,
+      "detail": {
+        "returncode": 0,
+        "elapsed_ms": 261.572,
+        "stdout_hash": "a3d25b1630bd8de40a44f9eca1faa49bc3389f0337d48c7096981f42eaf95a90",
+        "stderr_hash": "0c7d4405eb8e99583889e05c63b3e65ca0d4cfba82731ab451bca83cffd893bd",
+        "stdout_tail": "_s100p_v11_execution_20260701/evidence/hf_boundaries_v11 --full-truth-root /mnt/nas/openclaw/reports/models/dream7b_s100p_v11_execution_20260701/evidence/full_truth_repeat_v11 --output-root . --dtype bfloat16 --torch-threads 6 --report-json reports/1340_v13_bpu_island_remote.json --report-md reports/1340_v13_bpu_island_remote.md >> logs/1340_v13_bpu_island_remote.log 2>&1 < /dev/null &\n 697793  697792 S     0.0  0.0   512 timeout         timeout 21600 python3 -u tools/run_v13_bpu_island_reconstruction.py --model-dir /mnt/nas/openclaw/models/dream7b-hf --cases /mnt/nas/openclaw/reports/models/dream7b_s100p_v11_execution_20260701/canonical_seq128_cases_v10.jsonl --hf-boundary-root /mnt/nas/openclaw/reports/models/dream7b_s100p_v11_execution_20260701/evidence/hf_boundaries_v11 --full-truth-root /mnt/nas/openclaw/reports/models/dream7b_s100p_v11_execution_20260701/evidence/full_truth_repeat_v11 --output-root . --dtype bfloat16 --torch-threads 6 --report-json reports/1340_v13_bpu_island_remote.json --report-md reports/1340_v13_bpu_island_remote.md\n 697794  697793 Rl    114 57.5 12838144 python3      python3 -u tools/run_v13_bpu_island_reconstruction.py --model-dir /mnt/nas/openclaw/models/dream7b-hf --cases /mnt/nas/openclaw/reports/models/dream7b_s100p_v11_execution_20260701/canonical_seq128_cases_v10.jsonl --hf-boundary-root /mnt/nas/openclaw/reports/models/dream7b_s100p_v11_execution_20260701/evidence/hf_boundaries_v11 --full-truth-root /mnt/nas/openclaw/reports/models/dream7b_s100p_v11_execution_20260701/evidence/full_truth_repeat_v11 --output-root . --dtype bfloat16 --torch-threads 6 --report-json reports/1340_v13_bpu_island_remote.json --report-md reports/1340_v13_bpu_island_remote.md\n__LOAD__\n 11:49:16 up 2 days, 18:31,  1 user,  load average: 9.24, 7.18, 6.54\n               total        used        free      shared  buff/cache   available\nMem:           21783        2955        1472          46       17355       18560\nSwap:              0           0           0\n",
+        "stderr_tail": "Failed to get unit file state for qwen25-local-openai-gateway.service: No such file or directory\n"
+      }
+    }
+  ],
+  "detail": {
+    "remote_root": "/tmp/digua_stage2_5_soak_20260703-114833",
+    "sidecar_port": 19083,
+    "summary": {
+      "run_count": 60,
+      "concurrency": 4,
+      "allowed_success_rate": 1.0,
+      "denial_correctness": 1.0,
+      "leak_count": 0,
+      "dispatcher_latency_ms": {
+        "p50": 154.749,
+        "p95": 730.647,
+        "p99": 742.903
+      },
+      "qwen_health_ms_before": {
+        "p50": 1.395,
+        "p95": 3.866,
+        "p99": 3.866
+      },
+      "qwen_health_ms_after": {
+        "p50": 1.223,
+        "p95": 1.404,
+        "p99": 1.404
+      },
+      "openclaw_health_ms_before": {
+        "p50": 362.962,
+        "p95": 383.454,
+        "p99": 383.454
+      },
+      "openclaw_health_ms_after": {
+        "p50": 364.611,
+        "p95": 372.781,
+        "p99": 372.781
+      },
+      "status_counts": {
+        "denied": 12,
+        "executed": 48
+      },
+      "nonzero_by_tool": {}
+    },
+    "sidecar_ps": {
+      "returncode": 0,
+      "elapsed_ms": 222.158,
+      "stdout_hash": "a02e699869dbee47fcff135267c9b91105cab6dbb2df0b7de1f2cf3320d3cfb7",
+      "stderr_hash": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stdout_tail": " 711843  0.7 17920 python3 stage2_sidecar/mock_server.py --bind 127.0.0.1 --port 19083 --provider-base-url http://127.0.0.1:18080/v1\n"
+    },
+    "before": {
+      "returncode": 0,
+      "elapsed_ms": 395.937,
+      "stdout_hash": "33111fcc581fcb46bcbe25231947f9dc53f9add3568ac8c2e855060c00c61839",
+      "stderr_hash": "0c7d4405eb8e99583889e05c63b3e65ca0d4cfba82731ab451bca83cffd893bd",
+      "stdout_tail": "_s100p_v11_execution_20260701/evidence/hf_boundaries_v11 --full-truth-root /mnt/nas/openclaw/reports/models/dream7b_s100p_v11_execution_20260701/evidence/full_truth_repeat_v11 --output-root . --dtype bfloat16 --torch-threads 6 --report-json reports/1340_v13_bpu_island_remote.json --report-md reports/1340_v13_bpu_island_remote.md >> logs/1340_v13_bpu_island_remote.log 2>&1 < /dev/null &\n 697793  697792 S     0.0  0.0   512 timeout         timeout 21600 python3 -u tools/run_v13_bpu_island_reconstruction.py --model-dir /mnt/nas/openclaw/models/dream7b-hf --cases /mnt/nas/openclaw/reports/models/dream7b_s100p_v11_execution_20260701/canonical_seq128_cases_v10.jsonl --hf-boundary-root /mnt/nas/openclaw/reports/models/dream7b_s100p_v11_execution_20260701/evidence/hf_boundaries_v11 --full-truth-root /mnt/nas/openclaw/reports/models/dream7b_s100p_v11_execution_20260701/evidence/full_truth_repeat_v11 --output-root . --dtype bfloat16 --torch-threads 6 --report-json reports/1340_v13_bpu_island_remote.json --report-md reports/1340_v13_bpu_island_remote.md\n 697794  697793 Rl    114 57.5 12838144 python3      python3 -u tools/run_v13_bpu_island_reconstruction.py --model-dir /mnt/nas/openclaw/models/dream7b-hf --cases /mnt/nas/openclaw/reports/models/dream7b_s100p_v11_execution_20260701/canonical_seq128_cases_v10.jsonl --hf-boundary-root /mnt/nas/openclaw/reports/models/dream7b_s100p_v11_execution_20260701/evidence/hf_boundaries_v11 --full-truth-root /mnt/nas/openclaw/reports/models/dream7b_s100p_v11_execution_20260701/evidence/full_truth_repeat_v11 --output-root . --dtype bfloat16 --torch-threads 6 --report-json reports/1340_v13_bpu_island_remote.json --report-md reports/1340_v13_bpu_island_remote.md\n__LOAD__\n 11:49:02 up 2 days, 18:31,  1 user,  load average: 8.12, 6.90, 6.44\n               total        used        free      shared  buff/cache   available\nMem:           21783        2956        1481          46       17345       18559\nSwap:              0           0           0\n",
+      "stderr_tail": "Failed to get unit file state for qwen25-local-openai-gateway.service: No such file or directory\n"
+    },
+    "after": {
+      "returncode": 0,
+      "elapsed_ms": 261.572,
+      "stdout_hash": "a3d25b1630bd8de40a44f9eca1faa49bc3389f0337d48c7096981f42eaf95a90",
+      "stderr_hash": "0c7d4405eb8e99583889e05c63b3e65ca0d4cfba82731ab451bca83cffd893bd",
+      "stdout_tail": "_s100p_v11_execution_20260701/evidence/hf_boundaries_v11 --full-truth-root /mnt/nas/openclaw/reports/models/dream7b_s100p_v11_execution_20260701/evidence/full_truth_repeat_v11 --output-root . --dtype bfloat16 --torch-threads 6 --report-json reports/1340_v13_bpu_island_remote.json --report-md reports/1340_v13_bpu_island_remote.md >> logs/1340_v13_bpu_island_remote.log 2>&1 < /dev/null &\n 697793  697792 S     0.0  0.0   512 timeout         timeout 21600 python3 -u tools/run_v13_bpu_island_reconstruction.py --model-dir /mnt/nas/openclaw/models/dream7b-hf --cases /mnt/nas/openclaw/reports/models/dream7b_s100p_v11_execution_20260701/canonical_seq128_cases_v10.jsonl --hf-boundary-root /mnt/nas/openclaw/reports/models/dream7b_s100p_v11_execution_20260701/evidence/hf_boundaries_v11 --full-truth-root /mnt/nas/openclaw/reports/models/dream7b_s100p_v11_execution_20260701/evidence/full_truth_repeat_v11 --output-root . --dtype bfloat16 --torch-threads 6 --report-json reports/1340_v13_bpu_island_remote.json --report-md reports/1340_v13_bpu_island_remote.md\n 697794  697793 Rl    114 57.5 12838144 python3      python3 -u tools/run_v13_bpu_island_reconstruction.py --model-dir /mnt/nas/openclaw/models/dream7b-hf --cases /mnt/nas/openclaw/reports/models/dream7b_s100p_v11_execution_20260701/canonical_seq128_cases_v10.jsonl --hf-boundary-root /mnt/nas/openclaw/reports/models/dream7b_s100p_v11_execution_20260701/evidence/hf_boundaries_v11 --full-truth-root /mnt/nas/openclaw/reports/models/dream7b_s100p_v11_execution_20260701/evidence/full_truth_repeat_v11 --output-root . --dtype bfloat16 --torch-threads 6 --report-json reports/1340_v13_bpu_island_remote.json --report-md reports/1340_v13_bpu_island_remote.md\n__LOAD__\n 11:49:16 up 2 days, 18:31,  1 user,  load average: 9.24, 7.18, 6.54\n               total        used        free      shared  buff/cache   available\nMem:           21783        2955        1472          46       17355       18560\nSwap:              0           0           0\n",
+      "stderr_tail": "Failed to get unit file state for qwen25-local-openai-gateway.service: No such file or directory\n"
+    },
+    "stop": {
+      "returncode": 0,
+      "elapsed_ms": 702.784,
+      "stdout_hash": "eb974b0cea16c997ac77dc67d5de1bad2c68972917dd46dc98772195dc6aed66",
+      "stderr_hash": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stdout_tail": "stopped_pid=711843\n"
+    }
+  }
+}

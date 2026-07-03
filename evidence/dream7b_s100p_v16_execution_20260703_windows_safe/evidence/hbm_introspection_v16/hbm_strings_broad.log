@@ -1,0 +1,20 @@
+COMMAND: bash -lc strings -a '/mnt/nas/openclaw/models/dream7b-hbm/seq128-b1-lmheadq16-lasttoken/seg00_01/dream7b_segment_0_1_seq128_q8.hbm' | grep -Ei 'hbir|GatherND|qnt|scale|zero|input|output' | head -5000
+ENV_OVERRIDES: {}
+
+STDOUT:
+resize:  can't open terminal /dev/tty
+{"march": "nash-e", "opt": 2, "jobs": 4, "max_time_per_fc": 0.0, "debug": false, "progress_bar": false, "advice": 0.0, "balance": 100, "input_no_padding": false, "output_no_padding": false}
+_input_0
+_input_1
+_output_0
+hbir.gather_nd_id_7: 0
+hbir.reshape_id_1: 0
+qnt.const_fake_quant_id_3: 0
+hbir.mul_id_63_bpu_segment_0
+hbir.reshape_id_1_cpu_segment_1
+qnt.const_fake_quant_id_3_cpu_segment_2
+native::GatherND(Tensor, Tensor, int64_t) -> (Tensor)
+hbir.add_id_137_bpu_segment_3
+
+
+STDERR:

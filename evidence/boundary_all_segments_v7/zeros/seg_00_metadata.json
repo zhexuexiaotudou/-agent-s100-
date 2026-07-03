@@ -1,0 +1,77 @@
+{
+  "case_id": "zeros",
+  "segment": 0,
+  "raw_path": "evidence/boundary_all_segments_v7/zeros/seg_00_raw_output.npy",
+  "dequant_path": "evidence/boundary_all_segments_v7/zeros/seg_00_output.npy",
+  "model_name": "dream_segment_00_01",
+  "hbm_path": "/mnt/nas/openclaw/models/dream7b-hbm/seq128-b1-lmheadq16-lasttoken/seg00_01/dream7b_segment_0_1_seq128_q8.hbm",
+  "quant_metadata": {
+    "available": true,
+    "repr": "<hbm_runtime.HB_HBMRuntime.QuantParams object at 0xffff80bd5f30>",
+    "scale": [
+      6.062494503566995e-05
+    ],
+    "scale_first": 6.062494503566995e-05,
+    "zero_point": [
+      0.0
+    ]
+  },
+  "raw_stats": {
+    "shape": [
+      128,
+      3584
+    ],
+    "dtype": "int16",
+    "size": 458752,
+    "min": -9110.0,
+    "max": 8986.0,
+    "mean": -1.8005567278180803,
+    "std": 876.2538121788295,
+    "abs_max": 9110.0,
+    "nonzero_count": 458449,
+    "constant": false,
+    "allzero": false,
+    "nan_count": 0,
+    "inf_count": 0,
+    "count_pos_32767": 0,
+    "count_neg_32768": 0,
+    "count_abs_19807": 0,
+    "frac_pos_32767": 0.0,
+    "frac_neg_32768": 0.0,
+    "frac_abs_19807": 0.0,
+    "p0": -9110.0,
+    "p1": -2059.0,
+    "p5": -1268.0,
+    "p50": 0.0,
+    "p95": 1260.0,
+    "p99": 2064.0,
+    "p100": 8986.0
+  },
+  "dequant_stats": {
+    "shape": [
+      128,
+      3584
+    ],
+    "dtype": "float32",
+    "size": 458752,
+    "min": -0.5522932410240173,
+    "max": 0.5447757840156555,
+    "mean": -0.00010915865277638659,
+    "std": 0.05312284082174301,
+    "abs_max": 0.5522932410240173,
+    "nonzero_count": 458449,
+    "constant": false,
+    "allzero": false,
+    "nan_count": 0,
+    "inf_count": 0,
+    "p0": -0.5522932410240173,
+    "p1": -0.12482675909996033,
+    "p5": -0.07687243074178696,
+    "p50": 0.0,
+    "p95": 0.0763874277472496,
+    "p99": 0.12512989342212677,
+    "p100": 0.5447757840156555
+  },
+  "raw_sha256": "1f4dfbc6b3abb9d46267f76d664e200a1c69b0553ab588c0f7760adb56aaf2d7",
+  "dequant_sha256": "19b88e072b709874c4352a7fd508aacf126b0ed1e8ec8f72fe85167c46254a6d"
+}

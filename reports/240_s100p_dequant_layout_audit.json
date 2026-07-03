@@ -1,0 +1,3248 @@
+{
+  "audit_dimensions": {
+    "endian_swap": {
+      "status": "executed",
+      "variant": "byteswap_int16"
+    },
+    "official_dequant": {
+      "status": "executed",
+      "variant": "scale_x"
+    },
+    "per_channel_scale": {
+      "reason": "current HBRT metadata for final logits exposes scalar scale only; no per-channel vector scale was available",
+      "status": "unavailable"
+    },
+    "per_tensor_scale": {
+      "evidence": "HBRT output quant metadata exposes scalar scale and zero_point",
+      "status": "available"
+    },
+    "raw_int_stats": {
+      "fields": [
+        "min",
+        "max",
+        "mean",
+        "std",
+        "nonzero_count",
+        "constant"
+      ],
+      "status": "available"
+    },
+    "signed_unsigned_reinterpretation": {
+      "status": "executed",
+      "variants": [
+        "identity_float",
+        "uint16_reinterpret"
+      ]
+    },
+    "stride_layout_variants": {
+      "reason": "final raw logits are all zero for all tested cases; stride or permutation cannot recover nonzero values from an all-zero vector",
+      "status": "logically_non_rescuing_for_final_logits"
+    }
+  },
+  "cases": [
+    {
+      "best_variant": {
+        "cosine": 0.0,
+        "variant": "identity_float"
+      },
+      "case_id": "zeros",
+      "official_entropy": 1.0,
+      "official_variant": "scale_x",
+      "raw_stats": {
+        "constant": true,
+        "dtype": "int16",
+        "inf_count": 0,
+        "max": 0.0,
+        "mean": 0.0,
+        "min": 0.0,
+        "nan_count": 0,
+        "nonzero_count": 0,
+        "shape": [
+          1,
+          152064
+        ],
+        "std": 0.0
+      },
+      "reference_type": "gguf_q4km",
+      "scale": 0.00025415877462364733,
+      "variants": {
+        "byteswap_int16": {
+          "compare_to_reference": {
+            "candidate_nonzero_count": 0,
+            "candidate_normalized_entropy": 1.0,
+            "candidate_top1": 152063,
+            "candidate_top1_probability": 6.576178451178451e-06,
+            "cosine": 0.0,
+            "kl_divergence": 6.492683808188119,
+            "l2_relative_error": 1.0,
+            "max_abs_error": 13.72036361694336,
+            "mean_abs_error": 10.055129873579363,
+            "ref_top1": 151643,
+            "ref_top1_in_candidate_top5": false,
+            "shape_match": true,
+            "top1_agreement": false,
+            "top5_overlap_count": 0
+          },
+          "stats": {
+            "constant": true,
+            "dtype": "float32",
+            "inf_count": 0,
+            "max": 0.0,
+            "mean": 0.0,
+            "min": 0.0,
+            "nan_count": 0,
+            "nonzero_count": 0,
+            "shape": [
+              152064
+            ],
+            "std": 0.0
+          },
+          "top5": [
+            {
+              "logit": 0.0,
+              "token": 152063
+            },
+            {
+              "logit": 0.0,
+              "token": 50687
+            },
+            {
+              "logit": 0.0,
+              "token": 50686
+            },
+            {
+              "logit": 0.0,
+              "token": 50689
+            },
+            {
+              "logit": 0.0,
+              "token": 50692
+            }
+          ]
+        },
+        "identity_float": {
+          "compare_to_reference": {
+            "candidate_nonzero_count": 0,
+            "candidate_normalized_entropy": 1.0,
+            "candidate_top1": 152063,
+            "candidate_top1_probability": 6.576178451178451e-06,
+            "cosine": 0.0,
+            "kl_divergence": 6.492683808188119,
+            "l2_relative_error": 1.0,
+            "max_abs_error": 13.72036361694336,
+            "mean_abs_error": 10.055129873579363,
+            "ref_top1": 151643,
+            "ref_top1_in_candidate_top5": false,
+            "shape_match": true,
+            "top1_agreement": false,
+            "top5_overlap_count": 0
+          },
+          "stats": {
+            "constant": true,
+            "dtype": "float32",
+            "inf_count": 0,
+            "max": 0.0,
+            "mean": 0.0,
+            "min": 0.0,
+            "nan_count": 0,
+            "nonzero_count": 0,
+            "shape": [
+              152064
+            ],
+            "std": 0.0
+          },
+          "top5": [
+            {
+              "logit": 0.0,
+              "token": 152063
+            },
+            {
+              "logit": 0.0,
+              "token": 50687
+            },
+            {
+              "logit": 0.0,
+              "token": 50686
+            },
+            {
+              "logit": 0.0,
+              "token": 50689
+            },
+            {
+              "logit": 0.0,
+              "token": 50692
+            }
+          ]
+        },
+        "scale_x": {
+          "compare_to_reference": {
+            "candidate_nonzero_count": 0,
+            "candidate_normalized_entropy": 1.0,
+            "candidate_top1": 152063,
+            "candidate_top1_probability": 6.576178451178451e-06,
+            "cosine": 0.0,
+            "kl_divergence": 6.492683808188119,
+            "l2_relative_error": 1.0,
+            "max_abs_error": 13.72036361694336,
+            "mean_abs_error": 10.055129873579363,
+            "ref_top1": 151643,
+            "ref_top1_in_candidate_top5": false,
+            "shape_match": true,
+            "top1_agreement": false,
+            "top5_overlap_count": 0
+          },
+          "stats": {
+            "constant": true,
+            "dtype": "float32",
+            "inf_count": 0,
+            "max": 0.0,
+            "mean": 0.0,
+            "min": 0.0,
+            "nan_count": 0,
+            "nonzero_count": 0,
+            "shape": [
+              152064
+            ],
+            "std": 0.0
+          },
+          "top5": [
+            {
+              "logit": 0.0,
+              "token": 152063
+            },
+            {
+              "logit": 0.0,
+              "token": 50687
+            },
+            {
+              "logit": 0.0,
+              "token": 50686
+            },
+            {
+              "logit": 0.0,
+              "token": 50689
+            },
+            {
+              "logit": 0.0,
+              "token": 50692
+            }
+          ]
+        },
+        "scale_x_minus_zero_point": {
+          "compare_to_reference": {
+            "candidate_nonzero_count": 0,
+            "candidate_normalized_entropy": 1.0,
+            "candidate_top1": 152063,
+            "candidate_top1_probability": 6.576178451178451e-06,
+            "cosine": 0.0,
+            "kl_divergence": 6.492683808188119,
+            "l2_relative_error": 1.0,
+            "max_abs_error": 13.72036361694336,
+            "mean_abs_error": 10.055129873579363,
+            "ref_top1": 151643,
+            "ref_top1_in_candidate_top5": false,
+            "shape_match": true,
+            "top1_agreement": false,
+            "top5_overlap_count": 0
+          },
+          "stats": {
+            "constant": true,
+            "dtype": "float32",
+            "inf_count": 0,
+            "max": 0.0,
+            "mean": 0.0,
+            "min": 0.0,
+            "nan_count": 0,
+            "nonzero_count": 0,
+            "shape": [
+              152064
+            ],
+            "std": 0.0
+          },
+          "top5": [
+            {
+              "logit": 0.0,
+              "token": 152063
+            },
+            {
+              "logit": 0.0,
+              "token": 50687
+            },
+            {
+              "logit": 0.0,
+              "token": 50686
+            },
+            {
+              "logit": 0.0,
+              "token": 50689
+            },
+            {
+              "logit": 0.0,
+              "token": 50692
+            }
+          ]
+        },
+        "uint16_reinterpret": {
+          "compare_to_reference": {
+            "candidate_nonzero_count": 0,
+            "candidate_normalized_entropy": 1.0,
+            "candidate_top1": 152063,
+            "candidate_top1_probability": 6.576178451178451e-06,
+            "cosine": 0.0,
+            "kl_divergence": 6.492683808188119,
+            "l2_relative_error": 1.0,
+            "max_abs_error": 13.72036361694336,
+            "mean_abs_error": 10.055129873579363,
+            "ref_top1": 151643,
+            "ref_top1_in_candidate_top5": false,
+            "shape_match": true,
+            "top1_agreement": false,
+            "top5_overlap_count": 0
+          },
+          "stats": {
+            "constant": true,
+            "dtype": "float32",
+            "inf_count": 0,
+            "max": 0.0,
+            "mean": 0.0,
+            "min": 0.0,
+            "nan_count": 0,
+            "nonzero_count": 0,
+            "shape": [
+              152064
+            ],
+            "std": 0.0
+          },
+          "top5": [
+            {
+              "logit": 0.0,
+              "token": 152063
+            },
+            {
+              "logit": 0.0,
+              "token": 50687
+            },
+            {
+              "logit": 0.0,
+              "token": 50686
+            },
+            {
+              "logit": 0.0,
+              "token": 50689
+            },
+            {
+              "logit": 0.0,
+              "token": 50692
+            }
+          ]
+        }
+      },
+      "zero_point": 0.0
+    },
+    {
+      "best_variant": {
+        "cosine": 0.0,
+        "variant": "identity_float"
+      },
+      "case_id": "ramp",
+      "official_entropy": 1.0,
+      "official_variant": "scale_x",
+      "raw_stats": {
+        "constant": true,
+        "dtype": "int16",
+        "inf_count": 0,
+        "max": 0.0,
+        "mean": 0.0,
+        "min": 0.0,
+        "nan_count": 0,
+        "nonzero_count": 0,
+        "shape": [
+          1,
+          152064
+        ],
+        "std": 0.0
+      },
+      "reference_type": "gguf_q4km",
+      "scale": 0.00025415877462364733,
+      "variants": {
+        "byteswap_int16": {
+          "compare_to_reference": {
+            "candidate_nonzero_count": 0,
+            "candidate_normalized_entropy": 1.0,
+            "candidate_top1": 152063,
+            "candidate_top1_probability": 6.576178451178451e-06,
+            "cosine": 0.0,
+            "kl_divergence": 9.876726974006848,
+            "l2_relative_error": 1.0,
+            "max_abs_error": 12.238977432250977,
+            "mean_abs_error": 2.197137448058452,
+            "ref_top1": 151643,
+            "ref_top1_in_candidate_top5": false,
+            "shape_match": true,
+            "top1_agreement": false,
+            "top5_overlap_count": 0
+          },
+          "stats": {
+            "constant": true,
+            "dtype": "float32",
+            "inf_count": 0,
+            "max": 0.0,
+            "mean": 0.0,
+            "min": 0.0,
+            "nan_count": 0,
+            "nonzero_count": 0,
+            "shape": [
+              152064
+            ],
+            "std": 0.0
+          },
+          "top5": [
+            {
+              "logit": 0.0,
+              "token": 152063
+            },
+            {
+              "logit": 0.0,
+              "token": 50687
+            },
+            {
+              "logit": 0.0,
+              "token": 50686
+            },
+            {
+              "logit": 0.0,
+              "token": 50689
+            },
+            {
+              "logit": 0.0,
+              "token": 50692
+            }
+          ]
+        },
+        "identity_float": {
+          "compare_to_reference": {
+            "candidate_nonzero_count": 0,
+            "candidate_normalized_entropy": 1.0,
+            "candidate_top1": 152063,
+            "candidate_top1_probability": 6.576178451178451e-06,
+            "cosine": 0.0,
+            "kl_divergence": 9.876726974006848,
+            "l2_relative_error": 1.0,
+            "max_abs_error": 12.238977432250977,
+            "mean_abs_error": 2.197137448058452,
+            "ref_top1": 151643,
+            "ref_top1_in_candidate_top5": false,
+            "shape_match": true,
+            "top1_agreement": false,
+            "top5_overlap_count": 0
+          },
+          "stats": {
+            "constant": true,
+            "dtype": "float32",
+            "inf_count": 0,
+            "max": 0.0,
+            "mean": 0.0,
+            "min": 0.0,
+            "nan_count": 0,
+            "nonzero_count": 0,
+            "shape": [
+              152064
+            ],
+            "std": 0.0
+          },
+          "top5": [
+            {
+              "logit": 0.0,
+              "token": 152063
+            },
+            {
+              "logit": 0.0,
+              "token": 50687
+            },
+            {
+              "logit": 0.0,
+              "token": 50686
+            },
+            {
+              "logit": 0.0,
+              "token": 50689
+            },
+            {
+              "logit": 0.0,
+              "token": 50692
+            }
+          ]
+        },
+        "scale_x": {
+          "compare_to_reference": {
+            "candidate_nonzero_count": 0,
+            "candidate_normalized_entropy": 1.0,
+            "candidate_top1": 152063,
+            "candidate_top1_probability": 6.576178451178451e-06,
+            "cosine": 0.0,
+            "kl_divergence": 9.876726974006848,
+            "l2_relative_error": 1.0,
+            "max_abs_error": 12.238977432250977,
+            "mean_abs_error": 2.197137448058452,
+            "ref_top1": 151643,
+            "ref_top1_in_candidate_top5": false,
+            "shape_match": true,
+            "top1_agreement": false,
+            "top5_overlap_count": 0
+          },
+          "stats": {
+            "constant": true,
+            "dtype": "float32",
+            "inf_count": 0,
+            "max": 0.0,
+            "mean": 0.0,
+            "min": 0.0,
+            "nan_count": 0,
+            "nonzero_count": 0,
+            "shape": [
+              152064
+            ],
+            "std": 0.0
+          },
+          "top5": [
+            {
+              "logit": 0.0,
+              "token": 152063
+            },
+            {
+              "logit": 0.0,
+              "token": 50687
+            },
+            {
+              "logit": 0.0,
+              "token": 50686
+            },
+            {
+              "logit": 0.0,
+              "token": 50689
+            },
+            {
+              "logit": 0.0,
+              "token": 50692
+            }
+          ]
+        },
+        "scale_x_minus_zero_point": {
+          "compare_to_reference": {
+            "candidate_nonzero_count": 0,
+            "candidate_normalized_entropy": 1.0,
+            "candidate_top1": 152063,
+            "candidate_top1_probability": 6.576178451178451e-06,
+            "cosine": 0.0,
+            "kl_divergence": 9.876726974006848,
+            "l2_relative_error": 1.0,
+            "max_abs_error": 12.238977432250977,
+            "mean_abs_error": 2.197137448058452,
+            "ref_top1": 151643,
+            "ref_top1_in_candidate_top5": false,
+            "shape_match": true,
+            "top1_agreement": false,
+            "top5_overlap_count": 0
+          },
+          "stats": {
+            "constant": true,
+            "dtype": "float32",
+            "inf_count": 0,
+            "max": 0.0,
+            "mean": 0.0,
+            "min": 0.0,
+            "nan_count": 0,
+            "nonzero_count": 0,
+            "shape": [
+              152064
+            ],
+            "std": 0.0
+          },
+          "top5": [
+            {
+              "logit": 0.0,
+              "token": 152063
+            },
+            {
+              "logit": 0.0,
+              "token": 50687
+            },
+            {
+              "logit": 0.0,
+              "token": 50686
+            },
+            {
+              "logit": 0.0,
+              "token": 50689
+            },
+            {
+              "logit": 0.0,
+              "token": 50692
+            }
+          ]
+        },
+        "uint16_reinterpret": {
+          "compare_to_reference": {
+            "candidate_nonzero_count": 0,
+            "candidate_normalized_entropy": 1.0,
+            "candidate_top1": 152063,
+            "candidate_top1_probability": 6.576178451178451e-06,
+            "cosine": 0.0,
+            "kl_divergence": 9.876726974006848,
+            "l2_relative_error": 1.0,
+            "max_abs_error": 12.238977432250977,
+            "mean_abs_error": 2.197137448058452,
+            "ref_top1": 151643,
+            "ref_top1_in_candidate_top5": false,
+            "shape_match": true,
+            "top1_agreement": false,
+            "top5_overlap_count": 0
+          },
+          "stats": {
+            "constant": true,
+            "dtype": "float32",
+            "inf_count": 0,
+            "max": 0.0,
+            "mean": 0.0,
+            "min": 0.0,
+            "nan_count": 0,
+            "nonzero_count": 0,
+            "shape": [
+              152064
+            ],
+            "std": 0.0
+          },
+          "top5": [
+            {
+              "logit": 0.0,
+              "token": 152063
+            },
+            {
+              "logit": 0.0,
+              "token": 50687
+            },
+            {
+              "logit": 0.0,
+              "token": 50686
+            },
+            {
+              "logit": 0.0,
+              "token": 50689
+            },
+            {
+              "logit": 0.0,
+              "token": 50692
+            }
+          ]
+        }
+      },
+      "zero_point": 0.0
+    },
+    {
+      "best_variant": {
+        "cosine": 0.0,
+        "variant": "identity_float"
+      },
+      "case_id": "repeated_frequent_token",
+      "official_entropy": 1.0,
+      "official_variant": "scale_x",
+      "raw_stats": {
+        "constant": true,
+        "dtype": "int16",
+        "inf_count": 0,
+        "max": 0.0,
+        "mean": 0.0,
+        "min": 0.0,
+        "nan_count": 0,
+        "nonzero_count": 0,
+        "shape": [
+          1,
+          152064
+        ],
+        "std": 0.0
+      },
+      "reference_type": "gguf_q4km",
+      "scale": 0.00025415877462364733,
+      "variants": {
+        "byteswap_int16": {
+          "compare_to_reference": {
+            "candidate_nonzero_count": 0,
+            "candidate_normalized_entropy": 1.0,
+            "candidate_top1": 152063,
+            "candidate_top1_probability": 6.576178451178451e-06,
+            "cosine": 0.0,
+            "kl_divergence": 8.140109249670855,
+            "l2_relative_error": 1.0,
+            "max_abs_error": 12.791715621948242,
+            "mean_abs_error": 8.417411518970118,
+            "ref_top1": 220,
+            "ref_top1_in_candidate_top5": false,
+            "shape_match": true,
+            "top1_agreement": false,
+            "top5_overlap_count": 0
+          },
+          "stats": {
+            "constant": true,
+            "dtype": "float32",
+            "inf_count": 0,
+            "max": 0.0,
+            "mean": 0.0,
+            "min": 0.0,
+            "nan_count": 0,
+            "nonzero_count": 0,
+            "shape": [
+              152064
+            ],
+            "std": 0.0
+          },
+          "top5": [
+            {
+              "logit": 0.0,
+              "token": 152063
+            },
+            {
+              "logit": 0.0,
+              "token": 50687
+            },
+            {
+              "logit": 0.0,
+              "token": 50686
+            },
+            {
+              "logit": 0.0,
+              "token": 50689
+            },
+            {
+              "logit": 0.0,
+              "token": 50692
+            }
+          ]
+        },
+        "identity_float": {
+          "compare_to_reference": {
+            "candidate_nonzero_count": 0,
+            "candidate_normalized_entropy": 1.0,
+            "candidate_top1": 152063,
+            "candidate_top1_probability": 6.576178451178451e-06,
+            "cosine": 0.0,
+            "kl_divergence": 8.140109249670855,
+            "l2_relative_error": 1.0,
+            "max_abs_error": 12.791715621948242,
+            "mean_abs_error": 8.417411518970118,
+            "ref_top1": 220,
+            "ref_top1_in_candidate_top5": false,
+            "shape_match": true,
+            "top1_agreement": false,
+            "top5_overlap_count": 0
+          },
+          "stats": {
+            "constant": true,
+            "dtype": "float32",
+            "inf_count": 0,
+            "max": 0.0,
+            "mean": 0.0,
+            "min": 0.0,
+            "nan_count": 0,
+            "nonzero_count": 0,
+            "shape": [
+              152064
+            ],
+            "std": 0.0
+          },
+          "top5": [
+            {
+              "logit": 0.0,
+              "token": 152063
+            },
+            {
+              "logit": 0.0,
+              "token": 50687
+            },
+            {
+              "logit": 0.0,
+              "token": 50686
+            },
+            {
+              "logit": 0.0,
+              "token": 50689
+            },
+            {
+              "logit": 0.0,
+              "token": 50692
+            }
+          ]
+        },
+        "scale_x": {
+          "compare_to_reference": {
+            "candidate_nonzero_count": 0,
+            "candidate_normalized_entropy": 1.0,
+            "candidate_top1": 152063,
+            "candidate_top1_probability": 6.576178451178451e-06,
+            "cosine": 0.0,
+            "kl_divergence": 8.140109249670855,
+            "l2_relative_error": 1.0,
+            "max_abs_error": 12.791715621948242,
+            "mean_abs_error": 8.417411518970118,
+            "ref_top1": 220,
+            "ref_top1_in_candidate_top5": false,
+            "shape_match": true,
+            "top1_agreement": false,
+            "top5_overlap_count": 0
+          },
+          "stats": {
+            "constant": true,
+            "dtype": "float32",
+            "inf_count": 0,
+            "max": 0.0,
+            "mean": 0.0,
+            "min": 0.0,
+            "nan_count": 0,
+            "nonzero_count": 0,
+            "shape": [
+              152064
+            ],
+            "std": 0.0
+          },
+          "top5": [
+            {
+              "logit": 0.0,
+              "token": 152063
+            },
+            {
+              "logit": 0.0,
+              "token": 50687
+            },
+            {
+              "logit": 0.0,
+              "token": 50686
+            },
+            {
+              "logit": 0.0,
+              "token": 50689
+            },
+            {
+              "logit": 0.0,
+              "token": 50692
+            }
+          ]
+        },
+        "scale_x_minus_zero_point": {
+          "compare_to_reference": {
+            "candidate_nonzero_count": 0,
+            "candidate_normalized_entropy": 1.0,
+            "candidate_top1": 152063,
+            "candidate_top1_probability": 6.576178451178451e-06,
+            "cosine": 0.0,
+            "kl_divergence": 8.140109249670855,
+            "l2_relative_error": 1.0,
+            "max_abs_error": 12.791715621948242,
+            "mean_abs_error": 8.417411518970118,
+            "ref_top1": 220,
+            "ref_top1_in_candidate_top5": false,
+            "shape_match": true,
+            "top1_agreement": false,
+            "top5_overlap_count": 0
+          },
+          "stats": {
+            "constant": true,
+            "dtype": "float32",
+            "inf_count": 0,
+            "max": 0.0,
+            "mean": 0.0,
+            "min": 0.0,
+            "nan_count": 0,
+            "nonzero_count": 0,
+            "shape": [
+              152064
+            ],
+            "std": 0.0
+          },
+          "top5": [
+            {
+              "logit": 0.0,
+              "token": 152063
+            },
+            {
+              "logit": 0.0,
+              "token": 50687
+            },
+            {
+              "logit": 0.0,
+              "token": 50686
+            },
+            {
+              "logit": 0.0,
+              "token": 50689
+            },
+            {
+              "logit": 0.0,
+              "token": 50692
+            }
+          ]
+        },
+        "uint16_reinterpret": {
+          "compare_to_reference": {
+            "candidate_nonzero_count": 0,
+            "candidate_normalized_entropy": 1.0,
+            "candidate_top1": 152063,
+            "candidate_top1_probability": 6.576178451178451e-06,
+            "cosine": 0.0,
+            "kl_divergence": 8.140109249670855,
+            "l2_relative_error": 1.0,
+            "max_abs_error": 12.791715621948242,
+            "mean_abs_error": 8.417411518970118,
+            "ref_top1": 220,
+            "ref_top1_in_candidate_top5": false,
+            "shape_match": true,
+            "top1_agreement": false,
+            "top5_overlap_count": 0
+          },
+          "stats": {
+            "constant": true,
+            "dtype": "float32",
+            "inf_count": 0,
+            "max": 0.0,
+            "mean": 0.0,
+            "min": 0.0,
+            "nan_count": 0,
+            "nonzero_count": 0,
+            "shape": [
+              152064
+            ],
+            "std": 0.0
+          },
+          "top5": [
+            {
+              "logit": 0.0,
+              "token": 152063
+            },
+            {
+              "logit": 0.0,
+              "token": 50687
+            },
+            {
+              "logit": 0.0,
+              "token": 50686
+            },
+            {
+              "logit": 0.0,
+              "token": 50689
+            },
+            {
+              "logit": 0.0,
+              "token": 50692
+            }
+          ]
+        }
+      },
+      "zero_point": 0.0
+    },
+    {
+      "best_variant": {
+        "cosine": 0.0,
+        "variant": "identity_float"
+      },
+      "case_id": "repeated_rare_token",
+      "official_entropy": 1.0,
+      "official_variant": "scale_x",
+      "raw_stats": {
+        "constant": true,
+        "dtype": "int16",
+        "inf_count": 0,
+        "max": 0.0,
+        "mean": 0.0,
+        "min": 0.0,
+        "nan_count": 0,
+        "nonzero_count": 0,
+        "shape": [
+          1,
+          152064
+        ],
+        "std": 0.0
+      },
+      "reference_type": "gguf_q4km",
+      "scale": 0.00025415877462364733,
+      "variants": {
+        "byteswap_int16": {
+          "compare_to_reference": {
+            "candidate_nonzero_count": 0,
+            "candidate_normalized_entropy": 1.0,
+            "candidate_top1": 152063,
+            "candidate_top1_probability": 6.576178451178451e-06,
+            "cosine": 0.0,
+            "kl_divergence": 8.163134114559242,
+            "l2_relative_error": 1.0,
+            "max_abs_error": 11.54983139038086,
+            "mean_abs_error": 7.210444516069225,
+            "ref_top1": 151643,
+            "ref_top1_in_candidate_top5": false,
+            "shape_match": true,
+            "top1_agreement": false,
+            "top5_overlap_count": 0
+          },
+          "stats": {
+            "constant": true,
+            "dtype": "float32",
+            "inf_count": 0,
+            "max": 0.0,
+            "mean": 0.0,
+            "min": 0.0,
+            "nan_count": 0,
+            "nonzero_count": 0,
+            "shape": [
+              152064
+            ],
+            "std": 0.0
+          },
+          "top5": [
+            {
+              "logit": 0.0,
+              "token": 152063
+            },
+            {
+              "logit": 0.0,
+              "token": 50687
+            },
+            {
+              "logit": 0.0,
+              "token": 50686
+            },
+            {
+              "logit": 0.0,
+              "token": 50689
+            },
+            {
+              "logit": 0.0,
+              "token": 50692
+            }
+          ]
+        },
+        "identity_float": {
+          "compare_to_reference": {
+            "candidate_nonzero_count": 0,
+            "candidate_normalized_entropy": 1.0,
+            "candidate_top1": 152063,
+            "candidate_top1_probability": 6.576178451178451e-06,
+            "cosine": 0.0,
+            "kl_divergence": 8.163134114559242,
+            "l2_relative_error": 1.0,
+            "max_abs_error": 11.54983139038086,
+            "mean_abs_error": 7.210444516069225,
+            "ref_top1": 151643,
+            "ref_top1_in_candidate_top5": false,
+            "shape_match": true,
+            "top1_agreement": false,
+            "top5_overlap_count": 0
+          },
+          "stats": {
+            "constant": true,
+            "dtype": "float32",
+            "inf_count": 0,
+            "max": 0.0,
+            "mean": 0.0,
+            "min": 0.0,
+            "nan_count": 0,
+            "nonzero_count": 0,
+            "shape": [
+              152064
+            ],
+            "std": 0.0
+          },
+          "top5": [
+            {
+              "logit": 0.0,
+              "token": 152063
+            },
+            {
+              "logit": 0.0,
+              "token": 50687
+            },
+            {
+              "logit": 0.0,
+              "token": 50686
+            },
+            {
+              "logit": 0.0,
+              "token": 50689
+            },
+            {
+              "logit": 0.0,
+              "token": 50692
+            }
+          ]
+        },
+        "scale_x": {
+          "compare_to_reference": {
+            "candidate_nonzero_count": 0,
+            "candidate_normalized_entropy": 1.0,
+            "candidate_top1": 152063,
+            "candidate_top1_probability": 6.576178451178451e-06,
+            "cosine": 0.0,
+            "kl_divergence": 8.163134114559242,
+            "l2_relative_error": 1.0,
+            "max_abs_error": 11.54983139038086,
+            "mean_abs_error": 7.210444516069225,
+            "ref_top1": 151643,
+            "ref_top1_in_candidate_top5": false,
+            "shape_match": true,
+            "top1_agreement": false,
+            "top5_overlap_count": 0
+          },
+          "stats": {
+            "constant": true,
+            "dtype": "float32",
+            "inf_count": 0,
+            "max": 0.0,
+            "mean": 0.0,
+            "min": 0.0,
+            "nan_count": 0,
+            "nonzero_count": 0,
+            "shape": [
+              152064
+            ],
+            "std": 0.0
+          },
+          "top5": [
+            {
+              "logit": 0.0,
+              "token": 152063
+            },
+            {
+              "logit": 0.0,
+              "token": 50687
+            },
+            {
+              "logit": 0.0,
+              "token": 50686
+            },
+            {
+              "logit": 0.0,
+              "token": 50689
+            },
+            {
+              "logit": 0.0,
+              "token": 50692
+            }
+          ]
+        },
+        "scale_x_minus_zero_point": {
+          "compare_to_reference": {
+            "candidate_nonzero_count": 0,
+            "candidate_normalized_entropy": 1.0,
+            "candidate_top1": 152063,
+            "candidate_top1_probability": 6.576178451178451e-06,
+            "cosine": 0.0,
+            "kl_divergence": 8.163134114559242,
+            "l2_relative_error": 1.0,
+            "max_abs_error": 11.54983139038086,
+            "mean_abs_error": 7.210444516069225,
+            "ref_top1": 151643,
+            "ref_top1_in_candidate_top5": false,
+            "shape_match": true,
+            "top1_agreement": false,
+            "top5_overlap_count": 0
+          },
+          "stats": {
+            "constant": true,
+            "dtype": "float32",
+            "inf_count": 0,
+            "max": 0.0,
+            "mean": 0.0,
+            "min": 0.0,
+            "nan_count": 0,
+            "nonzero_count": 0,
+            "shape": [
+              152064
+            ],
+            "std": 0.0
+          },
+          "top5": [
+            {
+              "logit": 0.0,
+              "token": 152063
+            },
+            {
+              "logit": 0.0,
+              "token": 50687
+            },
+            {
+              "logit": 0.0,
+              "token": 50686
+            },
+            {
+              "logit": 0.0,
+              "token": 50689
+            },
+            {
+              "logit": 0.0,
+              "token": 50692
+            }
+          ]
+        },
+        "uint16_reinterpret": {
+          "compare_to_reference": {
+            "candidate_nonzero_count": 0,
+            "candidate_normalized_entropy": 1.0,
+            "candidate_top1": 152063,
+            "candidate_top1_probability": 6.576178451178451e-06,
+            "cosine": 0.0,
+            "kl_divergence": 8.163134114559242,
+            "l2_relative_error": 1.0,
+            "max_abs_error": 11.54983139038086,
+            "mean_abs_error": 7.210444516069225,
+            "ref_top1": 151643,
+            "ref_top1_in_candidate_top5": false,
+            "shape_match": true,
+            "top1_agreement": false,
+            "top5_overlap_count": 0
+          },
+          "stats": {
+            "constant": true,
+            "dtype": "float32",
+            "inf_count": 0,
+            "max": 0.0,
+            "mean": 0.0,
+            "min": 0.0,
+            "nan_count": 0,
+            "nonzero_count": 0,
+            "shape": [
+              152064
+            ],
+            "std": 0.0
+          },
+          "top5": [
+            {
+              "logit": 0.0,
+              "token": 152063
+            },
+            {
+              "logit": 0.0,
+              "token": 50687
+            },
+            {
+              "logit": 0.0,
+              "token": 50686
+            },
+            {
+              "logit": 0.0,
+              "token": 50689
+            },
+            {
+              "logit": 0.0,
+              "token": 50692
+            }
+          ]
+        }
+      },
+      "zero_point": 0.0
+    },
+    {
+      "best_variant": {
+        "cosine": 0.0,
+        "variant": "identity_float"
+      },
+      "case_id": "alternating_two_tokens",
+      "official_entropy": 1.0,
+      "official_variant": "scale_x",
+      "raw_stats": {
+        "constant": true,
+        "dtype": "int16",
+        "inf_count": 0,
+        "max": 0.0,
+        "mean": 0.0,
+        "min": 0.0,
+        "nan_count": 0,
+        "nonzero_count": 0,
+        "shape": [
+          1,
+          152064
+        ],
+        "std": 0.0
+      },
+      "reference_type": "gguf_q4km",
+      "scale": 0.00025415877462364733,
+      "variants": {
+        "byteswap_int16": {
+          "compare_to_reference": {
+            "candidate_nonzero_count": 0,
+            "candidate_normalized_entropy": 1.0,
+            "candidate_top1": 152063,
+            "candidate_top1_probability": 6.576178451178451e-06,
+            "cosine": 0.0,
+            "kl_divergence": 11.237634940420136,
+            "l2_relative_error": 1.0,
+            "max_abs_error": 15.85426139831543,
+            "mean_abs_error": 11.747155705455892,
+            "ref_top1": 15,
+            "ref_top1_in_candidate_top5": false,
+            "shape_match": true,
+            "top1_agreement": false,
+            "top5_overlap_count": 0
+          },
+          "stats": {
+            "constant": true,
+            "dtype": "float32",
+            "inf_count": 0,
+            "max": 0.0,
+            "mean": 0.0,
+            "min": 0.0,
+            "nan_count": 0,
+            "nonzero_count": 0,
+            "shape": [
+              152064
+            ],
+            "std": 0.0
+          },
+          "top5": [
+            {
+              "logit": 0.0,
+              "token": 152063
+            },
+            {
+              "logit": 0.0,
+              "token": 50687
+            },
+            {
+              "logit": 0.0,
+              "token": 50686
+            },
+            {
+              "logit": 0.0,
+              "token": 50689
+            },
+            {
+              "logit": 0.0,
+              "token": 50692
+            }
+          ]
+        },
+        "identity_float": {
+          "compare_to_reference": {
+            "candidate_nonzero_count": 0,
+            "candidate_normalized_entropy": 1.0,
+            "candidate_top1": 152063,
+            "candidate_top1_probability": 6.576178451178451e-06,
+            "cosine": 0.0,
+            "kl_divergence": 11.237634940420136,
+            "l2_relative_error": 1.0,
+            "max_abs_error": 15.85426139831543,
+            "mean_abs_error": 11.747155705455892,
+            "ref_top1": 15,
+            "ref_top1_in_candidate_top5": false,
+            "shape_match": true,
+            "top1_agreement": false,
+            "top5_overlap_count": 0
+          },
+          "stats": {
+            "constant": true,
+            "dtype": "float32",
+            "inf_count": 0,
+            "max": 0.0,
+            "mean": 0.0,
+            "min": 0.0,
+            "nan_count": 0,
+            "nonzero_count": 0,
+            "shape": [
+              152064
+            ],
+            "std": 0.0
+          },
+          "top5": [
+            {
+              "logit": 0.0,
+              "token": 152063
+            },
+            {
+              "logit": 0.0,
+              "token": 50687
+            },
+            {
+              "logit": 0.0,
+              "token": 50686
+            },
+            {
+              "logit": 0.0,
+              "token": 50689
+            },
+            {
+              "logit": 0.0,
+              "token": 50692
+            }
+          ]
+        },
+        "scale_x": {
+          "compare_to_reference": {
+            "candidate_nonzero_count": 0,
+            "candidate_normalized_entropy": 1.0,
+            "candidate_top1": 152063,
+            "candidate_top1_probability": 6.576178451178451e-06,
+            "cosine": 0.0,
+            "kl_divergence": 11.237634940420136,
+            "l2_relative_error": 1.0,
+            "max_abs_error": 15.85426139831543,
+            "mean_abs_error": 11.747155705455892,
+            "ref_top1": 15,
+            "ref_top1_in_candidate_top5": false,
+            "shape_match": true,
+            "top1_agreement": false,
+            "top5_overlap_count": 0
+          },
+          "stats": {
+            "constant": true,
+            "dtype": "float32",
+            "inf_count": 0,
+            "max": 0.0,
+            "mean": 0.0,
+            "min": 0.0,
+            "nan_count": 0,
+            "nonzero_count": 0,
+            "shape": [
+              152064
+            ],
+            "std": 0.0
+          },
+          "top5": [
+            {
+              "logit": 0.0,
+              "token": 152063
+            },
+            {
+              "logit": 0.0,
+              "token": 50687
+            },
+            {
+              "logit": 0.0,
+              "token": 50686
+            },
+            {
+              "logit": 0.0,
+              "token": 50689
+            },
+            {
+              "logit": 0.0,
+              "token": 50692
+            }
+          ]
+        },
+        "scale_x_minus_zero_point": {
+          "compare_to_reference": {
+            "candidate_nonzero_count": 0,
+            "candidate_normalized_entropy": 1.0,
+            "candidate_top1": 152063,
+            "candidate_top1_probability": 6.576178451178451e-06,
+            "cosine": 0.0,
+            "kl_divergence": 11.237634940420136,
+            "l2_relative_error": 1.0,
+            "max_abs_error": 15.85426139831543,
+            "mean_abs_error": 11.747155705455892,
+            "ref_top1": 15,
+            "ref_top1_in_candidate_top5": false,
+            "shape_match": true,
+            "top1_agreement": false,
+            "top5_overlap_count": 0
+          },
+          "stats": {
+            "constant": true,
+            "dtype": "float32",
+            "inf_count": 0,
+            "max": 0.0,
+            "mean": 0.0,
+            "min": 0.0,
+            "nan_count": 0,
+            "nonzero_count": 0,
+            "shape": [
+              152064
+            ],
+            "std": 0.0
+          },
+          "top5": [
+            {
+              "logit": 0.0,
+              "token": 152063
+            },
+            {
+              "logit": 0.0,
+              "token": 50687
+            },
+            {
+              "logit": 0.0,
+              "token": 50686
+            },
+            {
+              "logit": 0.0,
+              "token": 50689
+            },
+            {
+              "logit": 0.0,
+              "token": 50692
+            }
+          ]
+        },
+        "uint16_reinterpret": {
+          "compare_to_reference": {
+            "candidate_nonzero_count": 0,
+            "candidate_normalized_entropy": 1.0,
+            "candidate_top1": 152063,
+            "candidate_top1_probability": 6.576178451178451e-06,
+            "cosine": 0.0,
+            "kl_divergence": 11.237634940420136,
+            "l2_relative_error": 1.0,
+            "max_abs_error": 15.85426139831543,
+            "mean_abs_error": 11.747155705455892,
+            "ref_top1": 15,
+            "ref_top1_in_candidate_top5": false,
+            "shape_match": true,
+            "top1_agreement": false,
+            "top5_overlap_count": 0
+          },
+          "stats": {
+            "constant": true,
+            "dtype": "float32",
+            "inf_count": 0,
+            "max": 0.0,
+            "mean": 0.0,
+            "min": 0.0,
+            "nan_count": 0,
+            "nonzero_count": 0,
+            "shape": [
+              152064
+            ],
+            "std": 0.0
+          },
+          "top5": [
+            {
+              "logit": 0.0,
+              "token": 152063
+            },
+            {
+              "logit": 0.0,
+              "token": 50687
+            },
+            {
+              "logit": 0.0,
+              "token": 50686
+            },
+            {
+              "logit": 0.0,
+              "token": 50689
+            },
+            {
+              "logit": 0.0,
+              "token": 50692
+            }
+          ]
+        }
+      },
+      "zero_point": 0.0
+    },
+    {
+      "best_variant": {
+        "cosine": 0.0,
+        "variant": "identity_float"
+      },
+      "case_id": "short_english_prompt_padded",
+      "official_entropy": 1.0,
+      "official_variant": "scale_x",
+      "raw_stats": {
+        "constant": true,
+        "dtype": "int16",
+        "inf_count": 0,
+        "max": 0.0,
+        "mean": 0.0,
+        "min": 0.0,
+        "nan_count": 0,
+        "nonzero_count": 0,
+        "shape": [
+          1,
+          152064
+        ],
+        "std": 0.0
+      },
+      "reference_type": "gguf_q4km",
+      "scale": 0.00025415877462364733,
+      "variants": {
+        "byteswap_int16": {
+          "compare_to_reference": {
+            "candidate_nonzero_count": 0,
+            "candidate_normalized_entropy": 1.0,
+            "candidate_top1": 152063,
+            "candidate_top1_probability": 6.576178451178451e-06,
+            "cosine": 0.0,
+            "kl_divergence": 9.458346807883085,
+            "l2_relative_error": 1.0,
+            "max_abs_error": 13.520686149597168,
+            "mean_abs_error": 9.641468869242322,
+            "ref_top1": 151643,
+            "ref_top1_in_candidate_top5": false,
+            "shape_match": true,
+            "top1_agreement": false,
+            "top5_overlap_count": 0
+          },
+          "stats": {
+            "constant": true,
+            "dtype": "float32",
+            "inf_count": 0,
+            "max": 0.0,
+            "mean": 0.0,
+            "min": 0.0,
+            "nan_count": 0,
+            "nonzero_count": 0,
+            "shape": [
+              152064
+            ],
+            "std": 0.0
+          },
+          "top5": [
+            {
+              "logit": 0.0,
+              "token": 152063
+            },
+            {
+              "logit": 0.0,
+              "token": 50687
+            },
+            {
+              "logit": 0.0,
+              "token": 50686
+            },
+            {
+              "logit": 0.0,
+              "token": 50689
+            },
+            {
+              "logit": 0.0,
+              "token": 50692
+            }
+          ]
+        },
+        "identity_float": {
+          "compare_to_reference": {
+            "candidate_nonzero_count": 0,
+            "candidate_normalized_entropy": 1.0,
+            "candidate_top1": 152063,
+            "candidate_top1_probability": 6.576178451178451e-06,
+            "cosine": 0.0,
+            "kl_divergence": 9.458346807883085,
+            "l2_relative_error": 1.0,
+            "max_abs_error": 13.520686149597168,
+            "mean_abs_error": 9.641468869242322,
+            "ref_top1": 151643,
+            "ref_top1_in_candidate_top5": false,
+            "shape_match": true,
+            "top1_agreement": false,
+            "top5_overlap_count": 0
+          },
+          "stats": {
+            "constant": true,
+            "dtype": "float32",
+            "inf_count": 0,
+            "max": 0.0,
+            "mean": 0.0,
+            "min": 0.0,
+            "nan_count": 0,
+            "nonzero_count": 0,
+            "shape": [
+              152064
+            ],
+            "std": 0.0
+          },
+          "top5": [
+            {
+              "logit": 0.0,
+              "token": 152063
+            },
+            {
+              "logit": 0.0,
+              "token": 50687
+            },
+            {
+              "logit": 0.0,
+              "token": 50686
+            },
+            {
+              "logit": 0.0,
+              "token": 50689
+            },
+            {
+              "logit": 0.0,
+              "token": 50692
+            }
+          ]
+        },
+        "scale_x": {
+          "compare_to_reference": {
+            "candidate_nonzero_count": 0,
+            "candidate_normalized_entropy": 1.0,
+            "candidate_top1": 152063,
+            "candidate_top1_probability": 6.576178451178451e-06,
+            "cosine": 0.0,
+            "kl_divergence": 9.458346807883085,
+            "l2_relative_error": 1.0,
+            "max_abs_error": 13.520686149597168,
+            "mean_abs_error": 9.641468869242322,
+            "ref_top1": 151643,
+            "ref_top1_in_candidate_top5": false,
+            "shape_match": true,
+            "top1_agreement": false,
+            "top5_overlap_count": 0
+          },
+          "stats": {
+            "constant": true,
+            "dtype": "float32",
+            "inf_count": 0,
+            "max": 0.0,
+            "mean": 0.0,
+            "min": 0.0,
+            "nan_count": 0,
+            "nonzero_count": 0,
+            "shape": [
+              152064
+            ],
+            "std": 0.0
+          },
+          "top5": [
+            {
+              "logit": 0.0,
+              "token": 152063
+            },
+            {
+              "logit": 0.0,
+              "token": 50687
+            },
+            {
+              "logit": 0.0,
+              "token": 50686
+            },
+            {
+              "logit": 0.0,
+              "token": 50689
+            },
+            {
+              "logit": 0.0,
+              "token": 50692
+            }
+          ]
+        },
+        "scale_x_minus_zero_point": {
+          "compare_to_reference": {
+            "candidate_nonzero_count": 0,
+            "candidate_normalized_entropy": 1.0,
+            "candidate_top1": 152063,
+            "candidate_top1_probability": 6.576178451178451e-06,
+            "cosine": 0.0,
+            "kl_divergence": 9.458346807883085,
+            "l2_relative_error": 1.0,
+            "max_abs_error": 13.520686149597168,
+            "mean_abs_error": 9.641468869242322,
+            "ref_top1": 151643,
+            "ref_top1_in_candidate_top5": false,
+            "shape_match": true,
+            "top1_agreement": false,
+            "top5_overlap_count": 0
+          },
+          "stats": {
+            "constant": true,
+            "dtype": "float32",
+            "inf_count": 0,
+            "max": 0.0,
+            "mean": 0.0,
+            "min": 0.0,
+            "nan_count": 0,
+            "nonzero_count": 0,
+            "shape": [
+              152064
+            ],
+            "std": 0.0
+          },
+          "top5": [
+            {
+              "logit": 0.0,
+              "token": 152063
+            },
+            {
+              "logit": 0.0,
+              "token": 50687
+            },
+            {
+              "logit": 0.0,
+              "token": 50686
+            },
+            {
+              "logit": 0.0,
+              "token": 50689
+            },
+            {
+              "logit": 0.0,
+              "token": 50692
+            }
+          ]
+        },
+        "uint16_reinterpret": {
+          "compare_to_reference": {
+            "candidate_nonzero_count": 0,
+            "candidate_normalized_entropy": 1.0,
+            "candidate_top1": 152063,
+            "candidate_top1_probability": 6.576178451178451e-06,
+            "cosine": 0.0,
+            "kl_divergence": 9.458346807883085,
+            "l2_relative_error": 1.0,
+            "max_abs_error": 13.520686149597168,
+            "mean_abs_error": 9.641468869242322,
+            "ref_top1": 151643,
+            "ref_top1_in_candidate_top5": false,
+            "shape_match": true,
+            "top1_agreement": false,
+            "top5_overlap_count": 0
+          },
+          "stats": {
+            "constant": true,
+            "dtype": "float32",
+            "inf_count": 0,
+            "max": 0.0,
+            "mean": 0.0,
+            "min": 0.0,
+            "nan_count": 0,
+            "nonzero_count": 0,
+            "shape": [
+              152064
+            ],
+            "std": 0.0
+          },
+          "top5": [
+            {
+              "logit": 0.0,
+              "token": 152063
+            },
+            {
+              "logit": 0.0,
+              "token": 50687
+            },
+            {
+              "logit": 0.0,
+              "token": 50686
+            },
+            {
+              "logit": 0.0,
+              "token": 50689
+            },
+            {
+              "logit": 0.0,
+              "token": 50692
+            }
+          ]
+        }
+      },
+      "zero_point": 0.0
+    },
+    {
+      "best_variant": {
+        "cosine": 0.0,
+        "variant": "identity_float"
+      },
+      "case_id": "short_chinese_prompt_padded",
+      "official_entropy": 1.0,
+      "official_variant": "scale_x",
+      "raw_stats": {
+        "constant": true,
+        "dtype": "int16",
+        "inf_count": 0,
+        "max": 0.0,
+        "mean": 0.0,
+        "min": 0.0,
+        "nan_count": 0,
+        "nonzero_count": 0,
+        "shape": [
+          1,
+          152064
+        ],
+        "std": 0.0
+      },
+      "reference_type": "gguf_q4km",
+      "scale": 0.00025415877462364733,
+      "variants": {
+        "byteswap_int16": {
+          "compare_to_reference": {
+            "candidate_nonzero_count": 0,
+            "candidate_normalized_entropy": 1.0,
+            "candidate_top1": 152063,
+            "candidate_top1_probability": 6.576178451178451e-06,
+            "cosine": 0.0,
+            "kl_divergence": 11.495200074257461,
+            "l2_relative_error": 1.0,
+            "max_abs_error": 12.114394187927246,
+            "mean_abs_error": 8.34226488245386,
+            "ref_top1": 151643,
+            "ref_top1_in_candidate_top5": false,
+            "shape_match": true,
+            "top1_agreement": false,
+            "top5_overlap_count": 0
+          },
+          "stats": {
+            "constant": true,
+            "dtype": "float32",
+            "inf_count": 0,
+            "max": 0.0,
+            "mean": 0.0,
+            "min": 0.0,
+            "nan_count": 0,
+            "nonzero_count": 0,
+            "shape": [
+              152064
+            ],
+            "std": 0.0
+          },
+          "top5": [
+            {
+              "logit": 0.0,
+              "token": 152063
+            },
+            {
+              "logit": 0.0,
+              "token": 50687
+            },
+            {
+              "logit": 0.0,
+              "token": 50686
+            },
+            {
+              "logit": 0.0,
+              "token": 50689
+            },
+            {
+              "logit": 0.0,
+              "token": 50692
+            }
+          ]
+        },
+        "identity_float": {
+          "compare_to_reference": {
+            "candidate_nonzero_count": 0,
+            "candidate_normalized_entropy": 1.0,
+            "candidate_top1": 152063,
+            "candidate_top1_probability": 6.576178451178451e-06,
+            "cosine": 0.0,
+            "kl_divergence": 11.495200074257461,
+            "l2_relative_error": 1.0,
+            "max_abs_error": 12.114394187927246,
+            "mean_abs_error": 8.34226488245386,
+            "ref_top1": 151643,
+            "ref_top1_in_candidate_top5": false,
+            "shape_match": true,
+            "top1_agreement": false,
+            "top5_overlap_count": 0
+          },
+          "stats": {
+            "constant": true,
+            "dtype": "float32",
+            "inf_count": 0,
+            "max": 0.0,
+            "mean": 0.0,
+            "min": 0.0,
+            "nan_count": 0,
+            "nonzero_count": 0,
+            "shape": [
+              152064
+            ],
+            "std": 0.0
+          },
+          "top5": [
+            {
+              "logit": 0.0,
+              "token": 152063
+            },
+            {
+              "logit": 0.0,
+              "token": 50687
+            },
+            {
+              "logit": 0.0,
+              "token": 50686
+            },
+            {
+              "logit": 0.0,
+              "token": 50689
+            },
+            {
+              "logit": 0.0,
+              "token": 50692
+            }
+          ]
+        },
+        "scale_x": {
+          "compare_to_reference": {
+            "candidate_nonzero_count": 0,
+            "candidate_normalized_entropy": 1.0,
+            "candidate_top1": 152063,
+            "candidate_top1_probability": 6.576178451178451e-06,
+            "cosine": 0.0,
+            "kl_divergence": 11.495200074257461,
+            "l2_relative_error": 1.0,
+            "max_abs_error": 12.114394187927246,
+            "mean_abs_error": 8.34226488245386,
+            "ref_top1": 151643,
+            "ref_top1_in_candidate_top5": false,
+            "shape_match": true,
+            "top1_agreement": false,
+            "top5_overlap_count": 0
+          },
+          "stats": {
+            "constant": true,
+            "dtype": "float32",
+            "inf_count": 0,
+            "max": 0.0,
+            "mean": 0.0,
+            "min": 0.0,
+            "nan_count": 0,
+            "nonzero_count": 0,
+            "shape": [
+              152064
+            ],
+            "std": 0.0
+          },
+          "top5": [
+            {
+              "logit": 0.0,
+              "token": 152063
+            },
+            {
+              "logit": 0.0,
+              "token": 50687
+            },
+            {
+              "logit": 0.0,
+              "token": 50686
+            },
+            {
+              "logit": 0.0,
+              "token": 50689
+            },
+            {
+              "logit": 0.0,
+              "token": 50692
+            }
+          ]
+        },
+        "scale_x_minus_zero_point": {
+          "compare_to_reference": {
+            "candidate_nonzero_count": 0,
+            "candidate_normalized_entropy": 1.0,
+            "candidate_top1": 152063,
+            "candidate_top1_probability": 6.576178451178451e-06,
+            "cosine": 0.0,
+            "kl_divergence": 11.495200074257461,
+            "l2_relative_error": 1.0,
+            "max_abs_error": 12.114394187927246,
+            "mean_abs_error": 8.34226488245386,
+            "ref_top1": 151643,
+            "ref_top1_in_candidate_top5": false,
+            "shape_match": true,
+            "top1_agreement": false,
+            "top5_overlap_count": 0
+          },
+          "stats": {
+            "constant": true,
+            "dtype": "float32",
+            "inf_count": 0,
+            "max": 0.0,
+            "mean": 0.0,
+            "min": 0.0,
+            "nan_count": 0,
+            "nonzero_count": 0,
+            "shape": [
+              152064
+            ],
+            "std": 0.0
+          },
+          "top5": [
+            {
+              "logit": 0.0,
+              "token": 152063
+            },
+            {
+              "logit": 0.0,
+              "token": 50687
+            },
+            {
+              "logit": 0.0,
+              "token": 50686
+            },
+            {
+              "logit": 0.0,
+              "token": 50689
+            },
+            {
+              "logit": 0.0,
+              "token": 50692
+            }
+          ]
+        },
+        "uint16_reinterpret": {
+          "compare_to_reference": {
+            "candidate_nonzero_count": 0,
+            "candidate_normalized_entropy": 1.0,
+            "candidate_top1": 152063,
+            "candidate_top1_probability": 6.576178451178451e-06,
+            "cosine": 0.0,
+            "kl_divergence": 11.495200074257461,
+            "l2_relative_error": 1.0,
+            "max_abs_error": 12.114394187927246,
+            "mean_abs_error": 8.34226488245386,
+            "ref_top1": 151643,
+            "ref_top1_in_candidate_top5": false,
+            "shape_match": true,
+            "top1_agreement": false,
+            "top5_overlap_count": 0
+          },
+          "stats": {
+            "constant": true,
+            "dtype": "float32",
+            "inf_count": 0,
+            "max": 0.0,
+            "mean": 0.0,
+            "min": 0.0,
+            "nan_count": 0,
+            "nonzero_count": 0,
+            "shape": [
+              152064
+            ],
+            "std": 0.0
+          },
+          "top5": [
+            {
+              "logit": 0.0,
+              "token": 152063
+            },
+            {
+              "logit": 0.0,
+              "token": 50687
+            },
+            {
+              "logit": 0.0,
+              "token": 50686
+            },
+            {
+              "logit": 0.0,
+              "token": 50689
+            },
+            {
+              "logit": 0.0,
+              "token": 50692
+            }
+          ]
+        }
+      },
+      "zero_point": 0.0
+    },
+    {
+      "best_variant": {
+        "cosine": 0.0,
+        "variant": "identity_float"
+      },
+      "case_id": "openclaw_style_prompt_padded",
+      "official_entropy": 1.0,
+      "official_variant": "scale_x",
+      "raw_stats": {
+        "constant": true,
+        "dtype": "int16",
+        "inf_count": 0,
+        "max": 0.0,
+        "mean": 0.0,
+        "min": 0.0,
+        "nan_count": 0,
+        "nonzero_count": 0,
+        "shape": [
+          1,
+          152064
+        ],
+        "std": 0.0
+      },
+      "reference_type": "gguf_q4km",
+      "scale": 0.00025415877462364733,
+      "variants": {
+        "byteswap_int16": {
+          "compare_to_reference": {
+            "candidate_nonzero_count": 0,
+            "candidate_normalized_entropy": 1.0,
+            "candidate_top1": 152063,
+            "candidate_top1_probability": 6.576178451178451e-06,
+            "cosine": 0.0,
+            "kl_divergence": 10.713767480641941,
+            "l2_relative_error": 1.0,
+            "max_abs_error": 13.924449920654297,
+            "mean_abs_error": 9.982362304866635,
+            "ref_top1": 151643,
+            "ref_top1_in_candidate_top5": false,
+            "shape_match": true,
+            "top1_agreement": false,
+            "top5_overlap_count": 0
+          },
+          "stats": {
+            "constant": true,
+            "dtype": "float32",
+            "inf_count": 0,
+            "max": 0.0,
+            "mean": 0.0,
+            "min": 0.0,
+            "nan_count": 0,
+            "nonzero_count": 0,
+            "shape": [
+              152064
+            ],
+            "std": 0.0
+          },
+          "top5": [
+            {
+              "logit": 0.0,
+              "token": 152063
+            },
+            {
+              "logit": 0.0,
+              "token": 50687
+            },
+            {
+              "logit": 0.0,
+              "token": 50686
+            },
+            {
+              "logit": 0.0,
+              "token": 50689
+            },
+            {
+              "logit": 0.0,
+              "token": 50692
+            }
+          ]
+        },
+        "identity_float": {
+          "compare_to_reference": {
+            "candidate_nonzero_count": 0,
+            "candidate_normalized_entropy": 1.0,
+            "candidate_top1": 152063,
+            "candidate_top1_probability": 6.576178451178451e-06,
+            "cosine": 0.0,
+            "kl_divergence": 10.713767480641941,
+            "l2_relative_error": 1.0,
+            "max_abs_error": 13.924449920654297,
+            "mean_abs_error": 9.982362304866635,
+            "ref_top1": 151643,
+            "ref_top1_in_candidate_top5": false,
+            "shape_match": true,
+            "top1_agreement": false,
+            "top5_overlap_count": 0
+          },
+          "stats": {
+            "constant": true,
+            "dtype": "float32",
+            "inf_count": 0,
+            "max": 0.0,
+            "mean": 0.0,
+            "min": 0.0,
+            "nan_count": 0,
+            "nonzero_count": 0,
+            "shape": [
+              152064
+            ],
+            "std": 0.0
+          },
+          "top5": [
+            {
+              "logit": 0.0,
+              "token": 152063
+            },
+            {
+              "logit": 0.0,
+              "token": 50687
+            },
+            {
+              "logit": 0.0,
+              "token": 50686
+            },
+            {
+              "logit": 0.0,
+              "token": 50689
+            },
+            {
+              "logit": 0.0,
+              "token": 50692
+            }
+          ]
+        },
+        "scale_x": {
+          "compare_to_reference": {
+            "candidate_nonzero_count": 0,
+            "candidate_normalized_entropy": 1.0,
+            "candidate_top1": 152063,
+            "candidate_top1_probability": 6.576178451178451e-06,
+            "cosine": 0.0,
+            "kl_divergence": 10.713767480641941,
+            "l2_relative_error": 1.0,
+            "max_abs_error": 13.924449920654297,
+            "mean_abs_error": 9.982362304866635,
+            "ref_top1": 151643,
+            "ref_top1_in_candidate_top5": false,
+            "shape_match": true,
+            "top1_agreement": false,
+            "top5_overlap_count": 0
+          },
+          "stats": {
+            "constant": true,
+            "dtype": "float32",
+            "inf_count": 0,
+            "max": 0.0,
+            "mean": 0.0,
+            "min": 0.0,
+            "nan_count": 0,
+            "nonzero_count": 0,
+            "shape": [
+              152064
+            ],
+            "std": 0.0
+          },
+          "top5": [
+            {
+              "logit": 0.0,
+              "token": 152063
+            },
+            {
+              "logit": 0.0,
+              "token": 50687
+            },
+            {
+              "logit": 0.0,
+              "token": 50686
+            },
+            {
+              "logit": 0.0,
+              "token": 50689
+            },
+            {
+              "logit": 0.0,
+              "token": 50692
+            }
+          ]
+        },
+        "scale_x_minus_zero_point": {
+          "compare_to_reference": {
+            "candidate_nonzero_count": 0,
+            "candidate_normalized_entropy": 1.0,
+            "candidate_top1": 152063,
+            "candidate_top1_probability": 6.576178451178451e-06,
+            "cosine": 0.0,
+            "kl_divergence": 10.713767480641941,
+            "l2_relative_error": 1.0,
+            "max_abs_error": 13.924449920654297,
+            "mean_abs_error": 9.982362304866635,
+            "ref_top1": 151643,
+            "ref_top1_in_candidate_top5": false,
+            "shape_match": true,
+            "top1_agreement": false,
+            "top5_overlap_count": 0
+          },
+          "stats": {
+            "constant": true,
+            "dtype": "float32",
+            "inf_count": 0,
+            "max": 0.0,
+            "mean": 0.0,
+            "min": 0.0,
+            "nan_count": 0,
+            "nonzero_count": 0,
+            "shape": [
+              152064
+            ],
+            "std": 0.0
+          },
+          "top5": [
+            {
+              "logit": 0.0,
+              "token": 152063
+            },
+            {
+              "logit": 0.0,
+              "token": 50687
+            },
+            {
+              "logit": 0.0,
+              "token": 50686
+            },
+            {
+              "logit": 0.0,
+              "token": 50689
+            },
+            {
+              "logit": 0.0,
+              "token": 50692
+            }
+          ]
+        },
+        "uint16_reinterpret": {
+          "compare_to_reference": {
+            "candidate_nonzero_count": 0,
+            "candidate_normalized_entropy": 1.0,
+            "candidate_top1": 152063,
+            "candidate_top1_probability": 6.576178451178451e-06,
+            "cosine": 0.0,
+            "kl_divergence": 10.713767480641941,
+            "l2_relative_error": 1.0,
+            "max_abs_error": 13.924449920654297,
+            "mean_abs_error": 9.982362304866635,
+            "ref_top1": 151643,
+            "ref_top1_in_candidate_top5": false,
+            "shape_match": true,
+            "top1_agreement": false,
+            "top5_overlap_count": 0
+          },
+          "stats": {
+            "constant": true,
+            "dtype": "float32",
+            "inf_count": 0,
+            "max": 0.0,
+            "mean": 0.0,
+            "min": 0.0,
+            "nan_count": 0,
+            "nonzero_count": 0,
+            "shape": [
+              152064
+            ],
+            "std": 0.0
+          },
+          "top5": [
+            {
+              "logit": 0.0,
+              "token": 152063
+            },
+            {
+              "logit": 0.0,
+              "token": 50687
+            },
+            {
+              "logit": 0.0,
+              "token": 50686
+            },
+            {
+              "logit": 0.0,
+              "token": 50689
+            },
+            {
+              "logit": 0.0,
+              "token": 50692
+            }
+          ]
+        }
+      },
+      "zero_point": 0.0
+    },
+    {
+      "best_variant": {
+        "cosine": 0.0,
+        "variant": "identity_float"
+      },
+      "case_id": "exactly_128_token_synthetic_prompt",
+      "official_entropy": 1.0,
+      "official_variant": "scale_x",
+      "raw_stats": {
+        "constant": true,
+        "dtype": "int16",
+        "inf_count": 0,
+        "max": 0.0,
+        "mean": 0.0,
+        "min": 0.0,
+        "nan_count": 0,
+        "nonzero_count": 0,
+        "shape": [
+          1,
+          152064
+        ],
+        "std": 0.0
+      },
+      "reference_type": "gguf_q4km",
+      "scale": 0.00025415877462364733,
+      "variants": {
+        "byteswap_int16": {
+          "compare_to_reference": {
+            "candidate_nonzero_count": 0,
+            "candidate_normalized_entropy": 1.0,
+            "candidate_top1": 152063,
+            "candidate_top1_probability": 6.576178451178451e-06,
+            "cosine": 0.0,
+            "kl_divergence": 3.5271420342161237,
+            "l2_relative_error": 1.0,
+            "max_abs_error": 10.727234840393066,
+            "mean_abs_error": 6.958827444306105,
+            "ref_top1": 151643,
+            "ref_top1_in_candidate_top5": false,
+            "shape_match": true,
+            "top1_agreement": false,
+            "top5_overlap_count": 0
+          },
+          "stats": {
+            "constant": true,
+            "dtype": "float32",
+            "inf_count": 0,
+            "max": 0.0,
+            "mean": 0.0,
+            "min": 0.0,
+            "nan_count": 0,
+            "nonzero_count": 0,
+            "shape": [
+              152064
+            ],
+            "std": 0.0
+          },
+          "top5": [
+            {
+              "logit": 0.0,
+              "token": 152063
+            },
+            {
+              "logit": 0.0,
+              "token": 50687
+            },
+            {
+              "logit": 0.0,
+              "token": 50686
+            },
+            {
+              "logit": 0.0,
+              "token": 50689
+            },
+            {
+              "logit": 0.0,
+              "token": 50692
+            }
+          ]
+        },
+        "identity_float": {
+          "compare_to_reference": {
+            "candidate_nonzero_count": 0,
+            "candidate_normalized_entropy": 1.0,
+            "candidate_top1": 152063,
+            "candidate_top1_probability": 6.576178451178451e-06,
+            "cosine": 0.0,
+            "kl_divergence": 3.5271420342161237,
+            "l2_relative_error": 1.0,
+            "max_abs_error": 10.727234840393066,
+            "mean_abs_error": 6.958827444306105,
+            "ref_top1": 151643,
+            "ref_top1_in_candidate_top5": false,
+            "shape_match": true,
+            "top1_agreement": false,
+            "top5_overlap_count": 0
+          },
+          "stats": {
+            "constant": true,
+            "dtype": "float32",
+            "inf_count": 0,
+            "max": 0.0,
+            "mean": 0.0,
+            "min": 0.0,
+            "nan_count": 0,
+            "nonzero_count": 0,
+            "shape": [
+              152064
+            ],
+            "std": 0.0
+          },
+          "top5": [
+            {
+              "logit": 0.0,
+              "token": 152063
+            },
+            {
+              "logit": 0.0,
+              "token": 50687
+            },
+            {
+              "logit": 0.0,
+              "token": 50686
+            },
+            {
+              "logit": 0.0,
+              "token": 50689
+            },
+            {
+              "logit": 0.0,
+              "token": 50692
+            }
+          ]
+        },
+        "scale_x": {
+          "compare_to_reference": {
+            "candidate_nonzero_count": 0,
+            "candidate_normalized_entropy": 1.0,
+            "candidate_top1": 152063,
+            "candidate_top1_probability": 6.576178451178451e-06,
+            "cosine": 0.0,
+            "kl_divergence": 3.5271420342161237,
+            "l2_relative_error": 1.0,
+            "max_abs_error": 10.727234840393066,
+            "mean_abs_error": 6.958827444306105,
+            "ref_top1": 151643,
+            "ref_top1_in_candidate_top5": false,
+            "shape_match": true,
+            "top1_agreement": false,
+            "top5_overlap_count": 0
+          },
+          "stats": {
+            "constant": true,
+            "dtype": "float32",
+            "inf_count": 0,
+            "max": 0.0,
+            "mean": 0.0,
+            "min": 0.0,
+            "nan_count": 0,
+            "nonzero_count": 0,
+            "shape": [
+              152064
+            ],
+            "std": 0.0
+          },
+          "top5": [
+            {
+              "logit": 0.0,
+              "token": 152063
+            },
+            {
+              "logit": 0.0,
+              "token": 50687
+            },
+            {
+              "logit": 0.0,
+              "token": 50686
+            },
+            {
+              "logit": 0.0,
+              "token": 50689
+            },
+            {
+              "logit": 0.0,
+              "token": 50692
+            }
+          ]
+        },
+        "scale_x_minus_zero_point": {
+          "compare_to_reference": {
+            "candidate_nonzero_count": 0,
+            "candidate_normalized_entropy": 1.0,
+            "candidate_top1": 152063,
+            "candidate_top1_probability": 6.576178451178451e-06,
+            "cosine": 0.0,
+            "kl_divergence": 3.5271420342161237,
+            "l2_relative_error": 1.0,
+            "max_abs_error": 10.727234840393066,
+            "mean_abs_error": 6.958827444306105,
+            "ref_top1": 151643,
+            "ref_top1_in_candidate_top5": false,
+            "shape_match": true,
+            "top1_agreement": false,
+            "top5_overlap_count": 0
+          },
+          "stats": {
+            "constant": true,
+            "dtype": "float32",
+            "inf_count": 0,
+            "max": 0.0,
+            "mean": 0.0,
+            "min": 0.0,
+            "nan_count": 0,
+            "nonzero_count": 0,
+            "shape": [
+              152064
+            ],
+            "std": 0.0
+          },
+          "top5": [
+            {
+              "logit": 0.0,
+              "token": 152063
+            },
+            {
+              "logit": 0.0,
+              "token": 50687
+            },
+            {
+              "logit": 0.0,
+              "token": 50686
+            },
+            {
+              "logit": 0.0,
+              "token": 50689
+            },
+            {
+              "logit": 0.0,
+              "token": 50692
+            }
+          ]
+        },
+        "uint16_reinterpret": {
+          "compare_to_reference": {
+            "candidate_nonzero_count": 0,
+            "candidate_normalized_entropy": 1.0,
+            "candidate_top1": 152063,
+            "candidate_top1_probability": 6.576178451178451e-06,
+            "cosine": 0.0,
+            "kl_divergence": 3.5271420342161237,
+            "l2_relative_error": 1.0,
+            "max_abs_error": 10.727234840393066,
+            "mean_abs_error": 6.958827444306105,
+            "ref_top1": 151643,
+            "ref_top1_in_candidate_top5": false,
+            "shape_match": true,
+            "top1_agreement": false,
+            "top5_overlap_count": 0
+          },
+          "stats": {
+            "constant": true,
+            "dtype": "float32",
+            "inf_count": 0,
+            "max": 0.0,
+            "mean": 0.0,
+            "min": 0.0,
+            "nan_count": 0,
+            "nonzero_count": 0,
+            "shape": [
+              152064
+            ],
+            "std": 0.0
+          },
+          "top5": [
+            {
+              "logit": 0.0,
+              "token": 152063
+            },
+            {
+              "logit": 0.0,
+              "token": 50687
+            },
+            {
+              "logit": 0.0,
+              "token": 50686
+            },
+            {
+              "logit": 0.0,
+              "token": 50689
+            },
+            {
+              "logit": 0.0,
+              "token": 50692
+            }
+          ]
+        }
+      },
+      "zero_point": 0.0
+    },
+    {
+      "best_variant": {
+        "cosine": 0.0,
+        "variant": "identity_float"
+      },
+      "case_id": "prompt_with_mask_tail",
+      "official_entropy": 1.0,
+      "official_variant": "scale_x",
+      "raw_stats": {
+        "constant": true,
+        "dtype": "int16",
+        "inf_count": 0,
+        "max": 0.0,
+        "mean": 0.0,
+        "min": 0.0,
+        "nan_count": 0,
+        "nonzero_count": 0,
+        "shape": [
+          1,
+          152064
+        ],
+        "std": 0.0
+      },
+      "reference_type": "gguf_q4km",
+      "scale": 0.00025415877462364733,
+      "variants": {
+        "byteswap_int16": {
+          "compare_to_reference": {
+            "candidate_nonzero_count": 0,
+            "candidate_normalized_entropy": 1.0,
+            "candidate_top1": 152063,
+            "candidate_top1_probability": 6.576178451178451e-06,
+            "cosine": 0.0,
+            "kl_divergence": 11.23520659093059,
+            "l2_relative_error": 1.0,
+            "max_abs_error": 13.648308753967285,
+            "mean_abs_error": 9.69750400430968,
+            "ref_top1": 151643,
+            "ref_top1_in_candidate_top5": false,
+            "shape_match": true,
+            "top1_agreement": false,
+            "top5_overlap_count": 0
+          },
+          "stats": {
+            "constant": true,
+            "dtype": "float32",
+            "inf_count": 0,
+            "max": 0.0,
+            "mean": 0.0,
+            "min": 0.0,
+            "nan_count": 0,
+            "nonzero_count": 0,
+            "shape": [
+              152064
+            ],
+            "std": 0.0
+          },
+          "top5": [
+            {
+              "logit": 0.0,
+              "token": 152063
+            },
+            {
+              "logit": 0.0,
+              "token": 50687
+            },
+            {
+              "logit": 0.0,
+              "token": 50686
+            },
+            {
+              "logit": 0.0,
+              "token": 50689
+            },
+            {
+              "logit": 0.0,
+              "token": 50692
+            }
+          ]
+        },
+        "identity_float": {
+          "compare_to_reference": {
+            "candidate_nonzero_count": 0,
+            "candidate_normalized_entropy": 1.0,
+            "candidate_top1": 152063,
+            "candidate_top1_probability": 6.576178451178451e-06,
+            "cosine": 0.0,
+            "kl_divergence": 11.23520659093059,
+            "l2_relative_error": 1.0,
+            "max_abs_error": 13.648308753967285,
+            "mean_abs_error": 9.69750400430968,
+            "ref_top1": 151643,
+            "ref_top1_in_candidate_top5": false,
+            "shape_match": true,
+            "top1_agreement": false,
+            "top5_overlap_count": 0
+          },
+          "stats": {
+            "constant": true,
+            "dtype": "float32",
+            "inf_count": 0,
+            "max": 0.0,
+            "mean": 0.0,
+            "min": 0.0,
+            "nan_count": 0,
+            "nonzero_count": 0,
+            "shape": [
+              152064
+            ],
+            "std": 0.0
+          },
+          "top5": [
+            {
+              "logit": 0.0,
+              "token": 152063
+            },
+            {
+              "logit": 0.0,
+              "token": 50687
+            },
+            {
+              "logit": 0.0,
+              "token": 50686
+            },
+            {
+              "logit": 0.0,
+              "token": 50689
+            },
+            {
+              "logit": 0.0,
+              "token": 50692
+            }
+          ]
+        },
+        "scale_x": {
+          "compare_to_reference": {
+            "candidate_nonzero_count": 0,
+            "candidate_normalized_entropy": 1.0,
+            "candidate_top1": 152063,
+            "candidate_top1_probability": 6.576178451178451e-06,
+            "cosine": 0.0,
+            "kl_divergence": 11.23520659093059,
+            "l2_relative_error": 1.0,
+            "max_abs_error": 13.648308753967285,
+            "mean_abs_error": 9.69750400430968,
+            "ref_top1": 151643,
+            "ref_top1_in_candidate_top5": false,
+            "shape_match": true,
+            "top1_agreement": false,
+            "top5_overlap_count": 0
+          },
+          "stats": {
+            "constant": true,
+            "dtype": "float32",
+            "inf_count": 0,
+            "max": 0.0,
+            "mean": 0.0,
+            "min": 0.0,
+            "nan_count": 0,
+            "nonzero_count": 0,
+            "shape": [
+              152064
+            ],
+            "std": 0.0
+          },
+          "top5": [
+            {
+              "logit": 0.0,
+              "token": 152063
+            },
+            {
+              "logit": 0.0,
+              "token": 50687
+            },
+            {
+              "logit": 0.0,
+              "token": 50686
+            },
+            {
+              "logit": 0.0,
+              "token": 50689
+            },
+            {
+              "logit": 0.0,
+              "token": 50692
+            }
+          ]
+        },
+        "scale_x_minus_zero_point": {
+          "compare_to_reference": {
+            "candidate_nonzero_count": 0,
+            "candidate_normalized_entropy": 1.0,
+            "candidate_top1": 152063,
+            "candidate_top1_probability": 6.576178451178451e-06,
+            "cosine": 0.0,
+            "kl_divergence": 11.23520659093059,
+            "l2_relative_error": 1.0,
+            "max_abs_error": 13.648308753967285,
+            "mean_abs_error": 9.69750400430968,
+            "ref_top1": 151643,
+            "ref_top1_in_candidate_top5": false,
+            "shape_match": true,
+            "top1_agreement": false,
+            "top5_overlap_count": 0
+          },
+          "stats": {
+            "constant": true,
+            "dtype": "float32",
+            "inf_count": 0,
+            "max": 0.0,
+            "mean": 0.0,
+            "min": 0.0,
+            "nan_count": 0,
+            "nonzero_count": 0,
+            "shape": [
+              152064
+            ],
+            "std": 0.0
+          },
+          "top5": [
+            {
+              "logit": 0.0,
+              "token": 152063
+            },
+            {
+              "logit": 0.0,
+              "token": 50687
+            },
+            {
+              "logit": 0.0,
+              "token": 50686
+            },
+            {
+              "logit": 0.0,
+              "token": 50689
+            },
+            {
+              "logit": 0.0,
+              "token": 50692
+            }
+          ]
+        },
+        "uint16_reinterpret": {
+          "compare_to_reference": {
+            "candidate_nonzero_count": 0,
+            "candidate_normalized_entropy": 1.0,
+            "candidate_top1": 152063,
+            "candidate_top1_probability": 6.576178451178451e-06,
+            "cosine": 0.0,
+            "kl_divergence": 11.23520659093059,
+            "l2_relative_error": 1.0,
+            "max_abs_error": 13.648308753967285,
+            "mean_abs_error": 9.69750400430968,
+            "ref_top1": 151643,
+            "ref_top1_in_candidate_top5": false,
+            "shape_match": true,
+            "top1_agreement": false,
+            "top5_overlap_count": 0
+          },
+          "stats": {
+            "constant": true,
+            "dtype": "float32",
+            "inf_count": 0,
+            "max": 0.0,
+            "mean": 0.0,
+            "min": 0.0,
+            "nan_count": 0,
+            "nonzero_count": 0,
+            "shape": [
+              152064
+            ],
+            "std": 0.0
+          },
+          "top5": [
+            {
+              "logit": 0.0,
+              "token": 152063
+            },
+            {
+              "logit": 0.0,
+              "token": 50687
+            },
+            {
+              "logit": 0.0,
+              "token": 50686
+            },
+            {
+              "logit": 0.0,
+              "token": 50689
+            },
+            {
+              "logit": 0.0,
+              "token": 50692
+            }
+          ]
+        }
+      },
+      "zero_point": 0.0
+    }
+  ],
+  "created_at_utc": "2026-07-01T07:36:19Z",
+  "schema_version": "dream7b_s100p_dequant_layout_audit_v1",
+  "scope": "S100P final logits raw/dequant/layout audit inspired by llama.cpp-npu; logits only",
+  "seg26_hidden_audit": [
+    {
+      "case_id": "zeros",
+      "seg26_dequant_stats": {
+        "abs_max": 16.29678726196289,
+        "allzero": false,
+        "constant": false,
+        "dtype": "float32",
+        "inf_count": 0,
+        "max": 16.29678726196289,
+        "mean": 0.005043780339334804,
+        "min": -16.29678726196289,
+        "nan_count": 0,
+        "nonzero_count": 458751,
+        "p0": -16.29678726196289,
+        "p1": -16.29678726196289,
+        "p100": 16.29678726196289,
+        "p5": -16.29678726196289,
+        "p50": 0.27563104033470154,
+        "p95": 16.29678726196289,
+        "p99": 16.29678726196289,
+        "shape": [
+          128,
+          3584
+        ],
+        "std": 16.123766137608065
+      },
+      "seg26_quant_metadata": {
+        "available": true,
+        "repr": "<hbm_runtime.HB_HBMRuntime.QuantParams object at 0xffff9f789030>",
+        "scale": [
+          0.0008227791986428201
+        ],
+        "scale_first": 0.0008227791986428201,
+        "zero_point": [
+          0.0
+        ]
+      },
+      "seg26_raw_stats": {
+        "abs_max": 19807.0,
+        "allzero": false,
+        "constant": false,
+        "dtype": "int16",
+        "inf_count": 0,
+        "max": 19807.0,
+        "mean": 6.130174909319196,
+        "min": -19807.0,
+        "nan_count": 0,
+        "nonzero_count": 458751,
+        "p0": -19807.0,
+        "p1": -19807.0,
+        "p100": 19807.0,
+        "p5": -19807.0,
+        "p50": 335.0,
+        "p95": 19807.0,
+        "p99": 19807.0,
+        "shape": [
+          128,
+          3584
+        ],
+        "std": 19596.711344721432
+      }
+    },
+    {
+      "case_id": "ramp",
+      "seg26_dequant_stats": {
+        "abs_max": 16.29678726196289,
+        "allzero": false,
+        "constant": false,
+        "dtype": "float32",
+        "inf_count": 0,
+        "max": 16.29678726196289,
+        "mean": 0.08678288324044255,
+        "min": -16.29678726196289,
+        "nan_count": 0,
+        "nonzero_count": 458752,
+        "p0": -16.29678726196289,
+        "p1": -16.29678726196289,
+        "p100": 16.29678726196289,
+        "p5": -16.29678726196289,
+        "p50": 2.661279320716858,
+        "p95": 16.29678726196289,
+        "p99": 16.29678726196289,
+        "shape": [
+          128,
+          3584
+        ],
+        "std": 16.120623348033856
+      },
+      "seg26_quant_metadata": {
+        "available": true,
+        "repr": "<hbm_runtime.HB_HBMRuntime.QuantParams object at 0xffff89b19030>",
+        "scale": [
+          0.0008227791986428201
+        ],
+        "scale_first": 0.0008227791986428201,
+        "zero_point": [
+          0.0
+        ]
+      },
+      "seg26_raw_stats": {
+        "abs_max": 19807.0,
+        "allzero": false,
+        "constant": false,
+        "dtype": "int16",
+        "inf_count": 0,
+        "max": 19807.0,
+        "mean": 105.47530255998883,
+        "min": -19807.0,
+        "nan_count": 0,
+        "nonzero_count": 458752,
+        "p0": -19807.0,
+        "p1": -19807.0,
+        "p100": 19807.0,
+        "p5": -19807.0,
+        "p50": 3234.5,
+        "p95": 19807.0,
+        "p99": 19807.0,
+        "shape": [
+          128,
+          3584
+        ],
+        "std": 19592.891620509945
+      }
+    },
+    {
+      "case_id": "short_chinese_prompt_padded",
+      "seg26_dequant_stats": {
+        "abs_max": 16.29678726196289,
+        "allzero": false,
+        "constant": false,
+        "dtype": "float32",
+        "inf_count": 0,
+        "max": 16.29678726196289,
+        "mean": 0.06199397187599498,
+        "min": -16.29678726196289,
+        "nan_count": 0,
+        "nonzero_count": 458752,
+        "p0": -16.29678726196289,
+        "p1": -16.29678726196289,
+        "p100": 16.29678726196289,
+        "p5": -16.29678726196289,
+        "p50": 1.9277716875076294,
+        "p95": 16.29678726196289,
+        "p99": 16.29678726196289,
+        "shape": [
+          128,
+          3584
+        ],
+        "std": 16.12292779310649
+      },
+      "seg26_quant_metadata": {
+        "available": true,
+        "repr": "<hbm_runtime.HB_HBMRuntime.QuantParams object at 0xffff71cdcf30>",
+        "scale": [
+          0.0008227791986428201
+        ],
+        "scale_first": 0.0008227791986428201,
+        "zero_point": [
+          0.0
+        ]
+      },
+      "seg26_raw_stats": {
+        "abs_max": 19807.0,
+        "allzero": false,
+        "constant": false,
+        "dtype": "int16",
+        "inf_count": 0,
+        "max": 19807.0,
+        "mean": 75.34703499930245,
+        "min": -19807.0,
+        "nan_count": 0,
+        "nonzero_count": 458752,
+        "p0": -19807.0,
+        "p1": -19807.0,
+        "p100": 19807.0,
+        "p5": -19807.0,
+        "p50": 2343.0,
+        "p95": 19807.0,
+        "p99": 19807.0,
+        "shape": [
+          128,
+          3584
+        ],
+        "std": 19595.692426654958
+      }
+    }
+  ],
+  "source_reports": {
+    "boundary_dump": "F:\\Project\\Digua\\deliverables\\dream7b_s100p_v3_execution_20260701\\reports\\130_s100p_boundary_dump_subprocess.json",
+    "dequant_audit": "F:\\Project\\Digua\\deliverables\\dream7b_s100p_v3_execution_20260701\\reports\\060_dequant_audit.json"
+  },
+  "summary": {
+    "all_final_raw_logits_zero": true,
+    "case_count": 10,
+    "interpretation": "All tested final raw logits are already constant all-zero. Official dequant, scalar scale, zero-point handling, uint16 reinterpretation, and endian swap cannot recover nonzero logits. Late hidden states are nonzero and often saturated, so the current failure is upstream of output dequant and at or before final segment execution/output emission.",
+    "layout_dequant_rescue_found": false,
+    "raw_constant_cases": [
+      "zeros",
+      "ramp",
+      "repeated_frequent_token",
+      "repeated_rare_token",
+      "alternating_two_tokens",
+      "short_english_prompt_padded",
+      "short_chinese_prompt_padded",
+      "openclaw_style_prompt_padded",
+      "exactly_128_token_synthetic_prompt",
+      "prompt_with_mask_tail"
+    ],
+    "verdict": "upstream_graph_or_runtime_issue_raw_constant"
+  }
+}

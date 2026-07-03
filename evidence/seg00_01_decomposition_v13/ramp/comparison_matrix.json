@@ -1,0 +1,2270 @@
+[
+  {
+    "case_id": "ramp",
+    "input_variant": "canonical_pos_128",
+    "interpretation": "official_dequant",
+    "hf_boundary": "token_embedding_output",
+    "metrics": {
+      "shape_match": true,
+      "reference_top1": 37235,
+      "candidate_top1": 80540,
+      "top1_agreement": false,
+      "reference_top1_in_candidate_top5": true,
+      "top5_overlap": 1,
+      "cosine": 0.2728015327174646,
+      "pearson_centered": 0.27278930867440343,
+      "relative_l2": 3.4700889529374797,
+      "max_abs_error": 0.9734864234924316,
+      "mean_abs_error": 0.03304708423342241,
+      "candidate_normalized_entropy": 0.9998985190091544,
+      "candidate_stats": {
+        "shape": [
+          458752
+        ],
+        "dtype": "float32",
+        "size": 458752,
+        "min": -0.9146485328674316,
+        "max": 0.7435043454170227,
+        "mean": -0.0005779584171250463,
+        "std": 0.05070845037698746,
+        "abs_max": 0.9146485328674316,
+        "nonzero_count": 458457,
+        "allzero": false,
+        "constant": false,
+        "nan_count": 0,
+        "inf_count": 0
+      },
+      "reference_stats": {
+        "shape": [
+          458752
+        ],
+        "dtype": "float32",
+        "size": 458752,
+        "min": -0.26953125,
+        "max": 0.87109375,
+        "mean": -3.817711694864556e-05,
+        "std": 0.014059757813811302,
+        "abs_max": 0.87109375,
+        "nonzero_count": 458752,
+        "allzero": false,
+        "constant": false,
+        "nan_count": 0,
+        "inf_count": 0
+      }
+    }
+  },
+  {
+    "case_id": "ramp",
+    "input_variant": "canonical_pos_128",
+    "interpretation": "raw_signed_times_scale",
+    "hf_boundary": "token_embedding_output",
+    "metrics": {
+      "shape_match": true,
+      "reference_top1": 37235,
+      "candidate_top1": 80540,
+      "top1_agreement": false,
+      "reference_top1_in_candidate_top5": true,
+      "top5_overlap": 1,
+      "cosine": 0.2728015327174646,
+      "pearson_centered": 0.27278930867440343,
+      "relative_l2": 3.4700889529374797,
+      "max_abs_error": 0.9734864234924316,
+      "mean_abs_error": 0.03304708423342241,
+      "candidate_normalized_entropy": 0.9998985190091544,
+      "candidate_stats": {
+        "shape": [
+          458752
+        ],
+        "dtype": "float32",
+        "size": 458752,
+        "min": -0.9146485328674316,
+        "max": 0.7435043454170227,
+        "mean": -0.0005779584171250463,
+        "std": 0.05070845037698746,
+        "abs_max": 0.9146485328674316,
+        "nonzero_count": 458457,
+        "allzero": false,
+        "constant": false,
+        "nan_count": 0,
+        "inf_count": 0
+      },
+      "reference_stats": {
+        "shape": [
+          458752
+        ],
+        "dtype": "float32",
+        "size": 458752,
+        "min": -0.26953125,
+        "max": 0.87109375,
+        "mean": -3.817711694864556e-05,
+        "std": 0.014059757813811302,
+        "abs_max": 0.87109375,
+        "nonzero_count": 458752,
+        "allzero": false,
+        "constant": false,
+        "nan_count": 0,
+        "inf_count": 0
+      }
+    }
+  },
+  {
+    "case_id": "ramp",
+    "input_variant": "canonical_pos_128",
+    "interpretation": "raw_unsigned_centered_times_scale",
+    "hf_boundary": "token_embedding_output",
+    "metrics": {
+      "shape_match": true,
+      "reference_top1": 37235,
+      "candidate_top1": 114158,
+      "top1_agreement": false,
+      "reference_top1_in_candidate_top5": false,
+      "top5_overlap": 0,
+      "cosine": -0.2599346984842534,
+      "pearson_centered": -0.25992275626954453,
+      "relative_l2": 139.09509569761462,
+      "max_abs_error": 2.2346209287643433,
+      "mean_abs_error": 1.9552917537706083,
+      "candidate_normalized_entropy": 0.9550831928371307,
+      "candidate_stats": {
+        "shape": [
+          458752
+        ],
+        "dtype": "float32",
+        "size": 458752,
+        "min": -1.986558198928833,
+        "max": 1.9864975214004517,
+        "mean": 0.02652139402925968,
+        "std": 1.9517685174942017,
+        "abs_max": 1.986558198928833,
+        "nonzero_count": 458752,
+        "allzero": false,
+        "constant": false,
+        "nan_count": 0,
+        "inf_count": 0
+      },
+      "reference_stats": {
+        "shape": [
+          458752
+        ],
+        "dtype": "float32",
+        "size": 458752,
+        "min": -0.26953125,
+        "max": 0.87109375,
+        "mean": -3.817711694864556e-05,
+        "std": 0.014059757813811302,
+        "abs_max": 0.87109375,
+        "nonzero_count": 458752,
+        "allzero": false,
+        "constant": false,
+        "nan_count": 0,
+        "inf_count": 0
+      }
+    }
+  },
+  {
+    "case_id": "ramp",
+    "input_variant": "canonical_pos_128",
+    "interpretation": "raw_byteswap_times_scale",
+    "hf_boundary": "token_embedding_output",
+    "metrics": {
+      "shape_match": true,
+      "reference_top1": 37235,
+      "candidate_top1": 62387,
+      "top1_agreement": false,
+      "reference_top1_in_candidate_top5": false,
+      "top5_overlap": 0,
+      "cosine": -0.001901280369192771,
+      "pearson_centered": -0.0019078321889837873,
+      "relative_l2": 81.67381516895384,
+      "max_abs_error": 2.188895106315613,
+      "mean_abs_error": 0.9948342861560793,
+      "candidate_normalized_entropy": 0.9635074550948799,
+      "candidate_stats": {
+        "shape": [
+          458752
+        ],
+        "dtype": "float32",
+        "size": 458752,
+        "min": -1.986558198928833,
+        "max": 1.9864975214004517,
+        "mean": -0.0027651845011860132,
+        "std": 1.1482020616531372,
+        "abs_max": 1.986558198928833,
+        "nonzero_count": 458457,
+        "allzero": false,
+        "constant": false,
+        "nan_count": 0,
+        "inf_count": 0
+      },
+      "reference_stats": {
+        "shape": [
+          458752
+        ],
+        "dtype": "float32",
+        "size": 458752,
+        "min": -0.26953125,
+        "max": 0.87109375,
+        "mean": -3.817711694864556e-05,
+        "std": 0.014059757813811302,
+        "abs_max": 0.87109375,
+        "nonzero_count": 458752,
+        "allzero": false,
+        "constant": false,
+        "nan_count": 0,
+        "inf_count": 0
+      }
+    }
+  },
+  {
+    "case_id": "ramp",
+    "input_variant": "canonical_pos_128",
+    "interpretation": "transpose_flatten_reshape_official",
+    "hf_boundary": "token_embedding_output",
+    "metrics": {
+      "shape_match": true,
+      "reference_top1": 37235,
+      "candidate_top1": 216598,
+      "top1_agreement": false,
+      "reference_top1_in_candidate_top5": false,
+      "top5_overlap": 0,
+      "cosine": 0.0007314460328174552,
+      "pearson_centered": 0.0007005475999154171,
+      "relative_l2": 3.7422124641422796,
+      "max_abs_error": 0.9150528907775879,
+      "mean_abs_error": 0.03677081629463833,
+      "candidate_normalized_entropy": 0.9998985190091542,
+      "candidate_stats": {
+        "shape": [
+          458752
+        ],
+        "dtype": "float32",
+        "size": 458752,
+        "min": -0.9146485328674316,
+        "max": 0.7435043454170227,
+        "mean": -0.0005779583007097244,
+        "std": 0.05070845037698746,
+        "abs_max": 0.9146485328674316,
+        "nonzero_count": 458457,
+        "allzero": false,
+        "constant": false,
+        "nan_count": 0,
+        "inf_count": 0
+      },
+      "reference_stats": {
+        "shape": [
+          458752
+        ],
+        "dtype": "float32",
+        "size": 458752,
+        "min": -0.26953125,
+        "max": 0.87109375,
+        "mean": -3.817711694864556e-05,
+        "std": 0.014059757813811302,
+        "abs_max": 0.87109375,
+        "nonzero_count": 458752,
+        "allzero": false,
+        "constant": false,
+        "nan_count": 0,
+        "inf_count": 0
+      }
+    }
+  },
+  {
+    "case_id": "ramp",
+    "input_variant": "canonical_pos_128",
+    "interpretation": "scale_to_hf_std_diagnostic",
+    "hf_boundary": "token_embedding_output",
+    "metrics": {
+      "shape_match": true,
+      "reference_top1": 37235,
+      "candidate_top1": 80540,
+      "top1_agreement": false,
+      "reference_top1_in_candidate_top5": true,
+      "top5_overlap": 1,
+      "cosine": 0.2727946700226271,
+      "pearson_centered": 0.2727893082888518,
+      "relative_l2": 1.2059895487277272,
+      "max_abs_error": 0.6679156869649887,
+      "mean_abs_error": 0.01216525709723423,
+      "candidate_normalized_entropy": 0.9999923776876035,
+      "candidate_stats": {
+        "shape": [
+          458752
+        ],
+        "dtype": "float32",
+        "size": 458752,
+        "min": -0.25347939133644104,
+        "max": 0.2062709778547287,
+        "mean": -3.8176898669917136e-05,
+        "std": 0.014059757813811302,
+        "abs_max": 0.25347939133644104,
+        "nonzero_count": 458752,
+        "allzero": false,
+        "constant": false,
+        "nan_count": 0,
+        "inf_count": 0
+      },
+      "reference_stats": {
+        "shape": [
+          458752
+        ],
+        "dtype": "float32",
+        "size": 458752,
+        "min": -0.26953125,
+        "max": 0.87109375,
+        "mean": -3.817711694864556e-05,
+        "std": 0.014059757813811302,
+        "abs_max": 0.87109375,
+        "nonzero_count": 458752,
+        "allzero": false,
+        "constant": false,
+        "nan_count": 0,
+        "inf_count": 0
+      }
+    }
+  },
+  {
+    "case_id": "ramp",
+    "input_variant": "canonical_pos_128",
+    "interpretation": "official_dequant",
+    "hf_boundary": "layer0_pre_attention_norm_output",
+    "metrics": {
+      "shape_match": true,
+      "reference_top1": 37235,
+      "candidate_top1": 80540,
+      "top1_agreement": false,
+      "reference_top1_in_candidate_top5": true,
+      "top5_overlap": 1,
+      "cosine": 0.26307774502889436,
+      "pearson_centered": 0.26309135349292984,
+      "relative_l2": 0.9657335413064755,
+      "max_abs_error": 17.26765066385269,
+      "mean_abs_error": 0.16390929260761666,
+      "candidate_normalized_entropy": 0.9998985190091544,
+      "candidate_stats": {
+        "shape": [
+          458752
+        ],
+        "dtype": "float32",
+        "size": 458752,
+        "min": -0.9146485328674316,
+        "max": 0.7435043454170227,
+        "mean": -0.0005779584171250463,
+        "std": 0.05070845037698746,
+        "abs_max": 0.9146485328674316,
+        "nonzero_count": 458457,
+        "allzero": false,
+        "constant": false,
+        "nan_count": 0,
+        "inf_count": 0
+      },
+      "reference_stats": {
+        "shape": [
+          458752
+        ],
+        "dtype": "float32",
+        "size": 458752,
+        "min": -4.4375,
+        "max": 18.0,
+        "mean": -7.058839400997385e-05,
+        "std": 0.23045293986797333,
+        "abs_max": 18.0,
+        "nonzero_count": 458752,
+        "allzero": false,
+        "constant": false,
+        "nan_count": 0,
+        "inf_count": 0
+      }
+    }
+  },
+  {
+    "case_id": "ramp",
+    "input_variant": "canonical_pos_128",
+    "interpretation": "raw_signed_times_scale",
+    "hf_boundary": "layer0_pre_attention_norm_output",
+    "metrics": {
+      "shape_match": true,
+      "reference_top1": 37235,
+      "candidate_top1": 80540,
+      "top1_agreement": false,
+      "reference_top1_in_candidate_top5": true,
+      "top5_overlap": 1,
+      "cosine": 0.26307774502889436,
+      "pearson_centered": 0.26309135349292984,
+      "relative_l2": 0.9657335413064755,
+      "max_abs_error": 17.26765066385269,
+      "mean_abs_error": 0.16390929260761666,
+      "candidate_normalized_entropy": 0.9998985190091544,
+      "candidate_stats": {
+        "shape": [
+          458752
+        ],
+        "dtype": "float32",
+        "size": 458752,
+        "min": -0.9146485328674316,
+        "max": 0.7435043454170227,
+        "mean": -0.0005779584171250463,
+        "std": 0.05070845037698746,
+        "abs_max": 0.9146485328674316,
+        "nonzero_count": 458457,
+        "allzero": false,
+        "constant": false,
+        "nan_count": 0,
+        "inf_count": 0
+      },
+      "reference_stats": {
+        "shape": [
+          458752
+        ],
+        "dtype": "float32",
+        "size": 458752,
+        "min": -4.4375,
+        "max": 18.0,
+        "mean": -7.058839400997385e-05,
+        "std": 0.23045293986797333,
+        "abs_max": 18.0,
+        "nonzero_count": 458752,
+        "allzero": false,
+        "constant": false,
+        "nan_count": 0,
+        "inf_count": 0
+      }
+    }
+  },
+  {
+    "case_id": "ramp",
+    "input_variant": "canonical_pos_128",
+    "interpretation": "raw_unsigned_centered_times_scale",
+    "hf_boundary": "layer0_pre_attention_norm_output",
+    "metrics": {
+      "shape_match": true,
+      "reference_top1": 37235,
+      "candidate_top1": 114158,
+      "top1_agreement": false,
+      "reference_top1_in_candidate_top5": false,
+      "top5_overlap": 0,
+      "cosine": -0.25339126126886563,
+      "pearson_centered": -0.25341050354875355,
+      "relative_l2": 8.776916935788723,
+      "max_abs_error": 19.25420892238617,
+      "mean_abs_error": 2.0106433960618704,
+      "candidate_normalized_entropy": 0.9550831928371307,
+      "candidate_stats": {
+        "shape": [
+          458752
+        ],
+        "dtype": "float32",
+        "size": 458752,
+        "min": -1.986558198928833,
+        "max": 1.9864975214004517,
+        "mean": 0.02652139402925968,
+        "std": 1.9517685174942017,
+        "abs_max": 1.986558198928833,
+        "nonzero_count": 458752,
+        "allzero": false,
+        "constant": false,
+        "nan_count": 0,
+        "inf_count": 0
+      },
+      "reference_stats": {
+        "shape": [
+          458752
+        ],
+        "dtype": "float32",
+        "size": 458752,
+        "min": -4.4375,
+        "max": 18.0,
+        "mean": -7.058839400997385e-05,
+        "std": 0.23045293986797333,
+        "abs_max": 18.0,
+        "nonzero_count": 458752,
+        "allzero": false,
+        "constant": false,
+        "nan_count": 0,
+        "inf_count": 0
+      }
+    }
+  },
+  {
+    "case_id": "ramp",
+    "input_variant": "canonical_pos_128",
+    "interpretation": "raw_byteswap_times_scale",
+    "hf_boundary": "layer0_pre_attention_norm_output",
+    "metrics": {
+      "shape_match": true,
+      "reference_top1": 37235,
+      "candidate_top1": 62387,
+      "top1_agreement": false,
+      "reference_top1_in_candidate_top5": false,
+      "top5_overlap": 0,
+      "cosine": -0.0017540705533324675,
+      "pearson_centered": -0.0017548133828193641,
+      "relative_l2": 5.083467614794751,
+      "max_abs_error": 17.49218785762787,
+      "mean_abs_error": 1.0078853483853931,
+      "candidate_normalized_entropy": 0.9635074550948799,
+      "candidate_stats": {
+        "shape": [
+          458752
+        ],
+        "dtype": "float32",
+        "size": 458752,
+        "min": -1.986558198928833,
+        "max": 1.9864975214004517,
+        "mean": -0.0027651845011860132,
+        "std": 1.1482020616531372,
+        "abs_max": 1.986558198928833,
+        "nonzero_count": 458457,
+        "allzero": false,
+        "constant": false,
+        "nan_count": 0,
+        "inf_count": 0
+      },
+      "reference_stats": {
+        "shape": [
+          458752
+        ],
+        "dtype": "float32",
+        "size": 458752,
+        "min": -4.4375,
+        "max": 18.0,
+        "mean": -7.058839400997385e-05,
+        "std": 0.23045293986797333,
+        "abs_max": 18.0,
+        "nonzero_count": 458752,
+        "allzero": false,
+        "constant": false,
+        "nan_count": 0,
+        "inf_count": 0
+      }
+    }
+  },
+  {
+    "case_id": "ramp",
+    "input_variant": "canonical_pos_128",
+    "interpretation": "transpose_flatten_reshape_official",
+    "hf_boundary": "layer0_pre_attention_norm_output",
+    "metrics": {
+      "shape_match": true,
+      "reference_top1": 37235,
+      "candidate_top1": 216598,
+      "top1_agreement": false,
+      "reference_top1_in_candidate_top5": false,
+      "top5_overlap": 0,
+      "cosine": 0.0009615185059693652,
+      "pearson_centered": 0.0009580898646906181,
+      "relative_l2": 1.0237186764143549,
+      "max_abs_error": 17.949984420090914,
+      "mean_abs_error": 0.17486078453703377,
+      "candidate_normalized_entropy": 0.9998985190091542,
+      "candidate_stats": {
+        "shape": [
+          458752
+        ],
+        "dtype": "float32",
+        "size": 458752,
+        "min": -0.9146485328674316,
+        "max": 0.7435043454170227,
+        "mean": -0.0005779583007097244,
+        "std": 0.05070845037698746,
+        "abs_max": 0.9146485328674316,
+        "nonzero_count": 458457,
+        "allzero": false,
+        "constant": false,
+        "nan_count": 0,
+        "inf_count": 0
+      },
+      "reference_stats": {
+        "shape": [
+          458752
+        ],
+        "dtype": "float32",
+        "size": 458752,
+        "min": -4.4375,
+        "max": 18.0,
+        "mean": -7.058839400997385e-05,
+        "std": 0.23045293986797333,
+        "abs_max": 18.0,
+        "nonzero_count": 458752,
+        "allzero": false,
+        "constant": false,
+        "nan_count": 0,
+        "inf_count": 0
+      }
+    }
+  },
+  {
+    "case_id": "ramp",
+    "input_variant": "canonical_pos_128",
+    "interpretation": "scale_to_hf_std_diagnostic",
+    "hf_boundary": "layer0_pre_attention_norm_output",
+    "metrics": {
+      "shape_match": true,
+      "reference_top1": 37235,
+      "candidate_top1": 80540,
+      "top1_agreement": false,
+      "reference_top1_in_candidate_top5": true,
+      "top5_overlap": 1,
+      "cosine": 0.2630914222415299,
+      "pearson_centered": 0.26309135310423437,
+      "relative_l2": 1.2140087291040746,
+      "max_abs_error": 15.174947500228882,
+      "mean_abs_error": 0.19863698744427957,
+      "candidate_normalized_entropy": 0.9970204537659348,
+      "candidate_stats": {
+        "shape": [
+          458752
+        ],
+        "dtype": "float32",
+        "size": 458752,
+        "min": -4.154215335845947,
+        "max": 3.3815348148345947,
+        "mean": -7.058779738144949e-05,
+        "std": 0.23045293986797333,
+        "abs_max": 4.154215335845947,
+        "nonzero_count": 458752,
+        "allzero": false,
+        "constant": false,
+        "nan_count": 0,
+        "inf_count": 0
+      },
+      "reference_stats": {
+        "shape": [
+          458752
+        ],
+        "dtype": "float32",
+        "size": 458752,
+        "min": -4.4375,
+        "max": 18.0,
+        "mean": -7.058839400997385e-05,
+        "std": 0.23045293986797333,
+        "abs_max": 18.0,
+        "nonzero_count": 458752,
+        "allzero": false,
+        "constant": false,
+        "nan_count": 0,
+        "inf_count": 0
+      }
+    }
+  },
+  {
+    "case_id": "ramp",
+    "input_variant": "canonical_pos_128",
+    "interpretation": "official_dequant",
+    "hf_boundary": "layer0_attention_output",
+    "metrics": {
+      "shape_match": true,
+      "reference_top1": 73470,
+      "candidate_top1": 80540,
+      "top1_agreement": false,
+      "reference_top1_in_candidate_top5": false,
+      "top5_overlap": 0,
+      "cosine": 0.30384982299336166,
+      "pearson_centered": 0.30374356694947846,
+      "relative_l2": 0.9972136051828278,
+      "max_abs_error": 1.592512622475624,
+      "mean_abs_error": 0.05888636087802073,
+      "candidate_normalized_entropy": 0.9998985190091544,
+      "candidate_stats": {
+        "shape": [
+          458752
+        ],
+        "dtype": "float32",
+        "size": 458752,
+        "min": -0.9146485328674316,
+        "max": 0.7435043454170227,
+        "mean": -0.0005779584171250463,
+        "std": 0.05070845037698746,
+        "abs_max": 0.9146485328674316,
+        "nonzero_count": 458457,
+        "allzero": false,
+        "constant": false,
+        "nan_count": 0,
+        "inf_count": 0
+      },
+      "reference_stats": {
+        "shape": [
+          458752
+        ],
+        "dtype": "float32",
+        "size": 458752,
+        "min": -1.9375,
+        "max": 1.1171875,
+        "mean": -0.0011417765635997057,
+        "std": 0.08473790436983109,
+        "abs_max": 1.9375,
+        "nonzero_count": 458752,
+        "allzero": false,
+        "constant": false,
+        "nan_count": 0,
+        "inf_count": 0
+      }
+    }
+  },
+  {
+    "case_id": "ramp",
+    "input_variant": "canonical_pos_128",
+    "interpretation": "raw_signed_times_scale",
+    "hf_boundary": "layer0_attention_output",
+    "metrics": {
+      "shape_match": true,
+      "reference_top1": 73470,
+      "candidate_top1": 80540,
+      "top1_agreement": false,
+      "reference_top1_in_candidate_top5": false,
+      "top5_overlap": 0,
+      "cosine": 0.30384982299336166,
+      "pearson_centered": 0.30374356694947846,
+      "relative_l2": 0.9972136051828278,
+      "max_abs_error": 1.592512622475624,
+      "mean_abs_error": 0.05888636087802073,
+      "candidate_normalized_entropy": 0.9998985190091544,
+      "candidate_stats": {
+        "shape": [
+          458752
+        ],
+        "dtype": "float32",
+        "size": 458752,
+        "min": -0.9146485328674316,
+        "max": 0.7435043454170227,
+        "mean": -0.0005779584171250463,
+        "std": 0.05070845037698746,
+        "abs_max": 0.9146485328674316,
+        "nonzero_count": 458457,
+        "allzero": false,
+        "constant": false,
+        "nan_count": 0,
+        "inf_count": 0
+      },
+      "reference_stats": {
+        "shape": [
+          458752
+        ],
+        "dtype": "float32",
+        "size": 458752,
+        "min": -1.9375,
+        "max": 1.1171875,
+        "mean": -0.0011417765635997057,
+        "std": 0.08473790436983109,
+        "abs_max": 1.9375,
+        "nonzero_count": 458752,
+        "allzero": false,
+        "constant": false,
+        "nan_count": 0,
+        "inf_count": 0
+      }
+    }
+  },
+  {
+    "case_id": "ramp",
+    "input_variant": "canonical_pos_128",
+    "interpretation": "raw_unsigned_centered_times_scale",
+    "hf_boundary": "layer0_attention_output",
+    "metrics": {
+      "shape_match": true,
+      "reference_top1": 73470,
+      "candidate_top1": 114158,
+      "top1_agreement": false,
+      "reference_top1_in_candidate_top5": false,
+      "top5_overlap": 0,
+      "cosine": -0.10452088725749234,
+      "pearson_centered": -0.10435693209509966,
+      "relative_l2": 23.158925761379447,
+      "max_abs_error": 3.579070806503296,
+      "mean_abs_error": 1.9609635776193224,
+      "candidate_normalized_entropy": 0.9550831928371307,
+      "candidate_stats": {
+        "shape": [
+          458752
+        ],
+        "dtype": "float32",
+        "size": 458752,
+        "min": -1.986558198928833,
+        "max": 1.9864975214004517,
+        "mean": 0.02652139402925968,
+        "std": 1.9517685174942017,
+        "abs_max": 1.986558198928833,
+        "nonzero_count": 458752,
+        "allzero": false,
+        "constant": false,
+        "nan_count": 0,
+        "inf_count": 0
+      },
+      "reference_stats": {
+        "shape": [
+          458752
+        ],
+        "dtype": "float32",
+        "size": 458752,
+        "min": -1.9375,
+        "max": 1.1171875,
+        "mean": -0.0011417765635997057,
+        "std": 0.08473790436983109,
+        "abs_max": 1.9375,
+        "nonzero_count": 458752,
+        "allzero": false,
+        "constant": false,
+        "nan_count": 0,
+        "inf_count": 0
+      }
+    }
+  },
+  {
+    "case_id": "ramp",
+    "input_variant": "canonical_pos_128",
+    "interpretation": "raw_byteswap_times_scale",
+    "hf_boundary": "layer0_attention_output",
+    "metrics": {
+      "shape_match": true,
+      "reference_top1": 73470,
+      "candidate_top1": 62387,
+      "top1_agreement": false,
+      "reference_top1_in_candidate_top5": false,
+      "top5_overlap": 0,
+      "cosine": -0.0026636516032220846,
+      "pearson_centered": -0.002696350702667953,
+      "relative_l2": 13.588360745744334,
+      "max_abs_error": 3.59528911113739,
+      "mean_abs_error": 0.9968409015486264,
+      "candidate_normalized_entropy": 0.9635074550948799,
+      "candidate_stats": {
+        "shape": [
+          458752
+        ],
+        "dtype": "float32",
+        "size": 458752,
+        "min": -1.986558198928833,
+        "max": 1.9864975214004517,
+        "mean": -0.0027651845011860132,
+        "std": 1.1482020616531372,
+        "abs_max": 1.986558198928833,
+        "nonzero_count": 458457,
+        "allzero": false,
+        "constant": false,
+        "nan_count": 0,
+        "inf_count": 0
+      },
+      "reference_stats": {
+        "shape": [
+          458752
+        ],
+        "dtype": "float32",
+        "size": 458752,
+        "min": -1.9375,
+        "max": 1.1171875,
+        "mean": -0.0011417765635997057,
+        "std": 0.08473790436983109,
+        "abs_max": 1.9375,
+        "nonzero_count": 458752,
+        "allzero": false,
+        "constant": false,
+        "nan_count": 0,
+        "inf_count": 0
+      }
+    }
+  },
+  {
+    "case_id": "ramp",
+    "input_variant": "canonical_pos_128",
+    "interpretation": "transpose_flatten_reshape_official",
+    "hf_boundary": "layer0_attention_output",
+    "metrics": {
+      "shape_match": true,
+      "reference_top1": 73470,
+      "candidate_top1": 216598,
+      "top1_agreement": false,
+      "reference_top1_in_candidate_top5": false,
+      "top5_overlap": 0,
+      "cosine": -3.7802891766145196e-05,
+      "pearson_centered": -0.0001913834658978208,
+      "relative_l2": 1.1653873020661545,
+      "max_abs_error": 2.0067926049232483,
+      "mean_abs_error": 0.06626632869314267,
+      "candidate_normalized_entropy": 0.9998985190091542,
+      "candidate_stats": {
+        "shape": [
+          458752
+        ],
+        "dtype": "float32",
+        "size": 458752,
+        "min": -0.9146485328674316,
+        "max": 0.7435043454170227,
+        "mean": -0.0005779583007097244,
+        "std": 0.05070845037698746,
+        "abs_max": 0.9146485328674316,
+        "nonzero_count": 458457,
+        "allzero": false,
+        "constant": false,
+        "nan_count": 0,
+        "inf_count": 0
+      },
+      "reference_stats": {
+        "shape": [
+          458752
+        ],
+        "dtype": "float32",
+        "size": 458752,
+        "min": -1.9375,
+        "max": 1.1171875,
+        "mean": -0.0011417765635997057,
+        "std": 0.08473790436983109,
+        "abs_max": 1.9375,
+        "nonzero_count": 458752,
+        "allzero": false,
+        "constant": false,
+        "nan_count": 0,
+        "inf_count": 0
+      }
+    }
+  },
+  {
+    "case_id": "ramp",
+    "input_variant": "canonical_pos_128",
+    "interpretation": "scale_to_hf_std_diagnostic",
+    "hf_boundary": "layer0_attention_output",
+    "metrics": {
+      "shape_match": true,
+      "reference_top1": 73470,
+      "candidate_top1": 80540,
+      "top1_agreement": false,
+      "reference_top1_in_candidate_top5": false,
+      "top5_overlap": 0,
+      "cosine": 0.3038699528928131,
+      "pearson_centered": 0.30374356742958586,
+      "relative_l2": 1.1799407626755625,
+      "max_abs_error": 1.497135579586029,
+      "mean_abs_error": 0.07257762014771897,
+      "candidate_normalized_entropy": 0.99970672279615,
+      "candidate_stats": {
+        "shape": [
+          458752
+        ],
+        "dtype": "float32",
+        "size": 458752,
+        "min": -1.5286272764205933,
+        "max": 1.2422797679901123,
+        "mean": -0.0011417764471843839,
+        "std": 0.08473790436983109,
+        "abs_max": 1.5286272764205933,
+        "nonzero_count": 458752,
+        "allzero": false,
+        "constant": false,
+        "nan_count": 0,
+        "inf_count": 0
+      },
+      "reference_stats": {
+        "shape": [
+          458752
+        ],
+        "dtype": "float32",
+        "size": 458752,
+        "min": -1.9375,
+        "max": 1.1171875,
+        "mean": -0.0011417765635997057,
+        "std": 0.08473790436983109,
+        "abs_max": 1.9375,
+        "nonzero_count": 458752,
+        "allzero": false,
+        "constant": false,
+        "nan_count": 0,
+        "inf_count": 0
+      }
+    }
+  },
+  {
+    "case_id": "ramp",
+    "input_variant": "canonical_pos_128",
+    "interpretation": "official_dequant",
+    "hf_boundary": "layer0_post_attention_residual",
+    "metrics": {
+      "shape_match": true,
+      "reference_top1": 73470,
+      "candidate_top1": 80540,
+      "top1_agreement": false,
+      "reference_top1_in_candidate_top5": false,
+      "top5_overlap": 0,
+      "cosine": 0.3417793212012182,
+      "pearson_centered": 0.3416779063511545,
+      "relative_l2": 0.9709512391455363,
+      "max_abs_error": 1.600325122475624,
+      "mean_abs_error": 0.05820735738069376,
+      "candidate_normalized_entropy": 0.9998985190091544,
+      "candidate_stats": {
+        "shape": [
+          458752
+        ],
+        "dtype": "float32",
+        "size": 458752,
+        "min": -0.9146485328674316,
+        "max": 0.7435043454170227,
+        "mean": -0.0005779584171250463,
+        "std": 0.05070845037698746,
+        "abs_max": 0.9146485328674316,
+        "nonzero_count": 458457,
+        "allzero": false,
+        "constant": false,
+        "nan_count": 0,
+        "inf_count": 0
+      },
+      "reference_stats": {
+        "shape": [
+          458752
+        ],
+        "dtype": "float32",
+        "size": 458752,
+        "min": -1.953125,
+        "max": 1.1796875,
+        "mean": -0.0011799102649092674,
+        "std": 0.08655628561973572,
+        "abs_max": 1.953125,
+        "nonzero_count": 458602,
+        "allzero": false,
+        "constant": false,
+        "nan_count": 0,
+        "inf_count": 0
+      }
+    }
+  },
+  {
+    "case_id": "ramp",
+    "input_variant": "canonical_pos_128",
+    "interpretation": "raw_signed_times_scale",
+    "hf_boundary": "layer0_post_attention_residual",
+    "metrics": {
+      "shape_match": true,
+      "reference_top1": 73470,
+      "candidate_top1": 80540,
+      "top1_agreement": false,
+      "reference_top1_in_candidate_top5": false,
+      "top5_overlap": 0,
+      "cosine": 0.3417793212012182,
+      "pearson_centered": 0.3416779063511545,
+      "relative_l2": 0.9709512391455363,
+      "max_abs_error": 1.600325122475624,
+      "mean_abs_error": 0.05820735738069376,
+      "candidate_normalized_entropy": 0.9998985190091544,
+      "candidate_stats": {
+        "shape": [
+          458752
+        ],
+        "dtype": "float32",
+        "size": 458752,
+        "min": -0.9146485328674316,
+        "max": 0.7435043454170227,
+        "mean": -0.0005779584171250463,
+        "std": 0.05070845037698746,
+        "abs_max": 0.9146485328674316,
+        "nonzero_count": 458457,
+        "allzero": false,
+        "constant": false,
+        "nan_count": 0,
+        "inf_count": 0
+      },
+      "reference_stats": {
+        "shape": [
+          458752
+        ],
+        "dtype": "float32",
+        "size": 458752,
+        "min": -1.953125,
+        "max": 1.1796875,
+        "mean": -0.0011799102649092674,
+        "std": 0.08655628561973572,
+        "abs_max": 1.953125,
+        "nonzero_count": 458602,
+        "allzero": false,
+        "constant": false,
+        "nan_count": 0,
+        "inf_count": 0
+      }
+    }
+  },
+  {
+    "case_id": "ramp",
+    "input_variant": "canonical_pos_128",
+    "interpretation": "raw_unsigned_centered_times_scale",
+    "hf_boundary": "layer0_post_attention_residual",
+    "metrics": {
+      "shape_match": true,
+      "reference_top1": 73470,
+      "candidate_top1": 114158,
+      "top1_agreement": false,
+      "reference_top1_in_candidate_top5": false,
+      "top5_overlap": 0,
+      "cosine": -0.14454564131169806,
+      "pearson_centered": -0.14438718305468026,
+      "relative_l2": 22.71521952724482,
+      "max_abs_error": 3.586883306503296,
+      "mean_abs_error": 1.9646526379809595,
+      "candidate_normalized_entropy": 0.9550831928371307,
+      "candidate_stats": {
+        "shape": [
+          458752
+        ],
+        "dtype": "float32",
+        "size": 458752,
+        "min": -1.986558198928833,
+        "max": 1.9864975214004517,
+        "mean": 0.02652139402925968,
+        "std": 1.9517685174942017,
+        "abs_max": 1.986558198928833,
+        "nonzero_count": 458752,
+        "allzero": false,
+        "constant": false,
+        "nan_count": 0,
+        "inf_count": 0
+      },
+      "reference_stats": {
+        "shape": [
+          458752
+        ],
+        "dtype": "float32",
+        "size": 458752,
+        "min": -1.953125,
+        "max": 1.1796875,
+        "mean": -0.0011799102649092674,
+        "std": 0.08655628561973572,
+        "abs_max": 1.953125,
+        "nonzero_count": 458602,
+        "allzero": false,
+        "constant": false,
+        "nan_count": 0,
+        "inf_count": 0
+      }
+    }
+  },
+  {
+    "case_id": "ramp",
+    "input_variant": "canonical_pos_128",
+    "interpretation": "raw_byteswap_times_scale",
+    "hf_boundary": "layer0_post_attention_residual",
+    "metrics": {
+      "shape_match": true,
+      "reference_top1": 73470,
+      "candidate_top1": 62387,
+      "top1_agreement": false,
+      "reference_top1_in_candidate_top5": false,
+      "top5_overlap": 0,
+      "cosine": -0.0029181304563038026,
+      "pearson_centered": -0.002951238920305707,
+      "relative_l2": 13.304738607454324,
+      "max_abs_error": 3.61091411113739,
+      "mean_abs_error": 0.9969329243663128,
+      "candidate_normalized_entropy": 0.9635074550948799,
+      "candidate_stats": {
+        "shape": [
+          458752
+        ],
+        "dtype": "float32",
+        "size": 458752,
+        "min": -1.986558198928833,
+        "max": 1.9864975214004517,
+        "mean": -0.0027651845011860132,
+        "std": 1.1482020616531372,
+        "abs_max": 1.986558198928833,
+        "nonzero_count": 458457,
+        "allzero": false,
+        "constant": false,
+        "nan_count": 0,
+        "inf_count": 0
+      },
+      "reference_stats": {
+        "shape": [
+          458752
+        ],
+        "dtype": "float32",
+        "size": 458752,
+        "min": -1.953125,
+        "max": 1.1796875,
+        "mean": -0.0011799102649092674,
+        "std": 0.08655628561973572,
+        "abs_max": 1.953125,
+        "nonzero_count": 458602,
+        "allzero": false,
+        "constant": false,
+        "nan_count": 0,
+        "inf_count": 0
+      }
+    }
+  },
+  {
+    "case_id": "ramp",
+    "input_variant": "canonical_pos_128",
+    "interpretation": "transpose_flatten_reshape_official",
+    "hf_boundary": "layer0_post_attention_residual",
+    "metrics": {
+      "shape_match": true,
+      "reference_top1": 73470,
+      "candidate_top1": 216598,
+      "top1_agreement": false,
+      "reference_top1_in_candidate_top5": false,
+      "top5_overlap": 0,
+      "cosine": 8.023534129008782e-05,
+      "pearson_centered": -7.512179073811248e-05,
+      "relative_l2": 1.158921744856851,
+      "max_abs_error": 1.9833551049232483,
+      "mean_abs_error": 0.06762476983619987,
+      "candidate_normalized_entropy": 0.9998985190091542,
+      "candidate_stats": {
+        "shape": [
+          458752
+        ],
+        "dtype": "float32",
+        "size": 458752,
+        "min": -0.9146485328674316,
+        "max": 0.7435043454170227,
+        "mean": -0.0005779583007097244,
+        "std": 0.05070845037698746,
+        "abs_max": 0.9146485328674316,
+        "nonzero_count": 458457,
+        "allzero": false,
+        "constant": false,
+        "nan_count": 0,
+        "inf_count": 0
+      },
+      "reference_stats": {
+        "shape": [
+          458752
+        ],
+        "dtype": "float32",
+        "size": 458752,
+        "min": -1.953125,
+        "max": 1.1796875,
+        "mean": -0.0011799102649092674,
+        "std": 0.08655628561973572,
+        "abs_max": 1.953125,
+        "nonzero_count": 458602,
+        "allzero": false,
+        "constant": false,
+        "nan_count": 0,
+        "inf_count": 0
+      }
+    }
+  },
+  {
+    "case_id": "ramp",
+    "input_variant": "canonical_pos_128",
+    "interpretation": "scale_to_hf_std_diagnostic",
+    "hf_boundary": "layer0_post_attention_residual",
+    "metrics": {
+      "shape_match": true,
+      "reference_top1": 73470,
+      "candidate_top1": 80540,
+      "top1_agreement": false,
+      "reference_top1_in_candidate_top5": false,
+      "top5_overlap": 0,
+      "cosine": 0.341800214557862,
+      "pearson_centered": 0.34167790557985184,
+      "relative_l2": 1.1473445929116342,
+      "max_abs_error": 1.499843567609787,
+      "mean_abs_error": 0.07174811427397135,
+      "candidate_normalized_entropy": 0.9996933275474704,
+      "candidate_stats": {
+        "shape": [
+          458752
+        ],
+        "dtype": "float32",
+        "size": 458752,
+        "min": -1.561443567276001,
+        "max": 1.2689239978790283,
+        "mean": -0.001179909915663302,
+        "std": 0.08655628561973572,
+        "abs_max": 1.561443567276001,
+        "nonzero_count": 458752,
+        "allzero": false,
+        "constant": false,
+        "nan_count": 0,
+        "inf_count": 0
+      },
+      "reference_stats": {
+        "shape": [
+          458752
+        ],
+        "dtype": "float32",
+        "size": 458752,
+        "min": -1.953125,
+        "max": 1.1796875,
+        "mean": -0.0011799102649092674,
+        "std": 0.08655628561973572,
+        "abs_max": 1.953125,
+        "nonzero_count": 458602,
+        "allzero": false,
+        "constant": false,
+        "nan_count": 0,
+        "inf_count": 0
+      }
+    }
+  },
+  {
+    "case_id": "ramp",
+    "input_variant": "canonical_pos_128",
+    "interpretation": "official_dequant",
+    "hf_boundary": "layer0_pre_mlp_norm_output",
+    "metrics": {
+      "shape_match": true,
+      "reference_top1": 440852,
+      "candidate_top1": 80540,
+      "top1_agreement": false,
+      "reference_top1_in_candidate_top5": false,
+      "top5_overlap": 0,
+      "cosine": 0.2613733821882879,
+      "pearson_centered": 0.26149869036257956,
+      "relative_l2": 0.965810648066885,
+      "max_abs_error": 10.551249861717224,
+      "mean_abs_error": 0.1293026125369069,
+      "candidate_normalized_entropy": 0.9998985190091544,
+      "candidate_stats": {
+        "shape": [
+          458752
+        ],
+        "dtype": "float32",
+        "size": 458752,
+        "min": -0.9146485328674316,
+        "max": 0.7435043454170227,
+        "mean": -0.0005779584171250463,
+        "std": 0.05070845037698746,
+        "abs_max": 0.9146485328674316,
+        "nonzero_count": 458457,
+        "allzero": false,
+        "constant": false,
+        "nan_count": 0,
+        "inf_count": 0
+      },
+      "reference_stats": {
+        "shape": [
+          458752
+        ],
+        "dtype": "float32",
+        "size": 458752,
+        "min": -1.734375,
+        "max": 11.0625,
+        "mean": 0.0019223048584535718,
+        "std": 0.2223014384508133,
+        "abs_max": 11.0625,
+        "nonzero_count": 458602,
+        "allzero": false,
+        "constant": false,
+        "nan_count": 0,
+        "inf_count": 0
+      }
+    }
+  },
+  {
+    "case_id": "ramp",
+    "input_variant": "canonical_pos_128",
+    "interpretation": "raw_signed_times_scale",
+    "hf_boundary": "layer0_pre_mlp_norm_output",
+    "metrics": {
+      "shape_match": true,
+      "reference_top1": 440852,
+      "candidate_top1": 80540,
+      "top1_agreement": false,
+      "reference_top1_in_candidate_top5": false,
+      "top5_overlap": 0,
+      "cosine": 0.2613733821882879,
+      "pearson_centered": 0.26149869036257956,
+      "relative_l2": 0.965810648066885,
+      "max_abs_error": 10.551249861717224,
+      "mean_abs_error": 0.1293026125369069,
+      "candidate_normalized_entropy": 0.9998985190091544,
+      "candidate_stats": {
+        "shape": [
+          458752
+        ],
+        "dtype": "float32",
+        "size": 458752,
+        "min": -0.9146485328674316,
+        "max": 0.7435043454170227,
+        "mean": -0.0005779584171250463,
+        "std": 0.05070845037698746,
+        "abs_max": 0.9146485328674316,
+        "nonzero_count": 458457,
+        "allzero": false,
+        "constant": false,
+        "nan_count": 0,
+        "inf_count": 0
+      },
+      "reference_stats": {
+        "shape": [
+          458752
+        ],
+        "dtype": "float32",
+        "size": 458752,
+        "min": -1.734375,
+        "max": 11.0625,
+        "mean": 0.0019223048584535718,
+        "std": 0.2223014384508133,
+        "abs_max": 11.0625,
+        "nonzero_count": 458602,
+        "allzero": false,
+        "constant": false,
+        "nan_count": 0,
+        "inf_count": 0
+      }
+    }
+  },
+  {
+    "case_id": "ramp",
+    "input_variant": "canonical_pos_128",
+    "interpretation": "raw_unsigned_centered_times_scale",
+    "hf_boundary": "layer0_pre_mlp_norm_output",
+    "metrics": {
+      "shape_match": true,
+      "reference_top1": 440852,
+      "candidate_top1": 114158,
+      "top1_agreement": false,
+      "reference_top1_in_candidate_top5": false,
+      "top5_overlap": 0,
+      "cosine": -0.11762786424218558,
+      "pearson_centered": -0.11776062432043619,
+      "relative_l2": 8.953182293288128,
+      "max_abs_error": 12.537808060646057,
+      "mean_abs_error": 1.9787805908025773,
+      "candidate_normalized_entropy": 0.9550831928371307,
+      "candidate_stats": {
+        "shape": [
+          458752
+        ],
+        "dtype": "float32",
+        "size": 458752,
+        "min": -1.986558198928833,
+        "max": 1.9864975214004517,
+        "mean": 0.02652139402925968,
+        "std": 1.9517685174942017,
+        "abs_max": 1.986558198928833,
+        "nonzero_count": 458752,
+        "allzero": false,
+        "constant": false,
+        "nan_count": 0,
+        "inf_count": 0
+      },
+      "reference_stats": {
+        "shape": [
+          458752
+        ],
+        "dtype": "float32",
+        "size": 458752,
+        "min": -1.734375,
+        "max": 11.0625,
+        "mean": 0.0019223048584535718,
+        "std": 0.2223014384508133,
+        "abs_max": 11.0625,
+        "nonzero_count": 458602,
+        "allzero": false,
+        "constant": false,
+        "nan_count": 0,
+        "inf_count": 0
+      }
+    }
+  },
+  {
+    "case_id": "ramp",
+    "input_variant": "canonical_pos_128",
+    "interpretation": "raw_byteswap_times_scale",
+    "hf_boundary": "layer0_pre_mlp_norm_output",
+    "metrics": {
+      "shape_match": true,
+      "reference_top1": 440852,
+      "candidate_top1": 62387,
+      "top1_agreement": false,
+      "reference_top1_in_candidate_top5": false,
+      "top5_overlap": 0,
+      "cosine": -0.0034845524529545043,
+      "pearson_centered": -0.0034638678000725328,
+      "relative_l2": 5.264226737227814,
+      "max_abs_error": 12.064617276191711,
+      "mean_abs_error": 1.0048249695825262,
+      "candidate_normalized_entropy": 0.9635074550948799,
+      "candidate_stats": {
+        "shape": [
+          458752
+        ],
+        "dtype": "float32",
+        "size": 458752,
+        "min": -1.986558198928833,
+        "max": 1.9864975214004517,
+        "mean": -0.0027651845011860132,
+        "std": 1.1482020616531372,
+        "abs_max": 1.986558198928833,
+        "nonzero_count": 458457,
+        "allzero": false,
+        "constant": false,
+        "nan_count": 0,
+        "inf_count": 0
+      },
+      "reference_stats": {
+        "shape": [
+          458752
+        ],
+        "dtype": "float32",
+        "size": 458752,
+        "min": -1.734375,
+        "max": 11.0625,
+        "mean": 0.0019223048584535718,
+        "std": 0.2223014384508133,
+        "abs_max": 11.0625,
+        "nonzero_count": 458602,
+        "allzero": false,
+        "constant": false,
+        "nan_count": 0,
+        "inf_count": 0
+      }
+    }
+  },
+  {
+    "case_id": "ramp",
+    "input_variant": "canonical_pos_128",
+    "interpretation": "transpose_flatten_reshape_official",
+    "hf_boundary": "layer0_pre_mlp_norm_output",
+    "metrics": {
+      "shape_match": true,
+      "reference_top1": 440852,
+      "candidate_top1": 216598,
+      "top1_agreement": false,
+      "reference_top1_in_candidate_top5": false,
+      "top5_overlap": 0,
+      "cosine": -0.0010919899251545706,
+      "pearson_centered": -0.0009935426959701906,
+      "relative_l2": 1.0259306683474523,
+      "max_abs_error": 11.135007433593273,
+      "mean_abs_error": 0.13761405473801389,
+      "candidate_normalized_entropy": 0.9998985190091542,
+      "candidate_stats": {
+        "shape": [
+          458752
+        ],
+        "dtype": "float32",
+        "size": 458752,
+        "min": -0.9146485328674316,
+        "max": 0.7435043454170227,
+        "mean": -0.0005779583007097244,
+        "std": 0.05070845037698746,
+        "abs_max": 0.9146485328674316,
+        "nonzero_count": 458457,
+        "allzero": false,
+        "constant": false,
+        "nan_count": 0,
+        "inf_count": 0
+      },
+      "reference_stats": {
+        "shape": [
+          458752
+        ],
+        "dtype": "float32",
+        "size": 458752,
+        "min": -1.734375,
+        "max": 11.0625,
+        "mean": 0.0019223048584535718,
+        "std": 0.2223014384508133,
+        "abs_max": 11.0625,
+        "nonzero_count": 458602,
+        "allzero": false,
+        "constant": false,
+        "nan_count": 0,
+        "inf_count": 0
+      }
+    }
+  },
+  {
+    "case_id": "ramp",
+    "input_variant": "canonical_pos_128",
+    "interpretation": "scale_to_hf_std_diagnostic",
+    "hf_boundary": "layer0_pre_mlp_norm_output",
+    "metrics": {
+      "shape_match": true,
+      "reference_top1": 440852,
+      "candidate_top1": 80540,
+      "top1_agreement": false,
+      "reference_top1_in_candidate_top5": false,
+      "top5_overlap": 0,
+      "cosine": 0.26155391416194135,
+      "pearson_centered": 0.26149869633121314,
+      "relative_l2": 1.2152745336124264,
+      "max_abs_error": 8.816767692565918,
+      "mean_abs_error": 0.18403510369900244,
+      "candidate_normalized_entropy": 0.9972996994027428,
+      "candidate_stats": {
+        "shape": [
+          458752
+        ],
+        "dtype": "float32",
+        "size": 458752,
+        "min": -4.005283832550049,
+        "max": 3.2639145851135254,
+        "mean": 0.0019223073031753302,
+        "std": 0.2223014384508133,
+        "abs_max": 4.005283832550049,
+        "nonzero_count": 458752,
+        "allzero": false,
+        "constant": false,
+        "nan_count": 0,
+        "inf_count": 0
+      },
+      "reference_stats": {
+        "shape": [
+          458752
+        ],
+        "dtype": "float32",
+        "size": 458752,
+        "min": -1.734375,
+        "max": 11.0625,
+        "mean": 0.0019223048584535718,
+        "std": 0.2223014384508133,
+        "abs_max": 11.0625,
+        "nonzero_count": 458602,
+        "allzero": false,
+        "constant": false,
+        "nan_count": 0,
+        "inf_count": 0
+      }
+    }
+  },
+  {
+    "case_id": "ramp",
+    "input_variant": "canonical_pos_128",
+    "interpretation": "official_dequant",
+    "hf_boundary": "layer0_mlp_output",
+    "metrics": {
+      "shape_match": true,
+      "reference_top1": 85002,
+      "candidate_top1": 80540,
+      "top1_agreement": false,
+      "reference_top1_in_candidate_top5": false,
+      "top5_overlap": 0,
+      "cosine": 0.1516049175255896,
+      "pearson_centered": 0.15165605684624675,
+      "relative_l2": 1.0619090505976692,
+      "max_abs_error": 1.642102599143982,
+      "mean_abs_error": 0.07567677672155473,
+      "candidate_normalized_entropy": 0.9998985190091544,
+      "candidate_stats": {
+        "shape": [
+          458752
+        ],
+        "dtype": "float32",
+        "size": 458752,
+        "min": -0.9146485328674316,
+        "max": 0.7435043454170227,
+        "mean": -0.0005779584171250463,
+        "std": 0.05070845037698746,
+        "abs_max": 0.9146485328674316,
+        "nonzero_count": 458457,
+        "allzero": false,
+        "constant": false,
+        "nan_count": 0,
+        "inf_count": 0
+      },
+      "reference_stats": {
+        "shape": [
+          458752
+        ],
+        "dtype": "float32",
+        "size": 458752,
+        "min": -0.890625,
+        "max": 1.1171875,
+        "mean": 0.00033257046015933156,
+        "std": 0.09395842254161835,
+        "abs_max": 1.1171875,
+        "nonzero_count": 458752,
+        "allzero": false,
+        "constant": false,
+        "nan_count": 0,
+        "inf_count": 0
+      }
+    }
+  },
+  {
+    "case_id": "ramp",
+    "input_variant": "canonical_pos_128",
+    "interpretation": "raw_signed_times_scale",
+    "hf_boundary": "layer0_mlp_output",
+    "metrics": {
+      "shape_match": true,
+      "reference_top1": 85002,
+      "candidate_top1": 80540,
+      "top1_agreement": false,
+      "reference_top1_in_candidate_top5": false,
+      "top5_overlap": 0,
+      "cosine": 0.1516049175255896,
+      "pearson_centered": 0.15165605684624675,
+      "relative_l2": 1.0619090505976692,
+      "max_abs_error": 1.642102599143982,
+      "mean_abs_error": 0.07567677672155473,
+      "candidate_normalized_entropy": 0.9998985190091544,
+      "candidate_stats": {
+        "shape": [
+          458752
+        ],
+        "dtype": "float32",
+        "size": 458752,
+        "min": -0.9146485328674316,
+        "max": 0.7435043454170227,
+        "mean": -0.0005779584171250463,
+        "std": 0.05070845037698746,
+        "abs_max": 0.9146485328674316,
+        "nonzero_count": 458457,
+        "allzero": false,
+        "constant": false,
+        "nan_count": 0,
+        "inf_count": 0
+      },
+      "reference_stats": {
+        "shape": [
+          458752
+        ],
+        "dtype": "float32",
+        "size": 458752,
+        "min": -0.890625,
+        "max": 1.1171875,
+        "mean": 0.00033257046015933156,
+        "std": 0.09395842254161835,
+        "abs_max": 1.1171875,
+        "nonzero_count": 458752,
+        "allzero": false,
+        "constant": false,
+        "nan_count": 0,
+        "inf_count": 0
+      }
+    }
+  },
+  {
+    "case_id": "ramp",
+    "input_variant": "canonical_pos_128",
+    "interpretation": "raw_unsigned_centered_times_scale",
+    "hf_boundary": "layer0_mlp_output",
+    "metrics": {
+      "shape_match": true,
+      "reference_top1": 85002,
+      "candidate_top1": 114158,
+      "top1_agreement": false,
+      "reference_top1_in_candidate_top5": false,
+      "top5_overlap": 0,
+      "cosine": -0.08387463534071649,
+      "pearson_centered": -0.08393100070788143,
+      "relative_l2": 20.882134658188445,
+      "max_abs_error": 2.6784470081329346,
+      "mean_abs_error": 1.9597099897575845,
+      "candidate_normalized_entropy": 0.9550831928371307,
+      "candidate_stats": {
+        "shape": [
+          458752
+        ],
+        "dtype": "float32",
+        "size": 458752,
+        "min": -1.986558198928833,
+        "max": 1.9864975214004517,
+        "mean": 0.02652139402925968,
+        "std": 1.9517685174942017,
+        "abs_max": 1.986558198928833,
+        "nonzero_count": 458752,
+        "allzero": false,
+        "constant": false,
+        "nan_count": 0,
+        "inf_count": 0
+      },
+      "reference_stats": {
+        "shape": [
+          458752
+        ],
+        "dtype": "float32",
+        "size": 458752,
+        "min": -0.890625,
+        "max": 1.1171875,
+        "mean": 0.00033257046015933156,
+        "std": 0.09395842254161835,
+        "abs_max": 1.1171875,
+        "nonzero_count": 458752,
+        "allzero": false,
+        "constant": false,
+        "nan_count": 0,
+        "inf_count": 0
+      }
+    }
+  },
+  {
+    "case_id": "ramp",
+    "input_variant": "canonical_pos_128",
+    "interpretation": "raw_byteswap_times_scale",
+    "hf_boundary": "layer0_mlp_output",
+    "metrics": {
+      "shape_match": true,
+      "reference_top1": 85002,
+      "candidate_top1": 62387,
+      "top1_agreement": false,
+      "reference_top1_in_candidate_top5": false,
+      "top5_overlap": 0,
+      "cosine": 0.00020305867983059651,
+      "pearson_centered": 0.00021158474279007314,
+      "relative_l2": 12.26092524373384,
+      "max_abs_error": 2.669347643852234,
+      "mean_abs_error": 0.9970658065012287,
+      "candidate_normalized_entropy": 0.9635074550948799,
+      "candidate_stats": {
+        "shape": [
+          458752
+        ],
+        "dtype": "float32",
+        "size": 458752,
+        "min": -1.986558198928833,
+        "max": 1.9864975214004517,
+        "mean": -0.0027651845011860132,
+        "std": 1.1482020616531372,
+        "abs_max": 1.986558198928833,
+        "nonzero_count": 458457,
+        "allzero": false,
+        "constant": false,
+        "nan_count": 0,
+        "inf_count": 0
+      },
+      "reference_stats": {
+        "shape": [
+          458752
+        ],
+        "dtype": "float32",
+        "size": 458752,
+        "min": -0.890625,
+        "max": 1.1171875,
+        "mean": 0.00033257046015933156,
+        "std": 0.09395842254161835,
+        "abs_max": 1.1171875,
+        "nonzero_count": 458752,
+        "allzero": false,
+        "constant": false,
+        "nan_count": 0,
+        "inf_count": 0
+      }
+    }
+  },
+  {
+    "case_id": "ramp",
+    "input_variant": "canonical_pos_128",
+    "interpretation": "transpose_flatten_reshape_official",
+    "hf_boundary": "layer0_mlp_output",
+    "metrics": {
+      "shape_match": true,
+      "reference_top1": 85002,
+      "candidate_top1": 216598,
+      "top1_agreement": false,
+      "reference_top1_in_candidate_top5": false,
+      "top5_overlap": 0,
+      "cosine": -3.4231285642955826e-05,
+      "pearson_centered": 6.108906778009112e-06,
+      "relative_l2": 1.1363700128873635,
+      "max_abs_error": 1.1636262089014053,
+      "mean_abs_error": 0.0809937250705757,
+      "candidate_normalized_entropy": 0.9998985190091542,
+      "candidate_stats": {
+        "shape": [
+          458752
+        ],
+        "dtype": "float32",
+        "size": 458752,
+        "min": -0.9146485328674316,
+        "max": 0.7435043454170227,
+        "mean": -0.0005779583007097244,
+        "std": 0.05070845037698746,
+        "abs_max": 0.9146485328674316,
+        "nonzero_count": 458457,
+        "allzero": false,
+        "constant": false,
+        "nan_count": 0,
+        "inf_count": 0
+      },
+      "reference_stats": {
+        "shape": [
+          458752
+        ],
+        "dtype": "float32",
+        "size": 458752,
+        "min": -0.890625,
+        "max": 1.1171875,
+        "mean": 0.00033257046015933156,
+        "std": 0.09395842254161835,
+        "abs_max": 1.1171875,
+        "nonzero_count": 458752,
+        "allzero": false,
+        "constant": false,
+        "nan_count": 0,
+        "inf_count": 0
+      }
+    }
+  },
+  {
+    "case_id": "ramp",
+    "input_variant": "canonical_pos_128",
+    "interpretation": "scale_to_hf_std_diagnostic",
+    "hf_boundary": "layer0_mlp_output",
+    "metrics": {
+      "shape_match": true,
+      "reference_top1": 85002,
+      "candidate_top1": 80540,
+      "top1_agreement": false,
+      "reference_top1_in_candidate_top5": false,
+      "top5_overlap": 0,
+      "cosine": 0.1516666850915204,
+      "pearson_centered": 0.1516560568125083,
+      "relative_l2": 1.3025616059328795,
+      "max_abs_error": 2.189154624938965,
+      "mean_abs_error": 0.09108427472303528,
+      "candidate_normalized_entropy": 0.999635239368388,
+      "candidate_stats": {
+        "shape": [
+          458752
+        ],
+        "dtype": "float32",
+        "size": 458752,
+        "min": -1.6933619976043701,
+        "max": 1.3790535926818848,
+        "mean": 0.0003325708385091275,
+        "std": 0.09395842254161835,
+        "abs_max": 1.6933619976043701,
+        "nonzero_count": 458752,
+        "allzero": false,
+        "constant": false,
+        "nan_count": 0,
+        "inf_count": 0
+      },
+      "reference_stats": {
+        "shape": [
+          458752
+        ],
+        "dtype": "float32",
+        "size": 458752,
+        "min": -0.890625,
+        "max": 1.1171875,
+        "mean": 0.00033257046015933156,
+        "std": 0.09395842254161835,
+        "abs_max": 1.1171875,
+        "nonzero_count": 458752,
+        "allzero": false,
+        "constant": false,
+        "nan_count": 0,
+        "inf_count": 0
+      }
+    }
+  },
+  {
+    "case_id": "ramp",
+    "input_variant": "canonical_pos_128",
+    "interpretation": "official_dequant",
+    "hf_boundary": "layer0_final_output",
+    "metrics": {
+      "shape_match": true,
+      "reference_top1": 453276,
+      "candidate_top1": 80540,
+      "top1_agreement": false,
+      "reference_top1_in_candidate_top5": false,
+      "top5_overlap": 0,
+      "cosine": 0.3440026674710142,
+      "pearson_centered": 0.3439567969761554,
+      "relative_l2": 0.9405217046083041,
+      "max_abs_error": 2.0433772206306458,
+      "mean_abs_error": 0.08799551365831507,
+      "candidate_normalized_entropy": 0.9998985190091544,
+      "candidate_stats": {
+        "shape": [
+          458752
+        ],
+        "dtype": "float32",
+        "size": 458752,
+        "min": -0.9146485328674316,
+        "max": 0.7435043454170227,
+        "mean": -0.0005779584171250463,
+        "std": 0.05070845037698746,
+        "abs_max": 0.9146485328674316,
+        "nonzero_count": 458457,
+        "allzero": false,
+        "constant": false,
+        "nan_count": 0,
+        "inf_count": 0
+      },
+      "reference_stats": {
+        "shape": [
+          458752
+        ],
+        "dtype": "float32",
+        "size": 458752,
+        "min": -2.4375,
+        "max": 1.53125,
+        "mean": -0.0008476033108308911,
+        "std": 0.1274041384458542,
+        "abs_max": 2.4375,
+        "nonzero_count": 458345,
+        "allzero": false,
+        "constant": false,
+        "nan_count": 0,
+        "inf_count": 0
+      }
+    }
+  },
+  {
+    "case_id": "ramp",
+    "input_variant": "canonical_pos_128",
+    "interpretation": "raw_signed_times_scale",
+    "hf_boundary": "layer0_final_output",
+    "metrics": {
+      "shape_match": true,
+      "reference_top1": 453276,
+      "candidate_top1": 80540,
+      "top1_agreement": false,
+      "reference_top1_in_candidate_top5": false,
+      "top5_overlap": 0,
+      "cosine": 0.3440026674710142,
+      "pearson_centered": 0.3439567969761554,
+      "relative_l2": 0.9405217046083041,
+      "max_abs_error": 2.0433772206306458,
+      "mean_abs_error": 0.08799551365831507,
+      "candidate_normalized_entropy": 0.9998985190091544,
+      "candidate_stats": {
+        "shape": [
+          458752
+        ],
+        "dtype": "float32",
+        "size": 458752,
+        "min": -0.9146485328674316,
+        "max": 0.7435043454170227,
+        "mean": -0.0005779584171250463,
+        "std": 0.05070845037698746,
+        "abs_max": 0.9146485328674316,
+        "nonzero_count": 458457,
+        "allzero": false,
+        "constant": false,
+        "nan_count": 0,
+        "inf_count": 0
+      },
+      "reference_stats": {
+        "shape": [
+          458752
+        ],
+        "dtype": "float32",
+        "size": 458752,
+        "min": -2.4375,
+        "max": 1.53125,
+        "mean": -0.0008476033108308911,
+        "std": 0.1274041384458542,
+        "abs_max": 2.4375,
+        "nonzero_count": 458345,
+        "allzero": false,
+        "constant": false,
+        "nan_count": 0,
+        "inf_count": 0
+      }
+    }
+  },
+  {
+    "case_id": "ramp",
+    "input_variant": "canonical_pos_128",
+    "interpretation": "raw_unsigned_centered_times_scale",
+    "hf_boundary": "layer0_final_output",
+    "metrics": {
+      "shape_match": true,
+      "reference_top1": 453276,
+      "candidate_top1": 114158,
+      "top1_agreement": false,
+      "reference_top1_in_candidate_top5": false,
+      "top5_overlap": 0,
+      "cosine": -0.16006273798507997,
+      "pearson_centered": -0.15999065537152374,
+      "relative_l2": 15.51208274959526,
+      "max_abs_error": 4.0299354791641235,
+      "mean_abs_error": 1.9727595271152885,
+      "candidate_normalized_entropy": 0.9550831928371307,
+      "candidate_stats": {
+        "shape": [
+          458752
+        ],
+        "dtype": "float32",
+        "size": 458752,
+        "min": -1.986558198928833,
+        "max": 1.9864975214004517,
+        "mean": 0.02652139402925968,
+        "std": 1.9517685174942017,
+        "abs_max": 1.986558198928833,
+        "nonzero_count": 458752,
+        "allzero": false,
+        "constant": false,
+        "nan_count": 0,
+        "inf_count": 0
+      },
+      "reference_stats": {
+        "shape": [
+          458752
+        ],
+        "dtype": "float32",
+        "size": 458752,
+        "min": -2.4375,
+        "max": 1.53125,
+        "mean": -0.0008476033108308911,
+        "std": 0.1274041384458542,
+        "abs_max": 2.4375,
+        "nonzero_count": 458345,
+        "allzero": false,
+        "constant": false,
+        "nan_count": 0,
+        "inf_count": 0
+      }
+    }
+  },
+  {
+    "case_id": "ramp",
+    "input_variant": "canonical_pos_128",
+    "interpretation": "raw_byteswap_times_scale",
+    "hf_boundary": "layer0_final_output",
+    "metrics": {
+      "shape_match": true,
+      "reference_top1": 453276,
+      "candidate_top1": 62387,
+      "top1_agreement": false,
+      "reference_top1_in_candidate_top5": false,
+      "top5_overlap": 0,
+      "cosine": -0.0018285527184956614,
+      "pearson_centered": -0.0018446204169051943,
+      "relative_l2": 9.069237268256776,
+      "max_abs_error": 3.759283423423767,
+      "mean_abs_error": 0.9991744326706655,
+      "candidate_normalized_entropy": 0.9635074550948799,
+      "candidate_stats": {
+        "shape": [
+          458752
+        ],
+        "dtype": "float32",
+        "size": 458752,
+        "min": -1.986558198928833,
+        "max": 1.9864975214004517,
+        "mean": -0.0027651845011860132,
+        "std": 1.1482020616531372,
+        "abs_max": 1.986558198928833,
+        "nonzero_count": 458457,
+        "allzero": false,
+        "constant": false,
+        "nan_count": 0,
+        "inf_count": 0
+      },
+      "reference_stats": {
+        "shape": [
+          458752
+        ],
+        "dtype": "float32",
+        "size": 458752,
+        "min": -2.4375,
+        "max": 1.53125,
+        "mean": -0.0008476033108308911,
+        "std": 0.1274041384458542,
+        "abs_max": 2.4375,
+        "nonzero_count": 458345,
+        "allzero": false,
+        "constant": false,
+        "nan_count": 0,
+        "inf_count": 0
+      }
+    }
+  },
+  {
+    "case_id": "ramp",
+    "input_variant": "canonical_pos_128",
+    "interpretation": "transpose_flatten_reshape_official",
+    "hf_boundary": "layer0_final_output",
+    "metrics": {
+      "shape_match": true,
+      "reference_top1": 453276,
+      "candidate_top1": 216598,
+      "top1_agreement": false,
+      "reference_top1_in_candidate_top5": false,
+      "top5_overlap": 0,
+      "cosine": 2.7694069742739795e-05,
+      "pearson_centered": -4.8130766089931545e-05,
+      "relative_l2": 1.07629249542909,
+      "max_abs_error": 2.4868487045168877,
+      "mean_abs_error": 0.09876447901837768,
+      "candidate_normalized_entropy": 0.9998985190091542,
+      "candidate_stats": {
+        "shape": [
+          458752
+        ],
+        "dtype": "float32",
+        "size": 458752,
+        "min": -0.9146485328674316,
+        "max": 0.7435043454170227,
+        "mean": -0.0005779583007097244,
+        "std": 0.05070845037698746,
+        "abs_max": 0.9146485328674316,
+        "nonzero_count": 458457,
+        "allzero": false,
+        "constant": false,
+        "nan_count": 0,
+        "inf_count": 0
+      },
+      "reference_stats": {
+        "shape": [
+          458752
+        ],
+        "dtype": "float32",
+        "size": 458752,
+        "min": -2.4375,
+        "max": 1.53125,
+        "mean": -0.0008476033108308911,
+        "std": 0.1274041384458542,
+        "abs_max": 2.4375,
+        "nonzero_count": 458345,
+        "allzero": false,
+        "constant": false,
+        "nan_count": 0,
+        "inf_count": 0
+      }
+    }
+  },
+  {
+    "case_id": "ramp",
+    "input_variant": "canonical_pos_128",
+    "interpretation": "scale_to_hf_std_diagnostic",
+    "hf_boundary": "layer0_final_output",
+    "metrics": {
+      "shape_match": true,
+      "reference_top1": 453276,
+      "candidate_top1": 80540,
+      "top1_agreement": false,
+      "reference_top1_in_candidate_top5": false,
+      "top5_overlap": 0,
+      "cosine": 0.34398583331768456,
+      "pearson_centered": 0.3439567976926304,
+      "relative_l2": 1.145438050905924,
+      "max_abs_error": 2.199572205543518,
+      "mean_abs_error": 0.10919984958042774,
+      "candidate_normalized_entropy": 0.9992945686202338,
+      "candidate_stats": {
+        "shape": [
+          458752
+        ],
+        "dtype": "float32",
+        "size": 458752,
+        "min": -2.2974348068237305,
+        "max": 1.8686469793319702,
+        "mean": -0.0008476029033772647,
+        "std": 0.1274041384458542,
+        "abs_max": 2.2974348068237305,
+        "nonzero_count": 458752,
+        "allzero": false,
+        "constant": false,
+        "nan_count": 0,
+        "inf_count": 0
+      },
+      "reference_stats": {
+        "shape": [
+          458752
+        ],
+        "dtype": "float32",
+        "size": 458752,
+        "min": -2.4375,
+        "max": 1.53125,
+        "mean": -0.0008476033108308911,
+        "std": 0.1274041384458542,
+        "abs_max": 2.4375,
+        "nonzero_count": 458345,
+        "allzero": false,
+        "constant": false,
+        "nan_count": 0,
+        "inf_count": 0
+      }
+    }
+  }
+]

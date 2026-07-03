@@ -1,0 +1,44 @@
+{
+  "final_verdict": "ready_for_more_readonly_sidecar_trials",
+  "generated_at": "2026-07-02T23:40:39+08:00",
+  "recommendations": {
+    "absorb_zleap_design_without_code": "yes; keep workspace-scoped tools, trace, provider isolation, and rollback patterns",
+    "allow_cloud_research": "public/redacted only; no private NAS raw content",
+    "allow_write_workspace": "no",
+    "continue_sqlite": "yes for harness trace and current NAS index evidence",
+    "continue_zleap_sidecar": "yes, but only as isolated read-only trials",
+    "modify_production_route": "no",
+    "openclaw_qwen_dispatcher_unchanged": "yes, by hash evidence in 2070/2120",
+    "postgres_pgvector": "no production dependency now; lab-only if real Zleap requires it",
+    "rollback_passed": "yes"
+  },
+  "sidecar_limitations": [
+    "mock sidecar only",
+    "read-only bridge dry-run",
+    "no real Zleap package installed",
+    "Qwen gateway explicitly unavailable in this Windows run"
+  ],
+  "stage1_vs_stage2": [
+    {
+      "scenario": "nas_search_read_only",
+      "stage1_context": 1397,
+      "stage1_exposed": 1,
+      "stage2_estimated_context": 1466,
+      "stage2_exposed": 3
+    },
+    {
+      "scenario": "nas_denied_acl_search",
+      "stage1_context": 1405,
+      "stage1_exposed": 1,
+      "stage2_estimated_context": 1475,
+      "stage2_exposed": 3
+    },
+    {
+      "scenario": "document_report_generation",
+      "stage1_context": 1512,
+      "stage1_exposed": 2,
+      "stage2_estimated_context": 1587,
+      "stage2_exposed": 5
+    }
+  ]
+}

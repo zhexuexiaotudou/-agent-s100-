@@ -1,0 +1,77 @@
+{
+  "case_id": "ramp",
+  "segment": 2,
+  "raw_path": "evidence/boundary_all_segments_v7/ramp/seg_02_raw_output.npy",
+  "dequant_path": "evidence/boundary_all_segments_v7/ramp/seg_02_output.npy",
+  "model_name": "dream_segment_02_03",
+  "hbm_path": "/mnt/nas/openclaw/models/dream7b-hbm/seq128-b1-lmheadq16-lasttoken/seg02_03/dream7b_segment_2_3_seq128_q8.hbm",
+  "quant_metadata": {
+    "available": true,
+    "repr": "<hbm_runtime.HB_HBMRuntime.QuantParams object at 0xffffa65c6870>",
+    "scale": [
+      0.0010667958995327353
+    ],
+    "scale_first": 0.0010667958995327353,
+    "zero_point": [
+      0.0
+    ]
+  },
+  "raw_stats": {
+    "shape": [
+      128,
+      3584
+    ],
+    "dtype": "int16",
+    "size": 458752,
+    "min": -427.0,
+    "max": 427.0,
+    "mean": -2.341070992606027,
+    "std": 82.36896353874609,
+    "abs_max": 427.0,
+    "nonzero_count": 454375,
+    "constant": false,
+    "allzero": false,
+    "nan_count": 0,
+    "inf_count": 0,
+    "count_pos_32767": 0,
+    "count_neg_32768": 0,
+    "count_abs_19807": 0,
+    "frac_pos_32767": 0.0,
+    "frac_neg_32768": 0.0,
+    "frac_abs_19807": 0.0,
+    "p0": -427.0,
+    "p1": -227.0,
+    "p5": -122.0,
+    "p50": -3.0,
+    "p95": 118.0,
+    "p99": 212.0,
+    "p100": 427.0
+  },
+  "dequant_stats": {
+    "shape": [
+      128,
+      3584
+    ],
+    "dtype": "float32",
+    "size": 458752,
+    "min": -0.4555218517780304,
+    "max": 0.4555218517780304,
+    "mean": -0.0024974450934678316,
+    "std": 0.08787087351083755,
+    "abs_max": 0.4555218517780304,
+    "nonzero_count": 454375,
+    "constant": false,
+    "allzero": false,
+    "nan_count": 0,
+    "inf_count": 0,
+    "p0": -0.4555218517780304,
+    "p1": -0.24216267466545105,
+    "p5": -0.13014909625053406,
+    "p50": -0.003200387582182884,
+    "p95": 0.12588191032409668,
+    "p99": 0.22616073489189148,
+    "p100": 0.4555218517780304
+  },
+  "raw_sha256": "679a05f91adb7d077d11653785092afc7c8e5dc4c5ceef91f5e6b0266a4f706d",
+  "dequant_sha256": "daa15ba27ff7cb99533d2a1f5e0735273c997a7c4b5447dbb8cf19555f395e91"
+}

@@ -1,0 +1,609 @@
+{
+  "query": "2024 renovation payment contract invoice receipt chat screenshot",
+  "results": [
+    {
+      "relative_path": "Photos/2024_renovation_chat_invoice_screenshot.jpg",
+      "original_path": "F:\\Project\\Digua\\reports\\operator_portal_contract_20260625-001846-838613\\appliance_experience_fixture\\Personal\\Photos\\2024_renovation_chat_invoice_screenshot.jpg",
+      "why_matched": [
+        "keywords matches `invoice`",
+        "keywords matches `screen`",
+        "keywords matches `screenshot`",
+        "name matches `2024`",
+        "name matches `chat`",
+        "name matches `invoice`",
+        "name matches `renovation`",
+        "name matches `screen`",
+        "local_hash_embedding_v1 cosine similarity 0.800",
+        "name matches `screenshot`"
+      ],
+      "evidence_snippets": [
+        "labels: invoice, screenshot; size: 720x420; phash: 951e6ae23f1c6ae0",
+        "labels: invoice, screenshot; size: 720x420; mean_rgb: [0.9424, 0.942, 0.9121]"
+      ],
+      "summary": "content_not_extracted",
+      "dates": [],
+      "amounts": [],
+      "payment_terms": [],
+      "confidence": 0.95,
+      "sources": [
+        "sqlite_text_fts_metadata",
+        "local_hash_embedding",
+        "photo_semantic_local_visual"
+      ],
+      "matched_intents": [
+        "invoice",
+        "screenshot"
+      ],
+      "missing_intents": []
+    },
+    {
+      "relative_path": "Documents/2024_renovation_invoice_receipt.txt",
+      "original_path": "F:\\Project\\Digua\\reports\\operator_portal_contract_20260625-001846-838613\\appliance_experience_fixture\\Personal\\Documents\\2024_renovation_invoice_receipt.txt",
+      "why_matched": [
+        "keywords matches `2024`",
+        "keywords matches `invoice`",
+        "keywords matches `receipt`",
+        "keywords matches `reimbursement`",
+        "keywords matches `renovation`",
+        "name matches `2024`",
+        "name matches `invoice`",
+        "name matches `receipt`",
+        "local_hash_embedding_v1 cosine similarity 0.675",
+        "name matches `renovation`"
+      ],
+      "evidence_snippets": [
+        "dates: 2024-04-15; amounts: 12000 CNY; payment: Invoice receipt for renovation reimbursement."
+      ],
+      "summary": "Invoice receipt for renovation reimbursement. Amount: 12000 CNY. Date: 2024-04-15. Receipt number RCPT-2024-0415.",
+      "dates": [
+        "2024-04-15"
+      ],
+      "amounts": [
+        "12000 CNY"
+      ],
+      "payment_terms": [
+        "Invoice receipt for renovation reimbursement."
+      ],
+      "confidence": 0.95,
+      "sources": [
+        "sqlite_text_fts_metadata",
+        "local_hash_embedding"
+      ],
+      "matched_intents": [],
+      "missing_intents": []
+    },
+    {
+      "relative_path": "Documents/2024_renovation_contract.txt",
+      "original_path": "F:\\Project\\Digua\\reports\\operator_portal_contract_20260625-001846-838613\\appliance_experience_fixture\\Personal\\Documents\\2024_renovation_contract.txt",
+      "why_matched": [
+        "keywords matches `2024`",
+        "keywords matches `payment`",
+        "name matches `2024`",
+        "name matches `contract`",
+        "name matches `renovation`",
+        "path matches `2024`",
+        "path matches `contract`",
+        "path matches `renovation`",
+        "local_hash_embedding_v1 cosine similarity 0.428",
+        "semantic alias matches `contract->contract`"
+      ],
+      "evidence_snippets": [
+        "dates: 2024-03-01, 2024-05-20; amounts: 20000 CNY, 8000 CNY; payment: Payment: deposit 20000 CNY on 2024-03-01; | final payment 8000 CNY on 2024-05-20."
+      ],
+      "summary": "Renovation contract 2024. Payment: deposit 20000 CNY on 2024-03-01; final payment 8000 CNY on 2024-05-20.",
+      "dates": [
+        "2024-03-01",
+        "2024-05-20"
+      ],
+      "amounts": [
+        "20000 CNY",
+        "8000 CNY"
+      ],
+      "payment_terms": [
+        "Payment: deposit 20000 CNY on 2024-03-01;",
+        "final payment 8000 CNY on 2024-05-20."
+      ],
+      "confidence": 0.95,
+      "sources": [
+        "sqlite_text_fts_metadata",
+        "local_hash_embedding"
+      ],
+      "matched_intents": [],
+      "missing_intents": []
+    },
+    {
+      "relative_path": "Photos/2024_unrelated_beach_photo.jpg",
+      "original_path": "F:\\Project\\Digua\\reports\\operator_portal_contract_20260625-001846-838613\\appliance_experience_fixture\\Personal\\Photos\\2024_unrelated_beach_photo.jpg",
+      "why_matched": [
+        "name matches `2024`",
+        "path matches `2024`",
+        "semantic alias matches `contract->contract`",
+        "semantic alias matches `contract`",
+        "semantic alias matches `payment->contract`",
+        "sqlite fts matched query terms",
+        "tags matches `2024`",
+        "tags matches `contract`",
+        "local_hash_embedding_v1 cosine similarity 0.296",
+        "year matches `2024`"
+      ],
+      "evidence_snippets": [
+        "labels: beach; size: 720x420; phash: 85037af02f0f7af0",
+        "labels: beach; size: 720x420; mean_rgb: [0.3135, 0.6555, 0.8858]"
+      ],
+      "summary": "content_not_extracted",
+      "dates": [],
+      "amounts": [],
+      "payment_terms": [],
+      "confidence": 0.83,
+      "sources": [
+        "sqlite_text_fts_metadata",
+        "local_hash_embedding",
+        "photo_semantic_local_visual"
+      ],
+      "matched_intents": [],
+      "missing_intents": [
+        "invoice",
+        "screenshot"
+      ]
+    }
+  ],
+  "payment_nodes": [
+    {
+      "relative_path": "Documents/2024_renovation_invoice_receipt.txt",
+      "document_class": "invoice",
+      "dates": [
+        "2024-04-15"
+      ],
+      "amounts": [
+        "12000 CNY"
+      ],
+      "payment_terms": [
+        "Invoice receipt for renovation reimbursement."
+      ],
+      "confidence": 0.95
+    },
+    {
+      "relative_path": "Documents/2024_renovation_contract.txt",
+      "document_class": "contract",
+      "dates": [
+        "2024-03-01",
+        "2024-05-20"
+      ],
+      "amounts": [
+        "20000 CNY",
+        "8000 CNY"
+      ],
+      "payment_terms": [
+        "Payment: deposit 20000 CNY on 2024-03-01;",
+        "final payment 8000 CNY on 2024-05-20."
+      ],
+      "confidence": 0.95
+    }
+  ],
+  "copyable_organizing_suggestions": [
+    {
+      "action": "copy_suggestion_only",
+      "source_relative_path": "Photos/2024_renovation_chat_invoice_screenshot.jpg",
+      "suggested_target_relative_path": "Collections/2024_renovation_payment_packet/screenshots/2024_renovation_chat_invoice_screenshot.jpg",
+      "requires_human_confirmation": true,
+      "delete_source": false,
+      "move_source": false,
+      "overwrite": false
+    },
+    {
+      "action": "copy_suggestion_only",
+      "source_relative_path": "Documents/2024_renovation_invoice_receipt.txt",
+      "suggested_target_relative_path": "Collections/2024_renovation_payment_packet/invoice/2024_renovation_invoice_receipt.txt",
+      "requires_human_confirmation": true,
+      "delete_source": false,
+      "move_source": false,
+      "overwrite": false
+    },
+    {
+      "action": "copy_suggestion_only",
+      "source_relative_path": "Documents/2024_renovation_contract.txt",
+      "suggested_target_relative_path": "Collections/2024_renovation_payment_packet/contract/2024_renovation_contract.txt",
+      "requires_human_confirmation": true,
+      "delete_source": false,
+      "move_source": false,
+      "overwrite": false
+    },
+    {
+      "action": "copy_suggestion_only",
+      "source_relative_path": "Photos/2024_unrelated_beach_photo.jpg",
+      "suggested_target_relative_path": "Collections/2024_renovation_payment_packet/beach/2024_unrelated_beach_photo.jpg",
+      "requires_human_confirmation": true,
+      "delete_source": false,
+      "move_source": false,
+      "overwrite": false
+    }
+  ],
+  "approval_manifest": {
+    "tool_id": "ai_nas_action_approval_manifest",
+    "manifest_id": "apm-10c05a2e9e409f75",
+    "status": "awaiting_human_confirmation",
+    "query": "2024 renovation payment contract invoice receipt chat screenshot",
+    "collection_name": "2024_renovation_payment_packet",
+    "proposed_actions": [
+      {
+        "action_id": "copy-5957664a1403d9d5",
+        "action_type": "copy",
+        "status": "proposed_requires_human_confirmation",
+        "source_relative_path": "Photos/2024_renovation_chat_invoice_screenshot.jpg",
+        "source_absolute_path": "F:\\Project\\Digua\\reports\\operator_portal_contract_20260625-001846-838613\\appliance_experience_fixture\\Personal\\Photos\\2024_renovation_chat_invoice_screenshot.jpg",
+        "source_sha256": "862ed55531ab6b86fa9e4da68e121f8566f5cf0dd9c4da3c99ea26e8b1d3425e",
+        "target_relative_path": "Collections/2024_renovation_payment_packet/screenshots/2024_renovation_chat_invoice_screenshot.jpg",
+        "target_absolute_path": "F:\\Project\\Digua\\reports\\operator_portal_contract_20260625-001846-838613\\appliance_experience_fixture\\Personal\\Collections\\2024_renovation_payment_packet\\screenshots\\2024_renovation_chat_invoice_screenshot.jpg",
+        "target_exists_now": false,
+        "confidence": 0.95,
+        "evidence_sources": [
+          "sqlite_text_fts_metadata",
+          "local_hash_embedding",
+          "photo_semantic_local_visual"
+        ],
+        "reason": "copy matched evidence into a case collection without modifying the original file",
+        "permission_level_required": "bounded-personal-copy",
+        "requires_human_confirmation": true,
+        "destructive": false,
+        "write_effect": "create one copied file only if the exact target path does not already exist",
+        "preconditions": [
+          "operator explicitly approves this manifest and action_id",
+          "source path exists and source_sha256 still matches",
+          "target path is under Personal/Collections",
+          "target path does not already exist",
+          "no source delete, move, rename, or overwrite is allowed"
+        ],
+        "rollback_plan": [
+          "remove only the copied target created by the future execution manifest",
+          "rollback must verify target sha256 equals the approved source_sha256 before removal",
+          "rollback must append its own audit event and never touch the source file"
+        ]
+      },
+      {
+        "action_id": "copy-f44ebf95c5d5021d",
+        "action_type": "copy",
+        "status": "proposed_requires_human_confirmation",
+        "source_relative_path": "Documents/2024_renovation_invoice_receipt.txt",
+        "source_absolute_path": "F:\\Project\\Digua\\reports\\operator_portal_contract_20260625-001846-838613\\appliance_experience_fixture\\Personal\\Documents\\2024_renovation_invoice_receipt.txt",
+        "source_sha256": "6205d6474f925a06ebbeadab90a268b6941351cb0944696d5c36916d1ad77f85",
+        "target_relative_path": "Collections/2024_renovation_payment_packet/invoice/2024_renovation_invoice_receipt.txt",
+        "target_absolute_path": "F:\\Project\\Digua\\reports\\operator_portal_contract_20260625-001846-838613\\appliance_experience_fixture\\Personal\\Collections\\2024_renovation_payment_packet\\invoice\\2024_renovation_invoice_receipt.txt",
+        "target_exists_now": false,
+        "confidence": 0.95,
+        "evidence_sources": [
+          "sqlite_text_fts_metadata",
+          "local_hash_embedding"
+        ],
+        "reason": "copy matched evidence into a case collection without modifying the original file",
+        "permission_level_required": "bounded-personal-copy",
+        "requires_human_confirmation": true,
+        "destructive": false,
+        "write_effect": "create one copied file only if the exact target path does not already exist",
+        "preconditions": [
+          "operator explicitly approves this manifest and action_id",
+          "source path exists and source_sha256 still matches",
+          "target path is under Personal/Collections",
+          "target path does not already exist",
+          "no source delete, move, rename, or overwrite is allowed"
+        ],
+        "rollback_plan": [
+          "remove only the copied target created by the future execution manifest",
+          "rollback must verify target sha256 equals the approved source_sha256 before removal",
+          "rollback must append its own audit event and never touch the source file"
+        ]
+      },
+      {
+        "action_id": "copy-2235bd511a238350",
+        "action_type": "copy",
+        "status": "proposed_requires_human_confirmation",
+        "source_relative_path": "Documents/2024_renovation_contract.txt",
+        "source_absolute_path": "F:\\Project\\Digua\\reports\\operator_portal_contract_20260625-001846-838613\\appliance_experience_fixture\\Personal\\Documents\\2024_renovation_contract.txt",
+        "source_sha256": "b2181dd3223dcb5dd5df5308dcf92355668cae608de2a9315ba3656874afadd3",
+        "target_relative_path": "Collections/2024_renovation_payment_packet/contract/2024_renovation_contract.txt",
+        "target_absolute_path": "F:\\Project\\Digua\\reports\\operator_portal_contract_20260625-001846-838613\\appliance_experience_fixture\\Personal\\Collections\\2024_renovation_payment_packet\\contract\\2024_renovation_contract.txt",
+        "target_exists_now": false,
+        "confidence": 0.95,
+        "evidence_sources": [
+          "sqlite_text_fts_metadata",
+          "local_hash_embedding"
+        ],
+        "reason": "copy matched evidence into a case collection without modifying the original file",
+        "permission_level_required": "bounded-personal-copy",
+        "requires_human_confirmation": true,
+        "destructive": false,
+        "write_effect": "create one copied file only if the exact target path does not already exist",
+        "preconditions": [
+          "operator explicitly approves this manifest and action_id",
+          "source path exists and source_sha256 still matches",
+          "target path is under Personal/Collections",
+          "target path does not already exist",
+          "no source delete, move, rename, or overwrite is allowed"
+        ],
+        "rollback_plan": [
+          "remove only the copied target created by the future execution manifest",
+          "rollback must verify target sha256 equals the approved source_sha256 before removal",
+          "rollback must append its own audit event and never touch the source file"
+        ]
+      },
+      {
+        "action_id": "copy-a749991a30c8408b",
+        "action_type": "copy",
+        "status": "proposed_requires_human_confirmation",
+        "source_relative_path": "Photos/2024_unrelated_beach_photo.jpg",
+        "source_absolute_path": "F:\\Project\\Digua\\reports\\operator_portal_contract_20260625-001846-838613\\appliance_experience_fixture\\Personal\\Photos\\2024_unrelated_beach_photo.jpg",
+        "source_sha256": "37486d9e58df0916b4ebe7ea42fe82911590be4a5618f70e945414086c763c0b",
+        "target_relative_path": "Collections/2024_renovation_payment_packet/beach/2024_unrelated_beach_photo.jpg",
+        "target_absolute_path": "F:\\Project\\Digua\\reports\\operator_portal_contract_20260625-001846-838613\\appliance_experience_fixture\\Personal\\Collections\\2024_renovation_payment_packet\\beach\\2024_unrelated_beach_photo.jpg",
+        "target_exists_now": false,
+        "confidence": 0.83,
+        "evidence_sources": [
+          "sqlite_text_fts_metadata",
+          "local_hash_embedding",
+          "photo_semantic_local_visual"
+        ],
+        "reason": "copy matched evidence into a case collection without modifying the original file",
+        "permission_level_required": "bounded-personal-copy",
+        "requires_human_confirmation": true,
+        "destructive": false,
+        "write_effect": "create one copied file only if the exact target path does not already exist",
+        "preconditions": [
+          "operator explicitly approves this manifest and action_id",
+          "source path exists and source_sha256 still matches",
+          "target path is under Personal/Collections",
+          "target path does not already exist",
+          "no source delete, move, rename, or overwrite is allowed"
+        ],
+        "rollback_plan": [
+          "remove only the copied target created by the future execution manifest",
+          "rollback must verify target sha256 equals the approved source_sha256 before removal",
+          "rollback must append its own audit event and never touch the source file"
+        ]
+      }
+    ],
+    "blocked_destructive_actions": [
+      {
+        "action_type": "move",
+        "status": "blocked_not_generated",
+        "reason": "destructive actions require a separate operator-approved execution tool, backup/retention policy, exact source hash checks, and rollback manifest",
+        "candidate_file_count": 4,
+        "required_gate": "suggestion -> human confirmation -> bounded execution -> rollback/manifest"
+      },
+      {
+        "action_type": "delete",
+        "status": "blocked_not_generated",
+        "reason": "destructive actions require a separate operator-approved execution tool, backup/retention policy, exact source hash checks, and rollback manifest",
+        "candidate_file_count": 4,
+        "required_gate": "suggestion -> human confirmation -> bounded execution -> rollback/manifest"
+      },
+      {
+        "action_type": "overwrite",
+        "status": "blocked_not_generated",
+        "reason": "destructive actions require a separate operator-approved execution tool, backup/retention policy, exact source hash checks, and rollback manifest",
+        "candidate_file_count": 4,
+        "required_gate": "suggestion -> human confirmation -> bounded execution -> rollback/manifest"
+      },
+      {
+        "action_type": "rename",
+        "status": "blocked_not_generated",
+        "reason": "destructive actions require a separate operator-approved execution tool, backup/retention policy, exact source hash checks, and rollback manifest",
+        "candidate_file_count": 4,
+        "required_gate": "suggestion -> human confirmation -> bounded execution -> rollback/manifest"
+      }
+    ],
+    "approval": {
+      "required": true,
+      "approval_phrase": "APPROVE apm-10c05a2e9e409f75",
+      "execution_allowed_by_this_tool": false,
+      "future_execution_requirements": [
+        "re-check source_sha256 and target non-existence immediately before copying",
+        "write execution_manifest.json with created files and per-action result",
+        "provide rollback_manifest.json for copied targets"
+      ]
+    },
+    "audit": {
+      "source_files_modified": false,
+      "delete_performed": false,
+      "move_performed": false,
+      "overwrite_performed": false,
+      "execution_performed": false
+    },
+    "manifest_sha256": "b91e0fb281d9108f7a6f18fe02f251f2c764c36f6ea52876c2bc70c055db6422"
+  },
+  "approval_inbox": [
+    {
+      "path": "F:\\Project\\Digua\\reports\\operator_portal_contract_20260625-001846-838613\\portal_inbox_manifests\\apm-10c05a2e9e409f75.json",
+      "manifest_id": "apm-10c05a2e9e409f75",
+      "status": "awaiting_human_confirmation",
+      "query": "2024 renovation payment contract invoice receipt chat screenshot",
+      "collection_name": "2024_renovation_payment_packet",
+      "generated_at": null,
+      "approval_phrase": "APPROVE apm-10c05a2e9e409f75",
+      "action_count": 4,
+      "blocked_destructive_action_types": [
+        "delete",
+        "move",
+        "overwrite",
+        "rename"
+      ],
+      "source_hash_complete": true,
+      "rollback_plan_complete": true,
+      "execution_allowed_by_manifest_tool": false,
+      "risk_level": "ready_for_operator_review",
+      "failure_count": 0,
+      "failures": [],
+      "decision_options": [
+        "approve_with_exact_phrase",
+        "reject",
+        "needs_review"
+      ]
+    },
+    {
+      "path": "F:\\Project\\Digua\\reports\\operator_portal_contract_20260625-001846-838613\\portal_inbox_manifests\\apm-portal-needsreview.json",
+      "manifest_id": "apm-portal-needsreview",
+      "status": "awaiting_human_confirmation",
+      "query": "2024 renovation payment contract invoice receipt chat screenshot",
+      "collection_name": "2024_Renovation_Payment_Evidence",
+      "generated_at": "2026-06-25T00:18:47.012223+08:00",
+      "approval_phrase": "APPROVE apm-portal-needsreview",
+      "action_count": 1,
+      "blocked_destructive_action_types": [
+        "delete",
+        "move",
+        "overwrite",
+        "rename"
+      ],
+      "source_hash_complete": false,
+      "rollback_plan_complete": false,
+      "execution_allowed_by_manifest_tool": false,
+      "risk_level": "needs_manifest_repair",
+      "failure_count": 2,
+      "failures": [
+        "copy-review0:missing_source_sha256",
+        "copy-review0:missing_rollback_plan"
+      ],
+      "decision_options": [
+        "needs_manifest_repair"
+      ]
+    },
+    {
+      "path": "F:\\Project\\Digua\\reports\\operator_portal_contract_20260625-001846-838613\\portal_inbox_manifests\\apm-portal-approved.json",
+      "manifest_id": "apm-portal-approved",
+      "status": "approved_for_execution",
+      "query": "2024 renovation payment contract invoice receipt chat screenshot",
+      "collection_name": "2024_Renovation_Payment_Evidence",
+      "generated_at": "2026-06-25T00:18:47.012263+08:00",
+      "approval_phrase": "APPROVE apm-portal-approved",
+      "action_count": 1,
+      "blocked_destructive_action_types": [
+        "delete",
+        "move",
+        "overwrite",
+        "rename"
+      ],
+      "source_hash_complete": true,
+      "rollback_plan_complete": true,
+      "execution_allowed_by_manifest_tool": false,
+      "risk_level": "ready_for_operator_review",
+      "failure_count": 0,
+      "failures": [],
+      "decision_options": [
+        "approve_with_exact_phrase",
+        "reject",
+        "needs_review"
+      ]
+    }
+  ],
+  "production_readiness": {
+    "found": false,
+    "filename": "production_readiness_gate.json",
+    "path": null,
+    "verdict": null,
+    "generated_at": null,
+    "selection_policy": "generated_at_then_mtime"
+  },
+  "operational_slo": {
+    "found": false,
+    "filename": "operational_slo_rollup_contract.json",
+    "path": null,
+    "verdict": null,
+    "generated_at": null,
+    "selection_policy": "generated_at_then_mtime"
+  },
+  "objective_traceability": {
+    "found": false,
+    "filename": "objective_traceability_contract.json",
+    "path": null,
+    "verdict": null,
+    "generated_at": null,
+    "selection_policy": "generated_at_then_mtime"
+  },
+  "production_dependency_bundle": {
+    "found": false,
+    "filename": "production_dependency_bundle.json",
+    "path": null,
+    "verdict": null,
+    "generated_at": null,
+    "selection_policy": "generated_at_then_mtime"
+  },
+  "production_blocker_runbook": {
+    "found": false,
+    "filename": "production_blocker_runbook_contract.json",
+    "path": null,
+    "verdict": null,
+    "generated_at": null,
+    "selection_policy": "generated_at_then_mtime"
+  },
+  "soak_completion_gate_watcher": {
+    "found": false,
+    "filename": "soak_completion_gate_watcher_latest.json",
+    "path": null,
+    "verdict": null,
+    "generated_at": null,
+    "selection_policy": "generated_at_then_mtime"
+  },
+  "dream7b_interaction": {
+    "found": false,
+    "filename": "dream7b_perf_identity.json",
+    "path": null,
+    "verdict": null,
+    "generated_at": null,
+    "selection_policy": "generated_at_then_mtime"
+  },
+  "dream7b_product_decision_packet": {
+    "found": false,
+    "filename": "dream7b_product_decision_packet.json",
+    "path": null,
+    "verdict": null,
+    "generated_at": null,
+    "selection_policy": "generated_at_then_mtime"
+  },
+  "dream7b_fast_path_regression": {
+    "found": false,
+    "filename": "dream7b_fast_path_regression.json",
+    "path": null,
+    "verdict": null,
+    "generated_at": null,
+    "selection_policy": "generated_at_then_mtime"
+  },
+  "dream7b_product_guardrail_snapshot": {
+    "found": false,
+    "filename": "dream7b_product_guardrail_snapshot.json",
+    "path": null,
+    "verdict": null,
+    "generated_at": null,
+    "selection_policy": "generated_at_then_mtime"
+  },
+  "dream7b_default_service_freshness_gate": {
+    "found": false,
+    "filename": "dream7b_default_service_freshness_gate_latest.json",
+    "path": null,
+    "verdict": null,
+    "generated_at": null,
+    "selection_policy": "generated_at_then_mtime"
+  },
+  "official_qwen25_text_route": {
+    "found": false,
+    "filename": "qwen25_ai_nas_acceptance.json",
+    "path": null,
+    "verdict": null,
+    "generated_at": null,
+    "selection_policy": "generated_at_then_mtime"
+  },
+  "official_s100_vision_route": {
+    "found": false,
+    "filename": "official_vision_route_packet.json",
+    "path": null,
+    "verdict": null,
+    "generated_at": null,
+    "selection_policy": "generated_at_then_mtime"
+  },
+  "audit": {
+    "source_files_modified": false,
+    "real_personal_source_modified": false,
+    "delete_performed": false,
+    "move_performed": false,
+    "overwrite_performed": false,
+    "execution_performed": false,
+    "all_operations_auditable": true
+  }
+}

@@ -1,0 +1,397 @@
+{
+  "generated_at": "2026-07-02T23:28:15.826188+08:00",
+  "gate_id": "workspace_isolation_gate",
+  "verdict": "ok_workspace_isolation_gate",
+  "passed_count": 81,
+  "check_count": 81,
+  "failure_count": 0,
+  "failures": [],
+  "checks": [
+    {
+      "label": "shadow default disabled in registry",
+      "ok": true
+    },
+    {
+      "label": "shadow default disabled in policy",
+      "ok": true
+    },
+    {
+      "label": "dispatcher forbids arbitrary script path",
+      "ok": true
+    },
+    {
+      "label": "dispatcher local path is fixed allowlisted script",
+      "ok": true
+    },
+    {
+      "label": "policy tool catalog is subset of dispatcher",
+      "ok": true,
+      "detail": []
+    },
+    {
+      "label": "registry protects Dream7B foreground",
+      "ok": true
+    },
+    {
+      "label": "policy denies Dream7B ports",
+      "ok": true
+    },
+    {
+      "label": "main_router exists in registry",
+      "ok": true
+    },
+    {
+      "label": "main_router exists in policy",
+      "ok": true
+    },
+    {
+      "label": "main_router registry fields complete",
+      "ok": true,
+      "detail": []
+    },
+    {
+      "label": "main_router registry and policy allowed tools match",
+      "ok": true,
+      "detail": []
+    },
+    {
+      "label": "main_router registry and policy approvals match",
+      "ok": true,
+      "detail": []
+    },
+    {
+      "label": "main_router allowed tools are cataloged",
+      "ok": true,
+      "detail": []
+    },
+    {
+      "label": "main_router allowed tools are dispatcher exposed",
+      "ok": true,
+      "detail": []
+    },
+    {
+      "label": "main_router approval tools are allowed subset",
+      "ok": true,
+      "detail": []
+    },
+    {
+      "label": "main_router context exposes only workspace tools",
+      "ok": true,
+      "detail": []
+    },
+    {
+      "label": "nas_search exists in registry",
+      "ok": true
+    },
+    {
+      "label": "nas_search exists in policy",
+      "ok": true
+    },
+    {
+      "label": "nas_search registry fields complete",
+      "ok": true,
+      "detail": []
+    },
+    {
+      "label": "nas_search registry and policy allowed tools match",
+      "ok": true,
+      "detail": []
+    },
+    {
+      "label": "nas_search registry and policy approvals match",
+      "ok": true,
+      "detail": []
+    },
+    {
+      "label": "nas_search allowed tools are cataloged",
+      "ok": true,
+      "detail": []
+    },
+    {
+      "label": "nas_search allowed tools are dispatcher exposed",
+      "ok": true,
+      "detail": []
+    },
+    {
+      "label": "nas_search approval tools are allowed subset",
+      "ok": true,
+      "detail": []
+    },
+    {
+      "label": "nas_search context exposes only workspace tools",
+      "ok": true,
+      "detail": []
+    },
+    {
+      "label": "nas_action exists in registry",
+      "ok": true
+    },
+    {
+      "label": "nas_action exists in policy",
+      "ok": true
+    },
+    {
+      "label": "nas_action registry fields complete",
+      "ok": true,
+      "detail": []
+    },
+    {
+      "label": "nas_action registry and policy allowed tools match",
+      "ok": true,
+      "detail": []
+    },
+    {
+      "label": "nas_action registry and policy approvals match",
+      "ok": true,
+      "detail": []
+    },
+    {
+      "label": "nas_action allowed tools are cataloged",
+      "ok": true,
+      "detail": []
+    },
+    {
+      "label": "nas_action allowed tools are dispatcher exposed",
+      "ok": true,
+      "detail": []
+    },
+    {
+      "label": "nas_action approval tools are allowed subset",
+      "ok": true,
+      "detail": []
+    },
+    {
+      "label": "nas_action context exposes only workspace tools",
+      "ok": true,
+      "detail": []
+    },
+    {
+      "label": "media_photo exists in registry",
+      "ok": true
+    },
+    {
+      "label": "media_photo exists in policy",
+      "ok": true
+    },
+    {
+      "label": "media_photo registry fields complete",
+      "ok": true,
+      "detail": []
+    },
+    {
+      "label": "media_photo registry and policy allowed tools match",
+      "ok": true,
+      "detail": []
+    },
+    {
+      "label": "media_photo registry and policy approvals match",
+      "ok": true,
+      "detail": []
+    },
+    {
+      "label": "media_photo allowed tools are cataloged",
+      "ok": true,
+      "detail": []
+    },
+    {
+      "label": "media_photo allowed tools are dispatcher exposed",
+      "ok": true,
+      "detail": []
+    },
+    {
+      "label": "media_photo approval tools are allowed subset",
+      "ok": true,
+      "detail": []
+    },
+    {
+      "label": "media_photo context exposes only workspace tools",
+      "ok": true,
+      "detail": []
+    },
+    {
+      "label": "document_rag exists in registry",
+      "ok": true
+    },
+    {
+      "label": "document_rag exists in policy",
+      "ok": true
+    },
+    {
+      "label": "document_rag registry fields complete",
+      "ok": true,
+      "detail": []
+    },
+    {
+      "label": "document_rag registry and policy allowed tools match",
+      "ok": true,
+      "detail": []
+    },
+    {
+      "label": "document_rag registry and policy approvals match",
+      "ok": true,
+      "detail": []
+    },
+    {
+      "label": "document_rag allowed tools are cataloged",
+      "ok": true,
+      "detail": []
+    },
+    {
+      "label": "document_rag allowed tools are dispatcher exposed",
+      "ok": true,
+      "detail": []
+    },
+    {
+      "label": "document_rag approval tools are allowed subset",
+      "ok": true,
+      "detail": []
+    },
+    {
+      "label": "document_rag context exposes only workspace tools",
+      "ok": true,
+      "detail": []
+    },
+    {
+      "label": "ops_recovery exists in registry",
+      "ok": true
+    },
+    {
+      "label": "ops_recovery exists in policy",
+      "ok": true
+    },
+    {
+      "label": "ops_recovery registry fields complete",
+      "ok": true,
+      "detail": []
+    },
+    {
+      "label": "ops_recovery registry and policy allowed tools match",
+      "ok": true,
+      "detail": []
+    },
+    {
+      "label": "ops_recovery registry and policy approvals match",
+      "ok": true,
+      "detail": []
+    },
+    {
+      "label": "ops_recovery allowed tools are cataloged",
+      "ok": true,
+      "detail": []
+    },
+    {
+      "label": "ops_recovery allowed tools are dispatcher exposed",
+      "ok": true,
+      "detail": []
+    },
+    {
+      "label": "ops_recovery approval tools are allowed subset",
+      "ok": true,
+      "detail": []
+    },
+    {
+      "label": "ops_recovery context exposes only workspace tools",
+      "ok": true,
+      "detail": []
+    },
+    {
+      "label": "web_cloud_research exists in registry",
+      "ok": true
+    },
+    {
+      "label": "web_cloud_research exists in policy",
+      "ok": true
+    },
+    {
+      "label": "web_cloud_research registry fields complete",
+      "ok": true,
+      "detail": []
+    },
+    {
+      "label": "web_cloud_research registry and policy allowed tools match",
+      "ok": true,
+      "detail": []
+    },
+    {
+      "label": "web_cloud_research registry and policy approvals match",
+      "ok": true,
+      "detail": []
+    },
+    {
+      "label": "web_cloud_research allowed tools are cataloged",
+      "ok": true,
+      "detail": []
+    },
+    {
+      "label": "web_cloud_research allowed tools are dispatcher exposed",
+      "ok": true,
+      "detail": []
+    },
+    {
+      "label": "web_cloud_research approval tools are allowed subset",
+      "ok": true,
+      "detail": []
+    },
+    {
+      "label": "web_cloud_research context exposes only workspace tools",
+      "ok": true,
+      "detail": []
+    },
+    {
+      "label": "admin_audit exists in registry",
+      "ok": true
+    },
+    {
+      "label": "admin_audit exists in policy",
+      "ok": true
+    },
+    {
+      "label": "admin_audit registry fields complete",
+      "ok": true,
+      "detail": []
+    },
+    {
+      "label": "admin_audit registry and policy allowed tools match",
+      "ok": true,
+      "detail": []
+    },
+    {
+      "label": "admin_audit registry and policy approvals match",
+      "ok": true,
+      "detail": []
+    },
+    {
+      "label": "admin_audit allowed tools are cataloged",
+      "ok": true,
+      "detail": []
+    },
+    {
+      "label": "admin_audit allowed tools are dispatcher exposed",
+      "ok": true,
+      "detail": []
+    },
+    {
+      "label": "admin_audit approval tools are allowed subset",
+      "ok": true,
+      "detail": []
+    },
+    {
+      "label": "admin_audit context exposes only workspace tools",
+      "ok": true,
+      "detail": []
+    },
+    {
+      "label": "Dream7B dispatcher id is not exposed to any workspace",
+      "ok": true
+    },
+    {
+      "label": "no workspace sees the full dispatcher catalog",
+      "ok": true
+    }
+  ],
+  "detail": {
+    "dispatcher_tool_count": 78,
+    "catalog_tool_count": 78,
+    "workspace_count": 8
+  }
+}

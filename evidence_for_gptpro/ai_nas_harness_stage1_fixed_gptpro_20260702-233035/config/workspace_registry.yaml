@@ -1,0 +1,156 @@
+{
+  "version": "harness_stage1_shadow_v1",
+  "shadow_default_enabled": false,
+  "production_invariants": {
+    "do_not_replace": ["openclaw-gateway.service", "qwen25-local-openai-gateway.service", "ai_nas_allowlisted_tool.sh"],
+    "do_not_modify_ports": [18888, 18889],
+    "foreground_model_path": "Qwen + OpenClaw + AI-NAS gates",
+    "dream7b_foreground_allowed": false
+  },
+  "workspaces": {
+    "main_router": {
+      "prompt_file": "config/prompts/main_router.md",
+      "default_model": "Qwen2.5-local-router",
+      "allow_cloud": false,
+      "allow_write": false,
+      "approval_required_tools": [],
+      "allowed_tool_ids": ["ai_nas_edge_cloud_router"],
+      "data_scope": "request metadata, route labels, non-sensitive recent history",
+      "trace_requirements": ["workspace_decision", "context_hash", "selected_workspace", "candidate_workspaces"]
+    },
+    "nas_search": {
+      "prompt_file": "config/prompts/nas_search.md",
+      "default_model": "Qwen2.5-local",
+      "allow_cloud": false,
+      "allow_write": false,
+      "approval_required_tools": [],
+      "allowed_tool_ids": [
+        "ai_nas_personal_inventory",
+        "ai_nas_index_status",
+        "ai_nas_permission_aware_search",
+        "ai_nas_file_search",
+        "ai_nas_search_evidence_contract",
+        "ai_nas_search_confidence_calibration_contract",
+        "ai_nas_embedding_search",
+        "ai_nas_semantic_query_acceptance",
+        "ai_nas_folder_summary"
+      ],
+      "data_scope": "Personal index metadata and redacted search snippets visible to the principal",
+      "trace_requirements": ["exposed_tools", "memory_reads", "permission_decision", "denied_tools"]
+    },
+    "nas_action": {
+      "prompt_file": "config/prompts/nas_action.md",
+      "default_model": "Qwen2.5-local",
+      "allow_cloud": false,
+      "allow_write": true,
+      "approval_required_tools": ["ai_nas_action_execute_copy", "ai_nas_action_rollback_copy"],
+      "allowed_tool_ids": [
+        "ai_nas_action_approval_manifest",
+        "ai_nas_action_manifest_integrity",
+        "ai_nas_operator_approval_inbox",
+        "ai_nas_action_execute_copy",
+        "ai_nas_action_rollback_copy",
+        "ai_nas_destructive_action_governance",
+        "ai_nas_audit_trail_contract"
+      ],
+      "data_scope": "approved action manifests, bounded relative Personal paths, audit ledger",
+      "trace_requirements": ["approval_state", "manifest_hash", "policy_denials", "tool_calls"]
+    },
+    "media_photo": {
+      "prompt_file": "config/prompts/media_photo.md",
+      "default_model": "Qwen2.5-local",
+      "allow_cloud": false,
+      "allow_write": false,
+      "approval_required_tools": ["ai_nas_movie_sort_enhanced"],
+      "allowed_tool_ids": [
+        "ai_nas_photo_similarity",
+        "ai_nas_image_embedding_extract",
+        "ai_nas_photo_semantic_search",
+        "ai_nas_photo_pipeline_acceptance",
+        "ai_nas_photo_privacy_governance",
+        "ai_nas_duplicate_report",
+        "ai_nas_movie_sort_enhanced",
+        "ai_nas_multimodal_intent_routing_contract"
+      ],
+      "data_scope": "photo/movie metadata, local visual labels, privacy-governed thumbnails only",
+      "trace_requirements": ["privacy_classification", "exposed_tools", "memory_reads"]
+    },
+    "document_rag": {
+      "prompt_file": "config/prompts/document_rag.md",
+      "default_model": "Qwen2.5-local",
+      "allow_cloud": false,
+      "allow_write": false,
+      "approval_required_tools": [],
+      "allowed_tool_ids": [
+        "ai_nas_case_packet",
+        "ai_nas_evidence_report",
+        "ai_nas_folder_rag",
+        "ai_nas_folder_rag_grounding_contract",
+        "ai_nas_folder_summary",
+        "ai_nas_ocr_readiness",
+        "ai_nas_ocr_extract",
+        "ai_nas_ocr_runtime_contract",
+        "ai_nas_document_pipeline_acceptance"
+      ],
+      "data_scope": "document summaries, OCR snippets, folder RAG evidence with explicit source paths",
+      "trace_requirements": ["source_paths", "evidence_fragments", "context_hash", "report_paths"]
+    },
+    "ops_recovery": {
+      "prompt_file": "config/prompts/ops_recovery.md",
+      "default_model": "Qwen2.5-local",
+      "allow_cloud": false,
+      "allow_write": false,
+      "approval_required_tools": ["ai_nas_model_service_recovery_drill", "ai_nas_model_service_real_recovery_drill"],
+      "allowed_tool_ids": [
+        "ai_nas_index_daemon_readiness",
+        "ai_nas_index_daemon_smoke",
+        "ai_nas_index_daemon_resident",
+        "ai_nas_index_observability_contract",
+        "ai_nas_task_queue",
+        "ai_nas_queue_backpressure_slo",
+        "ai_nas_model_service_resilience",
+        "ai_nas_model_service_recovery_manifest",
+        "ai_nas_model_service_recovery_drill",
+        "ai_nas_model_service_real_recovery_drill",
+        "ai_nas_production_blocker_runbook_contract",
+        "ai_nas_production_dependency_bundle"
+      ],
+      "data_scope": "service health, daemon/index status, recovery manifests, no foreground model promotion",
+      "trace_requirements": ["service_names", "ports_checked", "recovery_approval", "gate_results"]
+    },
+    "web_cloud_research": {
+      "prompt_file": "config/prompts/web_cloud_research.md",
+      "default_model": "Qwen2.5-local-router-plus-cloud-overflow",
+      "allow_cloud": true,
+      "allow_write": false,
+      "approval_required_tools": [],
+      "allowed_tool_ids": [
+        "ai_nas_edge_cloud_router",
+        "ai_nas_evidence_catalog_contract",
+        "ai_nas_objective_traceability_contract"
+      ],
+      "data_scope": "public or redacted content only; no Personal paths, family/photos/invoices/contracts",
+      "trace_requirements": ["cloud_allowed", "redaction_applied", "egress_preview", "privacy_floor"]
+    },
+    "admin_audit": {
+      "prompt_file": "config/prompts/admin_audit.md",
+      "default_model": "Qwen2.5-local",
+      "allow_cloud": false,
+      "allow_write": false,
+      "approval_required_tools": ["ai_nas_product_closure_gate", "ai_nas_production_readiness_gate"],
+      "allowed_tool_ids": [
+        "ai_nas_allowlist_governance_audit",
+        "ai_nas_audit_trail_contract",
+        "ai_nas_acl_mapping_readiness",
+        "ai_nas_evidence_freshness_contract",
+        "ai_nas_objective_traceability_contract",
+        "ai_nas_production_readiness_gate",
+        "ai_nas_official_route_readiness_gate",
+        "ai_nas_product_closure_gate",
+        "ai_nas_appliance_experience_acceptance"
+      ],
+      "data_scope": "gate reports, audit events, allowlist governance, policy decisions",
+      "trace_requirements": ["gate_id", "verdict", "audit_event_hash", "policy_snapshot"]
+    }
+  }
+}

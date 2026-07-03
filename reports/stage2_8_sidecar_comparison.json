@@ -1,0 +1,57 @@
+{
+  "generated_at": "2026-07-03T17:24:27.459426+08:00",
+  "final_verdict": "blocked_by_no_operator_approval_for_qwen_persistence",
+  "architecture": "policy_first_deterministic_router_with_qwen_summarizer_advisor",
+  "qwen_structured_decision": "disabled",
+  "qwen_advisor": "disabled_safe_mode",
+  "gate_table": [
+    {
+      "report": "7000_stage2_8_baseline_lock",
+      "gate_id": "stage2_8_baseline_lock",
+      "verdict": "ok_stage2_8_baseline_lock",
+      "passed_count": 8,
+      "check_count": 8,
+      "failure_count": 0
+    },
+    {
+      "report": "7010_qwen_systemd_apply_verify_rollback_gate",
+      "gate_id": "stage2_8_qwen_systemd_apply_verify_rollback_gate",
+      "verdict": "blocked_by_no_operator_approval",
+      "passed_count": 12,
+      "check_count": 13,
+      "failure_count": 1
+    },
+    {
+      "report": "7020_policy_first_shadow_contract_gate",
+      "gate_id": "stage2_8_policy_first_shadow_contract_gate",
+      "verdict": "ok_stage2_8_policy_first_shadow_contract_gate",
+      "passed_count": 11,
+      "check_count": 11,
+      "failure_count": 0
+    },
+    {
+      "report": "7030_qwen_advisor_schema_gate",
+      "gate_id": "stage2_8_qwen_advisor_schema_gate",
+      "verdict": "failed_stage2_8_qwen_advisor_schema_gate",
+      "passed_count": 9,
+      "check_count": 11,
+      "failure_count": 2
+    },
+    {
+      "report": "7040_policy_first_readonly_shadow_preflight_soak_gate",
+      "gate_id": "stage2_8_readonly_shadow_preflight_soak_gate",
+      "verdict": "ok_stage2_8_readonly_shadow_preflight_soak_gate",
+      "passed_count": 15,
+      "check_count": 15,
+      "failure_count": 0
+    },
+    {
+      "report": "7050_stage2_8_stage3_go_no_go_gate",
+      "gate_id": "stage2_8_stage3_go_no_go_gate",
+      "verdict": "blocked_by_no_operator_approval_for_qwen_persistence",
+      "passed_count": 7,
+      "check_count": 8,
+      "failure_count": 1
+    }
+  ]
+}

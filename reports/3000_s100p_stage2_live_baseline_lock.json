@@ -1,0 +1,130 @@
+{
+  "generated_at": "2026-07-03T01:37:57.251678+08:00",
+  "gate_id": "stage2_s100p_live_baseline_lock",
+  "verdict": "ok_stage2_s100p_live_baseline_lock",
+  "passed_count": 2,
+  "check_count": 2,
+  "failure_count": 0,
+  "failures": [],
+  "checks": [
+    {
+      "label": "previous package exists",
+      "ok": true,
+      "detail": "evidence_for_gptpro/digua_ai_nas_harness_stage2_for_gptpro_20260702-234039.zip"
+    },
+    {
+      "label": "previous verdict was read-only sidecar trial",
+      "ok": true,
+      "detail": "ready_for_more_readonly_sidecar_trials"
+    }
+  ],
+  "detail": {
+    "previous_verdict": "ready_for_more_readonly_sidecar_trials",
+    "why_stage3_not_allowed_yet": [
+      "previous sidecar was mock/sidecar-like",
+      "previous read-only bridges were dry-run",
+      "previous Windows-side Qwen health was explicitly unavailable",
+      "write/destructive workspace remained disabled"
+    ],
+    "prior_dry_run_or_mock_only_reports": [
+      "2080_stage2_readonly_nas_search_bridge",
+      "2090_stage2_document_rag_bridge",
+      "2070_stage2_sidecar_mock_isolation"
+    ],
+    "previous_sidecar_limitations": [
+      "mock sidecar only",
+      "read-only bridge dry-run",
+      "no real Zleap package installed",
+      "Qwen gateway explicitly unavailable in this Windows run"
+    ],
+    "expected_protected_ports": [
+      8765,
+      18080,
+      18888,
+      18889
+    ],
+    "expected_services": [
+      "openclaw-gateway.service",
+      "qwen25-local-openai-gateway.service"
+    ],
+    "expected_dispatcher_path": "/mnt/nas/openclaw/scripts/probes/ai_nas_allowlisted_tool.sh",
+    "expected_qwen_url": "http://127.0.0.1:18080",
+    "expected_openclaw_url": "http://127.0.0.1:8765/api/health",
+    "dream_llama_parallel_process_note": "Observe only; do not stop or modify Dream/llama research processes.",
+    "hard_constraints": [
+      "Do not replace OpenClaw.",
+      "Do not replace local Qwen foreground gateway.",
+      "Do not bypass ai_nas_allowlisted_tool.sh.",
+      "Do not introduce arbitrary shell/script path.",
+      "Do not modify 8765/18080/18888/18889.",
+      "Do not attach Dream7B foreground.",
+      "Do not stop or modify Dream/llama process without explicit authorization.",
+      "Cloud may not see private NAS raw content.",
+      "Do not enable write/destructive/admin/recovery workspaces.",
+      "Do not set sidecar as OpenClaw default route.",
+      "Do not add PostgreSQL/pgvector as default production dependency."
+    ],
+    "previous_reports": [
+      {
+        "path": "reports/2000_stage1_review_baseline_lock.json",
+        "gate_id": "stage1_review_baseline_lock",
+        "verdict": "ok_stage1_review_baseline_lock",
+        "failure_count": 0
+      },
+      {
+        "path": "reports/2010_package_reproducibility_gate.json",
+        "gate_id": "stage1_package_reproducibility_gate",
+        "verdict": "ok_stage1_package_reproducibility_gate",
+        "failure_count": 0
+      },
+      {
+        "path": "reports/2020_existing_gate_hard_fail_test.json",
+        "gate_id": "existing_gate_hard_fail_test",
+        "verdict": "ok_existing_gate_hard_fail_test",
+        "failure_count": 0
+      },
+      {
+        "path": "reports/2030_cloud_redaction_hardening_gate.json",
+        "gate_id": "stage1_cloud_redaction_hardening_gate",
+        "verdict": "ok_stage1_cloud_redaction_hardening_gate",
+        "failure_count": 0
+      },
+      {
+        "path": "reports/2040_argument_scope_gate.json",
+        "gate_id": "stage1_argument_scope_gate",
+        "verdict": "ok_stage1_argument_scope_gate",
+        "failure_count": 0
+      },
+      {
+        "path": "reports/2050_approval_token_schema_gate.json",
+        "gate_id": "approval_token_schema_gate",
+        "verdict": "ok_approval_token_schema_gate",
+        "failure_count": 0
+      },
+      {
+        "path": "reports/2060_qwen_runtime_identity_gate.json",
+        "gate_id": "qwen_runtime_identity_gate",
+        "verdict": "ok_qwen_runtime_identity_gate",
+        "failure_count": 0
+      },
+      {
+        "path": "reports/2070_stage2_sidecar_mock_isolation.json",
+        "gate_id": "stage2_sidecar_mock_isolation_gate",
+        "verdict": "ok_stage2_sidecar_mock_isolation_gate",
+        "failure_count": 0
+      },
+      {
+        "path": "reports/2080_stage2_readonly_nas_search_bridge.json",
+        "gate_id": "stage2_readonly_nas_search_bridge",
+        "verdict": "ok_stage2_readonly_nas_search_bridge",
+        "failure_count": 0
+      },
+      {
+        "path": "reports/2090_stage2_document_rag_bridge.json",
+        "gate_id": "stage2_document_rag_bridge",
+        "verdict": "ok_stage2_document_rag_bridge",
+        "failure_count": 0
+      }
+    ]
+  }
+}

@@ -1,0 +1,57 @@
+# stage2_actual_context_minimization_gate
+
+- verdict: `ok_stage2_actual_context_minimization_gate`
+- generated_at: `2026-07-03T01:38:22.738491+08:00`
+- passed: `4/4`
+
+## Checks
+
+- `PASS` actual sidecar context <= Stage1 baseline * 1.20
+- `PASS` exposed tool count bounded
+- `PASS` no global tool catalog exposure
+- `PASS` no raw private context stored
+
+## Failures
+
+- none
+
+## Detail
+
+```json
+{
+  "contexts": [
+    {
+      "workspace_id": "nas_search",
+      "capture_mode": "live_sidecar_config_and_tool_schema",
+      "system_prompt_chars": 310,
+      "workspace_prompt_chars": 420,
+      "tool_schemas_chars": 270,
+      "memory_block_chars": 0,
+      "history_chars": 160,
+      "total_chars": 1160,
+      "stage1_baseline_chars": 1466,
+      "exposed_tool_count": 3,
+      "stage1_exposed_tool_count": 3,
+      "hidden_tool_count": 75,
+      "context_hash": "62d207533d642daa54a02a03c950171766b13cfa6337175ed917c515b6f1e044",
+      "raw_private_context_stored": false
+    },
+    {
+      "workspace_id": "document_rag",
+      "capture_mode": "live_sidecar_config_and_tool_schema",
+      "system_prompt_chars": 310,
+      "workspace_prompt_chars": 520,
+      "tool_schemas_chars": 450,
+      "memory_block_chars": 0,
+      "history_chars": 160,
+      "total_chars": 1440,
+      "stage1_baseline_chars": 1587,
+      "exposed_tool_count": 5,
+      "stage1_exposed_tool_count": 5,
+      "hidden_tool_count": 73,
+      "context_hash": "4c9d09ceaf1b0a9da560489ea2b8d6c7596ec7974584ac8de33f916b90b5da15",
+      "raw_private_context_stored": false
+    }
+  ]
+}
+```

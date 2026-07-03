@@ -1,0 +1,153 @@
+{
+  "review_created_at": "2026-07-01T06:36:21.731361+00:00",
+  "original_zip": "/mnt/data/codex_dream7b_s100p_research_gptpro_pack_20260701.zip",
+  "original_zip_sha256": "24e00c4855d218be80a24e21c6b9641771a3727e853e5a7197bf81c82b06fcac",
+  "zip_testzip_bad_file": null,
+  "zip_file_count": 100,
+  "zip_names_with_backslash": 95,
+  "gate_packet_sha256": "5dce8ca697ac345a68acf0c4b6cb6cc731d91f733e03c4d3cf4a52f5845a4b3f",
+  "verdict": "deployment_blocked_against_deployment_reference_but_bf16_unresolved",
+  "verdict_class": "C",
+  "gate_status": {
+    "compile_feasible": "pass",
+    "s100p_runtime_valid": "pass",
+    "logits_numerically_valid": "inconclusive",
+    "generation_quality_valid": "pending",
+    "product_route_valid": "pending"
+  },
+  "deployment_reference_status": "fail",
+  "bf16_reference_status": "unavailable",
+  "blocking_issues": [
+    "bf16_reference_unavailable",
+    "deployment_reference_gguf_q4km_failed",
+    "s100p_logits_uniform_or_constant",
+    "raw_output_constant_cases",
+    "real_bpu_seg26_to_final_constant"
+  ],
+  "reproduction": {
+    "manifest_entries_checked": 52,
+    "manifest_ok": true,
+    "compile_feasible": "pass",
+    "s100p_runtime_valid": "pass",
+    "gguf_logits_gate": "fail",
+    "runtime_final_shape": [
+      1,
+      152064
+    ],
+    "logits_top1_agreement": 0.0,
+    "logits_mean_cosine": 0.0
+  },
+  "s100p_logits_dump": {
+    "verdict": "blocked_s100p_dump_logits_anomaly",
+    "case_count": 10,
+    "blocking_anomaly_case_count": 10
+  },
+  "dequant": {
+    "verdict": "upstream_graph_or_runtime_issue_raw_constant",
+    "raw_constant_case_count": 10,
+    "scale": 0.00025415877462364733
+  },
+  "final_segment": {
+    "metadata_verdict": "ok_final_segment_metadata",
+    "hbm_size_bytes": 1880386728,
+    "output_shape": [
+      1,
+      152064
+    ],
+    "scale": 0.00025415877462364733,
+    "audit_verdict": "blocked_final_segment_constant_or_uniform",
+    "top1_changes_with_input": true,
+    "synthetic_case_count": 4,
+    "real_bpu_seg26_raw_constant": true,
+    "real_bpu_seg26_hidden_std": 16.123767852783203
+  },
+  "boundary": {
+    "s100p_boundary_dump_verdict": "failed_s100p_boundary_dump",
+    "s100p_boundary_cases_completed": 1,
+    "s100p_boundary_errors": [
+      "ramp:RuntimeError:DNN Error (code: -400001, desc: Memory alloc failed, please check error log) hbDNN initialize from /mnt/nas/openclaw/models/dream7b-hbm/seq128-b1-lmheadq16-lasttoken/seg27_28/dream7b_segment_27_28_seq128_q8_lmheadq16_last_token_logits.hbm file failed."
+    ],
+    "boundary_compare_verdict": "inconclusive_boundary_compare_bf16_missing",
+    "first_divergent_segment": null,
+    "zeros_late_segment_stats": {
+      "23": {
+        "model_name": "dream_segment_23_24",
+        "raw_min": -4458.0,
+        "raw_max": 4458.0,
+        "raw_std": 4008.731370037798,
+        "dequant_min": -13.896108627319336,
+        "dequant_max": 13.896108627319336,
+        "dequant_std": 12.495684623718262,
+        "constant": false,
+        "scale": 0.0031171173322945833
+      },
+      "24": {
+        "model_name": "dream_segment_24_25",
+        "raw_min": -32768.0,
+        "raw_max": 32767.0,
+        "raw_std": 24447.914359347382,
+        "dequant_min": -16.745126724243164,
+        "dequant_max": 16.74461555480957,
+        "dequant_std": 12.493391036987305,
+        "constant": false,
+        "scale": 0.0005110207130201161
+      },
+      "25": {
+        "model_name": "dream_segment_25_26",
+        "raw_min": -32768.0,
+        "raw_max": 32767.0,
+        "raw_std": 26992.82897504049,
+        "dequant_min": -258.418701171875,
+        "dequant_max": 258.41082763671875,
+        "dequant_std": 212.87388610839844,
+        "constant": false,
+        "scale": 0.007886312901973724
+      },
+      "26": {
+        "model_name": "dream_segment_26_27",
+        "raw_min": -19807.0,
+        "raw_max": 19807.0,
+        "raw_std": 19596.711344721432,
+        "dequant_min": -16.29678726196289,
+        "dequant_max": 16.29678726196289,
+        "dequant_std": 16.123767852783203,
+        "constant": false,
+        "scale": 0.0008227791986428201
+      },
+      "27": {
+        "model_name": "dream_segment_27_28_last_token_logits",
+        "raw_min": 0.0,
+        "raw_max": 0.0,
+        "raw_std": 0.0,
+        "dequant_min": 0.0,
+        "dequant_max": 0.0,
+        "dequant_std": 0.0,
+        "constant": true,
+        "scale": 0.00025415877462364733
+      }
+    }
+  },
+  "input_alignment": {
+    "input_alignment_valid": "pass",
+    "tokenizer_decode_status": "inconclusive_tokenizer_api_not_used",
+    "case_count": 6
+  },
+  "triplet": {
+    "verdict": "inconclusive_triplet_compare_bf16_missing",
+    "gguf_vs_bpu_mean_cosine": 0.0,
+    "bf16_missing_error_count": 10,
+    "semantic_case_count": 4
+  },
+  "gate3_gate4": {
+    "generation_gate_status": "blocked",
+    "product_route_status": "blocked",
+    "foreground_18888_changed": false,
+    "experimental_18889_enabled": false
+  },
+  "raw_evidence_inventory": {
+    "file_count": 192,
+    "total_size_bytes": 948018244,
+    "sha256_computed": true,
+    "raw_files_not_in_zip": true
+  }
+}

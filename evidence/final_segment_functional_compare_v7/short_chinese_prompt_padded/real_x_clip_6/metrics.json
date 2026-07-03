@@ -1,0 +1,89 @@
+{
+  "candidate_top1": 72869,
+  "reference_top1": 57992,
+  "top1_agreement": false,
+  "candidate_topk": [
+    72869,
+    58375,
+    37355,
+    84602,
+    31069
+  ],
+  "reference_topk": [
+    57992,
+    50564,
+    58375,
+    36343,
+    10749
+  ],
+  "top5_overlap": 1,
+  "reference_top1_in_candidate_top5": false,
+  "cosine": 0.8575171471170487,
+  "relative_l2": 2105.8819858368943,
+  "max_abs_error": 26167.777163505554,
+  "mean_abs_error": 3643.439363168637,
+  "candidate_stats": {
+    "shape": [
+      152064
+    ],
+    "dtype": "float32",
+    "size": 152064,
+    "min": -26176.0,
+    "max": 25972.0,
+    "mean": 2370.2216796875,
+    "std": 3749.62744140625,
+    "abs_max": 26176.0,
+    "nonzero_count": 152047,
+    "constant": false,
+    "allzero": false,
+    "nan_count": 0,
+    "inf_count": 0,
+    "p0": -26176.0,
+    "p1": -9206.48046875,
+    "p5": -4660.0,
+    "p50": 3004.0,
+    "p95": 7783.85009765625,
+    "p99": 12130.1103515625,
+    "p100": 25972.0
+  },
+  "reference_stats": {
+    "shape": [
+      152064
+    ],
+    "dtype": "float32",
+    "size": 152064,
+    "min": -8.2228364944458,
+    "max": 9.915154457092285,
+    "mean": 1.7783443927764893,
+    "std": 1.1274052858352661,
+    "abs_max": 9.915154457092285,
+    "nonzero_count": 152064,
+    "constant": false,
+    "allzero": false,
+    "nan_count": 0,
+    "inf_count": 0,
+    "p0": -8.2228364944458,
+    "p1": -1.8577877283096313,
+    "p5": -0.4849624037742615,
+    "p50": 2.073495864868164,
+    "p95": 3.13775634765625,
+    "p99": 4.231623649597168,
+    "p100": 9.915154457092285
+  },
+  "candidate_entropy": {
+    "entropy": 9.783125982032732e-277,
+    "normalized_entropy": 8.199027356020134e-278,
+    "top1_probability": 1.0
+  },
+  "reference_entropy": {
+    "entropy": 11.262166155004818,
+    "normalized_entropy": 0.9438579096549924,
+    "top1_probability": 0.013001587675249572
+  },
+  "case_id": "short_chinese_prompt_padded",
+  "variant": "real_x_clip_6",
+  "candidate": "bpu_seg27_28",
+  "reference": "hf_final_norm_lmhead_same_input",
+  "bpu_logits_path": "evidence/raw_endpoint_subset_v6/final_segment_dense_sweep_v5/short_chinese_prompt_padded/real_x_clip_6/dequant_logits.npy",
+  "hf_logits_path": "evidence/hf_lmhead_only_v7/short_chinese_prompt_padded/real_x_clip_6/hf_final_lmhead_logits.npy"
+}

@@ -1,6 +1,7 @@
 English| [简体中文](./README_cn.md)
 
-# Getting Started with DNN Node Sample
+Getting Started with DNN Node Sample
+=======
 
 
 # Introduction
@@ -56,7 +57,7 @@ colcon build --packages-select dnn_node_sample \
    --cmake-args \
    --no-warn-unused-cli \
    -DCMAKE_TOOLCHAIN_FILE=`pwd`/robot_dev_config/aarch64_toolchainfile.cmake
-```
+```  
 
 # Usage Guide
 
@@ -78,7 +79,7 @@ cp -r /opt/tros/${TROS_DISTRO}/lib/dnn_node_sample/config/ .
 # Configure the MIPI camera
 export CAM_TYPE=mipi
 
-ros2 launch dnn_node_sample dnn_node_sample.launch.py
+ros2 launch dnn_node_sample dnn_node_sample.launch.py 
 ```
 
 **Publish Images by USB Camera**
@@ -93,7 +94,7 @@ cp -r /opt/tros/${TROS_DISTRO}/lib/dnn_node_sample/config/ .
 # Configure the USB camera
 export CAM_TYPE=usb
 
-ros2 launch dnn_node_sample dnn_node_sample.launch.py
+ros2 launch dnn_node_sample dnn_node_sample.launch.py 
 ```
 
 **Use Local Images**

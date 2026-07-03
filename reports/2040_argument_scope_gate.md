@@ -1,0 +1,154 @@
+# stage1_argument_scope_gate
+
+- verdict: `ok_stage1_argument_scope_gate`
+- generated_at: `2026-07-03T01:33:35.237676+08:00`
+- passed: `10/10`
+
+## Checks
+
+- `PASS` nas_search:ai_nas_file_search:True
+- `PASS` nas_search:ai_nas_file_search:args_hash
+- `PASS` web_cloud_research:ai_nas_edge_cloud_router:False
+- `PASS` web_cloud_research:ai_nas_edge_cloud_router:args_hash
+- `PASS` nas_search:ai_nas_file_search:False
+- `PASS` nas_search:ai_nas_file_search:args_hash
+- `PASS` nas_search:ai_nas_file_search:False
+- `PASS` nas_search:ai_nas_file_search:args_hash
+- `PASS` nas_action:ai_nas_action_execute_copy:False
+- `PASS` nas_action:ai_nas_action_execute_copy:args_hash
+
+## Failures
+
+- none
+
+## Detail
+
+```json
+{
+  "decisions": [
+    {
+      "allowed": true,
+      "reason_code": "ok",
+      "reasons": [],
+      "args_hash": "abde69ebb89bd6ada8fb04979bbb034051024722a1c44537e0f77f867ad21037",
+      "leak_count": 1,
+      "leak_markers": [
+        "term:invoice"
+      ],
+      "trace_args": {
+        "args_hash": "abde69ebb89bd6ada8fb04979bbb034051024722a1c44537e0f77f867ad21037",
+        "arg_count": 1,
+        "leak_count": 1
+      },
+      "policy": {
+        "read_only": true,
+        "write_allowed": false,
+        "allow_cloud_egress": false,
+        "required_acl_check": true
+      }
+    },
+    {
+      "allowed": false,
+      "reason_code": "absolute_path_denied",
+      "reasons": [
+        "absolute_path_denied",
+        "denied_path_root",
+        "private_snippet_or_path_denied"
+      ],
+      "args_hash": "731a0c8ef8e525a654515b521b4943b3e0ca77af5a1784de044ceff2bf7eaf2e",
+      "leak_count": 3,
+      "leak_markers": [
+        "pattern:(?i)(?:/mnt/(?:nas|data)|/home)/[^\\s,;\\\"'<>]+",
+        "term:Personal",
+        "term:invoice"
+      ],
+      "trace_args": {
+        "args_hash": "731a0c8ef8e525a654515b521b4943b3e0ca77af5a1784de044ceff2bf7eaf2e",
+        "arg_count": 1,
+        "leak_count": 3
+      },
+      "policy": {
+        "read_only": true,
+        "write_allowed": false,
+        "allow_cloud_egress": true,
+        "required_acl_check": true
+      }
+    },
+    {
+      "allowed": false,
+      "reason_code": "denied_path_root",
+      "reasons": [
+        "denied_path_root"
+      ],
+      "args_hash": "7611d35639e6d44bb2f5aaa7a235b7861be29ba39d8ff7af8fed3c91982d1093",
+      "leak_count": 2,
+      "leak_markers": [
+        "pattern:(?i)\\.\\.(?:/|\\\\)",
+        "term:Personal"
+      ],
+      "trace_args": {
+        "args_hash": "7611d35639e6d44bb2f5aaa7a235b7861be29ba39d8ff7af8fed3c91982d1093",
+        "arg_count": 1,
+        "leak_count": 2
+      },
+      "policy": {
+        "read_only": true,
+        "write_allowed": false,
+        "allow_cloud_egress": false,
+        "required_acl_check": true
+      }
+    },
+    {
+      "allowed": false,
+      "reason_code": "write_or_destructive_arg_in_read_only_workspace",
+      "reasons": [
+        "destructive_arg_not_allowed",
+        "write_or_destructive_arg_in_read_only_workspace"
+      ],
+      "args_hash": "6a369434998f5c9cf8f5329e0d44fcd768ef6b2b563b5f031ce8341ae39adc5f",
+      "leak_count": 3,
+      "leak_markers": [
+        "pattern:(?i)(?:^|[\\s,;])(?:Personal|Inbox|Documents|Photos|Family|Finance|Medical|Private)(?:[/\\\\][^\\s,;\\\"'<>]+)?",
+        "term:Inbox",
+        "term:Personal"
+      ],
+      "trace_args": {
+        "args_hash": "6a369434998f5c9cf8f5329e0d44fcd768ef6b2b563b5f031ce8341ae39adc5f",
+        "arg_count": 1,
+        "leak_count": 3
+      },
+      "policy": {
+        "read_only": true,
+        "write_allowed": false,
+        "allow_cloud_egress": false,
+        "required_acl_check": true
+      }
+    },
+    {
+      "allowed": false,
+      "reason_code": "destructive_arg_not_allowed",
+      "reasons": [
+        "destructive_arg_not_allowed"
+      ],
+      "args_hash": "6a369434998f5c9cf8f5329e0d44fcd768ef6b2b563b5f031ce8341ae39adc5f",
+      "leak_count": 3,
+      "leak_markers": [
+        "pattern:(?i)(?:^|[\\s,;])(?:Personal|Inbox|Documents|Photos|Family|Finance|Medical|Private)(?:[/\\\\][^\\s,;\\\"'<>]+)?",
+        "term:Inbox",
+        "term:Personal"
+      ],
+      "trace_args": {
+        "args_hash": "6a369434998f5c9cf8f5329e0d44fcd768ef6b2b563b5f031ce8341ae39adc5f",
+        "arg_count": 1,
+        "leak_count": 3
+      },
+      "policy": {
+        "read_only": false,
+        "write_allowed": false,
+        "allow_cloud_egress": false,
+        "required_acl_check": true
+      }
+    }
+  ]
+}
+```

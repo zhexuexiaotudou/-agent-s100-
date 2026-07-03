@@ -1,0 +1,139 @@
+{
+  "generated_at": "2026-07-03T17:24:20.245824+08:00",
+  "gate_id": "stage2_8_stage3_go_no_go_gate",
+  "verdict": "blocked_by_no_operator_approval_for_qwen_persistence",
+  "passed_count": 7,
+  "check_count": 8,
+  "failure_count": 1,
+  "failures": [
+    "qwen_persistence_applied_and_verified"
+  ],
+  "checks": [
+    {
+      "label": "qwen_persistence_applied_and_verified",
+      "ok": false,
+      "detail": {
+        "qwen_persistence_applied_and_verified": false,
+        "policy_first_contract_pass": true,
+        "qwen_advisor_pass_or_disabled_safe": true,
+        "readonly_shadow_preflight_soak_pass": true,
+        "no_write_destructive_admin_recovery": true,
+        "no_production_route_change": true,
+        "no_cloud_private_egress": true,
+        "rollback_pass": true
+      }
+    },
+    {
+      "label": "policy_first_contract_pass",
+      "ok": true,
+      "detail": {
+        "qwen_persistence_applied_and_verified": false,
+        "policy_first_contract_pass": true,
+        "qwen_advisor_pass_or_disabled_safe": true,
+        "readonly_shadow_preflight_soak_pass": true,
+        "no_write_destructive_admin_recovery": true,
+        "no_production_route_change": true,
+        "no_cloud_private_egress": true,
+        "rollback_pass": true
+      }
+    },
+    {
+      "label": "qwen_advisor_pass_or_disabled_safe",
+      "ok": true,
+      "detail": {
+        "qwen_persistence_applied_and_verified": false,
+        "policy_first_contract_pass": true,
+        "qwen_advisor_pass_or_disabled_safe": true,
+        "readonly_shadow_preflight_soak_pass": true,
+        "no_write_destructive_admin_recovery": true,
+        "no_production_route_change": true,
+        "no_cloud_private_egress": true,
+        "rollback_pass": true
+      }
+    },
+    {
+      "label": "readonly_shadow_preflight_soak_pass",
+      "ok": true,
+      "detail": {
+        "qwen_persistence_applied_and_verified": false,
+        "policy_first_contract_pass": true,
+        "qwen_advisor_pass_or_disabled_safe": true,
+        "readonly_shadow_preflight_soak_pass": true,
+        "no_write_destructive_admin_recovery": true,
+        "no_production_route_change": true,
+        "no_cloud_private_egress": true,
+        "rollback_pass": true
+      }
+    },
+    {
+      "label": "no_write_destructive_admin_recovery",
+      "ok": true,
+      "detail": {
+        "qwen_persistence_applied_and_verified": false,
+        "policy_first_contract_pass": true,
+        "qwen_advisor_pass_or_disabled_safe": true,
+        "readonly_shadow_preflight_soak_pass": true,
+        "no_write_destructive_admin_recovery": true,
+        "no_production_route_change": true,
+        "no_cloud_private_egress": true,
+        "rollback_pass": true
+      }
+    },
+    {
+      "label": "no_production_route_change",
+      "ok": true,
+      "detail": {
+        "qwen_persistence_applied_and_verified": false,
+        "policy_first_contract_pass": true,
+        "qwen_advisor_pass_or_disabled_safe": true,
+        "readonly_shadow_preflight_soak_pass": true,
+        "no_write_destructive_admin_recovery": true,
+        "no_production_route_change": true,
+        "no_cloud_private_egress": true,
+        "rollback_pass": true
+      }
+    },
+    {
+      "label": "no_cloud_private_egress",
+      "ok": true,
+      "detail": {
+        "qwen_persistence_applied_and_verified": false,
+        "policy_first_contract_pass": true,
+        "qwen_advisor_pass_or_disabled_safe": true,
+        "readonly_shadow_preflight_soak_pass": true,
+        "no_write_destructive_admin_recovery": true,
+        "no_production_route_change": true,
+        "no_cloud_private_egress": true,
+        "rollback_pass": true
+      }
+    },
+    {
+      "label": "rollback_pass",
+      "ok": true,
+      "detail": {
+        "qwen_persistence_applied_and_verified": false,
+        "policy_first_contract_pass": true,
+        "qwen_advisor_pass_or_disabled_safe": true,
+        "readonly_shadow_preflight_soak_pass": true,
+        "no_write_destructive_admin_recovery": true,
+        "no_production_route_change": true,
+        "no_cloud_private_egress": true,
+        "rollback_pass": true
+      }
+    }
+  ],
+  "detail": {
+    "conditions": {
+      "qwen_persistence_applied_and_verified": false,
+      "policy_first_contract_pass": true,
+      "qwen_advisor_pass_or_disabled_safe": true,
+      "readonly_shadow_preflight_soak_pass": true,
+      "no_write_destructive_admin_recovery": true,
+      "no_production_route_change": true,
+      "no_cloud_private_egress": true,
+      "rollback_pass": true
+    },
+    "stage3_go_no_go_verdict": "blocked_by_no_operator_approval_for_qwen_persistence"
+  },
+  "stage3_go_no_go_verdict": "blocked_by_no_operator_approval_for_qwen_persistence"
+}

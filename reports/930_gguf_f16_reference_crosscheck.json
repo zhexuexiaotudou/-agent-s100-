@@ -1,0 +1,547 @@
+{
+  "schema_version": "dream7b_s100p_v11_930_gguf_f16_reference_crosscheck",
+  "created_at_utc": "2026-07-01T19:15:57.094670+00:00",
+  "run_commands": [
+    "C:\\Users\\zhexu\\AppData\\Local\\Python\\pythoncore-3.14-64\\python.exe tools\\build_v11_research_thread.py --root ."
+  ],
+  "git": {
+    "cwd": "F:\\Project\\Digua",
+    "git_dir_exists": true,
+    "git_head_exists": false,
+    "status": "unavailable_empty_or_incomplete_git_dir"
+  },
+  "input_artifacts": [
+    {
+      "path": "evidence/model_inventory_v6.json",
+      "exists": true,
+      "size_bytes": 51138,
+      "sha256": "787bbf0b03c0e193e6588c13d709cdbab443266d4b9807db05aed62d22df2c03"
+    }
+  ],
+  "output_artifacts": [
+    {
+      "path": "reports/930_gguf_f16_reference_crosscheck.json"
+    },
+    {
+      "path": "reports/930_gguf_f16_reference_crosscheck.md"
+    }
+  ],
+  "blocking_or_failure_reasons": [
+    "Only Q4_K_M GGUF was found in prior and v10 NAS inventory; no GGUF F16/unquantized runner artifact is available in the current workspace/NAS evidence."
+  ],
+  "next_minimal_experiments": [
+    "Provide Dream7B GGUF F16/unquantized artifact and llama.cpp/diffuse-cpp runner for canonical seq128 logits cross-check."
+  ],
+  "gguf_f16_available": false,
+  "gguf_f16_rows": 0,
+  "known_gguf_artifacts": [
+    "/mnt/nas/openclaw/models/dream7b/dream-7b-q4km.gguf"
+  ],
+  "blocker": "Only Q4_K_M GGUF was found in prior and v10 NAS inventory; no GGUF F16/unquantized runner artifact is available in the current workspace/NAS evidence.",
+  "inventory_excerpt": {
+    "roots": [
+      "/mnt/nas/openclaw/models/dream7b",
+      "/mnt/nas/openclaw/models/dream7b-hf"
+    ],
+    "files": [
+      {
+        "root": "/mnt/nas/openclaw/models/dream7b",
+        "relative_path": "dream-7b-q4km.gguf",
+        "path": "/mnt/nas/openclaw/models/dream7b/dream-7b-q4km.gguf",
+        "exists": true,
+        "size_bytes": 5313916320,
+        "sha256": "skipped_large_file_not_in_sha256sums"
+      },
+      {
+        "root": "/mnt/nas/openclaw/models/dream7b",
+        "relative_path": "dream-7b-q4km.gguf.sha256",
+        "path": "/mnt/nas/openclaw/models/dream7b/dream-7b-q4km.gguf.sha256",
+        "exists": true,
+        "size_bytes": 118,
+        "sha256": "a2caee58e2d432784424291601925097f9868af19bea83dc1eee7b2322e00846"
+      },
+      {
+        "root": "/mnt/nas/openclaw/models/dream7b",
+        "relative_path": "dream7b_deployment.json",
+        "path": "/mnt/nas/openclaw/models/dream7b/dream7b_deployment.json",
+        "exists": true,
+        "size_bytes": 1740,
+        "sha256": "5eda0dc7203b0d00b49dd74a155b63392bf4798b987158c5d7d12163d67c1dca"
+      },
+      {
+        "root": "/mnt/nas/openclaw/models/dream7b",
+        "relative_path": "hf-cache/hub/CACHEDIR.TAG",
+        "path": "/mnt/nas/openclaw/models/dream7b/hf-cache/hub/CACHEDIR.TAG",
+        "exists": true,
+        "size_bytes": 191,
+        "sha256": "f6572428f6d5e1575e73a1502895a8731f10757dfbb634909c6e154b849af91d"
+      },
+      {
+        "root": "/mnt/nas/openclaw/models/dream7b",
+        "relative_path": "hf-cache/hub/models--Dream-org--Dream-v0-Instruct-7B/.no_exist/05334cb9faaf763692dcf9d8737c642be2b2a6ae/chat_template.jinja",
+        "path": "/mnt/nas/openclaw/models/dream7b/hf-cache/hub/models--Dream-org--Dream-v0-Instruct-7B/.no_exist/05334cb9faaf763692dcf9d8737c642be2b2a6ae/chat_template.jinja",
+        "exists": true,
+        "size_bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      {
+        "root": "/mnt/nas/openclaw/models/dream7b",
+        "relative_path": "hf-cache/hub/models--Dream-org--Dream-v0-Instruct-7B/.no_exist/05334cb9faaf763692dcf9d8737c642be2b2a6ae/tokenizer.json",
+        "path": "/mnt/nas/openclaw/models/dream7b/hf-cache/hub/models--Dream-org--Dream-v0-Instruct-7B/.no_exist/05334cb9faaf763692dcf9d8737c642be2b2a6ae/tokenizer.json",
+        "exists": true,
+        "size_bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      {
+        "root": "/mnt/nas/openclaw/models/dream7b",
+        "relative_path": "hf-cache/hub/models--Dream-org--Dream-v0-Instruct-7B/blobs/0354ebfbf540d2f770b6b24fda583294f513f962",
+        "path": "/mnt/nas/openclaw/models/dream7b/hf-cache/hub/models--Dream-org--Dream-v0-Instruct-7B/blobs/0354ebfbf540d2f770b6b24fda583294f513f962",
+        "exists": true,
+        "size_bytes": 7486,
+        "sha256": "b0e9c1a6299d8832a1362d6b24f007de8a2acfe0243d8a3a1d1b57aa8250f7ee"
+      },
+      {
+        "root": "/mnt/nas/openclaw/models/dream7b",
+        "relative_path": "hf-cache/hub/models--Dream-org--Dream-v0-Instruct-7B/blobs/23b4959a1efed046572621c2d183c3438cc0b6a4",
+        "path": "/mnt/nas/openclaw/models/dream7b/hf-cache/hub/models--Dream-org--Dream-v0-Instruct-7B/blobs/23b4959a1efed046572621c2d183c3438cc0b6a4",
+        "exists": true,
+        "size_bytes": 927,
+        "sha256": "11afc7fe7a1881e73dcd70cca6868aaaf8eb89ad45ea5fc6426c3fb82dec9340"
+      },
+      {
+        "root": "/mnt/nas/openclaw/models/dream7b",
+        "relative_path": "hf-cache/hub/models--Dream-org--Dream-v0-Instruct-7B/blobs/31349551d90c7606f325fe0f11bbb8bd5fa0d7c7",
+        "path": "/mnt/nas/openclaw/models/dream7b/hf-cache/hub/models--Dream-org--Dream-v0-Instruct-7B/blobs/31349551d90c7606f325fe0f11bbb8bd5fa0d7c7",
+        "exists": true,
+        "size_bytes": 1671853,
+        "sha256": "8831e4f1a044471340f7c0a83d7bd71306a5b867e95fd870f74d0c5308a904d5"
+      },
+      {
+        "root": "/mnt/nas/openclaw/models/dream7b",
+        "relative_path": "hf-cache/hub/models--Dream-org--Dream-v0-Instruct-7B/blobs/6bce3a0a3866c4791a74d83d78f6824c3af64ec3",
+        "path": "/mnt/nas/openclaw/models/dream7b/hf-cache/hub/models--Dream-org--Dream-v0-Instruct-7B/blobs/6bce3a0a3866c4791a74d83d78f6824c3af64ec3",
+        "exists": true,
+        "size_bytes": 3383407,
+        "sha256": "87a257b04b17642a0688c98cd1df89c398bda4fee532d6f88b38a659ecb4ac8d"
+      },
+      {
+        "root": "/mnt/nas/openclaw/models/dream7b",
+        "relative_path": "hf-cache/hub/models--Dream-org--Dream-v0-Instruct-7B/blobs/96d1598e69f108469c292fa6a86fb143be07d70c",
+        "path": "/mnt/nas/openclaw/models/dream7b/hf-cache/hub/models--Dream-org--Dream-v0-Instruct-7B/blobs/96d1598e69f108469c292fa6a86fb143be07d70c",
+        "exists": true,
+        "size_bytes": 3197,
+        "sha256": "24d038962ccf16361595494461000ec0c1b043653c7494d7fc835c96f121f0b9"
+      },
+      {
+        "root": "/mnt/nas/openclaw/models/dream7b",
+        "relative_path": "hf-cache/hub/models--Dream-org--Dream-v0-Instruct-7B/blobs/a3c908dc9df134c726061ae540546e5ef7db055d",
+        "path": "/mnt/nas/openclaw/models/dream7b/hf-cache/hub/models--Dream-org--Dream-v0-Instruct-7B/blobs/a3c908dc9df134c726061ae540546e5ef7db055d",
+        "exists": true,
+        "size_bytes": 656,
+        "sha256": "32ad9d49fafda64e737853737fe3be3e33cce3f719a159ed73f04cbd81a690ce"
+      },
+      {
+        "root": "/mnt/nas/openclaw/models/dream7b",
+        "relative_path": "hf-cache/hub/models--Dream-org--Dream-v0-Instruct-7B/blobs/cca444f900c5f5d2909c65a49771dfbd32267e5c",
+        "path": "/mnt/nas/openclaw/models/dream7b/hf-cache/hub/models--Dream-org--Dream-v0-Instruct-7B/blobs/cca444f900c5f5d2909c65a49771dfbd32267e5c",
+        "exists": true,
+        "size_bytes": 14028,
+        "sha256": "1d7f04104fa673831f48256e3cd42cd0bbd1bddd801b4abea5c74cc47d98bdd2"
+      },
+      {
+        "root": "/mnt/nas/openclaw/models/dream7b",
+        "relative_path": "hf-cache/hub/models--Dream-org--Dream-v0-Instruct-7B/blobs/f1a63e029f3c7863a8c2eba29b3f48e3eda1aab8",
+        "path": "/mnt/nas/openclaw/models/dream7b/hf-cache/hub/models--Dream-org--Dream-v0-Instruct-7B/blobs/f1a63e029f3c7863a8c2eba29b3f48e3eda1aab8",
+        "exists": true,
+        "size_bytes": 661,
+        "sha256": "fa14641fdc084244b0a530556b1d5bfcb9fa0ed9151a780ffec3b44ba96a0dfe"
+      },
+      {
+        "root": "/mnt/nas/openclaw/models/dream7b",
+        "relative_path": "hf-cache/hub/models--Dream-org--Dream-v0-Instruct-7B/refs/main",
+        "path": "/mnt/nas/openclaw/models/dream7b/hf-cache/hub/models--Dream-org--Dream-v0-Instruct-7B/refs/main",
+        "exists": true,
+        "size_bytes": 40,
+        "sha256": "8dcf619176532a444ea31a61a163a04beaaa6f944b86ee4dcd1d463e3f4f29f2"
+      },
+      {
+        "root": "/mnt/nas/openclaw/models/dream7b",
+        "relative_path": "hf-cache/hub/models--Dream-org--Dream-v0-Instruct-7B/snapshots/05334cb9faaf763692dcf9d8737c642be2b2a6ae/added_tokens.json",
+        "path": "/mnt/nas/openclaw/models/dream7b/hf-cache/hub/models--Dream-org--Dream-v0-Instruct-7B/snapshots/05334cb9faaf763692dcf9d8737c642be2b2a6ae/added_tokens.json",
+        "exists": true,
+        "size_bytes": 656,
+        "sha256": "32ad9d49fafda64e737853737fe3be3e33cce3f719a159ed73f04cbd81a690ce"
+      },
+      {
+        "root": "/mnt/nas/openclaw/models/dream7b",
+        "relative_path": "hf-cache/hub/models--Dream-org--Dream-v0-Instruct-7B/snapshots/05334cb9faaf763692dcf9d8737c642be2b2a6ae/config.json",
+        "path": "/mnt/nas/openclaw/models/dream7b/hf-cache/hub/models--Dream-org--Dream-v0-Instruct-7B/snapshots/05334cb9faaf763692dcf9d8737c642be2b2a6ae/config.json",
+        "exists": true,
+        "size_bytes": 927,
+        "sha256": "11afc7fe7a1881e73dcd70cca6868aaaf8eb89ad45ea5fc6426c3fb82dec9340"
+      },
+      {
+        "root": "/mnt/nas/openclaw/models/dream7b",
+        "relative_path": "hf-cache/hub/models--Dream-org--Dream-v0-Instruct-7B/snapshots/05334cb9faaf763692dcf9d8737c642be2b2a6ae/configuration_dream.py",
+        "path": "/mnt/nas/openclaw/models/dream7b/hf-cache/hub/models--Dream-org--Dream-v0-Instruct-7B/snapshots/05334cb9faaf763692dcf9d8737c642be2b2a6ae/configuration_dream.py",
+        "exists": true,
+        "size_bytes": 3197,
+        "sha256": "24d038962ccf16361595494461000ec0c1b043653c7494d7fc835c96f121f0b9"
+      },
+      {
+        "root": "/mnt/nas/openclaw/models/dream7b",
+        "relative_path": "hf-cache/hub/models--Dream-org--Dream-v0-Instruct-7B/snapshots/05334cb9faaf763692dcf9d8737c642be2b2a6ae/merges.txt",
+        "path": "/mnt/nas/openclaw/models/dream7b/hf-cache/hub/models--Dream-org--Dream-v0-Instruct-7B/snapshots/05334cb9faaf763692dcf9d8737c642be2b2a6ae/merges.txt",
+        "exists": true,
+        "size_bytes": 1671853,
+        "sha256": "8831e4f1a044471340f7c0a83d7bd71306a5b867e95fd870f74d0c5308a904d5"
+      },
+      {
+        "root": "/mnt/nas/openclaw/models/dream7b",
+        "relative_path": "hf-cache/hub/models--Dream-org--Dream-v0-Instruct-7B/snapshots/05334cb9faaf763692dcf9d8737c642be2b2a6ae/special_tokens_map.json",
+        "path": "/mnt/nas/openclaw/models/dream7b/hf-cache/hub/models--Dream-org--Dream-v0-Instruct-7B/snapshots/05334cb9faaf763692dcf9d8737c642be2b2a6ae/special_tokens_map.json",
+        "exists": true,
+        "size_bytes": 661,
+        "sha256": "fa14641fdc084244b0a530556b1d5bfcb9fa0ed9151a780ffec3b44ba96a0dfe"
+      },
+      {
+        "root": "/mnt/nas/openclaw/models/dream7b",
+        "relative_path": "hf-cache/hub/models--Dream-org--Dream-v0-Instruct-7B/snapshots/05334cb9faaf763692dcf9d8737c642be2b2a6ae/tokenization_dream.py",
+        "path": "/mnt/nas/openclaw/models/dream7b/hf-cache/hub/models--Dream-org--Dream-v0-Instruct-7B/snapshots/05334cb9faaf763692dcf9d8737c642be2b2a6ae/tokenization_dream.py",
+        "exists": true,
+        "size_bytes": 14028,
+        "sha256": "1d7f04104fa673831f48256e3cd42cd0bbd1bddd801b4abea5c74cc47d98bdd2"
+      },
+      {
+        "root": "/mnt/nas/openclaw/models/dream7b",
+        "relative_path": "hf-cache/hub/models--Dream-org--Dream-v0-Instruct-7B/snapshots/05334cb9faaf763692dcf9d8737c642be2b2a6ae/tokenizer_config.json",
+        "path": "/mnt/nas/openclaw/models/dream7b/hf-cache/hub/models--Dream-org--Dream-v0-Instruct-7B/snapshots/05334cb9faaf763692dcf9d8737c642be2b2a6ae/tokenizer_config.json",
+        "exists": true,
+        "size_bytes": 7486,
+        "sha256": "b0e9c1a6299d8832a1362d6b24f007de8a2acfe0243d8a3a1d1b57aa8250f7ee"
+      },
+      {
+        "root": "/mnt/nas/openclaw/models/dream7b",
+        "relative_path": "hf-cache/hub/models--Dream-org--Dream-v0-Instruct-7B/snapshots/05334cb9faaf763692dcf9d8737c642be2b2a6ae/vocab.json",
+        "path": "/mnt/nas/openclaw/models/dream7b/hf-cache/hub/models--Dream-org--Dream-v0-Instruct-7B/snapshots/05334cb9faaf763692dcf9d8737c642be2b2a6ae/vocab.json",
+        "exists": true,
+        "size_bytes": 3383407,
+        "sha256": "87a257b04b17642a0688c98cd1df89c398bda4fee532d6f88b38a659ecb4ac8d"
+      },
+      {
+        "root": "/mnt/nas/openclaw/models/dream7b",
+        "relative_path": "hf-cache/modules/__init__.py",
+        "path": "/mnt/nas/openclaw/models/dream7b/hf-cache/modules/__init__.py",
+        "exists": true,
+        "size_bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      {
+        "root": "/mnt/nas/openclaw/models/dream7b",
+        "relative_path": "hf-cache/modules/transformers_modules/Dream_hyphen_org/Dream_hyphen_v0_hyphen_Instruct_hyphen_7B/05334cb9faaf763692dcf9d8737c642be2b2a6ae/__init__.py",
+        "path": "/mnt/nas/openclaw/models/dream7b/hf-cache/modules/transformers_modules/Dream_hyphen_org/Dream_hyphen_v0_hyphen_Instruct_hyphen_7B/05334cb9faaf763692dcf9d8737c642be2b2a6ae/__init__.py",
+        "exists": true,
+        "size_bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      {
+        "root": "/mnt/nas/openclaw/models/dream7b",
+        "relative_path": "hf-cache/modules/transformers_modules/Dream_hyphen_org/Dream_hyphen_v0_hyphen_Instruct_hyphen_7B/05334cb9faaf763692dcf9d8737c642be2b2a6ae/__pycache__/configuration_dream.cpython-310.pyc",
+        "path": "/mnt/nas/openclaw/models/dream7b/hf-cache/modules/transformers_modules/Dream_hyphen_org/Dream_hyphen_v0_hyphen_Instruct_hyphen_7B/05334cb9faaf763692dcf9d8737c642be2b2a6ae/__pycache__/configuration_dream.cpython-310.pyc",
+        "exists": true,
+        "size_bytes": 1947,
+        "sha256": "e3ad6a200b0ef41b606efc13edc8e6f59440ddc3edf6fd1ecb1875a5edf446d1"
+      },
+      {
+        "root": "/mnt/nas/openclaw/models/dream7b",
+        "relative_path": "hf-cache/modules/transformers_modules/Dream_hyphen_org/Dream_hyphen_v0_hyphen_Instruct_hyphen_7B/05334cb9faaf763692dcf9d8737c642be2b2a6ae/__pycache__/tokenization_dream.cpython-310.pyc",
+        "path": "/mnt/nas/openclaw/models/dream7b/hf-cache/modules/transformers_modules/Dream_hyphen_org/Dream_hyphen_v0_hyphen_Instruct_hyphen_7B/05334cb9faaf763692dcf9d8737c642be2b2a6ae/__pycache__/tokenization_dream.cpython-310.pyc",
+        "exists": true,
+        "size_bytes": 11636,
+        "sha256": "666af53b4ba68a66a68cbc2b9df5f8ae582ada21f2c8ef9eb870cfc7e564de8f"
+      },
+      {
+        "root": "/mnt/nas/openclaw/models/dream7b",
+        "relative_path": "hf-cache/modules/transformers_modules/Dream_hyphen_org/Dream_hyphen_v0_hyphen_Instruct_hyphen_7B/05334cb9faaf763692dcf9d8737c642be2b2a6ae/configuration_dream.py",
+        "path": "/mnt/nas/openclaw/models/dream7b/hf-cache/modules/transformers_modules/Dream_hyphen_org/Dream_hyphen_v0_hyphen_Instruct_hyphen_7B/05334cb9faaf763692dcf9d8737c642be2b2a6ae/configuration_dream.py",
+        "exists": true,
+        "size_bytes": 3197,
+        "sha256": "24d038962ccf16361595494461000ec0c1b043653c7494d7fc835c96f121f0b9"
+      },
+      {
+        "root": "/mnt/nas/openclaw/models/dream7b",
+        "relative_path": "hf-cache/modules/transformers_modules/Dream_hyphen_org/Dream_hyphen_v0_hyphen_Instruct_hyphen_7B/05334cb9faaf763692dcf9d8737c642be2b2a6ae/tokenization_dream.py",
+        "path": "/mnt/nas/openclaw/models/dream7b/hf-cache/modules/transformers_modules/Dream_hyphen_org/Dream_hyphen_v0_hyphen_Instruct_hyphen_7B/05334cb9faaf763692dcf9d8737c642be2b2a6ae/tokenization_dream.py",
+        "exists": true,
+        "size_bytes": 14028,
+        "sha256": "1d7f04104fa673831f48256e3cd42cd0bbd1bddd801b4abea5c74cc47d98bdd2"
+      },
+      {
+        "root": "/mnt/nas/openclaw/models/dream7b",
+        "relative_path": "hf-cache/modules/transformers_modules/Dream_hyphen_org/Dream_hyphen_v0_hyphen_Instruct_hyphen_7B/__init__.py",
+        "path": "/mnt/nas/openclaw/models/dream7b/hf-cache/modules/transformers_modules/Dream_hyphen_org/Dream_hyphen_v0_hyphen_Instruct_hyphen_7B/__init__.py",
+        "exists": true,
+        "size_bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      {
+        "root": "/mnt/nas/openclaw/models/dream7b",
+        "relative_path": "hf-cache/modules/transformers_modules/Dream_hyphen_org/__init__.py",
+        "path": "/mnt/nas/openclaw/models/dream7b/hf-cache/modules/transformers_modules/Dream_hyphen_org/__init__.py",
+        "exists": true,
+        "size_bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      {
+        "root": "/mnt/nas/openclaw/models/dream7b",
+        "relative_path": "hf-cache/modules/transformers_modules/__init__.py",
+        "path": "/mnt/nas/openclaw/models/dream7b/hf-cache/modules/transformers_modules/__init__.py",
+        "exists": true,
+        "size_bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      {
+        "root": "/mnt/nas/openclaw/models/dream7b",
+        "relative_path": "tokenizer/added_tokens.json",
+        "path": "/mnt/nas/openclaw/models/dream7b/tokenizer/added_tokens.json",
+        "exists": true,
+        "size_bytes": 656,
+        "sha256": "32ad9d49fafda64e737853737fe3be3e33cce3f719a159ed73f04cbd81a690ce"
+      },
+      {
+        "root": "/mnt/nas/openclaw/models/dream7b",
+        "relative_path": "tokenizer/chat_template.jinja",
+        "path": "/mnt/nas/openclaw/models/dream7b/tokenizer/chat_template.jinja",
+        "exists": true,
+        "size_bytes": 2427,
+        "sha256": "44d5f08f3f72b837eaad09f13a54c1f9f4eb58d75240334548b7fd52a5437fa5"
+      },
+      {
+        "root": "/mnt/nas/openclaw/models/dream7b",
+        "relative_path": "tokenizer/merges.txt",
+        "path": "/mnt/nas/openclaw/models/dream7b/tokenizer/merges.txt",
+        "exists": true,
+        "size_bytes": 1671853,
+        "sha256": "8831e4f1a044471340f7c0a83d7bd71306a5b867e95fd870f74d0c5308a904d5"
+      },
+      {
+        "root": "/mnt/nas/openclaw/models/dream7b",
+        "relative_path": "tokenizer/tokenization_dream.py",
+        "path": "/mnt/nas/openclaw/models/dream7b/tokenizer/tokenization_dream.py",
+        "exists": true,
+        "size_bytes": 14028,
+        "sha256": "1d7f04104fa673831f48256e3cd42cd0bbd1bddd801b4abea5c74cc47d98bdd2"
+      },
+      {
+        "root": "/mnt/nas/openclaw/models/dream7b",
+        "relative_path": "tokenizer/tokenizer_config.json",
+        "path": "/mnt/nas/openclaw/models/dream7b/tokenizer/tokenizer_config.json",
+        "exists": true,
+        "size_bytes": 4958,
+        "sha256": "708e0bd328e292234cda20998c54ae83b70b2f2818aa65cd9cdbfeb719d12678"
+      },
+      {
+        "root": "/mnt/nas/openclaw/models/dream7b",
+        "relative_path": "tokenizer/vocab.json",
+        "path": "/mnt/nas/openclaw/models/dream7b/tokenizer/vocab.json",
+        "exists": true,
+        "size_bytes": 3383407,
+        "sha256": "87a257b04b17642a0688c98cd1df89c398bda4fee532d6f88b38a659ecb4ac8d"
+      },
+      {
+        "root": "/mnt/nas/openclaw/models/dream7b-hf",
+        "relative_path": "SHA256SUMS",
+        "path": "/mnt/nas/openclaw/models/dream7b-hf/SHA256SUMS",
+        "exists": true,
+        "size_bytes": 550,
+        "sha256": "00943b62e19d3080f930603f6a65e210f11e239dc8b1c7a65d9b98090330ff8a"
+      },
+      {
+        "root": "/mnt/nas/openclaw/models/dream7b-hf",
+        "relative_path": "compile_dream_with_deepseek_skeleton.sh",
+        "path": "/mnt/nas/openclaw/models/dream7b-hf/compile_dream_with_deepseek_skeleton.sh",
+        "exists": true,
+        "size_bytes": 2213,
+        "sha256": "4e5591703842e5c85a39e2bf42d574db90a2a7f7d91c2ca999aedae6f834e6f9"
+      },
+      {
+        "root": "/mnt/nas/openclaw/models/dream7b-hf",
+        "relative_path": "config.json",
+        "path": "/mnt/nas/openclaw/models/dream7b-hf/config.json",
+        "exists": true,
+        "size_bytes": 927,
+        "sha256": "11afc7fe7a1881e73dcd70cca6868aaaf8eb89ad45ea5fc6426c3fb82dec9340"
+      },
+      {
+        "root": "/mnt/nas/openclaw/models/dream7b-hf",
+        "relative_path": "configuration_dream.py",
+        "path": "/mnt/nas/openclaw/models/dream7b-hf/configuration_dream.py",
+        "exists": true,
+        "size_bytes": 3197,
+        "sha256": "24d038962ccf16361595494461000ec0c1b043653c7494d7fc835c96f121f0b9"
+      },
+      {
+        "root": "/mnt/nas/openclaw/models/dream7b-hf",
+        "relative_path": "download.log",
+        "path": "/mnt/nas/openclaw/models/dream7b-hf/download.log",
+        "exists": true,
+        "size_bytes": 92888,
+        "sha256": "9c26441cf3490ef63234014958d422f2ed1354a1bfad4320f9b1f388f46b409a"
+      },
+      {
+        "root": "/mnt/nas/openclaw/models/dream7b-hf",
+        "relative_path": "download.pid",
+        "path": "/mnt/nas/openclaw/models/dream7b-hf/download.pid",
+        "exists": true,
+        "size_bytes": 6,
+        "sha256": "f09fdb33764a8c183907eb7900303211638781c15287b082d1edaf9c7bd5527b"
+      },
+      {
+        "root": "/mnt/nas/openclaw/models/dream7b-hf",
+        "relative_path": "download_dream_hf_to_s100p.sh",
+        "path": "/mnt/nas/openclaw/models/dream7b-hf/download_dream_hf_to_s100p.sh",
+        "exists": true,
+        "size_bytes": 797,
+        "sha256": "42758a010992b339e19d423fa944765a020392532f9864658da0a347a4c2f223"
+      },
+      {
+        "root": "/mnt/nas/openclaw/models/dream7b-hf",
+        "relative_path": "generation_config.json",
+        "path": "/mnt/nas/openclaw/models/dream7b-hf/generation_config.json",
+        "exists": true,
+        "size_bytes": 326,
+        "sha256": "e4fa42a31ef22740804534395c7a18f335a3c1f9abd9db83a6941b1c8748b2ee"
+      },
+      {
+        "root": "/mnt/nas/openclaw/models/dream7b-hf",
+        "relative_path": "generation_utils.py",
+        "path": "/mnt/nas/openclaw/models/dream7b-hf/generation_utils.py",
+        "exists": true,
+        "size_bytes": 22332,
+        "sha256": "7f8ad01484898946b3c9c9d5ebc85e5ac726061d0fa7b4a522c4b8110c13a921"
+      },
+      {
+        "root": "/mnt/nas/openclaw/models/dream7b-hf",
+        "relative_path": "merges.txt",
+        "path": "/mnt/nas/openclaw/models/dream7b-hf/merges.txt",
+        "exists": true,
+        "size_bytes": 1671853,
+        "sha256": "8831e4f1a044471340f7c0a83d7bd71306a5b867e95fd870f74d0c5308a904d5"
+      },
+      {
+        "root": "/mnt/nas/openclaw/models/dream7b-hf",
+        "relative_path": "model-00001-of-00004.safetensors",
+        "path": "/mnt/nas/openclaw/models/dream7b-hf/model-00001-of-00004.safetensors",
+        "exists": true,
+        "size_bytes": 4877660776,
+        "sha256": "3014d84950f2f3afcce622508b6625e9cd911b9c340f4206e35e6a3177aec993"
+      },
+      {
+        "root": "/mnt/nas/openclaw/models/dream7b-hf",
+        "relative_path": "model-00002-of-00004.safetensors",
+        "path": "/mnt/nas/openclaw/models/dream7b-hf/model-00002-of-00004.safetensors",
+        "exists": true,
+        "size_bytes": 4932751008,
+        "sha256": "78fc44a7eae29c3d13bba010ca12584f4220798d41c9e617579a33c47222aa57"
+      },
+      {
+        "root": "/mnt/nas/openclaw/models/dream7b-hf",
+        "relative_path": "model-00003-of-00004.safetensors",
+        "path": "/mnt/nas/openclaw/models/dream7b-hf/model-00003-of-00004.safetensors",
+        "exists": true,
+        "size_bytes": 4330865200,
+        "sha256": "eac5afaf9a0e0b4a23c7ac1dbe5f538ccdf9fac5c0db7919fd9625a92c378e48"
+      },
+      {
+        "root": "/mnt/nas/openclaw/models/dream7b-hf",
+        "relative_path": "model-00004-of-00004.safetensors",
+        "path": "/mnt/nas/openclaw/models/dream7b-hf/model-00004-of-00004.safetensors",
+        "exists": true,
+        "size_bytes": 1089994880,
+        "sha256": "398da65f1f599ca8d594a9d7a077a3b7c4eb0ddfdff8e7e004c3d259712b3cb7"
+      },
+      {
+        "root": "/mnt/nas/openclaw/models/dream7b-hf",
+        "relative_path": "model.safetensors.index.json",
+        "path": "/mnt/nas/openclaw/models/dream7b-hf/model.safetensors.index.json",
+        "exists": true,
+        "size_bytes": 27752,
+        "sha256": "998a078123ffc97763690de7f2a677eb89168af5eaf8a5e12e6bc24d18e25bdb"
+      },
+      {
+        "root": "/mnt/nas/openclaw/models/dream7b-hf",
+        "relative_path": "modeling_dream.py",
+        "path": "/mnt/nas/openclaw/models/dream7b-hf/modeling_dream.py",
+        "exists": true,
+        "size_bytes": 36763,
+        "sha256": "3166e789f0d69beb1f4fbdee2317953d1c1c3b9bc21479b109afc5dd059de5b3"
+      },
+      {
+        "root": "/mnt/nas/openclaw/models/dream7b-hf",
+        "relative_path": "tokenization_dream.py",
+        "path": "/mnt/nas/openclaw/models/dream7b-hf/tokenization_dream.py",
+        "exists": true,
+        "size_bytes": 14028,
+        "sha256": "1d7f04104fa673831f48256e3cd42cd0bbd1bddd801b4abea5c74cc47d98bdd2"
+      },
+      {
+        "root": "/mnt/nas/openclaw/models/dream7b-hf",
+        "relative_path": "tokenizer_config.json",
+        "path": "/mnt/nas/openclaw/models/dream7b-hf/tokenizer_config.json",
+        "exists": true,
+        "size_bytes": 7486,
+        "sha256": "b0e9c1a6299d8832a1362d6b24f007de8a2acfe0243d8a3a1d1b57aa8250f7ee"
+      },
+      {
+        "root": "/mnt/nas/openclaw/models/dream7b-hf",
+        "relative_path": "vocab.json",
+        "path": "/mnt/nas/openclaw/models/dream7b-hf/vocab.json",
+        "exists": true,
+        "size_bytes": 3383407,
+        "sha256": "87a257b04b17642a0688c98cd1df89c398bda4fee532d6f88b38a659ecb4ac8d"
+      }
+    ],
+    "weight_like_files": [
+      {
+        "root": "/mnt/nas/openclaw/models/dream7b",
+        "relative_path": "dream-7b-q4km.gguf",
+        "path": "/mnt/nas/openclaw/models/dream7b/dream-7b-q4km.gguf",
+        "exists": true,
+        "size_bytes": 5313916320,
+        "sha256": "skipped_large_file_not_in_sha256sums"
+      },
+      {
+        "root": "/mnt/nas/openclaw/models/dream7b-hf",
+        "relative_path": "model-00001-of-00004.safetensors",
+        "path": "/mnt/nas/openclaw/models/dream7b-hf/model-00001-of-00004.safetensors",
+        "exists": true,
+        "size_bytes": 4877660776,
+        "sha256": "3014d84950f2f3afcce622508b6625e9cd911b9c340f4206e35e6a3177aec993"
+      },
+      {
+        "root": "/mnt/nas/openclaw/models/dream7b-hf",
+        "relative_path": "model-00002-of-00004.safetensors",
+        "path": "/mnt/nas/openclaw/models/dream7b-hf/model-00002-of-00004.safetensors",
+        "exists": true,
+        "size_bytes": 4932751008,
+        "sha256": "78fc44a7eae29c3d13bba010ca12584f4220798d41c9e617579a33c47222aa57"
+      },
+      {
+        "root": "/mnt/nas/openclaw/models/dream7b-hf",
+        "relative_path": "model-00003-of-00004.safetensors",
+        "path": "/mnt/nas/openclaw/models/dream7b-hf/model-00003-of-00004.safetensors",
+        "exists": true,
+        "size_bytes": 4330865200,
+        "sha256": "eac5afaf9a0e0b4a23c7ac1dbe5f538ccdf9fac5c0db7919fd9625a92c378e48"
+      },
+      {
+        "root": "/mnt/nas/openclaw/models/dream7b-hf",
+        "relative_path": "model-00004-of-00004.safetensors",
+        "path": "/mnt/nas/openclaw/models/dream7b-hf/model-00004-of-00004.safetensors",
+        "exists": true,
+        "size_bytes": 1089994880,
+        "sha256": "398da65f1f599ca8d594a9d7a077a3b7c4eb0ddfdff8e7e004c3d259712b3cb7"
+      }
+    ]
+  }
+}

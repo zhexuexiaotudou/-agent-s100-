@@ -1,6 +1,7 @@
 [English](./README.md) | 简体中文
 
-# Getting Started with Hobot Dnn
+Getting Started with Hobot Dnn
+=======
 
 仓库中包含dnn_node、dnn_node_sample、dnn_node_example、dnn_benchmark_example四部分内容，用户可以实现在RDK X3开发板上使用模型和数据利用BPU处理器进行模型推理，以及模型性能评测。
 

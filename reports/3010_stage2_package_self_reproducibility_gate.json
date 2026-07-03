@@ -1,0 +1,70 @@
+{
+  "generated_at": "2026-07-03T01:38:04.445383+08:00",
+  "gate_id": "stage2_package_self_reproducibility_gate",
+  "verdict": "ok_stage2_package_self_reproducibility_gate",
+  "passed_count": 7,
+  "check_count": 7,
+  "failure_count": 0,
+  "failures": [],
+  "checks": [
+    {
+      "label": "unzip/test package root exists",
+      "ok": true,
+      "detail": "tmp/stage2_s100p_package_repro_repaired"
+    },
+    {
+      "label": "stage2 SHA manifest paths exist",
+      "ok": true,
+      "detail": []
+    },
+    {
+      "label": "stage2 SHA manifest hashes match",
+      "ok": true,
+      "detail": []
+    },
+    {
+      "label": "run_stage2_gates_from_package.sh exists",
+      "ok": true
+    },
+    {
+      "label": "package copied to S100P clean tmp dir",
+      "ok": true,
+      "detail": {
+        "returncode": 0,
+        "stdout_hash": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "stderr_hash": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "stderr_tail": ""
+      }
+    },
+    {
+      "label": "clean S100P package rerun passes",
+      "ok": true,
+      "detail": {
+        "returncode": 0,
+        "elapsed_ms": 3125.649,
+        "stdout_hash": "73cec3135c33573449071cca35b8b2453d424c39154e73d8526add2a72939afe",
+        "stderr_hash": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "stdout_tail": "{\n  \"verdict\": \"ok_stage2_readiness_gates\",\n  \"failed\": []\n}\n"
+      }
+    },
+    {
+      "label": "negative missing dispatcher hard-fails",
+      "ok": true,
+      "detail": {
+        "returncode": 1,
+        "elapsed_ms": 3004.949,
+        "stdout_hash": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "stderr_hash": "4807a1060811174c0d23273db39ee06d0ad3abf772908410f967a33f5289234a",
+        "stdout_tail": "",
+        "stderr_tail": "s/probes/ai_nas_allowlisted_tool.sh; searched=['/tmp/digua_stage2_pkg_repro_20260703-013757/stage2_s100p_package_repro_repaired/scripts/probes/ai_nas_allowlisted_tool.sh', '/tmp/digua_stage2_pkg_repro_20260703-013757/stage2_s100p_package_repro_repaired/production_context/scripts/probes/ai_nas_allowlisted_tool.sh', '/tmp/digua_stage2_pkg_repro_20260703-013757/stage2_s100p_package_repro_repaired/tmp/stage1_input_extracted/production_context/scripts/probes/ai_nas_allowlisted_tool.sh', '/tmp/digua_stage2_pkg_repro_20260703-013757/stage2_s100p_package_repro_repaired/tmp/stage1_input_extracted/production_context/production_context/scripts/probes/ai_nas_allowlisted_tool.sh', '/tmp/digua_stage2_pkg_repro_20260703-013757/stage2_s100p_package_repro_repaired/tmp/stage1_input_extracted/scripts/probes/ai_nas_allowlisted_tool.sh', '/tmp/digua_stage2_pkg_repro_20260703-013757/stage2_s100p_package_repro_repaired/tmp/stage1_input_extracted/production_context/scripts/probes/ai_nas_allowlisted_tool.sh']\n"
+      }
+    }
+  ],
+  "detail": {
+    "local_repaired_package_root": "tmp/stage2_s100p_package_repro_repaired",
+    "remote_clean_package_root": "/tmp/digua_stage2_pkg_repro_20260703-013757/stage2_s100p_package_repro_repaired",
+    "sha_line_count": 81,
+    "rerun_stdout_hash": "73cec3135c33573449071cca35b8b2453d424c39154e73d8526add2a72939afe",
+    "negative_returncode": 1
+  }
+}

@@ -1,0 +1,447 @@
+{
+  "created_at": "2026-07-01T14:20:15.445111+08:00",
+  "verdict": "blocked_final_segment_constant_or_uniform",
+  "top1_changes_with_input": true,
+  "cases": [
+    {
+      "input_kind": "zeros",
+      "hidden_stats": {
+        "shape": [
+          128,
+          3584
+        ],
+        "dtype": "float32",
+        "min": 0.0,
+        "max": 0.0,
+        "mean": 0.0,
+        "std": 0.0,
+        "nonzero_count": 0,
+        "nan_count": 0,
+        "inf_count": 0,
+        "constant": true
+      },
+      "raw_stats": {
+        "shape": [
+          1,
+          152064
+        ],
+        "dtype": "int16",
+        "min": -32400.0,
+        "max": 20049.0,
+        "mean": -5117.90519123527,
+        "std": 4925.444082575505,
+        "nonzero_count": 152062,
+        "nan_count": 0,
+        "inf_count": 0,
+        "constant": false
+      },
+      "dequant_stats": {
+        "shape": [
+          1,
+          152064
+        ],
+        "dtype": "float32",
+        "min": -8.23474407196045,
+        "max": 5.0956292152404785,
+        "mean": -1.3007605075836182,
+        "std": 1.251844882965088,
+        "nonzero_count": 152062,
+        "nan_count": 0,
+        "inf_count": 0,
+        "constant": false
+      },
+      "softmax": {
+        "top1_probability": 0.0015490736388442854,
+        "entropy": 10.878191502554653,
+        "normalized_entropy": 0.9116778203334492
+      },
+      "top5": [
+        {
+          "token": 32216,
+          "logit": 5.0956292152404785
+        },
+        {
+          "token": 47656,
+          "logit": 4.721761703491211
+        },
+        {
+          "token": 91529,
+          "logit": 4.695329189300537
+        },
+        {
+          "token": 89013,
+          "logit": 4.682875633239746
+        },
+        {
+          "token": 88677,
+          "logit": 4.641701698303223
+        }
+      ],
+      "quant_metadata": {
+        "available": true,
+        "scale": [
+          0.00025415877462364733
+        ],
+        "scale_first": 0.00025415877462364733,
+        "zero_point": [
+          0.0
+        ],
+        "repr": "<hbm_runtime.HB_HBMRuntime.QuantParams object at 0xffff9ae439b0>"
+      },
+      "raw_logits": "evidence/final_segment_lmheadq16_audit/zeros/raw_logits.npy",
+      "dequant_logits": "evidence/final_segment_lmheadq16_audit/zeros/dequant_logits.npy"
+    },
+    {
+      "input_kind": "ones",
+      "hidden_stats": {
+        "shape": [
+          128,
+          3584
+        ],
+        "dtype": "float32",
+        "min": 1.0,
+        "max": 1.0,
+        "mean": 1.0,
+        "std": 0.0,
+        "nonzero_count": 458752,
+        "nan_count": 0,
+        "inf_count": 0,
+        "constant": true
+      },
+      "raw_stats": {
+        "shape": [
+          1,
+          152064
+        ],
+        "dtype": "int16",
+        "min": -12737.0,
+        "max": 10247.0,
+        "mean": -2826.001006155303,
+        "std": 1675.3145953216854,
+        "nonzero_count": 152061,
+        "nan_count": 0,
+        "inf_count": 0,
+        "constant": false
+      },
+      "dequant_stats": {
+        "shape": [
+          1,
+          152064
+        ],
+        "dtype": "float32",
+        "min": -3.237220287322998,
+        "max": 2.6043648719787598,
+        "mean": -0.7182530164718628,
+        "std": 0.42579594254493713,
+        "nonzero_count": 152061,
+        "nan_count": 0,
+        "inf_count": 0,
+        "constant": false
+      },
+      "softmax": {
+        "top1_probability": 0.0001635685428608425,
+        "entropy": 11.79849144574467,
+        "normalized_entropy": 0.9888061781182369
+      },
+      "top5": [
+        {
+          "token": 51735,
+          "logit": 2.6043648719787598
+        },
+        {
+          "token": 54462,
+          "logit": 2.335719108581543
+        },
+        {
+          "token": 49752,
+          "logit": 2.2508301734924316
+        },
+        {
+          "token": 41810,
+          "logit": 2.1936442852020264
+        },
+        {
+          "token": 52269,
+          "logit": 2.182969808578491
+        }
+      ],
+      "quant_metadata": {
+        "available": true,
+        "scale": [
+          0.00025415877462364733
+        ],
+        "scale_first": 0.00025415877462364733,
+        "zero_point": [
+          0.0
+        ],
+        "repr": "<hbm_runtime.HB_HBMRuntime.QuantParams object at 0xffff9ae43a70>"
+      },
+      "raw_logits": "evidence/final_segment_lmheadq16_audit/ones/raw_logits.npy",
+      "dequant_logits": "evidence/final_segment_lmheadq16_audit/ones/dequant_logits.npy"
+    },
+    {
+      "input_kind": "ramp",
+      "hidden_stats": {
+        "shape": [
+          128,
+          3584
+        ],
+        "dtype": "float32",
+        "min": 0.0,
+        "max": 0.9921259880065918,
+        "mean": 0.49603915214538574,
+        "std": 0.2886738181114197,
+        "nonzero_count": 455139,
+        "nan_count": 0,
+        "inf_count": 0,
+        "constant": false
+      },
+      "raw_stats": {
+        "shape": [
+          1,
+          152064
+        ],
+        "dtype": "int16",
+        "min": -13022.0,
+        "max": 9855.0,
+        "mean": -3149.6746172664143,
+        "std": 1685.8097701186941,
+        "nonzero_count": 152052,
+        "nan_count": 0,
+        "inf_count": 0,
+        "constant": false
+      },
+      "dequant_stats": {
+        "shape": [
+          1,
+          152064
+        ],
+        "dtype": "float32",
+        "min": -3.3096556663513184,
+        "max": 2.504734754562378,
+        "mean": -0.8005174398422241,
+        "std": 0.4284633696079254,
+        "nonzero_count": 152052,
+        "nan_count": 0,
+        "inf_count": 0,
+        "constant": false
+      },
+      "softmax": {
+        "top1_probability": 0.00016017285529378316,
+        "entropy": 11.79287078947892,
+        "normalized_entropy": 0.9883351230120643
+      },
+      "top5": [
+        {
+          "token": 51735,
+          "logit": 2.504734754562378
+        },
+        {
+          "token": 54462,
+          "logit": 2.2081315517425537
+        },
+        {
+          "token": 49752,
+          "logit": 2.1689910888671875
+        },
+        {
+          "token": 66906,
+          "logit": 2.1631453037261963
+        },
+        {
+          "token": 40745,
+          "logit": 2.1578080654144287
+        }
+      ],
+      "quant_metadata": {
+        "available": true,
+        "scale": [
+          0.00025415877462364733
+        ],
+        "scale_first": 0.00025415877462364733,
+        "zero_point": [
+          0.0
+        ],
+        "repr": "<hbm_runtime.HB_HBMRuntime.QuantParams object at 0xffff9ae5c130>"
+      },
+      "raw_logits": "evidence/final_segment_lmheadq16_audit/ramp/raw_logits.npy",
+      "dequant_logits": "evidence/final_segment_lmheadq16_audit/ramp/dequant_logits.npy"
+    },
+    {
+      "input_kind": "last_token_impulse",
+      "hidden_stats": {
+        "shape": [
+          128,
+          3584
+        ],
+        "dtype": "float32",
+        "min": 0.0,
+        "max": 1.0,
+        "mean": 0.00027901786961592734,
+        "std": 0.01670149713754654,
+        "nonzero_count": 128,
+        "nan_count": 0,
+        "inf_count": 0,
+        "constant": false
+      },
+      "raw_stats": {
+        "shape": [
+          1,
+          152064
+        ],
+        "dtype": "int16",
+        "min": -13584.0,
+        "max": 8773.0,
+        "mean": -3614.4923519044614,
+        "std": 1712.4956018790472,
+        "nonzero_count": 152060,
+        "nan_count": 0,
+        "inf_count": 0,
+        "constant": false
+      },
+      "dequant_stats": {
+        "shape": [
+          1,
+          152064
+        ],
+        "dtype": "float32",
+        "min": -3.4524927139282227,
+        "max": 2.2297348976135254,
+        "mean": -0.9186549186706543,
+        "std": 0.4352457821369171,
+        "nonzero_count": 152060,
+        "nan_count": 0,
+        "inf_count": 0,
+        "constant": false
+      },
+      "softmax": {
+        "top1_probability": 0.0001362317652192694,
+        "entropy": 11.785945210732994,
+        "normalized_entropy": 0.9877547051609764
+      },
+      "top5": [
+        {
+          "token": 66906,
+          "logit": 2.2297348976135254
+        },
+        {
+          "token": 51735,
+          "logit": 2.2078771591186523
+        },
+        {
+          "token": 49752,
+          "logit": 2.1232423782348633
+        },
+        {
+          "token": 58113,
+          "logit": 2.038353443145752
+        },
+        {
+          "token": 11,
+          "logit": 2.0248830318450928
+        }
+      ],
+      "quant_metadata": {
+        "available": true,
+        "scale": [
+          0.00025415877462364733
+        ],
+        "scale_first": 0.00025415877462364733,
+        "zero_point": [
+          0.0
+        ],
+        "repr": "<hbm_runtime.HB_HBMRuntime.QuantParams object at 0xffff9ae5c870>"
+      },
+      "raw_logits": "evidence/final_segment_lmheadq16_audit/last_token_impulse/raw_logits.npy",
+      "dequant_logits": "evidence/final_segment_lmheadq16_audit/last_token_impulse/dequant_logits.npy"
+    },
+    {
+      "input_kind": "real_bpu_seg26_output",
+      "hidden_stats": {
+        "shape": [
+          128,
+          3584
+        ],
+        "dtype": "float32",
+        "min": -16.29678726196289,
+        "max": 16.29678726196289,
+        "mean": 0.005043782293796539,
+        "std": 16.123767852783203,
+        "nonzero_count": 458751,
+        "nan_count": 0,
+        "inf_count": 0,
+        "constant": false
+      },
+      "raw_stats": {
+        "shape": [
+          1,
+          152064
+        ],
+        "dtype": "int16",
+        "min": 0.0,
+        "max": 0.0,
+        "mean": 0.0,
+        "std": 0.0,
+        "nonzero_count": 0,
+        "nan_count": 0,
+        "inf_count": 0,
+        "constant": true
+      },
+      "dequant_stats": {
+        "shape": [
+          1,
+          152064
+        ],
+        "dtype": "float32",
+        "min": 0.0,
+        "max": 0.0,
+        "mean": 0.0,
+        "std": 0.0,
+        "nonzero_count": 0,
+        "nan_count": 0,
+        "inf_count": 0,
+        "constant": true
+      },
+      "softmax": {
+        "top1_probability": 6.576178451178451e-06,
+        "entropy": 11.932056763842207,
+        "normalized_entropy": 1.0
+      },
+      "top5": [
+        {
+          "token": 152063,
+          "logit": 0.0
+        },
+        {
+          "token": 50687,
+          "logit": 0.0
+        },
+        {
+          "token": 50686,
+          "logit": 0.0
+        },
+        {
+          "token": 50689,
+          "logit": 0.0
+        },
+        {
+          "token": 50692,
+          "logit": 0.0
+        }
+      ],
+      "quant_metadata": {
+        "available": true,
+        "scale": [
+          0.00025415877462364733
+        ],
+        "scale_first": 0.00025415877462364733,
+        "zero_point": [
+          0.0
+        ],
+        "repr": "<hbm_runtime.HB_HBMRuntime.QuantParams object at 0xffff9ae5d0f0>"
+      },
+      "raw_logits": "evidence/final_segment_lmheadq16_audit/real_bpu_seg26_output/raw_logits.npy",
+      "dequant_logits": "evidence/final_segment_lmheadq16_audit/real_bpu_seg26_output/dequant_logits.npy"
+    }
+  ]
+}

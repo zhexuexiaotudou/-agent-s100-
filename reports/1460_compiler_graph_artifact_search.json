@@ -1,0 +1,764 @@
+{
+  "schema_version": "dream7b_s100p_v14_1460_compiler_graph_artifact_search",
+  "created_at_utc": "2026-07-03T06:10:20.870334+00:00",
+  "run_commands": [
+    "C:\\Users\\zhexu\\AppData\\Local\\Python\\pythoncore-3.14-64\\python.exe tools\\build_v14_research_thread.py --root ."
+  ],
+  "host_environment": {
+    "local_platform": "Windows-11-10.0.26200-SP0",
+    "python": "3.14.3 (tags/v3.14.3:323c59a, Feb  3 2026, 16:04:56) [MSC v.1944 64 bit (AMD64)]"
+  },
+  "git": {
+    "returncode": 128,
+    "stdout": "",
+    "stderr": "fatal: not a git repository (or any of the parent directories): .git"
+  },
+  "input_artifacts": [
+    {
+      "path": "evidence/compiler_graph_artifact_search_v14/search_results.json",
+      "exists": true,
+      "size_bytes": 341104,
+      "sha256": "869f959b4df830a8de26032fd880a1413c3fd8aa23dad7177f664d04afbdb0a6"
+    }
+  ],
+  "output_artifacts": [
+    {
+      "path": "reports/1460_compiler_graph_artifact_search.json",
+      "exists": true,
+      "size_bytes": 33988,
+      "sha256": "12513868242e6a8407cd4daf870dce201a0222509314c1309b31ce5147785755"
+    },
+    {
+      "path": "reports/1460_compiler_graph_artifact_search.md",
+      "exists": true,
+      "size_bytes": 301,
+      "sha256": "8dd87844d6ea855e8ce8c86b823087bdcc54fd6cc135491ec8028636183f4fee"
+    }
+  ],
+  "blocking_or_failure_reasons": [
+    "No seq128 B=1 seg00_01 HBO/source graph was found; seq16 HBO artifacts are not sufficient for corrected v14 recompile."
+  ],
+  "next_minimal_experiments": [],
+  "safety": {
+    "generation_quality_run": false,
+    "product_routes_18888_18889_touched": false,
+    "dream7b_frontend_openclaw_traffic_touched": false
+  },
+  "verdict": "seq16_hbo_available_seq128_b1_source_graph_missing",
+  "result_count": 1077,
+  "hbo_count": 56,
+  "seq16_hbo_count": 56,
+  "seq128_hbo_count": 0,
+  "seg00_related_count": 147,
+  "seq128_hbo_examples": [],
+  "seq16_hbo_examples": [
+    {
+      "path": "/mnt/nas/openclaw/models/dream7b-hbm/true-batch-seq16-b2/seg00_01/dream7b_segment_0_1_seq16_b2_q8.hbo",
+      "size_bytes": 780186144,
+      "mtime": 1781781576.6717148,
+      "suffix": ".hbo",
+      "sha256": "skipped_large_file"
+    },
+    {
+      "path": "/mnt/nas/openclaw/models/dream7b-hbm/true-batch-seq16-b2/seg01_02/dream7b_segment_1_2_seq16_b2_q8.hbo",
+      "size_bytes": 226189976,
+      "mtime": 1781782111.7037606,
+      "suffix": ".hbo",
+      "sha256": "skipped_large_file"
+    },
+    {
+      "path": "/mnt/nas/openclaw/models/dream7b-hbm/true-batch-seq16-b2/seg02_03/dream7b_segment_2_3_seq16_b2_q8.hbo",
+      "size_bytes": 226178456,
+      "mtime": 1781792140.1216176,
+      "suffix": ".hbo",
+      "sha256": "skipped_large_file"
+    },
+    {
+      "path": "/mnt/nas/openclaw/models/dream7b-hbm/true-batch-seq16-b2/seg03_04/dream7b_segment_3_4_seq16_b2_q8.hbo",
+      "size_bytes": 226179992,
+      "mtime": 1781792613.829658,
+      "suffix": ".hbo",
+      "sha256": "skipped_large_file"
+    },
+    {
+      "path": "/mnt/nas/openclaw/models/dream7b-hbm/true-batch-seq16-b2/seg04_05/dream7b_segment_4_5_seq16_b2_q8.hbo",
+      "size_bytes": 226187928,
+      "mtime": 1781792944.8956861,
+      "suffix": ".hbo",
+      "sha256": "skipped_large_file"
+    },
+    {
+      "path": "/mnt/nas/openclaw/models/dream7b-hbm/true-batch-seq16-b2/seg05_06/dream7b_segment_5_6_seq16_b2_q8.hbo",
+      "size_bytes": 226188952,
+      "mtime": 1781793298.1277163,
+      "suffix": ".hbo",
+      "sha256": "skipped_large_file"
+    },
+    {
+      "path": "/mnt/nas/openclaw/models/dream7b-hbm/true-batch-seq16-b2/seg06_07/dream7b_segment_6_7_seq16_b2_q8.hbo",
+      "size_bytes": 226167704,
+      "mtime": 1781793623.2777443,
+      "suffix": ".hbo",
+      "sha256": "skipped_large_file"
+    },
+    {
+      "path": "/mnt/nas/openclaw/models/dream7b-hbm/true-batch-seq16-b2/seg07_08/dream7b_segment_7_8_seq16_b2_q8.hbo",
+      "size_bytes": 226188440,
+      "mtime": 1781793941.7007713,
+      "suffix": ".hbo",
+      "sha256": "skipped_large_file"
+    },
+    {
+      "path": "/mnt/nas/openclaw/models/dream7b-hbm/true-batch-seq16-b2/seg08_09/dream7b_segment_8_9_seq16_b2_q8.hbo",
+      "size_bytes": 226186904,
+      "mtime": 1781794270.9337995,
+      "suffix": ".hbo",
+      "sha256": "skipped_large_file"
+    },
+    {
+      "path": "/mnt/nas/openclaw/models/dream7b-hbm/true-batch-seq16-b2/seg09_10/dream7b_segment_9_10_seq16_b2_q8.hbo",
+      "size_bytes": 226186136,
+      "mtime": 1781794628.10483,
+      "suffix": ".hbo",
+      "sha256": "skipped_large_file"
+    },
+    {
+      "path": "/mnt/nas/openclaw/models/dream7b-hbm/true-batch-seq16-b2/seg10_11/dream7b_segment_10_11_seq16_b2_q8.hbo",
+      "size_bytes": 226175640,
+      "mtime": 1781794940.7948568,
+      "suffix": ".hbo",
+      "sha256": "skipped_large_file"
+    },
+    {
+      "path": "/mnt/nas/openclaw/models/dream7b-hbm/true-batch-seq16-b2/seg11_12/dream7b_segment_11_12_seq16_b2_q8.hbo",
+      "size_bytes": 226168472,
+      "mtime": 1781795276.3068855,
+      "suffix": ".hbo",
+      "sha256": "skipped_large_file"
+    },
+    {
+      "path": "/mnt/nas/openclaw/models/dream7b-hbm/true-batch-seq16-b2/seg12_13/dream7b_segment_12_13_seq16_b2_q8.hbo",
+      "size_bytes": 226184600,
+      "mtime": 1781795607.1389136,
+      "suffix": ".hbo",
+      "sha256": "skipped_large_file"
+    },
+    {
+      "path": "/mnt/nas/openclaw/models/dream7b-hbm/true-batch-seq16-b2/seg13_14/dream7b_segment_13_14_seq16_b2_q8.hbo",
+      "size_bytes": 226178968,
+      "mtime": 1781796035.9209504,
+      "suffix": ".hbo",
+      "sha256": "skipped_large_file"
+    },
+    {
+      "path": "/mnt/nas/openclaw/models/dream7b-hbm/true-batch-seq16-b2/seg14_15/dream7b_segment_14_15_seq16_b2_q8.hbo",
+      "size_bytes": 226185880,
+      "mtime": 1781796363.9669783,
+      "suffix": ".hbo",
+      "sha256": "skipped_large_file"
+    },
+    {
+      "path": "/mnt/nas/openclaw/models/dream7b-hbm/true-batch-seq16-b2/seg15_16/dream7b_segment_15_16_seq16_b2_q8.hbo",
+      "size_bytes": 226177432,
+      "mtime": 1781796738.4680104,
+      "suffix": ".hbo",
+      "sha256": "skipped_large_file"
+    },
+    {
+      "path": "/mnt/nas/openclaw/models/dream7b-hbm/true-batch-seq16-b2/seg16_17/dream7b_segment_16_17_seq16_b2_q8.hbo",
+      "size_bytes": 226178456,
+      "mtime": 1781797110.331042,
+      "suffix": ".hbo",
+      "sha256": "skipped_large_file"
+    },
+    {
+      "path": "/mnt/nas/openclaw/models/dream7b-hbm/true-batch-seq16-b2/seg17_18/dream7b_segment_17_18_seq16_b2_q8.hbo",
+      "size_bytes": 226178968,
+      "mtime": 1781797609.5430849,
+      "suffix": ".hbo",
+      "sha256": "skipped_large_file"
+    },
+    {
+      "path": "/mnt/nas/openclaw/models/dream7b-hbm/true-batch-seq16-b2/seg18_19/dream7b_segment_18_19_seq16_b2_q8.hbo",
+      "size_bytes": 226199448,
+      "mtime": 1781797986.738117,
+      "suffix": ".hbo",
+      "sha256": "skipped_large_file"
+    },
+    {
+      "path": "/mnt/nas/openclaw/models/dream7b-hbm/true-batch-seq16-b2/seg19_20/dream7b_segment_19_20_seq16_b2_q8.hbo",
+      "size_bytes": 226178200,
+      "mtime": 1781798363.1851492,
+      "suffix": ".hbo",
+      "sha256": "skipped_large_file"
+    }
+  ],
+  "seg00_related_examples": [
+    {
+      "path": "/mnt/nas/openclaw/reports/models/dream7b_s100p_v13_execution_20260703/evidence/seg00_01_operator_metadata_v13/hrt_model_info_seg00_01.txt",
+      "size_bytes": 1123,
+      "mtime": 1783047281.077126,
+      "suffix": ".txt",
+      "sha256": "730bb5ff1ef0c4a79e6f465afba41797072a7c995cbc8bcc94d3322cd422a95f"
+    },
+    {
+      "path": "/mnt/nas/openclaw/reports/models/dream7b_s100p_v13_execution_20260703/evidence/seg00_01_operator_metadata_v13_windows_safe/hrt_model_info_seg00_01.txt",
+      "size_bytes": 1123,
+      "mtime": 1783047281.077126,
+      "suffix": ".txt",
+      "sha256": "730bb5ff1ef0c4a79e6f465afba41797072a7c995cbc8bcc94d3322cd422a95f"
+    },
+    {
+      "path": "/mnt/nas/openclaw/reports/models/dream7b_s100p_v13_execution_20260703/reports/1320_v13_seg00_remote_decomposition.json",
+      "size_bytes": 34562,
+      "mtime": 1783047660.8941586,
+      "suffix": ".json",
+      "sha256": "033cf87abbce477fd1d11efec76e5ad7244f60639f9ae40d7136e07a2ea9c36d"
+    },
+    {
+      "path": "/mnt/nas/openclaw/reports/models/dream7b_s100p_v13_execution_20260703/logs/1320_v13_seg00_remote_decomposition.log",
+      "size_bytes": 4022,
+      "mtime": 1783047662.0101585,
+      "suffix": ".log",
+      "sha256": "1fe177213b47d66b1ecb05e025dbf824eda6cfc22c3741b795a8f032b1f2dd42"
+    },
+    {
+      "path": "/mnt/nas/openclaw/reports/models/dream7b_bpu_persistent_pair_cache_20260605-234349/pair_00_seg00_02__seg02_04.payload.json",
+      "size_bytes": 577,
+      "mtime": 1780844211.4418287,
+      "suffix": ".json",
+      "sha256": "436269eb9f4405cf8f3eda94db4a30ba153a9c281d71a58df2c12824621000a4"
+    },
+    {
+      "path": "/mnt/nas/openclaw/reports/models/dream7b_bpu_persistent_pair_cache_20260605-234349/pair_00_seg00_02__seg02_04.ready.json",
+      "size_bytes": 443,
+      "mtime": 1780844216.8568292,
+      "suffix": ".json",
+      "sha256": "47faa00e0def9e54d4db62c9a5352636c2b2ca57b49e2531873cd2a574cf0344"
+    },
+    {
+      "path": "/mnt/nas/openclaw/reports/models/dream7b_true_batch_compile_20260618_seg00_01_b2/compile_seg00_01_b2.log",
+      "size_bytes": 1447,
+      "mtime": 1781781626.5457191,
+      "suffix": ".log",
+      "sha256": "17d9c52ab1c4fd2be32a1b375c2c8dff93cc73ecb0b18832ca9871f94bbdcf3a"
+    },
+    {
+      "path": "/mnt/nas/openclaw/reports/models/dream7b_true_batch_compile_20260618_seg00_01_b2/compile_seg01_02_b2.log",
+      "size_bytes": 1347,
+      "mtime": 1781782090.1037586,
+      "suffix": ".log",
+      "sha256": "4a6eeb36a8d0814306ba8313541055a508dd1b2f121d156d0bf2d236b281a76a"
+    },
+    {
+      "path": "/mnt/nas/openclaw/reports/models/dream7b_s100p_v14_execution_20260703/reports/1420_1440_v14_seg00_exact_graph_position_remote.json",
+      "size_bytes": 109835,
+      "mtime": 1783058347.5630717,
+      "suffix": ".json",
+      "sha256": "a1768fd476adfbe2c5615081c5ef51cc679accfcf50a51dc39ffc9cdd10be4e1"
+    },
+    {
+      "path": "/mnt/nas/openclaw/reports/models/dream7b_s100p_v14_execution_20260703/logs/1420_1440_v14_seg00_exact_graph_position_remote.log",
+      "size_bytes": 299,
+      "mtime": 1783058348.2320716,
+      "suffix": ".log",
+      "sha256": "b829344cc16225f9f959d261292f45245f17254522bedebef70b6fa0f54da26c"
+    },
+    {
+      "path": "/mnt/nas/openclaw/reports/models/dream7b_bpu_resplit_segment_residency_20260606-072919/adjacent_holder_00_seg00_01.payload.json",
+      "size_bytes": 576,
+      "mtime": 1780923628.1672318,
+      "suffix": ".json",
+      "sha256": "b850071f963ab48a69efdb3c412c4a960e16e8ec2d746f4d9cf0142956238548"
+    },
+    {
+      "path": "/mnt/nas/openclaw/reports/models/dream7b_bpu_resplit_segment_residency_20260606-072919/adjacent_holder_00_seg00_01.ready.json",
+      "size_bytes": 215,
+      "mtime": 1780923631.3202322,
+      "suffix": ".json",
+      "sha256": "21e41f17afb959a4936bd2b6535fef0fa4ab95238c70b273b130c81af72ae09c"
+    },
+    {
+      "path": "/mnt/nas/openclaw/reports/models/dream7b_bpu_resplit_segment_residency_20260606-072919/prefix_00_seg00_01.payload.json",
+      "size_bytes": 558,
+      "mtime": 1780923696.2132378,
+      "suffix": ".json",
+      "sha256": "b5372d833b7926f5916314a278e15db95c7d29b0493d1e2e0d2cf79c785c18a9"
+    },
+    {
+      "path": "/mnt/nas/openclaw/reports/models/dream7b_bpu_resplit_segment_residency_20260606-072919/single_00_seg00_01.result.json",
+      "size_bytes": 256,
+      "mtime": 1780923586.0182283,
+      "suffix": ".json",
+      "sha256": "f4a05b802183044ac5c89a17eb175c684b092d59f963634e1c1a037078644c57"
+    },
+    {
+      "path": "/mnt/nas/openclaw/reports/models/dream7b_bpu_resplit_segment_residency_20260606-072919/single_00_seg00_01.payload.json",
+      "size_bytes": 431,
+      "mtime": 1780923582.658228,
+      "suffix": ".json",
+      "sha256": "a43377c229b630e9f75c624ceec349db6add26d2b4d0d824c3e9ae0cf4c307e9"
+    },
+    {
+      "path": "/mnt/nas/openclaw/reports/models/dream7b_bpu_resplit_segment_residency_20260606-072919/prefix_00_seg00_01.ready.json",
+      "size_bytes": 215,
+      "mtime": 1780923699.396238,
+      "suffix": ".json",
+      "sha256": "90f12b85751aefa6e6064d2069b5401e792d9a759a1269daeae218310e41cfea"
+    },
+    {
+      "path": "/mnt/nas/openclaw/reports/models/dream7b_bpu_persistent_segment_cache_20260606-005633/segment_00_seg00_02.payload.json",
+      "size_bytes": 429,
+      "mtime": 1780848575.3302014,
+      "suffix": ".json",
+      "sha256": "db661a943f4e7ecfb13c7ea1ab8c72a250c1577260d7ddf1affbf55bd35a5125"
+    },
+    {
+      "path": "/mnt/nas/openclaw/reports/models/dream7b_bpu_persistent_segment_cache_20260606-005633/segment_00_seg00_02.ready.json",
+      "size_bytes": 192,
+      "mtime": 1780848579.2302017,
+      "suffix": ".json",
+      "sha256": "f1a7076c7139485dbfa12b8fddc0d2a7b46fe42faae518504d0a0ba843b73e82"
+    },
+    {
+      "path": "/mnt/nas/openclaw/reports/models/dream7b_bpu_persistent_triplet_topology_20260606-131107/topology_000_0_1_8_segment_00_seg00_02.ready.json",
+      "size_bytes": 192,
+      "mtime": 1780892657.1655855,
+      "suffix": ".json",
+      "sha256": "be29da0355c29211cb014d66462867f774d8164c218970a4227ed56b8dd331d7"
+    },
+    {
+      "path": "/mnt/nas/openclaw/reports/models/dream7b_bpu_persistent_triplet_topology_20260606-131107/topology_000_0_1_8_segment_00_seg00_02.payload.json",
+      "size_bytes": 473,
+      "mtime": 1780892653.266585,
+      "suffix": ".json",
+      "sha256": "f0a2ee789f65c5f37155b4192a4381cf397c769d1998c77cdb51638a56edaa52"
+    },
+    {
+      "path": "/mnt/nas/openclaw/reports/models/dream7b_true_batch_compile_20260619-030323_b4/compile_seg00_01_b4_20260619-014008.log",
+      "size_bytes": 0,
+      "mtime": 1781820724.488677,
+      "suffix": ".log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "/mnt/nas/openclaw/reports/models/dream7b_true_batch_compile_20260619-030323_b4/compile_seg00_01_b4_20260618-215002.log",
+      "size_bytes": 1485,
+      "mtime": 1781820724.5496771,
+      "suffix": ".log",
+      "sha256": "a34cafac7cd67a34e40391634216f0514f5eae5c6c5ea096338b1c010961ebcc"
+    },
+    {
+      "path": "/mnt/nas/openclaw/reports/models/dream7b_bpu_held_pair_residency_matrix_20260605-235813/holder_00_seg00_02__seg02_04.payload.json",
+      "size_bytes": 588,
+      "mtime": 1780845074.7489023,
+      "suffix": ".json",
+      "sha256": "81272bf927cdf9972bc3ef3a929633b7157e147bdfcfb963716be2b8ee48adb1"
+    },
+    {
+      "path": "/mnt/nas/openclaw/reports/models/dream7b_bpu_held_pair_residency_matrix_20260605-235813/holder_00_seg00_02__seg02_04.ready.json",
+      "size_bytes": 216,
+      "mtime": 1780845080.056903,
+      "suffix": ".json",
+      "sha256": "271d7b50166e4f3c47a79bb01117124b5566a5eb3e011a7e6eb11fd279d75124"
+    },
+    {
+      "path": "/mnt/nas/openclaw/reports/models/dream7b_bpu_seeded_quad_residency_20260606-124305/quad_017_0_3_7_8_segment_00_seg00_02.ready.json",
+      "size_bytes": 191,
+      "mtime": 1780891102.2064526,
+      "suffix": ".json",
+      "sha256": "7a78291239bffd256823ba52a0e78fd5e3f2b5681ef3e4b6dfe8b3975f0bc37b"
+    },
+    {
+      "path": "/mnt/nas/openclaw/reports/models/dream7b_bpu_seeded_quad_residency_20260606-124305/quad_004_0_1_3_5_segment_00_seg00_02.payload.json",
+      "size_bytes": 457,
+      "mtime": 1780890999.4534438,
+      "suffix": ".json",
+      "sha256": "b304821ef7fef218c00717aedb2eecc8d046c92a62f53555e83b4d510f85dd80"
+    },
+    {
+      "path": "/mnt/nas/openclaw/reports/models/dream7b_bpu_seeded_quad_residency_20260606-124305/quad_008_0_1_5_7_segment_00_seg00_02.payload.json",
+      "size_bytes": 457,
+      "mtime": 1780891028.5474463,
+      "suffix": ".json",
+      "sha256": "7b6eaf0a293da3d8f214c76efe54b06d327b69e60ceeb5f6d093db82ff270d27"
+    },
+    {
+      "path": "/mnt/nas/openclaw/reports/models/dream7b_bpu_seeded_quad_residency_20260606-124305/quad_016_0_3_5_8_segment_00_seg00_02.ready.json",
+      "size_bytes": 192,
+      "mtime": 1780891094.1874518,
+      "suffix": ".json",
+      "sha256": "5ad41cd48e4a88e0fddba9825814998ae8ff09f76f3ceaeace108d1b8872bbeb"
+    },
+    {
+      "path": "/mnt/nas/openclaw/reports/models/dream7b_bpu_seeded_quad_residency_20260606-124305/quad_002_0_1_2_7_segment_00_seg00_02.ready.json",
+      "size_bytes": 192,
+      "mtime": 1780890989.243443,
+      "suffix": ".json",
+      "sha256": "147c6832181eb1448343225640785d2c9e46035faa299193d0731ccece2de782"
+    },
+    {
+      "path": "/mnt/nas/openclaw/reports/models/dream7b_bpu_seeded_quad_residency_20260606-124305/quad_011_0_1_7_8_segment_00_seg00_02.ready.json",
+      "size_bytes": 192,
+      "mtime": 1780891054.1884484,
+      "suffix": ".json",
+      "sha256": "a168f8a896a26d10a4eaea42557e9a2e6f27045efb4159e745a512dc44f519e0"
+    },
+    {
+      "path": "/mnt/nas/openclaw/reports/models/dream7b_bpu_seeded_quad_residency_20260606-124305/quad_012_0_1_8_9_segment_00_seg00_02.payload.json",
+      "size_bytes": 457,
+      "mtime": 1780891057.2994487,
+      "suffix": ".json",
+      "sha256": "5d48a8cb83dbdb8d0245dd753a66540e4aceaacf1eae143c5aa3ef17df306ebc"
+    },
+    {
+      "path": "/mnt/nas/openclaw/reports/models/dream7b_bpu_seeded_quad_residency_20260606-124305/quad_017_0_3_7_8_segment_00_seg00_02.payload.json",
+      "size_bytes": 457,
+      "mtime": 1780891098.3264523,
+      "suffix": ".json",
+      "sha256": "bed7448fd74e463cc8304e3a60a8271b2f7634d94ba4958865e314e0f83bc7c6"
+    },
+    {
+      "path": "/mnt/nas/openclaw/reports/models/dream7b_bpu_seeded_quad_residency_20260606-124305/quad_004_0_1_3_5_segment_00_seg00_02.ready.json",
+      "size_bytes": 192,
+      "mtime": 1780891003.350444,
+      "suffix": ".json",
+      "sha256": "4d53a24c674098ffa1708929a5c87868d90a1a08d6304cf24799bcd4c5f85c85"
+    },
+    {
+      "path": "/mnt/nas/openclaw/reports/models/dream7b_bpu_seeded_quad_residency_20260606-124305/quad_003_0_1_2_8_segment_00_seg00_02.payload.json",
+      "size_bytes": 457,
+      "mtime": 1780890992.4084432,
+      "suffix": ".json",
+      "sha256": "5b8c8eb534f5d628131cf14677302579daa8391d9ead76fb22bfbc7f12de3995"
+    },
+    {
+      "path": "/mnt/nas/openclaw/reports/models/dream7b_bpu_seeded_quad_residency_20260606-124305/quad_013_0_2_3_8_segment_00_seg00_02.payload.json",
+      "size_bytes": 457,
+      "mtime": 1780891066.3464496,
+      "suffix": ".json",
+      "sha256": "5a040d711bda93787fef21d46d61c035e75bf6f80f645457bf5848a7ccb7aa82"
+    },
+    {
+      "path": "/mnt/nas/openclaw/reports/models/dream7b_bpu_seeded_quad_residency_20260606-124305/quad_001_0_1_2_5_segment_00_seg00_02.ready.json",
+      "size_bytes": 192,
+      "mtime": 1780890982.3874424,
+      "suffix": ".json",
+      "sha256": "fe3a1c09e261a570201bd9612b410c15b174b4576aa6091606d86b25808a9eed"
+    },
+    {
+      "path": "/mnt/nas/openclaw/reports/models/dream7b_bpu_seeded_quad_residency_20260606-124305/quad_006_0_1_3_8_segment_00_seg00_02.payload.json",
+      "size_bytes": 457,
+      "mtime": 1780891013.892445,
+      "suffix": ".json",
+      "sha256": "2f0817e4d955daba58257e63f44a755b861433fdd967331a09c781eba0f562c7"
+    },
+    {
+      "path": "/mnt/nas/openclaw/reports/models/dream7b_bpu_seeded_quad_residency_20260606-124305/quad_003_0_1_2_8_segment_00_seg00_02.ready.json",
+      "size_bytes": 192,
+      "mtime": 1780890996.3034434,
+      "suffix": ".json",
+      "sha256": "6ca1bfaccced945d167ccd5e667945a3b4ed56d193b7531920cc51b75514b6c5"
+    },
+    {
+      "path": "/mnt/nas/openclaw/reports/models/dream7b_bpu_seeded_quad_residency_20260606-124305/quad_000_0_1_2_3_segment_00_seg00_02.payload.json",
+      "size_bytes": 457,
+      "mtime": 1780890970.9744413,
+      "suffix": ".json",
+      "sha256": "eee657626b80db204d5f63f4bc91078d8ac2c5ecaf4d38e4b839feca5b9f3b2b"
+    },
+    {
+      "path": "/mnt/nas/openclaw/reports/models/dream7b_bpu_seeded_quad_residency_20260606-124305/quad_002_0_1_2_7_segment_00_seg00_02.payload.json",
+      "size_bytes": 457,
+      "mtime": 1780890985.3424425,
+      "suffix": ".json",
+      "sha256": "327c5fb6663a004a9864d86e2860041d43c6522f93d146dab4827ebcbd89bf39"
+    },
+    {
+      "path": "/mnt/nas/openclaw/reports/models/dream7b_bpu_seeded_quad_residency_20260606-124305/quad_005_0_1_3_7_segment_00_seg00_02.ready.json",
+      "size_bytes": 191,
+      "mtime": 1780891010.7754447,
+      "suffix": ".json",
+      "sha256": "24eb537df434421b3486037726607e7eb9545387217d59a9b598a04c17b2af36"
+    },
+    {
+      "path": "/mnt/nas/openclaw/reports/models/dream7b_bpu_seeded_quad_residency_20260606-124305/quad_012_0_1_8_9_segment_00_seg00_02.ready.json",
+      "size_bytes": 192,
+      "mtime": 1780891061.1944492,
+      "suffix": ".json",
+      "sha256": "305625050ea7d9c7a8d00c4b739e121526df2a04e5affe4ea58cde95d7826386"
+    },
+    {
+      "path": "/mnt/nas/openclaw/reports/models/dream7b_bpu_seeded_quad_residency_20260606-124305/quad_007_0_1_4_8_segment_00_seg00_02.payload.json",
+      "size_bytes": 457,
+      "mtime": 1780891020.9394457,
+      "suffix": ".json",
+      "sha256": "076bfa3696b980cb53c7289546845a9aa88075ea3ef6d446674f0f31d3537af7"
+    },
+    {
+      "path": "/mnt/nas/openclaw/reports/models/dream7b_bpu_seeded_quad_residency_20260606-124305/quad_008_0_1_5_7_segment_00_seg00_02.ready.json",
+      "size_bytes": 192,
+      "mtime": 1780891032.4474466,
+      "suffix": ".json",
+      "sha256": "fe5ec57973ebb516304f12701c8d4c7e545b800118bd62e1ba7150bcb7e0dd0d"
+    },
+    {
+      "path": "/mnt/nas/openclaw/reports/models/dream7b_bpu_seeded_quad_residency_20260606-124305/quad_018_0_5_7_8_segment_00_seg00_02.ready.json",
+      "size_bytes": 192,
+      "mtime": 1780891110.2664533,
+      "suffix": ".json",
+      "sha256": "cfaf38c86521959613c61460ab6bfa1bf7edab731360b2335f7805f1dc5a40eb"
+    },
+    {
+      "path": "/mnt/nas/openclaw/reports/models/dream7b_bpu_seeded_quad_residency_20260606-124305/quad_000_0_1_2_3_segment_00_seg00_02.ready.json",
+      "size_bytes": 192,
+      "mtime": 1780890975.1644418,
+      "suffix": ".json",
+      "sha256": "ef459c71d6643436264231e6f288bc6d98e0660cd7799f45d14db6b3e6a5fcc1"
+    },
+    {
+      "path": "/mnt/nas/openclaw/reports/models/dream7b_bpu_seeded_quad_residency_20260606-124305/quad_006_0_1_3_8_segment_00_seg00_02.ready.json",
+      "size_bytes": 192,
+      "mtime": 1780891017.7934453,
+      "suffix": ".json",
+      "sha256": "fb61d6fc4a182fe86eb1889647e1a66fe67470599b5dcb90ff5b1752f3d91e8a"
+    },
+    {
+      "path": "/mnt/nas/openclaw/reports/models/dream7b_bpu_seeded_quad_residency_20260606-124305/quad_014_0_2_5_8_segment_00_seg00_02.ready.json",
+      "size_bytes": 192,
+      "mtime": 1780891078.0974505,
+      "suffix": ".json",
+      "sha256": "77ef8fac126b88f5db4305455cc8e1ffbafac330d2c38571f0059d4f70512303"
+    },
+    {
+      "path": "/mnt/nas/openclaw/reports/models/dream7b_bpu_seeded_quad_residency_20260606-124305/quad_016_0_3_5_8_segment_00_seg00_02.payload.json",
+      "size_bytes": 457,
+      "mtime": 1780891090.2754517,
+      "suffix": ".json",
+      "sha256": "f0a27b2c8168da32c661e7cf1f0c3da3cbbe47f00256231c04e0211ec40266aa"
+    },
+    {
+      "path": "/mnt/nas/openclaw/reports/models/dream7b_bpu_seeded_quad_residency_20260606-124305/quad_014_0_2_5_8_segment_00_seg00_02.payload.json",
+      "size_bytes": 457,
+      "mtime": 1780891074.1964502,
+      "suffix": ".json",
+      "sha256": "c50e4c135dae22ac7a80b2fc0e0ea88086ee6facdf49e2d4c7286429703b8fab"
+    },
+    {
+      "path": "/mnt/nas/openclaw/reports/models/dream7b_bpu_seeded_quad_residency_20260606-124305/quad_005_0_1_3_7_segment_00_seg00_02.payload.json",
+      "size_bytes": 457,
+      "mtime": 1780891006.8734443,
+      "suffix": ".json",
+      "sha256": "a4a409b5959cca8b16a53606e5ac56ea055e1d5458cf24a396075f831b6eb23f"
+    },
+    {
+      "path": "/mnt/nas/openclaw/reports/models/dream7b_bpu_seeded_quad_residency_20260606-124305/quad_009_0_1_5_8_segment_00_seg00_02.ready.json",
+      "size_bytes": 192,
+      "mtime": 1780891039.489447,
+      "suffix": ".json",
+      "sha256": "328b19e707249cf6b05d3dda7c2ecccdf2af6110046da0e5c7e5b79d0f9de7b2"
+    },
+    {
+      "path": "/mnt/nas/openclaw/reports/models/dream7b_bpu_seeded_quad_residency_20260606-124305/quad_001_0_1_2_5_segment_00_seg00_02.payload.json",
+      "size_bytes": 457,
+      "mtime": 1780890978.486442,
+      "suffix": ".json",
+      "sha256": "b946aadbf4a34b54f7c49d9f21460e89292293359490840ed9a48c5091c79298"
+    },
+    {
+      "path": "/mnt/nas/openclaw/reports/models/dream7b_bpu_seeded_quad_residency_20260606-124305/quad_013_0_2_3_8_segment_00_seg00_02.ready.json",
+      "size_bytes": 192,
+      "mtime": 1780891070.2574499,
+      "suffix": ".json",
+      "sha256": "72cee17e515f9e6b8efa8afd0ddc070b7620445fe301e36e2e0ec17f8731a9c3"
+    },
+    {
+      "path": "/mnt/nas/openclaw/reports/models/dream7b_bpu_seeded_quad_residency_20260606-124305/quad_010_0_1_6_8_segment_00_seg00_02.ready.json",
+      "size_bytes": 192,
+      "mtime": 1780891046.5454478,
+      "suffix": ".json",
+      "sha256": "52fd61bf28fff4b4fe140f725f47d86267ae60fbee68ddca0ff839d59a61020a"
+    },
+    {
+      "path": "/mnt/nas/openclaw/reports/models/dream7b_bpu_seeded_quad_residency_20260606-124305/quad_015_0_2_7_8_segment_00_seg00_02.payload.json",
+      "size_bytes": 457,
+      "mtime": 1780891082.222451,
+      "suffix": ".json",
+      "sha256": "fbef3f4dbdb1e1d693973de663f768e92858ab53ac2ea6faf0ecfd46270891ed"
+    },
+    {
+      "path": "/mnt/nas/openclaw/reports/models/dream7b_bpu_seeded_quad_residency_20260606-124305/quad_015_0_2_7_8_segment_00_seg00_02.ready.json",
+      "size_bytes": 191,
+      "mtime": 1780891086.1264513,
+      "suffix": ".json",
+      "sha256": "4af6fc6e62efe09822942fac63f35b61f890e25b6424e666b25edd951bcf40c7"
+    },
+    {
+      "path": "/mnt/nas/openclaw/reports/models/dream7b_bpu_seeded_quad_residency_20260606-124305/quad_009_0_1_5_8_segment_00_seg00_02.payload.json",
+      "size_bytes": 457,
+      "mtime": 1780891035.6024468,
+      "suffix": ".json",
+      "sha256": "8ab12438aca74c64343c327049d70717998229c7dce3aca8e0a3b5ca16b8c436"
+    },
+    {
+      "path": "/mnt/nas/openclaw/reports/models/dream7b_bpu_seeded_quad_residency_20260606-124305/quad_007_0_1_4_8_segment_00_seg00_02.ready.json",
+      "size_bytes": 192,
+      "mtime": 1780891024.824446,
+      "suffix": ".json",
+      "sha256": "16032cecd22318345140abfc7893294ebd28d11d8c6dd0c4fed8e1f70a3663f3"
+    },
+    {
+      "path": "/mnt/nas/openclaw/reports/models/dream7b_bpu_seeded_quad_residency_20260606-124305/quad_018_0_5_7_8_segment_00_seg00_02.payload.json",
+      "size_bytes": 457,
+      "mtime": 1780891106.376453,
+      "suffix": ".json",
+      "sha256": "92561ad3a36f5e67cc19cf0b7e77e3f295391e809850d7f1fa429071bb13a026"
+    },
+    {
+      "path": "/mnt/nas/openclaw/reports/models/dream7b_bpu_seeded_quad_residency_20260606-124305/quad_011_0_1_7_8_segment_00_seg00_02.payload.json",
+      "size_bytes": 457,
+      "mtime": 1780891050.2994483,
+      "suffix": ".json",
+      "sha256": "234844447ab4768e5c11d8dd12977b2bc8db3fa66a0146c29677f34a0157d235"
+    },
+    {
+      "path": "/mnt/nas/openclaw/reports/models/dream7b_bpu_seeded_quad_residency_20260606-124305/quad_010_0_1_6_8_segment_00_seg00_02.payload.json",
+      "size_bytes": 457,
+      "mtime": 1780891042.6474476,
+      "suffix": ".json",
+      "sha256": "b96cfbbeb76f4ee2119142393da3919d3d3d698ae127e6f5887fcb4d6a10626a"
+    },
+    {
+      "path": "/mnt/nas/openclaw/reports/models/dream7b_bpu_persistent_pair_cache_20260607-225243/pair_00_seg00_02__seg02_04.payload.json",
+      "size_bytes": 577,
+      "mtime": 1780843996.1458101,
+      "suffix": ".json",
+      "sha256": "45b6c3f703a44ce63fdcfcf31be8a849166d06c193ae8bd1bc8c35feb769b41f"
+    },
+    {
+      "path": "/mnt/nas/openclaw/reports/models/dream7b_bpu_single_segment_residency_matrix_20260606-002628/holder_00_seg00_02.payload.json",
+      "size_bytes": 441,
+      "mtime": 1780846770.3920472,
+      "suffix": ".json",
+      "sha256": "1ac391732ab0c0009a6b7ef43f760ad0f4bbc54a9deab9eceaad90420388f114"
+    },
+    {
+      "path": "/mnt/nas/openclaw/reports/models/dream7b_bpu_single_segment_residency_matrix_20260606-002628/holder_00_seg00_02.ready.json",
+      "size_bytes": 192,
+      "mtime": 1780846774.3040476,
+      "suffix": ".json",
+      "sha256": "240325fd6b826e0223c0ffb8b202180c1e59e8a554f25aa886bd4f1fd394b282"
+    },
+    {
+      "path": "/mnt/nas/openclaw/reports/models/dream7b_true_batch_b4_single_segment_runtime_20260619-030323/b4_seg00_01_entry_segment_runtime.json",
+      "size_bytes": 436,
+      "mtime": 1781821017.428702,
+      "suffix": ".json",
+      "sha256": "649b23be58d9703ea7ac0dbc07fa3083345b5db5c2d24417aeae194c61e95407"
+    },
+    {
+      "path": "/mnt/nas/openclaw/reports/models/dream7b_bpu_single_segment_triplet_residency_20260606-121243/combo_004_0_1_6_segment_00_seg00_02.ready.json",
+      "size_bytes": 192,
+      "mtime": 1780889180.6052883,
+      "suffix": ".json",
+      "sha256": "f625aeb781ac947d421dccef4a2c4a6500d9dd0f74de5ea79fc4d9f131899681"
+    },
+    {
+      "path": "/mnt/nas/openclaw/reports/models/dream7b_bpu_single_segment_triplet_residency_20260606-121243/combo_005_0_1_7_segment_00_seg00_02.ready.json",
+      "size_bytes": 192,
+      "mtime": 1780889188.061289,
+      "suffix": ".json",
+      "sha256": "9f8e9dc4dc820e05a52e5425315c8051127c84d11d038e1d02cd543e224dbb90"
+    },
+    {
+      "path": "/mnt/nas/openclaw/reports/models/dream7b_bpu_single_segment_triplet_residency_20260606-121243/combo_012_0_2_7_segment_00_seg00_02.payload.json",
+      "size_bytes": 477,
+      "mtime": 1780889239.4132934,
+      "suffix": ".json",
+      "sha256": "9efabc49bbf6610ed758024effaaed7e0c690b7908e4072f0016cf94855ca08b"
+    },
+    {
+      "path": "/mnt/nas/openclaw/reports/models/dream7b_bpu_single_segment_triplet_residency_20260606-121243/combo_017_0_3_6_segment_00_seg00_02.payload.json",
+      "size_bytes": 477,
+      "mtime": 1780889279.5872967,
+      "suffix": ".json",
+      "sha256": "e6369f09a58f79b61ef66001964c4021f1372d01b14f92ea26648bb370931314"
+    },
+    {
+      "path": "/mnt/nas/openclaw/reports/models/dream7b_bpu_single_segment_triplet_residency_20260606-121243/combo_012_0_2_7_segment_00_seg00_02.ready.json",
+      "size_bytes": 192,
+      "mtime": 1780889243.3182938,
+      "suffix": ".json",
+      "sha256": "83ac2bf94e85cfa975cd1db87f49a93c78caebfb7b386c7c0a766f7cf7addc02"
+    },
+    {
+      "path": "/mnt/nas/openclaw/reports/models/dream7b_bpu_single_segment_triplet_residency_20260606-121243/combo_001_0_1_3_segment_00_seg00_02.ready.json",
+      "size_bytes": 192,
+      "mtime": 1780889159.5872865,
+      "suffix": ".json",
+      "sha256": "be0e93da62e4413eb88d676ec4ca805c6941359869a33da1e915b11c3ab6c8a8"
+    },
+    {
+      "path": "/mnt/nas/openclaw/reports/models/dream7b_bpu_single_segment_triplet_residency_20260606-121243/combo_007_0_1_9_segment_00_seg00_02.ready.json",
+      "size_bytes": 191,
+      "mtime": 1780889203.6252904,
+      "suffix": ".json",
+      "sha256": "10d01de551d53fa5f571f2aded6ae3e278b49e775d709bf90569178a5236926b"
+    },
+    {
+      "path": "/mnt/nas/openclaw/reports/models/dream7b_bpu_single_segment_triplet_residency_20260606-121243/combo_030_0_6_7_segment_00_seg00_02.payload.json",
+      "size_bytes": 477,
+      "mtime": 1780889388.7563062,
+      "suffix": ".json",
+      "sha256": "caf1a6dc76d257d1c45a97dc884d9d2ff3a36ebfb3d13f3b5269c0d26edfdc06"
+    },
+    {
+      "path": "/mnt/nas/openclaw/reports/models/dream7b_bpu_single_segment_triplet_residency_20260606-121243/combo_011_0_2_6_segment_00_seg00_02.ready.json",
+      "size_bytes": 192,
+      "mtime": 1780889235.3042932,
+      "suffix": ".json",
+      "sha256": "f4c6a8f7b1ba6ec310992f6aec3800e56e71c256dccf5c698f21e6f48258ac15"
+    },
+    {
+      "path": "/mnt/nas/openclaw/reports/models/dream7b_bpu_single_segment_triplet_residency_20260606-121243/combo_008_0_2_3_segment_00_seg00_02.ready.json",
+      "size_bytes": 192,
+      "mtime": 1780889210.649291,
+      "suffix": ".json",
+      "sha256": "a8a87def65241df1591769d006d558a20cc83ed51aabaf5572954f2467c60f94"
+    },
+    {
+      "path": "/mnt/nas/openclaw/reports/models/dream7b_bpu_single_segment_triplet_residency_20260606-121243/combo_032_0_6_9_segment_00_seg00_02.ready.json",
+      "size_bytes": 192,
+      "mtime": 1780889409.502308,
+      "suffix": ".json",
+      "sha256": "b03f23caefc8cffe439429d5816c5a0dc4a58b054e2c93dcfff62e603236502b"
+    },
+    {
+      "path": "/mnt/nas/openclaw/reports/models/dream7b_bpu_single_segment_triplet_residency_20260606-121243/combo_035_0_8_9_segment_00_seg00_02.ready.json",
+      "size_bytes": 192,
+      "mtime": 1780889434.7533102,
+      "suffix": ".json",
+      "sha256": "62f59dda475953d784f4726762376f92301abfc2577b565942ac9a373d21459c"
+    },
+    {
+      "path": "/mnt/nas/openclaw/reports/models/dream7b_bpu_single_segment_triplet_residency_20260606-121243/combo_005_0_1_7_segment_00_seg00_02.payload.json",
+      "size_bytes": 477,
+      "mtime": 1780889184.1532886,
+      "suffix": ".json",
+      "sha256": "75e5ef6d1dfaecfaf6238c31fb10a7e398c819799ebf964b0a86dfade5ff9a17"
+    },
+    {
+      "path": "/mnt/nas/openclaw/reports/models/dream7b_bpu_single_segment_triplet_residency_20260606-121243/combo_007_0_1_9_segment_00_seg00_02.payload.json",
+      "size_bytes": 477,
+      "mtime": 1780889199.74629,
+      "suffix": ".json",
+      "sha256": "5deedf7b931b7c9ad25674804ecd37e1b28fd7c508e6822ee515b3e88f5890b2"
+    }
+  ],
+  "vendor_request": {
+    "path": "vendor_request/SEG00_01_COMPILER_ARTIFACT_REQUEST.md",
+    "exists": true,
+    "size_bytes": 796,
+    "sha256": "f6a4fc272670325ca85730a48ae85ed4bb6aac2fc4af77461567e08a11e19ba1"
+  }
+}

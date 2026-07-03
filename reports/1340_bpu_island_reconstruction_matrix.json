@@ -1,0 +1,190 @@
+{
+  "schema_version": "dream7b_s100p_v13_1340_bpu_island_reconstruction_matrix",
+  "created_at_utc": "2026-07-03T05:26:14.801204+00:00",
+  "run_commands": [
+    "C:\\Users\\zhexu\\AppData\\Local\\Python\\pythoncore-3.14-64\\python.exe tools\\build_v13_research_thread.py --root ."
+  ],
+  "host_environment": {
+    "local_platform": "Windows-11-10.0.26200-SP0",
+    "python": "3.14.3 (tags/v3.14.3:323c59a, Feb  3 2026, 16:04:56) [MSC v.1944 64 bit (AMD64)]"
+  },
+  "git": {
+    "returncode": 128,
+    "stdout": "",
+    "stderr": "fatal: not a git repository (or any of the parent directories): .git"
+  },
+  "input_artifacts": [
+    {
+      "path": "evidence/s100p_remote_v13_reports/1340_v13_bpu_island_remote.json",
+      "exists": true,
+      "size_bytes": 157548,
+      "sha256": "c090ac6d8123fad08d1680116fdb622c793659656b46f7b878defcaf163a70d7"
+    },
+    {
+      "path": "evidence/single_segment_substitution_v12r",
+      "exists": true
+    }
+  ],
+  "output_artifacts": [
+    {
+      "path": "reports/1340_bpu_island_reconstruction_matrix.json",
+      "exists": true,
+      "size_bytes": 5757,
+      "sha256": "1a73a6db41527a87670a10dd0f3b14e0c5807cd40c8a0f6c2d08c29d6a348b4b"
+    },
+    {
+      "path": "reports/1340_bpu_island_reconstruction_matrix.md",
+      "exists": true,
+      "size_bytes": 249,
+      "sha256": "50f042813436d3edfcf41923092c39bdca2422ada5b94d30a4dcaf7117c9b34b"
+    }
+  ],
+  "blocking_or_failure_reasons": [
+    "No tested single or contiguous BPU island passed strict logits validity across all three canonical cases."
+  ],
+  "next_minimal_experiments": [],
+  "safety": {
+    "generation_quality_run": false,
+    "product_routes_18888_18889_touched": false,
+    "dream7b_frontend_openclaw_traffic_touched": false
+  },
+  "verdict": "no_valid_islands",
+  "rows": 42,
+  "expected_rows": 42,
+  "summary_by_island": {
+    "[1]": {
+      "rows": 3,
+      "strict_logits_valid_rows": 1,
+      "top1_agreement_rows": 2,
+      "reference_top1_in_candidate_top5_rows": 3,
+      "mean_cosine": 0.9597430099082044,
+      "median_relative_l2": 0.21536491437324923,
+      "all_cases_strict_pass": false
+    },
+    "[2]": {
+      "rows": 3,
+      "strict_logits_valid_rows": 0,
+      "top1_agreement_rows": 2,
+      "reference_top1_in_candidate_top5_rows": 3,
+      "mean_cosine": 0.958171372251352,
+      "median_relative_l2": 0.24327235182054857,
+      "all_cases_strict_pass": false
+    },
+    "[4]": {
+      "rows": 3,
+      "strict_logits_valid_rows": 0,
+      "top1_agreement_rows": 1,
+      "reference_top1_in_candidate_top5_rows": 2,
+      "mean_cosine": 0.9096008961238039,
+      "median_relative_l2": 0.7913062424756017,
+      "all_cases_strict_pass": false
+    },
+    "[8]": {
+      "rows": 3,
+      "strict_logits_valid_rows": 0,
+      "top1_agreement_rows": 1,
+      "reference_top1_in_candidate_top5_rows": 1,
+      "mean_cosine": 0.9509339313915834,
+      "median_relative_l2": 0.628176925930609,
+      "all_cases_strict_pass": false
+    },
+    "[11]": {
+      "rows": 3,
+      "strict_logits_valid_rows": 0,
+      "top1_agreement_rows": 0,
+      "reference_top1_in_candidate_top5_rows": 0,
+      "mean_cosine": 0.38044925324118245,
+      "median_relative_l2": 0.7645719393290273,
+      "all_cases_strict_pass": false
+    },
+    "[12]": {
+      "rows": 3,
+      "strict_logits_valid_rows": 0,
+      "top1_agreement_rows": 0,
+      "reference_top1_in_candidate_top5_rows": 0,
+      "mean_cosine": 0.8491017611522432,
+      "median_relative_l2": 0.8535734504408916,
+      "all_cases_strict_pass": false
+    },
+    "[13]": {
+      "rows": 3,
+      "strict_logits_valid_rows": 0,
+      "top1_agreement_rows": 0,
+      "reference_top1_in_candidate_top5_rows": 0,
+      "mean_cosine": 0.9172811682322376,
+      "median_relative_l2": 0.6549224677152996,
+      "all_cases_strict_pass": false
+    },
+    "[20]": {
+      "rows": 3,
+      "strict_logits_valid_rows": 0,
+      "top1_agreement_rows": 0,
+      "reference_top1_in_candidate_top5_rows": 0,
+      "mean_cosine": 0.5619788852728175,
+      "median_relative_l2": 0.8347004460170735,
+      "all_cases_strict_pass": false
+    },
+    "[25]": {
+      "rows": 3,
+      "strict_logits_valid_rows": 0,
+      "top1_agreement_rows": 0,
+      "reference_top1_in_candidate_top5_rows": 0,
+      "mean_cosine": -0.28320855790016036,
+      "median_relative_l2": 1.3257705671393631,
+      "all_cases_strict_pass": false
+    },
+    "[26]": {
+      "rows": 3,
+      "strict_logits_valid_rows": 0,
+      "top1_agreement_rows": 2,
+      "reference_top1_in_candidate_top5_rows": 2,
+      "mean_cosine": 0.008798480719906432,
+      "median_relative_l2": 1.01095842784738,
+      "all_cases_strict_pass": false
+    },
+    "[27]": {
+      "rows": 3,
+      "strict_logits_valid_rows": 0,
+      "top1_agreement_rows": 1,
+      "reference_top1_in_candidate_top5_rows": 2,
+      "mean_cosine": -0.8441796119198881,
+      "median_relative_l2": 1.1148402550026593,
+      "all_cases_strict_pass": false
+    },
+    "[1,2]": {
+      "rows": 3,
+      "strict_logits_valid_rows": 0,
+      "top1_agreement_rows": 2,
+      "reference_top1_in_candidate_top5_rows": 3,
+      "mean_cosine": 0.9582014861213203,
+      "median_relative_l2": 0.35126610398693225,
+      "all_cases_strict_pass": false
+    },
+    "[1,2,3,4]": {
+      "rows": 3,
+      "strict_logits_valid_rows": 0,
+      "top1_agreement_rows": 0,
+      "reference_top1_in_candidate_top5_rows": 1,
+      "mean_cosine": 0.9190154598478792,
+      "median_relative_l2": 0.799473962729187,
+      "all_cases_strict_pass": false
+    },
+    "[8,9,10,11]": {
+      "rows": 3,
+      "strict_logits_valid_rows": 0,
+      "top1_agreement_rows": 0,
+      "reference_top1_in_candidate_top5_rows": 0,
+      "mean_cosine": -0.17374854519811944,
+      "median_relative_l2": 1.0978955028435662,
+      "all_cases_strict_pass": false
+    }
+  },
+  "valid_islands": [],
+  "strict_thresholds": {
+    "relative_l2_max": 0.1,
+    "pearson_min": 0.95,
+    "cosine_min": 0.95
+  },
+  "remote_status": "pass",
+  "remote_errors": []
+}

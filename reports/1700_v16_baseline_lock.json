@@ -1,0 +1,212 @@
+{
+  "schema_version": "dream7b_s100p_v16_1700_v16_baseline_lock",
+  "created_at_utc": "2026-07-03T09:55:53.313661+00:00",
+  "run_commands": [
+    "C:\\Users\\zhexu\\AppData\\Local\\Python\\pythoncore-3.14-64\\python.exe tools\\build_v16_research_thread.py --root ."
+  ],
+  "host_environment": {
+    "local_platform": "Windows-11-10.0.26200-SP0",
+    "python": "3.14.3 (tags/v3.14.3:323c59a, Feb  3 2026, 16:04:56) [MSC v.1944 64 bit (AMD64)]"
+  },
+  "git": {
+    "returncode": 128,
+    "stdout": "",
+    "stderr": "fatal: not a git repository (or any of the parent directories): .git"
+  },
+  "input_artifacts": [
+    {
+      "path": "evidence_for_gptpro/dream7b_s100p_v15_for_gptpro_20260703_171308.zip",
+      "exists": true,
+      "size_bytes": 62976134,
+      "sha256": "d6ac0dc5ea330b40d309d3297f2bd34d185a0f9e78b46cfd859c4e78dd2d91e7"
+    },
+    {
+      "path": "01_final_evidence/dream7b_s100p_gate_packet_v15.json",
+      "exists": true,
+      "size_bytes": 2283,
+      "sha256": "c40e7c885d55e133de1397964984e20b3033dbe788c594d10561f5be40ef85c9"
+    },
+    {
+      "path": "reports/1600_v15_baseline_lock.json",
+      "exists": true,
+      "size_bytes": 6424,
+      "sha256": "f7c73e85ec03a6eb5e59d1c840c63ad075eac09513c3904325d43319d31633af"
+    },
+    {
+      "path": "reports/1610_seg00_01_compiler_source_graph_acquisition.json",
+      "exists": true,
+      "size_bytes": 24776,
+      "sha256": "2ef8f51a6dffa6bbc8bf9ea8cd3ff727eed3815f8c3dedc5258a70baff59f1c5"
+    },
+    {
+      "path": "reports/1620_hbir_mul_add_input1_recovery.json",
+      "exists": true,
+      "size_bytes": 11974,
+      "sha256": "3a17e27834c7a09257b056f3142fc430863826f5655985cd54a560ac47765b2f"
+    },
+    {
+      "path": "reports/1630_gathernd_official_quant_scale_closure.json",
+      "exists": true,
+      "size_bytes": 3679,
+      "sha256": "e803b764d6f9a89efeffb37099231072f69e1a2a9bb6d513e769f4c6160e0afe"
+    },
+    {
+      "path": "reports/1640_position_contract_closure.json",
+      "exists": true,
+      "size_bytes": 137148,
+      "sha256": "ab16d9c362bb6148245d7a57eed6a8b14e82a41a60ca78741339a597670ec795"
+    },
+    {
+      "path": "reports/1650_exact_seg00_01_comparator.json",
+      "exists": true,
+      "size_bytes": 32931,
+      "sha256": "75b2c09d50296a43261c60d23654ef5e60e651ada4a7356f7fdf83fdf35f574d"
+    },
+    {
+      "path": "reports/1660_corrected_seg00_01_candidate.json",
+      "exists": true,
+      "size_bytes": 2125,
+      "sha256": "8b69e9948399d9838c846dfb3caad739b30adef21b68fb740a838609aa1b2c89"
+    },
+    {
+      "path": "reports/1670_gguf_f16_reference_closure.json",
+      "exists": true,
+      "size_bytes": 4456,
+      "sha256": "3ec148fa5fd3f3ab95de381ff0518afd770d6f5b724554483d31ef1a1a0a7e4f"
+    }
+  ],
+  "output_artifacts": [
+    {
+      "path": "reports/1700_v16_baseline_lock.json",
+      "exists": true,
+      "size_bytes": 8125,
+      "sha256": "7afefbe3064d7cfd2d0c9e59dedb7ed3fb555bd9345256f6f800f6121bac141b"
+    },
+    {
+      "path": "reports/1700_v16_baseline_lock.md",
+      "exists": true,
+      "size_bytes": 249,
+      "sha256": "a1df1f38e6ff334d2c1bea77ea798a92375911e6aa91716d7582fd9482bd0943"
+    }
+  ],
+  "blocking_or_failure_reasons": [],
+  "next_minimal_experiments": [],
+  "safety": {
+    "generation_quality_run": false,
+    "product_routes_18888_18889_touched": false,
+    "dream7b_frontend_openclaw_traffic_touched": false
+  },
+  "verdict": "baseline_locked",
+  "v15_zip_validation": {
+    "path": "F:\\Project\\Digua\\evidence_for_gptpro\\dream7b_s100p_v15_for_gptpro_20260703_171308.zip",
+    "exists": true,
+    "size_bytes": 62976134,
+    "sha256": "d6ac0dc5ea330b40d309d3297f2bd34d185a0f9e78b46cfd859c4e78dd2d91e7",
+    "testzip_bad_member": null,
+    "member_count": 221,
+    "manifest_entries": 219,
+    "manifest_missing": [],
+    "manifest_bad_size": [],
+    "manifest_bad_hash": []
+  },
+  "v15_gate_packet": {
+    "schema_version": "dream7b_s100p_gate_packet_v15",
+    "created_at_utc": "2026-07-03T09:13:08.864395+00:00",
+    "verdict": "C_seg00_01_contract_fault_strongly_supported_but_vendor_artifacts_required",
+    "generation_quality_run": false,
+    "product_routes_18888_18889_touched": false,
+    "dream7b_frontend_openclaw_traffic_touched": false,
+    "current_full_bpu_path": "falsified_against_HF_PyTorch_BF16_logits_truth",
+    "v14_verdict": "B_seg00_01_exact_comparator_still_unresolved_compiler_artifacts_required",
+    "seg00_01": {
+      "compiler_source_graph": "compiler_artifacts_missing_vendor_required",
+      "mul_add_input1": "runtime_dump_does_not_expose_mul_output_or_add_input1",
+      "gathernd_official_scale": "official_scale_missing_reexport_recalibration_required",
+      "position_contract": "position_input_contract_fault_suspected",
+      "exact_comparator": "exact_comparator_blocked_missing_mul_add_input1_source_graph_quant_table",
+      "corrected_candidate": "not_run_no_justified_correction"
+    },
+    "gguf_f16": "gguf_f16_blocked_no_artifact_no_logits_runner",
+    "bf16_truth_hashes": {
+      "zeros": {
+        "path": "evidence/full_truth_bf16_v14/zeros/full_truth_logits.npy",
+        "exists": true,
+        "size_bytes": 608384,
+        "sha256": "661ae552e7e368d829971c052f36bca50d0ba7f3b36e32c0b40d23179b77d56c"
+      },
+      "ramp": {
+        "path": "evidence/full_truth_bf16_v14/ramp/full_truth_logits.npy",
+        "exists": true,
+        "size_bytes": 608384,
+        "sha256": "c5ba9211687cd11d69e6825ae32e2e253db9f3ddbe11d9df4a72b2e790a5c154"
+      },
+      "short_chinese_prompt_padded": {
+        "path": "evidence/full_truth_bf16_v14/short_chinese_prompt_padded/full_truth_logits.npy",
+        "exists": true,
+        "size_bytes": 608384,
+        "sha256": "e46398de01f01c3646ca333aee4bce5e89705190d79290ac34ae6e40b3d6a5a6"
+      }
+    },
+    "claim_boundary": "The current tested seq128 B=1 segmented-HBM S100P path remains logits-invalid. v15 strongly supports a seg00_01 contract/export/quant/position fault but cannot close exact root cause or produce a corrected candidate without vendor/compiler artifacts.",
+    "commands": [
+      "C:\\Users\\zhexu\\AppData\\Local\\Python\\pythoncore-3.14-64\\python.exe tools\\build_v15_research_thread.py --root ."
+    ]
+  },
+  "required_v15_inputs": [
+    {
+      "path": "reports/1600_v15_baseline_lock.json",
+      "exists": true,
+      "size_bytes": 6424,
+      "sha256": "f7c73e85ec03a6eb5e59d1c840c63ad075eac09513c3904325d43319d31633af"
+    },
+    {
+      "path": "reports/1610_seg00_01_compiler_source_graph_acquisition.json",
+      "exists": true,
+      "size_bytes": 24776,
+      "sha256": "2ef8f51a6dffa6bbc8bf9ea8cd3ff727eed3815f8c3dedc5258a70baff59f1c5"
+    },
+    {
+      "path": "reports/1620_hbir_mul_add_input1_recovery.json",
+      "exists": true,
+      "size_bytes": 11974,
+      "sha256": "3a17e27834c7a09257b056f3142fc430863826f5655985cd54a560ac47765b2f"
+    },
+    {
+      "path": "reports/1630_gathernd_official_quant_scale_closure.json",
+      "exists": true,
+      "size_bytes": 3679,
+      "sha256": "e803b764d6f9a89efeffb37099231072f69e1a2a9bb6d513e769f4c6160e0afe"
+    },
+    {
+      "path": "reports/1640_position_contract_closure.json",
+      "exists": true,
+      "size_bytes": 137148,
+      "sha256": "ab16d9c362bb6148245d7a57eed6a8b14e82a41a60ca78741339a597670ec795"
+    },
+    {
+      "path": "reports/1650_exact_seg00_01_comparator.json",
+      "exists": true,
+      "size_bytes": 32931,
+      "sha256": "75b2c09d50296a43261c60d23654ef5e60e651ada4a7356f7fdf83fdf35f574d"
+    },
+    {
+      "path": "reports/1660_corrected_seg00_01_candidate.json",
+      "exists": true,
+      "size_bytes": 2125,
+      "sha256": "8b69e9948399d9838c846dfb3caad739b30adef21b68fb740a838609aa1b2c89"
+    },
+    {
+      "path": "reports/1670_gguf_f16_reference_closure.json",
+      "exists": true,
+      "size_bytes": 4456,
+      "sha256": "3ec148fa5fd3f3ab95de381ff0518afd770d6f5b724554483d31ef1a1a0a7e4f"
+    }
+  ],
+  "baseline_facts": {
+    "current_full_bpu_path": "falsified_against_HF_PyTorch_BF16_logits_truth",
+    "generation_quality": "not_run_by_design",
+    "product_route": "not_run_by_design",
+    "v16_scope": "root-cause closure plus corrected/bypass candidate attempts; not a generation or product route gate",
+    "v15_verdict": "C_seg00_01_contract_fault_strongly_supported_but_vendor_artifacts_required"
+  }
+}

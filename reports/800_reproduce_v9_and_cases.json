@@ -1,0 +1,73 @@
+{
+  "schema_version": "dream7b_s100p_v10_800_reproduce_v9_and_cases",
+  "created_at_utc": "2026-07-01T13:25:01.226160+00:00",
+  "run_commands": [
+    "C:\\Users\\zhexu\\AppData\\Local\\Python\\pythoncore-3.14-64\\python.exe tools\\build_v10_research_thread.py --root ."
+  ],
+  "git": {
+    "cwd": "F:\\Project\\Digua",
+    "status": "unavailable_empty_or_incomplete_git_dir",
+    "git_dir_exists": true,
+    "git_head_exists": false
+  },
+  "input_artifacts": [
+    {
+      "path": "evidence/final_segment_endpoint_raw_v9",
+      "exists": true
+    },
+    {
+      "path": "evidence/hf_exact_final_segment_v9",
+      "exists": true
+    },
+    {
+      "path": "cases/canonical_seq128_cases_v10.jsonl",
+      "exists": true,
+      "size_bytes": 8726,
+      "sha256": "8b854976148b8cd3e98e754448d8c2ab75c12d62f6d7ef1798cf46c9734191b3"
+    }
+  ],
+  "output_artifacts": [
+    {
+      "path": "reports/800_reproduce_v9_and_cases.json"
+    },
+    {
+      "path": "reports/800_reproduce_v9_and_cases.md"
+    }
+  ],
+  "blocking_or_failure_reasons": [],
+  "next_minimal_experiments": [],
+  "v9_zip_validation": {
+    "zip_path": "evidence_for_gptpro/dream7b_s100p_v9_for_gptpro_20260701_f_exact_final_contract.zip",
+    "exists": true,
+    "zip_testzip_bad_member": null,
+    "manifest_check": {
+      "entries": 352,
+      "missing": [],
+      "bad_size": [],
+      "bad_sha256": []
+    },
+    "zip_sha256": "fbf07a42b37980bb505b7033a11fb9b9fd4dc08a2126a7863277c9ce23c463bd"
+  },
+  "official_dequant_recomputed_rows": 42,
+  "official_dequant_bad_rows": [],
+  "recomputed_comparison_rows": 42,
+  "top1_agreement_rows": 0,
+  "top1_mismatch_rows": 42,
+  "allzero_candidate_nonconstant_reference_rows": 15,
+  "real_x_allzero_candidate_nonconstant_reference_rows": 3,
+  "canonical_cases_path": "cases/canonical_seq128_cases_v10.jsonl",
+  "canonical_case_count": 3,
+  "canonical_case_ids": [
+    "zeros",
+    "ramp",
+    "short_chinese_prompt_padded"
+  ],
+  "canonical_case_field_check": {
+    "token_ids": true,
+    "position_ids": true,
+    "attention_mask": true,
+    "last_token_index": true,
+    "tokenizer_hash": true,
+    "model_hash": true
+  }
+}

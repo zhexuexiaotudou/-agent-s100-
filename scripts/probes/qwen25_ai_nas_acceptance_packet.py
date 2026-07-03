@@ -241,6 +241,20 @@ def ssh_command(args: argparse.Namespace, command: str, timeout: int = 90) -> di
     )
 
 
+def parse_remote_json_output(stdout: str) -> dict[str, Any]:
+    try:
+        payload = json.loads(stdout)
+    except json.JSONDecodeError:
+        start = stdout.find("{")
+        end = stdout.rfind("}")
+        if start < 0 or end < start:
+            raise
+        payload = json.loads(stdout[start : end + 1])
+    if not isinstance(payload, dict):
+        raise ValueError("remote probe output must be a JSON object")
+    return payload
+
+
 def run_remote_probe(args: argparse.Namespace) -> dict[str, Any]:
     source = (
         REMOTE_PROBE.replace("__BASE_URL__", json.dumps(args.base_url))
@@ -253,8 +267,8 @@ def run_remote_probe(args: argparse.Namespace) -> dict[str, Any]:
     if result["returncode"] != 0:
         return {"ok": False, "error": "remote_probe_failed", "ssh": result}
     try:
-        payload = json.loads(result["stdout"])
-    except json.JSONDecodeError as exc:
+        payload = parse_remote_json_output(result["stdout"])
+    except (json.JSONDecodeError, ValueError) as exc:
         return {"ok": False, "error": f"remote_json_decode_failed:{exc}", "ssh": result}
     payload["ok"] = True
     return payload

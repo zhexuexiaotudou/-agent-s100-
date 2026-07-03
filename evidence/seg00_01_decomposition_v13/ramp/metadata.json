@@ -1,0 +1,336 @@
+{
+  "case_id": "ramp",
+  "hf_boundaries": {
+    "token_embedding_output": {
+      "path": "evidence/seg00_01_decomposition_v13/ramp/hf/token_embedding_output.npy",
+      "sha256": "ab8427dd8c6eb1c3efc85e670fb0374941aa8b67f4f61cdc3cd7c802292c8143",
+      "stats": {
+        "shape": [
+          128,
+          3584
+        ],
+        "dtype": "float32",
+        "size": 458752,
+        "min": -0.26953125,
+        "max": 0.87109375,
+        "mean": -3.8177124224603176e-05,
+        "std": 0.014059757813811302,
+        "abs_max": 0.87109375,
+        "nonzero_count": 458752,
+        "allzero": false,
+        "constant": false,
+        "nan_count": 0,
+        "inf_count": 0
+      }
+    },
+    "rotary_cos": {
+      "path": "evidence/seg00_01_decomposition_v13/ramp/hf/rotary_cos.npy",
+      "sha256": "15ea155977158fd9b447f866b700a98ad30ceea1b1bd15e59406e0d8bb1d5101",
+      "stats": {
+        "shape": [
+          128,
+          128
+        ],
+        "dtype": "float32",
+        "size": 16384,
+        "min": -1.0,
+        "max": 1.0,
+        "mean": 0.6725490093231201,
+        "std": 0.5991390347480774,
+        "abs_max": 1.0,
+        "nonzero_count": 16384,
+        "allzero": false,
+        "constant": false,
+        "nan_count": 0,
+        "inf_count": 0
+      }
+    },
+    "rotary_sin": {
+      "path": "evidence/seg00_01_decomposition_v13/ramp/hf/rotary_sin.npy",
+      "sha256": "3aa31d3ea4fa6024ff57964b73ea64978e08a9bfb1176dc9b444f728ecad263b",
+      "stats": {
+        "shape": [
+          128,
+          128
+        ],
+        "dtype": "float32",
+        "size": 16384,
+        "min": -1.0,
+        "max": 1.0,
+        "mean": 0.1139523833990097,
+        "std": 0.4193454682826996,
+        "abs_max": 1.0,
+        "nonzero_count": 16256,
+        "allzero": false,
+        "constant": false,
+        "nan_count": 0,
+        "inf_count": 0
+      }
+    },
+    "layer0_pre_attention_norm_output": {
+      "path": "evidence/seg00_01_decomposition_v13/ramp/hf/layer0_pre_attention_norm_output.npy",
+      "sha256": "fe9a2ffc813cf06a415c4bff0f0a9c6a572e6d8806244fc6f14c59a94676d061",
+      "stats": {
+        "shape": [
+          128,
+          3584
+        ],
+        "dtype": "float32",
+        "size": 458752,
+        "min": -4.4375,
+        "max": 18.0,
+        "mean": -7.058832852635533e-05,
+        "std": 0.23045291006565094,
+        "abs_max": 18.0,
+        "nonzero_count": 458752,
+        "allzero": false,
+        "constant": false,
+        "nan_count": 0,
+        "inf_count": 0
+      }
+    },
+    "layer0_attention_output": {
+      "path": "evidence/seg00_01_decomposition_v13/ramp/hf/layer0_attention_output.npy",
+      "sha256": "2381a01ee6a19feac1dd57d374d3a792ecb7a3b87734dbae44611eb6a5311dcc",
+      "stats": {
+        "shape": [
+          128,
+          3584
+        ],
+        "dtype": "float32",
+        "size": 458752,
+        "min": -1.9375,
+        "max": 1.1171875,
+        "mean": -0.0011417764471843839,
+        "std": 0.08473789691925049,
+        "abs_max": 1.9375,
+        "nonzero_count": 458752,
+        "allzero": false,
+        "constant": false,
+        "nan_count": 0,
+        "inf_count": 0
+      }
+    },
+    "layer0_post_attention_residual": {
+      "path": "evidence/seg00_01_decomposition_v13/ramp/hf/layer0_post_attention_residual.npy",
+      "sha256": "9f7572459a3a759531c33356f977d993eea5d593ceb4849068b1142ceb520234",
+      "stats": {
+        "shape": [
+          128,
+          3584
+        ],
+        "dtype": "float32",
+        "size": 458752,
+        "min": -1.953125,
+        "max": 1.1796875,
+        "mean": -0.0011799102649092674,
+        "std": 0.08655627816915512,
+        "abs_max": 1.953125,
+        "nonzero_count": 458602,
+        "allzero": false,
+        "constant": false,
+        "nan_count": 0,
+        "inf_count": 0
+      }
+    },
+    "layer0_pre_mlp_norm_output": {
+      "path": "evidence/seg00_01_decomposition_v13/ramp/hf/layer0_pre_mlp_norm_output.npy",
+      "sha256": "0d9c8311e1cbf948c6a2a02efb5d30d3ab9f07ccec9cf3758c42e36a571cdf4b",
+      "stats": {
+        "shape": [
+          128,
+          3584
+        ],
+        "dtype": "float32",
+        "size": 458752,
+        "min": -1.734375,
+        "max": 11.0625,
+        "mean": 0.0019223049748688936,
+        "std": 0.2223014384508133,
+        "abs_max": 11.0625,
+        "nonzero_count": 458602,
+        "allzero": false,
+        "constant": false,
+        "nan_count": 0,
+        "inf_count": 0
+      }
+    },
+    "layer0_mlp_output": {
+      "path": "evidence/seg00_01_decomposition_v13/ramp/hf/layer0_mlp_output.npy",
+      "sha256": "f75655abe2aa70b842dddfa48bbf4cef4163fc5f7f27cceb6f3f2af39bf1807e",
+      "stats": {
+        "shape": [
+          128,
+          3584
+        ],
+        "dtype": "float32",
+        "size": 458752,
+        "min": -0.890625,
+        "max": 1.1171875,
+        "mean": 0.000332570489263162,
+        "std": 0.09395841509103775,
+        "abs_max": 1.1171875,
+        "nonzero_count": 458752,
+        "allzero": false,
+        "constant": false,
+        "nan_count": 0,
+        "inf_count": 0
+      }
+    },
+    "layer0_final_output": {
+      "path": "evidence/seg00_01_decomposition_v13/ramp/hf/layer0_final_output.npy",
+      "sha256": "ed821a6f900e3a8f90b5e148f8b6d246921f799218f6fa5787cf38b8c307e9b3",
+      "stats": {
+        "shape": [
+          128,
+          3584
+        ],
+        "dtype": "float32",
+        "size": 458752,
+        "min": -2.4375,
+        "max": 1.53125,
+        "mean": -0.0008476033108308911,
+        "std": 0.1274041384458542,
+        "abs_max": 2.4375,
+        "nonzero_count": 458345,
+        "allzero": false,
+        "constant": false,
+        "nan_count": 0,
+        "inf_count": 0
+      }
+    }
+  },
+  "bpu_variants": [
+    {
+      "variant": "canonical_pos_128",
+      "model_name": "dream_segment_00_01",
+      "hbm_path": "/mnt/nas/openclaw/models/dream7b-hbm/seq128-b1-lmheadq16-lasttoken/seg00_01/dream7b_segment_0_1_seq128_q8.hbm",
+      "hbm_sha256": "d31aac20f491edad44dc4c9d09c0daad05abd1bc3736b4ca06fb294ebbd3c244",
+      "inputs": {
+        "_input_0": {
+          "shape": [
+            1,
+            128
+          ],
+          "dtype": "int32"
+        },
+        "_input_1": {
+          "shape": [
+            128
+          ],
+          "dtype": "int32"
+        }
+      },
+      "quant_metadata": {
+        "available": true,
+        "scale": [
+          6.062494503566995e-05
+        ],
+        "scale_first": 6.062494503566995e-05,
+        "zero_point": [
+          0.0
+        ],
+        "repr": "<hbm_runtime.HB_HBMRuntime.QuantParams object at 0xffff621076b0>"
+      },
+      "raw_stats": {
+        "shape": [
+          128,
+          3584
+        ],
+        "dtype": "int16",
+        "size": 458752,
+        "min": -15087.0,
+        "max": 12264.0,
+        "mean": -9.533342633928571,
+        "std": 836.4288206112308,
+        "abs_max": 15087.0,
+        "nonzero_count": 458457,
+        "allzero": false,
+        "constant": false,
+        "nan_count": 0,
+        "inf_count": 0
+      },
+      "dequant_stats": {
+        "shape": [
+          128,
+          3584
+        ],
+        "dtype": "float32",
+        "size": 458752,
+        "min": -0.9146485328674316,
+        "max": 0.7435043454170227,
+        "mean": -0.0005779584171250463,
+        "std": 0.05070844665169716,
+        "abs_max": 0.9146485328674316,
+        "nonzero_count": 458457,
+        "allzero": false,
+        "constant": false,
+        "nan_count": 0,
+        "inf_count": 0
+      },
+      "status": "pass",
+      "raw_output": {
+        "path": "evidence/seg00_01_decomposition_v13/ramp/bpu/canonical_pos_128/bpu_raw_output.npy",
+        "sha256": "8b42873e5363dc222a0ba46edc4c36667af1308f23c8dfb7d1ec92a7349e246f",
+        "stats": {
+          "shape": [
+            128,
+            3584
+          ],
+          "dtype": "int16",
+          "size": 458752,
+          "min": -15087.0,
+          "max": 12264.0,
+          "mean": -9.533342633928571,
+          "std": 836.4288206112308,
+          "abs_max": 15087.0,
+          "nonzero_count": 458457,
+          "allzero": false,
+          "constant": false,
+          "nan_count": 0,
+          "inf_count": 0
+        }
+      },
+      "dequant_output": {
+        "path": "evidence/seg00_01_decomposition_v13/ramp/bpu/canonical_pos_128/bpu_dequant_output.npy",
+        "sha256": "5979b821f007b443d209da853e9f33c9bbc84456efc1cd6da78e6f9ef2a18de9",
+        "stats": {
+          "shape": [
+            128,
+            3584
+          ],
+          "dtype": "float32",
+          "size": 458752,
+          "min": -0.9146485328674316,
+          "max": 0.7435043454170227,
+          "mean": -0.0005779584171250463,
+          "std": 0.05070844665169716,
+          "abs_max": 0.9146485328674316,
+          "nonzero_count": 458457,
+          "allzero": false,
+          "constant": false,
+          "nan_count": 0,
+          "inf_count": 0
+        }
+      }
+    },
+    {
+      "variant": "position_1x128",
+      "status": "fail",
+      "type": "RuntimeError",
+      "message": "Mismatch in tensor dimensions for model: dream_segment_00_01, input: _input_1, input data ndim = 2, model numDimensions = 1"
+    },
+    {
+      "variant": "token_only",
+      "status": "fail",
+      "type": "RuntimeError",
+      "message": "Data type mismatch for input tensor '_input_1' in model 'dream_segment_00_01': expected numpy dtype format 'i', but received 'd'"
+    },
+    {
+      "variant": "input0_flat_pos_128",
+      "status": "fail",
+      "type": "RuntimeError",
+      "message": "Mismatch in tensor dimensions for model: dream_segment_00_01, input: _input_0, input data ndim = 1, model numDimensions = 2"
+    }
+  ]
+}

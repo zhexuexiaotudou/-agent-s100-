@@ -1,0 +1,222 @@
+{
+  "generated_at": "2026-07-02T23:28:15.864120+08:00",
+  "gate_id": "runtime_trace_completeness_gate",
+  "verdict": "ok_runtime_trace_completeness_gate",
+  "passed_count": 19,
+  "check_count": 19,
+  "failure_count": 0,
+  "failures": [],
+  "checks": [
+    {
+      "label": "trace DB exists",
+      "ok": true,
+      "detail": "reports\\harness_shadow_probe_20260702-232815-136372\\harness_runtime_trace.sqlite3"
+    },
+    {
+      "label": "harness_runs has rows",
+      "ok": true,
+      "detail": 6
+    },
+    {
+      "label": "harness_steps has rows",
+      "ok": true,
+      "detail": 6
+    },
+    {
+      "label": "workspace_decisions has rows",
+      "ok": true,
+      "detail": 6
+    },
+    {
+      "label": "tool_calls has rows",
+      "ok": true,
+      "detail": 16
+    },
+    {
+      "label": "policy_denials has rows",
+      "ok": true,
+      "detail": 7
+    },
+    {
+      "label": "memory_reads has rows",
+      "ok": true,
+      "detail": 6
+    },
+    {
+      "label": "gate_results has rows",
+      "ok": true,
+      "detail": 6
+    },
+    {
+      "label": "six trace runs recorded",
+      "ok": true,
+      "detail": 6
+    },
+    {
+      "label": "nas_search_read_only trace complete",
+      "ok": true,
+      "detail": {
+        "harness_steps": 1,
+        "workspace_decisions": 1,
+        "tool_calls": 2,
+        "memory_reads": 1,
+        "gate_results": 1
+      }
+    },
+    {
+      "label": "nas_denied_acl_search trace complete",
+      "ok": true,
+      "detail": {
+        "harness_steps": 1,
+        "workspace_decisions": 1,
+        "tool_calls": 2,
+        "memory_reads": 1,
+        "gate_results": 1
+      }
+    },
+    {
+      "label": "nas_destructive_action_requires_approval trace complete",
+      "ok": true,
+      "detail": {
+        "harness_steps": 1,
+        "workspace_decisions": 1,
+        "tool_calls": 3,
+        "memory_reads": 1,
+        "gate_results": 1
+      }
+    },
+    {
+      "label": "document_report_generation trace complete",
+      "ok": true,
+      "detail": {
+        "harness_steps": 1,
+        "workspace_decisions": 1,
+        "tool_calls": 3,
+        "memory_reads": 1,
+        "gate_results": 1
+      }
+    },
+    {
+      "label": "web_cloud_research_redacted trace complete",
+      "ok": true,
+      "detail": {
+        "harness_steps": 1,
+        "workspace_decisions": 1,
+        "tool_calls": 3,
+        "memory_reads": 1,
+        "gate_results": 1
+      }
+    },
+    {
+      "label": "ops_health_check trace complete",
+      "ok": true,
+      "detail": {
+        "harness_steps": 1,
+        "workspace_decisions": 1,
+        "tool_calls": 3,
+        "memory_reads": 1,
+        "gate_results": 1
+      }
+    },
+    {
+      "label": "denied calls recorded",
+      "ok": true,
+      "detail": 7
+    },
+    {
+      "label": "policy_denials recorded",
+      "ok": true,
+      "detail": 7
+    },
+    {
+      "label": "all tool call records preserve dispatcher boundary",
+      "ok": true,
+      "detail": 0
+    },
+    {
+      "label": "shadow probe verdict ok",
+      "ok": true,
+      "detail": "ok_harness_shadow_probe"
+    }
+  ],
+  "detail": {
+    "trace_db": "reports\\harness_shadow_probe_20260702-232815-136372\\harness_runtime_trace.sqlite3",
+    "table_counts": {
+      "harness_runs": 6,
+      "harness_steps": 6,
+      "workspace_decisions": 6,
+      "tool_calls": 16,
+      "policy_denials": 7,
+      "memory_reads": 6,
+      "gate_results": 6
+    },
+    "run_details": [
+      {
+        "run_id": "hr-03e3651d0ee744a8",
+        "scenario_id": "nas_search_read_only",
+        "counts": {
+          "harness_steps": 1,
+          "workspace_decisions": 1,
+          "tool_calls": 2,
+          "memory_reads": 1,
+          "gate_results": 1
+        }
+      },
+      {
+        "run_id": "hr-522386eab54a4570",
+        "scenario_id": "nas_denied_acl_search",
+        "counts": {
+          "harness_steps": 1,
+          "workspace_decisions": 1,
+          "tool_calls": 2,
+          "memory_reads": 1,
+          "gate_results": 1
+        }
+      },
+      {
+        "run_id": "hr-2d62e713397b4338",
+        "scenario_id": "nas_destructive_action_requires_approval",
+        "counts": {
+          "harness_steps": 1,
+          "workspace_decisions": 1,
+          "tool_calls": 3,
+          "memory_reads": 1,
+          "gate_results": 1
+        }
+      },
+      {
+        "run_id": "hr-aca0ba67faa94c91",
+        "scenario_id": "document_report_generation",
+        "counts": {
+          "harness_steps": 1,
+          "workspace_decisions": 1,
+          "tool_calls": 3,
+          "memory_reads": 1,
+          "gate_results": 1
+        }
+      },
+      {
+        "run_id": "hr-4c59158e02d9441b",
+        "scenario_id": "web_cloud_research_redacted",
+        "counts": {
+          "harness_steps": 1,
+          "workspace_decisions": 1,
+          "tool_calls": 3,
+          "memory_reads": 1,
+          "gate_results": 1
+        }
+      },
+      {
+        "run_id": "hr-eec2c9420a3449c9",
+        "scenario_id": "ops_health_check",
+        "counts": {
+          "harness_steps": 1,
+          "workspace_decisions": 1,
+          "tool_calls": 3,
+          "memory_reads": 1,
+          "gate_results": 1
+        }
+      }
+    ]
+  }
+}

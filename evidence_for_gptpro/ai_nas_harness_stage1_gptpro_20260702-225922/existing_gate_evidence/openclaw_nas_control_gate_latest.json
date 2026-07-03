@@ -1,0 +1,108 @@
+{
+  "generated_at": "2026-07-02T22:49:44.370696+08:00",
+  "tool_id": "ai_nas_openclaw_nas_control_gate",
+  "verdict": "ok_ai_nas_openclaw_nas_control_gate",
+  "scope": "OpenClaw as a NAS assistant with ordinary chat plus ACL-aware file control tools",
+  "checks": [
+    {
+      "label": "Portal server ready",
+      "ok": true
+    },
+    {
+      "label": "Portal renders NAS action cards",
+      "ok": true
+    },
+    {
+      "label": "Admin login",
+      "ok": true
+    },
+    {
+      "label": "OpenClaw chat lists NAS directory",
+      "ok": true
+    },
+    {
+      "label": "OpenClaw chat renames NAS file",
+      "ok": true
+    },
+    {
+      "label": "OpenClaw chat copies NAS file",
+      "ok": true
+    },
+    {
+      "label": "OpenClaw chat requires confirmation for delete",
+      "ok": true
+    },
+    {
+      "label": "Viewer read-only setup",
+      "ok": true
+    },
+    {
+      "label": "OpenClaw chat respects ACL on copy target",
+      "ok": true
+    },
+    {
+      "label": "Direct storage mutation route respects ACL",
+      "ok": true
+    }
+  ],
+  "passed_count": 10,
+  "check_count": 10,
+  "failures": [],
+  "artifacts": {
+    "base_url": "http://127.0.0.1:50166",
+    "list_action": {
+      "operation": "list",
+      "status": "completed",
+      "entries": [
+        {
+          "name": "control.txt",
+          "relative_path": "Inbox/control.txt",
+          "is_dir": false,
+          "size_bytes": 17,
+          "mtime_ns": 1783003782824090600,
+          "mtime": "2026-07-02T22:49:42.824090+08:00",
+          "extension": ".txt",
+          "mime_type": "text/plain",
+          "download_url": "/api/storage/download?path=Inbox%2Fcontrol.txt"
+        }
+      ]
+    },
+    "rename_action": {
+      "operation": "rename",
+      "status": "completed",
+      "source": "Inbox/control.txt",
+      "target": "Inbox/renamed_control.txt"
+    },
+    "copy_action": {
+      "operation": "copy",
+      "status": "completed",
+      "source": "Inbox/renamed_control.txt",
+      "target": "Documents/copied_control.txt"
+    },
+    "delete_action": {
+      "operation": "delete",
+      "status": "confirmation_required",
+      "path": "Inbox/renamed_control.txt"
+    },
+    "denied_action": {
+      "operation": "copy",
+      "status": "permission_denied",
+      "source": "Photos/car_fixture.jpg",
+      "target": "Documents/copied.jpg"
+    },
+    "denied_api": {
+      "ok": false,
+      "status": 403,
+      "payload": {
+        "ok": false,
+        "error": "permission_denied",
+        "required": "write",
+        "path": "Photos/car_fixture.jpg"
+      }
+    }
+  },
+  "server": {
+    "stdout_tail": "http://127.0.0.1:50166/\n",
+    "stderr_tail": "127.0.0.1 - - [02/Jul/2026 22:49:43] \"GET /api/storage/status HTTP/1.1\" 200 -\n127.0.0.1 - - [02/Jul/2026 22:49:43] \"GET / HTTP/1.1\" 200 -\n127.0.0.1 - - [02/Jul/2026 22:49:43] \"POST /api/identity/create-user HTTP/1.1\" 200 -\n127.0.0.1 - - [02/Jul/2026 22:49:43] \"POST /api/identity/login HTTP/1.1\" 200 -\n127.0.0.1 - - [02/Jul/2026 22:49:43] \"POST /api/copilot/chat HTTP/1.1\" 200 -\n127.0.0.1 - - [02/Jul/2026 22:49:43] \"POST /api/copilot/chat HTTP/1.1\" 200 -\n127.0.0.1 - - [02/Jul/2026 22:49:43] \"POST /api/copilot/chat HTTP/1.1\" 200 -\n127.0.0.1 - - [02/Jul/2026 22:49:43] \"POST /api/copilot/chat HTTP/1.1\" 200 -\n127.0.0.1 - - [02/Jul/2026 22:49:43] \"POST /api/identity/create-user HTTP/1.1\" 200 -\n127.0.0.1 - - [02/Jul/2026 22:49:43] \"POST /api/identity/set-acl HTTP/1.1\" 200 -\n127.0.0.1 - - [02/Jul/2026 22:49:43] \"POST /api/identity/login HTTP/1.1\" 200 -\n127.0.0.1 - - [02/Jul/2026 22:49:43] \"POST /api/copilot/chat HTTP/1.1\" 200 -\n127.0.0.1 - - [02/Jul/2026 22:49:43] \"POST /api/storage/rename HTTP/1.1\" 403 -\n"
+  }
+}

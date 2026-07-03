@@ -1,0 +1,197 @@
+{
+  "case_id": "short_chinese_prompt_padded",
+  "segment": 27,
+  "input_source": {
+    "kind": "hf_layer_output",
+    "path": "/mnt/nas/openclaw/reports/models/dream7b_s100p_v11_execution_20260701/evidence/hf_boundaries_v11/short_chinese_prompt_padded/layer_26_output.npy",
+    "sha256": "6066363216390af6a805aa1abe536dbd66bab1540631b6b8602d93720fc8bc66"
+  },
+  "layout_scale_variant_used": "direct_float32_seq_hidden_or_token_ids",
+  "bpu": {
+    "segment": 27,
+    "model_name": "dream_segment_27_28_last_token_logits",
+    "hbm_path": "/mnt/nas/openclaw/models/dream7b-hbm/seq128-b1-lmheadq16-lasttoken/seg27_28/dream7b_segment_27_28_seq128_q8_lmheadq16_last_token_logits.hbm",
+    "hbm_sha256": "28e1be002e51cf84aa2cbab24cb29587a91f7c42920f92a2a86fe871bd55c19c",
+    "input_contract": {
+      "kind": "hidden_plus_position_ids",
+      "input_0_shape": [
+        128,
+        3584
+      ],
+      "input_0_dtype": "float32",
+      "input_1_shape": [
+        128
+      ],
+      "input_1_dtype": "int32"
+    },
+    "load_seconds": 15.89,
+    "run_seconds": 0.06,
+    "quant_metadata": {
+      "available": true,
+      "scale": [
+        0.00025415877462364733
+      ],
+      "scale_first": 0.00025415877462364733,
+      "zero_point": [
+        0.0
+      ],
+      "repr": "<hbm_runtime.HB_HBMRuntime.QuantParams object at 0xffff78bf47f0>"
+    },
+    "raw_stats": {
+      "shape": [
+        1,
+        152064
+      ],
+      "dtype": "int16",
+      "size": 152064,
+      "min": -12020.0,
+      "max": 23403.0,
+      "mean": 3275.37733454335,
+      "std": 2285.1311244473573,
+      "abs_max": 23403.0,
+      "nonzero_count": 152059,
+      "allzero": false,
+      "constant": false,
+      "nan_count": 0,
+      "inf_count": 0
+    },
+    "dequant_stats": {
+      "shape": [
+        1,
+        152064
+      ],
+      "dtype": "float32",
+      "size": 152064,
+      "min": -3.054988384246826,
+      "max": 5.94807767868042,
+      "mean": 0.8324658274650574,
+      "std": 0.5807861089706421,
+      "abs_max": 5.94807767868042,
+      "nonzero_count": 152059,
+      "allzero": false,
+      "constant": false,
+      "nan_count": 0,
+      "inf_count": 0
+    }
+  },
+  "raw_output": {
+    "path": "evidence/single_segment_substitution_v12r/short_chinese_prompt_padded/seg_27/bpu_raw_output.npy",
+    "sha256": "8da2a67c0fdb2e866e35f9b3ce55da7dd38deab9265393d21ac3b760f3edb63c",
+    "stats": {
+      "shape": [
+        1,
+        152064
+      ],
+      "dtype": "int16",
+      "size": 152064,
+      "min": -12020.0,
+      "max": 23403.0,
+      "mean": 3275.37733454335,
+      "std": 2285.1311244473573,
+      "abs_max": 23403.0,
+      "nonzero_count": 152059,
+      "allzero": false,
+      "constant": false,
+      "nan_count": 0,
+      "inf_count": 0
+    }
+  },
+  "dequant_output": {
+    "path": "evidence/single_segment_substitution_v12r/short_chinese_prompt_padded/seg_27/bpu_dequant_output.npy",
+    "sha256": "df259f55d9898e670641ee3f8609fbfdcc27a8ccbde34843c14bdb848d633376",
+    "stats": {
+      "shape": [
+        1,
+        152064
+      ],
+      "dtype": "float32",
+      "size": 152064,
+      "min": -3.054988384246826,
+      "max": 5.94807767868042,
+      "mean": 0.8324658274650574,
+      "std": 0.5807861089706421,
+      "abs_max": 5.94807767868042,
+      "nonzero_count": 152059,
+      "allzero": false,
+      "constant": false,
+      "nan_count": 0,
+      "inf_count": 0
+    }
+  },
+  "suffix": {
+    "kind": "bpu_final_segment_logits",
+    "hf_suffix_layers": []
+  },
+  "logits": {
+    "path": "evidence/single_segment_substitution_v12r/short_chinese_prompt_padded/seg_27/substitution_logits.npy",
+    "sha256": "2535bddf34bdaa66f6194571e12699cd1341be83468bb8a327840322b714b393",
+    "stats": {
+      "shape": [
+        152064
+      ],
+      "dtype": "float32",
+      "size": 152064,
+      "min": -3.054988384246826,
+      "max": 5.94807767868042,
+      "mean": 0.8324658274650574,
+      "std": 0.5807861089706421,
+      "abs_max": 5.94807767868042,
+      "nonzero_count": 152059,
+      "allzero": false,
+      "constant": false,
+      "nan_count": 0,
+      "inf_count": 0
+    }
+  },
+  "final_metrics": {
+    "shape_match": true,
+    "reference_top1": 151643,
+    "candidate_top1": 151643,
+    "top1_agreement": true,
+    "reference_top1_in_candidate_top5": true,
+    "top5_overlap": 1,
+    "cosine": -0.8100184782285628,
+    "pearson_centered": -0.06462736284388162,
+    "relative_l2": 1.0925812686037368,
+    "max_abs_error": 14.01931357383728,
+    "mean_abs_error": 9.710076031967516,
+    "candidate_normalized_entropy": 0.9808952373490928,
+    "candidate_stats": {
+      "shape": [
+        152064
+      ],
+      "dtype": "float32",
+      "size": 152064,
+      "min": -3.054988384246826,
+      "max": 5.94807767868042,
+      "mean": 0.8324658274650574,
+      "std": 0.5807861089706421,
+      "abs_max": 5.94807767868042,
+      "nonzero_count": 152059,
+      "allzero": false,
+      "constant": false,
+      "nan_count": 0,
+      "inf_count": 0
+    },
+    "reference_stats": {
+      "shape": [
+        152064
+      ],
+      "dtype": "float32",
+      "size": 152064,
+      "min": -12.5,
+      "max": 9.125,
+      "mean": -8.877497673034668,
+      "std": 1.8784396648406982,
+      "abs_max": 12.5,
+      "nonzero_count": 152064,
+      "allzero": false,
+      "constant": false,
+      "nan_count": 0,
+      "inf_count": 0
+    }
+  },
+  "boundary_metrics": null,
+  "elapsed_seconds": 32.047,
+  "status": "pass"
+}

@@ -1,0 +1,19 @@
+{
+  "version": 1,
+  "description": "Copy to /root/.openclaw/workspace/config/dream7b_deployment.json after the Dream 7B model files are mounted or installed locally. The smoke probe never downloads models or starts a persistent server.",
+  "model": {
+    "path": "/mnt/nas/openclaw/models/dream7b",
+    "format": "auto",
+    "runtime": "auto"
+  },
+  "smoke_test": {
+    "prompt": "Respond with exactly: OK",
+    "max_new_tokens": 16,
+    "timeout_seconds": 120
+  },
+  "operator": {
+    "name": "",
+    "confirmed_at": "",
+    "notes": "Keep model path under /mnt/nas/openclaw/models, /root/.openclaw/workspace/models, or /home/sunrise/models."
+  }
+}

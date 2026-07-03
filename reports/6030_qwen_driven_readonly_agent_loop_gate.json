@@ -1,0 +1,27 @@
+{
+  "generated_at": "2026-07-03T13:01:48.051977+08:00",
+  "gate_id": "stage2_7_qwen_driven_readonly_agent_loop_gate",
+  "verdict": "failed_stage2_7_qwen_driven_readonly_agent_loop_gate",
+  "passed_count": 0,
+  "check_count": 1,
+  "failure_count": 1,
+  "failures": [
+    "6020 prerequisite passed"
+  ],
+  "checks": [
+    {
+      "label": "6020 prerequisite passed",
+      "ok": false,
+      "detail": [
+        "parsed_json_ok_rate >= 0.95",
+        "schema_valid_rate >= 0.95",
+        "workspace_policy_match_rate >= 0.95",
+        "tool_policy_match_rate >= 0.95"
+      ]
+    }
+  ],
+  "detail": {
+    "skipped": true,
+    "reason": "6020 structured contract failed"
+  }
+}

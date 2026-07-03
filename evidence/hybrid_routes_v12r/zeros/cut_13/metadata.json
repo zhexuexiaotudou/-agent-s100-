@@ -1,0 +1,163 @@
+{
+  "case_id": "zeros",
+  "cut": 13,
+  "route": "BPU segments 0..13 then HF/PyTorch CPU suffix 14..27 + final norm + lm_head",
+  "input_boundary": {
+    "path": "evidence/bpu_boundaries_v12r/zeros/seg_13_output.npy",
+    "sha256": "6c4d6c9d065e29b32bd531726a3d4717b986d1f86a104848db01ff51e984ebbf",
+    "stats": {
+      "shape": [
+        128,
+        3584
+      ],
+      "dtype": "float32",
+      "size": 458752,
+      "min": -5.40559720993042,
+      "max": 5.405432224273682,
+      "mean": -0.019693713635206223,
+      "std": 3.7647531032562256,
+      "abs_max": 5.40559720993042,
+      "nonzero_count": 458741,
+      "allzero": false,
+      "constant": false,
+      "nan_count": 0,
+      "inf_count": 0
+    }
+  },
+  "hf_suffix_layers": [
+    14,
+    15,
+    16,
+    17,
+    18,
+    19,
+    20,
+    21,
+    22,
+    23,
+    24,
+    25,
+    26,
+    27
+  ],
+  "logits": {
+    "path": "evidence/hybrid_routes_v12r/zeros/cut_13/hybrid_logits.npy",
+    "sha256": "032e0b1f5e7ab014a4bbe4787e47f411c490e99886ad90d02de434db3504a59d",
+    "stats": {
+      "shape": [
+        152064
+      ],
+      "dtype": "float32",
+      "size": 152064,
+      "min": -7.28125,
+      "max": 7.1875,
+      "mean": -0.02980058826506138,
+      "std": 1.1122714281082153,
+      "abs_max": 7.28125,
+      "nonzero_count": 152064,
+      "allzero": false,
+      "constant": false,
+      "nan_count": 0,
+      "inf_count": 0
+    }
+  },
+  "final_metrics": {
+    "shape_match": true,
+    "reference_top1": 220,
+    "candidate_top1": 54975,
+    "top1_agreement": false,
+    "reference_top1_in_candidate_top5": false,
+    "top5_overlap": 0,
+    "cosine": 0.08624558764480429,
+    "pearson_centered": 0.3476812074184938,
+    "relative_l2": 0.9964925990517028,
+    "max_abs_error": 17.34375,
+    "mean_abs_error": 10.203321813240409,
+    "candidate_normalized_entropy": 0.90882342439914,
+    "candidate_stats": {
+      "shape": [
+        152064
+      ],
+      "dtype": "float32",
+      "size": 152064,
+      "min": -7.28125,
+      "max": 7.1875,
+      "mean": -0.02980058826506138,
+      "std": 1.1122714281082153,
+      "abs_max": 7.28125,
+      "nonzero_count": 152064,
+      "allzero": false,
+      "constant": false,
+      "nan_count": 0,
+      "inf_count": 0
+    },
+    "reference_stats": {
+      "shape": [
+        152064
+      ],
+      "dtype": "float32",
+      "size": 152064,
+      "min": -14.25,
+      "max": 1.75,
+      "mean": -10.231769561767578,
+      "std": 1.7890510559082031,
+      "abs_max": 14.25,
+      "nonzero_count": 152064,
+      "allzero": false,
+      "constant": false,
+      "nan_count": 0,
+      "inf_count": 0
+    }
+  },
+  "boundary_metrics": {
+    "shape_match": true,
+    "reference_top1": 163998,
+    "candidate_top1": 391394,
+    "top1_agreement": false,
+    "reference_top1_in_candidate_top5": false,
+    "top5_overlap": 0,
+    "cosine": 0.020003990716607644,
+    "pearson_centered": 0.01992258854332256,
+    "relative_l2": 1.739916762653863,
+    "max_abs_error": 123.59440279006958,
+    "mean_abs_error": 3.481466169395413,
+    "candidate_normalized_entropy": 0.8995789464187537,
+    "candidate_stats": {
+      "shape": [
+        458752
+      ],
+      "dtype": "float32",
+      "size": 458752,
+      "min": -5.40559720993042,
+      "max": 5.405432224273682,
+      "mean": -0.019693713635206223,
+      "std": 3.7647531032562256,
+      "abs_max": 5.40559720993042,
+      "nonzero_count": 458741,
+      "allzero": false,
+      "constant": false,
+      "nan_count": 0,
+      "inf_count": 0
+    },
+    "reference_stats": {
+      "shape": [
+        458752
+      ],
+      "dtype": "float32",
+      "size": 458752,
+      "min": -129.0,
+      "max": 29.0,
+      "mean": -0.041996657848358154,
+      "std": 2.606901168823242,
+      "abs_max": 129.0,
+      "nonzero_count": 458351,
+      "allzero": false,
+      "constant": false,
+      "nan_count": 0,
+      "inf_count": 0
+    }
+  },
+  "layout_scale_variant_used": "existing_full_chain_bpu_dequant_boundary_direct_float32_seq_hidden",
+  "elapsed_seconds": 558.131,
+  "status": "pass"
+}

@@ -1,0 +1,110 @@
+{
+  "variant_id": "real_x_z_normalized",
+  "why_included": "z-normalized real seg26 hidden",
+  "input_path": "/mnt/nas/openclaw/reports/models/dream7b_s100p_v5_execution_20260701/evidence/final_segment_dense_sweep_v5/ramp/real_x_z_normalized/input.npy",
+  "raw_output_path": "/mnt/nas/openclaw/reports/models/dream7b_s100p_v5_execution_20260701/evidence/final_segment_dense_sweep_v5/ramp/real_x_z_normalized/raw_output.npy",
+  "dequant_logits_path": "/mnt/nas/openclaw/reports/models/dream7b_s100p_v5_execution_20260701/evidence/final_segment_dense_sweep_v5/ramp/real_x_z_normalized/dequant_logits.npy",
+  "metadata_path": "/mnt/nas/openclaw/reports/models/dream7b_s100p_v5_execution_20260701/evidence/final_segment_dense_sweep_v5/ramp/real_x_z_normalized/metadata.json",
+  "input_stats": {
+    "shape": [
+      128,
+      3584
+    ],
+    "dtype": "float32",
+    "size": 458752,
+    "min": -1.0163111686706543,
+    "max": 1.0055445432662964,
+    "mean": 4.9168843219149494e-08,
+    "std": 1.0000001192092896,
+    "abs_max": 1.0163111686706543,
+    "nonzero_count": 458752,
+    "allzero": false,
+    "constant": false,
+    "nan_count": 0,
+    "inf_count": 0
+  },
+  "run_status": "pass",
+  "runtime_exception": null,
+  "raw_output_stats": {
+    "shape": [
+      1,
+      152064
+    ],
+    "dtype": "int16",
+    "size": 152064,
+    "min": -13243.0,
+    "max": 9450.0,
+    "mean": -2999.9810869107746,
+    "std": 1739.4205806411192,
+    "abs_max": 13243.0,
+    "nonzero_count": 152060,
+    "allzero": false,
+    "constant": false,
+    "nan_count": 0,
+    "inf_count": 0
+  },
+  "dequant_output_stats": {
+    "shape": [
+      152064
+    ],
+    "dtype": "float32",
+    "size": 152064,
+    "min": -13243.0,
+    "max": 9450.0,
+    "mean": -2999.98095703125,
+    "std": 1739.42041015625,
+    "abs_max": 13243.0,
+    "nonzero_count": 152060,
+    "allzero": false,
+    "constant": false,
+    "nan_count": 0,
+    "inf_count": 0
+  },
+  "softmax": {
+    "entropy": 5.1387267733824605e-239,
+    "normalized_entropy": 4.30665632513112e-240,
+    "top1_probability": 1.0
+  },
+  "top10_logits": [
+    {
+      "token": 54462,
+      "logit": 9450.0
+    },
+    {
+      "token": 49752,
+      "logit": 8895.0
+    },
+    {
+      "token": 66906,
+      "logit": 8840.0
+    },
+    {
+      "token": 51735,
+      "logit": 8821.0
+    },
+    {
+      "token": 58113,
+      "logit": 8783.0
+    },
+    {
+      "token": 62815,
+      "logit": 8553.0
+    },
+    {
+      "token": 51757,
+      "logit": 8443.0
+    },
+    {
+      "token": 88414,
+      "logit": 8365.0
+    },
+    {
+      "token": 59881,
+      "logit": 8126.0
+    },
+    {
+      "token": 25506,
+      "logit": 8016.0
+    }
+  ]
+}

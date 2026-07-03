@@ -1,0 +1,57 @@
+{
+  "schema_version": "dream7b_s100p_v15_1660_corrected_seg00_01_candidate",
+  "created_at_utc": "2026-07-03T09:13:08.706993+00:00",
+  "run_commands": [
+    "C:\\Users\\zhexu\\AppData\\Local\\Python\\pythoncore-3.14-64\\python.exe tools\\build_v15_research_thread.py --root ."
+  ],
+  "host_environment": {
+    "local_platform": "Windows-11-10.0.26200-SP0",
+    "python": "3.14.3 (tags/v3.14.3:323c59a, Feb  3 2026, 16:04:56) [MSC v.1944 64 bit (AMD64)]"
+  },
+  "git": {
+    "returncode": 128,
+    "stdout": "",
+    "stderr": "fatal: not a git repository (or any of the parent directories): .git"
+  },
+  "input_artifacts": [
+    {
+      "path": "reports/1610_seg00_01_compiler_source_graph_acquisition.json",
+      "exists": true,
+      "size_bytes": 24776,
+      "sha256": "2ef8f51a6dffa6bbc8bf9ea8cd3ff727eed3815f8c3dedc5258a70baff59f1c5"
+    },
+    {
+      "path": "reports/1630_gathernd_official_quant_scale_closure.json",
+      "exists": true,
+      "size_bytes": 3679,
+      "sha256": "e803b764d6f9a89efeffb37099231072f69e1a2a9bb6d513e769f4c6160e0afe"
+    }
+  ],
+  "output_artifacts": [
+    {
+      "path": "reports/1660_corrected_seg00_01_candidate.json",
+      "exists": true,
+      "size_bytes": 1697,
+      "sha256": "a3189715e491726c28e30f575d64130ca16323504c130f2177f320109ae1d286"
+    },
+    {
+      "path": "reports/1660_corrected_seg00_01_candidate.md",
+      "exists": true,
+      "size_bytes": 262,
+      "sha256": "0a9980a62674ec9676083bdc1774bf1fb3dbbd4fb59e0a9cfbd219647a1ff910"
+    }
+  ],
+  "blocking_or_failure_reasons": [
+    "A corrected seg00_01 candidate would require official scale/zero point, position formula, source graph, or compiler support; none was available."
+  ],
+  "next_minimal_experiments": [],
+  "safety": {
+    "generation_quality_run": false,
+    "product_routes_18888_18889_touched": false,
+    "dream7b_frontend_openclaw_traffic_touched": false
+  },
+  "verdict": "not_run_no_justified_correction",
+  "trigger_condition_met": false,
+  "executed_candidates": [],
+  "evidence_root": "evidence/corrected_seg00_01_candidate_v15"
+}

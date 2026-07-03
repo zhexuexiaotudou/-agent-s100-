@@ -1,0 +1,54 @@
+
+A module that was compiled using NumPy 1.x cannot be run in
+NumPy 2.2.6 as it may crash. To support both 1.x and 2.x
+versions of NumPy, modules must be compiled with NumPy 2.0.
+Some module may need to rebuild instead e.g. with 'pybind11>=2.12'.
+
+If you are a user of the module, the easiest solution will be to
+downgrade to 'numpy<2' or try to upgrade the affected module.
+We expect that some modules will need time to support NumPy 2.
+
+Traceback (most recent call last):  File "/mnt/nas/openclaw/reports/models/dream7b_s100p_v12r_execution_20260702/tools/run_v12r_remote_reconstruction.py", line 457, in <module>
+    raise SystemExit(main())
+  File "/mnt/nas/openclaw/reports/models/dream7b_s100p_v12r_execution_20260702/tools/run_v12r_remote_reconstruction.py", line 294, in main
+    import torch
+  File "/mnt/nas/openclaw/reports/models/dream7b_s100p_v8_execution_20260701/pydeps_modern/torch/__init__.py", line 1477, in <module>
+    from .functional import *  # noqa: F403
+  File "/mnt/nas/openclaw/reports/models/dream7b_s100p_v8_execution_20260701/pydeps_modern/torch/functional.py", line 9, in <module>
+    import torch.nn.functional as F
+  File "/mnt/nas/openclaw/reports/models/dream7b_s100p_v8_execution_20260701/pydeps_modern/torch/nn/__init__.py", line 1, in <module>
+    from .modules import *  # noqa: F403
+  File "/mnt/nas/openclaw/reports/models/dream7b_s100p_v8_execution_20260701/pydeps_modern/torch/nn/modules/__init__.py", line 35, in <module>
+    from .transformer import TransformerEncoder, TransformerDecoder, \
+  File "/mnt/nas/openclaw/reports/models/dream7b_s100p_v8_execution_20260701/pydeps_modern/torch/nn/modules/transformer.py", line 20, in <module>
+    device: torch.device = torch.device(torch._C._get_default_device()),  # torch.device('cpu'),
+/mnt/nas/openclaw/reports/models/dream7b_s100p_v8_execution_20260701/pydeps_modern/torch/nn/modules/transformer.py:20: UserWarning: Failed to initialize NumPy: 
+A module that was compiled using NumPy 1.x cannot be run in
+NumPy 2.2.6 as it may crash. To support both 1.x and 2.x
+versions of NumPy, modules must be compiled with NumPy 2.0.
+Some module may need to rebuild instead e.g. with 'pybind11>=2.12'.
+
+If you are a user of the module, the easiest solution will be to
+downgrade to 'numpy<2' or try to upgrade the affected module.
+We expect that some modules will need time to support NumPy 2.
+
+ (Triggered internally at /pytorch/torch/csrc/utils/tensor_numpy.cpp:84.)
+  device: torch.device = torch.device(torch._C._get_default_device()),  # torch.device('cpu'),
+[v12r] loading HF model dtype=bfloat16
+Loading checkpoint shards:   0%|          | 0/4 [00:00<?, ?it/s]Loading checkpoint shards:  25%|██▌       | 1/4 [00:00<00:00,  7.57it/s]Loading checkpoint shards:  75%|███████▌  | 3/4 [00:00<00:00,  9.58it/s]Loading checkpoint shards: 100%|██████████| 4/4 [00:00<00:00, 10.19it/s]
+/mnt/nas/openclaw/reports/models/dream7b_s100p_v8_execution_20260701/pydeps_modern/transformers/generation/configuration_utils.py:590: UserWarning: `do_sample` is set to `False`. However, `temperature` is set to `0.0` -- this flag is only used in sample-based generation modes. You should set `do_sample=True` or unset `temperature`. This was detected when initializing the generation config instance, which means the corresponding file may hold incorrect parameterization and should be fixed.
+  warnings.warn(
+/mnt/nas/openclaw/reports/models/dream7b_s100p_v8_execution_20260701/pydeps_modern/transformers/generation/configuration_utils.py:590: UserWarning: `do_sample` is set to `False`. However, `temperature` is set to `0.0` -- this flag is only used in sample-based generation modes. You should set `do_sample=True` or unset `temperature`.
+  warnings.warn(
+[v12r] skip existing single case=zeros seg=27
+[v12r] single case=ramp seg=27
+[UCP]: log level = 3
+[UCP]: UCP version = 3.13.6
+[VP]: log level = 3
+[DNN]: log level = 3
+[HPL]: log level = 3
+[UCPT]: log level = 6
+[BPU][[BPU_MONITOR]][281473835796160][INFO]BPULib verison(2, 2, 15)[f21ee84]!
+[DNN]: 3.13.6_(4.7.5 HBRT)
+[v12r] single case=short_chinese_prompt_padded seg=27
+reports/1030_1040_v12r_remote_reconstruction.json

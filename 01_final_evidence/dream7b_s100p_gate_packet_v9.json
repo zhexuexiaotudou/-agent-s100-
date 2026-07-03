@@ -1,0 +1,90 @@
+{
+  "schema_version": "dream7b_s100p_v9_760_build_gate_packet_v9",
+  "created_at_utc": "2026-07-01T12:03:43.538124+00:00",
+  "run_commands": [
+    "C:\\Users\\zhexu\\AppData\\Local\\Python\\pythoncore-3.14-64\\python.exe tools\\build_v9_research_thread.py --root . --exact-source evidence\\s100p_remote_v9_hf_isolated_final_segment_v8"
+  ],
+  "git": {
+    "cwd": "F:\\Project\\Digua",
+    "status": "unavailable:CalledProcessError"
+  },
+  "input_artifacts": [],
+  "output_artifacts": [
+    {
+      "path": "reports/760_build_gate_packet_v9.json"
+    },
+    {
+      "path": "reports/760_build_gate_packet_v9.md"
+    }
+  ],
+  "blocking_or_failure_reasons": [],
+  "next_minimal_experiments": [],
+  "verdict_class": "F_exact_final_segment_contract_falsified_on_same_input",
+  "verdict": "For the unmodified BPU seg26 hidden input (real_x) in all three prompt cases, S100P seg27_28 official-dequant logits are all-zero, while the exact HF layer27 + final norm + lm_head boundary produces nonzero/nonconstant logits for the same inputs. Across the 42-row sweep, top-1 agreement is 0/42, 15/42 rows are all-zero/constant against nonconstant HF references, and 36/42 rows have relative L2 > 0.9. This falsifies the final-segment contract on same input. Full deployment logits validity remains unproven without a full truth row.",
+  "gate_status": {
+    "G0_safety_generation_quality_not_run": "pass",
+    "G0_safety_product_routes_18888_18889_untouched": "pass",
+    "G1_raw_endpoint_packaging": "pass",
+    "G2_exact_hf_layer27_final_boundary": "pass",
+    "G3_full_truth_reference_row": "blocked",
+    "G4_exact_final_same_input_comparison": "fail_final_segment_contract",
+    "G5_upstream_hidden_validity_vs_full_truth": "blocked",
+    "G6_evidence_packaging": "evaluated_by_task_770_manifest_and_zip_checks"
+  },
+  "compile_runtime_inherited_status": {
+    "segmented_hbm_runtime": "inherited from v5-v8 endpoint runs; not rerun through product routes",
+    "generation_quality": "not run",
+    "product_routes_18888_18889": "not enabled, not modified, not tested"
+  },
+  "evidence_integrity_summary": {
+    "final_endpoint_rows_packaged": 42,
+    "exact_hf_rows_available": 42,
+    "exact_comparison_rows": 42,
+    "full_truth_available": false
+  },
+  "full_truth_availability": {
+    "available": false,
+    "blocked_reason": "S100P full HF forward reached model-load stage in v8 isolated modern runtime but produced no logits before the evidence-run timeout; no GGUF F16 artifact/tool was found locally or on NAS during prior inventory.",
+    "truth_row_type": null
+  },
+  "exact_final_segment_comparison_summary": {
+    "boundary": "HF Dream decoder layer 27 -> final RMSNorm -> lm_head",
+    "same_input_rows": 42,
+    "allzero_candidate_nonconstant_reference_rows": 15,
+    "real_x_allzero_candidate_nonconstant_reference_rows": 3,
+    "top1_mismatch_rows": 42,
+    "high_relative_l2_gt_0p9_rows": 36,
+    "top1_agreement_rows": 0,
+    "tie_aware_note": "Candidate all-zero rows must be treated as full-vocabulary max ties, not as meaningful top-1 agreement. Relative L2 and constant/allzero status carry the final-segment contract decision."
+  },
+  "upstream_hidden_validity_summary": "Without a full BF16/FP32 or GGUF F16 truth row, BPU seg26 hidden correctness versus full-model hidden is not testable. The same-input exact final test does show the hidden endpoint is not by itself forcing all-zero logits.",
+  "numerical_logits_gate_summary": {
+    "validated": false,
+    "falsified_scope": "same-input final-segment contract",
+    "not_validated_scope": "full Dream7B seq128 segmented HBM logits versus full BF16/FP32 or GGUF F16 truth"
+  },
+  "allowed_paper_claims": [
+    "For the unmodified real_x endpoint inputs in all three prompt cases, the S100P seg27_28 official-dequant output does not implement the HF layer27 + final norm + lm_head boundary.",
+    "Across the 42-row final-segment sweep, top-1 agreement is 0/42; 15/42 rows are all-zero/constant against nonconstant HF references in this run.",
+    "The same BPU seg26 endpoint hidden produces nonzero/nonconstant logits through the exact HF final boundary.",
+    "Full Dream7B seq128 segmented HBM logits validity on S100P is not established because the full truth row is unavailable."
+  ],
+  "forbidden_claims": [
+    "Do not claim generation quality or product-route behavior.",
+    "Do not claim full Dream7B deployment logits are numerically valid.",
+    "Do not claim full Dream7B deployment logits are falsified against BF16/FP32 truth without the missing truth row.",
+    "Do not claim 18888/18889 routes were enabled, tested, or modified."
+  ],
+  "next_minimal_experiment": [
+    "Produce a full BF16/FP32 or GGUF F16 truth row for zeros, ramp, and short_chinese_prompt_padded.",
+    "If full truth remains too slow on S100P, export the exact needed truth logits on a GPU/CPU host with enough RAM, then rerun task 740."
+  ],
+  "source_reports": {
+    "700": "reports/700_package_final_endpoint_raw_evidence.json",
+    "710": "reports/710_export_exact_hf_layer27_final.json",
+    "720": "reports/720_export_full_truth_reference.json",
+    "730": "reports/730_recompare_exact_final_segment.json",
+    "740": "reports/740_upstream_hidden_validity_audit.json",
+    "750": "reports/750_tie_aware_verdict_metrics.json"
+  }
+}

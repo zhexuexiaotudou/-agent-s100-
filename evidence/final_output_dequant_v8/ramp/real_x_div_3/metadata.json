@@ -1,0 +1,102 @@
+{
+  "case_id": "ramp",
+  "variant": "real_x_div_3",
+  "scale": 0.00025415877462364733,
+  "zero_point": 0.0,
+  "raw_path": "evidence/raw_endpoint_subset_v6/final_segment_dense_sweep_v5/ramp/real_x_div_3/raw_output.npy",
+  "official_dequant_path": "evidence/final_output_dequant_v8/ramp/real_x_div_3/official_dequant_logits.npy",
+  "official_dequant_sha256": "9cbf203408b6441c76920997f66ac6b10c3972fd078c052a46a0fc695a1e3015",
+  "raw_stats": {
+    "shape": [
+      152064
+    ],
+    "dtype": "int16",
+    "size": 152064,
+    "min": -22934.0,
+    "max": 24652.0,
+    "mean": -48.22696364688552,
+    "std": 3504.3364668510676,
+    "abs_max": 24652.0,
+    "nonzero_count": 152043,
+    "allzero": false,
+    "constant": false,
+    "count_pos_32767": 0,
+    "count_neg_32768": 0,
+    "frac_pos_32767": 0.0,
+    "frac_neg_32768": 0.0
+  },
+  "official_dequant_stats": {
+    "shape": [
+      152064
+    ],
+    "dtype": "float32",
+    "size": 152064,
+    "min": -5.8288774490356445,
+    "max": 6.265522003173828,
+    "mean": -0.012257309630513191,
+    "std": 0.8906578421592712,
+    "abs_max": 6.265522003173828,
+    "nonzero_count": 152043,
+    "allzero": false,
+    "constant": false
+  },
+  "hf_final_head_path": "evidence/hf_lmhead_only_v8/ramp/real_x_div_3/hf_final_lmhead_logits.npy",
+  "metrics_vs_hf_final_head": {
+    "candidate_top1": 61183,
+    "reference_top1": 61183,
+    "top1_agreement": true,
+    "top5_overlap": 2,
+    "reference_top1_in_candidate_top5": true,
+    "candidate_max_tie_count": 1,
+    "reference_top1_in_candidate_max_tie_set": true,
+    "rank_interval_for_reference_top1_under_ties": [
+      1,
+      1
+    ],
+    "cosine": 0.6575555062427875,
+    "pearson_centered": 0.8883006153643298,
+    "relative_l2": 0.7545835474951561,
+    "mean_abs_error": 1.0134590469914324,
+    "max_abs_error": 4.108711242675781,
+    "candidate_stats": {
+      "shape": [
+        152064
+      ],
+      "dtype": "float32",
+      "size": 152064,
+      "min": -5.8288774490356445,
+      "max": 6.265522003173828,
+      "mean": -0.012257309630513191,
+      "std": 0.8906578421592712,
+      "abs_max": 6.265522003173828,
+      "nonzero_count": 152043,
+      "allzero": false,
+      "constant": false
+    },
+    "reference_stats": {
+      "shape": [
+        152064
+      ],
+      "dtype": "float32",
+      "size": 152064,
+      "min": -6.209233283996582,
+      "max": 7.666618347167969,
+      "mean": 0.9564507007598877,
+      "std": 1.086326003074646,
+      "abs_max": 7.666618347167969,
+      "nonzero_count": 152064,
+      "allzero": false,
+      "constant": false
+    },
+    "candidate_entropy": {
+      "entropy": 11.329797264128363,
+      "normalized_entropy": 0.9495259273708054,
+      "top1_probability": 0.002236322959824556
+    },
+    "reference_entropy": {
+      "entropy": 11.244678644072113,
+      "normalized_entropy": 0.9423923189962472,
+      "top1_probability": 0.003089684360421334
+    }
+  }
+}

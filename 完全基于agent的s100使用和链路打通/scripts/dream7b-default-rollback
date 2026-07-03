@@ -1,0 +1,51 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+report_root="${DREAM7B_DEFAULT_ROLLBACK_REPORT_ROOT:-/mnt/nas/openclaw/reports/models}"
+service_name="${DREAM7B_DEFAULT_ROLLBACK_SERVICE_NAME:-dream7b-bpu-batch-queue.service}"
+dry_run="${DREAM7B_DEFAULT_ROLLBACK_DRY_RUN:-0}"
+
+if [[ "$(id -u)" != "0" ]]; then
+  exec sudo DREAM7B_DEFAULT_ROLLBACK_REPORT_ROOT="$report_root" \
+    DREAM7B_DEFAULT_ROLLBACK_SERVICE_NAME="$service_name" \
+    DREAM7B_DEFAULT_ROLLBACK_DRY_RUN="$dry_run" "$0" "$@"
+fi
+
+promotion_json="$(find "$report_root" -path '*/dream7b_bpu_segment_major_default_promotion_*/segment_major_default_promotion_probe.json' -type f -printf '%T@ %p\n' 2>/dev/null | sort -n | tail -1 | cut -d' ' -f2-)"
+if [[ -z "$promotion_json" || ! -f "$promotion_json" ]]; then
+  echo "No segment-major default promotion report found under $report_root" >&2
+  exit 2
+fi
+
+original_unit="$(python3 - "$promotion_json" <<'PY'
+import json
+import sys
+from pathlib import Path
+path = Path(sys.argv[1])
+payload = json.loads(path.read_text(encoding="utf-8"))
+print(payload.get("original_unit_backup") or "")
+PY
+)"
+
+if [[ -z "$original_unit" || ! -f "$original_unit" ]]; then
+  echo "Promotion report does not point to a readable original unit backup: $promotion_json" >&2
+  exit 3
+fi
+
+target="/etc/systemd/system/$service_name"
+echo "promotion_json=$promotion_json"
+echo "restore_from=$original_unit"
+echo "restore_to=$target"
+
+if [[ "$dry_run" == "1" ]]; then
+  echo "dry_run=1; no changes applied"
+  exit 0
+fi
+
+cp "$original_unit" "$target"
+systemctl daemon-reload
+systemctl enable "$service_name" >/dev/null
+systemctl restart "$service_name"
+systemctl is-active "$service_name"
+systemctl is-enabled "$service_name"
+systemctl show "$service_name" -p ExecStart --value

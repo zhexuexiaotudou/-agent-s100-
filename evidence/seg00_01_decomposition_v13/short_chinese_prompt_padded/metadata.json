@@ -1,0 +1,336 @@
+{
+  "case_id": "short_chinese_prompt_padded",
+  "hf_boundaries": {
+    "token_embedding_output": {
+      "path": "evidence/seg00_01_decomposition_v13/short_chinese_prompt_padded/hf/token_embedding_output.npy",
+      "sha256": "a9afb6ecdd35a32870ac10fd1f7df4c3024cbaadb2dc8ecaa8bc4d89a72a6c35",
+      "stats": {
+        "shape": [
+          128,
+          3584
+        ],
+        "dtype": "float32",
+        "size": 458752,
+        "min": -0.234375,
+        "max": 0.48828125,
+        "mean": -2.8683616619673558e-05,
+        "std": 0.014238351956009865,
+        "abs_max": 0.48828125,
+        "nonzero_count": 458752,
+        "allzero": false,
+        "constant": false,
+        "nan_count": 0,
+        "inf_count": 0
+      }
+    },
+    "rotary_cos": {
+      "path": "evidence/seg00_01_decomposition_v13/short_chinese_prompt_padded/hf/rotary_cos.npy",
+      "sha256": "15ea155977158fd9b447f866b700a98ad30ceea1b1bd15e59406e0d8bb1d5101",
+      "stats": {
+        "shape": [
+          128,
+          128
+        ],
+        "dtype": "float32",
+        "size": 16384,
+        "min": -1.0,
+        "max": 1.0,
+        "mean": 0.6725490093231201,
+        "std": 0.5991390347480774,
+        "abs_max": 1.0,
+        "nonzero_count": 16384,
+        "allzero": false,
+        "constant": false,
+        "nan_count": 0,
+        "inf_count": 0
+      }
+    },
+    "rotary_sin": {
+      "path": "evidence/seg00_01_decomposition_v13/short_chinese_prompt_padded/hf/rotary_sin.npy",
+      "sha256": "3aa31d3ea4fa6024ff57964b73ea64978e08a9bfb1176dc9b444f728ecad263b",
+      "stats": {
+        "shape": [
+          128,
+          128
+        ],
+        "dtype": "float32",
+        "size": 16384,
+        "min": -1.0,
+        "max": 1.0,
+        "mean": 0.1139523833990097,
+        "std": 0.4193454682826996,
+        "abs_max": 1.0,
+        "nonzero_count": 16256,
+        "allzero": false,
+        "constant": false,
+        "nan_count": 0,
+        "inf_count": 0
+      }
+    },
+    "layer0_pre_attention_norm_output": {
+      "path": "evidence/seg00_01_decomposition_v13/short_chinese_prompt_padded/hf/layer0_pre_attention_norm_output.npy",
+      "sha256": "c06a2ce5f194ee7dc143c74c12ee6ecf277cc9ee8f7dd81eb29ed4bf04b36e5a",
+      "stats": {
+        "shape": [
+          128,
+          3584
+        ],
+        "dtype": "float32",
+        "size": 458752,
+        "min": -6.0625,
+        "max": 10.0,
+        "mean": 0.0012131620896980166,
+        "std": 0.23514989018440247,
+        "abs_max": 10.0,
+        "nonzero_count": 458752,
+        "allzero": false,
+        "constant": false,
+        "nan_count": 0,
+        "inf_count": 0
+      }
+    },
+    "layer0_attention_output": {
+      "path": "evidence/seg00_01_decomposition_v13/short_chinese_prompt_padded/hf/layer0_attention_output.npy",
+      "sha256": "885de5773529541d16dec2dac940f833c486e3dc70d2b698a9d70b02c27e9c87",
+      "stats": {
+        "shape": [
+          128,
+          3584
+        ],
+        "dtype": "float32",
+        "size": 458752,
+        "min": -1.515625,
+        "max": 1.0625,
+        "mean": 0.0005226022913120687,
+        "std": 0.11795875430107117,
+        "abs_max": 1.515625,
+        "nonzero_count": 458752,
+        "allzero": false,
+        "constant": false,
+        "nan_count": 0,
+        "inf_count": 0
+      }
+    },
+    "layer0_post_attention_residual": {
+      "path": "evidence/seg00_01_decomposition_v13/short_chinese_prompt_padded/hf/layer0_post_attention_residual.npy",
+      "sha256": "7fc41876ea0c29cf666bf630153a0274bceda25f03feac1e0148a540e32218f9",
+      "stats": {
+        "shape": [
+          128,
+          3584
+        ],
+        "dtype": "float32",
+        "size": 458752,
+        "min": -1.53125,
+        "max": 1.0625,
+        "mean": 0.000491505372337997,
+        "std": 0.1193729117512703,
+        "abs_max": 1.53125,
+        "nonzero_count": 458637,
+        "allzero": false,
+        "constant": false,
+        "nan_count": 0,
+        "inf_count": 0
+      }
+    },
+    "layer0_pre_mlp_norm_output": {
+      "path": "evidence/seg00_01_decomposition_v13/short_chinese_prompt_padded/hf/layer0_pre_mlp_norm_output.npy",
+      "sha256": "38b5bd8264e4723a8396bde66415af6d90b62af6ed43e83df39411f4fdf34d2f",
+      "stats": {
+        "shape": [
+          128,
+          3584
+        ],
+        "dtype": "float32",
+        "size": 458752,
+        "min": -2.171875,
+        "max": 5.96875,
+        "mean": 0.0028489723335951567,
+        "std": 0.21504993736743927,
+        "abs_max": 5.96875,
+        "nonzero_count": 458637,
+        "allzero": false,
+        "constant": false,
+        "nan_count": 0,
+        "inf_count": 0
+      }
+    },
+    "layer0_mlp_output": {
+      "path": "evidence/seg00_01_decomposition_v13/short_chinese_prompt_padded/hf/layer0_mlp_output.npy",
+      "sha256": "10d46c20ceabc22bf64d9d3648567210169068e61d8dff3e971ea04f47708c20",
+      "stats": {
+        "shape": [
+          128,
+          3584
+        ],
+        "dtype": "float32",
+        "size": 458752,
+        "min": -0.953125,
+        "max": 1.0234375,
+        "mean": -0.0009438613196834922,
+        "std": 0.13750647008419037,
+        "abs_max": 1.0234375,
+        "nonzero_count": 458752,
+        "allzero": false,
+        "constant": false,
+        "nan_count": 0,
+        "inf_count": 0
+      }
+    },
+    "layer0_final_output": {
+      "path": "evidence/seg00_01_decomposition_v13/short_chinese_prompt_padded/hf/layer0_final_output.npy",
+      "sha256": "316d0ef991deb80918fdb1ab11acde3c2303cb5c5893ef66dcadf9019d32fdd0",
+      "stats": {
+        "shape": [
+          128,
+          3584
+        ],
+        "dtype": "float32",
+        "size": 458752,
+        "min": -1.9375,
+        "max": 1.796875,
+        "mean": -0.00045254422002471983,
+        "std": 0.19344462454319,
+        "abs_max": 1.9375,
+        "nonzero_count": 458272,
+        "allzero": false,
+        "constant": false,
+        "nan_count": 0,
+        "inf_count": 0
+      }
+    }
+  },
+  "bpu_variants": [
+    {
+      "variant": "canonical_pos_128",
+      "model_name": "dream_segment_00_01",
+      "hbm_path": "/mnt/nas/openclaw/models/dream7b-hbm/seq128-b1-lmheadq16-lasttoken/seg00_01/dream7b_segment_0_1_seq128_q8.hbm",
+      "hbm_sha256": "d31aac20f491edad44dc4c9d09c0daad05abd1bc3736b4ca06fb294ebbd3c244",
+      "inputs": {
+        "_input_0": {
+          "shape": [
+            1,
+            128
+          ],
+          "dtype": "int32"
+        },
+        "_input_1": {
+          "shape": [
+            128
+          ],
+          "dtype": "int32"
+        }
+      },
+      "quant_metadata": {
+        "available": true,
+        "scale": [
+          6.062494503566995e-05
+        ],
+        "scale_first": 6.062494503566995e-05,
+        "zero_point": [
+          0.0
+        ],
+        "repr": "<hbm_runtime.HB_HBMRuntime.QuantParams object at 0xffff62142d30>"
+      },
+      "raw_stats": {
+        "shape": [
+          128,
+          3584
+        ],
+        "dtype": "int16",
+        "size": 458752,
+        "min": -10113.0,
+        "max": 13403.0,
+        "mean": -1.8996080671037947,
+        "std": 879.758213170049,
+        "abs_max": 13403.0,
+        "nonzero_count": 458480,
+        "allzero": false,
+        "constant": false,
+        "nan_count": 0,
+        "inf_count": 0
+      },
+      "dequant_stats": {
+        "shape": [
+          128,
+          3584
+        ],
+        "dtype": "float32",
+        "size": 458752,
+        "min": -0.6131000518798828,
+        "max": 0.8125561475753784,
+        "mean": -0.00011516364611452445,
+        "std": 0.053335294127464294,
+        "abs_max": 0.8125561475753784,
+        "nonzero_count": 458480,
+        "allzero": false,
+        "constant": false,
+        "nan_count": 0,
+        "inf_count": 0
+      },
+      "status": "pass",
+      "raw_output": {
+        "path": "evidence/seg00_01_decomposition_v13/short_chinese_prompt_padded/bpu/canonical_pos_128/bpu_raw_output.npy",
+        "sha256": "3e316a3233e07be970266a026c737e19d076666bb066ab53a3b7160c79ff5b57",
+        "stats": {
+          "shape": [
+            128,
+            3584
+          ],
+          "dtype": "int16",
+          "size": 458752,
+          "min": -10113.0,
+          "max": 13403.0,
+          "mean": -1.8996080671037947,
+          "std": 879.758213170049,
+          "abs_max": 13403.0,
+          "nonzero_count": 458480,
+          "allzero": false,
+          "constant": false,
+          "nan_count": 0,
+          "inf_count": 0
+        }
+      },
+      "dequant_output": {
+        "path": "evidence/seg00_01_decomposition_v13/short_chinese_prompt_padded/bpu/canonical_pos_128/bpu_dequant_output.npy",
+        "sha256": "650d1188123ff259e629d5ff682ee2a4b60016f9c6a27b263b9067eea36cdcf4",
+        "stats": {
+          "shape": [
+            128,
+            3584
+          ],
+          "dtype": "float32",
+          "size": 458752,
+          "min": -0.6131000518798828,
+          "max": 0.8125561475753784,
+          "mean": -0.00011516364611452445,
+          "std": 0.053335294127464294,
+          "abs_max": 0.8125561475753784,
+          "nonzero_count": 458480,
+          "allzero": false,
+          "constant": false,
+          "nan_count": 0,
+          "inf_count": 0
+        }
+      }
+    },
+    {
+      "variant": "position_1x128",
+      "status": "fail",
+      "type": "RuntimeError",
+      "message": "Mismatch in tensor dimensions for model: dream_segment_00_01, input: _input_1, input data ndim = 2, model numDimensions = 1"
+    },
+    {
+      "variant": "token_only",
+      "status": "fail",
+      "type": "RuntimeError",
+      "message": "Data type mismatch for input tensor '_input_1' in model 'dream_segment_00_01': expected numpy dtype format 'i', but received 'd'"
+    },
+    {
+      "variant": "input0_flat_pos_128",
+      "status": "fail",
+      "type": "RuntimeError",
+      "message": "Mismatch in tensor dimensions for model: dream_segment_00_01, input: _input_0, input data ndim = 1, model numDimensions = 2"
+    }
+  ]
+}

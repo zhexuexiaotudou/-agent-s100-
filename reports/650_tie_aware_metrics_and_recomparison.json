@@ -1,0 +1,1462 @@
+{
+  "schema_version": "dream7b_s100p_v8_650_tie_aware_metrics_and_recomparison",
+  "created_at_utc": "2026-07-01T11:03:14.256512+00:00",
+  "run_commands": [
+    "py tools/build_v8_research_thread.py --timestamp 20260701_v8_dequant_manifest_truth_attempt"
+  ],
+  "git": {
+    "cwd": "F:\\Project\\Digua",
+    "status": "unavailable:CalledProcessError"
+  },
+  "input_artifacts": [
+    {
+      "path": "reports/610_final_output_dequant_audit.json",
+      "exists": true,
+      "size_bytes": 142441,
+      "sha256": "7a1c8b9e73ef2c464b9b4e7c34cee88b7ac5f627621cdfaec36b825ec983472c"
+    }
+  ],
+  "output_artifacts": [
+    {
+      "path": "reports/650_tie_aware_metrics_and_recomparison.json"
+    },
+    {
+      "path": "reports/650_tie_aware_metrics_and_recomparison.md"
+    }
+  ],
+  "blocking_or_failure_reasons": [],
+  "next_minimal_experiments": [],
+  "tie_aware_rows": [
+    {
+      "case_id": "zeros",
+      "variant": "real_x",
+      "candidate_max_tie_count": 152064,
+      "reference_top1_in_candidate_max_tie_set": true,
+      "rank_interval_for_reference_top1_under_ties": [
+        1,
+        152064
+      ],
+      "pearson_centered": 0.0,
+      "cosine": 0.0,
+      "relative_l2": 0.9999999999999996,
+      "top5_overlap": 0,
+      "candidate_entropy": {
+        "entropy": 11.932056763842207,
+        "normalized_entropy": 1.0,
+        "top1_probability": 6.576178451178451e-06
+      },
+      "candidate_stats": {
+        "shape": [
+          152064
+        ],
+        "dtype": "float32",
+        "size": 152064,
+        "min": 0.0,
+        "max": 0.0,
+        "mean": 0.0,
+        "std": 0.0,
+        "abs_max": 0.0,
+        "nonzero_count": 0,
+        "allzero": true,
+        "constant": true
+      }
+    },
+    {
+      "case_id": "zeros",
+      "variant": "real_x_div_2",
+      "candidate_max_tie_count": 152064,
+      "reference_top1_in_candidate_max_tie_set": true,
+      "rank_interval_for_reference_top1_under_ties": [
+        1,
+        152064
+      ],
+      "pearson_centered": 0.0,
+      "cosine": 0.0,
+      "relative_l2": 0.9999999999999996,
+      "top5_overlap": 0,
+      "candidate_entropy": {
+        "entropy": 11.932056763842207,
+        "normalized_entropy": 1.0,
+        "top1_probability": 6.576178451178451e-06
+      },
+      "candidate_stats": {
+        "shape": [
+          152064
+        ],
+        "dtype": "float32",
+        "size": 152064,
+        "min": 0.0,
+        "max": 0.0,
+        "mean": 0.0,
+        "std": 0.0,
+        "abs_max": 0.0,
+        "nonzero_count": 0,
+        "allzero": true,
+        "constant": true
+      }
+    },
+    {
+      "case_id": "zeros",
+      "variant": "real_x_div_2p25",
+      "candidate_max_tie_count": 152064,
+      "reference_top1_in_candidate_max_tie_set": true,
+      "rank_interval_for_reference_top1_under_ties": [
+        1,
+        152064
+      ],
+      "pearson_centered": 0.0,
+      "cosine": 0.0,
+      "relative_l2": 0.9999999999999996,
+      "top5_overlap": 0,
+      "candidate_entropy": {
+        "entropy": 11.932056763842207,
+        "normalized_entropy": 1.0,
+        "top1_probability": 6.576178451178451e-06
+      },
+      "candidate_stats": {
+        "shape": [
+          152064
+        ],
+        "dtype": "float32",
+        "size": 152064,
+        "min": 0.0,
+        "max": 0.0,
+        "mean": 0.0,
+        "std": 0.0,
+        "abs_max": 0.0,
+        "nonzero_count": 0,
+        "allzero": true,
+        "constant": true
+      }
+    },
+    {
+      "case_id": "zeros",
+      "variant": "real_x_div_2p5",
+      "candidate_max_tie_count": 152064,
+      "reference_top1_in_candidate_max_tie_set": true,
+      "rank_interval_for_reference_top1_under_ties": [
+        1,
+        152064
+      ],
+      "pearson_centered": 0.0,
+      "cosine": 0.0,
+      "relative_l2": 0.9999999999999996,
+      "top5_overlap": 0,
+      "candidate_entropy": {
+        "entropy": 11.932056763842207,
+        "normalized_entropy": 1.0,
+        "top1_probability": 6.576178451178451e-06
+      },
+      "candidate_stats": {
+        "shape": [
+          152064
+        ],
+        "dtype": "float32",
+        "size": 152064,
+        "min": 0.0,
+        "max": 0.0,
+        "mean": 0.0,
+        "std": 0.0,
+        "abs_max": 0.0,
+        "nonzero_count": 0,
+        "allzero": true,
+        "constant": true
+      }
+    },
+    {
+      "case_id": "zeros",
+      "variant": "real_x_div_2p75",
+      "candidate_max_tie_count": 10,
+      "reference_top1_in_candidate_max_tie_set": true,
+      "rank_interval_for_reference_top1_under_ties": [
+        1,
+        10
+      ],
+      "pearson_centered": 0.9494248782352424,
+      "cosine": 0.9944805704938511,
+      "relative_l2": 0.3382119924657188,
+      "top5_overlap": 2,
+      "candidate_entropy": {
+        "entropy": 11.466834754585165,
+        "normalized_entropy": 0.9610107445460025,
+        "top1_probability": 0.0004836477167863757
+      },
+      "candidate_stats": {
+        "shape": [
+          152064
+        ],
+        "dtype": "float32",
+        "size": 152064,
+        "min": -6.8033223152160645,
+        "max": 8.328020095825195,
+        "mean": 3.506337881088257,
+        "std": 1.2175593376159668,
+        "abs_max": 8.328020095825195,
+        "nonzero_count": 152062,
+        "allzero": false,
+        "constant": false
+      }
+    },
+    {
+      "case_id": "zeros",
+      "variant": "real_x_div_3",
+      "candidate_max_tie_count": 3,
+      "reference_top1_in_candidate_max_tie_set": true,
+      "rank_interval_for_reference_top1_under_ties": [
+        1,
+        3
+      ],
+      "pearson_centered": 0.9388709711835209,
+      "cosine": 0.9931326417521714,
+      "relative_l2": 0.4067405564634382,
+      "top5_overlap": 2,
+      "candidate_entropy": {
+        "entropy": 11.524690419323349,
+        "normalized_entropy": 0.9658595033043001,
+        "top1_probability": 0.0007514188488050806
+      },
+      "candidate_stats": {
+        "shape": [
+          152064
+        ],
+        "dtype": "float32",
+        "size": 152064,
+        "min": -6.193086624145508,
+        "max": 8.328020095825195,
+        "mean": 3.138355016708374,
+        "std": 1.1106501817703247,
+        "abs_max": 8.328020095825195,
+        "nonzero_count": 152063,
+        "allzero": false,
+        "constant": false
+      }
+    },
+    {
+      "case_id": "zeros",
+      "variant": "real_x_div_3p25",
+      "candidate_max_tie_count": 1,
+      "reference_top1_in_candidate_max_tie_set": false,
+      "rank_interval_for_reference_top1_under_ties": [
+        2,
+        2
+      ],
+      "pearson_centered": 0.9271957977465177,
+      "cosine": 0.9915551026538844,
+      "relative_l2": 0.4653197120352646,
+      "top5_overlap": 2,
+      "candidate_entropy": {
+        "entropy": 11.576148148017477,
+        "normalized_entropy": 0.9701720648108848,
+        "top1_probability": 0.000855284509040552
+      },
+      "candidate_stats": {
+        "shape": [
+          152064
+        ],
+        "dtype": "float32",
+        "size": 152064,
+        "min": -5.677398681640625,
+        "max": 8.085553169250488,
+        "mean": 2.825347900390625,
+        "std": 1.0210111141204834,
+        "abs_max": 8.085553169250488,
+        "nonzero_count": 152063,
+        "allzero": false,
+        "constant": false
+      }
+    },
+    {
+      "case_id": "zeros",
+      "variant": "real_x_div_3p5",
+      "candidate_max_tie_count": 1,
+      "reference_top1_in_candidate_max_tie_set": false,
+      "rank_interval_for_reference_top1_under_ties": [
+        2,
+        2
+      ],
+      "pearson_centered": 0.9146257000452133,
+      "cosine": 0.9897778226433454,
+      "relative_l2": 0.5149453194004305,
+      "top5_overlap": 2,
+      "candidate_entropy": {
+        "entropy": 11.618072884432717,
+        "normalized_entropy": 0.9736856867492487,
+        "top1_probability": 0.0006769604069083127
+      },
+      "candidate_stats": {
+        "shape": [
+          152064
+        ],
+        "dtype": "float32",
+        "size": 152064,
+        "min": -5.238466739654541,
+        "max": 7.540128231048584,
+        "mean": 2.561082124710083,
+        "std": 0.9455840587615967,
+        "abs_max": 7.540128231048584,
+        "nonzero_count": 152061,
+        "allzero": false,
+        "constant": false
+      }
+    },
+    {
+      "case_id": "zeros",
+      "variant": "real_x_div_4",
+      "candidate_max_tie_count": 1,
+      "reference_top1_in_candidate_max_tie_set": false,
+      "rank_interval_for_reference_top1_under_ties": [
+        4,
+        4
+      ],
+      "pearson_centered": 0.8860512373739767,
+      "cosine": 0.9853114495583649,
+      "relative_l2": 0.5969134864569346,
+      "top5_overlap": 2,
+      "candidate_entropy": {
+        "entropy": 11.677925612461763,
+        "normalized_entropy": 0.9787018150843416,
+        "top1_probability": 0.00046087827639068043
+      },
+      "candidate_stats": {
+        "shape": [
+          152064
+        ],
+        "dtype": "float32",
+        "size": 152064,
+        "min": -4.513859748840332,
+        "max": 6.649810314178467,
+        "mean": 2.1254611015319824,
+        "std": 0.8246555924415588,
+        "abs_max": 6.649810314178467,
+        "nonzero_count": 152059,
+        "allzero": false,
+        "constant": false
+      }
+    },
+    {
+      "case_id": "zeros",
+      "variant": "real_x_clip_8",
+      "candidate_max_tie_count": 152064,
+      "reference_top1_in_candidate_max_tie_set": true,
+      "rank_interval_for_reference_top1_under_ties": [
+        1,
+        152064
+      ],
+      "pearson_centered": 0.0,
+      "cosine": 0.0,
+      "relative_l2": 0.9999999999999996,
+      "top5_overlap": 0,
+      "candidate_entropy": {
+        "entropy": 11.932056763842207,
+        "normalized_entropy": 1.0,
+        "top1_probability": 6.576178451178451e-06
+      },
+      "candidate_stats": {
+        "shape": [
+          152064
+        ],
+        "dtype": "float32",
+        "size": 152064,
+        "min": 0.0,
+        "max": 0.0,
+        "mean": 0.0,
+        "std": 0.0,
+        "abs_max": 0.0,
+        "nonzero_count": 0,
+        "allzero": true,
+        "constant": true
+      }
+    },
+    {
+      "case_id": "zeros",
+      "variant": "real_x_clip_6",
+      "candidate_max_tie_count": 11,
+      "reference_top1_in_candidate_max_tie_set": true,
+      "rank_interval_for_reference_top1_under_ties": [
+        1,
+        11
+      ],
+      "pearson_centered": 0.9528195235490057,
+      "cosine": 0.9945703041801379,
+      "relative_l2": 0.3236379268651147,
+      "top5_overlap": 3,
+      "candidate_entropy": {
+        "entropy": 11.463017973417587,
+        "normalized_entropy": 0.9606908683299302,
+        "top1_probability": 0.000460957131985957
+      },
+      "candidate_stats": {
+        "shape": [
+          152064
+        ],
+        "dtype": "float32",
+        "size": 152064,
+        "min": -6.949209213256836,
+        "max": 8.328020095825195,
+        "mean": 3.5331649780273438,
+        "std": 1.2583831548690796,
+        "abs_max": 8.328020095825195,
+        "nonzero_count": 152064,
+        "allzero": false,
+        "constant": false
+      }
+    },
+    {
+      "case_id": "zeros",
+      "variant": "real_x_clip_5",
+      "candidate_max_tie_count": 1,
+      "reference_top1_in_candidate_max_tie_set": false,
+      "rank_interval_for_reference_top1_under_ties": [
+        18,
+        18
+      ],
+      "pearson_centered": 0.9297253288281403,
+      "cosine": 0.9913067762425,
+      "relative_l2": 0.4642088921238102,
+      "top5_overlap": 2,
+      "candidate_entropy": {
+        "entropy": 11.581375877722817,
+        "normalized_entropy": 0.9706101895875939,
+        "top1_probability": 0.0007891326560875696
+      },
+      "candidate_stats": {
+        "shape": [
+          152064
+        ],
+        "dtype": "float32",
+        "size": 152064,
+        "min": -5.712218284606934,
+        "max": 7.9681315422058105,
+        "mean": 2.782777786254883,
+        "std": 1.037992000579834,
+        "abs_max": 7.9681315422058105,
+        "nonzero_count": 152063,
+        "allzero": false,
+        "constant": false
+      }
+    },
+    {
+      "case_id": "zeros",
+      "variant": "real_x_clip_4",
+      "candidate_max_tie_count": 1,
+      "reference_top1_in_candidate_max_tie_set": false,
+      "rank_interval_for_reference_top1_under_ties": [
+        45,
+        45
+      ],
+      "pearson_centered": 0.8858837203668998,
+      "cosine": 0.9838814775948123,
+      "relative_l2": 0.606759263932067,
+      "top5_overlap": 2,
+      "candidate_entropy": {
+        "entropy": 11.685759264019428,
+        "normalized_entropy": 0.9793583365636396,
+        "top1_probability": 0.000421060198905006
+      },
+      "candidate_stats": {
+        "shape": [
+          152064
+        ],
+        "dtype": "float32",
+        "size": 152064,
+        "min": -4.461248874664307,
+        "max": 6.458428859710693,
+        "mean": 2.0274157524108887,
+        "std": 0.8244867324829102,
+        "abs_max": 6.458428859710693,
+        "nonzero_count": 152064,
+        "allzero": false,
+        "constant": false
+      }
+    },
+    {
+      "case_id": "zeros",
+      "variant": "real_x_z_normalized",
+      "candidate_max_tie_count": 1,
+      "reference_top1_in_candidate_max_tie_set": false,
+      "rank_interval_for_reference_top1_under_ties": [
+        403,
+        403
+      ],
+      "pearson_centered": 0.06851965642833163,
+      "cosine": -0.36327190186598624,
+      "relative_l2": 1.0299614862010023,
+      "top5_overlap": 0,
+      "candidate_entropy": {
+        "entropy": 11.83350770163854,
+        "normalized_entropy": 0.9917408151709184,
+        "top1_probability": 0.00013515909015644994
+      },
+      "candidate_stats": {
+        "shape": [
+          152064
+        ],
+        "dtype": "float32",
+        "size": 152064,
+        "min": -2.6991662979125977,
+        "max": 2.9393463134765625,
+        "mean": -0.166967511177063,
+        "std": 0.38327285647392273,
+        "abs_max": 2.9393463134765625,
+        "nonzero_count": 152042,
+        "allzero": false,
+        "constant": false
+      }
+    },
+    {
+      "case_id": "ramp",
+      "variant": "real_x",
+      "candidate_max_tie_count": 152064,
+      "reference_top1_in_candidate_max_tie_set": true,
+      "rank_interval_for_reference_top1_under_ties": [
+        1,
+        152064
+      ],
+      "pearson_centered": 0.0,
+      "cosine": 0.0,
+      "relative_l2": 0.9999999999999982,
+      "top5_overlap": 0,
+      "candidate_entropy": {
+        "entropy": 11.932056763842207,
+        "normalized_entropy": 1.0,
+        "top1_probability": 6.576178451178451e-06
+      },
+      "candidate_stats": {
+        "shape": [
+          152064
+        ],
+        "dtype": "float32",
+        "size": 152064,
+        "min": 0.0,
+        "max": 0.0,
+        "mean": 0.0,
+        "std": 0.0,
+        "abs_max": 0.0,
+        "nonzero_count": 0,
+        "allzero": true,
+        "constant": true
+      }
+    },
+    {
+      "case_id": "ramp",
+      "variant": "real_x_div_2",
+      "candidate_max_tie_count": 152064,
+      "reference_top1_in_candidate_max_tie_set": true,
+      "rank_interval_for_reference_top1_under_ties": [
+        1,
+        152064
+      ],
+      "pearson_centered": 0.0,
+      "cosine": 0.0,
+      "relative_l2": 0.9999999999999982,
+      "top5_overlap": 0,
+      "candidate_entropy": {
+        "entropy": 11.932056763842207,
+        "normalized_entropy": 1.0,
+        "top1_probability": 6.576178451178451e-06
+      },
+      "candidate_stats": {
+        "shape": [
+          152064
+        ],
+        "dtype": "float32",
+        "size": 152064,
+        "min": 0.0,
+        "max": 0.0,
+        "mean": 0.0,
+        "std": 0.0,
+        "abs_max": 0.0,
+        "nonzero_count": 0,
+        "allzero": true,
+        "constant": true
+      }
+    },
+    {
+      "case_id": "ramp",
+      "variant": "real_x_div_2p25",
+      "candidate_max_tie_count": 152064,
+      "reference_top1_in_candidate_max_tie_set": true,
+      "rank_interval_for_reference_top1_under_ties": [
+        1,
+        152064
+      ],
+      "pearson_centered": 0.0,
+      "cosine": 0.0,
+      "relative_l2": 0.9999999999999982,
+      "top5_overlap": 0,
+      "candidate_entropy": {
+        "entropy": 11.932056763842207,
+        "normalized_entropy": 1.0,
+        "top1_probability": 6.576178451178451e-06
+      },
+      "candidate_stats": {
+        "shape": [
+          152064
+        ],
+        "dtype": "float32",
+        "size": 152064,
+        "min": 0.0,
+        "max": 0.0,
+        "mean": 0.0,
+        "std": 0.0,
+        "abs_max": 0.0,
+        "nonzero_count": 0,
+        "allzero": true,
+        "constant": true
+      }
+    },
+    {
+      "case_id": "ramp",
+      "variant": "real_x_div_2p5",
+      "candidate_max_tie_count": 152064,
+      "reference_top1_in_candidate_max_tie_set": true,
+      "rank_interval_for_reference_top1_under_ties": [
+        1,
+        152064
+      ],
+      "pearson_centered": 0.0,
+      "cosine": 0.0,
+      "relative_l2": 0.9999999999999982,
+      "top5_overlap": 0,
+      "candidate_entropy": {
+        "entropy": 11.932056763842207,
+        "normalized_entropy": 1.0,
+        "top1_probability": 6.576178451178451e-06
+      },
+      "candidate_stats": {
+        "shape": [
+          152064
+        ],
+        "dtype": "float32",
+        "size": 152064,
+        "min": 0.0,
+        "max": 0.0,
+        "mean": 0.0,
+        "std": 0.0,
+        "abs_max": 0.0,
+        "nonzero_count": 0,
+        "allzero": true,
+        "constant": true
+      }
+    },
+    {
+      "case_id": "ramp",
+      "variant": "real_x_div_2p75",
+      "candidate_max_tie_count": 1,
+      "reference_top1_in_candidate_max_tie_set": true,
+      "rank_interval_for_reference_top1_under_ties": [
+        1,
+        1
+      ],
+      "pearson_centered": 0.9052243418609816,
+      "cosine": 0.7253168409116085,
+      "relative_l2": 0.6911587863252936,
+      "top5_overlap": 2,
+      "candidate_entropy": {
+        "entropy": 11.209606336879052,
+        "normalized_entropy": 0.939452984404801,
+        "top1_probability": 0.003301580394550527
+      },
+      "candidate_stats": {
+        "shape": [
+          152064
+        ],
+        "dtype": "float32",
+        "size": 152064,
+        "min": -6.105910301208496,
+        "max": 6.81069278717041,
+        "mean": 0.06931202113628387,
+        "std": 0.9582580327987671,
+        "abs_max": 6.81069278717041,
+        "nonzero_count": 152046,
+        "allzero": false,
+        "constant": false
+      }
+    },
+    {
+      "case_id": "ramp",
+      "variant": "real_x_div_3",
+      "candidate_max_tie_count": 1,
+      "reference_top1_in_candidate_max_tie_set": true,
+      "rank_interval_for_reference_top1_under_ties": [
+        1,
+        1
+      ],
+      "pearson_centered": 0.8883006153643298,
+      "cosine": 0.6575555062427875,
+      "relative_l2": 0.7545835474951561,
+      "top5_overlap": 2,
+      "candidate_entropy": {
+        "entropy": 11.329797264128363,
+        "normalized_entropy": 0.9495259273708054,
+        "top1_probability": 0.002236322959824556
+      },
+      "candidate_stats": {
+        "shape": [
+          152064
+        ],
+        "dtype": "float32",
+        "size": 152064,
+        "min": -5.8288774490356445,
+        "max": 6.265522003173828,
+        "mean": -0.012257309630513191,
+        "std": 0.8906578421592712,
+        "abs_max": 6.265522003173828,
+        "nonzero_count": 152043,
+        "allzero": false,
+        "constant": false
+      }
+    },
+    {
+      "case_id": "ramp",
+      "variant": "real_x_div_3p25",
+      "candidate_max_tie_count": 1,
+      "reference_top1_in_candidate_max_tie_set": true,
+      "rank_interval_for_reference_top1_under_ties": [
+        1,
+        1
+      ],
+      "pearson_centered": 0.8703702800425872,
+      "cosine": 0.5825826414170058,
+      "relative_l2": 0.8127759840972212,
+      "top5_overlap": 2,
+      "candidate_entropy": {
+        "entropy": 11.415348060547613,
+        "normalized_entropy": 0.956695755516318,
+        "top1_probability": 0.0015955940588261819
+      },
+      "candidate_stats": {
+        "shape": [
+          152064
+        ],
+        "dtype": "float32",
+        "size": 152064,
+        "min": -5.597846984863281,
+        "max": 5.7993950843811035,
+        "mean": -0.08544853329658508,
+        "std": 0.8349360823631287,
+        "abs_max": 5.7993950843811035,
+        "nonzero_count": 152041,
+        "allzero": false,
+        "constant": false
+      }
+    },
+    {
+      "case_id": "ramp",
+      "variant": "real_x_div_3p5",
+      "candidate_max_tie_count": 1,
+      "reference_top1_in_candidate_max_tie_set": true,
+      "rank_interval_for_reference_top1_under_ties": [
+        1,
+        1
+      ],
+      "pearson_centered": 0.8521033873451088,
+      "cosine": 0.510838979384794,
+      "relative_l2": 0.8607259678019207,
+      "top5_overlap": 2,
+      "candidate_entropy": {
+        "entropy": 11.479950600063692,
+        "normalized_entropy": 0.9621099553307075,
+        "top1_probability": 0.0011893478895621862
+      },
+      "candidate_stats": {
+        "shape": [
+          152064
+        ],
+        "dtype": "float32",
+        "size": 152064,
+        "min": -5.396298885345459,
+        "max": 5.404178142547607,
+        "mean": -0.1434502899646759,
+        "std": 0.7879284024238586,
+        "abs_max": 5.404178142547607,
+        "nonzero_count": 152045,
+        "allzero": false,
+        "constant": false
+      }
+    },
+    {
+      "case_id": "ramp",
+      "variant": "real_x_div_4",
+      "candidate_max_tie_count": 1,
+      "reference_top1_in_candidate_max_tie_set": true,
+      "rank_interval_for_reference_top1_under_ties": [
+        1,
+        1
+      ],
+      "pearson_centered": 0.8137672271729784,
+      "cosine": 0.36559294931136005,
+      "relative_l2": 0.9436710430089842,
+      "top5_overlap": 2,
+      "candidate_entropy": {
+        "entropy": 11.567724842160919,
+        "normalized_entropy": 0.9694661256737124,
+        "top1_probability": 0.0007307519972416869
+      },
+      "candidate_stats": {
+        "shape": [
+          152064
+        ],
+        "dtype": "float32",
+        "size": 152064,
+        "min": -5.071738243103027,
+        "max": 4.756072998046875,
+        "mean": -0.24273096024990082,
+        "std": 0.7140572667121887,
+        "abs_max": 5.071738243103027,
+        "nonzero_count": 152030,
+        "allzero": false,
+        "constant": false
+      }
+    },
+    {
+      "case_id": "ramp",
+      "variant": "real_x_clip_8",
+      "candidate_max_tie_count": 152064,
+      "reference_top1_in_candidate_max_tie_set": true,
+      "rank_interval_for_reference_top1_under_ties": [
+        1,
+        152064
+      ],
+      "pearson_centered": 0.0,
+      "cosine": 0.0,
+      "relative_l2": 0.9999999999999982,
+      "top5_overlap": 0,
+      "candidate_entropy": {
+        "entropy": 11.932056763842207,
+        "normalized_entropy": 1.0,
+        "top1_probability": 6.576178451178451e-06
+      },
+      "candidate_stats": {
+        "shape": [
+          152064
+        ],
+        "dtype": "float32",
+        "size": 152064,
+        "min": 0.0,
+        "max": 0.0,
+        "mean": 0.0,
+        "std": 0.0,
+        "abs_max": 0.0,
+        "nonzero_count": 0,
+        "allzero": true,
+        "constant": true
+      }
+    },
+    {
+      "case_id": "ramp",
+      "variant": "real_x_clip_6",
+      "candidate_max_tie_count": 1,
+      "reference_top1_in_candidate_max_tie_set": true,
+      "rank_interval_for_reference_top1_under_ties": [
+        1,
+        1
+      ],
+      "pearson_centered": 0.9081696806184509,
+      "cosine": 0.7231690525626382,
+      "relative_l2": 0.6913872968925894,
+      "top5_overlap": 2,
+      "candidate_entropy": {
+        "entropy": 11.168959598063728,
+        "normalized_entropy": 0.9360464686950788,
+        "top1_probability": 0.0036434457272469553
+      },
+      "candidate_stats": {
+        "shape": [
+          152064
+        ],
+        "dtype": "float32",
+        "size": 152064,
+        "min": -6.005517482757568,
+        "max": 6.897869110107422,
+        "mean": 0.03701527416706085,
+        "std": 0.9720415472984314,
+        "abs_max": 6.897869110107422,
+        "nonzero_count": 152045,
+        "allzero": false,
+        "constant": false
+      }
+    },
+    {
+      "case_id": "ramp",
+      "variant": "real_x_clip_5",
+      "candidate_max_tie_count": 1,
+      "reference_top1_in_candidate_max_tie_set": true,
+      "rank_interval_for_reference_top1_under_ties": [
+        1,
+        1
+      ],
+      "pearson_centered": 0.8707976247529587,
+      "cosine": 0.5629736737031011,
+      "relative_l2": 0.8278265941319085,
+      "top5_overlap": 2,
+      "candidate_entropy": {
+        "entropy": 11.40444152973177,
+        "normalized_entropy": 0.9557817026391231,
+        "top1_probability": 0.0016299646472086042
+      },
+      "candidate_stats": {
+        "shape": [
+          152064
+        ],
+        "dtype": "float32",
+        "size": 152064,
+        "min": -5.470005035400391,
+        "max": 5.768641471862793,
+        "mean": -0.142424538731575,
+        "std": 0.8366115093231201,
+        "abs_max": 5.768641471862793,
+        "nonzero_count": 152041,
+        "allzero": false,
+        "constant": false
+      }
+    },
+    {
+      "case_id": "ramp",
+      "variant": "real_x_clip_4",
+      "candidate_max_tie_count": 1,
+      "reference_top1_in_candidate_max_tie_set": true,
+      "rank_interval_for_reference_top1_under_ties": [
+        1,
+        1
+      ],
+      "pearson_centered": 0.8099692751451824,
+      "cosine": 0.3331615224745424,
+      "relative_l2": 0.9693932013826159,
+      "top5_overlap": 2,
+      "candidate_entropy": {
+        "entropy": 11.570455470754194,
+        "normalized_entropy": 0.9696949737798956,
+        "top1_probability": 0.0007065934782956747
+      },
+      "candidate_stats": {
+        "shape": [
+          152064
+        ],
+        "dtype": "float32",
+        "size": 152064,
+        "min": -4.928901195526123,
+        "max": 4.653901100158691,
+        "mean": -0.30837535858154297,
+        "std": 0.7086473107337952,
+        "abs_max": 4.928901195526123,
+        "nonzero_count": 152009,
+        "allzero": false,
+        "constant": false
+      }
+    },
+    {
+      "case_id": "ramp",
+      "variant": "real_x_z_normalized",
+      "candidate_max_tie_count": 1,
+      "reference_top1_in_candidate_max_tie_set": false,
+      "rank_interval_for_reference_top1_under_ties": [
+        163,
+        163
+      ],
+      "pearson_centered": 0.2453196952102017,
+      "cosine": -0.47669758337260276,
+      "relative_l2": 1.3987969325423903,
+      "top5_overlap": 0,
+      "candidate_entropy": {
+        "entropy": 11.786017539188157,
+        "normalized_entropy": 0.9877607668531553,
+        "top1_probability": 0.00013829887132482514
+      },
+      "candidate_stats": {
+        "shape": [
+          152064
+        ],
+        "dtype": "float32",
+        "size": 152064,
+        "min": -3.3658246994018555,
+        "max": 2.4018003940582275,
+        "mean": -0.7624714970588684,
+        "std": 0.4420890212059021,
+        "abs_max": 3.3658246994018555,
+        "nonzero_count": 152060,
+        "allzero": false,
+        "constant": false
+      }
+    },
+    {
+      "case_id": "short_chinese_prompt_padded",
+      "variant": "real_x",
+      "candidate_max_tie_count": 152064,
+      "reference_top1_in_candidate_max_tie_set": true,
+      "rank_interval_for_reference_top1_under_ties": [
+        1,
+        152064
+      ],
+      "pearson_centered": 0.0,
+      "cosine": 0.0,
+      "relative_l2": 0.9999999999999986,
+      "top5_overlap": 0,
+      "candidate_entropy": {
+        "entropy": 11.932056763842207,
+        "normalized_entropy": 1.0,
+        "top1_probability": 6.576178451178451e-06
+      },
+      "candidate_stats": {
+        "shape": [
+          152064
+        ],
+        "dtype": "float32",
+        "size": 152064,
+        "min": 0.0,
+        "max": 0.0,
+        "mean": 0.0,
+        "std": 0.0,
+        "abs_max": 0.0,
+        "nonzero_count": 0,
+        "allzero": true,
+        "constant": true
+      }
+    },
+    {
+      "case_id": "short_chinese_prompt_padded",
+      "variant": "real_x_div_2",
+      "candidate_max_tie_count": 152064,
+      "reference_top1_in_candidate_max_tie_set": true,
+      "rank_interval_for_reference_top1_under_ties": [
+        1,
+        152064
+      ],
+      "pearson_centered": 0.0,
+      "cosine": 0.0,
+      "relative_l2": 0.9999999999999986,
+      "top5_overlap": 0,
+      "candidate_entropy": {
+        "entropy": 11.932056763842207,
+        "normalized_entropy": 1.0,
+        "top1_probability": 6.576178451178451e-06
+      },
+      "candidate_stats": {
+        "shape": [
+          152064
+        ],
+        "dtype": "float32",
+        "size": 152064,
+        "min": 0.0,
+        "max": 0.0,
+        "mean": 0.0,
+        "std": 0.0,
+        "abs_max": 0.0,
+        "nonzero_count": 0,
+        "allzero": true,
+        "constant": true
+      }
+    },
+    {
+      "case_id": "short_chinese_prompt_padded",
+      "variant": "real_x_div_2p25",
+      "candidate_max_tie_count": 152064,
+      "reference_top1_in_candidate_max_tie_set": true,
+      "rank_interval_for_reference_top1_under_ties": [
+        1,
+        152064
+      ],
+      "pearson_centered": 0.0,
+      "cosine": 0.0,
+      "relative_l2": 0.9999999999999986,
+      "top5_overlap": 0,
+      "candidate_entropy": {
+        "entropy": 11.932056763842207,
+        "normalized_entropy": 1.0,
+        "top1_probability": 6.576178451178451e-06
+      },
+      "candidate_stats": {
+        "shape": [
+          152064
+        ],
+        "dtype": "float32",
+        "size": 152064,
+        "min": 0.0,
+        "max": 0.0,
+        "mean": 0.0,
+        "std": 0.0,
+        "abs_max": 0.0,
+        "nonzero_count": 0,
+        "allzero": true,
+        "constant": true
+      }
+    },
+    {
+      "case_id": "short_chinese_prompt_padded",
+      "variant": "real_x_div_2p5",
+      "candidate_max_tie_count": 152064,
+      "reference_top1_in_candidate_max_tie_set": true,
+      "rank_interval_for_reference_top1_under_ties": [
+        1,
+        152064
+      ],
+      "pearson_centered": 0.0,
+      "cosine": 0.0,
+      "relative_l2": 0.9999999999999986,
+      "top5_overlap": 0,
+      "candidate_entropy": {
+        "entropy": 11.932056763842207,
+        "normalized_entropy": 1.0,
+        "top1_probability": 6.576178451178451e-06
+      },
+      "candidate_stats": {
+        "shape": [
+          152064
+        ],
+        "dtype": "float32",
+        "size": 152064,
+        "min": 0.0,
+        "max": 0.0,
+        "mean": 0.0,
+        "std": 0.0,
+        "abs_max": 0.0,
+        "nonzero_count": 0,
+        "allzero": true,
+        "constant": true
+      }
+    },
+    {
+      "case_id": "short_chinese_prompt_padded",
+      "variant": "real_x_div_2p75",
+      "candidate_max_tie_count": 1,
+      "reference_top1_in_candidate_max_tie_set": false,
+      "rank_interval_for_reference_top1_under_ties": [
+        18,
+        18
+      ],
+      "pearson_centered": 0.892260230480288,
+      "cosine": 0.7795182457529657,
+      "relative_l2": 0.6742337091088312,
+      "top5_overlap": 1,
+      "candidate_entropy": {
+        "entropy": 11.345493078790756,
+        "normalized_entropy": 0.9508413598208049,
+        "top1_probability": 0.0016408933257417674
+      },
+      "candidate_stats": {
+        "shape": [
+          152064
+        ],
+        "dtype": "float32",
+        "size": 152064,
+        "min": -6.706995964050293,
+        "max": 6.330586910247803,
+        "mean": 0.35392916202545166,
+        "std": 0.9343723058700562,
+        "abs_max": 6.706995964050293,
+        "nonzero_count": 152046,
+        "allzero": false,
+        "constant": false
+      }
+    },
+    {
+      "case_id": "short_chinese_prompt_padded",
+      "variant": "real_x_div_3",
+      "candidate_max_tie_count": 1,
+      "reference_top1_in_candidate_max_tie_set": false,
+      "rank_interval_for_reference_top1_under_ties": [
+        33,
+        33
+      ],
+      "pearson_centered": 0.8731567716689521,
+      "cosine": 0.7180913210314411,
+      "relative_l2": 0.7364026925332046,
+      "top5_overlap": 1,
+      "candidate_entropy": {
+        "entropy": 11.43991086001212,
+        "normalized_entropy": 0.9587543108811349,
+        "top1_probability": 0.0012699400862473454
+      },
+      "candidate_stats": {
+        "shape": [
+          152064
+        ],
+        "dtype": "float32",
+        "size": 152064,
+        "min": -6.118110179901123,
+        "max": 5.902583599090576,
+        "mean": 0.2466578185558319,
+        "std": 0.8654196858406067,
+        "abs_max": 6.118110179901123,
+        "nonzero_count": 152053,
+        "allzero": false,
+        "constant": false
+      }
+    },
+    {
+      "case_id": "short_chinese_prompt_padded",
+      "variant": "real_x_div_3p25",
+      "candidate_max_tie_count": 1,
+      "reference_top1_in_candidate_max_tie_set": false,
+      "rank_interval_for_reference_top1_under_ties": [
+        57,
+        57
+      ],
+      "pearson_centered": 0.8529737749496791,
+      "cosine": 0.6484306828068349,
+      "relative_l2": 0.7901457245783807,
+      "top5_overlap": 1,
+      "candidate_entropy": {
+        "entropy": 11.507924812869597,
+        "normalized_entropy": 0.9644544139064223,
+        "top1_probability": 0.0010164435601677767
+      },
+      "candidate_stats": {
+        "shape": [
+          152064
+        ],
+        "dtype": "float32",
+        "size": 152064,
+        "min": -5.617417335510254,
+        "max": 5.540407180786133,
+        "mean": 0.15581488609313965,
+        "std": 0.8084962964057922,
+        "abs_max": 5.617417335510254,
+        "nonzero_count": 152052,
+        "allzero": false,
+        "constant": false
+      }
+    },
+    {
+      "case_id": "short_chinese_prompt_padded",
+      "variant": "real_x_div_3p5",
+      "candidate_max_tie_count": 1,
+      "reference_top1_in_candidate_max_tie_set": false,
+      "rank_interval_for_reference_top1_under_ties": [
+        99,
+        99
+      ],
+      "pearson_centered": 0.8323558697336262,
+      "cosine": 0.5759318409136259,
+      "relative_l2": 0.8349949118947152,
+      "top5_overlap": 0,
+      "candidate_entropy": {
+        "entropy": 11.559372118989684,
+        "normalized_entropy": 0.9687661019195055,
+        "top1_probability": 0.0008362040828016066
+      },
+      "candidate_stats": {
+        "shape": [
+          152064
+        ],
+        "dtype": "float32",
+        "size": 152064,
+        "min": -5.1914472579956055,
+        "max": 5.232874870300293,
+        "mean": 0.08154981583356857,
+        "std": 0.7607720494270325,
+        "abs_max": 5.232874870300293,
+        "nonzero_count": 152035,
+        "allzero": false,
+        "constant": false
+      }
+    },
+    {
+      "case_id": "short_chinese_prompt_padded",
+      "variant": "real_x_div_4",
+      "candidate_max_tie_count": 1,
+      "reference_top1_in_candidate_max_tie_set": false,
+      "rank_interval_for_reference_top1_under_ties": [
+        270,
+        270
+      ],
+      "pearson_centered": 0.7886156580013535,
+      "cosine": 0.4153599864473433,
+      "relative_l2": 0.9110754814528941,
+      "top5_overlap": 0,
+      "candidate_entropy": {
+        "entropy": 11.629895802797911,
+        "normalized_entropy": 0.9746765400949201,
+        "top1_probability": 0.0006058513420022114
+      },
+      "candidate_stats": {
+        "shape": [
+          152064
+        ],
+        "dtype": "float32",
+        "size": 152064,
+        "min": -4.562404155731201,
+        "max": 4.731419563293457,
+        "mean": -0.0432048961520195,
+        "std": 0.6858261823654175,
+        "abs_max": 4.731419563293457,
+        "nonzero_count": 152040,
+        "allzero": false,
+        "constant": false
+      }
+    },
+    {
+      "case_id": "short_chinese_prompt_padded",
+      "variant": "real_x_clip_8",
+      "candidate_max_tie_count": 152064,
+      "reference_top1_in_candidate_max_tie_set": true,
+      "rank_interval_for_reference_top1_under_ties": [
+        1,
+        152064
+      ],
+      "pearson_centered": 0.0,
+      "cosine": 0.0,
+      "relative_l2": 0.9999999999999987,
+      "top5_overlap": 0,
+      "candidate_entropy": {
+        "entropy": 11.932056763842207,
+        "normalized_entropy": 1.0,
+        "top1_probability": 6.576178451178451e-06
+      },
+      "candidate_stats": {
+        "shape": [
+          152064
+        ],
+        "dtype": "float32",
+        "size": 152064,
+        "min": 0.0,
+        "max": 0.0,
+        "mean": 0.0,
+        "std": 0.0,
+        "abs_max": 0.0,
+        "nonzero_count": 0,
+        "allzero": true,
+        "constant": true
+      }
+    },
+    {
+      "case_id": "short_chinese_prompt_padded",
+      "variant": "real_x_clip_6",
+      "candidate_max_tie_count": 1,
+      "reference_top1_in_candidate_max_tie_set": false,
+      "rank_interval_for_reference_top1_under_ties": [
+        16,
+        16
+      ],
+      "pearson_centered": 0.897590547905762,
+      "cosine": 0.8575171472035169,
+      "relative_l2": 0.6069546632892343,
+      "top5_overlap": 1,
+      "candidate_entropy": {
+        "entropy": 11.318083661905579,
+        "normalized_entropy": 0.9485442355757848,
+        "top1_probability": 0.0016486995112388483
+      },
+      "candidate_stats": {
+        "shape": [
+          152064
+        ],
+        "dtype": "float32",
+        "size": 152064,
+        "min": -6.652860164642334,
+        "max": 6.601011753082275,
+        "mean": 0.6024126410484314,
+        "std": 0.9530007243156433,
+        "abs_max": 6.652860164642334,
+        "nonzero_count": 152047,
+        "allzero": false,
+        "constant": false
+      }
+    },
+    {
+      "case_id": "short_chinese_prompt_padded",
+      "variant": "real_x_clip_5",
+      "candidate_max_tie_count": 1,
+      "reference_top1_in_candidate_max_tie_set": false,
+      "rank_interval_for_reference_top1_under_ties": [
+        52,
+        52
+      ],
+      "pearson_centered": 0.8563224969727368,
+      "cosine": 0.7773627627986678,
+      "relative_l2": 0.7245478170393417,
+      "top5_overlap": 1,
+      "candidate_entropy": {
+        "entropy": 11.50497714288391,
+        "normalized_entropy": 0.9642073760282067,
+        "top1_probability": 0.0009722173249533448
+      },
+      "candidate_stats": {
+        "shape": [
+          152064
+        ],
+        "dtype": "float32",
+        "size": 152064,
+        "min": -5.477630138397217,
+        "max": 5.741446495056152,
+        "mean": 0.3994310200214386,
+        "std": 0.8124287724494934,
+        "abs_max": 5.741446495056152,
+        "nonzero_count": 152054,
+        "allzero": false,
+        "constant": false
+      }
+    },
+    {
+      "case_id": "short_chinese_prompt_padded",
+      "variant": "real_x_clip_4",
+      "candidate_max_tie_count": 1,
+      "reference_top1_in_candidate_max_tie_set": false,
+      "rank_interval_for_reference_top1_under_ties": [
+        262,
+        262
+      ],
+      "pearson_centered": 0.7870776622688176,
+      "cosine": 0.6166569795570865,
+      "relative_l2": 0.843909260734485,
+      "top5_overlap": 0,
+      "candidate_entropy": {
+        "entropy": 11.636577180000701,
+        "normalized_entropy": 0.975236491940191,
+        "top1_probability": 0.0005600977114616328
+      },
+      "candidate_stats": {
+        "shape": [
+          152064
+        ],
+        "dtype": "float32",
+        "size": 152064,
+        "min": -4.294775009155273,
+        "max": 4.883914947509766,
+        "mean": 0.1930682212114334,
+        "std": 0.6797969341278076,
+        "abs_max": 4.883914947509766,
+        "nonzero_count": 152043,
+        "allzero": false,
+        "constant": false
+      }
+    },
+    {
+      "case_id": "short_chinese_prompt_padded",
+      "variant": "real_x_z_normalized",
+      "candidate_max_tie_count": 1,
+      "reference_top1_in_candidate_max_tie_set": false,
+      "rank_interval_for_reference_top1_under_ties": [
+        149002,
+        149008
+      ],
+      "pearson_centered": 0.13346927509030984,
+      "cosine": -0.6478213906569851,
+      "relative_l2": 1.3257571386565128,
+      "top5_overlap": 0,
+      "candidate_entropy": {
+        "entropy": 11.800370350402563,
+        "normalized_entropy": 0.9889636450742764,
+        "top1_probability": 0.00015952591129211085
+      },
+      "candidate_stats": {
+        "shape": [
+          152064
+        ],
+        "dtype": "float32",
+        "size": 152064,
+        "min": -3.26009464263916,
+        "max": 2.5934362411499023,
+        "mean": -0.7033408880233765,
+        "std": 0.4255889356136322,
+        "abs_max": 3.26009464263916,
+        "nonzero_count": 152061,
+        "allzero": false,
+        "constant": false
+      }
+    }
+  ],
+  "max_tie_count_max": 152064,
+  "rows_with_reference_top1_in_candidate_max_tie_set": 26,
+  "verdict": "pass_tie_aware_metrics_recomputed"
+}
