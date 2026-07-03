@@ -1,0 +1,38 @@
+{
+  "generated_at": "2026-07-03T23:44:09.175748+08:00",
+  "gate_id": "stage2_9_qwen_persistence_apply_verify_restart_gate",
+  "verdict": "skipped_no_operator_approval",
+  "passed_count": 1,
+  "check_count": 2,
+  "failure_count": 1,
+  "failures": [
+    "operator approval prerequisite passed"
+  ],
+  "checks": [
+    {
+      "label": "operator approval prerequisite passed",
+      "ok": false,
+      "detail": {
+        "operator_approved": false,
+        "env_approved": false,
+        "approval_file": "F:\\Project\\Digua\\operator_approval\\qwen_systemd_apply_approved.json",
+        "approval_file_exists": false,
+        "approval_file_valid": false,
+        "approval_file_error": "missing",
+        "approval_file_payload": null,
+        "target_unit_sha256": "d4f3a198305894becde33cc318c24b23ac14a1664dc62d5c89a6102c90b783a0"
+      }
+    },
+    {
+      "label": "apply not executed without approval",
+      "ok": true,
+      "detail": "no systemd mutation"
+    }
+  ],
+  "detail": {
+    "skipped": true,
+    "reason": "blocked_by_no_operator_approval",
+    "applied": false,
+    "restart_ok": false
+  }
+}

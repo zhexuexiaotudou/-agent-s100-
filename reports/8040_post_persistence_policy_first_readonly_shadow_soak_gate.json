@@ -1,0 +1,23 @@
+{
+  "generated_at": "2026-07-03T23:44:11.795269+08:00",
+  "gate_id": "stage2_9_post_persistence_readonly_shadow_soak_gate",
+  "verdict": "skipped_qwen_persistence_not_applied",
+  "passed_count": 0,
+  "check_count": 1,
+  "failure_count": 1,
+  "failures": [
+    "Qwen persistence applied prerequisite passed"
+  ],
+  "checks": [
+    {
+      "label": "Qwen persistence applied prerequisite passed",
+      "ok": false,
+      "detail": "skipped_no_operator_approval"
+    }
+  ],
+  "detail": {
+    "skipped": true,
+    "reason": "qwen_persistence_not_applied",
+    "trace": "reports\\stage2_9_post_persistence_shadow_soak_trace.jsonl"
+  }
+}

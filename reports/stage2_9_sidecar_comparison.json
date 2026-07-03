@@ -1,0 +1,57 @@
+{
+  "generated_at": "2026-07-03T23:44:19.123645+08:00",
+  "final_verdict": "blocked_by_no_operator_approval_for_qwen_persistence",
+  "architecture": "policy_first_deterministic_router_with_qwen_summarizer_advisor",
+  "qwen_structured_decision": "disabled",
+  "qwen_advisor": "disabled_safe_mode",
+  "gate_table": [
+    {
+      "report": "8000_stage2_9_baseline_lock",
+      "gate_id": "stage2_9_baseline_lock",
+      "verdict": "ok_stage2_9_baseline_lock",
+      "passed_count": 8,
+      "check_count": 8,
+      "failure_count": 0
+    },
+    {
+      "report": "8010_operator_approval_check",
+      "gate_id": "stage2_9_operator_approval_check",
+      "verdict": "blocked_by_no_operator_approval",
+      "passed_count": 2,
+      "check_count": 3,
+      "failure_count": 1
+    },
+    {
+      "report": "8020_qwen_persistence_apply_verify_restart_gate",
+      "gate_id": "stage2_9_qwen_persistence_apply_verify_restart_gate",
+      "verdict": "skipped_no_operator_approval",
+      "passed_count": 1,
+      "check_count": 2,
+      "failure_count": 1
+    },
+    {
+      "report": "8030_qwen_persistence_rollback_gate",
+      "gate_id": "stage2_9_qwen_persistence_rollback_gate",
+      "verdict": "rollback_plan_verified_dry_run",
+      "passed_count": 6,
+      "check_count": 6,
+      "failure_count": 0
+    },
+    {
+      "report": "8040_post_persistence_policy_first_readonly_shadow_soak_gate",
+      "gate_id": "stage2_9_post_persistence_readonly_shadow_soak_gate",
+      "verdict": "skipped_qwen_persistence_not_applied",
+      "passed_count": 0,
+      "check_count": 1,
+      "failure_count": 1
+    },
+    {
+      "report": "8050_stage2_9_stage3_go_no_go_gate",
+      "gate_id": "stage2_9_stage3_go_no_go_gate",
+      "verdict": "blocked_by_no_operator_approval_for_qwen_persistence",
+      "passed_count": 6,
+      "check_count": 12,
+      "failure_count": 6
+    }
+  ]
+}
