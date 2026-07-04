@@ -1,20 +1,229 @@
 # 21210 journal_live_e2e_gate
 
-- generated_at: 2026-07-04T08:32:15Z
-- status: skipped
-- verdict: blocked_by_no_operator_approval
+- generated_at: 2026-07-04T08:49:53Z
+- status: pass
+- verdict: journal_live_e2e_gate_passed
 
 ```json
 {
-  "approval": {
-    "approval_file": "operator_approval/digua_journal_live_rollout_approved.json",
-    "approval_file_exists": false,
-    "approval_file_payload": null,
-    "approved": false,
-    "env_name": "AI_NAS_OPERATOR_APPROVED_DIGUA_JOURNAL_LIVE_ROLLOUT",
-    "env_value_is_1": false
+  "collectors": {
+    "command": [
+      "ssh",
+      "-i",
+      "%USERPROFILE%\\.ssh\\s100p_linkcheck_ed25519",
+      "-o",
+      "BatchMode=yes",
+      "-o",
+      "ConnectTimeout=8",
+      "sunrise@192.168.127.10",
+      "\nset -eu\ncd '/mnt/nas/openclaw'\nDIGUA_JOURNAL_DB_PATH='/mnt/nas/openclaw/reports/qwen25_ai_nas/digua_journal.sqlite3' DIGUA_JOURNAL_REPORT_ROOT='/mnt/nas/openclaw/reports/qwen25_ai_nas' sh scripts/run_journal_collectors_once.sh\n"
+    ],
+    "elapsed_ms": 2049.119,
+    "json": {
+      "db_path": "/mnt/nas/openclaw/reports/qwen25_ai_nas/digua_journal.sqlite3",
+      "event_count": 76,
+      "events_jsonl": "/mnt/nas/openclaw/reports/qwen25_ai_nas/digua_journal_collectors_once_events.jsonl",
+      "migration": {
+        "db_path": "/mnt/nas/openclaw/reports/qwen25_ai_nas/digua_journal.sqlite3",
+        "ok": true,
+        "schema_version": 1
+      },
+      "mode": "live_db",
+      "ok": true,
+      "stats": {
+        "journal_events": 80,
+        "journal_exports": 4,
+        "journal_manual_entries": 4,
+        "journal_project_map": 0,
+        "journal_summary_runs": 16,
+        "journal_token_privacy_traces": 16
+      }
+    },
+    "ok": true,
+    "returncode": 0,
+    "stderr": "",
+    "stdout": "{\"db_path\": \"/mnt/nas/openclaw/reports/qwen25_ai_nas/digua_journal.sqlite3\", \"event_count\": 76, \"events_jsonl\": \"/mnt/nas/openclaw/reports/qwen25_ai_nas/digua_journal_collectors_once_events.jsonl\", \"migration\": {\"db_path\": \"/mnt/nas/openclaw/reports/qwen25_ai_nas/digua_journal.sqlite3\", \"ok\": true, \"schema_version\": 1}, \"mode\": \"live_db\", \"ok\": true, \"stats\": {\"journal_events\": 80, \"journal_exports\": 4, \"journal_manual_entries\": 4, \"journal_project_map\": 0, \"journal_summary_runs\": 16, \"journal_token_privacy_traces\": 16}}"
   },
-  "generated_at": "2026-07-04T08:32:15Z",
+  "e2e": {
+    "command": [
+      "ssh",
+      "-i",
+      "%USERPROFILE%\\.ssh\\s100p_linkcheck_ed25519",
+      "-o",
+      "BatchMode=yes",
+      "-o",
+      "ConnectTimeout=8",
+      "sunrise@192.168.127.10",
+      "python3 - <<'PY'\nimport hashlib, json, urllib.request\n\nBASE = \"http://127.0.0.1:8765\"\n\ndef request(path, payload=None):\n    data = None\n    headers = {\"Accept\": \"application/json\"}\n    method = \"GET\"\n    if payload is not None:\n        data = json.dumps(payload).encode(\"utf-8\")\n        headers[\"Content-Type\"] = \"application/json\"\n        method = \"POST\"\n    req = urllib.request.Request(BASE + path, data=data, headers=headers, method=method)\n    with urllib.request.urlopen(req, timeout=10) as resp:\n        raw = resp.read()\n        text = raw.decode(\"utf-8\", errors=\"replace\")\n        parsed = None\n        try:\n            parsed = json.loads(text)\n        except Exception:\n            parsed = {\"raw_preview\": text[:500]}\n        return {\"status\": resp.status, \"ok\": 200 <= resp.status < 300, \"payload\": parsed}\n\ndef compact_response(response):\n    compact = json.loads(json.dumps(response, ensure_ascii=False))\n    payload = compact.get(\"payload\") if isinstance(compact, dict) else None\n    if isinstance(payload, dict):\n        if payload.get(\"feature\") == \"digua_journal\":\n            return {\n                \"ok\": compact.get(\"ok\"),\n                \"status\": compact.get(\"status\"),\n                \"payload\": {\n                    \"ok\": payload.get(\"ok\"),\n                    \"feature\": payload.get(\"feature\"),\n                    \"db_path\": payload.get(\"db_path\"),\n                    \"stats\": payload.get(\"stats\"),\n                    \"cloud_generation_enabled\": payload.get(\"cloud_generation_enabled\"),\n                    \"qwen_execution_authority\": payload.get(\"qwen_execution_authority\"),\n                },\n            }\n        if payload.get(\"entry_id\") or payload.get(\"event_id\"):\n            return {\n                \"ok\": compact.get(\"ok\"),\n                \"status\": compact.get(\"status\"),\n                \"payload\": {\n                    \"ok\": payload.get(\"ok\"),\n                    \"entry_id\": payload.get(\"entry_id\"),\n                    \"event_id\": payload.get(\"event_id\"),\n                    \"redaction_count\": payload.get(\"redaction_count\"),\n                },\n            }\n        summary = payload.get(\"summary\")\n        if isinstance(summary, dict) and isinstance(summary.get(\"markdown\"), str):\n            markdown = summary[\"markdown\"]\n            return {\n                \"ok\": compact.get(\"ok\"),\n                \"status\": compact.get(\"status\"),\n                \"payload\": {\n                    \"ok\": payload.get(\"ok\"),\n                    \"summary\": {\n                        \"period_type\": summary.get(\"period_type\"),\n                        \"project_id\": summary.get(\"project_id\"),\n                        \"event_count\": summary.get(\"event_count\"),\n                        \"manual_entry_count\": summary.get(\"manual_entry_count\"),\n                        \"local_qwen_used\": summary.get(\"local_qwen_used\"),\n                        \"cloud_used\": summary.get(\"cloud_used\"),\n                        \"hallucinated_event_count\": summary.get(\"hallucinated_event_count\"),\n                        \"path\": summary.get(\"path\"),\n                        \"markdown_bytes\": len(markdown.encode(\"utf-8\")),\n                        \"markdown_sha256\": hashlib.sha256(markdown.encode(\"utf-8\")).hexdigest(),\n                    },\n                },\n            }\n        export = payload.get(\"export\")\n        if isinstance(export, dict):\n            return {\n                \"ok\": compact.get(\"ok\"),\n                \"status\": compact.get(\"status\"),\n                \"payload\": {\n                    \"ok\": payload.get(\"ok\"),\n                    \"export\": {\n                        \"export_type\": export.get(\"export_type\"),\n                        \"period_type\": export.get(\"period_type\"),\n                        \"project_id\": export.get(\"project_id\"),\n                        \"path\": export.get(\"path\"),\n                        \"sha256\": export.get(\"sha256\"),\n                        \"private_leak_count\": export.get(\"private_leak_count\"),\n                        \"redaction_lookup_exported\": export.get(\"redaction_lookup_exported\"),\n                    },\n                },\n            }\n    return compact\n\npage_req = urllib.request.Request(BASE + \"/journal\", headers={\"Accept\": \"text/html\"})\nwith urllib.request.urlopen(page_req, timeout=10) as resp:\n    page_raw = resp.read()\n    page = {\n        \"status\": resp.status,\n        \"ok\": resp.status == 200,\n        \"bytes\": len(page_raw),\n        \"sha256\": hashlib.sha256(page_raw).hexdigest(),\n        \"contains_journal_marker\": b\"journal\" in page_raw.lower(),\n    }\n\nhealth_before = request(\"/api/journal/health\")\nmanual = request(\"/api/journal/manual-entry\", {\n    \"project_id\": \"project_ai_nas\",\n    \"title\": \"Live rollout acceptance note\",\n    \"body\": \"Operator approved Digua Journal live rollout. This manual note stores no private NAS raw content.\",\n    \"evidence_refs\": [\"reports/21200_journal_live_rollout_gate.json\"],\n})\nsummaries = {}\nfor period in [\"daily\", \"weekly\", \"monthly\", \"yearly\"]:\n    summaries[period] = request(\"/api/journal/generate-summary\", {\"period_type\": period, \"project_id\": \"all\"})\nexport = request(\"/api/journal/export\", {\"export_type\": \"markdown\", \"period_type\": \"daily\", \"project_id\": \"all\"})\nhealth_after = request(\"/api/journal/health\")\n\nchecks = {\n    \"journal_http_200\": page[\"ok\"],\n    \"journal_marker_present\": page[\"contains_journal_marker\"],\n    \"health_before_ok\": health_before[\"ok\"] and bool(health_before[\"payload\"].get(\"ok\")),\n    \"manual_entry_ok\": manual[\"ok\"] and bool(manual[\"payload\"].get(\"ok\")),\n    \"summaries_ok\": all(item[\"ok\"] and bool(item[\"payload\"].get(\"ok\")) for item in summaries.values()),\n    \"export_markdown_ok\": export[\"ok\"] and bool(export[\"payload\"].get(\"ok\")),\n    \"health_after_ok\": health_after[\"ok\"] and bool(health_after[\"payload\"].get(\"ok\")),\n}\nprint(json.dumps({\n    \"ok\": all(checks.values()),\n    \"checks\": checks,\n    \"page\": page,\n    \"health_before\": compact_response(health_before),\n    \"manual\": compact_response(manual),\n    \"summaries\": {key: compact_response(value) for key, value in summaries.items()},\n    \"export\": compact_response(export),\n    \"health_after\": compact_response(health_after),\n}, ensure_ascii=False, sort_keys=True))\nPY"
+    ],
+    "elapsed_ms": 871.85,
+    "json": {
+      "checks": {
+        "export_markdown_ok": true,
+        "health_after_ok": true,
+        "health_before_ok": true,
+        "journal_http_200": true,
+        "journal_marker_present": true,
+        "manual_entry_ok": true,
+        "summaries_ok": true
+      },
+      "export": {
+        "ok": true,
+        "payload": {
+          "export": {
+            "export_type": "markdown",
+            "path": "/mnt/nas/openclaw/reports/qwen25_ai_nas/digua_journal_exports/export_f664e0bec32142e6_daily_all.md",
+            "period_type": "daily",
+            "private_leak_count": 0,
+            "project_id": "all",
+            "redaction_lookup_exported": false,
+            "sha256": "f5d2f41d601e35d00a7ff94e03f49385e60eabfdb8b7a3db334f1b98d5d0febc"
+          },
+          "ok": true
+        },
+        "status": 200
+      },
+      "health_after": {
+        "ok": true,
+        "payload": {
+          "cloud_generation_enabled": false,
+          "db_path": "/mnt/nas/openclaw/reports/qwen25_ai_nas/digua_journal.sqlite3",
+          "feature": "digua_journal",
+          "ok": true,
+          "qwen_execution_authority": false,
+          "stats": {
+            "journal_events": 81,
+            "journal_exports": 5,
+            "journal_manual_entries": 5,
+            "journal_project_map": 0,
+            "journal_summary_runs": 20,
+            "journal_token_privacy_traces": 20
+          }
+        },
+        "status": 200
+      },
+      "health_before": {
+        "ok": true,
+        "payload": {
+          "cloud_generation_enabled": false,
+          "db_path": "/mnt/nas/openclaw/reports/qwen25_ai_nas/digua_journal.sqlite3",
+          "feature": "digua_journal",
+          "ok": true,
+          "qwen_execution_authority": false,
+          "stats": {
+            "journal_events": 80,
+            "journal_exports": 4,
+            "journal_manual_entries": 4,
+            "journal_project_map": 0,
+            "journal_summary_runs": 16,
+            "journal_token_privacy_traces": 16
+          }
+        },
+        "status": 200
+      },
+      "manual": {
+        "ok": true,
+        "payload": {
+          "entry_id": "manual_e00b525fcdeb4759bf60",
+          "event_id": "evt_8a3f0594c48f4548af017c81",
+          "ok": true,
+          "redaction_count": 0
+        },
+        "status": 200
+      },
+      "ok": true,
+      "page": {
+        "bytes": 2897,
+        "contains_journal_marker": true,
+        "ok": true,
+        "sha256": "d23498f258ea8cbc8f1dae1b192ccd8b8f0219f569718a7abfa9b843e3c9fe85",
+        "status": 200
+      },
+      "summaries": {
+        "daily": {
+          "ok": true,
+          "payload": {
+            "ok": true,
+            "summary": {
+              "cloud_used": false,
+              "event_count": 81,
+              "hallucinated_event_count": 0,
+              "local_qwen_used": true,
+              "manual_entry_count": 5,
+              "markdown_bytes": 1200,
+              "markdown_sha256": "eadcd041ab334c6a133b9d3988e4fe4664de21a81fd3d81e95707889ba48d349",
+              "path": "/mnt/nas/openclaw/reports/qwen25_ai_nas/digua_journal_evidence/sample_daily_summary.md",
+              "period_type": "daily",
+              "project_id": "all"
+            }
+          },
+          "status": 200
+        },
+        "monthly": {
+          "ok": true,
+          "payload": {
+            "ok": true,
+            "summary": {
+              "cloud_used": false,
+              "event_count": 81,
+              "hallucinated_event_count": 0,
+              "local_qwen_used": true,
+              "manual_entry_count": 5,
+              "markdown_bytes": 1200,
+              "markdown_sha256": "e69efa9c1200fe0044eb8d5d26580eb5fe84c9912967f1399b74497be81f32d0",
+              "path": "/mnt/nas/openclaw/reports/qwen25_ai_nas/digua_journal_evidence/sample_monthly_summary.md",
+              "period_type": "monthly",
+              "project_id": "all"
+            }
+          },
+          "status": 200
+        },
+        "weekly": {
+          "ok": true,
+          "payload": {
+            "ok": true,
+            "summary": {
+              "cloud_used": false,
+              "event_count": 81,
+              "hallucinated_event_count": 0,
+              "local_qwen_used": true,
+              "manual_entry_count": 5,
+              "markdown_bytes": 1200,
+              "markdown_sha256": "e5baf6b1d853993aafc466e0ae357b4e282edc27de2dfe71d3eb131c5c3a7c58",
+              "path": "/mnt/nas/openclaw/reports/qwen25_ai_nas/digua_journal_evidence/sample_weekly_summary.md",
+              "period_type": "weekly",
+              "project_id": "all"
+            }
+          },
+          "status": 200
+        },
+        "yearly": {
+          "ok": true,
+          "payload": {
+            "ok": true,
+            "summary": {
+              "cloud_used": false,
+              "event_count": 81,
+              "hallucinated_event_count": 0,
+              "local_qwen_used": true,
+              "manual_entry_count": 5,
+              "markdown_bytes": 1200,
+              "markdown_sha256": "2fe35a502864aadd1c579a3a6572f625eb1d89efae1994f1108b0722d0cf6582",
+              "path": "/mnt/nas/openclaw/reports/qwen25_ai_nas/digua_journal_evidence/sample_yearly_summary.md",
+              "period_type": "yearly",
+              "project_id": "all"
+            }
+          },
+          "status": 200
+        }
+      }
+    },
+    "ok": true,
+    "returncode": 0,
+    "stderr": "",
+    "stdout": "{\"checks\": {\"export_markdown_ok\": true, \"health_after_ok\": true, \"health_before_ok\": true, \"journal_http_200\": true, \"journal_marker_present\": true, \"manual_entry_ok\": true, \"summaries_ok\": true}, \"export\": {\"ok\": true, \"payload\": {\"export\": {\"export_type\": \"markdown\", \"path\": \"/mnt/nas/openclaw/reports/qwen25_ai_nas/digua_journal_exports/export_f664e0bec32142e6_daily_all.md\", \"period_type\": \"daily\", \"private_leak_count\": 0, \"project_id\": \"all\", \"redaction_lookup_exported\": false, \"sha256\": \"f5d2f41d601e35d00a7ff94e03f49385e60eabfdb8b7a3db334f1b98d5d0febc\"}, \"ok\": true}, \"status\": 200}, \"health_after\": {\"ok\": true, \"payload\": {\"cloud_generation_enabled\": false, \"db_path\": \"/mnt/nas/openclaw/reports/qwen25_ai_nas/digua_journal.sqlite3\", \"feature\": \"digua_journal\", \"ok\": true, \"qwen_execution_authority\": false, \"stats\": {\"journal_events\": 81, \"journal_exports\": 5, \"journal_manual_entries\": 5, \"journal_project_map\": 0, \"journal_summary_runs\": 20, \"journal_token_privacy_traces\": 20}}, \"status\": 200}, \"health_before\": {\"ok\": true, \"payload\": {\"cloud_generation_enabled\": false, \"db_path\": \"/mnt/nas/openclaw/reports/qwen25_ai_nas/digua_journal.sqlite3\", \"feature\": \"digua_journal\", \"ok\": true, \"qwen_execution_authority\": false, \"stats\": {\"journal_events\": 80, \"journal_exports\": 4, \"journal_manual_entries\": 4, \"journal_project_map\": 0, \"journal_summary_runs\": 16, \"journal_token_privacy_traces\": 16}}, \"status\": 200}, \"manual\": {\"ok\": true, \"payload\": {\"entry_id\": \"manual_e00b525fcdeb4759bf60\", \"event_id\": \"evt_8a3f0594c48f4548af017c81\", \"ok\": true, \"redaction_count\": 0}, \"status\": 200}, \"ok\": true, \"page\": {\"bytes\": 2897, \"contains_journal_marker\": true, \"ok\": true, \"sha256\": \"d23498f258ea8cbc8f1dae1b192ccd8b8f0219f569718a7abfa9b843e3c9fe85\", \"status\": 200}, \"summaries\": {\"daily\": {\"ok\": true, \"payload\": {\"ok\": true, \"summary\": {\"cloud_used\": false, \"event_count\": 81, \"hallucinated_event_count\": 0, \"local_qwen_used\": true, \"manual_entry_count\": 5, \"markdown_bytes\": 1200, \"markdown_sha256\": \"eadcd041ab334c6a133b9d3988e4fe4664de21a81fd3d81e95707889ba48d349\", \"path\": \"/mnt/nas/openclaw/reports/qwen25_ai_nas/digua_journal_evidence/sample_daily_summary.md\", \"period_type\": \"daily\", \"project_id\": \"all\"}}, \"status\": 200}, \"monthly\": {\"ok\": true, \"payload\": {\"ok\": true, \"summary\": {\"cloud_used\": false, \"event_count\": 81, \"hallucinated_event_count\": 0, \"local_qwen_used\": true, \"manual_entry_count\": 5, \"markdown_bytes\": 1200, \"markdown_sha256\": \"e69efa9c1200fe0044eb8d5d26580eb5fe84c9912967f1399b74497be81f32d0\", \"path\": \"/mnt/nas/openclaw/reports/qwen25_ai_nas/digua_journal_evidence/sample_monthly_summary.md\", \"period_type\": \"monthly\", \"project_id\": \"all\"}}, \"status\": 200}, \"weekly\": {\"ok\": true, \"payload\": {\"ok\": true, \"summary\": {\"cloud_used\": false, \"event_count\": 81, \"hallucinated_event_count\": 0, \"local_qwen_used\": true, \"manual_entry_count\": 5, \"markdown_bytes\": 1200, \"markdown_sha256\": \"e5baf6b1d853993aafc466e0ae357b4e282edc27de2dfe71d3eb131c5c3a7c58\", \"path\": \"/mnt/nas/openclaw/reports/qwen25_ai_nas/digua_journal_evidence/sample_weekly_summary.md\", \"period_type\": \"weekly\", \"project_id\": \"all\"}}, \"status\": 200}, \"yearly\": {\"ok\": true, \"payload\": {\"ok\": true, \"summary\": {\"cloud_used\": false, \"event_count\": 81, \"hallucinated_event_count\": 0, \"local_qwen_used\": true, \"manual_entry_count\": 5, \"markdown_bytes\": 1200, \"markdown_sha256\": \"2fe35a502864aadd1c579a3a6572f625eb1d89efae1994f1108b0722d0cf6582\", \"path\": \"/mnt/nas/openclaw/reports/qwen25_ai_nas/digua_journal_evidence/sample_yearly_summary.md\", \"period_type\": \"yearly\", \"project_id\": \"all\"}}, \"status\": 200}}}"
+  },
+  "generated_at": "2026-07-04T08:49:53Z",
   "hard_constraints": {
     "cloud_generation_enabled": false,
     "delete_move_rename_chmod_executed": false,
@@ -27,29 +236,110 @@
     "qwen_tool_execution_authority": false,
     "screenshot_enabled": false
   },
-  "live_rollout_attempted": false,
-  "openclaw_reload_attempted": false,
-  "reason": "missing operator approval gate",
+  "privacy_scan": {
+    "command": [
+      "ssh",
+      "-i",
+      "%USERPROFILE%\\.ssh\\s100p_linkcheck_ed25519",
+      "-o",
+      "BatchMode=yes",
+      "-o",
+      "ConnectTimeout=8",
+      "sunrise@192.168.127.10",
+      "python3 - <<'PY'\nimport json, sys\nfrom pathlib import Path\n\nroot = Path('/mnt/nas/openclaw')\nsys.path.insert(0, str(root))\nfrom src.digua_journal.journal_privacy_guard import export_safety_report\n\nscan_roots = [Path('/mnt/nas/openclaw/reports/qwen25_ai_nas/digua_journal_evidence'), Path('/mnt/nas/openclaw/reports/qwen25_ai_nas/digua_journal_exports')]\nfiles = []\nfor scan_root in scan_roots:\n    if scan_root.exists():\n        files.extend(path for path in scan_root.rglob(\"*\") if path.is_file() and path.suffix.lower() in {\".md\", \".json\", \".jsonl\"})\nreports = []\nfor path in sorted(files):\n    text = path.read_text(encoding=\"utf-8\", errors=\"replace\")\n    safety = export_safety_report(text)\n    reports.append({\"path\": str(path), **safety})\nprivate_leak_count = sum(item[\"private_leak_count\"] for item in reports)\nprint(json.dumps({\n    \"ok\": private_leak_count == 0,\n    \"scanned_file_count\": len(reports),\n    \"private_leak_count\": private_leak_count,\n    \"redaction_lookup_exported\": any(item[\"redaction_lookup_exported\"] for item in reports),\n    \"reports\": reports,\n}, ensure_ascii=False, sort_keys=True))\nPY"
+    ],
+    "elapsed_ms": 291.277,
+    "json": {
+      "ok": true,
+      "private_leak_count": 0,
+      "redaction_lookup_exported": false,
+      "reports": [
+        {
+          "leak_preview": [],
+          "ok": true,
+          "path": "/mnt/nas/openclaw/reports/qwen25_ai_nas/digua_journal_evidence/sample_daily_summary.md",
+          "private_leak_count": 0,
+          "redaction_lookup_exported": false
+        },
+        {
+          "leak_preview": [],
+          "ok": true,
+          "path": "/mnt/nas/openclaw/reports/qwen25_ai_nas/digua_journal_evidence/sample_monthly_summary.md",
+          "private_leak_count": 0,
+          "redaction_lookup_exported": false
+        },
+        {
+          "leak_preview": [],
+          "ok": true,
+          "path": "/mnt/nas/openclaw/reports/qwen25_ai_nas/digua_journal_evidence/sample_weekly_summary.md",
+          "private_leak_count": 0,
+          "redaction_lookup_exported": false
+        },
+        {
+          "leak_preview": [],
+          "ok": true,
+          "path": "/mnt/nas/openclaw/reports/qwen25_ai_nas/digua_journal_evidence/sample_yearly_summary.md",
+          "private_leak_count": 0,
+          "redaction_lookup_exported": false
+        },
+        {
+          "leak_preview": [],
+          "ok": true,
+          "path": "/mnt/nas/openclaw/reports/qwen25_ai_nas/digua_journal_exports/export_122757931e624216_daily_all.md",
+          "private_leak_count": 0,
+          "redaction_lookup_exported": false
+        },
+        {
+          "leak_preview": [],
+          "ok": true,
+          "path": "/mnt/nas/openclaw/reports/qwen25_ai_nas/digua_journal_exports/export_8a145b41fe164658_daily_all.md",
+          "private_leak_count": 0,
+          "redaction_lookup_exported": false
+        },
+        {
+          "leak_preview": [],
+          "ok": true,
+          "path": "/mnt/nas/openclaw/reports/qwen25_ai_nas/digua_journal_exports/export_902bc23da61d4591_daily_all.md",
+          "private_leak_count": 0,
+          "redaction_lookup_exported": false
+        },
+        {
+          "leak_preview": [],
+          "ok": true,
+          "path": "/mnt/nas/openclaw/reports/qwen25_ai_nas/digua_journal_exports/export_bf1da883fea9496b_daily_all.md",
+          "private_leak_count": 0,
+          "redaction_lookup_exported": false
+        },
+        {
+          "leak_preview": [],
+          "ok": true,
+          "path": "/mnt/nas/openclaw/reports/qwen25_ai_nas/digua_journal_exports/export_f664e0bec32142e6_daily_all.md",
+          "private_leak_count": 0,
+          "redaction_lookup_exported": false
+        }
+      ],
+      "scanned_file_count": 9
+    },
+    "ok": true,
+    "returncode": 0,
+    "stderr": "",
+    "stdout": "{\"ok\": true, \"private_leak_count\": 0, \"redaction_lookup_exported\": false, \"reports\": [{\"leak_preview\": [], \"ok\": true, \"path\": \"/mnt/nas/openclaw/reports/qwen25_ai_nas/digua_journal_evidence/sample_daily_summary.md\", \"private_leak_count\": 0, \"redaction_lookup_exported\": false}, {\"leak_preview\": [], \"ok\": true, \"path\": \"/mnt/nas/openclaw/reports/qwen25_ai_nas/digua_journal_evidence/sample_monthly_summary.md\", \"private_leak_count\": 0, \"redaction_lookup_exported\": false}, {\"leak_preview\": [], \"ok\": true, \"path\": \"/mnt/nas/openclaw/reports/qwen25_ai_nas/digua_journal_evidence/sample_weekly_summary.md\", \"private_leak_count\": 0, \"redaction_lookup_exported\": false}, {\"leak_preview\": [], \"ok\": true, \"path\": \"/mnt/nas/openclaw/reports/qwen25_ai_nas/digua_journal_evidence/sample_yearly_summary.md\", \"private_leak_count\": 0, \"redaction_lookup_exported\": false}, {\"leak_preview\": [], \"ok\": true, \"path\": \"/mnt/nas/openclaw/reports/qwen25_ai_nas/digua_journal_exports/export_122757931e624216_daily_all.md\", \"private_leak_count\": 0, \"redaction_lookup_exported\": false}, {\"leak_preview\": [], \"ok\": true, \"path\": \"/mnt/nas/openclaw/reports/qwen25_ai_nas/digua_journal_exports/export_8a145b41fe164658_daily_all.md\", \"private_leak_count\": 0, \"redaction_lookup_exported\": false}, {\"leak_preview\": [], \"ok\": true, \"path\": \"/mnt/nas/openclaw/reports/qwen25_ai_nas/digua_journal_exports/export_902bc23da61d4591_daily_all.md\", \"private_leak_count\": 0, \"redaction_lookup_exported\": false}, {\"leak_preview\": [], \"ok\": true, \"path\": \"/mnt/nas/openclaw/reports/qwen25_ai_nas/digua_journal_exports/export_bf1da883fea9496b_daily_all.md\", \"private_leak_count\": 0, \"redaction_lookup_exported\": false}, {\"leak_preview\": [], \"ok\": true, \"path\": \"/mnt/nas/openclaw/reports/qwen25_ai_nas/digua_journal_exports/export_f664e0bec32142e6_daily_all.md\", \"private_leak_count\": 0, \"redaction_lookup_exported\": false}], \"scanned_file_count\": 9}"
+  },
   "report_id": 21210,
-  "s100p_service_mutation_attempted": false,
-  "skipped_steps": [
-    "OpenClaw health",
-    "Qwen health",
-    "protected port check",
-    "journal DB migration on S100P",
-    "feature flag load",
-    "OpenClaw reload",
+  "required_checks": [
     "/journal HTTP 200",
     "/api/journal/health",
-    "collector run",
+    "run_journal_collectors_once.sh",
     "manual entry",
-    "period summaries",
+    "daily summary",
+    "weekly summary",
+    "monthly summary",
+    "yearly summary",
     "Markdown export",
     "privacy scan"
   ],
-  "ssh_attempted": false,
-  "status": "skipped",
+  "status": "pass",
   "title": "journal_live_e2e_gate",
-  "verdict": "blocked_by_no_operator_approval"
+  "verdict": "journal_live_e2e_gate_passed"
 }
 ```
