@@ -1,0 +1,23 @@
+{
+  "benchmark_summary_api_pass": true,
+  "desktop_screenshot_exists": true,
+  "estimate_api_pass": true,
+  "evidence": {
+    "html": "F:\\Project\\Digua\\evidence\\token_budget\\screenshots\\token_budget_diagnostics_panel.html",
+    "screenshot": "F:\\Project\\Digua\\evidence\\token_budget\\screenshots\\token_budget_diagnostics_panel.png"
+  },
+  "gate": "17060_openclaw_token_budget_product_api_gate",
+  "generated_at": "2026-07-04T13:57:01+08:00",
+  "private_leak_count": 0,
+  "route_api_pass": true,
+  "routes_added": [
+    "POST /api/token-budget/estimate",
+    "POST /api/token-budget/route",
+    "GET /api/token-budget/trace/{run_id}",
+    "GET /api/token-budget/summary",
+    "GET /api/token-budget/benchmark-summary"
+  ],
+  "summary_api_pass": true,
+  "trace_api_pass": true,
+  "verdict": "pass"
+}

@@ -1,0 +1,163 @@
+{
+  "gate": "17050_token_trace_harness_integration_gate",
+  "generated_at": "2026-07-04T13:57:00+08:00",
+  "harness_integration_smoke_pass": true,
+  "private_leak_count": 0,
+  "responses": [
+    {
+      "case_id": "harness_private_doc",
+      "cloud_allowed": false,
+      "cloud_call_avoided": true,
+      "ok": true,
+      "optimized_payload_preview": null,
+      "private_leak_count": 0,
+      "quality_check": "pass",
+      "redaction_count": 1,
+      "redaction_map_included": false,
+      "route": "local_only",
+      "route_reason": "private_context_kept_local",
+      "run_id": "token-budget-5a806731f6ba",
+      "task_type": "document_qa",
+      "token_counts": {
+        "compressed_payload_tokens": 0,
+        "naive_cloud_payload_tokens": 44,
+        "optimized_cloud_payload_tokens": 0,
+        "raw_context_tokens": 16,
+        "raw_user_prompt_tokens": 9,
+        "redacted_payload_tokens": 54,
+        "reduction_ratio": 1.0,
+        "saved_tokens": 44
+      },
+      "tokenizer_identity": {
+        "added_tokens_hash": null,
+        "backend": "tokenizers_json",
+        "fallback_used": false,
+        "generated_at": "2026-07-04T13:57:00+08:00",
+        "load_method": "tokenizers_json",
+        "merges_hash": "599bab54075088774b1733fde865d5bd747cbcc7a547c5bc12610e874e26f5e3",
+        "model_identity": "Qwen2.5-1.5B-Instruct-S100P-official",
+        "real_tokenizer_available": true,
+        "remote_source_path": "/mnt/nas/openclaw/models/qwen2_5-1_5b-hf",
+        "tokenizer_class": "Tokenizer",
+        "tokenizer_config_hash": "5b5d4f65d0acd3b2d56a35b56d374a36cbc1c8fa5cf3b3febbbfabf22f359583",
+        "tokenizer_identity_hash": "8695d2b54075568a870d2364c50a53a59be11e28305a1cf4cc5bdbb67a7223af",
+        "tokenizer_json_hash": "c0382117ea329cdf097041132f6d735924b697924d6f6fc3945713e96ce87539",
+        "tokenizer_path": "F:\\Project\\Digua\\evidence\\token_budget\\qwen2_5-1_5b-hf",
+        "vocab_hash": "ca10d7e9fb3ed18575dd1e277a2579c16d108e32f27439684afa0e10b1440910",
+        "vocab_size": 151665
+      },
+      "trace": {
+        "case_id": "harness_private_doc",
+        "cloud_call_avoided": true,
+        "compressed_payload_tokens": 0,
+        "naive_cloud_payload_tokens": 44,
+        "optimized_cloud_payload_tokens": 0,
+        "private_leak_count": 0,
+        "quality_check": "pass",
+        "raw_context_tokens": 16,
+        "raw_user_prompt_tokens": 9,
+        "redacted_payload_tokens": 54,
+        "redaction_count": 1,
+        "reduction_ratio": 1.0,
+        "route": "local_only",
+        "route_reason": "private_context_kept_local",
+        "run_id": "token-budget-5a806731f6ba",
+        "saved_tokens": 44,
+        "task_type": "document_qa",
+        "timestamp": "2026-07-04T13:57:00+08:00",
+        "tokenizer_identity_hash": "8695d2b54075568a870d2364c50a53a59be11e28305a1cf4cc5bdbb67a7223af",
+        "trace_hash": "23bb7e2cf517b0c207eb860f432248b7e2fe0392844476bdbeac8c85e38a18a9"
+      },
+      "workspace": "openclaw"
+    },
+    {
+      "case_id": "harness_public_research",
+      "cloud_allowed": true,
+      "cloud_call_avoided": false,
+      "ok": true,
+      "optimized_payload_preview": {
+        "context_summary": {
+          "item_count": 1,
+          "metadata": {},
+          "top_items": [
+            "public OpenClaw S100P Qwen evidence hash_abcd1234"
+          ]
+        },
+        "evidence_hashes": [
+          "hash_abcd1234"
+        ],
+        "policy": {
+          "raw_private_content_removed": true,
+          "redaction_map_included": false,
+          "split_private_local": false
+        },
+        "query": "Compare public AI NAS product trends.",
+        "task_type": "public_research"
+      },
+      "private_leak_count": 0,
+      "quality_check": "pass",
+      "redaction_count": 0,
+      "redaction_map_included": false,
+      "route": "cloud_allowed_redacted",
+      "route_reason": "public_or_redacted_complex_task",
+      "run_id": "token-budget-121567f6c758",
+      "task_type": "public_research",
+      "token_counts": {
+        "compressed_payload_tokens": 88,
+        "naive_cloud_payload_tokens": 53,
+        "optimized_cloud_payload_tokens": 88,
+        "raw_context_tokens": 19,
+        "raw_user_prompt_tokens": 7,
+        "redacted_payload_tokens": 61,
+        "reduction_ratio": 0.0,
+        "saved_tokens": 0
+      },
+      "tokenizer_identity": {
+        "added_tokens_hash": null,
+        "backend": "tokenizers_json",
+        "fallback_used": false,
+        "generated_at": "2026-07-04T13:57:00+08:00",
+        "load_method": "tokenizers_json",
+        "merges_hash": "599bab54075088774b1733fde865d5bd747cbcc7a547c5bc12610e874e26f5e3",
+        "model_identity": "Qwen2.5-1.5B-Instruct-S100P-official",
+        "real_tokenizer_available": true,
+        "remote_source_path": "/mnt/nas/openclaw/models/qwen2_5-1_5b-hf",
+        "tokenizer_class": "Tokenizer",
+        "tokenizer_config_hash": "5b5d4f65d0acd3b2d56a35b56d374a36cbc1c8fa5cf3b3febbbfabf22f359583",
+        "tokenizer_identity_hash": "8695d2b54075568a870d2364c50a53a59be11e28305a1cf4cc5bdbb67a7223af",
+        "tokenizer_json_hash": "c0382117ea329cdf097041132f6d735924b697924d6f6fc3945713e96ce87539",
+        "tokenizer_path": "F:\\Project\\Digua\\evidence\\token_budget\\qwen2_5-1_5b-hf",
+        "vocab_hash": "ca10d7e9fb3ed18575dd1e277a2579c16d108e32f27439684afa0e10b1440910",
+        "vocab_size": 151665
+      },
+      "trace": {
+        "case_id": "harness_public_research",
+        "cloud_call_avoided": false,
+        "compressed_payload_tokens": 88,
+        "naive_cloud_payload_tokens": 53,
+        "optimized_cloud_payload_tokens": 88,
+        "private_leak_count": 0,
+        "quality_check": "pass",
+        "raw_context_tokens": 19,
+        "raw_user_prompt_tokens": 7,
+        "redacted_payload_tokens": 61,
+        "redaction_count": 0,
+        "reduction_ratio": 0.0,
+        "route": "cloud_allowed_redacted",
+        "route_reason": "public_or_redacted_complex_task",
+        "run_id": "token-budget-121567f6c758",
+        "saved_tokens": 0,
+        "task_type": "public_research",
+        "timestamp": "2026-07-04T13:57:00+08:00",
+        "tokenizer_identity_hash": "8695d2b54075568a870d2364c50a53a59be11e28305a1cf4cc5bdbb67a7223af",
+        "trace_hash": "fe0e185b15823a11539a2c958dd5d9340c2b6b11df1a7c7a037caf95a9c91fad"
+      },
+      "workspace": "openclaw"
+    }
+  ],
+  "token_fields_complete": true,
+  "trace_complete_rate": 1.0,
+  "trace_count": 2,
+  "trace_hash_present": true,
+  "verdict": "pass"
+}

@@ -1,0 +1,44 @@
+{
+  "gate": "17000_qwen_tokenizer_identity_gate",
+  "generated_at": "2026-07-04T13:56:59+08:00",
+  "real_tokenizer_available": true,
+  "smoke_test_count": 30,
+  "smoke_tests_pass": true,
+  "tokenizer_identity": {
+    "added_tokens_hash": null,
+    "backend": "tokenizers_json",
+    "fallback_used": false,
+    "file_hashes": {
+      "merges.txt": {
+        "bytes": 1671839,
+        "sha256": "599bab54075088774b1733fde865d5bd747cbcc7a547c5bc12610e874e26f5e3"
+      },
+      "tokenizer.json": {
+        "bytes": 7031645,
+        "sha256": "c0382117ea329cdf097041132f6d735924b697924d6f6fc3945713e96ce87539"
+      },
+      "tokenizer_config.json": {
+        "bytes": 7305,
+        "sha256": "5b5d4f65d0acd3b2d56a35b56d374a36cbc1c8fa5cf3b3febbbfabf22f359583"
+      },
+      "vocab.json": {
+        "bytes": 2776833,
+        "sha256": "ca10d7e9fb3ed18575dd1e277a2579c16d108e32f27439684afa0e10b1440910"
+      }
+    },
+    "generated_at": "2026-07-04T13:56:59+08:00",
+    "load_method": "tokenizers_json",
+    "merges_hash": "599bab54075088774b1733fde865d5bd747cbcc7a547c5bc12610e874e26f5e3",
+    "model_identity": "Qwen2.5-1.5B-Instruct-S100P-official",
+    "real_tokenizer_available": true,
+    "remote_source_path": "/mnt/nas/openclaw/models/qwen2_5-1_5b-hf",
+    "tokenizer_class": "Tokenizer",
+    "tokenizer_config_hash": "5b5d4f65d0acd3b2d56a35b56d374a36cbc1c8fa5cf3b3febbbfabf22f359583",
+    "tokenizer_identity_hash": "8695d2b54075568a870d2364c50a53a59be11e28305a1cf4cc5bdbb67a7223af",
+    "tokenizer_json_hash": "c0382117ea329cdf097041132f6d735924b697924d6f6fc3945713e96ce87539",
+    "tokenizer_path": "F:\\Project\\Digua\\evidence\\token_budget\\qwen2_5-1_5b-hf",
+    "vocab_hash": "ca10d7e9fb3ed18575dd1e277a2579c16d108e32f27439684afa0e10b1440910",
+    "vocab_size": 151665
+  },
+  "verdict": "pass"
+}

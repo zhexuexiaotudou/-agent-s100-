@@ -1,0 +1,342 @@
+{
+  "file_count": 66,
+  "files": [
+    {
+      "bytes": 4703,
+      "path": "tools/token_budget/qwen_token_counter.py",
+      "sha256": "88fd9e24d64e944b3a3c9796e9cd36ad3175efcc785de8a164748ab39bdf820f"
+    },
+    {
+      "bytes": 5476,
+      "path": "tools/token_budget/tokenizer_identity.py",
+      "sha256": "4a7b9dfdbf1a3c03a6c7b6570f7ff5f5e66aced2c108fdb956c075627e3e5b9f"
+    },
+    {
+      "bytes": 4896,
+      "path": "tools/token_budget/privacy_redactor.py",
+      "sha256": "69add63020bc07a950c48291aca6ee4cd2f88d85e2a9db53faf84d6af2a1f71f"
+    },
+    {
+      "bytes": 5205,
+      "path": "tools/token_budget/context_compressor.py",
+      "sha256": "ee87f1bdb85d3473c784fdd3c5d17305ec2c8ac40ca8bbc4af1bff8d98094f9b"
+    },
+    {
+      "bytes": 3356,
+      "path": "tools/token_budget/cloud_route_decider.py",
+      "sha256": "3d06e481e02f71c1b05311d3c7444b5063d4cb28055141e1dcd4d88f6d00b771"
+    },
+    {
+      "bytes": 2295,
+      "path": "tools/token_budget/token_trace.py",
+      "sha256": "e5e4808c1dbadae0cff6dce2591d2a0d69885dfd6c216414919d07eabebd94d6"
+    },
+    {
+      "bytes": 9949,
+      "path": "src/harness/token_budget_integration.py",
+      "sha256": "c2ed1bc09480e5d78a86a0408d50686fc31447c1562045b67a631e5af698c118"
+    },
+    {
+      "bytes": 980642,
+      "path": "benchmarks/token_budget_cases.jsonl",
+      "sha256": "639066a4d38a27df0df2e0c721f8d0d5b692c72aae907ae788d36a44f2d2c2df"
+    },
+    {
+      "bytes": 53293,
+      "path": "benchmarks/run_token_budget_benchmark.py",
+      "sha256": "150587ab06be20ce3d00cba31a4b1d6b7142c2f68293137743ad25714bb518ee"
+    },
+    {
+      "bytes": 105680,
+      "path": "reports/token_budget_benchmark_cases_scored.jsonl",
+      "sha256": "66c983250403619cedd16e360973b9089cf8093200dbdc3ff2078485f7f294f6"
+    },
+    {
+      "bytes": 5151,
+      "path": "reports/token_budget_traces_sample.jsonl",
+      "sha256": "beb9746fb0518f23788c69c6f9139d51a16047ef4480c4ece882f6a807fffc5d"
+    },
+    {
+      "bytes": 17188,
+      "path": "reports/privacy_redactor_test_cases.json",
+      "sha256": "5bd7de6254691d38e19d5e06db37c7fe5f983146cffb7be683853a126ad76881"
+    },
+    {
+      "bytes": 13991,
+      "path": "reports/privacy_redactor_test_cases.jsonl",
+      "sha256": "d4478f71e2d0eef21bd7858d25620cf00c15c71739cc6e5757a364a5aa7e3a70"
+    },
+    {
+      "bytes": 662,
+      "path": "docs/TOKENIZER_TOKEN_BUDGET_DESIGN_REPORT_SECTION.md",
+      "sha256": "19f3e9aa82a17128906c8b4e4ea786781a2930d34995b016afa2fe8e2b5f92aa"
+    },
+    {
+      "bytes": 1186,
+      "path": "docs/TOKENIZER_TOKEN_BUDGET_PERFORMANCE_TABLE.md",
+      "sha256": "f89f07c89ff58dce8ddeb00d4fb6a4b338947870dcd69f87d3883bd4a00906d8"
+    },
+    {
+      "bytes": 660,
+      "path": "docs/TOKEN_COST_SAFE_WORDING.md",
+      "sha256": "6c0b0270df913e31d1793a1127f0ff403e9e7bb6811af39700e8592892aa9f98"
+    },
+    {
+      "bytes": 793,
+      "path": "docs/TOKEN_BUDGET_DEFENSE_QA.md",
+      "sha256": "3265401c75bf09d2a9eb197675e89e7a316273355fe9555ba83f044a75a0e2b4"
+    },
+    {
+      "bytes": 17722,
+      "path": "reports/PRODUCT_CLAIM_EVIDENCE_MATRIX.json",
+      "sha256": "9d6ad5f6766bbaec14645506c6e85f6b7177f93d73d9e556ce24bb787ab21f80"
+    },
+    {
+      "bytes": 6282,
+      "path": "reports/PRODUCT_CLAIM_EVIDENCE_MATRIX.md",
+      "sha256": "2bfd70b22ade003d0981c1e5f081fec6d1560eded6373dc76dc758c056cfe34c"
+    },
+    {
+      "bytes": 1801,
+      "path": "SELF_CHECK.py",
+      "sha256": "e2b72926fc8f302ffc1d9aeaa9a8c64ec42f798e9aa4f0cbc89d5c13333a4b1c"
+    },
+    {
+      "bytes": 1851,
+      "path": "reports/17000_qwen_tokenizer_identity_gate.json",
+      "sha256": "27626885a4226db262422eea2af57cf66ac61fb74d3e930f8916c7bcecaa6f1a"
+    },
+    {
+      "bytes": 2105,
+      "path": "reports/17000_qwen_tokenizer_smoke_tests.json",
+      "sha256": "78dcec7bea0fe3af28e30a25bc9d68e8b0fbf7cff8893c6a34005cf46ee46bf3"
+    },
+    {
+      "bytes": 8614,
+      "path": "reports/17000_tokenizer_product_baseline_lock.json",
+      "sha256": "9fd9bdf1f41caf58ab21f1257b69a3370e9eed647eeb31e38d5d8f4b0af14f29"
+    },
+    {
+      "bytes": 260,
+      "path": "reports/17010_privacy_redactor_gate.json",
+      "sha256": "c9a17dae98763306017516d4a4ffbdbe4363474527e298c2a9bede65916d2dd1"
+    },
+    {
+      "bytes": 1851,
+      "path": "reports/17010_qwen_tokenizer_identity_gate.json",
+      "sha256": "27626885a4226db262422eea2af57cf66ac61fb74d3e930f8916c7bcecaa6f1a"
+    },
+    {
+      "bytes": 2105,
+      "path": "reports/17010_qwen_tokenizer_smoke_tests.json",
+      "sha256": "78dcec7bea0fe3af28e30a25bc9d68e8b0fbf7cff8893c6a34005cf46ee46bf3"
+    },
+    {
+      "bytes": 252,
+      "path": "reports/17020_context_compressor_gate.json",
+      "sha256": "fcdbffd26732790c5dda194499503d9909dd1fa7e86ab7d0cbda3c6ab1d08ede"
+    },
+    {
+      "bytes": 260,
+      "path": "reports/17020_privacy_redactor_product_gate.json",
+      "sha256": "c9a17dae98763306017516d4a4ffbdbe4363474527e298c2a9bede65916d2dd1"
+    },
+    {
+      "bytes": 320,
+      "path": "reports/17030_cloud_route_decider_gate.json",
+      "sha256": "78297f968ade47f3e1cbd18cada22c64466d26392807dfe9e546a67c96b026f7"
+    },
+    {
+      "bytes": 252,
+      "path": "reports/17030_context_compressor_product_gate.json",
+      "sha256": "fcdbffd26732790c5dda194499503d9909dd1fa7e86ab7d0cbda3c6ab1d08ede"
+    },
+    {
+      "bytes": 320,
+      "path": "reports/17040_cloud_route_decider_product_gate.json",
+      "sha256": "78297f968ade47f3e1cbd18cada22c64466d26392807dfe9e546a67c96b026f7"
+    },
+    {
+      "bytes": 269,
+      "path": "reports/17040_token_trace_audit_gate.json",
+      "sha256": "b137073a1ff687e06cef65bdeebeacec4a67342ab3eab674a309ec8c79eba834"
+    },
+    {
+      "bytes": 3674,
+      "path": "reports/17050_token_budget_benchmark_results.json",
+      "sha256": "0349c35074252bffd31dc70f521b3559e8e554d40e8265a8d59ad0bdfa6bc91b"
+    },
+    {
+      "bytes": 6656,
+      "path": "reports/17050_token_trace_harness_integration_gate.json",
+      "sha256": "1143af00641d33c7171761935456bcbf5ac7d21aa14d85d06eeae7b902e3d1bc"
+    },
+    {
+      "bytes": 831,
+      "path": "reports/17060_openclaw_token_budget_product_api_gate.json",
+      "sha256": "5a9bf3aa33dad77e056ada3b7b24e80546a81dc65948249ce228a691bdb38c88"
+    },
+    {
+      "bytes": 2958,
+      "path": "reports/17060_token_cost_reduction_analysis.json",
+      "sha256": "5c2d119959de88f66c8ad66204d7d31654b87a64a68d8be2ce71d08b435cc5aa"
+    },
+    {
+      "bytes": 3674,
+      "path": "reports/17070_token_budget_benchmark_results.json",
+      "sha256": "0349c35074252bffd31dc70f521b3559e8e554d40e8265a8d59ad0bdfa6bc91b"
+    },
+    {
+      "bytes": 2975,
+      "path": "reports/17080_token_cost_reduction_analysis.json",
+      "sha256": "50287b71cfea0c180e283b5dff1122b0d05a3d4b4e34498a0c07139b9435a874"
+    },
+    {
+      "bytes": 491,
+      "path": "reports/17090_token_budget_product_integration_gate.json",
+      "sha256": "cc8a7be9284a5a6f7d590a59dd370055f43c4846cce192b2eb733e5562e2528f"
+    },
+    {
+      "bytes": 1453,
+      "path": "reports/17100_token_budget_product_regression_gate.json",
+      "sha256": "077d5aea9cd1334da89090d18f8bf98a1a4dc6b9b55bf294409258232b9bab29"
+    },
+    {
+      "bytes": 1044,
+      "path": "reports/17110_updated_claim_matrix_token_budget_gate.json",
+      "sha256": "e049ceda9ae8fddd6273072bb495ba484e39b22c394ced50a7a25d1ce9edcbb0"
+    },
+    {
+      "bytes": 370,
+      "path": "reports/17000_qwen_tokenizer_identity_gate.md",
+      "sha256": "0dec73c73e67ab01f9c9023b90c6fcbf88b624ab32f81c95bcb8f9989e5baf33"
+    },
+    {
+      "bytes": 300,
+      "path": "reports/17000_tokenizer_product_baseline_lock.md",
+      "sha256": "9b3f0285ae4edd4654e36a3d71aa3466d09c895ac8447f3343918bca5f51f1d4"
+    },
+    {
+      "bytes": 227,
+      "path": "reports/17010_privacy_redactor_gate.md",
+      "sha256": "2e124688e8a7970ee4d6ff7f2f489a158e46716b7ce1515d02fcb07698dc02bf"
+    },
+    {
+      "bytes": 370,
+      "path": "reports/17010_qwen_tokenizer_identity_gate.md",
+      "sha256": "0dec73c73e67ab01f9c9023b90c6fcbf88b624ab32f81c95bcb8f9989e5baf33"
+    },
+    {
+      "bytes": 217,
+      "path": "reports/17020_context_compressor_gate.md",
+      "sha256": "31b7f1434772d5a44c4ab3d91da741ba76904dba8422a584a78915dc59c0ac70"
+    },
+    {
+      "bytes": 227,
+      "path": "reports/17020_privacy_redactor_product_gate.md",
+      "sha256": "2e124688e8a7970ee4d6ff7f2f489a158e46716b7ce1515d02fcb07698dc02bf"
+    },
+    {
+      "bytes": 285,
+      "path": "reports/17030_cloud_route_decider_gate.md",
+      "sha256": "3df2e0b873e6fb6193ff7262e56945ab2b747575a5335b0975b839a3486e480f"
+    },
+    {
+      "bytes": 217,
+      "path": "reports/17030_context_compressor_product_gate.md",
+      "sha256": "31b7f1434772d5a44c4ab3d91da741ba76904dba8422a584a78915dc59c0ac70"
+    },
+    {
+      "bytes": 285,
+      "path": "reports/17040_cloud_route_decider_product_gate.md",
+      "sha256": "3df2e0b873e6fb6193ff7262e56945ab2b747575a5335b0975b839a3486e480f"
+    },
+    {
+      "bytes": 234,
+      "path": "reports/17040_token_trace_audit_gate.md",
+      "sha256": "6bb84425cf8414ba5825023d8e8fc2497621b7f234cbcbe20af9db6b7ecdc521"
+    },
+    {
+      "bytes": 1180,
+      "path": "reports/17050_token_budget_benchmark_results.md",
+      "sha256": "070daad2b62cb19b4e66c20d9f56012f1aae38153ecb91871acf06941d6671de"
+    },
+    {
+      "bytes": 285,
+      "path": "reports/17050_token_trace_harness_integration_gate.md",
+      "sha256": "66fe34c5f431d1b54a050859597c513cff83503a011072321f657e4d3c01c08a"
+    },
+    {
+      "bytes": 317,
+      "path": "reports/17060_openclaw_token_budget_product_api_gate.md",
+      "sha256": "63f1332266afe4c5f5fa26626ee0507bd2d4a667b1164b8b0972557f0b90392d"
+    },
+    {
+      "bytes": 637,
+      "path": "reports/17060_token_cost_reduction_analysis.md",
+      "sha256": "112cffeeef67992df837be3234f12af488df50dbef13cd1b64f76dd03d79b565"
+    },
+    {
+      "bytes": 1180,
+      "path": "reports/17070_token_budget_benchmark_results.md",
+      "sha256": "070daad2b62cb19b4e66c20d9f56012f1aae38153ecb91871acf06941d6671de"
+    },
+    {
+      "bytes": 637,
+      "path": "reports/17080_token_cost_reduction_analysis.md",
+      "sha256": "112cffeeef67992df837be3234f12af488df50dbef13cd1b64f76dd03d79b565"
+    },
+    {
+      "bytes": 384,
+      "path": "reports/17090_token_budget_product_integration_gate.md",
+      "sha256": "6c1b26c420670b266fbb3acab933dbaf956b37e444e111dc52a662dd3cc8cb02"
+    },
+    {
+      "bytes": 342,
+      "path": "reports/17100_token_budget_product_regression_gate.md",
+      "sha256": "fd61374be51d296f39ada991d4e1dd24a52b1e1974e11e3d3c1f372f1b776ee2"
+    },
+    {
+      "bytes": 216,
+      "path": "reports/17110_updated_claim_matrix_token_budget_gate.md",
+      "sha256": "ebaf2bad4f3f656c638afe7f663df7548964992f00c87ddc2fc06734b8f8e6fe"
+    },
+    {
+      "bytes": 240,
+      "path": "evidence/token_budget/screenshots/token_budget_diagnostics_panel.html",
+      "sha256": "0289c780816c414ba39ff8d3603144b895b9b5b2882651da027d535a35b94e24"
+    },
+    {
+      "bytes": 2782,
+      "path": "evidence/token_budget/screenshots/token_budget_diagnostics_panel.png",
+      "sha256": "e7f13c462b794587ef83407077d52048dcdb46b226c9f4498740f40885a0e879"
+    },
+    {
+      "bytes": 1671839,
+      "path": "evidence/token_budget/qwen2_5-1_5b-hf/merges.txt",
+      "sha256": "599bab54075088774b1733fde865d5bd747cbcc7a547c5bc12610e874e26f5e3"
+    },
+    {
+      "bytes": 7031645,
+      "path": "evidence/token_budget/qwen2_5-1_5b-hf/tokenizer.json",
+      "sha256": "c0382117ea329cdf097041132f6d735924b697924d6f6fc3945713e96ce87539"
+    },
+    {
+      "bytes": 7305,
+      "path": "evidence/token_budget/qwen2_5-1_5b-hf/tokenizer_config.json",
+      "sha256": "5b5d4f65d0acd3b2d56a35b56d374a36cbc1c8fa5cf3b3febbbfabf22f359583"
+    },
+    {
+      "bytes": 2776833,
+      "path": "evidence/token_budget/qwen2_5-1_5b-hf/vocab.json",
+      "sha256": "ca10d7e9fb3ed18575dd1e277a2579c16d108e32f27439684afa0e10b1440910"
+    }
+  ],
+  "final_verdict": "tokenizer_token_budget_product_deployed_claim_supported",
+  "generated_at": "2026-07-04T13:57:03+08:00",
+  "missing_required_files": [],
+  "package": "digua_ai_nas_tokenizer_product_final_for_gptpro_20260704-135657.zip",
+  "zip_bytes": 3959923,
+  "zip_path": "F:\\Project\\Digua\\digua_ai_nas_tokenizer_product_final_for_gptpro_20260704-135657.zip",
+  "zip_sha256": "cb64cd9dc453a33500626dceac1cd55426bf8a42d17471174ac8c710b7745a54"
+}

@@ -1,0 +1,47 @@
+{
+  "cloud_private_egress_count": 0,
+  "copy_route_unaffected": true,
+  "gate": "17100_token_budget_product_regression_gate",
+  "generated_at": "2026-07-04T13:57:03+08:00",
+  "no_write_execution": true,
+  "openclaw_health_ok": true,
+  "private_leak_count": 0,
+  "protected_ports_unchanged": true,
+  "py_compile_command": {
+    "command": [
+      "C:\\Users\\zhexu\\AppData\\Local\\Python\\pythoncore-3.14-64\\python.exe",
+      "-m",
+      "py_compile",
+      "src/harness/token_budget_integration.py",
+      "scripts/qwen25_openai_gateway.py",
+      "scripts/probes/ai_nas_operator_portal_server.py",
+      "benchmarks/run_token_budget_benchmark.py"
+    ],
+    "elapsed_ms": 104.765,
+    "ok": true,
+    "returncode": 0,
+    "stderr_tail": "",
+    "stdout_tail": ""
+  },
+  "py_compile_pass": true,
+  "qwen_health_ok": true,
+  "readonly_demos_pass": true,
+  "test_command": {
+    "command": [
+      "C:\\Users\\zhexu\\AppData\\Local\\Python\\pythoncore-3.14-64\\python.exe",
+      "-m",
+      "unittest",
+      "discover",
+      "-s",
+      "tests"
+    ],
+    "elapsed_ms": 1808.288,
+    "ok": true,
+    "returncode": 0,
+    "stderr_tail": "......................................................\n----------------------------------------------------------------------\nRan 54 tests in 1.699s\n\nOK\n",
+    "stdout_tail": ""
+  },
+  "unittest_pass": true,
+  "verdict": "pass",
+  "write_execution_count": 0
+}
