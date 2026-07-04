@@ -34,6 +34,34 @@ Expected blocked verdict:
 blocked_by_no_operator_approval
 ```
 
+## Approved Live Rollout Command
+
+Use this only after the operator explicitly approves live rollout for the current session.
+
+```powershell
+$env:AI_NAS_OPERATOR_APPROVED_DIGUA_JOURNAL_LIVE_ROLLOUT='1'
+py scripts\probes\digua_journal_live_rollout.py
+```
+
+The runner targets `sunrise@192.168.127.10` with `%USERPROFILE%\.ssh\s100p_linkcheck_ed25519` and the live OpenClaw workspace at `/mnt/nas/openclaw`.
+
+## 2026-07-04 Live Rollout Result
+
+- verdict: `digua_journal_live_rollout_passed`
+- live DB: `/mnt/nas/openclaw/reports/qwen25_ai_nas/digua_journal.sqlite3`
+- journal evidence dir: `/mnt/nas/openclaw/reports/qwen25_ai_nas/digua_journal_evidence`
+- journal export dir: `/mnt/nas/openclaw/reports/qwen25_ai_nas/digua_journal_exports`
+- S100P user: `sunrise`
+- S100P IPs observed: `192.168.127.10/24`, `192.168.137.10/24`
+- service action: `systemctl --user restart openclaw-gateway.service`
+- protected ports unchanged: `127.0.0.1:8765`, `127.0.0.1:18080`, `127.0.0.1:18888`
+- `/journal`: HTTP 200
+- `/api/journal/health`: OK
+- privacy scan: `private_leak_count=0`
+- regression: remote py_compile OK, local Journal pytest OK, disable script probe OK
+
+The rollout synced only Journal/OpenClaw extension code, configs, static assets, migrations, and helper scripts into `/mnt/nas/openclaw`. It did not replace OpenClaw, replace Qwen, modify protected port configuration, enable cloud generation, enable screenshots or desktop capture, grant Qwen tool execution authority, or upload private NAS raw content.
+
 ## Required Outputs
 
 - `reports/21200_journal_live_rollout_gate.json`

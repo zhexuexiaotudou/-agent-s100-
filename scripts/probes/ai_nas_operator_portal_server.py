@@ -33,6 +33,7 @@ except Exception:
 
 try:
     from src.openclaw.routes.harness_status_routes import harness_status_response
+    from src.openclaw.routes.journal_routes import journal_route_response
     from src.openclaw.routes.nas_copy_routes import (
         copy_confirm_response,
         copy_dry_run_response,
@@ -42,6 +43,7 @@ try:
     )
 except Exception:
     harness_status_response = None  # type: ignore[assignment]
+    journal_route_response = None  # type: ignore[assignment]
     copy_preview_response = None  # type: ignore[assignment]
     copy_dry_run_response = None  # type: ignore[assignment]
     copy_confirm_response = None  # type: ignore[assignment]
@@ -670,6 +672,9 @@ class PortalState:
         openclaw_gateway_url: str | None = None,
         openclaw_model_gateway_url: str | None = None,
         qwen_gateway_url: str | None = None,
+        journal_report_root: Path | None = None,
+        journal_evidence_dir: Path | None = None,
+        journal_export_dir: Path | None = None,
     ) -> None:
         self.report_root = report_root
         self.evidence_roots = evidence_roots
@@ -695,6 +700,9 @@ class PortalState:
         self.openclaw_gateway_url = openclaw_gateway_url
         self.openclaw_model_gateway_url = openclaw_model_gateway_url
         self.qwen_gateway_url = qwen_gateway_url
+        self.journal_report_root = journal_report_root or report_root
+        self.journal_evidence_dir = journal_evidence_dir or (report_root / "digua_journal_evidence")
+        self.journal_export_dir = journal_export_dir or (report_root / "digua_journal_exports")
         self.identity_store: IdentityStore | None = None
         self.snapshot_store: SnapshotStore | None = None
         self.backup_manager: BackupManager | None = None
@@ -1285,6 +1293,24 @@ class PortalHandler(BaseHTTPRequestHandler):
             self.send_json({"ok": False, "error": f"token_budget_init_failed:{type(exc).__name__}:{exc}"}, HTTPStatus.SERVICE_UNAVAILABLE)
             return None
 
+    def send_journal_response(self, method: str, route: str, payload: dict | None = None) -> None:
+        if journal_route_response is None:
+            self.send_json({"ok": False, "error": "digua_journal_routes_unavailable"}, HTTPStatus.SERVICE_UNAVAILABLE)
+            return
+        try:
+            status_code, result = journal_route_response(
+                route,
+                method=method,
+                payload=payload or {},
+                report_root=self.state.journal_report_root,
+                evidence_dir=self.state.journal_evidence_dir,
+                export_dir=self.state.journal_export_dir,
+            )
+        except Exception as exc:
+            self.send_json({"ok": False, "error": f"digua_journal_route_failed:{type(exc).__name__}:{exc}"}, HTTPStatus.INTERNAL_SERVER_ERROR)
+            return
+        self.send_json(result, status_code)
+
     def do_GET(self) -> None:
         route = urlparse(self.path).path.rstrip("/") or "/"
         if route in {"/", "/operator_portal.html"}:
@@ -1296,6 +1322,18 @@ class PortalHandler(BaseHTTPRequestHandler):
                 self.send_json({"ok": False, "error": "operator_portal_html_not_found"}, HTTPStatus.NOT_FOUND)
                 return
             self.send_portal_html(html_path)
+            return
+        if route == "/journal":
+            self.send_file_text(REPO_ROOT / "web" / "digua_journal.html", "text/html; charset=utf-8")
+            return
+        if route == "/static/digua_journal.css":
+            self.send_file_text(REPO_ROOT / "web" / "static" / "digua_journal.css", "text/css; charset=utf-8")
+            return
+        if route == "/static/digua_journal.js":
+            self.send_file_text(REPO_ROOT / "web" / "static" / "digua_journal.js", "application/javascript; charset=utf-8")
+            return
+        if route.startswith("/api/journal") or route.startswith("/journal/"):
+            self.send_journal_response("GET", route)
             return
         if route == "/api/storage/status":
             if not self.require_product():
@@ -1461,7 +1499,11 @@ class PortalHandler(BaseHTTPRequestHandler):
                 "error": "not_found",
                 "routes": [
                     "/",
+                    "/journal",
                     "/api/health",
+                    "/api/journal/health",
+                    "/api/journal/timeline",
+                    "/api/journal/projects",
                     "/api/latest",
                     "/api/latest.goal_progress",
                     "/api/latest.operator_decisions",
@@ -1482,6 +1524,9 @@ class PortalHandler(BaseHTTPRequestHandler):
                     "POST /api/operator-decision",
                     "POST /api/token-budget/estimate",
                     "POST /api/token-budget/route",
+                    "POST /api/journal/manual-entry",
+                    "POST /api/journal/generate-summary",
+                    "POST /api/journal/export",
                 ],
             },
             HTTPStatus.NOT_FOUND,
@@ -1489,6 +1534,13 @@ class PortalHandler(BaseHTTPRequestHandler):
 
     def do_POST(self) -> None:
         route = urlparse(self.path).path.rstrip("/") or "/"
+        if route.startswith("/api/journal") or route.startswith("/journal/"):
+            status, payload = self.read_json_body()
+            if status:
+                self.send_json(payload or {}, status)
+                return
+            self.send_journal_response("POST", route, payload)
+            return
         if route == "/api/identity/create-user":
             if not self.require_product():
                 return
@@ -1805,6 +1857,9 @@ class PortalHandler(BaseHTTPRequestHandler):
                     "POST /api/nas/copy/rollback",
                     "POST /api/token-budget/estimate",
                     "POST /api/token-budget/route",
+                    "POST /api/journal/manual-entry",
+                    "POST /api/journal/generate-summary",
+                    "POST /api/journal/export",
                 ],
             },
             HTTPStatus.NOT_FOUND,
@@ -1837,6 +1892,9 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--openclaw-gateway-url", default=None)
     parser.add_argument("--openclaw-model-gateway-url", default=None)
     parser.add_argument("--qwen-gateway-url", default=None)
+    parser.add_argument("--journal-report-root", type=Path, default=None)
+    parser.add_argument("--journal-evidence-dir", type=Path, default=None)
+    parser.add_argument("--journal-export-dir", type=Path, default=None)
     return parser.parse_args()
 
 
@@ -1866,6 +1924,9 @@ def main() -> int:
         openclaw_gateway_url=args.openclaw_gateway_url,
         openclaw_model_gateway_url=args.openclaw_model_gateway_url,
         qwen_gateway_url=args.qwen_gateway_url,
+        journal_report_root=args.journal_report_root,
+        journal_evidence_dir=args.journal_evidence_dir,
+        journal_export_dir=args.journal_export_dir,
     )
     server = ThreadingHTTPServer((args.bind, args.port), PortalHandler)
     server.state = state  # type: ignore[attr-defined]
