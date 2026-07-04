@@ -1,0 +1,173 @@
+:root {
+  color-scheme: light;
+  font-family: Inter, "Segoe UI", Arial, sans-serif;
+  background: #f7f8fb;
+  color: #1f2933;
+}
+
+body {
+  margin: 0;
+}
+
+button,
+input,
+textarea {
+  font: inherit;
+}
+
+button {
+  border: 1px solid #ccd3df;
+  background: #fff;
+  color: #17202a;
+  border-radius: 6px;
+  padding: 8px 12px;
+  cursor: pointer;
+}
+
+button:hover,
+.nav-item.active {
+  background: #16324f;
+  color: #fff;
+  border-color: #16324f;
+}
+
+.journal-shell {
+  min-height: 100vh;
+}
+
+.journal-topbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 24px;
+  padding: 22px 28px;
+  background: #fff;
+  border-bottom: 1px solid #d7dee8;
+}
+
+.journal-topbar h1,
+.journal-topbar p,
+.journal-panel h2 {
+  margin: 0;
+}
+
+.journal-topbar p {
+  margin-top: 4px;
+  color: #607080;
+}
+
+.status-strip {
+  padding: 8px 12px;
+  border-radius: 6px;
+  background: #e7f5ef;
+  color: #14633f;
+  border: 1px solid #b6dfcc;
+  white-space: nowrap;
+}
+
+.journal-layout {
+  display: grid;
+  grid-template-columns: 220px minmax(0, 1fr);
+  min-height: calc(100vh - 86px);
+}
+
+.journal-sidebar {
+  padding: 16px;
+  border-right: 1px solid #d7dee8;
+  background: #fbfcfe;
+}
+
+.nav-item {
+  width: 100%;
+  text-align: left;
+  margin-bottom: 8px;
+}
+
+.journal-panel {
+  padding: 24px;
+}
+
+.panel-heading,
+.button-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 16px;
+}
+
+.timeline-list,
+.project-list {
+  display: grid;
+  gap: 10px;
+}
+
+.event-row,
+.project-row {
+  border: 1px solid #d7dee8;
+  border-radius: 8px;
+  padding: 12px;
+  background: #fff;
+}
+
+.event-meta {
+  color: #607080;
+  font-size: 13px;
+  margin-bottom: 4px;
+}
+
+.manual-form {
+  max-width: 720px;
+  display: grid;
+  gap: 12px;
+}
+
+.manual-form label {
+  display: grid;
+  gap: 6px;
+}
+
+.manual-form input,
+.manual-form textarea {
+  border: 1px solid #ccd3df;
+  border-radius: 6px;
+  padding: 9px 10px;
+}
+
+pre {
+  white-space: pre-wrap;
+  background: #111827;
+  color: #dbe7ff;
+  border-radius: 8px;
+  padding: 14px;
+  overflow: auto;
+}
+
+.hidden {
+  display: none;
+}
+
+@media (max-width: 760px) {
+  .journal-topbar,
+  .panel-heading,
+  .button-row {
+    align-items: stretch;
+    flex-direction: column;
+  }
+
+  .journal-layout {
+    grid-template-columns: 1fr;
+  }
+
+  .journal-sidebar {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 8px;
+    border-right: 0;
+    border-bottom: 1px solid #d7dee8;
+  }
+
+  .nav-item {
+    margin-bottom: 0;
+  }
+}

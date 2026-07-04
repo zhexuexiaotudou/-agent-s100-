@@ -1,0 +1,24 @@
+# 21130 journal_e2e_production_demo_gate
+
+- generated_at: 2026-07-04T08:11:58Z
+- status: pass
+- verdict: pass
+
+```json
+{
+  "e2e_events": "evidence/digua_journal/e2e_events.jsonl",
+  "exported_files": "evidence/digua_journal/e2e_exported_files.json",
+  "final_verdict_candidate": "digua_journal_production_deployed_local_period_summaries",
+  "generated_at": "2026-07-04T08:11:58Z",
+  "report_id": 21130,
+  "status": "pass",
+  "summary_outputs": [
+    "evidence/digua_journal/e2e_daily_summary.md",
+    "evidence/digua_journal/e2e_weekly_summary.md",
+    "evidence/digua_journal/e2e_monthly_summary.md",
+    "evidence/digua_journal/e2e_yearly_summary.md",
+    "evidence/digua_journal/e2e_project_summary.md"
+  ],
+  "title": "journal_e2e_production_demo_gate"
+}
+```

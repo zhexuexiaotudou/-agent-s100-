@@ -1,0 +1,29 @@
+{
+  "feature": "digua_journal",
+  "enabled_by_default": true,
+  "service_mode": "openclaw_default_service_extension",
+  "live_db_path": "/mnt/nas/openclaw/reports/qwen25_ai_nas/digua_journal.sqlite3",
+  "local_smoke_db_path": "tmp/digua_journal/digua_journal.sqlite3",
+  "export_root": "/mnt/nas/openclaw/reports/qwen25_ai_nas/digua_journal_exports",
+  "local_smoke_export_root": "evidence/digua_journal/exports",
+  "allowed_sources": [
+    "nas_index_diff",
+    "openclaw",
+    "workspace_harness",
+    "document_rag",
+    "report",
+    "manual",
+    "token_budget",
+    "copy_route"
+  ],
+  "forbidden_actions": [
+    "real_nas_delete",
+    "real_nas_move",
+    "real_nas_rename",
+    "real_nas_chmod",
+    "desktop_visual_capture",
+    "keyboard_or_mouse_tracking",
+    "cloud_private_egress",
+    "qwen_tool_execution"
+  ]
+}

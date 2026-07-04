@@ -1,0 +1,41 @@
+{
+  "boundaries": {
+    "cloud_generation_enabled": false,
+    "openclaw_replaced": false,
+    "port_changes": false,
+    "qwen_replaced": false,
+    "qwen_tool_execution_authority": false,
+    "real_nas_write_enabled": false,
+    "remote_deploy_attempted": false,
+    "screenshots_taken": false
+  },
+  "db_path": "tmp/digua_journal/digua_journal.sqlite3",
+  "evidence_dir": "evidence/digua_journal",
+  "feature": "digua_journal",
+  "generated_at": "2026-07-04T08:12:00Z",
+  "package": {
+    "manifest_file_count": 92,
+    "package_bytes": 104545,
+    "package_path": "digua_ai_nas_digua_journal_production_for_gptpro_20260704-161200.zip",
+    "package_root": "tmp/digua_journal_package_20260704-161200",
+    "package_sha256": "0580694351f352c5dd32cb6ef2667b90e5993041571b6838ace085fa7e616c76"
+  },
+  "reports": [
+    "reports/21000_journal_baseline_lock.json",
+    "reports/21010_journal_workspace_feature_flags_gate.json",
+    "reports/21020_journal_db_migration_gate.json",
+    "reports/21030_journal_event_model_gate.json",
+    "reports/21040_nas_index_diff_collector_gate.json",
+    "reports/21050_journal_system_collectors_gate.json",
+    "reports/21060_journal_manual_entry_gate.json",
+    "reports/21070_journal_project_classifier_gate.json",
+    "reports/21080_journal_period_summary_engine_gate.json",
+    "reports/21090_journal_token_privacy_trace_gate.json",
+    "reports/21100_openclaw_journal_page_api_gate.json",
+    "reports/21110_journal_export_gate.json",
+    "reports/21120_journal_default_service_persistence_gate.json",
+    "reports/21130_journal_e2e_production_demo_gate.json",
+    "reports/21140_journal_regression_safety_gate.json"
+  ],
+  "verdict": "digua_journal_production_deployed_local_period_summaries"
+}

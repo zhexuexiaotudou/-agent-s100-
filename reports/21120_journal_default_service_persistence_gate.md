@@ -1,0 +1,24 @@
+# 21120 journal_default_service_persistence_gate
+
+- generated_at: 2026-07-04T08:11:58Z
+- status: pass
+- verdict: pass
+
+```json
+{
+  "default_service_extension_prepared": true,
+  "foreground_takeover": false,
+  "generated_at": "2026-07-04T08:11:58Z",
+  "ports_unchanged": [
+    8765,
+    18080,
+    18888,
+    18889
+  ],
+  "remote_systemd_changed": false,
+  "report_id": 21120,
+  "rollback_script": "scripts/disable_journal_feature.sh",
+  "status": "pass",
+  "title": "journal_default_service_persistence_gate"
+}
+```

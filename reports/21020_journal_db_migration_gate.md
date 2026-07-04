@@ -1,0 +1,28 @@
+# 21020 journal_db_migration_gate
+
+- generated_at: 2026-07-04T08:11:56Z
+- status: pass
+- verdict: pass
+
+```json
+{
+  "fts5_enabled": true,
+  "generated_at": "2026-07-04T08:11:56Z",
+  "migration": {
+    "db_path": "F:\\Project\\Digua\\tmp\\digua_journal\\digua_journal.sqlite3",
+    "ok": true,
+    "schema_version": 1
+  },
+  "report_id": 21020,
+  "status": "pass",
+  "tables": {
+    "journal_events": 0,
+    "journal_exports": 0,
+    "journal_manual_entries": 0,
+    "journal_project_map": 0,
+    "journal_summary_runs": 0,
+    "journal_token_privacy_traces": 0
+  },
+  "title": "journal_db_migration_gate"
+}
+```

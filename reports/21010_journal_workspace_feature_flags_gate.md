@@ -1,0 +1,34 @@
+# 21010 journal_workspace_feature_flags_gate
+
+- generated_at: 2026-07-04T08:11:56Z
+- status: pass
+- verdict: pass
+
+```json
+{
+  "feature_flags": {
+    "cloud_generation_enabled": false,
+    "collect_copy_route": true,
+    "collect_document_rag": true,
+    "collect_nas_index_diff": true,
+    "collect_openclaw": true,
+    "collect_reports": true,
+    "collect_token_budget": true,
+    "collect_workspace_harness": true,
+    "feature": "digua_journal",
+    "journal_workspace_enabled": true,
+    "manual_entry_enabled": true,
+    "markdown_export_enabled": true,
+    "period_summary_enabled": true,
+    "qwen_execution_authority": false,
+    "qwen_summary_enabled": true,
+    "real_nas_write_enabled": false,
+    "screenshots_enabled": false
+  },
+  "generated_at": "2026-07-04T08:11:56Z",
+  "report_id": 21010,
+  "rollback_script": "scripts/disable_journal_feature.sh",
+  "status": "pass",
+  "title": "journal_workspace_feature_flags_gate"
+}
+```

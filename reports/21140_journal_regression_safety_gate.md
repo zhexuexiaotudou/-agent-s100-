@@ -1,0 +1,79 @@
+# 21140 journal_regression_safety_gate
+
+- generated_at: 2026-07-04T08:12:00Z
+- status: pass
+- verdict: pass
+
+```json
+{
+  "generated_at": "2026-07-04T08:12:00Z",
+  "py_compile": {
+    "command": [
+      "C:\\Users\\zhexu\\AppData\\Local\\Python\\pythoncore-3.14-64\\python.exe",
+      "-m",
+      "py_compile",
+      "F:\\Project\\Digua\\src\\digua_journal\\__init__.py",
+      "F:\\Project\\Digua\\src\\digua_journal\\collectors\\__init__.py",
+      "F:\\Project\\Digua\\src\\digua_journal\\collectors\\copy_route_collector.py",
+      "F:\\Project\\Digua\\src\\digua_journal\\collectors\\harness_trace_collector.py",
+      "F:\\Project\\Digua\\src\\digua_journal\\collectors\\nas_index_diff_collector.py",
+      "F:\\Project\\Digua\\src\\digua_journal\\collectors\\openclaw_collector.py",
+      "F:\\Project\\Digua\\src\\digua_journal\\collectors\\rag_collector.py",
+      "F:\\Project\\Digua\\src\\digua_journal\\collectors\\report_collector.py",
+      "F:\\Project\\Digua\\src\\digua_journal\\collectors\\system_collectors.py",
+      "F:\\Project\\Digua\\src\\digua_journal\\collectors\\token_budget_collector.py",
+      "F:\\Project\\Digua\\src\\digua_journal\\event_model.py",
+      "F:\\Project\\Digua\\src\\digua_journal\\journal_db.py",
+      "F:\\Project\\Digua\\src\\digua_journal\\journal_exporter.py",
+      "F:\\Project\\Digua\\src\\digua_journal\\journal_migrations.py",
+      "F:\\Project\\Digua\\src\\digua_journal\\journal_privacy_guard.py",
+      "F:\\Project\\Digua\\src\\digua_journal\\journal_retention_policy.py",
+      "F:\\Project\\Digua\\src\\digua_journal\\journal_token_trace.py",
+      "F:\\Project\\Digua\\src\\digua_journal\\manual_entry.py",
+      "F:\\Project\\Digua\\src\\digua_journal\\period_summary_engine.py",
+      "F:\\Project\\Digua\\src\\digua_journal\\project_classifier.py",
+      "F:\\Project\\Digua\\src\\digua_journal\\summary_templates.py",
+      "F:\\Project\\Digua\\src\\openclaw\\routes\\journal_routes.py"
+    ],
+    "elapsed_ms": 79.296,
+    "ok": true,
+    "returncode": 0,
+    "stderr": "",
+    "stdout": ""
+  },
+  "pytest": {
+    "command": [
+      "C:\\Users\\zhexu\\AppData\\Local\\Python\\pythoncore-3.14-64\\python.exe",
+      "-m",
+      "pytest",
+      "tests/test_journal_event_model.py",
+      "tests/test_journal_db.py",
+      "tests/test_nas_index_diff_collector.py",
+      "tests/test_journal_system_collectors.py",
+      "tests/test_manual_entry.py",
+      "tests/test_project_classifier.py",
+      "tests/test_period_summary_engine.py",
+      "tests/test_journal_token_privacy.py",
+      "tests/test_journal_exporter.py",
+      "tests/test_journal_routes.py",
+      "-q"
+    ],
+    "elapsed_ms": 1780.136,
+    "ok": true,
+    "returncode": 0,
+    "stderr": "",
+    "stdout": "............                                                             [100%]\n12 passed in 1.43s\n"
+  },
+  "report_id": 21140,
+  "safety_boundaries": {
+    "cloud_private_egress": false,
+    "openclaw_replaced": false,
+    "qwen_replaced": false,
+    "qwen_tool_execution_authority": false,
+    "real_nas_write": false,
+    "screenshots_taken": false
+  },
+  "status": "pass",
+  "title": "journal_regression_safety_gate"
+}
+```
