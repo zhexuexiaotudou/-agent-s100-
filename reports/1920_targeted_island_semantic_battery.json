@@ -1,0 +1,71 @@
+{
+  "schema_version": "dream7b_s100p_v18_1920_targeted_island_semantic_battery",
+  "created_at_utc": "2026-07-03T16:24:08.436279+00:00",
+  "run_commands": [
+    "C:\\Users\\zhexu\\AppData\\Local\\Python\\pythoncore-3.14-64\\python.exe tools\\build_v18_research_thread.py --root ."
+  ],
+  "host_environment": {
+    "local_platform": "Windows-11-10.0.26200-SP0",
+    "python": "3.14.3 (tags/v3.14.3:323c59a, Feb  3 2026, 16:04:56) [MSC v.1944 64 bit (AMD64)]"
+  },
+  "git": {
+    "returncode": 0,
+    "stdout": "?? 01_final_evidence/digua_ai_nas_harness_stage2_10_gate_packet.json\n?? 01_final_evidence/digua_ai_nas_harness_stage2_10_gate_packet.md\n?? docs/STAGE2_10_DECISION.md\n?? docs/STAGE3_READONLY_SHADOW_DRYRUN_PLAN_V5.md\n?? evidence/dream7b_s100p_v18_execution_20260704/\n?? evidence/dream7b_s100p_v18_execution_20260704_remote_evidence.tar.gz\n?? evidence_for_gptpro/digua_ai_nas_harness_stage2_10_for_gptpro_20260704-001631.zip\n?? evidence_for_gptpro/digua_ai_nas_harness_stage2_10_for_gptpro_20260704-001631.zip.sha256.txt\n?? gates/stage2_10_gates.py\n?? operator_approval/\n?? reports/1900_v18_baseline_lock.json\n?? reports/1900_v18_baseline_lock.md\n?? reports/1910_position_path_indirect_recovery.json\n?? reports/1910_position_path_indirect_recovery.md\n?? reports/9000_stage2_10_baseline_lock.json\n?? reports/9000_stage2_10_baseline_lock.md\n?? reports/9010_operator_approval_hard_gate.json\n?? reports/9010_operator_approval_hard_gate.md\n?? reports/9020_qwen_persistence_apply_verify_restart_gate.json\n?? reports/9020_qwen_persistence_apply_verify_restart_gate.md\n?? reports/9030_qwen_persistence_rollback_verify_gate.json\n?? reports/9030_qwen_persistence_rollback_verify_gate.md\n?? reports/9040_post_persistence_policy_first_readonly_shadow_soak_gate.json\n?? reports/9040_post_persistence_policy_first_readonly_shadow_soak_gate.md\n?? reports/9050_stage2_10_stage3_go_no_go_gate.json\n?? reports/9050_stage2_10_stage3_go_no_go_gate.md\n?? reports/stage2_10_post_persistence_shadow_soak_trace.jsonl\n?? scripts/run_stage2_10_gates_from_package.sh\n?? tools/build_v18_research_thread.py\n?? tools/run_v18_position_path_recovery.py\n?? tools/run_v18_semantic_island_battery.py",
+    "stderr": ""
+  },
+  "input_artifacts": [
+    {
+      "path": "evidence/dream7b_s100p_v18_execution_20260704/evidence/targeted_bpu_islands_semantic_v18/semantic_island_battery_report.json",
+      "exists": true,
+      "size_bytes": 3905,
+      "sha256": "53d9326a4af2b88706bbc48ed6909743eea202b813e404eb02f15be6d63ff0a0"
+    }
+  ],
+  "output_artifacts": [
+    {
+      "path": "reports/1920_targeted_island_semantic_battery.json",
+      "exists": true,
+      "size_bytes": 4367,
+      "sha256": "4211424339411b62573dbe7871e267ee9153eb60b1b1749ab57babf229b9ab1a"
+    },
+    {
+      "path": "reports/1920_targeted_island_semantic_battery.md",
+      "exists": true,
+      "size_bytes": 373,
+      "sha256": "29c5643aba6e0c94d01d594d7db62d654319c54388541ad1fb9b08dad029a13e"
+    }
+  ],
+  "blocking_or_failure_reasons": [
+    "HF/PyTorch BF16 truth for semantic cases could not be produced because the installed transformers 4.30.2 path still attempted torch.load on sharded safetensors."
+  ],
+  "next_minimal_experiments": [],
+  "safety": {
+    "generation_quality_run": false,
+    "product_routes_18888_18889_touched": false,
+    "dream7b_frontend_openclaw_traffic_touched": false,
+    "harness_qwen_openclaw_defaults_modified": false
+  },
+  "verdict": "semantic_battery_runtime_blocked_no_logits_rows",
+  "remote_status": "fail",
+  "semantic_cases_generated": 8,
+  "hf_truth_rows": 0,
+  "island_rows": 0,
+  "errors": [
+    {
+      "type": "OSError",
+      "message": "Unable to load weights from pytorch checkpoint file for '/mnt/nas/openclaw/models/dream7b-hf/model-00001-of-00004.safetensors' at '/mnt/nas/openclaw/models/dream7b-hf/model-00001-of-00004.safetensors'. If you tried to load a PyTorch model from a TF 2.0 checkpoint, please set from_tf=True."
+    }
+  ],
+  "cases_path": "/mnt/nas/openclaw/reports/models/dream7b_s100p_v18_execution_20260704/evidence/targeted_bpu_islands_semantic_v18/cases/semantic_seq128_cases_v18.jsonl",
+  "semantic_vs_ramp_verdict": "inconclusive_runtime_blocked",
+  "strict_gate_relaxed": false,
+  "generation_quality_run": false,
+  "attempted_compatibility_steps": [
+    "transformers.modeling_rope_utils shim for rope_config_validation/ROPE_INIT_FUNCTIONS",
+    "transformers.cache_utils shim for Cache/DynamicCache with use_cache=False",
+    "flash-attn availability shims returning False",
+    "is_torchdynamo_compiling shim returning False",
+    "PreTrainedModel.from_pretrained compatibility wrapper for token/weights_only/_attn_implementation",
+    "forced use_safetensors=True"
+  ]
+}

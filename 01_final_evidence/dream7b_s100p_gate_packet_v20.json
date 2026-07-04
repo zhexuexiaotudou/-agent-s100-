@@ -1,0 +1,25 @@
+{
+  "generation_quality_run": false,
+  "product_routes_18888_18889_touched": false,
+  "dream7b_frontend_openclaw_traffic_touched": false,
+  "harness_qwen_openclaw_defaults_modified": false,
+  "schema_version": "dream7b_s100p_v20_final_gate_packet",
+  "created_at_utc": "2026-07-04T03:40:01.146488+00:00",
+  "command": "C:\\Users\\zhexu\\AppData\\Local\\Python\\pythoncore-3.14-64\\python.exe tools\\build_v20_research_thread.py --root .",
+  "final_verdict": "D_semantic_truth_export_bundle_ready_external_run_required",
+  "current_full_bpu_path_status": "falsified_against_HF_PyTorch_BF16_logits_truth_v17_v18_baseline",
+  "single_case_forward_localization": "manual_stop_s100p_reference_runtime_too_slow",
+  "semantic_truth_rows": 0,
+  "semantic_island_status": "blocked_hf_semantic_truth_rows_missing",
+  "ramp_outlier_status": "C_inconclusive_missing_rows",
+  "generation_quality": "not_run_logits_gate_not_passed",
+  "product_route": "not_run_generation_gate_not_passed",
+  "gates": {
+    "3000": "baseline_locked",
+    "3010": "manual_stop_s100p_reference_runtime_too_slow",
+    "3020": "export_bundle_ready_external_run_required",
+    "3030": "blocked_hf_semantic_truth_rows_missing",
+    "3040": "C_inconclusive_missing_rows"
+  },
+  "paper_safe_claim": "v20 localizes S100P semantic HF reference runtime: direct BF16 safetensors load succeeds, embedding and SDPA are fast, but decoder layers take about 196 seconds each on S100P torch1.8 CPU. The 8-row semantic truth export is therefore moved to an x86/GPU torch2 bundle. No semantic BPU island verdict is claimed without those truth rows."
+}

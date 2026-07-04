@@ -82,7 +82,9 @@ Recommended one-line pitch:
 - **Evidence-first delivery**: every demo claim is backed by JSON/Markdown
   reports on `/mnt/nas/openclaw/reports/...`, not by screenshots alone.
 - **Model pivot is clear**: Dream7B artifacts are retained as toolchain history;
-  the current product route is Qwen + OpenClaw + AI-NAS gates.
+  the current product route is Qwen + OpenClaw + AI-NAS gates. The current
+  Dream7B seq128 S100P logits-validity research status is summarized in
+  `docs/DREAM7B_S100P_SEQ128_LOGITS_VALIDITY_ROUTE_STATUS_20260704.md`.
 
 ## Repository Layout
 
@@ -134,7 +136,9 @@ ssh -i C:\Users\zhexu\.ssh\s100p_linkcheck_ed25519 sunrise@192.168.127.10 `
   can look inconsistent. For acceptance, use the gate verdicts and generated
   report paths above as the source of truth.
 - Dream7B is no longer the promoted product path. It remains useful as runtime,
-  batching, telemetry, and validation history.
+  batching, telemetry, and validation history. The latest seq128 segmented-HBM
+  research route is logits-invalid for the current full-BPU path and must stay
+  out of generation/product routing until a logits-valid candidate exists.
 - The local checkout is now a valid git repo with remote
   `https://github.com/zhexuexiaotudou/-agent-s100-.git`. Large unrelated
   Dream7B, tokenizer, and journal artifacts are not part of the harness upload

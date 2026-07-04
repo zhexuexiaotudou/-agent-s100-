@@ -1,0 +1,55 @@
+{
+  "schema_version": "dream7b_s100p_v18_1940_corrected_candidate_if_justified_v18",
+  "created_at_utc": "2026-07-03T16:24:09.765391+00:00",
+  "run_commands": [
+    "C:\\Users\\zhexu\\AppData\\Local\\Python\\pythoncore-3.14-64\\python.exe tools\\build_v18_research_thread.py --root ."
+  ],
+  "host_environment": {
+    "local_platform": "Windows-11-10.0.26200-SP0",
+    "python": "3.14.3 (tags/v3.14.3:323c59a, Feb  3 2026, 16:04:56) [MSC v.1944 64 bit (AMD64)]"
+  },
+  "git": {
+    "returncode": 0,
+    "stdout": "?? 01_final_evidence/digua_ai_nas_harness_stage2_10_gate_packet.json\n?? 01_final_evidence/digua_ai_nas_harness_stage2_10_gate_packet.md\n?? docs/STAGE2_10_DECISION.md\n?? docs/STAGE3_READONLY_SHADOW_DRYRUN_PLAN_V5.md\n?? evidence/dream7b_s100p_v18_execution_20260704/\n?? evidence/dream7b_s100p_v18_execution_20260704_remote_evidence.tar.gz\n?? evidence_for_gptpro/digua_ai_nas_harness_stage2_10_for_gptpro_20260704-001631.zip\n?? evidence_for_gptpro/digua_ai_nas_harness_stage2_10_for_gptpro_20260704-001631.zip.sha256.txt\n?? gates/stage2_10_gates.py\n?? operator_approval/\n?? reports/1900_v18_baseline_lock.json\n?? reports/1900_v18_baseline_lock.md\n?? reports/1910_position_path_indirect_recovery.json\n?? reports/1910_position_path_indirect_recovery.md\n?? reports/1920_targeted_island_semantic_battery.json\n?? reports/1920_targeted_island_semantic_battery.md\n?? reports/1930_ramp_failure_deep_dive.json\n?? reports/1930_ramp_failure_deep_dive.md\n?? reports/9000_stage2_10_baseline_lock.json\n?? reports/9000_stage2_10_baseline_lock.md\n?? reports/9010_operator_approval_hard_gate.json\n?? reports/9010_operator_approval_hard_gate.md\n?? reports/9020_qwen_persistence_apply_verify_restart_gate.json\n?? reports/9020_qwen_persistence_apply_verify_restart_gate.md\n?? reports/9030_qwen_persistence_rollback_verify_gate.json\n?? reports/9030_qwen_persistence_rollback_verify_gate.md\n?? reports/9040_post_persistence_policy_first_readonly_shadow_soak_gate.json\n?? reports/9040_post_persistence_policy_first_readonly_shadow_soak_gate.md\n?? reports/9050_stage2_10_stage3_go_no_go_gate.json\n?? reports/9050_stage2_10_stage3_go_no_go_gate.md\n?? reports/stage2_10_post_persistence_shadow_soak_trace.jsonl\n?? scripts/run_stage2_10_gates_from_package.sh\n?? tools/build_v18_research_thread.py\n?? tools/run_v18_position_path_recovery.py\n?? tools/run_v18_semantic_island_battery.py",
+    "stderr": ""
+  },
+  "input_artifacts": [],
+  "output_artifacts": [
+    {
+      "path": "reports/1940_corrected_candidate_if_justified_v18.json",
+      "exists": true,
+      "size_bytes": 3649,
+      "sha256": "97e02a058af013c1a74bf8290135e3884e500ffe866e59cc1aac65d6a3230efc"
+    },
+    {
+      "path": "reports/1940_corrected_candidate_if_justified_v18.md",
+      "exists": true,
+      "size_bytes": 483,
+      "sha256": "122001bf593a5c6f64beeed68a77af2f4981fdc0a5cc4805fc38a7fdbb8d5050"
+    }
+  ],
+  "blocking_or_failure_reasons": [
+    "position-derived path formula was not recovered without target fitting",
+    "official GatherND/add scale was not found",
+    "semantic island pass condition was not established because semantic HF truth/runtime was blocked",
+    "no source/quant metadata was found",
+    "no deployable conversion was validated on heldout semantic cases"
+  ],
+  "next_minimal_experiments": [],
+  "safety": {
+    "generation_quality_run": false,
+    "product_routes_18888_18889_touched": false,
+    "dream7b_frontend_openclaw_traffic_touched": false,
+    "harness_qwen_openclaw_defaults_modified": false
+  },
+  "verdict": "not_run_no_justified_correction",
+  "corrected_candidate_run": false,
+  "justification_conditions_met": false,
+  "failed_conditions": [
+    "position-derived path formula was not recovered without target fitting",
+    "official GatherND/add scale was not found",
+    "semantic island pass condition was not established because semantic HF truth/runtime was blocked",
+    "no source/quant metadata was found",
+    "no deployable conversion was validated on heldout semantic cases"
+  ]
+}

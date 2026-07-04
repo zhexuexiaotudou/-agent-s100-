@@ -1,0 +1,337 @@
+{
+  "schema_version": "dream7b_s100p_longrun_2200_seg00_operator_contract_inventory",
+  "created_at_utc": "2026-07-03T17:06:16.782528+00:00",
+  "run_commands": [
+    "C:\\Users\\zhexu\\AppData\\Local\\Python\\pythoncore-3.14-64\\python.exe F:\\Project\\Digua\\tools\\build_longrun_final_thread.py --root F:\\Project\\Digua"
+  ],
+  "host_environment": {
+    "local_platform": "Windows-11-10.0.26200-SP0",
+    "python": "3.14.3 (tags/v3.14.3:323c59a, Feb  3 2026, 16:04:56) [MSC v.1944 64 bit (AMD64)]"
+  },
+  "git": {
+    "returncode": 0,
+    "stdout": "?? 01_final_evidence/digua_ai_nas_harness_stage2_10_gate_packet.json\n?? 01_final_evidence/digua_ai_nas_harness_stage2_10_gate_packet.md\n?? 01_final_evidence/digua_ai_nas_harness_stage3_readonly_shadow_gate_packet.json\n?? 01_final_evidence/digua_ai_nas_harness_stage3_readonly_shadow_gate_packet.md\n?? 01_final_evidence/dream7b_s100p_gate_packet_v18.json\n?? 01_final_evidence/dream7b_s100p_gate_packet_v18.md\n?? 01_final_evidence/dream7b_s100p_longrun_final_gate_packet.json\n?? 01_final_evidence/dream7b_s100p_longrun_final_gate_packet.md\n?? config/stage3_readonly_shadow_policy.json\n?? docs/STAGE2_10_DECISION.md\n?? docs/STAGE3_READONLY_SHADOW_DECISION.md\n?? docs/STAGE3_READONLY_SHADOW_DRYRUN_PLAN_V5.md\n?? docs/STAGE4_WRITE_ACTION_PRECONDITIONS.md\n?? evidence/dream7b_s100p_longrun_20260704/\n?? evidence/dream7b_s100p_longrun_20260704_remote_evidence.tar.gz\n?? evidence/dream7b_s100p_v18_execution_20260704/\n?? evidence/dream7b_s100p_v18_execution_20260704_remote_evidence.tar.gz\n?? evidence/gguf_f16_longrun/\n?? evidence/longrun_artifact_registry.json\n?? evidence/position_delta_basis_longrun/\n?? evidence_for_gptpro/digua_ai_nas_harness_stage2_10_for_gptpro_20260704-001631.zip\n?? evidence_for_gptpro/digua_ai_nas_harness_stage2_10_for_gptpro_20260704-001631.zip.sha256.txt\n?? evidence_for_gptpro/digua_ai_nas_harness_stage3_readonly_shadow_for_gptpro_20260704-003851.zip\n?? evidence_for_gptpro/digua_ai_nas_harness_stage3_readonly_shadow_for_gptpro_20260704-003851.zip.sha256.txt\n?? evidence_for_gptpro/dream7b_s100p_longrun_final_for_gptpro_20260704_010420.zip\n?? evidence_for_gptpro/dream7b_s100p_longrun_final_for_gptpro_20260704_010420.zip.sha256.txt\n?? evidence_for_gptpro/dream7b_s100p_v18_for_gptpro_20260704_002409.zip\n?? evidence_for_gptpro/dream7b_s100p_v18_for_gptpro_20260704_002409.zip.sha256.txt\n?? gates/stage2_10_gates.py\n?? gates/stage3_readonly_shadow_gates.py\n?? operator_approval/\n?? reports/11000_stage3_fasttrack_baseline_lock.json\n?? reports/11000_stage3_fasttrack_baseline_lock.md\n?? reports/11010_stage3_shadow_tap_integrity_gate.json\n?? reports/11010_stage3_shadow_tap_integrity_gate.md\n?? reports/11020_stage3_policy_first_shadow_decision_gate.json\n?? reports/11020_stage3_policy_first_shadow_decision_gate.md\n?? reports/11030_stage3_readonly_shadow_execution_gate.json\n?? reports/11030_stage3_readonly_shadow_execution_gate.md\n?? reports/11040_stage3_health_resource_latency_gate.json\n?? reports/11040_stage3_health_resource_latency_gate.md\n?? reports/11045_stage3_cloud_egress_redaction_gate.json\n?? reports/11045_stage3_cloud_egress_redaction_gate.md\n?? reports/11050_stage3_shadow_rollback_gate.json\n?? reports/11050_stage3_shadow_rollback_gate.md\n?? reports/11060_stage3_final_gate_packet.json\n?? reports/11060_stage3_final_gate_packet.md\n?? reports/1900_v18_baseline_lock.json\n?? reports/1900_v18_baseline_lock.md\n?? reports/1910_position_path_indirect_recovery.json\n?? reports/1910_position_path_indirect_recovery.md\n?? reports/1920_targeted_island_semantic_battery.json\n?? reports/1920_targeted_island_semantic_battery.md\n?? reports/1930_ramp_failure_deep_dive.json\n?? reports/1930_ramp_failure_deep_dive.md\n?? reports/1940_corrected_candidate_if_justified_v18.json\n?? reports/1940_corrected_candidate_if_justified_v18.md\n?? reports/1950_final_v18_gate_packet_and_package.json\n?? reports/1950_final_v18_gate_packet_and_package.md\n?? reports/2000_longrun_baseline_lock.json\n?? reports/2000_longrun_baseline_lock.md\n?? reports/2100_hf_semantic_truth_loader.json\n?? reports/2100_hf_semantic_truth_loader.md\n?? reports/2110_gguf_f16_reference_escalation.json\n?? reports/2110_gguf_f16_reference_escalation.md\n?? reports/2200_seg00_operator_contract_inventory.json\n?? reports/2200_seg00_operator_contract_inventory.md\n?? reports/2210_position_delta_basis_model.json\n?? reports/2210_position_delta_basis_model.md\n?? reports/2220_gathernd_quant_contract_closure.json\n?? reports/2220_gathernd_quant_contract_closure.md\n?? reports/2230_hf_equivalent_boundary_exhaustive.json\n?? reports/2230_hf_equivalent_boundary_exhaustive.md\n?? reports/2300_semantic_bpu_island_battery.json\n?? reports/2300_semantic_bpu_island_battery.md\n?? reports/2310_ramp_outlier_decision.json\n?? reports/2310_ramp_outlier_decision.md\n?? reports/2320_hybrid_candidate_routes.json\n?? reports/2320_hybrid_candidate_routes.md\n?? reports/2400_corrected_candidate_if_justified.json\n?? reports/2400_corrected_candidate_if_justified.md\n?? reports/2500_logits_gate_for_candidates.json\n?? reports/2500_logits_gate_for_candidates.md\n?? reports/2600_generation_quality_gate.json\n?? reports/2600_generation_quality_gate.md\n?? reports/2700_isolated_product_route_gate.json\n?? reports/2700_isolated_product_route_gate.md\n?? reports/2800_longrun_final_package.json\n?? reports/2800_longrun_final_package.md\n?? reports/9000_stage2_10_baseline_lock.json\n?? reports/9000_stage2_10_baseline_lock.md\n?? reports/9010_operator_approval_hard_gate.json\n?? reports/9010_operator_approval_hard_gate.md\n?? reports/9020_qwen_persistence_apply_verify_restart_gate.json\n?? reports/9020_qwen_persistence_apply_verify_restart_gate.md\n?? reports/9030_qwen_persistence_rollback_verify_gate.json\n?? reports/9030_qwen_persistence_rollback_verify_gate.md\n?? reports/9040_post_persistence_policy_first_readonly_shadow_soak_gate.json\n?? reports/9040_post_persistence_policy_first_readonly_shadow_soak_gate.md\n?? reports/9050_stage2_10_stage3_go_no_go_gate.json\n?? reports/9050_stage2_10_stage3_go_no_go_gate.md\n?? reports/BPU_ISLAND_SEMANTIC_STATUS_V18.md\n?? reports/DREAM7B_S100P_DEPLOYMENT_VERDICT.md\n?? reports/DREAM7B_S100P_FINAL_PAPER_EVIDENCE_DOSSIER.md\n?? reports/PAPER_EVIDENCE_DOSSIER_V18.md\n?? reports/SEG00_POSITION_PATH_STATUS_V18.md\n?? reports/stage2_10_post_persistence_shadow_soak_trace.jsonl\n?? reports/stage3_readonly_shadow_execution_trace.jsonl\n?? reports/stage3_shadow/\n?? reports/stage3_shadow_comparison.json\n?? reports/stage3_shadow_comparison.md\n?? scripts/run_stage2_10_gates_from_package.sh\n?? scripts/run_stage3_readonly_shadow_from_package.sh\n?? tools/build_longrun_final_thread.py\n?? tools/build_v18_research_thread.py\n?? tools/run_v18_position_path_recovery.py\n?? tools/run_v18_semantic_island_battery.py",
+    "stderr": ""
+  },
+  "input_artifacts": [
+    {
+      "path": "reports/1810_seg00_01_operator_inventory.json",
+      "exists": true,
+      "size_bytes": 16216,
+      "sha256": "ffeaf3ef34b946112d9db30a6299a9afb43400ec9c4f2e59cae909ddf8a16675"
+    }
+  ],
+  "output_artifacts": [
+    {
+      "path": "reports/2200_seg00_operator_contract_inventory.json",
+      "exists": true,
+      "size_bytes": 19156,
+      "sha256": "c3a513b334c71f2b7da894a691ac0776529952bd99a341286b599beeb814476c"
+    },
+    {
+      "path": "reports/2200_seg00_operator_contract_inventory.md",
+      "exists": true,
+      "size_bytes": 254,
+      "sha256": "86847338250120db4310dfd9798aa2b248aa5dee5276521d11dd19b65820178b"
+    }
+  ],
+  "blocking_or_failure_reasons": [],
+  "next_blocking_condition": "Need HBM/HBIR/HBO/source graph or vendor quant metadata to expose hbir.mul/add input-1 semantics.",
+  "safety": {
+    "generation_quality_run": false,
+    "product_routes_18888_18889_touched": false,
+    "dream7b_frontend_openclaw_traffic_touched": false,
+    "harness_qwen_openclaw_defaults_modified": false
+  },
+  "verdict": "visible_operator_contract_closed_missing_internal_vendor_artifacts",
+  "operator_inventory": [
+    {
+      "index": 0,
+      "operator": "hbir.mul_id_63",
+      "kind": "BPU",
+      "inputs": [
+        {
+          "name": "_input_1",
+          "shape": [
+            128
+          ],
+          "dtype": "int32",
+          "dumpable": true
+        }
+      ],
+      "outputs": [
+        {
+          "name": "hbir.mul output / hbir.add input-1",
+          "dumpable": false,
+          "evidence": "not exposed in bin/txt/npy dump formats"
+        }
+      ],
+      "scale": null,
+      "zero_point": null
+    },
+    {
+      "index": 1,
+      "operator": "View / hbir.reshape_id_1",
+      "kind": "CPU/native",
+      "inputs": [
+        {
+          "name": "_input_0",
+          "shape": [
+            1,
+            128
+          ],
+          "dtype": "int32",
+          "dumpable": true
+        }
+      ],
+      "outputs": [
+        {
+          "name": "hbir.reshape_id_1",
+          "shape": [
+            1,
+            128
+          ],
+          "dtype": "int32",
+          "dumpable": true
+        }
+      ],
+      "scale": null,
+      "zero_point": null
+    },
+    {
+      "index": 2,
+      "operator": "GatherND / qnt.const_fake_quant_id_3",
+      "kind": "CPU/native",
+      "inputs": [
+        {
+          "name": "hbir.reshape_id_1",
+          "shape": [
+            1,
+            128
+          ],
+          "dtype": "int32",
+          "dumpable": true
+        }
+      ],
+      "outputs": [
+        {
+          "name": "qnt.const_fake_quant_id_3 / hbir.add input-0",
+          "shape": [
+            128,
+            3584
+          ],
+          "dtype": "int8 raw inferred",
+          "dumpable": true
+        }
+      ],
+      "scale": "missing",
+      "zero_point": "missing"
+    },
+    {
+      "index": 3,
+      "operator": "hbir.add_id_137",
+      "kind": "BPU",
+      "inputs": [
+        {
+          "name": "qnt.const_fake_quant_id_3",
+          "shape": [
+            128,
+            3584
+          ],
+          "dtype": "int8 raw",
+          "dumpable": true
+        },
+        {
+          "name": "hbir.mul output",
+          "dumpable": false
+        }
+      ],
+      "outputs": [
+        {
+          "name": "_output_0",
+          "shape": [
+            128,
+            3584
+          ],
+          "dtype": "int16",
+          "dumpable": true
+        }
+      ],
+      "scale": 6.062494503566995e-05,
+      "zero_point": 0
+    }
+  ],
+  "missing_artifacts": [
+    {
+      "artifact": "hbir.mul output",
+      "attempted": [
+        "hrt_model_exec dump_intermediate bin",
+        "hrt_model_exec dump_intermediate txt",
+        "hrt_model_exec dump_intermediate npy",
+        "strings/readelf/HBM metadata"
+      ],
+      "found": false,
+      "reason": "not emitted by public HRT dump"
+    },
+    {
+      "artifact": "hbir.add input-1",
+      "attempted": [
+        "HRT dump all formats",
+        "dump file listing search for input-1",
+        "operator strings search"
+      ],
+      "found": false,
+      "reason": "not emitted by public HRT dump"
+    },
+    {
+      "artifact": "GatherND official scale/zero_point",
+      "attempted": [
+        "hb_model_info",
+        "hrt_model_exec model_info",
+        "strings grep scale/zero/qnt/fake_quant",
+        "compiler source search v15"
+      ],
+      "found": false,
+      "reason": "only model output scale is exposed"
+    },
+    {
+      "artifact": "source graph/HBO/HBIR/ONNX/quant table",
+      "attempted": [
+        "targeted NAS/compiler cache search",
+        "HBM strings/readelf"
+      ],
+      "found": false,
+      "reason": "no matching seq128 B=1 source graph or quant sidecar found"
+    }
+  ],
+  "command_log_manifest": [
+    {
+      "source": "evidence/dream7b_s100p_v16_execution_20260703_windows_safe/evidence/hbm_introspection_v16/hb_model_info_model_file.log",
+      "copied_to": "evidence/seg00_01_operator_inventory_v17/logs/hbm_introspection_v16_hb_model_info_model_file.log",
+      "size_bytes": 248,
+      "sha256": "56a9939701cde6bb9d9ffffe39ec6017a30a39168f0d04187f14588bcddc114f"
+    },
+    {
+      "source": "evidence/dream7b_s100p_v16_execution_20260703_windows_safe/evidence/hbm_introspection_v16/hb_model_info_positional.log",
+      "copied_to": "evidence/seg00_01_operator_inventory_v17/logs/hbm_introspection_v16_hb_model_info_positional.log",
+      "size_bytes": 235,
+      "sha256": "f6a9b5cb1a2af7cf3ad44e331c7d137c4617f96c3d76509711dc6413ddc1f41e"
+    },
+    {
+      "source": "evidence/dream7b_s100p_v16_execution_20260703_windows_safe/evidence/hbm_introspection_v16/hbm_file.log",
+      "copied_to": "evidence/seg00_01_operator_inventory_v17/logs/hbm_introspection_v16_hbm_file.log",
+      "size_bytes": 344,
+      "sha256": "38df4d5c5b606f0889924ccf710f77f528a9296de6bd49a0310ee74c5378b591"
+    },
+    {
+      "source": "evidence/dream7b_s100p_v16_execution_20260703_windows_safe/evidence/hbm_introspection_v16/hbm_readelf_h.log",
+      "copied_to": "evidence/seg00_01_operator_inventory_v17/logs/hbm_introspection_v16_hbm_readelf_h.log",
+      "size_bytes": 1118,
+      "sha256": "37427d234f0a703fb446951e9cb6af66a57190531ea6bc6f351355845d598584"
+    },
+    {
+      "source": "evidence/dream7b_s100p_v16_execution_20260703_windows_safe/evidence/hbm_introspection_v16/hbm_sha256.log",
+      "copied_to": "evidence/seg00_01_operator_inventory_v17/logs/hbm_introspection_v16_hbm_sha256.log",
+      "size_bytes": 342,
+      "sha256": "069019db48a4d109c8f4eacc83f25cb30c8c430e0bb2813eccae9b8b6c49f3cc"
+    },
+    {
+      "source": "evidence/dream7b_s100p_v16_execution_20260703_windows_safe/evidence/hbm_introspection_v16/hbm_strings_broad.log",
+      "copied_to": "evidence/seg00_01_operator_inventory_v17/logs/hbm_introspection_v16_hbm_strings_broad.log",
+      "size_bytes": 760,
+      "sha256": "574b8ccb04fe8d1632930e21d99631411480efbdec724b6c39f604e84fec9828"
+    },
+    {
+      "source": "evidence/dream7b_s100p_v16_execution_20260703_windows_safe/evidence/hbm_introspection_v16/hbm_strings_filtered.log",
+      "copied_to": "evidence/seg00_01_operator_inventory_v17/logs/hbm_introspection_v16_hbm_strings_filtered.log",
+      "size_bytes": 12325,
+      "sha256": "1123f283f82c61e9ee577400b761c1158c07cb4ea236e6c938a472abf943b82b"
+    },
+    {
+      "source": "evidence/dream7b_s100p_v16_execution_20260703_windows_safe/evidence/hbm_introspection_v16/hrt_dump_bin.log",
+      "copied_to": "evidence/seg00_01_operator_inventory_v17/logs/hbm_introspection_v16_hrt_dump_bin.log",
+      "size_bytes": 4865,
+      "sha256": "f0eb6c12f003c7fbc21322a1cd92d16df18c54a99fe85e18f03b3cade8abd4ea"
+    },
+    {
+      "source": "evidence/dream7b_s100p_v16_execution_20260703_windows_safe/evidence/hbm_introspection_v16/hrt_dump_npy.log",
+      "copied_to": "evidence/seg00_01_operator_inventory_v17/logs/hbm_introspection_v16_hrt_dump_npy.log",
+      "size_bytes": 5058,
+      "sha256": "b4788718952364fb00bfa1ee72e30bdc56588342bf0dc43233841e7cad6c83b9"
+    },
+    {
+      "source": "evidence/dream7b_s100p_v16_execution_20260703_windows_safe/evidence/hbm_introspection_v16/hrt_dump_txt/model_infer_input_0__input_0.txt",
+      "copied_to": "evidence/seg00_01_operator_inventory_v17/logs/hrt_dump_txt_model_infer_input_0__input_0.txt",
+      "size_bytes": 384,
+      "sha256": "63fbf18e4cd96ce4571db1e4d35ef804423030a98640e95dcd1bb033b5804153"
+    },
+    {
+      "source": "evidence/dream7b_s100p_v16_execution_20260703_windows_safe/evidence/hbm_introspection_v16/hrt_dump_txt/model_infer_input_1__input_1.txt",
+      "copied_to": "evidence/seg00_01_operator_inventory_v17/logs/hrt_dump_txt_model_infer_input_1__input_1.txt",
+      "size_bytes": 530,
+      "sha256": "88aca39045c20404a78649ffc71bb51322174a28bce2c04977f8448f35c10467"
+    },
+    {
+      "source": "evidence/dream7b_s100p_v16_execution_20260703_windows_safe/evidence/hbm_introspection_v16/hrt_dump_txt/model_infer_output_0__output_0.txt",
+      "copied_to": "evidence/seg00_01_operator_inventory_v17/logs/hrt_dump_txt_model_infer_output_0__output_0.txt",
+      "size_bytes": 2556660,
+      "sha256": "ffb9cc2ae758d6af813a6537e94c9ba0ba30744d00bedac4a3fc71410b6d93b1"
+    },
+    {
+      "source": "evidence/dream7b_s100p_v16_execution_20260703_windows_safe/evidence/hbm_introspection_v16/hrt_dump_txt.log",
+      "copied_to": "evidence/seg00_01_operator_inventory_v17/logs/hbm_introspection_v16_hrt_dump_txt.log",
+      "size_bytes": 5389,
+      "sha256": "5ff17e6b191dfd33bfae67c5698c52f47af529a1ea05a76f2cd2167c7c881dc7"
+    },
+    {
+      "source": "evidence/dream7b_s100p_v16_execution_20260703_windows_safe/evidence/hbm_introspection_v16/hrt_model_exec_model_info.log",
+      "copied_to": "evidence/seg00_01_operator_inventory_v17/logs/hbm_introspection_v16_hrt_model_exec_model_info.log",
+      "size_bytes": 1318,
+      "sha256": "c5dcf999de95bf34ebe8e653a9233d4eb5bcc9c5dcbbb1477c48165d22ca274b"
+    },
+    {
+      "source": "evidence/dream7b_s100p_v16_execution_20260703_windows_safe/evidence/hbm_introspection_v16/tool_compgen.log",
+      "copied_to": "evidence/seg00_01_operator_inventory_v17/logs/hbm_introspection_v16_tool_compgen.log",
+      "size_bytes": 282,
+      "sha256": "d61d2cddb41428e4aac2d0bf5cb1d1892b517307fd964c4054dd04de6970699e"
+    },
+    {
+      "source": "evidence/dream7b_s100p_v16_execution_20260703_windows_safe/evidence/hbm_introspection_v16/tool_help/file.help.log",
+      "copied_to": "evidence/seg00_01_operator_inventory_v17/logs/tool_help_file.help.log",
+      "size_bytes": 3254,
+      "sha256": "b34acabbee9b7a71beda5c1f5c1c51b075681851177f7d11932f8feafae90fae"
+    },
+    {
+      "source": "evidence/dream7b_s100p_v16_execution_20260703_windows_safe/evidence/hbm_introspection_v16/tool_help/hrt_model_exec.help.log",
+      "copied_to": "evidence/seg00_01_operator_inventory_v17/logs/tool_help_hrt_model_exec.help.log",
+      "size_bytes": 7143,
+      "sha256": "2370e8d2c2c16d78fc132ab57b6223f5e2a0434c8ecf2d082ab8d1ae1b8054d1"
+    },
+    {
+      "source": "evidence/dream7b_s100p_v16_execution_20260703_windows_safe/evidence/hbm_introspection_v16/tool_help/python3.help.log",
+      "copied_to": "evidence/seg00_01_operator_inventory_v17/logs/tool_help_python3.help.log",
+      "size_bytes": 6444,
+      "sha256": "b669ff4d243a02a88692167221c7ed859a4370e286ba5c84072a0f245eff071f"
+    },
+    {
+      "source": "evidence/dream7b_s100p_v16_execution_20260703_windows_safe/evidence/hbm_introspection_v16/tool_help/readelf.help.log",
+      "copied_to": "evidence/seg00_01_operator_inventory_v17/logs/tool_help_readelf.help.log",
+      "size_bytes": 4659,
+      "sha256": "b7c23b95994e88d089977aa24a45f03e332d0e9f0150ff0ca1ba05fa92e353c5"
+    },
+    {
+      "source": "evidence/dream7b_s100p_v16_execution_20260703_windows_safe/evidence/hbm_introspection_v16/tool_help/strings.help.log",
+      "copied_to": "evidence/seg00_01_operator_inventory_v17/logs/tool_help_strings.help.log",
+      "size_bytes": 1653,
+      "sha256": "a1be69c951f09a3ff2c5d425a481d9b44652664d34ea21991130e5970eebbeed"
+    }
+  ],
+  "definitive_status": {
+    "hbir_mul_output": "not_dumpable_public_HRT",
+    "hbir_add_input1": "not_dumpable_public_HRT",
+    "GatherND_official_scale": "not_found",
+    "source_graph": "not_found",
+    "quant_table": "not_found",
+    "calibration_table": "not_found"
+  }
+}

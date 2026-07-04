@@ -1,0 +1,153 @@
+{
+  "schema_version": "dream7b_s100p_v20_3020_x86_gpu_semantic_truth_export_bundle",
+  "created_at_utc": "2026-07-04T03:40:00.842597+00:00",
+  "run_commands": [
+    "C:\\Users\\zhexu\\AppData\\Local\\Python\\pythoncore-3.14-64\\python.exe tools\\build_v20_research_thread.py --root ."
+  ],
+  "host_environment": {
+    "platform": "Windows-11-10.0.26200-SP0",
+    "python": "3.14.3 (tags/v3.14.3:323c59a, Feb  3 2026, 16:04:56) [MSC v.1944 64 bit (AMD64)]"
+  },
+  "git": {
+    "cmd": [
+      "git",
+      "status",
+      "--short"
+    ],
+    "returncode": 0,
+    "stdout": "?? 01_final_evidence/digua_ai_nas_harness_aggressive_progression_gate_packet.json\n?? 01_final_evidence/digua_ai_nas_harness_aggressive_progression_gate_packet.md\n?? 01_final_evidence/digua_ai_nas_harness_stage2_10_gate_packet.json\n?? 01_final_evidence/digua_ai_nas_harness_stage2_10_gate_packet.md\n?? 01_final_evidence/digua_ai_nas_harness_stage3_readonly_shadow_gate_packet.json\n?? 01_final_evidence/digua_ai_nas_harness_stage3_readonly_shadow_gate_packet.md\n?? 01_final_evidence/digua_ai_nas_harness_stage4_1_gate_packet.json\n?? 01_final_evidence/digua_ai_nas_harness_stage4_1_gate_packet.md\n?? 01_final_evidence/dream7b_s100p_gate_packet_v18.json\n?? 01_final_evidence/dream7b_s100p_gate_packet_v18.md\n?? 01_final_evidence/dream7b_s100p_gate_packet_v19.json\n?? 01_final_evidence/dream7b_s100p_gate_packet_v19.md\n?? 01_final_evidence/dream7b_s100p_longrun_final_gate_packet.json\n?? 01_final_evidence/dream7b_s100p_longrun_final_gate_packet.md\n?? config/stage3_readonly_shadow_policy.json\n?? config/stage4_sandbox_approval_token_schema.json\n?? docs/HARNESS_AGGRESSIVE_PROGRESSION_DECISION.md\n?? docs/REAL_NAS_WRITE_GATE_PLAN.md\n?? docs/REAL_NAS_WRITE_HUMAN_CONFIRMATION_SPEC.md\n?? docs/REAL_NAS_WRITE_PREFLIGHT_DESIGN.md\n?? docs/REAL_NAS_WRITE_PREFLIGHT_REVIEW_REQUEST.md\n?? docs/STAGE2_10_DECISION.md\n?? docs/STAGE3_READONLY_SHADOW_DECISION.md\n?? docs/STAGE3_READONLY_SHADOW_DRYRUN_PLAN_V5.md\n?? docs/STAGE4_1_DECISION.md\n?? docs/STAGE4_WRITE_ACTION_DESIGN_DOSSIER.md\n?? docs/STAGE4_WRITE_ACTION_GATE_PLAN.md\n?? docs/STAGE4_WRITE_ACTION_PRECONDITIONS.md\n?? docs/STAGE4_WRITE_ACTION_READINESS_DECISION.md\n?? docs/STAGE4_WRITE_ACTION_RISK_REGISTER.md\n?? evidence/dream7b_hf_small_source_v20.tar.gz\n?? evidence/dream7b_s100p_longrun_20260704/\n?? evidence/dream7b_s100p_longrun_20260704_remote_evidence.tar.gz\n?? evidence/dream7b_s100p_v18_execution_20260704/\n?? evidence/dream7b_s100p_v18_execution_20260704_remote_evidence.tar.gz\n?? evidence/dream7b_s100p_v19_execution_20260704/\n?? evidence/dream7b_s100p_v19_execution_20260704_remote_evidence.tar.gz\n?? evidence/dream7b_s100p_v20_execution_20260704/\n?? evidence/dream7b_s100p_v20_execution_20260704_remote_evidence.tar.gz\n?? evidence/gguf_f16_longrun/\n?? evidence/longrun_artifact_registry.json\n?? evidence/position_delta_basis_longrun/\n?? evidence/position_delta_basis_model_v19/\n?? evidence/stage4_1_write_sandbox_manifest.json\n?? evidence/write_sandbox_manifest.json\n?? evidence/x86_gpu_semantic_truth_export_bundle_v20/\n?? evidence_for_gptpro/digua_ai_nas_harness_aggressive_progression_for_gptpro_20260704-015133.zip\n?? evidence_for_gptpro/digua_ai_nas_harness_aggressive_progression_for_gptpro_20260704-015133.zip.sha256.txt\n?? evidence_for_gptpro/digua_ai_nas_harness_aggressive_progression_for_gptpro_20260704-112214.zip\n?? evidence_for_gptpro/digua_ai_nas_harness_aggressive_progression_for_gptpro_20260704-112214.zip.sha256.txt\n?? evidence_for_gptpro/digua_ai_nas_harness_stage2_10_for_gptpro_20260704-001631.zip\n?? evidence_for_gptpro/digua_ai_nas_harness_stage2_10_for_gptpro_20260704-001631.zip.sha256.txt\n?? evidence_for_gptpro/digua_ai_nas_harness_stage3_readonly_shadow_for_gptpro_20260704-003851.zip\n?? evidence_for_gptpro/digua_ai_nas_harness_stage3_readonly_shadow_for_gptpro_20260704-003851.zip.sha256.txt\n?? evidence_for_gptpro/digua_ai_nas_harness_stage4_1_for_gptpro_20260704-113916.zip\n?? evidence_for_gptpro/digua_ai_nas_harness_stage4_1_for_gptpro_20260704-113916.zip.sha256.txt\n?? evidence_for_gptpro/dream7b_s100p_longrun_final_for_gptpro_20260704_010617.zip\n?? evidence_for_gptpro/dream7b_s100p_longrun_final_for_gptpro_20260704_010617.zip.sha256.txt\n?? evidence_for_gptpro/dream7b_s100p_v18_for_gptpro_20260704_002409.zip\n?? evidence_for_gptpro/dream7b_s100p_v18_for_gptpro_20260704_002409.zip.sha256.txt\n?? evidence_for_gptpro/dream7b_s100p_v19_for_gptpro_20260704_025255.zip\n?? evidence_for_gptpro/dream7b_s100p_v19_for_gptpro_20260704_025255.zip.sha256.txt\n?? gates/aggressive_progression_gates.py\n?? gates/stage2_10_gates.py\n?? gates/stage3_readonly_shadow_gates.py\n?? gates/stage4_1_gates.py\n?? operator_approval/\n?? reports/11000_stage3_fasttrack_baseline_lock.json\n?? reports/11000_stage3_fasttrack_baseline_lock.md\n?? reports/11010_stage3_shadow_tap_integrity_gate.json\n?? reports/11010_stage3_shadow_tap_integrity_gate.md\n?? reports/11020_stage3_policy_first_shadow_decision_gate.json\n?? reports/11020_stage3_policy_first_shadow_decision_gate.md\n?? reports/11030_stage3_readonly_shadow_execution_gate.json\n?? reports/11030_stage3_readonly_shadow_execution_gate.md\n?? reports/11040_stage3_health_resource_latency_gate.json\n?? reports/11040_stage3_health_resource_latency_gate.md\n?? reports/11045_stage3_cloud_egress_redaction_gate.json\n?? reports/11045_stage3_cloud_egress_redaction_gate.md\n?? reports/11050_stage3_shadow_rollback_gate.json\n?? reports/11050_stage3_shadow_rollback_gate.md\n?? reports/11060_stage3_final_gate_packet.json\n?? reports/11060_stage3_final_gate_packet.md\n?? reports/13100_stage3_1_extended_readonly_shadow_soak_gate.json\n?? reports/13100_stage3_1_extended_readonly_shadow_soak_gate.md\n?? reports/13110_stage3_1_health_resource_latency_gate.json\n?? reports/13110_stage3_1_health_resource_latency_gate.md\n?? reports/13120_stage3_1_adversarial_privacy_injection_gate.json\n?? reports/13120_stage3_1_adversarial_privacy_injection_gate.md\n?? reports/13130_stage3_1_repeated_shadow_rollback_gate.json\n?? reports/13130_stage3_1_repeated_shadow_rollback_gate.md\n?? reports/13200_stage4_signed_approval_token_gate.json\n?? reports/13200_stage4_signed_approval_token_gate.md\n?? reports/13210_stage4_synthetic_sandbox_fixture_gate.json\n?? reports/13210_stage4_synthetic_sandbox_fixture_gate.md\n?? reports/13220_stage4_write_action_dryrun_planner_gate.json\n?? reports/13220_stage4_write_action_dryrun_planner_gate.md\n?? reports/13230_stage4_sandbox_write_canary_gate.json\n?? reports/13230_stage4_sandbox_write_canary_gate.md\n?? reports/15000_stage4_1_baseline_lock.json\n?? reports/15000_stage4_1_baseline_lock.md\n?? reports/15010_extended_synthetic_sandbox_fixture_gate.json\n?? reports/15010_extended_synthetic_sandbox_fixture_gate.md\n?? reports/15020_expanded_approval_token_gate.json\n?? reports/15020_expanded_approval_token_gate.md\n?? reports/15030_expanded_sandbox_write_canary_gate.json\n?? reports/15030_expanded_sandbox_write_canary_gate.md\n?? reports/15040_sandbox_write_failure_injection_rollback_gate.json\n?? reports/15040_sandbox_write_failure_injection_rollback_gate.md\n?? reports/15060_post_canary_health_readonly_regression_gate.json\n?? reports/15060_post_canary_health_readonly_regression_gate.md\n?? reports/1900_v18_baseline_lock.json\n?? reports/1900_v18_baseline_lock.md\n?? reports/1910_position_path_indirect_recovery.json\n?? reports/1910_position_path_indirect_recovery.md\n?? reports/1920_targeted_island_semantic_battery.json\n?? reports/1920_targeted_island_semantic_battery.md\n?? reports/1930_ramp_failure_deep_dive.json\n?? reports/1930_ramp_failure_deep_dive.md\n?? reports/1940_corrected_candidate_if_justified_v18.json\n?? reports/1940_corrected_candidate_if_justified_v18.md\n?? reports/1950_final_v18_gate_packet_and_package.json\n?? reports/1950_final_v18_gate_packet_and_package.md\n?? reports/2000_longrun_baseline_lock.json\n?? reports/2000_longrun_baseline_lock.md\n?? reports/2000_v19_baseline_lock.json\n?? reports/2000_v19_baseline_lock.md\n?? reports/2010_semantic_hf_truth_loader_gate.json\n?? reports/2010_semantic_hf_truth_loader_gate.md\n?? reports/2020_semantic_bpu_island_battery.json\n?? reports/2020_semantic_bpu_island_battery.md\n?? reports/2030_ramp_outlier_decision.json\n?? reports/2030_ramp_outlier_decision.md\n?? reports/2040_position_delta_basis_model.json\n?? reports/2040_position_delta_basis_model.md\n?? reports/2050_corrected_candidate_if_justified_v19.json\n?? reports/2050_corrected_candidate_if_justified_v19.md\n?? reports/2060_final_v19_gate_packet_and_package.json\n?? reports/2060_final_v19_gate_packet_and_package.md\n?? reports/2100_hf_semantic_truth_loader.json\n?? reports/2100_hf_semantic_truth_loader.md\n?? reports/2110_gguf_f16_reference_escalation.json\n?? reports/2110_gguf_f16_reference_escalation.md\n?? reports/2200_seg00_operator_contract_inventory.json\n?? reports/2200_seg00_operator_contract_inventory.md\n?? reports/2210_position_delta_basis_model.json\n?? reports/2210_position_delta_basis_model.md\n?? reports/2220_gathernd_quant_contract_closure.json\n?? reports/2220_gathernd_quant_contract_closure.md\n?? reports/2230_hf_equivalent_boundary_exhaustive.json\n?? reports/2230_hf_equivalent_boundary_exhaustive.md\n?? reports/2300_semantic_bpu_island_battery.json\n?? reports/2300_semantic_bpu_island_battery.md\n?? reports/2310_ramp_outlier_decision.json\n?? reports/2310_ramp_outlier_decision.md\n?? reports/2320_hybrid_candidate_routes.json\n?? reports/2320_hybrid_candidate_routes.md\n?? reports/2400_corrected_candidate_if_justified.json\n?? reports/2400_corrected_candidate_if_justified.md\n?? reports/2500_logits_gate_for_candidates.json\n?? reports/2500_logits_gate_for_candidates.md\n?? reports/2600_generation_quality_gate.json\n?? reports/2600_generation_quality_gate.md\n?? reports/2700_isolated_product_route_gate.json\n?? reports/2700_isolated_product_route_gate.md\n?? reports/2800_longrun_final_package.json\n?? reports/2800_longrun_final_package.md\n?? reports/3000_v20_baseline_lock.json\n?? reports/3000_v20_baseline_lock.md\n?? reports/3010_single_case_forward_runtime_localization.json\n?? reports/3010_single_case_forward_runtime_localization.md\n?? reports/9000_stage2_10_baseline_lock.json\n?? reports/9000_stage2_10_baseline_lock.md\n?? reports/9010_operator_approval_hard_gate.json\n?? reports/9010_operator_approval_hard_gate.md\n?? reports/9020_qwen_persistence_apply_verify_restart_gate.json\n?? reports/9020_qwen_persistence_apply_verify_restart_gate.md\n?? reports/9030_qwen_persistence_rollback_verify_gate.json\n?? reports/9030_qwen_persistence_rollback_verify_gate.md\n?? reports/9040_post_persistence_policy_first_readonly_shadow_soak_gate.json\n?? reports/9040_post_persistence_policy_first_readonly_shadow_soak_gate.md\n?? reports/9050_stage2_10_stage3_go_no_go_gate.json\n?? reports/9050_stage2_10_stage3_go_no_go_gate.md\n?? reports/BPU_ISLAND_SEMANTIC_STATUS_V18.md\n?? reports/DREAM7B_S100P_DEPLOYMENT_VERDICT.md\n?? reports/DREAM7B_S100P_FINAL_PAPER_EVIDENCE_DOSSIER.md\n?? reports/PAPER_EVIDENCE_DOSSIER_V18.md\n?? reports/PAPER_EVIDENCE_DOSSIER_V19.md\n?? reports/POSITION_PATH_MODEL_STATUS_V19.md\n?? reports/SEG00_POSITION_PATH_STATUS_V18.md\n?? reports/SEMANTIC_BPU_ISLAND_STATUS_V19.md\n?? reports/aggressive_progression_summary.json\n?? reports/aggressive_progression_summary.md\n?? reports/stage2_10_post_persistence_shadow_soak_trace.jsonl\n?? reports/stage3_1_adversarial_privacy_injection_trace.jsonl\n?? reports/stage3_1_extended_shadow_decisions.jsonl\n?? reports/stage3_1_extended_shadow_tool_calls.jsonl\n?? reports/stage3_1_extended_shadow_trace.jsonl\n?? reports/stage3_1_repeated_shadow_rollback_trace.jsonl\n?? reports/stage3_readonly_shadow_execution_trace.jsonl\n?? reports/stage3_shadow/\n?? reports/stage3_shadow_comparison.json\n?? reports/stage3_shadow_comparison.md\n?? reports/stage4_1_failure_injection_trace.jsonl\n?? reports/stage4_1_post_canary_readonly_regression_trace.jsonl\n?? reports/stage4_1_sandbox_write_canary_trace.jsonl\n?? reports/stage4_write_action_dryrun_plans.json\n?? scripts/run_aggressive_progression_from_package.sh\n?? scripts/run_stage2_10_gates_from_package.sh\n?? scripts/run_stage3_readonly_shadow_from_package.sh\n?? scripts/run_stage4_1_from_package.sh\n?? tools/build_longrun_final_thread.py\n?? tools/build_v18_research_thread.py\n?? tools/build_v19_research_thread.py\n?? tools/build_v20_research_thread.py\n?? tools/run_v18_position_path_recovery.py\n?? tools/run_v18_semantic_island_battery.py\n?? tools/run_v19_semantic_hf_truth_loader.py\n?? tools/run_v20_single_case_forward_localization.py\n",
+    "stderr": ""
+  },
+  "input_artifacts": [
+    {
+      "path": "evidence/x86_gpu_semantic_truth_export_bundle_v20/semantic_cases.jsonl",
+      "exists": true,
+      "size_bytes": 13715,
+      "sha256": "1472c21c346e4e230fc7dc90aa7f2e01b07336f49af7dbb87624a50b282cf531"
+    },
+    {
+      "path": "evidence/x86_gpu_semantic_truth_export_bundle_v20/export_semantic_truth.py",
+      "exists": true,
+      "size_bytes": 8596,
+      "sha256": "c9de0f157ed2e6fdce45018d5244cc6926ee418c0eeca881f59b463804d4077d"
+    },
+    {
+      "path": "evidence/dream7b_hf_small_source_v20.tar.gz",
+      "exists": true,
+      "size_bytes": 1774124,
+      "sha256": "017982a26edb36c8f2dd06d4f0c937635dd30a10b31a3cc5364e1707d1ff1941"
+    }
+  ],
+  "output_artifacts": [
+    {
+      "path": "reports/3020_x86_gpu_semantic_truth_export_bundle.json",
+      "exists": true,
+      "size_bytes": 17906,
+      "sha256": "2cb0801d8121e1313da630edca47d7154a8e467a5134cd6ec058064ac50ade5e"
+    },
+    {
+      "path": "reports/3020_x86_gpu_semantic_truth_export_bundle.md",
+      "exists": true,
+      "size_bytes": 189,
+      "sha256": "1f81152bc99fa22b92a212f21813627699dd82ab5a7f5095b75fce49835d51fe"
+    }
+  ],
+  "blocking_or_failure_reasons": [
+    "Current local Python environment does not provide a verified torch2 + Dream7B model runtime for completing the 8-row semantic truth export in this workspace."
+  ],
+  "safety": {
+    "generation_quality_run": false,
+    "product_routes_18888_18889_touched": false,
+    "dream7b_frontend_openclaw_traffic_touched": false,
+    "harness_qwen_openclaw_defaults_modified": false
+  },
+  "bundle": {
+    "path": "evidence/x86_gpu_semantic_truth_export_bundle_v20",
+    "exists": true,
+    "file_count": 17,
+    "size_bytes": 5194487
+  },
+  "bundle_manifest": {
+    "schema_version": "dream7b_s100p_v20_x86_gpu_export_bundle_manifest",
+    "created_at_utc": "2026-07-04T03:40:00.829921+00:00",
+    "purpose": "Produce 8 semantic HF/PyTorch BF16 or FP32 full-truth logits outside the S100P torch1.8 CPU runtime.",
+    "expected_model_dir_on_s100p": "/mnt/nas/openclaw/models/dream7b-hf",
+    "weights_not_embedded": true,
+    "required_cases": 8,
+    "semantic_cases_sha256": "1472c21c346e4e230fc7dc90aa7f2e01b07336f49af7dbb87624a50b282cf531",
+    "model_source_files": [
+      {
+        "path": "model_source_files/models/dream7b-hf/config.json",
+        "size_bytes": 927,
+        "sha256": "11afc7fe7a1881e73dcd70cca6868aaaf8eb89ad45ea5fc6426c3fb82dec9340"
+      },
+      {
+        "path": "model_source_files/models/dream7b-hf/configuration_dream.py",
+        "size_bytes": 3197,
+        "sha256": "24d038962ccf16361595494461000ec0c1b043653c7494d7fc835c96f121f0b9"
+      },
+      {
+        "path": "model_source_files/models/dream7b-hf/generation_utils.py",
+        "size_bytes": 22332,
+        "sha256": "7f8ad01484898946b3c9c9d5ebc85e5ac726061d0fa7b4a522c4b8110c13a921"
+      },
+      {
+        "path": "model_source_files/models/dream7b-hf/merges.txt",
+        "size_bytes": 1671853,
+        "sha256": "8831e4f1a044471340f7c0a83d7bd71306a5b867e95fd870f74d0c5308a904d5"
+      },
+      {
+        "path": "model_source_files/models/dream7b-hf/model.safetensors.index.json",
+        "size_bytes": 27752,
+        "sha256": "998a078123ffc97763690de7f2a677eb89168af5eaf8a5e12e6bc24d18e25bdb"
+      },
+      {
+        "path": "model_source_files/models/dream7b-hf/modeling_dream.py",
+        "size_bytes": 36763,
+        "sha256": "3166e789f0d69beb1f4fbdee2317953d1c1c3b9bc21479b109afc5dd059de5b3"
+      },
+      {
+        "path": "model_source_files/models/dream7b-hf/SHA256SUMS",
+        "size_bytes": 550,
+        "sha256": "00943b62e19d3080f930603f6a65e210f11e239dc8b1c7a65d9b98090330ff8a"
+      },
+      {
+        "path": "model_source_files/models/dream7b-hf/tokenization_dream.py",
+        "size_bytes": 14028,
+        "sha256": "1d7f04104fa673831f48256e3cd42cd0bbd1bddd801b4abea5c74cc47d98bdd2"
+      },
+      {
+        "path": "model_source_files/models/dream7b-hf/tokenizer_config.json",
+        "size_bytes": 7486,
+        "sha256": "b0e9c1a6299d8832a1362d6b24f007de8a2acfe0243d8a3a1d1b57aa8250f7ee"
+      },
+      {
+        "path": "model_source_files/models/dream7b-hf/vocab.json",
+        "size_bytes": 3383407,
+        "sha256": "87a257b04b17642a0688c98cd1df89c398bda4fee532d6f88b38a659ecb4ac8d"
+      }
+    ],
+    "run_commands": [
+      "bash run_export.sh /path/to/dream7b-hf semantic_truth_output",
+      "py -3 .\\export_semantic_truth.py --model-dir C:\\path\\to\\dream7b-hf --cases-jsonl .\\semantic_cases.jsonl --output-root semantic_truth_output --dtype bfloat16 --device auto --fallback-fp32"
+    ],
+    "safety": {
+      "generation_quality_run": false,
+      "product_routes_18888_18889_touched": false,
+      "dream7b_frontend_openclaw_traffic_touched": false,
+      "harness_qwen_openclaw_defaults_modified": false
+    }
+  },
+  "local_torch_probe": {
+    "cmd": [
+      "C:\\Users\\zhexu\\AppData\\Local\\Python\\pythoncore-3.14-64\\python.exe",
+      "-c",
+      "import torch, json; print(json.dumps({'torch': torch.__version__, 'cuda': torch.cuda.is_available()}))"
+    ],
+    "returncode": 1,
+    "stdout": "",
+    "stderr": "Traceback (most recent call last):\n  File \"<string>\", line 1, in <module>\n    import torch, json; print(json.dumps({'torch': torch.__version__, 'cuda': torch.cuda.is_available()}))\n    ^^^^^^^^^^^^^^^^^^\nModuleNotFoundError: No module named 'torch'\n"
+  },
+  "semantic_truth_rows": 0,
+  "verdict": "export_bundle_ready_external_run_required"
+}

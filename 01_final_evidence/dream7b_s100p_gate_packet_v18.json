@@ -1,0 +1,29 @@
+{
+  "schema_version": "dream7b_s100p_gate_packet_v18",
+  "created_at_utc": "2026-07-03T16:24:09.835329+00:00",
+  "verdict": "D_seg00_01_fault_strongly_supported_exact_closure_still_blocked",
+  "generation_quality_run": false,
+  "product_routes_18888_18889_touched": false,
+  "dream7b_frontend_openclaw_traffic_touched": false,
+  "harness_qwen_openclaw_defaults_modified": false,
+  "current_full_bpu_path_status": "fail_falsified_against_HF_PyTorch_BF16_logits_truth_v17_baseline",
+  "position_path_status": "position_path_lookup_like_token_dependent_not_formula_recovered",
+  "semantic_battery_status": "semantic_battery_runtime_blocked_no_logits_rows",
+  "ramp_failure_status": "ramp_failure_recurs_under_v17_diagnostic_cases_semantic_inconclusive",
+  "corrected_candidate_status": "not_run_no_justified_correction",
+  "generation_quality_status": "not_run_by_design",
+  "product_route_status": "not_run_by_design",
+  "generation_gate_can_unlock": false,
+  "product_route_can_unlock": false,
+  "gates": {
+    "1900": "baseline_locked",
+    "1910": "position_path_lookup_like_token_dependent_not_formula_recovered",
+    "1920": "semantic_battery_runtime_blocked_no_logits_rows",
+    "1930": "ramp_failure_recurs_under_v17_diagnostic_cases_semantic_inconclusive",
+    "1940": "not_run_no_justified_correction"
+  },
+  "paper_safe_claim": "v18 strengthens the seg00_01 position-derived path diagnosis as lookup-like/token-dependent but does not recover a deployable formula; semantic island expansion is blocked by HF runtime loader incompatibility, so no semantic island validity claim is made.",
+  "commands": [
+    "C:\\Users\\zhexu\\AppData\\Local\\Python\\pythoncore-3.14-64\\python.exe tools\\build_v18_research_thread.py --root ."
+  ]
+}
