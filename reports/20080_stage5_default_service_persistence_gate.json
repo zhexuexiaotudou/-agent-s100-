@@ -1,0 +1,348 @@
+{
+  "generated_at": "2026-07-04T14:36:50.917547+08:00",
+  "gate_id": "stage5_default_service_persistence_gate",
+  "verdict": "ok_stage5_default_service_persistence_gate",
+  "passed_count": 6,
+  "check_count": 6,
+  "failure_count": 0,
+  "failures": [],
+  "checks": [
+    {
+      "label": "OpenClaw restart succeeds",
+      "ok": true,
+      "detail": {
+        "returncode": 0,
+        "elapsed_ms": 4195.742,
+        "stdout_hash": "45df5ad5e0ecfa54d3226343e0e6857337494ba6e32f189d1174070665d8c659",
+        "stderr_hash": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "stdout_tail": "active\n"
+      }
+    },
+    {
+      "label": "policy loaded after restart",
+      "ok": true,
+      "detail": {
+        "ok": true,
+        "returncode": 0,
+        "http_code": "200",
+        "time_total": 0.001764,
+        "json": {
+          "ok": true,
+          "service": "harness_default_service",
+          "policy_id": "digua_stage5_harness_default_service_policy_v1",
+          "readonly_workspaces_enabled": true,
+          "token_budget_gate_enabled": true,
+          "privacy_redaction_gate_enabled": true,
+          "copy_routes": [
+            "/api/nas/copy/preview",
+            "/api/nas/copy/dry-run",
+            "/api/nas/copy/confirm",
+            "/api/nas/copy/execute",
+            "/api/nas/copy/rollback"
+          ],
+          "copy_execute_enabled": true,
+          "copy_execute_requires": {
+            "user_confirmation": true,
+            "signed_token": true,
+            "source_rehash": true,
+            "target_absent": true,
+            "dispatcher": true
+          },
+          "forbidden_actions": [
+            "delete",
+            "move",
+            "rename",
+            "chmod",
+            "chown",
+            "overwrite",
+            "recursive",
+            "recursive_delete",
+            "arbitrary_shell"
+          ],
+          "qwen_execution_authority": false,
+          "cloud_private_raw_egress": false,
+          "dispatcher": "/mnt/nas/openclaw/scripts/probes/ai_nas_allowlisted_tool.sh",
+          "dispatcher_exists": true,
+          "dispatcher_sha256": "d099f8071ab3710778520bf610ce2bca07fbc7976effe0a6d99791cf42ebb23a",
+          "raw_private_content_in_status": false
+        },
+        "body_hash": "8ce7358ef321a96433f788c7e2e2a95bd5b9b26c2f72d95a673332402aa31631",
+        "stderr_hash": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "stderr_tail": ""
+      }
+    },
+    {
+      "label": "OpenClaw/Qwen health OK after restart",
+      "ok": true,
+      "detail": {
+        "openclaw": {
+          "ok": true,
+          "returncode": 0,
+          "http_code": "200",
+          "time_total": 0.85442,
+          "json": {
+            "ok": true,
+            "tool_id": "ai_nas_operator_portal_server",
+            "operator_portal_contract": {
+              "found": true,
+              "filename": "operator_portal_contract.json",
+              "path": "/mnt/nas/openclaw/reports/ai_nas_mvp/operator_portal_contract_20260618-160406-445747/operator_portal_contract.json",
+              "verdict": "ok_ai_nas_operator_portal_contract",
+              "generated_at": "2026-06-18T16:04:08.346324+08:00",
+              "selection_policy": "generated_at_then_mtime"
+            },
+            "portal_html": "/mnt/nas/openclaw/reports/ai_nas_mvp/operator_portal_contract_20260618-160406-445747/operator_portal.html",
+            "refresh_on_start": null
+          },
+          "body_hash": "3f602e957754ba001c367fa58c76c536eda10a7318d8befc265f0d27698f100e",
+          "stderr_hash": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "stderr_tail": ""
+        },
+        "qwen": {
+          "ok": true,
+          "returncode": 0,
+          "http_code": "200",
+          "time_total": 0.001096,
+          "json": {
+            "ok": true,
+            "model": "Qwen2.5-1.5B-Instruct-S100P-official",
+            "backend": "official-qwen2.5-oellm-multichat-plus-ai-nas-tools",
+            "port": 18080,
+            "active_profile": "qwen25_7b_instruct_cache_len_1024_q8",
+            "priority_profile": "qwen25_7b_instruct_cache_len_1024_q8_vendor_default",
+            "priority_status": "promoted_from_shadow_18081",
+            "active_hbm": {
+              "path": "/mnt/nas/openclaw/toolchains/s100_llm_sdk/D-Robotics_LLM_S100_1.0.0_SDK/oellm_runtime/model/Qwen2.5_1.5B_Instruct_512.hbm",
+              "exists": false,
+              "size_bytes": 0
+            },
+            "priority_hbm": {
+              "path": "/mnt/nas/openclaw/toolchains/s100_llm_sdk/D-Robotics_LLM_S100_1.0.0_SDK/oellm_runtime/model/Qwen2.5_1.5B_Instruct_512.hbm",
+              "exists": false,
+              "size_bytes": 0
+            },
+            "tool_dispatcher": "/mnt/nas/openclaw/scripts/probes/ai_nas_allowlisted_tool.sh",
+            "report_root": "/mnt/nas/openclaw/reports/qwen25_ai_nas"
+          },
+          "body_hash": "93f6c14eaa15d5be20371ecd6e2125c3534ad144dc5fcee349d782ded5be1812",
+          "stderr_hash": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "stderr_tail": ""
+        }
+      }
+    },
+    {
+      "label": "protected ports unchanged",
+      "ok": true,
+      "detail": {
+        "before": [
+          "LISTEN 0      5          127.0.0.1:18080      0.0.0.0:*    users:((\"python3\",pid=<pid>,fd=3))",
+          "LISTEN 0      5          127.0.0.1:18888      0.0.0.0:*",
+          "LISTEN 0      5          127.0.0.1:8765       0.0.0.0:*    users:((\"python3\",pid=<pid>,fd=3))"
+        ],
+        "after": [
+          "LISTEN 0      5          127.0.0.1:18080      0.0.0.0:*    users:((\"python3\",pid=<pid>,fd=3))",
+          "LISTEN 0      5          127.0.0.1:18888      0.0.0.0:*",
+          "LISTEN 0      5          127.0.0.1:8765       0.0.0.0:*    users:((\"python3\",pid=<pid>,fd=3))"
+        ]
+      }
+    },
+    {
+      "label": "default service status endpoint OK",
+      "ok": true,
+      "detail": {
+        "ok": true,
+        "returncode": 0,
+        "http_code": "200",
+        "time_total": 0.001764,
+        "json": {
+          "ok": true,
+          "service": "harness_default_service",
+          "policy_id": "digua_stage5_harness_default_service_policy_v1",
+          "readonly_workspaces_enabled": true,
+          "token_budget_gate_enabled": true,
+          "privacy_redaction_gate_enabled": true,
+          "copy_routes": [
+            "/api/nas/copy/preview",
+            "/api/nas/copy/dry-run",
+            "/api/nas/copy/confirm",
+            "/api/nas/copy/execute",
+            "/api/nas/copy/rollback"
+          ],
+          "copy_execute_enabled": true,
+          "copy_execute_requires": {
+            "user_confirmation": true,
+            "signed_token": true,
+            "source_rehash": true,
+            "target_absent": true,
+            "dispatcher": true
+          },
+          "forbidden_actions": [
+            "delete",
+            "move",
+            "rename",
+            "chmod",
+            "chown",
+            "overwrite",
+            "recursive",
+            "recursive_delete",
+            "arbitrary_shell"
+          ],
+          "qwen_execution_authority": false,
+          "cloud_private_raw_egress": false,
+          "dispatcher": "/mnt/nas/openclaw/scripts/probes/ai_nas_allowlisted_tool.sh",
+          "dispatcher_exists": true,
+          "dispatcher_sha256": "d099f8071ab3710778520bf610ce2bca07fbc7976effe0a6d99791cf42ebb23a",
+          "raw_private_content_in_status": false
+        },
+        "body_hash": "8ce7358ef321a96433f788c7e2e2a95bd5b9b26c2f72d95a673332402aa31631",
+        "stderr_hash": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "stderr_tail": ""
+      }
+    },
+    {
+      "label": "copy execute still requires confirmation/token",
+      "ok": true,
+      "detail": {
+        "http_status": 403,
+        "payload": {
+          "ok": false,
+          "error": "approval_phrase_mismatch",
+          "qwen_execution_authority": false
+        }
+      }
+    }
+  ],
+  "detail": {
+    "restart": {
+      "returncode": 0,
+      "elapsed_ms": 4195.742,
+      "stdout_hash": "45df5ad5e0ecfa54d3226343e0e6857337494ba6e32f189d1174070665d8c659",
+      "stderr_hash": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stdout_tail": "active\n"
+    },
+    "status": {
+      "ok": true,
+      "returncode": 0,
+      "http_code": "200",
+      "time_total": 0.001764,
+      "json": {
+        "ok": true,
+        "service": "harness_default_service",
+        "policy_id": "digua_stage5_harness_default_service_policy_v1",
+        "readonly_workspaces_enabled": true,
+        "token_budget_gate_enabled": true,
+        "privacy_redaction_gate_enabled": true,
+        "copy_routes": [
+          "/api/nas/copy/preview",
+          "/api/nas/copy/dry-run",
+          "/api/nas/copy/confirm",
+          "/api/nas/copy/execute",
+          "/api/nas/copy/rollback"
+        ],
+        "copy_execute_enabled": true,
+        "copy_execute_requires": {
+          "user_confirmation": true,
+          "signed_token": true,
+          "source_rehash": true,
+          "target_absent": true,
+          "dispatcher": true
+        },
+        "forbidden_actions": [
+          "delete",
+          "move",
+          "rename",
+          "chmod",
+          "chown",
+          "overwrite",
+          "recursive",
+          "recursive_delete",
+          "arbitrary_shell"
+        ],
+        "qwen_execution_authority": false,
+        "cloud_private_raw_egress": false,
+        "dispatcher": "/mnt/nas/openclaw/scripts/probes/ai_nas_allowlisted_tool.sh",
+        "dispatcher_exists": true,
+        "dispatcher_sha256": "d099f8071ab3710778520bf610ce2bca07fbc7976effe0a6d99791cf42ebb23a",
+        "raw_private_content_in_status": false
+      },
+      "body_hash": "8ce7358ef321a96433f788c7e2e2a95bd5b9b26c2f72d95a673332402aa31631",
+      "stderr_hash": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr_tail": ""
+    },
+    "health": {
+      "openclaw": {
+        "ok": true,
+        "returncode": 0,
+        "http_code": "200",
+        "time_total": 0.85442,
+        "json": {
+          "ok": true,
+          "tool_id": "ai_nas_operator_portal_server",
+          "operator_portal_contract": {
+            "found": true,
+            "filename": "operator_portal_contract.json",
+            "path": "/mnt/nas/openclaw/reports/ai_nas_mvp/operator_portal_contract_20260618-160406-445747/operator_portal_contract.json",
+            "verdict": "ok_ai_nas_operator_portal_contract",
+            "generated_at": "2026-06-18T16:04:08.346324+08:00",
+            "selection_policy": "generated_at_then_mtime"
+          },
+          "portal_html": "/mnt/nas/openclaw/reports/ai_nas_mvp/operator_portal_contract_20260618-160406-445747/operator_portal.html",
+          "refresh_on_start": null
+        },
+        "body_hash": "3f602e957754ba001c367fa58c76c536eda10a7318d8befc265f0d27698f100e",
+        "stderr_hash": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "stderr_tail": ""
+      },
+      "qwen": {
+        "ok": true,
+        "returncode": 0,
+        "http_code": "200",
+        "time_total": 0.001096,
+        "json": {
+          "ok": true,
+          "model": "Qwen2.5-1.5B-Instruct-S100P-official",
+          "backend": "official-qwen2.5-oellm-multichat-plus-ai-nas-tools",
+          "port": 18080,
+          "active_profile": "qwen25_7b_instruct_cache_len_1024_q8",
+          "priority_profile": "qwen25_7b_instruct_cache_len_1024_q8_vendor_default",
+          "priority_status": "promoted_from_shadow_18081",
+          "active_hbm": {
+            "path": "/mnt/nas/openclaw/toolchains/s100_llm_sdk/D-Robotics_LLM_S100_1.0.0_SDK/oellm_runtime/model/Qwen2.5_1.5B_Instruct_512.hbm",
+            "exists": false,
+            "size_bytes": 0
+          },
+          "priority_hbm": {
+            "path": "/mnt/nas/openclaw/toolchains/s100_llm_sdk/D-Robotics_LLM_S100_1.0.0_SDK/oellm_runtime/model/Qwen2.5_1.5B_Instruct_512.hbm",
+            "exists": false,
+            "size_bytes": 0
+          },
+          "tool_dispatcher": "/mnt/nas/openclaw/scripts/probes/ai_nas_allowlisted_tool.sh",
+          "report_root": "/mnt/nas/openclaw/reports/qwen25_ai_nas"
+        },
+        "body_hash": "93f6c14eaa15d5be20371ecd6e2125c3534ad144dc5fcee349d782ded5be1812",
+        "stderr_hash": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "stderr_tail": ""
+      }
+    },
+    "execute_probe": {
+      "http_status": 403,
+      "payload": {
+        "ok": false,
+        "error": "approval_phrase_mismatch",
+        "qwen_execution_authority": false
+      }
+    },
+    "ports": {
+      "before": [
+        "LISTEN 0      5          127.0.0.1:18080      0.0.0.0:*    users:((\"python3\",pid=<pid>,fd=3))",
+        "LISTEN 0      5          127.0.0.1:18888      0.0.0.0:*",
+        "LISTEN 0      5          127.0.0.1:8765       0.0.0.0:*    users:((\"python3\",pid=<pid>,fd=3))"
+      ],
+      "after": [
+        "LISTEN 0      5          127.0.0.1:18080      0.0.0.0:*    users:((\"python3\",pid=<pid>,fd=3))",
+        "LISTEN 0      5          127.0.0.1:18888      0.0.0.0:*",
+        "LISTEN 0      5          127.0.0.1:8765       0.0.0.0:*    users:((\"python3\",pid=<pid>,fd=3))"
+      ]
+    }
+  }
+}

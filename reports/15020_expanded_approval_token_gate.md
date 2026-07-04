@@ -1,0 +1,117 @@
+# stage4_1_expanded_approval_token_gate
+
+- verdict: `ok_stage4_1_expanded_approval_token_gate`
+- generated_at: `2026-07-04T11:38:47.633782+08:00`
+- passed: `4/4`
+
+## Checks
+
+- `PASS` all valid token cases accepted
+- `PASS` all invalid token cases rejected
+- `PASS` delete/chmod/real NAS rejected
+- `PASS` token bound to action/tool/args/path/before/rollback
+
+## Failures
+
+- none
+
+## Detail
+
+```json
+{
+  "test_results": [
+    {
+      "name": "valid_copy",
+      "expected": "accept",
+      "ok": true,
+      "reason": "ok"
+    },
+    {
+      "name": "valid_rename",
+      "expected": "accept",
+      "ok": true,
+      "reason": "ok"
+    },
+    {
+      "name": "valid_move",
+      "expected": "accept",
+      "ok": true,
+      "reason": "ok"
+    },
+    {
+      "name": "valid_batch_copy",
+      "expected": "accept",
+      "ok": true,
+      "reason": "ok"
+    },
+    {
+      "name": "expired",
+      "expected": "reject",
+      "ok": false,
+      "reason": "expired"
+    },
+    {
+      "name": "wrong_tool",
+      "expected": "reject",
+      "ok": false,
+      "reason": "tool_or_action_not_allowlisted"
+    },
+    {
+      "name": "wrong_args_hash",
+      "expected": "reject",
+      "ok": false,
+      "reason": "args_hash_mismatch"
+    },
+    {
+      "name": "wrong_target_path_hash",
+      "expected": "reject",
+      "ok": false,
+      "reason": "target_path_hash_mismatch"
+    },
+    {
+      "name": "missing_before_state",
+      "expected": "reject",
+      "ok": false,
+      "reason": "missing:before_state_hash"
+    },
+    {
+      "name": "missing_rollback",
+      "expected": "reject",
+      "ok": false,
+      "reason": "missing:rollback_plan_hash"
+    },
+    {
+      "name": "nonce_reuse",
+      "expected": "reject",
+      "ok": false,
+      "reason": "nonce_reuse"
+    },
+    {
+      "name": "bad_signature",
+      "expected": "reject",
+      "ok": false,
+      "reason": "bad_signature"
+    },
+    {
+      "name": "delete_attempt",
+      "expected": "reject",
+      "ok": false,
+      "reason": "tool_or_action_not_allowlisted"
+    },
+    {
+      "name": "chmod_attempt",
+      "expected": "reject",
+      "ok": false,
+      "reason": "tool_or_action_not_allowlisted"
+    },
+    {
+      "name": "real_nas_path_attempt",
+      "expected": "reject",
+      "ok": false,
+      "reason": "real_nas_path_rejected"
+    }
+  ],
+  "valid_count": 4,
+  "invalid_rejected_count": 11
+}
+```

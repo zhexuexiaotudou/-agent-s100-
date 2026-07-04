@@ -1,0 +1,264 @@
+{
+  "generated_at": "2026-07-04T13:57:37.525786+08:00",
+  "gate_id": "stage4_5_pre_execute_route_flow_gate",
+  "verdict": "ok_stage4_5_pre_execute_route_flow_gate",
+  "passed_count": 6,
+  "check_count": 6,
+  "failure_count": 0,
+  "failures": [],
+  "checks": [
+    {
+      "label": "candidate exists for route flow",
+      "ok": true,
+      "detail": "operator_candidates/stage4_5_self_created_synthetic_route_candidate.json"
+    },
+    {
+      "label": "preview/dry-run/confirm allowed",
+      "ok": true,
+      "detail": [
+        "preview_allowed",
+        "dry-run_allowed",
+        "confirm_allowed_token_issued"
+      ]
+    },
+    {
+      "label": "signed approval token issued by confirm",
+      "ok": true,
+      "detail": "858a01464a848279d81dbe5231c0084c54a45de6966337f546013dfa1e12e63d"
+    },
+    {
+      "label": "execute remains blocked under default global flags",
+      "ok": true,
+      "detail": [
+        "execute_feature_disabled"
+      ]
+    },
+    {
+      "label": "pre-execute route flow performed no writes",
+      "ok": true,
+      "detail": [
+        {
+          "route": "preview",
+          "allowed": true,
+          "status": "preview_allowed",
+          "reason_codes": [],
+          "response": {
+            "route": "preview",
+            "status": "preview_allowed",
+            "action_type": "copy",
+            "candidate_fingerprint": "9845850926bccef5ba5aeb9b9d39ada668e9a4a7821958e727f97f6e0d6b62c7",
+            "source_path_hash": "c3f8de23135918ad682a2e22e1d7e8fabc4f062c48b1e0d6cc9fe17e4eca89b8",
+            "target_path_hash": "bb91fbd04ec4d493fb5ffec67a573bda42fbe61dec72c668b146865f86835cf2",
+            "source_sha256_prefix": "7c17e4552a22",
+            "expected_size_bytes": 199,
+            "target_root": "Collections",
+            "raw_paths_in_response": false,
+            "private_content_in_response": false,
+            "would_require_dry_run": true,
+            "would_require_confirm": true,
+            "execute_enabled": false,
+            "rollback_enabled": false
+          },
+          "audit_event": {
+            "event_id": "copy-route-f6a470f92090483f",
+            "tool_id": "ai_nas_route_copy_guard_v1",
+            "route": "preview",
+            "allowed": true,
+            "reason_codes": [],
+            "candidate_fingerprint": "9845850926bccef5ba5aeb9b9d39ada668e9a4a7821958e727f97f6e0d6b62c7",
+            "source_path_hash": "c3f8de23135918ad682a2e22e1d7e8fabc4f062c48b1e0d6cc9fe17e4eca89b8",
+            "target_path_hash": "bb91fbd04ec4d493fb5ffec67a573bda42fbe61dec72c668b146865f86835cf2",
+            "args_hash": "efbd843bbaca4b4b67fe633768930c8a07e177a652d084af38764dc974d3ec31",
+            "qwen_execution_authority": false,
+            "cloud_private_egress": false,
+            "raw_private_content_logged": false,
+            "dispatcher_tool": null
+          },
+          "private_leak_count": 0,
+          "private_leak_markers": [],
+          "writes_performed": false
+        },
+        {
+          "route": "dry-run",
+          "allowed": true,
+          "status": "dry-run_allowed",
+          "reason_codes": [],
+          "response": {
+            "route": "dry-run",
+            "status": "dry-run_allowed",
+            "action_type": "copy",
+            "candidate_fingerprint": "9845850926bccef5ba5aeb9b9d39ada668e9a4a7821958e727f97f6e0d6b62c7",
+            "source_path_hash": "c3f8de23135918ad682a2e22e1d7e8fabc4f062c48b1e0d6cc9fe17e4eca89b8",
+            "target_path_hash": "bb91fbd04ec4d493fb5ffec67a573bda42fbe61dec72c668b146865f86835cf2",
+            "source_sha256_prefix": "7c17e4552a22",
+            "expected_size_bytes": 199,
+            "target_root": "Collections",
+            "raw_paths_in_response": false,
+            "private_content_in_response": false,
+            "planned_effect": "create_one_target_file_if_absent",
+            "writes_performed": false,
+            "rollback_plan": "remove_only_created_target_after_hash_match",
+            "approval_phrase": "APPROVE COPY 9845850926bccef5",
+            "approval_phrase_hash": "968cb2ee3e64afaf4a660c2f488b11c073801812f2d7e23082c6febeea7d81ce"
+          },
+          "audit_event": {
+            "event_id": "copy-route-d75850d8be1446ad",
+            "tool_id": "ai_nas_route_copy_guard_v1",
+            "route": "dry-run",
+            "allowed": true,
+            "reason_codes": [],
+            "candidate_fingerprint": "9845850926bccef5ba5aeb9b9d39ada668e9a4a7821958e727f97f6e0d6b62c7",
+            "source_path_hash": "c3f8de23135918ad682a2e22e1d7e8fabc4f062c48b1e0d6cc9fe17e4eca89b8",
+            "target_path_hash": "bb91fbd04ec4d493fb5ffec67a573bda42fbe61dec72c668b146865f86835cf2",
+            "args_hash": "efbd843bbaca4b4b67fe633768930c8a07e177a652d084af38764dc974d3ec31",
+            "qwen_execution_authority": false,
+            "cloud_private_egress": false,
+            "raw_private_content_logged": false,
+            "dispatcher_tool": null,
+            "writes_performed": false,
+            "approval_phrase_hash": "968cb2ee3e64afaf4a660c2f488b11c073801812f2d7e23082c6febeea7d81ce"
+          },
+          "private_leak_count": 0,
+          "private_leak_markers": [],
+          "writes_performed": false
+        },
+        {
+          "route": "confirm",
+          "allowed": true,
+          "status": "confirm_allowed_token_issued",
+          "reason_codes": [],
+          "response": {
+            "route": "confirm",
+            "status": "confirm_allowed_token_issued",
+            "action_type": "copy",
+            "candidate_fingerprint": "9845850926bccef5ba5aeb9b9d39ada668e9a4a7821958e727f97f6e0d6b62c7",
+            "source_path_hash": "c3f8de23135918ad682a2e22e1d7e8fabc4f062c48b1e0d6cc9fe17e4eca89b8",
+            "target_path_hash": "bb91fbd04ec4d493fb5ffec67a573bda42fbe61dec72c668b146865f86835cf2",
+            "source_sha256_prefix": "7c17e4552a22",
+            "expected_size_bytes": 199,
+            "target_root": "Collections",
+            "raw_paths_in_response": false,
+            "private_content_in_response": false,
+            "signed_approval_token": {
+              "token_type": "copy_route_execute_approval",
+              "tool_id": "ai_nas_action_execute_copy",
+              "workspace_id": "nas_action",
+              "operator_user_id": "operator-zhexu",
+              "candidate_fingerprint": "9845850926bccef5ba5aeb9b9d39ada668e9a4a7821958e727f97f6e0d6b62c7",
+              "args_hash": "efbd843bbaca4b4b67fe633768930c8a07e177a652d084af38764dc974d3ec31",
+              "source_path_hash": "c3f8de23135918ad682a2e22e1d7e8fabc4f062c48b1e0d6cc9fe17e4eca89b8",
+              "target_path_hash": "bb91fbd04ec4d493fb5ffec67a573bda42fbe61dec72c668b146865f86835cf2",
+              "action_type": "copy",
+              "expires_at": 1783145253,
+              "nonce": "8c0bb313f29b4febb0a1443d6a22a272",
+              "signature": "MHMNbTXdepLFInkX0WVVrjCvmP64Cs9JR9buoGq2QQI"
+            },
+            "signed_approval_token_hash": "858a01464a848279d81dbe5231c0084c54a45de6966337f546013dfa1e12e63d",
+            "execute_enabled": false,
+            "writes_performed": false
+          },
+          "audit_event": {
+            "event_id": "copy-route-f273938d4b454c9c",
+            "tool_id": "ai_nas_route_copy_guard_v1",
+            "route": "confirm",
+            "allowed": true,
+            "reason_codes": [],
+            "candidate_fingerprint": "9845850926bccef5ba5aeb9b9d39ada668e9a4a7821958e727f97f6e0d6b62c7",
+            "source_path_hash": "c3f8de23135918ad682a2e22e1d7e8fabc4f062c48b1e0d6cc9fe17e4eca89b8",
+            "target_path_hash": "bb91fbd04ec4d493fb5ffec67a573bda42fbe61dec72c668b146865f86835cf2",
+            "args_hash": "efbd843bbaca4b4b67fe633768930c8a07e177a652d084af38764dc974d3ec31",
+            "qwen_execution_authority": false,
+            "cloud_private_egress": false,
+            "raw_private_content_logged": false,
+            "dispatcher_tool": null,
+            "approval_phrase_hash": "968cb2ee3e64afaf4a660c2f488b11c073801812f2d7e23082c6febeea7d81ce",
+            "token_issued": true,
+            "token_hash": "858a01464a848279d81dbe5231c0084c54a45de6966337f546013dfa1e12e63d",
+            "writes_performed": false
+          },
+          "private_leak_count": 0,
+          "private_leak_markers": [],
+          "writes_performed": false
+        },
+        {
+          "route": "execute_default_closed",
+          "allowed": false,
+          "status": "execute_blocked",
+          "reason_codes": [
+            "execute_feature_disabled"
+          ],
+          "response": {
+            "route": "execute",
+            "status": "execute_blocked",
+            "action_type": "copy",
+            "candidate_fingerprint": "9845850926bccef5ba5aeb9b9d39ada668e9a4a7821958e727f97f6e0d6b62c7",
+            "source_path_hash": "c3f8de23135918ad682a2e22e1d7e8fabc4f062c48b1e0d6cc9fe17e4eca89b8",
+            "target_path_hash": "bb91fbd04ec4d493fb5ffec67a573bda42fbe61dec72c668b146865f86835cf2",
+            "source_sha256_prefix": "7c17e4552a22",
+            "expected_size_bytes": 199,
+            "target_root": "Collections",
+            "raw_paths_in_response": false,
+            "private_content_in_response": false,
+            "dispatcher_tool": "ai_nas_action_execute_copy",
+            "execution_performed_by_guard": false,
+            "writes_performed": false,
+            "blocked_safely": true
+          },
+          "audit_event": {
+            "event_id": "copy-route-7e5a2fef6c6a42e5",
+            "tool_id": "ai_nas_route_copy_guard_v1",
+            "route": "execute",
+            "allowed": false,
+            "reason_codes": [
+              "execute_feature_disabled"
+            ],
+            "candidate_fingerprint": "9845850926bccef5ba5aeb9b9d39ada668e9a4a7821958e727f97f6e0d6b62c7",
+            "source_path_hash": "c3f8de23135918ad682a2e22e1d7e8fabc4f062c48b1e0d6cc9fe17e4eca89b8",
+            "target_path_hash": "bb91fbd04ec4d493fb5ffec67a573bda42fbe61dec72c668b146865f86835cf2",
+            "args_hash": "efbd843bbaca4b4b67fe633768930c8a07e177a652d084af38764dc974d3ec31",
+            "qwen_execution_authority": false,
+            "cloud_private_egress": false,
+            "raw_private_content_logged": false,
+            "dispatcher_tool": "ai_nas_action_execute_copy",
+            "execution_performed_by_guard": false,
+            "operator_approved": true,
+            "env_enabled": true,
+            "approval_file_present": true,
+            "token_validation_reason": "approval_token_ok"
+          },
+          "private_leak_count": 0,
+          "private_leak_markers": [],
+          "writes_performed": false
+        }
+      ]
+    },
+    {
+      "label": "pre-execute route trace has no raw paths/private content",
+      "ok": true,
+      "detail": []
+    }
+  ],
+  "detail": {
+    "trace": "reports/stage4_5_pre_execute_route_flow_trace.jsonl",
+    "global_feature_flags": {
+      "preview_enabled": true,
+      "dry_run_enabled": true,
+      "confirm_enabled": true,
+      "execute_enabled": false,
+      "rollback_enabled": false,
+      "execute_canary_enabled": false,
+      "require_operator_approval_file": true,
+      "require_execute_env": true
+    },
+    "approval_token_hash": "858a01464a848279d81dbe5231c0084c54a45de6966337f546013dfa1e12e63d",
+    "route_statuses": {
+      "preview": "preview_allowed",
+      "dry-run": "dry-run_allowed",
+      "confirm": "confirm_allowed_token_issued",
+      "execute_default_closed": "execute_blocked"
+    },
+    "execute_default_reason_codes": [
+      "execute_feature_disabled"
+    ]
+  }
+}

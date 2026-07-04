@@ -1,0 +1,2222 @@
+{
+  "generated_at": "2026-07-04T14:35:38.987984+08:00",
+  "gate_id": "stage5_baseline_lock",
+  "verdict": "ok_stage5_baseline_lock",
+  "passed_count": 8,
+  "check_count": 8,
+  "failure_count": 0,
+  "failures": [],
+  "checks": [
+    {
+      "label": "Stage4.5 packet readable",
+      "ok": true,
+      "detail": "self_created_synthetic_route_copy_canary_passed_target_rolled_back"
+    },
+    {
+      "label": "Stage4.5 execute and rollback passed",
+      "ok": true,
+      "detail": {
+        "generated_at": "2026-07-04T13:58:11.432740+08:00",
+        "final_verdict": "self_created_synthetic_route_copy_canary_passed_target_rolled_back",
+        "final_verdict_allowed": true,
+        "all_gates_pass": true,
+        "run_id": "stage4_5_self_created_route_canary_20260704-135733",
+        "route_execute_executed": true,
+        "route_rollback_executed": true,
+        "target_missing_after_rollback": true,
+        "source_retained_after_rollback": true,
+        "candidate_summary": {
+          "candidate_id": "stage4_5-stage4_5_self_created_route_canary_20260704-135733",
+          "source_relative_path": "Collections/CodexPreflight/source/stage4_5_self_created_route_canary_20260704-135733.txt",
+          "target_relative_path": "Collections/CodexPreflight/target/stage4_5_self_created_route_canary_20260704-135733_copied.txt",
+          "source_sha256": "7c17e4552a221e467550974c8007f3a1fabb75ab30b1f75908f675c7482cb09c",
+          "expected_size_bytes": 199,
+          "source_owner_scope": "codex_synthetic"
+        },
+        "feature_flags": {
+          "global_config": {
+            "preview_enabled": true,
+            "dry_run_enabled": true,
+            "confirm_enabled": true,
+            "execute_enabled": false,
+            "rollback_enabled": false,
+            "execute_canary_enabled": false,
+            "require_operator_approval_file": true,
+            "require_execute_env": true
+          },
+          "scoped_enabled": {
+            "preview_enabled": true,
+            "dry_run_enabled": true,
+            "confirm_enabled": true,
+            "execute_enabled": true,
+            "rollback_enabled": true,
+            "execute_canary_enabled": true,
+            "require_operator_approval_file": true,
+            "require_execute_env": true
+          },
+          "scoped_after_close": {
+            "preview_enabled": true,
+            "dry_run_enabled": true,
+            "confirm_enabled": true,
+            "execute_enabled": false,
+            "rollback_enabled": false,
+            "execute_canary_enabled": false,
+            "require_operator_approval_file": true,
+            "require_execute_env": true
+          }
+        },
+        "policy": {
+          "policy_id": "digua_stage4_4_copy_route_policy_v1",
+          "workspace_id": "nas_action",
+          "allowed_action_type": "copy",
+          "allowed_source_prefixes": [
+            "Collections/CodexPreflight/source/"
+          ],
+          "allowed_target_prefixes": [
+            "Collections/CodexPreflight/target/"
+          ],
+          "allowed_source_owner_scopes": [
+            "operator_visible",
+            "codex_synthetic"
+          ],
+          "target_root_prefix": "Collections/",
+          "max_size_bytes": 1048576,
+          "approval_ttl_seconds": 600,
+          "require_source_hash": true,
+          "require_target_absent": true,
+          "require_target_parent_exists": true,
+          "forbid_symlink": true,
+          "forbid_recursive": true,
+          "forbid_overwrite": true,
+          "forbid_qwen_autonomous": true,
+          "forbid_cloud_derived": true,
+          "forbidden_action_types": [
+            "delete",
+            "move",
+            "rename",
+            "chmod",
+            "chown",
+            "overwrite",
+            "recursive",
+            "recursive_delete",
+            "shell"
+          ]
+        },
+        "evidence_table": [
+          {
+            "report": "15500_stage4_5_baseline_lock",
+            "gate_id": "stage4_5_baseline_lock",
+            "verdict": "ok_stage4_5_baseline_lock",
+            "passed_count": 8,
+            "check_count": 8,
+            "failure_count": 0
+          },
+          {
+            "report": "15510_stage4_5_self_created_synthetic_source_gate",
+            "gate_id": "stage4_5_self_created_synthetic_source_gate",
+            "verdict": "ok_stage4_5_self_created_synthetic_source_gate",
+            "passed_count": 6,
+            "check_count": 6,
+            "failure_count": 0
+          },
+          {
+            "report": "15520_stage4_5_synthetic_approval_gate",
+            "gate_id": "stage4_5_synthetic_approval_gate",
+            "verdict": "ok_stage4_5_synthetic_approval_gate",
+            "passed_count": 7,
+            "check_count": 7,
+            "failure_count": 0
+          },
+          {
+            "report": "15530_stage4_5_candidate_readonly_verification_gate",
+            "gate_id": "stage4_5_candidate_readonly_verification_gate",
+            "verdict": "ok_stage4_5_candidate_readonly_verification_gate",
+            "passed_count": 5,
+            "check_count": 5,
+            "failure_count": 0
+          },
+          {
+            "report": "15540_stage4_5_pre_execute_route_flow_gate",
+            "gate_id": "stage4_5_pre_execute_route_flow_gate",
+            "verdict": "ok_stage4_5_pre_execute_route_flow_gate",
+            "passed_count": 6,
+            "check_count": 6,
+            "failure_count": 0
+          },
+          {
+            "report": "15550_stage4_5_feature_flag_scoped_enable_gate",
+            "gate_id": "stage4_5_feature_flag_scoped_enable_gate",
+            "verdict": "ok_stage4_5_feature_flag_scoped_enable_gate",
+            "passed_count": 5,
+            "check_count": 5,
+            "failure_count": 0
+          },
+          {
+            "report": "15560_stage4_5_route_execute_canary_gate",
+            "gate_id": "stage4_5_route_execute_canary_gate",
+            "verdict": "ok_stage4_5_route_execute_canary_gate",
+            "passed_count": 9,
+            "check_count": 9,
+            "failure_count": 0
+          },
+          {
+            "report": "15570_stage4_5_route_rollback_canary_gate",
+            "gate_id": "stage4_5_route_rollback_canary_gate",
+            "verdict": "ok_stage4_5_route_rollback_canary_gate",
+            "passed_count": 7,
+            "check_count": 7,
+            "failure_count": 0
+          },
+          {
+            "report": "15580_stage4_5_feature_flag_close_and_health_gate",
+            "gate_id": "stage4_5_feature_flag_close_and_health_gate",
+            "verdict": "ok_stage4_5_feature_flag_close_and_health_gate",
+            "passed_count": 7,
+            "check_count": 7,
+            "failure_count": 0
+          },
+          {
+            "report": "15590_stage4_5_post_execute_adversarial_regression_gate",
+            "gate_id": "stage4_5_post_execute_adversarial_regression_gate",
+            "verdict": "ok_stage4_5_post_execute_adversarial_regression_gate",
+            "passed_count": 6,
+            "check_count": 6,
+            "failure_count": 0
+          },
+          {
+            "report": "15600_stage4_5_readonly_regression_mini_soak_gate",
+            "gate_id": "stage4_5_readonly_regression_mini_soak_gate",
+            "verdict": "ok_stage4_5_readonly_regression_mini_soak_gate",
+            "passed_count": 6,
+            "check_count": 6,
+            "failure_count": 0
+          }
+        ],
+        "environment": {
+          "repo_root": "F:\\Project\\Digua",
+          "platform": "Windows-11-10.0.26200-SP0",
+          "python": "3.14.3"
+        },
+        "remote_evidence": {
+          "remote_root": "/mnt/nas/openclaw/reports/stage4_5_route_canary_stage4_5_self_created_route_canary_20260704-135733",
+          "remote_manifest_path": "/mnt/nas/openclaw/reports/stage4_5_route_canary_stage4_5_self_created_route_canary_20260704-135733/approval_manifest.json",
+          "remote_rollback_manifest_path": "/mnt/nas/openclaw/reports/stage4_5_route_canary_stage4_5_self_created_route_canary_20260704-135733/reports/action_execute_copy_20260704-135741-403876/rollback_manifest.json",
+          "baseline_dispatcher_hash": "d099f8071ab3710778520bf610ce2bca07fbc7976effe0a6d99791cf42ebb23a"
+        },
+        "claim_boundary": [
+          "Only one Codex-created synthetic source file was copied.",
+          "Copy and rollback used route guard authorization plus ai_nas_allowlisted_tool.sh dispatcher.",
+          "Global execute/rollback feature flags remain disabled.",
+          "This does not authorize arbitrary user-file copy or whole-NAS browsing.",
+          "Qwen did not choose source/target and has no execution authority.",
+          "Cloud private payload egress remains forbidden."
+        ],
+        "final_package": {
+          "package_root": "F:\\Project\\Digua\\tmp\\digua_ai_nas_stage4_5_self_created_synthetic_route_canary_for_gptpro_20260704-135733",
+          "zip_path": "F:\\Project\\Digua\\evidence_for_gptpro\\digua_ai_nas_stage4_5_self_created_synthetic_route_canary_for_gptpro_20260704-135733.zip",
+          "sha256": "ba4395656b28815c3213db9fae36153e12a281c576e42e946a6acc8c6ad82f59",
+          "sha256_file": "F:\\Project\\Digua\\evidence_for_gptpro\\digua_ai_nas_stage4_5_self_created_synthetic_route_canary_for_gptpro_20260704-135733.zip.sha256.txt",
+          "file_count": 47
+        },
+        "package_self_check": {
+          "returncode": 0,
+          "stdout_hash": "0238ea704dd024cfe03dff49323e28c0b9fe79da32c5770473c684f426ab9330",
+          "stderr_hash": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "stdout_tail": "\"/mnt/nas/openclaw/reports/stage4_5_route_canary_stage4_5_self_created_route_canary_20260704-135733/approval_manifest.json\",\n          \"remote_rollback_manifest_path\": \"/mnt/nas/openclaw/reports/stage4_5_route_canary_stage4_5_self_created_route_canary_20260704-135733/reports/action_execute_copy_20260704-135741-403876/rollback_manifest.json\",\n          \"baseline_dispatcher_hash\": \"d099f8071ab3710778520bf610ce2bca07fbc7976effe0a6d99791cf42ebb23a\"\n        },\n        \"claim_boundary\": [\n          \"Only one Codex-created synthetic source file was copied.\",\n          \"Copy and rollback used route guard authorization plus ai_nas_allowlisted_tool.sh dispatcher.\",\n          \"Global execute/rollback feature flags remain disabled.\",\n          \"This does not authorize arbitrary user-file copy or whole-NAS browsing.\",\n          \"Qwen did not choose source/target and has no execution authority.\",\n          \"Cloud private payload egress remains forbidden.\"\n        ],\n        \"package_internal_note\": \"This packet is embedded inside the zip, so the zip SHA256 is recorded in the external .sha256.txt file and root workspace packet.\"\n      }\n    },\n    {\n      \"label\": \"route trace has no raw NAS path markers: reports/stage4_5_pre_execute_route_flow_trace.jsonl\",\n      \"ok\": true,\n      \"detail\": \"reports/stage4_5_pre_execute_route_flow_trace.jsonl\"\n    },\n    {\n      \"label\": \"route trace has no raw NAS path markers: reports/stage4_5_route_execute_trace.jsonl\",\n      \"ok\": true,\n      \"detail\": \"reports/stage4_5_route_execute_trace.jsonl\"\n    },\n    {\n      \"label\": \"route trace has no raw NAS path markers: reports/stage4_5_route_rollback_trace.jsonl\",\n      \"ok\": true,\n      \"detail\": \"reports/stage4_5_route_rollback_trace.jsonl\"\n    },\n    {\n      \"label\": \"route trace has no raw NAS path markers: reports/15590_stage4_5_post_execute_adversarial_cases.jsonl\",\n      \"ok\": true,\n      \"detail\": \"reports/15590_stage4_5_post_execute_adversarial_cases.jsonl\"\n    }\n  ],\n  \"failures\": []\n}\n",
+          "stderr_tail": "",
+          "json": {
+            "checks": [
+              {
+                "label": "exists: 01_final_evidence/digua_ai_nas_stage4_5_self_created_synthetic_route_canary_gate_packet.json",
+                "ok": true,
+                "detail": "01_final_evidence/digua_ai_nas_stage4_5_self_created_synthetic_route_canary_gate_packet.json"
+              },
+              {
+                "label": "exists: 01_final_evidence/digua_ai_nas_stage4_5_self_created_synthetic_route_canary_gate_packet.md",
+                "ok": true,
+                "detail": "01_final_evidence/digua_ai_nas_stage4_5_self_created_synthetic_route_canary_gate_packet.md"
+              },
+              {
+                "label": "exists: docs/STAGE4_5_SELF_CREATED_SYNTHETIC_ROUTE_COPY_CANARY_DECISION.md",
+                "ok": true,
+                "detail": "docs/STAGE4_5_SELF_CREATED_SYNTHETIC_ROUTE_COPY_CANARY_DECISION.md"
+              },
+              {
+                "label": "exists: docs/NEXT_STAGE4_6_OPERATOR_SELECTED_FIXTURE_ROUTE_CANARY_PLAN.md",
+                "ok": true,
+                "detail": "docs/NEXT_STAGE4_6_OPERATOR_SELECTED_FIXTURE_ROUTE_CANARY_PLAN.md"
+              },
+              {
+                "label": "exists: operator_candidates/stage4_5_self_created_synthetic_route_candidate.json",
+                "ok": true,
+                "detail": "operator_candidates/stage4_5_self_created_synthetic_route_candidate.json"
+              },
+              {
+                "label": "exists: operator_approval/stage4_5_self_created_synthetic_route_execute_approved.json",
+                "ok": true,
+                "detail": "operator_approval/stage4_5_self_created_synthetic_route_execute_approved.json"
+              },
+              {
+                "label": "exists: operator_candidates/stage4_5_self_created_synthetic_route_approval_manifest.json",
+                "ok": true,
+                "detail": "operator_candidates/stage4_5_self_created_synthetic_route_approval_manifest.json"
+              },
+              {
+                "label": "exists: reports/15500_stage4_5_baseline_lock.json",
+                "ok": true,
+                "detail": "reports/15500_stage4_5_baseline_lock.json"
+              },
+              {
+                "label": "exists: reports/15510_stage4_5_self_created_synthetic_source_gate.json",
+                "ok": true,
+                "detail": "reports/15510_stage4_5_self_created_synthetic_source_gate.json"
+              },
+              {
+                "label": "exists: reports/15520_stage4_5_synthetic_approval_gate.json",
+                "ok": true,
+                "detail": "reports/15520_stage4_5_synthetic_approval_gate.json"
+              },
+              {
+                "label": "exists: reports/15530_stage4_5_candidate_readonly_verification_gate.json",
+                "ok": true,
+                "detail": "reports/15530_stage4_5_candidate_readonly_verification_gate.json"
+              },
+              {
+                "label": "exists: reports/15540_stage4_5_pre_execute_route_flow_gate.json",
+                "ok": true,
+                "detail": "reports/15540_stage4_5_pre_execute_route_flow_gate.json"
+              },
+              {
+                "label": "exists: reports/15550_stage4_5_feature_flag_scoped_enable_gate.json",
+                "ok": true,
+                "detail": "reports/15550_stage4_5_feature_flag_scoped_enable_gate.json"
+              },
+              {
+                "label": "exists: reports/15560_stage4_5_route_execute_canary_gate.json",
+                "ok": true,
+                "detail": "reports/15560_stage4_5_route_execute_canary_gate.json"
+              },
+              {
+                "label": "exists: reports/15570_stage4_5_route_rollback_canary_gate.json",
+                "ok": true,
+                "detail": "reports/15570_stage4_5_route_rollback_canary_gate.json"
+              },
+              {
+                "label": "exists: reports/15580_stage4_5_feature_flag_close_and_health_gate.json",
+                "ok": true,
+                "detail": "reports/15580_stage4_5_feature_flag_close_and_health_gate.json"
+              },
+              {
+                "label": "exists: reports/15590_stage4_5_post_execute_adversarial_regression_gate.json",
+                "ok": true,
+                "detail": "reports/15590_stage4_5_post_execute_adversarial_regression_gate.json"
+              },
+              {
+                "label": "exists: reports/15600_stage4_5_readonly_regression_mini_soak_gate.json",
+                "ok": true,
+                "detail": "reports/15600_stage4_5_readonly_regression_mini_soak_gate.json"
+              },
+              {
+                "label": "exists: reports/stage4_5_pre_execute_route_flow_trace.jsonl",
+                "ok": true,
+                "detail": "reports/stage4_5_pre_execute_route_flow_trace.jsonl"
+              },
+              {
+                "label": "exists: reports/stage4_5_route_execute_trace.jsonl",
+                "ok": true,
+                "detail": "reports/stage4_5_route_execute_trace.jsonl"
+              },
+              {
+                "label": "exists: reports/stage4_5_route_rollback_trace.jsonl",
+                "ok": true,
+                "detail": "reports/stage4_5_route_rollback_trace.jsonl"
+              },
+              {
+                "label": "exists: reports/15590_stage4_5_post_execute_adversarial_cases.jsonl",
+                "ok": true,
+                "detail": "reports/15590_stage4_5_post_execute_adversarial_cases.jsonl"
+              },
+              {
+                "label": "exists: reports/stage4_5_readonly_regression_mini_soak_trace.jsonl",
+                "ok": true,
+                "detail": "reports/stage4_5_readonly_regression_mini_soak_trace.jsonl"
+              },
+              {
+                "label": "final verdict valid",
+                "ok": true,
+                "detail": "self_created_synthetic_route_copy_canary_passed_target_rolled_back"
+              },
+              {
+                "label": "global execute flags remain closed",
+                "ok": true,
+                "detail": {
+                  "global_config": {
+                    "preview_enabled": true,
+                    "dry_run_enabled": true,
+                    "confirm_enabled": true,
+                    "execute_enabled": false,
+                    "rollback_enabled": false,
+                    "execute_canary_enabled": false,
+                    "require_operator_approval_file": true,
+                    "require_execute_env": true
+                  },
+                  "scoped_enabled": {
+                    "preview_enabled": true,
+                    "dry_run_enabled": true,
+                    "confirm_enabled": true,
+                    "execute_enabled": true,
+                    "rollback_enabled": true,
+                    "execute_canary_enabled": true,
+                    "require_operator_approval_file": true,
+                    "require_execute_env": true
+                  },
+                  "scoped_after_close": {
+                    "preview_enabled": true,
+                    "dry_run_enabled": true,
+                    "confirm_enabled": true,
+                    "execute_enabled": false,
+                    "rollback_enabled": false,
+                    "execute_canary_enabled": false,
+                    "require_operator_approval_file": true,
+                    "require_execute_env": true
+                  }
+                }
+              },
+              {
+                "label": "copy and rollback executed",
+                "ok": true,
+                "detail": {
+                  "generated_at": "2026-07-04T13:58:10.956940+08:00",
+                  "final_verdict": "self_created_synthetic_route_copy_canary_passed_target_rolled_back",
+                  "final_verdict_allowed": true,
+                  "all_gates_pass": true,
+                  "run_id": "stage4_5_self_created_route_canary_20260704-135733",
+                  "route_execute_executed": true,
+                  "route_rollback_executed": true,
+                  "target_missing_after_rollback": true,
+                  "source_retained_after_rollback": true,
+                  "candidate_summary": {
+                    "candidate_id": "stage4_5-stage4_5_self_created_route_canary_20260704-135733",
+                    "source_relative_path": "Collections/CodexPreflight/source/stage4_5_self_created_route_canary_20260704-135733.txt",
+                    "target_relative_path": "Collections/CodexPreflight/target/stage4_5_self_created_route_canary_20260704-135733_copied.txt",
+                    "source_sha256": "7c17e4552a221e467550974c8007f3a1fabb75ab30b1f75908f675c7482cb09c",
+                    "expected_size_bytes": 199,
+                    "source_owner_scope": "codex_synthetic"
+                  },
+                  "feature_flags": {
+                    "global_config": {
+                      "preview_enabled": true,
+                      "dry_run_enabled": true,
+                      "confirm_enabled": true,
+                      "execute_enabled": false,
+                      "rollback_enabled": false,
+                      "execute_canary_enabled": false,
+                      "require_operator_approval_file": true,
+                      "require_execute_env": true
+                    },
+                    "scoped_enabled": {
+                      "preview_enabled": true,
+                      "dry_run_enabled": true,
+                      "confirm_enabled": true,
+                      "execute_enabled": true,
+                      "rollback_enabled": true,
+                      "execute_canary_enabled": true,
+                      "require_operator_approval_file": true,
+                      "require_execute_env": true
+                    },
+                    "scoped_after_close": {
+                      "preview_enabled": true,
+                      "dry_run_enabled": true,
+                      "confirm_enabled": true,
+                      "execute_enabled": false,
+                      "rollback_enabled": false,
+                      "execute_canary_enabled": false,
+                      "require_operator_approval_file": true,
+                      "require_execute_env": true
+                    }
+                  },
+                  "policy": {
+                    "policy_id": "digua_stage4_4_copy_route_policy_v1",
+                    "workspace_id": "nas_action",
+                    "allowed_action_type": "copy",
+                    "allowed_source_prefixes": [
+                      "Collections/CodexPreflight/source/"
+                    ],
+                    "allowed_target_prefixes": [
+                      "Collections/CodexPreflight/target/"
+                    ],
+                    "allowed_source_owner_scopes": [
+                      "operator_visible",
+                      "codex_synthetic"
+                    ],
+                    "target_root_prefix": "Collections/",
+                    "max_size_bytes": 1048576,
+                    "approval_ttl_seconds": 600,
+                    "require_source_hash": true,
+                    "require_target_absent": true,
+                    "require_target_parent_exists": true,
+                    "forbid_symlink": true,
+                    "forbid_recursive": true,
+                    "forbid_overwrite": true,
+                    "forbid_qwen_autonomous": true,
+                    "forbid_cloud_derived": true,
+                    "forbidden_action_types": [
+                      "delete",
+                      "move",
+                      "rename",
+                      "chmod",
+                      "chown",
+                      "overwrite",
+                      "recursive",
+                      "recursive_delete",
+                      "shell"
+                    ]
+                  },
+                  "evidence_table": [
+                    {
+                      "report": "15500_stage4_5_baseline_lock",
+                      "gate_id": "stage4_5_baseline_lock",
+                      "verdict": "ok_stage4_5_baseline_lock",
+                      "passed_count": 8,
+                      "check_count": 8,
+                      "failure_count": 0
+                    },
+                    {
+                      "report": "15510_stage4_5_self_created_synthetic_source_gate",
+                      "gate_id": "stage4_5_self_created_synthetic_source_gate",
+                      "verdict": "ok_stage4_5_self_created_synthetic_source_gate",
+                      "passed_count": 6,
+                      "check_count": 6,
+                      "failure_count": 0
+                    },
+                    {
+                      "report": "15520_stage4_5_synthetic_approval_gate",
+                      "gate_id": "stage4_5_synthetic_approval_gate",
+                      "verdict": "ok_stage4_5_synthetic_approval_gate",
+                      "passed_count": 7,
+                      "check_count": 7,
+                      "failure_count": 0
+                    },
+                    {
+                      "report": "15530_stage4_5_candidate_readonly_verification_gate",
+                      "gate_id": "stage4_5_candidate_readonly_verification_gate",
+                      "verdict": "ok_stage4_5_candidate_readonly_verification_gate",
+                      "passed_count": 5,
+                      "check_count": 5,
+                      "failure_count": 0
+                    },
+                    {
+                      "report": "15540_stage4_5_pre_execute_route_flow_gate",
+                      "gate_id": "stage4_5_pre_execute_route_flow_gate",
+                      "verdict": "ok_stage4_5_pre_execute_route_flow_gate",
+                      "passed_count": 6,
+                      "check_count": 6,
+                      "failure_count": 0
+                    },
+                    {
+                      "report": "15550_stage4_5_feature_flag_scoped_enable_gate",
+                      "gate_id": "stage4_5_feature_flag_scoped_enable_gate",
+                      "verdict": "ok_stage4_5_feature_flag_scoped_enable_gate",
+                      "passed_count": 5,
+                      "check_count": 5,
+                      "failure_count": 0
+                    },
+                    {
+                      "report": "15560_stage4_5_route_execute_canary_gate",
+                      "gate_id": "stage4_5_route_execute_canary_gate",
+                      "verdict": "ok_stage4_5_route_execute_canary_gate",
+                      "passed_count": 9,
+                      "check_count": 9,
+                      "failure_count": 0
+                    },
+                    {
+                      "report": "15570_stage4_5_route_rollback_canary_gate",
+                      "gate_id": "stage4_5_route_rollback_canary_gate",
+                      "verdict": "ok_stage4_5_route_rollback_canary_gate",
+                      "passed_count": 7,
+                      "check_count": 7,
+                      "failure_count": 0
+                    },
+                    {
+                      "report": "15580_stage4_5_feature_flag_close_and_health_gate",
+                      "gate_id": "stage4_5_feature_flag_close_and_health_gate",
+                      "verdict": "ok_stage4_5_feature_flag_close_and_health_gate",
+                      "passed_count": 7,
+                      "check_count": 7,
+                      "failure_count": 0
+                    },
+                    {
+                      "report": "15590_stage4_5_post_execute_adversarial_regression_gate",
+                      "gate_id": "stage4_5_post_execute_adversarial_regression_gate",
+                      "verdict": "ok_stage4_5_post_execute_adversarial_regression_gate",
+                      "passed_count": 6,
+                      "check_count": 6,
+                      "failure_count": 0
+                    },
+                    {
+                      "report": "15600_stage4_5_readonly_regression_mini_soak_gate",
+                      "gate_id": "stage4_5_readonly_regression_mini_soak_gate",
+                      "verdict": "ok_stage4_5_readonly_regression_mini_soak_gate",
+                      "passed_count": 6,
+                      "check_count": 6,
+                      "failure_count": 0
+                    }
+                  ],
+                  "environment": {
+                    "repo_root": "F:\\Project\\Digua",
+                    "platform": "Windows-11-10.0.26200-SP0",
+                    "python": "3.14.3"
+                  },
+                  "remote_evidence": {
+                    "remote_root": "/mnt/nas/openclaw/reports/stage4_5_route_canary_stage4_5_self_created_route_canary_20260704-135733",
+                    "remote_manifest_path": "/mnt/nas/openclaw/reports/stage4_5_route_canary_stage4_5_self_created_route_canary_20260704-135733/approval_manifest.json",
+                    "remote_rollback_manifest_path": "/mnt/nas/openclaw/reports/stage4_5_route_canary_stage4_5_self_created_route_canary_20260704-135733/reports/action_execute_copy_20260704-135741-403876/rollback_manifest.json",
+                    "baseline_dispatcher_hash": "d099f8071ab3710778520bf610ce2bca07fbc7976effe0a6d99791cf42ebb23a"
+                  },
+                  "claim_boundary": [
+                    "Only one Codex-created synthetic source file was copied.",
+                    "Copy and rollback used route guard authorization plus ai_nas_allowlisted_tool.sh dispatcher.",
+                    "Global execute/rollback feature flags remain disabled.",
+                    "This does not authorize arbitrary user-file copy or whole-NAS browsing.",
+                    "Qwen did not choose source/target and has no execution authority.",
+                    "Cloud private payload egress remains forbidden."
+                  ],
+                  "package_internal_note": "This packet is embedded inside the zip, so the zip SHA256 is recorded in the external .sha256.txt file and root workspace packet."
+                }
+              },
+              {
+                "label": "target rolled back and source retained",
+                "ok": true,
+                "detail": {
+                  "generated_at": "2026-07-04T13:58:10.956940+08:00",
+                  "final_verdict": "self_created_synthetic_route_copy_canary_passed_target_rolled_back",
+                  "final_verdict_allowed": true,
+                  "all_gates_pass": true,
+                  "run_id": "stage4_5_self_created_route_canary_20260704-135733",
+                  "route_execute_executed": true,
+                  "route_rollback_executed": true,
+                  "target_missing_after_rollback": true,
+                  "source_retained_after_rollback": true,
+                  "candidate_summary": {
+                    "candidate_id": "stage4_5-stage4_5_self_created_route_canary_20260704-135733",
+                    "source_relative_path": "Collections/CodexPreflight/source/stage4_5_self_created_route_canary_20260704-135733.txt",
+                    "target_relative_path": "Collections/CodexPreflight/target/stage4_5_self_created_route_canary_20260704-135733_copied.txt",
+                    "source_sha256": "7c17e4552a221e467550974c8007f3a1fabb75ab30b1f75908f675c7482cb09c",
+                    "expected_size_bytes": 199,
+                    "source_owner_scope": "codex_synthetic"
+                  },
+                  "feature_flags": {
+                    "global_config": {
+                      "preview_enabled": true,
+                      "dry_run_enabled": true,
+                      "confirm_enabled": true,
+                      "execute_enabled": false,
+                      "rollback_enabled": false,
+                      "execute_canary_enabled": false,
+                      "require_operator_approval_file": true,
+                      "require_execute_env": true
+                    },
+                    "scoped_enabled": {
+                      "preview_enabled": true,
+                      "dry_run_enabled": true,
+                      "confirm_enabled": true,
+                      "execute_enabled": true,
+                      "rollback_enabled": true,
+                      "execute_canary_enabled": true,
+                      "require_operator_approval_file": true,
+                      "require_execute_env": true
+                    },
+                    "scoped_after_close": {
+                      "preview_enabled": true,
+                      "dry_run_enabled": true,
+                      "confirm_enabled": true,
+                      "execute_enabled": false,
+                      "rollback_enabled": false,
+                      "execute_canary_enabled": false,
+                      "require_operator_approval_file": true,
+                      "require_execute_env": true
+                    }
+                  },
+                  "policy": {
+                    "policy_id": "digua_stage4_4_copy_route_policy_v1",
+                    "workspace_id": "nas_action",
+                    "allowed_action_type": "copy",
+                    "allowed_source_prefixes": [
+                      "Collections/CodexPreflight/source/"
+                    ],
+                    "allowed_target_prefixes": [
+                      "Collections/CodexPreflight/target/"
+                    ],
+                    "allowed_source_owner_scopes": [
+                      "operator_visible",
+                      "codex_synthetic"
+                    ],
+                    "target_root_prefix": "Collections/",
+                    "max_size_bytes": 1048576,
+                    "approval_ttl_seconds": 600,
+                    "require_source_hash": true,
+                    "require_target_absent": true,
+                    "require_target_parent_exists": true,
+                    "forbid_symlink": true,
+                    "forbid_recursive": true,
+                    "forbid_overwrite": true,
+                    "forbid_qwen_autonomous": true,
+                    "forbid_cloud_derived": true,
+                    "forbidden_action_types": [
+                      "delete",
+                      "move",
+                      "rename",
+                      "chmod",
+                      "chown",
+                      "overwrite",
+                      "recursive",
+                      "recursive_delete",
+                      "shell"
+                    ]
+                  },
+                  "evidence_table": [
+                    {
+                      "report": "15500_stage4_5_baseline_lock",
+                      "gate_id": "stage4_5_baseline_lock",
+                      "verdict": "ok_stage4_5_baseline_lock",
+                      "passed_count": 8,
+                      "check_count": 8,
+                      "failure_count": 0
+                    },
+                    {
+                      "report": "15510_stage4_5_self_created_synthetic_source_gate",
+                      "gate_id": "stage4_5_self_created_synthetic_source_gate",
+                      "verdict": "ok_stage4_5_self_created_synthetic_source_gate",
+                      "passed_count": 6,
+                      "check_count": 6,
+                      "failure_count": 0
+                    },
+                    {
+                      "report": "15520_stage4_5_synthetic_approval_gate",
+                      "gate_id": "stage4_5_synthetic_approval_gate",
+                      "verdict": "ok_stage4_5_synthetic_approval_gate",
+                      "passed_count": 7,
+                      "check_count": 7,
+                      "failure_count": 0
+                    },
+                    {
+                      "report": "15530_stage4_5_candidate_readonly_verification_gate",
+                      "gate_id": "stage4_5_candidate_readonly_verification_gate",
+                      "verdict": "ok_stage4_5_candidate_readonly_verification_gate",
+                      "passed_count": 5,
+                      "check_count": 5,
+                      "failure_count": 0
+                    },
+                    {
+                      "report": "15540_stage4_5_pre_execute_route_flow_gate",
+                      "gate_id": "stage4_5_pre_execute_route_flow_gate",
+                      "verdict": "ok_stage4_5_pre_execute_route_flow_gate",
+                      "passed_count": 6,
+                      "check_count": 6,
+                      "failure_count": 0
+                    },
+                    {
+                      "report": "15550_stage4_5_feature_flag_scoped_enable_gate",
+                      "gate_id": "stage4_5_feature_flag_scoped_enable_gate",
+                      "verdict": "ok_stage4_5_feature_flag_scoped_enable_gate",
+                      "passed_count": 5,
+                      "check_count": 5,
+                      "failure_count": 0
+                    },
+                    {
+                      "report": "15560_stage4_5_route_execute_canary_gate",
+                      "gate_id": "stage4_5_route_execute_canary_gate",
+                      "verdict": "ok_stage4_5_route_execute_canary_gate",
+                      "passed_count": 9,
+                      "check_count": 9,
+                      "failure_count": 0
+                    },
+                    {
+                      "report": "15570_stage4_5_route_rollback_canary_gate",
+                      "gate_id": "stage4_5_route_rollback_canary_gate",
+                      "verdict": "ok_stage4_5_route_rollback_canary_gate",
+                      "passed_count": 7,
+                      "check_count": 7,
+                      "failure_count": 0
+                    },
+                    {
+                      "report": "15580_stage4_5_feature_flag_close_and_health_gate",
+                      "gate_id": "stage4_5_feature_flag_close_and_health_gate",
+                      "verdict": "ok_stage4_5_feature_flag_close_and_health_gate",
+                      "passed_count": 7,
+                      "check_count": 7,
+                      "failure_count": 0
+                    },
+                    {
+                      "report": "15590_stage4_5_post_execute_adversarial_regression_gate",
+                      "gate_id": "stage4_5_post_execute_adversarial_regression_gate",
+                      "verdict": "ok_stage4_5_post_execute_adversarial_regression_gate",
+                      "passed_count": 6,
+                      "check_count": 6,
+                      "failure_count": 0
+                    },
+                    {
+                      "report": "15600_stage4_5_readonly_regression_mini_soak_gate",
+                      "gate_id": "stage4_5_readonly_regression_mini_soak_gate",
+                      "verdict": "ok_stage4_5_readonly_regression_mini_soak_gate",
+                      "passed_count": 6,
+                      "check_count": 6,
+                      "failure_count": 0
+                    }
+                  ],
+                  "environment": {
+                    "repo_root": "F:\\Project\\Digua",
+                    "platform": "Windows-11-10.0.26200-SP0",
+                    "python": "3.14.3"
+                  },
+                  "remote_evidence": {
+                    "remote_root": "/mnt/nas/openclaw/reports/stage4_5_route_canary_stage4_5_self_created_route_canary_20260704-135733",
+                    "remote_manifest_path": "/mnt/nas/openclaw/reports/stage4_5_route_canary_stage4_5_self_created_route_canary_20260704-135733/approval_manifest.json",
+                    "remote_rollback_manifest_path": "/mnt/nas/openclaw/reports/stage4_5_route_canary_stage4_5_self_created_route_canary_20260704-135733/reports/action_execute_copy_20260704-135741-403876/rollback_manifest.json",
+                    "baseline_dispatcher_hash": "d099f8071ab3710778520bf610ce2bca07fbc7976effe0a6d99791cf42ebb23a"
+                  },
+                  "claim_boundary": [
+                    "Only one Codex-created synthetic source file was copied.",
+                    "Copy and rollback used route guard authorization plus ai_nas_allowlisted_tool.sh dispatcher.",
+                    "Global execute/rollback feature flags remain disabled.",
+                    "This does not authorize arbitrary user-file copy or whole-NAS browsing.",
+                    "Qwen did not choose source/target and has no execution authority.",
+                    "Cloud private payload egress remains forbidden."
+                  ],
+                  "package_internal_note": "This packet is embedded inside the zip, so the zip SHA256 is recorded in the external .sha256.txt file and root workspace packet."
+                }
+              },
+              {
+                "label": "route trace has no raw NAS path markers: reports/stage4_5_pre_execute_route_flow_trace.jsonl",
+                "ok": true,
+                "detail": "reports/stage4_5_pre_execute_route_flow_trace.jsonl"
+              },
+              {
+                "label": "route trace has no raw NAS path markers: reports/stage4_5_route_execute_trace.jsonl",
+                "ok": true,
+                "detail": "reports/stage4_5_route_execute_trace.jsonl"
+              },
+              {
+                "label": "route trace has no raw NAS path markers: reports/stage4_5_route_rollback_trace.jsonl",
+                "ok": true,
+                "detail": "reports/stage4_5_route_rollback_trace.jsonl"
+              },
+              {
+                "label": "route trace has no raw NAS path markers: reports/15590_stage4_5_post_execute_adversarial_cases.jsonl",
+                "ok": true,
+                "detail": "reports/15590_stage4_5_post_execute_adversarial_cases.jsonl"
+              }
+            ],
+            "failures": []
+          }
+        }
+      }
+    },
+    {
+      "label": "Stage4.5 target rolled back and source retained",
+      "ok": true,
+      "detail": {
+        "generated_at": "2026-07-04T13:58:11.432740+08:00",
+        "final_verdict": "self_created_synthetic_route_copy_canary_passed_target_rolled_back",
+        "final_verdict_allowed": true,
+        "all_gates_pass": true,
+        "run_id": "stage4_5_self_created_route_canary_20260704-135733",
+        "route_execute_executed": true,
+        "route_rollback_executed": true,
+        "target_missing_after_rollback": true,
+        "source_retained_after_rollback": true,
+        "candidate_summary": {
+          "candidate_id": "stage4_5-stage4_5_self_created_route_canary_20260704-135733",
+          "source_relative_path": "Collections/CodexPreflight/source/stage4_5_self_created_route_canary_20260704-135733.txt",
+          "target_relative_path": "Collections/CodexPreflight/target/stage4_5_self_created_route_canary_20260704-135733_copied.txt",
+          "source_sha256": "7c17e4552a221e467550974c8007f3a1fabb75ab30b1f75908f675c7482cb09c",
+          "expected_size_bytes": 199,
+          "source_owner_scope": "codex_synthetic"
+        },
+        "feature_flags": {
+          "global_config": {
+            "preview_enabled": true,
+            "dry_run_enabled": true,
+            "confirm_enabled": true,
+            "execute_enabled": false,
+            "rollback_enabled": false,
+            "execute_canary_enabled": false,
+            "require_operator_approval_file": true,
+            "require_execute_env": true
+          },
+          "scoped_enabled": {
+            "preview_enabled": true,
+            "dry_run_enabled": true,
+            "confirm_enabled": true,
+            "execute_enabled": true,
+            "rollback_enabled": true,
+            "execute_canary_enabled": true,
+            "require_operator_approval_file": true,
+            "require_execute_env": true
+          },
+          "scoped_after_close": {
+            "preview_enabled": true,
+            "dry_run_enabled": true,
+            "confirm_enabled": true,
+            "execute_enabled": false,
+            "rollback_enabled": false,
+            "execute_canary_enabled": false,
+            "require_operator_approval_file": true,
+            "require_execute_env": true
+          }
+        },
+        "policy": {
+          "policy_id": "digua_stage4_4_copy_route_policy_v1",
+          "workspace_id": "nas_action",
+          "allowed_action_type": "copy",
+          "allowed_source_prefixes": [
+            "Collections/CodexPreflight/source/"
+          ],
+          "allowed_target_prefixes": [
+            "Collections/CodexPreflight/target/"
+          ],
+          "allowed_source_owner_scopes": [
+            "operator_visible",
+            "codex_synthetic"
+          ],
+          "target_root_prefix": "Collections/",
+          "max_size_bytes": 1048576,
+          "approval_ttl_seconds": 600,
+          "require_source_hash": true,
+          "require_target_absent": true,
+          "require_target_parent_exists": true,
+          "forbid_symlink": true,
+          "forbid_recursive": true,
+          "forbid_overwrite": true,
+          "forbid_qwen_autonomous": true,
+          "forbid_cloud_derived": true,
+          "forbidden_action_types": [
+            "delete",
+            "move",
+            "rename",
+            "chmod",
+            "chown",
+            "overwrite",
+            "recursive",
+            "recursive_delete",
+            "shell"
+          ]
+        },
+        "evidence_table": [
+          {
+            "report": "15500_stage4_5_baseline_lock",
+            "gate_id": "stage4_5_baseline_lock",
+            "verdict": "ok_stage4_5_baseline_lock",
+            "passed_count": 8,
+            "check_count": 8,
+            "failure_count": 0
+          },
+          {
+            "report": "15510_stage4_5_self_created_synthetic_source_gate",
+            "gate_id": "stage4_5_self_created_synthetic_source_gate",
+            "verdict": "ok_stage4_5_self_created_synthetic_source_gate",
+            "passed_count": 6,
+            "check_count": 6,
+            "failure_count": 0
+          },
+          {
+            "report": "15520_stage4_5_synthetic_approval_gate",
+            "gate_id": "stage4_5_synthetic_approval_gate",
+            "verdict": "ok_stage4_5_synthetic_approval_gate",
+            "passed_count": 7,
+            "check_count": 7,
+            "failure_count": 0
+          },
+          {
+            "report": "15530_stage4_5_candidate_readonly_verification_gate",
+            "gate_id": "stage4_5_candidate_readonly_verification_gate",
+            "verdict": "ok_stage4_5_candidate_readonly_verification_gate",
+            "passed_count": 5,
+            "check_count": 5,
+            "failure_count": 0
+          },
+          {
+            "report": "15540_stage4_5_pre_execute_route_flow_gate",
+            "gate_id": "stage4_5_pre_execute_route_flow_gate",
+            "verdict": "ok_stage4_5_pre_execute_route_flow_gate",
+            "passed_count": 6,
+            "check_count": 6,
+            "failure_count": 0
+          },
+          {
+            "report": "15550_stage4_5_feature_flag_scoped_enable_gate",
+            "gate_id": "stage4_5_feature_flag_scoped_enable_gate",
+            "verdict": "ok_stage4_5_feature_flag_scoped_enable_gate",
+            "passed_count": 5,
+            "check_count": 5,
+            "failure_count": 0
+          },
+          {
+            "report": "15560_stage4_5_route_execute_canary_gate",
+            "gate_id": "stage4_5_route_execute_canary_gate",
+            "verdict": "ok_stage4_5_route_execute_canary_gate",
+            "passed_count": 9,
+            "check_count": 9,
+            "failure_count": 0
+          },
+          {
+            "report": "15570_stage4_5_route_rollback_canary_gate",
+            "gate_id": "stage4_5_route_rollback_canary_gate",
+            "verdict": "ok_stage4_5_route_rollback_canary_gate",
+            "passed_count": 7,
+            "check_count": 7,
+            "failure_count": 0
+          },
+          {
+            "report": "15580_stage4_5_feature_flag_close_and_health_gate",
+            "gate_id": "stage4_5_feature_flag_close_and_health_gate",
+            "verdict": "ok_stage4_5_feature_flag_close_and_health_gate",
+            "passed_count": 7,
+            "check_count": 7,
+            "failure_count": 0
+          },
+          {
+            "report": "15590_stage4_5_post_execute_adversarial_regression_gate",
+            "gate_id": "stage4_5_post_execute_adversarial_regression_gate",
+            "verdict": "ok_stage4_5_post_execute_adversarial_regression_gate",
+            "passed_count": 6,
+            "check_count": 6,
+            "failure_count": 0
+          },
+          {
+            "report": "15600_stage4_5_readonly_regression_mini_soak_gate",
+            "gate_id": "stage4_5_readonly_regression_mini_soak_gate",
+            "verdict": "ok_stage4_5_readonly_regression_mini_soak_gate",
+            "passed_count": 6,
+            "check_count": 6,
+            "failure_count": 0
+          }
+        ],
+        "environment": {
+          "repo_root": "F:\\Project\\Digua",
+          "platform": "Windows-11-10.0.26200-SP0",
+          "python": "3.14.3"
+        },
+        "remote_evidence": {
+          "remote_root": "/mnt/nas/openclaw/reports/stage4_5_route_canary_stage4_5_self_created_route_canary_20260704-135733",
+          "remote_manifest_path": "/mnt/nas/openclaw/reports/stage4_5_route_canary_stage4_5_self_created_route_canary_20260704-135733/approval_manifest.json",
+          "remote_rollback_manifest_path": "/mnt/nas/openclaw/reports/stage4_5_route_canary_stage4_5_self_created_route_canary_20260704-135733/reports/action_execute_copy_20260704-135741-403876/rollback_manifest.json",
+          "baseline_dispatcher_hash": "d099f8071ab3710778520bf610ce2bca07fbc7976effe0a6d99791cf42ebb23a"
+        },
+        "claim_boundary": [
+          "Only one Codex-created synthetic source file was copied.",
+          "Copy and rollback used route guard authorization plus ai_nas_allowlisted_tool.sh dispatcher.",
+          "Global execute/rollback feature flags remain disabled.",
+          "This does not authorize arbitrary user-file copy or whole-NAS browsing.",
+          "Qwen did not choose source/target and has no execution authority.",
+          "Cloud private payload egress remains forbidden."
+        ],
+        "final_package": {
+          "package_root": "F:\\Project\\Digua\\tmp\\digua_ai_nas_stage4_5_self_created_synthetic_route_canary_for_gptpro_20260704-135733",
+          "zip_path": "F:\\Project\\Digua\\evidence_for_gptpro\\digua_ai_nas_stage4_5_self_created_synthetic_route_canary_for_gptpro_20260704-135733.zip",
+          "sha256": "ba4395656b28815c3213db9fae36153e12a281c576e42e946a6acc8c6ad82f59",
+          "sha256_file": "F:\\Project\\Digua\\evidence_for_gptpro\\digua_ai_nas_stage4_5_self_created_synthetic_route_canary_for_gptpro_20260704-135733.zip.sha256.txt",
+          "file_count": 47
+        },
+        "package_self_check": {
+          "returncode": 0,
+          "stdout_hash": "0238ea704dd024cfe03dff49323e28c0b9fe79da32c5770473c684f426ab9330",
+          "stderr_hash": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "stdout_tail": "\"/mnt/nas/openclaw/reports/stage4_5_route_canary_stage4_5_self_created_route_canary_20260704-135733/approval_manifest.json\",\n          \"remote_rollback_manifest_path\": \"/mnt/nas/openclaw/reports/stage4_5_route_canary_stage4_5_self_created_route_canary_20260704-135733/reports/action_execute_copy_20260704-135741-403876/rollback_manifest.json\",\n          \"baseline_dispatcher_hash\": \"d099f8071ab3710778520bf610ce2bca07fbc7976effe0a6d99791cf42ebb23a\"\n        },\n        \"claim_boundary\": [\n          \"Only one Codex-created synthetic source file was copied.\",\n          \"Copy and rollback used route guard authorization plus ai_nas_allowlisted_tool.sh dispatcher.\",\n          \"Global execute/rollback feature flags remain disabled.\",\n          \"This does not authorize arbitrary user-file copy or whole-NAS browsing.\",\n          \"Qwen did not choose source/target and has no execution authority.\",\n          \"Cloud private payload egress remains forbidden.\"\n        ],\n        \"package_internal_note\": \"This packet is embedded inside the zip, so the zip SHA256 is recorded in the external .sha256.txt file and root workspace packet.\"\n      }\n    },\n    {\n      \"label\": \"route trace has no raw NAS path markers: reports/stage4_5_pre_execute_route_flow_trace.jsonl\",\n      \"ok\": true,\n      \"detail\": \"reports/stage4_5_pre_execute_route_flow_trace.jsonl\"\n    },\n    {\n      \"label\": \"route trace has no raw NAS path markers: reports/stage4_5_route_execute_trace.jsonl\",\n      \"ok\": true,\n      \"detail\": \"reports/stage4_5_route_execute_trace.jsonl\"\n    },\n    {\n      \"label\": \"route trace has no raw NAS path markers: reports/stage4_5_route_rollback_trace.jsonl\",\n      \"ok\": true,\n      \"detail\": \"reports/stage4_5_route_rollback_trace.jsonl\"\n    },\n    {\n      \"label\": \"route trace has no raw NAS path markers: reports/15590_stage4_5_post_execute_adversarial_cases.jsonl\",\n      \"ok\": true,\n      \"detail\": \"reports/15590_stage4_5_post_execute_adversarial_cases.jsonl\"\n    }\n  ],\n  \"failures\": []\n}\n",
+          "stderr_tail": "",
+          "json": {
+            "checks": [
+              {
+                "label": "exists: 01_final_evidence/digua_ai_nas_stage4_5_self_created_synthetic_route_canary_gate_packet.json",
+                "ok": true,
+                "detail": "01_final_evidence/digua_ai_nas_stage4_5_self_created_synthetic_route_canary_gate_packet.json"
+              },
+              {
+                "label": "exists: 01_final_evidence/digua_ai_nas_stage4_5_self_created_synthetic_route_canary_gate_packet.md",
+                "ok": true,
+                "detail": "01_final_evidence/digua_ai_nas_stage4_5_self_created_synthetic_route_canary_gate_packet.md"
+              },
+              {
+                "label": "exists: docs/STAGE4_5_SELF_CREATED_SYNTHETIC_ROUTE_COPY_CANARY_DECISION.md",
+                "ok": true,
+                "detail": "docs/STAGE4_5_SELF_CREATED_SYNTHETIC_ROUTE_COPY_CANARY_DECISION.md"
+              },
+              {
+                "label": "exists: docs/NEXT_STAGE4_6_OPERATOR_SELECTED_FIXTURE_ROUTE_CANARY_PLAN.md",
+                "ok": true,
+                "detail": "docs/NEXT_STAGE4_6_OPERATOR_SELECTED_FIXTURE_ROUTE_CANARY_PLAN.md"
+              },
+              {
+                "label": "exists: operator_candidates/stage4_5_self_created_synthetic_route_candidate.json",
+                "ok": true,
+                "detail": "operator_candidates/stage4_5_self_created_synthetic_route_candidate.json"
+              },
+              {
+                "label": "exists: operator_approval/stage4_5_self_created_synthetic_route_execute_approved.json",
+                "ok": true,
+                "detail": "operator_approval/stage4_5_self_created_synthetic_route_execute_approved.json"
+              },
+              {
+                "label": "exists: operator_candidates/stage4_5_self_created_synthetic_route_approval_manifest.json",
+                "ok": true,
+                "detail": "operator_candidates/stage4_5_self_created_synthetic_route_approval_manifest.json"
+              },
+              {
+                "label": "exists: reports/15500_stage4_5_baseline_lock.json",
+                "ok": true,
+                "detail": "reports/15500_stage4_5_baseline_lock.json"
+              },
+              {
+                "label": "exists: reports/15510_stage4_5_self_created_synthetic_source_gate.json",
+                "ok": true,
+                "detail": "reports/15510_stage4_5_self_created_synthetic_source_gate.json"
+              },
+              {
+                "label": "exists: reports/15520_stage4_5_synthetic_approval_gate.json",
+                "ok": true,
+                "detail": "reports/15520_stage4_5_synthetic_approval_gate.json"
+              },
+              {
+                "label": "exists: reports/15530_stage4_5_candidate_readonly_verification_gate.json",
+                "ok": true,
+                "detail": "reports/15530_stage4_5_candidate_readonly_verification_gate.json"
+              },
+              {
+                "label": "exists: reports/15540_stage4_5_pre_execute_route_flow_gate.json",
+                "ok": true,
+                "detail": "reports/15540_stage4_5_pre_execute_route_flow_gate.json"
+              },
+              {
+                "label": "exists: reports/15550_stage4_5_feature_flag_scoped_enable_gate.json",
+                "ok": true,
+                "detail": "reports/15550_stage4_5_feature_flag_scoped_enable_gate.json"
+              },
+              {
+                "label": "exists: reports/15560_stage4_5_route_execute_canary_gate.json",
+                "ok": true,
+                "detail": "reports/15560_stage4_5_route_execute_canary_gate.json"
+              },
+              {
+                "label": "exists: reports/15570_stage4_5_route_rollback_canary_gate.json",
+                "ok": true,
+                "detail": "reports/15570_stage4_5_route_rollback_canary_gate.json"
+              },
+              {
+                "label": "exists: reports/15580_stage4_5_feature_flag_close_and_health_gate.json",
+                "ok": true,
+                "detail": "reports/15580_stage4_5_feature_flag_close_and_health_gate.json"
+              },
+              {
+                "label": "exists: reports/15590_stage4_5_post_execute_adversarial_regression_gate.json",
+                "ok": true,
+                "detail": "reports/15590_stage4_5_post_execute_adversarial_regression_gate.json"
+              },
+              {
+                "label": "exists: reports/15600_stage4_5_readonly_regression_mini_soak_gate.json",
+                "ok": true,
+                "detail": "reports/15600_stage4_5_readonly_regression_mini_soak_gate.json"
+              },
+              {
+                "label": "exists: reports/stage4_5_pre_execute_route_flow_trace.jsonl",
+                "ok": true,
+                "detail": "reports/stage4_5_pre_execute_route_flow_trace.jsonl"
+              },
+              {
+                "label": "exists: reports/stage4_5_route_execute_trace.jsonl",
+                "ok": true,
+                "detail": "reports/stage4_5_route_execute_trace.jsonl"
+              },
+              {
+                "label": "exists: reports/stage4_5_route_rollback_trace.jsonl",
+                "ok": true,
+                "detail": "reports/stage4_5_route_rollback_trace.jsonl"
+              },
+              {
+                "label": "exists: reports/15590_stage4_5_post_execute_adversarial_cases.jsonl",
+                "ok": true,
+                "detail": "reports/15590_stage4_5_post_execute_adversarial_cases.jsonl"
+              },
+              {
+                "label": "exists: reports/stage4_5_readonly_regression_mini_soak_trace.jsonl",
+                "ok": true,
+                "detail": "reports/stage4_5_readonly_regression_mini_soak_trace.jsonl"
+              },
+              {
+                "label": "final verdict valid",
+                "ok": true,
+                "detail": "self_created_synthetic_route_copy_canary_passed_target_rolled_back"
+              },
+              {
+                "label": "global execute flags remain closed",
+                "ok": true,
+                "detail": {
+                  "global_config": {
+                    "preview_enabled": true,
+                    "dry_run_enabled": true,
+                    "confirm_enabled": true,
+                    "execute_enabled": false,
+                    "rollback_enabled": false,
+                    "execute_canary_enabled": false,
+                    "require_operator_approval_file": true,
+                    "require_execute_env": true
+                  },
+                  "scoped_enabled": {
+                    "preview_enabled": true,
+                    "dry_run_enabled": true,
+                    "confirm_enabled": true,
+                    "execute_enabled": true,
+                    "rollback_enabled": true,
+                    "execute_canary_enabled": true,
+                    "require_operator_approval_file": true,
+                    "require_execute_env": true
+                  },
+                  "scoped_after_close": {
+                    "preview_enabled": true,
+                    "dry_run_enabled": true,
+                    "confirm_enabled": true,
+                    "execute_enabled": false,
+                    "rollback_enabled": false,
+                    "execute_canary_enabled": false,
+                    "require_operator_approval_file": true,
+                    "require_execute_env": true
+                  }
+                }
+              },
+              {
+                "label": "copy and rollback executed",
+                "ok": true,
+                "detail": {
+                  "generated_at": "2026-07-04T13:58:10.956940+08:00",
+                  "final_verdict": "self_created_synthetic_route_copy_canary_passed_target_rolled_back",
+                  "final_verdict_allowed": true,
+                  "all_gates_pass": true,
+                  "run_id": "stage4_5_self_created_route_canary_20260704-135733",
+                  "route_execute_executed": true,
+                  "route_rollback_executed": true,
+                  "target_missing_after_rollback": true,
+                  "source_retained_after_rollback": true,
+                  "candidate_summary": {
+                    "candidate_id": "stage4_5-stage4_5_self_created_route_canary_20260704-135733",
+                    "source_relative_path": "Collections/CodexPreflight/source/stage4_5_self_created_route_canary_20260704-135733.txt",
+                    "target_relative_path": "Collections/CodexPreflight/target/stage4_5_self_created_route_canary_20260704-135733_copied.txt",
+                    "source_sha256": "7c17e4552a221e467550974c8007f3a1fabb75ab30b1f75908f675c7482cb09c",
+                    "expected_size_bytes": 199,
+                    "source_owner_scope": "codex_synthetic"
+                  },
+                  "feature_flags": {
+                    "global_config": {
+                      "preview_enabled": true,
+                      "dry_run_enabled": true,
+                      "confirm_enabled": true,
+                      "execute_enabled": false,
+                      "rollback_enabled": false,
+                      "execute_canary_enabled": false,
+                      "require_operator_approval_file": true,
+                      "require_execute_env": true
+                    },
+                    "scoped_enabled": {
+                      "preview_enabled": true,
+                      "dry_run_enabled": true,
+                      "confirm_enabled": true,
+                      "execute_enabled": true,
+                      "rollback_enabled": true,
+                      "execute_canary_enabled": true,
+                      "require_operator_approval_file": true,
+                      "require_execute_env": true
+                    },
+                    "scoped_after_close": {
+                      "preview_enabled": true,
+                      "dry_run_enabled": true,
+                      "confirm_enabled": true,
+                      "execute_enabled": false,
+                      "rollback_enabled": false,
+                      "execute_canary_enabled": false,
+                      "require_operator_approval_file": true,
+                      "require_execute_env": true
+                    }
+                  },
+                  "policy": {
+                    "policy_id": "digua_stage4_4_copy_route_policy_v1",
+                    "workspace_id": "nas_action",
+                    "allowed_action_type": "copy",
+                    "allowed_source_prefixes": [
+                      "Collections/CodexPreflight/source/"
+                    ],
+                    "allowed_target_prefixes": [
+                      "Collections/CodexPreflight/target/"
+                    ],
+                    "allowed_source_owner_scopes": [
+                      "operator_visible",
+                      "codex_synthetic"
+                    ],
+                    "target_root_prefix": "Collections/",
+                    "max_size_bytes": 1048576,
+                    "approval_ttl_seconds": 600,
+                    "require_source_hash": true,
+                    "require_target_absent": true,
+                    "require_target_parent_exists": true,
+                    "forbid_symlink": true,
+                    "forbid_recursive": true,
+                    "forbid_overwrite": true,
+                    "forbid_qwen_autonomous": true,
+                    "forbid_cloud_derived": true,
+                    "forbidden_action_types": [
+                      "delete",
+                      "move",
+                      "rename",
+                      "chmod",
+                      "chown",
+                      "overwrite",
+                      "recursive",
+                      "recursive_delete",
+                      "shell"
+                    ]
+                  },
+                  "evidence_table": [
+                    {
+                      "report": "15500_stage4_5_baseline_lock",
+                      "gate_id": "stage4_5_baseline_lock",
+                      "verdict": "ok_stage4_5_baseline_lock",
+                      "passed_count": 8,
+                      "check_count": 8,
+                      "failure_count": 0
+                    },
+                    {
+                      "report": "15510_stage4_5_self_created_synthetic_source_gate",
+                      "gate_id": "stage4_5_self_created_synthetic_source_gate",
+                      "verdict": "ok_stage4_5_self_created_synthetic_source_gate",
+                      "passed_count": 6,
+                      "check_count": 6,
+                      "failure_count": 0
+                    },
+                    {
+                      "report": "15520_stage4_5_synthetic_approval_gate",
+                      "gate_id": "stage4_5_synthetic_approval_gate",
+                      "verdict": "ok_stage4_5_synthetic_approval_gate",
+                      "passed_count": 7,
+                      "check_count": 7,
+                      "failure_count": 0
+                    },
+                    {
+                      "report": "15530_stage4_5_candidate_readonly_verification_gate",
+                      "gate_id": "stage4_5_candidate_readonly_verification_gate",
+                      "verdict": "ok_stage4_5_candidate_readonly_verification_gate",
+                      "passed_count": 5,
+                      "check_count": 5,
+                      "failure_count": 0
+                    },
+                    {
+                      "report": "15540_stage4_5_pre_execute_route_flow_gate",
+                      "gate_id": "stage4_5_pre_execute_route_flow_gate",
+                      "verdict": "ok_stage4_5_pre_execute_route_flow_gate",
+                      "passed_count": 6,
+                      "check_count": 6,
+                      "failure_count": 0
+                    },
+                    {
+                      "report": "15550_stage4_5_feature_flag_scoped_enable_gate",
+                      "gate_id": "stage4_5_feature_flag_scoped_enable_gate",
+                      "verdict": "ok_stage4_5_feature_flag_scoped_enable_gate",
+                      "passed_count": 5,
+                      "check_count": 5,
+                      "failure_count": 0
+                    },
+                    {
+                      "report": "15560_stage4_5_route_execute_canary_gate",
+                      "gate_id": "stage4_5_route_execute_canary_gate",
+                      "verdict": "ok_stage4_5_route_execute_canary_gate",
+                      "passed_count": 9,
+                      "check_count": 9,
+                      "failure_count": 0
+                    },
+                    {
+                      "report": "15570_stage4_5_route_rollback_canary_gate",
+                      "gate_id": "stage4_5_route_rollback_canary_gate",
+                      "verdict": "ok_stage4_5_route_rollback_canary_gate",
+                      "passed_count": 7,
+                      "check_count": 7,
+                      "failure_count": 0
+                    },
+                    {
+                      "report": "15580_stage4_5_feature_flag_close_and_health_gate",
+                      "gate_id": "stage4_5_feature_flag_close_and_health_gate",
+                      "verdict": "ok_stage4_5_feature_flag_close_and_health_gate",
+                      "passed_count": 7,
+                      "check_count": 7,
+                      "failure_count": 0
+                    },
+                    {
+                      "report": "15590_stage4_5_post_execute_adversarial_regression_gate",
+                      "gate_id": "stage4_5_post_execute_adversarial_regression_gate",
+                      "verdict": "ok_stage4_5_post_execute_adversarial_regression_gate",
+                      "passed_count": 6,
+                      "check_count": 6,
+                      "failure_count": 0
+                    },
+                    {
+                      "report": "15600_stage4_5_readonly_regression_mini_soak_gate",
+                      "gate_id": "stage4_5_readonly_regression_mini_soak_gate",
+                      "verdict": "ok_stage4_5_readonly_regression_mini_soak_gate",
+                      "passed_count": 6,
+                      "check_count": 6,
+                      "failure_count": 0
+                    }
+                  ],
+                  "environment": {
+                    "repo_root": "F:\\Project\\Digua",
+                    "platform": "Windows-11-10.0.26200-SP0",
+                    "python": "3.14.3"
+                  },
+                  "remote_evidence": {
+                    "remote_root": "/mnt/nas/openclaw/reports/stage4_5_route_canary_stage4_5_self_created_route_canary_20260704-135733",
+                    "remote_manifest_path": "/mnt/nas/openclaw/reports/stage4_5_route_canary_stage4_5_self_created_route_canary_20260704-135733/approval_manifest.json",
+                    "remote_rollback_manifest_path": "/mnt/nas/openclaw/reports/stage4_5_route_canary_stage4_5_self_created_route_canary_20260704-135733/reports/action_execute_copy_20260704-135741-403876/rollback_manifest.json",
+                    "baseline_dispatcher_hash": "d099f8071ab3710778520bf610ce2bca07fbc7976effe0a6d99791cf42ebb23a"
+                  },
+                  "claim_boundary": [
+                    "Only one Codex-created synthetic source file was copied.",
+                    "Copy and rollback used route guard authorization plus ai_nas_allowlisted_tool.sh dispatcher.",
+                    "Global execute/rollback feature flags remain disabled.",
+                    "This does not authorize arbitrary user-file copy or whole-NAS browsing.",
+                    "Qwen did not choose source/target and has no execution authority.",
+                    "Cloud private payload egress remains forbidden."
+                  ],
+                  "package_internal_note": "This packet is embedded inside the zip, so the zip SHA256 is recorded in the external .sha256.txt file and root workspace packet."
+                }
+              },
+              {
+                "label": "target rolled back and source retained",
+                "ok": true,
+                "detail": {
+                  "generated_at": "2026-07-04T13:58:10.956940+08:00",
+                  "final_verdict": "self_created_synthetic_route_copy_canary_passed_target_rolled_back",
+                  "final_verdict_allowed": true,
+                  "all_gates_pass": true,
+                  "run_id": "stage4_5_self_created_route_canary_20260704-135733",
+                  "route_execute_executed": true,
+                  "route_rollback_executed": true,
+                  "target_missing_after_rollback": true,
+                  "source_retained_after_rollback": true,
+                  "candidate_summary": {
+                    "candidate_id": "stage4_5-stage4_5_self_created_route_canary_20260704-135733",
+                    "source_relative_path": "Collections/CodexPreflight/source/stage4_5_self_created_route_canary_20260704-135733.txt",
+                    "target_relative_path": "Collections/CodexPreflight/target/stage4_5_self_created_route_canary_20260704-135733_copied.txt",
+                    "source_sha256": "7c17e4552a221e467550974c8007f3a1fabb75ab30b1f75908f675c7482cb09c",
+                    "expected_size_bytes": 199,
+                    "source_owner_scope": "codex_synthetic"
+                  },
+                  "feature_flags": {
+                    "global_config": {
+                      "preview_enabled": true,
+                      "dry_run_enabled": true,
+                      "confirm_enabled": true,
+                      "execute_enabled": false,
+                      "rollback_enabled": false,
+                      "execute_canary_enabled": false,
+                      "require_operator_approval_file": true,
+                      "require_execute_env": true
+                    },
+                    "scoped_enabled": {
+                      "preview_enabled": true,
+                      "dry_run_enabled": true,
+                      "confirm_enabled": true,
+                      "execute_enabled": true,
+                      "rollback_enabled": true,
+                      "execute_canary_enabled": true,
+                      "require_operator_approval_file": true,
+                      "require_execute_env": true
+                    },
+                    "scoped_after_close": {
+                      "preview_enabled": true,
+                      "dry_run_enabled": true,
+                      "confirm_enabled": true,
+                      "execute_enabled": false,
+                      "rollback_enabled": false,
+                      "execute_canary_enabled": false,
+                      "require_operator_approval_file": true,
+                      "require_execute_env": true
+                    }
+                  },
+                  "policy": {
+                    "policy_id": "digua_stage4_4_copy_route_policy_v1",
+                    "workspace_id": "nas_action",
+                    "allowed_action_type": "copy",
+                    "allowed_source_prefixes": [
+                      "Collections/CodexPreflight/source/"
+                    ],
+                    "allowed_target_prefixes": [
+                      "Collections/CodexPreflight/target/"
+                    ],
+                    "allowed_source_owner_scopes": [
+                      "operator_visible",
+                      "codex_synthetic"
+                    ],
+                    "target_root_prefix": "Collections/",
+                    "max_size_bytes": 1048576,
+                    "approval_ttl_seconds": 600,
+                    "require_source_hash": true,
+                    "require_target_absent": true,
+                    "require_target_parent_exists": true,
+                    "forbid_symlink": true,
+                    "forbid_recursive": true,
+                    "forbid_overwrite": true,
+                    "forbid_qwen_autonomous": true,
+                    "forbid_cloud_derived": true,
+                    "forbidden_action_types": [
+                      "delete",
+                      "move",
+                      "rename",
+                      "chmod",
+                      "chown",
+                      "overwrite",
+                      "recursive",
+                      "recursive_delete",
+                      "shell"
+                    ]
+                  },
+                  "evidence_table": [
+                    {
+                      "report": "15500_stage4_5_baseline_lock",
+                      "gate_id": "stage4_5_baseline_lock",
+                      "verdict": "ok_stage4_5_baseline_lock",
+                      "passed_count": 8,
+                      "check_count": 8,
+                      "failure_count": 0
+                    },
+                    {
+                      "report": "15510_stage4_5_self_created_synthetic_source_gate",
+                      "gate_id": "stage4_5_self_created_synthetic_source_gate",
+                      "verdict": "ok_stage4_5_self_created_synthetic_source_gate",
+                      "passed_count": 6,
+                      "check_count": 6,
+                      "failure_count": 0
+                    },
+                    {
+                      "report": "15520_stage4_5_synthetic_approval_gate",
+                      "gate_id": "stage4_5_synthetic_approval_gate",
+                      "verdict": "ok_stage4_5_synthetic_approval_gate",
+                      "passed_count": 7,
+                      "check_count": 7,
+                      "failure_count": 0
+                    },
+                    {
+                      "report": "15530_stage4_5_candidate_readonly_verification_gate",
+                      "gate_id": "stage4_5_candidate_readonly_verification_gate",
+                      "verdict": "ok_stage4_5_candidate_readonly_verification_gate",
+                      "passed_count": 5,
+                      "check_count": 5,
+                      "failure_count": 0
+                    },
+                    {
+                      "report": "15540_stage4_5_pre_execute_route_flow_gate",
+                      "gate_id": "stage4_5_pre_execute_route_flow_gate",
+                      "verdict": "ok_stage4_5_pre_execute_route_flow_gate",
+                      "passed_count": 6,
+                      "check_count": 6,
+                      "failure_count": 0
+                    },
+                    {
+                      "report": "15550_stage4_5_feature_flag_scoped_enable_gate",
+                      "gate_id": "stage4_5_feature_flag_scoped_enable_gate",
+                      "verdict": "ok_stage4_5_feature_flag_scoped_enable_gate",
+                      "passed_count": 5,
+                      "check_count": 5,
+                      "failure_count": 0
+                    },
+                    {
+                      "report": "15560_stage4_5_route_execute_canary_gate",
+                      "gate_id": "stage4_5_route_execute_canary_gate",
+                      "verdict": "ok_stage4_5_route_execute_canary_gate",
+                      "passed_count": 9,
+                      "check_count": 9,
+                      "failure_count": 0
+                    },
+                    {
+                      "report": "15570_stage4_5_route_rollback_canary_gate",
+                      "gate_id": "stage4_5_route_rollback_canary_gate",
+                      "verdict": "ok_stage4_5_route_rollback_canary_gate",
+                      "passed_count": 7,
+                      "check_count": 7,
+                      "failure_count": 0
+                    },
+                    {
+                      "report": "15580_stage4_5_feature_flag_close_and_health_gate",
+                      "gate_id": "stage4_5_feature_flag_close_and_health_gate",
+                      "verdict": "ok_stage4_5_feature_flag_close_and_health_gate",
+                      "passed_count": 7,
+                      "check_count": 7,
+                      "failure_count": 0
+                    },
+                    {
+                      "report": "15590_stage4_5_post_execute_adversarial_regression_gate",
+                      "gate_id": "stage4_5_post_execute_adversarial_regression_gate",
+                      "verdict": "ok_stage4_5_post_execute_adversarial_regression_gate",
+                      "passed_count": 6,
+                      "check_count": 6,
+                      "failure_count": 0
+                    },
+                    {
+                      "report": "15600_stage4_5_readonly_regression_mini_soak_gate",
+                      "gate_id": "stage4_5_readonly_regression_mini_soak_gate",
+                      "verdict": "ok_stage4_5_readonly_regression_mini_soak_gate",
+                      "passed_count": 6,
+                      "check_count": 6,
+                      "failure_count": 0
+                    }
+                  ],
+                  "environment": {
+                    "repo_root": "F:\\Project\\Digua",
+                    "platform": "Windows-11-10.0.26200-SP0",
+                    "python": "3.14.3"
+                  },
+                  "remote_evidence": {
+                    "remote_root": "/mnt/nas/openclaw/reports/stage4_5_route_canary_stage4_5_self_created_route_canary_20260704-135733",
+                    "remote_manifest_path": "/mnt/nas/openclaw/reports/stage4_5_route_canary_stage4_5_self_created_route_canary_20260704-135733/approval_manifest.json",
+                    "remote_rollback_manifest_path": "/mnt/nas/openclaw/reports/stage4_5_route_canary_stage4_5_self_created_route_canary_20260704-135733/reports/action_execute_copy_20260704-135741-403876/rollback_manifest.json",
+                    "baseline_dispatcher_hash": "d099f8071ab3710778520bf610ce2bca07fbc7976effe0a6d99791cf42ebb23a"
+                  },
+                  "claim_boundary": [
+                    "Only one Codex-created synthetic source file was copied.",
+                    "Copy and rollback used route guard authorization plus ai_nas_allowlisted_tool.sh dispatcher.",
+                    "Global execute/rollback feature flags remain disabled.",
+                    "This does not authorize arbitrary user-file copy or whole-NAS browsing.",
+                    "Qwen did not choose source/target and has no execution authority.",
+                    "Cloud private payload egress remains forbidden."
+                  ],
+                  "package_internal_note": "This packet is embedded inside the zip, so the zip SHA256 is recorded in the external .sha256.txt file and root workspace packet."
+                }
+              },
+              {
+                "label": "route trace has no raw NAS path markers: reports/stage4_5_pre_execute_route_flow_trace.jsonl",
+                "ok": true,
+                "detail": "reports/stage4_5_pre_execute_route_flow_trace.jsonl"
+              },
+              {
+                "label": "route trace has no raw NAS path markers: reports/stage4_5_route_execute_trace.jsonl",
+                "ok": true,
+                "detail": "reports/stage4_5_route_execute_trace.jsonl"
+              },
+              {
+                "label": "route trace has no raw NAS path markers: reports/stage4_5_route_rollback_trace.jsonl",
+                "ok": true,
+                "detail": "reports/stage4_5_route_rollback_trace.jsonl"
+              },
+              {
+                "label": "route trace has no raw NAS path markers: reports/15590_stage4_5_post_execute_adversarial_cases.jsonl",
+                "ok": true,
+                "detail": "reports/15590_stage4_5_post_execute_adversarial_cases.jsonl"
+              }
+            ],
+            "failures": []
+          }
+        }
+      }
+    },
+    {
+      "label": "Stage4.5 feature flags closed after test",
+      "ok": true,
+      "detail": {
+        "generated_at": "2026-07-04T13:57:42.094497+08:00",
+        "gate_id": "stage4_5_feature_flag_close_and_health_gate",
+        "verdict": "ok_stage4_5_feature_flag_close_and_health_gate",
+        "passed_count": 7,
+        "check_count": 7,
+        "failure_count": 0,
+        "failures": [],
+        "checks": [
+          {
+            "label": "global config flags still closed after canary",
+            "ok": true,
+            "detail": {
+              "preview_enabled": true,
+              "dry_run_enabled": true,
+              "confirm_enabled": true,
+              "execute_enabled": false,
+              "rollback_enabled": false,
+              "execute_canary_enabled": false,
+              "require_operator_approval_file": true,
+              "require_execute_env": true
+            }
+          },
+          {
+            "label": "scoped canary flags closed in gate state",
+            "ok": true,
+            "detail": {
+              "preview_enabled": true,
+              "dry_run_enabled": true,
+              "confirm_enabled": true,
+              "execute_enabled": false,
+              "rollback_enabled": false,
+              "execute_canary_enabled": false,
+              "require_operator_approval_file": true,
+              "require_execute_env": true
+            }
+          },
+          {
+            "label": "closed flags block execute and rollback routes",
+            "ok": true,
+            "detail": {
+              "execute": {
+                "allowed": false,
+                "route": "execute",
+                "status": "execute_blocked",
+                "reason_codes": [
+                  "execute_feature_disabled"
+                ],
+                "response": {
+                  "route": "execute",
+                  "status": "execute_blocked",
+                  "action_type": "copy",
+                  "candidate_fingerprint": "9845850926bccef5ba5aeb9b9d39ada668e9a4a7821958e727f97f6e0d6b62c7",
+                  "source_path_hash": "c3f8de23135918ad682a2e22e1d7e8fabc4f062c48b1e0d6cc9fe17e4eca89b8",
+                  "target_path_hash": "bb91fbd04ec4d493fb5ffec67a573bda42fbe61dec72c668b146865f86835cf2",
+                  "source_sha256_prefix": "7c17e4552a22",
+                  "expected_size_bytes": 199,
+                  "target_root": "Collections",
+                  "raw_paths_in_response": false,
+                  "private_content_in_response": false,
+                  "dispatcher_tool": "ai_nas_action_execute_copy",
+                  "execution_performed_by_guard": false,
+                  "writes_performed": false,
+                  "blocked_safely": true
+                },
+                "audit_event": {
+                  "event_id": "copy-route-18969b56454d40ed",
+                  "tool_id": "ai_nas_route_copy_guard_v1",
+                  "route": "execute",
+                  "allowed": false,
+                  "reason_codes": [
+                    "execute_feature_disabled"
+                  ],
+                  "candidate_fingerprint": "9845850926bccef5ba5aeb9b9d39ada668e9a4a7821958e727f97f6e0d6b62c7",
+                  "source_path_hash": "c3f8de23135918ad682a2e22e1d7e8fabc4f062c48b1e0d6cc9fe17e4eca89b8",
+                  "target_path_hash": "bb91fbd04ec4d493fb5ffec67a573bda42fbe61dec72c668b146865f86835cf2",
+                  "args_hash": "efbd843bbaca4b4b67fe633768930c8a07e177a652d084af38764dc974d3ec31",
+                  "qwen_execution_authority": false,
+                  "cloud_private_egress": false,
+                  "raw_private_content_logged": false,
+                  "dispatcher_tool": "ai_nas_action_execute_copy",
+                  "execution_performed_by_guard": false,
+                  "operator_approved": true,
+                  "env_enabled": true,
+                  "approval_file_present": true,
+                  "token_validation_reason": "approval_token_ok"
+                }
+              },
+              "rollback": {
+                "allowed": false,
+                "route": "rollback",
+                "status": "rollback_blocked",
+                "reason_codes": [
+                  "rollback_feature_disabled"
+                ],
+                "response": {
+                  "route": "rollback",
+                  "status": "rollback_blocked",
+                  "action_type": "copy",
+                  "candidate_fingerprint": "9845850926bccef5ba5aeb9b9d39ada668e9a4a7821958e727f97f6e0d6b62c7",
+                  "source_path_hash": "c3f8de23135918ad682a2e22e1d7e8fabc4f062c48b1e0d6cc9fe17e4eca89b8",
+                  "target_path_hash": "bb91fbd04ec4d493fb5ffec67a573bda42fbe61dec72c668b146865f86835cf2",
+                  "source_sha256_prefix": "7c17e4552a22",
+                  "expected_size_bytes": 199,
+                  "target_root": "Collections",
+                  "raw_paths_in_response": false,
+                  "private_content_in_response": false,
+                  "dispatcher_tool": "ai_nas_action_rollback_copy",
+                  "rollback_performed_by_guard": false,
+                  "writes_performed": false,
+                  "blocked_safely": true
+                },
+                "audit_event": {
+                  "event_id": "copy-route-2ce2702bc0d14a17",
+                  "tool_id": "ai_nas_route_copy_guard_v1",
+                  "route": "rollback",
+                  "allowed": false,
+                  "reason_codes": [
+                    "rollback_feature_disabled"
+                  ],
+                  "candidate_fingerprint": "9845850926bccef5ba5aeb9b9d39ada668e9a4a7821958e727f97f6e0d6b62c7",
+                  "source_path_hash": "c3f8de23135918ad682a2e22e1d7e8fabc4f062c48b1e0d6cc9fe17e4eca89b8",
+                  "target_path_hash": "bb91fbd04ec4d493fb5ffec67a573bda42fbe61dec72c668b146865f86835cf2",
+                  "args_hash": "efbd843bbaca4b4b67fe633768930c8a07e177a652d084af38764dc974d3ec31",
+                  "qwen_execution_authority": false,
+                  "cloud_private_egress": false,
+                  "raw_private_content_logged": false,
+                  "dispatcher_tool": "ai_nas_action_rollback_copy",
+                  "rollback_performed_by_guard": false,
+                  "operator_approved": true
+                }
+              }
+            }
+          },
+          {
+            "label": "OpenClaw/Qwen health OK after close",
+            "ok": true,
+            "detail": {
+              "openclaw": {
+                "ok": true,
+                "returncode": 0,
+                "http_code": "200",
+                "time_total": 0.721209,
+                "json": {
+                  "ok": true,
+                  "tool_id": "ai_nas_operator_portal_server",
+                  "operator_portal_contract": {
+                    "found": true,
+                    "filename": "operator_portal_contract.json",
+                    "path": "/mnt/nas/openclaw/reports/ai_nas_mvp/operator_portal_contract_20260618-160406-445747/operator_portal_contract.json",
+                    "verdict": "ok_ai_nas_operator_portal_contract",
+                    "generated_at": "2026-06-18T16:04:08.346324+08:00",
+                    "selection_policy": "generated_at_then_mtime"
+                  },
+                  "portal_html": "/mnt/nas/openclaw/reports/ai_nas_mvp/operator_portal_contract_20260618-160406-445747/operator_portal.html",
+                  "refresh_on_start": null
+                },
+                "body_hash": "3f602e957754ba001c367fa58c76c536eda10a7318d8befc265f0d27698f100e",
+                "stderr_hash": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+                "stderr_tail": ""
+              },
+              "qwen": {
+                "ok": true,
+                "returncode": 0,
+                "http_code": "200",
+                "time_total": 0.001072,
+                "json": {
+                  "ok": true,
+                  "model": "Qwen2.5-1.5B-Instruct-S100P-official",
+                  "backend": "official-qwen2.5-oellm-multichat-plus-ai-nas-tools",
+                  "port": 18080,
+                  "active_profile": "qwen25_7b_instruct_cache_len_1024_q8",
+                  "priority_profile": "qwen25_7b_instruct_cache_len_1024_q8_vendor_default",
+                  "priority_status": "promoted_from_shadow_18081",
+                  "active_hbm": {
+                    "path": "/mnt/nas/openclaw/toolchains/s100_llm_sdk/D-Robotics_LLM_S100_1.0.0_SDK/oellm_runtime/model/Qwen2.5_1.5B_Instruct_512.hbm",
+                    "exists": false,
+                    "size_bytes": 0
+                  },
+                  "priority_hbm": {
+                    "path": "/mnt/nas/openclaw/toolchains/s100_llm_sdk/D-Robotics_LLM_S100_1.0.0_SDK/oellm_runtime/model/Qwen2.5_1.5B_Instruct_512.hbm",
+                    "exists": false,
+                    "size_bytes": 0
+                  },
+                  "tool_dispatcher": "/mnt/nas/openclaw/scripts/probes/ai_nas_allowlisted_tool.sh",
+                  "report_root": "/mnt/nas/openclaw/reports/qwen25_ai_nas"
+                },
+                "body_hash": "93f6c14eaa15d5be20371ecd6e2125c3534ad144dc5fcee349d782ded5be1812",
+                "stderr_hash": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+                "stderr_tail": ""
+              }
+            }
+          },
+          {
+            "label": "protected ports unchanged after normalization",
+            "ok": true,
+            "detail": {
+              "before": [
+                "LISTEN 0      5          127.0.0.1:18080      0.0.0.0:*    users:((\"python3\",pid=<pid>,fd=3))",
+                "LISTEN 0      5          127.0.0.1:18888      0.0.0.0:*",
+                "LISTEN 0      5          127.0.0.1:8765       0.0.0.0:*    users:((\"python3\",pid=<pid>,fd=3))"
+              ],
+              "after": [
+                "LISTEN 0      5          127.0.0.1:18080      0.0.0.0:*    users:((\"python3\",pid=<pid>,fd=3))",
+                "LISTEN 0      5          127.0.0.1:18888      0.0.0.0:*",
+                "LISTEN 0      5          127.0.0.1:8765       0.0.0.0:*    users:((\"python3\",pid=<pid>,fd=3))"
+              ]
+            }
+          },
+          {
+            "label": "dispatcher hash unchanged",
+            "ok": true,
+            "detail": {
+              "before": "d099f8071ab3710778520bf610ce2bca07fbc7976effe0a6d99791cf42ebb23a",
+              "after": "d099f8071ab3710778520bf610ce2bca07fbc7976effe0a6d99791cf42ebb23a"
+            }
+          },
+          {
+            "label": "target remains absent and synthetic source retained",
+            "ok": true,
+            "detail": {
+              "source_exists": true,
+              "source_is_file": true,
+              "source_is_symlink": false,
+              "source_relative_path": "Collections/CodexPreflight/source/stage4_5_self_created_route_canary_20260704-135733.txt",
+              "source_sha256": "7c17e4552a221e467550974c8007f3a1fabb75ab30b1f75908f675c7482cb09c",
+              "source_sha256_matches": true,
+              "source_size_bytes": 199,
+              "target_exists": false,
+              "target_is_symlink": false,
+              "target_parent_exists": true,
+              "target_parent_is_symlink": false,
+              "target_relative_path": "Collections/CodexPreflight/target/stage4_5_self_created_route_canary_20260704-135733_copied.txt"
+            }
+          }
+        ],
+        "detail": {
+          "global_feature_flags_after": {
+            "preview_enabled": true,
+            "dry_run_enabled": true,
+            "confirm_enabled": true,
+            "execute_enabled": false,
+            "rollback_enabled": false,
+            "execute_canary_enabled": false,
+            "require_operator_approval_file": true,
+            "require_execute_env": true
+          },
+          "scoped_flags_after_close": {
+            "preview_enabled": true,
+            "dry_run_enabled": true,
+            "confirm_enabled": true,
+            "execute_enabled": false,
+            "rollback_enabled": false,
+            "execute_canary_enabled": false,
+            "require_operator_approval_file": true,
+            "require_execute_env": true
+          },
+          "closed_execute_decision": {
+            "allowed": false,
+            "route": "execute",
+            "status": "execute_blocked",
+            "reason_codes": [
+              "execute_feature_disabled"
+            ],
+            "response": {
+              "route": "execute",
+              "status": "execute_blocked",
+              "action_type": "copy",
+              "candidate_fingerprint": "9845850926bccef5ba5aeb9b9d39ada668e9a4a7821958e727f97f6e0d6b62c7",
+              "source_path_hash": "c3f8de23135918ad682a2e22e1d7e8fabc4f062c48b1e0d6cc9fe17e4eca89b8",
+              "target_path_hash": "bb91fbd04ec4d493fb5ffec67a573bda42fbe61dec72c668b146865f86835cf2",
+              "source_sha256_prefix": "7c17e4552a22",
+              "expected_size_bytes": 199,
+              "target_root": "Collections",
+              "raw_paths_in_response": false,
+              "private_content_in_response": false,
+              "dispatcher_tool": "ai_nas_action_execute_copy",
+              "execution_performed_by_guard": false,
+              "writes_performed": false,
+              "blocked_safely": true
+            },
+            "audit_event": {
+              "event_id": "copy-route-18969b56454d40ed",
+              "tool_id": "ai_nas_route_copy_guard_v1",
+              "route": "execute",
+              "allowed": false,
+              "reason_codes": [
+                "execute_feature_disabled"
+              ],
+              "candidate_fingerprint": "9845850926bccef5ba5aeb9b9d39ada668e9a4a7821958e727f97f6e0d6b62c7",
+              "source_path_hash": "c3f8de23135918ad682a2e22e1d7e8fabc4f062c48b1e0d6cc9fe17e4eca89b8",
+              "target_path_hash": "bb91fbd04ec4d493fb5ffec67a573bda42fbe61dec72c668b146865f86835cf2",
+              "args_hash": "efbd843bbaca4b4b67fe633768930c8a07e177a652d084af38764dc974d3ec31",
+              "qwen_execution_authority": false,
+              "cloud_private_egress": false,
+              "raw_private_content_logged": false,
+              "dispatcher_tool": "ai_nas_action_execute_copy",
+              "execution_performed_by_guard": false,
+              "operator_approved": true,
+              "env_enabled": true,
+              "approval_file_present": true,
+              "token_validation_reason": "approval_token_ok"
+            }
+          },
+          "closed_rollback_decision": {
+            "allowed": false,
+            "route": "rollback",
+            "status": "rollback_blocked",
+            "reason_codes": [
+              "rollback_feature_disabled"
+            ],
+            "response": {
+              "route": "rollback",
+              "status": "rollback_blocked",
+              "action_type": "copy",
+              "candidate_fingerprint": "9845850926bccef5ba5aeb9b9d39ada668e9a4a7821958e727f97f6e0d6b62c7",
+              "source_path_hash": "c3f8de23135918ad682a2e22e1d7e8fabc4f062c48b1e0d6cc9fe17e4eca89b8",
+              "target_path_hash": "bb91fbd04ec4d493fb5ffec67a573bda42fbe61dec72c668b146865f86835cf2",
+              "source_sha256_prefix": "7c17e4552a22",
+              "expected_size_bytes": 199,
+              "target_root": "Collections",
+              "raw_paths_in_response": false,
+              "private_content_in_response": false,
+              "dispatcher_tool": "ai_nas_action_rollback_copy",
+              "rollback_performed_by_guard": false,
+              "writes_performed": false,
+              "blocked_safely": true
+            },
+            "audit_event": {
+              "event_id": "copy-route-2ce2702bc0d14a17",
+              "tool_id": "ai_nas_route_copy_guard_v1",
+              "route": "rollback",
+              "allowed": false,
+              "reason_codes": [
+                "rollback_feature_disabled"
+              ],
+              "candidate_fingerprint": "9845850926bccef5ba5aeb9b9d39ada668e9a4a7821958e727f97f6e0d6b62c7",
+              "source_path_hash": "c3f8de23135918ad682a2e22e1d7e8fabc4f062c48b1e0d6cc9fe17e4eca89b8",
+              "target_path_hash": "bb91fbd04ec4d493fb5ffec67a573bda42fbe61dec72c668b146865f86835cf2",
+              "args_hash": "efbd843bbaca4b4b67fe633768930c8a07e177a652d084af38764dc974d3ec31",
+              "qwen_execution_authority": false,
+              "cloud_private_egress": false,
+              "raw_private_content_logged": false,
+              "dispatcher_tool": "ai_nas_action_rollback_copy",
+              "rollback_performed_by_guard": false,
+              "operator_approved": true
+            }
+          },
+          "health": {
+            "openclaw": {
+              "ok": true,
+              "returncode": 0,
+              "http_code": "200",
+              "time_total": 0.721209,
+              "json": {
+                "ok": true,
+                "tool_id": "ai_nas_operator_portal_server",
+                "operator_portal_contract": {
+                  "found": true,
+                  "filename": "operator_portal_contract.json",
+                  "path": "/mnt/nas/openclaw/reports/ai_nas_mvp/operator_portal_contract_20260618-160406-445747/operator_portal_contract.json",
+                  "verdict": "ok_ai_nas_operator_portal_contract",
+                  "generated_at": "2026-06-18T16:04:08.346324+08:00",
+                  "selection_policy": "generated_at_then_mtime"
+                },
+                "portal_html": "/mnt/nas/openclaw/reports/ai_nas_mvp/operator_portal_contract_20260618-160406-445747/operator_portal.html",
+                "refresh_on_start": null
+              },
+              "body_hash": "3f602e957754ba001c367fa58c76c536eda10a7318d8befc265f0d27698f100e",
+              "stderr_hash": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+              "stderr_tail": ""
+            },
+            "qwen": {
+              "ok": true,
+              "returncode": 0,
+              "http_code": "200",
+              "time_total": 0.001072,
+              "json": {
+                "ok": true,
+                "model": "Qwen2.5-1.5B-Instruct-S100P-official",
+                "backend": "official-qwen2.5-oellm-multichat-plus-ai-nas-tools",
+                "port": 18080,
+                "active_profile": "qwen25_7b_instruct_cache_len_1024_q8",
+                "priority_profile": "qwen25_7b_instruct_cache_len_1024_q8_vendor_default",
+                "priority_status": "promoted_from_shadow_18081",
+                "active_hbm": {
+                  "path": "/mnt/nas/openclaw/toolchains/s100_llm_sdk/D-Robotics_LLM_S100_1.0.0_SDK/oellm_runtime/model/Qwen2.5_1.5B_Instruct_512.hbm",
+                  "exists": false,
+                  "size_bytes": 0
+                },
+                "priority_hbm": {
+                  "path": "/mnt/nas/openclaw/toolchains/s100_llm_sdk/D-Robotics_LLM_S100_1.0.0_SDK/oellm_runtime/model/Qwen2.5_1.5B_Instruct_512.hbm",
+                  "exists": false,
+                  "size_bytes": 0
+                },
+                "tool_dispatcher": "/mnt/nas/openclaw/scripts/probes/ai_nas_allowlisted_tool.sh",
+                "report_root": "/mnt/nas/openclaw/reports/qwen25_ai_nas"
+              },
+              "body_hash": "93f6c14eaa15d5be20371ecd6e2125c3534ad144dc5fcee349d782ded5be1812",
+              "stderr_hash": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+              "stderr_tail": ""
+            }
+          },
+          "ports_after": {
+            "ports": [
+              8765,
+              18080,
+              18888,
+              18889
+            ],
+            "stdout": "LISTEN 0      511        127.0.0.1:18765      0.0.0.0:*                                       \nLISTEN 0      5          127.0.0.1:18888      0.0.0.0:*                                       \nLISTEN 0      5          127.0.0.1:18080      0.0.0.0:*    users:((\"python3\",pid=854063,fd=3))\nLISTEN 0      5          127.0.0.1:8765       0.0.0.0:*    users:((\"python3\",pid=42831,fd=3)) \nLISTEN 0      511            [::1]:18765         [::]:*                                       \n",
+            "stdout_hash": "4170b1d0f75ae557d7940ef33784686dac6599043a03b2a83cb298f28127b891",
+            "returncode": 0
+          },
+          "normalized_ports_after": [
+            "LISTEN 0      5          127.0.0.1:18080      0.0.0.0:*    users:((\"python3\",pid=<pid>,fd=3))",
+            "LISTEN 0      5          127.0.0.1:18888      0.0.0.0:*",
+            "LISTEN 0      5          127.0.0.1:8765       0.0.0.0:*    users:((\"python3\",pid=<pid>,fd=3))"
+          ],
+          "dispatcher_hash_after": "d099f8071ab3710778520bf610ce2bca07fbc7976effe0a6d99791cf42ebb23a"
+        }
+      }
+    },
+    {
+      "label": "OpenClaw/Qwen health OK",
+      "ok": true,
+      "detail": {
+        "openclaw": {
+          "ok": true,
+          "returncode": 0,
+          "http_code": "200",
+          "time_total": 0.878279,
+          "json": {
+            "ok": true,
+            "tool_id": "ai_nas_operator_portal_server",
+            "operator_portal_contract": {
+              "found": true,
+              "filename": "operator_portal_contract.json",
+              "path": "/mnt/nas/openclaw/reports/ai_nas_mvp/operator_portal_contract_20260618-160406-445747/operator_portal_contract.json",
+              "verdict": "ok_ai_nas_operator_portal_contract",
+              "generated_at": "2026-06-18T16:04:08.346324+08:00",
+              "selection_policy": "generated_at_then_mtime"
+            },
+            "portal_html": "/mnt/nas/openclaw/reports/ai_nas_mvp/operator_portal_contract_20260618-160406-445747/operator_portal.html",
+            "refresh_on_start": null
+          },
+          "body_hash": "3f602e957754ba001c367fa58c76c536eda10a7318d8befc265f0d27698f100e",
+          "stderr_hash": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "stderr_tail": ""
+        },
+        "qwen": {
+          "ok": true,
+          "returncode": 0,
+          "http_code": "200",
+          "time_total": 0.002231,
+          "json": {
+            "ok": true,
+            "model": "Qwen2.5-1.5B-Instruct-S100P-official",
+            "backend": "official-qwen2.5-oellm-multichat-plus-ai-nas-tools",
+            "port": 18080,
+            "active_profile": "qwen25_7b_instruct_cache_len_1024_q8",
+            "priority_profile": "qwen25_7b_instruct_cache_len_1024_q8_vendor_default",
+            "priority_status": "promoted_from_shadow_18081",
+            "active_hbm": {
+              "path": "/mnt/nas/openclaw/toolchains/s100_llm_sdk/D-Robotics_LLM_S100_1.0.0_SDK/oellm_runtime/model/Qwen2.5_1.5B_Instruct_512.hbm",
+              "exists": false,
+              "size_bytes": 0
+            },
+            "priority_hbm": {
+              "path": "/mnt/nas/openclaw/toolchains/s100_llm_sdk/D-Robotics_LLM_S100_1.0.0_SDK/oellm_runtime/model/Qwen2.5_1.5B_Instruct_512.hbm",
+              "exists": false,
+              "size_bytes": 0
+            },
+            "tool_dispatcher": "/mnt/nas/openclaw/scripts/probes/ai_nas_allowlisted_tool.sh",
+            "report_root": "/mnt/nas/openclaw/reports/qwen25_ai_nas"
+          },
+          "body_hash": "93f6c14eaa15d5be20371ecd6e2125c3534ad144dc5fcee349d782ded5be1812",
+          "stderr_hash": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "stderr_tail": ""
+        }
+      }
+    },
+    {
+      "label": "protected ports sampled",
+      "ok": true,
+      "detail": "LISTEN 0      511        127.0.0.1:18765      0.0.0.0:*                                        \nLISTEN 0      5          127.0.0.1:18888      0.0.0.0:*                                        \nLISTEN 0      5          127.0.0.1:18080      0.0.0.0:*    users:((\"python3\",pid=1028631,fd=3))\nLISTEN 0      5          127.0.0.1:8765       0.0.0.0:*    users:((\"python3\",pid=1031214,fd=3))\nLISTEN 0      511            [::1]:18765         [::]:*                                        \n"
+    },
+    {
+      "label": "allowlisted dispatcher hash recorded",
+      "ok": true,
+      "detail": "d099f8071ab3710778520bf610ce2bca07fbc7976effe0a6d99791cf42ebb23a"
+    },
+    {
+      "label": "Qwen execution authority false in previous packet",
+      "ok": true,
+      "detail": [
+        "Only one Codex-created synthetic source file was copied.",
+        "Copy and rollback used route guard authorization plus ai_nas_allowlisted_tool.sh dispatcher.",
+        "Global execute/rollback feature flags remain disabled.",
+        "This does not authorize arbitrary user-file copy or whole-NAS browsing.",
+        "Qwen did not choose source/target and has no execution authority.",
+        "Cloud private payload egress remains forbidden."
+      ]
+    }
+  ],
+  "detail": {
+    "stage4_5_final_verdict": "self_created_synthetic_route_copy_canary_passed_target_rolled_back",
+    "stage4_5_reports": {
+      "15560_stage4_5_route_execute_canary_gate.json": "ok_stage4_5_route_execute_canary_gate",
+      "15570_stage4_5_route_rollback_canary_gate.json": "ok_stage4_5_route_rollback_canary_gate",
+      "15580_stage4_5_feature_flag_close_and_health_gate.json": "ok_stage4_5_feature_flag_close_and_health_gate",
+      "15590_stage4_5_post_execute_adversarial_regression_gate.json": "ok_stage4_5_post_execute_adversarial_regression_gate",
+      "15600_stage4_5_readonly_regression_mini_soak_gate.json": "ok_stage4_5_readonly_regression_mini_soak_gate"
+    },
+    "service_state": {
+      "returncode": 0,
+      "elapsed_ms": 197.264,
+      "stdout_hash": "e4e5bbc88e8106a3b65e8c5ff6d8e9b20ce0d718f94506e99282a0d5166b851f",
+      "stderr_hash": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stdout_tail": "sunrise\nubuntu\nTARGET            SOURCE                            FSTYPE OPTIONS\n/mnt/nas/openclaw 169.254.143.37:/OpenClawWorkspace nfs4   rw,relatime,vers=4.1,rsize=1048576,wsize=1048576,namlen=255,hard,proto=tcp,timeo=600,retrans=2,sec=sys,clientaddr=169.254.8.10,local_lock=none,addr=169.254.143.37\nactive\nactive\n"
+    },
+    "service_state_stdout_tail": "sunrise\nubuntu\nTARGET            SOURCE                            FSTYPE OPTIONS\n/mnt/nas/openclaw 169.254.143.37:/OpenClawWorkspace nfs4   rw,relatime,vers=4.1,rsize=1048576,wsize=1048576,namlen=255,hard,proto=tcp,timeo=600,retrans=2,sec=sys,clientaddr=169.254.8.10,local_lock=none,addr=169.254.143.37\nactive\nactive\n",
+    "openclaw": {
+      "ok": true,
+      "returncode": 0,
+      "http_code": "200",
+      "time_total": 0.878279,
+      "json": {
+        "ok": true,
+        "tool_id": "ai_nas_operator_portal_server",
+        "operator_portal_contract": {
+          "found": true,
+          "filename": "operator_portal_contract.json",
+          "path": "/mnt/nas/openclaw/reports/ai_nas_mvp/operator_portal_contract_20260618-160406-445747/operator_portal_contract.json",
+          "verdict": "ok_ai_nas_operator_portal_contract",
+          "generated_at": "2026-06-18T16:04:08.346324+08:00",
+          "selection_policy": "generated_at_then_mtime"
+        },
+        "portal_html": "/mnt/nas/openclaw/reports/ai_nas_mvp/operator_portal_contract_20260618-160406-445747/operator_portal.html",
+        "refresh_on_start": null
+      },
+      "body_hash": "3f602e957754ba001c367fa58c76c536eda10a7318d8befc265f0d27698f100e",
+      "stderr_hash": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr_tail": ""
+    },
+    "qwen": {
+      "ok": true,
+      "returncode": 0,
+      "http_code": "200",
+      "time_total": 0.002231,
+      "json": {
+        "ok": true,
+        "model": "Qwen2.5-1.5B-Instruct-S100P-official",
+        "backend": "official-qwen2.5-oellm-multichat-plus-ai-nas-tools",
+        "port": 18080,
+        "active_profile": "qwen25_7b_instruct_cache_len_1024_q8",
+        "priority_profile": "qwen25_7b_instruct_cache_len_1024_q8_vendor_default",
+        "priority_status": "promoted_from_shadow_18081",
+        "active_hbm": {
+          "path": "/mnt/nas/openclaw/toolchains/s100_llm_sdk/D-Robotics_LLM_S100_1.0.0_SDK/oellm_runtime/model/Qwen2.5_1.5B_Instruct_512.hbm",
+          "exists": false,
+          "size_bytes": 0
+        },
+        "priority_hbm": {
+          "path": "/mnt/nas/openclaw/toolchains/s100_llm_sdk/D-Robotics_LLM_S100_1.0.0_SDK/oellm_runtime/model/Qwen2.5_1.5B_Instruct_512.hbm",
+          "exists": false,
+          "size_bytes": 0
+        },
+        "tool_dispatcher": "/mnt/nas/openclaw/scripts/probes/ai_nas_allowlisted_tool.sh",
+        "report_root": "/mnt/nas/openclaw/reports/qwen25_ai_nas"
+      },
+      "body_hash": "93f6c14eaa15d5be20371ecd6e2125c3534ad144dc5fcee349d782ded5be1812",
+      "stderr_hash": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr_tail": ""
+    },
+    "protected_ports": {
+      "ports": [
+        8765,
+        18080,
+        18888,
+        18889
+      ],
+      "stdout": "LISTEN 0      511        127.0.0.1:18765      0.0.0.0:*                                        \nLISTEN 0      5          127.0.0.1:18888      0.0.0.0:*                                        \nLISTEN 0      5          127.0.0.1:18080      0.0.0.0:*    users:((\"python3\",pid=1028631,fd=3))\nLISTEN 0      5          127.0.0.1:8765       0.0.0.0:*    users:((\"python3\",pid=1031214,fd=3))\nLISTEN 0      511            [::1]:18765         [::]:*                                        \n",
+      "stdout_hash": "e0c13087cda407b8904557d146cf1ba9f2221f34cb5b75a52933d2cacf990d55",
+      "returncode": 0
+    },
+    "normalized_protected_ports": [
+      "LISTEN 0      5          127.0.0.1:18080      0.0.0.0:*    users:((\"python3\",pid=<pid>,fd=3))",
+      "LISTEN 0      5          127.0.0.1:18888      0.0.0.0:*",
+      "LISTEN 0      5          127.0.0.1:8765       0.0.0.0:*    users:((\"python3\",pid=<pid>,fd=3))"
+    ],
+    "dispatcher_hash": "d099f8071ab3710778520bf610ce2bca07fbc7976effe0a6d99791cf42ebb23a",
+    "forbidden_actions": [
+      "delete",
+      "move",
+      "rename",
+      "chmod",
+      "chown",
+      "overwrite",
+      "recursive",
+      "recursive_delete",
+      "arbitrary_shell"
+    ]
+  }
+}

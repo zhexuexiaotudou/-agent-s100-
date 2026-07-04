@@ -1,0 +1,313 @@
+{
+  "generated_at": "2026-07-04T12:03:59.969856+08:00",
+  "final_verdict": "real_nas_copy_candidate_test_passed_target_rolled_back_source_retained",
+  "final_verdict_allowed": true,
+  "all_gates_pass": true,
+  "real_nas_copy_executed": true,
+  "rollback_executed": true,
+  "existing_user_file_touched": false,
+  "source_cleanup_executed": false,
+  "copy_test_summary": {
+    "action_id": "copy-8cc4bc19a64f5085",
+    "approval_phrase_hash": "9664c05c9a25372ce1ed6b5ca6389d155e8fbe9c4f04b96d32e0a7b294e5bcdb",
+    "candidate_json": "/mnt/nas/openclaw/reports/real_nas_copy_candidate_test/real_nas_copy_candidate_20260704-120353/real_nas_copy_candidate.json",
+    "checks": {
+      "copy_verified": true,
+      "existing_user_file_touched": false,
+      "rollback_verified": true,
+      "source_created": true,
+      "source_hash_unchanged": true,
+      "source_retained": true,
+      "target_absent_before": true,
+      "target_missing_after_rollback": true
+    },
+    "copy_verified": true,
+    "errors": [],
+    "execute_result": {
+      "returncode": 0,
+      "stderr_tail": "",
+      "stdout_tail": "/mnt/nas/openclaw/reports/real_nas_copy_candidate_test/real_nas_copy_candidate_20260704-120353/action_execute_copy_20260704-120358-412357/action_execute_copy.md\n/mnt/nas/openclaw/reports/real_nas_copy_candidate_test/real_nas_copy_candidate_20260704-120353/action_execute_copy_20260704-120358-412357/action_execute_copy.json\n"
+    },
+    "execution_json": "/mnt/nas/openclaw/reports/real_nas_copy_candidate_test/real_nas_copy_candidate_20260704-120353/action_execute_copy_20260704-120358-412357/action_execute_copy.json",
+    "generated_at": "2026-07-04T12:03:58.309522+08:00",
+    "manifest_id": "apm-dcbc69f49f6632f5",
+    "manifest_path": "/mnt/nas/openclaw/reports/real_nas_copy_candidate_test/real_nas_copy_candidate_20260704-120353/real_nas_copy_approval_manifest.json",
+    "personal_root": "/mnt/nas/openclaw/Personal",
+    "real_nas_write_scope": "create synthetic source, copy to synthetic target, rollback copied target only",
+    "rollback_failed_count": 0,
+    "rollback_json": "/mnt/nas/openclaw/reports/real_nas_copy_candidate_test/real_nas_copy_candidate_20260704-120353/action_rollback_copy_20260704-120358-531115/action_rollback_copy.json",
+    "rollback_manifest": "/mnt/nas/openclaw/reports/real_nas_copy_candidate_test/real_nas_copy_candidate_20260704-120353/action_execute_copy_20260704-120358-412357/rollback_manifest.json",
+    "rollback_removed_count": 1,
+    "rollback_result": {
+      "returncode": 0,
+      "stderr_tail": "",
+      "stdout_tail": "/mnt/nas/openclaw/reports/real_nas_copy_candidate_test/real_nas_copy_candidate_20260704-120353/action_rollback_copy_20260704-120358-531115/action_rollback_copy.md\n/mnt/nas/openclaw/reports/real_nas_copy_candidate_test/real_nas_copy_candidate_20260704-120353/action_rollback_copy_20260704-120358-531115/action_rollback_copy.json\n"
+    },
+    "rollback_verified": true,
+    "run_id": "real_nas_copy_candidate_20260704-120353",
+    "source_absolute_path": "/mnt/nas/openclaw/Personal/Collections/CodexPreflight/source/real_nas_copy_candidate_20260704-120353_source.txt",
+    "source_created": true,
+    "source_existed_before": false,
+    "source_modified_after_copy_or_rollback": false,
+    "source_relative_path": "Collections/CodexPreflight/source/real_nas_copy_candidate_20260704-120353_source.txt",
+    "source_retained": true,
+    "source_sha256": "78ee7fedc0b1f45ffd4c347c9d9086c10b4a99e80b8645be69c6b7f708c9f5ea",
+    "source_sha256_after": "78ee7fedc0b1f45ffd4c347c9d9086c10b4a99e80b8645be69c6b7f708c9f5ea",
+    "source_size_bytes": 229,
+    "status": "passed",
+    "target_absolute_path": "/mnt/nas/openclaw/Personal/Collections/CodexPreflight/target/real_nas_copy_candidate_20260704-120353_copied.txt",
+    "target_existed_before": false,
+    "target_missing_after_rollback": true,
+    "target_relative_path": "Collections/CodexPreflight/target/real_nas_copy_candidate_20260704-120353_copied.txt",
+    "target_sha256_after_copy": "78ee7fedc0b1f45ffd4c347c9d9086c10b4a99e80b8645be69c6b7f708c9f5ea",
+    "target_size_after_copy": 229,
+    "unexpected_existing_path": false
+  },
+  "evidence_table": [
+    {
+      "report": "15200_real_nas_copy_candidate_approval_gate",
+      "gate_id": "real_nas_copy_candidate_approval_gate",
+      "verdict": "ok_real_nas_copy_candidate_approval_gate",
+      "passed_count": 4,
+      "check_count": 4,
+      "failure_count": 0
+    },
+    {
+      "report": "15210_real_nas_copy_candidate_execute_rollback_gate",
+      "gate_id": "real_nas_copy_candidate_execute_rollback_gate",
+      "verdict": "ok_real_nas_copy_candidate_execute_rollback_gate",
+      "passed_count": 8,
+      "check_count": 8,
+      "failure_count": 0
+    },
+    {
+      "report": "15220_real_nas_copy_candidate_post_health_gate",
+      "gate_id": "real_nas_copy_candidate_post_health_gate",
+      "verdict": "ok_real_nas_copy_candidate_post_health_gate",
+      "passed_count": 4,
+      "check_count": 4,
+      "failure_count": 0
+    }
+  ],
+  "environment": {
+    "repo_root": "F:\\Project\\Digua",
+    "platform": "Windows-11-10.0.26200-SP0",
+    "python": "3.14.3"
+  },
+  "claim_boundary": [
+    "Real NAS copy was tested only on a Codex-created synthetic file.",
+    "The copied target was removed by rollback after SHA256 verification.",
+    "The synthetic source file remains as audit evidence.",
+    "No existing user file was used, copied, deleted, moved, renamed, chmodded, or overwritten.",
+    "This does not yet authorize Web/API/AI exposure for arbitrary user-file copy."
+  ],
+  "final_package": {
+    "package_root": "F:\\Project\\Digua\\tmp\\digua_ai_nas_real_nas_copy_candidate_test_for_gptpro_20260704-120353",
+    "zip_path": "F:\\Project\\Digua\\evidence_for_gptpro\\digua_ai_nas_real_nas_copy_candidate_test_for_gptpro_20260704-120353.zip",
+    "sha256": "193500b5abf487714f6272e02533cfa710acf18e70942632d535161a52921f9d",
+    "sha256_file": "F:\\Project\\Digua\\evidence_for_gptpro\\digua_ai_nas_real_nas_copy_candidate_test_for_gptpro_20260704-120353.zip.sha256.txt",
+    "file_count": 23
+  },
+  "package_self_check": {
+    "returncode": 0,
+    "stdout_hash": "542191626d1832dfa53ddfbc77310ccfbb4e6b06f6fc5643aef249cade6a7302",
+    "stderr_hash": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "stdout_tail": "penclaw/reports/real_nas_copy_candidate_test/real_nas_copy_candidate_20260704-120353/action_execute_copy_20260704-120358-412357/rollback_manifest.json\",\n        \"rollback_removed_count\": 1,\n        \"rollback_result\": {\n          \"returncode\": 0,\n          \"stderr_tail\": \"\",\n          \"stdout_tail\": \"/mnt/nas/openclaw/reports/real_nas_copy_candidate_test/real_nas_copy_candidate_20260704-120353/action_rollback_copy_20260704-120358-531115/action_rollback_copy.md\\n/mnt/nas/openclaw/reports/real_nas_copy_candidate_test/real_nas_copy_candidate_20260704-120353/action_rollback_copy_20260704-120358-531115/action_rollback_copy.json\\n\"\n        },\n        \"rollback_verified\": true,\n        \"run_id\": \"real_nas_copy_candidate_20260704-120353\",\n        \"source_absolute_path\": \"/mnt/nas/openclaw/Personal/Collections/CodexPreflight/source/real_nas_copy_candidate_20260704-120353_source.txt\",\n        \"source_created\": true,\n        \"source_existed_before\": false,\n        \"source_modified_after_copy_or_rollback\": false,\n        \"source_relative_path\": \"Collections/CodexPreflight/source/real_nas_copy_candidate_20260704-120353_source.txt\",\n        \"source_retained\": true,\n        \"source_sha256\": \"78ee7fedc0b1f45ffd4c347c9d9086c10b4a99e80b8645be69c6b7f708c9f5ea\",\n        \"source_sha256_after\": \"78ee7fedc0b1f45ffd4c347c9d9086c10b4a99e80b8645be69c6b7f708c9f5ea\",\n        \"source_size_bytes\": 229,\n        \"status\": \"passed\",\n        \"target_absolute_path\": \"/mnt/nas/openclaw/Personal/Collections/CodexPreflight/target/real_nas_copy_candidate_20260704-120353_copied.txt\",\n        \"target_existed_before\": false,\n        \"target_missing_after_rollback\": true,\n        \"target_relative_path\": \"Collections/CodexPreflight/target/real_nas_copy_candidate_20260704-120353_copied.txt\",\n        \"target_sha256_after_copy\": \"78ee7fedc0b1f45ffd4c347c9d9086c10b4a99e80b8645be69c6b7f708c9f5ea\",\n        \"target_size_after_copy\": 229,\n        \"unexpected_existing_path\": false\n      }\n    }\n  ],\n  \"failures\": []\n}\n",
+    "stderr_tail": "",
+    "json": {
+      "checks": [
+        {
+          "label": "exists: 01_final_evidence/digua_ai_nas_real_nas_copy_candidate_test_gate_packet.json",
+          "ok": true,
+          "detail": "01_final_evidence/digua_ai_nas_real_nas_copy_candidate_test_gate_packet.json"
+        },
+        {
+          "label": "exists: 01_final_evidence/digua_ai_nas_real_nas_copy_candidate_test_gate_packet.md",
+          "ok": true,
+          "detail": "01_final_evidence/digua_ai_nas_real_nas_copy_candidate_test_gate_packet.md"
+        },
+        {
+          "label": "exists: docs/REAL_NAS_COPY_CANDIDATE_TEST_DECISION.md",
+          "ok": true,
+          "detail": "docs/REAL_NAS_COPY_CANDIDATE_TEST_DECISION.md"
+        },
+        {
+          "label": "exists: docs/REAL_NAS_COPY_CANDIDATE_TEST_GPTPRO_PROMPT.md",
+          "ok": true,
+          "detail": "docs/REAL_NAS_COPY_CANDIDATE_TEST_GPTPRO_PROMPT.md"
+        },
+        {
+          "label": "exists: operator_approval/real_nas_copy_candidate_test_approved.json",
+          "ok": true,
+          "detail": "operator_approval/real_nas_copy_candidate_test_approved.json"
+        },
+        {
+          "label": "exists: evidence/real_nas_copy_candidate_test_latest.json",
+          "ok": true,
+          "detail": "evidence/real_nas_copy_candidate_test_latest.json"
+        },
+        {
+          "label": "exists: reports/15200_real_nas_copy_candidate_approval_gate.json",
+          "ok": true,
+          "detail": "reports/15200_real_nas_copy_candidate_approval_gate.json"
+        },
+        {
+          "label": "exists: reports/15210_real_nas_copy_candidate_execute_rollback_gate.json",
+          "ok": true,
+          "detail": "reports/15210_real_nas_copy_candidate_execute_rollback_gate.json"
+        },
+        {
+          "label": "exists: reports/15220_real_nas_copy_candidate_post_health_gate.json",
+          "ok": true,
+          "detail": "reports/15220_real_nas_copy_candidate_post_health_gate.json"
+        },
+        {
+          "label": "exists: gates/real_nas_copy_candidate_test_gates.py",
+          "ok": true,
+          "detail": "gates/real_nas_copy_candidate_test_gates.py"
+        },
+        {
+          "label": "final verdict is pass",
+          "ok": true,
+          "detail": "real_nas_copy_candidate_test_passed_target_rolled_back_source_retained"
+        },
+        {
+          "label": "copy executed",
+          "ok": true,
+          "detail": true
+        },
+        {
+          "label": "rollback executed",
+          "ok": true,
+          "detail": true
+        },
+        {
+          "label": "existing user file untouched",
+          "ok": true,
+          "detail": false
+        },
+        {
+          "label": "target missing after rollback",
+          "ok": true,
+          "detail": {
+            "action_id": "copy-8cc4bc19a64f5085",
+            "approval_phrase_hash": "9664c05c9a25372ce1ed6b5ca6389d155e8fbe9c4f04b96d32e0a7b294e5bcdb",
+            "candidate_json": "/mnt/nas/openclaw/reports/real_nas_copy_candidate_test/real_nas_copy_candidate_20260704-120353/real_nas_copy_candidate.json",
+            "checks": {
+              "copy_verified": true,
+              "existing_user_file_touched": false,
+              "rollback_verified": true,
+              "source_created": true,
+              "source_hash_unchanged": true,
+              "source_retained": true,
+              "target_absent_before": true,
+              "target_missing_after_rollback": true
+            },
+            "copy_verified": true,
+            "errors": [],
+            "execute_result": {
+              "returncode": 0,
+              "stderr_tail": "",
+              "stdout_tail": "/mnt/nas/openclaw/reports/real_nas_copy_candidate_test/real_nas_copy_candidate_20260704-120353/action_execute_copy_20260704-120358-412357/action_execute_copy.md\n/mnt/nas/openclaw/reports/real_nas_copy_candidate_test/real_nas_copy_candidate_20260704-120353/action_execute_copy_20260704-120358-412357/action_execute_copy.json\n"
+            },
+            "execution_json": "/mnt/nas/openclaw/reports/real_nas_copy_candidate_test/real_nas_copy_candidate_20260704-120353/action_execute_copy_20260704-120358-412357/action_execute_copy.json",
+            "generated_at": "2026-07-04T12:03:58.309522+08:00",
+            "manifest_id": "apm-dcbc69f49f6632f5",
+            "manifest_path": "/mnt/nas/openclaw/reports/real_nas_copy_candidate_test/real_nas_copy_candidate_20260704-120353/real_nas_copy_approval_manifest.json",
+            "personal_root": "/mnt/nas/openclaw/Personal",
+            "real_nas_write_scope": "create synthetic source, copy to synthetic target, rollback copied target only",
+            "rollback_failed_count": 0,
+            "rollback_json": "/mnt/nas/openclaw/reports/real_nas_copy_candidate_test/real_nas_copy_candidate_20260704-120353/action_rollback_copy_20260704-120358-531115/action_rollback_copy.json",
+            "rollback_manifest": "/mnt/nas/openclaw/reports/real_nas_copy_candidate_test/real_nas_copy_candidate_20260704-120353/action_execute_copy_20260704-120358-412357/rollback_manifest.json",
+            "rollback_removed_count": 1,
+            "rollback_result": {
+              "returncode": 0,
+              "stderr_tail": "",
+              "stdout_tail": "/mnt/nas/openclaw/reports/real_nas_copy_candidate_test/real_nas_copy_candidate_20260704-120353/action_rollback_copy_20260704-120358-531115/action_rollback_copy.md\n/mnt/nas/openclaw/reports/real_nas_copy_candidate_test/real_nas_copy_candidate_20260704-120353/action_rollback_copy_20260704-120358-531115/action_rollback_copy.json\n"
+            },
+            "rollback_verified": true,
+            "run_id": "real_nas_copy_candidate_20260704-120353",
+            "source_absolute_path": "/mnt/nas/openclaw/Personal/Collections/CodexPreflight/source/real_nas_copy_candidate_20260704-120353_source.txt",
+            "source_created": true,
+            "source_existed_before": false,
+            "source_modified_after_copy_or_rollback": false,
+            "source_relative_path": "Collections/CodexPreflight/source/real_nas_copy_candidate_20260704-120353_source.txt",
+            "source_retained": true,
+            "source_sha256": "78ee7fedc0b1f45ffd4c347c9d9086c10b4a99e80b8645be69c6b7f708c9f5ea",
+            "source_sha256_after": "78ee7fedc0b1f45ffd4c347c9d9086c10b4a99e80b8645be69c6b7f708c9f5ea",
+            "source_size_bytes": 229,
+            "status": "passed",
+            "target_absolute_path": "/mnt/nas/openclaw/Personal/Collections/CodexPreflight/target/real_nas_copy_candidate_20260704-120353_copied.txt",
+            "target_existed_before": false,
+            "target_missing_after_rollback": true,
+            "target_relative_path": "Collections/CodexPreflight/target/real_nas_copy_candidate_20260704-120353_copied.txt",
+            "target_sha256_after_copy": "78ee7fedc0b1f45ffd4c347c9d9086c10b4a99e80b8645be69c6b7f708c9f5ea",
+            "target_size_after_copy": 229,
+            "unexpected_existing_path": false
+          }
+        },
+        {
+          "label": "source retained",
+          "ok": true,
+          "detail": {
+            "action_id": "copy-8cc4bc19a64f5085",
+            "approval_phrase_hash": "9664c05c9a25372ce1ed6b5ca6389d155e8fbe9c4f04b96d32e0a7b294e5bcdb",
+            "candidate_json": "/mnt/nas/openclaw/reports/real_nas_copy_candidate_test/real_nas_copy_candidate_20260704-120353/real_nas_copy_candidate.json",
+            "checks": {
+              "copy_verified": true,
+              "existing_user_file_touched": false,
+              "rollback_verified": true,
+              "source_created": true,
+              "source_hash_unchanged": true,
+              "source_retained": true,
+              "target_absent_before": true,
+              "target_missing_after_rollback": true
+            },
+            "copy_verified": true,
+            "errors": [],
+            "execute_result": {
+              "returncode": 0,
+              "stderr_tail": "",
+              "stdout_tail": "/mnt/nas/openclaw/reports/real_nas_copy_candidate_test/real_nas_copy_candidate_20260704-120353/action_execute_copy_20260704-120358-412357/action_execute_copy.md\n/mnt/nas/openclaw/reports/real_nas_copy_candidate_test/real_nas_copy_candidate_20260704-120353/action_execute_copy_20260704-120358-412357/action_execute_copy.json\n"
+            },
+            "execution_json": "/mnt/nas/openclaw/reports/real_nas_copy_candidate_test/real_nas_copy_candidate_20260704-120353/action_execute_copy_20260704-120358-412357/action_execute_copy.json",
+            "generated_at": "2026-07-04T12:03:58.309522+08:00",
+            "manifest_id": "apm-dcbc69f49f6632f5",
+            "manifest_path": "/mnt/nas/openclaw/reports/real_nas_copy_candidate_test/real_nas_copy_candidate_20260704-120353/real_nas_copy_approval_manifest.json",
+            "personal_root": "/mnt/nas/openclaw/Personal",
+            "real_nas_write_scope": "create synthetic source, copy to synthetic target, rollback copied target only",
+            "rollback_failed_count": 0,
+            "rollback_json": "/mnt/nas/openclaw/reports/real_nas_copy_candidate_test/real_nas_copy_candidate_20260704-120353/action_rollback_copy_20260704-120358-531115/action_rollback_copy.json",
+            "rollback_manifest": "/mnt/nas/openclaw/reports/real_nas_copy_candidate_test/real_nas_copy_candidate_20260704-120353/action_execute_copy_20260704-120358-412357/rollback_manifest.json",
+            "rollback_removed_count": 1,
+            "rollback_result": {
+              "returncode": 0,
+              "stderr_tail": "",
+              "stdout_tail": "/mnt/nas/openclaw/reports/real_nas_copy_candidate_test/real_nas_copy_candidate_20260704-120353/action_rollback_copy_20260704-120358-531115/action_rollback_copy.md\n/mnt/nas/openclaw/reports/real_nas_copy_candidate_test/real_nas_copy_candidate_20260704-120353/action_rollback_copy_20260704-120358-531115/action_rollback_copy.json\n"
+            },
+            "rollback_verified": true,
+            "run_id": "real_nas_copy_candidate_20260704-120353",
+            "source_absolute_path": "/mnt/nas/openclaw/Personal/Collections/CodexPreflight/source/real_nas_copy_candidate_20260704-120353_source.txt",
+            "source_created": true,
+            "source_existed_before": false,
+            "source_modified_after_copy_or_rollback": false,
+            "source_relative_path": "Collections/CodexPreflight/source/real_nas_copy_candidate_20260704-120353_source.txt",
+            "source_retained": true,
+            "source_sha256": "78ee7fedc0b1f45ffd4c347c9d9086c10b4a99e80b8645be69c6b7f708c9f5ea",
+            "source_sha256_after": "78ee7fedc0b1f45ffd4c347c9d9086c10b4a99e80b8645be69c6b7f708c9f5ea",
+            "source_size_bytes": 229,
+            "status": "passed",
+            "target_absolute_path": "/mnt/nas/openclaw/Personal/Collections/CodexPreflight/target/real_nas_copy_candidate_20260704-120353_copied.txt",
+            "target_existed_before": false,
+            "target_missing_after_rollback": true,
+            "target_relative_path": "Collections/CodexPreflight/target/real_nas_copy_candidate_20260704-120353_copied.txt",
+            "target_sha256_after_copy": "78ee7fedc0b1f45ffd4c347c9d9086c10b4a99e80b8645be69c6b7f708c9f5ea",
+            "target_size_after_copy": 229,
+            "unexpected_existing_path": false
+          }
+        }
+      ],
+      "failures": []
+    }
+  }
+}

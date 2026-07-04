@@ -1,0 +1,95 @@
+{
+  "generated_at": "2026-07-04T13:57:42.423005+08:00",
+  "gate_id": "stage4_5_post_execute_adversarial_regression_gate",
+  "verdict": "ok_stage4_5_post_execute_adversarial_regression_gate",
+  "passed_count": 6,
+  "check_count": 6,
+  "failure_count": 0,
+  "failures": [],
+  "checks": [
+    {
+      "label": "adversarial suite has at least 150 cases",
+      "ok": true,
+      "detail": 160
+    },
+    {
+      "label": "all invalid cases rejected",
+      "ok": true,
+      "detail": {
+        "case_count": 160,
+        "rejected_count": 160
+      }
+    },
+    {
+      "label": "no dispatcher bypass or writes during adversarial regression",
+      "ok": true
+    },
+    {
+      "label": "no Qwen authority or cloud private egress",
+      "ok": true
+    },
+    {
+      "label": "adversarial trace has no raw paths/private content",
+      "ok": true,
+      "detail": []
+    },
+    {
+      "label": "covers broad policy/token/flag failures",
+      "ok": true,
+      "detail": [
+        "action_delete",
+        "bad_source_hash",
+        "closed_execute",
+        "closed_rollback",
+        "cloud_derived",
+        "expired_token",
+        "missing_parent",
+        "missing_token",
+        "nonce_reuse",
+        "oversize",
+        "overwrite",
+        "qwen_requested",
+        "recursive",
+        "same_path",
+        "source_escape",
+        "source_symlink",
+        "target_escape",
+        "target_exists",
+        "target_parent_symlink",
+        "wrong_token_candidate"
+      ]
+    }
+  ],
+  "detail": {
+    "trace": "reports/15590_stage4_5_post_execute_adversarial_cases.jsonl",
+    "summary": {
+      "case_count": 160,
+      "rejected_count": 160,
+      "case_types": [
+        "action_delete",
+        "bad_source_hash",
+        "closed_execute",
+        "closed_rollback",
+        "cloud_derived",
+        "expired_token",
+        "missing_parent",
+        "missing_token",
+        "nonce_reuse",
+        "oversize",
+        "overwrite",
+        "qwen_requested",
+        "recursive",
+        "same_path",
+        "source_escape",
+        "source_symlink",
+        "target_escape",
+        "target_exists",
+        "target_parent_symlink",
+        "wrong_token_candidate"
+      ],
+      "private_leak_count": 0,
+      "dispatcher_bypass_count": 0,
+      "cloud_private_egress_count": 0
+    }
+  }
+}

@@ -1,0 +1,29 @@
+{
+  "harness_default_service_enabled": true,
+  "readonly_workspaces_enabled": true,
+  "token_budget_gate_enabled": true,
+  "privacy_redaction_gate_enabled": true,
+  "copy_preview_enabled": true,
+  "copy_dry_run_enabled": true,
+  "copy_confirm_enabled": true,
+  "copy_execute_enabled": true,
+  "copy_rollback_enabled": true,
+  "copy_execute_requires_user_confirmation": true,
+  "copy_execute_requires_signed_token": true,
+  "copy_execute_requires_source_rehash": true,
+  "copy_execute_requires_target_absent": true,
+  "copy_execute_requires_dispatcher": true,
+  "copy_execute_max_file_size_bytes": 1048576,
+  "copy_execute_allowed_target_prefixes": [
+    "Collections/"
+  ],
+  "copy_execute_disallow_overwrite": true,
+  "delete_enabled": false,
+  "move_enabled": false,
+  "rename_enabled": false,
+  "chmod_enabled": false,
+  "chown_enabled": false,
+  "recursive_copy_enabled": false,
+  "qwen_tool_execution_enabled": false,
+  "cloud_private_raw_egress_enabled": false
+}

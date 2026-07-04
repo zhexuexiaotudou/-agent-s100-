@@ -1,0 +1,385 @@
+# openclaw_default_service_integration_gate
+
+- verdict: `ok_openclaw_default_service_integration_gate`
+- generated_at: `2026-07-04T14:35:47.473459+08:00`
+- passed: `7/7`
+
+## Checks
+
+- `PASS` local integration files compile
+- `PASS` remote files deployed and compiled
+- `PASS` OpenClaw service restarted and active
+- `PASS` /api/harness/status works
+- `PASS` copy preview/dry-run/confirm endpoints work
+- `PASS` copy execute endpoint exists and rejects missing token
+- `PASS` protected ports unchanged after integration
+
+## Failures
+
+- none
+
+## Detail
+
+```json
+{
+  "deploy": {
+    "mkdir": {
+      "command_hash": "cbd0793affe27dcd8ad48c4b31c307ea0bcbfd7ab1ddc9046c92daa761ce9f5e",
+      "returncode": 0,
+      "elapsed_ms": 189.889,
+      "stdout": "",
+      "stderr": "",
+      "stdout_hash": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr_hash": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "backup": {
+      "command_hash": "e36f9fdf7ea65b294549752a9ff6abb3819c09262922d92f145a1501f4b7288a",
+      "returncode": 0,
+      "elapsed_ms": 237.543,
+      "stdout": "",
+      "stderr": "",
+      "stdout_hash": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr_hash": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "scp_results": [
+      {
+        "local": "scripts/probes/ai_nas_operator_portal_server.py",
+        "remote": "/mnt/nas/openclaw/scripts/probes/ai_nas_operator_portal_server.py",
+        "scp": {
+          "returncode": 0,
+          "stdout_hash": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "stderr_hash": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "stderr_tail": ""
+        }
+      },
+      {
+        "local": "configs/harness_default_service_feature_flags.json",
+        "remote": "/mnt/nas/openclaw/configs/harness_default_service_feature_flags.json",
+        "scp": {
+          "returncode": 0,
+          "stdout_hash": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "stderr_hash": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "stderr_tail": ""
+        }
+      },
+      {
+        "local": "configs/harness_default_service_policy.json",
+        "remote": "/mnt/nas/openclaw/configs/harness_default_service_policy.json",
+        "scp": {
+          "returncode": 0,
+          "stdout_hash": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "stderr_hash": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "stderr_tail": ""
+        }
+      },
+      {
+        "local": "configs/copy_route_policy.json",
+        "remote": "/mnt/nas/openclaw/configs/copy_route_policy.json",
+        "scp": {
+          "returncode": 0,
+          "stdout_hash": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "stderr_hash": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "stderr_tail": ""
+        }
+      },
+      {
+        "local": "scripts/disable_harness_copy_execute.sh",
+        "remote": "/mnt/nas/openclaw/scripts/disable_harness_copy_execute.sh",
+        "scp": {
+          "returncode": 0,
+          "stdout_hash": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "stderr_hash": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "stderr_tail": ""
+        }
+      },
+      {
+        "local": "scripts/check_harness_default_service_status.sh",
+        "remote": "/mnt/nas/openclaw/scripts/check_harness_default_service_status.sh",
+        "scp": {
+          "returncode": 0,
+          "stdout_hash": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "stderr_hash": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "stderr_tail": ""
+        }
+      },
+      {
+        "local": "src/openclaw",
+        "remote": "/mnt/nas/openclaw/src/",
+        "scp": {
+          "returncode": 0,
+          "stdout_hash": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "stderr_hash": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "stderr_tail": ""
+        }
+      },
+      {
+        "local": "src/harness",
+        "remote": "/mnt/nas/openclaw/src/",
+        "scp": {
+          "returncode": 0,
+          "stdout_hash": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "stderr_hash": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "stderr_tail": ""
+        }
+      },
+      {
+        "local": "ai_nas_harness",
+        "remote": "/mnt/nas/openclaw/",
+        "scp": {
+          "returncode": 0,
+          "stdout_hash": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "stderr_hash": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "stderr_tail": ""
+        }
+      },
+      {
+        "local": "tools/token_budget",
+        "remote": "/mnt/nas/openclaw/tools/",
+        "scp": {
+          "returncode": 0,
+          "stdout_hash": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "stderr_hash": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "stderr_tail": ""
+        }
+      },
+      {
+        "local": "web/static",
+        "remote": "/mnt/nas/openclaw/web/",
+        "scp": {
+          "returncode": 0,
+          "stdout_hash": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "stderr_hash": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "stderr_tail": ""
+        }
+      },
+      {
+        "local": "web/templates",
+        "remote": "/mnt/nas/openclaw/web/",
+        "scp": {
+          "returncode": 0,
+          "stdout_hash": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "stderr_hash": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "stderr_tail": ""
+        }
+      }
+    ],
+    "chmod_compile": {
+      "command_hash": "3736fbfa66f16129d495e2456bdff3de667be8b66f2ec3eb60cb46a8f331b5fb",
+      "returncode": 0,
+      "elapsed_ms": 284.174,
+      "stdout": "",
+      "stderr": "",
+      "stdout_hash": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr_hash": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "restart": {
+      "command_hash": "4a391ebe1261638610bf607884964402573124f3f1c9c6ecbfba7dd2010aef03",
+      "returncode": 0,
+      "elapsed_ms": 4200.925,
+      "stdout": "active\n",
+      "stderr": "",
+      "stdout_hash": "45df5ad5e0ecfa54d3226343e0e6857337494ba6e32f189d1174070665d8c659",
+      "stderr_hash": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "backup_root": "/mnt/nas/openclaw/reports/stage5_default_service_stage5_default_service_20260704-143537/remote_backup"
+  },
+  "harness_status": {
+    "ok": true,
+    "returncode": 0,
+    "http_code": "200",
+    "time_total": 0.004121,
+    "json": {
+      "ok": true,
+      "service": "harness_default_service",
+      "policy_id": "digua_stage5_harness_default_service_policy_v1",
+      "readonly_workspaces_enabled": true,
+      "token_budget_gate_enabled": true,
+      "privacy_redaction_gate_enabled": true,
+      "copy_routes": [
+        "/api/nas/copy/preview",
+        "/api/nas/copy/dry-run",
+        "/api/nas/copy/confirm",
+        "/api/nas/copy/execute",
+        "/api/nas/copy/rollback"
+      ],
+      "copy_execute_enabled": true,
+      "copy_execute_requires": {
+        "user_confirmation": true,
+        "signed_token": true,
+        "source_rehash": true,
+        "target_absent": true,
+        "dispatcher": true
+      },
+      "forbidden_actions": [
+        "delete",
+        "move",
+        "rename",
+        "chmod",
+        "chown",
+        "overwrite",
+        "recursive",
+        "recursive_delete",
+        "arbitrary_shell"
+      ],
+      "qwen_execution_authority": false,
+      "cloud_private_raw_egress": false,
+      "dispatcher": "/mnt/nas/openclaw/scripts/probes/ai_nas_allowlisted_tool.sh",
+      "dispatcher_exists": true,
+      "dispatcher_sha256": "d099f8071ab3710778520bf610ce2bca07fbc7976effe0a6d99791cf42ebb23a",
+      "raw_private_content_in_status": false
+    },
+    "body_hash": "8ce7358ef321a96433f788c7e2e2a95bd5b9b26c2f72d95a673332402aa31631",
+    "stderr_hash": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "stderr_tail": ""
+  },
+  "endpoint_probe": {
+    "confirm": [
+      200,
+      {
+        "audit_event": {
+          "allowed": true,
+          "approval_phrase_hash": "56afa5e4b9f1fa72f5beb403776582a11a98d030c3cc1e727c42ccdd5fb68b54",
+          "args_hash": "4f90744054e61f3c7d727ce6b3aa1e445e81bf7ff9fab6ee96c4f885cbdc66c1",
+          "candidate_fingerprint": "a82924ddc8bc78c762cbe077f007da9271f30539f83c26811f4a4a97906c8c16",
+          "cloud_private_egress": false,
+          "dispatcher_tool": null,
+          "event_id": "copy-route-e5a4bc427e424833",
+          "qwen_execution_authority": false,
+          "raw_private_content_logged": false,
+          "reason_codes": [],
+          "route": "confirm",
+          "source_path_hash": "67fcceabddb66801374ddcb3474906e96d4ce92ad0dda7bf9c208b0c76a42667",
+          "target_path_hash": "820cd33af080b9df6dbc33c841ea701456130c6fb9bebc893ba129dd38b72851",
+          "token_hash": "2390c644bf3a0fcdfd276b1907be7322df50db5bb633c385d7700d6b3fab71db",
+          "token_issued": true,
+          "tool_id": "ai_nas_route_copy_guard_v1",
+          "writes_performed": false
+        },
+        "candidate_fingerprint": "a82924ddc8bc78c762cbe077f007da9271f30539f83c26811f4a4a97906c8c16",
+        "cloud_private_egress": false,
+        "expected_size_bytes": 10,
+        "ok": true,
+        "qwen_execution_authority": false,
+        "raw_paths_in_response": false,
+        "reason_codes": [],
+        "route": "confirm",
+        "signed_approval_token": {
+          "action_type": "copy",
+          "args_hash": "4f90744054e61f3c7d727ce6b3aa1e445e81bf7ff9fab6ee96c4f885cbdc66c1",
+          "candidate_fingerprint": "a82924ddc8bc78c762cbe077f007da9271f30539f83c26811f4a4a97906c8c16",
+          "expires_at": 1783147549,
+          "nonce": "3c2a355a2c234d9ab6456e38dcd58afd",
+          "operator_user_id": "operator-web-ui",
+          "signature": "8532scY38_nIlOIKER4RjErdUe8JaJBbe39Ogll5q9s",
+          "source_path_hash": "67fcceabddb66801374ddcb3474906e96d4ce92ad0dda7bf9c208b0c76a42667",
+          "target_path_hash": "820cd33af080b9df6dbc33c841ea701456130c6fb9bebc893ba129dd38b72851",
+          "token_type": "copy_route_execute_approval",
+          "tool_id": "ai_nas_action_execute_copy",
+          "workspace_id": "nas_action"
+        },
+        "signed_approval_token_hash": "2390c644bf3a0fcdfd276b1907be7322df50db5bb633c385d7700d6b3fab71db",
+        "source_path_hash": "67fcceabddb66801374ddcb3474906e96d4ce92ad0dda7bf9c208b0c76a42667",
+        "source_sha256_prefix": "aaaaaaaaaaaa",
+        "status": "confirm_allowed_token_issued",
+        "target_path_hash": "820cd33af080b9df6dbc33c841ea701456130c6fb9bebc893ba129dd38b72851"
+      }
+    ],
+    "dry_run": [
+      200,
+      {
+        "approval_phrase": "APPROVE COPY a82924ddc8bc78c7",
+        "audit_event": {
+          "allowed": true,
+          "approval_phrase_hash": "56afa5e4b9f1fa72f5beb403776582a11a98d030c3cc1e727c42ccdd5fb68b54",
+          "args_hash": "4f90744054e61f3c7d727ce6b3aa1e445e81bf7ff9fab6ee96c4f885cbdc66c1",
+          "candidate_fingerprint": "a82924ddc8bc78c762cbe077f007da9271f30539f83c26811f4a4a97906c8c16",
+          "cloud_private_egress": false,
+          "dispatcher_tool": null,
+          "event_id": "copy-route-b2ee22144ef64d1a",
+          "qwen_execution_authority": false,
+          "raw_private_content_logged": false,
+          "reason_codes": [],
+          "route": "dry-run",
+          "source_path_hash": "67fcceabddb66801374ddcb3474906e96d4ce92ad0dda7bf9c208b0c76a42667",
+          "target_path_hash": "820cd33af080b9df6dbc33c841ea701456130c6fb9bebc893ba129dd38b72851",
+          "tool_id": "ai_nas_route_copy_guard_v1",
+          "writes_performed": false
+        },
+        "candidate_fingerprint": "a82924ddc8bc78c762cbe077f007da9271f30539f83c26811f4a4a97906c8c16",
+        "cloud_private_egress": false,
+        "destructive_actions_available": false,
+        "expected_size_bytes": 10,
+        "ok": true,
+        "qwen_execution_authority": false,
+        "raw_paths_in_response": false,
+        "reason_codes": [],
+        "rollback_plan": "remove only this action-created target after target sha256 verification",
+        "route": "dry-run",
+        "source_path_hash": "67fcceabddb66801374ddcb3474906e96d4ce92ad0dda7bf9c208b0c76a42667",
+        "source_sha256_prefix": "aaaaaaaaaaaa",
+        "status": "dry-run_allowed",
+        "target_path_hash": "820cd33af080b9df6dbc33c841ea701456130c6fb9bebc893ba129dd38b72851"
+      }
+    ],
+    "execute_missing_token": [
+      409,
+      {
+        "detail": {},
+        "error": "source_missing_or_not_regular_file",
+        "ok": false,
+        "qwen_execution_authority": false
+      }
+    ],
+    "preview": [
+      200,
+      {
+        "audit_event": {
+          "allowed": true,
+          "args_hash": "4f90744054e61f3c7d727ce6b3aa1e445e81bf7ff9fab6ee96c4f885cbdc66c1",
+          "candidate_fingerprint": "a82924ddc8bc78c762cbe077f007da9271f30539f83c26811f4a4a97906c8c16",
+          "cloud_private_egress": false,
+          "dispatcher_tool": null,
+          "event_id": "copy-route-fd926c7fe0fa4a69",
+          "qwen_execution_authority": false,
+          "raw_private_content_logged": false,
+          "reason_codes": [],
+          "route": "preview",
+          "source_path_hash": "67fcceabddb66801374ddcb3474906e96d4ce92ad0dda7bf9c208b0c76a42667",
+          "target_path_hash": "820cd33af080b9df6dbc33c841ea701456130c6fb9bebc893ba129dd38b72851",
+          "tool_id": "ai_nas_route_copy_guard_v1"
+        },
+        "candidate_fingerprint": "a82924ddc8bc78c762cbe077f007da9271f30539f83c26811f4a4a97906c8c16",
+        "cloud_private_egress": false,
+        "expected_size_bytes": 10,
+        "ok": true,
+        "qwen_execution_authority": false,
+        "raw_paths_in_response": false,
+        "reason_codes": [],
+        "route": "preview",
+        "source_path_hash": "67fcceabddb66801374ddcb3474906e96d4ce92ad0dda7bf9c208b0c76a42667",
+        "source_sha256_prefix": "aaaaaaaaaaaa",
+        "status": "preview_allowed",
+        "target_path_hash": "820cd33af080b9df6dbc33c841ea701456130c6fb9bebc893ba129dd38b72851"
+      }
+    ]
+  },
+  "endpoint_probe_run": {
+    "returncode": 0,
+    "elapsed_ms": 288.871,
+    "stdout_hash": "4ec9b8b243c520842c0d0bd2539e86deeda08fb47cad2b080d20257143afc95a",
+    "stderr_hash": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "stdout_tail": "ard_v1\", \"writes_performed\": false}, \"candidate_fingerprint\": \"a82924ddc8bc78c762cbe077f007da9271f30539f83c26811f4a4a97906c8c16\", \"cloud_private_egress\": false, \"destructive_actions_available\": false, \"expected_size_bytes\": 10, \"ok\": true, \"qwen_execution_authority\": false, \"raw_paths_in_response\": false, \"reason_codes\": [], \"rollback_plan\": \"remove only this action-created target after target sha256 verification\", \"route\": \"dry-run\", \"source_path_hash\": \"67fcceabddb66801374ddcb3474906e96d4ce92ad0dda7bf9c208b0c76a42667\", \"source_sha256_prefix\": \"aaaaaaaaaaaa\", \"status\": \"dry-run_allowed\", \"target_path_hash\": \"820cd33af080b9df6dbc33c841ea701456130c6fb9bebc893ba129dd38b72851\"}], \"execute_missing_token\": [409, {\"detail\": {}, \"error\": \"source_missing_or_not_regular_file\", \"ok\": false, \"qwen_execution_authority\": false}], \"preview\": [200, {\"audit_event\": {\"allowed\": true, \"args_hash\": \"4f90744054e61f3c7d727ce6b3aa1e445e81bf7ff9fab6ee96c4f885cbdc66c1\", \"candidate_fingerprint\": \"a82924ddc8bc78c762cbe077f007da9271f30539f83c26811f4a4a97906c8c16\", \"cloud_private_egress\": false, \"dispatcher_tool\": null, \"event_id\": \"copy-route-fd926c7fe0fa4a69\", \"qwen_execution_authority\": false, \"raw_private_content_logged\": false, \"reason_codes\": [], \"route\": \"preview\", \"source_path_hash\": \"67fcceabddb66801374ddcb3474906e96d4ce92ad0dda7bf9c208b0c76a42667\", \"target_path_hash\": \"820cd33af080b9df6dbc33c841ea701456130c6fb9bebc893ba129dd38b72851\", \"tool_id\": \"ai_nas_route_copy_guard_v1\"}, \"candidate_fingerprint\": \"a82924ddc8bc78c762cbe077f007da9271f30539f83c26811f4a4a97906c8c16\", \"cloud_private_egress\": false, \"expected_size_bytes\": 10, \"ok\": true, \"qwen_execution_authority\": false, \"raw_paths_in_response\": false, \"reason_codes\": [], \"route\": \"preview\", \"source_path_hash\": \"67fcceabddb66801374ddcb3474906e96d4ce92ad0dda7bf9c208b0c76a42667\", \"source_sha256_prefix\": \"aaaaaaaaaaaa\", \"status\": \"preview_allowed\", \"target_path_hash\": \"820cd33af080b9df6dbc33c841ea701456130c6fb9bebc893ba129dd38b72851\"}]}\n"
+  },
+  "ports_after": {
+    "ports": [
+      8765,
+      18080,
+      18888,
+      18889
+    ],
+    "stdout": "LISTEN 0      511        127.0.0.1:18765      0.0.0.0:*                                        \nLISTEN 0      5          127.0.0.1:18888      0.0.0.0:*                                        \nLISTEN 0      5          127.0.0.1:18080      0.0.0.0:*    users:((\"python3\",pid=1028631,fd=3))\nLISTEN 0      5          127.0.0.1:8765       0.0.0.0:*    users:((\"python3\",pid=1032592,fd=3))\nLISTEN 0      511            [::1]:18765         [::]:*                                        \n",
+    "stdout_hash": "e68b983e1f5b3ac95fc12593ce4ee0a62b94e3d22be68d70060758a158391d12",
+    "returncode": 0
+  }
+}
+```

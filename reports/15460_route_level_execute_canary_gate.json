@@ -1,0 +1,391 @@
+{
+  "generated_at": "2026-07-04T12:31:21.658173+08:00",
+  "gate_id": "route_level_execute_canary_gate",
+  "verdict": "route_execute_canary_blocked_by_missing_approval_or_flag",
+  "passed_count": 4,
+  "check_count": 4,
+  "failure_count": 0,
+  "failures": [],
+  "checks": [
+    {
+      "label": "execute canary blocked safely by default",
+      "ok": true,
+      "detail": {
+        "allowed": false,
+        "route": "execute",
+        "status": "execute_blocked",
+        "reason_codes": [
+          "approval_token_missing",
+          "execute_env_not_enabled",
+          "execute_feature_disabled",
+          "operator_approval_file_missing",
+          "operator_approval_missing"
+        ],
+        "response": {
+          "route": "execute",
+          "status": "execute_blocked",
+          "action_type": "copy",
+          "candidate_fingerprint": "009a70122418c805eae46118024a549a8fb8100bf84ec156bae8578c9b281881",
+          "source_path_hash": "7a1ad2eb1c5b6227b9f2c8f6514af6465a3a01919217cf38d0ab1c76e2014f28",
+          "target_path_hash": "b70f74624121c7de76fb9fe2c43d781bc6ae73031a120d803ba90b16bb9c5f9f",
+          "source_sha256_prefix": "78ee7fedc0b1",
+          "expected_size_bytes": 229,
+          "target_root": "Collections",
+          "raw_paths_in_response": false,
+          "private_content_in_response": false,
+          "dispatcher_tool": "ai_nas_action_execute_copy",
+          "execution_performed_by_guard": false,
+          "writes_performed": false,
+          "blocked_safely": true
+        },
+        "audit_event": {
+          "event_id": "copy-route-eb1d3c0e71b54ec7",
+          "tool_id": "ai_nas_route_copy_guard_v1",
+          "route": "execute",
+          "allowed": false,
+          "reason_codes": [
+            "execute_feature_disabled",
+            "execute_env_not_enabled",
+            "operator_approval_file_missing",
+            "operator_approval_missing",
+            "approval_token_missing"
+          ],
+          "candidate_fingerprint": "009a70122418c805eae46118024a549a8fb8100bf84ec156bae8578c9b281881",
+          "source_path_hash": "7a1ad2eb1c5b6227b9f2c8f6514af6465a3a01919217cf38d0ab1c76e2014f28",
+          "target_path_hash": "b70f74624121c7de76fb9fe2c43d781bc6ae73031a120d803ba90b16bb9c5f9f",
+          "args_hash": "f0dff3c785611dcdc5b0597ba5af8332729039f7a39bf94262b3383e5e46bf4c",
+          "qwen_execution_authority": false,
+          "cloud_private_egress": false,
+          "raw_private_content_logged": false,
+          "dispatcher_tool": "ai_nas_action_execute_copy",
+          "execution_performed_by_guard": false,
+          "operator_approved": false,
+          "env_enabled": false,
+          "approval_file_present": false,
+          "token_validation_reason": "approval_token_missing"
+        }
+      }
+    },
+    {
+      "label": "rollback blocked safely by default",
+      "ok": true,
+      "detail": {
+        "allowed": false,
+        "route": "rollback",
+        "status": "rollback_blocked",
+        "reason_codes": [
+          "rollback_feature_disabled",
+          "rollback_operator_approval_missing"
+        ],
+        "response": {
+          "route": "rollback",
+          "status": "rollback_blocked",
+          "action_type": "copy",
+          "candidate_fingerprint": "009a70122418c805eae46118024a549a8fb8100bf84ec156bae8578c9b281881",
+          "source_path_hash": "7a1ad2eb1c5b6227b9f2c8f6514af6465a3a01919217cf38d0ab1c76e2014f28",
+          "target_path_hash": "b70f74624121c7de76fb9fe2c43d781bc6ae73031a120d803ba90b16bb9c5f9f",
+          "source_sha256_prefix": "78ee7fedc0b1",
+          "expected_size_bytes": 229,
+          "target_root": "Collections",
+          "raw_paths_in_response": false,
+          "private_content_in_response": false,
+          "dispatcher_tool": "ai_nas_action_rollback_copy",
+          "rollback_performed_by_guard": false,
+          "writes_performed": false,
+          "blocked_safely": true
+        },
+        "audit_event": {
+          "event_id": "copy-route-b8736fedd9014549",
+          "tool_id": "ai_nas_route_copy_guard_v1",
+          "route": "rollback",
+          "allowed": false,
+          "reason_codes": [
+            "rollback_feature_disabled",
+            "rollback_operator_approval_missing"
+          ],
+          "candidate_fingerprint": "009a70122418c805eae46118024a549a8fb8100bf84ec156bae8578c9b281881",
+          "source_path_hash": "7a1ad2eb1c5b6227b9f2c8f6514af6465a3a01919217cf38d0ab1c76e2014f28",
+          "target_path_hash": "b70f74624121c7de76fb9fe2c43d781bc6ae73031a120d803ba90b16bb9c5f9f",
+          "args_hash": "f0dff3c785611dcdc5b0597ba5af8332729039f7a39bf94262b3383e5e46bf4c",
+          "qwen_execution_authority": false,
+          "cloud_private_egress": false,
+          "raw_private_content_logged": false,
+          "dispatcher_tool": "ai_nas_action_rollback_copy",
+          "rollback_performed_by_guard": false,
+          "operator_approved": false
+        }
+      }
+    },
+    {
+      "label": "no execute or rollback writes performed",
+      "ok": true,
+      "detail": [
+        {
+          "route": "execute",
+          "allowed": false,
+          "status": "execute_blocked",
+          "reason_codes": [
+            "approval_token_missing",
+            "execute_env_not_enabled",
+            "execute_feature_disabled",
+            "operator_approval_file_missing",
+            "operator_approval_missing"
+          ],
+          "response": {
+            "route": "execute",
+            "status": "execute_blocked",
+            "action_type": "copy",
+            "candidate_fingerprint": "009a70122418c805eae46118024a549a8fb8100bf84ec156bae8578c9b281881",
+            "source_path_hash": "7a1ad2eb1c5b6227b9f2c8f6514af6465a3a01919217cf38d0ab1c76e2014f28",
+            "target_path_hash": "b70f74624121c7de76fb9fe2c43d781bc6ae73031a120d803ba90b16bb9c5f9f",
+            "source_sha256_prefix": "78ee7fedc0b1",
+            "expected_size_bytes": 229,
+            "target_root": "Collections",
+            "raw_paths_in_response": false,
+            "private_content_in_response": false,
+            "dispatcher_tool": "ai_nas_action_execute_copy",
+            "execution_performed_by_guard": false,
+            "writes_performed": false,
+            "blocked_safely": true
+          },
+          "audit_event": {
+            "event_id": "copy-route-eb1d3c0e71b54ec7",
+            "tool_id": "ai_nas_route_copy_guard_v1",
+            "route": "execute",
+            "allowed": false,
+            "reason_codes": [
+              "execute_feature_disabled",
+              "execute_env_not_enabled",
+              "operator_approval_file_missing",
+              "operator_approval_missing",
+              "approval_token_missing"
+            ],
+            "candidate_fingerprint": "009a70122418c805eae46118024a549a8fb8100bf84ec156bae8578c9b281881",
+            "source_path_hash": "7a1ad2eb1c5b6227b9f2c8f6514af6465a3a01919217cf38d0ab1c76e2014f28",
+            "target_path_hash": "b70f74624121c7de76fb9fe2c43d781bc6ae73031a120d803ba90b16bb9c5f9f",
+            "args_hash": "f0dff3c785611dcdc5b0597ba5af8332729039f7a39bf94262b3383e5e46bf4c",
+            "qwen_execution_authority": false,
+            "cloud_private_egress": false,
+            "raw_private_content_logged": false,
+            "dispatcher_tool": "ai_nas_action_execute_copy",
+            "execution_performed_by_guard": false,
+            "operator_approved": false,
+            "env_enabled": false,
+            "approval_file_present": false,
+            "token_validation_reason": "approval_token_missing"
+          },
+          "private_leak_count": 0,
+          "private_leak_markers": [],
+          "writes_performed": false,
+          "env_enabled": false,
+          "approval_file_present": false,
+          "operator_approved": false,
+          "execute_feature_enabled": false,
+          "rollback_feature_enabled": false
+        },
+        {
+          "route": "rollback",
+          "allowed": false,
+          "status": "rollback_blocked",
+          "reason_codes": [
+            "rollback_feature_disabled",
+            "rollback_operator_approval_missing"
+          ],
+          "response": {
+            "route": "rollback",
+            "status": "rollback_blocked",
+            "action_type": "copy",
+            "candidate_fingerprint": "009a70122418c805eae46118024a549a8fb8100bf84ec156bae8578c9b281881",
+            "source_path_hash": "7a1ad2eb1c5b6227b9f2c8f6514af6465a3a01919217cf38d0ab1c76e2014f28",
+            "target_path_hash": "b70f74624121c7de76fb9fe2c43d781bc6ae73031a120d803ba90b16bb9c5f9f",
+            "source_sha256_prefix": "78ee7fedc0b1",
+            "expected_size_bytes": 229,
+            "target_root": "Collections",
+            "raw_paths_in_response": false,
+            "private_content_in_response": false,
+            "dispatcher_tool": "ai_nas_action_rollback_copy",
+            "rollback_performed_by_guard": false,
+            "writes_performed": false,
+            "blocked_safely": true
+          },
+          "audit_event": {
+            "event_id": "copy-route-b8736fedd9014549",
+            "tool_id": "ai_nas_route_copy_guard_v1",
+            "route": "rollback",
+            "allowed": false,
+            "reason_codes": [
+              "rollback_feature_disabled",
+              "rollback_operator_approval_missing"
+            ],
+            "candidate_fingerprint": "009a70122418c805eae46118024a549a8fb8100bf84ec156bae8578c9b281881",
+            "source_path_hash": "7a1ad2eb1c5b6227b9f2c8f6514af6465a3a01919217cf38d0ab1c76e2014f28",
+            "target_path_hash": "b70f74624121c7de76fb9fe2c43d781bc6ae73031a120d803ba90b16bb9c5f9f",
+            "args_hash": "f0dff3c785611dcdc5b0597ba5af8332729039f7a39bf94262b3383e5e46bf4c",
+            "qwen_execution_authority": false,
+            "cloud_private_egress": false,
+            "raw_private_content_logged": false,
+            "dispatcher_tool": "ai_nas_action_rollback_copy",
+            "rollback_performed_by_guard": false,
+            "operator_approved": false
+          },
+          "private_leak_count": 0,
+          "private_leak_markers": [],
+          "writes_performed": false,
+          "env_enabled": false,
+          "approval_file_present": false,
+          "operator_approved": false,
+          "execute_feature_enabled": false,
+          "rollback_feature_enabled": false
+        }
+      ]
+    },
+    {
+      "label": "execute canary trace redacted",
+      "ok": true,
+      "detail": [
+        {
+          "route": "execute",
+          "allowed": false,
+          "status": "execute_blocked",
+          "reason_codes": [
+            "approval_token_missing",
+            "execute_env_not_enabled",
+            "execute_feature_disabled",
+            "operator_approval_file_missing",
+            "operator_approval_missing"
+          ],
+          "response": {
+            "route": "execute",
+            "status": "execute_blocked",
+            "action_type": "copy",
+            "candidate_fingerprint": "009a70122418c805eae46118024a549a8fb8100bf84ec156bae8578c9b281881",
+            "source_path_hash": "7a1ad2eb1c5b6227b9f2c8f6514af6465a3a01919217cf38d0ab1c76e2014f28",
+            "target_path_hash": "b70f74624121c7de76fb9fe2c43d781bc6ae73031a120d803ba90b16bb9c5f9f",
+            "source_sha256_prefix": "78ee7fedc0b1",
+            "expected_size_bytes": 229,
+            "target_root": "Collections",
+            "raw_paths_in_response": false,
+            "private_content_in_response": false,
+            "dispatcher_tool": "ai_nas_action_execute_copy",
+            "execution_performed_by_guard": false,
+            "writes_performed": false,
+            "blocked_safely": true
+          },
+          "audit_event": {
+            "event_id": "copy-route-eb1d3c0e71b54ec7",
+            "tool_id": "ai_nas_route_copy_guard_v1",
+            "route": "execute",
+            "allowed": false,
+            "reason_codes": [
+              "execute_feature_disabled",
+              "execute_env_not_enabled",
+              "operator_approval_file_missing",
+              "operator_approval_missing",
+              "approval_token_missing"
+            ],
+            "candidate_fingerprint": "009a70122418c805eae46118024a549a8fb8100bf84ec156bae8578c9b281881",
+            "source_path_hash": "7a1ad2eb1c5b6227b9f2c8f6514af6465a3a01919217cf38d0ab1c76e2014f28",
+            "target_path_hash": "b70f74624121c7de76fb9fe2c43d781bc6ae73031a120d803ba90b16bb9c5f9f",
+            "args_hash": "f0dff3c785611dcdc5b0597ba5af8332729039f7a39bf94262b3383e5e46bf4c",
+            "qwen_execution_authority": false,
+            "cloud_private_egress": false,
+            "raw_private_content_logged": false,
+            "dispatcher_tool": "ai_nas_action_execute_copy",
+            "execution_performed_by_guard": false,
+            "operator_approved": false,
+            "env_enabled": false,
+            "approval_file_present": false,
+            "token_validation_reason": "approval_token_missing"
+          },
+          "private_leak_count": 0,
+          "private_leak_markers": [],
+          "writes_performed": false,
+          "env_enabled": false,
+          "approval_file_present": false,
+          "operator_approved": false,
+          "execute_feature_enabled": false,
+          "rollback_feature_enabled": false
+        },
+        {
+          "route": "rollback",
+          "allowed": false,
+          "status": "rollback_blocked",
+          "reason_codes": [
+            "rollback_feature_disabled",
+            "rollback_operator_approval_missing"
+          ],
+          "response": {
+            "route": "rollback",
+            "status": "rollback_blocked",
+            "action_type": "copy",
+            "candidate_fingerprint": "009a70122418c805eae46118024a549a8fb8100bf84ec156bae8578c9b281881",
+            "source_path_hash": "7a1ad2eb1c5b6227b9f2c8f6514af6465a3a01919217cf38d0ab1c76e2014f28",
+            "target_path_hash": "b70f74624121c7de76fb9fe2c43d781bc6ae73031a120d803ba90b16bb9c5f9f",
+            "source_sha256_prefix": "78ee7fedc0b1",
+            "expected_size_bytes": 229,
+            "target_root": "Collections",
+            "raw_paths_in_response": false,
+            "private_content_in_response": false,
+            "dispatcher_tool": "ai_nas_action_rollback_copy",
+            "rollback_performed_by_guard": false,
+            "writes_performed": false,
+            "blocked_safely": true
+          },
+          "audit_event": {
+            "event_id": "copy-route-b8736fedd9014549",
+            "tool_id": "ai_nas_route_copy_guard_v1",
+            "route": "rollback",
+            "allowed": false,
+            "reason_codes": [
+              "rollback_feature_disabled",
+              "rollback_operator_approval_missing"
+            ],
+            "candidate_fingerprint": "009a70122418c805eae46118024a549a8fb8100bf84ec156bae8578c9b281881",
+            "source_path_hash": "7a1ad2eb1c5b6227b9f2c8f6514af6465a3a01919217cf38d0ab1c76e2014f28",
+            "target_path_hash": "b70f74624121c7de76fb9fe2c43d781bc6ae73031a120d803ba90b16bb9c5f9f",
+            "args_hash": "f0dff3c785611dcdc5b0597ba5af8332729039f7a39bf94262b3383e5e46bf4c",
+            "qwen_execution_authority": false,
+            "cloud_private_egress": false,
+            "raw_private_content_logged": false,
+            "dispatcher_tool": "ai_nas_action_rollback_copy",
+            "rollback_performed_by_guard": false,
+            "operator_approved": false
+          },
+          "private_leak_count": 0,
+          "private_leak_markers": [],
+          "writes_performed": false,
+          "env_enabled": false,
+          "approval_file_present": false,
+          "operator_approved": false,
+          "execute_feature_enabled": false,
+          "rollback_feature_enabled": false
+        }
+      ]
+    }
+  ],
+  "detail": {
+    "trace": "reports/stage4_4_route_execute_canary_trace.jsonl",
+    "env_enabled": false,
+    "approval_file": "operator_approval/stage4_4_route_execute_canary_approved.json",
+    "approval_file_present": false,
+    "operator_approved": false,
+    "feature_flags": {
+      "preview_enabled": true,
+      "dry_run_enabled": true,
+      "confirm_enabled": true,
+      "execute_enabled": false,
+      "rollback_enabled": false,
+      "execute_canary_enabled": false,
+      "require_operator_approval_file": true,
+      "require_execute_env": true
+    },
+    "execute_status": "execute_blocked",
+    "execute_reason_codes": [
+      "approval_token_missing",
+      "execute_env_not_enabled",
+      "execute_feature_disabled",
+      "operator_approval_file_missing",
+      "operator_approval_missing"
+    ]
+  }
+}

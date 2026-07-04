@@ -1,0 +1,331 @@
+{
+  "generated_at": "2026-07-04T11:48:27.594236+08:00",
+  "final_verdict": "real_nas_preflight_dryrun_approved_locked_missing_explicit_candidate",
+  "final_verdict_allowed": true,
+  "all_gates_pass": true,
+  "real_nas_write_executed": false,
+  "real_nas_write_remains_locked": true,
+  "materialized_dryrun_requires_explicit_candidate": true,
+  "candidate_status": {
+    "candidate_present": false,
+    "candidate_valid": false,
+    "block_reason": "missing_explicit_candidate",
+    "safe_block": true,
+    "redacted_candidate": null,
+    "candidate_hash": null
+  },
+  "execution_status": {
+    "generated_at": "2026-07-04T11:48:24.712209+08:00",
+    "real_nas_write_executed": false,
+    "approval_manifest_probe_invoked": false,
+    "execute_copy_probe_invoked": false,
+    "rollback_copy_probe_invoked": false,
+    "copy_performed": false,
+    "target_delete_performed": false,
+    "source_modified": false,
+    "probes_hashed": {
+      "approval_manifest_probe": {
+        "path": "scripts/probes/ai_nas_action_approval_manifest_probe.py",
+        "exists": true,
+        "sha256": "b1a9ebc23b0bd19ad3f3dddea329c5dcf46c42dd0b53d9f51349061e4c64a6c7"
+      },
+      "execute_copy_probe": {
+        "path": "scripts/probes/ai_nas_action_execute_copy_probe.py",
+        "exists": true,
+        "sha256": "37dd46f53b827cd694d8785eccdda7d19db959709871c48dd1891945a1b2e9e9"
+      },
+      "rollback_copy_probe": {
+        "path": "scripts/probes/ai_nas_action_rollback_copy_probe.py",
+        "exists": true,
+        "sha256": "575ae95639e608c1b441e403e59ae5921d42857389f649d41e854655af9b0cae"
+      }
+    },
+    "reason": "this gate records preflight lock state and never calls execute/rollback probes"
+  },
+  "evidence_table": [
+    {
+      "report": "15100_real_nas_preflight_approval_lock_gate",
+      "gate_id": "real_nas_preflight_approval_lock_gate",
+      "verdict": "ok_real_nas_preflight_approval_lock_gate",
+      "passed_count": 5,
+      "check_count": 5,
+      "failure_count": 0
+    },
+    {
+      "report": "15110_real_nas_copy_candidate_policy_gate",
+      "gate_id": "real_nas_copy_candidate_policy_gate",
+      "verdict": "ok_real_nas_copy_candidate_policy_gate",
+      "passed_count": 5,
+      "check_count": 5,
+      "failure_count": 0
+    },
+    {
+      "report": "15120_real_nas_preflight_dryrun_diff_gate",
+      "gate_id": "real_nas_preflight_dryrun_diff_gate",
+      "verdict": "ok_real_nas_preflight_dryrun_diff_gate",
+      "passed_count": 4,
+      "check_count": 4,
+      "failure_count": 0
+    },
+    {
+      "report": "15130_real_nas_execution_block_gate",
+      "gate_id": "real_nas_execution_block_gate",
+      "verdict": "ok_real_nas_execution_block_gate",
+      "passed_count": 4,
+      "check_count": 4,
+      "failure_count": 0
+    },
+    {
+      "report": "15140_real_nas_live_readonly_status_gate",
+      "gate_id": "real_nas_live_readonly_status_gate",
+      "verdict": "ok_real_nas_live_readonly_status_gate",
+      "passed_count": 5,
+      "check_count": 5,
+      "failure_count": 0
+    }
+  ],
+  "environment": {
+    "repo_root": "F:\\Project\\Digua",
+    "platform": "Windows-11-10.0.26200-SP0",
+    "python": "3.14.3"
+  },
+  "claim_boundary": [
+    "This package registers approval for dry-run preflight only.",
+    "No real NAS copy, delete, move, rename, chmod, overwrite, or rollback deletion was executed.",
+    "Existing execute_copy and rollback_copy probes remain hashed but not invoked.",
+    "Qwen has no direct write execution authority.",
+    "A future materialized dry-run requires one explicit candidate from the operator."
+  ],
+  "final_package": {
+    "package_root": "F:\\Project\\Digua\\tmp\\digua_ai_nas_real_nas_preflight_dryrun_for_gptpro_20260704-114826",
+    "zip_path": "F:\\Project\\Digua\\evidence_for_gptpro\\digua_ai_nas_real_nas_preflight_dryrun_for_gptpro_20260704-114826.zip",
+    "sha256": "25dcffb5ed9e73ef8ace0dd4d7c09c22ff932da6b34dc38a12d7a852e9d10f5b",
+    "sha256_file": "F:\\Project\\Digua\\evidence_for_gptpro\\digua_ai_nas_real_nas_preflight_dryrun_for_gptpro_20260704-114826.zip.sha256.txt",
+    "file_count": 34
+  },
+  "package_self_check": {
+    "returncode": 0,
+    "stdout_hash": "cd1c53f16ff3bad5edd770a4821e9379de2c61afdf793d3dd0ddf4b34d4b5a67",
+    "stderr_hash": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "stdout_tail": "      }\n    },\n    {\n      \"label\": \"approval is dry-run only\",\n      \"ok\": true,\n      \"detail\": {\n        \"generated_at\": \"2026-07-04T11:48:24.705112+08:00\",\n        \"approval_source\": \"current Codex chat approval\",\n        \"user_message_summary\": \"operator approved continuing beyond Stage4.1\",\n        \"interpreted_scope\": \"real_nas_preflight_dryrun_only\",\n        \"real_nas_write_allowed\": false,\n        \"execute_copy_allowed\": false,\n        \"rollback_copy_allowed\": false,\n        \"dryrun_diff_allowed\": true,\n        \"requires_explicit_candidate_before_materialized_dryrun\": true,\n        \"allowed_first_action\": \"copy\",\n        \"forbidden_actions\": [\n          \"delete\",\n          \"chmod\",\n          \"chown\",\n          \"recursive_copy\",\n          \"recursive_delete\",\n          \"move\",\n          \"rename\",\n          \"overwrite\",\n          \"cross_user_copy\",\n          \"cloud_derived_write\",\n          \"qwen_autonomous_write\",\n          \"arbitrary_shell\"\n        ],\n        \"previous_stage4_1_packet\": \"01_final_evidence/digua_ai_nas_harness_stage4_1_gate_packet.json\",\n        \"previous_stage4_1_package_sha256_file\": \"evidence_for_gptpro/digua_ai_nas_harness_stage4_1_for_gptpro_20260704-113916.zip.sha256.txt\"\n      }\n    },\n    {\n      \"label\": \"diff does not call execution probes\",\n      \"ok\": true,\n      \"detail\": {\n        \"generated_at\": \"2026-07-04T11:48:24.707818+08:00\",\n        \"dryrun_only\": true,\n        \"candidate_present\": false,\n        \"candidate_hash\": null,\n        \"block_reason\": \"missing_explicit_candidate\",\n        \"safe_block\": true,\n        \"would_create_one_file\": false,\n        \"would_modify_source\": false,\n        \"would_delete_anything\": false,\n        \"would_overwrite\": false,\n        \"would_call_execute_copy\": false,\n        \"would_call_rollback_copy\": false,\n        \"approval_phrase_generated\": false,\n        \"next_required_gate\": \"provide one explicit low-risk copy candidate before materialized dry-run diff\"\n      }\n    }\n  ],\n  \"failures\": []\n}\n",
+    "stderr_tail": "",
+    "json": {
+      "checks": [
+        {
+          "label": "exists: 01_final_evidence/digua_ai_nas_real_nas_preflight_dryrun_gate_packet.json",
+          "ok": true,
+          "detail": "01_final_evidence/digua_ai_nas_real_nas_preflight_dryrun_gate_packet.json"
+        },
+        {
+          "label": "exists: 01_final_evidence/digua_ai_nas_real_nas_preflight_dryrun_gate_packet.md",
+          "ok": true,
+          "detail": "01_final_evidence/digua_ai_nas_real_nas_preflight_dryrun_gate_packet.md"
+        },
+        {
+          "label": "exists: docs/REAL_NAS_PREFLIGHT_DRYRUN_DECISION.md",
+          "ok": true,
+          "detail": "docs/REAL_NAS_PREFLIGHT_DRYRUN_DECISION.md"
+        },
+        {
+          "label": "exists: docs/NEXT_REAL_NAS_COPY_CANDIDATE_REQUEST.md",
+          "ok": true,
+          "detail": "docs/NEXT_REAL_NAS_COPY_CANDIDATE_REQUEST.md"
+        },
+        {
+          "label": "exists: docs/REAL_NAS_PREFLIGHT_DRYRUN_GPTPRO_PROMPT.md",
+          "ok": true,
+          "detail": "docs/REAL_NAS_PREFLIGHT_DRYRUN_GPTPRO_PROMPT.md"
+        },
+        {
+          "label": "exists: operator_approval/real_nas_preflight_dryrun_approved.json",
+          "ok": true,
+          "detail": "operator_approval/real_nas_preflight_dryrun_approved.json"
+        },
+        {
+          "label": "exists: reports/15100_real_nas_preflight_approval_lock_gate.json",
+          "ok": true,
+          "detail": "reports/15100_real_nas_preflight_approval_lock_gate.json"
+        },
+        {
+          "label": "exists: reports/15110_real_nas_copy_candidate_policy_gate.json",
+          "ok": true,
+          "detail": "reports/15110_real_nas_copy_candidate_policy_gate.json"
+        },
+        {
+          "label": "exists: reports/15120_real_nas_preflight_dryrun_diff_gate.json",
+          "ok": true,
+          "detail": "reports/15120_real_nas_preflight_dryrun_diff_gate.json"
+        },
+        {
+          "label": "exists: reports/15130_real_nas_execution_block_gate.json",
+          "ok": true,
+          "detail": "reports/15130_real_nas_execution_block_gate.json"
+        },
+        {
+          "label": "exists: reports/15140_real_nas_live_readonly_status_gate.json",
+          "ok": true,
+          "detail": "reports/15140_real_nas_live_readonly_status_gate.json"
+        },
+        {
+          "label": "exists: reports/real_nas_preflight_dryrun_diff_redacted.json",
+          "ok": true,
+          "detail": "reports/real_nas_preflight_dryrun_diff_redacted.json"
+        },
+        {
+          "label": "exists: gates/real_nas_preflight_dryrun_gates.py",
+          "ok": true,
+          "detail": "gates/real_nas_preflight_dryrun_gates.py"
+        },
+        {
+          "label": "exists: scripts/probes/ai_nas_action_execute_copy_probe.py",
+          "ok": true,
+          "detail": "scripts/probes/ai_nas_action_execute_copy_probe.py"
+        },
+        {
+          "label": "exists: scripts/probes/ai_nas_action_rollback_copy_probe.py",
+          "ok": true,
+          "detail": "scripts/probes/ai_nas_action_rollback_copy_probe.py"
+        },
+        {
+          "label": "final verdict allowed",
+          "ok": true,
+          "detail": "real_nas_preflight_dryrun_approved_locked_missing_explicit_candidate"
+        },
+        {
+          "label": "real NAS write false",
+          "ok": true,
+          "detail": false
+        },
+        {
+          "label": "execute_copy not invoked",
+          "ok": true,
+          "detail": {
+            "generated_at": "2026-07-04T11:48:24.712209+08:00",
+            "real_nas_write_executed": false,
+            "approval_manifest_probe_invoked": false,
+            "execute_copy_probe_invoked": false,
+            "rollback_copy_probe_invoked": false,
+            "copy_performed": false,
+            "target_delete_performed": false,
+            "source_modified": false,
+            "probes_hashed": {
+              "approval_manifest_probe": {
+                "path": "scripts/probes/ai_nas_action_approval_manifest_probe.py",
+                "exists": true,
+                "sha256": "b1a9ebc23b0bd19ad3f3dddea329c5dcf46c42dd0b53d9f51349061e4c64a6c7"
+              },
+              "execute_copy_probe": {
+                "path": "scripts/probes/ai_nas_action_execute_copy_probe.py",
+                "exists": true,
+                "sha256": "37dd46f53b827cd694d8785eccdda7d19db959709871c48dd1891945a1b2e9e9"
+              },
+              "rollback_copy_probe": {
+                "path": "scripts/probes/ai_nas_action_rollback_copy_probe.py",
+                "exists": true,
+                "sha256": "575ae95639e608c1b441e403e59ae5921d42857389f649d41e854655af9b0cae"
+              }
+            },
+            "reason": "this gate records preflight lock state and never calls execute/rollback probes"
+          }
+        },
+        {
+          "label": "rollback_copy not invoked",
+          "ok": true,
+          "detail": {
+            "generated_at": "2026-07-04T11:48:24.712209+08:00",
+            "real_nas_write_executed": false,
+            "approval_manifest_probe_invoked": false,
+            "execute_copy_probe_invoked": false,
+            "rollback_copy_probe_invoked": false,
+            "copy_performed": false,
+            "target_delete_performed": false,
+            "source_modified": false,
+            "probes_hashed": {
+              "approval_manifest_probe": {
+                "path": "scripts/probes/ai_nas_action_approval_manifest_probe.py",
+                "exists": true,
+                "sha256": "b1a9ebc23b0bd19ad3f3dddea329c5dcf46c42dd0b53d9f51349061e4c64a6c7"
+              },
+              "execute_copy_probe": {
+                "path": "scripts/probes/ai_nas_action_execute_copy_probe.py",
+                "exists": true,
+                "sha256": "37dd46f53b827cd694d8785eccdda7d19db959709871c48dd1891945a1b2e9e9"
+              },
+              "rollback_copy_probe": {
+                "path": "scripts/probes/ai_nas_action_rollback_copy_probe.py",
+                "exists": true,
+                "sha256": "575ae95639e608c1b441e403e59ae5921d42857389f649d41e854655af9b0cae"
+              }
+            },
+            "reason": "this gate records preflight lock state and never calls execute/rollback probes"
+          }
+        },
+        {
+          "label": "missing candidate blocks safely",
+          "ok": true,
+          "detail": {
+            "candidate_present": false,
+            "candidate_valid": false,
+            "block_reason": "missing_explicit_candidate",
+            "safe_block": true,
+            "redacted_candidate": null,
+            "candidate_hash": null
+          }
+        },
+        {
+          "label": "approval is dry-run only",
+          "ok": true,
+          "detail": {
+            "generated_at": "2026-07-04T11:48:24.705112+08:00",
+            "approval_source": "current Codex chat approval",
+            "user_message_summary": "operator approved continuing beyond Stage4.1",
+            "interpreted_scope": "real_nas_preflight_dryrun_only",
+            "real_nas_write_allowed": false,
+            "execute_copy_allowed": false,
+            "rollback_copy_allowed": false,
+            "dryrun_diff_allowed": true,
+            "requires_explicit_candidate_before_materialized_dryrun": true,
+            "allowed_first_action": "copy",
+            "forbidden_actions": [
+              "delete",
+              "chmod",
+              "chown",
+              "recursive_copy",
+              "recursive_delete",
+              "move",
+              "rename",
+              "overwrite",
+              "cross_user_copy",
+              "cloud_derived_write",
+              "qwen_autonomous_write",
+              "arbitrary_shell"
+            ],
+            "previous_stage4_1_packet": "01_final_evidence/digua_ai_nas_harness_stage4_1_gate_packet.json",
+            "previous_stage4_1_package_sha256_file": "evidence_for_gptpro/digua_ai_nas_harness_stage4_1_for_gptpro_20260704-113916.zip.sha256.txt"
+          }
+        },
+        {
+          "label": "diff does not call execution probes",
+          "ok": true,
+          "detail": {
+            "generated_at": "2026-07-04T11:48:24.707818+08:00",
+            "dryrun_only": true,
+            "candidate_present": false,
+            "candidate_hash": null,
+            "block_reason": "missing_explicit_candidate",
+            "safe_block": true,
+            "would_create_one_file": false,
+            "would_modify_source": false,
+            "would_delete_anything": false,
+            "would_overwrite": false,
+            "would_call_execute_copy": false,
+            "would_call_rollback_copy": false,
+            "approval_phrase_generated": false,
+            "next_required_gate": "provide one explicit low-risk copy candidate before materialized dry-run diff"
+          }
+        }
+      ],
+      "failures": []
+    }
+  }
+}

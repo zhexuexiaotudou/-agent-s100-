@@ -1,0 +1,385 @@
+{
+  "generated_at": "2026-07-04T14:35:48.636589+08:00",
+  "gate_id": "stage5_default_service_synthetic_smoke_gate",
+  "verdict": "ok_stage5_default_service_synthetic_smoke_gate",
+  "passed_count": 7,
+  "check_count": 7,
+  "failure_count": 0,
+  "failures": [],
+  "checks": [
+    {
+      "label": "synthetic source created and HTTP smoke ran",
+      "ok": true,
+      "detail": {
+        "returncode": 0,
+        "elapsed_ms": 579.066,
+        "stdout_hash": "08b363bbae1b91c617f56dc3e34b7e9106411a9da9def39ff611625e6f1a0cd0",
+        "stderr_hash": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "stdout_tail": "5\", \"status\": \"completed\", \"target_hash_verified\": true, \"target_path_hash\": \"4fed536c9056ee17517a7cb2e4bf9c9a1cdd59259247cc9395acd947f61689d7\", \"target_sha256\": \"ea37a734e6e49965fb62137567e0bf8e75f239b1be55edf278730a230e0b8213\"}, \"ok\": true, \"rollback_payload\": {\"candidate_fingerprint\": \"3900ca2eb143086f3162fcb4b277e16b571d96642e610232a489bbc69d3956d9\", \"cloud_private_egress\": false, \"dispatcher_bypass\": false, \"dispatcher_returncode\": 0, \"dispatcher_stderr_hash\": \"12ae32cb1ec02d01eda3581b127c1fee3b0dc53572ed6baf239721a03d82e126\", \"dispatcher_stdout_hash\": \"96e9d33d7ef124e968a7238e36373c83b0d61bc7549de09fa283125eee58f87b\", \"dispatcher_tool\": \"ai_nas_action_rollback_copy\", \"ok\": true, \"qwen_execution_authority\": false, \"raw_paths_in_response\": false, \"route\": \"rollback\", \"source_hash_unchanged\": true, \"source_path_hash\": \"7e9740be0058e24686de6b4c5596f50a748b7fd9f39af888ebf832dc668310c5\", \"status\": \"completed\", \"target_missing\": true, \"target_path_hash\": \"4fed536c9056ee17517a7cb2e4bf9c9a1cdd59259247cc9395acd947f61689d7\"}, \"rows\": [{\"http_status\": 200, \"ok\": true, \"route\": \"preview\"}, {\"http_status\": 200, \"ok\": true, \"route\": \"dry-run\"}, {\"http_status\": 200, \"ok\": true, \"route\": \"confirm\", \"token_issued\": true}, {\"dispatcher_bypass\": false, \"http_status\": 200, \"ok\": true, \"route\": \"execute\", \"target_hash_verified\": true}, {\"dispatcher_bypass\": false, \"http_status\": 200, \"ok\": true, \"route\": \"rollback\", \"source_hash_unchanged\": true, \"target_missing\": true}], \"run_id\": \"stage5_default_service_20260704-143537\", \"source_relative_path\": \"Collections/CodexPreflight/stage5_default_service/source/stage5_default_service_20260704-143537.txt\", \"source_sha256\": \"ea37a734e6e49965fb62137567e0bf8e75f239b1be55edf278730a230e0b8213\", \"source_sha256_after\": \"ea37a734e6e49965fb62137567e0bf8e75f239b1be55edf278730a230e0b8213\", \"target_exists_after\": false, \"target_relative_path\": \"Collections/CodexPreflight/stage5_default_service/target/stage5_default_service_20260704-143537_copied.txt\"}\n"
+      }
+    },
+    {
+      "label": "preview/dry-run/confirm/execute/rollback passed",
+      "ok": true,
+      "detail": [
+        {
+          "http_status": 200,
+          "ok": true,
+          "route": "preview"
+        },
+        {
+          "http_status": 200,
+          "ok": true,
+          "route": "dry-run"
+        },
+        {
+          "http_status": 200,
+          "ok": true,
+          "route": "confirm",
+          "token_issued": true
+        },
+        {
+          "dispatcher_bypass": false,
+          "http_status": 200,
+          "ok": true,
+          "route": "execute",
+          "target_hash_verified": true
+        },
+        {
+          "dispatcher_bypass": false,
+          "http_status": 200,
+          "ok": true,
+          "route": "rollback",
+          "source_hash_unchanged": true,
+          "target_missing": true
+        }
+      ]
+    },
+    {
+      "label": "target hash verified and target rolled back",
+      "ok": true,
+      "detail": {
+        "execute_payload": {
+          "approval_manifest_path": "/mnt/nas/openclaw/reports/qwen25_ai_nas/harness_default_service_copy_1783146950_7f475657/approval_manifest.json",
+          "candidate_fingerprint": "3900ca2eb143086f3162fcb4b277e16b571d96642e610232a489bbc69d3956d9",
+          "cloud_private_egress": false,
+          "dispatcher_bypass": false,
+          "dispatcher_returncode": 0,
+          "dispatcher_stderr_hash": "12ae32cb1ec02d01eda3581b127c1fee3b0dc53572ed6baf239721a03d82e126",
+          "dispatcher_stdout_hash": "4cfd63d726dfa1e9687951d40dd835b4ffc7e0118ae1ec88333fbd6b916bd439",
+          "dispatcher_tool": "ai_nas_action_execute_copy",
+          "manifest_id": "apm-c93c8990c7da5214",
+          "ok": true,
+          "qwen_execution_authority": false,
+          "raw_paths_in_response": false,
+          "rollback_manifest_path": "/mnt/nas/openclaw/reports/qwen25_ai_nas/harness_default_service_copy_1783146950_7f475657/action_execute_copy_20260704-143550-839650/rollback_manifest.json",
+          "route": "execute",
+          "source_path_hash": "7e9740be0058e24686de6b4c5596f50a748b7fd9f39af888ebf832dc668310c5",
+          "status": "completed",
+          "target_hash_verified": true,
+          "target_path_hash": "4fed536c9056ee17517a7cb2e4bf9c9a1cdd59259247cc9395acd947f61689d7",
+          "target_sha256": "ea37a734e6e49965fb62137567e0bf8e75f239b1be55edf278730a230e0b8213"
+        },
+        "ok": true,
+        "rollback_payload": {
+          "candidate_fingerprint": "3900ca2eb143086f3162fcb4b277e16b571d96642e610232a489bbc69d3956d9",
+          "cloud_private_egress": false,
+          "dispatcher_bypass": false,
+          "dispatcher_returncode": 0,
+          "dispatcher_stderr_hash": "12ae32cb1ec02d01eda3581b127c1fee3b0dc53572ed6baf239721a03d82e126",
+          "dispatcher_stdout_hash": "96e9d33d7ef124e968a7238e36373c83b0d61bc7549de09fa283125eee58f87b",
+          "dispatcher_tool": "ai_nas_action_rollback_copy",
+          "ok": true,
+          "qwen_execution_authority": false,
+          "raw_paths_in_response": false,
+          "route": "rollback",
+          "source_hash_unchanged": true,
+          "source_path_hash": "7e9740be0058e24686de6b4c5596f50a748b7fd9f39af888ebf832dc668310c5",
+          "status": "completed",
+          "target_missing": true,
+          "target_path_hash": "4fed536c9056ee17517a7cb2e4bf9c9a1cdd59259247cc9395acd947f61689d7"
+        },
+        "rows": [
+          {
+            "http_status": 200,
+            "ok": true,
+            "route": "preview"
+          },
+          {
+            "http_status": 200,
+            "ok": true,
+            "route": "dry-run"
+          },
+          {
+            "http_status": 200,
+            "ok": true,
+            "route": "confirm",
+            "token_issued": true
+          },
+          {
+            "dispatcher_bypass": false,
+            "http_status": 200,
+            "ok": true,
+            "route": "execute",
+            "target_hash_verified": true
+          },
+          {
+            "dispatcher_bypass": false,
+            "http_status": 200,
+            "ok": true,
+            "route": "rollback",
+            "source_hash_unchanged": true,
+            "target_missing": true
+          }
+        ],
+        "run_id": "stage5_default_service_20260704-143537",
+        "source_relative_path": "Collections/CodexPreflight/stage5_default_service/source/stage5_default_service_20260704-143537.txt",
+        "source_sha256": "ea37a734e6e49965fb62137567e0bf8e75f239b1be55edf278730a230e0b8213",
+        "source_sha256_after": "ea37a734e6e49965fb62137567e0bf8e75f239b1be55edf278730a230e0b8213",
+        "target_exists_after": false,
+        "target_relative_path": "Collections/CodexPreflight/stage5_default_service/target/stage5_default_service_20260704-143537_copied.txt"
+      }
+    },
+    {
+      "label": "source hash unchanged",
+      "ok": true,
+      "detail": {
+        "execute_payload": {
+          "approval_manifest_path": "/mnt/nas/openclaw/reports/qwen25_ai_nas/harness_default_service_copy_1783146950_7f475657/approval_manifest.json",
+          "candidate_fingerprint": "3900ca2eb143086f3162fcb4b277e16b571d96642e610232a489bbc69d3956d9",
+          "cloud_private_egress": false,
+          "dispatcher_bypass": false,
+          "dispatcher_returncode": 0,
+          "dispatcher_stderr_hash": "12ae32cb1ec02d01eda3581b127c1fee3b0dc53572ed6baf239721a03d82e126",
+          "dispatcher_stdout_hash": "4cfd63d726dfa1e9687951d40dd835b4ffc7e0118ae1ec88333fbd6b916bd439",
+          "dispatcher_tool": "ai_nas_action_execute_copy",
+          "manifest_id": "apm-c93c8990c7da5214",
+          "ok": true,
+          "qwen_execution_authority": false,
+          "raw_paths_in_response": false,
+          "rollback_manifest_path": "/mnt/nas/openclaw/reports/qwen25_ai_nas/harness_default_service_copy_1783146950_7f475657/action_execute_copy_20260704-143550-839650/rollback_manifest.json",
+          "route": "execute",
+          "source_path_hash": "7e9740be0058e24686de6b4c5596f50a748b7fd9f39af888ebf832dc668310c5",
+          "status": "completed",
+          "target_hash_verified": true,
+          "target_path_hash": "4fed536c9056ee17517a7cb2e4bf9c9a1cdd59259247cc9395acd947f61689d7",
+          "target_sha256": "ea37a734e6e49965fb62137567e0bf8e75f239b1be55edf278730a230e0b8213"
+        },
+        "ok": true,
+        "rollback_payload": {
+          "candidate_fingerprint": "3900ca2eb143086f3162fcb4b277e16b571d96642e610232a489bbc69d3956d9",
+          "cloud_private_egress": false,
+          "dispatcher_bypass": false,
+          "dispatcher_returncode": 0,
+          "dispatcher_stderr_hash": "12ae32cb1ec02d01eda3581b127c1fee3b0dc53572ed6baf239721a03d82e126",
+          "dispatcher_stdout_hash": "96e9d33d7ef124e968a7238e36373c83b0d61bc7549de09fa283125eee58f87b",
+          "dispatcher_tool": "ai_nas_action_rollback_copy",
+          "ok": true,
+          "qwen_execution_authority": false,
+          "raw_paths_in_response": false,
+          "route": "rollback",
+          "source_hash_unchanged": true,
+          "source_path_hash": "7e9740be0058e24686de6b4c5596f50a748b7fd9f39af888ebf832dc668310c5",
+          "status": "completed",
+          "target_missing": true,
+          "target_path_hash": "4fed536c9056ee17517a7cb2e4bf9c9a1cdd59259247cc9395acd947f61689d7"
+        },
+        "rows": [
+          {
+            "http_status": 200,
+            "ok": true,
+            "route": "preview"
+          },
+          {
+            "http_status": 200,
+            "ok": true,
+            "route": "dry-run"
+          },
+          {
+            "http_status": 200,
+            "ok": true,
+            "route": "confirm",
+            "token_issued": true
+          },
+          {
+            "dispatcher_bypass": false,
+            "http_status": 200,
+            "ok": true,
+            "route": "execute",
+            "target_hash_verified": true
+          },
+          {
+            "dispatcher_bypass": false,
+            "http_status": 200,
+            "ok": true,
+            "route": "rollback",
+            "source_hash_unchanged": true,
+            "target_missing": true
+          }
+        ],
+        "run_id": "stage5_default_service_20260704-143537",
+        "source_relative_path": "Collections/CodexPreflight/stage5_default_service/source/stage5_default_service_20260704-143537.txt",
+        "source_sha256": "ea37a734e6e49965fb62137567e0bf8e75f239b1be55edf278730a230e0b8213",
+        "source_sha256_after": "ea37a734e6e49965fb62137567e0bf8e75f239b1be55edf278730a230e0b8213",
+        "target_exists_after": false,
+        "target_relative_path": "Collections/CodexPreflight/stage5_default_service/target/stage5_default_service_20260704-143537_copied.txt"
+      }
+    },
+    {
+      "label": "dispatcher used with no bypass",
+      "ok": true,
+      "detail": [
+        {
+          "route": "preview",
+          "http_status": 200,
+          "ok": true,
+          "dispatcher_bypass": false,
+          "target_hash_verified": null,
+          "target_missing": null,
+          "source_hash_unchanged": null
+        },
+        {
+          "route": "dry-run",
+          "http_status": 200,
+          "ok": true,
+          "dispatcher_bypass": false,
+          "target_hash_verified": null,
+          "target_missing": null,
+          "source_hash_unchanged": null
+        },
+        {
+          "route": "confirm",
+          "http_status": 200,
+          "ok": true,
+          "dispatcher_bypass": false,
+          "target_hash_verified": null,
+          "target_missing": null,
+          "source_hash_unchanged": null
+        },
+        {
+          "route": "execute",
+          "http_status": 200,
+          "ok": true,
+          "dispatcher_bypass": false,
+          "target_hash_verified": true,
+          "target_missing": null,
+          "source_hash_unchanged": null
+        },
+        {
+          "route": "rollback",
+          "http_status": 200,
+          "ok": true,
+          "dispatcher_bypass": false,
+          "target_hash_verified": null,
+          "target_missing": true,
+          "source_hash_unchanged": true
+        }
+      ]
+    },
+    {
+      "label": "qwen/destructive execution counts remain zero",
+      "ok": true,
+      "detail": {
+        "qwen_execution_authority_count": 0,
+        "destructive_execution_count": 0
+      }
+    },
+    {
+      "label": "smoke trace has no raw private paths",
+      "ok": true,
+      "detail": []
+    }
+  ],
+  "detail": {
+    "remote_root": "/mnt/nas/openclaw/reports/stage5_default_service_stage5_default_service_20260704-143537/smoke",
+    "remote_run": {
+      "returncode": 0,
+      "elapsed_ms": 579.066,
+      "stdout_hash": "08b363bbae1b91c617f56dc3e34b7e9106411a9da9def39ff611625e6f1a0cd0",
+      "stderr_hash": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stdout_tail": "5\", \"status\": \"completed\", \"target_hash_verified\": true, \"target_path_hash\": \"4fed536c9056ee17517a7cb2e4bf9c9a1cdd59259247cc9395acd947f61689d7\", \"target_sha256\": \"ea37a734e6e49965fb62137567e0bf8e75f239b1be55edf278730a230e0b8213\"}, \"ok\": true, \"rollback_payload\": {\"candidate_fingerprint\": \"3900ca2eb143086f3162fcb4b277e16b571d96642e610232a489bbc69d3956d9\", \"cloud_private_egress\": false, \"dispatcher_bypass\": false, \"dispatcher_returncode\": 0, \"dispatcher_stderr_hash\": \"12ae32cb1ec02d01eda3581b127c1fee3b0dc53572ed6baf239721a03d82e126\", \"dispatcher_stdout_hash\": \"96e9d33d7ef124e968a7238e36373c83b0d61bc7549de09fa283125eee58f87b\", \"dispatcher_tool\": \"ai_nas_action_rollback_copy\", \"ok\": true, \"qwen_execution_authority\": false, \"raw_paths_in_response\": false, \"route\": \"rollback\", \"source_hash_unchanged\": true, \"source_path_hash\": \"7e9740be0058e24686de6b4c5596f50a748b7fd9f39af888ebf832dc668310c5\", \"status\": \"completed\", \"target_missing\": true, \"target_path_hash\": \"4fed536c9056ee17517a7cb2e4bf9c9a1cdd59259247cc9395acd947f61689d7\"}, \"rows\": [{\"http_status\": 200, \"ok\": true, \"route\": \"preview\"}, {\"http_status\": 200, \"ok\": true, \"route\": \"dry-run\"}, {\"http_status\": 200, \"ok\": true, \"route\": \"confirm\", \"token_issued\": true}, {\"dispatcher_bypass\": false, \"http_status\": 200, \"ok\": true, \"route\": \"execute\", \"target_hash_verified\": true}, {\"dispatcher_bypass\": false, \"http_status\": 200, \"ok\": true, \"route\": \"rollback\", \"source_hash_unchanged\": true, \"target_missing\": true}], \"run_id\": \"stage5_default_service_20260704-143537\", \"source_relative_path\": \"Collections/CodexPreflight/stage5_default_service/source/stage5_default_service_20260704-143537.txt\", \"source_sha256\": \"ea37a734e6e49965fb62137567e0bf8e75f239b1be55edf278730a230e0b8213\", \"source_sha256_after\": \"ea37a734e6e49965fb62137567e0bf8e75f239b1be55edf278730a230e0b8213\", \"target_exists_after\": false, \"target_relative_path\": \"Collections/CodexPreflight/stage5_default_service/target/stage5_default_service_20260704-143537_copied.txt\"}\n"
+    },
+    "summary": {
+      "execute_payload": {
+        "approval_manifest_path": "/mnt/nas/openclaw/reports/qwen25_ai_nas/harness_default_service_copy_1783146950_7f475657/approval_manifest.json",
+        "candidate_fingerprint": "3900ca2eb143086f3162fcb4b277e16b571d96642e610232a489bbc69d3956d9",
+        "cloud_private_egress": false,
+        "dispatcher_bypass": false,
+        "dispatcher_returncode": 0,
+        "dispatcher_stderr_hash": "12ae32cb1ec02d01eda3581b127c1fee3b0dc53572ed6baf239721a03d82e126",
+        "dispatcher_stdout_hash": "4cfd63d726dfa1e9687951d40dd835b4ffc7e0118ae1ec88333fbd6b916bd439",
+        "dispatcher_tool": "ai_nas_action_execute_copy",
+        "manifest_id": "apm-c93c8990c7da5214",
+        "ok": true,
+        "qwen_execution_authority": false,
+        "raw_paths_in_response": false,
+        "rollback_manifest_path": "/mnt/nas/openclaw/reports/qwen25_ai_nas/harness_default_service_copy_1783146950_7f475657/action_execute_copy_20260704-143550-839650/rollback_manifest.json",
+        "route": "execute",
+        "source_path_hash": "7e9740be0058e24686de6b4c5596f50a748b7fd9f39af888ebf832dc668310c5",
+        "status": "completed",
+        "target_hash_verified": true,
+        "target_path_hash": "4fed536c9056ee17517a7cb2e4bf9c9a1cdd59259247cc9395acd947f61689d7",
+        "target_sha256": "ea37a734e6e49965fb62137567e0bf8e75f239b1be55edf278730a230e0b8213"
+      },
+      "ok": true,
+      "rollback_payload": {
+        "candidate_fingerprint": "3900ca2eb143086f3162fcb4b277e16b571d96642e610232a489bbc69d3956d9",
+        "cloud_private_egress": false,
+        "dispatcher_bypass": false,
+        "dispatcher_returncode": 0,
+        "dispatcher_stderr_hash": "12ae32cb1ec02d01eda3581b127c1fee3b0dc53572ed6baf239721a03d82e126",
+        "dispatcher_stdout_hash": "96e9d33d7ef124e968a7238e36373c83b0d61bc7549de09fa283125eee58f87b",
+        "dispatcher_tool": "ai_nas_action_rollback_copy",
+        "ok": true,
+        "qwen_execution_authority": false,
+        "raw_paths_in_response": false,
+        "route": "rollback",
+        "source_hash_unchanged": true,
+        "source_path_hash": "7e9740be0058e24686de6b4c5596f50a748b7fd9f39af888ebf832dc668310c5",
+        "status": "completed",
+        "target_missing": true,
+        "target_path_hash": "4fed536c9056ee17517a7cb2e4bf9c9a1cdd59259247cc9395acd947f61689d7"
+      },
+      "rows": [
+        {
+          "http_status": 200,
+          "ok": true,
+          "route": "preview"
+        },
+        {
+          "http_status": 200,
+          "ok": true,
+          "route": "dry-run"
+        },
+        {
+          "http_status": 200,
+          "ok": true,
+          "route": "confirm",
+          "token_issued": true
+        },
+        {
+          "dispatcher_bypass": false,
+          "http_status": 200,
+          "ok": true,
+          "route": "execute",
+          "target_hash_verified": true
+        },
+        {
+          "dispatcher_bypass": false,
+          "http_status": 200,
+          "ok": true,
+          "route": "rollback",
+          "source_hash_unchanged": true,
+          "target_missing": true
+        }
+      ],
+      "run_id": "stage5_default_service_20260704-143537",
+      "source_relative_path": "Collections/CodexPreflight/stage5_default_service/source/stage5_default_service_20260704-143537.txt",
+      "source_sha256": "ea37a734e6e49965fb62137567e0bf8e75f239b1be55edf278730a230e0b8213",
+      "source_sha256_after": "ea37a734e6e49965fb62137567e0bf8e75f239b1be55edf278730a230e0b8213",
+      "target_exists_after": false,
+      "target_relative_path": "Collections/CodexPreflight/stage5_default_service/target/stage5_default_service_20260704-143537_copied.txt"
+    },
+    "trace": "reports/stage5_default_service_synthetic_smoke_trace.jsonl"
+  }
+}

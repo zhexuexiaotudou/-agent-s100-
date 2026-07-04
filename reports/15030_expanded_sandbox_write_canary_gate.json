@@ -1,0 +1,292 @@
+{
+  "generated_at": "2026-07-04T11:38:47.754638+08:00",
+  "gate_id": "stage4_1_expanded_sandbox_write_canary_gate",
+  "verdict": "ok_stage4_1_expanded_sandbox_write_canary_gate",
+  "passed_count": 5,
+  "check_count": 5,
+  "failure_count": 0,
+  "failures": [],
+  "checks": [
+    {
+      "label": "operator approval present for Stage4.1 sandbox only",
+      "ok": true,
+      "detail": {
+        "generated_at": "2026-07-04T11:38:47.506335+08:00",
+        "approval_source": "current Codex chat request to progress Stage4.1",
+        "env_approval_present": false,
+        "scope": "local_synthetic_sandbox_only",
+        "allowed_actions": [
+          "batch_copy",
+          "copy",
+          "move",
+          "rename"
+        ],
+        "forbidden_actions": [
+          "chmod",
+          "delete",
+          "permission_mutation",
+          "real_nas_write",
+          "recursive_delete",
+          "shell_bypass"
+        ],
+        "sandbox_root": "F:\\Project\\Digua\\tmp\\digua_ai_nas_stage4_1_write_sandbox",
+        "real_nas_write_allowed": false,
+        "real_nas_write_executed": false,
+        "human_confirmation": "I_APPROVE_STAGE4_1_SANDBOX_WRITE",
+        "env_approval_present_at_runtime": false
+      }
+    },
+    {
+      "label": "copy/rename/move/batch copy pass",
+      "ok": true,
+      "detail": {
+        "approval_present": true,
+        "copy_pass": true,
+        "rename_pass": true,
+        "move_pass": true,
+        "batch_copy_pass": true,
+        "real_nas_write_count": 0,
+        "delete_execution_count": 0,
+        "chmod_execution_count": 0,
+        "dispatcher_bypass_count": 0,
+        "audit_trace_complete": true,
+        "final_manifest_hash": "dc36dddc3f153e8ea87f9f449061fa964fa08743798c0a2e3067d98d93e16733"
+      }
+    },
+    {
+      "label": "rollback restored before manifest for all canaries",
+      "ok": true,
+      "detail": [
+        {
+          "run_id": "stage4-1-copy",
+          "action": "copy",
+          "dispatcher": "stage4_1_synthetic_sandbox_allowlisted_dispatcher_v1",
+          "dispatcher_bypass": false,
+          "token_ok": true,
+          "token_reason": "ok",
+          "real_nas_write": false,
+          "delete_execution": false,
+          "chmod_execution": false,
+          "audit_trace_complete": true,
+          "before_manifest_hash": "dc36dddc3f153e8ea87f9f449061fa964fa08743798c0a2e3067d98d93e16733",
+          "after_write_manifest_hash": "65446a7dda8d6e1b6b9f0646334b0cd4df33c6dcade9f6ae1269f95e9cbe88b1",
+          "expected_changes_verified": true,
+          "status": "executed",
+          "after_rollback_manifest_hash": "dc36dddc3f153e8ea87f9f449061fa964fa08743798c0a2e3067d98d93e16733",
+          "rollback_executed": true,
+          "rollback_restored": true
+        },
+        {
+          "run_id": "stage4-1-rename",
+          "action": "rename",
+          "dispatcher": "stage4_1_synthetic_sandbox_allowlisted_dispatcher_v1",
+          "dispatcher_bypass": false,
+          "token_ok": true,
+          "token_reason": "ok",
+          "real_nas_write": false,
+          "delete_execution": false,
+          "chmod_execution": false,
+          "audit_trace_complete": true,
+          "before_manifest_hash": "dc36dddc3f153e8ea87f9f449061fa964fa08743798c0a2e3067d98d93e16733",
+          "after_write_manifest_hash": "d636458a760fd2e05dc9ca3f356aadf6bf051e2c6e4beaf7d40f019db07969e5",
+          "expected_changes_verified": true,
+          "status": "executed",
+          "after_rollback_manifest_hash": "dc36dddc3f153e8ea87f9f449061fa964fa08743798c0a2e3067d98d93e16733",
+          "rollback_executed": true,
+          "rollback_restored": true
+        },
+        {
+          "run_id": "stage4-1-move",
+          "action": "move",
+          "dispatcher": "stage4_1_synthetic_sandbox_allowlisted_dispatcher_v1",
+          "dispatcher_bypass": false,
+          "token_ok": true,
+          "token_reason": "ok",
+          "real_nas_write": false,
+          "delete_execution": false,
+          "chmod_execution": false,
+          "audit_trace_complete": true,
+          "before_manifest_hash": "dc36dddc3f153e8ea87f9f449061fa964fa08743798c0a2e3067d98d93e16733",
+          "after_write_manifest_hash": "de4e94231f261120d275c3a9d7d8f1e396adc987176070b27118b2963c639c2e",
+          "expected_changes_verified": true,
+          "status": "executed",
+          "after_rollback_manifest_hash": "dc36dddc3f153e8ea87f9f449061fa964fa08743798c0a2e3067d98d93e16733",
+          "rollback_executed": true,
+          "rollback_restored": true
+        },
+        {
+          "run_id": "stage4-1-batch-copy",
+          "action": "batch_copy",
+          "dispatcher": "stage4_1_synthetic_sandbox_allowlisted_dispatcher_v1",
+          "dispatcher_bypass": false,
+          "token_ok": true,
+          "token_reason": "ok",
+          "real_nas_write": false,
+          "delete_execution": false,
+          "chmod_execution": false,
+          "audit_trace_complete": true,
+          "before_manifest_hash": "dc36dddc3f153e8ea87f9f449061fa964fa08743798c0a2e3067d98d93e16733",
+          "after_write_manifest_hash": "cd5ef6af04f2146994e910c60a9f5e65b69b98f8481f7c4b4ba1a74a05ba5c14",
+          "expected_changes_verified": true,
+          "status": "executed",
+          "after_rollback_manifest_hash": "dc36dddc3f153e8ea87f9f449061fa964fa08743798c0a2e3067d98d93e16733",
+          "rollback_executed": true,
+          "rollback_restored": true
+        }
+      ]
+    },
+    {
+      "label": "real NAS/delete/chmod/dispatcher bypass counts are zero",
+      "ok": true,
+      "detail": {
+        "approval_present": true,
+        "copy_pass": true,
+        "rename_pass": true,
+        "move_pass": true,
+        "batch_copy_pass": true,
+        "real_nas_write_count": 0,
+        "delete_execution_count": 0,
+        "chmod_execution_count": 0,
+        "dispatcher_bypass_count": 0,
+        "audit_trace_complete": true,
+        "final_manifest_hash": "dc36dddc3f153e8ea87f9f449061fa964fa08743798c0a2e3067d98d93e16733"
+      }
+    },
+    {
+      "label": "audit trace complete",
+      "ok": true,
+      "detail": {
+        "approval_present": true,
+        "copy_pass": true,
+        "rename_pass": true,
+        "move_pass": true,
+        "batch_copy_pass": true,
+        "real_nas_write_count": 0,
+        "delete_execution_count": 0,
+        "chmod_execution_count": 0,
+        "dispatcher_bypass_count": 0,
+        "audit_trace_complete": true,
+        "final_manifest_hash": "dc36dddc3f153e8ea87f9f449061fa964fa08743798c0a2e3067d98d93e16733"
+      }
+    }
+  ],
+  "detail": {
+    "approval": {
+      "generated_at": "2026-07-04T11:38:47.506335+08:00",
+      "approval_source": "current Codex chat request to progress Stage4.1",
+      "env_approval_present": false,
+      "scope": "local_synthetic_sandbox_only",
+      "allowed_actions": [
+        "batch_copy",
+        "copy",
+        "move",
+        "rename"
+      ],
+      "forbidden_actions": [
+        "chmod",
+        "delete",
+        "permission_mutation",
+        "real_nas_write",
+        "recursive_delete",
+        "shell_bypass"
+      ],
+      "sandbox_root": "F:\\Project\\Digua\\tmp\\digua_ai_nas_stage4_1_write_sandbox",
+      "real_nas_write_allowed": false,
+      "real_nas_write_executed": false,
+      "human_confirmation": "I_APPROVE_STAGE4_1_SANDBOX_WRITE",
+      "env_approval_present_at_runtime": false
+    },
+    "trace": "reports/stage4_1_sandbox_write_canary_trace.jsonl",
+    "results": [
+      {
+        "run_id": "stage4-1-copy",
+        "action": "copy",
+        "dispatcher": "stage4_1_synthetic_sandbox_allowlisted_dispatcher_v1",
+        "dispatcher_bypass": false,
+        "token_ok": true,
+        "token_reason": "ok",
+        "real_nas_write": false,
+        "delete_execution": false,
+        "chmod_execution": false,
+        "audit_trace_complete": true,
+        "before_manifest_hash": "dc36dddc3f153e8ea87f9f449061fa964fa08743798c0a2e3067d98d93e16733",
+        "after_write_manifest_hash": "65446a7dda8d6e1b6b9f0646334b0cd4df33c6dcade9f6ae1269f95e9cbe88b1",
+        "expected_changes_verified": true,
+        "status": "executed",
+        "after_rollback_manifest_hash": "dc36dddc3f153e8ea87f9f449061fa964fa08743798c0a2e3067d98d93e16733",
+        "rollback_executed": true,
+        "rollback_restored": true
+      },
+      {
+        "run_id": "stage4-1-rename",
+        "action": "rename",
+        "dispatcher": "stage4_1_synthetic_sandbox_allowlisted_dispatcher_v1",
+        "dispatcher_bypass": false,
+        "token_ok": true,
+        "token_reason": "ok",
+        "real_nas_write": false,
+        "delete_execution": false,
+        "chmod_execution": false,
+        "audit_trace_complete": true,
+        "before_manifest_hash": "dc36dddc3f153e8ea87f9f449061fa964fa08743798c0a2e3067d98d93e16733",
+        "after_write_manifest_hash": "d636458a760fd2e05dc9ca3f356aadf6bf051e2c6e4beaf7d40f019db07969e5",
+        "expected_changes_verified": true,
+        "status": "executed",
+        "after_rollback_manifest_hash": "dc36dddc3f153e8ea87f9f449061fa964fa08743798c0a2e3067d98d93e16733",
+        "rollback_executed": true,
+        "rollback_restored": true
+      },
+      {
+        "run_id": "stage4-1-move",
+        "action": "move",
+        "dispatcher": "stage4_1_synthetic_sandbox_allowlisted_dispatcher_v1",
+        "dispatcher_bypass": false,
+        "token_ok": true,
+        "token_reason": "ok",
+        "real_nas_write": false,
+        "delete_execution": false,
+        "chmod_execution": false,
+        "audit_trace_complete": true,
+        "before_manifest_hash": "dc36dddc3f153e8ea87f9f449061fa964fa08743798c0a2e3067d98d93e16733",
+        "after_write_manifest_hash": "de4e94231f261120d275c3a9d7d8f1e396adc987176070b27118b2963c639c2e",
+        "expected_changes_verified": true,
+        "status": "executed",
+        "after_rollback_manifest_hash": "dc36dddc3f153e8ea87f9f449061fa964fa08743798c0a2e3067d98d93e16733",
+        "rollback_executed": true,
+        "rollback_restored": true
+      },
+      {
+        "run_id": "stage4-1-batch-copy",
+        "action": "batch_copy",
+        "dispatcher": "stage4_1_synthetic_sandbox_allowlisted_dispatcher_v1",
+        "dispatcher_bypass": false,
+        "token_ok": true,
+        "token_reason": "ok",
+        "real_nas_write": false,
+        "delete_execution": false,
+        "chmod_execution": false,
+        "audit_trace_complete": true,
+        "before_manifest_hash": "dc36dddc3f153e8ea87f9f449061fa964fa08743798c0a2e3067d98d93e16733",
+        "after_write_manifest_hash": "cd5ef6af04f2146994e910c60a9f5e65b69b98f8481f7c4b4ba1a74a05ba5c14",
+        "expected_changes_verified": true,
+        "status": "executed",
+        "after_rollback_manifest_hash": "dc36dddc3f153e8ea87f9f449061fa964fa08743798c0a2e3067d98d93e16733",
+        "rollback_executed": true,
+        "rollback_restored": true
+      }
+    ],
+    "summary": {
+      "approval_present": true,
+      "copy_pass": true,
+      "rename_pass": true,
+      "move_pass": true,
+      "batch_copy_pass": true,
+      "real_nas_write_count": 0,
+      "delete_execution_count": 0,
+      "chmod_execution_count": 0,
+      "dispatcher_bypass_count": 0,
+      "audit_trace_complete": true,
+      "final_manifest_hash": "dc36dddc3f153e8ea87f9f449061fa964fa08743798c0a2e3067d98d93e16733"
+    }
+  }
+}

@@ -1,0 +1,51 @@
+# stage4_5_self_created_synthetic_source_gate
+
+- verdict: `ok_stage4_5_self_created_synthetic_source_gate`
+- generated_at: `2026-07-04T13:57:36.363533+08:00`
+- passed: `6/6`
+
+## Checks
+
+- `PASS` remote source creation helper copied and ran
+- `PASS` source path is constrained to CodexPreflight/source
+- `PASS` target path is constrained to CodexPreflight/target
+- `PASS` source exists as regular non-symlink file
+- `PASS` target is absent before route execute
+- `PASS` source sha256 and size recorded
+
+## Failures
+
+- none
+
+## Detail
+
+```json
+{
+  "remote_root": "/mnt/nas/openclaw/reports/stage4_5_route_canary_stage4_5_self_created_route_canary_20260704-135733",
+  "remote_run": {
+    "returncode": 0,
+    "elapsed_ms": 292.794,
+    "stdout_hash": "a34ef520921f264fa93144d53f7c147eb8afe624d4b64ea951ff6e304d803f4a",
+    "stderr_hash": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "stdout_tail": "{\"ok\": true, \"personal_root\": \"/mnt/nas/openclaw/Personal\", \"run_id\": \"stage4_5_self_created_route_canary_20260704-135733\", \"source_absolute_path\": \"/mnt/nas/openclaw/Personal/Collections/CodexPreflight/source/stage4_5_self_created_route_canary_20260704-135733.txt\", \"source_exists\": true, \"source_is_file\": true, \"source_is_symlink\": false, \"source_relative_path\": \"Collections/CodexPreflight/source/stage4_5_self_created_route_canary_20260704-135733.txt\", \"source_sha256\": \"7c17e4552a221e467550974c8007f3a1fabb75ab30b1f75908f675c7482cb09c\", \"source_size_bytes\": 199, \"target_absolute_path\": \"/mnt/nas/openclaw/Personal/Collections/CodexPreflight/target/stage4_5_self_created_route_canary_20260704-135733_copied.txt\", \"target_exists\": false, \"target_parent_exists\": true, \"target_parent_is_symlink\": false, \"target_relative_path\": \"Collections/CodexPreflight/target/stage4_5_self_created_route_canary_20260704-135733_copied.txt\"}\n"
+  },
+  "source_creation": {
+    "ok": true,
+    "personal_root": "/mnt/nas/openclaw/Personal",
+    "run_id": "stage4_5_self_created_route_canary_20260704-135733",
+    "source_absolute_path": "/mnt/nas/openclaw/Personal/Collections/CodexPreflight/source/stage4_5_self_created_route_canary_20260704-135733.txt",
+    "source_exists": true,
+    "source_is_file": true,
+    "source_is_symlink": false,
+    "source_relative_path": "Collections/CodexPreflight/source/stage4_5_self_created_route_canary_20260704-135733.txt",
+    "source_sha256": "7c17e4552a221e467550974c8007f3a1fabb75ab30b1f75908f675c7482cb09c",
+    "source_size_bytes": 199,
+    "target_absolute_path": "/mnt/nas/openclaw/Personal/Collections/CodexPreflight/target/stage4_5_self_created_route_canary_20260704-135733_copied.txt",
+    "target_exists": false,
+    "target_parent_exists": true,
+    "target_parent_is_symlink": false,
+    "target_relative_path": "Collections/CodexPreflight/target/stage4_5_self_created_route_canary_20260704-135733_copied.txt"
+  },
+  "candidate_json": "operator_candidates/stage4_5_self_created_synthetic_route_candidate.json"
+}
+```

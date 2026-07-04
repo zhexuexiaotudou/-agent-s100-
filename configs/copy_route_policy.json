@@ -1,0 +1,39 @@
+{
+  "policy_id": "digua_stage4_4_copy_route_policy_v1",
+  "workspace_id": "nas_action",
+  "allowed_action_type": "copy",
+  "allowed_source_prefixes": [
+    "Collections/CodexPreflight/source/",
+    "Collections/CodexPreflight/stage5_default_service/source/"
+  ],
+  "allowed_target_prefixes": [
+    "Collections/CodexPreflight/target/",
+    "Collections/CodexPreflight/stage5_default_service/target/"
+  ],
+  "allowed_source_owner_scopes": [
+    "operator_visible",
+    "codex_synthetic"
+  ],
+  "target_root_prefix": "Collections/",
+  "max_size_bytes": 1048576,
+  "approval_ttl_seconds": 600,
+  "require_source_hash": true,
+  "require_target_absent": true,
+  "require_target_parent_exists": true,
+  "forbid_symlink": true,
+  "forbid_recursive": true,
+  "forbid_overwrite": true,
+  "forbid_qwen_autonomous": true,
+  "forbid_cloud_derived": true,
+  "forbidden_action_types": [
+    "delete",
+    "move",
+    "rename",
+    "chmod",
+    "chown",
+    "overwrite",
+    "recursive",
+    "recursive_delete",
+    "shell"
+  ]
+}

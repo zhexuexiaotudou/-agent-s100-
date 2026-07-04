@@ -1,0 +1,32 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Harness Copy Confirmation</title>
+    <link rel="stylesheet" href="/static/copy_confirm.css">
+  </head>
+  <body>
+    <main class="copy-confirm-shell">
+      <h1>Harness Copy Confirmation</h1>
+      <section class="copy-confirm-grid">
+        <div class="copy-confirm-panel">
+          <h2>Policy</h2>
+          <p>Qwen suggests only. Policy and the allowlisted dispatcher execute the action.</p>
+          <p>Rollback removes only the target created by this action after hash verification.</p>
+          <p class="copy-confirm-danger">Delete, move, rename, chmod, overwrite, recursive copy, and unattended writes are not available.</p>
+        </div>
+        <div class="copy-confirm-panel">
+          <h2>Decision</h2>
+          <pre id="copy-confirm-output" class="copy-confirm-output"></pre>
+        </div>
+        <div class="copy-confirm-panel">
+          <h2>Status</h2>
+          <pre id="harness-status-output" class="copy-confirm-output"></pre>
+        </div>
+      </section>
+    </main>
+    <script src="/static/harness_status.js"></script>
+    <script src="/static/copy_confirm.js"></script>
+  </body>
+</html>

@@ -1,0 +1,166 @@
+{
+  "generated_at": "2026-07-04T00:38:53.782057+08:00",
+  "gate_id": "stage3_shadow_tap_integrity_gate",
+  "verdict": "ok_stage3_shadow_tap_integrity_gate",
+  "passed_count": 6,
+  "check_count": 6,
+  "failure_count": 0,
+  "failures": [],
+  "checks": [
+    {
+      "label": "shadow tap can be enabled and disabled by env flag",
+      "ok": true,
+      "detail": {
+        "version": "stage3_readonly_shadow_policy_v1",
+        "env_flag": "AI_NAS_STAGE3_SHADOW",
+        "enabled_value": "1",
+        "disabled_value": "0",
+        "default_enabled": false,
+        "mode": "readonly_shadow_dry_run_policy_first",
+        "foreground_route_change_allowed": false,
+        "sidecar_foreground_allowed": false,
+        "raw_private_prompt_storage_allowed": false,
+        "qwen_tool_execution_authority": false,
+        "qwen_structured_decision": "disabled",
+        "qwen_advisor": "disabled_safe_mode",
+        "allowed_workspaces": [
+          "nas_search",
+          "document_rag"
+        ],
+        "forbidden_workspaces": [
+          "nas_action",
+          "ops_recovery",
+          "admin_audit",
+          "web_cloud_research",
+          "dream7b_foreground"
+        ],
+        "allowed_readonly_tools": [
+          "ai_nas_permission_aware_search",
+          "ai_nas_file_search",
+          "ai_nas_index_status",
+          "ai_nas_folder_rag",
+          "ai_nas_folder_summary",
+          "ai_nas_evidence_report",
+          "ai_nas_ocr_readiness",
+          "ai_nas_ocr_extract"
+        ],
+        "dispatcher": "/mnt/nas/openclaw/scripts/probes/ai_nas_allowlisted_tool.sh",
+        "cloud_private_egress_allowed": false,
+        "stage4_entry_allowed_by_this_packet": false
+      }
+    },
+    {
+      "label": "shadow tap trace produced for every seed case",
+      "ok": true,
+      "detail": 12
+    },
+    {
+      "label": "raw private prompt is not stored",
+      "ok": true,
+      "detail": {
+        "raw_private_prompt_stored_count": 0,
+        "leak_count": 0
+      }
+    },
+    {
+      "label": "foreground response is not modified",
+      "ok": true,
+      "detail": 0
+    },
+    {
+      "label": "sidecar is not foreground route",
+      "ok": true,
+      "detail": {
+        "version": "stage3_readonly_shadow_policy_v1",
+        "env_flag": "AI_NAS_STAGE3_SHADOW",
+        "enabled_value": "1",
+        "disabled_value": "0",
+        "default_enabled": false,
+        "mode": "readonly_shadow_dry_run_policy_first",
+        "foreground_route_change_allowed": false,
+        "sidecar_foreground_allowed": false,
+        "raw_private_prompt_storage_allowed": false,
+        "qwen_tool_execution_authority": false,
+        "qwen_structured_decision": "disabled",
+        "qwen_advisor": "disabled_safe_mode",
+        "allowed_workspaces": [
+          "nas_search",
+          "document_rag"
+        ],
+        "forbidden_workspaces": [
+          "nas_action",
+          "ops_recovery",
+          "admin_audit",
+          "web_cloud_research",
+          "dream7b_foreground"
+        ],
+        "allowed_readonly_tools": [
+          "ai_nas_permission_aware_search",
+          "ai_nas_file_search",
+          "ai_nas_index_status",
+          "ai_nas_folder_rag",
+          "ai_nas_folder_summary",
+          "ai_nas_evidence_report",
+          "ai_nas_ocr_readiness",
+          "ai_nas_ocr_extract"
+        ],
+        "dispatcher": "/mnt/nas/openclaw/scripts/probes/ai_nas_allowlisted_tool.sh",
+        "cloud_private_egress_allowed": false,
+        "stage4_entry_allowed_by_this_packet": false
+      }
+    },
+    {
+      "label": "baseline protected ports are only observed by tap",
+      "ok": true,
+      "detail": "LISTEN 0      511        127.0.0.1:18765      0.0.0.0:*                                       \nLISTEN 0      5          127.0.0.1:18888      0.0.0.0:*                                       \nLISTEN 0      5          127.0.0.1:18080      0.0.0.0:*    users:((\"python3\",pid=854063,fd=3))\nLISTEN 0      5          127.0.0.1:8765       0.0.0.0:*    users:((\"python3\",pid=42831,fd=3)) \nLISTEN 0      511            [::1]:18765         [::]:*                                       \n"
+    }
+  ],
+  "detail": {
+    "config": {
+      "version": "stage3_readonly_shadow_policy_v1",
+      "env_flag": "AI_NAS_STAGE3_SHADOW",
+      "enabled_value": "1",
+      "disabled_value": "0",
+      "default_enabled": false,
+      "mode": "readonly_shadow_dry_run_policy_first",
+      "foreground_route_change_allowed": false,
+      "sidecar_foreground_allowed": false,
+      "raw_private_prompt_storage_allowed": false,
+      "qwen_tool_execution_authority": false,
+      "qwen_structured_decision": "disabled",
+      "qwen_advisor": "disabled_safe_mode",
+      "allowed_workspaces": [
+        "nas_search",
+        "document_rag"
+      ],
+      "forbidden_workspaces": [
+        "nas_action",
+        "ops_recovery",
+        "admin_audit",
+        "web_cloud_research",
+        "dream7b_foreground"
+      ],
+      "allowed_readonly_tools": [
+        "ai_nas_permission_aware_search",
+        "ai_nas_file_search",
+        "ai_nas_index_status",
+        "ai_nas_folder_rag",
+        "ai_nas_folder_summary",
+        "ai_nas_evidence_report",
+        "ai_nas_ocr_readiness",
+        "ai_nas_ocr_extract"
+      ],
+      "dispatcher": "/mnt/nas/openclaw/scripts/probes/ai_nas_allowlisted_tool.sh",
+      "cloud_private_egress_allowed": false,
+      "stage4_entry_allowed_by_this_packet": false
+    },
+    "trace": "reports/stage3_shadow/stage3_shadow_tap_trace.jsonl",
+    "summary": {
+      "tap_run_count": 12,
+      "raw_private_prompt_stored_count": 0,
+      "foreground_response_modified_count": 0,
+      "private_leak_count": 0,
+      "shadow_directory": "reports/stage3_shadow"
+    }
+  }
+}

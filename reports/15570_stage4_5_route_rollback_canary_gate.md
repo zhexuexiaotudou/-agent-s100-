@@ -1,0 +1,144 @@
+# stage4_5_route_rollback_canary_gate
+
+- verdict: `ok_stage4_5_route_rollback_canary_gate`
+- generated_at: `2026-07-04T13:57:40.577240+08:00`
+- passed: `7/7`
+
+## Checks
+
+- `PASS` candidate exists for rollback canary
+- `PASS` route guard authorizes rollback only under scoped canary
+- `PASS` allowlisted dispatcher rollback ran
+- `PASS` rollback removed exactly the copied target
+- `PASS` target missing and source unchanged after rollback
+- `PASS` rollback audit forbids source/delete/move/overwrite side effects
+- `PASS` rollback trace has no raw paths/private content
+
+## Failures
+
+- none
+
+## Detail
+
+```json
+{
+  "trace": "reports/stage4_5_route_rollback_trace.jsonl",
+  "route_decision": {
+    "allowed": true,
+    "route": "rollback",
+    "status": "rollback_authorized_for_allowlisted_dispatcher",
+    "reason_codes": [],
+    "response": {
+      "route": "rollback",
+      "status": "rollback_authorized_for_allowlisted_dispatcher",
+      "action_type": "copy",
+      "candidate_fingerprint": "9845850926bccef5ba5aeb9b9d39ada668e9a4a7821958e727f97f6e0d6b62c7",
+      "source_path_hash": "c3f8de23135918ad682a2e22e1d7e8fabc4f062c48b1e0d6cc9fe17e4eca89b8",
+      "target_path_hash": "bb91fbd04ec4d493fb5ffec67a573bda42fbe61dec72c668b146865f86835cf2",
+      "source_sha256_prefix": "7c17e4552a22",
+      "expected_size_bytes": 199,
+      "target_root": "Collections",
+      "raw_paths_in_response": false,
+      "private_content_in_response": false,
+      "dispatcher_tool": "ai_nas_action_rollback_copy",
+      "rollback_performed_by_guard": false,
+      "writes_performed": false,
+      "blocked_safely": false
+    },
+    "audit_event": {
+      "event_id": "copy-route-0b1a98b2d3e74527",
+      "tool_id": "ai_nas_route_copy_guard_v1",
+      "route": "rollback",
+      "allowed": true,
+      "reason_codes": [],
+      "candidate_fingerprint": "9845850926bccef5ba5aeb9b9d39ada668e9a4a7821958e727f97f6e0d6b62c7",
+      "source_path_hash": "c3f8de23135918ad682a2e22e1d7e8fabc4f062c48b1e0d6cc9fe17e4eca89b8",
+      "target_path_hash": "bb91fbd04ec4d493fb5ffec67a573bda42fbe61dec72c668b146865f86835cf2",
+      "args_hash": "efbd843bbaca4b4b67fe633768930c8a07e177a652d084af38764dc974d3ec31",
+      "qwen_execution_authority": false,
+      "cloud_private_egress": false,
+      "raw_private_content_logged": false,
+      "dispatcher_tool": "ai_nas_action_rollback_copy",
+      "rollback_performed_by_guard": false,
+      "operator_approved": true
+    }
+  },
+  "dispatcher_run": {
+    "returncode": 0,
+    "elapsed_ms": 380.516,
+    "stdout_hash": "48082b0724141b13b88712d4ee9996b88a11ff2e98de17846b72ed7ac493a8b3",
+    "stderr_hash": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "stdout_tail": "status\": \"removed_copied_target\", \"target_absolute_path\": \"/mnt/nas/openclaw/Personal/Collections/CodexPreflight/target/stage4_5_self_created_route_canary_20260704-135733_copied.txt\", \"target_relative_path\": \"Collections/CodexPreflight/target/stage4_5_self_created_route_canary_20260704-135733_copied.txt\"}], \"removed_count\": 1, \"requested_rollback_count\": 1, \"rollback_manifest_path\": \"/mnt/nas/openclaw/reports/stage4_5_route_canary_stage4_5_self_created_route_canary_20260704-135733/reports/action_execute_copy_20260704-135741-403876/rollback_manifest.json\", \"rollback_phrase_accepted\": true, \"skipped_actions\": [], \"skipped_count\": 0, \"source_audit\": [{\"actual_source_sha256\": \"7c17e4552a221e467550974c8007f3a1fabb75ab30b1f75908f675c7482cb09c\", \"expected_source_sha256\": \"7c17e4552a221e467550974c8007f3a1fabb75ab30b1f75908f675c7482cb09c\", \"source_absolute_path\": \"/mnt/nas/openclaw/Personal/Collections/CodexPreflight/source/stage4_5_self_created_route_canary_20260704-135733.txt\", \"source_relative_path\": \"Collections/CodexPreflight/source/stage4_5_self_created_route_canary_20260704-135733.txt\", \"status\": \"source_hash_checked\"}], \"status\": \"completed\", \"tool_id\": \"ai_nas_action_rollback_copy\"}, \"returncode\": 0, \"source_exists_after\": true, \"source_sha256_after\": \"7c17e4552a221e467550974c8007f3a1fabb75ab30b1f75908f675c7482cb09c\", \"started_at\": \"2026-07-04T13:57:42+08:00\", \"stderr_hash\": \"e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855\", \"stderr_tail\": \"\", \"stdout_hash\": \"96c0b5f93a13f619bc509b749e0adfb97e6161b4a4b3dacb8e15224f9c608d8f\", \"stdout_tail\": \"/mnt/nas/openclaw/reports/stage4_5_route_canary_stage4_5_self_created_route_canary_20260704-135733/reports/action_rollback_copy_20260704-135742-200204/action_rollback_copy.md\\n/mnt/nas/openclaw/reports/stage4_5_route_canary_stage4_5_self_created_route_canary_20260704-135733/reports/action_rollback_copy_20260704-135742-200204/action_rollback_copy.json\\n\", \"target_exists_after\": false, \"target_sha256_after\": null}\n"
+  },
+  "dispatcher_result": {
+    "action": "rollback",
+    "report_path": "/mnt/nas/openclaw/reports/stage4_5_route_canary_stage4_5_self_created_route_canary_20260704-135733/reports/action_rollback_copy_20260704-135742-200204/action_rollback_copy.json",
+    "report_payload": {
+      "audit": {
+        "copied_target_delete_performed": true,
+        "directories_removed": false,
+        "move_performed": false,
+        "overwrite_performed": false,
+        "source_delete_performed": false,
+        "source_files_modified": false,
+        "writes": "removed hash-verified copied target files plus Markdown/JSON rollback execution reports"
+      },
+      "failed_actions": [],
+      "failed_count": 0,
+      "generated_at": "2026-07-04T13:57:42.200146+08:00",
+      "manifest_id": "apm-f96cdcaac8399b5c",
+      "removed_actions": [
+        {
+          "action_id": "copy-f2b798dc7adfe1ec",
+          "actual_target_sha256": "7c17e4552a221e467550974c8007f3a1fabb75ab30b1f75908f675c7482cb09c",
+          "expected_target_sha256": "7c17e4552a221e467550974c8007f3a1fabb75ab30b1f75908f675c7482cb09c",
+          "status": "removed_copied_target",
+          "target_absolute_path": "/mnt/nas/openclaw/Personal/Collections/CodexPreflight/target/stage4_5_self_created_route_canary_20260704-135733_copied.txt",
+          "target_relative_path": "Collections/CodexPreflight/target/stage4_5_self_created_route_canary_20260704-135733_copied.txt"
+        }
+      ],
+      "removed_count": 1,
+      "requested_rollback_count": 1,
+      "rollback_manifest_path": "/mnt/nas/openclaw/reports/stage4_5_route_canary_stage4_5_self_created_route_canary_20260704-135733/reports/action_execute_copy_20260704-135741-403876/rollback_manifest.json",
+      "rollback_phrase_accepted": true,
+      "skipped_actions": [],
+      "skipped_count": 0,
+      "source_audit": [
+        {
+          "actual_source_sha256": "7c17e4552a221e467550974c8007f3a1fabb75ab30b1f75908f675c7482cb09c",
+          "expected_source_sha256": "7c17e4552a221e467550974c8007f3a1fabb75ab30b1f75908f675c7482cb09c",
+          "source_absolute_path": "/mnt/nas/openclaw/Personal/Collections/CodexPreflight/source/stage4_5_self_created_route_canary_20260704-135733.txt",
+          "source_relative_path": "Collections/CodexPreflight/source/stage4_5_self_created_route_canary_20260704-135733.txt",
+          "status": "source_hash_checked"
+        }
+      ],
+      "status": "completed",
+      "tool_id": "ai_nas_action_rollback_copy"
+    },
+    "returncode": 0,
+    "source_exists_after": true,
+    "source_sha256_after": "7c17e4552a221e467550974c8007f3a1fabb75ab30b1f75908f675c7482cb09c",
+    "started_at": "2026-07-04T13:57:42+08:00",
+    "stderr_hash": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "stderr_tail": "",
+    "stdout_hash": "96c0b5f93a13f619bc509b749e0adfb97e6161b4a4b3dacb8e15224f9c608d8f",
+    "stdout_tail": "/mnt/nas/openclaw/reports/stage4_5_route_canary_stage4_5_self_created_route_canary_20260704-135733/reports/action_rollback_copy_20260704-135742-200204/action_rollback_copy.md\n/mnt/nas/openclaw/reports/stage4_5_route_canary_stage4_5_self_created_route_canary_20260704-135733/reports/action_rollback_copy_20260704-135742-200204/action_rollback_copy.json\n",
+    "target_exists_after": false,
+    "target_sha256_after": null
+  },
+  "post_rollback_verify": {
+    "source_exists": true,
+    "source_is_file": true,
+    "source_is_symlink": false,
+    "source_relative_path": "Collections/CodexPreflight/source/stage4_5_self_created_route_canary_20260704-135733.txt",
+    "source_sha256": "7c17e4552a221e467550974c8007f3a1fabb75ab30b1f75908f675c7482cb09c",
+    "source_sha256_matches": true,
+    "source_size_bytes": 199,
+    "target_exists": false,
+    "target_is_symlink": false,
+    "target_parent_exists": true,
+    "target_parent_is_symlink": false,
+    "target_relative_path": "Collections/CodexPreflight/target/stage4_5_self_created_route_canary_20260704-135733_copied.txt"
+  }
+}
+```

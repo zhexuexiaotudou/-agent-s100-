@@ -1,0 +1,54 @@
+# real_nas_preflight_approval_lock_gate
+
+- verdict: `ok_real_nas_preflight_approval_lock_gate`
+- generated_at: `2026-07-04T11:48:24.706193+08:00`
+- passed: `5/5`
+
+## Checks
+
+- `PASS` Stage4.1 packet exists
+- `PASS` Stage4.1 final verdict allows preflight review
+- `PASS` Stage4.1 real NAS write was false
+- `PASS` approval file written as dry-run only
+- `PASS` execute and rollback remain disallowed by approval
+
+## Failures
+
+- none
+
+## Detail
+
+```json
+{
+  "approval_file": "operator_approval/real_nas_preflight_dryrun_approved.json",
+  "approval": {
+    "generated_at": "2026-07-04T11:48:24.705112+08:00",
+    "approval_source": "current Codex chat approval",
+    "user_message_summary": "operator approved continuing beyond Stage4.1",
+    "interpreted_scope": "real_nas_preflight_dryrun_only",
+    "real_nas_write_allowed": false,
+    "execute_copy_allowed": false,
+    "rollback_copy_allowed": false,
+    "dryrun_diff_allowed": true,
+    "requires_explicit_candidate_before_materialized_dryrun": true,
+    "allowed_first_action": "copy",
+    "forbidden_actions": [
+      "delete",
+      "chmod",
+      "chown",
+      "recursive_copy",
+      "recursive_delete",
+      "move",
+      "rename",
+      "overwrite",
+      "cross_user_copy",
+      "cloud_derived_write",
+      "qwen_autonomous_write",
+      "arbitrary_shell"
+    ],
+    "previous_stage4_1_packet": "01_final_evidence/digua_ai_nas_harness_stage4_1_gate_packet.json",
+    "previous_stage4_1_package_sha256_file": "evidence_for_gptpro/digua_ai_nas_harness_stage4_1_for_gptpro_20260704-113916.zip.sha256.txt"
+  },
+  "stage4_1_verdict": "expanded_sandbox_write_canary_passed_ready_for_real_write_preflight_review"
+}
+```

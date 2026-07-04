@@ -1,0 +1,198 @@
+{
+  "generated_at": "2026-07-04T13:57:36.802436+08:00",
+  "gate_id": "stage4_5_synthetic_approval_gate",
+  "verdict": "ok_stage4_5_synthetic_approval_gate",
+  "passed_count": 7,
+  "check_count": 7,
+  "failure_count": 0,
+  "failures": [],
+  "checks": [
+    {
+      "label": "candidate exists from self-created synthetic source",
+      "ok": true,
+      "detail": "operator_candidates/stage4_5_self_created_synthetic_route_candidate.json"
+    },
+    {
+      "label": "operator approval file created and scoped",
+      "ok": true,
+      "detail": "operator_approval/stage4_5_self_created_synthetic_route_execute_approved.json"
+    },
+    {
+      "label": "approval forbids destructive and autonomous actions",
+      "ok": true,
+      "detail": [
+        "delete",
+        "move",
+        "rename",
+        "chmod",
+        "chown",
+        "overwrite",
+        "recursive",
+        "arbitrary_shell",
+        "qwen_autonomous_execute",
+        "cloud_private_write"
+      ]
+    },
+    {
+      "label": "approval manifest has valid one-action copy proposal",
+      "ok": true,
+      "detail": {
+        "generated_at": "2026-07-04T13:57:36.364470+08:00",
+        "tool_id": "ai_nas_action_approval_manifest",
+        "manifest_id": "apm-f96cdcaac8399b5c",
+        "status": "awaiting_human_confirmation",
+        "personal_root": "/mnt/nas/openclaw/Personal",
+        "query": "stage4_5_self_created_synthetic_route_copy_canary",
+        "collection_name": "CodexPreflight",
+        "run_id": "stage4_5_self_created_route_canary_20260704-135733",
+        "proposed_actions": [
+          {
+            "action_id": "copy-f2b798dc7adfe1ec",
+            "action_type": "copy",
+            "status": "proposed_requires_human_confirmation",
+            "source_relative_path": "Collections/CodexPreflight/source/stage4_5_self_created_route_canary_20260704-135733.txt",
+            "source_absolute_path": "/mnt/nas/openclaw/Personal/Collections/CodexPreflight/source/stage4_5_self_created_route_canary_20260704-135733.txt",
+            "source_sha256": "7c17e4552a221e467550974c8007f3a1fabb75ab30b1f75908f675c7482cb09c",
+            "target_relative_path": "Collections/CodexPreflight/target/stage4_5_self_created_route_canary_20260704-135733_copied.txt",
+            "target_absolute_path": "/mnt/nas/openclaw/Personal/Collections/CodexPreflight/target/stage4_5_self_created_route_canary_20260704-135733_copied.txt",
+            "target_exists_now": false,
+            "reason": "copy one Codex-created non-sensitive synthetic canary file through the existing allowlisted dispatcher",
+            "permission_level_required": "bounded-codex-synthetic-copy",
+            "requires_human_confirmation": true,
+            "destructive": false,
+            "write_effect": "create one target file only if absent; never overwrite; never delete source",
+            "rollback_plan": [
+              "remove only the copied target listed by rollback_manifest.json",
+              "verify target sha256 before removal",
+              "never touch source file"
+            ]
+          }
+        ],
+        "blocked_destructive_actions": [
+          {
+            "action_type": "delete",
+            "status": "blocked_not_generated",
+            "reason": "Stage4.5 canary is copy-only"
+          },
+          {
+            "action_type": "move",
+            "status": "blocked_not_generated",
+            "reason": "Stage4.5 canary is copy-only"
+          },
+          {
+            "action_type": "rename",
+            "status": "blocked_not_generated",
+            "reason": "Stage4.5 canary is copy-only"
+          },
+          {
+            "action_type": "chmod",
+            "status": "blocked_not_generated",
+            "reason": "Stage4.5 canary is copy-only"
+          },
+          {
+            "action_type": "chown",
+            "status": "blocked_not_generated",
+            "reason": "Stage4.5 canary is copy-only"
+          },
+          {
+            "action_type": "overwrite",
+            "status": "blocked_not_generated",
+            "reason": "Stage4.5 canary is copy-only"
+          },
+          {
+            "action_type": "recursive",
+            "status": "blocked_not_generated",
+            "reason": "Stage4.5 canary is copy-only"
+          }
+        ],
+        "approval": {
+          "required": true,
+          "approval_phrase": "APPROVE apm-f96cdcaac8399b5c",
+          "approval_scope": "one self-created synthetic file copy listed in proposed_actions by exact action_id",
+          "execution_allowed_by_this_tool": false
+        },
+        "audit": {
+          "tool_id": "ai_nas_action_approval_manifest",
+          "source_files_modified": false,
+          "delete_performed": false,
+          "move_performed": false,
+          "overwrite_performed": false,
+          "execution_performed": false,
+          "qwen_execution_authority": false,
+          "cloud_private_egress": false
+        },
+        "manifest_sha256": "69f33f4910640280cfc7062ebb7d1c144256d7b82a9d689c66b4c3dc109a97c9"
+      }
+    },
+    {
+      "label": "manifest hash is self-consistent",
+      "ok": true,
+      "detail": "69f33f4910640280cfc7062ebb7d1c144256d7b82a9d689c66b4c3dc109a97c9"
+    },
+    {
+      "label": "manifest copied to S100P report root",
+      "ok": true,
+      "detail": {
+        "returncode": 0,
+        "stdout_hash": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "stderr_hash": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "stderr_tail": ""
+      }
+    },
+    {
+      "label": "policy still copy-only",
+      "ok": true,
+      "detail": {
+        "policy_id": "digua_stage4_4_copy_route_policy_v1",
+        "workspace_id": "nas_action",
+        "allowed_action_type": "copy",
+        "allowed_source_prefixes": [
+          "Collections/CodexPreflight/source/"
+        ],
+        "allowed_target_prefixes": [
+          "Collections/CodexPreflight/target/"
+        ],
+        "allowed_source_owner_scopes": [
+          "operator_visible",
+          "codex_synthetic"
+        ],
+        "target_root_prefix": "Collections/",
+        "max_size_bytes": 1048576,
+        "approval_ttl_seconds": 600,
+        "require_source_hash": true,
+        "require_target_absent": true,
+        "require_target_parent_exists": true,
+        "forbid_symlink": true,
+        "forbid_recursive": true,
+        "forbid_overwrite": true,
+        "forbid_qwen_autonomous": true,
+        "forbid_cloud_derived": true,
+        "forbidden_action_types": [
+          "delete",
+          "move",
+          "rename",
+          "chmod",
+          "chown",
+          "overwrite",
+          "recursive",
+          "recursive_delete",
+          "shell"
+        ]
+      }
+    }
+  ],
+  "detail": {
+    "candidate_json": "operator_candidates/stage4_5_self_created_synthetic_route_candidate.json",
+    "approval_json": "operator_approval/stage4_5_self_created_synthetic_route_execute_approved.json",
+    "manifest_json": "operator_candidates/stage4_5_self_created_synthetic_route_approval_manifest.json",
+    "remote_manifest_path": "/mnt/nas/openclaw/reports/stage4_5_route_canary_stage4_5_self_created_route_canary_20260704-135733/approval_manifest.json",
+    "manifest_id": "apm-f96cdcaac8399b5c",
+    "manifest_sha256": "69f33f4910640280cfc7062ebb7d1c144256d7b82a9d689c66b4c3dc109a97c9",
+    "scp": {
+      "returncode": 0,
+      "stdout_hash": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr_hash": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr_tail": ""
+    }
+  }
+}

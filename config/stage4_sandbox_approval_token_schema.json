@@ -1,0 +1,36 @@
+{
+  "schema_id": "digua_stage4_sandbox_approval_token_v1",
+  "mode": "sandbox_write_canary_only",
+  "required_fields": [
+    "approval_id",
+    "user_id",
+    "workspace_id",
+    "tool_id",
+    "args_hash",
+    "action_type",
+    "target_path_hash",
+    "before_state_hash",
+    "rollback_plan_hash",
+    "human_confirmation",
+    "expires_at",
+    "nonce",
+    "scope",
+    "signature"
+  ],
+  "signature": "HMAC-SHA256 over canonical JSON payload excluding signature",
+  "scope": "local_synthetic_sandbox_only",
+  "allowed_workspace_id": "sandbox_write",
+  "allowed_tool_ids": [
+    "ai_nas_sandbox_copy",
+    "ai_nas_sandbox_rename",
+    "ai_nas_sandbox_move"
+  ],
+  "forbidden_tool_ids": [
+    "ai_nas_action_execute_copy",
+    "ai_nas_action_rollback_copy",
+    "shell",
+    "script_path"
+  ],
+  "required_confirmation": "I_APPROVE_SANDBOX_WRITE_CANARY",
+  "real_nas_write_allowed": false
+}

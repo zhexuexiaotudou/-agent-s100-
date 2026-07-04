@@ -1,0 +1,56 @@
+# real_nas_copy_candidate_approval_gate
+
+- verdict: `ok_real_nas_copy_candidate_approval_gate`
+- generated_at: `2026-07-04T12:03:53.907583+08:00`
+- passed: `4/4`
+
+## Checks
+
+- `PASS` preflight dry-run packet exists
+- `PASS` preflight verdict is safe locked state
+- `PASS` operator approval file written
+- `PASS` approval scope is single synthetic copy only
+
+## Failures
+
+- none
+
+## Detail
+
+```json
+{
+  "approval_file": "operator_approval/real_nas_copy_candidate_test_approved.json",
+  "approval": {
+    "generated_at": "2026-07-04T12:03:53.906411+08:00",
+    "approval_source": "current Codex chat approval",
+    "scope": "single synthetic real NAS copy candidate smoke test",
+    "allowed_real_writes": [
+      "create one synthetic source file under /mnt/nas/openclaw/Personal/Collections/CodexPreflight/source",
+      "copy that source to one synthetic target under /mnt/nas/openclaw/Personal/Collections/CodexPreflight/target",
+      "rollback remove only the copied target after SHA256 verification",
+      "write reports under /mnt/nas/openclaw/reports/real_nas_copy_candidate_test"
+    ],
+    "forbidden_actions": [
+      "touch existing user files",
+      "delete source file",
+      "delete existing user files",
+      "move",
+      "rename",
+      "overwrite",
+      "chmod",
+      "chown",
+      "recursive operation",
+      "cloud-derived write",
+      "Qwen autonomous write",
+      "arbitrary shell outside this gate"
+    ],
+    "real_nas_write_allowed": true,
+    "execute_copy_probe_allowed": true,
+    "rollback_copy_probe_allowed_for_copied_target_only": true,
+    "source_cleanup_allowed": false,
+    "target_cleanup_allowed_if_created_by_this_gate": true,
+    "previous_preflight_packet": "01_final_evidence/digua_ai_nas_real_nas_preflight_dryrun_gate_packet.json"
+  },
+  "preflight_verdict": "real_nas_preflight_dryrun_approved_locked_missing_explicit_candidate"
+}
+```

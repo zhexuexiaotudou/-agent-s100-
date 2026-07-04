@@ -1,0 +1,254 @@
+{
+  "generated_at": "2026-07-04T14:36:52.591843+08:00",
+  "final_verdict": "harness_default_service_integrated_limited_copy_enabled",
+  "final_verdict_allowed": true,
+  "all_gates_pass": true,
+  "run_id": "stage5_default_service_20260704-143537",
+  "default_service_enabled": true,
+  "limited_copy_execute_enabled": true,
+  "qwen_execution_authority": false,
+  "cloud_private_raw_egress": false,
+  "forbidden_actions": [
+    "delete",
+    "move",
+    "rename",
+    "chmod",
+    "chown",
+    "overwrite",
+    "recursive",
+    "recursive_delete",
+    "arbitrary_shell"
+  ],
+  "remote_backup_root": "/mnt/nas/openclaw/reports/stage5_default_service_stage5_default_service_20260704-143537/remote_backup",
+  "evidence_table": [
+    {
+      "report": "20000_stage5_baseline_lock",
+      "gate_id": "stage5_baseline_lock",
+      "verdict": "ok_stage5_baseline_lock",
+      "passed_count": 8,
+      "check_count": 8,
+      "failure_count": 0
+    },
+    {
+      "report": "20010_default_service_contract_gate",
+      "gate_id": "default_service_contract_gate",
+      "verdict": "ok_default_service_contract_gate",
+      "passed_count": 7,
+      "check_count": 7,
+      "failure_count": 0
+    },
+    {
+      "report": "20020_openclaw_default_service_integration_gate",
+      "gate_id": "openclaw_default_service_integration_gate",
+      "verdict": "ok_openclaw_default_service_integration_gate",
+      "passed_count": 7,
+      "check_count": 7,
+      "failure_count": 0
+    },
+    {
+      "report": "20030_default_copy_ui_confirmation_gate",
+      "gate_id": "default_copy_ui_confirmation_gate",
+      "verdict": "ok_default_copy_ui_confirmation_gate",
+      "passed_count": 6,
+      "check_count": 6,
+      "failure_count": 0
+    },
+    {
+      "report": "20040_stage5_default_service_synthetic_smoke_gate",
+      "gate_id": "stage5_default_service_synthetic_smoke_gate",
+      "verdict": "ok_stage5_default_service_synthetic_smoke_gate",
+      "passed_count": 7,
+      "check_count": 7,
+      "failure_count": 0
+    },
+    {
+      "report": "20050_stage5_default_service_adversarial_gate",
+      "gate_id": "stage5_default_service_adversarial_gate",
+      "verdict": "ok_stage5_default_service_adversarial_gate",
+      "passed_count": 8,
+      "check_count": 8,
+      "failure_count": 0
+    },
+    {
+      "report": "20060_stage5_default_service_regression_soak_gate",
+      "gate_id": "stage5_default_service_regression_soak_gate",
+      "verdict": "ok_stage5_default_service_regression_soak_gate",
+      "passed_count": 7,
+      "check_count": 7,
+      "failure_count": 0
+    },
+    {
+      "report": "20070_stage5_default_service_emergency_rollback_gate",
+      "gate_id": "stage5_default_service_emergency_rollback_gate",
+      "verdict": "ok_stage5_default_service_emergency_rollback_gate",
+      "passed_count": 5,
+      "check_count": 5,
+      "failure_count": 0
+    },
+    {
+      "report": "20080_stage5_default_service_persistence_gate",
+      "gate_id": "stage5_default_service_persistence_gate",
+      "verdict": "ok_stage5_default_service_persistence_gate",
+      "passed_count": 6,
+      "check_count": 6,
+      "failure_count": 0
+    }
+  ],
+  "environment": {
+    "repo_root": "F:\\Project\\Digua",
+    "platform": "Windows-11-10.0.26200-SP0",
+    "python": "3.14.3"
+  },
+  "claim_boundary": [
+    "Harness is integrated into the default OpenClaw service with limited user-confirmed copy only.",
+    "It does not authorize delete, move, rename, chmod, recursive operations, Qwen autonomous tool execution, cloud private raw egress, or unattended background writes."
+  ],
+  "final_package": {
+    "package_root": "F:\\Project\\Digua\\tmp\\digua_ai_nas_harness_default_service_for_gptpro_20260704-143537",
+    "zip_path": "F:\\Project\\Digua\\evidence_for_gptpro\\digua_ai_nas_harness_default_service_for_gptpro_20260704-143537.zip",
+    "sha256": "38bc412b3cf0bbf1a159bdc75413a680f9cc2f3c5ec14d9878a8fb962e0c2fbf",
+    "sha256_file": "F:\\Project\\Digua\\evidence_for_gptpro\\digua_ai_nas_harness_default_service_for_gptpro_20260704-143537.zip.sha256.txt",
+    "file_count": 51
+  },
+  "package_self_check": {
+    "returncode": 0,
+    "stdout_hash": "2d4e5328cf125f1b1b2eae768e366ad174273eb669e09f7b7cce398c1e8c276a",
+    "stderr_hash": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "stdout_tail": ": web/static/harness_status.js\",\n      \"ok\": true\n    },\n    {\n      \"label\": \"exists: web/static/copy_confirm.js\",\n      \"ok\": true\n    },\n    {\n      \"label\": \"exists: web/static/copy_confirm.css\",\n      \"ok\": true\n    },\n    {\n      \"label\": \"exists: web/templates/copy_confirm.html\",\n      \"ok\": true\n    },\n    {\n      \"label\": \"exists: scripts/disable_harness_copy_execute.sh\",\n      \"ok\": true\n    },\n    {\n      \"label\": \"exists: scripts/check_harness_default_service_status.sh\",\n      \"ok\": true\n    },\n    {\n      \"label\": \"exists: reports/20000_stage5_baseline_lock.json\",\n      \"ok\": true\n    },\n    {\n      \"label\": \"exists: reports/20010_default_service_contract_gate.json\",\n      \"ok\": true\n    },\n    {\n      \"label\": \"exists: reports/20020_openclaw_default_service_integration_gate.json\",\n      \"ok\": true\n    },\n    {\n      \"label\": \"exists: reports/20030_default_copy_ui_confirmation_gate.json\",\n      \"ok\": true\n    },\n    {\n      \"label\": \"exists: reports/20040_stage5_default_service_synthetic_smoke_gate.json\",\n      \"ok\": true\n    },\n    {\n      \"label\": \"exists: reports/20050_stage5_default_service_adversarial_gate.json\",\n      \"ok\": true\n    },\n    {\n      \"label\": \"exists: reports/20060_stage5_default_service_regression_soak_gate.json\",\n      \"ok\": true\n    },\n    {\n      \"label\": \"exists: reports/20070_stage5_default_service_emergency_rollback_gate.json\",\n      \"ok\": true\n    },\n    {\n      \"label\": \"exists: reports/20080_stage5_default_service_persistence_gate.json\",\n      \"ok\": true\n    },\n    {\n      \"label\": \"exists: reports/stage5_default_service_synthetic_smoke_trace.jsonl\",\n      \"ok\": true\n    },\n    {\n      \"label\": \"exists: reports/stage5_default_service_adversarial_cases.jsonl\",\n      \"ok\": true\n    },\n    {\n      \"label\": \"final verdict valid\",\n      \"ok\": true,\n      \"detail\": \"harness_default_service_integrated_limited_copy_enabled\"\n    },\n    {\n      \"label\": \"qwen execution authority false\",\n      \"ok\": true\n    }\n  ],\n  \"failures\": []\n}\n",
+    "stderr_tail": "",
+    "json": {
+      "checks": [
+        {
+          "label": "exists: 01_final_evidence/digua_ai_nas_harness_default_service_gate_packet.json",
+          "ok": true
+        },
+        {
+          "label": "exists: 01_final_evidence/digua_ai_nas_harness_default_service_gate_packet.md",
+          "ok": true
+        },
+        {
+          "label": "exists: configs/harness_default_service_policy.json",
+          "ok": true
+        },
+        {
+          "label": "exists: configs/harness_default_service_feature_flags.json",
+          "ok": true
+        },
+        {
+          "label": "exists: docs/HARNESS_DEFAULT_SERVICE_CONTRACT.md",
+          "ok": true
+        },
+        {
+          "label": "exists: docs/HARNESS_DEFAULT_SERVICE_FINAL_DECISION.md",
+          "ok": true
+        },
+        {
+          "label": "exists: docs/HARNESS_DEFAULT_SERVICE_USER_GUIDE.md",
+          "ok": true
+        },
+        {
+          "label": "exists: docs/HARNESS_DEFAULT_SERVICE_DEFENSE_QA.md",
+          "ok": true
+        },
+        {
+          "label": "exists: docs/HARNESS_DEFAULT_SERVICE_SAFE_CLAIM_BOUNDARY.md",
+          "ok": true
+        },
+        {
+          "label": "exists: src/openclaw/harness_default_middleware.py",
+          "ok": true
+        },
+        {
+          "label": "exists: src/openclaw/routes/nas_copy_routes.py",
+          "ok": true
+        },
+        {
+          "label": "exists: src/openclaw/routes/token_budget_routes.py",
+          "ok": true
+        },
+        {
+          "label": "exists: src/openclaw/routes/harness_status_routes.py",
+          "ok": true
+        },
+        {
+          "label": "exists: web/static/harness_status.js",
+          "ok": true
+        },
+        {
+          "label": "exists: web/static/copy_confirm.js",
+          "ok": true
+        },
+        {
+          "label": "exists: web/static/copy_confirm.css",
+          "ok": true
+        },
+        {
+          "label": "exists: web/templates/copy_confirm.html",
+          "ok": true
+        },
+        {
+          "label": "exists: scripts/disable_harness_copy_execute.sh",
+          "ok": true
+        },
+        {
+          "label": "exists: scripts/check_harness_default_service_status.sh",
+          "ok": true
+        },
+        {
+          "label": "exists: reports/20000_stage5_baseline_lock.json",
+          "ok": true
+        },
+        {
+          "label": "exists: reports/20010_default_service_contract_gate.json",
+          "ok": true
+        },
+        {
+          "label": "exists: reports/20020_openclaw_default_service_integration_gate.json",
+          "ok": true
+        },
+        {
+          "label": "exists: reports/20030_default_copy_ui_confirmation_gate.json",
+          "ok": true
+        },
+        {
+          "label": "exists: reports/20040_stage5_default_service_synthetic_smoke_gate.json",
+          "ok": true
+        },
+        {
+          "label": "exists: reports/20050_stage5_default_service_adversarial_gate.json",
+          "ok": true
+        },
+        {
+          "label": "exists: reports/20060_stage5_default_service_regression_soak_gate.json",
+          "ok": true
+        },
+        {
+          "label": "exists: reports/20070_stage5_default_service_emergency_rollback_gate.json",
+          "ok": true
+        },
+        {
+          "label": "exists: reports/20080_stage5_default_service_persistence_gate.json",
+          "ok": true
+        },
+        {
+          "label": "exists: reports/stage5_default_service_synthetic_smoke_trace.jsonl",
+          "ok": true
+        },
+        {
+          "label": "exists: reports/stage5_default_service_adversarial_cases.jsonl",
+          "ok": true
+        },
+        {
+          "label": "final verdict valid",
+          "ok": true,
+          "detail": "harness_default_service_integrated_limited_copy_enabled"
+        },
+        {
+          "label": "qwen execution authority false",
+          "ok": true
+        }
+      ],
+      "failures": []
+    }
+  }
+}

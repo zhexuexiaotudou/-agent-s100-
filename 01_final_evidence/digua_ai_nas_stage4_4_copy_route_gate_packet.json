@@ -1,0 +1,312 @@
+{
+  "generated_at": "2026-07-04T12:31:26.343766+08:00",
+  "final_verdict": "copy_route_execute_canary_blocked_safely",
+  "final_verdict_allowed": true,
+  "all_gates_pass": true,
+  "preview_dryrun_confirm_ready": true,
+  "route_execute_canary_blocked_safely": true,
+  "real_nas_copy_executed_in_stage4_4": false,
+  "route_execute_executed": false,
+  "route_rollback_executed": false,
+  "feature_flags": {
+    "preview_enabled": true,
+    "dry_run_enabled": true,
+    "confirm_enabled": true,
+    "execute_enabled": false,
+    "rollback_enabled": false,
+    "execute_canary_enabled": false,
+    "require_operator_approval_file": true,
+    "require_execute_env": true
+  },
+  "policy": {
+    "policy_id": "digua_stage4_4_copy_route_policy_v1",
+    "workspace_id": "nas_action",
+    "allowed_action_type": "copy",
+    "allowed_source_prefixes": [
+      "Collections/CodexPreflight/source/"
+    ],
+    "allowed_target_prefixes": [
+      "Collections/CodexPreflight/target/"
+    ],
+    "allowed_source_owner_scopes": [
+      "operator_visible",
+      "codex_synthetic"
+    ],
+    "target_root_prefix": "Collections/",
+    "max_size_bytes": 1048576,
+    "approval_ttl_seconds": 600,
+    "require_source_hash": true,
+    "require_target_absent": true,
+    "require_target_parent_exists": true,
+    "forbid_symlink": true,
+    "forbid_recursive": true,
+    "forbid_overwrite": true,
+    "forbid_qwen_autonomous": true,
+    "forbid_cloud_derived": true,
+    "forbidden_action_types": [
+      "delete",
+      "move",
+      "rename",
+      "chmod",
+      "chown",
+      "overwrite",
+      "recursive",
+      "recursive_delete",
+      "shell"
+    ]
+  },
+  "evidence_table": [
+    {
+      "report": "15400_stage4_4_baseline_lock",
+      "gate_id": "stage4_4_baseline_lock",
+      "verdict": "ok_stage4_4_baseline_lock",
+      "passed_count": 7,
+      "check_count": 7,
+      "failure_count": 0
+    },
+    {
+      "report": "15410_copy_route_contract_gate",
+      "gate_id": "copy_route_contract_gate",
+      "verdict": "ok_copy_route_contract_gate",
+      "passed_count": 6,
+      "check_count": 6,
+      "failure_count": 0
+    },
+    {
+      "report": "15420_copy_route_policy_guard_gate",
+      "gate_id": "copy_route_policy_guard_gate",
+      "verdict": "ok_copy_route_policy_guard_gate",
+      "passed_count": 4,
+      "check_count": 4,
+      "failure_count": 0
+    },
+    {
+      "report": "15430_copy_preview_dryrun_confirm_route_gate",
+      "gate_id": "copy_preview_dryrun_confirm_route_gate",
+      "verdict": "ok_copy_preview_dryrun_confirm_route_gate",
+      "passed_count": 5,
+      "check_count": 5,
+      "failure_count": 0
+    },
+    {
+      "report": "15450_copy_route_adversarial_gate",
+      "gate_id": "copy_route_adversarial_gate",
+      "verdict": "ok_copy_route_adversarial_gate",
+      "passed_count": 6,
+      "check_count": 6,
+      "failure_count": 0
+    },
+    {
+      "report": "15460_route_level_execute_canary_gate",
+      "gate_id": "route_level_execute_canary_gate",
+      "verdict": "route_execute_canary_blocked_by_missing_approval_or_flag",
+      "passed_count": 4,
+      "check_count": 4,
+      "failure_count": 0
+    },
+    {
+      "report": "15470_post_route_regression_gate",
+      "gate_id": "post_route_regression_gate",
+      "verdict": "ok_post_route_regression_gate",
+      "passed_count": 5,
+      "check_count": 5,
+      "failure_count": 0
+    }
+  ],
+  "environment": {
+    "repo_root": "F:\\Project\\Digua",
+    "platform": "Windows-11-10.0.26200-SP0",
+    "python": "3.14.3"
+  },
+  "claim_boundary": [
+    "Preview/dry-run/confirm route guard is ready for review.",
+    "Execute and rollback routes remain disabled by default.",
+    "Stage4.4 did not execute a real NAS copy.",
+    "Qwen has no direct execution authority.",
+    "Cloud-derived private writes are blocked.",
+    "Private raw content is not emitted in route traces."
+  ],
+  "final_package": {
+    "package_root": "F:\\Project\\Digua\\tmp\\digua_ai_nas_stage4_4_copy_route_for_gptpro_20260704-123119",
+    "zip_path": "F:\\Project\\Digua\\evidence_for_gptpro\\digua_ai_nas_stage4_4_copy_route_for_gptpro_20260704-123119.zip",
+    "sha256": "088c0057b0e01658d27344cc2944129b307afa7b87cebb2e97b9e19e5f962be4",
+    "sha256_file": "F:\\Project\\Digua\\evidence_for_gptpro\\digua_ai_nas_stage4_4_copy_route_for_gptpro_20260704-123119.zip.sha256.txt",
+    "file_count": 39
+  },
+  "package_self_check": {
+    "returncode": 0,
+    "stdout_hash": "24906e7a3a3661b87446e53b01ba7fd8e944e2339e9d1384b0905ff4f5373779",
+    "stderr_hash": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "stdout_tail": "run_trace.jsonl\",\n      \"ok\": true,\n      \"detail\": \"reports/stage4_4_copy_route_preview_dryrun_trace.jsonl\"\n    },\n    {\n      \"label\": \"exists: reports/stage4_4_copy_route_adversarial_cases.jsonl\",\n      \"ok\": true,\n      \"detail\": \"reports/stage4_4_copy_route_adversarial_cases.jsonl\"\n    },\n    {\n      \"label\": \"exists: reports/stage4_4_route_execute_canary_trace.jsonl\",\n      \"ok\": true,\n      \"detail\": \"reports/stage4_4_route_execute_canary_trace.jsonl\"\n    },\n    {\n      \"label\": \"exists: evidence/stage4_4_ui_wireframe_text.md\",\n      \"ok\": true,\n      \"detail\": \"evidence/stage4_4_ui_wireframe_text.md\"\n    },\n    {\n      \"label\": \"final verdict valid\",\n      \"ok\": true,\n      \"detail\": \"copy_route_execute_canary_blocked_safely\"\n    },\n    {\n      \"label\": \"stage4_4 did not execute real copy\",\n      \"ok\": true,\n      \"detail\": false\n    },\n    {\n      \"label\": \"execute and rollback flags false\",\n      \"ok\": true,\n      \"detail\": {\n        \"preview_enabled\": true,\n        \"dry_run_enabled\": true,\n        \"confirm_enabled\": true,\n        \"execute_enabled\": false,\n        \"rollback_enabled\": false,\n        \"execute_canary_enabled\": false,\n        \"require_operator_approval_file\": true,\n        \"require_execute_env\": true\n      }\n    },\n    {\n      \"label\": \"preview dryrun confirm ready\",\n      \"ok\": true,\n      \"detail\": true\n    },\n    {\n      \"label\": \"trace has no raw NAS path markers: reports/stage4_4_copy_route_preview_dryrun_trace.jsonl\",\n      \"ok\": true,\n      \"detail\": \"reports/stage4_4_copy_route_preview_dryrun_trace.jsonl\"\n    },\n    {\n      \"label\": \"trace has no raw NAS path markers: reports/stage4_4_copy_route_adversarial_cases.jsonl\",\n      \"ok\": true,\n      \"detail\": \"reports/stage4_4_copy_route_adversarial_cases.jsonl\"\n    },\n    {\n      \"label\": \"trace has no raw NAS path markers: reports/stage4_4_route_execute_canary_trace.jsonl\",\n      \"ok\": true,\n      \"detail\": \"reports/stage4_4_route_execute_canary_trace.jsonl\"\n    }\n  ],\n  \"failures\": []\n}\n",
+    "stderr_tail": "",
+    "json": {
+      "checks": [
+        {
+          "label": "exists: 01_final_evidence/digua_ai_nas_stage4_4_copy_route_gate_packet.json",
+          "ok": true,
+          "detail": "01_final_evidence/digua_ai_nas_stage4_4_copy_route_gate_packet.json"
+        },
+        {
+          "label": "exists: 01_final_evidence/digua_ai_nas_stage4_4_copy_route_gate_packet.md",
+          "ok": true,
+          "detail": "01_final_evidence/digua_ai_nas_stage4_4_copy_route_gate_packet.md"
+        },
+        {
+          "label": "exists: docs/STAGE4_4_COPY_ROUTE_CONTRACT.md",
+          "ok": true,
+          "detail": "docs/STAGE4_4_COPY_ROUTE_CONTRACT.md"
+        },
+        {
+          "label": "exists: docs/STAGE4_4_OPENCLAW_COPY_UI_CONFIRMATION_SPEC.md",
+          "ok": true,
+          "detail": "docs/STAGE4_4_OPENCLAW_COPY_UI_CONFIRMATION_SPEC.md"
+        },
+        {
+          "label": "exists: docs/STAGE4_4_COPY_CONFIRMATION_COPYWRITING.md",
+          "ok": true,
+          "detail": "docs/STAGE4_4_COPY_CONFIRMATION_COPYWRITING.md"
+        },
+        {
+          "label": "exists: docs/STAGE4_4_COPY_ROUTE_DECISION.md",
+          "ok": true,
+          "detail": "docs/STAGE4_4_COPY_ROUTE_DECISION.md"
+        },
+        {
+          "label": "exists: docs/NEXT_STAGE4_5_LIMITED_COPY_BETA_PLAN.md",
+          "ok": true,
+          "detail": "docs/NEXT_STAGE4_5_LIMITED_COPY_BETA_PLAN.md"
+        },
+        {
+          "label": "exists: configs/copy_route_policy.json",
+          "ok": true,
+          "detail": "configs/copy_route_policy.json"
+        },
+        {
+          "label": "exists: configs/copy_route_feature_flags.json",
+          "ok": true,
+          "detail": "configs/copy_route_feature_flags.json"
+        },
+        {
+          "label": "exists: src/harness/copy_route_guard.py",
+          "ok": true,
+          "detail": "src/harness/copy_route_guard.py"
+        },
+        {
+          "label": "exists: src/harness/copy_route_types.py",
+          "ok": true,
+          "detail": "src/harness/copy_route_types.py"
+        },
+        {
+          "label": "exists: tests/test_copy_route_guard.py",
+          "ok": true,
+          "detail": "tests/test_copy_route_guard.py"
+        },
+        {
+          "label": "exists: gates/stage4_4_copy_route_gates.py",
+          "ok": true,
+          "detail": "gates/stage4_4_copy_route_gates.py"
+        },
+        {
+          "label": "exists: reports/15400_stage4_4_baseline_lock.json",
+          "ok": true,
+          "detail": "reports/15400_stage4_4_baseline_lock.json"
+        },
+        {
+          "label": "exists: reports/15410_copy_route_contract_gate.json",
+          "ok": true,
+          "detail": "reports/15410_copy_route_contract_gate.json"
+        },
+        {
+          "label": "exists: reports/15420_copy_route_policy_guard_gate.json",
+          "ok": true,
+          "detail": "reports/15420_copy_route_policy_guard_gate.json"
+        },
+        {
+          "label": "exists: reports/15430_copy_preview_dryrun_confirm_route_gate.json",
+          "ok": true,
+          "detail": "reports/15430_copy_preview_dryrun_confirm_route_gate.json"
+        },
+        {
+          "label": "exists: reports/15450_copy_route_adversarial_gate.json",
+          "ok": true,
+          "detail": "reports/15450_copy_route_adversarial_gate.json"
+        },
+        {
+          "label": "exists: reports/15460_route_level_execute_canary_gate.json",
+          "ok": true,
+          "detail": "reports/15460_route_level_execute_canary_gate.json"
+        },
+        {
+          "label": "exists: reports/15470_post_route_regression_gate.json",
+          "ok": true,
+          "detail": "reports/15470_post_route_regression_gate.json"
+        },
+        {
+          "label": "exists: reports/stage4_4_copy_route_preview_dryrun_trace.jsonl",
+          "ok": true,
+          "detail": "reports/stage4_4_copy_route_preview_dryrun_trace.jsonl"
+        },
+        {
+          "label": "exists: reports/stage4_4_copy_route_adversarial_cases.jsonl",
+          "ok": true,
+          "detail": "reports/stage4_4_copy_route_adversarial_cases.jsonl"
+        },
+        {
+          "label": "exists: reports/stage4_4_route_execute_canary_trace.jsonl",
+          "ok": true,
+          "detail": "reports/stage4_4_route_execute_canary_trace.jsonl"
+        },
+        {
+          "label": "exists: evidence/stage4_4_ui_wireframe_text.md",
+          "ok": true,
+          "detail": "evidence/stage4_4_ui_wireframe_text.md"
+        },
+        {
+          "label": "final verdict valid",
+          "ok": true,
+          "detail": "copy_route_execute_canary_blocked_safely"
+        },
+        {
+          "label": "stage4_4 did not execute real copy",
+          "ok": true,
+          "detail": false
+        },
+        {
+          "label": "execute and rollback flags false",
+          "ok": true,
+          "detail": {
+            "preview_enabled": true,
+            "dry_run_enabled": true,
+            "confirm_enabled": true,
+            "execute_enabled": false,
+            "rollback_enabled": false,
+            "execute_canary_enabled": false,
+            "require_operator_approval_file": true,
+            "require_execute_env": true
+          }
+        },
+        {
+          "label": "preview dryrun confirm ready",
+          "ok": true,
+          "detail": true
+        },
+        {
+          "label": "trace has no raw NAS path markers: reports/stage4_4_copy_route_preview_dryrun_trace.jsonl",
+          "ok": true,
+          "detail": "reports/stage4_4_copy_route_preview_dryrun_trace.jsonl"
+        },
+        {
+          "label": "trace has no raw NAS path markers: reports/stage4_4_copy_route_adversarial_cases.jsonl",
+          "ok": true,
+          "detail": "reports/stage4_4_copy_route_adversarial_cases.jsonl"
+        },
+        {
+          "label": "trace has no raw NAS path markers: reports/stage4_4_route_execute_canary_trace.jsonl",
+          "ok": true,
+          "detail": "reports/stage4_4_route_execute_canary_trace.jsonl"
+        }
+      ],
+      "failures": []
+    }
+  }
+}

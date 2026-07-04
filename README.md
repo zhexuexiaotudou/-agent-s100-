@@ -7,7 +7,7 @@ device.
 
 ## Current Status
 
-Status timestamp: 2026-06-29 21:00 CST.
+Status timestamp: 2026-07-04 14:35 CST.
 
 The three demo expectations are now satisfied on the S100P test machine:
 
@@ -23,6 +23,23 @@ The latest Qwen AI-NAS acceptance packet also passed:
 - Route: `ai_nas_allowlisted_tools`
 - Generated reports: personal inventory, evidence report, case packet, folder RAG, and gateway turn reports
 - Evidence: `/mnt/nas/openclaw/reports/models/qwen25_ai_nas_acceptance_20260629-210016/qwen25_ai_nas_acceptance.json`
+
+## Harness Default Service Status
+
+The AI-NAS harness is now integrated into the default OpenClaw service path with
+limited, user-confirmed copy enabled.
+
+- Final verdict: `harness_default_service_integrated_limited_copy_enabled`
+- Final packet: `01_final_evidence/digua_ai_nas_harness_default_service_gate_packet.json`
+- Review package: `evidence_for_gptpro/digua_ai_nas_harness_default_service_for_gptpro_20260704-143537.zip`
+- Package SHA256: `38bc412b3cf0bbf1a159bdc75413a680f9cc2f3c5ec14d9878a8fb962e0c2fbf`
+- Live status endpoint: `http://127.0.0.1:8765/api/harness/status` on S100P
+
+The default harness path allows only bounded copy flows that pass policy,
+typed approval, signed approval token, source rehash, target-absent check, and
+the allowlisted dispatcher. Delete, move, rename, chmod, chown, overwrite,
+recursive operations, arbitrary shell execution, Qwen autonomous tool execution,
+and private raw cloud egress remain out of scope.
 
 ## Demo Story
 
@@ -76,6 +93,11 @@ Recommended one-line pitch:
 | `scripts/probes/qwen25_ai_nas_acceptance_packet.py` | Qwen AI-NAS acceptance packet generator |
 | `scripts/probes/ai_nas_openclaw_nas_control_gate_probe.py` | OpenClaw NAS control, ACL, and destructive-action gate |
 | `scripts/probes/ai_nas_operator_portal_server.py` | AI-NAS Web OS / operator portal server |
+| `src/harness/` | Harness policy, copy route guard, and token-budget integration |
+| `src/openclaw/` | OpenClaw default-service middleware and API route adapters |
+| `gates/stage*_gates.py` | Stage-gated AI-NAS harness validation scripts |
+| `reports/` | Gate outputs, trace JSONL, and regression evidence |
+| `evidence_for_gptpro/` | Packaged review bundles with SHA256 sidecars |
 | `configs/systemd/qwen25-local-openai-gateway.service` | S100P resident Qwen gateway unit |
 | `configs/systemd/openclaw-gateway.service` | S100P resident OpenClaw AI-NAS portal gateway unit |
 | `docs/` | Project decisions, runbooks, acceptance notes, and demo scripts |
@@ -113,7 +135,7 @@ ssh -i C:\Users\zhexu\.ssh\s100p_linkcheck_ed25519 sunrise@192.168.127.10 `
   report paths above as the source of truth.
 - Dream7B is no longer the promoted product path. It remains useful as runtime,
   batching, telemetry, and validation history.
-- `F:\Project\Digua\.git` is currently an empty/broken git directory. Local git
-  commands fail with `fatal: not a git repository`, so the latest progress has
-  not been verified as uploaded from this workspace. Restore the real git
-  metadata or provide the remote before committing and pushing.
+- The local checkout is now a valid git repo with remote
+  `https://github.com/zhexuexiaotudou/-agent-s100-.git`. Large unrelated
+  Dream7B, tokenizer, and journal artifacts are not part of the harness upload
+  scope unless explicitly staged.

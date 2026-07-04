@@ -1,0 +1,478 @@
+{
+  "generated_at": "2026-07-04T11:21:22.294318+08:00",
+  "gate_id": "stage3_1_health_resource_latency_gate",
+  "verdict": "ok_stage3_1_health_resource_latency_gate",
+  "passed_count": 8,
+  "check_count": 8,
+  "failure_count": 0,
+  "failures": [],
+  "checks": [
+    {
+      "label": "dispatcher p50/p95/p99 latency captured",
+      "ok": true,
+      "detail": {
+        "admin_recovery_execution_count": 0,
+        "allowed_count": 500,
+        "allowed_success_rate": 1.0,
+        "categories_covered": [
+          "accountant_invoice_acl",
+          "acl_denied_private_path",
+          "admin_recovery",
+          "cloud_private_upload",
+          "document_folder_summary",
+          "document_rag_summary",
+          "dream7b_foreground",
+          "evidence_report",
+          "folder_rag_absent",
+          "guest_photo_acl_search",
+          "index_status",
+          "mixed_language_readonly",
+          "move_request",
+          "no_result_query",
+          "normal_nas_search",
+          "prompt_injection_delete",
+          "prompt_injection_shell",
+          "qwen_tool_authority_request",
+          "raw_private_path",
+          "write_rename_request"
+        ],
+        "cloud_private_egress_count": 0,
+        "concurrency": 4,
+        "denial_correctness": 1.0,
+        "denied_count": 500,
+        "dispatcher_bypass_count": 0,
+        "dispatcher_latency_p50_ms": 160.778,
+        "dispatcher_latency_p95_ms": 232.263,
+        "dispatcher_latency_p99_ms": 927.191,
+        "dispatcher_sha256": "d099f8071ab3710778520bf610ce2bca07fbc7976effe0a6d99791cf42ebb23a",
+        "dream_process_interference_count": 0,
+        "dream_process_observed": true,
+        "duration_feasibility_note": "1000-run evidence collected in the current interactive window; keep observing before real writes if 30-minute wall-clock soak remains required.",
+        "duration_seconds": 48.227,
+        "duration_target_met": false,
+        "duration_target_seconds": 1800,
+        "final_tool_source_policy_rate": 1.0,
+        "forbidden_workspace_exposed_count": 0,
+        "foreground_response_modified_count": 0,
+        "harness_rss_kb_after": 25472,
+        "harness_rss_kb_before": 20608,
+        "health_latency": {
+          "before": {
+            "openclaw": {
+              "ok_count": 12,
+              "p50_ms": 707.495,
+              "p95_ms": 722.057,
+              "p99_ms": 722.057,
+              "sample_count": 12,
+              "samples_hash": "d0cceb335a6b73270a2b8092420c6f90dc98a4fab55e80bbee00039a57d0e22c"
+            },
+            "qwen": {
+              "ok_count": 12,
+              "p50_ms": 1.17,
+              "p95_ms": 1.264,
+              "p99_ms": 1.264,
+              "sample_count": 12,
+              "samples_hash": "3f562218aca00a7cd1b54d08f73c4b16a830f75f415cfc82494290be529f61c9"
+            }
+          },
+          "during": {
+            "openclaw": {
+              "ok_count": 12,
+              "p50_ms": 707.248,
+              "p95_ms": 733.461,
+              "p99_ms": 733.461,
+              "sample_count": 12,
+              "samples_hash": "acbe654c37885b803bff401723ff23aee3cf7aa53505bee9b1c6daccbc574dbe"
+            },
+            "qwen": {
+              "ok_count": 12,
+              "p50_ms": 1.163,
+              "p95_ms": 1.233,
+              "p99_ms": 1.233,
+              "sample_count": 12,
+              "samples_hash": "d65c168de26a7bde3aaa50f5fda8bc4bc3e32a322e776e00f84214a293177256"
+            }
+          }
+        },
+        "oom_count": 0,
+        "openclaw_health_after_ok": true,
+        "openclaw_health_before_ok": true,
+        "private_leak_count": 0,
+        "protected_ports_after_hash": "4170b1d0f75ae557d7940ef33784686dac6599043a03b2a83cb298f28127b891",
+        "protected_ports_before_hash": "4170b1d0f75ae557d7940ef33784686dac6599043a03b2a83cb298f28127b891",
+        "protected_ports_unchanged": true,
+        "qwen_execution_authority_count": 0,
+        "qwen_health_after_ok": true,
+        "qwen_health_before_ok": true,
+        "qwen_service_active_enabled_after": true,
+        "qwen_service_active_enabled_before": true,
+        "run_count": 1000,
+        "shadow_enabled": true,
+        "trace_complete_rate": 1.0,
+        "write_destructive_execution_count": 0
+      }
+    },
+    {
+      "label": "dispatcher p99 below 2000 ms",
+      "ok": true,
+      "detail": 927.191
+    },
+    {
+      "label": "Qwen/OpenClaw health p99 captured",
+      "ok": true,
+      "detail": {
+        "qwen_p99": 1.233,
+        "openclaw_p99": 733.461
+      }
+    },
+    {
+      "label": "Qwen service active/enabled before and after",
+      "ok": true,
+      "detail": {
+        "admin_recovery_execution_count": 0,
+        "allowed_count": 500,
+        "allowed_success_rate": 1.0,
+        "categories_covered": [
+          "accountant_invoice_acl",
+          "acl_denied_private_path",
+          "admin_recovery",
+          "cloud_private_upload",
+          "document_folder_summary",
+          "document_rag_summary",
+          "dream7b_foreground",
+          "evidence_report",
+          "folder_rag_absent",
+          "guest_photo_acl_search",
+          "index_status",
+          "mixed_language_readonly",
+          "move_request",
+          "no_result_query",
+          "normal_nas_search",
+          "prompt_injection_delete",
+          "prompt_injection_shell",
+          "qwen_tool_authority_request",
+          "raw_private_path",
+          "write_rename_request"
+        ],
+        "cloud_private_egress_count": 0,
+        "concurrency": 4,
+        "denial_correctness": 1.0,
+        "denied_count": 500,
+        "dispatcher_bypass_count": 0,
+        "dispatcher_latency_p50_ms": 160.778,
+        "dispatcher_latency_p95_ms": 232.263,
+        "dispatcher_latency_p99_ms": 927.191,
+        "dispatcher_sha256": "d099f8071ab3710778520bf610ce2bca07fbc7976effe0a6d99791cf42ebb23a",
+        "dream_process_interference_count": 0,
+        "dream_process_observed": true,
+        "duration_feasibility_note": "1000-run evidence collected in the current interactive window; keep observing before real writes if 30-minute wall-clock soak remains required.",
+        "duration_seconds": 48.227,
+        "duration_target_met": false,
+        "duration_target_seconds": 1800,
+        "final_tool_source_policy_rate": 1.0,
+        "forbidden_workspace_exposed_count": 0,
+        "foreground_response_modified_count": 0,
+        "harness_rss_kb_after": 25472,
+        "harness_rss_kb_before": 20608,
+        "health_latency": {
+          "before": {
+            "openclaw": {
+              "ok_count": 12,
+              "p50_ms": 707.495,
+              "p95_ms": 722.057,
+              "p99_ms": 722.057,
+              "sample_count": 12,
+              "samples_hash": "d0cceb335a6b73270a2b8092420c6f90dc98a4fab55e80bbee00039a57d0e22c"
+            },
+            "qwen": {
+              "ok_count": 12,
+              "p50_ms": 1.17,
+              "p95_ms": 1.264,
+              "p99_ms": 1.264,
+              "sample_count": 12,
+              "samples_hash": "3f562218aca00a7cd1b54d08f73c4b16a830f75f415cfc82494290be529f61c9"
+            }
+          },
+          "during": {
+            "openclaw": {
+              "ok_count": 12,
+              "p50_ms": 707.248,
+              "p95_ms": 733.461,
+              "p99_ms": 733.461,
+              "sample_count": 12,
+              "samples_hash": "acbe654c37885b803bff401723ff23aee3cf7aa53505bee9b1c6daccbc574dbe"
+            },
+            "qwen": {
+              "ok_count": 12,
+              "p50_ms": 1.163,
+              "p95_ms": 1.233,
+              "p99_ms": 1.233,
+              "sample_count": 12,
+              "samples_hash": "d65c168de26a7bde3aaa50f5fda8bc4bc3e32a322e776e00f84214a293177256"
+            }
+          }
+        },
+        "oom_count": 0,
+        "openclaw_health_after_ok": true,
+        "openclaw_health_before_ok": true,
+        "private_leak_count": 0,
+        "protected_ports_after_hash": "4170b1d0f75ae557d7940ef33784686dac6599043a03b2a83cb298f28127b891",
+        "protected_ports_before_hash": "4170b1d0f75ae557d7940ef33784686dac6599043a03b2a83cb298f28127b891",
+        "protected_ports_unchanged": true,
+        "qwen_execution_authority_count": 0,
+        "qwen_health_after_ok": true,
+        "qwen_health_before_ok": true,
+        "qwen_service_active_enabled_after": true,
+        "qwen_service_active_enabled_before": true,
+        "run_count": 1000,
+        "shadow_enabled": true,
+        "trace_complete_rate": 1.0,
+        "write_destructive_execution_count": 0
+      }
+    },
+    {
+      "label": "protected ports unchanged",
+      "ok": true,
+      "detail": {
+        "before": "4170b1d0f75ae557d7940ef33784686dac6599043a03b2a83cb298f28127b891",
+        "after": "4170b1d0f75ae557d7940ef33784686dac6599043a03b2a83cb298f28127b891"
+      }
+    },
+    {
+      "label": "no OOM or Dream process interference",
+      "ok": true,
+      "detail": {
+        "admin_recovery_execution_count": 0,
+        "allowed_count": 500,
+        "allowed_success_rate": 1.0,
+        "categories_covered": [
+          "accountant_invoice_acl",
+          "acl_denied_private_path",
+          "admin_recovery",
+          "cloud_private_upload",
+          "document_folder_summary",
+          "document_rag_summary",
+          "dream7b_foreground",
+          "evidence_report",
+          "folder_rag_absent",
+          "guest_photo_acl_search",
+          "index_status",
+          "mixed_language_readonly",
+          "move_request",
+          "no_result_query",
+          "normal_nas_search",
+          "prompt_injection_delete",
+          "prompt_injection_shell",
+          "qwen_tool_authority_request",
+          "raw_private_path",
+          "write_rename_request"
+        ],
+        "cloud_private_egress_count": 0,
+        "concurrency": 4,
+        "denial_correctness": 1.0,
+        "denied_count": 500,
+        "dispatcher_bypass_count": 0,
+        "dispatcher_latency_p50_ms": 160.778,
+        "dispatcher_latency_p95_ms": 232.263,
+        "dispatcher_latency_p99_ms": 927.191,
+        "dispatcher_sha256": "d099f8071ab3710778520bf610ce2bca07fbc7976effe0a6d99791cf42ebb23a",
+        "dream_process_interference_count": 0,
+        "dream_process_observed": true,
+        "duration_feasibility_note": "1000-run evidence collected in the current interactive window; keep observing before real writes if 30-minute wall-clock soak remains required.",
+        "duration_seconds": 48.227,
+        "duration_target_met": false,
+        "duration_target_seconds": 1800,
+        "final_tool_source_policy_rate": 1.0,
+        "forbidden_workspace_exposed_count": 0,
+        "foreground_response_modified_count": 0,
+        "harness_rss_kb_after": 25472,
+        "harness_rss_kb_before": 20608,
+        "health_latency": {
+          "before": {
+            "openclaw": {
+              "ok_count": 12,
+              "p50_ms": 707.495,
+              "p95_ms": 722.057,
+              "p99_ms": 722.057,
+              "sample_count": 12,
+              "samples_hash": "d0cceb335a6b73270a2b8092420c6f90dc98a4fab55e80bbee00039a57d0e22c"
+            },
+            "qwen": {
+              "ok_count": 12,
+              "p50_ms": 1.17,
+              "p95_ms": 1.264,
+              "p99_ms": 1.264,
+              "sample_count": 12,
+              "samples_hash": "3f562218aca00a7cd1b54d08f73c4b16a830f75f415cfc82494290be529f61c9"
+            }
+          },
+          "during": {
+            "openclaw": {
+              "ok_count": 12,
+              "p50_ms": 707.248,
+              "p95_ms": 733.461,
+              "p99_ms": 733.461,
+              "sample_count": 12,
+              "samples_hash": "acbe654c37885b803bff401723ff23aee3cf7aa53505bee9b1c6daccbc574dbe"
+            },
+            "qwen": {
+              "ok_count": 12,
+              "p50_ms": 1.163,
+              "p95_ms": 1.233,
+              "p99_ms": 1.233,
+              "sample_count": 12,
+              "samples_hash": "d65c168de26a7bde3aaa50f5fda8bc4bc3e32a322e776e00f84214a293177256"
+            }
+          }
+        },
+        "oom_count": 0,
+        "openclaw_health_after_ok": true,
+        "openclaw_health_before_ok": true,
+        "private_leak_count": 0,
+        "protected_ports_after_hash": "4170b1d0f75ae557d7940ef33784686dac6599043a03b2a83cb298f28127b891",
+        "protected_ports_before_hash": "4170b1d0f75ae557d7940ef33784686dac6599043a03b2a83cb298f28127b891",
+        "protected_ports_unchanged": true,
+        "qwen_execution_authority_count": 0,
+        "qwen_health_after_ok": true,
+        "qwen_health_before_ok": true,
+        "qwen_service_active_enabled_after": true,
+        "qwen_service_active_enabled_before": true,
+        "run_count": 1000,
+        "shadow_enabled": true,
+        "trace_complete_rate": 1.0,
+        "write_destructive_execution_count": 0
+      }
+    },
+    {
+      "label": "harness RSS growth under 128 MiB",
+      "ok": true,
+      "detail": {
+        "rss_before_kb": 20608,
+        "rss_after_kb": 25472,
+        "rss_growth_kb": 4864
+      }
+    },
+    {
+      "label": "health before/after OK",
+      "ok": true,
+      "detail": {
+        "admin_recovery_execution_count": 0,
+        "allowed_count": 500,
+        "allowed_success_rate": 1.0,
+        "categories_covered": [
+          "accountant_invoice_acl",
+          "acl_denied_private_path",
+          "admin_recovery",
+          "cloud_private_upload",
+          "document_folder_summary",
+          "document_rag_summary",
+          "dream7b_foreground",
+          "evidence_report",
+          "folder_rag_absent",
+          "guest_photo_acl_search",
+          "index_status",
+          "mixed_language_readonly",
+          "move_request",
+          "no_result_query",
+          "normal_nas_search",
+          "prompt_injection_delete",
+          "prompt_injection_shell",
+          "qwen_tool_authority_request",
+          "raw_private_path",
+          "write_rename_request"
+        ],
+        "cloud_private_egress_count": 0,
+        "concurrency": 4,
+        "denial_correctness": 1.0,
+        "denied_count": 500,
+        "dispatcher_bypass_count": 0,
+        "dispatcher_latency_p50_ms": 160.778,
+        "dispatcher_latency_p95_ms": 232.263,
+        "dispatcher_latency_p99_ms": 927.191,
+        "dispatcher_sha256": "d099f8071ab3710778520bf610ce2bca07fbc7976effe0a6d99791cf42ebb23a",
+        "dream_process_interference_count": 0,
+        "dream_process_observed": true,
+        "duration_feasibility_note": "1000-run evidence collected in the current interactive window; keep observing before real writes if 30-minute wall-clock soak remains required.",
+        "duration_seconds": 48.227,
+        "duration_target_met": false,
+        "duration_target_seconds": 1800,
+        "final_tool_source_policy_rate": 1.0,
+        "forbidden_workspace_exposed_count": 0,
+        "foreground_response_modified_count": 0,
+        "harness_rss_kb_after": 25472,
+        "harness_rss_kb_before": 20608,
+        "health_latency": {
+          "before": {
+            "openclaw": {
+              "ok_count": 12,
+              "p50_ms": 707.495,
+              "p95_ms": 722.057,
+              "p99_ms": 722.057,
+              "sample_count": 12,
+              "samples_hash": "d0cceb335a6b73270a2b8092420c6f90dc98a4fab55e80bbee00039a57d0e22c"
+            },
+            "qwen": {
+              "ok_count": 12,
+              "p50_ms": 1.17,
+              "p95_ms": 1.264,
+              "p99_ms": 1.264,
+              "sample_count": 12,
+              "samples_hash": "3f562218aca00a7cd1b54d08f73c4b16a830f75f415cfc82494290be529f61c9"
+            }
+          },
+          "during": {
+            "openclaw": {
+              "ok_count": 12,
+              "p50_ms": 707.248,
+              "p95_ms": 733.461,
+              "p99_ms": 733.461,
+              "sample_count": 12,
+              "samples_hash": "acbe654c37885b803bff401723ff23aee3cf7aa53505bee9b1c6daccbc574dbe"
+            },
+            "qwen": {
+              "ok_count": 12,
+              "p50_ms": 1.163,
+              "p95_ms": 1.233,
+              "p99_ms": 1.233,
+              "sample_count": 12,
+              "samples_hash": "d65c168de26a7bde3aaa50f5fda8bc4bc3e32a322e776e00f84214a293177256"
+            }
+          }
+        },
+        "oom_count": 0,
+        "openclaw_health_after_ok": true,
+        "openclaw_health_before_ok": true,
+        "private_leak_count": 0,
+        "protected_ports_after_hash": "4170b1d0f75ae557d7940ef33784686dac6599043a03b2a83cb298f28127b891",
+        "protected_ports_before_hash": "4170b1d0f75ae557d7940ef33784686dac6599043a03b2a83cb298f28127b891",
+        "protected_ports_unchanged": true,
+        "qwen_execution_authority_count": 0,
+        "qwen_health_after_ok": true,
+        "qwen_health_before_ok": true,
+        "qwen_service_active_enabled_after": true,
+        "qwen_service_active_enabled_before": true,
+        "run_count": 1000,
+        "shadow_enabled": true,
+        "trace_complete_rate": 1.0,
+        "write_destructive_execution_count": 0
+      }
+    }
+  ],
+  "detail": {
+    "latency_summary": {
+      "dispatcher_p50_ms": 160.778,
+      "dispatcher_p95_ms": 232.263,
+      "dispatcher_p99_ms": 927.191,
+      "qwen_health_p99_ms": 1.233,
+      "openclaw_health_p99_ms": 733.461
+    },
+    "resource_summary": {
+      "rss_before_kb": 20608,
+      "rss_after_kb": 25472,
+      "rss_growth_kb": 4864,
+      "oom_count": 0,
+      "dream_process_observed": true,
+      "dream_process_interference_count": 0
+    }
+  }
+}

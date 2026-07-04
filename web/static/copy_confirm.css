@@ -1,0 +1,42 @@
+.copy-confirm-shell {
+  max-width: 960px;
+  margin: 0 auto;
+  padding: 24px;
+  font-family: system-ui, sans-serif;
+  color: #172026;
+}
+
+.copy-confirm-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 16px;
+}
+
+.copy-confirm-panel {
+  border: 1px solid #d9e0e6;
+  border-radius: 6px;
+  padding: 16px;
+  background: #ffffff;
+}
+
+.copy-confirm-panel button {
+  border: 1px solid #1f6feb;
+  background: #1f6feb;
+  color: #ffffff;
+  border-radius: 6px;
+  padding: 8px 12px;
+}
+
+.copy-confirm-danger {
+  color: #8a1111;
+}
+
+.copy-confirm-output {
+  min-height: 160px;
+  overflow: auto;
+  white-space: pre-wrap;
+  word-break: break-word;
+  background: #f6f8fa;
+  border-radius: 6px;
+  padding: 12px;
+}

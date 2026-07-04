@@ -1,0 +1,174 @@
+# copy_route_policy_guard_gate
+
+- verdict: `ok_copy_route_policy_guard_gate`
+- generated_at: `2026-07-04T12:31:21.409016+08:00`
+- passed: `4/4`
+
+## Checks
+
+- `PASS` unit tests pass
+- `PASS` valid candidate has no policy reasons
+- `PASS` sample invalid candidates rejected 100 percent
+- `PASS` execute blocked by default feature flags
+
+## Failures
+
+- none
+
+## Detail
+
+```json
+{
+  "unit_test_command": [
+    "C:\\Users\\zhexu\\AppData\\Local\\Python\\pythoncore-3.14-64\\python.exe",
+    "-m",
+    "unittest",
+    "discover",
+    "-s",
+    "tests",
+    "-p",
+    "test_copy_route_guard.py"
+  ],
+  "unit_test": {
+    "returncode": 0,
+    "stdout_hash": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "stderr_hash": "239e8ce10cb1c762eb20713938057f1ca6b85e75c9143e9b349b3429a302e85d",
+    "stdout_tail": "",
+    "stderr_tail": ".........................................\n----------------------------------------------------------------------\nRan 41 tests in 0.010s\n\nOK\n"
+  },
+  "invalid_sample_count": 12,
+  "invalid_results": [
+    {
+      "index": 0,
+      "reasons": [
+        "action_type_not_copy",
+        "forbidden_action_type"
+      ]
+    },
+    {
+      "index": 1,
+      "reasons": [
+        "source_path_not_safe_relative",
+        "source_prefix_not_allowlisted"
+      ]
+    },
+    {
+      "index": 2,
+      "reasons": [
+        "target_not_under_collections",
+        "target_path_not_safe_relative",
+        "target_prefix_not_allowlisted"
+      ]
+    },
+    {
+      "index": 3,
+      "reasons": [
+        "source_path_not_safe_relative"
+      ]
+    },
+    {
+      "index": 4,
+      "reasons": [
+        "source_sha256_missing_or_invalid"
+      ]
+    },
+    {
+      "index": 5,
+      "reasons": [
+        "expected_size_exceeds_limit"
+      ]
+    },
+    {
+      "index": 6,
+      "reasons": [
+        "target_already_exists"
+      ]
+    },
+    {
+      "index": 7,
+      "reasons": [
+        "symlink_rejected"
+      ]
+    },
+    {
+      "index": 8,
+      "reasons": [
+        "recursive_rejected"
+      ]
+    },
+    {
+      "index": 9,
+      "reasons": [
+        "overwrite_rejected"
+      ]
+    },
+    {
+      "index": 10,
+      "reasons": [
+        "qwen_has_no_execution_authority"
+      ]
+    },
+    {
+      "index": 11,
+      "reasons": [
+        "cloud_derived_write_rejected"
+      ]
+    }
+  ],
+  "default_execute": {
+    "allowed": false,
+    "route": "execute",
+    "status": "execute_blocked",
+    "reason_codes": [
+      "approval_token_missing",
+      "execute_env_not_enabled",
+      "execute_feature_disabled",
+      "operator_approval_file_missing",
+      "operator_approval_missing"
+    ],
+    "response": {
+      "route": "execute",
+      "status": "execute_blocked",
+      "action_type": "copy",
+      "candidate_fingerprint": "009a70122418c805eae46118024a549a8fb8100bf84ec156bae8578c9b281881",
+      "source_path_hash": "7a1ad2eb1c5b6227b9f2c8f6514af6465a3a01919217cf38d0ab1c76e2014f28",
+      "target_path_hash": "b70f74624121c7de76fb9fe2c43d781bc6ae73031a120d803ba90b16bb9c5f9f",
+      "source_sha256_prefix": "78ee7fedc0b1",
+      "expected_size_bytes": 229,
+      "target_root": "Collections",
+      "raw_paths_in_response": false,
+      "private_content_in_response": false,
+      "dispatcher_tool": "ai_nas_action_execute_copy",
+      "execution_performed_by_guard": false,
+      "writes_performed": false,
+      "blocked_safely": true
+    },
+    "audit_event": {
+      "event_id": "copy-route-14c48eac38af4a4e",
+      "tool_id": "ai_nas_route_copy_guard_v1",
+      "route": "execute",
+      "allowed": false,
+      "reason_codes": [
+        "execute_feature_disabled",
+        "execute_env_not_enabled",
+        "operator_approval_file_missing",
+        "operator_approval_missing",
+        "approval_token_missing"
+      ],
+      "candidate_fingerprint": "009a70122418c805eae46118024a549a8fb8100bf84ec156bae8578c9b281881",
+      "source_path_hash": "7a1ad2eb1c5b6227b9f2c8f6514af6465a3a01919217cf38d0ab1c76e2014f28",
+      "target_path_hash": "b70f74624121c7de76fb9fe2c43d781bc6ae73031a120d803ba90b16bb9c5f9f",
+      "args_hash": "f0dff3c785611dcdc5b0597ba5af8332729039f7a39bf94262b3383e5e46bf4c",
+      "qwen_execution_authority": false,
+      "cloud_private_egress": false,
+      "raw_private_content_logged": false,
+      "dispatcher_tool": "ai_nas_action_execute_copy",
+      "execution_performed_by_guard": false,
+      "operator_approved": false,
+      "env_enabled": false,
+      "approval_file_present": false,
+      "token_validation_reason": "approval_token_missing"
+    }
+  }
+}
+```

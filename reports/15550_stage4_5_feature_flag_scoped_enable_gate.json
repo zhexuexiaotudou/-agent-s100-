@@ -1,0 +1,94 @@
+{
+  "generated_at": "2026-07-04T13:57:37.529182+08:00",
+  "gate_id": "stage4_5_feature_flag_scoped_enable_gate",
+  "verdict": "ok_stage4_5_feature_flag_scoped_enable_gate",
+  "passed_count": 5,
+  "check_count": 5,
+  "failure_count": 0,
+  "failures": [],
+  "checks": [
+    {
+      "label": "global execute/rollback flags remain closed",
+      "ok": true,
+      "detail": {
+        "preview_enabled": true,
+        "dry_run_enabled": true,
+        "confirm_enabled": true,
+        "execute_enabled": false,
+        "rollback_enabled": false,
+        "execute_canary_enabled": false,
+        "require_operator_approval_file": true,
+        "require_execute_env": true
+      }
+    },
+    {
+      "label": "scoped canary flags enable only execute/rollback for this run",
+      "ok": true,
+      "detail": {
+        "preview_enabled": true,
+        "dry_run_enabled": true,
+        "confirm_enabled": true,
+        "execute_enabled": true,
+        "rollback_enabled": true,
+        "execute_canary_enabled": true,
+        "require_operator_approval_file": true,
+        "require_execute_env": true
+      }
+    },
+    {
+      "label": "scoped enable is bound to candidate fingerprint",
+      "ok": true,
+      "detail": {
+        "candidate_id": "stage4_5-stage4_5_self_created_route_canary_20260704-135733",
+        "candidate_fingerprint": "9845850926bccef5ba5aeb9b9d39ada668e9a4a7821958e727f97f6e0d6b62c7",
+        "source_path_hash": "c3f8de23135918ad682a2e22e1d7e8fabc4f062c48b1e0d6cc9fe17e4eca89b8",
+        "target_path_hash": "bb91fbd04ec4d493fb5ffec67a573bda42fbe61dec72c668b146865f86835cf2",
+        "source_sha256": "7c17e4552a221e467550974c8007f3a1fabb75ab30b1f75908f675c7482cb09c",
+        "allowed_action_type": "copy",
+        "required_dispatcher_tool": "ai_nas_action_execute_copy"
+      }
+    },
+    {
+      "label": "operator approval and signed token both present",
+      "ok": true,
+      "detail": {
+        "approval": "operator_approval/stage4_5_self_created_synthetic_route_execute_approved.json",
+        "token_hash": "858a01464a848279d81dbe5231c0084c54a45de6966337f546013dfa1e12e63d"
+      }
+    },
+    {
+      "label": "manifest approval phrase bound to apm manifest",
+      "ok": true,
+      "detail": "APPROVE apm-f96cdcaac8399b5c"
+    }
+  ],
+  "detail": {
+    "global_feature_flags": {
+      "preview_enabled": true,
+      "dry_run_enabled": true,
+      "confirm_enabled": true,
+      "execute_enabled": false,
+      "rollback_enabled": false,
+      "execute_canary_enabled": false,
+      "require_operator_approval_file": true,
+      "require_execute_env": true
+    },
+    "scoped_canary_flags": {
+      "preview_enabled": true,
+      "dry_run_enabled": true,
+      "confirm_enabled": true,
+      "execute_enabled": true,
+      "rollback_enabled": true,
+      "execute_canary_enabled": true,
+      "require_operator_approval_file": true,
+      "require_execute_env": true
+    },
+    "scope": {
+      "run_id": "stage4_5_self_created_route_canary_20260704-135733",
+      "candidate_fingerprint": "9845850926bccef5ba5aeb9b9d39ada668e9a4a7821958e727f97f6e0d6b62c7",
+      "approval_token_hash": "858a01464a848279d81dbe5231c0084c54a45de6966337f546013dfa1e12e63d",
+      "manifest_id": "apm-f96cdcaac8399b5c"
+    },
+    "persistence_boundary": "Scoped flags are in-memory gate state only; configs/copy_route_feature_flags.json is not modified."
+  }
+}

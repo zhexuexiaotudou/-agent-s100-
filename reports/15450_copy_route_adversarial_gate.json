@@ -1,0 +1,48 @@
+{
+  "generated_at": "2026-07-04T12:31:21.650897+08:00",
+  "gate_id": "copy_route_adversarial_gate",
+  "verdict": "ok_copy_route_adversarial_gate",
+  "passed_count": 6,
+  "check_count": 6,
+  "failure_count": 0,
+  "failures": [],
+  "checks": [
+    {
+      "label": "adversarial case count >= 100",
+      "ok": true,
+      "detail": 120
+    },
+    {
+      "label": "all adversarial cases rejected",
+      "ok": true,
+      "detail": []
+    },
+    {
+      "label": "private leak count zero",
+      "ok": true,
+      "detail": []
+    },
+    {
+      "label": "destructive execution count zero",
+      "ok": true
+    },
+    {
+      "label": "Qwen authority adversarial cases rejected",
+      "ok": true,
+      "detail": 4
+    },
+    {
+      "label": "cloud-derived write adversarial cases rejected",
+      "ok": true,
+      "detail": 4
+    }
+  ],
+  "detail": {
+    "trace": "reports/stage4_4_copy_route_adversarial_cases.jsonl",
+    "case_count": 120,
+    "allowed_count": 0,
+    "private_leak_count": 0,
+    "qwen_authority_rejection_count": 4,
+    "cloud_derived_rejection_count": 4
+  }
+}

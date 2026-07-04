@@ -1,0 +1,210 @@
+{
+  "generated_at": "2026-07-04T11:22:14.032264+08:00",
+  "gate_id": "stage4_signed_approval_token_gate",
+  "verdict": "ok_stage4_signed_approval_token_gate",
+  "passed_count": 5,
+  "check_count": 5,
+  "failure_count": 0,
+  "failures": [],
+  "checks": [
+    {
+      "label": "token schema written",
+      "ok": true,
+      "detail": "config/stage4_sandbox_approval_token_schema.json"
+    },
+    {
+      "label": "valid sandbox token accepted",
+      "ok": true,
+      "detail": {
+        "name": "valid",
+        "ok": true,
+        "reason": "ok"
+      }
+    },
+    {
+      "label": "invalid variants rejected",
+      "ok": true,
+      "detail": [
+        {
+          "name": "valid",
+          "ok": true,
+          "reason": "ok"
+        },
+        {
+          "name": "expired",
+          "ok": false,
+          "reason": "expired"
+        },
+        {
+          "name": "wrong_tool",
+          "ok": false,
+          "reason": "tool_not_allowlisted_for_sandbox"
+        },
+        {
+          "name": "wrong_workspace",
+          "ok": false,
+          "reason": "workspace_not_sandbox"
+        },
+        {
+          "name": "missing_rollback",
+          "ok": false,
+          "reason": "missing:rollback_plan_hash"
+        },
+        {
+          "name": "wrong_confirmation",
+          "ok": false,
+          "reason": "human_confirmation_missing_or_wrong"
+        },
+        {
+          "name": "bad_signature",
+          "ok": false,
+          "reason": "bad_signature"
+        },
+        {
+          "name": "nonce_reuse",
+          "ok": false,
+          "reason": "nonce_reuse"
+        }
+      ]
+    },
+    {
+      "label": "required target/before/rollback/human fields enforced",
+      "ok": true,
+      "detail": [
+        {
+          "name": "valid",
+          "ok": true,
+          "reason": "ok"
+        },
+        {
+          "name": "expired",
+          "ok": false,
+          "reason": "expired"
+        },
+        {
+          "name": "wrong_tool",
+          "ok": false,
+          "reason": "tool_not_allowlisted_for_sandbox"
+        },
+        {
+          "name": "wrong_workspace",
+          "ok": false,
+          "reason": "workspace_not_sandbox"
+        },
+        {
+          "name": "missing_rollback",
+          "ok": false,
+          "reason": "missing:rollback_plan_hash"
+        },
+        {
+          "name": "wrong_confirmation",
+          "ok": false,
+          "reason": "human_confirmation_missing_or_wrong"
+        },
+        {
+          "name": "bad_signature",
+          "ok": false,
+          "reason": "bad_signature"
+        },
+        {
+          "name": "nonce_reuse",
+          "ok": false,
+          "reason": "nonce_reuse"
+        }
+      ]
+    },
+    {
+      "label": "real NAS tool/workspace rejected",
+      "ok": true,
+      "detail": [
+        {
+          "name": "valid",
+          "ok": true,
+          "reason": "ok"
+        },
+        {
+          "name": "expired",
+          "ok": false,
+          "reason": "expired"
+        },
+        {
+          "name": "wrong_tool",
+          "ok": false,
+          "reason": "tool_not_allowlisted_for_sandbox"
+        },
+        {
+          "name": "wrong_workspace",
+          "ok": false,
+          "reason": "workspace_not_sandbox"
+        },
+        {
+          "name": "missing_rollback",
+          "ok": false,
+          "reason": "missing:rollback_plan_hash"
+        },
+        {
+          "name": "wrong_confirmation",
+          "ok": false,
+          "reason": "human_confirmation_missing_or_wrong"
+        },
+        {
+          "name": "bad_signature",
+          "ok": false,
+          "reason": "bad_signature"
+        },
+        {
+          "name": "nonce_reuse",
+          "ok": false,
+          "reason": "nonce_reuse"
+        }
+      ]
+    }
+  ],
+  "detail": {
+    "schema": "config/stage4_sandbox_approval_token_schema.json",
+    "test_results": [
+      {
+        "name": "valid",
+        "ok": true,
+        "reason": "ok"
+      },
+      {
+        "name": "expired",
+        "ok": false,
+        "reason": "expired"
+      },
+      {
+        "name": "wrong_tool",
+        "ok": false,
+        "reason": "tool_not_allowlisted_for_sandbox"
+      },
+      {
+        "name": "wrong_workspace",
+        "ok": false,
+        "reason": "workspace_not_sandbox"
+      },
+      {
+        "name": "missing_rollback",
+        "ok": false,
+        "reason": "missing:rollback_plan_hash"
+      },
+      {
+        "name": "wrong_confirmation",
+        "ok": false,
+        "reason": "human_confirmation_missing_or_wrong"
+      },
+      {
+        "name": "bad_signature",
+        "ok": false,
+        "reason": "bad_signature"
+      },
+      {
+        "name": "nonce_reuse",
+        "ok": false,
+        "reason": "nonce_reuse"
+      }
+    ],
+    "accepted_count": 1,
+    "rejected_count": 7
+  }
+}
