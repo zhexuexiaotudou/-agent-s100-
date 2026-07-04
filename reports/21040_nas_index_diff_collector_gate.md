@@ -1,0 +1,18 @@
+# 21040 nas_index_diff_collector_gate
+
+- generated_at: 2026-07-04T08:11:57Z
+- status: pass
+- verdict: pass
+
+```json
+{
+  "generated_at": "2026-07-04T08:11:57Z",
+  "raw_private_path_exported": false,
+  "real_nas_write": false,
+  "report_id": 21040,
+  "sample_event_count": 32,
+  "sample_events_path": "reports/journal_nas_index_diff_sample_events.jsonl",
+  "status": "pass",
+  "title": "nas_index_diff_collector_gate"
+}
+```

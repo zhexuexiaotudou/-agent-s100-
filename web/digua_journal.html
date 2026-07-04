@@ -1,0 +1,78 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Digua Journal</title>
+  <link rel="stylesheet" href="/static/digua_journal.css">
+</head>
+<body>
+  <main class="journal-shell">
+    <header class="journal-topbar">
+      <div>
+        <h1>Digua Journal</h1>
+        <p>Local activity journal for OpenClaw and AI-NAS evidence.</p>
+      </div>
+      <div class="status-strip" id="journal-status">Local only</div>
+    </header>
+
+    <section class="journal-layout">
+      <aside class="journal-sidebar">
+        <button class="nav-item active" data-view="timeline">Timeline</button>
+        <button class="nav-item" data-view="projects">Projects</button>
+        <button class="nav-item" data-view="manual">Manual</button>
+        <button class="nav-item" data-view="summaries">Summaries</button>
+        <button class="nav-item" data-view="exports">Exports</button>
+      </aside>
+
+      <section class="journal-panel" id="timeline-view">
+        <div class="panel-heading">
+          <h2>Timeline</h2>
+          <button id="refresh-timeline">Refresh</button>
+        </div>
+        <div id="timeline-list" class="timeline-list"></div>
+      </section>
+
+      <section class="journal-panel hidden" id="projects-view">
+        <div class="panel-heading">
+          <h2>Projects</h2>
+          <button id="refresh-projects">Refresh</button>
+        </div>
+        <div id="project-list" class="project-list"></div>
+      </section>
+
+      <section class="journal-panel hidden" id="manual-view">
+        <h2>Manual Entry</h2>
+        <form id="manual-form" class="manual-form">
+          <label>Project <input name="project_id" value="project_ai_nas"></label>
+          <label>Title <input name="title" value="Production journal note"></label>
+          <label>Body <textarea name="body" rows="5">Operator-visible note stored as local journal metadata.</textarea></label>
+          <button type="submit">Add Entry</button>
+        </form>
+        <pre id="manual-result"></pre>
+      </section>
+
+      <section class="journal-panel hidden" id="summaries-view">
+        <h2>Summaries</h2>
+        <div class="button-row">
+          <button data-period="daily">Daily</button>
+          <button data-period="weekly">Weekly</button>
+          <button data-period="monthly">Monthly</button>
+          <button data-period="yearly">Yearly</button>
+        </div>
+        <pre id="summary-result"></pre>
+      </section>
+
+      <section class="journal-panel hidden" id="exports-view">
+        <h2>Exports</h2>
+        <div class="button-row">
+          <button data-export="markdown">Markdown</button>
+          <button data-export="json">JSON</button>
+        </div>
+        <pre id="export-result"></pre>
+      </section>
+    </section>
+  </main>
+  <script src="/static/digua_journal.js"></script>
+</body>
+</html>

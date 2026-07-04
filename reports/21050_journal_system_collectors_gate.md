@@ -1,0 +1,24 @@
+# 21050 journal_system_collectors_gate
+
+- generated_at: 2026-07-04T08:11:57Z
+- status: pass
+- verdict: pass
+
+```json
+{
+  "collectors": [
+    "openclaw",
+    "workspace_harness",
+    "document_rag",
+    "report",
+    "token_budget",
+    "copy_route"
+  ],
+  "generated_at": "2026-07-04T08:11:57Z",
+  "report_id": 21050,
+  "sample_event_count": 44,
+  "sample_events_path": "reports/journal_system_collector_sample_events.jsonl",
+  "status": "pass",
+  "title": "journal_system_collectors_gate"
+}
+```

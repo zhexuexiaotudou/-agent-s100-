@@ -1,0 +1,89 @@
+# Digua Journal Export: daily
+
+- Project: all
+- Exported at: 2026-07-04T08:11:57Z
+- Cloud generation: disabled
+
+## Events
+- 2026-07-04T01:00:00Z [nas_index_diff] file_added in journal-safe-item-00.md - NAS index detected file_added for a redacted item. content_hash=new_dd250f9a3e63; size_bucket=medium.
+- 2026-07-04T01:07:00Z [nas_index_diff] file_modified in journal-safe-item-01.md - NAS index detected file_modified for a redacted item. content_hash=new_b93cce786989; size_bucket=small.
+- 2026-07-04T01:14:00Z [nas_index_diff] file_modified in journal-safe-item-02.md - NAS index detected file_modified for a redacted item. content_hash=new_2d91398d7a8e; size_bucket=small.
+- 2026-07-04T01:21:00Z [nas_index_diff] file_modified in journal-safe-item-03.md - NAS index detected file_modified for a redacted item. content_hash=new_d4d5ae170a30; size_bucket=small.
+- 2026-07-04T01:28:00Z [nas_index_diff] file_modified in journal-safe-item-04.md - NAS index detected file_modified for a redacted item. content_hash=new_57f092b6ba75; size_bucket=medium.
+- 2026-07-04T01:35:00Z [nas_index_diff] file_added in journal-safe-item-05.md - NAS index detected file_added for a redacted item. content_hash=new_8b7b34b86fbf; size_bucket=small.
+- 2026-07-04T01:42:00Z [nas_index_diff] file_modified in journal-safe-item-06.md - NAS index detected file_modified for a redacted item. content_hash=new_9a596c809e2b; size_bucket=small.
+- 2026-07-04T01:49:00Z [nas_index_diff] file_modified in journal-safe-item-07.md - NAS index detected file_modified for a redacted item. content_hash=new_83feaa1d2a91; size_bucket=small.
+- 2026-07-04T01:56:00Z [nas_index_diff] file_modified in journal-safe-item-08.md - NAS index detected file_modified for a redacted item. content_hash=new_0a39ac2f2524; size_bucket=medium.
+- 2026-07-04T02:03:00Z [nas_index_diff] file_modified in journal-safe-item-09.md - NAS index detected file_modified for a redacted item. content_hash=new_cdcaa379a24a; size_bucket=small.
+- 2026-07-04T02:10:00Z [nas_index_diff] file_added in journal-safe-item-10.md - NAS index detected file_added for a redacted item. content_hash=new_8f4cd6a64648; size_bucket=small.
+- 2026-07-04T02:17:00Z [nas_index_diff] file_modified in journal-safe-item-11.md - NAS index detected file_modified for a redacted item. content_hash=new_0fa22d963ef1; size_bucket=small.
+- 2026-07-04T02:24:00Z [nas_index_diff] file_modified in journal-safe-item-12.md - NAS index detected file_modified for a redacted item. content_hash=new_2bc2689e970b; size_bucket=medium.
+- 2026-07-04T02:30:00Z [openclaw] OpenClaw journal action health_check - OpenClaw default service observed health_check; no foreground takeover and no port changes.
+- 2026-07-04T02:31:00Z [nas_index_diff] file_modified in journal-safe-item-13.md - NAS index detected file_modified for a redacted item. content_hash=new_0b5934affdc5; size_bucket=small.
+- 2026-07-04T02:38:00Z [nas_index_diff] file_modified in journal-safe-item-14.md - NAS index detected file_modified for a redacted item. content_hash=new_15dd81abc567; size_bucket=small.
+- 2026-07-04T02:41:00Z [openclaw] OpenClaw journal action timeline_view - OpenClaw default service observed timeline_view; no foreground takeover and no port changes.
+- 2026-07-04T02:45:00Z [nas_index_diff] file_added in journal-safe-item-15.md - NAS index detected file_added for a redacted item. content_hash=new_501cca941ded; size_bucket=small.
+- 2026-07-04T02:52:00Z [nas_index_diff] file_modified in journal-safe-item-16.md - NAS index detected file_modified for a redacted item. content_hash=new_b7056ca6ddfe; size_bucket=medium.
+- 2026-07-04T02:52:00Z [openclaw] OpenClaw journal action manual_entry - OpenClaw default service observed manual_entry; no foreground takeover and no port changes.
+- 2026-07-04T02:59:00Z [nas_index_diff] file_modified in journal-safe-item-17.md - NAS index detected file_modified for a redacted item. content_hash=new_742c87aacec5; size_bucket=small.
+- 2026-07-04T03:00:00Z [workspace_harness] Harness trace captured readonly_shadow - Workspace Harness trace captured readonly_shadow with write execution disabled for Journal collection.
+- 2026-07-04T03:03:00Z [openclaw] OpenClaw journal action summary_request - OpenClaw default service observed summary_request; no foreground takeover and no port changes.
+- 2026-07-04T03:06:00Z [nas_index_diff] file_modified in journal-safe-item-18.md - NAS index detected file_modified for a redacted item. content_hash=new_82536429f624; size_bucket=small.
+- 2026-07-04T03:13:00Z [workspace_harness] Harness trace captured policy_check - Workspace Harness trace captured policy_check with write execution disabled for Journal collection.
+- 2026-07-04T03:13:00Z [nas_index_diff] file_modified in journal-safe-item-19.md - NAS index detected file_modified for a redacted item. content_hash=new_50be1c5e860d; size_bucket=small.
+- 2026-07-04T03:14:00Z [openclaw] OpenClaw journal action health_check - OpenClaw default service observed health_check; no foreground takeover and no port changes.
+- 2026-07-04T03:20:00Z [nas_index_diff] file_added in journal-safe-item-20.md - NAS index detected file_added for a redacted item. content_hash=new_5266a1a09e93; size_bucket=medium.
+- 2026-07-04T03:25:00Z [openclaw] OpenClaw journal action timeline_view - OpenClaw default service observed timeline_view; no foreground takeover and no port changes.
+- 2026-07-04T03:26:00Z [workspace_harness] Harness trace captured copy_preview - Workspace Harness trace captured copy_preview with write execution disabled for Journal collection.
+- 2026-07-04T03:27:00Z [nas_index_diff] file_modified in journal-safe-item-21.md - NAS index detected file_modified for a redacted item. content_hash=new_2d006efe76ad; size_bucket=small.
+- 2026-07-04T03:34:00Z [nas_index_diff] file_modified in journal-safe-item-22.md - NAS index detected file_modified for a redacted item. content_hash=new_38a094c0eb55; size_bucket=small.
+- 2026-07-04T03:36:00Z [openclaw] OpenClaw journal action manual_entry - OpenClaw default service observed manual_entry; no foreground takeover and no port changes.
+- 2026-07-04T03:39:00Z [workspace_harness] Harness trace captured rollback_check - Workspace Harness trace captured rollback_check with write execution disabled for Journal collection.
+- 2026-07-04T03:41:00Z [nas_index_diff] file_modified in journal-safe-item-23.md - NAS index detected file_modified for a redacted item. content_hash=new_3bb788fc0934; size_bucket=small.
+- 2026-07-04T03:47:00Z [openclaw] OpenClaw journal action summary_request - OpenClaw default service observed summary_request; no foreground takeover and no port changes.
+- 2026-07-04T03:48:00Z [nas_index_diff] file_modified in journal-safe-item-24.md - NAS index detected file_modified for a redacted item. content_hash=new_2985f8e42d48; size_bucket=medium.
+- 2026-07-04T03:52:00Z [workspace_harness] Harness trace captured readonly_shadow - Workspace Harness trace captured readonly_shadow with write execution disabled for Journal collection.
+- 2026-07-04T03:55:00Z [nas_index_diff] file_added in journal-safe-item-25.md - NAS index detected file_added for a redacted item. content_hash=new_c598c35df7d5; size_bucket=small.
+- 2026-07-04T04:00:00Z [document_rag] RAG hit for permission-aware retrieval - Document/RAG collector stored only citation metadata for permission-aware retrieval; raw private content is not stored.
+- 2026-07-04T04:02:00Z [nas_index_diff] file_modified in journal-safe-item-26.md - NAS index detected file_modified for a redacted item. content_hash=new_39f70e3217ef; size_bucket=small.
+- 2026-07-04T04:05:00Z [workspace_harness] Harness trace captured policy_check - Workspace Harness trace captured policy_check with write execution disabled for Journal collection.
+- 2026-07-04T04:09:00Z [document_rag] RAG hit for local summary - Document/RAG collector stored only citation metadata for local summary; raw private content is not stored.
+- 2026-07-04T04:09:00Z [nas_index_diff] file_modified in journal-safe-item-27.md - NAS index detected file_modified for a redacted item. content_hash=new_2892c1391738; size_bucket=small.
+- 2026-07-04T04:16:00Z [nas_index_diff] file_modified in journal-safe-item-28.md - NAS index detected file_modified for a redacted item. content_hash=new_8c6aaefa9ad8; size_bucket=medium.
+- 2026-07-04T04:18:00Z [workspace_harness] Harness trace captured copy_preview - Workspace Harness trace captured copy_preview with write execution disabled for Journal collection.
+- 2026-07-04T04:18:00Z [document_rag] RAG hit for evidence citation - Document/RAG collector stored only citation metadata for evidence citation; raw private content is not stored.
+- 2026-07-04T04:23:00Z [nas_index_diff] file_modified in journal-safe-item-29.md - NAS index detected file_modified for a redacted item. content_hash=new_64a172fffcee; size_bucket=small.
+- 2026-07-04T04:27:00Z [document_rag] RAG hit for report section - Document/RAG collector stored only citation metadata for report section; raw private content is not stored.
+- 2026-07-04T04:30:00Z [nas_index_diff] file_added in journal-safe-item-30.md - NAS index detected file_added for a redacted item. content_hash=new_5619bd3d792f; size_bucket=small.
+- 2026-07-04T04:31:00Z [workspace_harness] Harness trace captured rollback_check - Workspace Harness trace captured rollback_check with write execution disabled for Journal collection.
+- 2026-07-04T04:36:00Z [document_rag] RAG hit for permission-aware retrieval - Document/RAG collector stored only citation metadata for permission-aware retrieval; raw private content is not stored.
+- 2026-07-04T04:37:00Z [nas_index_diff] file_modified in journal-safe-item-31.md - NAS index detected file_modified for a redacted item. content_hash=new_61e815aef331; size_bucket=small.
+- 2026-07-04T04:45:00Z [document_rag] RAG hit for local summary - Document/RAG collector stored only citation metadata for local summary; raw private content is not stored.
+- 2026-07-04T04:54:00Z [document_rag] RAG hit for evidence citation - Document/RAG collector stored only citation metadata for evidence citation; raw private content is not stored.
+- 2026-07-04T05:00:00Z [report] Gate report 17090 indexed - Report collector captured metadata for gate 17090; report body remains local evidence only.
+- 2026-07-04T05:03:00Z [document_rag] RAG hit for report section - Document/RAG collector stored only citation metadata for report section; raw private content is not stored.
+- 2026-07-04T05:05:00Z [report] Gate report 17100 indexed - Report collector captured metadata for gate 17100; report body remains local evidence only.
+- 2026-07-04T05:10:00Z [report] Gate report 20080 indexed - Report collector captured metadata for gate 20080; report body remains local evidence only.
+- 2026-07-04T05:15:00Z [report] Gate report 21000 indexed - Report collector captured metadata for gate 21000; report body remains local evidence only.
+- 2026-07-04T05:20:00Z [report] Gate report 17090 indexed - Report collector captured metadata for gate 17090; report body remains local evidence only.
+- 2026-07-04T05:25:00Z [report] Gate report 17100 indexed - Report collector captured metadata for gate 17100; report body remains local evidence only.
+- 2026-07-04T05:30:00Z [report] Gate report 20080 indexed - Report collector captured metadata for gate 20080; report body remains local evidence only.
+- 2026-07-04T05:35:00Z [report] Gate report 21000 indexed - Report collector captured metadata for gate 21000; report body remains local evidence only.
+- 2026-07-04T05:45:00Z [token_budget] Token route sample 0 - Token budget route stayed local-only for private Journal evidence.
+- 2026-07-04T05:51:00Z [token_budget] Token route sample 1 - Token budget route stayed local-only for private Journal evidence.
+- 2026-07-04T05:57:00Z [token_budget] Token route sample 2 - Token budget route stayed local-only for private Journal evidence.
+- 2026-07-04T06:03:00Z [token_budget] Token route sample 3 - Token budget route stayed local-only for private Journal evidence.
+- 2026-07-04T06:09:00Z [token_budget] Token route sample 4 - Token budget route stayed local-only for private Journal evidence.
+- 2026-07-04T06:15:00Z [token_budget] Token route sample 5 - Token budget route stayed local-only for private Journal evidence.
+- 2026-07-04T06:15:00Z [copy_route] Copy route readonly trace 0 - Copy route trace was ingested as readonly metadata; no real NAS copy/delete/move was executed.
+- 2026-07-04T06:23:00Z [copy_route] Copy route readonly trace 1 - Copy route trace was ingested as readonly metadata; no real NAS copy/delete/move was executed.
+- 2026-07-04T06:31:00Z [copy_route] Copy route readonly trace 2 - Copy route trace was ingested as readonly metadata; no real NAS copy/delete/move was executed.
+- 2026-07-04T06:39:00Z [copy_route] Copy route readonly trace 3 - Copy route trace was ingested as readonly metadata; no real NAS copy/delete/move was executed.
+- 2026-07-04T06:47:00Z [copy_route] Copy route readonly trace 4 - Copy route trace was ingested as readonly metadata; no real NAS copy/delete/move was executed.
+- 2026-07-04T06:55:00Z [copy_route] Copy route readonly trace 5 - Copy route trace was ingested as readonly metadata; no real NAS copy/delete/move was executed.
+- 2026-07-04T08:11:57Z [manual] API smoke note - API smoke body
+- 2026-07-04T08:11:57Z [manual] Production acceptance note - Journal manual entry records operator-visible acceptance notes without storing raw private content.
+
+## Manual Entries
+- 2026-07-04T08:11:57Z Production acceptance note - Journal manual entry records operator-visible acceptance notes without storing raw private content.
+- 2026-07-04T08:11:57Z API smoke note - API smoke body
