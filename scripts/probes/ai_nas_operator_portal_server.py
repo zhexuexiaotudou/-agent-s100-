@@ -2,6 +2,7 @@
 from __future__ import annotations
 
 import argparse
+import hashlib
 import json
 import os
 import platform
@@ -20,6 +21,32 @@ from http import HTTPStatus
 from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 from pathlib import Path
 from urllib.parse import urlparse
+
+REPO_ROOT = Path(__file__).resolve().parents[2]
+if str(REPO_ROOT) not in sys.path:
+    sys.path.insert(0, str(REPO_ROOT))
+
+try:
+    from src.harness.token_budget_integration import TokenBudgetIntegration
+except Exception:
+    TokenBudgetIntegration = None  # type: ignore[assignment]
+
+try:
+    from src.openclaw.routes.harness_status_routes import harness_status_response
+    from src.openclaw.routes.nas_copy_routes import (
+        copy_confirm_response,
+        copy_dry_run_response,
+        copy_execute_response,
+        copy_preview_response,
+        copy_rollback_response,
+    )
+except Exception:
+    harness_status_response = None  # type: ignore[assignment]
+    copy_preview_response = None  # type: ignore[assignment]
+    copy_dry_run_response = None  # type: ignore[assignment]
+    copy_confirm_response = None  # type: ignore[assignment]
+    copy_execute_response = None  # type: ignore[assignment]
+    copy_rollback_response = None  # type: ignore[assignment]
 
 from ai_nas_app_ecosystem import AppEcosystem
 from ai_nas_backup import BackupManager
@@ -759,49 +786,45 @@ class PortalState:
             return
 
     def storage_rename(self, relative_path: str, new_name: str, user: dict) -> tuple[int, dict]:
-        if not self.personal_root:
-            return HTTPStatus.SERVICE_UNAVAILABLE, {"ok": False, "error": "personal_root_not_configured"}
         try:
             source_rel = normalize_storage_relative_path(relative_path)
-            if "/" in new_name or "\\" in new_name or not new_name.strip():
-                return HTTPStatus.BAD_REQUEST, {"ok": False, "error": "invalid_new_name"}
-            source = resolve_storage_path(self.personal_root, source_rel, allow_root=False)
-            target = source.with_name(new_name.strip()).resolve(strict=False)
-            target_rel = target.relative_to(self.personal_root.resolve(strict=False)).as_posix()
-        except (StoragePathError, ValueError) as exc:
-            return HTTPStatus.BAD_REQUEST, {"ok": False, "error": str(exc)}
-        if not self.can_write(user, source_rel) or not self.can_write(user, target_rel):
-            self.record_operation("rename", source_rel, target_rel, "permission_denied", str(user.get("username")))
-            return HTTPStatus.FORBIDDEN, {"ok": False, "error": "permission_denied", "required": "write", "path": source_rel}
-        if not source.exists():
-            return HTTPStatus.NOT_FOUND, {"ok": False, "error": "source_not_found", "path": source_rel}
-        if target.exists():
-            return HTTPStatus.CONFLICT, {"ok": False, "error": "target_exists", "path": target_rel}
-        source.rename(target)
-        self.record_operation("rename", source_rel, target_rel, "completed", str(user.get("username")))
-        return HTTPStatus.OK, {"ok": True, "nas_action": {"operation": "rename", "status": "completed", "source": source_rel, "target": target_rel}}
+        except StoragePathError:
+            source_rel = ""
+        self.record_operation("rename", source_rel, None, "disabled_by_harness_default_service", str(user.get("username")))
+        return HTTPStatus.FORBIDDEN, {
+            "ok": False,
+            "error": "rename_disabled_by_harness_default_service",
+            "qwen_execution_authority": False,
+            "allowed_write_actions": ["copy"],
+            "source_path_hash": hashlib.sha256(source_rel.encode("utf-8", errors="replace")).hexdigest() if source_rel else None,
+        }
 
     def storage_copy(self, source_relative_path: str, target_relative_path: str, user: dict) -> tuple[int, dict]:
-        if not self.personal_root:
-            return HTTPStatus.SERVICE_UNAVAILABLE, {"ok": False, "error": "personal_root_not_configured"}
         try:
             source_rel = normalize_storage_relative_path(source_relative_path)
             target_rel = normalize_storage_relative_path(target_relative_path)
-            source = resolve_storage_path(self.personal_root, source_rel, allow_root=False)
-            target = resolve_storage_path(self.personal_root, target_rel, allow_root=False)
         except StoragePathError as exc:
             return HTTPStatus.BAD_REQUEST, {"ok": False, "error": str(exc)}
-        if not self.can_read(user, source_rel) or not self.can_write(user, target_rel):
-            self.record_operation("copy", source_rel, target_rel, "permission_denied", str(user.get("username")))
-            return HTTPStatus.OK, {"ok": True, "nas_action": {"operation": "copy", "status": "permission_denied", "source": source_rel, "target": target_rel}}
-        if not source.exists() or not source.is_file():
-            return HTTPStatus.NOT_FOUND, {"ok": False, "error": "source_file_not_found", "path": source_rel}
-        if target.exists():
-            return HTTPStatus.CONFLICT, {"ok": False, "error": "target_exists", "path": target_rel}
-        target.parent.mkdir(parents=True, exist_ok=True)
-        shutil.copy2(str(source), str(target))
-        self.record_operation("copy", source_rel, target_rel, "completed", str(user.get("username")))
-        return HTTPStatus.OK, {"ok": True, "nas_action": {"operation": "copy", "status": "completed", "source": source_rel, "target": target_rel}}
+        self.record_operation("copy", source_rel, target_rel, "harness_route_required", str(user.get("username")))
+        return HTTPStatus.ACCEPTED, {
+            "ok": True,
+            "nas_action": {
+                "operation": "copy",
+                "status": "harness_route_required",
+                "routes": [
+                    "/api/nas/copy/preview",
+                    "/api/nas/copy/dry-run",
+                    "/api/nas/copy/confirm",
+                    "/api/nas/copy/execute",
+                    "/api/nas/copy/rollback",
+                ],
+                "source_path_hash": hashlib.sha256(source_rel.encode("utf-8", errors="replace")).hexdigest(),
+                "target_path_hash": hashlib.sha256(target_rel.encode("utf-8", errors="replace")).hexdigest(),
+                "qwen_execution_authority": False,
+                "dispatcher_required": True,
+                "direct_copy_performed": False,
+            },
+        }
 
     def copilot_chat(self, message: str, user: dict) -> tuple[int, dict]:
         quoted = re.findall(r'"([^"]+)"', message or "")
@@ -1252,6 +1275,16 @@ class PortalHandler(BaseHTTPRequestHandler):
             return False
         return True
 
+    def token_budget_api(self):
+        if TokenBudgetIntegration is None:
+            self.send_json({"ok": False, "error": "token_budget_integration_unavailable"}, HTTPStatus.SERVICE_UNAVAILABLE)
+            return None
+        try:
+            return TokenBudgetIntegration()
+        except Exception as exc:
+            self.send_json({"ok": False, "error": f"token_budget_init_failed:{type(exc).__name__}:{exc}"}, HTTPStatus.SERVICE_UNAVAILABLE)
+            return None
+
     def do_GET(self) -> None:
         route = urlparse(self.path).path.rstrip("/") or "/"
         if route in {"/", "/operator_portal.html"}:
@@ -1357,6 +1390,12 @@ class PortalHandler(BaseHTTPRequestHandler):
                 return
             self.send_json(self.state.audit_summary_payload())
             return
+        if route == "/api/harness/status":
+            if harness_status_response is None:
+                self.send_json({"ok": False, "error": "harness_default_service_unavailable"}, HTTPStatus.SERVICE_UNAVAILABLE)
+                return
+            self.send_json(harness_status_response(report_root=self.state.report_root, personal_root=self.state.personal_root))
+            return
         if route == "/api/health":
             contract = self.state.portal_contract()
             self.send_json(
@@ -1398,6 +1437,24 @@ class PortalHandler(BaseHTTPRequestHandler):
         if route == "/api/operator-decisions":
             self.send_json({"ok": True, "operator_decisions": self.state.latest_operator_decisions(limit=50)})
             return
+        if route == "/api/token-budget/summary":
+            api = self.token_budget_api()
+            if api is None:
+                return
+            self.send_json(api.summary())
+            return
+        if route == "/api/token-budget/benchmark-summary":
+            api = self.token_budget_api()
+            if api is None:
+                return
+            self.send_json(api.benchmark_summary())
+            return
+        if route.startswith("/api/token-budget/trace/"):
+            api = self.token_budget_api()
+            if api is None:
+                return
+            self.send_json(api.trace(route.rsplit("/", 1)[-1]))
+            return
         self.send_json(
             {
                 "ok": False,
@@ -1411,9 +1468,20 @@ class PortalHandler(BaseHTTPRequestHandler):
                     "/api/services",
                     "/api/portal-report",
                     "/api/operator-decisions",
+                    "/api/harness/status",
                     "/api/contracts/operator-portal",
+                    "/api/token-budget/summary",
+                    "/api/token-budget/benchmark-summary",
+                    "/api/token-budget/trace/{run_id}",
+                    "POST /api/nas/copy/preview",
+                    "POST /api/nas/copy/dry-run",
+                    "POST /api/nas/copy/confirm",
+                    "POST /api/nas/copy/execute",
+                    "POST /api/nas/copy/rollback",
                     "POST /api/refresh",
                     "POST /api/operator-decision",
+                    "POST /api/token-budget/estimate",
+                    "POST /api/token-budget/route",
                 ],
             },
             HTTPStatus.NOT_FOUND,
@@ -1687,11 +1755,57 @@ class PortalHandler(BaseHTTPRequestHandler):
             status, result = self.state.record_operator_decision(payload)
             self.send_json(result, status)
             return
+        if route in {"/api/token-budget/estimate", "/api/token-budget/route"}:
+            status, payload = self.read_json_body()
+            if status:
+                self.send_json(payload or {}, status)
+                return
+            api = self.token_budget_api()
+            if api is None:
+                return
+            result = api.estimate(payload or {}) if route.endswith("/estimate") else api.route(payload or {})
+            self.send_json(result, HTTPStatus.OK if result.get("ok") else HTTPStatus.BAD_REQUEST)
+            return
+        if route in {
+            "/api/nas/copy/preview",
+            "/api/nas/copy/dry-run",
+            "/api/nas/copy/confirm",
+            "/api/nas/copy/execute",
+            "/api/nas/copy/rollback",
+        }:
+            status, payload = self.read_json_body()
+            if status:
+                self.send_json(payload or {}, status)
+                return
+            route_map = {
+                "/api/nas/copy/preview": copy_preview_response,
+                "/api/nas/copy/dry-run": copy_dry_run_response,
+                "/api/nas/copy/confirm": copy_confirm_response,
+                "/api/nas/copy/execute": copy_execute_response,
+                "/api/nas/copy/rollback": copy_rollback_response,
+            }
+            handler = route_map[route]
+            if handler is None:
+                self.send_json({"ok": False, "error": "harness_copy_route_unavailable"}, HTTPStatus.SERVICE_UNAVAILABLE)
+                return
+            status_code, result = handler(payload or {}, report_root=self.state.report_root, personal_root=self.state.personal_root)
+            self.send_json(result, status_code)
+            return
         self.send_json(
             {
                 "ok": False,
                 "error": "not_found",
-                "routes": ["POST /api/refresh", "POST /api/operator-decision"],
+                "routes": [
+                    "POST /api/refresh",
+                    "POST /api/operator-decision",
+                    "POST /api/nas/copy/preview",
+                    "POST /api/nas/copy/dry-run",
+                    "POST /api/nas/copy/confirm",
+                    "POST /api/nas/copy/execute",
+                    "POST /api/nas/copy/rollback",
+                    "POST /api/token-budget/estimate",
+                    "POST /api/token-budget/route",
+                ],
             },
             HTTPStatus.NOT_FOUND,
         )

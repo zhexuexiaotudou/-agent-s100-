@@ -6,6 +6,7 @@ import json
 import os
 import re
 import subprocess
+import sys
 import time
 import uuid
 from datetime import datetime, timezone
@@ -16,6 +17,14 @@ from typing import Any
 
 DEFAULT_CONFIG = Path(os.environ.get("QWEN25_POLICY", "configs/qwen25_official_route_policy.json"))
 MAX_REQUEST_BYTES = 5 * 1024 * 1024
+REPO_ROOT = Path(__file__).resolve().parents[1]
+if str(REPO_ROOT) not in sys.path:
+    sys.path.insert(0, str(REPO_ROOT))
+
+try:
+    from src.harness.token_budget_integration import TokenBudgetIntegration
+except Exception:
+    TokenBudgetIntegration = None  # type: ignore[assignment]
 
 
 def iso_now() -> str:
@@ -109,7 +118,31 @@ def route_term_hits(query: str, groups: dict[str, list[str]]) -> dict[str, list[
     return hits
 
 
-def edge_cloud_route_classification(prompt: str) -> dict[str, Any]:
+def token_budget_api() -> Any | None:
+    if TokenBudgetIntegration is None:
+        return None
+    try:
+        return TokenBudgetIntegration()
+    except Exception:
+        return None
+
+
+def token_budget_route_for_prompt(prompt: str) -> dict[str, Any]:
+    api = token_budget_api()
+    if api is None:
+        return {"ok": False, "error": "token_budget_integration_unavailable"}
+    return api.route(
+        {
+            "case_id": f"qwen_gateway_{uuid.uuid4().hex[:12]}",
+            "task_type": "public_research",
+            "user_prompt": extract_original_query(prompt),
+            "context_text": "",
+        },
+        record_trace=True,
+    )
+
+
+def edge_cloud_route_classification(prompt: str, token_budget_route: dict[str, Any] | None = None) -> dict[str, Any]:
     query = extract_original_query(prompt)
     privacy_terms = {
         "id_card": ["身份证", "护照", "驾驶证", "id card", "passport", "driver license"],
@@ -150,6 +183,16 @@ def edge_cloud_route_classification(prompt: str) -> dict[str, Any]:
     else:
         reason = "uncertain route defaults local"
         local_tool_id = None
+    if token_budget_route and token_budget_route.get("ok"):
+        budget_route = token_budget_route.get("route")
+        if budget_route == "cloud_allowed_redacted":
+            route = "cloud"
+            reason = f"token_budget_router allowed redacted cloud: {token_budget_route.get('route_reason')}"
+            local_tool_id = None
+        elif budget_route in {"local_only", "cloud_blocked_private"}:
+            route = "local"
+            reason = f"token_budget_router blocked cloud: {token_budget_route.get('route_reason')}"
+            local_tool_id = "ai_nas_allowlisted_tools" if budget_route == "local_only" else None
     return {
         "route": route,
         "privacy_level": privacy_level,
@@ -157,6 +200,7 @@ def edge_cloud_route_classification(prompt: str) -> dict[str, Any]:
         "reason": reason,
         "local_tool_id": local_tool_id,
         "classifier": "qwen_gateway_structured_router",
+        "token_budget_route": token_budget_route or {"ok": False, "error": "not_run"},
         "privacy_hits": privacy_hits,
         "simple_hits": simple_hits,
         "original_query_preview": query[:180],
@@ -422,6 +466,16 @@ class Handler(BaseHTTPRequestHandler):
     def do_GET(self) -> None:
         policy = self.policy
         runtime = policy["official_runtime"]
+        if self.path in {"/api/token-budget/summary", "/api/token-budget/benchmark-summary"}:
+            api = token_budget_api()
+            if api is None:
+                self.json_response(503, {"ok": False, "error": "token_budget_integration_unavailable"})
+                return
+            if self.path == "/api/token-budget/summary":
+                self.json_response(200, api.summary())
+                return
+            self.json_response(200, api.benchmark_summary())
+            return
         if self.path == "/health":
             self.json_response(
                 200,
@@ -458,6 +512,19 @@ class Handler(BaseHTTPRequestHandler):
         self.json_response(404, {"error": {"message": "not found", "type": "not_found"}})
 
     def do_POST(self) -> None:
+        if self.path in {"/api/token-budget/estimate", "/api/token-budget/route"}:
+            try:
+                payload = read_json_request(self)
+            except Exception as exc:
+                self.json_response(400, {"error": {"message": str(exc), "type": "invalid_request"}})
+                return
+            api = token_budget_api()
+            if api is None:
+                self.json_response(503, {"ok": False, "error": "token_budget_integration_unavailable"})
+                return
+            result = api.estimate(payload) if self.path.endswith("/estimate") else api.route(payload)
+            self.json_response(200 if result.get("ok") else 400, result)
+            return
         if self.path not in {"/v1/chat/completions", "/v1/completions"}:
             self.json_response(404, {"error": {"message": "not found", "type": "not_found"}})
             return
@@ -469,7 +536,8 @@ class Handler(BaseHTTPRequestHandler):
         prompt = first_text(payload)
         policy = self.policy
         if is_edge_cloud_route_request(payload):
-            classification = edge_cloud_route_classification(prompt)
+            token_budget_route = token_budget_route_for_prompt(prompt)
+            classification = edge_cloud_route_classification(prompt, token_budget_route)
             self.json_response(
                 200,
                 chat_completion(
