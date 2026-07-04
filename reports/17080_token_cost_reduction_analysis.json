@@ -1,0 +1,89 @@
+{
+  "average_reduction_ratio": 0.926837,
+  "by_task_type": {
+    "chinese_search": {
+      "average_naive_cloud_tokens": 719.3,
+      "average_optimized_cloud_tokens": 0.0,
+      "average_reduction_ratio": 1.0,
+      "cases": 10,
+      "cloud_call_avoidance_rate": 1.0,
+      "private_leak_count": 0
+    },
+    "cloud_sensitive_mixed": {
+      "average_naive_cloud_tokens": 1212.0,
+      "average_optimized_cloud_tokens": 316.1,
+      "average_reduction_ratio": 0.739187,
+      "cases": 10,
+      "cloud_call_avoidance_rate": 0.0,
+      "private_leak_count": 0
+    },
+    "document_qa": {
+      "average_naive_cloud_tokens": 1398.37,
+      "average_optimized_cloud_tokens": 206.47,
+      "average_reduction_ratio": 0.876154,
+      "cases": 30,
+      "cloud_call_avoidance_rate": 0.333333,
+      "private_leak_count": 0
+    },
+    "file_organization_suggestion": {
+      "average_naive_cloud_tokens": 1276.5,
+      "average_optimized_cloud_tokens": 0.0,
+      "average_reduction_ratio": 1.0,
+      "cases": 10,
+      "cloud_call_avoidance_rate": 1.0,
+      "private_leak_count": 0
+    },
+    "folder_summary": {
+      "average_naive_cloud_tokens": 1498.0,
+      "average_optimized_cloud_tokens": 0.0,
+      "average_reduction_ratio": 1.0,
+      "cases": 10,
+      "cloud_call_avoidance_rate": 1.0,
+      "private_leak_count": 0
+    },
+    "mixed_zh_en_search": {
+      "average_naive_cloud_tokens": 756.0,
+      "average_optimized_cloud_tokens": 0.0,
+      "average_reduction_ratio": 1.0,
+      "cases": 10,
+      "cloud_call_avoidance_rate": 1.0,
+      "private_leak_count": 0
+    },
+    "nas_search": {
+      "average_naive_cloud_tokens": 985.05,
+      "average_optimized_cloud_tokens": 0.0,
+      "average_reduction_ratio": 1.0,
+      "cases": 20,
+      "cloud_call_avoidance_rate": 1.0,
+      "private_leak_count": 0
+    },
+    "public_research": {
+      "average_naive_cloud_tokens": 1854.2,
+      "average_optimized_cloud_tokens": 312.1,
+      "average_reduction_ratio": 0.831678,
+      "cases": 10,
+      "cloud_call_avoidance_rate": 0.0,
+      "private_leak_count": 0
+    },
+    "report_generation": {
+      "average_naive_cloud_tokens": 1323.65,
+      "average_optimized_cloud_tokens": 154.95,
+      "average_reduction_ratio": 0.924773,
+      "cases": 20,
+      "cloud_call_avoidance_rate": 0.5,
+      "private_leak_count": 0
+    }
+  },
+  "cloud_call_avoidance_rate": 0.615385,
+  "final_verdict": "tokenizer_token_budget_product_deployed_claim_supported",
+  "gate": "17060_token_cost_reduction_analysis",
+  "generated_at": "2026-07-04T13:57:00+08:00",
+  "median_reduction_ratio": 1.0,
+  "not_bill_savings": true,
+  "p90_reduction_ratio": 1.0,
+  "private_cases_blocked": 20,
+  "private_leak_count": 0,
+  "quality_pass_rate": 1.0,
+  "rationale": "benchmark supports significant cloud input token reduction",
+  "safe_wording_level": "benchmark 中显著减少云端输入 token"
+}

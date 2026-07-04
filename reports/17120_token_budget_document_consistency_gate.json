@@ -1,0 +1,59 @@
+{
+  "gate": "17120_token_budget_document_consistency_gate",
+  "generated_at": "2026-07-04T14:10:00+08:00",
+  "status": "pass",
+  "final_verdict": "token_budget_report_text_ready",
+  "source_package": "digua_ai_nas_tokenizer_product_final_for_gptpro_20260704-135657.zip",
+  "metrics": {
+    "benchmark_case_count": 130,
+    "average_reduction_ratio": 0.926837,
+    "average_reduction_percent": "92.68%",
+    "median_reduction_ratio": 1.0,
+    "p90_reduction_ratio": 1.0,
+    "cloud_call_avoidance_rate": 0.615385,
+    "cloud_call_avoidance_percent": "61.54%",
+    "private_leak_count": 0,
+    "quality_pass_rate": 1.0,
+    "quality_pass_percent": "100%",
+    "real_qwen_tokenizer_used": true,
+    "fallback_used": false,
+    "tokenizer_backend": "tokenizers_json",
+    "tokenizer_identity_hash": "8695d2b54075568a870d2364c50a53a59be11e28305a1cf4cc5bdbb67a7223af"
+  },
+  "checked_files": [
+    "docs/TOKENIZER_TOKEN_BUDGET_DESIGN_REPORT_SECTION.md",
+    "docs/TOKENIZER_TOKEN_BUDGET_PERFORMANCE_TABLE.md",
+    "docs/TOKEN_COST_SAFE_WORDING.md",
+    "docs/TOKEN_BUDGET_DEFENSE_QA.md",
+    "docs/SECTION_1_3_TECHNICAL_FEATURES_BY_ASPECT.md",
+    "docs/SECTION_1_4_PERFORMANCE_INDICATORS_TABLE.md",
+    "docs/FINAL_ABSTRACT_SAFE_VERSION.md",
+    "reports/PRODUCT_CLAIM_EVIDENCE_MATRIX.md",
+    "reports/PRODUCT_CLAIM_EVIDENCE_MATRIX.json"
+  ],
+  "new_report_sections": [
+    "docs/REPORT_SECTION_TOKENIZER_TECHNICAL_FEATURE.md",
+    "docs/REPORT_SECTION_TOKENIZER_PERFORMANCE_TABLE.md",
+    "docs/REPORT_SECTION_TOKENIZER_PRIVACY_AND_ROUTE.md",
+    "docs/TOKEN_BUDGET_DEFENSE_QA_FINAL.md",
+    "docs/TOKEN_BUDGET_PRODUCTION_TRACE_PLAN.md"
+  ],
+  "consistency_checks": {
+    "no_120_case_token_budget_claims_remaining_in_target_docs": true,
+    "benchmark_case_count_unified_to_130": true,
+    "average_reduction_unified_to_0_926837_or_92_68_percent": true,
+    "cloud_call_avoidance_unified_to_0_615385_or_61_54_percent": true,
+    "private_leak_count_unified_to_0": true,
+    "quality_pass_rate_unified_to_1_or_100_percent": true,
+    "benchmark_not_written_as_real_billing_cost": true,
+    "benchmark_not_written_as_long_term_production_stats": true,
+    "private_raw_content_not_allowed_in_cloud_payload": true
+  },
+  "boundaries": {
+    "service_restart_performed": false,
+    "protected_ports_modified": false,
+    "real_nas_write_performed": false,
+    "dream7b_promoted_to_frontend": false,
+    "qwen_tool_execution_authority_granted": false
+  }
+}

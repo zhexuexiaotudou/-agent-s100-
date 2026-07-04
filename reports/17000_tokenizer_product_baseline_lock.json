@@ -1,0 +1,198 @@
+{
+  "audit": {
+    "nas_write_performed": false,
+    "read_only": true,
+    "service_restart_performed": false
+  },
+  "cloud_route_config_files": [
+    "configs/qwen25_official_route_policy.json",
+    "scripts/qwen25_openai_gateway.py"
+  ],
+  "current_token_estimate_implementation": "tools/token_budget/qwen_token_counter.py",
+  "gate": "17000_tokenizer_product_baseline_lock",
+  "generated_at": "2026-07-04T13:56:58+08:00",
+  "harness_config_files": [
+    "src/harness/token_budget_integration.py",
+    "src/harness/copy_route_guard.py",
+    "configs/copy_route_policy.json"
+  ],
+  "nas_index_db_path": "reports/harness_shadow_probe_20260702-232815-136372/harness_runtime_trace.sqlite3",
+  "openclaw_health_ok": true,
+  "protected_ports": [
+    8765,
+    18080,
+    18888,
+    18889
+  ],
+  "protected_ports_unchanged": true,
+  "qwen_health_ok": true,
+  "qwen_model_identity": {
+    "data": [
+      {
+        "id": "Qwen2.5-1.5B-Instruct-S100P-official",
+        "object": "model",
+        "owned_by": "local-s100p-official-qwen"
+      }
+    ],
+    "object": "list"
+  },
+  "remote_probe": {
+    "elapsed_ms": 1213.622,
+    "ok": true,
+    "payload": {
+      "audit": {
+        "nas_write_performed": false,
+        "read_only": true,
+        "service_restart_performed": false
+      },
+      "generated_at": "2026-07-04T13:57:00+0800",
+      "hostname": {
+        "ok": true,
+        "returncode": 0,
+        "stderr": "",
+        "stdout": "ubuntu"
+      },
+      "ip_addr_eth1": {
+        "ok": true,
+        "returncode": 0,
+        "stderr": "",
+        "stdout": "resize:  can't open terminal /dev/tty\n192.168.127.10\n192.168.137.10"
+      },
+      "ip_route": {
+        "ok": true,
+        "returncode": 0,
+        "stderr": "",
+        "stdout": "resize:  can't open terminal /dev/tty\ndefault via 192.168.137.1 dev eth1 metric 50 \ndefault via 192.168.137.1 dev eth1 proto static metric 50 \n169.254.0.0/16 dev eth0 proto kernel scope link src 169.254.8.10 metric 100 \n169.254.0.0/16 dev eth0 scope link src 169.254.8.10 metric 101 \n172.17.0.0/16 dev docker0 proto kernel scope link src 172.17.0.1 linkdown"
+      },
+      "openclaw_health": {
+        "elapsed_ms": 873.67,
+        "ok": true,
+        "payload": {
+          "ok": true,
+          "operator_portal_contract": {
+            "filename": "operator_portal_contract.json",
+            "found": true,
+            "generated_at": "2026-06-18T16:04:08.346324+08:00",
+            "path": "/mnt/nas/openclaw/reports/ai_nas_mvp/operator_portal_contract_20260618-160406-445747/operator_portal_contract.json",
+            "selection_policy": "generated_at_then_mtime",
+            "verdict": "ok_ai_nas_operator_portal_contract"
+          },
+          "portal_html": "/mnt/nas/openclaw/reports/ai_nas_mvp/operator_portal_contract_20260618-160406-445747/operator_portal.html",
+          "refresh_on_start": null,
+          "tool_id": "ai_nas_operator_portal_server"
+        },
+        "status": 200
+      },
+      "openclaw_service_active": {
+        "ok": true,
+        "returncode": 0,
+        "stderr": "",
+        "stdout": "active"
+      },
+      "openclaw_service_enabled": {
+        "ok": true,
+        "returncode": 0,
+        "stderr": "",
+        "stdout": "enabled"
+      },
+      "protected_ports": [
+        8765,
+        18080,
+        18888,
+        18889
+      ],
+      "qwen_health": {
+        "elapsed_ms": 5.346,
+        "ok": true,
+        "payload": {
+          "active_hbm": {
+            "exists": false,
+            "path": "/mnt/nas/openclaw/toolchains/s100_llm_sdk/D-Robotics_LLM_S100_1.0.0_SDK/oellm_runtime/model/Qwen2.5_1.5B_Instruct_512.hbm",
+            "size_bytes": 0
+          },
+          "active_profile": "qwen25_7b_instruct_cache_len_1024_q8",
+          "backend": "official-qwen2.5-oellm-multichat-plus-ai-nas-tools",
+          "model": "Qwen2.5-1.5B-Instruct-S100P-official",
+          "ok": true,
+          "port": 18080,
+          "priority_hbm": {
+            "exists": false,
+            "path": "/mnt/nas/openclaw/toolchains/s100_llm_sdk/D-Robotics_LLM_S100_1.0.0_SDK/oellm_runtime/model/Qwen2.5_1.5B_Instruct_512.hbm",
+            "size_bytes": 0
+          },
+          "priority_profile": "qwen25_7b_instruct_cache_len_1024_q8_vendor_default",
+          "priority_status": "promoted_from_shadow_18081",
+          "report_root": "/mnt/nas/openclaw/reports/qwen25_ai_nas",
+          "tool_dispatcher": "/mnt/nas/openclaw/scripts/probes/ai_nas_allowlisted_tool.sh"
+        },
+        "status": 200
+      },
+      "qwen_models": {
+        "elapsed_ms": 1.329,
+        "ok": true,
+        "payload": {
+          "data": [
+            {
+              "id": "Qwen2.5-1.5B-Instruct-S100P-official",
+              "object": "model",
+              "owned_by": "local-s100p-official-qwen"
+            }
+          ],
+          "object": "list"
+        },
+        "status": 200
+      },
+      "qwen_service_active": {
+        "ok": true,
+        "returncode": 0,
+        "stderr": "",
+        "stdout": "active"
+      },
+      "qwen_service_enabled": {
+        "ok": true,
+        "returncode": 0,
+        "stderr": "",
+        "stdout": "enabled"
+      },
+      "tokenizer_dir": "/mnt/nas/openclaw/models/qwen2_5-1_5b-hf",
+      "tokenizer_files": [
+        {
+          "bytes": 7031645,
+          "exists": true,
+          "path": "/mnt/nas/openclaw/models/qwen2_5-1_5b-hf/tokenizer.json"
+        },
+        {
+          "bytes": 7305,
+          "exists": true,
+          "path": "/mnt/nas/openclaw/models/qwen2_5-1_5b-hf/tokenizer_config.json"
+        },
+        {
+          "bytes": 2776833,
+          "exists": true,
+          "path": "/mnt/nas/openclaw/models/qwen2_5-1_5b-hf/vocab.json"
+        },
+        {
+          "bytes": 1671839,
+          "exists": true,
+          "path": "/mnt/nas/openclaw/models/qwen2_5-1_5b-hf/merges.txt"
+        },
+        {
+          "bytes": 0,
+          "exists": false,
+          "path": "/mnt/nas/openclaw/models/qwen2_5-1_5b-hf/added_tokens.json"
+        }
+      ],
+      "user": {
+        "ok": true,
+        "returncode": 0,
+        "stderr": "",
+        "stdout": "sunrise"
+      }
+    },
+    "returncode": 0,
+    "stderr_tail": "",
+    "stdout_tail": "del/Qwen2.5_1.5B_Instruct_512.hbm\", \"exists\": false, \"size_bytes\": 0}, \"priority_hbm\": {\"path\": \"/mnt/nas/openclaw/toolchains/s100_llm_sdk/D-Robotics_LLM_S100_1.0.0_SDK/oellm_runtime/model/Qwen2.5_1.5B_Instruct_512.hbm\", \"exists\": false, \"size_bytes\": 0}, \"tool_dispatcher\": \"/mnt/nas/openclaw/scripts/probes/ai_nas_allowlisted_tool.sh\", \"report_root\": \"/mnt/nas/openclaw/reports/qwen25_ai_nas\"}}, \"qwen_models\": {\"ok\": true, \"status\": 200, \"elapsed_ms\": 1.329, \"payload\": {\"object\": \"list\", \"data\": [{\"id\": \"Qwen2.5-1.5B-Instruct-S100P-official\", \"object\": \"model\", \"owned_by\": \"local-s100p-official-qwen\"}]}}, \"openclaw_health\": {\"ok\": true, \"status\": 200, \"elapsed_ms\": 873.67, \"payload\": {\"ok\": true, \"tool_id\": \"ai_nas_operator_portal_server\", \"operator_portal_contract\": {\"found\": true, \"filename\": \"operator_portal_contract.json\", \"path\": \"/mnt/nas/openclaw/reports/ai_nas_mvp/operator_portal_contract_20260618-160406-445747/operator_portal_contract.json\", \"verdict\": \"ok_ai_nas_operator_portal_contract\", \"generated_at\": \"2026-06-18T16:04:08.346324+08:00\", \"selection_policy\": \"generated_at_then_mtime\"}, \"portal_html\": \"/mnt/nas/openclaw/reports/ai_nas_mvp/operator_portal_contract_20260618-160406-445747/operator_portal.html\", \"refresh_on_start\": null}}, \"tokenizer_dir\": \"/mnt/nas/openclaw/models/qwen2_5-1_5b-hf\", \"tokenizer_files\": [{\"path\": \"/mnt/nas/openclaw/models/qwen2_5-1_5b-hf/tokenizer.json\", \"exists\": true, \"bytes\": 7031645}, {\"path\": \"/mnt/nas/openclaw/models/qwen2_5-1_5b-hf/tokenizer_config.json\", \"exists\": true, \"bytes\": 7305}, {\"path\": \"/mnt/nas/openclaw/models/qwen2_5-1_5b-hf/vocab.json\", \"exists\": true, \"bytes\": 2776833}, {\"path\": \"/mnt/nas/openclaw/models/qwen2_5-1_5b-hf/merges.txt\", \"exists\": true, \"bytes\": 1671839}, {\"path\": \"/mnt/nas/openclaw/models/qwen2_5-1_5b-hf/added_tokens.json\", \"exists\": false, \"bytes\": 0}], \"protected_ports\": [8765, 18080, 18888, 18889], \"audit\": {\"read_only\": true, \"service_restart_performed\": false, \"nas_write_performed\": false}}\n"
+  },
+  "tokenizer_candidate_found": true,
+  "verdict": "pass"
+}

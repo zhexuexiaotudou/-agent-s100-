@@ -1,0 +1,436 @@
+[
+  {
+    "claim_text": "项目基于 RDK S100P 与 OpenClaw。",
+    "commands_or_gates": [
+      "ssh whoami/hostname/uname/ip route",
+      "systemctl status openclaw-gateway.service"
+    ],
+    "evidence_files": [
+      "README.md",
+      "docs/openclaw_s100p_nas_baseline.md"
+    ],
+    "quantitative_metrics": {
+      "system_openclaw_active": true,
+      "system_openclaw_enabled": true
+    },
+    "remaining_gap": "PC 网络/NAT 依赖仍需作为运行边界说明。",
+    "safe_wording": "本项目在 RDK S100P 上运行 OpenClaw Gateway/AI-NAS 门户，并以 NAS 专用 workspace 保存证据。",
+    "status": "supported",
+    "unsafe_wording": "OpenClaw 已完整替代所有 PC/NAS 厂商能力。"
+  },
+  {
+    "claim_text": "S100P 是本地 AI Gateway。",
+    "commands_or_gates": [
+      "systemctl is-active/is-enabled qwen25-local-openai-gateway.service",
+      "curl 127.0.0.1:18080/health",
+      "curl 127.0.0.1:18080/v1/models"
+    ],
+    "evidence_files": [
+      "reports/FINAL_SERVICE_HEALTH_AND_IDENTITY.json"
+    ],
+    "quantitative_metrics": {
+      "qwen_http_ok": true,
+      "system_qwen_active": true,
+      "system_qwen_enabled": true
+    },
+    "remaining_gap": "Qwen health 中仍有历史 profile 字段，报告以 live endpoint 和 gate verdict 为准。",
+    "safe_wording": "S100P 当前提供本地 OpenAI-compatible Qwen endpoint，作为 AI-NAS 的本地模型入口。",
+    "status": "supported",
+    "unsafe_wording": "所有 AI 推理都已在 S100P 上生产级闭环。"
+  },
+  {
+    "claim_text": "OpenClaw 负责交互与任务编排。",
+    "commands_or_gates": [
+      "ok_ai_nas_openclaw_nas_control_gate",
+      "OpenClaw /api/health"
+    ],
+    "evidence_files": [
+      "/mnt/nas/openclaw/reports/qwen25_ai_nas/openclaw_nas_control_gate_20260630-201548-149710/openclaw_nas_control_gate.json",
+      "docs/three_demo_story_and_acceptance_2026-06-29.md"
+    ],
+    "quantitative_metrics": {},
+    "remaining_gap": "真实写操作仍需单独人工确认和 gate。",
+    "safe_wording": "OpenClaw 是用户交互和受控 NAS 工作流入口。",
+    "status": "supported",
+    "unsafe_wording": "OpenClaw 可直接执行任意 NAS 操作。"
+  },
+  {
+    "claim_text": "Qwen2.5 本地模型网关已部署。",
+    "commands_or_gates": [
+      "qwen /health",
+      "qwen /v1/models"
+    ],
+    "evidence_files": [
+      "reports/FINAL_SERVICE_HEALTH_AND_IDENTITY.json"
+    ],
+    "quantitative_metrics": {
+      "model_payload": {
+        "data": [
+          {
+            "id": "Qwen2.5-1.5B-Instruct-S100P-official",
+            "object": "model",
+            "owned_by": "local-s100p-official-qwen"
+          }
+        ],
+        "object": "list"
+      }
+    },
+    "remaining_gap": "Qwen 仅提供理解/分类/回答，不持有工具执行权。",
+    "safe_wording": "本地 Qwen2.5 endpoint 可查询健康状态和模型身份。",
+    "status": "supported",
+    "unsafe_wording": "Qwen 已自主完成所有 agent 工具执行。"
+  },
+  {
+    "claim_text": "Qwen 用于语义理解、摘要、建议或本地推理。",
+    "commands_or_gates": [
+      "ok_qwen25_ai_nas_acceptance_packet",
+      "qwen_structured_json router classifications"
+    ],
+    "evidence_files": [
+      "/mnt/nas/openclaw/reports/models/qwen25_ai_nas_acceptance_20260702-225128/qwen25_ai_nas_acceptance.json",
+      "/mnt/nas/openclaw/reports/qwen25_gateway/qwen25_gateway_turn_20260703-130141-911445/qwen25_gateway_turn.json"
+    ],
+    "quantitative_metrics": {},
+    "remaining_gap": "复杂质量评估和长文档体验仍需持续样本。",
+    "safe_wording": "Qwen 在已验证路径中承担本地理解、分类、摘要和建议生成角色。",
+    "status": "supported",
+    "unsafe_wording": "Qwen 可以绕过 policy 直接调用工具。"
+  },
+  {
+    "claim_text": "Workspace Harness 控制工作区、上下文和工具边界。",
+    "commands_or_gates": [
+      "ok_stage3_readonly_shadow_execution_gate",
+      "ok_stage4_1_post_canary_health_readonly_regression_gate"
+    ],
+    "evidence_files": [
+      "01_final_evidence/digua_ai_nas_harness_stage3_readonly_shadow_gate_packet.json",
+      "01_final_evidence/digua_ai_nas_harness_stage4_1_gate_packet.json"
+    ],
+    "quantitative_metrics": {
+      "approval_present": true,
+      "audit_trace_complete": true,
+      "batch_copy_pass": true,
+      "chmod_execution_count": 0,
+      "copy_pass": true,
+      "delete_execution_count": 0,
+      "dispatcher_bypass_count": 0,
+      "final_manifest_hash": "dc36dddc3f153e8ea87f9f449061fa964fa08743798c0a2e3067d98d93e16733",
+      "move_pass": true,
+      "real_nas_write_count": 0,
+      "rename_pass": true
+    },
+    "remaining_gap": "真实写入仍未开放。",
+    "safe_wording": "Harness 作为 policy-first 控制层限制 workspace、工具暴露和参数记录。",
+    "status": "supported",
+    "unsafe_wording": "Harness 已开放所有 NAS 工具。"
+  },
+  {
+    "claim_text": "文件检索通过 allowlist dispatcher。",
+    "commands_or_gates": [
+      "ai_nas_permission_aware_search",
+      "dispatcher sha256"
+    ],
+    "evidence_files": [
+      "reports/FINAL_READONLY_AI_NAS_DEMO_CASES.json",
+      "/mnt/nas/openclaw/reports/qwen25_ai_nas/personal_inventory_20260703-130142-409565/personal_inventory.json"
+    ],
+    "quantitative_metrics": {
+      "dispatcher_sha256": "d099f8071ab3710778520bf610ce2bca07fbc7976effe0a6d99791cf42ebb23a"
+    },
+    "remaining_gap": "索引覆盖面受当前 demo dataset 限制。",
+    "safe_wording": "文件检索通过 allowlisted dispatcher 路径执行并留下 trace。",
+    "status": "supported",
+    "unsafe_wording": "模型可以任意搜索整个 NAS。"
+  },
+  {
+    "claim_text": "文档读取通过 allowlist dispatcher。",
+    "commands_or_gates": [
+      "ai_nas_folder_rag",
+      "ai_nas_folder_summary"
+    ],
+    "evidence_files": [
+      "reports/FINAL_READONLY_AI_NAS_DEMO_CASES.json",
+      "/mnt/nas/openclaw/reports/qwen25_ai_nas/folder_rag_20260703-130144-195080/folder_rag.json"
+    ],
+    "quantitative_metrics": {},
+    "remaining_gap": "按 ACL 可见路径限制解释，不承诺全 NAS 文档覆盖。",
+    "safe_wording": "文档 RAG/文件夹摘要在只读工具和 dispatcher 边界内执行。",
+    "status": "supported",
+    "unsafe_wording": "文档原文可不受限制地送云或外泄。"
+  },
+  {
+    "claim_text": "报告生成通过 allowlist dispatcher。",
+    "commands_or_gates": [
+      "ai_nas_evidence_report",
+      "case_packet"
+    ],
+    "evidence_files": [
+      "reports/FINAL_READONLY_AI_NAS_DEMO_CASES.json",
+      "/mnt/nas/openclaw/reports/qwen25_ai_nas/case_packet_20260703-130143-826479/case_packet.json"
+    ],
+    "quantitative_metrics": {},
+    "remaining_gap": "报告内容仍需按 claim matrix 审核后入设计报告。",
+    "safe_wording": "证据包、case packet 和 folder RAG 报告通过受控工具生成。",
+    "status": "supported",
+    "unsafe_wording": "报告生成可以执行任意 shell 或写真实 NAS。"
+  },
+  {
+    "claim_text": "ACL 权限检查有效。",
+    "commands_or_gates": [
+      "ACL denied search",
+      "viewer read-only path",
+      "copy target ACL enforcement"
+    ],
+    "evidence_files": [
+      "/mnt/nas/openclaw/reports/qwen25_ai_nas/openclaw_nas_control_gate_20260630-201548-149710/openclaw_nas_control_gate.json",
+      "reports/FINAL_READONLY_AI_NAS_DEMO_CASES.json"
+    ],
+    "quantitative_metrics": {
+      "denial_correctness": null
+    },
+    "remaining_gap": "生产部署需同步真实 NAS/目录账号映射策略。",
+    "safe_wording": "已验证 ACL 拒绝、viewer 只读和受控目标检查。",
+    "status": "supported",
+    "unsafe_wording": "ACL 绝对杜绝所有风险。"
+  },
+  {
+    "claim_text": "私有内容脱敏有效。",
+    "commands_or_gates": [
+      "ok_stage3_cloud_egress_redaction_gate",
+      "ok_stage3_1_adversarial_privacy_injection_gate"
+    ],
+    "evidence_files": [
+      "reports/11045_stage3_cloud_egress_redaction_gate.json",
+      "reports/13120_stage3_1_adversarial_privacy_injection_gate.json",
+      "reports/TOKEN_COST_AND_CLOUD_REDACTION_EVIDENCE.json"
+    ],
+    "quantitative_metrics": {
+      "private_leak_count": 0
+    },
+    "remaining_gap": "新类型敏感字段需继续扩展脱敏规则和样本。",
+    "safe_wording": "已验证私有路径/敏感语境在上云前被本地脱敏，测试 private leak count 为 0。",
+    "status": "supported",
+    "unsafe_wording": "系统永久杜绝隐私泄露。"
+  },
+  {
+    "claim_text": "runtime trace / audit 有记录。",
+    "commands_or_gates": [
+      "trace_complete_rate",
+      "runtime_trace_writer"
+    ],
+    "evidence_files": [
+      "reports/AUDIT_TRACE_ROLLBACK_EVIDENCE.json",
+      "01_final_evidence/digua_ai_nas_harness_stage3_readonly_shadow_gate_packet.json",
+      "01_final_evidence/digua_ai_nas_harness_stage4_1_gate_packet.json"
+    ],
+    "quantitative_metrics": {
+      "trace_complete_rate": null
+    },
+    "remaining_gap": "真实 NAS 写入上线前还需正式审计保留策略。",
+    "safe_wording": "只读 shadow、工具调用、策略拒绝、脱敏和回滚均有 trace/audit 记录。",
+    "status": "supported",
+    "unsafe_wording": "所有未来操作都天然可审计。"
+  },
+  {
+    "claim_text": "回滚设计存在。",
+    "commands_or_gates": [
+      "sandbox write canary rollback",
+      "write action dry-run planner"
+    ],
+    "evidence_files": [
+      "reports/13230_stage4_sandbox_write_canary_gate.json",
+      "reports/13220_stage4_write_action_dryrun_planner_gate.json"
+    ],
+    "quantitative_metrics": {},
+    "remaining_gap": "真实 NAS 写入仍需 GPT Pro/人工复审后才能进入 preflight。",
+    "safe_wording": "已完成 sandbox canary 回滚和真实 NAS 写操作 dry-run 规划。",
+    "status": "supported",
+    "unsafe_wording": "真实 NAS 写入已具备生产级自动回滚。"
+  },
+  {
+    "claim_text": "网页端访问可用。",
+    "commands_or_gates": [
+      "Chromium headless screenshot",
+      "OpenClaw root HTTP status",
+      "OpenClaw /api/health"
+    ],
+    "evidence_files": [
+      "reports/WEB_MOBILE_ACCESS_EVIDENCE.json"
+    ],
+    "quantitative_metrics": {
+      "desktop_http_ok": true,
+      "desktop_screenshot_ok": true
+    },
+    "remaining_gap": "功能页登录后全流程截图需使用有效测试账号补充。",
+    "safe_wording": "OpenClaw 网页入口当前 HTTP 可访问，并已生成桌面视口截图。",
+    "status": "supported",
+    "unsafe_wording": "所有网页功能均已在未登录截图中验证。"
+  },
+  {
+    "claim_text": "手机浏览器适配可用。",
+    "commands_or_gates": [
+      "mobile viewport Chromium screenshot",
+      "historical PWA/mobile portal gate"
+    ],
+    "evidence_files": [
+      "reports/WEB_MOBILE_ACCESS_EVIDENCE.json",
+      "docs/ai_nas_progress_2026-06-24.md"
+    ],
+    "quantitative_metrics": {
+      "mobile_http_ok": true,
+      "mobile_screenshot_ok": true
+    },
+    "remaining_gap": "需补登录后手机端完整功能流截图。",
+    "safe_wording": "支持手机浏览器访问基础入口；已有 PWA/mobile 结构 gate，当前包含移动视口截图。",
+    "status": "partially_supported",
+    "unsafe_wording": "手机端所有复杂工作流都已完整验收。"
+  },
+  {
+    "claim_text": "权限感知搜索可用。",
+    "commands_or_gates": [
+      "normal_nas_search",
+      "acl_denied_private_path"
+    ],
+    "evidence_files": [
+      "reports/FINAL_READONLY_AI_NAS_DEMO_CASES.json"
+    ],
+    "quantitative_metrics": {},
+    "remaining_gap": "生产用户/组映射仍需按真实账号体系复核。",
+    "safe_wording": "权限感知搜索在只读 shadow case 中通过，拒绝不可见私有路径。",
+    "status": "supported",
+    "unsafe_wording": "搜索会返回所有 NAS 文件。"
+  },
+  {
+    "claim_text": "语义检索 / 文档问答可用。",
+    "commands_or_gates": [
+      "document_rag_summary",
+      "folder_rag",
+      "records_fts"
+    ],
+    "evidence_files": [
+      "reports/FINAL_READONLY_AI_NAS_DEMO_CASES.json",
+      "reports/DATABASE_INDEXING_EVIDENCE.json"
+    ],
+    "quantitative_metrics": {
+      "embeddings": 162,
+      "records": 162
+    },
+    "remaining_gap": "向量语义检索覆盖和质量仍需按真实数据集单独验收。",
+    "safe_wording": "当前可表述为 metadata/FTS/document chunk retrieval + Qwen-assisted semantic query understanding。",
+    "status": "supported",
+    "unsafe_wording": "已生产级向量语义检索全覆盖。"
+  },
+  {
+    "claim_text": "文件整理建议可用。",
+    "commands_or_gates": [
+      "write action dry-run planner",
+      "scheduled rules dry-run"
+    ],
+    "evidence_files": [
+      "reports/13220_stage4_write_action_dryrun_planner_gate.json",
+      "docs/STAGE4_WRITE_ACTION_DESIGN_DOSSIER.md"
+    ],
+    "quantitative_metrics": {},
+    "remaining_gap": "真实 copy/move/delete 需另走人工确认和真实 NAS preflight。",
+    "safe_wording": "系统可生成文件整理/写操作 dry-run 方案、审批和回滚计划；真实移动/删除仍未开放。",
+    "status": "partially_supported",
+    "unsafe_wording": "系统已自动整理真实 NAS 文件。"
+  },
+  {
+    "claim_text": "云端只接收 public/redacted 内容。",
+    "commands_or_gates": [
+      "cloud egress redaction gate",
+      "edge-cloud router"
+    ],
+    "evidence_files": [
+      "reports/11045_stage3_cloud_egress_redaction_gate.json",
+      "reports/TOKEN_COST_AND_CLOUD_REDACTION_EVIDENCE.json"
+    ],
+    "quantitative_metrics": {
+      "cloud_private_egress_count": 0
+    },
+    "remaining_gap": "接入真实云 endpoint 前需复跑 egress gate。",
+    "safe_wording": "已验证私有 NAS 原文不进入云端路径；公共复杂任务可走受控 cloud stub/endpoint。",
+    "status": "supported",
+    "unsafe_wording": "云端永远不会接触任何敏感内容。"
+  },
+  {
+    "claim_text": "token 成本降低有数据支持。",
+    "commands_or_gates": [
+      "py -3 benchmarks/run_token_budget_benchmark.py --write-default-cases",
+      "17000_qwen_tokenizer_identity_gate",
+      "17010_privacy_redactor_gate",
+      "17050_token_budget_benchmark_results"
+    ],
+    "evidence_files": [
+      "reports/17000_qwen_tokenizer_identity_gate.json",
+      "reports/17010_privacy_redactor_gate.json",
+      "reports/17050_token_budget_benchmark_results.json",
+      "reports/17060_token_cost_reduction_analysis.json"
+    ],
+    "quantitative_metrics": {
+      "average_reduction_ratio": 0.926837,
+      "benchmark_cases": 130,
+      "cloud_call_avoidance_rate": 0.615385,
+      "median_reduction_ratio": 1.0,
+      "p90_reduction_ratio": 1.0,
+      "private_leak_count": 0,
+      "quality_pass_rate": 1.0,
+      "real_qwen_tokenizer_used": true
+    },
+    "remaining_gap": "真实账单成本仍需云 API 价格模型、生产 trace、缓存/重试统计和实际调用日志单独验证。",
+    "safe_wording": "130 个 synthetic NAS benchmark 中使用真实 Qwen tokenizer 统计云端输入 token；平均云端输入 token 降幅为 92.68%（0.926837），cloud_call_avoidance_rate 为 61.54%（0.615385），private_leak_count = 0，quality_pass_rate = 100%。",
+    "status": "supported",
+    "unsafe_wording": "真实账单成本已显著下降。"
+  },
+  {
+    "claim_text": "真实 NAS 写操作是否已开放。",
+    "commands_or_gates": [
+      "real_nas_write_executed=false",
+      "real NAS write remains locked"
+    ],
+    "evidence_files": [
+      "01_final_evidence/digua_ai_nas_harness_stage4_1_gate_packet.json",
+      "reports/13220_stage4_write_action_dryrun_planner_gate.json"
+    ],
+    "quantitative_metrics": {
+      "real_nas_write_executed": false
+    },
+    "remaining_gap": "需 GPT Pro/人工复审、真实 NAS preflight 和回滚演练。",
+    "safe_wording": "真实 NAS 写操作仍锁定；当前只支持只读 AI-NAS 和 sandbox/dry-run 写入治理验证。",
+    "status": "should_reword",
+    "unsafe_wording": "真实 NAS 写操作已安全开放。"
+  },
+  {
+    "claim_text": "sandbox write canary 是否已完成。",
+    "commands_or_gates": [
+      "ok_stage4_sandbox_write_canary_gate"
+    ],
+    "evidence_files": [
+      "reports/13230_stage4_sandbox_write_canary_gate.json"
+    ],
+    "quantitative_metrics": {
+      "real_nas_write_executed": false,
+      "sandbox_write_canary": "passed"
+    },
+    "remaining_gap": "真实 NAS 写入需独立 gate。",
+    "safe_wording": "sandbox write canary 已完成，且回滚恢复 before manifest；不能写成真实 NAS 写入。",
+    "status": "supported",
+    "unsafe_wording": "sandbox canary 等同于真实 NAS 写入。"
+  },
+  {
+    "claim_text": "Dream7B 是否属于前台产品能力。",
+    "commands_or_gates": [
+      "Dream7B foreground disabled/not promoted by product story"
+    ],
+    "evidence_files": [
+      "README.md",
+      "docs/three_demo_story_and_acceptance_2026-06-29.md"
+    ],
+    "quantitative_metrics": {},
+    "remaining_gap": "如未来切换模型，需重新验收服务、质量、路由和回滚。",
+    "safe_wording": "Dream7B 是历史 runtime/研究证据，不作为当前 AI-NAS 前台产品能力；当前产品路径是 Qwen + OpenClaw。",
+    "status": "should_reword",
+    "unsafe_wording": "Dream7B 是当前 OpenClaw AI-NAS 前台模型能力。"
+  }
+]
