@@ -1,0 +1,61 @@
+{
+  "fixes": [
+    {
+      "evidence": "reports/final_audit/*.json",
+      "original_wording": "UI v2 is fully live on production",
+      "problem": "Prior packet used temp service; current /ui curl on 8765 needs fresh browser gate.",
+      "reason": "Avoid overclaiming production rollout completeness.",
+      "recommended_wording": "UI v2 `/ui` is reachable on 8765 and 18766 in current curl checks; fresh browser validation is pending."
+    },
+    {
+      "evidence": "reports/final_audit/*.json",
+      "original_wording": "Complete embedding RAG",
+      "problem": "Evidence is FTS-first with optional embedding.",
+      "reason": "Avoid unsupported semantic-RAG claim.",
+      "recommended_wording": "Document Q&A uses local SQLite FTS-first retrieval; embedding/reranker are optional enhancements."
+    },
+    {
+      "evidence": "reports/final_audit/*.json",
+      "original_wording": "Token cost dropped by 92.68%",
+      "problem": "Benchmark token reduction is not a bill.",
+      "reason": "Avoid billing claim.",
+      "recommended_wording": "130-case benchmark shows 92.68% average cloud-input token reduction."
+    },
+    {
+      "evidence": "reports/final_audit/*.json",
+      "original_wording": "Arbitrary NAS copy/write is safe",
+      "problem": "Only bounded single-file copy is allowed.",
+      "reason": "Avoid broad write claim.",
+      "recommended_wording": "Controlled copy requires preview/dry-run/confirmation/signed token/source rehash/target absent/dispatcher."
+    },
+    {
+      "evidence": "reports/final_audit/*.json",
+      "original_wording": "Mobile app workflows complete",
+      "problem": "Only limited mobile screenshot evidence exists.",
+      "reason": "Avoid full mobile production claim.",
+      "recommended_wording": "Mobile-responsive core views have screenshot evidence; full mobile workflow acceptance remains a follow-up."
+    },
+    {
+      "evidence": "reports/final_audit/*.json",
+      "original_wording": "Dream7B is product capability",
+      "problem": "Dream7B remains research-only.",
+      "reason": "Avoid product model claim.",
+      "recommended_wording": "Dream7B has a 31-row truth set but stops at BPU operator alignment review."
+    },
+    {
+      "evidence": "reports/final_audit/*.json",
+      "original_wording": "Multimodal semantic index",
+      "problem": "Live status is metadata-first.",
+      "reason": "Avoid AI vision/audio overclaim.",
+      "recommended_wording": "Multimodal NAS index covers metadata records; OCR/embedding/keyframe/transcript are default-off."
+    },
+    {
+      "evidence": "reports/final_audit/*.json",
+      "original_wording": "Journal fully merged and rolled out",
+      "problem": "Live rollout and repo state differ.",
+      "reason": "Avoid repo-clean claim.",
+      "recommended_wording": "Journal production package and S100P live rollout passed; repo remains dirty and needs submission cleanup."
+    }
+  ],
+  "generated_at": "2026-07-05T13:44:26+08:00"
+}

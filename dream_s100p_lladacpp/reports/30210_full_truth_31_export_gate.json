@@ -1,0 +1,510 @@
+{
+  "args": {
+    "cases_jsonl": "F:\\Project\\Digua\\dream_s100p_lladacpp\\reference\\full_truth_31_cases.jsonl",
+    "device_map": "auto",
+    "dtype": "bfloat16",
+    "manifest": "F:\\Project\\Digua\\dream_s100p_lladacpp\\reference\\full_truth_31_manifest.json",
+    "model_dir": "F:\\Project\\Digua\\tmp\\true_batch_inputs\\dream7b-hf",
+    "output_root": "F:\\Project\\Digua\\dream_s100p_lladacpp\\reference\\full_truth_31_arrays",
+    "report_json": "F:\\Project\\Digua\\dream_s100p_lladacpp\\reports\\30210_full_truth_31_export_gate.json",
+    "report_md": "F:\\Project\\Digua\\dream_s100p_lladacpp\\reports\\30210_full_truth_31_export_gate.md",
+    "torch_threads": 8,
+    "truth_jsonl": "F:\\Project\\Digua\\dream_s100p_lladacpp\\reference\\full_truth_31.jsonl"
+  },
+  "case_count_requested": 31,
+  "case_type_counts": {
+    "block_wise": 4,
+    "canonical": 3,
+    "control_command": 4,
+    "fixed_output": 4,
+    "infill": 4,
+    "revision": 4,
+    "semantic_original": 8
+  },
+  "case_type_counts_requested": {
+    "block_wise": 4,
+    "canonical": 3,
+    "control_command": 4,
+    "fixed_output": 4,
+    "infill": 4,
+    "revision": 4,
+    "semantic_original": 8
+  },
+  "cuda_available": true,
+  "cuda_device_count": 1,
+  "cuda_device_name": "NVIDIA GeForce RTX 4080 Laptop GPU",
+  "elapsed_total_seconds": 48.954,
+  "errors": [],
+  "hf_device_map": {
+    "lm_head": "cpu",
+    "model.embed_tokens": "0",
+    "model.layers.0": "0",
+    "model.layers.1": "0",
+    "model.layers.10": "0",
+    "model.layers.11": "0",
+    "model.layers.12": "0",
+    "model.layers.13": "0",
+    "model.layers.14": "0",
+    "model.layers.15": "0",
+    "model.layers.16": "0",
+    "model.layers.17": "cpu",
+    "model.layers.18": "cpu",
+    "model.layers.19": "cpu",
+    "model.layers.2": "0",
+    "model.layers.20": "cpu",
+    "model.layers.21": "cpu",
+    "model.layers.22": "cpu",
+    "model.layers.23": "cpu",
+    "model.layers.24": "cpu",
+    "model.layers.25": "cpu",
+    "model.layers.26": "cpu",
+    "model.layers.27": "cpu",
+    "model.layers.3": "0",
+    "model.layers.4": "0",
+    "model.layers.5": "0",
+    "model.layers.6": "0",
+    "model.layers.7": "0",
+    "model.layers.8": "0",
+    "model.layers.9": "0",
+    "model.norm": "cpu",
+    "model.rotary_emb": "cpu"
+  },
+  "manifest": {
+    "array_root": "dream_s100p_lladacpp/reference/full_truth_31_arrays",
+    "case_type_counts": {
+      "block_wise": 4,
+      "canonical": 3,
+      "control_command": 4,
+      "fixed_output": 4,
+      "infill": 4,
+      "revision": 4,
+      "semantic_original": 8
+    },
+    "cuda_available": true,
+    "dtype": "bfloat16",
+    "errors": [],
+    "model_identity": {
+      "SHA256SUMS": {
+        "path": "F:\\Project\\Digua\\tmp\\true_batch_inputs\\dream7b-hf\\SHA256SUMS",
+        "sha256": "00943b62e19d3080f930603f6a65e210f11e239dc8b1c7a65d9b98090330ff8a",
+        "size_bytes": 550
+      },
+      "config.json": {
+        "path": "F:\\Project\\Digua\\tmp\\true_batch_inputs\\dream7b-hf\\config.json",
+        "sha256": "11afc7fe7a1881e73dcd70cca6868aaaf8eb89ad45ea5fc6426c3fb82dec9340",
+        "size_bytes": 927
+      },
+      "configuration_dream.py": {
+        "path": "F:\\Project\\Digua\\tmp\\true_batch_inputs\\dream7b-hf\\configuration_dream.py",
+        "sha256": "24d038962ccf16361595494461000ec0c1b043653c7494d7fc835c96f121f0b9",
+        "size_bytes": 3197
+      },
+      "merges.txt": {
+        "path": "F:\\Project\\Digua\\tmp\\true_batch_inputs\\dream7b-hf\\merges.txt",
+        "sha256": "8831e4f1a044471340f7c0a83d7bd71306a5b867e95fd870f74d0c5308a904d5",
+        "size_bytes": 1671853
+      },
+      "model.safetensors.index.json": {
+        "path": "F:\\Project\\Digua\\tmp\\true_batch_inputs\\dream7b-hf\\model.safetensors.index.json",
+        "sha256": "998a078123ffc97763690de7f2a677eb89168af5eaf8a5e12e6bc24d18e25bdb",
+        "size_bytes": 27752
+      },
+      "modeling_dream.py": {
+        "path": "F:\\Project\\Digua\\tmp\\true_batch_inputs\\dream7b-hf\\modeling_dream.py",
+        "sha256": "3166e789f0d69beb1f4fbdee2317953d1c1c3b9bc21479b109afc5dd059de5b3",
+        "size_bytes": 36763
+      },
+      "tokenization_dream.py": {
+        "path": "F:\\Project\\Digua\\tmp\\true_batch_inputs\\dream7b-hf\\tokenization_dream.py",
+        "sha256": "1d7f04104fa673831f48256e3cd42cd0bbd1bddd801b4abea5c74cc47d98bdd2",
+        "size_bytes": 14028
+      },
+      "tokenizer_config.json": {
+        "path": "F:\\Project\\Digua\\tmp\\true_batch_inputs\\dream7b-hf\\tokenizer_config.json",
+        "sha256": "b0e9c1a6299d8832a1362d6b24f007de8a2acfe0243d8a3a1d1b57aa8250f7ee",
+        "size_bytes": 7486
+      },
+      "vocab.json": {
+        "path": "F:\\Project\\Digua\\tmp\\true_batch_inputs\\dream7b-hf\\vocab.json",
+        "sha256": "87a257b04b17642a0688c98cd1df89c398bda4fee532d6f88b38a659ecb4ac8d",
+        "size_bytes": 3383407
+      }
+    },
+    "required_counts": {
+      "block_wise": 4,
+      "canonical": 3,
+      "control_command": 4,
+      "fixed_output": 4,
+      "infill": 4,
+      "revision": 4,
+      "semantic_original": 8
+    },
+    "runtime_versions": {
+      "numpy": "2.5.0",
+      "torch": "2.11.0+cu128",
+      "transformers": "4.46.3"
+    },
+    "safety": {
+      "dream7b_frontend_openclaw_traffic_touched": false,
+      "generation_quality_run": false,
+      "harness_qwen_openclaw_defaults_modified": false,
+      "product_routes_18888_18889_touched": false
+    },
+    "schema_version": "dream7b_s100p_lladacpp_full_truth_31_manifest_v1",
+    "status": "pass",
+    "truth_jsonl": "dream_s100p_lladacpp/reference/full_truth_31.jsonl",
+    "truth_jsonl_sha256": "c988643af429fb80cc309c15e7e4251e1f01699a89c10320334f15d0e9e2879c",
+    "truth_row_count": 31
+  },
+  "model_class": "DreamModel",
+  "model_files": {
+    "SHA256SUMS": {
+      "path": "F:\\Project\\Digua\\tmp\\true_batch_inputs\\dream7b-hf\\SHA256SUMS",
+      "sha256": "00943b62e19d3080f930603f6a65e210f11e239dc8b1c7a65d9b98090330ff8a",
+      "size_bytes": 550
+    },
+    "config.json": {
+      "path": "F:\\Project\\Digua\\tmp\\true_batch_inputs\\dream7b-hf\\config.json",
+      "sha256": "11afc7fe7a1881e73dcd70cca6868aaaf8eb89ad45ea5fc6426c3fb82dec9340",
+      "size_bytes": 927
+    },
+    "configuration_dream.py": {
+      "path": "F:\\Project\\Digua\\tmp\\true_batch_inputs\\dream7b-hf\\configuration_dream.py",
+      "sha256": "24d038962ccf16361595494461000ec0c1b043653c7494d7fc835c96f121f0b9",
+      "size_bytes": 3197
+    },
+    "merges.txt": {
+      "path": "F:\\Project\\Digua\\tmp\\true_batch_inputs\\dream7b-hf\\merges.txt",
+      "sha256": "8831e4f1a044471340f7c0a83d7bd71306a5b867e95fd870f74d0c5308a904d5",
+      "size_bytes": 1671853
+    },
+    "model.safetensors.index.json": {
+      "path": "F:\\Project\\Digua\\tmp\\true_batch_inputs\\dream7b-hf\\model.safetensors.index.json",
+      "sha256": "998a078123ffc97763690de7f2a677eb89168af5eaf8a5e12e6bc24d18e25bdb",
+      "size_bytes": 27752
+    },
+    "modeling_dream.py": {
+      "path": "F:\\Project\\Digua\\tmp\\true_batch_inputs\\dream7b-hf\\modeling_dream.py",
+      "sha256": "3166e789f0d69beb1f4fbdee2317953d1c1c3b9bc21479b109afc5dd059de5b3",
+      "size_bytes": 36763
+    },
+    "tokenization_dream.py": {
+      "path": "F:\\Project\\Digua\\tmp\\true_batch_inputs\\dream7b-hf\\tokenization_dream.py",
+      "sha256": "1d7f04104fa673831f48256e3cd42cd0bbd1bddd801b4abea5c74cc47d98bdd2",
+      "size_bytes": 14028
+    },
+    "tokenizer_config.json": {
+      "path": "F:\\Project\\Digua\\tmp\\true_batch_inputs\\dream7b-hf\\tokenizer_config.json",
+      "sha256": "b0e9c1a6299d8832a1362d6b24f007de8a2acfe0243d8a3a1d1b57aa8250f7ee",
+      "size_bytes": 7486
+    },
+    "vocab.json": {
+      "path": "F:\\Project\\Digua\\tmp\\true_batch_inputs\\dream7b-hf\\vocab.json",
+      "sha256": "87a257b04b17642a0688c98cd1df89c398bda4fee532d6f88b38a659ecb4ac8d",
+      "size_bytes": 3383407
+    }
+  },
+  "parameter_count": 7615616512,
+  "parameter_dtypes": [
+    "torch.bfloat16"
+  ],
+  "platform": "Windows-11-10.0.26200-SP0",
+  "python": "3.13.9 | packaged by Anaconda, Inc. | (main, Oct 21 2025, 19:09:58) [MSC v.1929 64 bit (AMD64)]",
+  "rows": [
+    {
+      "case_id": "short_english_prompt_padded",
+      "case_type": "semantic_original",
+      "elapsed_seconds": 7.208,
+      "hidden_sha256": "787eb580b9ed09ae86c04918630ccc9a59b64a4387a2bdfb1932958d0cede27a",
+      "logits_sha256": "5c37d4803be7bbece7a77d05ea3325e683c1fec249c03d386c7d36a7e95223e5",
+      "status": "pass",
+      "top1": 151643
+    },
+    {
+      "case_id": "short_chinese_prompt_padded_v18",
+      "case_type": "semantic_original",
+      "elapsed_seconds": 1.097,
+      "hidden_sha256": "8435101f69e7789a1cc2276274645e95e4b0a675fc6709806fcf629c457e744f",
+      "logits_sha256": "30a4ed6a93f77d23a151aa815767012ff74212763ea60cec275c2bec0f709ea4",
+      "status": "pass",
+      "top1": 151643
+    },
+    {
+      "case_id": "openclaw_nas_search_request",
+      "case_type": "semantic_original",
+      "elapsed_seconds": 1.08,
+      "hidden_sha256": "3c9199743498b8f5cca12c6e7d95554769eb8f343f7edf9c80cef025727c3b7b",
+      "logits_sha256": "97d3c0e971700eb49c00db212b5155d02e67e122f21ee8c5e177d17798f3f185",
+      "status": "pass",
+      "top1": 151643
+    },
+    {
+      "case_id": "document_summary_request",
+      "case_type": "semantic_original",
+      "elapsed_seconds": 1.202,
+      "hidden_sha256": "719c717a49dd4d6660297d859d6ae3448945ea188231c67f456c43a007582c30",
+      "logits_sha256": "3bf12a5ce083db4fa110ff5182678b81b70b7bfe2e36729d63f4184c83dc8051",
+      "status": "pass",
+      "top1": 151643
+    },
+    {
+      "case_id": "privacy_sensitive_denied_request",
+      "case_type": "semantic_original",
+      "elapsed_seconds": 1.326,
+      "hidden_sha256": "dfd64c8f5674a7af3a92267b3a59b6d993206a5afefe0d8b73d75b74cd0819a1",
+      "logits_sha256": "2f0d2cfc3eba28fb5054c666a1e97a887814bdfcd225d67a6cb17df803b4dca7",
+      "status": "pass",
+      "top1": 151643
+    },
+    {
+      "case_id": "mixed_english_chinese_request",
+      "case_type": "semantic_original",
+      "elapsed_seconds": 1.104,
+      "hidden_sha256": "2d4b6494843e22bd5e290173910fe3e1ef264a6e56666fa5dfed7dab4521aec0",
+      "logits_sha256": "9d687b7bf676615b4a97b155f874317754183fdfbda34565a66104b0d32c06b0",
+      "status": "pass",
+      "top1": 151643
+    },
+    {
+      "case_id": "real_prompt_no_synthetic_ramp",
+      "case_type": "semantic_original",
+      "elapsed_seconds": 1.104,
+      "hidden_sha256": "dbadc28803274269bb6e63a5fbc8c584d5db6606dc50215256de929b06b28d31",
+      "logits_sha256": "db732e2e2cbff1c7f129db0f37f30842aa0519e876dbbae8b9d0b68e244f22b5",
+      "status": "pass",
+      "top1": 151643
+    },
+    {
+      "case_id": "mask_tail_policy_probe",
+      "case_type": "semantic_original",
+      "elapsed_seconds": 1.002,
+      "hidden_sha256": "ad5bf3177e2804f04dae69f314affb9d00e42eb9595686b925c600f4fb4afd7f",
+      "logits_sha256": "e62fdffe5eb8162007ea34e9d31513bfdff43d0097a5d03240a99ba3b8908d0f",
+      "status": "pass",
+      "top1": 151643
+    },
+    {
+      "case_id": "zeros",
+      "case_type": "canonical",
+      "elapsed_seconds": 1.021,
+      "hidden_sha256": "86d96d2c44625ce786144f5dc57c6940ca9ee54877b72bffa8b00beb464d9454",
+      "logits_sha256": "936ef99b335617f6d84e85e7eaa955da99c33d587fe74ab7b8c1537a09f7b764",
+      "status": "pass",
+      "top1": 151643
+    },
+    {
+      "case_id": "ramp",
+      "case_type": "canonical",
+      "elapsed_seconds": 1.082,
+      "hidden_sha256": "3806ad7de38de1c59313b1118b39cc10f8ddb501202689ce0c3040dacb6e439a",
+      "logits_sha256": "c2085ff36a86322f757d4e300321c852461d2eed9fe2dde6b7b62704f04d2dd2",
+      "status": "pass",
+      "top1": 151643
+    },
+    {
+      "case_id": "short_chinese_prompt_padded",
+      "case_type": "canonical",
+      "elapsed_seconds": 0.946,
+      "hidden_sha256": "7cb74d614917cee8c9da89d2f26d190323510984ef124d8ce86bd6846d5da802",
+      "logits_sha256": "3a5dd5e81b37dd3ecb523e5ef3fbf2cef62aa6bea9441198e5700e8e3c426a13",
+      "status": "pass",
+      "top1": 151643
+    },
+    {
+      "case_id": "block_wise_command_16",
+      "case_type": "block_wise",
+      "elapsed_seconds": 0.902,
+      "hidden_sha256": "5ab79ffb224bfe49a868929f235d3f455c314ac2e6741edd5783f43a9fd7336f",
+      "logits_sha256": "094d25f7964e1ca7e4645703bb1006e1d408aea378fe1df4e2a775518dd30c90",
+      "status": "pass",
+      "top1": 151643
+    },
+    {
+      "case_id": "block_wise_json_plan_32",
+      "case_type": "block_wise",
+      "elapsed_seconds": 1.066,
+      "hidden_sha256": "7afcf7b78f3fa4e672ba4cb3473b3b5ef8ff14e797cbad6f0486888f91ff901a",
+      "logits_sha256": "29b9c62877b51faedde54ec6bde06a5b18aa53e82baf5c3037cb55cfc14557ad",
+      "status": "pass",
+      "top1": 151643
+    },
+    {
+      "case_id": "block_wise_summary_64",
+      "case_type": "block_wise",
+      "elapsed_seconds": 1.087,
+      "hidden_sha256": "810c607854bb1245d17c2109fa22c051a11d23632792c7522fde940413246c37",
+      "logits_sha256": "8acfb1bda3c7e148b1471f5840aad51bcd5d82c00101039acaa27bfbaccd20a3",
+      "status": "pass",
+      "top1": 151643
+    },
+    {
+      "case_id": "block_wise_router_intent_32",
+      "case_type": "block_wise",
+      "elapsed_seconds": 1.109,
+      "hidden_sha256": "aa7045e806c82a07976cf2ed2f1cd07d0f893c032e9cb6600577909886874060",
+      "logits_sha256": "9d2aea6f533db1f9849e8db1e1102926a4a12f3ffb21d49a679cd43b75034b91",
+      "status": "pass",
+      "top1": 151643
+    },
+    {
+      "case_id": "revision_typo_fix",
+      "case_type": "revision",
+      "elapsed_seconds": 1.102,
+      "hidden_sha256": "58cc5a58bad421564ad22f8cd357cd82f452bf35b48512cf0790d0c6ac1c670c",
+      "logits_sha256": "68a0ab6bcf5e1c87ba8e4f61b98ae6a0b31204059ed907a10f65e6c9c6e32664",
+      "status": "pass",
+      "top1": 151643
+    },
+    {
+      "case_id": "revision_json_key_repair",
+      "case_type": "revision",
+      "elapsed_seconds": 1.123,
+      "hidden_sha256": "280cf3f581c3d976af0560a4f58116ee082394871925280b4ae8d97cdb23d342",
+      "logits_sha256": "010601e25d978ae812fb364911383a753c6a7d78557b937e8b926696bd11fae8",
+      "status": "pass",
+      "top1": 151643
+    },
+    {
+      "case_id": "revision_safety_boundary",
+      "case_type": "revision",
+      "elapsed_seconds": 0.967,
+      "hidden_sha256": "15ba3c6966b71e4d407c8ff31957e782a20972d0931003e484ec62f09f22d4fa",
+      "logits_sha256": "da796aefbe44b229820c66adab50a2dc93cfa675c0a9c2202ea48cc1e389475a",
+      "status": "pass",
+      "top1": 151643
+    },
+    {
+      "case_id": "revision_chinese_boundary",
+      "case_type": "revision",
+      "elapsed_seconds": 1.12,
+      "hidden_sha256": "0cfee998790a130b796d81ab43409b8981a0ff7ee191e5e35e20fd4a15d325a7",
+      "logits_sha256": "efc118ce10e0239dad028c3d06096e8b679d9a7ee57b5c24cab99c114591ac94",
+      "status": "pass",
+      "top1": 151643
+    },
+    {
+      "case_id": "fixed_output_command_16",
+      "case_type": "fixed_output",
+      "elapsed_seconds": 1.101,
+      "hidden_sha256": "25661f86f41210b27c75926f237173ca43c6d62907adbf017351cde7005426f8",
+      "logits_sha256": "47ce07da9afa7658ef535c709126b6971d791429ea60681f6e38d85b25bdc70f",
+      "status": "pass",
+      "top1": 151643
+    },
+    {
+      "case_id": "fixed_output_json_32",
+      "case_type": "fixed_output",
+      "elapsed_seconds": 0.978,
+      "hidden_sha256": "40a51eb2831bb1d0f04b9941f59f1cd9b9adcd8e0d300afece98c78e8624ea65",
+      "logits_sha256": "b0ec2139c802ece002be17c85ebf0e4bb7c3a863fde84813c78db0b5a23ca2fe",
+      "status": "pass",
+      "top1": 151643
+    },
+    {
+      "case_id": "fixed_output_nas_intent_32",
+      "case_type": "fixed_output",
+      "elapsed_seconds": 1.022,
+      "hidden_sha256": "2f51c013b9c69d76d3e0c78e210b458039a4c8f3f7ed266e59c2c0e3102ef756",
+      "logits_sha256": "b372a9bf10fdcbb82622dc8b7ea6e89ffc301c0899a9c3630c3a5bac748f641a",
+      "status": "pass",
+      "top1": 151643
+    },
+    {
+      "case_id": "fixed_output_short_summary_64",
+      "case_type": "fixed_output",
+      "elapsed_seconds": 1.043,
+      "hidden_sha256": "5426f18a8bfefda6d2d948d85d1ab1c0e5b9bb94f3247d247ab1e1c89e4d62c1",
+      "logits_sha256": "aa8baa7cb43c832b21a36e4ae63fea1684a82c774798ab395d606eb5ce4d3a47",
+      "status": "pass",
+      "top1": 151643
+    },
+    {
+      "case_id": "infill_missing_action",
+      "case_type": "infill",
+      "elapsed_seconds": 1.094,
+      "hidden_sha256": "d3dee841fcde012fc85e3ac1c53ea8f80bc222074d6a2c0f2d5c65b73b2b2ea8",
+      "logits_sha256": "1bca388993ec3eaa3924ac3f3bfe5398645b176559eef4cf2213120ae718a48a",
+      "status": "pass",
+      "top1": 151643
+    },
+    {
+      "case_id": "infill_missing_verdict",
+      "case_type": "infill",
+      "elapsed_seconds": 1.074,
+      "hidden_sha256": "99ec6c5710afd3df8ae37e71c5526dcfafcda305c4eeb3e733e31d79e2dace0f",
+      "logits_sha256": "00d4e8c47db127c754911a7ef80ccf603aedd7bd0bde814394b2da40b12a69c9",
+      "status": "pass",
+      "top1": 151643
+    },
+    {
+      "case_id": "infill_policy_clause",
+      "case_type": "infill",
+      "elapsed_seconds": 1.051,
+      "hidden_sha256": "653bb15b53bd310975db1b7ad44b3b5f3172ff066a77199fa7f8e605c24bf20d",
+      "logits_sha256": "d4ae4eedb7454c9d9827aa5afad2aadae1b1cf8e05891ec0096ae6522d23d2cb",
+      "status": "pass",
+      "top1": 151643
+    },
+    {
+      "case_id": "infill_chinese_boundary",
+      "case_type": "infill",
+      "elapsed_seconds": 1.064,
+      "hidden_sha256": "bdd0b2b867964cf32757437d9b703f96a7ee323cddd947e97af280055ee5cacd",
+      "logits_sha256": "b8d09bf5ad5ddb14378ad2e1ceb377c7533d18bcd29f94548c196b2e606ea8a9",
+      "status": "pass",
+      "top1": 151643
+    },
+    {
+      "case_id": "control_list_reports",
+      "case_type": "control_command",
+      "elapsed_seconds": 1.053,
+      "hidden_sha256": "8e0a832355e8370a076f51a8c16b86bdcd288a799977f4e2bf83ee7a58f144fa",
+      "logits_sha256": "e2e1e1618ba2f1cc894eeb725c0c90839fd629abc1e434b6b8dd8acb131d39e9",
+      "status": "pass",
+      "top1": 151643
+    },
+    {
+      "case_id": "control_copy_review_packet",
+      "case_type": "control_command",
+      "elapsed_seconds": 1.064,
+      "hidden_sha256": "0b612bb16a693d010e8791c68bdb150834442cba86328bf691cc331b31501603",
+      "logits_sha256": "a8c5df64f560dded7592298d355fcd06a05ecd4e2cc2475fbe3016d9e7533571",
+      "status": "pass",
+      "top1": 151643
+    },
+    {
+      "case_id": "control_refuse_delete",
+      "case_type": "control_command",
+      "elapsed_seconds": 1.012,
+      "hidden_sha256": "d93fdeeb3975183c084d0232427574fa5321e94d33bb61651686a9d6f83ba273",
+      "logits_sha256": "00ff5bf6f522910cadc7f098ffe3be697dd48222f1c564d1da00668614f131ea",
+      "status": "pass",
+      "top1": 151643
+    },
+    {
+      "case_id": "control_cloud_privacy_refusal",
+      "case_type": "control_command",
+      "elapsed_seconds": 1.009,
+      "hidden_sha256": "7adadcb3f1e08fbe12184db5bd98e06deaaf6840d5131fc2cd934712a306ff26",
+      "logits_sha256": "208bed125290ec87343551308442903a0e3ac758c4c7393c4d54836cd114690a",
+      "status": "pass",
+      "top1": 151643
+    }
+  ],
+  "runtime_versions": {
+    "numpy": "2.5.0",
+    "torch": "2.11.0+cu128",
+    "transformers": "4.46.3"
+  },
+  "safety": {
+    "dream7b_frontend_openclaw_traffic_touched": false,
+    "generation_quality_run": false,
+    "harness_qwen_openclaw_defaults_modified": false,
+    "product_routes_18888_18889_touched": false
+  },
+  "schema_version": "dream7b_s100p_lladacpp_full_truth_31_export_gate_v1",
+  "started_at_unix": 1783169739.645919,
+  "status": "pass",
+  "truth_row_count": 31,
+  "verdict": "full_truth_31_export_pass"
+}

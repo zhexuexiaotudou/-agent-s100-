@@ -71,6 +71,18 @@ try:
 except Exception:
     yolo_route_response = None  # type: ignore[assignment]
 
+try:
+    from src.yolo_index.labels import labels_from_query
+except Exception:
+    def labels_from_query(query: str) -> list[str]:  # type: ignore[no-redef]
+        text = str(query or "").lower()
+        labels: list[str] = []
+        if any(term in text for term in ["person", "people"]) or any(term in str(query or "") for term in ["人", "人物", "行人", "有人"]):
+            labels.append("person")
+        if any(term in text for term in ["car", "vehicle"]) or any(term in str(query or "") for term in ["车", "汽车"]):
+            labels.append("car")
+        return labels
+
 from ai_nas_app_ecosystem import AppEcosystem
 from ai_nas_backup import BackupManager
 from ai_nas_common import (
@@ -165,6 +177,140 @@ REMOTE_SYNC_EXTRA_FILENAMES = [
 ]
 OPERATOR_DECISION_DIRNAME = "operator_decisions"
 MAX_UPLOAD_BYTES = 5 * 1024 * 1024
+DEFAULT_QWEN_GATEWAY_URL = "http://127.0.0.1:18080"
+DEFAULT_QWEN_MODEL = "Qwen2.5-1.5B-Instruct-S100P-official"
+COPILOT_SEARCH_VERBS = (
+    "search",
+    "find",
+    "locate",
+    "show",
+    "list",
+    "搜索",
+    "查找",
+    "检索",
+    "寻找",
+    "找",
+    "列出",
+    "显示",
+    "看看",
+)
+COPILOT_NAS_SCOPE_TERMS = ("nas", "个人盘", "网盘", "文件", "文档", "照片", "图片", "图像", "相册", "视频", "file", "document", "photo", "image", "picture", "video")
+COPILOT_IMAGE_TERMS = ("photo", "image", "picture", "照片", "图片", "图像", "相册")
+COPILOT_VIDEO_TERMS = ("video", "movie", "clip", "视频", "录像", "影片")
+COPILOT_DOCUMENT_TERMS = ("document", "doc", "pdf", "invoice", "file", "文档", "文件", "发票", "合同", "报告")
+COPILOT_PRIVACY_TERMS = (
+    "nas",
+    "personal",
+    "private",
+    "local",
+    "file",
+    "document",
+    "photo",
+    "image",
+    "video",
+    "audio",
+    "invoice",
+    "contract",
+    "password",
+    "token",
+    "secret",
+    "\u79c1\u4eba",
+    "\u9690\u79c1",
+    "\u672c\u5730",
+    "\u6587\u4ef6",
+    "\u6587\u6863",
+    "\u7167\u7247",
+    "\u56fe\u7247",
+    "\u56fe\u50cf",
+    "\u89c6\u9891",
+    "\u97f3\u9891",
+    "\u53d1\u7968",
+    "\u5408\u540c",
+    "\u5bc6\u7801",
+    "\u4ee4\u724c",
+)
+COPILOT_STRONG_PRIVACY_TERMS = (
+    "private",
+    "personal",
+    "photo",
+    "image",
+    "video",
+    "audio",
+    "invoice",
+    "contract",
+    "password",
+    "token",
+    "secret",
+    "\u79c1\u4eba",
+    "\u9690\u79c1",
+    "\u7167\u7247",
+    "\u56fe\u7247",
+    "\u56fe\u50cf",
+    "\u89c6\u9891",
+    "\u97f3\u9891",
+    "\u53d1\u7968",
+    "\u5408\u540c",
+    "\u5bc6\u7801",
+    "\u4ee4\u724c",
+)
+COPILOT_LOCAL_CONTENT_TERMS = ("nas", "local", "file", "document", "\u672c\u5730", "\u6587\u4ef6", "\u6587\u6863")
+COPILOT_PUBLIC_ONLY_TERMS = ("public", "non-private", "non private", "do not reference local", "\u516c\u5f00", "\u975e\u9690\u79c1", "\u4e0d\u5f15\u7528\u672c\u5730")
+COPILOT_PUBLIC_COMPLEX_TERMS = (
+    "market",
+    "strategy",
+    "industry",
+    "trend",
+    "launch",
+    "competitor",
+    "public",
+    "\u5e02\u573a",
+    "\u6218\u7565",
+    "\u884c\u4e1a",
+    "\u8d8b\u52bf",
+    "\u53d1\u5e03",
+    "\u7ade\u54c1",
+    "\u516c\u5f00",
+)
+COPILOT_RENAME_TERMS = ("rename", "renamed", "\u91cd\u547d\u540d", "\u6539\u540d")
+COPILOT_COPY_TERMS = ("copy", "duplicate", "\u590d\u5236", "\u62f7\u8d1d")
+COPILOT_LIST_TERMS = ("list", "open", "browse", "show files", "\u5217\u51fa", "\u6253\u5f00", "\u6d4f\u89c8", "\u770b\u770b", "\u76ee\u5f55")
+COPILOT_INSPECT_TERMS = (
+    "inspect",
+    "check path",
+    "path status",
+    "file info",
+    "folder info",
+    "\u68c0\u67e5",
+    "\u67e5\u770b\u8def\u5f84",
+    "\u68c0\u67e5\u8def\u5f84",
+    "\u67e5\u770b\u6587\u4ef6\u5939",
+    "\u68c0\u67e5\u6587\u4ef6\u5939",
+    "\u6587\u4ef6\u5939\u72b6\u6001",
+    "\u8def\u5f84\u72b6\u6001",
+)
+COPILOT_CREATE_FOLDER_TERMS = ("create folder", "new folder", "mkdir", "\u65b0\u5efa\u6587\u4ef6\u5939", "\u521b\u5efa\u6587\u4ef6\u5939")
+COPILOT_SNAPSHOT_TERMS = ("snapshot", "\u5feb\u7167")
+COPILOT_BACKUP_TERMS = ("backup", "sync", "\u5907\u4efd", "\u540c\u6b65")
+COPILOT_RUN_TERMS = ("run", "execute", "start", "\u8fd0\u884c", "\u6267\u884c", "\u5f00\u59cb")
+COPILOT_MEDIA_TERMS = ("media", "photo", "album", "movie", "\u5a92\u4f53", "\u7167\u7247", "\u76f8\u518c", "\u7535\u5f71")
+COPILOT_INDEX_TERMS = ("index", "rebuild", "scan", "\u7d22\u5f15", "\u91cd\u5efa", "\u626b\u63cf")
+COPILOT_ALBUM_TERMS = ("album", "\u76f8\u518c")
+COPILOT_JOURNAL_TERMS = ("journal", "diary", "log", "\u65e5\u8bb0", "\u65e5\u5fd7")
+COPILOT_SUMMARY_TERMS = ("summary", "summarize", "report", "\u603b\u7ed3", "\u6458\u8981", "\u62a5\u544a", "\u5468\u62a5")
+COPILOT_DOCUMENT_QUERY_TERMS = (
+    "document",
+    "doc",
+    "pdf",
+    "invoice",
+    "contract",
+    "rag",
+    "\u6587\u6863",
+    "\u6587\u4ef6",
+    "\u53d1\u7968",
+    "\u5408\u540c",
+    "\u95ee\u7b54",
+)
+COPILOT_STATUS_TERMS = ("status", "health", "summary", "list", "report", "audit", "\u72b6\u6001", "\u5065\u5eb7", "\u6982\u89c8", "\u6c47\u603b", "\u5217\u8868", "\u62a5\u544a", "\u5ba1\u8ba1")
 
 
 def iso_timestamp() -> str:
@@ -252,6 +398,502 @@ def http_health(name: str, url: str, timeout: int = 5) -> dict:
 def normalize_health_url(base_or_url: str) -> str:
     text = base_or_url.rstrip("/")
     return text if text.endswith("/health") else f"{text}/health"
+
+
+def normalize_chat_completions_url(base_or_url: str) -> str:
+    text = base_or_url.rstrip("/")
+    if text.endswith("/v1/chat/completions") or text.endswith("/chat/completions"):
+        return text
+    if text.endswith("/v1"):
+        return f"{text}/chat/completions"
+    return f"{text}/v1/chat/completions"
+
+
+def contains_any(text: str, terms: tuple[str, ...]) -> bool:
+    lower = text.lower()
+    return any(term.lower() in lower for term in terms)
+
+
+def infer_copilot_search_intent(message: str) -> dict | None:
+    text = str(message or "").strip()
+    if not text:
+        return None
+    lower = text.lower()
+    has_search_verb = contains_any(text, COPILOT_SEARCH_VERBS)
+    has_nas_scope = contains_any(text, COPILOT_NAS_SCOPE_TERMS)
+    labels = labels_from_query(text)
+    has_image = contains_any(text, COPILOT_IMAGE_TERMS)
+    has_video = contains_any(text, COPILOT_VIDEO_TERMS)
+    has_document = contains_any(text, COPILOT_DOCUMENT_TERMS)
+    if not has_search_verb or not (has_nas_scope or labels):
+        return None
+    modality = "all"
+    if has_image and not has_video:
+        modality = "image"
+    elif has_video and not has_image:
+        modality = "video"
+    elif has_document and not (has_image or has_video):
+        modality = "document"
+    prefer_yolo = bool(labels) and modality in {"all", "image", "video"}
+    return {
+        "query": text,
+        "query_lower": lower,
+        "modality": modality,
+        "labels": labels,
+        "prefer_yolo": prefer_yolo,
+        "search_verb_detected": has_search_verb,
+    }
+
+
+def copilot_quoted_segments(message: str) -> list[str]:
+    pattern = "\"([^\"]+)\"|'([^']+)'|\u201c([^\u201d]+)\u201d|\u300c([^\u300d]+)\u300d|\u300e([^\u300f]+)\u300f"
+    segments: list[str] = []
+    for match in re.findall(pattern, str(message or "")):
+        value = next((part for part in match if part), "")
+        if value:
+            segments.append(value.strip())
+    return segments
+
+
+def copilot_default_path_for_message(message: str, fallback: str = "") -> str:
+    text = str(message or "")
+    lower = text.lower()
+    if "documents" in lower or "\u6587\u6863" in text:
+        return "Documents"
+    if "photos" in lower or "pictures" in lower or "\u7167\u7247" in text or "\u76f8\u518c" in text:
+        return "Photos"
+    if "videos" in lower or "movies" in lower or "\u89c6\u9891" in text or "\u7535\u5f71" in text:
+        return "Videos"
+    if "reports" in lower or "\u62a5\u544a" in text:
+        return "Reports"
+    if "root" in lower or "\u6839\u76ee\u5f55" in text:
+        return ""
+    return fallback
+
+
+def copilot_action_tool_id(action: str | None) -> str | None:
+    if not action:
+        return None
+    mapping = {
+        "search": "local_nas_search",
+        "document_query": "local_document_rag",
+        "storage_list": "local_storage_list",
+        "storage_list_or_inspect": "local_storage_list_or_inspect",
+        "storage_inspect": "local_storage_inspect",
+        "storage_copy": "harness_copy_route",
+        "storage_rename": "disabled_rename_guardrail",
+        "storage_create_folder": "local_storage_create_folder",
+        "snapshot_create": "local_snapshot_create",
+        "backup_create_task": "local_backup_create_task",
+        "backup_run": "local_backup_run",
+        "media_index": "local_media_index",
+        "media_create_album": "local_media_create_album",
+        "media_summary": "local_media_summary",
+        "journal_summary": "local_journal_summary",
+        "journal_manual_entry": "local_journal_manual_entry",
+        "storage_status": "local_storage_status",
+        "ops_summary": "local_ops_summary",
+        "apps_summary": "local_apps_summary",
+        "audit_summary": "local_audit_summary",
+        "reports_list": "local_reports_list",
+    }
+    return mapping.get(action, action)
+
+
+def infer_copilot_action_intent(message: str) -> dict | None:
+    text = str(message or "").strip()
+    if not text:
+        return None
+    quoted = copilot_quoted_segments(text)
+    search_intent = infer_copilot_search_intent(text)
+    has_snapshot = contains_any(text, COPILOT_SNAPSHOT_TERMS)
+    has_backup = contains_any(text, COPILOT_BACKUP_TERMS)
+    has_media = contains_any(text, COPILOT_MEDIA_TERMS)
+    has_index = contains_any(text, COPILOT_INDEX_TERMS)
+    has_album = contains_any(text, COPILOT_ALBUM_TERMS)
+    has_journal = contains_any(text, COPILOT_JOURNAL_TERMS)
+    has_summary = contains_any(text, COPILOT_SUMMARY_TERMS)
+    has_document = contains_any(text, COPILOT_DOCUMENT_QUERY_TERMS)
+    has_status = contains_any(text, COPILOT_STATUS_TERMS)
+    has_inspect = contains_any(text, COPILOT_INSPECT_TERMS)
+    if has_snapshot:
+        return {
+            "action": "snapshot_create",
+            "path": quoted[0] if quoted else copilot_default_path_for_message(text),
+            "name": quoted[1] if len(quoted) >= 2 else f"assistant-snapshot-{compact_timestamp()}",
+            "quoted": quoted,
+        }
+    if has_backup:
+        if contains_any(text, COPILOT_RUN_TERMS):
+            return {"action": "backup_run", "name": quoted[0] if quoted else "", "quoted": quoted}
+        return {
+            "action": "backup_create_task",
+            "source": quoted[0] if len(quoted) >= 1 else "",
+            "dest": quoted[1] if len(quoted) >= 2 else "",
+            "name": quoted[2] if len(quoted) >= 3 else f"assistant-backup-{compact_timestamp()}",
+            "quoted": quoted,
+        }
+    if has_media and has_album and ("create" in text.lower() or "\u521b\u5efa" in text or "\u65b0\u5efa" in text):
+        return {
+            "action": "media_create_album",
+            "name": quoted[0] if quoted else "",
+            "description": quoted[1] if len(quoted) >= 2 else "",
+            "quoted": quoted,
+        }
+    if has_media and has_index:
+        return {"action": "media_index", "path": quoted[0] if quoted else copilot_default_path_for_message(text, "Photos"), "quoted": quoted}
+    if has_journal and has_summary:
+        period = "weekly" if "week" in text.lower() or "\u5468" in text else "daily"
+        return {"action": "journal_summary", "period_type": period, "project_id": "all", "quoted": quoted}
+    if has_journal and ("write" in text.lower() or "record" in text.lower() or "\u8bb0" in text or "\u5199" in text):
+        return {
+            "action": "journal_manual_entry",
+            "project_id": "manual",
+            "title": quoted[0] if quoted else "",
+            "body": quoted[1] if len(quoted) >= 2 else "",
+            "quoted": quoted,
+        }
+    if contains_any(text, COPILOT_CREATE_FOLDER_TERMS):
+        return {"action": "storage_create_folder", "path": quoted[0] if quoted else "", "quoted": quoted}
+    if has_inspect:
+        inspect_path = quoted[0] if quoted else copilot_default_path_for_message(text)
+        if inspect_path or quoted or "root" in text.lower() or "\u6839\u76ee\u5f55" in text:
+            return {"action": "storage_list_or_inspect", "path": inspect_path, "quoted": quoted}
+    if has_document and (has_summary or "query" in text.lower() or "\u67e5" in text or "\u627e" in text or "\u95ee" in text):
+        return {
+            "action": "document_query",
+            "query": text,
+            "path": quoted[0] if quoted and ("/" in quoted[0] or "\\" in quoted[0]) else copilot_default_path_for_message(text, "Documents"),
+            "quoted": quoted,
+        }
+    lower = text.lower()
+    if has_status and ("storage" in lower or "nas" in lower or "\u5b58\u50a8" in text):
+        return {"action": "storage_status", "quoted": quoted}
+    if has_status and ("media" in lower or "\u5a92\u4f53" in text or "\u76f8\u518c" in text):
+        return {"action": "media_summary", "quoted": quoted}
+    if has_status and ("ops" in lower or "health" in lower or "\u8fd0\u884c" in text or "\u5065\u5eb7" in text):
+        return {"action": "ops_summary", "quoted": quoted}
+    if has_status and ("app" in lower or "plugin" in lower or "\u5e94\u7528" in text or "\u63d2\u4ef6" in text):
+        return {"action": "apps_summary", "quoted": quoted}
+    if has_status and ("audit" in lower or "\u5ba1\u8ba1" in text):
+        return {"action": "audit_summary", "quoted": quoted}
+    if has_status and ("report" in lower or "\u62a5\u544a" in text):
+        return {"action": "reports_list", "quoted": quoted}
+    if len(quoted) >= 2:
+        action = "storage_rename" if contains_any(text, COPILOT_RENAME_TERMS) or "renamed" in quoted[1].lower() else "storage_copy"
+        return {"action": action, "source": quoted[0], "target": quoted[1], "quoted": quoted}
+    if quoted:
+        return {"action": "storage_list_or_inspect", "path": quoted[0], "quoted": quoted}
+    if contains_any(text, COPILOT_LIST_TERMS):
+        return {"action": "storage_list", "path": copilot_default_path_for_message(text), "quoted": quoted}
+    if search_intent:
+        return {"action": "search", "search_intent": search_intent, "quoted": quoted}
+    return None
+
+
+def build_copilot_qwen_router_prompt(message: str) -> str:
+    return (
+        "You are the local Qwen router for Digua AI-NAS. Classify the original user query. "
+        "Do not answer the user. Return exactly one JSON object with keys: "
+        "route, privacy_level, task_complexity, reason, local_tool_id. "
+        "route must be local or cloud. privacy_level must be none, low, medium, or high. "
+        "Use local for private NAS data, local files, photos, invoices, contracts, backups, "
+        "snapshots, media search, storage actions, journal actions, or any uncertain request. "
+        "Use cloud only for public non-private complex reasoning. Qwen must not execute tools. "
+        f"Original user query:\n{message}"
+    )
+
+
+def chat_completion_content(result: dict) -> tuple[str, dict, dict]:
+    upstream = result.get("payload") if isinstance(result.get("payload"), dict) else {}
+    choices = upstream.get("choices") if isinstance(upstream.get("choices"), list) else []
+    first_choice = choices[0] if choices and isinstance(choices[0], dict) else {}
+    message_payload = first_choice.get("message") if isinstance(first_choice.get("message"), dict) else {}
+    content = str(message_payload.get("content") or "")
+    metadata = message_payload.get("metadata") if isinstance(message_payload.get("metadata"), dict) else {}
+    return content, metadata, upstream
+
+
+def parse_json_object_from_text(text: str) -> dict | None:
+    content = str(text or "").strip()
+    if not content:
+        return None
+    if content.startswith("```"):
+        content = re.sub(r"^```(?:json)?\s*", "", content, flags=re.IGNORECASE).strip()
+        content = re.sub(r"\s*```$", "", content).strip()
+    candidates = [content]
+    start = content.find("{")
+    end = content.rfind("}")
+    if start >= 0 and end > start:
+        candidates.append(content[start : end + 1])
+    for candidate in candidates:
+        try:
+            parsed = json.loads(candidate)
+        except json.JSONDecodeError:
+            continue
+        if isinstance(parsed, dict):
+            return parsed
+    return None
+
+
+def normalize_copilot_router(parsed: dict, *, classifier: str, raw_content: str = "", elapsed_ms: object = None) -> dict | None:
+    route = str(parsed.get("route") or "").lower()
+    if route not in {"local", "cloud"}:
+        return None
+    privacy_level = str(parsed.get("privacy_level") or "none").lower().replace("-", "_")
+    if privacy_level in {"public", "non_private", "nonprivate"}:
+        privacy_level = "none"
+    if privacy_level not in {"none", "low", "medium", "high"}:
+        privacy_level = "none"
+    task_complexity = str(parsed.get("task_complexity") or ("complex" if route == "cloud" else "simple")).lower()
+    if task_complexity not in {"simple", "complex"}:
+        task_complexity = "complex" if route == "cloud" else "simple"
+    local_tool_id = parsed.get("local_tool_id")
+    if local_tool_id in {"", "none", "null"}:
+        local_tool_id = None
+    return {
+        "route": route,
+        "privacy_level": privacy_level,
+        "task_complexity": task_complexity,
+        "reason": str(parsed.get("reason") or "Qwen returned a structured route."),
+        "local_tool_id": local_tool_id,
+        "classifier": classifier,
+        "raw_content_preview": raw_content[:500],
+        "elapsed_ms": elapsed_ms,
+        "original_query_sent": True,
+        "qwen_execution_authority": False,
+    }
+
+
+def copilot_policy_route(message: str, action_intent: dict | None = None) -> dict:
+    text = str(message or "")
+    has_public_complex = contains_any(text, COPILOT_PUBLIC_COMPLEX_TERMS) or len(text) > 160
+    explicit_public_only = contains_any(text, COPILOT_PUBLIC_ONLY_TERMS)
+    if contains_any(text, COPILOT_STRONG_PRIVACY_TERMS) and not (has_public_complex and explicit_public_only and not contains_any(text, ("invoice", "contract", "password", "token", "\u53d1\u7968", "\u5408\u540c", "\u5bc6\u7801", "\u4ee4\u724c"))):
+        privacy_level = "high"
+    elif contains_any(text, COPILOT_LOCAL_CONTENT_TERMS) and not (has_public_complex and explicit_public_only):
+        privacy_level = "medium"
+    else:
+        privacy_level = "none"
+    local_tool_id = copilot_action_tool_id((action_intent or {}).get("action"))
+    if local_tool_id or privacy_level != "none" or not has_public_complex:
+        route = "local"
+        reason = "local route required by NAS action, privacy floor, or simple request"
+    else:
+        route = "cloud"
+        reason = "public non-private complex request may use cloud overflow"
+    return {
+        "route": route,
+        "privacy_level": privacy_level,
+        "task_complexity": "complex" if has_public_complex else "simple",
+        "reason": reason,
+        "local_tool_id": local_tool_id,
+        "classifier": "portal_policy_guardrail",
+        "original_query_sent": False,
+        "qwen_execution_authority": False,
+    }
+
+
+def apply_copilot_guardrail(qwen_route: dict | None, policy_route: dict) -> dict:
+    route = dict(qwen_route or policy_route)
+    route.setdefault("classifier", "portal_policy_guardrail")
+    route["policy_route"] = {
+        "route": policy_route.get("route"),
+        "privacy_level": policy_route.get("privacy_level"),
+        "task_complexity": policy_route.get("task_complexity"),
+        "local_tool_id": policy_route.get("local_tool_id"),
+    }
+    if policy_route.get("privacy_level") in {"medium", "high"} or policy_route.get("local_tool_id"):
+        if route.get("route") != "local":
+            route["guardrail_applied"] = True
+            route["guardrail_reason"] = "privacy or local NAS tool intent cannot be sent to cloud"
+        route["route"] = "local"
+        route["privacy_level"] = policy_route.get("privacy_level") or route.get("privacy_level") or "none"
+        route["local_tool_id"] = policy_route.get("local_tool_id") or route.get("local_tool_id")
+    elif policy_route.get("route") == "cloud" and policy_route.get("privacy_level") == "none" and not policy_route.get("local_tool_id"):
+        if route.get("route") != "cloud":
+            route["guardrail_applied"] = True
+            route["guardrail_reason"] = "explicit public non-private complex request can use cloud overflow"
+        route["route"] = "cloud"
+        route["privacy_level"] = "none"
+        route["local_tool_id"] = None
+    route["qwen_execution_authority"] = False
+    return route
+
+
+def summarize_search_result_titles(results: list[dict], limit: int = 3) -> str:
+    titles: list[str] = []
+    for item in results[:limit]:
+        display = item.get("display") if isinstance(item.get("display"), dict) else {}
+        title = str(display.get("name") or item.get("title_redacted") or item.get("name") or item.get("asset_id") or "").strip()
+        if title:
+            titles.append(title)
+    return "、".join(titles)
+
+
+def mtime_to_display(value: object) -> str:
+    try:
+        return datetime.fromtimestamp(float(value)).strftime("%Y-%m-%d %H:%M")
+    except (TypeError, ValueError, OSError, OverflowError):
+        return ""
+
+
+def bytes_to_display(value: object) -> str:
+    try:
+        size = float(value)
+    except (TypeError, ValueError):
+        return ""
+    units = ["B", "KB", "MB", "GB", "TB"]
+    idx = 0
+    while size >= 1024 and idx < len(units) - 1:
+        size /= 1024
+        idx += 1
+    if idx == 0:
+        return f"{int(size)} {units[idx]}"
+    return f"{size:.1f} {units[idx]}"
+
+
+def modality_display_label(modality: object, file_type: object = None) -> str:
+    normalized = str(modality or "").lower()
+    file_norm = str(file_type or "").lower()
+    if normalized == "image" or file_norm in {".jpg", ".jpeg", ".png", ".webp", ".bmp", ".gif"}:
+        return "照片"
+    if normalized == "video" or file_norm in {".mp4", ".mov", ".mkv", ".avi"}:
+        return "视频"
+    if normalized == "document":
+        return "文档"
+    if normalized == "audio":
+        return "音频"
+    return "文件"
+
+
+def privacy_display_label(value: object) -> str:
+    normalized = str(value or "").lower()
+    if "private" in normalized or normalized in {"high", "local_only"}:
+        return "本地私有"
+    if normalized in {"medium", "internal"}:
+        return "本地受限"
+    if normalized in {"none", "public", "low"}:
+        return "普通"
+    return "本地保护"
+
+
+def object_label_display(label: object, label_zh_value: object = None) -> str:
+    zh = str(label_zh_value or "").strip()
+    if zh and zh.lower() != str(label or "").lower():
+        return zh
+    mapping = {
+        "person": "人物",
+        "car": "车辆",
+        "bus": "公交车",
+        "truck": "卡车",
+        "bicycle": "自行车",
+        "motorcycle": "摩托车",
+        "dog": "宠物",
+        "cat": "宠物",
+        "book": "书本",
+        "laptop": "电脑",
+        "keyboard": "键盘",
+        "mouse": "鼠标",
+        "kite": "风筝",
+    }
+    return mapping.get(str(label or "").lower(), str(label or "目标"))
+
+
+def search_result_match_display(item: dict) -> tuple[str, float | None]:
+    detections = item.get("detections") if isinstance(item.get("detections"), list) else []
+    best = None
+    for det in detections:
+        if not isinstance(det, dict):
+            continue
+        if best is None or float(det.get("confidence") or 0) > float(best.get("confidence") or 0):
+            best = det
+    if best:
+        return object_label_display(best.get("label"), best.get("label_zh")), float(best.get("confidence") or 0)
+    labels = item.get("object_labels") if isinstance(item.get("object_labels"), list) else []
+    if labels:
+        return object_label_display(labels[0]), float(item.get("score") or 0)
+    return "本地索引匹配", float(item.get("score") or 0) if item.get("score") is not None else None
+
+
+def sanitize_copilot_search_result(item: dict) -> dict:
+    allowed = {
+        "rank",
+        "asset_id",
+        "keyframe_id",
+        "title_redacted",
+        "modality",
+        "file_type",
+        "size_bytes",
+        "mtime",
+        "score",
+        "matched_by",
+        "object_labels",
+        "detections",
+        "evidence_ref",
+        "timestamp_sec",
+        "path_hash",
+        "privacy_level",
+        "score_components",
+        "display",
+        "preview_url",
+        "preview_kind",
+    }
+    return {key: value for key, value in item.items() if key in allowed}
+
+
+def http_post_json(name: str, url: str, payload: dict, timeout: int = 60) -> dict:
+    started = time.perf_counter()
+    data = json.dumps(payload, ensure_ascii=False).encode("utf-8")
+    req = urllib.request.Request(
+        url,
+        data=data,
+        headers={"Accept": "application/json", "Content-Type": "application/json; charset=utf-8"},
+        method="POST",
+    )
+    try:
+        with urllib.request.urlopen(req, timeout=timeout) as resp:
+            raw = resp.read(2 * 1024 * 1024).decode("utf-8", errors="replace")
+            elapsed_ms = round((time.perf_counter() - started) * 1000, 3)
+            try:
+                payload_out = json.loads(raw) if raw else {}
+            except json.JSONDecodeError:
+                payload_out = {"raw": raw[:2000]}
+            return {
+                "name": name,
+                "ok": 200 <= resp.status < 300,
+                "status": resp.status,
+                "elapsed_ms": elapsed_ms,
+                "url": url,
+                "payload": payload_out,
+            }
+    except urllib.error.HTTPError as exc:
+        raw = exc.read(65536).decode("utf-8", errors="replace")
+        elapsed_ms = round((time.perf_counter() - started) * 1000, 3)
+        try:
+            payload_out = json.loads(raw) if raw else {}
+        except json.JSONDecodeError:
+            payload_out = {"raw": raw[:2000]}
+        return {
+            "name": name,
+            "ok": False,
+            "status": exc.code,
+            "elapsed_ms": elapsed_ms,
+            "url": url,
+            "payload": payload_out,
+            "error": str(exc),
+        }
+    except urllib.error.URLError as exc:
+        elapsed_ms = round((time.perf_counter() - started) * 1000, 3)
+        return {
+            "name": name,
+            "ok": False,
+            "status": None,
+            "elapsed_ms": elapsed_ms,
+            "url": url,
+            "payload": {},
+            "error": str(exc),
+        }
 
 
 def required_check(check: dict, required: bool = True) -> dict:
@@ -847,6 +1489,7 @@ class PortalState:
         openclaw_gateway_url: str | None = None,
         openclaw_model_gateway_url: str | None = None,
         qwen_gateway_url: str | None = None,
+        qwen_model: str | None = None,
         journal_report_root: Path | None = None,
         journal_evidence_dir: Path | None = None,
         journal_export_dir: Path | None = None,
@@ -876,7 +1519,8 @@ class PortalState:
         self.official_manager_url = official_manager_url
         self.openclaw_gateway_url = openclaw_gateway_url
         self.openclaw_model_gateway_url = openclaw_model_gateway_url
-        self.qwen_gateway_url = qwen_gateway_url
+        self.qwen_gateway_url = (qwen_gateway_url or DEFAULT_QWEN_GATEWAY_URL).rstrip("/")
+        self.qwen_model = qwen_model or DEFAULT_QWEN_MODEL
         self.journal_report_root = journal_report_root or report_root
         self.journal_evidence_dir = journal_evidence_dir or (report_root / "digua_journal_evidence")
         self.journal_export_dir = journal_export_dir or (report_root / "digua_journal_exports")
@@ -941,6 +1585,52 @@ class PortalState:
         if not self.identity_store:
             return False
         return self.identity_store.check_acl(str(user.get("username") or ""), relative_path, "read")
+
+    def storage_file_by_path_hash(
+        self,
+        path_hash: str,
+        user: dict,
+        cache: dict[str, tuple[Path | None, str | None]] | None = None,
+    ) -> tuple[Path | None, str | None]:
+        digest = str(path_hash or "").strip().lower()
+        if not self.personal_root or not re.fullmatch(r"[0-9a-f]{64}", digest):
+            return None, None
+        if cache is not None and digest in cache:
+            return cache[digest]
+        scanned = 0
+        found: tuple[Path | None, str | None] = (None, None)
+        roots: list[tuple[Path, bool]] = [(self.personal_root, True)]
+        yolo_fixture_root = self.personal_root.parent / "yolo_v2_fixture" / "images"
+        if yolo_fixture_root.exists():
+            roots.append((yolo_fixture_root, False))
+        for root, requires_acl in roots:
+            for path in root.rglob("*"):
+                if scanned >= self.storage_max_files:
+                    break
+                try:
+                    if path.is_symlink() or not path.is_file():
+                        continue
+                    scanned += 1
+                    if not requires_acl and path.suffix.lower() not in {".jpg", ".jpeg", ".png", ".webp", ".bmp", ".gif"}:
+                        continue
+                    current_hash = hashlib.sha256(str(path.resolve()).encode("utf-8", errors="replace")).hexdigest()
+                    if current_hash != digest:
+                        continue
+                    if requires_acl:
+                        relative_path = path.relative_to(self.personal_root).as_posix()
+                        if self.can_read(user, relative_path):
+                            found = (path, relative_path)
+                            break
+                    else:
+                        found = (path, None)
+                        break
+                except OSError:
+                    continue
+            if found[0] is not None or scanned >= self.storage_max_files:
+                break
+        if cache is not None:
+            cache[digest] = found
+        return found
 
     def can_write(self, user: dict, relative_path: str) -> bool:
         if not self.identity_store:
@@ -1309,10 +1999,567 @@ class PortalState:
             },
         }
 
-    def copilot_chat(self, message: str, user: dict) -> tuple[int, dict]:
-        quoted = re.findall(r'"([^"]+)"', message or "")
-        if len(quoted) >= 2:
-            source, target = quoted[0], quoted[1]
+    def _copilot_qwen_router_completion(self, message: str) -> dict:
+        payload = {
+            "model": self.qwen_model,
+            "messages": [
+                {"role": "user", "content": message},
+            ],
+            "temperature": 0.0,
+            "max_tokens": 96,
+            "stream": False,
+            "disable_ai_nas_tools": True,
+            "metadata": {
+                "source": "openclaw_operator_portal",
+                "purpose": "edge_cloud_route_classifier",
+                "original_query_sent": True,
+                "disable_ai_nas_tools": True,
+                "qwen_execution_authority": False,
+            },
+        }
+        return http_post_json(
+            "local_qwen_router",
+            normalize_chat_completions_url(self.qwen_gateway_url or DEFAULT_QWEN_GATEWAY_URL),
+            payload,
+            timeout=12,
+        )
+
+    def _copilot_structured_router_completion(self, message: str) -> dict:
+        payload = {
+            "model": self.qwen_model,
+            "messages": [
+                {"role": "user", "content": message},
+            ],
+            "temperature": 0.0,
+            "max_tokens": 96,
+            "stream": False,
+            "disable_ai_nas_tools": True,
+            "metadata": {
+                "source": "openclaw_operator_portal",
+                "purpose": "edge_cloud_route_classifier",
+                "original_query_sent": True,
+                "disable_ai_nas_tools": True,
+                "qwen_execution_authority": False,
+            },
+        }
+        return http_post_json(
+            "local_qwen_router_structured_fallback",
+            normalize_chat_completions_url(self.qwen_gateway_url or DEFAULT_QWEN_GATEWAY_URL),
+            payload,
+            timeout=12,
+        )
+
+    def copilot_qwen_route(self, message: str, action_intent: dict | None = None) -> dict:
+        policy = copilot_policy_route(message, action_intent)
+        qwen_route: dict | None = None
+        result = self._copilot_qwen_router_completion(message)
+        if result.get("ok"):
+            content, metadata, upstream = chat_completion_content(result)
+            parsed = parse_json_object_from_text(content)
+            qwen_route = normalize_copilot_router(
+                parsed or {},
+                classifier=str(metadata.get("classifier") or "qwen_gateway_structured_router"),
+                raw_content=content,
+                elapsed_ms=result.get("elapsed_ms"),
+            )
+            if qwen_route:
+                qwen_route["model"] = upstream.get("model") or self.qwen_model
+        if not qwen_route:
+            fallback = self._copilot_structured_router_completion(message)
+            if fallback.get("ok"):
+                content, _metadata, upstream = chat_completion_content(fallback)
+                parsed = parse_json_object_from_text(content)
+                qwen_route = normalize_copilot_router(
+                    parsed or {},
+                    classifier="qwen_gateway_structured_router_fallback",
+                    raw_content=content,
+                    elapsed_ms=fallback.get("elapsed_ms"),
+                )
+                if qwen_route:
+                    qwen_route["model"] = upstream.get("model") or self.qwen_model
+                    qwen_route["fallback_from_real_qwen"] = True
+        if not qwen_route:
+            qwen_route = {
+                **policy,
+                "classifier": "portal_policy_fallback_after_qwen_failure",
+                "qwen_router_failed": True,
+                "qwen_router_error": result.get("error") or (result.get("payload") or {}).get("error") if isinstance(result.get("payload"), dict) else result.get("error"),
+                "elapsed_ms": result.get("elapsed_ms"),
+            }
+        return apply_copilot_guardrail(qwen_route, policy)
+
+    def _copilot_attach_router(self, status: int, payload: dict, router: dict, *, assistant_mode: str | None = None) -> tuple[int, dict]:
+        if not isinstance(payload, dict):
+            return status, payload
+        if assistant_mode:
+            payload.setdefault("assistant_mode", assistant_mode)
+            payload.setdefault("route", assistant_mode)
+        payload.setdefault("cloud_used", False)
+        payload.setdefault("qwen_execution_authority", False)
+        payload["qwen_router"] = router
+        audit = payload.get("audit")
+        if isinstance(audit, dict):
+            audit.setdefault("qwen_router_classifier", router.get("classifier"))
+            audit.setdefault("qwen_router_route", router.get("route"))
+            audit.setdefault("qwen_execution_authority", False)
+        return status, payload
+
+    def _copilot_answer_payload(self, *, mode: str, answer: str, router: dict, nas_action: dict | None = None, extra: dict | None = None) -> tuple[int, dict]:
+        payload = {
+            "ok": True,
+            "assistant_mode": mode,
+            "answer": answer,
+            "route": mode,
+            "model": "S100P local API via Qwen router",
+            "cloud_used": False,
+            "qwen_execution_authority": False,
+            "nas_action": nas_action or {
+                "operation": "none",
+                "status": "completed",
+                "qwen_execution_authority": False,
+            },
+            "audit": {
+                "tool_executor": "openclaw_local_api",
+                "tool_execution_performed": bool(nas_action and nas_action.get("operation") not in {"none", "inspect"}),
+                "direct_nas_write_performed": bool(nas_action and nas_action.get("direct_nas_write_performed")),
+                "cloud_payload_sent": False,
+                "qwen_execution_authority": False,
+            },
+        }
+        if extra:
+            payload.update(extra)
+        return self._copilot_attach_router(HTTPStatus.OK, payload, router, assistant_mode=mode)
+
+    def _copilot_needs_params(self, action: str, missing: list[str], router: dict, example: str) -> tuple[int, dict]:
+        answer = f"Qwen 已识别为 {action} 本地任务，但参数不完整。还需要：{', '.join(missing)}。示例：{example}"
+        return self._copilot_answer_payload(
+            mode="needs_parameters",
+            answer=answer,
+            router=router,
+            nas_action={
+                "operation": action,
+                "status": "needs_parameters",
+                "missing": missing,
+                "qwen_execution_authority": False,
+                "direct_nas_write_performed": False,
+            },
+        )
+
+    def _copilot_storage_path(self, rel: str, user: dict, router: dict) -> tuple[int, dict]:
+        try:
+            path = resolve_storage_path(self.personal_root, rel) if self.personal_root else Path(rel)
+        except StoragePathError as exc:
+            return self._copilot_attach_router(HTTPStatus.BAD_REQUEST, {"ok": False, "error": str(exc)}, router)
+        if path.is_dir():
+            status, payload = self.storage_list_payload(rel, user)
+            if status == HTTPStatus.OK:
+                entries = payload.get("entries") or []
+                payload.update(
+                    {
+                        "assistant_mode": "local_storage_list",
+                        "route": "local_storage_list",
+                        "model": "S100P storage API via Qwen router",
+                        "answer": f"已通过本地 NAS 权限检查列出 {normalize_storage_relative_path(rel) or '/'}，返回 {len(entries)} 个条目。",
+                        "nas_action": {
+                            "operation": "list",
+                            "status": "completed",
+                            "entries": entries[:25],
+                            "qwen_execution_authority": False,
+                            "direct_nas_write_performed": False,
+                        },
+                        "cloud_used": False,
+                        "qwen_execution_authority": False,
+                    }
+                )
+            return self._copilot_attach_router(status, payload, router, assistant_mode=payload.get("assistant_mode"))
+        return self._copilot_answer_payload(
+            mode="local_storage_inspect",
+            answer=f"已完成只读路径检查：{normalize_storage_relative_path(rel)}。不会把原始文件内容交给云端，也不会让 Qwen 获得写权限。",
+            router=router,
+            nas_action={
+                "operation": "inspect",
+                "status": "read_only_completed",
+                "path": normalize_storage_relative_path(rel),
+                "path_hash": hashlib.sha256(normalize_storage_relative_path(rel).encode("utf-8", errors="replace")).hexdigest(),
+                "qwen_execution_authority": False,
+                "direct_nas_write_performed": False,
+                "forbidden_actions": ["delete", "move", "rename", "chmod", "chown", "recursive", "overwrite"],
+            },
+        )
+
+    def _copilot_document_query(self, intent: dict, user: dict, router: dict) -> tuple[int, dict]:
+        status, payload = self.document_query_payload(str(intent.get("query") or ""), str(intent.get("path") or "Documents"), user)
+        if status == HTTPStatus.OK:
+            payload.update(
+                {
+                    "assistant_mode": "local_document_query",
+                    "route": "local_document_query",
+                    "model": "SQLite FTS-first RAG via Qwen router",
+                    "nas_action": {
+                        "operation": "document_query",
+                        "status": "completed",
+                        "evidence_count": payload.get("evidence_count", 0),
+                        "qwen_execution_authority": False,
+                        "direct_nas_write_performed": False,
+                    },
+                }
+            )
+        return self._copilot_attach_router(status, payload, router, assistant_mode=payload.get("assistant_mode"))
+
+    def _copilot_snapshot_create(self, intent: dict, user: dict, router: dict) -> tuple[int, dict]:
+        rel = str(intent.get("path") or "").strip()
+        name = str(intent.get("name") or "").strip()
+        if not rel:
+            return self._copilot_needs_params("snapshot_create", ["path"], router, '给 "Documents" 创建快照')
+        if not self.snapshot_store:
+            return self._copilot_attach_router(HTTPStatus.SERVICE_UNAVAILABLE, {"ok": False, "error": "snapshot_store_unavailable"}, router)
+        try:
+            source_rel = normalize_storage_relative_path(rel)
+        except StoragePathError as exc:
+            return self._copilot_attach_router(HTTPStatus.BAD_REQUEST, {"ok": False, "error": str(exc)}, router)
+        if not self.can_read(user, source_rel):
+            return self._copilot_attach_router(HTTPStatus.FORBIDDEN, {"ok": False, "error": "permission_denied", "required": "read", "path": source_rel}, router)
+        result = self.snapshot_store.create_snapshot(name, source_rel, str(user.get("username") or ""))
+        status = HTTPStatus.OK if result.get("ok") else HTTPStatus.BAD_REQUEST
+        payload = {
+            "ok": bool(result.get("ok")),
+            "assistant_mode": "local_snapshot_create",
+            "answer": f"已为 {source_rel} 创建本地快照 {name}。" if result.get("ok") else f"快照创建失败：{result.get('error')}",
+            "route": "local_snapshot_create",
+            "model": "S100P snapshot API via Qwen router",
+            "snapshot": result.get("snapshot"),
+            "result": result,
+            "cloud_used": False,
+            "qwen_execution_authority": False,
+            "nas_action": {
+                "operation": "snapshot_create",
+                "status": "completed" if result.get("ok") else "failed",
+                "path": source_rel,
+                "name": name,
+                "qwen_execution_authority": False,
+                "direct_nas_write_performed": bool(result.get("ok")),
+            },
+        }
+        return self._copilot_attach_router(status, payload, router, assistant_mode="local_snapshot_create")
+
+    def _copilot_backup_create_task(self, intent: dict, user: dict, router: dict) -> tuple[int, dict]:
+        source_rel = str(intent.get("source") or "").strip()
+        dest_rel = str(intent.get("dest") or "").strip()
+        name = str(intent.get("name") or "").strip()
+        if not source_rel or not dest_rel:
+            return self._copilot_needs_params("backup_create_task", ["source", "dest"], router, '备份 "Documents" 到 "Backups/Documents"')
+        if not self.backup_manager:
+            return self._copilot_attach_router(HTTPStatus.SERVICE_UNAVAILABLE, {"ok": False, "error": "backup_manager_unavailable"}, router)
+        try:
+            source_rel = normalize_storage_relative_path(source_rel)
+            dest_rel = normalize_storage_relative_path(dest_rel)
+            source = resolve_storage_path(self.personal_root, source_rel)
+            dest = resolve_storage_path(self.personal_root, dest_rel)
+        except StoragePathError as exc:
+            return self._copilot_attach_router(HTTPStatus.BAD_REQUEST, {"ok": False, "error": str(exc)}, router)
+        if not self.can_read(user, source_rel) or not self.can_write(user, dest_rel):
+            return self._copilot_attach_router(HTTPStatus.FORBIDDEN, {"ok": False, "error": "permission_denied", "source": source_rel, "dest": dest_rel}, router)
+        result = self.backup_manager.create_task(name, str(source), str(dest), 0)
+        status = HTTPStatus.OK if result.get("ok") else HTTPStatus.BAD_REQUEST
+        payload = {
+            "ok": bool(result.get("ok")),
+            "assistant_mode": "local_backup_create_task",
+            "answer": f"已创建本地备份任务 {name}：{source_rel} -> {dest_rel}。" if result.get("ok") else f"备份任务创建失败：{result.get('error')}",
+            "route": "local_backup_create_task",
+            "model": "S100P backup API via Qwen router",
+            "result": result,
+            "cloud_used": False,
+            "qwen_execution_authority": False,
+            "nas_action": {
+                "operation": "backup_create_task",
+                "status": "completed" if result.get("ok") else "failed",
+                "source": source_rel,
+                "dest": dest_rel,
+                "name": name,
+                "qwen_execution_authority": False,
+                "direct_nas_write_performed": bool(result.get("ok")),
+            },
+        }
+        return self._copilot_attach_router(status, payload, router, assistant_mode="local_backup_create_task")
+
+    def _copilot_backup_run(self, intent: dict, router: dict) -> tuple[int, dict]:
+        name = str(intent.get("name") or "").strip()
+        if not name:
+            return self._copilot_needs_params("backup_run", ["task_name"], router, '运行备份任务 "assistant-backup-20260705-120000"')
+        if not self.backup_manager:
+            return self._copilot_attach_router(HTTPStatus.SERVICE_UNAVAILABLE, {"ok": False, "error": "backup_manager_unavailable"}, router)
+        result = self.backup_manager.run_backup(name)
+        status = HTTPStatus.OK if result.get("ok") else HTTPStatus.BAD_REQUEST
+        payload = {
+            "ok": bool(result.get("ok")),
+            "assistant_mode": "local_backup_run",
+            "answer": f"备份任务 {name} 已运行，复制 {result.get('copied', 0)} 个文件。" if result.get("ok") else f"备份运行失败：{result.get('error')}",
+            "route": "local_backup_run",
+            "model": "S100P backup API via Qwen router",
+            "result": result,
+            "cloud_used": False,
+            "qwen_execution_authority": False,
+            "nas_action": {
+                "operation": "backup_run",
+                "status": "completed" if result.get("ok") else "failed",
+                "name": name,
+                "qwen_execution_authority": False,
+                "direct_nas_write_performed": bool(result.get("ok")),
+            },
+        }
+        return self._copilot_attach_router(status, payload, router, assistant_mode="local_backup_run")
+
+    def _copilot_media_index(self, intent: dict, user: dict, router: dict) -> tuple[int, dict]:
+        rel = str(intent.get("path") or "Photos").strip()
+        try:
+            rel = normalize_storage_relative_path(rel)
+            root = resolve_storage_path(self.personal_root, rel)
+        except StoragePathError as exc:
+            return self._copilot_attach_router(HTTPStatus.BAD_REQUEST, {"ok": False, "error": str(exc)}, router)
+        if not self.can_read(user, rel):
+            return self._copilot_attach_router(HTTPStatus.FORBIDDEN, {"ok": False, "error": "permission_denied", "required": "read", "path": rel}, router)
+        result = self.media_center.index_photos(root) if self.media_center else {"scanned": 0, "indexed": 0, "skipped": 0}
+        return self._copilot_answer_payload(
+            mode="local_media_index",
+            answer=f"已在本地扫描 {rel}，scanned={result.get('scanned', 0)}，indexed={result.get('indexed', 0)}，skipped={result.get('skipped', 0)}。",
+            router=router,
+            nas_action={
+                "operation": "media_index",
+                "status": "completed",
+                "path": rel,
+                "qwen_execution_authority": False,
+                "direct_nas_write_performed": True,
+            },
+            extra={"index": result},
+        )
+
+    def _copilot_media_create_album(self, intent: dict, router: dict) -> tuple[int, dict]:
+        name = str(intent.get("name") or "").strip()
+        if not name:
+            return self._copilot_needs_params("media_create_album", ["album_name"], router, '创建相册 "家庭照片"')
+        result = self.media_center.create_album(name, str(intent.get("description") or "")) if self.media_center else {"ok": False, "error": "media_center_unavailable"}
+        status = HTTPStatus.OK if result.get("ok") else HTTPStatus.BAD_REQUEST
+        payload = {
+            "ok": bool(result.get("ok")),
+            "assistant_mode": "local_media_create_album",
+            "answer": f"已创建本地相册 {name}。" if result.get("ok") else f"相册创建失败：{result.get('error')}",
+            "route": "local_media_create_album",
+            "model": "S100P media API via Qwen router",
+            "result": result,
+            "cloud_used": False,
+            "qwen_execution_authority": False,
+            "nas_action": {
+                "operation": "media_create_album",
+                "status": "completed" if result.get("ok") else "failed",
+                "name": name,
+                "qwen_execution_authority": False,
+                "direct_nas_write_performed": bool(result.get("ok")),
+            },
+        }
+        return self._copilot_attach_router(status, payload, router, assistant_mode="local_media_create_album")
+
+    def _copilot_journal_summary(self, intent: dict, router: dict) -> tuple[int, dict]:
+        if journal_route_response is None:
+            return self._copilot_attach_router(HTTPStatus.SERVICE_UNAVAILABLE, {"ok": False, "error": "digua_journal_routes_unavailable"}, router)
+        status, result = journal_route_response(
+            "/api/journal/generate-summary",
+            method="POST",
+            payload={"period_type": intent.get("period_type") or "daily", "project_id": intent.get("project_id") or "all"},
+            report_root=self.journal_report_root,
+            evidence_dir=self.journal_evidence_dir,
+            export_dir=self.journal_export_dir,
+        )
+        summary = result.get("summary") if isinstance(result.get("summary"), dict) else {}
+        payload = {
+            "ok": bool(result.get("ok")),
+            "assistant_mode": "local_journal_summary",
+            "answer": str(summary.get("markdown") or "已生成本地日记摘要。")[:1200] if result.get("ok") else f"日记摘要失败：{result.get('error')}",
+            "route": "local_journal_summary",
+            "model": "S100P journal API via Qwen router",
+            "result": result,
+            "cloud_used": False,
+            "qwen_execution_authority": False,
+            "nas_action": {
+                "operation": "journal_summary",
+                "status": "completed" if result.get("ok") else "failed",
+                "qwen_execution_authority": False,
+                "direct_nas_write_performed": False,
+            },
+        }
+        return self._copilot_attach_router(status, payload, router, assistant_mode="local_journal_summary")
+
+    def _copilot_journal_manual_entry(self, intent: dict, router: dict) -> tuple[int, dict]:
+        title = str(intent.get("title") or "").strip()
+        body = str(intent.get("body") or "").strip()
+        if not title or not body:
+            return self._copilot_needs_params("journal_manual_entry", ["title", "body"], router, '记一条日记 "标题" "正文内容"')
+        if journal_route_response is None:
+            return self._copilot_attach_router(HTTPStatus.SERVICE_UNAVAILABLE, {"ok": False, "error": "digua_journal_routes_unavailable"}, router)
+        status, result = journal_route_response(
+            "/api/journal/manual-entry",
+            method="POST",
+            payload={"project_id": intent.get("project_id") or "manual", "title": title, "body": body, "evidence_refs": []},
+            report_root=self.journal_report_root,
+            evidence_dir=self.journal_evidence_dir,
+            export_dir=self.journal_export_dir,
+        )
+        payload = {
+            "ok": bool(result.get("ok")),
+            "assistant_mode": "local_journal_manual_entry",
+            "answer": f"已写入本地日记：{title}。" if result.get("ok") else f"日记写入失败：{result.get('error')}",
+            "route": "local_journal_manual_entry",
+            "model": "S100P journal API via Qwen router",
+            "result": result,
+            "cloud_used": False,
+            "qwen_execution_authority": False,
+            "nas_action": {
+                "operation": "journal_manual_entry",
+                "status": "completed" if result.get("ok") else "failed",
+                "qwen_execution_authority": False,
+                "direct_nas_write_performed": bool(result.get("ok")),
+            },
+        }
+        return self._copilot_attach_router(status, payload, router, assistant_mode="local_journal_manual_entry")
+
+    def _copilot_summary_action(self, action: str, router: dict) -> tuple[int, dict]:
+        if action == "storage_status":
+            payload = self.storage_status_payload()
+            answer = f"已读取本地 NAS 存储状态。Personal 空间{'已配置' if self.personal_root else '未配置'}，下方展示容量、索引和权限状态。"
+        elif action == "media_summary":
+            media = self.media_center
+            payload = {"ok": True, "stats": media.stats() if media else {}, "albums": media.list_albums() if media else []}
+            stats = payload.get("stats") or {}
+            answer = (
+                f"已读取媒体库概览：照片 {int(stats.get('photo_count') or 0)} 个，"
+                f"视频 {int(stats.get('video_count') or 0)} 个，相册 {int(stats.get('album_count') or 0)} 个。"
+            )
+        elif action == "ops_summary":
+            ops = self.ops_manager
+            payload = {"ok": True, "checks": ops.list_checks(limit=50) if ops else [], "alerts": ops.list_alerts(True) if ops else [], "stats": ops.stats() if ops else {}}
+            stats = payload.get("stats") or {}
+            answer = (
+                f"已读取运行健康概览：健康检查 {int(stats.get('health_check_count') or 0)} 项，"
+                f"活动告警 {int(stats.get('active_alert_count') or 0)} 条。"
+            )
+        elif action == "apps_summary":
+            apps = self.app_ecosystem
+            payload = {"ok": True, "plugins": apps.list_plugins() if apps else [], "protocols": apps.list_protocols() if apps else [], "stats": apps.stats() if apps else {}}
+            stats = payload.get("stats") or {}
+            answer = (
+                f"已读取应用生态概览：插件 {int(stats.get('plugin_count') or 0)} 个，"
+                f"协议适配 {int(stats.get('adapter_count') or 0)} 个。"
+            )
+        elif action == "audit_summary":
+            payload = self.audit_summary_payload()
+            answer = f"已读取本地审计概览：最近 {len(payload.get('operations') or [])} 条操作记录，下方展示时间、动作和状态。"
+        elif action == "reports_list":
+            payload = self.list_reports_payload()
+            answer = f"已读取本地报告列表：共 {len(payload.get('reports') or [])} 份，按最近可查看报告展示。"
+        else:
+            payload = {"ok": False, "error": "unknown_summary_action", "action": action}
+            answer = payload["error"]
+        payload.update(
+            {
+                "assistant_mode": f"local_{action}",
+                "answer": answer,
+                "route": f"local_{action}",
+                "model": "S100P local API via Qwen router",
+                "cloud_used": False,
+                "qwen_execution_authority": False,
+                "nas_action": {
+                    "operation": action,
+                    "status": "completed" if payload.get("ok") else "failed",
+                    "qwen_execution_authority": False,
+                    "direct_nas_write_performed": False,
+                },
+            }
+        )
+        return self._copilot_attach_router(HTTPStatus.OK if payload.get("ok") else HTTPStatus.BAD_REQUEST, payload, router, assistant_mode=f"local_{action}")
+
+    def _copilot_cloud_overflow(self, message: str, user: dict, router: dict) -> tuple[int, dict]:
+        if router.get("privacy_level") != "none":
+            status, payload = self.local_qwen_chat(message, user)
+            payload.setdefault("cloud_overflow_blocked", True)
+            return self._copilot_attach_router(status, payload, router, assistant_mode=payload.get("assistant_mode"))
+        cloud_url = os.environ.get("AI_NAS_CLOUD_CHAT_URL", "").strip()
+        if not cloud_url:
+            return self._copilot_answer_payload(
+                mode="cloud_overflow_stub",
+                answer="Qwen 判断这是非隐私的复杂公共任务，可以进入云端；当前实机环境未配置 AI_NAS_CLOUD_CHAT_URL，所以没有发送云端 payload，仅保留本地受控返回。",
+                router=router,
+                nas_action={
+                    "operation": "cloud_overflow",
+                    "status": "cloud_not_configured",
+                    "qwen_execution_authority": False,
+                    "direct_nas_write_performed": False,
+                },
+                extra={"cloud_available": False, "cloud_used": False},
+            )
+        result = http_post_json(
+            "cloud_overflow_chat",
+            normalize_chat_completions_url(cloud_url),
+            {
+                "model": os.environ.get("AI_NAS_CLOUD_CHAT_MODEL", "cloud-overflow"),
+                "messages": [{"role": "user", "content": message}],
+                "stream": False,
+                "metadata": {"source": "digua_ai_nas_cloud_overflow", "privacy_level": "none"},
+            },
+            timeout=60,
+        )
+        if not result.get("ok"):
+            return self._copilot_attach_router(HTTPStatus.BAD_GATEWAY, {"ok": False, "error": "cloud_overflow_failed", "upstream": result}, router)
+        content, _metadata, upstream = chat_completion_content(result)
+        payload = {
+            "ok": True,
+            "assistant_mode": "cloud_overflow_chat",
+            "answer": content.strip() or "cloud_overflow_empty_answer",
+            "route": "cloud_overflow_chat",
+            "model": upstream.get("model") or os.environ.get("AI_NAS_CLOUD_CHAT_MODEL", "cloud-overflow"),
+            "cloud_used": True,
+            "qwen_execution_authority": False,
+            "nas_action": {"operation": "cloud_overflow", "status": "completed", "qwen_execution_authority": False},
+            "audit": {"cloud_payload_sent": True, "privacy_level": "none", "qwen_execution_authority": False},
+        }
+        return self._copilot_attach_router(HTTPStatus.OK, payload, router, assistant_mode="cloud_overflow_chat")
+
+    def dispatch_copilot_action(self, intent: dict, user: dict, router: dict) -> tuple[int, dict]:
+        action = str(intent.get("action") or "")
+        if action == "search":
+            status, payload = self.local_copilot_search(intent.get("search_intent") or {}, user)
+            return self._copilot_attach_router(status, payload, router, assistant_mode=payload.get("assistant_mode") if isinstance(payload, dict) else None)
+        if action == "document_query":
+            return self._copilot_document_query(intent, user, router)
+        if action == "storage_list_or_inspect":
+            return self._copilot_storage_path(str(intent.get("path") or ""), user, router)
+        if action == "storage_list":
+            return self._copilot_storage_path(str(intent.get("path") or ""), user, router)
+        if action == "storage_create_folder":
+            path = str(intent.get("path") or "").strip()
+            if not path:
+                return self._copilot_needs_params("storage_create_folder", ["path"], router, '新建文件夹 "Inbox/NewFolder"')
+            status, payload = self.storage_create_folder(path, user)
+            if status == HTTPStatus.OK:
+                payload.update(
+                    {
+                        "assistant_mode": "local_storage_create_folder",
+                        "answer": f"已新建文件夹 {normalize_storage_relative_path(path)}。",
+                        "route": "local_storage_create_folder",
+                        "model": "S100P storage API via Qwen router",
+                        "cloud_used": False,
+                        "qwen_execution_authority": False,
+                        "nas_action": {
+                            "operation": "mkdir",
+                            "status": "completed",
+                            "path": normalize_storage_relative_path(path),
+                            "qwen_execution_authority": False,
+                            "direct_nas_write_performed": True,
+                        },
+                    }
+                )
+            return self._copilot_attach_router(status, payload, router, assistant_mode=payload.get("assistant_mode"))
+        if action in {"storage_copy", "storage_rename"}:
+            source = str(intent.get("source") or "")
+            target = str(intent.get("target") or "")
             if "/" not in target and "\\" not in target:
                 try:
                     source_rel = normalize_storage_relative_path(source)
@@ -1320,33 +2567,292 @@ class PortalState:
                     target = target if parent in {"", "."} else f"{parent}/{target}"
                 except StoragePathError:
                     pass
-            if "renamed" in target.lower():
-                status, payload = self.storage_rename(source, Path(target).name, user)
-                return status, payload
-            status, payload = self.storage_copy(source, target, user)
-            return status, payload
-        if quoted:
-            rel = quoted[0]
-            try:
-                path = resolve_storage_path(self.personal_root, rel) if self.personal_root else Path(rel)
-            except StoragePathError as exc:
-                return HTTPStatus.BAD_REQUEST, {"ok": False, "error": str(exc)}
-            if path.is_dir():
-                status, payload = self.storage_list_payload(rel, user)
-                if status == HTTPStatus.OK:
-                    payload["nas_action"] = {"operation": "list", "status": "completed", "entries": payload.get("entries") or []}
-                return status, payload
-            return HTTPStatus.OK, {
-                "ok": True,
-                "nas_action": {
-                    "operation": "inspect",
-                    "status": "read_only_completed",
-                    "path": normalize_storage_relative_path(rel),
-                    "qwen_execution_authority": False,
-                    "forbidden_actions": ["delete", "move", "rename", "chmod", "chown", "recursive", "overwrite"],
-                },
+            status, payload = self.storage_rename(source, Path(target).name, user) if action == "storage_rename" else self.storage_copy(source, target, user)
+            if isinstance(payload, dict):
+                payload.setdefault("assistant_mode", "local_storage_rename" if action == "storage_rename" else "local_storage_copy_route")
+                payload.setdefault("route", payload["assistant_mode"])
+                payload.setdefault("answer", "已进入受控 NAS 操作链路；直接高风险写操作未交给 Qwen 执行。")
+            return self._copilot_attach_router(status, payload, router, assistant_mode=payload.get("assistant_mode") if isinstance(payload, dict) else None)
+        if action == "snapshot_create":
+            return self._copilot_snapshot_create(intent, user, router)
+        if action == "backup_create_task":
+            return self._copilot_backup_create_task(intent, user, router)
+        if action == "backup_run":
+            return self._copilot_backup_run(intent, router)
+        if action == "media_index":
+            return self._copilot_media_index(intent, user, router)
+        if action == "media_create_album":
+            return self._copilot_media_create_album(intent, router)
+        if action == "journal_summary":
+            return self._copilot_journal_summary(intent, router)
+        if action == "journal_manual_entry":
+            return self._copilot_journal_manual_entry(intent, router)
+        if action in {"storage_status", "media_summary", "ops_summary", "apps_summary", "audit_summary", "reports_list"}:
+            return self._copilot_summary_action(action, router)
+        return self._copilot_answer_payload(
+            mode="local_intent_unhandled",
+            answer=f"Qwen 已完成本地路由判定，但当前 Copilot 尚未映射动作：{action}",
+            router=router,
+            nas_action={"operation": action or "unknown", "status": "unhandled", "qwen_execution_authority": False},
+        )
+
+    def _local_qwen_chat_completion(self, message: str) -> dict:
+        payload = {
+            "model": self.qwen_model,
+            "messages": [
+                {"role": "user", "content": message},
+            ],
+            "temperature": 0.2,
+            "max_tokens": 256,
+            "stream": False,
+            "disable_ai_nas_tools": True,
+            "metadata": {
+                "source": "openclaw_operator_portal",
+                "purpose": "local_general_chat",
+                "disable_ai_nas_tools": True,
+                "qwen_execution_authority": False,
+            },
+        }
+        return http_post_json(
+            "local_qwen_chat",
+            normalize_chat_completions_url(self.qwen_gateway_url or DEFAULT_QWEN_GATEWAY_URL),
+            payload,
+            timeout=180,
+        )
+
+    def local_qwen_chat(self, message: str, user: dict) -> tuple[int, dict]:
+        clean_message = (message or "").strip()
+        if not clean_message:
+            return HTTPStatus.BAD_REQUEST, {"ok": False, "error": "empty_message"}
+        result = self._local_qwen_chat_completion(clean_message)
+        if not result.get("ok"):
+            return HTTPStatus.BAD_GATEWAY, {
+                "ok": False,
+                "error": "local_qwen_chat_failed",
+                "route": "local_qwen_chat",
+                "qwen_execution_authority": False,
+                "cloud_used": False,
+                "upstream_status": result.get("status"),
+                "upstream_error": result.get("error") or (result.get("payload") or {}).get("error"),
+                "elapsed_ms": result.get("elapsed_ms"),
             }
-        return HTTPStatus.OK, {"ok": True, "nas_action": {"operation": "none", "status": "no_action"}}
+        upstream = result.get("payload") if isinstance(result.get("payload"), dict) else {}
+        choices = upstream.get("choices") if isinstance(upstream.get("choices"), list) else []
+        first_choice = choices[0] if choices and isinstance(choices[0], dict) else {}
+        message_payload = first_choice.get("message") if isinstance(first_choice.get("message"), dict) else {}
+        answer = str(message_payload.get("content") or "").strip()
+        if not answer:
+            return HTTPStatus.BAD_GATEWAY, {
+                "ok": False,
+                "error": "local_qwen_empty_answer",
+                "route": "local_qwen_chat",
+                "qwen_execution_authority": False,
+                "cloud_used": False,
+                "elapsed_ms": result.get("elapsed_ms"),
+            }
+        return HTTPStatus.OK, {
+            "ok": True,
+            "assistant_mode": "local_qwen_chat",
+            "answer": answer,
+            "route": "local_qwen_chat",
+            "model": upstream.get("model") or self.qwen_model,
+            "finish_reason": first_choice.get("finish_reason"),
+            "usage": upstream.get("usage") if isinstance(upstream.get("usage"), dict) else {},
+            "elapsed_ms": result.get("elapsed_ms"),
+            "cloud_used": False,
+            "qwen_execution_authority": False,
+            "nas_action": {
+                "operation": "none",
+                "status": "answered_by_local_qwen",
+                "qwen_execution_authority": False,
+                "forbidden_actions": ["delete", "move", "rename", "chmod", "chown", "recursive", "overwrite", "shell"],
+            },
+            "audit": {
+                "caller": str(user.get("username") or "unknown"),
+                "tool_execution_performed": False,
+                "direct_nas_write_performed": False,
+                "cloud_payload_sent": False,
+                "prompt_hash": hashlib.sha256(clean_message.encode("utf-8", errors="replace")).hexdigest(),
+            },
+        }
+
+    def enrich_copilot_search_result(
+        self,
+        item: dict,
+        user: dict,
+        path_cache: dict[str, tuple[Path | None, str | None]],
+    ) -> dict:
+        safe = sanitize_copilot_search_result(item)
+        path_hash_value = str(safe.get("path_hash") or "")
+        path, _relative_path = self.storage_file_by_path_hash(path_hash_value, user, path_cache)
+        stat = None
+        if path:
+            try:
+                stat = path.stat()
+            except OSError:
+                stat = None
+        name = path.name if path else str(safe.get("title_redacted") or safe.get("asset_id") or "本地索引结果")
+        modality = safe.get("modality")
+        file_type = safe.get("file_type") or (path.suffix.lower() if path else "")
+        type_label = modality_display_label(modality, file_type)
+        mtime_value = safe.get("mtime")
+        if not mtime_value and stat:
+            mtime_value = stat.st_mtime
+        size_value = safe.get("size_bytes")
+        if not size_value and stat:
+            size_value = stat.st_size
+        match_label, match_score = search_result_match_display(safe)
+        match_score_label = f"{round(match_score * 1000) / 10}%" if isinstance(match_score, float) else ""
+        safe["display"] = {
+            "name": name,
+            "date_label": mtime_to_display(mtime_value),
+            "type_label": type_label,
+            "size_label": bytes_to_display(size_value),
+            "match_label": match_label,
+            "match_score": match_score,
+            "match_score_label": match_score_label,
+            "privacy_label": privacy_display_label(safe.get("privacy_level")),
+            "location_label": "NAS 本地索引",
+        }
+        if path and type_label == "照片" and path_hash_value:
+            safe["preview_url"] = f"/api/storage/preview-by-hash?path_hash={quote(path_hash_value, safe='')}"
+            safe["preview_kind"] = "image"
+            safe["display"]["preview_available"] = True
+        else:
+            safe["display"]["preview_available"] = False
+        return safe
+
+    def _copilot_search_response(self, *, mode: str, intent: dict, result: dict, source: str, retrieval_mode: str, user: dict) -> tuple[int, dict]:
+        path_cache: dict[str, tuple[Path | None, str | None]] = {}
+        results = [
+            self.enrich_copilot_search_result(item, user, path_cache)
+            for item in (result.get("results") or [])[:8]
+            if isinstance(item, dict)
+        ]
+        result_count = len(results)
+        query = str(intent.get("query") or "")
+        labels = result.get("labels") or intent.get("labels") or []
+        title_summary = summarize_search_result_titles(results)
+        if result_count:
+            image_only = (intent.get("modality") == "image") or all((item.get("display") or {}).get("type_label") == "照片" for item in results)
+            unit = "张相关照片" if image_only else "个匹配结果"
+            answer = f"已在本地 NAS 索引中搜索“{query}”，找到 {result_count} {unit}。下方卡片包含预览图、名称、日期和匹配原因。"
+            if title_summary:
+                answer += f" 结果包括：{title_summary}。"
+            if "person" in labels:
+                answer += " 这里只表示检测到 person 目标，不做人脸识别，也不判断具体身份。"
+        else:
+            reason = result.get("degraded_reason") or "no_matching_local_index_result"
+            answer = f"已执行本地 NAS 搜索“{query}”，当前索引没有返回匹配结果。原因：{reason}。未调用云端，也没有让 Qwen 直接访问或执行 NAS 工具。"
+        return HTTPStatus.OK, {
+            "ok": True,
+            "assistant_mode": mode,
+            "answer": answer,
+            "route": mode,
+            "model": source,
+            "cloud_used": False,
+            "qwen_execution_authority": False,
+            "search": {
+                "query_redacted": result.get("query_redacted") or query[:120],
+                "labels": labels,
+                "modality": intent.get("modality") or "all",
+                "retrieval_mode": retrieval_mode,
+                "result_count": result_count,
+                "results": results,
+                "degraded": bool(result.get("degraded")),
+                "degraded_reason": result.get("degraded_reason"),
+                "privacy": result.get("privacy") or {"raw_path_returned": False, "cloud_used": False},
+            },
+            "nas_action": {
+                "operation": "search",
+                "status": "completed" if result_count else "completed_empty",
+                "qwen_execution_authority": False,
+                "direct_nas_write_performed": False,
+                "forbidden_actions": ["delete", "move", "rename", "chmod", "chown", "recursive", "overwrite", "shell"],
+            },
+            "audit": {
+                "tool_executor": "openclaw_local_api",
+                "local_search_performed": True,
+                "direct_nas_write_performed": False,
+                "cloud_payload_sent": False,
+                "raw_path_returned": False,
+                "prompt_hash": hashlib.sha256(query.encode("utf-8", errors="replace")).hexdigest(),
+            },
+        }
+
+    def local_copilot_search(self, intent: dict, user: dict) -> tuple[int, dict]:
+        query = str(intent.get("query") or "").strip()
+        if intent.get("prefer_yolo") and yolo_route_response is not None:
+            yolo_payload = {"query": query, "top_k": 8, "user_id": str(user.get("username") or "operator")}
+            if intent.get("modality") and intent.get("modality") != "all":
+                yolo_payload["modality"] = intent["modality"]
+            status_code, result = yolo_route_response(
+                "/api/yolo-index/search",
+                method="POST",
+                payload=yolo_payload,
+                report_root=self.report_root,
+                personal_root=self.personal_root,
+            )
+            if status_code == HTTPStatus.OK and result.get("ok"):
+                return self._copilot_search_response(
+                    mode="local_yolo_search",
+                    intent=intent,
+                    result=result,
+                    source="S100P YOLO object index",
+                    retrieval_mode="yolo_object_index",
+                    user=user,
+                )
+        if multimodal_route_response is None:
+            return HTTPStatus.SERVICE_UNAVAILABLE, {
+                "ok": False,
+                "error": "local_search_unavailable",
+                "route": "local_search",
+                "cloud_used": False,
+                "qwen_execution_authority": False,
+            }
+        mm_payload = {
+            "query": query,
+            "top_k": 8,
+            "user_id": str(user.get("username") or "operator"),
+        }
+        if intent.get("modality") and intent.get("modality") != "all":
+            mm_payload["modality"] = intent["modality"]
+        status_code, result = multimodal_route_response(
+            "/api/multimodal-search/query",
+            method="POST",
+            payload=mm_payload,
+            report_root=self.report_root,
+            personal_root=self.personal_root,
+        )
+        if status_code != HTTPStatus.OK or not result.get("ok"):
+            return HTTPStatus.BAD_GATEWAY, {
+                "ok": False,
+                "error": result.get("error") or "local_multimodal_search_failed",
+                "route": "local_multimodal_search",
+                "cloud_used": False,
+                "qwen_execution_authority": False,
+            }
+        return self._copilot_search_response(
+            mode="local_multimodal_search",
+            intent=intent,
+            result=result,
+            source="Local multimodal NAS index",
+            retrieval_mode=result.get("retrieval_mode") or "fts_first_plus_image_embedding",
+            user=user,
+        )
+
+    def copilot_chat(self, message: str, user: dict) -> tuple[int, dict]:
+        clean_message = str(message or "").strip()
+        if not clean_message:
+            return HTTPStatus.BAD_REQUEST, {"ok": False, "error": "empty_message"}
+        action_intent = infer_copilot_action_intent(clean_message)
+        router = self.copilot_qwen_route(clean_message, action_intent)
+        if action_intent:
+            return self.dispatch_copilot_action(action_intent, user, router)
+        if router.get("route") == "cloud":
+            return self._copilot_cloud_overflow(clean_message, user, router)
+        status, payload = self.local_qwen_chat(clean_message, user)
+        return self._copilot_attach_router(status, payload, router, assistant_mode=payload.get("assistant_mode") if isinstance(payload, dict) else None)
 
     def audit_summary_payload(self) -> dict:
         if not self.operation_db_path:
@@ -2003,6 +3509,21 @@ class PortalHandler(BaseHTTPRequestHandler):
                 return
             preview = (params.get("preview") or [""])[0] in {"1", "true", "yes"}
             self.send_storage_file(target, preview=preview)
+            return
+        if route == "/api/storage/preview-by-hash":
+            if not self.require_product():
+                return
+            status, error, user = self.state.require_user(self.headers.get("Authorization"))
+            if status:
+                self.send_json(error or {}, status)
+                return
+            params = parse_qs(urlparse(self.path).query, keep_blank_values=True)
+            path_hash_value = (params.get("path_hash") or [""])[0]
+            target, _relative_path = self.state.storage_file_by_path_hash(path_hash_value, user or {})
+            if not target:
+                self.send_json({"ok": False, "error": "preview_not_found_or_not_authorized"}, HTTPStatus.NOT_FOUND)
+                return
+            self.send_storage_file(target, preview=True)
             return
         if route == "/api/storage/operations":
             if not self.require_product():
@@ -2787,6 +4308,7 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--openclaw-gateway-url", default=None)
     parser.add_argument("--openclaw-model-gateway-url", default=None)
     parser.add_argument("--qwen-gateway-url", default=None)
+    parser.add_argument("--qwen-model", default=None)
     parser.add_argument("--journal-report-root", type=Path, default=None)
     parser.add_argument("--journal-evidence-dir", type=Path, default=None)
     parser.add_argument("--journal-export-dir", type=Path, default=None)
@@ -2821,6 +4343,7 @@ def main() -> int:
         openclaw_gateway_url=args.openclaw_gateway_url,
         openclaw_model_gateway_url=args.openclaw_model_gateway_url,
         qwen_gateway_url=args.qwen_gateway_url,
+        qwen_model=args.qwen_model,
         journal_report_root=args.journal_report_root,
         journal_evidence_dir=args.journal_evidence_dir,
         journal_export_dir=args.journal_export_dir,

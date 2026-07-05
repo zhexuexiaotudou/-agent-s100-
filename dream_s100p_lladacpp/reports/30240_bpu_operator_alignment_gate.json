@@ -1,0 +1,43 @@
+{
+  "claim_boundary": "This is a hard review point: truth and replay can proceed, but BPU operator alignment cannot be claimed without real per-op BPU outputs and layout/scale records.",
+  "created_at_utc": "2026-07-04T12:58:44.488540+00:00",
+  "embedding_pass": false,
+  "errors": [
+    "missing_bpu_operator_alignment_cases_jsonl",
+    "missing_true_bpu_per_op_outputs_for_embedding_position_lm_head"
+  ],
+  "lm_head_pass": false,
+  "no_unknown_layout_conversion": false,
+  "op_alignment_cases": {
+    "exists": false,
+    "path": "dream_s100p_lladacpp/bpu_ops/op_alignment_cases.jsonl",
+    "sha256": null,
+    "size_bytes": 0
+  },
+  "position_path_pass": false,
+  "required_ops": [
+    "embedding_lookup",
+    "position_or_rotary_path",
+    "rmsnorm_or_layernorm",
+    "linear_matmul",
+    "qkv_projection",
+    "attention_score",
+    "softmax_or_equivalent",
+    "attention_value",
+    "mlp_up_gate_down",
+    "activation_function",
+    "residual_add",
+    "lm_head",
+    "mask_update_or_confidence",
+    "dequant_quant_path"
+  ],
+  "required_ops_covered": false,
+  "safety": {
+    "dream7b_frontend_openclaw_traffic_touched": false,
+    "generation_quality_run": false,
+    "harness_qwen_openclaw_defaults_modified": false,
+    "product_routes_18888_18889_touched": false
+  },
+  "schema_version": "dream7b_s100p_lladacpp_bpu_operator_alignment_gate_v1",
+  "verdict": "bpu_operator_alignment_failed_review_required"
+}

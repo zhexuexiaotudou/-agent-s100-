@@ -1,0 +1,139 @@
+{
+  "case_id": "mask_tail_policy_probe",
+  "island": [
+    1
+  ],
+  "semantic_or_diagnostic": "semantic",
+  "route": "HF torch2 prefix through layer 0, S100P BPU island 1..1, HF torch2 suffix 2..27 + final norm + lm_head",
+  "conversion_used": "official_runtime_output_scale_direct_float32_no_target_affine",
+  "bpu_hidden_path": "evidence\\dream7b_s100p_v21_execution_20260704\\evidence\\semantic_island_battery_v21\\bpu_outputs\\mask_tail_policy_probe\\island_1\\island_final_hidden.npy",
+  "logits": {
+    "path": "evidence\\semantic_island_battery_v21\\mask_tail_policy_probe\\island_1\\island_logits.npy",
+    "size_bytes": 608384,
+    "sha256": "d22675abc97550dd53cb0d48195dbf4305c8918c34fcb1ab9803f41b860b506a",
+    "stats": {
+      "shape": [
+        152064
+      ],
+      "dtype": "float32",
+      "size": 152064,
+      "min": -14.25,
+      "max": 4.90625,
+      "mean": -9.649907112121582,
+      "std": 2.6108741760253906,
+      "abs_max": 14.25,
+      "nonzero_count": 152064,
+      "allzero": false,
+      "constant": false,
+      "nan_count": 0,
+      "inf_count": 0
+    }
+  },
+  "final_metrics": {
+    "shape_match": true,
+    "reference_top1": 151643,
+    "candidate_top1": 220,
+    "top1_agreement": false,
+    "reference_top1_in_candidate_top5": false,
+    "top5_overlap": 1,
+    "cosine": 0.9849287360022818,
+    "pearson_centered": 0.7987990099547813,
+    "relative_l2": 0.20785890900939546,
+    "max_abs_error": 11.4765625,
+    "mean_abs_error": 1.6492895337467643,
+    "candidate_normalized_entropy": 0.5286876866857754,
+    "reference_normalized_entropy": 0.000454958267557274,
+    "candidate_stats": {
+      "shape": [
+        152064
+      ],
+      "dtype": "float32",
+      "size": 152064,
+      "min": -14.25,
+      "max": 4.90625,
+      "mean": -9.649907112121582,
+      "std": 2.6108741760253906,
+      "abs_max": 14.25,
+      "nonzero_count": 152064,
+      "allzero": false,
+      "constant": false,
+      "nan_count": 0,
+      "inf_count": 0
+    },
+    "reference_stats": {
+      "shape": [
+        152064
+      ],
+      "dtype": "float32",
+      "size": 152064,
+      "min": -13.1875,
+      "max": 13.3125,
+      "mean": -8.99797534942627,
+      "std": 1.263990879058838,
+      "abs_max": 13.3125,
+      "nonzero_count": 152064,
+      "allzero": false,
+      "constant": false,
+      "nan_count": 0,
+      "inf_count": 0
+    }
+  },
+  "boundary_metrics": {
+    "shape_match": true,
+    "reference_top1": 29681,
+    "candidate_top1": 68,
+    "top1_agreement": false,
+    "reference_top1_in_candidate_top5": false,
+    "top5_overlap": 0,
+    "cosine": 0.7662540532233251,
+    "pearson_centered": 0.7662958337428459,
+    "relative_l2": 0.6461284309687172,
+    "max_abs_error": 6.3732603788375854,
+    "mean_abs_error": 0.10667862695905521,
+    "candidate_normalized_entropy": 0.9985826086020484,
+    "reference_normalized_entropy": 0.997821104672024,
+    "candidate_stats": {
+      "shape": [
+        458752
+      ],
+      "dtype": "float32",
+      "size": 458752,
+      "min": -0.6892396211624146,
+      "max": 0.6892396211624146,
+      "mean": -0.000909854774363339,
+      "std": 0.1918160766363144,
+      "abs_max": 0.6892396211624146,
+      "nonzero_count": 458681,
+      "allzero": false,
+      "constant": false,
+      "nan_count": 0,
+      "inf_count": 0
+    },
+    "reference_stats": {
+      "shape": [
+        458752
+      ],
+      "dtype": "float32",
+      "size": 458752,
+      "min": -7.0625,
+      "max": 2.90625,
+      "mean": 0.0011459777597337961,
+      "std": 0.2299184501171112,
+      "abs_max": 7.0625,
+      "nonzero_count": 458395,
+      "allzero": false,
+      "constant": false,
+      "nan_count": 0,
+      "inf_count": 0
+    }
+  },
+  "strict_gate": {
+    "reference_top1_in_candidate_top5_required": true,
+    "cosine_min": 0.95,
+    "relative_l2_max": 0.3,
+    "no_allzero_or_constant_logits": true
+  },
+  "strict_pass": false,
+  "elapsed_seconds": 1.297879,
+  "status": "pass"
+}

@@ -1,0 +1,63 @@
+{
+  "ok": true,
+  "generated_at": "2026-07-05T04:04:26.856907+00:00",
+  "base_url": "http://127.0.0.1:18766",
+  "health_ok": true,
+  "harness_ok": true,
+  "production_rollout_performed": false,
+  "default_port": 8765,
+  "health": {
+    "ok": true,
+    "tool_id": "ai_nas_operator_portal_server",
+    "operator_portal_contract": {
+      "found": false,
+      "filename": "operator_portal_contract.json",
+      "path": null,
+      "verdict": null,
+      "generated_at": null,
+      "selection_policy": "generated_at_then_mtime"
+    },
+    "portal_html": null,
+    "refresh_on_start": null
+  },
+  "harness": {
+    "ok": true,
+    "service": "harness_default_service",
+    "policy_id": "digua_stage5_harness_default_service_policy_v1",
+    "readonly_workspaces_enabled": true,
+    "token_budget_gate_enabled": true,
+    "privacy_redaction_gate_enabled": true,
+    "copy_routes": [
+      "/api/nas/copy/preview",
+      "/api/nas/copy/dry-run",
+      "/api/nas/copy/confirm",
+      "/api/nas/copy/execute",
+      "/api/nas/copy/rollback"
+    ],
+    "copy_execute_enabled": true,
+    "copy_execute_requires": {
+      "user_confirmation": true,
+      "signed_token": true,
+      "source_rehash": true,
+      "target_absent": true,
+      "dispatcher": true
+    },
+    "forbidden_actions": [
+      "delete",
+      "move",
+      "rename",
+      "chmod",
+      "chown",
+      "overwrite",
+      "recursive",
+      "recursive_delete",
+      "arbitrary_shell"
+    ],
+    "qwen_execution_authority": false,
+    "cloud_private_raw_egress": false,
+    "dispatcher": "/mnt/nas/openclaw/scripts/probes/ai_nas_allowlisted_tool.sh",
+    "dispatcher_exists": true,
+    "dispatcher_sha256": "d099f8071ab3710778520bf610ce2bca07fbc7976effe0a6d99791cf42ebb23a",
+    "raw_private_content_in_status": false
+  }
+}

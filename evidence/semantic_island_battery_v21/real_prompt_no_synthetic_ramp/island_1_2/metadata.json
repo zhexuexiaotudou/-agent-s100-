@@ -1,0 +1,140 @@
+{
+  "case_id": "real_prompt_no_synthetic_ramp",
+  "island": [
+    1,
+    2
+  ],
+  "semantic_or_diagnostic": "semantic",
+  "route": "HF torch2 prefix through layer 0, S100P BPU island 1..2, HF torch2 suffix 3..27 + final norm + lm_head",
+  "conversion_used": "official_runtime_output_scale_direct_float32_no_target_affine",
+  "bpu_hidden_path": "evidence\\dream7b_s100p_v21_execution_20260704\\evidence\\semantic_island_battery_v21\\bpu_outputs\\real_prompt_no_synthetic_ramp\\island_1_2\\island_final_hidden.npy",
+  "logits": {
+    "path": "evidence\\semantic_island_battery_v21\\real_prompt_no_synthetic_ramp\\island_1_2\\island_logits.npy",
+    "size_bytes": 608384,
+    "sha256": "c5bb73de22f004414a59ff99f4e0b9e37b10c33e7a6023b99ccc11a516b99e79",
+    "stats": {
+      "shape": [
+        152064
+      ],
+      "dtype": "float32",
+      "size": 152064,
+      "min": -10.75,
+      "max": 15.75,
+      "mean": -5.619452953338623,
+      "std": 1.064717173576355,
+      "abs_max": 15.75,
+      "nonzero_count": 152064,
+      "allzero": false,
+      "constant": false,
+      "nan_count": 0,
+      "inf_count": 0
+    }
+  },
+  "final_metrics": {
+    "shape_match": true,
+    "reference_top1": 151643,
+    "candidate_top1": 151643,
+    "top1_agreement": true,
+    "reference_top1_in_candidate_top5": true,
+    "top5_overlap": 4,
+    "cosine": 0.9939333168548854,
+    "pearson_centered": 0.8121402491312869,
+    "relative_l2": 0.3856780620209042,
+    "max_abs_error": 15.78125,
+    "mean_abs_error": 3.4589757606738343,
+    "candidate_normalized_entropy": 0.002515190412706643,
+    "reference_normalized_entropy": 0.0005792925452619555,
+    "candidate_stats": {
+      "shape": [
+        152064
+      ],
+      "dtype": "float32",
+      "size": 152064,
+      "min": -10.75,
+      "max": 15.75,
+      "mean": -5.619452953338623,
+      "std": 1.064717173576355,
+      "abs_max": 15.75,
+      "nonzero_count": 152064,
+      "allzero": false,
+      "constant": false,
+      "nan_count": 0,
+      "inf_count": 0
+    },
+    "reference_stats": {
+      "shape": [
+        152064
+      ],
+      "dtype": "float32",
+      "size": 152064,
+      "min": -14.0625,
+      "max": 12.875,
+      "mean": -9.078083038330078,
+      "std": 1.2356327772140503,
+      "abs_max": 14.0625,
+      "nonzero_count": 152064,
+      "allzero": false,
+      "constant": false,
+      "nan_count": 0,
+      "inf_count": 0
+    }
+  },
+  "boundary_metrics": {
+    "shape_match": true,
+    "reference_top1": 31196,
+    "candidate_top1": 68,
+    "top1_agreement": false,
+    "reference_top1_in_candidate_top5": false,
+    "top5_overlap": 0,
+    "cosine": 0.6159478972333025,
+    "pearson_centered": 0.6159441698107572,
+    "relative_l2": 0.790628209447633,
+    "max_abs_error": 3.7007281482219696,
+    "mean_abs_error": 0.14449293963262733,
+    "candidate_normalized_entropy": 0.9988397038272232,
+    "reference_normalized_entropy": 0.996780525064659,
+    "candidate_stats": {
+      "shape": [
+        458752
+      ],
+      "dtype": "float32",
+      "size": 458752,
+      "min": -0.4555218517780304,
+      "max": 0.4555218517780304,
+      "mean": -0.0014284515054896474,
+      "std": 0.1741638481616974,
+      "abs_max": 0.4555218517780304,
+      "nonzero_count": 456886,
+      "allzero": false,
+      "constant": false,
+      "nan_count": 0,
+      "inf_count": 0
+    },
+    "reference_stats": {
+      "shape": [
+        458752
+      ],
+      "dtype": "float32",
+      "size": 458752,
+      "min": -4.15625,
+      "max": 3.296875,
+      "mean": -0.0008720755577087402,
+      "std": 0.2550366222858429,
+      "abs_max": 4.15625,
+      "nonzero_count": 458362,
+      "allzero": false,
+      "constant": false,
+      "nan_count": 0,
+      "inf_count": 0
+    }
+  },
+  "strict_gate": {
+    "reference_top1_in_candidate_top5_required": true,
+    "cosine_min": 0.95,
+    "relative_l2_max": 0.3,
+    "no_allzero_or_constant_logits": true
+  },
+  "strict_pass": false,
+  "elapsed_seconds": 1.270876,
+  "status": "pass"
+}

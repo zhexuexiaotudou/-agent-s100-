@@ -1,0 +1,20 @@
+# digua ai-nas production status
+2026-07-05T15:23:27+08:00
+uid=1000(sunrise) gid=1000(sunrise) groups=1000(sunrise),6(disk),15(kmem),20(dialout),27(sudo),29(audio),44(video),104(weston-launch),116(render),126(i2c),134(gdm),135(docker),992(vpu),993(lightdm),994(graphics),995(jpu),996(ipu),997(vps),998(misc),999(gpio)
+ubuntu
+lo               UNKNOWN        127.0.0.1/8 ::1/128
+eth0             UP             169.254.8.10/16 fe80::6c75:dfff:fe40:9cbc/64
+eth1             UP             192.168.127.10/24 192.168.137.10/24
+docker0          DOWN           172.17.0.1/16
+active
+inactive
+{"ok":true,"name":"openclaw_health","url":"http://127.0.0.1:8765/api/health","status":200}
+{"ok":true,"name":"harness_status","url":"http://127.0.0.1:8765/api/harness/status","status":200}
+{"ok":true,"name":"agent_runtime_status","url":"http://127.0.0.1:8765/api/agent-runtime/status","status":200}
+{"ok":true,"name":"journal_health","url":"http://127.0.0.1:8765/api/journal/health","status":200}
+{"ok":true,"name":"qwen_health","url":"http://127.0.0.1:18080/health","status":200}
+{"ok":true,"name":"qwen_models","url":"http://127.0.0.1:18080/v1/models","status":200}
+{"ok":true,"name":"aux_health","url":"http://127.0.0.1:18766/api/health","status":200}
+LISTEN 0      5          127.0.0.1:18766      0.0.0.0:*    users:(("python3",pid=1263347,fd=3))
+LISTEN 0      5          127.0.0.1:18080      0.0.0.0:*    users:(("python3",pid=1028631,fd=3))
+LISTEN 0      5          127.0.0.1:8765       0.0.0.0:*    users:(("python3",pid=1263900,fd=3))

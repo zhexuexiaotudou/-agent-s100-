@@ -1,0 +1,84 @@
+$ node --check web/static/digua_ai_nas_v2.js
+exit=127
+STDOUT:
+
+STDERR:
+[WinError 2] 系统找不到指定的文件。
+
+$ py -3 -m py_compile scripts/probes/ai_nas_operator_portal_server.py
+exit=0
+STDOUT:
+
+STDERR:
+
+
+$ py -3 -c import subprocess, py_compile, sys; raw=subprocess.check_output(['git','ls-files','*.py']); files=raw.decode('utf-8','replace').splitlines(); failed=[]
+for f in files:
+    try: py_compile.compile(f, doraise=True)
+    except Exception as e: failed.append((f, str(e)))
+print('tracked_py_files', len(files)); print('failed', len(failed))
+for path, err in failed[:80]: print(path + ': ' + err.replace('\n',' | ')[:500])
+sys.exit(1 if failed else 0)
+exit=1
+STDOUT:
+tracked_py_files 561
+failed 1
+scripts/probes/dream7b_gguf_param_matrix_probe.py: Sorry: IndentationError: unexpected indent (scripts/probes/dream7b_gguf_param_matrix_probe.py, line 2)
+
+STDERR:
+
+
+$ py -3 -m pytest tests
+exit=0
+STDOUT:
+============================= test session starts =============================
+platform win32 -- Python 3.14.3, pytest-9.0.3, pluggy-1.6.0
+rootdir: F:\Project\Digua
+plugins: anyio-4.13.0
+collected 82 items
+
+tests\test_agent_runtime_core.py .....                                   [  6%]
+tests\test_agent_runtime_routes.py ...                                   [  9%]
+tests\test_cloud_route_decider.py ....                                   [ 14%]
+tests\test_context_compressor.py ..                                      [ 17%]
+tests\test_copy_route_guard.py ......................................... [ 67%]
+                                                                         [ 67%]
+tests\test_document_fts_rag.py ..                                        [ 69%]
+tests\test_journal_db.py .                                               [ 70%]
+tests\test_journal_event_model.py ..                                     [ 73%]
+tests\test_journal_exporter.py .                                         [ 74%]
+tests\test_journal_routes.py .                                           [ 75%]
+tests\test_journal_system_collectors.py .                                [ 76%]
+tests\test_journal_token_privacy.py ..                                   [ 79%]
+tests\test_manual_entry.py .                                             [ 80%]
+tests\test_nas_index_diff_collector.py .                                 [ 81%]
+tests\test_period_summary_engine.py .                                    [ 82%]
+tests\test_personal_inventory_sqlite_readonly.py ..                      [ 85%]
+tests\test_privacy_redactor.py ..                                        [ 87%]
+tests\test_project_classifier.py .                                       [ 89%]
+tests\test_qwen_token_counter.py ...                                     [ 92%]
+tests\test_token_trace_integration.py ..                                 [ 95%]
+tests\test_ui_v2_security_boundaries.py ....                             [100%]
+
+============================= 82 passed in 4.63s ==============================
+
+STDERR:
+
+
+$ py -3 SELF_CHECK.py
+exit=0
+STDOUT:
+{
+  "ok": true,
+  "missing": [],
+  "checks": {
+    "missing_required_count": 0,
+    "real_qwen_tokenizer_used": true,
+    "private_leak_count": 0,
+    "total_cases": 130,
+    "quality_pass_rate": 1.0,
+    "final_verdict": "tokenizer_token_budget_product_deployed_claim_supported"
+  }
+}
+
+STDERR:

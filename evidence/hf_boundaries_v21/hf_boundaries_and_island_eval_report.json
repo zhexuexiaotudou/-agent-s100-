@@ -1,0 +1,1343 @@
+{
+  "schema_version": "dream7b_s100p_v21_hf_boundaries_and_island_eval",
+  "started_at_unix": 1783137994.21095,
+  "python": "3.13.9 | packaged by Anaconda, Inc. | (main, Oct 21 2025, 19:09:58) [MSC v.1929 64 bit (AMD64)]",
+  "platform": "Windows-11-10.0.26200-SP0",
+  "args": {
+    "model_dir": ".\\tmp\\true_batch_inputs\\dream7b-hf",
+    "cases_jsonl": ".\\evidence\\v21_combined_cases\\semantic_plus_canonical_seq128_cases_v21.jsonl",
+    "output_root": ".\\evidence\\hf_boundaries_v21",
+    "bpu_root": null,
+    "dtype": "bfloat16",
+    "device_map": "auto",
+    "torch_threads": 8
+  },
+  "safety": {
+    "generation_quality_run": false,
+    "product_routes_18888_18889_touched": false,
+    "dream7b_frontend_openclaw_traffic_touched": false,
+    "harness_qwen_openclaw_defaults_modified": false
+  },
+  "hf_rows": [
+    {
+      "case_id": "short_english_prompt_padded",
+      "semantic_or_diagnostic": "semantic",
+      "elapsed_seconds": 7.151988,
+      "token_ids_sha256": "cc4e59f9c0d8204a4665ee388d2eeb1ca849e034eece62ca29406d1e4f02433a",
+      "truth": {
+        "path": "evidence\\hf_boundaries_v21\\short_english_prompt_padded\\hf_truth\\hf_truth_logits.npy",
+        "size_bytes": 608384,
+        "sha256": "5c37d4803be7bbece7a77d05ea3325e683c1fec249c03d386c7d36a7e95223e5",
+        "stats": {
+          "shape": [
+            152064
+          ],
+          "dtype": "float32",
+          "size": 152064,
+          "min": -10.125,
+          "max": 16.125,
+          "mean": -6.313141345977783,
+          "std": 1.2083162069320679,
+          "abs_max": 16.125,
+          "nonzero_count": 152064,
+          "allzero": false,
+          "constant": false,
+          "nan_count": 0,
+          "inf_count": 0
+        }
+      },
+      "boundaries": {
+        "layer_00_output": {
+          "path": "evidence\\hf_boundaries_v21\\short_english_prompt_padded\\hf_boundaries\\layer_00_output.npy",
+          "size_bytes": 1835136,
+          "sha256": "b7b43c67c769e09abd39e5d9d26530aef234caca28db81e0465ad04807849e13",
+          "stats": {
+            "shape": [
+              128,
+              3584
+            ],
+            "dtype": "float32",
+            "size": 458752,
+            "min": -1.984375,
+            "max": 1.765625,
+            "mean": -0.00044160234392620623,
+            "std": 0.1978049874305725,
+            "abs_max": 1.984375,
+            "nonzero_count": 458288,
+            "allzero": false,
+            "constant": false,
+            "nan_count": 0,
+            "inf_count": 0
+          }
+        },
+        "layer_01_output": {
+          "path": "evidence\\hf_boundaries_v21\\short_english_prompt_padded\\hf_boundaries\\layer_01_output.npy",
+          "size_bytes": 1835136,
+          "sha256": "ac03200d458ee5dffaf2e579c1311dcfa433d0425fb459bdf4eb0ffb45745aa1",
+          "stats": {
+            "shape": [
+              128,
+              3584
+            ],
+            "dtype": "float32",
+            "size": 458752,
+            "min": -5.65625,
+            "max": 1.96875,
+            "mean": 0.0009440175490453839,
+            "std": 0.23822112381458282,
+            "abs_max": 5.65625,
+            "nonzero_count": 458383,
+            "allzero": false,
+            "constant": false,
+            "nan_count": 0,
+            "inf_count": 0
+          }
+        },
+        "layer_02_output": {
+          "path": "evidence\\hf_boundaries_v21\\short_english_prompt_padded\\hf_boundaries\\layer_02_output.npy",
+          "size_bytes": 1835136,
+          "sha256": "25c1dc1d6918325582f056bf4fa49d92a7b9da292446e2dfdb238dfe0d587e5c",
+          "stats": {
+            "shape": [
+              128,
+              3584
+            ],
+            "dtype": "float32",
+            "size": 458752,
+            "min": -3.90625,
+            "max": 2.8125,
+            "mean": -0.0013798121362924576,
+            "std": 0.2629912793636322,
+            "abs_max": 3.90625,
+            "nonzero_count": 458450,
+            "allzero": false,
+            "constant": false,
+            "nan_count": 0,
+            "inf_count": 0
+          }
+        }
+      },
+      "top10": [
+        151643,
+        0,
+        4894,
+        25984,
+        220,
+        1112,
+        16,
+        2219,
+        8958,
+        30
+      ],
+      "status": "pass"
+    },
+    {
+      "case_id": "short_chinese_prompt_padded_v18",
+      "semantic_or_diagnostic": "semantic",
+      "elapsed_seconds": 2.10461,
+      "token_ids_sha256": "05d364753172ac2efcd634be0dd5dded78be1858924f7e650c1ddb5367208d55",
+      "truth": {
+        "path": "evidence\\hf_boundaries_v21\\short_chinese_prompt_padded_v18\\hf_truth\\hf_truth_logits.npy",
+        "size_bytes": 608384,
+        "sha256": "30a4ed6a93f77d23a151aa815767012ff74212763ea60cec275c2bec0f709ea4",
+        "stats": {
+          "shape": [
+            152064
+          ],
+          "dtype": "float32",
+          "size": 152064,
+          "min": -8.0,
+          "max": 19.375,
+          "mean": -3.770746946334839,
+          "std": 1.7171458005905151,
+          "abs_max": 19.375,
+          "nonzero_count": 152064,
+          "allzero": false,
+          "constant": false,
+          "nan_count": 0,
+          "inf_count": 0
+        }
+      },
+      "boundaries": {
+        "layer_00_output": {
+          "path": "evidence\\hf_boundaries_v21\\short_chinese_prompt_padded_v18\\hf_boundaries\\layer_00_output.npy",
+          "size_bytes": 1835136,
+          "sha256": "a069afde22986bf4ed7655109810ef8f8ece19da924c386cc50c03d9ec9d71a6",
+          "stats": {
+            "shape": [
+              128,
+              3584
+            ],
+            "dtype": "float32",
+            "size": 458752,
+            "min": -1.9140625,
+            "max": 1.8046875,
+            "mean": 0.00024215949815697968,
+            "std": 0.2011461853981018,
+            "abs_max": 1.9140625,
+            "nonzero_count": 458362,
+            "allzero": false,
+            "constant": false,
+            "nan_count": 0,
+            "inf_count": 0
+          }
+        },
+        "layer_01_output": {
+          "path": "evidence\\hf_boundaries_v21\\short_chinese_prompt_padded_v18\\hf_boundaries\\layer_01_output.npy",
+          "size_bytes": 1835136,
+          "sha256": "8169ab5d9c8b9bd8ed011859c26080ebfb4664860d7de64874adef379cd5585b",
+          "stats": {
+            "shape": [
+              128,
+              3584
+            ],
+            "dtype": "float32",
+            "size": 458752,
+            "min": -6.40625,
+            "max": 2.4375,
+            "mean": 0.0022539517376571894,
+            "std": 0.24094761908054352,
+            "abs_max": 6.40625,
+            "nonzero_count": 458417,
+            "allzero": false,
+            "constant": false,
+            "nan_count": 0,
+            "inf_count": 0
+          }
+        },
+        "layer_02_output": {
+          "path": "evidence\\hf_boundaries_v21\\short_chinese_prompt_padded_v18\\hf_boundaries\\layer_02_output.npy",
+          "size_bytes": 1835136,
+          "sha256": "3b91f719207ffb9082ce9b276a9f6d14b23336d9b05f1da0fdcb711e93b383ca",
+          "stats": {
+            "shape": [
+              128,
+              3584
+            ],
+            "dtype": "float32",
+            "size": 458752,
+            "min": -4.1875,
+            "max": 2.765625,
+            "mean": -0.0001769178779795766,
+            "std": 0.26712271571159363,
+            "abs_max": 4.1875,
+            "nonzero_count": 458422,
+            "allzero": false,
+            "constant": false,
+            "nan_count": 0,
+            "inf_count": 0
+          }
+        }
+      },
+      "top10": [
+        151643,
+        0,
+        4894,
+        6313,
+        8958,
+        1112,
+        25984,
+        220,
+        17839,
+        753
+      ],
+      "status": "pass"
+    },
+    {
+      "case_id": "openclaw_nas_search_request",
+      "semantic_or_diagnostic": "semantic",
+      "elapsed_seconds": 1.481479,
+      "token_ids_sha256": "53155539096701ad85f9afaa5ae11129c97b194f3aeeb5c8d56f2646820ddda4",
+      "truth": {
+        "path": "evidence\\hf_boundaries_v21\\openclaw_nas_search_request\\hf_truth\\hf_truth_logits.npy",
+        "size_bytes": 608384,
+        "sha256": "97d3c0e971700eb49c00db212b5155d02e67e122f21ee8c5e177d17798f3f185",
+        "stats": {
+          "shape": [
+            152064
+          ],
+          "dtype": "float32",
+          "size": 152064,
+          "min": -14.1875,
+          "max": 10.9375,
+          "mean": -9.534625053405762,
+          "std": 1.1301578283309937,
+          "abs_max": 14.1875,
+          "nonzero_count": 152064,
+          "allzero": false,
+          "constant": false,
+          "nan_count": 0,
+          "inf_count": 0
+        }
+      },
+      "boundaries": {
+        "layer_00_output": {
+          "path": "evidence\\hf_boundaries_v21\\openclaw_nas_search_request\\hf_boundaries\\layer_00_output.npy",
+          "size_bytes": 1835136,
+          "sha256": "f9e90091fe9fa5d164010dec368340a66c22bcd7e34329274e3e4e7777bbdeae",
+          "stats": {
+            "shape": [
+              128,
+              3584
+            ],
+            "dtype": "float32",
+            "size": 458752,
+            "min": -2.421875,
+            "max": 1.734375,
+            "mean": -0.0006316676735877991,
+            "std": 0.18105897307395935,
+            "abs_max": 2.421875,
+            "nonzero_count": 458316,
+            "allzero": false,
+            "constant": false,
+            "nan_count": 0,
+            "inf_count": 0
+          }
+        },
+        "layer_01_output": {
+          "path": "evidence\\hf_boundaries_v21\\openclaw_nas_search_request\\hf_boundaries\\layer_01_output.npy",
+          "size_bytes": 1835136,
+          "sha256": "cf96250477e8ec8cf47117b26df8ad60d7dff466bbc59382baa80c0846c357bf",
+          "stats": {
+            "shape": [
+              128,
+              3584
+            ],
+            "dtype": "float32",
+            "size": 458752,
+            "min": -7.0,
+            "max": 2.65625,
+            "mean": 0.0006636331090703607,
+            "std": 0.22139745950698853,
+            "abs_max": 7.0,
+            "nonzero_count": 458415,
+            "allzero": false,
+            "constant": false,
+            "nan_count": 0,
+            "inf_count": 0
+          }
+        },
+        "layer_02_output": {
+          "path": "evidence\\hf_boundaries_v21\\openclaw_nas_search_request\\hf_boundaries\\layer_02_output.npy",
+          "size_bytes": 1835136,
+          "sha256": "3bb73baa5f4fa2c8d9ba3c439eaedb83f1f103b534f80c0e6f8355b2b8a7c2bd",
+          "stats": {
+            "shape": [
+              128,
+              3584
+            ],
+            "dtype": "float32",
+            "size": 458752,
+            "min": -5.3125,
+            "max": 3.515625,
+            "mean": -0.0015574514400213957,
+            "std": 0.25592219829559326,
+            "abs_max": 5.3125,
+            "nonzero_count": 458408,
+            "allzero": false,
+            "constant": false,
+            "nan_count": 0,
+            "inf_count": 0
+          }
+        }
+      },
+      "top10": [
+        151643,
+        0,
+        4894,
+        25984,
+        1112,
+        4102,
+        8958,
+        496,
+        1940,
+        220
+      ],
+      "status": "pass"
+    },
+    {
+      "case_id": "document_summary_request",
+      "semantic_or_diagnostic": "semantic",
+      "elapsed_seconds": 1.528083,
+      "token_ids_sha256": "6eade2d854d75ba1cb9d89aaacbf720e1b1ea3ca62b4a1e23f4f4bae197fcf75",
+      "truth": {
+        "path": "evidence\\hf_boundaries_v21\\document_summary_request\\hf_truth\\hf_truth_logits.npy",
+        "size_bytes": 608384,
+        "sha256": "3bf12a5ce083db4fa110ff5182678b81b70b7bfe2e36729d63f4184c83dc8051",
+        "stats": {
+          "shape": [
+            152064
+          ],
+          "dtype": "float32",
+          "size": 152064,
+          "min": -11.625,
+          "max": 18.5,
+          "mean": -6.989191055297852,
+          "std": 1.2956078052520752,
+          "abs_max": 18.5,
+          "nonzero_count": 152064,
+          "allzero": false,
+          "constant": false,
+          "nan_count": 0,
+          "inf_count": 0
+        }
+      },
+      "boundaries": {
+        "layer_00_output": {
+          "path": "evidence\\hf_boundaries_v21\\document_summary_request\\hf_boundaries\\layer_00_output.npy",
+          "size_bytes": 1835136,
+          "sha256": "6ee0123a084193877dd68b9f48d52faac0336dfb1bd8f2eaa930a3eb19775080",
+          "stats": {
+            "shape": [
+              128,
+              3584
+            ],
+            "dtype": "float32",
+            "size": 458752,
+            "min": -2.1875,
+            "max": 1.7578125,
+            "mean": -0.00048799763317219913,
+            "std": 0.18563087284564972,
+            "abs_max": 2.1875,
+            "nonzero_count": 458279,
+            "allzero": false,
+            "constant": false,
+            "nan_count": 0,
+            "inf_count": 0
+          }
+        },
+        "layer_01_output": {
+          "path": "evidence\\hf_boundaries_v21\\document_summary_request\\hf_boundaries\\layer_01_output.npy",
+          "size_bytes": 1835136,
+          "sha256": "3e5871a2c2489b6947798ce401d58ef8ef3df6611f2c1edd18263549e1e9a834",
+          "stats": {
+            "shape": [
+              128,
+              3584
+            ],
+            "dtype": "float32",
+            "size": 458752,
+            "min": -6.5,
+            "max": 2.46875,
+            "mean": 0.0011387491831555963,
+            "std": 0.22492527961730957,
+            "abs_max": 6.5,
+            "nonzero_count": 458389,
+            "allzero": false,
+            "constant": false,
+            "nan_count": 0,
+            "inf_count": 0
+          }
+        },
+        "layer_02_output": {
+          "path": "evidence\\hf_boundaries_v21\\document_summary_request\\hf_boundaries\\layer_02_output.npy",
+          "size_bytes": 1835136,
+          "sha256": "fcc858648b9117e4ce92154ec3be91a5272d9f3157a30af957e03fae8ff418b1",
+          "stats": {
+            "shape": [
+              128,
+              3584
+            ],
+            "dtype": "float32",
+            "size": 458752,
+            "min": -4.84375,
+            "max": 2.96875,
+            "mean": -0.0011395083274692297,
+            "std": 0.256694495677948,
+            "abs_max": 4.84375,
+            "nonzero_count": 458361,
+            "allzero": false,
+            "constant": false,
+            "nan_count": 0,
+            "inf_count": 0
+          }
+        }
+      },
+      "top10": [
+        151643,
+        0,
+        4894,
+        25984,
+        220,
+        8958,
+        16,
+        1112,
+        17839,
+        753
+      ],
+      "status": "pass"
+    },
+    {
+      "case_id": "privacy_sensitive_denied_request",
+      "semantic_or_diagnostic": "semantic",
+      "elapsed_seconds": 1.272277,
+      "token_ids_sha256": "7e8e61519085f4234d9717de7600230ccc7851956e8107c0979ef15ba419d127",
+      "truth": {
+        "path": "evidence\\hf_boundaries_v21\\privacy_sensitive_denied_request\\hf_truth\\hf_truth_logits.npy",
+        "size_bytes": 608384,
+        "sha256": "2f0d2cfc3eba28fb5054c666a1e97a887814bdfcd225d67a6cb17df803b4dca7",
+        "stats": {
+          "shape": [
+            152064
+          ],
+          "dtype": "float32",
+          "size": 152064,
+          "min": -14.4375,
+          "max": 12.25,
+          "mean": -9.63772964477539,
+          "std": 1.2175912857055664,
+          "abs_max": 14.4375,
+          "nonzero_count": 152064,
+          "allzero": false,
+          "constant": false,
+          "nan_count": 0,
+          "inf_count": 0
+        }
+      },
+      "boundaries": {
+        "layer_00_output": {
+          "path": "evidence\\hf_boundaries_v21\\privacy_sensitive_denied_request\\hf_boundaries\\layer_00_output.npy",
+          "size_bytes": 1835136,
+          "sha256": "ae2a56000916794ec117432fb36f856e89a573f4d7a9aa8d7d6b2b004c92e4bc",
+          "stats": {
+            "shape": [
+              128,
+              3584
+            ],
+            "dtype": "float32",
+            "size": 458752,
+            "min": -2.515625,
+            "max": 1.765625,
+            "mean": -0.000295480975182727,
+            "std": 0.19333121180534363,
+            "abs_max": 2.515625,
+            "nonzero_count": 458341,
+            "allzero": false,
+            "constant": false,
+            "nan_count": 0,
+            "inf_count": 0
+          }
+        },
+        "layer_01_output": {
+          "path": "evidence\\hf_boundaries_v21\\privacy_sensitive_denied_request\\hf_boundaries\\layer_01_output.npy",
+          "size_bytes": 1835136,
+          "sha256": "21f36353186698472cf2722ff3cd7aee64e63850fd00203c95082a9086b91d67",
+          "stats": {
+            "shape": [
+              128,
+              3584
+            ],
+            "dtype": "float32",
+            "size": 458752,
+            "min": -7.9375,
+            "max": 2.75,
+            "mean": 0.0011820598738268018,
+            "std": 0.23364044725894928,
+            "abs_max": 7.9375,
+            "nonzero_count": 458383,
+            "allzero": false,
+            "constant": false,
+            "nan_count": 0,
+            "inf_count": 0
+          }
+        },
+        "layer_02_output": {
+          "path": "evidence\\hf_boundaries_v21\\privacy_sensitive_denied_request\\hf_boundaries\\layer_02_output.npy",
+          "size_bytes": 1835136,
+          "sha256": "952d7462698197fa03d7022578625a2383ad4d29ec20152e4957f94a46bffce0",
+          "stats": {
+            "shape": [
+              128,
+              3584
+            ],
+            "dtype": "float32",
+            "size": 458752,
+            "min": -5.78125,
+            "max": 2.8125,
+            "mean": -0.001381123554892838,
+            "std": 0.2624708414077759,
+            "abs_max": 5.78125,
+            "nonzero_count": 458386,
+            "allzero": false,
+            "constant": false,
+            "nan_count": 0,
+            "inf_count": 0
+          }
+        }
+      },
+      "top10": [
+        151643,
+        0,
+        25984,
+        4894,
+        1112,
+        496,
+        220,
+        5267,
+        16,
+        82
+      ],
+      "status": "pass"
+    },
+    {
+      "case_id": "mixed_english_chinese_request",
+      "semantic_or_diagnostic": "semantic",
+      "elapsed_seconds": 1.182559,
+      "token_ids_sha256": "b7ac6108c3f2b216e4f932d4c6206981a40ac746c5b891e932dd6e78feb08a2a",
+      "truth": {
+        "path": "evidence\\hf_boundaries_v21\\mixed_english_chinese_request\\hf_truth\\hf_truth_logits.npy",
+        "size_bytes": 608384,
+        "sha256": "9d687b7bf676615b4a97b155f874317754183fdfbda34565a66104b0d32c06b0",
+        "stats": {
+          "shape": [
+            152064
+          ],
+          "dtype": "float32",
+          "size": 152064,
+          "min": -12.5625,
+          "max": 14.0,
+          "mean": -7.480813980102539,
+          "std": 1.4213672876358032,
+          "abs_max": 14.0,
+          "nonzero_count": 152064,
+          "allzero": false,
+          "constant": false,
+          "nan_count": 0,
+          "inf_count": 0
+        }
+      },
+      "boundaries": {
+        "layer_00_output": {
+          "path": "evidence\\hf_boundaries_v21\\mixed_english_chinese_request\\hf_boundaries\\layer_00_output.npy",
+          "size_bytes": 1835136,
+          "sha256": "db9dd5fab055d9dcd09f97d9721e6609023caf7dbc4c2c70b04d1f5464845e30",
+          "stats": {
+            "shape": [
+              128,
+              3584
+            ],
+            "dtype": "float32",
+            "size": 458752,
+            "min": -2.5,
+            "max": 1.75,
+            "mean": -0.0002260137553093955,
+            "std": 0.1868809312582016,
+            "abs_max": 2.5,
+            "nonzero_count": 458304,
+            "allzero": false,
+            "constant": false,
+            "nan_count": 0,
+            "inf_count": 0
+          }
+        },
+        "layer_01_output": {
+          "path": "evidence\\hf_boundaries_v21\\mixed_english_chinese_request\\hf_boundaries\\layer_01_output.npy",
+          "size_bytes": 1835136,
+          "sha256": "20bb9ff849e42cd573e624d81b53d1e95e525800b561cd359224771e3b4faad2",
+          "stats": {
+            "shape": [
+              128,
+              3584
+            ],
+            "dtype": "float32",
+            "size": 458752,
+            "min": -8.0,
+            "max": 2.84375,
+            "mean": 0.0014440632658079267,
+            "std": 0.2267664521932602,
+            "abs_max": 8.0,
+            "nonzero_count": 458404,
+            "allzero": false,
+            "constant": false,
+            "nan_count": 0,
+            "inf_count": 0
+          }
+        },
+        "layer_02_output": {
+          "path": "evidence\\hf_boundaries_v21\\mixed_english_chinese_request\\hf_boundaries\\layer_02_output.npy",
+          "size_bytes": 1835136,
+          "sha256": "97b48a04ca0b436cdf0861c385735e520770ed5a912267585b83e135ae5a2a67",
+          "stats": {
+            "shape": [
+              128,
+              3584
+            ],
+            "dtype": "float32",
+            "size": 458752,
+            "min": -5.8125,
+            "max": 4.28125,
+            "mean": -0.0010474754963070154,
+            "std": 0.25844934582710266,
+            "abs_max": 5.8125,
+            "nonzero_count": 458359,
+            "allzero": false,
+            "constant": false,
+            "nan_count": 0,
+            "inf_count": 0
+          }
+        }
+      },
+      "top10": [
+        151643,
+        0,
+        25984,
+        4894,
+        1112,
+        220,
+        6313,
+        16,
+        496,
+        8958
+      ],
+      "status": "pass"
+    },
+    {
+      "case_id": "real_prompt_no_synthetic_ramp",
+      "semantic_or_diagnostic": "semantic",
+      "elapsed_seconds": 1.286906,
+      "token_ids_sha256": "fb6cbc0d6608cf76791704eb61879739ceebdddc0238735d1bf1034d6789ec37",
+      "truth": {
+        "path": "evidence\\hf_boundaries_v21\\real_prompt_no_synthetic_ramp\\hf_truth\\hf_truth_logits.npy",
+        "size_bytes": 608384,
+        "sha256": "db732e2e2cbff1c7f129db0f37f30842aa0519e876dbbae8b9d0b68e244f22b5",
+        "stats": {
+          "shape": [
+            152064
+          ],
+          "dtype": "float32",
+          "size": 152064,
+          "min": -14.0625,
+          "max": 12.875,
+          "mean": -9.078083038330078,
+          "std": 1.2356327772140503,
+          "abs_max": 14.0625,
+          "nonzero_count": 152064,
+          "allzero": false,
+          "constant": false,
+          "nan_count": 0,
+          "inf_count": 0
+        }
+      },
+      "boundaries": {
+        "layer_00_output": {
+          "path": "evidence\\hf_boundaries_v21\\real_prompt_no_synthetic_ramp\\hf_boundaries\\layer_00_output.npy",
+          "size_bytes": 1835136,
+          "sha256": "1df19733a90c308319ecacff8f598fb6027739ac47fdc7bf8c6d7ecda8508737",
+          "stats": {
+            "shape": [
+              128,
+              3584
+            ],
+            "dtype": "float32",
+            "size": 458752,
+            "min": -2.046875,
+            "max": 1.671875,
+            "mean": -0.00018113608530256897,
+            "std": 0.17881865799427032,
+            "abs_max": 2.046875,
+            "nonzero_count": 458300,
+            "allzero": false,
+            "constant": false,
+            "nan_count": 0,
+            "inf_count": 0
+          }
+        },
+        "layer_01_output": {
+          "path": "evidence\\hf_boundaries_v21\\real_prompt_no_synthetic_ramp\\hf_boundaries\\layer_01_output.npy",
+          "size_bytes": 1835136,
+          "sha256": "a478858956ace4b7c4b5655404a0ccd43cfc570dd202688bbc594186a1e1d639",
+          "stats": {
+            "shape": [
+              128,
+              3584
+            ],
+            "dtype": "float32",
+            "size": 458752,
+            "min": -6.125,
+            "max": 2.828125,
+            "mean": 0.001434576348401606,
+            "std": 0.2176351249217987,
+            "abs_max": 6.125,
+            "nonzero_count": 458344,
+            "allzero": false,
+            "constant": false,
+            "nan_count": 0,
+            "inf_count": 0
+          }
+        },
+        "layer_02_output": {
+          "path": "evidence\\hf_boundaries_v21\\real_prompt_no_synthetic_ramp\\hf_boundaries\\layer_02_output.npy",
+          "size_bytes": 1835136,
+          "sha256": "9f71e659101fa63a0f61dc12c4a24e995acc567b92c0a65ea6f43a1f7783511a",
+          "stats": {
+            "shape": [
+              128,
+              3584
+            ],
+            "dtype": "float32",
+            "size": 458752,
+            "min": -4.15625,
+            "max": 3.296875,
+            "mean": -0.0008720755577087402,
+            "std": 0.2550366222858429,
+            "abs_max": 4.15625,
+            "nonzero_count": 458362,
+            "allzero": false,
+            "constant": false,
+            "nan_count": 0,
+            "inf_count": 0
+          }
+        }
+      },
+      "top10": [
+        151643,
+        0,
+        25984,
+        1112,
+        4894,
+        16,
+        496,
+        82,
+        220,
+        1940
+      ],
+      "status": "pass"
+    },
+    {
+      "case_id": "mask_tail_policy_probe",
+      "semantic_or_diagnostic": "semantic",
+      "elapsed_seconds": 1.263004,
+      "token_ids_sha256": "880aa32eaa46598985337003cb1b1c3e2e0d285197a85920432b22642ed37723",
+      "truth": {
+        "path": "evidence\\hf_boundaries_v21\\mask_tail_policy_probe\\hf_truth\\hf_truth_logits.npy",
+        "size_bytes": 608384,
+        "sha256": "e62fdffe5eb8162007ea34e9d31513bfdff43d0097a5d03240a99ba3b8908d0f",
+        "stats": {
+          "shape": [
+            152064
+          ],
+          "dtype": "float32",
+          "size": 152064,
+          "min": -13.1875,
+          "max": 13.3125,
+          "mean": -8.99797534942627,
+          "std": 1.263990879058838,
+          "abs_max": 13.3125,
+          "nonzero_count": 152064,
+          "allzero": false,
+          "constant": false,
+          "nan_count": 0,
+          "inf_count": 0
+        }
+      },
+      "boundaries": {
+        "layer_00_output": {
+          "path": "evidence\\hf_boundaries_v21\\mask_tail_policy_probe\\hf_boundaries\\layer_00_output.npy",
+          "size_bytes": 1835136,
+          "sha256": "11957e4b42f44d5a0c32f5be0d9cd2ddfaf73a6f8201b80512200e6f34e7d071",
+          "stats": {
+            "shape": [
+              128,
+              3584
+            ],
+            "dtype": "float32",
+            "size": 458752,
+            "min": -2.203125,
+            "max": 1.8125,
+            "mean": -0.00035786619991995394,
+            "std": 0.1914817988872528,
+            "abs_max": 2.203125,
+            "nonzero_count": 458342,
+            "allzero": false,
+            "constant": false,
+            "nan_count": 0,
+            "inf_count": 0
+          }
+        },
+        "layer_01_output": {
+          "path": "evidence\\hf_boundaries_v21\\mask_tail_policy_probe\\hf_boundaries\\layer_01_output.npy",
+          "size_bytes": 1835136,
+          "sha256": "3e9f60fcb93f824d2e18469d0392193e5238c290d3b062c19de74a88bc507d6f",
+          "stats": {
+            "shape": [
+              128,
+              3584
+            ],
+            "dtype": "float32",
+            "size": 458752,
+            "min": -7.0625,
+            "max": 2.90625,
+            "mean": 0.0011459777597337961,
+            "std": 0.2299184501171112,
+            "abs_max": 7.0625,
+            "nonzero_count": 458395,
+            "allzero": false,
+            "constant": false,
+            "nan_count": 0,
+            "inf_count": 0
+          }
+        },
+        "layer_02_output": {
+          "path": "evidence\\hf_boundaries_v21\\mask_tail_policy_probe\\hf_boundaries\\layer_02_output.npy",
+          "size_bytes": 1835136,
+          "sha256": "72c38c8b676186d969489d5330802ae5e8ca0a37995a5626be311f3318b31037",
+          "stats": {
+            "shape": [
+              128,
+              3584
+            ],
+            "dtype": "float32",
+            "size": 458752,
+            "min": -4.9375,
+            "max": 3.25,
+            "mean": -0.0017379431519657373,
+            "std": 0.2612099051475525,
+            "abs_max": 4.9375,
+            "nonzero_count": 458403,
+            "allzero": false,
+            "constant": false,
+            "nan_count": 0,
+            "inf_count": 0
+          }
+        }
+      },
+      "top10": [
+        151643,
+        0,
+        4894,
+        25984,
+        1112,
+        496,
+        2219,
+        82,
+        16,
+        8958
+      ],
+      "status": "pass"
+    },
+    {
+      "case_id": "zeros",
+      "semantic_or_diagnostic": "diagnostic",
+      "elapsed_seconds": 1.177089,
+      "token_ids_sha256": "1b912946d3fd584649a7924a6d699d2bd0ee0da2ebc320bd53135fa9b1ec21a0",
+      "truth": {
+        "path": "evidence\\hf_boundaries_v21\\zeros\\hf_truth\\hf_truth_logits.npy",
+        "size_bytes": 608384,
+        "sha256": "936ef99b335617f6d84e85e7eaa955da99c33d587fe74ab7b8c1537a09f7b764",
+        "stats": {
+          "shape": [
+            152064
+          ],
+          "dtype": "float32",
+          "size": 152064,
+          "min": -14.1875,
+          "max": 1.8515625,
+          "mean": -10.193270683288574,
+          "std": 1.7180142402648926,
+          "abs_max": 14.1875,
+          "nonzero_count": 152064,
+          "allzero": false,
+          "constant": false,
+          "nan_count": 0,
+          "inf_count": 0
+        }
+      },
+      "boundaries": {
+        "layer_00_output": {
+          "path": "evidence\\hf_boundaries_v21\\zeros\\hf_boundaries\\layer_00_output.npy",
+          "size_bytes": 1835136,
+          "sha256": "af1035a83c63207fb62ac620a541f18871e2a1819b0f26141a59fc4aca7c0606",
+          "stats": {
+            "shape": [
+              128,
+              3584
+            ],
+            "dtype": "float32",
+            "size": 458752,
+            "min": -1.984375,
+            "max": 1.8984375,
+            "mean": -0.00040792993968352675,
+            "std": 0.22023053467273712,
+            "abs_max": 1.984375,
+            "nonzero_count": 458368,
+            "allzero": false,
+            "constant": false,
+            "nan_count": 0,
+            "inf_count": 0
+          }
+        },
+        "layer_01_output": {
+          "path": "evidence\\hf_boundaries_v21\\zeros\\hf_boundaries\\layer_01_output.npy",
+          "size_bytes": 1835136,
+          "sha256": "643670e7e8a3a2c8f5423ec6be5f7546a6981aa901fa5966a70a7cc2d82222bb",
+          "stats": {
+            "shape": [
+              128,
+              3584
+            ],
+            "dtype": "float32",
+            "size": 458752,
+            "min": -4.34375,
+            "max": 2.234375,
+            "mean": 0.00027261461946181953,
+            "std": 0.2682138681411743,
+            "abs_max": 4.34375,
+            "nonzero_count": 458112,
+            "allzero": false,
+            "constant": false,
+            "nan_count": 0,
+            "inf_count": 0
+          }
+        },
+        "layer_02_output": {
+          "path": "evidence\\hf_boundaries_v21\\zeros\\hf_boundaries\\layer_02_output.npy",
+          "size_bytes": 1835136,
+          "sha256": "c792a88f5a7cac8f77c83da93c18390d6bbc1b5746de6564f452f8037534bc9b",
+          "stats": {
+            "shape": [
+              128,
+              3584
+            ],
+            "dtype": "float32",
+            "size": 458752,
+            "min": -2.21875,
+            "max": 2.734375,
+            "mean": -0.0008667366928420961,
+            "std": 0.2790301442146301,
+            "abs_max": 2.734375,
+            "nonzero_count": 458624,
+            "allzero": false,
+            "constant": false,
+            "nan_count": 0,
+            "inf_count": 0
+          }
+        }
+      },
+      "top10": [
+        151643,
+        220,
+        16,
+        15,
+        576,
+        279,
+        600,
+        17,
+        518,
+        2055
+      ],
+      "status": "pass"
+    },
+    {
+      "case_id": "ramp",
+      "semantic_or_diagnostic": "diagnostic",
+      "elapsed_seconds": 1.212519,
+      "token_ids_sha256": "f0d76dfdfbf5467a030817361d4cedd8ddc8e86a9b24ee55e7749eb72a658b53",
+      "truth": {
+        "path": "evidence\\hf_boundaries_v21\\ramp\\hf_truth\\hf_truth_logits.npy",
+        "size_bytes": 608384,
+        "sha256": "c2085ff36a86322f757d4e300321c852461d2eed9fe2dde6b7b62704f04d2dd2",
+        "stats": {
+          "shape": [
+            152064
+          ],
+          "dtype": "float32",
+          "size": 152064,
+          "min": -8.0,
+          "max": 12.5625,
+          "mean": -2.1767992973327637,
+          "std": 0.8919289112091064,
+          "abs_max": 12.5625,
+          "nonzero_count": 152064,
+          "allzero": false,
+          "constant": false,
+          "nan_count": 0,
+          "inf_count": 0
+        }
+      },
+      "boundaries": {
+        "layer_00_output": {
+          "path": "evidence\\hf_boundaries_v21\\ramp\\hf_boundaries\\layer_00_output.npy",
+          "size_bytes": 1835136,
+          "sha256": "c19469820f54995a96ffcc6743940432b4eeef09fd1663ab29af010773424ba2",
+          "stats": {
+            "shape": [
+              128,
+              3584
+            ],
+            "dtype": "float32",
+            "size": 458752,
+            "min": -2.46875,
+            "max": 1.859375,
+            "mean": -0.0008652406977489591,
+            "std": 0.1312064677476883,
+            "abs_max": 2.46875,
+            "nonzero_count": 458360,
+            "allzero": false,
+            "constant": false,
+            "nan_count": 0,
+            "inf_count": 0
+          }
+        },
+        "layer_01_output": {
+          "path": "evidence\\hf_boundaries_v21\\ramp\\hf_boundaries\\layer_01_output.npy",
+          "size_bytes": 1835136,
+          "sha256": "d3eb77541bf098d8c996aad29499f34daa1a9a501fffacd5133e18dc288ef28b",
+          "stats": {
+            "shape": [
+              128,
+              3584
+            ],
+            "dtype": "float32",
+            "size": 458752,
+            "min": -5.125,
+            "max": 3.125,
+            "mean": -0.0012048331554979086,
+            "std": 0.2052648663520813,
+            "abs_max": 5.125,
+            "nonzero_count": 458355,
+            "allzero": false,
+            "constant": false,
+            "nan_count": 0,
+            "inf_count": 0
+          }
+        },
+        "layer_02_output": {
+          "path": "evidence\\hf_boundaries_v21\\ramp\\hf_boundaries\\layer_02_output.npy",
+          "size_bytes": 1835136,
+          "sha256": "94ccd7ad56a93b5468bd6c2fc03f616110bb0c6e14017fd9b4021ab85a9fa907",
+          "stats": {
+            "shape": [
+              128,
+              3584
+            ],
+            "dtype": "float32",
+            "size": 458752,
+            "min": -4.8125,
+            "max": 3.5,
+            "mean": -0.0006624105735681951,
+            "std": 0.2679915726184845,
+            "abs_max": 4.8125,
+            "nonzero_count": 458393,
+            "allzero": false,
+            "constant": false,
+            "nan_count": 0,
+            "inf_count": 0
+          }
+        }
+      },
+      "top10": [
+        151643,
+        126,
+        122,
+        242,
+        245,
+        2139,
+        230,
+        246,
+        107,
+        123
+      ],
+      "status": "pass"
+    },
+    {
+      "case_id": "short_chinese_prompt_padded",
+      "semantic_or_diagnostic": "semantic",
+      "elapsed_seconds": 1.293972,
+      "token_ids_sha256": "ac26ad530204a4bc2196cff5fd05bf83a46048a578fdabab2b9073439addd01a",
+      "truth": {
+        "path": "evidence\\hf_boundaries_v21\\short_chinese_prompt_padded\\hf_truth\\hf_truth_logits.npy",
+        "size_bytes": 608384,
+        "sha256": "3a5dd5e81b37dd3ecb523e5ef3fbf2cef62aa6bea9441198e5700e8e3c426a13",
+        "stats": {
+          "shape": [
+            152064
+          ],
+          "dtype": "float32",
+          "size": 152064,
+          "min": -13.0,
+          "max": 8.75,
+          "mean": -9.121015548706055,
+          "std": 2.049726963043213,
+          "abs_max": 13.0,
+          "nonzero_count": 152064,
+          "allzero": false,
+          "constant": false,
+          "nan_count": 0,
+          "inf_count": 0
+        }
+      },
+      "boundaries": {
+        "layer_00_output": {
+          "path": "evidence\\hf_boundaries_v21\\short_chinese_prompt_padded\\hf_boundaries\\layer_00_output.npy",
+          "size_bytes": 1835136,
+          "sha256": "0c99a7e793ecd359cd02d22d2096f0c5a773dcf0a29ab8cbe662b164c00c6887",
+          "stats": {
+            "shape": [
+              128,
+              3584
+            ],
+            "dtype": "float32",
+            "size": 458752,
+            "min": -1.9375,
+            "max": 1.796875,
+            "mean": -0.00046221193042583764,
+            "std": 0.1929185390472412,
+            "abs_max": 1.9375,
+            "nonzero_count": 458290,
+            "allzero": false,
+            "constant": false,
+            "nan_count": 0,
+            "inf_count": 0
+          }
+        },
+        "layer_01_output": {
+          "path": "evidence\\hf_boundaries_v21\\short_chinese_prompt_padded\\hf_boundaries\\layer_01_output.npy",
+          "size_bytes": 1835136,
+          "sha256": "c486d5e9eb0705a7a8dee32c81511b9b87e4d4165b38625a138201244bfda1df",
+          "stats": {
+            "shape": [
+              128,
+              3584
+            ],
+            "dtype": "float32",
+            "size": 458752,
+            "min": -6.4375,
+            "max": 2.515625,
+            "mean": 0.0014611132210120559,
+            "std": 0.23226314783096313,
+            "abs_max": 6.4375,
+            "nonzero_count": 458290,
+            "allzero": false,
+            "constant": false,
+            "nan_count": 0,
+            "inf_count": 0
+          }
+        },
+        "layer_02_output": {
+          "path": "evidence\\hf_boundaries_v21\\short_chinese_prompt_padded\\hf_boundaries\\layer_02_output.npy",
+          "size_bytes": 1835136,
+          "sha256": "457b4cd6c5cbe49f9767f9b71f2825c228d157fde8f8cc2f8ef65ae044ba0605",
+          "stats": {
+            "shape": [
+              128,
+              3584
+            ],
+            "dtype": "float32",
+            "size": 458752,
+            "min": -5.1875,
+            "max": 2.78125,
+            "mean": -0.0002785788383334875,
+            "std": 0.2610380947589874,
+            "abs_max": 5.1875,
+            "nonzero_count": 458453,
+            "allzero": false,
+            "constant": false,
+            "nan_count": 0,
+            "inf_count": 0
+          }
+        }
+      },
+      "top10": [
+        151643,
+        0,
+        6313,
+        2055,
+        2219,
+        4894,
+        16,
+        220,
+        773,
+        9370
+      ],
+      "status": "pass"
+    }
+  ],
+  "island_rows": [],
+  "errors": [],
+  "status": "pass",
+  "runtime_versions": {
+    "torch": "2.11.0+cu128",
+    "transformers": "4.46.3",
+    "numpy": "2.5.0"
+  },
+  "cuda_available": true,
+  "model_files": {
+    "config.json": {
+      "path": "tmp\\true_batch_inputs\\dream7b-hf\\config.json",
+      "size_bytes": 927,
+      "sha256": "11afc7fe7a1881e73dcd70cca6868aaaf8eb89ad45ea5fc6426c3fb82dec9340"
+    },
+    "model.safetensors.index.json": {
+      "path": "tmp\\true_batch_inputs\\dream7b-hf\\model.safetensors.index.json",
+      "size_bytes": 27752,
+      "sha256": "998a078123ffc97763690de7f2a677eb89168af5eaf8a5e12e6bc24d18e25bdb"
+    },
+    "tokenizer_config.json": {
+      "path": "tmp\\true_batch_inputs\\dream7b-hf\\tokenizer_config.json",
+      "size_bytes": 7486,
+      "sha256": "b0e9c1a6299d8832a1362d6b24f007de8a2acfe0243d8a3a1d1b57aa8250f7ee"
+    },
+    "vocab.json": {
+      "path": "tmp\\true_batch_inputs\\dream7b-hf\\vocab.json",
+      "size_bytes": 3383407,
+      "sha256": "87a257b04b17642a0688c98cd1df89c398bda4fee532d6f88b38a659ecb4ac8d"
+    },
+    "merges.txt": {
+      "path": "tmp\\true_batch_inputs\\dream7b-hf\\merges.txt",
+      "size_bytes": 1671853,
+      "sha256": "8831e4f1a044471340f7c0a83d7bd71306a5b867e95fd870f74d0c5308a904d5"
+    },
+    "modeling_dream.py": {
+      "path": "tmp\\true_batch_inputs\\dream7b-hf\\modeling_dream.py",
+      "size_bytes": 36763,
+      "sha256": "3166e789f0d69beb1f4fbdee2317953d1c1c3b9bc21479b109afc5dd059de5b3"
+    },
+    "configuration_dream.py": {
+      "path": "tmp\\true_batch_inputs\\dream7b-hf\\configuration_dream.py",
+      "size_bytes": 3197,
+      "sha256": "24d038962ccf16361595494461000ec0c1b043653c7494d7fc835c96f121f0b9"
+    }
+  },
+  "model_class": "DreamModel",
+  "parameter_count": 7615616512,
+  "parameter_dtypes": [
+    "torch.bfloat16"
+  ],
+  "hf_device_map": {
+    "model.embed_tokens": "0",
+    "model.layers.0": "0",
+    "model.layers.1": "0",
+    "model.layers.2": "0",
+    "model.layers.3": "0",
+    "model.layers.4": "0",
+    "model.layers.5": "0",
+    "model.layers.6": "0",
+    "model.layers.7": "0",
+    "model.layers.8": "0",
+    "model.layers.9": "0",
+    "model.layers.10": "0",
+    "model.layers.11": "0",
+    "model.layers.12": "0",
+    "model.layers.13": "0",
+    "model.layers.14": "0",
+    "model.layers.15": "0",
+    "model.layers.16": "0",
+    "model.layers.17": "cpu",
+    "model.layers.18": "cpu",
+    "model.layers.19": "cpu",
+    "model.layers.20": "cpu",
+    "model.layers.21": "cpu",
+    "model.layers.22": "cpu",
+    "model.layers.23": "cpu",
+    "model.layers.24": "cpu",
+    "model.layers.25": "cpu",
+    "model.layers.26": "cpu",
+    "model.layers.27": "cpu",
+    "model.norm": "cpu",
+    "model.rotary_emb": "cpu",
+    "lm_head": "cpu"
+  },
+  "hf_truth_rows": 11,
+  "island_row_count": 0,
+  "elapsed_total_seconds": 31.710559
+}

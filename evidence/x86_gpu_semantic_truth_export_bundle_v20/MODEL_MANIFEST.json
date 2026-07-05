@@ -1,0 +1,71 @@
+{
+  "schema_version": "dream7b_s100p_v20_x86_gpu_export_bundle_manifest",
+  "created_at_utc": "2026-07-04T03:40:00.829921+00:00",
+  "purpose": "Produce 8 semantic HF/PyTorch BF16 or FP32 full-truth logits outside the S100P torch1.8 CPU runtime.",
+  "expected_model_dir_on_s100p": "/mnt/nas/openclaw/models/dream7b-hf",
+  "weights_not_embedded": true,
+  "required_cases": 8,
+  "semantic_cases_sha256": "1472c21c346e4e230fc7dc90aa7f2e01b07336f49af7dbb87624a50b282cf531",
+  "model_source_files": [
+    {
+      "path": "model_source_files/models/dream7b-hf/config.json",
+      "size_bytes": 927,
+      "sha256": "11afc7fe7a1881e73dcd70cca6868aaaf8eb89ad45ea5fc6426c3fb82dec9340"
+    },
+    {
+      "path": "model_source_files/models/dream7b-hf/configuration_dream.py",
+      "size_bytes": 3197,
+      "sha256": "24d038962ccf16361595494461000ec0c1b043653c7494d7fc835c96f121f0b9"
+    },
+    {
+      "path": "model_source_files/models/dream7b-hf/generation_utils.py",
+      "size_bytes": 22332,
+      "sha256": "7f8ad01484898946b3c9c9d5ebc85e5ac726061d0fa7b4a522c4b8110c13a921"
+    },
+    {
+      "path": "model_source_files/models/dream7b-hf/merges.txt",
+      "size_bytes": 1671853,
+      "sha256": "8831e4f1a044471340f7c0a83d7bd71306a5b867e95fd870f74d0c5308a904d5"
+    },
+    {
+      "path": "model_source_files/models/dream7b-hf/model.safetensors.index.json",
+      "size_bytes": 27752,
+      "sha256": "998a078123ffc97763690de7f2a677eb89168af5eaf8a5e12e6bc24d18e25bdb"
+    },
+    {
+      "path": "model_source_files/models/dream7b-hf/modeling_dream.py",
+      "size_bytes": 36763,
+      "sha256": "3166e789f0d69beb1f4fbdee2317953d1c1c3b9bc21479b109afc5dd059de5b3"
+    },
+    {
+      "path": "model_source_files/models/dream7b-hf/SHA256SUMS",
+      "size_bytes": 550,
+      "sha256": "00943b62e19d3080f930603f6a65e210f11e239dc8b1c7a65d9b98090330ff8a"
+    },
+    {
+      "path": "model_source_files/models/dream7b-hf/tokenization_dream.py",
+      "size_bytes": 14028,
+      "sha256": "1d7f04104fa673831f48256e3cd42cd0bbd1bddd801b4abea5c74cc47d98bdd2"
+    },
+    {
+      "path": "model_source_files/models/dream7b-hf/tokenizer_config.json",
+      "size_bytes": 7486,
+      "sha256": "b0e9c1a6299d8832a1362d6b24f007de8a2acfe0243d8a3a1d1b57aa8250f7ee"
+    },
+    {
+      "path": "model_source_files/models/dream7b-hf/vocab.json",
+      "size_bytes": 3383407,
+      "sha256": "87a257b04b17642a0688c98cd1df89c398bda4fee532d6f88b38a659ecb4ac8d"
+    }
+  ],
+  "run_commands": [
+    "bash run_export.sh /path/to/dream7b-hf semantic_truth_output",
+    "py -3 .\\export_semantic_truth.py --model-dir C:\\path\\to\\dream7b-hf --cases-jsonl .\\semantic_cases.jsonl --output-root semantic_truth_output --dtype bfloat16 --device auto --fallback-fp32"
+  ],
+  "safety": {
+    "generation_quality_run": false,
+    "product_routes_18888_18889_touched": false,
+    "dream7b_frontend_openclaw_traffic_touched": false,
+    "harness_qwen_openclaw_defaults_modified": false
+  }
+}

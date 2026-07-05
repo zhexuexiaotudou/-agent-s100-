@@ -1,0 +1,415 @@
+{
+  "generated_at": "2026-07-04T11:54:15+08:00",
+  "environment": {
+    "whoami": {
+      "ok": true,
+      "returncode": 0,
+      "stdout": "sunrise",
+      "stderr": "",
+      "args": [
+        "whoami"
+      ]
+    },
+    "hostname": {
+      "ok": true,
+      "returncode": 0,
+      "stdout": "ubuntu",
+      "stderr": "",
+      "args": [
+        "hostname"
+      ]
+    },
+    "uname": {
+      "ok": true,
+      "returncode": 0,
+      "stdout": "Linux ubuntu 6.1.158-rt58-DR-4.0.5-2603031328-g9f678e-g6caa4d #17 SMP PREEMPT_RT Tue Mar  3 13:29:49 CST 2026 aarch64 aarch64 aarch64 GNU/Linux",
+      "stderr": "",
+      "args": [
+        "uname",
+        "-a"
+      ]
+    },
+    "os_release": {
+      "ok": true,
+      "returncode": 0,
+      "stdout": "resize:  can't open terminal /dev/tty\nPRETTY_NAME=\"Ubuntu 22.04.5 LTS\"\nNAME=\"Ubuntu\"\nVERSION_ID=\"22.04\"\nVERSION=\"22.04.5 LTS (Jammy Jellyfish)\"\nVERSION_CODENAME=jammy\nID=ubuntu\nID_LIKE=debian\nHOME_URL=\"https://www.ubuntu.com/\"",
+      "stderr": "",
+      "args": [
+        "bash",
+        "-lc",
+        "cat /etc/os-release | sed -n '1,8p'"
+      ]
+    },
+    "ip_brief": {
+      "ok": true,
+      "returncode": 0,
+      "stdout": "lo               UNKNOWN        127.0.0.1/8 ::1/128 \neth0             UP             169.254.8.10/16 fe80::6c75:dfff:fe40:9cbc/64 \neth1             UP             192.168.127.10/24 192.168.137.10/24 \ndocker0          DOWN           172.17.0.1/16",
+      "stderr": "",
+      "args": [
+        "ip",
+        "-brief",
+        "addr"
+      ]
+    },
+    "ip_route": {
+      "ok": true,
+      "returncode": 0,
+      "stdout": "default via 192.168.137.1 dev eth1 metric 50 \ndefault via 192.168.137.1 dev eth1 proto static metric 50 \n169.254.0.0/16 dev eth0 proto kernel scope link src 169.254.8.10 metric 100 \n169.254.0.0/16 dev eth0 scope link src 169.254.8.10 metric 101 \n172.17.0.0/16 dev docker0 proto kernel scope link src 172.17.0.1 linkdown \n192.168.127.0/24 dev eth1 proto kernel scope link src 192.168.127.10 metric 101 \n192.168.127.0/24 dev eth0 metric 700 \n192.168.137.0/24 dev eth1 proto kernel scope link src 192.168.137.10 metric 101",
+      "stderr": "",
+      "args": [
+        "ip",
+        "route"
+      ]
+    },
+    "id": {
+      "ok": true,
+      "returncode": 0,
+      "stdout": "uid=1000(sunrise) gid=1000(sunrise) groups=1000(sunrise),6(disk),15(kmem),20(dialout),27(sudo),29(audio),44(video),104(weston-launch),116(render),126(i2c),134(gdm),135(docker),992(vpu),993(lightdm),994(graphics),995(jpu),996(ipu),997(vps),998(misc),999(gpio)",
+      "stderr": "",
+      "args": [
+        "id"
+      ]
+    }
+  },
+  "services": {
+    "system_qwen_active": {
+      "ok": true,
+      "returncode": 0,
+      "stdout": "active",
+      "stderr": "",
+      "args": [
+        "systemctl",
+        "is-active",
+        "qwen25-local-openai-gateway.service"
+      ]
+    },
+    "system_qwen_enabled": {
+      "ok": true,
+      "returncode": 0,
+      "stdout": "enabled",
+      "stderr": "",
+      "args": [
+        "systemctl",
+        "is-enabled",
+        "qwen25-local-openai-gateway.service"
+      ]
+    },
+    "system_openclaw_active": {
+      "ok": true,
+      "returncode": 0,
+      "stdout": "active",
+      "stderr": "",
+      "args": [
+        "systemctl",
+        "is-active",
+        "openclaw-gateway.service"
+      ]
+    },
+    "system_openclaw_enabled": {
+      "ok": true,
+      "returncode": 0,
+      "stdout": "enabled",
+      "stderr": "",
+      "args": [
+        "systemctl",
+        "is-enabled",
+        "openclaw-gateway.service"
+      ]
+    },
+    "user_qwen_active": {
+      "ok": false,
+      "returncode": 3,
+      "stdout": "inactive",
+      "stderr": "",
+      "args": [
+        "systemctl",
+        "--user",
+        "is-active",
+        "qwen25-local-openai-gateway.service"
+      ]
+    },
+    "user_qwen_enabled": {
+      "ok": true,
+      "returncode": 0,
+      "stdout": "enabled",
+      "stderr": "",
+      "args": [
+        "systemctl",
+        "--user",
+        "is-enabled",
+        "qwen25-local-openai-gateway.service"
+      ]
+    },
+    "user_openclaw_active": {
+      "ok": true,
+      "returncode": 0,
+      "stdout": "active",
+      "stderr": "",
+      "args": [
+        "systemctl",
+        "--user",
+        "is-active",
+        "openclaw-gateway.service"
+      ]
+    },
+    "user_openclaw_enabled": {
+      "ok": true,
+      "returncode": 0,
+      "stdout": "enabled",
+      "stderr": "",
+      "args": [
+        "systemctl",
+        "--user",
+        "is-enabled",
+        "openclaw-gateway.service"
+      ]
+    },
+    "linger": {
+      "ok": true,
+      "returncode": 0,
+      "stdout": "yes",
+      "stderr": "",
+      "args": [
+        "loginctl",
+        "show-user",
+        "sunrise",
+        "-p",
+        "Linger",
+        "--value"
+      ]
+    }
+  },
+  "http": {
+    "openclaw_api_health": {
+      "ok": true,
+      "status": 200,
+      "elapsed_ms": 855.284,
+      "url": "http://127.0.0.1:8765/api/health",
+      "payload": {
+        "ok": true,
+        "tool_id": "ai_nas_operator_portal_server",
+        "operator_portal_contract": {
+          "found": true,
+          "filename": "operator_portal_contract.json",
+          "path": "/mnt/nas/openclaw/reports/ai_nas_mvp/operator_portal_contract_20260618-160406-445747/operator_portal_contract.json",
+          "verdict": "ok_ai_nas_operator_portal_contract",
+          "generated_at": "2026-06-18T16:04:08.346324+08:00",
+          "selection_policy": "generated_at_then_mtime"
+        },
+        "portal_html": "/mnt/nas/openclaw/reports/ai_nas_mvp/operator_portal_contract_20260618-160406-445747/operator_portal.html",
+        "refresh_on_start": null
+      }
+    },
+    "openclaw_root": {
+      "ok": true,
+      "status": 200,
+      "elapsed_ms": 1.317,
+      "url": "http://127.0.0.1:8765/",
+      "payload": {
+        "raw": "<!doctype html>\n<html lang=\"en\">\n<head>\n  <meta charset=\"utf-8\">\n  <title>AI-NAS Web OS</title>\n  <meta name=\"viewport\" content=\"width=device-width, initial-scale=1\">\n  <style>\n    body { font-family: system-ui, -apple-system, Segoe UI, sans-serif; margin: 0; background: #f6f7f9; color: #1f2933; }\n    main { max-width: 1180px; margin: 0 auto; padding: 24px; }\n    header { display: flex; justify-content: space-between; gap: 16px; align-items: center; }\n    h1 { margin: 0; font-size: 28px; }\n    .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 12px; margin-top: 20px; }\n    .tile { background: #fff; border: 1px solid #d9dee6; border-radius: 8px; padding: 14px; min-height: 72px; }\n    .muted { color: #607080; font-size: 13px; }\n  </style>\n</head>\n<body>\n<main>\n  <header>\n    <div>\n      <h1>AI-NAS Web OS</h1>\n      <div id=\"loginScreen\" class=\"muted\">loginScreen</div>\n    </div>\n    <div class=\"muted\">nas_action runtime enabled</div>\n  </header>\n  <section class=\"grid\" id=\"entryGrid\">\n    <div class=\"tile\">File Manager</div>\n    <div class=\"tile\">Media Center</div>\n    <div class=\"tile\">Photos / Album</div>\n    <div class=\"tile\">Documents</div>\n    <div class=\"tile\">Backup Tasks</div>\n    <div class=\"tile\">Snapshots / Trash</div>\n    <div class=\"tile\">User Management</div>\n    <div class=\"tile\">System Status</div>\n    <div class=\"tile\">App Ecosystem</div>\n    <div class=\"tile\">AI Copilot</div>\n    <div class=\"tile\">Audit Log</div>\n  </section>\n  <script>\n    function renderNasAction(nas_action) { return nas_action && nas_action.operation ? nas_action.operation : \"none\"; }\n    window.renderNasAction = renderNasAction;\n  </script>\n</main>\n</body>\n</html>\n"
+      }
+    },
+    "qwen_health": {
+      "ok": true,
+      "status": 200,
+      "elapsed_ms": 2.202,
+      "url": "http://127.0.0.1:18080/health",
+      "payload": {
+        "ok": true,
+        "model": "Qwen2.5-1.5B-Instruct-S100P-official",
+        "backend": "official-qwen2.5-oellm-multichat-plus-ai-nas-tools",
+        "port": 18080,
+        "active_profile": "qwen25_7b_instruct_cache_len_1024_q8",
+        "priority_profile": "qwen25_7b_instruct_cache_len_1024_q8_vendor_default",
+        "priority_status": "promoted_from_shadow_18081",
+        "active_hbm": {
+          "path": "/mnt/nas/openclaw/toolchains/s100_llm_sdk/D-Robotics_LLM_S100_1.0.0_SDK/oellm_runtime/model/Qwen2.5_1.5B_Instruct_512.hbm",
+          "exists": false,
+          "size_bytes": 0
+        },
+        "priority_hbm": {
+          "path": "/mnt/nas/openclaw/toolchains/s100_llm_sdk/D-Robotics_LLM_S100_1.0.0_SDK/oellm_runtime/model/Qwen2.5_1.5B_Instruct_512.hbm",
+          "exists": false,
+          "size_bytes": 0
+        },
+        "tool_dispatcher": "/mnt/nas/openclaw/scripts/probes/ai_nas_allowlisted_tool.sh",
+        "report_root": "/mnt/nas/openclaw/reports/qwen25_ai_nas"
+      }
+    },
+    "qwen_models": {
+      "ok": true,
+      "status": 200,
+      "elapsed_ms": 1.114,
+      "url": "http://127.0.0.1:18080/v1/models",
+      "payload": {
+        "object": "list",
+        "data": [
+          {
+            "id": "Qwen2.5-1.5B-Instruct-S100P-official",
+            "object": "model",
+            "owned_by": "local-s100p-official-qwen"
+          }
+        ]
+      }
+    }
+  },
+  "ports": {
+    "ss_lntp_returncode": 0,
+    "protected_port_lines": [
+      "LISTEN 0      5          127.0.0.1:18888      0.0.0.0:*                                       ",
+      "LISTEN 0      5          127.0.0.1:18080      0.0.0.0:*    users:((\"python3\",pid=854063,fd=3))",
+      "LISTEN 0      5          127.0.0.1:8765       0.0.0.0:*    users:((\"python3\",pid=42831,fd=3)) "
+    ],
+    "protected_ports_hash": "9df8946b32cfddcd4b1d7af29f5d748e3f6549373cc79550b59283c6f59930dd"
+  },
+  "hashes": {
+    "dispatcher": {
+      "path": "/mnt/nas/openclaw/scripts/probes/ai_nas_allowlisted_tool.sh",
+      "sha256": "d099f8071ab3710778520bf610ce2bca07fbc7976effe0a6d99791cf42ebb23a"
+    },
+    "qwen_route_policy": {
+      "path": "/mnt/nas/openclaw/configs/qwen25_official_route_policy.json",
+      "sha256": "3d0b3348cc61b96bdaef9f195eee56339ad24f0f5fdcc9d79ab4c507e25db655"
+    },
+    "workspace_tool_policy": {
+      "found": true,
+      "sha256": "5ce4df3218be8655c42bb066e847856a37dec74295866049e20db4f3a446e191"
+    },
+    "workspace_arg_policy": {
+      "found": true,
+      "sha256": "73f820fc47f2b6cd31524e66a4eee4e1d8d8ce29abe4418a2cfc6cab0226ca6a"
+    },
+    "runtime_trace_writer": {
+      "found": true,
+      "sha256": "50b5797bc73fb30a13341f66ec0ace5f5262a4a71281999f4453f07432c937fe"
+    },
+    "stage3_readonly_shadow_policy": {
+      "found": true,
+      "sha256": "c96a2fb4c4ba9c7cca0217a3f34ba0d8b8811fec90b2696851ea172ec4bec744"
+    }
+  },
+  "latest_remote_reports": {
+    "qwen_acceptance": {
+      "found": true,
+      "filename": "qwen25_ai_nas_acceptance.json",
+      "path": "/mnt/nas/openclaw/reports/models/qwen25_ai_nas_acceptance_20260702-225128/qwen25_ai_nas_acceptance.json",
+      "generated_at": "2026-07-02T22:51:28.809495+08:00",
+      "mtime": 1783004119.7678208,
+      "verdict": "ok_qwen25_ai_nas_acceptance_packet",
+      "summary": {},
+      "sha256": "c3171cf90f98772b22069309e7ba7bff3790e4f323396322d4fe7a565e3e8ed4"
+    },
+    "openclaw_nas_control": {
+      "found": true,
+      "filename": "openclaw_nas_control_gate.json",
+      "path": "/mnt/nas/openclaw/reports/qwen25_ai_nas/openclaw_nas_control_gate_20260630-201548-149710/openclaw_nas_control_gate.json",
+      "generated_at": "2026-06-30T20:15:51.160274+08:00",
+      "mtime": 1782821965.2939048,
+      "verdict": "ok_ai_nas_openclaw_nas_control_gate",
+      "summary": {},
+      "sha256": "9fd93bca902073ecb1be6079b3515ec3acc5f377666411859fddb1129a8ac8c6"
+    },
+    "edge_cloud_router": {
+      "found": true,
+      "filename": "edge_cloud_router.json",
+      "path": "/mnt/nas/openclaw/reports/qwen25_ai_nas/edge_cloud_router_20260630-201548-288838/edge_cloud_router.json",
+      "generated_at": "2026-06-30T20:15:48.798990+08:00",
+      "mtime": 1782821962.9329045,
+      "verdict": "ok_ai_nas_edge_cloud_router",
+      "summary": {
+        "query_count": 3,
+        "route_counts": {
+          "local": 2,
+          "cloud": 1
+        },
+        "privacy_counts": {
+          "high": 2,
+          "none": 1
+        },
+        "classifier_counts": {
+          "qwen_structured_json": 3
+        },
+        "privacy_query_sent_to_cloud": false,
+        "local_query_count": 2,
+        "cloud_query_count": 1,
+        "cloud_call_count": 1,
+        "controlled_cloud_call_count": 1,
+        "failures": []
+      },
+      "sha256": "5d77815b5d1e25afd239f9261ab7a6a52002400afbbcdf1a3c82ae914f68b8c8"
+    },
+    "personal_inventory": {
+      "found": true,
+      "filename": "personal_inventory.json",
+      "path": "/mnt/nas/openclaw/reports/qwen25_ai_nas/personal_inventory_20260703-130142-409565/personal_inventory.json",
+      "generated_at": "2026-07-03T13:01:42.126909+08:00",
+      "mtime": 1783055137.5767975,
+      "verdict": null,
+      "summary": {},
+      "sha256": "8d6edbadb31800a5f481545ac5d8c3564dc7e1ebace8d94fd5c282827d1c8c48"
+    },
+    "case_packet": {
+      "found": true,
+      "filename": "case_packet.json",
+      "path": "/mnt/nas/openclaw/reports/qwen25_ai_nas/case_packet_20260703-130143-826479/case_packet.json",
+      "generated_at": "2026-07-03T13:01:43.726014+08:00",
+      "mtime": 1783055138.9857974,
+      "verdict": null,
+      "summary": {
+        "match_count": 20,
+        "type_counts": {
+          "Documents": 1,
+          "Photos": 19
+        },
+        "document_class_counts": {
+          "contract": 1
+        },
+        "photo_label_counts": {
+          "beach": 19,
+          "car": 19,
+          "child": 19,
+          "meal": 19,
+          "white": 19
+        },
+        "source_counts": {
+          "sqlite_text_fts_metadata": 20
+        }
+      },
+      "sha256": "a8ead51544530977ea17c717c33e91dcdfe65a5afb43da8984ec8ce6f914ddb8"
+    },
+    "folder_rag": {
+      "found": true,
+      "filename": "folder_rag.json",
+      "path": "/mnt/nas/openclaw/reports/qwen25_ai_nas/folder_rag_20260703-130144-195080/folder_rag.json",
+      "generated_at": "",
+      "mtime": 1783055139.3547976,
+      "verdict": null,
+      "summary": {},
+      "sha256": "c14b378bd382373a204879899e10bba10bb77a1eb0c6c4d0b502e9bfa04e5c34"
+    },
+    "gateway_turn": {
+      "found": true,
+      "filename": "qwen25_gateway_turn.json",
+      "path": "/mnt/nas/openclaw/reports/qwen25_gateway/qwen25_gateway_turn_20260703-130141-911445/qwen25_gateway_turn.json",
+      "generated_at": "2026-07-03T13:01:44.218934+08:00",
+      "mtime": 1783055139.3767974,
+      "verdict": "ok_qwen25_ai_nas_gateway_turn",
+      "summary": {},
+      "sha256": "aed803fb6e4d81ecb264df2b7cd84ec6a69174a9809b645acefa1fe227dde56a"
+    }
+  },
+  "pass_criteria": {
+    "openclaw_health_ok": true,
+    "qwen_health_ok": true,
+    "qwen_model_identity_recorded": true,
+    "system_qwen_active_enabled": true,
+    "system_openclaw_active_enabled": true,
+    "dispatcher_hash_recorded": true,
+    "protected_ports_recorded": true,
+    "dream7b_not_product_foreground": true
+  },
+  "boundary_notes": [
+    "User-level qwen25-local-openai-gateway.service may be inactive; current active route is system-level qwen25-local-openai-gateway.service.",
+    "S100P default route currently uses 192.168.137.1; do not claim PC network independence without a fresh route/NAT recheck."
+  ]
+}

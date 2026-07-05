@@ -1,0 +1,69 @@
+{
+  "checks": [
+    {
+      "detail": 250,
+      "label": "total cases >= 150",
+      "ok": true
+    },
+    {
+      "label": "privacy cases >= 30",
+      "ok": true
+    },
+    {
+      "label": "rag cases >= 40",
+      "ok": true
+    },
+    {
+      "label": "copy cases >= 30",
+      "ok": true
+    },
+    {
+      "label": "ui cases >= 10",
+      "ok": true
+    }
+  ],
+  "cloud_private_raw_egress": false,
+  "evidence": {
+    "agent_runtime_eval_cases.jsonl": {
+      "case_count": 30,
+      "path": "/mnt/nas/openclaw/benchmarks/agent_runtime_eval_cases.jsonl"
+    },
+    "copy_route_eval_cases.jsonl": {
+      "case_count": 30,
+      "path": "/mnt/nas/openclaw/benchmarks/copy_route_eval_cases.jsonl"
+    },
+    "journal_eval_cases.jsonl": {
+      "case_count": 20,
+      "path": "/mnt/nas/openclaw/benchmarks/journal_eval_cases.jsonl"
+    },
+    "nas_search_eval_cases.jsonl": {
+      "case_count": 45,
+      "path": "/mnt/nas/openclaw/benchmarks/nas_search_eval_cases.jsonl"
+    },
+    "privacy_eval_cases.jsonl": {
+      "case_count": 30,
+      "path": "/mnt/nas/openclaw/benchmarks/privacy_eval_cases.jsonl"
+    },
+    "rag_eval_cases.jsonl": {
+      "case_count": 53,
+      "path": "/mnt/nas/openclaw/benchmarks/rag_eval_cases.jsonl"
+    },
+    "token_budget_eval_cases.jsonl": {
+      "case_count": 30,
+      "path": "/mnt/nas/openclaw/benchmarks/token_budget_eval_cases.jsonl"
+    },
+    "total_cases": 250,
+    "ui_flow_eval_cases.jsonl": {
+      "case_count": 12,
+      "path": "/mnt/nas/openclaw/benchmarks/ui_flow_eval_cases.jsonl"
+    }
+  },
+  "failures": [],
+  "generated_at": "2026-07-05T04:26:51Z",
+  "name": "continuous_eval_dataset_gate",
+  "ok": true,
+  "public_mcp_exposed": false,
+  "qwen_execution_authority": false,
+  "schema": "digua_agent_runtime_gate_v1",
+  "verdict": "ok_continuous_eval_dataset_gate"
+}

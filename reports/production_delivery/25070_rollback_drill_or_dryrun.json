@@ -1,0 +1,193 @@
+{
+  "copy_chain": {
+    "ok": true,
+    "steps": [
+      {
+        "duration_ms": 2.8,
+        "name": "POST /api/nas/copy/preview",
+        "ok": true,
+        "payload_summary": {
+          "audit_event": {
+            "allowed": true,
+            "args_hash": "8dd603d95ab04456a2fab7e10b06666bd36c73ae7719754672a055a8cbfb9858",
+            "candidate_fingerprint": "3cca97c644f276ce9e2eb7d2d61dac20c2242b7dc1f2d32ba6edd7f96b1b8541",
+            "cloud_private_egress": false,
+            "dispatcher_tool": null,
+            "event_id": "copy-route-4d968579cd054d2f",
+            "qwen_execution_authority": false,
+            "raw_private_content_logged": false,
+            "reason_codes": {
+              "count": 0,
+              "type": "list"
+            },
+            "route": "preview",
+            "source_path_hash": "5d8afddec8e14b2924d6fe541b2bf7606a475091c4598478781273bdd64d0d78",
+            "target_path_hash": "1d217d30842a36ce95edb2f04e745e1c76e6d9992eea9733c8ca70fe8171f039",
+            "tool_id": "ai_nas_route_copy_guard_v1"
+          },
+          "candidate_fingerprint": "3cca97c644f276ce9e2eb7d2d61dac20c2242b7dc1f2d32ba6edd7f96b1b8541",
+          "cloud_private_egress": false,
+          "expected_size_bytes": 48,
+          "ok": true,
+          "qwen_execution_authority": false,
+          "raw_paths_in_response": false,
+          "reason_codes": {
+            "count": 0,
+            "type": "list"
+          },
+          "route": "preview",
+          "source_path_hash": "5d8afddec8e14b2924d6fe541b2bf7606a475091c4598478781273bdd64d0d78",
+          "source_sha256_prefix": "a4634aa3e7e0",
+          "status": "preview_allowed",
+          "target_path_hash": "1d217d30842a36ce95edb2f04e745e1c76e6d9992eea9733c8ca70fe8171f039"
+        },
+        "status": 200
+      },
+      {
+        "duration_ms": 2.3,
+        "name": "POST /api/nas/copy/dry-run",
+        "ok": true,
+        "payload_summary": {
+          "approval_phrase": "APPROVE COPY 3cca97c644f276ce",
+          "audit_event": {
+            "allowed": true,
+            "approval_phrase_hash": "3d7c057d049c50086998c9aafe9fb161e8c15a7536eee2fffd695faf0f5a8424",
+            "args_hash": "8dd603d95ab04456a2fab7e10b06666bd36c73ae7719754672a055a8cbfb9858",
+            "candidate_fingerprint": "3cca97c644f276ce9e2eb7d2d61dac20c2242b7dc1f2d32ba6edd7f96b1b8541",
+            "cloud_private_egress": false,
+            "dispatcher_tool": null,
+            "event_id": "copy-route-cea895da8da14822",
+            "qwen_execution_authority": false,
+            "raw_private_content_logged": false,
+            "reason_codes": {
+              "count": 0,
+              "type": "list"
+            },
+            "route": "dry-run",
+            "source_path_hash": "5d8afddec8e14b2924d6fe541b2bf7606a475091c4598478781273bdd64d0d78",
+            "target_path_hash": "1d217d30842a36ce95edb2f04e745e1c76e6d9992eea9733c8ca70fe8171f039",
+            "tool_id": "ai_nas_route_copy_guard_v1",
+            "writes_performed": false
+          },
+          "candidate_fingerprint": "3cca97c644f276ce9e2eb7d2d61dac20c2242b7dc1f2d32ba6edd7f96b1b8541",
+          "cloud_private_egress": false,
+          "destructive_actions_available": false,
+          "expected_size_bytes": 48,
+          "ok": true,
+          "qwen_execution_authority": false,
+          "raw_paths_in_response": false,
+          "reason_codes": {
+            "count": 0,
+            "type": "list"
+          },
+          "rollback_plan": "remove only this action-created target after target sha256 verification",
+          "route": "dry-run",
+          "source_path_hash": "5d8afddec8e14b2924d6fe541b2bf7606a475091c4598478781273bdd64d0d78",
+          "source_sha256_prefix": "a4634aa3e7e0",
+          "status": "dry-run_allowed",
+          "target_path_hash": "1d217d30842a36ce95edb2f04e745e1c76e6d9992eea9733c8ca70fe8171f039"
+        },
+        "status": 200
+      },
+      {
+        "duration_ms": 2.6,
+        "name": "POST /api/nas/copy/confirm",
+        "ok": true,
+        "payload_summary": {
+          "audit_event": {
+            "allowed": true,
+            "approval_phrase_hash": "3d7c057d049c50086998c9aafe9fb161e8c15a7536eee2fffd695faf0f5a8424",
+            "args_hash": "8dd603d95ab04456a2fab7e10b06666bd36c73ae7719754672a055a8cbfb9858",
+            "candidate_fingerprint": "3cca97c644f276ce9e2eb7d2d61dac20c2242b7dc1f2d32ba6edd7f96b1b8541",
+            "cloud_private_egress": false,
+            "dispatcher_tool": null,
+            "event_id": "copy-route-8278431b827549d0",
+            "qwen_execution_authority": false,
+            "raw_private_content_logged": false,
+            "reason_codes": {
+              "count": 0,
+              "type": "list"
+            },
+            "route": "confirm",
+            "source_path_hash": "5d8afddec8e14b2924d6fe541b2bf7606a475091c4598478781273bdd64d0d78",
+            "target_path_hash": "1d217d30842a36ce95edb2f04e745e1c76e6d9992eea9733c8ca70fe8171f039",
+            "token_hash": "[REDACTED]",
+            "token_issued": "[REDACTED]",
+            "tool_id": "ai_nas_route_copy_guard_v1",
+            "writes_performed": false
+          },
+          "candidate_fingerprint": "3cca97c644f276ce9e2eb7d2d61dac20c2242b7dc1f2d32ba6edd7f96b1b8541",
+          "cloud_private_egress": false,
+          "expected_size_bytes": 48,
+          "ok": true,
+          "qwen_execution_authority": false,
+          "raw_paths_in_response": false,
+          "reason_codes": {
+            "count": 0,
+            "type": "list"
+          },
+          "route": "confirm",
+          "signed_approval_token": "[REDACTED]",
+          "signed_approval_token_hash": "[REDACTED]",
+          "source_path_hash": "5d8afddec8e14b2924d6fe541b2bf7606a475091c4598478781273bdd64d0d78",
+          "source_sha256_prefix": "a4634aa3e7e0",
+          "status": "confirm_allowed_token_issued",
+          "target_path_hash": "1d217d30842a36ce95edb2f04e745e1c76e6d9992eea9733c8ca70fe8171f039"
+        },
+        "status": 200
+      },
+      {
+        "duration_ms": 132.1,
+        "name": "POST /api/nas/copy/execute",
+        "ok": true,
+        "payload_summary": {
+          "approval_manifest_path": "/mnt/nas/openclaw/reports/qwen25_ai_nas/harness_default_service_copy_1783238275_13a13dca/approval_manifest.json",
+          "candidate_fingerprint": "3cca97c644f276ce9e2eb7d2d61dac20c2242b7dc1f2d32ba6edd7f96b1b8541",
+          "cloud_private_egress": false,
+          "dispatcher_bypass": false,
+          "dispatcher_returncode": 0,
+          "dispatcher_stderr_hash": "12ae32cb1ec02d01eda3581b127c1fee3b0dc53572ed6baf239721a03d82e126",
+          "dispatcher_stdout_hash": "3534157a813f1716348845e7ecac783aebbdf34268f5321c15e4c8d9aa50beec",
+          "dispatcher_tool": "ai_nas_action_execute_copy",
+          "manifest_id": "apm-f53e966c3eaa7e63",
+          "ok": true,
+          "qwen_execution_authority": false,
+          "raw_paths_in_response": false,
+          "rollback_manifest_path": "/mnt/nas/openclaw/reports/qwen25_ai_nas/harness_default_service_copy_1783238275_13a13dca/action_execute_copy_20260705-155755-121076/rollback_manifest.json",
+          "route": "execute",
+          "source_path_hash": "5d8afddec8e14b2924d6fe541b2bf7606a475091c4598478781273bdd64d0d78",
+          "status": "completed",
+          "target_hash_verified": true,
+          "target_path_hash": "1d217d30842a36ce95edb2f04e745e1c76e6d9992eea9733c8ca70fe8171f039",
+          "target_sha256": "a4634aa3e7e0ac9ddd8e83f46630d2509f43e113c6b8c1779cc4f707e7d6a70b"
+        },
+        "status": 200
+      },
+      {
+        "duration_ms": 122.9,
+        "name": "POST /api/nas/copy/rollback",
+        "ok": true,
+        "payload_summary": {
+          "candidate_fingerprint": "3cca97c644f276ce9e2eb7d2d61dac20c2242b7dc1f2d32ba6edd7f96b1b8541",
+          "cloud_private_egress": false,
+          "dispatcher_bypass": false,
+          "dispatcher_returncode": 0,
+          "dispatcher_stderr_hash": "12ae32cb1ec02d01eda3581b127c1fee3b0dc53572ed6baf239721a03d82e126",
+          "dispatcher_stdout_hash": "8861ec40e5dc6fd8ee16c2ccc004352a81674854a3f9b19989a29180b06d5acd",
+          "dispatcher_tool": "ai_nas_action_rollback_copy",
+          "ok": true,
+          "qwen_execution_authority": false,
+          "raw_paths_in_response": false,
+          "route": "rollback",
+          "source_hash_unchanged": true,
+          "source_path_hash": "5d8afddec8e14b2924d6fe541b2bf7606a475091c4598478781273bdd64d0d78",
+          "status": "completed",
+          "target_missing": true,
+          "target_path_hash": "1d217d30842a36ce95edb2f04e745e1c76e6d9992eea9733c8ca70fe8171f039"
+        },
+        "status": 200
+      }
+    ]
+  },
+  "generated_at": "2026-07-05T16:07:35+08:00"
+}

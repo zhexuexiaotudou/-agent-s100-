@@ -1,0 +1,139 @@
+{
+  "case_id": "short_chinese_prompt_padded",
+  "island": [
+    2
+  ],
+  "semantic_or_diagnostic": "semantic",
+  "route": "HF torch2 prefix through layer 1, S100P BPU island 2..2, HF torch2 suffix 3..27 + final norm + lm_head",
+  "conversion_used": "official_runtime_output_scale_direct_float32_no_target_affine",
+  "bpu_hidden_path": "evidence\\dream7b_s100p_v21_execution_20260704\\evidence\\semantic_island_battery_v21\\bpu_outputs\\short_chinese_prompt_padded\\island_2\\island_final_hidden.npy",
+  "logits": {
+    "path": "evidence\\semantic_island_battery_v21\\short_chinese_prompt_padded\\island_2\\island_logits.npy",
+    "size_bytes": 608384,
+    "sha256": "e58d33abfd9f70a4194d702fce0949264ac2d17882da4112483a06574a5d0089",
+    "stats": {
+      "shape": [
+        152064
+      ],
+      "dtype": "float32",
+      "size": 152064,
+      "min": -12.0625,
+      "max": 10.1875,
+      "mean": -7.920414924621582,
+      "std": 1.3844743967056274,
+      "abs_max": 12.0625,
+      "nonzero_count": 152064,
+      "allzero": false,
+      "constant": false,
+      "nan_count": 0,
+      "inf_count": 0
+    }
+  },
+  "final_metrics": {
+    "shape_match": true,
+    "reference_top1": 151643,
+    "candidate_top1": 151643,
+    "top1_agreement": true,
+    "reference_top1_in_candidate_top5": true,
+    "top5_overlap": 3,
+    "cosine": 0.9946490637170916,
+    "pearson_centered": 0.8887784996898224,
+    "relative_l2": 0.16964807788666544,
+    "max_abs_error": 6.3359375,
+    "mean_abs_error": 1.4100128681170017,
+    "candidate_normalized_entropy": 0.03494401506136465,
+    "reference_normalized_entropy": 0.049357248508905084,
+    "candidate_stats": {
+      "shape": [
+        152064
+      ],
+      "dtype": "float32",
+      "size": 152064,
+      "min": -12.0625,
+      "max": 10.1875,
+      "mean": -7.920414924621582,
+      "std": 1.3844743967056274,
+      "abs_max": 12.0625,
+      "nonzero_count": 152064,
+      "allzero": false,
+      "constant": false,
+      "nan_count": 0,
+      "inf_count": 0
+    },
+    "reference_stats": {
+      "shape": [
+        152064
+      ],
+      "dtype": "float32",
+      "size": 152064,
+      "min": -13.0,
+      "max": 8.75,
+      "mean": -9.121015548706055,
+      "std": 2.049726963043213,
+      "abs_max": 13.0,
+      "nonzero_count": 152064,
+      "allzero": false,
+      "constant": false,
+      "nan_count": 0,
+      "inf_count": 0
+    }
+  },
+  "boundary_metrics": {
+    "shape_match": true,
+    "reference_top1": 55420,
+    "candidate_top1": 458710,
+    "top1_agreement": false,
+    "reference_top1_in_candidate_top5": false,
+    "top5_overlap": 0,
+    "cosine": 0.8045509601355125,
+    "pearson_centered": 0.8045623119918481,
+    "relative_l2": 0.5951188788910546,
+    "max_abs_error": 4.73197814822197,
+    "mean_abs_error": 0.10702116921805123,
+    "candidate_normalized_entropy": 0.9984722042598088,
+    "reference_normalized_entropy": 0.9965103764913723,
+    "candidate_stats": {
+      "shape": [
+        458752
+      ],
+      "dtype": "float32",
+      "size": 458752,
+      "min": -0.4555218517780304,
+      "max": 0.4555218517780304,
+      "mean": 0.0008088150061666965,
+      "std": 0.20001289248466492,
+      "abs_max": 0.4555218517780304,
+      "nonzero_count": 457206,
+      "allzero": false,
+      "constant": false,
+      "nan_count": 0,
+      "inf_count": 0
+    },
+    "reference_stats": {
+      "shape": [
+        458752
+      ],
+      "dtype": "float32",
+      "size": 458752,
+      "min": -5.1875,
+      "max": 2.78125,
+      "mean": -0.0002785788383334875,
+      "std": 0.2610380947589874,
+      "abs_max": 5.1875,
+      "nonzero_count": 458453,
+      "allzero": false,
+      "constant": false,
+      "nan_count": 0,
+      "inf_count": 0
+    }
+  },
+  "strict_gate": {
+    "reference_top1_in_candidate_top5_required": true,
+    "cosine_min": 0.95,
+    "relative_l2_max": 0.3,
+    "no_allzero_or_constant_logits": true
+  },
+  "strict_pass": true,
+  "elapsed_seconds": 1.328899,
+  "status": "pass"
+}

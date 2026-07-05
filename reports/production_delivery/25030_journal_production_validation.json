@@ -1,0 +1,109 @@
+{
+  "checks": [
+    {
+      "duration_ms": 50.8,
+      "name": "GET /api/journal/health",
+      "ok": true,
+      "payload_summary": {
+        "cloud_generation_enabled": false,
+        "db_path": "/mnt/nas/openclaw/reports/qwen25_ai_nas/digua_journal.sqlite3",
+        "feature": "digua_journal",
+        "ok": true,
+        "qwen_execution_authority": false,
+        "stats": {
+          "journal_events": 83,
+          "journal_exports": 7,
+          "journal_manual_entries": 7,
+          "journal_project_map": 3,
+          "journal_summary_runs": 22,
+          "journal_token_privacy_traces": "[REDACTED]"
+        }
+      },
+      "status": 200
+    },
+    {
+      "duration_ms": 42.3,
+      "name": "GET /api/journal/timeline",
+      "ok": true,
+      "payload_summary": {
+        "events": {
+          "count": 83,
+          "type": "list"
+        },
+        "ok": true
+      },
+      "status": 200
+    },
+    {
+      "duration_ms": 53.3,
+      "name": "GET /api/journal/projects",
+      "ok": true,
+      "payload_summary": {
+        "ok": true,
+        "projects": {
+          "count": 3,
+          "type": "list"
+        }
+      },
+      "status": 200
+    },
+    {
+      "duration_ms": 64.1,
+      "name": "POST /api/journal/manual-entry",
+      "ok": true,
+      "payload_summary": {
+        "entry_id": "manual_a3786c5e985745db979b",
+        "event_id": "evt_27694064aa5b46f0ad9450e9",
+        "ok": true,
+        "redaction_count": 0
+      },
+      "status": 200
+    },
+    {
+      "duration_ms": 79.8,
+      "name": "POST /api/journal/generate-summary",
+      "ok": true,
+      "payload_summary": {
+        "ok": true,
+        "summary": {
+          "cloud_used": false,
+          "event_count": 33,
+          "hallucinated_event_count": 0,
+          "local_qwen_used": true,
+          "manual_entry_count": 8,
+          "markdown": "# Digua Journal Daily Summary\n\n- Period: 2026-07-04T01:00:00Z to 2026-07-05T07:57:54Z\n- Project: project_ai_nas\n- Events: 33\n- Manual entries: 8\n- Generation ro...[truncated]",
+          "path": "/mnt/nas/openclaw/reports/qwen25_ai_nas/digua_journal_evidence/sample_daily_summary.md",
+          "period_end": "2026-07-05T07:57:54Z",
+          "period_start": "2026-07-04T01:00:00Z",
+          "period_type": "daily",
+          "project_id": "project_ai_nas",
+          "summary_id": "summary_daily_3071283316db4cbf",
+          "title": "Daily Journal Summary",
+          "token_trace_id": "[REDACTED]"
+        }
+      },
+      "status": 200
+    },
+    {
+      "duration_ms": 62.9,
+      "name": "POST /api/journal/export",
+      "ok": true,
+      "payload_summary": {
+        "export": {
+          "created_at": "2026-07-05T07:57:54Z",
+          "export_id": "export_13667b4995f2457c",
+          "export_type": "markdown",
+          "path": "/mnt/nas/openclaw/reports/qwen25_ai_nas/digua_journal_exports/export_13667b4995f2457c_daily_project_ai_nas.md",
+          "period_type": "daily",
+          "private_leak_count": 0,
+          "project_id": "project_ai_nas",
+          "redaction_lookup_exported": false,
+          "sha256": "695ff8fe9af0677c70958b1c9191b1d1dcc38cbea8049024bddb6eb14f8a0739"
+        },
+        "ok": true
+      },
+      "status": 200
+    }
+  ],
+  "generated_at": "2026-07-05T16:07:35+08:00"
+}

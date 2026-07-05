@@ -140,3 +140,21 @@ Next useful work must be logits-only and correctness-first:
    semantic logits gates before any generation or product-route work.
 4. Keep the product path documented as Qwen + OpenClaw unless a Dream7B
    candidate passes the complete logits gate first.
+
+## llada.cpp-Style Track
+
+The separate `dream_s100p_lladacpp/` track records a new correctness-first route
+inspired by block-wise diffusion inference systems. It has completed Phase 0/1,
+then continued past the original `external_truth_missing_hold` by exporting and
+validating a 31-row HF/PyTorch truth set for semantic, canonical, block-wise,
+revision, fixed-output, infill, and control-command cases. The truth-replay
+block-driver gate also passed.
+
+The current llada.cpp-style review verdict is
+`bpu_operator_alignment_failed_review_required`: no true per-op BPU output
+checksum table exists yet for embedding, position/RoPE, lm_head, and the other
+required operators, so layer alignment, quantization, static block graph compile,
+S100P runtime, and fixed-task claims remain locked.
+
+This track does not touch OpenClaw foreground traffic, ports 18888/18889, or the
+Qwen + OpenClaw product route.

@@ -1,0 +1,26 @@
+{
+  "alignment_metrics": [
+    "cosine_similarity",
+    "max_abs_error",
+    "relative_l2",
+    "topk_if_logits_related"
+  ],
+  "forbidden_alignment": "target_affine_or_per_case_fitting",
+  "required_ops": [
+    "embedding_lookup",
+    "position_or_rotary_path",
+    "rmsnorm_or_layernorm",
+    "linear_matmul",
+    "qkv_projection",
+    "attention_score",
+    "softmax_or_equivalent",
+    "attention_value",
+    "mlp_up_gate_down",
+    "activation_function",
+    "residual_add",
+    "lm_head",
+    "mask_update_or_confidence",
+    "dequant_quant_path"
+  ],
+  "status": "specification_only"
+}

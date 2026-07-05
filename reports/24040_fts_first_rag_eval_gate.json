@@ -1,0 +1,139 @@
+{
+  "checks": [
+    {
+      "detail": 53,
+      "label": "rag cases >= 40",
+      "ok": true
+    },
+    {
+      "detail": 1.0,
+      "label": "citation coverage >= 0.90",
+      "ok": true
+    },
+    {
+      "detail": 1.0,
+      "label": "no evidence refusal >= 0.95",
+      "ok": true
+    },
+    {
+      "detail": 0,
+      "label": "private leak count zero",
+      "ok": true
+    },
+    {
+      "label": "embedding fallback disabled",
+      "ok": true
+    }
+  ],
+  "cloud_private_raw_egress": false,
+  "evidence": {
+    "case_count": 53,
+    "citation_coverage": 1.0,
+    "no_evidence_refusal_rate": 1.0,
+    "sample_result": {
+      "answer": {
+        "answer": "Local FTS-first RAG found 6 evidence chunks from rag_case_00_harness.md, rag_case_05_harness.md, rag_case_10_harness.md. Evidence refs: rag_ev_1_68015d67ad, rag_ev_2_12131d771d, rag_ev_3_975f061b46, rag_ev_4_a9666df721, rag_ev_5_dae6a5ad3c, rag_ev_6_6d48e3ac14.",
+        "cloud_used": false,
+        "embedding_enabled": false,
+        "evidence": [
+          {
+            "chunk_id": "rag_chk_ca069e5a52cb4e21e76f7c84",
+            "chunk_index": 0,
+            "evidence_ref": "rag_ev_1_68015d67ad",
+            "file_type": ".md",
+            "score": -1.5673539267734813,
+            "snippet": "Agent Runtime RAG case 0. Topic harness. OpenClaw remains the gateway. Qwen is advisory only. The answer must cite evidence_refs and use SQLite FTS-first retrieval. Private raw NAS content is redacted before any optional cloud route.",
+            "source_hash": "68015d67ade2d35e6ef3c6a5",
+            "title": "rag_case_00_harness.md"
+          },
+          {
+            "chunk_id": "rag_chk_f4002aebd82ee897fbe1b172",
+            "chunk_index": 0,
+            "evidence_ref": "rag_ev_2_12131d771d",
+            "file_type": ".md",
+            "score": -1.5673539267734813,
+            "snippet": "Agent Runtime RAG case 5. Topic harness. OpenClaw remains the gateway. Qwen is advisory only. The answer must cite evidence_refs and use SQLite FTS-first retrieval. Private raw NAS content is redacted before any optional cloud route.",
+            "source_hash": "12131d771d42b631c50c90e4",
+            "title": "rag_case_05_harness.md"
+          },
+          {
+            "chunk_id": "rag_chk_db1739bad6a1b281e7cd2ac8",
+            "chunk_index": 0,
+            "evidence_ref": "rag_ev_3_975f061b46",
+            "file_type": ".md",
+            "score": -1.5673539267734813,
+            "snippet": "Agent Runtime RAG case 10. Topic harness. OpenClaw remains the gateway. Qwen is advisory only. The answer must cite evidence_refs and use SQLite FTS-first retrieval. Private raw NAS content is redacted before any optional cloud route.",
+            "source_hash": "975f061b46aca95d86a8bbe1",
+            "title": "rag_case_10_harness.md"
+          },
+          {
+            "chunk_id": "rag_chk_f0bbdece05eafc03469359e6",
+            "chunk_index": 0,
+            "evidence_ref": "rag_ev_4_a9666df721",
+            "file_type": ".md",
+            "score": -1.5673539267734813,
+            "snippet": "Agent Runtime RAG case 15. Topic harness. OpenClaw remains the gateway. Qwen is advisory only. The answer must cite evidence_refs and use SQLite FTS-first retrieval. Private raw NAS content is redacted before any optional cloud route.",
+            "source_hash": "a9666df7214a925d6f9b4dfc",
+            "title": "rag_case_15_harness.md"
+          },
+          {
+            "chunk_id": "rag_chk_3d452c847e7017448fe69127",
+            "chunk_index": 0,
+            "evidence_ref": "rag_ev_5_dae6a5ad3c",
+            "file_type": ".md",
+            "score": -1.5673539267734813,
+            "snippet": "Agent Runtime RAG case 20. Topic harness. OpenClaw remains the gateway. Qwen is advisory only. The answer must cite evidence_refs and use SQLite FTS-first retrieval. Private raw NAS content is redacted before any optional cloud route.",
+            "source_hash": "dae6a5ad3c9c2e7bd6ea5680",
+            "title": "rag_case_20_harness.md"
+          },
+          {
+            "chunk_id": "rag_chk_95454b6fdf5f3676c4f3123f",
+            "chunk_index": 0,
+            "evidence_ref": "rag_ev_6_6d48e3ac14",
+            "file_type": ".md",
+            "score": -1.5673539267734813,
+            "snippet": "Agent Runtime RAG case 25. Topic harness. OpenClaw remains the gateway. Qwen is advisory only. The answer must cite evidence_refs and use SQLite FTS-first retrieval. Private raw NAS content is redacted before any optional cloud route.",
+            "source_hash": "6d48e3ac14dab04918b0c6d6",
+            "title": "rag_case_25_harness.md"
+          }
+        ],
+        "evidence_count": 6,
+        "evidence_refs": [
+          "rag_ev_1_68015d67ad",
+          "rag_ev_2_12131d771d",
+          "rag_ev_3_975f061b46",
+          "rag_ev_4_a9666df721",
+          "rag_ev_5_dae6a5ad3c",
+          "rag_ev_6_6d48e3ac14"
+        ],
+        "no_evidence_refusal": false,
+        "ok": true,
+        "private_leak_count": 0,
+        "query": "harness OpenClaw evidence refs",
+        "qwen_execution_authority": false,
+        "raw_private_content_returned": false,
+        "reranker_enabled": false,
+        "retrieval_mode": "sqlite_fts_first"
+      },
+      "case_id": "rag_000",
+      "expects_evidence": true
+    },
+    "sync": {
+      "db_path": "F:\\Project\\Digua\\reports\\agent_runtime\\agent_runtime_rag.sqlite3",
+      "embedding_enabled": false,
+      "indexed_chunks": 57,
+      "indexed_documents": 57,
+      "ok": true,
+      "reranker_enabled": false,
+      "retrieval_mode": "sqlite_fts_first"
+    }
+  },
+  "failures": [],
+  "generated_at": "2026-07-05T04:24:06Z",
+  "name": "fts_first_rag_eval_gate",
+  "ok": true,
+  "public_mcp_exposed": false,
+  "qwen_execution_authority": false,
+  "schema": "digua_agent_runtime_gate_v1",
+  "verdict": "ok_fts_first_rag_eval_gate"
+}

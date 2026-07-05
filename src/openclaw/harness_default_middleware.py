@@ -23,6 +23,7 @@ from src.harness.copy_route_guard import (
     rollback,
     stable_hash,
 )
+from src.agent_runtime.service import AgentRuntimeService
 from src.harness.copy_route_types import COPY_EXECUTE_TOOL_ID, COPY_ROLLBACK_TOOL_ID, CopyCandidate, CopyRouteFeatureFlags, CopyRoutePolicy
 from src.harness.token_budget_integration import route_token_budget
 
@@ -110,6 +111,17 @@ class HarnessDefaultMiddleware:
 
     def status(self) -> dict[str, Any]:
         dispatcher_path = Path(self.dispatcher)
+        try:
+            agent_runtime = AgentRuntimeService(report_root=self.report_root, personal_root=self.personal_root).status()
+        except Exception as exc:
+            agent_runtime = {
+                "ok": False,
+                "service": "agent_runtime",
+                "error": f"agent_runtime_status_failed:{type(exc).__name__}:{exc}",
+                "qwen_execution_authority": False,
+                "cloud_private_raw_egress": False,
+                "public_mcp_exposed": False,
+            }
         return {
             "ok": bool(self.feature_flags.get("harness_default_service_enabled", False)),
             "service": "harness_default_service",
@@ -133,6 +145,7 @@ class HarnessDefaultMiddleware:
             "dispatcher_exists": dispatcher_path.exists(),
             "dispatcher_sha256": _sha256_file(dispatcher_path) if dispatcher_path.exists() and dispatcher_path.is_file() else None,
             "raw_private_content_in_status": False,
+            "agent_runtime": agent_runtime,
         }
 
     def candidate_from_payload(self, payload: dict[str, Any]) -> CopyCandidate:

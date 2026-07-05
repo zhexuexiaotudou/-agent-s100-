@@ -1,0 +1,1 @@
+Agent Runtime RAG case 16. Topic memory. OpenClaw remains the gateway. Qwen is advisory only. The answer must cite evidence_refs and use SQLite FTS-first retrieval. Private raw NAS content is redacted before any optional cloud route.

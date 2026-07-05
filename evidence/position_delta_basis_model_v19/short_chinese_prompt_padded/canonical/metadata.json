@@ -1,0 +1,46 @@
+{
+  "status": "evaluated",
+  "positions_nonzero": 127,
+  "basis_terms_covered": 4,
+  "basis_terms_missing": 123,
+  "target_stats": {
+    "shape": [
+      128,
+      3584
+    ],
+    "dtype": "float32",
+    "size": 458752,
+    "min": -0.44735145568847656,
+    "max": 0.42595088481903076,
+    "mean": -7.228443428175524e-05,
+    "std": 0.015638679265975952,
+    "abs_max": 0.44735145568847656,
+    "nonzero_count": 457534,
+    "allzero": false
+  },
+  "prediction_stats": {
+    "shape": [
+      128,
+      3584
+    ],
+    "dtype": "float32",
+    "size": 458752,
+    "min": -0.29912352561950684,
+    "max": 0.27590411901474,
+    "mean": -4.578866719384678e-05,
+    "std": 0.004737162496894598,
+    "abs_max": 0.29912352561950684,
+    "nonzero_count": 457234,
+    "allzero": false
+  },
+  "metrics": {
+    "shape_match": true,
+    "cosine": 0.2644738821970852,
+    "pearson_centered": 0.2644443848415094,
+    "relative_l2": 0.9651590464235794,
+    "max_abs_error": 0.4460177421569824,
+    "mean_abs_error": 0.009804560723114229,
+    "reference_norm": 10.592383958200488,
+    "candidate_norm": 3.2086883785981293
+  }
+}

@@ -1,0 +1,215 @@
+{
+  "analysis": {
+    "average_reduction_ratio": 0.926837,
+    "by_task_type": {
+      "chinese_search": {
+        "average_naive_cloud_tokens": 719.3,
+        "average_optimized_cloud_tokens": 0.0,
+        "average_reduction_ratio": 1.0,
+        "cases": 10,
+        "cloud_call_avoidance_rate": 1.0,
+        "private_leak_count": 0
+      },
+      "cloud_sensitive_mixed": {
+        "average_naive_cloud_tokens": 1212.0,
+        "average_optimized_cloud_tokens": 316.1,
+        "average_reduction_ratio": 0.739187,
+        "cases": 10,
+        "cloud_call_avoidance_rate": 0.0,
+        "private_leak_count": 0
+      },
+      "document_qa": {
+        "average_naive_cloud_tokens": 1398.37,
+        "average_optimized_cloud_tokens": 206.47,
+        "average_reduction_ratio": 0.876154,
+        "cases": 30,
+        "cloud_call_avoidance_rate": 0.333333,
+        "private_leak_count": 0
+      },
+      "file_organization_suggestion": {
+        "average_naive_cloud_tokens": 1276.5,
+        "average_optimized_cloud_tokens": 0.0,
+        "average_reduction_ratio": 1.0,
+        "cases": 10,
+        "cloud_call_avoidance_rate": 1.0,
+        "private_leak_count": 0
+      },
+      "folder_summary": {
+        "average_naive_cloud_tokens": 1498.0,
+        "average_optimized_cloud_tokens": 0.0,
+        "average_reduction_ratio": 1.0,
+        "cases": 10,
+        "cloud_call_avoidance_rate": 1.0,
+        "private_leak_count": 0
+      },
+      "mixed_zh_en_search": {
+        "average_naive_cloud_tokens": 756.0,
+        "average_optimized_cloud_tokens": 0.0,
+        "average_reduction_ratio": 1.0,
+        "cases": 10,
+        "cloud_call_avoidance_rate": 1.0,
+        "private_leak_count": 0
+      },
+      "nas_search": {
+        "average_naive_cloud_tokens": 985.05,
+        "average_optimized_cloud_tokens": 0.0,
+        "average_reduction_ratio": 1.0,
+        "cases": 20,
+        "cloud_call_avoidance_rate": 1.0,
+        "private_leak_count": 0
+      },
+      "public_research": {
+        "average_naive_cloud_tokens": 1854.2,
+        "average_optimized_cloud_tokens": 312.1,
+        "average_reduction_ratio": 0.831678,
+        "cases": 10,
+        "cloud_call_avoidance_rate": 0.0,
+        "private_leak_count": 0
+      },
+      "report_generation": {
+        "average_naive_cloud_tokens": 1323.65,
+        "average_optimized_cloud_tokens": 154.95,
+        "average_reduction_ratio": 0.924773,
+        "cases": 20,
+        "cloud_call_avoidance_rate": 0.5,
+        "private_leak_count": 0
+      }
+    },
+    "cloud_call_avoidance_rate": 0.615385,
+    "final_verdict": "tokenizer_token_budget_claim_supported",
+    "gate": "17060_token_cost_reduction_analysis",
+    "generated_at": "2026-07-04T14:37:28+08:00",
+    "median_reduction_ratio": 1.0,
+    "not_bill_savings": true,
+    "p90_reduction_ratio": 1.0,
+    "private_cases_blocked": 20,
+    "private_leak_count": 0,
+    "quality_pass_rate": 1.0,
+    "rationale": "benchmark supports significant cloud input token reduction",
+    "safe_wording_level": "benchmark 中显著减少云端输入 token"
+  },
+  "final_verdict": "tokenizer_token_budget_claim_supported",
+  "package": {
+    "reason": "skip_package_requested",
+    "skipped": true
+  },
+  "run_id": "token_budget_20260704-143727",
+  "summary": {
+    "average_naive_cloud_tokens": 1240.65,
+    "average_optimized_cloud_tokens": 119.81,
+    "average_reduction_ratio": 0.926837,
+    "blocked_private_cases": 20,
+    "by_task_type": {
+      "chinese_search": {
+        "average_naive_cloud_tokens": 719.3,
+        "average_optimized_cloud_tokens": 0.0,
+        "average_reduction_ratio": 1.0,
+        "cases": 10,
+        "cloud_call_avoidance_rate": 1.0,
+        "private_leak_count": 0
+      },
+      "cloud_sensitive_mixed": {
+        "average_naive_cloud_tokens": 1212.0,
+        "average_optimized_cloud_tokens": 316.1,
+        "average_reduction_ratio": 0.739187,
+        "cases": 10,
+        "cloud_call_avoidance_rate": 0.0,
+        "private_leak_count": 0
+      },
+      "document_qa": {
+        "average_naive_cloud_tokens": 1398.37,
+        "average_optimized_cloud_tokens": 206.47,
+        "average_reduction_ratio": 0.876154,
+        "cases": 30,
+        "cloud_call_avoidance_rate": 0.333333,
+        "private_leak_count": 0
+      },
+      "file_organization_suggestion": {
+        "average_naive_cloud_tokens": 1276.5,
+        "average_optimized_cloud_tokens": 0.0,
+        "average_reduction_ratio": 1.0,
+        "cases": 10,
+        "cloud_call_avoidance_rate": 1.0,
+        "private_leak_count": 0
+      },
+      "folder_summary": {
+        "average_naive_cloud_tokens": 1498.0,
+        "average_optimized_cloud_tokens": 0.0,
+        "average_reduction_ratio": 1.0,
+        "cases": 10,
+        "cloud_call_avoidance_rate": 1.0,
+        "private_leak_count": 0
+      },
+      "mixed_zh_en_search": {
+        "average_naive_cloud_tokens": 756.0,
+        "average_optimized_cloud_tokens": 0.0,
+        "average_reduction_ratio": 1.0,
+        "cases": 10,
+        "cloud_call_avoidance_rate": 1.0,
+        "private_leak_count": 0
+      },
+      "nas_search": {
+        "average_naive_cloud_tokens": 985.05,
+        "average_optimized_cloud_tokens": 0.0,
+        "average_reduction_ratio": 1.0,
+        "cases": 20,
+        "cloud_call_avoidance_rate": 1.0,
+        "private_leak_count": 0
+      },
+      "public_research": {
+        "average_naive_cloud_tokens": 1854.2,
+        "average_optimized_cloud_tokens": 312.1,
+        "average_reduction_ratio": 0.831678,
+        "cases": 10,
+        "cloud_call_avoidance_rate": 0.0,
+        "private_leak_count": 0
+      },
+      "report_generation": {
+        "average_naive_cloud_tokens": 1323.65,
+        "average_optimized_cloud_tokens": 154.95,
+        "average_reduction_ratio": 0.924773,
+        "cases": 20,
+        "cloud_call_avoidance_rate": 0.5,
+        "private_leak_count": 0
+      }
+    },
+    "categories": {
+      "chinese_search": 10,
+      "cloud_sensitive_mixed": 10,
+      "document_qa": 20,
+      "file_organization_suggestion": 10,
+      "folder_summary": 10,
+      "mixed_zh_en_search": 10,
+      "nas_search": 20,
+      "private_acl_denied": 10,
+      "prompt_injection": 10,
+      "public_research": 10,
+      "report_generation": 10
+    },
+    "cloud_call_avoidance_rate": 0.615385,
+    "gates": {
+      "context": "pass",
+      "identity": "pass",
+      "privacy": "pass",
+      "route": "pass",
+      "trace": "pass"
+    },
+    "generated_at": "2026-07-04T14:37:28+08:00",
+    "local_only_rate": 0.461538,
+    "median_reduction_ratio": 1.0,
+    "p90_reduction_ratio": 1.0,
+    "private_leak_count": 0,
+    "quality_pass_rate": 1.0,
+    "real_qwen_tokenizer_used": true,
+    "redacted_payload_private_leak_count": 0,
+    "routes": {
+      "cloud_allowed_redacted": 50,
+      "cloud_blocked_private": 20,
+      "local_only": 60
+    },
+    "run_id": "token_budget_20260704-143727",
+    "tokenizer_backend": "tokenizers_json",
+    "tokenizer_identity_hash": "bf8d73106cf5f27f4f792da91dd6ce29e410e2335961d9b97f54bc853864ce2d",
+    "total_cases": 130
+  }
+}

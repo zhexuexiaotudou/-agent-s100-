@@ -85,6 +85,11 @@ Recommended one-line pitch:
   the current product route is Qwen + OpenClaw + AI-NAS gates. The current
   Dream7B seq128 S100P logits-validity research status is summarized in
   `docs/DREAM7B_S100P_SEQ128_LOGITS_VALIDITY_ROUTE_STATUS_20260704.md`.
+- **Dream7B research route reset**: the llada.cpp-style correctness-first track
+  now lives under `dream_s100p_lladacpp/`; the 31-row HF/PyTorch truth set,
+  validation gate, and truth-replay block-driver gate have passed. The route is
+  stopped at `bpu_operator_alignment_failed_review_required` until true per-op
+  BPU outputs, layout records, and quant scale evidence exist.
 
 ## Repository Layout
 
@@ -102,6 +107,7 @@ Recommended one-line pitch:
 | `evidence_for_gptpro/` | Packaged review bundles with SHA256 sidecars |
 | `configs/systemd/qwen25-local-openai-gateway.service` | S100P resident Qwen gateway unit |
 | `configs/systemd/openclaw-gateway.service` | S100P resident OpenClaw AI-NAS portal gateway unit |
+| `dream_s100p_lladacpp/` | Isolated Dream7B llada.cpp-style research track; not a product route |
 | `docs/` | Project decisions, runbooks, acceptance notes, and demo scripts |
 | `tmp/demo_three_features_final_recheck/` | Local copies of the latest recheck reports |
 

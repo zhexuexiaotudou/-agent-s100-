@@ -1,0 +1,221 @@
+{
+  "ok": true,
+  "generated_at": "2026-07-05T04:20:49.251890+00:00",
+  "verdict": "B_ready_on_temp_service_default_8765_rollout_pending_operator_approval",
+  "base_url": "http://127.0.0.1:8767/ui",
+  "remote_service": {
+    "host": "sunrise@192.168.127.10",
+    "remote_port": 18766,
+    "local_tunnel_port": 8767,
+    "production_8765_rollout_performed": false,
+    "evidence_root_limited_for_validation": "/mnt/nas/openclaw/tmp/ui_v2_real_report"
+  },
+  "implemented": {
+    "reports_page": true,
+    "token_budget_page": true,
+    "real_nas_file_explorer": true,
+    "sqlite_readonly_inventory_status": "degraded",
+    "operation_db_status": "readonly_ok",
+    "document_rag_mode": "sqlite_fts_first",
+    "embedding_enabled": false,
+    "cloud_used_for_document_query": false,
+    "qwen_tool_execution_authority": false,
+    "high_risk_actions_exposed": false
+  },
+  "verification": {
+    "python_py_compile_changed_files": "passed",
+    "javascript_node_check": "passed",
+    "shell_bash_n_on_s100p": "passed",
+    "pytest_tests_dir": "74 passed in 3.89s",
+    "new_tests": "8 passed in 0.46s",
+    "self_check": "passed: tokenizer_token_budget_product_deployed_claim_supported",
+    "full_pytest_root": "blocked_by_existing_tmp_collection_artifacts_and_existing_dream7b_probe_indent_error",
+    "playwright": {
+      "ok": true,
+      "base_url": "http://127.0.0.1:8767",
+      "browser": "system_chrome",
+      "login": {
+        "ok": true,
+        "user": {
+          "id": 1,
+          "username": "admin",
+          "role": "admin"
+        }
+      },
+      "folder_click": {
+        "first": ".snapshots",
+        "count": 24,
+        "sample": [
+          ".snapshots",
+          ".trash",
+          ".versions",
+          "Collections",
+          "Documents",
+          "Inbox"
+        ]
+      },
+      "report_items_visible": 50,
+      "document_query_visible": true,
+      "token_budget_visible": true,
+      "audit_detail_visible": true,
+      "desktop_screenshots": [
+        "F:\\Project\\Digua\\evidence\\ui_v2\\screenshots\\desktop\\01_files_real_explorer.png",
+        "F:\\Project\\Digua\\evidence\\ui_v2\\screenshots\\desktop\\02_documents_fts_query.png",
+        "F:\\Project\\Digua\\evidence\\ui_v2\\screenshots\\desktop\\03_reports_page.png",
+        "F:\\Project\\Digua\\evidence\\ui_v2\\screenshots\\desktop\\04_token_budget_page.png",
+        "F:\\Project\\Digua\\evidence\\ui_v2\\screenshots\\desktop\\05_audit_detail_page.png"
+      ],
+      "mobile_screenshots": [
+        "F:\\Project\\Digua\\evidence\\ui_v2\\screenshots\\mobile\\01_files_mobile.png",
+        "F:\\Project\\Digua\\evidence\\ui_v2\\screenshots\\mobile\\02_reports_mobile.png"
+      ],
+      "console_messages": [
+        {
+          "type": "error",
+          "text": "Failed to load resource: the server responded with a status of 401 (Unauthorized)"
+        },
+        {
+          "type": "error",
+          "text": "[mobile] Failed to load resource: the server responded with a status of 401 (Unauthorized)"
+        }
+      ],
+      "page_errors": [],
+      "generated_at": "2026-07-05T04:15:03.432Z"
+    },
+    "api_smoke": {
+      "ok": true,
+      "generated_at": "2026-07-05T04:17:41.4675160Z",
+      "base_url": "http://127.0.0.1:8767",
+      "health_ok": true,
+      "storage_ok": true,
+      "sqlite_status": "degraded",
+      "operation_status": "readonly_ok",
+      "report_count": 51,
+      "document_retrieval_mode": "sqlite_fts_first",
+      "document_embedding_enabled": false,
+      "document_cloud_used": false,
+      "document_evidence_count": 8,
+      "token_ok": true,
+      "production_8765_rollout_performed": false
+    },
+    "default_service_preflight": {
+      "ok": true,
+      "generated_at": "2026-07-05T04:04:26.856907+00:00",
+      "base_url": "http://127.0.0.1:18766",
+      "health_ok": true,
+      "harness_ok": true,
+      "production_rollout_performed": false,
+      "default_port": 8765,
+      "health": {
+        "ok": true,
+        "tool_id": "ai_nas_operator_portal_server",
+        "operator_portal_contract": {
+          "found": false,
+          "filename": "operator_portal_contract.json",
+          "path": null,
+          "verdict": null,
+          "generated_at": null,
+          "selection_policy": "generated_at_then_mtime"
+        },
+        "portal_html": null,
+        "refresh_on_start": null
+      },
+      "harness": {
+        "ok": true,
+        "service": "harness_default_service",
+        "policy_id": "digua_stage5_harness_default_service_policy_v1",
+        "readonly_workspaces_enabled": true,
+        "token_budget_gate_enabled": true,
+        "privacy_redaction_gate_enabled": true,
+        "copy_routes": [
+          "/api/nas/copy/preview",
+          "/api/nas/copy/dry-run",
+          "/api/nas/copy/confirm",
+          "/api/nas/copy/execute",
+          "/api/nas/copy/rollback"
+        ],
+        "copy_execute_enabled": true,
+        "copy_execute_requires": {
+          "user_confirmation": true,
+          "signed_token": true,
+          "source_rehash": true,
+          "target_absent": true,
+          "dispatcher": true
+        },
+        "forbidden_actions": [
+          "delete",
+          "move",
+          "rename",
+          "chmod",
+          "chown",
+          "overwrite",
+          "recursive",
+          "recursive_delete",
+          "arbitrary_shell"
+        ],
+        "qwen_execution_authority": false,
+        "cloud_private_raw_egress": false,
+        "dispatcher": "/mnt/nas/openclaw/scripts/probes/ai_nas_allowlisted_tool.sh",
+        "dispatcher_exists": true,
+        "dispatcher_sha256": "d099f8071ab3710778520bf610ce2bca07fbc7976effe0a6d99791cf42ebb23a",
+        "raw_private_content_in_status": false
+      }
+    },
+    "default_service_enable_attempt": {
+      "ok": false,
+      "generated_at": "2026-07-05T04:04:25.287930+00:00",
+      "service_name": "digua-ai-nas-ui-v2.service",
+      "bind": "127.0.0.1",
+      "port": 8765,
+      "status": "blocked",
+      "message": "DIGUA_UI_V2_ALLOW_8765_ROLLOUT must equal I_APPROVE_PRODUCTION_8765",
+      "production_rollout_performed": false
+    },
+    "default_service_disable_attempt": {
+      "ok": false,
+      "generated_at": "2026-07-05T04:04:25.269964+00:00",
+      "service_name": "digua-ai-nas-ui-v2.service",
+      "status": "blocked",
+      "message": "DIGUA_UI_V2_DISABLE_APPROVAL must equal I_APPROVE_DISABLE_8765",
+      "production_disable_performed": false
+    }
+  },
+  "known_differences_from_mockup": [
+    "当前实测文件管理页展示真实 NAS Personal root 路径和文件夹，不再使用 mockup 示例文件名。",
+    "文档问答为 SQLite FTS-first 本地召回，未声明完整 embedding RAG。",
+    "生产 8765 默认服务未切换；验证使用 18766 远端临时服务和本机 8767 tunnel。",
+    "SQLite 库存索引文件当前 degraded，但页面/API 已按只读降级处理，operation log 使用独立 DB。"
+  ],
+  "next_steps": [
+    "获得操作者批准后再用 enable_ui_v2_default_service.sh 切换生产 8765。",
+    "将 report 列表按类型和时间做服务端分页，避免大 evidence root 时首次扫描变慢。",
+    "补充 DOCX/PDF 更完整文本抽取和可选 embedding feature flag。",
+    "把 tmp 历史打包目录排除出默认 pytest collection。"
+  ],
+  "modified_files": [
+    "scripts/probes/ai_nas_operator_portal_server.py",
+    "web/static/digua_ai_nas_v2.js",
+    "web/static/digua_ai_nas_v2.css",
+    "scripts/check_ui_v2_default_service_status.sh",
+    "scripts/enable_ui_v2_default_service.sh",
+    "scripts/disable_ui_v2_default_service.sh",
+    "tests/test_personal_inventory_sqlite_readonly.py",
+    "tests/test_document_fts_rag.py",
+    "tests/test_ui_v2_security_boundaries.py",
+    "reports/ui_v2_default_service_preflight.json",
+    "reports/ui_v2_default_service_preflight.md",
+    "reports/ui_v2_default_service_enable_attempt.json",
+    "reports/ui_v2_default_service_enable_attempt.md",
+    "reports/ui_v2_default_service_disable_attempt.json",
+    "reports/ui_v2_default_service_disable_attempt.md",
+    "evidence/ui_v2/api/ui_v2_api_smoke.json",
+    "evidence/ui_v2/playwright/ui_v2_playwright_validation.json",
+    "evidence/ui_v2/screenshots/desktop/01_files_real_explorer.png",
+    "evidence/ui_v2/screenshots/desktop/02_documents_fts_query.png",
+    "evidence/ui_v2/screenshots/desktop/03_reports_page.png",
+    "evidence/ui_v2/screenshots/desktop/04_token_budget_page.png",
+    "evidence/ui_v2/screenshots/desktop/05_audit_detail_page.png",
+    "evidence/ui_v2/screenshots/mobile/01_files_mobile.png",
+    "evidence/ui_v2/screenshots/mobile/02_reports_mobile.png"
+  ]
+}

@@ -1,0 +1,195 @@
+{
+  "checks": [
+    {
+      "detail": {
+        "cloud_private_raw_egress": false,
+        "manifest_ok": true,
+        "ok": true,
+        "public_mcp_exposed": false,
+        "qwen_execution_authority": false,
+        "status_ok": true
+      },
+      "label": "S100P live status ok",
+      "ok": true
+    },
+    {
+      "detail": {
+        "cloud_private_raw_egress": false,
+        "live_status": {
+          "cloud_private_raw_egress": false,
+          "manifest_ok": true,
+          "ok": true,
+          "public_mcp_exposed": false,
+          "qwen_execution_authority": false,
+          "status_ok": true
+        },
+        "local_eval_verdict": "agent_runtime_deepening_local_gates_ready_for_s100p_acceptance",
+        "ok": true,
+        "public_mcp_exposed": false,
+        "qwen_execution_authority": false
+      },
+      "label": "S100P e2e smoke ok",
+      "ok": true
+    },
+    {
+      "detail": {
+        "context_pack_count": 30,
+        "eval_total_cases": 250,
+        "memory_events": 200,
+        "multimodal_counts": {
+          "archive": 1,
+          "audio": 3,
+          "code": 1,
+          "document": 57,
+          "image": 10,
+          "other": 0,
+          "video": 3
+        },
+        "private_leak_count": 0,
+        "rag_case_count": 53,
+        "rag_citation_coverage": 1.0,
+        "rag_no_evidence_refusal_rate": 1.0
+      },
+      "label": "S100P eval gate ok",
+      "ok": true
+    },
+    {
+      "label": "S100P package local_ok true",
+      "ok": true
+    },
+    {
+      "label": "Qwen execution authority false",
+      "ok": true
+    },
+    {
+      "label": "cloud private raw egress false",
+      "ok": true
+    },
+    {
+      "label": "public MCP exposed false",
+      "ok": true
+    },
+    {
+      "detail": {
+        "auth_blocked_without_bypass": true,
+        "context_pack_ok": false,
+        "context_pack_status": null,
+        "login_error": "invalid_credentials",
+        "login_ok": false,
+        "login_status": 401
+      },
+      "label": "HTTP POST auth not bypassed",
+      "ok": true
+    },
+    {
+      "detail": {
+        "desktop": {
+          "hasAgentRuntime": true,
+          "hasPublicMcp": true,
+          "hasQwenBoundary": true,
+          "hasRuntimeBoundary": true,
+          "title": "地瓜 AI-NAS Desktop UI v2",
+          "url": "http://127.0.0.1:8766/ui#agentRuntime"
+        },
+        "mobile": {
+          "hasAgentRuntime": true,
+          "hasBottomRuntimeNav": true,
+          "hasPublicMcp": false,
+          "hasRuntimeBoundary": false,
+          "height": 844,
+          "url": "http://127.0.0.1:8766/ui#agentRuntime",
+          "width": 390
+        },
+        "mobileScrolled": {
+          "hasPublicMcp": true,
+          "hasQwenBoundary": true,
+          "hasRuntimeBoundary": true,
+          "rects": [
+            {
+              "bottom": 703,
+              "top": 315,
+              "width": 295
+            },
+            {
+              "bottom": 944,
+              "top": 719,
+              "width": 295
+            },
+            {
+              "bottom": 1310,
+              "top": 960,
+              "width": 295
+            },
+            {
+              "bottom": 1675,
+              "top": 1326,
+              "width": 295
+            },
+            {
+              "bottom": 1849,
+              "top": 1691,
+              "width": 295
+            },
+            {
+              "bottom": 2175,
+              "top": 1865,
+              "width": 295
+            }
+          ]
+        },
+        "ok": true,
+        "screenshots": {
+          "desktop": "F:\\Project\\Digua\\output\\playwright\\agent_runtime_desktop.png",
+          "mobile": "F:\\Project\\Digua\\output\\playwright\\agent_runtime_mobile.png",
+          "mobileScrolled": "F:\\Project\\Digua\\output\\playwright\\agent_runtime_mobile_scrolled.png"
+        }
+      },
+      "label": "UI desktop/mobile smoke ok",
+      "ok": true
+    }
+  ],
+  "e2e_smoke_summary": "F:\\Project\\Digua\\evidence\\s100p_agent_runtime_deepening_20260705\\agent_runtime_e2e_smoke\\agent_runtime_e2e_smoke_summary.json",
+  "evidence_dir": "F:\\Project\\Digua\\evidence\\s100p_agent_runtime_deepening_20260705",
+  "failures": [],
+  "generated_at": "2026-07-05T04:33:35Z",
+  "hard_constraints": {
+    "allowlist_dispatcher_bypassed": false,
+    "destructive_actions_default": false,
+    "ports_changed": false,
+    "public_mcp_exposed": false,
+    "qwen_tool_execution_authority": false,
+    "raw_private_cloud_egress": false
+  },
+  "http_context_pack_smoke": "F:\\Project\\Digua\\evidence\\s100p_agent_runtime_deepening_20260705\\agent_runtime_live_status\\http_context_pack_smoke.json",
+  "live_status_summary": "F:\\Project\\Digua\\evidence\\s100p_agent_runtime_deepening_20260705\\agent_runtime_live_status\\agent_runtime_live_status_summary.json",
+  "metrics": {
+    "context_pack_count": 30,
+    "eval_total_cases": 250,
+    "memory_events": 200,
+    "multimodal_counts": {
+      "archive": 1,
+      "audio": 3,
+      "code": 1,
+      "document": 57,
+      "image": 10,
+      "other": 0,
+      "video": 3
+    },
+    "private_leak_count": 0,
+    "rag_case_count": 53,
+    "rag_citation_coverage": 1.0,
+    "rag_no_evidence_refusal_rate": 1.0
+  },
+  "ok": true,
+  "s100p": {
+    "host": "192.168.127.10",
+    "openclaw_service": "openclaw-gateway.service",
+    "openclaw_url": "http://127.0.0.1:8765",
+    "qwen_url": "http://127.0.0.1:18080",
+    "report_root": "/mnt/nas/openclaw/reports/qwen25_ai_nas",
+    "ssh_user": "sunrise"
+  },
+  "schema": "digua_agent_runtime_deepening_final_acceptance_v1",
+  "ui_smoke": "F:\\Project\\Digua\\output\\playwright\\agent_runtime_iab_ui_smoke.json",
+  "verdict": "agent_runtime_deepening_deliverable_ready_for_repo_pr"
+}

@@ -1,0 +1,93 @@
+{
+  "case_id": "short_chinese_prompt_padded",
+  "variant": "single_spike_index_127_value_127",
+  "positions": {
+    "path": "/mnt/nas/openclaw/reports/models/dream7b_s100p_v18_execution_20260704/evidence/position_path_recovery_v18/short_chinese_prompt_padded/position_variants/single_spike_index_127_value_127/positions.npy",
+    "sha256": "606607c1328072b74d03cb1e5c9f4d955833120691a3c597bdb37b5a81de5cba",
+    "stats": {
+      "shape": [
+        128
+      ],
+      "dtype": "int32",
+      "size": 128,
+      "min": 0.0,
+      "max": 127.0,
+      "mean": 0.9921875,
+      "std": 11.181385265916015,
+      "abs_max": 127.0,
+      "nonzero_count": 1,
+      "allzero": false,
+      "constant": false,
+      "nan_count": 0,
+      "inf_count": 0
+    }
+  },
+  "add_output_raw": {
+    "path": "/mnt/nas/openclaw/reports/models/dream7b_s100p_v18_execution_20260704/evidence/position_path_recovery_v18/short_chinese_prompt_padded/position_variants/single_spike_index_127_value_127/add_output_raw.npy",
+    "sha256": "b487d822031a63aef3c2d1f42a5f960bb2c80906e2f7f9267a5703286278ad27",
+    "stats": {
+      "shape": [
+        128,
+        3584
+      ],
+      "dtype": "int16",
+      "size": 458752,
+      "min": -9432.0,
+      "max": 8998.0,
+      "mean": -0.7388327462332589,
+      "std": 865.2585321677697,
+      "abs_max": 9432.0,
+      "nonzero_count": 458613,
+      "allzero": false,
+      "constant": false,
+      "nan_count": 0,
+      "inf_count": 0
+    }
+  },
+  "add_output_dequant": {
+    "path": "/mnt/nas/openclaw/reports/models/dream7b_s100p_v18_execution_20260704/evidence/position_path_recovery_v18/short_chinese_prompt_padded/position_variants/single_spike_index_127_value_127/add_output_dequant.npy",
+    "sha256": "5fd4b4cb5c050c2c55bbd68d9efae14c28ba17e4d90a5c295ebc835f42c5c87f",
+    "stats": {
+      "shape": [
+        128,
+        3584
+      ],
+      "dtype": "float32",
+      "size": 458752,
+      "min": -0.5718144774436951,
+      "max": 0.5455032587051392,
+      "mean": -4.479201015783474e-05,
+      "std": 0.05245624855160713,
+      "abs_max": 0.5718144774436951,
+      "nonzero_count": 458613,
+      "allzero": false,
+      "constant": false,
+      "nan_count": 0,
+      "inf_count": 0
+    }
+  },
+  "delta_vs_all_zero": {
+    "path": "/mnt/nas/openclaw/reports/models/dream7b_s100p_v18_execution_20260704/evidence/position_path_recovery_v18/short_chinese_prompt_padded/position_variants/single_spike_index_127_value_127/delta_vs_all_zero.npy",
+    "sha256": "236b2144f5321e5fa18503a8e05a9565130a7204f113eb96a12f3cb088639fb5",
+    "stats": {
+      "shape": [
+        128,
+        3584
+      ],
+      "dtype": "float32",
+      "size": 458752,
+      "min": -0.07644805312156677,
+      "max": 0.12543301284313202,
+      "mean": -1.912492962219403e-06,
+      "std": 0.0010982247767969966,
+      "abs_max": 0.12543301284313202,
+      "nonzero_count": 418215,
+      "allzero": false,
+      "constant": false,
+      "nan_count": 0,
+      "inf_count": 0
+    }
+  },
+  "delta_norm": 0.7438448667526245,
+  "delta_abs_max": 0.12543301284313202
+}

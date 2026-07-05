@@ -1,0 +1,62 @@
+{
+  "environment": {
+    "platform": "win32",
+    "python": "3.14.3 (tags/v3.14.3:323c59a, Feb  3 2026, 16:04:56) [MSC v.1944 64 bit (AMD64)]"
+  },
+  "generated_at": "2026-07-05T13:44:26+08:00",
+  "known_warnings": [
+    "Windows PATH lacks node/npm, so node --check and fresh Playwright CLI could not run in this audit.",
+    "Tracked Python compile has one historical Dream7B probe IndentationError in scripts/probes/dream7b_gguf_param_matrix_probe.py."
+  ],
+  "node_check_passed": false,
+  "overall": "pass_with_environment_and_research_branch_warnings",
+  "pytest_passed": true,
+  "results": [
+    {
+      "command": "node --check web/static/digua_ai_nas_v2.js",
+      "duration_sec": 0.001,
+      "exit_code": 127,
+      "missing_executable": true,
+      "pass": false,
+      "stderr_tail": "[WinError 2] 系统找不到指定的文件。",
+      "stdout_tail": ""
+    },
+    {
+      "command": "py -3 -m py_compile scripts/probes/ai_nas_operator_portal_server.py",
+      "duration_sec": 0.277,
+      "exit_code": 0,
+      "missing_executable": false,
+      "pass": true,
+      "stderr_tail": "",
+      "stdout_tail": ""
+    },
+    {
+      "command": "py -3 -c import subprocess, py_compile, sys; raw=subprocess.check_output(['git','ls-files','*.py']); files=raw.decode('utf-8','replace').splitlines(); failed=[]\nfor f in files:\n    try: py_compile.compile(f, doraise=True)\n    except Exception as e: failed.append((f, str(e)))\nprint('tracked_py_files', len(files)); print('failed', len(failed))\nfor path, err in failed[:80]: print(path + ': ' + err.replace('\\n',' | ')[:500])\nsys.exit(1 if failed else 0)",
+      "duration_sec": 1.81,
+      "exit_code": 1,
+      "missing_executable": false,
+      "pass": false,
+      "stderr_tail": "",
+      "stdout_tail": "tracked_py_files 561\r\nfailed 1\r\nscripts/probes/dream7b_gguf_param_matrix_probe.py: Sorry: IndentationError: unexpected indent (scripts/probes/dream7b_gguf_param_matrix_probe.py, line 2)\r\n"
+    },
+    {
+      "command": "py -3 -m pytest tests",
+      "duration_sec": 5.273,
+      "exit_code": 0,
+      "missing_executable": false,
+      "pass": true,
+      "stderr_tail": "",
+      "stdout_tail": "============================= test session starts =============================\r\nplatform win32 -- Python 3.14.3, pytest-9.0.3, pluggy-1.6.0\r\nrootdir: F:\\Project\\Digua\r\nplugins: anyio-4.13.0\r\ncollected 82 items\r\n\r\ntests\\test_agent_runtime_core.py .....                                   [  6%]\r\ntests\\test_agent_runtime_routes.py ...                                   [  9%]\r\ntests\\test_cloud_route_decider.py ....                                   [ 14%]\r\ntests\\test_context_compressor.py ..                                      [ 17%]\r\ntests\\test_copy_route_guard.py ......................................... [ 67%]\r\n                                                                         [ 67%]\r\ntests\\test_document_fts_rag.py ..                                        [ 69%]\r\ntests\\test_journal_db.py .                                               [ 70%]\r\ntests\\test_journal_event_model.py ..                                     [ 73%]\r\ntests\\test_journal_exporter.py .                                         [ 74%]\r\ntests\\test_journal_routes.py .                                           [ 75%]\r\ntests\\test_journal_system_collectors.py .                                [ 76%]\r\ntests\\test_journal_token_privacy.py ..                                   [ 79%]\r\ntests\\test_manual_entry.py .                                             [ 80%]\r\ntests\\test_nas_index_diff_collector.py .                                 [ 81%]\r\ntests\\test_period_summary_engine.py .                                    [ 82%]\r\ntests\\test_personal_inventory_sqlite_readonly.py ..                      [ 85%]\r\ntests\\test_privacy_redactor.py ..                                        [ 87%]\r\ntests\\test_project_classifier.py .                                       [ 89%]\r\ntests\\test_qwen_token_counter.py ...                                     [ 92%]\r\ntests\\test_token_trace_integration.py ..                                 [ 95%]\r\ntests\\test_ui_v2_security_boundaries.py ....                             [100%]\r\n\r\n============================= 82 passed in 4.63s ==============================\r\n"
+    },
+    {
+      "command": "py -3 SELF_CHECK.py",
+      "duration_sec": 0.301,
+      "exit_code": 0,
+      "missing_executable": false,
+      "pass": true,
+      "stderr_tail": "",
+      "stdout_tail": "{\r\n  \"ok\": true,\r\n  \"missing\": [],\r\n  \"checks\": {\r\n    \"missing_required_count\": 0,\r\n    \"real_qwen_tokenizer_used\": true,\r\n    \"private_leak_count\": 0,\r\n    \"total_cases\": 130,\r\n    \"quality_pass_rate\": 1.0,\r\n    \"final_verdict\": \"tokenizer_token_budget_product_deployed_claim_supported\"\r\n  }\r\n}\r\n"
+    }
+  ],
+  "self_check_passed": true
+}

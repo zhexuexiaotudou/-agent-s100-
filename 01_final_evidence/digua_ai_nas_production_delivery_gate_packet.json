@@ -1,0 +1,32 @@
+{
+  "decision": {
+    "all_production_functions_passed": false,
+    "full_repo_security_review_required": false,
+    "local_tests_passed": true,
+    "production_scope_clean": true,
+    "s100p_live_api_passed": true,
+    "stability_gate_used": "24h_required_20260705_final_release",
+    "stability_observation_passed": true,
+    "twenty_four_hour_stability_passed": false,
+    "twenty_four_hour_stability_run": false,
+    "ui_browser_passed": true,
+    "verdict_code": "H",
+    "verdict_label": "hold_due_to_24h_stability_failure"
+  },
+  "evidence": {
+    "local_test_gates": "evidence/production_delivery/local_test_gates.json",
+    "playwright_ui_gate": "evidence/production_delivery/playwright_ui_gate.json",
+    "repo_security_scan": "evidence/production_delivery/repo_security_scan.json",
+    "s100p_live_api_gate": "evidence/production_delivery/s100p_live_api_gate.json",
+    "soak_summary": "evidence/production_delivery/soak_summary.json"
+  },
+  "generated_at": "2026-07-05T16:07:35+08:00",
+  "release_gate": "24-hour stability required for final release",
+  "safety_boundaries": {
+    "dream7b_production_route": false,
+    "public_gateway_exposure": false,
+    "qwen_tool_execution_authority": false,
+    "whole_nas_access": false
+  },
+  "tool_id": "digua_ai_nas_production_delivery_gate"
+}

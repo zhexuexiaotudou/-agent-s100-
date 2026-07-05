@@ -1,0 +1,22 @@
+{
+  "final_verdict": "final_audit_hold_due_to_repo_state_dirty",
+  "key_completed_items": [
+    "S100P SSH, OpenClaw 8765, Harness status, Qwen 18080, and UI `/ui` checks passed via SSH loopback.",
+    "`py -3 -m pytest tests` passed.",
+    "Harness default service keeps dangerous actions and Qwen tool execution disabled.",
+    "Token-budget benchmark uses real Qwen tokenizer with 130 cases and 0 private leak count.",
+    "Agent Runtime reports context/memory/multimodal/RAG/tool-manifest status through harness status."
+  ],
+  "key_missing_items": [
+    "Large modified/untracked repo state blocks ready/PR verdict.",
+    "Fresh Playwright and JS node check could not run because local Node/npm/npx are missing.",
+    "Tracked Python compile has one historical Dream7B research probe indentation error.",
+    "Dream7B remains research-only at BPU operator alignment review boundary.",
+    "Embedding/OCR/video/audio extraction are optional/default-off; do not overclaim semantic multimodal RAG."
+  ],
+  "package_path": "F:\\Project\\Digua\\evidence_for_gptpro\\digua_ai_nas_final_audit_for_gptpro_20260705-134436.zip",
+  "package_sha256": "e2a1a810690e24f5e758c3c535941790eee137996c21f30d18859fcb0c75c76e",
+  "package_sha256_file": "F:\\Project\\Digua\\evidence_for_gptpro\\digua_ai_nas_final_audit_for_gptpro_20260705-134436.zip.sha256.txt",
+  "recommended_next_actions": "docs/final_audit/NEXT_ACTIONS_PRIORITY_LIST.md",
+  "report_wording_fixes": "reports/final_audit/140_report_wording_fixes.md"
+}

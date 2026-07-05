@@ -1,0 +1,328 @@
+{
+  "checks": [
+    {
+      "label": "harness status includes agent runtime",
+      "ok": true
+    },
+    {
+      "detail": 200,
+      "label": "agent runtime route status 200",
+      "ok": true
+    },
+    {
+      "label": "tool manifest route valid",
+      "ok": true
+    },
+    {
+      "detail": "8765/18080/18888/18889 unchanged",
+      "label": "ports unchanged",
+      "ok": true
+    },
+    {
+      "label": "qwen execution false",
+      "ok": true
+    }
+  ],
+  "cloud_private_raw_egress": false,
+  "evidence": {
+    "agent_runtime_status": {
+      "cloud_private_raw_egress": false,
+      "datastores": {
+        "memory_db": "F:\\Project\\Digua\\reports\\agent_runtime\\agent_runtime_memory.sqlite3",
+        "multimodal_db": "F:\\Project\\Digua\\reports\\agent_runtime\\agent_runtime_multimodal.sqlite3",
+        "rag_db": "F:\\Project\\Digua\\reports\\agent_runtime\\agent_runtime_rag.sqlite3"
+      },
+      "feature_flags": {
+        "agent_runtime_enabled": true,
+        "cloud_private_raw_egress_enabled": false,
+        "context_pack_enabled": true,
+        "memory_manager_enabled": true,
+        "multimodal_index_enabled": true,
+        "public_mcp_enabled": false,
+        "qwen_tool_execution_enabled": false,
+        "rag_enabled": true,
+        "rag_eval_enabled": true
+      },
+      "internal_tool_manifest": {
+        "cloud_private_raw_egress_allowed": false,
+        "missing_tool_ids": [],
+        "mutating_not_dispatcher_only": [],
+        "ok": true,
+        "public_mcp_exposed": false,
+        "qwen_tool_execution_authority": false,
+        "tool_count": 12
+      },
+      "memory": {
+        "cloud_private_raw_egress": false,
+        "db_path": "F:\\Project\\Digua\\reports\\agent_runtime\\agent_runtime_memory.sqlite3",
+        "events": 200,
+        "facts": 12,
+        "ok": true,
+        "preferences": 6,
+        "private_leak_count": 0,
+        "procedures": 6,
+        "qwen_execution_authority": false,
+        "raw_content_rows": 0,
+        "reflections": 6,
+        "schema": "agent_runtime_memory_v1"
+      },
+      "multimodal_index": {
+        "counts": {
+          "archive": 4,
+          "audio": 12,
+          "code": 4,
+          "document": 228,
+          "image": 40,
+          "video": 12
+        },
+        "db_path": "F:\\Project\\Digua\\reports\\agent_runtime\\agent_runtime_multimodal.sqlite3",
+        "feature_flags": {
+          "embedding_enabled": false,
+          "ocr_enabled": false,
+          "thumbnail_enabled": false
+        },
+        "indexed_count": 300,
+        "ok": true,
+        "private_leak_count": 0,
+        "raw_path_rows": 0
+      },
+      "ok": true,
+      "public_mcp_exposed": false,
+      "qwen_execution_authority": false,
+      "raw_private_content_in_status": false,
+      "routes": [
+        "GET /api/agent-runtime/status",
+        "GET /api/agent-runtime/tool-manifest",
+        "GET /api/agent-runtime/memory/stats",
+        "GET /api/agent-runtime/multimodal-index/status",
+        "GET /api/agent-runtime/eval/status",
+        "POST /api/agent-runtime/context-pack",
+        "POST /api/agent-runtime/memory/record",
+        "POST /api/agent-runtime/multimodal-index/scan",
+        "POST /api/agent-runtime/rag/query"
+      ],
+      "schema": "digua_agent_runtime_status_v1",
+      "service": "agent_runtime"
+    },
+    "harness_status": {
+      "agent_runtime": {
+        "cloud_private_raw_egress": false,
+        "datastores": {
+          "memory_db": "F:\\Project\\Digua\\reports\\agent_runtime\\agent_runtime_memory.sqlite3",
+          "multimodal_db": "F:\\Project\\Digua\\reports\\agent_runtime\\agent_runtime_multimodal.sqlite3",
+          "rag_db": "F:\\Project\\Digua\\reports\\agent_runtime\\agent_runtime_rag.sqlite3"
+        },
+        "feature_flags": {
+          "agent_runtime_enabled": true,
+          "cloud_private_raw_egress_enabled": false,
+          "context_pack_enabled": true,
+          "memory_manager_enabled": true,
+          "multimodal_index_enabled": true,
+          "public_mcp_enabled": false,
+          "qwen_tool_execution_enabled": false,
+          "rag_enabled": true,
+          "rag_eval_enabled": true
+        },
+        "internal_tool_manifest": {
+          "cloud_private_raw_egress_allowed": false,
+          "missing_tool_ids": [],
+          "mutating_not_dispatcher_only": [],
+          "ok": true,
+          "public_mcp_exposed": false,
+          "qwen_tool_execution_authority": false,
+          "tool_count": 12
+        },
+        "memory": {
+          "cloud_private_raw_egress": false,
+          "db_path": "F:\\Project\\Digua\\reports\\agent_runtime\\agent_runtime_memory.sqlite3",
+          "events": 200,
+          "facts": 12,
+          "ok": true,
+          "preferences": 6,
+          "private_leak_count": 0,
+          "procedures": 6,
+          "qwen_execution_authority": false,
+          "raw_content_rows": 0,
+          "reflections": 6,
+          "schema": "agent_runtime_memory_v1"
+        },
+        "multimodal_index": {
+          "counts": {
+            "archive": 4,
+            "audio": 12,
+            "code": 4,
+            "document": 228,
+            "image": 40,
+            "video": 12
+          },
+          "db_path": "F:\\Project\\Digua\\reports\\agent_runtime\\agent_runtime_multimodal.sqlite3",
+          "feature_flags": {
+            "embedding_enabled": false,
+            "ocr_enabled": false,
+            "thumbnail_enabled": false
+          },
+          "indexed_count": 300,
+          "ok": true,
+          "private_leak_count": 0,
+          "raw_path_rows": 0
+        },
+        "ok": true,
+        "public_mcp_exposed": false,
+        "qwen_execution_authority": false,
+        "raw_private_content_in_status": false,
+        "routes": [
+          "GET /api/agent-runtime/status",
+          "GET /api/agent-runtime/tool-manifest",
+          "GET /api/agent-runtime/memory/stats",
+          "GET /api/agent-runtime/multimodal-index/status",
+          "GET /api/agent-runtime/eval/status",
+          "POST /api/agent-runtime/context-pack",
+          "POST /api/agent-runtime/memory/record",
+          "POST /api/agent-runtime/multimodal-index/scan",
+          "POST /api/agent-runtime/rag/query"
+        ],
+        "schema": "digua_agent_runtime_status_v1",
+        "service": "agent_runtime"
+      },
+      "cloud_private_raw_egress": false,
+      "copy_execute_enabled": true,
+      "copy_execute_requires": {
+        "dispatcher": true,
+        "signed_token": true,
+        "source_rehash": true,
+        "target_absent": true,
+        "user_confirmation": true
+      },
+      "copy_routes": [
+        "/api/nas/copy/preview",
+        "/api/nas/copy/dry-run",
+        "/api/nas/copy/confirm",
+        "/api/nas/copy/execute",
+        "/api/nas/copy/rollback"
+      ],
+      "dispatcher": "/mnt/nas/openclaw/scripts/probes/ai_nas_allowlisted_tool.sh",
+      "dispatcher_exists": false,
+      "dispatcher_sha256": null,
+      "forbidden_actions": [
+        "delete",
+        "move",
+        "rename",
+        "chmod",
+        "chown",
+        "overwrite",
+        "recursive",
+        "recursive_delete",
+        "arbitrary_shell"
+      ],
+      "ok": true,
+      "policy_id": "digua_stage5_harness_default_service_policy_v1",
+      "privacy_redaction_gate_enabled": true,
+      "qwen_execution_authority": false,
+      "raw_private_content_in_status": false,
+      "readonly_workspaces_enabled": true,
+      "service": "harness_default_service",
+      "token_budget_gate_enabled": true
+    },
+    "tool_manifest": {
+      "manifest": {
+        "cloud_private_raw_egress_allowed": false,
+        "manifest_id": "digua_agent_runtime_internal_tool_manifest_v1",
+        "public_mcp_exposed": false,
+        "qwen_tool_execution_authority": false,
+        "scope": "internal_only",
+        "tools": [
+          {
+            "description": "Compile redacted context packs with evidence refs.",
+            "dispatcher_only": false,
+            "mutates_state": false,
+            "tool_id": "agent_runtime.context_pack.compile"
+          },
+          {
+            "description": "Record redacted local memory events.",
+            "dispatcher_only": true,
+            "mutates_state": true,
+            "tool_id": "agent_runtime.memory.record"
+          },
+          {
+            "description": "Read local redacted memory summaries.",
+            "dispatcher_only": false,
+            "mutates_state": false,
+            "tool_id": "agent_runtime.memory.lookup"
+          },
+          {
+            "description": "Scan metadata under the configured Personal root.",
+            "dispatcher_only": true,
+            "mutates_state": true,
+            "tool_id": "agent_runtime.multimodal_index.scan"
+          },
+          {
+            "description": "Search metadata-only multimodal index.",
+            "dispatcher_only": false,
+            "mutates_state": false,
+            "tool_id": "agent_runtime.multimodal_index.search"
+          },
+          {
+            "description": "Answer with SQLite FTS-first local evidence refs.",
+            "dispatcher_only": false,
+            "mutates_state": false,
+            "tool_id": "agent_runtime.rag.query"
+          },
+          {
+            "description": "Run local RAG and privacy evaluation gates.",
+            "dispatcher_only": true,
+            "mutates_state": true,
+            "tool_id": "agent_runtime.rag.evaluate"
+          },
+          {
+            "description": "Existing Harness copy preview route.",
+            "dispatcher_only": false,
+            "mutates_state": false,
+            "tool_id": "harness.copy.preview"
+          },
+          {
+            "description": "Existing Harness copy dry-run route.",
+            "dispatcher_only": false,
+            "mutates_state": false,
+            "tool_id": "harness.copy.dry_run"
+          },
+          {
+            "description": "Existing Harness copy confirmation route.",
+            "dispatcher_only": true,
+            "mutates_state": true,
+            "tool_id": "harness.copy.confirm"
+          },
+          {
+            "description": "Existing Harness allowlisted dispatcher execute route.",
+            "dispatcher_only": true,
+            "mutates_state": true,
+            "tool_id": "harness.copy.execute"
+          },
+          {
+            "description": "Existing Harness allowlisted dispatcher rollback route.",
+            "dispatcher_only": true,
+            "mutates_state": true,
+            "tool_id": "harness.copy.rollback"
+          }
+        ],
+        "validation": {
+          "cloud_private_raw_egress_allowed": false,
+          "missing_tool_ids": [],
+          "mutating_not_dispatcher_only": [],
+          "ok": true,
+          "public_mcp_exposed": false,
+          "qwen_tool_execution_authority": false,
+          "tool_count": 12
+        }
+      },
+      "ok": true
+    }
+  },
+  "failures": [],
+  "generated_at": "2026-07-05T04:24:06Z",
+  "name": "default_service_integration_gate",
+  "ok": true,
+  "public_mcp_exposed": false,
+  "qwen_execution_authority": false,
+  "schema": "digua_agent_runtime_gate_v1",
+  "verdict": "ok_default_service_integration_gate"
+}

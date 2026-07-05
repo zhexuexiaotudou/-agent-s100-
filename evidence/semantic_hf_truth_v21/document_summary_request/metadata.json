@@ -1,0 +1,42 @@
+{
+  "case_id": "document_summary_request",
+  "semantic_or_diagnostic": "semantic",
+  "truth_row_type": "HF/PyTorch bfloat16",
+  "elapsed_seconds": 1.209,
+  "token_ids_sha256": "6eade2d854d75ba1cb9d89aaacbf720e1b1ea3ca62b4a1e23f4f4bae197fcf75",
+  "logits": {
+    "path": "evidence\\semantic_hf_truth_v21\\document_summary_request\\hf_truth_logits.npy",
+    "size_bytes": 608384,
+    "sha256": "3bf12a5ce083db4fa110ff5182678b81b70b7bfe2e36729d63f4184c83dc8051",
+    "stats": {
+      "shape": [
+        152064
+      ],
+      "dtype": "float32",
+      "size": 152064,
+      "min": -11.625,
+      "max": 18.5,
+      "mean": -6.989191055297852,
+      "std": 1.2956078052520752,
+      "abs_max": 18.5,
+      "nonzero_count": 152064,
+      "allzero": false,
+      "constant": false,
+      "nan_count": 0,
+      "inf_count": 0
+    }
+  },
+  "top10": [
+    151643,
+    0,
+    4894,
+    25984,
+    220,
+    8958,
+    16,
+    1112,
+    17839,
+    753
+  ],
+  "status": "pass"
+}

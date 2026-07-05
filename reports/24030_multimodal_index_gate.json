@@ -1,0 +1,66 @@
+{
+  "checks": [
+    {
+      "detail": 57,
+      "label": "documents >= 10",
+      "ok": true
+    },
+    {
+      "detail": 10,
+      "label": "images >= 10",
+      "ok": true
+    },
+    {
+      "detail": 3,
+      "label": "videos >= 3",
+      "ok": true
+    },
+    {
+      "detail": 3,
+      "label": "audio >= 3",
+      "ok": true
+    },
+    {
+      "label": "raw paths not exported",
+      "ok": true
+    },
+    {
+      "label": "feature flags respected",
+      "ok": true
+    }
+  ],
+  "cloud_private_raw_egress": false,
+  "evidence": {
+    "cloud_private_raw_egress": false,
+    "counts": {
+      "archive": 1,
+      "audio": 3,
+      "code": 1,
+      "document": 57,
+      "image": 10,
+      "other": 0,
+      "video": 3
+    },
+    "db_path": "F:\\Project\\Digua\\reports\\agent_runtime\\agent_runtime_multimodal.sqlite3",
+    "feature_flags": {
+      "embedding_enabled": false,
+      "ocr_enabled": false,
+      "thumbnail_enabled": false
+    },
+    "indexed_count": 75,
+    "ok": true,
+    "qwen_execution_authority": false,
+    "raw_content_stored": false,
+    "raw_path_exported": false,
+    "schema": "digua_agent_runtime_multimodal_index_v1",
+    "skipped_count": 0
+  },
+  "failures": [],
+  "generated_at": "2026-07-05T04:24:06Z",
+  "name": "multimodal_index_gate",
+  "ok": true,
+  "public_mcp_exposed": false,
+  "qwen_execution_authority": false,
+  "schema": "digua_agent_runtime_gate_v1",
+  "verdict": "ok_multimodal_index_gate"
+}

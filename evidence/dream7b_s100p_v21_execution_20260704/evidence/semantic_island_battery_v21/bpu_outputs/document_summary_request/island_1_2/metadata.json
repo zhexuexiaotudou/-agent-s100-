@@ -1,0 +1,276 @@
+{
+  "case_id": "document_summary_request",
+  "island": [
+    1,
+    2
+  ],
+  "input_boundary": "/mnt/nas/openclaw/reports/models/dream7b_s100p_v21_execution_20260704/evidence/v21_bpu_boundary_inputs/document_summary_request/layer_00_output.npy",
+  "segments": [
+    {
+      "segment": 1,
+      "bpu": {
+        "segment": 1,
+        "model_name": "dream_segment_01_02",
+        "hbm_path": "/mnt/nas/openclaw/models/dream7b-hbm/seq128-b1-lmheadq16-lasttoken/seg01_02/dream7b_segment_1_2_seq128_q8.hbm",
+        "hbm_sha256": "387a797d25ed624d47888217fcbdb4761bed52e1b6be854acf776c523f0e8fd0",
+        "run_seconds": 0.009492,
+        "quant_metadata": {
+          "available": true,
+          "scale": [
+            4.552441168925725e-05
+          ],
+          "scale_first": 4.552441168925725e-05,
+          "zero_point": [
+            0.0
+          ],
+          "repr": "<hbm_runtime.HB_HBMRuntime.QuantParams object at 0xffff75e7aa30>"
+        },
+        "input_stats": {
+          "shape": [
+            128,
+            3584
+          ],
+          "dtype": "float32",
+          "size": 458752,
+          "min": -2.1875,
+          "max": 1.7578125,
+          "mean": -0.00048799763317219913,
+          "std": 0.18563087284564972,
+          "abs_max": 2.1875,
+          "nonzero_count": 458279,
+          "allzero": false,
+          "constant": false,
+          "nan_count": 0,
+          "inf_count": 0
+        },
+        "raw_stats": {
+          "shape": [
+            128,
+            3584
+          ],
+          "dtype": "int16",
+          "size": 458752,
+          "min": -15140.0,
+          "max": 15140.0,
+          "mean": -23.659962245396205,
+          "std": 4093.974796350827,
+          "abs_max": 15140.0,
+          "nonzero_count": 458697,
+          "allzero": false,
+          "constant": false,
+          "nan_count": 0,
+          "inf_count": 0
+        },
+        "dequant_stats": {
+          "shape": [
+            128,
+            3584
+          ],
+          "dtype": "float32",
+          "size": 458752,
+          "min": -0.6892396211624146,
+          "max": 0.6892396211624146,
+          "mean": -0.0010771057568490505,
+          "std": 0.18637578189373016,
+          "abs_max": 0.6892396211624146,
+          "nonzero_count": 458697,
+          "allzero": false,
+          "constant": false,
+          "nan_count": 0,
+          "inf_count": 0
+        }
+      },
+      "raw_output": {
+        "path": "/mnt/nas/openclaw/reports/models/dream7b_s100p_v21_execution_20260704/evidence/semantic_island_battery_v21/bpu_outputs/document_summary_request/island_1_2/seg_01/bpu_raw_output.npy",
+        "size_bytes": 917632,
+        "sha256": "b9208f3fc2e24fde5390dd82608d6c3203624103bfe2c1c615bf07c49f337a7a",
+        "stats": {
+          "shape": [
+            128,
+            3584
+          ],
+          "dtype": "int16",
+          "size": 458752,
+          "min": -15140.0,
+          "max": 15140.0,
+          "mean": -23.659962245396205,
+          "std": 4093.974796350827,
+          "abs_max": 15140.0,
+          "nonzero_count": 458697,
+          "allzero": false,
+          "constant": false,
+          "nan_count": 0,
+          "inf_count": 0
+        }
+      },
+      "dequant_output": {
+        "path": "/mnt/nas/openclaw/reports/models/dream7b_s100p_v21_execution_20260704/evidence/semantic_island_battery_v21/bpu_outputs/document_summary_request/island_1_2/seg_01/bpu_dequant_output.npy",
+        "size_bytes": 1835136,
+        "sha256": "9fc250de94adb43378d7d6b6d78d7c067c8e94395540241e85bee398e1902a59",
+        "stats": {
+          "shape": [
+            128,
+            3584
+          ],
+          "dtype": "float32",
+          "size": 458752,
+          "min": -0.6892396211624146,
+          "max": 0.6892396211624146,
+          "mean": -0.0010771057568490505,
+          "std": 0.18637578189373016,
+          "abs_max": 0.6892396211624146,
+          "nonzero_count": 458697,
+          "allzero": false,
+          "constant": false,
+          "nan_count": 0,
+          "inf_count": 0
+        }
+      }
+    },
+    {
+      "segment": 2,
+      "bpu": {
+        "segment": 2,
+        "model_name": "dream_segment_02_03",
+        "hbm_path": "/mnt/nas/openclaw/models/dream7b-hbm/seq128-b1-lmheadq16-lasttoken/seg02_03/dream7b_segment_2_3_seq128_q8.hbm",
+        "hbm_sha256": "2e4efa4cbfdd1ade5a2a511142de8c885bea14b896a2174a8e066bd8aaf940e6",
+        "run_seconds": 0.009323,
+        "quant_metadata": {
+          "available": true,
+          "scale": [
+            0.0010667958995327353
+          ],
+          "scale_first": 0.0010667958995327353,
+          "zero_point": [
+            0.0
+          ],
+          "repr": "<hbm_runtime.HB_HBMRuntime.QuantParams object at 0xffff75e7b0f0>"
+        },
+        "input_stats": {
+          "shape": [
+            128,
+            3584
+          ],
+          "dtype": "float32",
+          "size": 458752,
+          "min": -0.6892396211624146,
+          "max": 0.6892396211624146,
+          "mean": -0.0010771057568490505,
+          "std": 0.18637578189373016,
+          "abs_max": 0.6892396211624146,
+          "nonzero_count": 458697,
+          "allzero": false,
+          "constant": false,
+          "nan_count": 0,
+          "inf_count": 0
+        },
+        "raw_stats": {
+          "shape": [
+            128,
+            3584
+          ],
+          "dtype": "int16",
+          "size": 458752,
+          "min": -427.0,
+          "max": 427.0,
+          "mean": -1.5439540318080358,
+          "std": 168.46892913929912,
+          "abs_max": 427.0,
+          "nonzero_count": 457040,
+          "allzero": false,
+          "constant": false,
+          "nan_count": 0,
+          "inf_count": 0
+        },
+        "dequant_stats": {
+          "shape": [
+            128,
+            3584
+          ],
+          "dtype": "float32",
+          "size": 458752,
+          "min": -0.4555218517780304,
+          "max": 0.4555218517780304,
+          "mean": -0.0016470836708322167,
+          "std": 0.17972198128700256,
+          "abs_max": 0.4555218517780304,
+          "nonzero_count": 457040,
+          "allzero": false,
+          "constant": false,
+          "nan_count": 0,
+          "inf_count": 0
+        }
+      },
+      "raw_output": {
+        "path": "/mnt/nas/openclaw/reports/models/dream7b_s100p_v21_execution_20260704/evidence/semantic_island_battery_v21/bpu_outputs/document_summary_request/island_1_2/seg_02/bpu_raw_output.npy",
+        "size_bytes": 917632,
+        "sha256": "7fbdda9db6a572f4b3f9fa84ba5ee93574adffac837cfbd838bad2f560ca6397",
+        "stats": {
+          "shape": [
+            128,
+            3584
+          ],
+          "dtype": "int16",
+          "size": 458752,
+          "min": -427.0,
+          "max": 427.0,
+          "mean": -1.5439540318080358,
+          "std": 168.46892913929912,
+          "abs_max": 427.0,
+          "nonzero_count": 457040,
+          "allzero": false,
+          "constant": false,
+          "nan_count": 0,
+          "inf_count": 0
+        }
+      },
+      "dequant_output": {
+        "path": "/mnt/nas/openclaw/reports/models/dream7b_s100p_v21_execution_20260704/evidence/semantic_island_battery_v21/bpu_outputs/document_summary_request/island_1_2/seg_02/bpu_dequant_output.npy",
+        "size_bytes": 1835136,
+        "sha256": "b156a1e0d23c17a38ee474d65e91843d0a0573286f7ec9e2c559d0bd7924243c",
+        "stats": {
+          "shape": [
+            128,
+            3584
+          ],
+          "dtype": "float32",
+          "size": 458752,
+          "min": -0.4555218517780304,
+          "max": 0.4555218517780304,
+          "mean": -0.0016470836708322167,
+          "std": 0.17972198128700256,
+          "abs_max": 0.4555218517780304,
+          "nonzero_count": 457040,
+          "allzero": false,
+          "constant": false,
+          "nan_count": 0,
+          "inf_count": 0
+        }
+      }
+    }
+  ],
+  "final_hidden": {
+    "path": "/mnt/nas/openclaw/reports/models/dream7b_s100p_v21_execution_20260704/evidence/semantic_island_battery_v21/bpu_outputs/document_summary_request/island_1_2/island_final_hidden.npy",
+    "size_bytes": 1835136,
+    "sha256": "b156a1e0d23c17a38ee474d65e91843d0a0573286f7ec9e2c559d0bd7924243c",
+    "stats": {
+      "shape": [
+        128,
+        3584
+      ],
+      "dtype": "float32",
+      "size": 458752,
+      "min": -0.4555218517780304,
+      "max": 0.4555218517780304,
+      "mean": -0.0016470836708322167,
+      "std": 0.17972198128700256,
+      "abs_max": 0.4555218517780304,
+      "nonzero_count": 457040,
+      "allzero": false,
+      "constant": false,
+      "nan_count": 0,
+      "inf_count": 0
+    }
+  },
+  "status": "pass"
+}

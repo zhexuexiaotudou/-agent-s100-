@@ -1,0 +1,39 @@
+{
+  "cloud_private_raw_egress": false,
+  "gate_reports": {
+    "agent_memory_manager_gate": "ok_agent_memory_manager_gate",
+    "agent_runtime_safety_ui_gate": "ok_agent_runtime_safety_ui_gate",
+    "context_pack_compiler_gate": "ok_context_pack_compiler_gate",
+    "continuous_eval_dataset_gate": "ok_continuous_eval_dataset_gate",
+    "default_service_integration_gate": "ok_default_service_integration_gate",
+    "fts_first_rag_eval_gate": "ok_fts_first_rag_eval_gate",
+    "internal_tool_manifest_gate": "ok_internal_tool_manifest_gate",
+    "multimodal_index_gate": "ok_multimodal_index_gate",
+    "trace_schema_gate": "ok_trace_schema_gate"
+  },
+  "generated_at": "2026-07-05T04:26:51Z",
+  "metrics": {
+    "context_pack_count": 30,
+    "eval_total_cases": 250,
+    "memory_events": 100,
+    "multimodal_counts": {
+      "archive": 1,
+      "audio": 3,
+      "code": 1,
+      "document": 57,
+      "image": 10,
+      "other": 0,
+      "video": 3
+    },
+    "private_leak_count": 0,
+    "rag_case_count": 53,
+    "rag_citation_coverage": 1.0,
+    "rag_no_evidence_refusal_rate": 1.0
+  },
+  "ok": true,
+  "public_mcp_exposed": false,
+  "qwen_execution_authority": false,
+  "required_s100p_acceptance": true,
+  "schema": "digua_agent_runtime_deepening_eval_gate_v1",
+  "verdict": "agent_runtime_deepening_local_gates_ready_for_s100p_acceptance"
+}

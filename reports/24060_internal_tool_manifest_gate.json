@@ -1,0 +1,46 @@
+{
+  "checks": [
+    {
+      "detail": {
+        "cloud_private_raw_egress_allowed": false,
+        "missing_tool_ids": [],
+        "mutating_not_dispatcher_only": [],
+        "ok": true,
+        "public_mcp_exposed": false,
+        "qwen_tool_execution_authority": false,
+        "tool_count": 12
+      },
+      "label": "manifest valid",
+      "ok": true
+    },
+    {
+      "label": "public MCP disabled",
+      "ok": true
+    },
+    {
+      "label": "mutating tools dispatcher only",
+      "ok": true
+    }
+  ],
+  "cloud_private_raw_egress": false,
+  "evidence": {
+    "manifest_path": "F:\\Project\\Digua\\configs\\internal_tool_manifest.json",
+    "validation": {
+      "cloud_private_raw_egress_allowed": false,
+      "missing_tool_ids": [],
+      "mutating_not_dispatcher_only": [],
+      "ok": true,
+      "public_mcp_exposed": false,
+      "qwen_tool_execution_authority": false,
+      "tool_count": 12
+    }
+  },
+  "failures": [],
+  "generated_at": "2026-07-05T04:24:06Z",
+  "name": "internal_tool_manifest_gate",
+  "ok": true,
+  "public_mcp_exposed": false,
+  "qwen_execution_authority": false,
+  "schema": "digua_agent_runtime_gate_v1",
+  "verdict": "ok_internal_tool_manifest_gate"
+}

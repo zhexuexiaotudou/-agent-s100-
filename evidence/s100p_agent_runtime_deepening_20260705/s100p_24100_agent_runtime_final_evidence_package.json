@@ -1,0 +1,82 @@
+{
+  "benchmarks": {
+    "agent_runtime_eval_cases.jsonl": {
+      "case_count": 30,
+      "path": "/mnt/nas/openclaw/benchmarks/agent_runtime_eval_cases.jsonl"
+    },
+    "copy_route_eval_cases.jsonl": {
+      "case_count": 30,
+      "path": "/mnt/nas/openclaw/benchmarks/copy_route_eval_cases.jsonl"
+    },
+    "journal_eval_cases.jsonl": {
+      "case_count": 20,
+      "path": "/mnt/nas/openclaw/benchmarks/journal_eval_cases.jsonl"
+    },
+    "nas_search_eval_cases.jsonl": {
+      "case_count": 45,
+      "path": "/mnt/nas/openclaw/benchmarks/nas_search_eval_cases.jsonl"
+    },
+    "privacy_eval_cases.jsonl": {
+      "case_count": 30,
+      "path": "/mnt/nas/openclaw/benchmarks/privacy_eval_cases.jsonl"
+    },
+    "rag_eval_cases.jsonl": {
+      "case_count": 53,
+      "path": "/mnt/nas/openclaw/benchmarks/rag_eval_cases.jsonl"
+    },
+    "token_budget_eval_cases.jsonl": {
+      "case_count": 30,
+      "path": "/mnt/nas/openclaw/benchmarks/token_budget_eval_cases.jsonl"
+    },
+    "total_cases": 250,
+    "ui_flow_eval_cases.jsonl": {
+      "case_count": 12,
+      "path": "/mnt/nas/openclaw/benchmarks/ui_flow_eval_cases.jsonl"
+    }
+  },
+  "configs": [
+    "configs/agent_runtime_feature_flags.json",
+    "configs/context_pack_policy.json",
+    "configs/memory_policy.json",
+    "configs/multimodal_index_policy.json",
+    "configs/rag_eval_policy.json",
+    "configs/internal_tool_manifest.json"
+  ],
+  "fixture_root": "/mnt/nas/openclaw/tmp/agent_runtime_deepening_fixture",
+  "generated_at": "2026-07-05T04:26:23Z",
+  "hard_constraints": {
+    "allowlist_dispatcher_bypassed": false,
+    "destructive_actions_default": false,
+    "ports_changed": false,
+    "public_mcp_exposed": false,
+    "qwen_tool_execution_authority": false,
+    "raw_private_cloud_egress": false
+  },
+  "local_ok": true,
+  "report_root": "/mnt/nas/openclaw/reports/qwen25_ai_nas",
+  "reports": [
+    "/mnt/nas/openclaw/reports/qwen25_ai_nas/24000_openclaw_capability_inventory.json",
+    "/mnt/nas/openclaw/reports/qwen25_ai_nas/24010_context_pack_compiler_gate.json",
+    "/mnt/nas/openclaw/reports/qwen25_ai_nas/24020_agent_memory_manager_gate.json",
+    "/mnt/nas/openclaw/reports/qwen25_ai_nas/24030_multimodal_index_gate.json",
+    "/mnt/nas/openclaw/reports/qwen25_ai_nas/24040_fts_first_rag_eval_gate.json",
+    "/mnt/nas/openclaw/reports/qwen25_ai_nas/24050_trace_schema_gate.json",
+    "/mnt/nas/openclaw/reports/qwen25_ai_nas/24060_internal_tool_manifest_gate.json",
+    "/mnt/nas/openclaw/reports/qwen25_ai_nas/24070_continuous_eval_dataset_gate.json",
+    "/mnt/nas/openclaw/reports/qwen25_ai_nas/24080_default_service_integration_gate.json",
+    "/mnt/nas/openclaw/reports/qwen25_ai_nas/24090_agent_runtime_eval_gate.json",
+    "/mnt/nas/openclaw/reports/qwen25_ai_nas/24100_agent_runtime_final_evidence_package.json",
+    "/mnt/nas/openclaw/reports/qwen25_ai_nas/24110_agent_runtime_final_evidence_package.md",
+    "/mnt/nas/openclaw/reports/qwen25_ai_nas/24120_agent_runtime_safety_ui_gate.json"
+  ],
+  "schema": "digua_agent_runtime_deepening_package_v1",
+  "source_files": [
+    "src/agent_runtime",
+    "src/openclaw/routes/agent_runtime_routes.py",
+    "src/openclaw/harness_default_middleware.py",
+    "scripts/probes/ai_nas_operator_portal_server.py",
+    "web/static/digua_ai_nas_v2.js",
+    "web/static/digua_ai_nas_v2.css"
+  ],
+  "verdict": "agent_runtime_deepening_local_gates_ready_for_s100p_acceptance"
+}

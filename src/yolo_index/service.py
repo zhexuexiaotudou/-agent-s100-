@@ -94,7 +94,7 @@ class YoloIndexService:
             params.append(str(modality))
         sql = f"""
             SELECT
-              a.asset_id,a.modality,a.title_redacted,a.path_hash,a.privacy_level,
+              a.asset_id,a.modality,a.title_redacted,a.file_type,a.path_hash,a.size_bytes,a.mtime,a.privacy_level,
               d.keyframe_id,d.label,d.label_zh,d.confidence,d.bbox_x1,d.bbox_y1,d.bbox_x2,d.bbox_y2,
               d.timestamp_sec,d.evidence_ref,d.model_id,d.model_backend
             FROM mm_yolo_detections d
@@ -119,6 +119,9 @@ class YoloIndexService:
                     "keyframe_id": row.get("keyframe_id"),
                     "title_redacted": row.get("title_redacted"),
                     "modality": row.get("modality"),
+                    "file_type": row.get("file_type"),
+                    "size_bytes": row.get("size_bytes"),
+                    "mtime": row.get("mtime"),
                     "path_hash": row.get("path_hash"),
                     "privacy_level": row.get("privacy_level"),
                     "score": 0.0,

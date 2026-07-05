@@ -1,0 +1,43 @@
+$ C:\Users\zhexu\AppData\Local\Python\pythoncore-3.14-64\python.exe -c import subprocess, sys
+files=subprocess.check_output(['git','ls-files','*.py'], text=True, encoding='utf-8', errors='replace').splitlines()
+failed=[]
+for f in files:
+    p=subprocess.run([sys.executable,'-m','py_compile',f], capture_output=True, text=True)
+    if p.returncode:
+        failed.append({'file':f,'stderr':p.stderr[-2000:]})
+print({'tracked_py_files':len(files),'failed':len(failed),'failed_items':failed[:20]})
+sys.exit(1 if failed else 0)
+
+
+{'tracked_py_files': 504, 'failed': 0, 'failed_items': []}
+
+
+
+
+$ C:\Users\zhexu\AppData\Local\Python\pythoncore-3.14-64\python.exe -m pytest tests/test_agent_runtime_core.py tests/test_agent_runtime_routes.py tests/test_document_fts_rag.py tests/test_journal_routes.py tests/test_copy_route_guard.py tests/test_ui_v2_security_boundaries.py tests/test_token_trace_integration.py tests/test_qwen_token_counter.py tests/test_privacy_redactor.py tests/test_context_compressor.py
+
+============================= test session starts =============================
+platform win32 -- Python 3.14.3, pytest-9.0.3, pluggy-1.6.0
+rootdir: F:\Project\Digua
+configfile: pytest.ini
+plugins: anyio-4.13.0
+collected 65 items
+
+tests\test_agent_runtime_core.py .....                                   [  7%]
+tests\test_agent_runtime_routes.py ...                                   [ 12%]
+tests\test_document_fts_rag.py ..                                        [ 15%]
+tests\test_journal_routes.py .                                           [ 16%]
+tests\test_copy_route_guard.py ......................................... [ 80%]
+                                                                         [ 80%]
+tests\test_ui_v2_security_boundaries.py ....                             [ 86%]
+tests\test_token_trace_integration.py ..                                 [ 89%]
+tests\test_qwen_token_counter.py ...                                     [ 93%]
+tests\test_privacy_redactor.py ..                                        [ 96%]
+tests\test_context_compressor.py ..                                      [100%]
+
+============================= 65 passed in 2.92s ==============================
+
+
+
+
+$ ssh -i C:\Users\zhexu\.ssh\s100p_linkcheck_ed25519 -o BatchMode=yes -o ConnectTimeout=8 sunrise@192.168.127.10 /opt/node-v22.19.0-linux-arm64/bin/node --check /tmp/digua_ai_nas_v2.production_check.js

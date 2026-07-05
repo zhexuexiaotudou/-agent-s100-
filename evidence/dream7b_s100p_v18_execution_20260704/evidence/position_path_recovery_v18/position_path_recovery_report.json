@@ -1,0 +1,418 @@
+{
+  "schema_version": "dream7b_s100p_v18_position_path_recovery_remote",
+  "created_at_unix": 1783094648.6154325,
+  "python": "3.10.12 (main, Aug 15 2025, 14:32:43) [GCC 11.4.0]",
+  "platform": "Linux-6.1.158-rt58-DR-4.0.5-2603031328-g9f678e-g6caa4d-aarch64-with-glibc2.35",
+  "args": {
+    "cases": "/mnt/nas/openclaw/reports/models/dream7b_s100p_v11_execution_20260701/canonical_seq128_cases_v10.jsonl",
+    "output_root": "/mnt/nas/openclaw/reports/models/dream7b_s100p_v18_execution_20260704/evidence/position_path_recovery_v18",
+    "hbm": "/mnt/nas/openclaw/models/dream7b-hbm/seq128-b1-lmheadq16-lasttoken/seg00_01/dream7b_segment_0_1_seq128_q8.hbm",
+    "model_name": "dream_segment_00_01",
+    "seq_len": 128,
+    "fallback_output_scale": 6.062494503566995e-05,
+    "hrt_timeout": 300,
+    "skip_hrt_dump": false
+  },
+  "safety": {
+    "generation_quality_run": false,
+    "product_routes_18888_18889_touched": false,
+    "dream7b_frontend_openclaw_traffic_touched": false,
+    "harness_qwen_openclaw_defaults_modified": false
+  },
+  "rows": [
+    {
+      "case_id": "zeros",
+      "variant_count": 34,
+      "hrt_add_input0_dump": {
+        "cmd": [
+          "hrt_model_exec",
+          "infer",
+          "--model_file",
+          "/mnt/nas/openclaw/models/dream7b-hbm/seq128-b1-lmheadq16-lasttoken/seg00_01/dream7b_segment_0_1_seq128_q8.hbm",
+          "--model_name",
+          "dream_segment_00_01",
+          "--input_file",
+          "/mnt/nas/openclaw/reports/models/dream7b_s100p_v18_execution_20260704/evidence/position_path_recovery_v18/zeros/hrt_inputs/input_0_tokens.npy,/mnt/nas/openclaw/reports/models/dream7b_s100p_v18_execution_20260704/evidence/position_path_recovery_v18/zeros/hrt_inputs/input_1_positions_all_zero.npy",
+          "--frame_count",
+          "1",
+          "--dump_intermediate",
+          "1",
+          "--enable_dump",
+          "true",
+          "--dump_path",
+          "/mnt/nas/openclaw/reports/models/dream7b_s100p_v18_execution_20260704/evidence/position_path_recovery_v18/zeros/hrt_all_zero_dump_npy",
+          "--dump_format",
+          "npy"
+        ],
+        "returncode": 0,
+        "elapsed_seconds": 6.803,
+        "stdout_len": 4448,
+        "stderr_len": 0,
+        "log_path": "/mnt/nas/openclaw/reports/models/dream7b_s100p_v18_execution_20260704/evidence/position_path_recovery_v18/zeros/hrt_all_zero_dump_npy.log",
+        "log_sha256": "40afcb7a5b225f553fd8344e43f19d6698ff13efd8ebeec8bbb91bf3b283aa09",
+        "dump_file_listing": [
+          {
+            "path": "/mnt/nas/openclaw/reports/models/dream7b_s100p_v18_execution_20260704/evidence/position_path_recovery_v18/zeros/hrt_all_zero_dump_npy/model_infer_input_0__input_0.npy",
+            "size_bytes": 592,
+            "sha256": "f2bf321a2574d39ceeb79a525edff93f742247e9149c973da7ea08e51ec60350"
+          },
+          {
+            "path": "/mnt/nas/openclaw/reports/models/dream7b_s100p_v18_execution_20260704/evidence/position_path_recovery_v18/zeros/hrt_all_zero_dump_npy/model_infer_input_1__input_1.npy",
+            "size_bytes": 592,
+            "sha256": "f2bf321a2574d39ceeb79a525edff93f742247e9149c973da7ea08e51ec60350"
+          },
+          {
+            "path": "/mnt/nas/openclaw/reports/models/dream7b_s100p_v18_execution_20260704/evidence/position_path_recovery_v18/zeros/hrt_all_zero_dump_npy/model_infer_output_0__output_0.npy",
+            "size_bytes": 917584,
+            "sha256": "00de3b6d5c0c06927d3fe7c979924f40ecd0eea8eea04314858f856b7cf38907"
+          },
+          {
+            "path": "/mnt/nas/openclaw/reports/models/dream7b_s100p_v18_execution_20260704/evidence/position_path_recovery_v18/zeros/hrt_all_zero_dump_npy/task-2-layer-0-BPU-hbir.mul_id_63_bpu_segment_0-input-0-_input_1-frame_283622903329.data.bin",
+            "size_bytes": 512,
+            "sha256": "076a27c79e5ace2a3d47f9dd2e83e4ff6ea8872b3c2218f66c92b89b55f36560"
+          },
+          {
+            "path": "/mnt/nas/openclaw/reports/models/dream7b_s100p_v18_execution_20260704/evidence/position_path_recovery_v18/zeros/hrt_all_zero_dump_npy/task-2-layer-1-native::View-hbir.reshape_id_1_cpu_segment_1-input-0-_input_0-frame_283622906259.data.bin",
+            "size_bytes": 512,
+            "sha256": "076a27c79e5ace2a3d47f9dd2e83e4ff6ea8872b3c2218f66c92b89b55f36560"
+          },
+          {
+            "path": "/mnt/nas/openclaw/reports/models/dream7b_s100p_v18_execution_20260704/evidence/position_path_recovery_v18/zeros/hrt_all_zero_dump_npy/task-2-layer-1-native::View-hbir.reshape_id_1_cpu_segment_1-output-0-hbir.reshape_id_1: 0-frame_283622907720.data.bin",
+            "size_bytes": 512,
+            "sha256": "076a27c79e5ace2a3d47f9dd2e83e4ff6ea8872b3c2218f66c92b89b55f36560"
+          },
+          {
+            "path": "/mnt/nas/openclaw/reports/models/dream7b_s100p_v18_execution_20260704/evidence/position_path_recovery_v18/zeros/hrt_all_zero_dump_npy/task-2-layer-2-native::GatherND-qnt.const_fake_quant_id_3_cpu_segment_2-input-0-hbir.reshape_id_1: 0-frame_283622909467.data.bin",
+            "size_bytes": 512,
+            "sha256": "076a27c79e5ace2a3d47f9dd2e83e4ff6ea8872b3c2218f66c92b89b55f36560"
+          },
+          {
+            "path": "/mnt/nas/openclaw/reports/models/dream7b_s100p_v18_execution_20260704/evidence/position_path_recovery_v18/zeros/hrt_all_zero_dump_npy/task-2-layer-2-native::GatherND-qnt.const_fake_quant_id_3_cpu_segment_2-output-0-qnt.const_fake_quant_id_3: 0-frame_283622910817.data.bin",
+            "size_bytes": 458752,
+            "sha256": "1c2a53674f9cfa49b85ca0c7b9e50313ba1ca30fcba4cd501ed67f4ab31d106f"
+          },
+          {
+            "path": "/mnt/nas/openclaw/reports/models/dream7b_s100p_v18_execution_20260704/evidence/position_path_recovery_v18/zeros/hrt_all_zero_dump_npy/task-2-layer-3-BPU-hbir.add_id_137_bpu_segment_3-input-0-qnt.const_fake_quant_id_3: 0-frame_283622916665.data.bin",
+            "size_bytes": 458752,
+            "sha256": "1c2a53674f9cfa49b85ca0c7b9e50313ba1ca30fcba4cd501ed67f4ab31d106f"
+          },
+          {
+            "path": "/mnt/nas/openclaw/reports/models/dream7b_s100p_v18_execution_20260704/evidence/position_path_recovery_v18/zeros/hrt_all_zero_dump_npy/task-2-layer-3-BPU-hbir.add_id_137_bpu_segment_3-output-0-_output_0-frame_283622930712.data.bin",
+            "size_bytes": 917504,
+            "sha256": "63c93a7637f2d2c190e05df371efc3a46c13058052c4b9aea42ee6e25358507c"
+          }
+        ],
+        "gathernd_or_add_input0_files": [
+          {
+            "path": "/mnt/nas/openclaw/reports/models/dream7b_s100p_v18_execution_20260704/evidence/position_path_recovery_v18/zeros/hrt_all_zero_dump_npy/task-2-layer-2-native::GatherND-qnt.const_fake_quant_id_3_cpu_segment_2-input-0-hbir.reshape_id_1: 0-frame_283622909467.data.bin",
+            "size_bytes": 512,
+            "sha256": "076a27c79e5ace2a3d47f9dd2e83e4ff6ea8872b3c2218f66c92b89b55f36560"
+          },
+          {
+            "path": "/mnt/nas/openclaw/reports/models/dream7b_s100p_v18_execution_20260704/evidence/position_path_recovery_v18/zeros/hrt_all_zero_dump_npy/task-2-layer-2-native::GatherND-qnt.const_fake_quant_id_3_cpu_segment_2-output-0-qnt.const_fake_quant_id_3: 0-frame_283622910817.data.bin",
+            "size_bytes": 458752,
+            "sha256": "1c2a53674f9cfa49b85ca0c7b9e50313ba1ca30fcba4cd501ed67f4ab31d106f"
+          },
+          {
+            "path": "/mnt/nas/openclaw/reports/models/dream7b_s100p_v18_execution_20260704/evidence/position_path_recovery_v18/zeros/hrt_all_zero_dump_npy/task-2-layer-3-BPU-hbir.add_id_137_bpu_segment_3-input-0-qnt.const_fake_quant_id_3: 0-frame_283622916665.data.bin",
+            "size_bytes": 458752,
+            "sha256": "1c2a53674f9cfa49b85ca0c7b9e50313ba1ca30fcba4cd501ed67f4ab31d106f"
+          }
+        ],
+        "add_input1_files": [
+          {
+            "path": "/mnt/nas/openclaw/reports/models/dream7b_s100p_v18_execution_20260704/evidence/position_path_recovery_v18/zeros/hrt_all_zero_dump_npy/model_infer_input_1__input_1.npy",
+            "size_bytes": 592,
+            "sha256": "f2bf321a2574d39ceeb79a525edff93f742247e9149c973da7ea08e51ec60350"
+          },
+          {
+            "path": "/mnt/nas/openclaw/reports/models/dream7b_s100p_v18_execution_20260704/evidence/position_path_recovery_v18/zeros/hrt_all_zero_dump_npy/task-2-layer-0-BPU-hbir.mul_id_63_bpu_segment_0-input-0-_input_1-frame_283622903329.data.bin",
+            "size_bytes": 512,
+            "sha256": "076a27c79e5ace2a3d47f9dd2e83e4ff6ea8872b3c2218f66c92b89b55f36560"
+          }
+        ]
+      }
+    },
+    {
+      "case_id": "ramp",
+      "variant_count": 34,
+      "hrt_add_input0_dump": {
+        "cmd": [
+          "hrt_model_exec",
+          "infer",
+          "--model_file",
+          "/mnt/nas/openclaw/models/dream7b-hbm/seq128-b1-lmheadq16-lasttoken/seg00_01/dream7b_segment_0_1_seq128_q8.hbm",
+          "--model_name",
+          "dream_segment_00_01",
+          "--input_file",
+          "/mnt/nas/openclaw/reports/models/dream7b_s100p_v18_execution_20260704/evidence/position_path_recovery_v18/ramp/hrt_inputs/input_0_tokens.npy,/mnt/nas/openclaw/reports/models/dream7b_s100p_v18_execution_20260704/evidence/position_path_recovery_v18/ramp/hrt_inputs/input_1_positions_all_zero.npy",
+          "--frame_count",
+          "1",
+          "--dump_intermediate",
+          "1",
+          "--enable_dump",
+          "true",
+          "--dump_path",
+          "/mnt/nas/openclaw/reports/models/dream7b_s100p_v18_execution_20260704/evidence/position_path_recovery_v18/ramp/hrt_all_zero_dump_npy",
+          "--dump_format",
+          "npy"
+        ],
+        "returncode": 0,
+        "elapsed_seconds": 6.742,
+        "stdout_len": 4438,
+        "stderr_len": 0,
+        "log_path": "/mnt/nas/openclaw/reports/models/dream7b_s100p_v18_execution_20260704/evidence/position_path_recovery_v18/ramp/hrt_all_zero_dump_npy.log",
+        "log_sha256": "ff6c0382d76ae8ebd67add2fc230acb1306fb00ef27791dba39fe07d6fbba74a",
+        "dump_file_listing": [
+          {
+            "path": "/mnt/nas/openclaw/reports/models/dream7b_s100p_v18_execution_20260704/evidence/position_path_recovery_v18/ramp/hrt_all_zero_dump_npy/model_infer_input_0__input_0.npy",
+            "size_bytes": 592,
+            "sha256": "17a85909992bd2b70b6663b9c6a6983266cb5f083e2175f7950f649883f34b15"
+          },
+          {
+            "path": "/mnt/nas/openclaw/reports/models/dream7b_s100p_v18_execution_20260704/evidence/position_path_recovery_v18/ramp/hrt_all_zero_dump_npy/model_infer_input_1__input_1.npy",
+            "size_bytes": 592,
+            "sha256": "f2bf321a2574d39ceeb79a525edff93f742247e9149c973da7ea08e51ec60350"
+          },
+          {
+            "path": "/mnt/nas/openclaw/reports/models/dream7b_s100p_v18_execution_20260704/evidence/position_path_recovery_v18/ramp/hrt_all_zero_dump_npy/model_infer_output_0__output_0.npy",
+            "size_bytes": 917584,
+            "sha256": "15b4ccd519ae7e226c4f9e680663b1197249eba25d222b5fff02130339a6afbe"
+          },
+          {
+            "path": "/mnt/nas/openclaw/reports/models/dream7b_s100p_v18_execution_20260704/evidence/position_path_recovery_v18/ramp/hrt_all_zero_dump_npy/task-2-layer-0-BPU-hbir.mul_id_63_bpu_segment_0-input-0-_input_1-frame_283632689329.data.bin",
+            "size_bytes": 512,
+            "sha256": "076a27c79e5ace2a3d47f9dd2e83e4ff6ea8872b3c2218f66c92b89b55f36560"
+          },
+          {
+            "path": "/mnt/nas/openclaw/reports/models/dream7b_s100p_v18_execution_20260704/evidence/position_path_recovery_v18/ramp/hrt_all_zero_dump_npy/task-2-layer-1-native::View-hbir.reshape_id_1_cpu_segment_1-input-0-_input_0-frame_283632711994.data.bin",
+            "size_bytes": 512,
+            "sha256": "24f9ac547baae524ba0ea5220692d48f7526cdb1df5e99edcbb1f32239a8d5f5"
+          },
+          {
+            "path": "/mnt/nas/openclaw/reports/models/dream7b_s100p_v18_execution_20260704/evidence/position_path_recovery_v18/ramp/hrt_all_zero_dump_npy/task-2-layer-1-native::View-hbir.reshape_id_1_cpu_segment_1-output-0-hbir.reshape_id_1: 0-frame_283632712913.data.bin",
+            "size_bytes": 512,
+            "sha256": "24f9ac547baae524ba0ea5220692d48f7526cdb1df5e99edcbb1f32239a8d5f5"
+          },
+          {
+            "path": "/mnt/nas/openclaw/reports/models/dream7b_s100p_v18_execution_20260704/evidence/position_path_recovery_v18/ramp/hrt_all_zero_dump_npy/task-2-layer-2-native::GatherND-qnt.const_fake_quant_id_3_cpu_segment_2-input-0-hbir.reshape_id_1: 0-frame_283632713547.data.bin",
+            "size_bytes": 512,
+            "sha256": "24f9ac547baae524ba0ea5220692d48f7526cdb1df5e99edcbb1f32239a8d5f5"
+          },
+          {
+            "path": "/mnt/nas/openclaw/reports/models/dream7b_s100p_v18_execution_20260704/evidence/position_path_recovery_v18/ramp/hrt_all_zero_dump_npy/task-2-layer-2-native::GatherND-qnt.const_fake_quant_id_3_cpu_segment_2-output-0-qnt.const_fake_quant_id_3: 0-frame_283632714801.data.bin",
+            "size_bytes": 458752,
+            "sha256": "5c9098b48ed3f085c4071214beb9c28b21674d534dbde7682448600368acf846"
+          },
+          {
+            "path": "/mnt/nas/openclaw/reports/models/dream7b_s100p_v18_execution_20260704/evidence/position_path_recovery_v18/ramp/hrt_all_zero_dump_npy/task-2-layer-3-BPU-hbir.add_id_137_bpu_segment_3-input-0-qnt.const_fake_quant_id_3: 0-frame_283632719942.data.bin",
+            "size_bytes": 458752,
+            "sha256": "5c9098b48ed3f085c4071214beb9c28b21674d534dbde7682448600368acf846"
+          },
+          {
+            "path": "/mnt/nas/openclaw/reports/models/dream7b_s100p_v18_execution_20260704/evidence/position_path_recovery_v18/ramp/hrt_all_zero_dump_npy/task-2-layer-3-BPU-hbir.add_id_137_bpu_segment_3-output-0-_output_0-frame_283632733706.data.bin",
+            "size_bytes": 917504,
+            "sha256": "319092543b59ef4fbd6b23680a7d71b8048b363b4532aea4c37b898ae746fd17"
+          }
+        ],
+        "gathernd_or_add_input0_files": [
+          {
+            "path": "/mnt/nas/openclaw/reports/models/dream7b_s100p_v18_execution_20260704/evidence/position_path_recovery_v18/ramp/hrt_all_zero_dump_npy/task-2-layer-2-native::GatherND-qnt.const_fake_quant_id_3_cpu_segment_2-input-0-hbir.reshape_id_1: 0-frame_283632713547.data.bin",
+            "size_bytes": 512,
+            "sha256": "24f9ac547baae524ba0ea5220692d48f7526cdb1df5e99edcbb1f32239a8d5f5"
+          },
+          {
+            "path": "/mnt/nas/openclaw/reports/models/dream7b_s100p_v18_execution_20260704/evidence/position_path_recovery_v18/ramp/hrt_all_zero_dump_npy/task-2-layer-2-native::GatherND-qnt.const_fake_quant_id_3_cpu_segment_2-output-0-qnt.const_fake_quant_id_3: 0-frame_283632714801.data.bin",
+            "size_bytes": 458752,
+            "sha256": "5c9098b48ed3f085c4071214beb9c28b21674d534dbde7682448600368acf846"
+          },
+          {
+            "path": "/mnt/nas/openclaw/reports/models/dream7b_s100p_v18_execution_20260704/evidence/position_path_recovery_v18/ramp/hrt_all_zero_dump_npy/task-2-layer-3-BPU-hbir.add_id_137_bpu_segment_3-input-0-qnt.const_fake_quant_id_3: 0-frame_283632719942.data.bin",
+            "size_bytes": 458752,
+            "sha256": "5c9098b48ed3f085c4071214beb9c28b21674d534dbde7682448600368acf846"
+          }
+        ],
+        "add_input1_files": [
+          {
+            "path": "/mnt/nas/openclaw/reports/models/dream7b_s100p_v18_execution_20260704/evidence/position_path_recovery_v18/ramp/hrt_all_zero_dump_npy/model_infer_input_1__input_1.npy",
+            "size_bytes": 592,
+            "sha256": "f2bf321a2574d39ceeb79a525edff93f742247e9149c973da7ea08e51ec60350"
+          },
+          {
+            "path": "/mnt/nas/openclaw/reports/models/dream7b_s100p_v18_execution_20260704/evidence/position_path_recovery_v18/ramp/hrt_all_zero_dump_npy/task-2-layer-0-BPU-hbir.mul_id_63_bpu_segment_0-input-0-_input_1-frame_283632689329.data.bin",
+            "size_bytes": 512,
+            "sha256": "076a27c79e5ace2a3d47f9dd2e83e4ff6ea8872b3c2218f66c92b89b55f36560"
+          }
+        ]
+      }
+    },
+    {
+      "case_id": "short_chinese_prompt_padded",
+      "variant_count": 34,
+      "hrt_add_input0_dump": {
+        "cmd": [
+          "hrt_model_exec",
+          "infer",
+          "--model_file",
+          "/mnt/nas/openclaw/models/dream7b-hbm/seq128-b1-lmheadq16-lasttoken/seg00_01/dream7b_segment_0_1_seq128_q8.hbm",
+          "--model_name",
+          "dream_segment_00_01",
+          "--input_file",
+          "/mnt/nas/openclaw/reports/models/dream7b_s100p_v18_execution_20260704/evidence/position_path_recovery_v18/short_chinese_prompt_padded/hrt_inputs/input_0_tokens.npy,/mnt/nas/openclaw/reports/models/dream7b_s100p_v18_execution_20260704/evidence/position_path_recovery_v18/short_chinese_prompt_padded/hrt_inputs/input_1_positions_all_zero.npy",
+          "--frame_count",
+          "1",
+          "--dump_intermediate",
+          "1",
+          "--enable_dump",
+          "true",
+          "--dump_path",
+          "/mnt/nas/openclaw/reports/models/dream7b_s100p_v18_execution_20260704/evidence/position_path_recovery_v18/short_chinese_prompt_padded/hrt_all_zero_dump_npy",
+          "--dump_format",
+          "npy"
+        ],
+        "returncode": 0,
+        "elapsed_seconds": 6.736,
+        "stdout_len": 4646,
+        "stderr_len": 0,
+        "log_path": "/mnt/nas/openclaw/reports/models/dream7b_s100p_v18_execution_20260704/evidence/position_path_recovery_v18/short_chinese_prompt_padded/hrt_all_zero_dump_npy.log",
+        "log_sha256": "27088f9a9f20dce6f91b6abbe003aa80e60721e82e980ed60f582da4f85dd0b3",
+        "dump_file_listing": [
+          {
+            "path": "/mnt/nas/openclaw/reports/models/dream7b_s100p_v18_execution_20260704/evidence/position_path_recovery_v18/short_chinese_prompt_padded/hrt_all_zero_dump_npy/model_infer_input_0__input_0.npy",
+            "size_bytes": 592,
+            "sha256": "17110860f7c6e689dd858a28f9c2b78fdaf893900f35853e43fbef1667b454d5"
+          },
+          {
+            "path": "/mnt/nas/openclaw/reports/models/dream7b_s100p_v18_execution_20260704/evidence/position_path_recovery_v18/short_chinese_prompt_padded/hrt_all_zero_dump_npy/model_infer_input_1__input_1.npy",
+            "size_bytes": 592,
+            "sha256": "f2bf321a2574d39ceeb79a525edff93f742247e9149c973da7ea08e51ec60350"
+          },
+          {
+            "path": "/mnt/nas/openclaw/reports/models/dream7b_s100p_v18_execution_20260704/evidence/position_path_recovery_v18/short_chinese_prompt_padded/hrt_all_zero_dump_npy/model_infer_output_0__output_0.npy",
+            "size_bytes": 917584,
+            "sha256": "52b3c1c4412e7a276a03f85a3311fa3fa61d8fea6ea6bcee1669535f74951abb"
+          },
+          {
+            "path": "/mnt/nas/openclaw/reports/models/dream7b_s100p_v18_execution_20260704/evidence/position_path_recovery_v18/short_chinese_prompt_padded/hrt_all_zero_dump_npy/task-2-layer-0-BPU-hbir.mul_id_63_bpu_segment_0-input-0-_input_1-frame_283642221721.data.bin",
+            "size_bytes": 512,
+            "sha256": "076a27c79e5ace2a3d47f9dd2e83e4ff6ea8872b3c2218f66c92b89b55f36560"
+          },
+          {
+            "path": "/mnt/nas/openclaw/reports/models/dream7b_s100p_v18_execution_20260704/evidence/position_path_recovery_v18/short_chinese_prompt_padded/hrt_all_zero_dump_npy/task-2-layer-1-native::View-hbir.reshape_id_1_cpu_segment_1-input-0-_input_0-frame_283642242927.data.bin",
+            "size_bytes": 512,
+            "sha256": "0c970e5d7439f82b493824b159402a490844d97a8390e630238d15068244239e"
+          },
+          {
+            "path": "/mnt/nas/openclaw/reports/models/dream7b_s100p_v18_execution_20260704/evidence/position_path_recovery_v18/short_chinese_prompt_padded/hrt_all_zero_dump_npy/task-2-layer-1-native::View-hbir.reshape_id_1_cpu_segment_1-output-0-hbir.reshape_id_1: 0-frame_283642243739.data.bin",
+            "size_bytes": 512,
+            "sha256": "0c970e5d7439f82b493824b159402a490844d97a8390e630238d15068244239e"
+          },
+          {
+            "path": "/mnt/nas/openclaw/reports/models/dream7b_s100p_v18_execution_20260704/evidence/position_path_recovery_v18/short_chinese_prompt_padded/hrt_all_zero_dump_npy/task-2-layer-2-native::GatherND-qnt.const_fake_quant_id_3_cpu_segment_2-input-0-hbir.reshape_id_1: 0-frame_283642244425.data.bin",
+            "size_bytes": 512,
+            "sha256": "0c970e5d7439f82b493824b159402a490844d97a8390e630238d15068244239e"
+          },
+          {
+            "path": "/mnt/nas/openclaw/reports/models/dream7b_s100p_v18_execution_20260704/evidence/position_path_recovery_v18/short_chinese_prompt_padded/hrt_all_zero_dump_npy/task-2-layer-2-native::GatherND-qnt.const_fake_quant_id_3_cpu_segment_2-output-0-qnt.const_fake_quant_id_3: 0-frame_283642245695.data.bin",
+            "size_bytes": 458752,
+            "sha256": "7a063fadc1a9708ccddbd8a927f8e57a08318cbe414adf64b2933e40faf44a99"
+          },
+          {
+            "path": "/mnt/nas/openclaw/reports/models/dream7b_s100p_v18_execution_20260704/evidence/position_path_recovery_v18/short_chinese_prompt_padded/hrt_all_zero_dump_npy/task-2-layer-3-BPU-hbir.add_id_137_bpu_segment_3-input-0-qnt.const_fake_quant_id_3: 0-frame_283642250990.data.bin",
+            "size_bytes": 458752,
+            "sha256": "7a063fadc1a9708ccddbd8a927f8e57a08318cbe414adf64b2933e40faf44a99"
+          },
+          {
+            "path": "/mnt/nas/openclaw/reports/models/dream7b_s100p_v18_execution_20260704/evidence/position_path_recovery_v18/short_chinese_prompt_padded/hrt_all_zero_dump_npy/task-2-layer-3-BPU-hbir.add_id_137_bpu_segment_3-output-0-_output_0-frame_283642264659.data.bin",
+            "size_bytes": 917504,
+            "sha256": "f59ae80c95837ca7d7ae3ec35cb522c409108b9fa86b9f69237586995e0f7573"
+          }
+        ],
+        "gathernd_or_add_input0_files": [
+          {
+            "path": "/mnt/nas/openclaw/reports/models/dream7b_s100p_v18_execution_20260704/evidence/position_path_recovery_v18/short_chinese_prompt_padded/hrt_all_zero_dump_npy/task-2-layer-2-native::GatherND-qnt.const_fake_quant_id_3_cpu_segment_2-input-0-hbir.reshape_id_1: 0-frame_283642244425.data.bin",
+            "size_bytes": 512,
+            "sha256": "0c970e5d7439f82b493824b159402a490844d97a8390e630238d15068244239e"
+          },
+          {
+            "path": "/mnt/nas/openclaw/reports/models/dream7b_s100p_v18_execution_20260704/evidence/position_path_recovery_v18/short_chinese_prompt_padded/hrt_all_zero_dump_npy/task-2-layer-2-native::GatherND-qnt.const_fake_quant_id_3_cpu_segment_2-output-0-qnt.const_fake_quant_id_3: 0-frame_283642245695.data.bin",
+            "size_bytes": 458752,
+            "sha256": "7a063fadc1a9708ccddbd8a927f8e57a08318cbe414adf64b2933e40faf44a99"
+          },
+          {
+            "path": "/mnt/nas/openclaw/reports/models/dream7b_s100p_v18_execution_20260704/evidence/position_path_recovery_v18/short_chinese_prompt_padded/hrt_all_zero_dump_npy/task-2-layer-3-BPU-hbir.add_id_137_bpu_segment_3-input-0-qnt.const_fake_quant_id_3: 0-frame_283642250990.data.bin",
+            "size_bytes": 458752,
+            "sha256": "7a063fadc1a9708ccddbd8a927f8e57a08318cbe414adf64b2933e40faf44a99"
+          }
+        ],
+        "add_input1_files": [
+          {
+            "path": "/mnt/nas/openclaw/reports/models/dream7b_s100p_v18_execution_20260704/evidence/position_path_recovery_v18/short_chinese_prompt_padded/hrt_all_zero_dump_npy/model_infer_input_1__input_1.npy",
+            "size_bytes": 592,
+            "sha256": "f2bf321a2574d39ceeb79a525edff93f742247e9149c973da7ea08e51ec60350"
+          },
+          {
+            "path": "/mnt/nas/openclaw/reports/models/dream7b_s100p_v18_execution_20260704/evidence/position_path_recovery_v18/short_chinese_prompt_padded/hrt_all_zero_dump_npy/task-2-layer-0-BPU-hbir.mul_id_63_bpu_segment_0-input-0-_input_1-frame_283642221721.data.bin",
+            "size_bytes": 512,
+            "sha256": "076a27c79e5ace2a3d47f9dd2e83e4ff6ea8872b3c2218f66c92b89b55f36560"
+          }
+        ]
+      }
+    }
+  ],
+  "errors": [],
+  "status": "pass",
+  "quant_metadata": {
+    "available": true,
+    "scale": [
+      6.062494503566995e-05
+    ],
+    "scale_first": 6.062494503566995e-05,
+    "zero_point": [
+      0.0
+    ],
+    "repr": "<hbm_runtime.HB_HBMRuntime.QuantParams object at 0xffff93cd55f0>"
+  },
+  "dequant_domain": {
+    "tensor": "seg00_01 add/model output",
+    "scale": 6.062494503566995e-05,
+    "zero_point_assumed": 0
+  },
+  "variant_names": [
+    "all_zero",
+    "all_one",
+    "canonical",
+    "reversed",
+    "random_permutation",
+    "constant_0",
+    "constant_1",
+    "constant_2",
+    "constant_4",
+    "constant_8",
+    "constant_16",
+    "constant_32",
+    "constant_64",
+    "constant_127",
+    "single_spike_index_000_value_001",
+    "single_spike_index_000_value_002",
+    "single_spike_index_000_value_064",
+    "single_spike_index_000_value_127",
+    "single_spike_index_001_value_001",
+    "single_spike_index_001_value_002",
+    "single_spike_index_001_value_064",
+    "single_spike_index_001_value_127",
+    "single_spike_index_002_value_001",
+    "single_spike_index_002_value_002",
+    "single_spike_index_002_value_064",
+    "single_spike_index_002_value_127",
+    "single_spike_index_064_value_001",
+    "single_spike_index_064_value_002",
+    "single_spike_index_064_value_064",
+    "single_spike_index_064_value_127",
+    "single_spike_index_127_value_001",
+    "single_spike_index_127_value_002",
+    "single_spike_index_127_value_064",
+    "single_spike_index_127_value_127"
+  ],
+  "elapsed_total_seconds": 36.35
+}

@@ -1,0 +1,361 @@
+{
+  "checks": [
+    {
+      "duration_ms": 63.4,
+      "name": "GET /api/agent-runtime/status",
+      "ok": true,
+      "payload_summary": {
+        "cloud_private_raw_egress": false,
+        "datastores": {
+          "memory_db": "/mnt/nas/openclaw/reports/qwen25_ai_nas/agent_runtime/agent_runtime_memory.sqlite3",
+          "multimodal_db": "/mnt/nas/openclaw/reports/qwen25_ai_nas/agent_runtime/agent_runtime_multimodal.sqlite3",
+          "rag_db": "/mnt/nas/openclaw/reports/qwen25_ai_nas/agent_runtime/agent_runtime_rag.sqlite3"
+        },
+        "feature_flags": {
+          "agent_runtime_enabled": true,
+          "cloud_private_raw_egress_enabled": false,
+          "context_pack_enabled": true,
+          "memory_manager_enabled": true,
+          "multimodal_index_enabled": true,
+          "public_mcp_enabled": false,
+          "qwen_tool_execution_enabled": false,
+          "rag_enabled": true,
+          "rag_eval_enabled": true
+        },
+        "internal_tool_manifest": {
+          "cloud_private_raw_egress_allowed": false,
+          "missing_tool_ids": {
+            "count": 0,
+            "type": "list"
+          },
+          "mutating_not_dispatcher_only": {
+            "count": 0,
+            "type": "list"
+          },
+          "ok": true,
+          "public_mcp_exposed": false,
+          "qwen_tool_execution_authority": false,
+          "tool_count": 12
+        },
+        "memory": {
+          "cloud_private_raw_egress": false,
+          "db_path": "/mnt/nas/openclaw/reports/qwen25_ai_nas/agent_runtime/agent_runtime_memory.sqlite3",
+          "events": 201,
+          "facts": 12,
+          "ok": true,
+          "preferences": 6,
+          "private_leak_count": 0,
+          "procedures": 6,
+          "qwen_execution_authority": false,
+          "raw_content_rows": 0,
+          "reflections": 6,
+          "schema": "agent_runtime_memory_v1"
+        },
+        "multimodal_index": {
+          "counts": {
+            "keys": [
+              "archive",
+              "audio",
+              "code",
+              "document",
+              "image",
+              "video"
+            ],
+            "type": "dict"
+          },
+          "db_path": "/mnt/nas/openclaw/reports/qwen25_ai_nas/agent_runtime/agent_runtime_multimodal.sqlite3",
+          "feature_flags": {
+            "keys": [
+              "embedding_enabled",
+              "ocr_enabled",
+              "thumbnail_enabled"
+            ],
+            "type": "dict"
+          },
+          "indexed_count": 337,
+          "ok": true,
+          "private_leak_count": 0,
+          "raw_path_rows": 0
+        },
+        "ok": true,
+        "public_mcp_exposed": false,
+        "qwen_execution_authority": false,
+        "raw_private_content_in_status": false,
+        "routes": {
+          "count": 9,
+          "type": "list"
+        },
+        "schema": "digua_agent_runtime_status_v1",
+        "service": "agent_runtime"
+      },
+      "status": 200
+    },
+    {
+      "duration_ms": 2.3,
+      "name": "GET /api/agent-runtime/tool-manifest",
+      "ok": true,
+      "payload_summary": {
+        "manifest": {
+          "cloud_private_raw_egress_allowed": false,
+          "manifest_id": "digua_agent_runtime_internal_tool_manifest_v1",
+          "public_mcp_exposed": false,
+          "qwen_tool_execution_authority": false,
+          "scope": "internal_only",
+          "tools": {
+            "count": 12,
+            "type": "list"
+          },
+          "validation": {
+            "keys": [
+              "cloud_private_raw_egress_allowed",
+              "missing_tool_ids",
+              "mutating_not_dispatcher_only",
+              "ok",
+              "public_mcp_exposed",
+              "qwen_tool_execution_authority",
+              "tool_count"
+            ],
+            "type": "dict"
+          }
+        },
+        "ok": true
+      },
+      "status": 200
+    },
+    {
+      "duration_ms": 44.8,
+      "name": "GET /api/agent-runtime/memory/stats",
+      "ok": true,
+      "payload_summary": {
+        "cloud_private_raw_egress": false,
+        "db_path": "/mnt/nas/openclaw/reports/qwen25_ai_nas/agent_runtime/agent_runtime_memory.sqlite3",
+        "events": 201,
+        "facts": 12,
+        "ok": true,
+        "preferences": 6,
+        "private_leak_count": 0,
+        "procedures": 6,
+        "qwen_execution_authority": false,
+        "raw_content_rows": 0,
+        "reflections": 6,
+        "schema": "agent_runtime_memory_v1"
+      },
+      "status": 200
+    },
+    {
+      "duration_ms": 19.6,
+      "name": "GET /api/agent-runtime/multimodal-index/status",
+      "ok": true,
+      "payload_summary": {
+        "counts": {
+          "archive": 4,
+          "audio": 12,
+          "code": 4,
+          "document": 256,
+          "image": 49,
+          "video": 12
+        },
+        "db_path": "/mnt/nas/openclaw/reports/qwen25_ai_nas/agent_runtime/agent_runtime_multimodal.sqlite3",
+        "feature_flags": {
+          "embedding_enabled": false,
+          "ocr_enabled": false,
+          "thumbnail_enabled": false
+        },
+        "indexed_count": 337,
+        "ok": true,
+        "private_leak_count": 0,
+        "raw_path_rows": 0
+      },
+      "status": 200
+    },
+    {
+      "duration_ms": 2.7,
+      "name": "GET /api/agent-runtime/eval/status",
+      "ok": true,
+      "payload_summary": {
+        "latest_eval": {
+          "cloud_private_raw_egress": false,
+          "gate_reports": {
+            "keys": [
+              "agent_memory_manager_gate",
+              "agent_runtime_safety_ui_gate",
+              "context_pack_compiler_gate",
+              "continuous_eval_dataset_gate",
+              "default_service_integration_gate",
+              "fts_first_rag_eval_gate",
+              "internal_tool_manifest_gate",
+              "multimodal_index_gate",
+              "trace_schema_gate"
+            ],
+            "type": "dict"
+          },
+          "generated_at": "2026-07-05T04:26:23Z",
+          "metrics": {
+            "keys": [
+              "context_pack_count",
+              "eval_total_cases",
+              "memory_events",
+              "multimodal_counts",
+              "private_leak_count",
+              "rag_case_count",
+              "rag_citation_coverage",
+              "rag_no_evidence_refusal_rate"
+            ],
+            "type": "dict"
+          },
+          "ok": true,
+          "public_mcp_exposed": false,
+          "qwen_execution_authority": false,
+          "required_s100p_acceptance": true,
+          "schema": "digua_agent_runtime_deepening_eval_gate_v1",
+          "verdict": "agent_runtime_deepening_local_gates_ready_for_s100p_acceptance"
+        },
+        "ok": true,
+        "path": "/mnt/nas/openclaw/reports/qwen25_ai_nas/24090_agent_runtime_eval_gate.json"
+      },
+      "status": 200
+    },
+    {
+      "duration_ms": 27.8,
+      "name": "POST /api/agent-runtime/context-pack",
+      "ok": true,
+      "payload_summary": {
+        "acl_denied_count": 1,
+        "allowed_tool_ids": {
+          "count": 6,
+          "type": "list"
+        },
+        "budget_ok": true,
+        "cloud_private_raw_egress": false,
+        "context_items": {
+          "count": 2,
+          "type": "list"
+        },
+        "evidence_refs": {
+          "count": 2,
+          "type": "list"
+        },
+        "ok": true,
+        "pack_id": "ctxpack_ac4b034994959a6ecf8739c4",
+        "private_leak_count": 0,
+        "query": "OpenClaw Harness production boundary",
+        "qwen_execution_authority": false,
+        "redaction_count": 3,
+        "redaction_map_exported": false,
+        "request_id": "ctx_311f78088ef898f2",
+        "schema": "digua_agent_runtime_context_pack_v1",
+        "token_budget": "[REDACTED]",
+        "token_estimate": "[REDACTED]",
+        "tool_intent": "answer_with_evidence",
+        "trace": {
+          "attributes": {
+            "keys": [
+              "acl_denied_count",
+              "cloud_private_raw_egress",
+              "context_item_count",
+              "qwen_execution_authority",
+              "token_estimate"
+            ],
+            "type": "dict"
+          },
+          "generated_at": "2026-07-05T07:57:54Z",
+          "private_leak_count": 0,
+          "request_id": "ctx_311f78088ef898f2",
+          "schema": "digua_agent_runtime_trace_v1",
+          "spans": {
+            "count": 5,
+            "type": "list"
+          },
+          "trace_hash": "f78a4d562544e2f3347408a2ef16edcb",
+          "trace_id": "trc_244afb94d3f3417b8ff8bffd"
+        },
+        "user_id_hash": "8c6976e5b5410415",
+        "workspace": "Personal"
+      },
+      "status": 200
+    },
+    {
+      "duration_ms": 67.6,
+      "name": "POST /api/agent-runtime/memory/record",
+      "ok": true,
+      "payload_summary": {
+        "event_id": "mem_evt_774a574c7056bd3b29a8",
+        "event_ts": "2026-07-05T07:57:54Z",
+        "evidence_refs": {
+          "count": 0,
+          "type": "list"
+        },
+        "memory_type": "event",
+        "metadata": {},
+        "ok": true,
+        "privacy_level": "local_private_redacted",
+        "private_leak_count": 0,
+        "raw_content_stored": false,
+        "source_hash": "f77fd7fd1a0b6903bcd444aa",
+        "summary": "Synthetic production gate record",
+        "title": "production_delivery_probe"
+      },
+      "status": 200
+    },
+    {
+      "duration_ms": 74.3,
+      "name": "POST /api/agent-runtime/multimodal-index/scan",
+      "ok": true,
+      "payload_summary": {
+        "cloud_private_raw_egress": false,
+        "counts": {
+          "archive": 0,
+          "audio": 0,
+          "code": 0,
+          "document": 28,
+          "image": 9,
+          "other": 0,
+          "video": 0
+        },
+        "db_path": "/mnt/nas/openclaw/reports/qwen25_ai_nas/agent_runtime/agent_runtime_multimodal.sqlite3",
+        "feature_flags": {
+          "embedding_enabled": false,
+          "ocr_enabled": false,
+          "thumbnail_enabled": false
+        },
+        "indexed_count": 37,
+        "ok": true,
+        "qwen_execution_authority": false,
+        "raw_content_stored": false,
+        "raw_path_exported": false,
+        "schema": "digua_agent_runtime_multimodal_index_v1",
+        "skipped_count": 0
+      },
+      "status": 200
+    },
+    {
+      "duration_ms": 131.7,
+      "name": "POST /api/agent-runtime/rag/query",
+      "ok": true,
+      "payload_summary": {
+        "answer": "Local FTS-first RAG found 6 evidence chunks from rag_case_00_harness.md, rag_case_05_harness.md, rag_case_10_harness.md. Evidence refs: rag_ev_1_68015d67ad, rag_ev_2_12131d771d, ra...[truncated]",
+        "cloud_used": false,
+        "embedding_enabled": false,
+        "evidence": {
+          "count": 6,
+          "type": "list"
+        },
+        "evidence_count": 6,
+        "evidence_refs": {
+          "count": 6,
+          "type": "list"
+        },
+        "no_evidence_refusal": false,
+        "ok": true,
+        "private_leak_count": 0,
+        "query": "OpenClaw Harness",
+        "qwen_execution_authority": false,
+        "raw_private_content_returned": false,
+        "reranker_enabled": false,
+        "retrieval_mode": "sqlite_fts_first"
+      },
+      "status": 200
+    }
+  ],
+  "generated_at": "2026-07-05T16:07:35+08:00"
+}

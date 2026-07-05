@@ -1,0 +1,79 @@
+{
+  "ok": true,
+  "service": "agent_runtime",
+  "schema": "digua_agent_runtime_status_v1",
+  "feature_flags": {
+    "agent_runtime_enabled": true,
+    "context_pack_enabled": true,
+    "memory_manager_enabled": true,
+    "multimodal_index_enabled": true,
+    "rag_enabled": true,
+    "rag_eval_enabled": true,
+    "public_mcp_enabled": false,
+    "qwen_tool_execution_enabled": false,
+    "cloud_private_raw_egress_enabled": false
+  },
+  "routes": [
+    "GET /api/agent-runtime/status",
+    "GET /api/agent-runtime/tool-manifest",
+    "GET /api/agent-runtime/memory/stats",
+    "GET /api/agent-runtime/multimodal-index/status",
+    "GET /api/agent-runtime/eval/status",
+    "POST /api/agent-runtime/context-pack",
+    "POST /api/agent-runtime/memory/record",
+    "POST /api/agent-runtime/multimodal-index/scan",
+    "POST /api/agent-runtime/rag/query"
+  ],
+  "datastores": {
+    "memory_db": "/mnt/nas/openclaw/reports/qwen25_ai_nas/agent_runtime/agent_runtime_memory.sqlite3",
+    "multimodal_db": "/mnt/nas/openclaw/reports/qwen25_ai_nas/agent_runtime/agent_runtime_multimodal.sqlite3",
+    "rag_db": "/mnt/nas/openclaw/reports/qwen25_ai_nas/agent_runtime/agent_runtime_rag.sqlite3"
+  },
+  "memory": {
+    "events": 200,
+    "facts": 12,
+    "procedures": 6,
+    "preferences": 6,
+    "reflections": 6,
+    "raw_content_rows": 0,
+    "private_leak_count": 0,
+    "ok": true,
+    "db_path": "/mnt/nas/openclaw/reports/qwen25_ai_nas/agent_runtime/agent_runtime_memory.sqlite3",
+    "schema": "agent_runtime_memory_v1",
+    "qwen_execution_authority": false,
+    "cloud_private_raw_egress": false
+  },
+  "multimodal_index": {
+    "ok": true,
+    "db_path": "/mnt/nas/openclaw/reports/qwen25_ai_nas/agent_runtime/agent_runtime_multimodal.sqlite3",
+    "counts": {
+      "archive": 4,
+      "audio": 12,
+      "code": 4,
+      "document": 228,
+      "image": 40,
+      "video": 12
+    },
+    "indexed_count": 300,
+    "raw_path_rows": 0,
+    "private_leak_count": 0,
+    "feature_flags": {
+      "thumbnail_enabled": false,
+      "ocr_enabled": false,
+      "embedding_enabled": false
+    }
+  },
+  "internal_tool_manifest": {
+    "ok": true,
+    "missing_tool_ids": [],
+    "tool_count": 12,
+    "public_mcp_exposed": false,
+    "qwen_tool_execution_authority": false,
+    "mutating_not_dispatcher_only": [],
+    "cloud_private_raw_egress_allowed": false
+  },
+  "qwen_execution_authority": false,
+  "cloud_private_raw_egress": false,
+  "public_mcp_exposed": false,
+  "raw_private_content_in_status": false
+}

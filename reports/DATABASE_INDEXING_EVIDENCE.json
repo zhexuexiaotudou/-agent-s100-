@@ -1,0 +1,421 @@
+{
+  "generated_at": "2026-07-04T11:54:15+08:00",
+  "database": {
+    "path": "/mnt/nas/openclaw/reports/qwen25_ai_nas/personal_inventory.sqlite3",
+    "exists": true,
+    "size_bytes": 999424,
+    "tables": [
+      "change_log",
+      "embeddings",
+      "failures",
+      "file_operations",
+      "image_captions",
+      "image_embeddings",
+      "index_runs",
+      "ocr_results",
+      "photo_visual_state",
+      "records",
+      "records_fts",
+      "records_fts_config",
+      "records_fts_content",
+      "records_fts_data",
+      "records_fts_docsize",
+      "records_fts_idx",
+      "sqlite_sequence",
+      "vision_artifacts",
+      "vision_attributes",
+      "vision_captions_v2",
+      "vision_embeddings_v2",
+      "vision_generations",
+      "vision_jobs",
+      "vision_regions",
+      "vision_search_audit"
+    ],
+    "table_counts": {
+      "change_log": 162,
+      "embeddings": 162,
+      "failures": 0,
+      "file_operations": 0,
+      "image_captions": 0,
+      "image_embeddings": 37,
+      "index_runs": 412,
+      "ocr_results": 0,
+      "photo_visual_state": 0,
+      "records": 162,
+      "records_fts": 162,
+      "records_fts_config": 1,
+      "records_fts_content": 162,
+      "records_fts_data": 18,
+      "records_fts_docsize": 162,
+      "records_fts_idx": 16,
+      "sqlite_sequence": 2,
+      "vision_artifacts": 0,
+      "vision_attributes": 0,
+      "vision_captions_v2": 0,
+      "vision_embeddings_v2": 0,
+      "vision_generations": 0,
+      "vision_jobs": 0,
+      "vision_regions": 0,
+      "vision_search_audit": 0
+    },
+    "columns": {
+      "change_log": [
+        "id",
+        "run_id",
+        "action",
+        "path",
+        "relative_path",
+        "reason",
+        "created_at"
+      ],
+      "embeddings": [
+        "path",
+        "model_id",
+        "dim",
+        "vector_json",
+        "source_text",
+        "updated_at"
+      ],
+      "failures": [
+        "id",
+        "run_id",
+        "path",
+        "reason",
+        "created_at"
+      ],
+      "file_operations": [
+        "id",
+        "created_at",
+        "action",
+        "source_relative_path",
+        "target_relative_path",
+        "status",
+        "detail",
+        "size_bytes",
+        "sha256"
+      ],
+      "image_captions": [
+        "path",
+        "relative_path",
+        "provider",
+        "model_id",
+        "schema_version",
+        "status",
+        "caption",
+        "structured_json",
+        "search_text",
+        "error",
+        "metadata_json",
+        "updated_at"
+      ],
+      "image_embeddings": [
+        "path",
+        "relative_path",
+        "model_id",
+        "dim",
+        "status",
+        "engine",
+        "vector_json",
+        "error",
+        "metadata_json",
+        "updated_at"
+      ],
+      "index_runs": [
+        "id",
+        "started_at",
+        "finished_at",
+        "personal_root",
+        "scan_dirs_json",
+        "max_files",
+        "scanned_files",
+        "added",
+        "updated",
+        "unchanged",
+        "deleted",
+        "failed",
+        "status",
+        "message"
+      ],
+      "ocr_results": [
+        "path",
+        "relative_path",
+        "status",
+        "engine",
+        "text_preview",
+        "error",
+        "metadata_json",
+        "updated_at"
+      ],
+      "photo_visual_state": [
+        "path",
+        "relative_path",
+        "source_revision",
+        "acl_scope",
+        "security_partition_id",
+        "acl_epoch",
+        "privacy_class",
+        "active_generation",
+        "status",
+        "degradation_json",
+        "indexed_at",
+        "updated_at"
+      ],
+      "records": [
+        "path",
+        "relative_path",
+        "name",
+        "size_bytes",
+        "mtime_ns",
+        "mtime",
+        "sha256",
+        "type",
+        "extension",
+        "mime_type",
+        "year",
+        "tags_json",
+        "keywords_json",
+        "summary",
+        "parse_error",
+        "metadata_json",
+        "indexed_at"
+      ],
+      "records_fts": [
+        "path",
+        "relative_path",
+        "name",
+        "type",
+        "tags",
+        "keywords",
+        "summary"
+      ],
+      "records_fts_config": [
+        "k",
+        "v"
+      ],
+      "records_fts_content": [
+        "id",
+        "c0",
+        "c1",
+        "c2",
+        "c3",
+        "c4",
+        "c5",
+        "c6"
+      ],
+      "records_fts_data": [
+        "id",
+        "block"
+      ],
+      "records_fts_docsize": [
+        "id",
+        "sz"
+      ],
+      "records_fts_idx": [
+        "segid",
+        "term",
+        "pgno"
+      ],
+      "sqlite_sequence": [
+        "name",
+        "seq"
+      ],
+      "vision_artifacts": [
+        "artifact_id",
+        "path",
+        "relative_path",
+        "generation",
+        "artifact_type",
+        "uri",
+        "mime_type",
+        "size_bytes",
+        "model_id",
+        "privacy_class",
+        "metadata_json",
+        "created_at"
+      ],
+      "vision_attributes": [
+        "id",
+        "region_id",
+        "path",
+        "relative_path",
+        "generation",
+        "namespace",
+        "name",
+        "value",
+        "confidence",
+        "model_id",
+        "runtime",
+        "evidence_json",
+        "created_at"
+      ],
+      "vision_captions_v2": [
+        "id",
+        "path",
+        "relative_path",
+        "generation",
+        "provider",
+        "model_id",
+        "schema_version",
+        "status",
+        "caption",
+        "structured_json",
+        "search_text",
+        "confidence",
+        "error",
+        "metadata_json",
+        "created_at"
+      ],
+      "vision_embeddings_v2": [
+        "id",
+        "path",
+        "relative_path",
+        "generation",
+        "scope",
+        "region_id",
+        "model_id",
+        "dim",
+        "vector_json",
+        "status",
+        "runtime",
+        "metadata_json",
+        "created_at"
+      ],
+      "vision_generations": [
+        "id",
+        "path",
+        "relative_path",
+        "generation",
+        "source_revision",
+        "model_bundle_json",
+        "status",
+        "created_at",
+        "activated_at",
+        "error",
+        "metadata_json"
+      ],
+      "vision_jobs": [
+        "job_id",
+        "requested_by",
+        "request_json",
+        "status",
+        "priority",
+        "created_at",
+        "started_at",
+        "finished_at",
+        "error",
+        "stats_json"
+      ],
+      "vision_regions": [
+        "id",
+        "path",
+        "relative_path",
+        "generation",
+        "region_kind",
+        "label",
+        "bbox_json",
+        "mask_artifact_id",
+        "confidence",
+        "model_id",
+        "runtime",
+        "metadata_json",
+        "created_at"
+      ],
+      "vision_search_audit": [
+        "id",
+        "created_at",
+        "principal",
+        "query_hash",
+        "query_plan_json",
+        "result_count",
+        "degraded",
+        "runtime_json"
+      ]
+    },
+    "query_examples": [
+      {
+        "name": "records_sample",
+        "sql": "SELECT relative_path, path, name, mime_type, extension, size_bytes, mtime FROM records LIMIT 5",
+        "row_count": 5,
+        "rows": [
+          {
+            "relative_path": "Movies/Controlled/movie_crime_family_archive_000.movie.txt",
+            "path": "/mnt/nas/openclaw/Personal/Movies/Controlled/movie_crime_family_archive_000.movie.txt",
+            "name": "movie_crime_family_archive_000.movie.txt",
+            "mime_type": "text/plain",
+            "extension": ".txt",
+            "size_bytes": 77,
+            "mtime": "2026-06-18T14:11:40.131136+08:00"
+          },
+          {
+            "relative_path": "Movies/Controlled/movie_crime_family_archive_001.movie.txt",
+            "path": "/mnt/nas/openclaw/Personal/Movies/Controlled/movie_crime_family_archive_001.movie.txt",
+            "name": "movie_crime_family_archive_001.movie.txt",
+            "mime_type": "text/plain",
+            "extension": ".txt",
+            "size_bytes": 77,
+            "mtime": "2026-06-18T14:11:40.132136+08:00"
+          },
+          {
+            "relative_path": "Movies/Controlled/movie_crime_family_archive_002.movie.txt",
+            "path": "/mnt/nas/openclaw/Personal/Movies/Controlled/movie_crime_family_archive_002.movie.txt",
+            "name": "movie_crime_family_archive_002.movie.txt",
+            "mime_type": "text/plain",
+            "extension": ".txt",
+            "size_bytes": 77,
+            "mtime": "2026-06-18T14:11:40.133136+08:00"
+          },
+          {
+            "relative_path": "Movies/Controlled/movie_crime_family_archive_003.movie.txt",
+            "path": "/mnt/nas/openclaw/Personal/Movies/Controlled/movie_crime_family_archive_003.movie.txt",
+            "name": "movie_crime_family_archive_003.movie.txt",
+            "mime_type": "text/plain",
+            "extension": ".txt",
+            "size_bytes": 77,
+            "mtime": "2026-06-18T14:11:40.135136+08:00"
+          },
+          {
+            "relative_path": "Movies/Controlled/movie_crime_family_archive_004.movie.txt",
+            "path": "/mnt/nas/openclaw/Personal/Movies/Controlled/movie_crime_family_archive_004.movie.txt",
+            "name": "movie_crime_family_archive_004.movie.txt",
+            "mime_type": "text/plain",
+            "extension": ".txt",
+            "size_bytes": 77,
+            "mtime": "2026-06-18T14:11:40.136136+08:00"
+          }
+        ]
+      },
+      {
+        "name": "fts_keyword_demo",
+        "sql": "SELECT rowid FROM records_fts WHERE records_fts MATCH 'demo' LIMIT 5",
+        "row_count": 5,
+        "rows": [
+          {
+            "rowid": 8
+          },
+          {
+            "rowid": 9
+          },
+          {
+            "rowid": 94
+          },
+          {
+            "rowid": 95
+          },
+          {
+            "rowid": 96
+          }
+        ]
+      }
+    ]
+  },
+  "capability_boundary": {
+    "db_file_exists": true,
+    "tables_listed": true,
+    "indexed_file_count": 162,
+    "document_chunk_count": 162,
+    "image_embedding_count": 37,
+    "records_fts_count": 162,
+    "vector_semantic_claim_allowed": false,
+    "safe_retrieval_wording": "metadata indexing, keyword/FTS, document chunk retrieval, Qwen-assisted semantic query understanding, and document RAG"
+  }
+}

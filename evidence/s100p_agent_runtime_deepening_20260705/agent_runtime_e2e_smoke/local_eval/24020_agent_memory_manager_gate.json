@@ -1,0 +1,49 @@
+{
+  "checks": [
+    {
+      "detail": 100,
+      "label": "events >= 50",
+      "ok": true
+    },
+    {
+      "detail": 12,
+      "label": "facts >= 10",
+      "ok": true
+    },
+    {
+      "label": "procedures/preferences/reflections present",
+      "ok": true
+    },
+    {
+      "label": "raw content not stored",
+      "ok": true
+    },
+    {
+      "label": "private leak count zero",
+      "ok": true
+    }
+  ],
+  "cloud_private_raw_egress": false,
+  "evidence": {
+    "cloud_private_raw_egress": false,
+    "db_path": "/mnt/nas/openclaw/reports/qwen25_ai_nas/agent_runtime_e2e_smoke/local_eval/agent_runtime/agent_runtime_memory.sqlite3",
+    "events": 100,
+    "facts": 12,
+    "ok": true,
+    "preferences": 6,
+    "private_leak_count": 0,
+    "procedures": 6,
+    "qwen_execution_authority": false,
+    "raw_content_rows": 0,
+    "reflections": 6,
+    "schema": "agent_runtime_memory_v1"
+  },
+  "failures": [],
+  "generated_at": "2026-07-05T04:26:49Z",
+  "name": "agent_memory_manager_gate",
+  "ok": true,
+  "public_mcp_exposed": false,
+  "qwen_execution_authority": false,
+  "schema": "digua_agent_runtime_gate_v1",
+  "verdict": "ok_agent_memory_manager_gate"
+}

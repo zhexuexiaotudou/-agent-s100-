@@ -1,0 +1,155 @@
+{
+  "created_at_utc": "2026-07-04T11:14:10.683800+00:00",
+  "design_points": [
+    {
+      "fallback_plan": "Keep the PyTorch block driver as the only runnable path and hold BPU compilation.",
+      "id": "block_wise_static_window",
+      "implementation_status": "planned",
+      "lladacpp_design_point": "Use block-wise denoising windows instead of treating every step as arbitrary-length decoding.",
+      "required_tests": [
+        "truth case can enter a fixed block driver",
+        "block tensor shapes are static",
+        "no generation claim"
+      ],
+      "risk": "A fixed block driver can still be numerically wrong if token masks, position ids, or timestep semantics differ from HF truth.",
+      "s100p_equivalent_implementation": "Define fixed block sizes 16, 32, and 64 with static input/output tensor contracts before any full-model graph attempt.",
+      "why_it_matters_for_dllm": "A dLLM has many masked positions early and fewer later; block windows expose dense work to an accelerator."
+    },
+    {
+      "fallback_plan": "Disable speculation and run one-block denoising only.",
+      "id": "multi_block_speculative_decoding",
+      "implementation_status": "planned_after_phase3",
+      "lladacpp_design_point": "Admit future-block draft tokens when current-block masked-token count becomes too small.",
+      "required_tests": [
+        "draft tokens do not alter commit order",
+        "latency trace records admitted draft count",
+        "quality gate compares against full logits"
+      ],
+      "risk": "Speculation can hurt quality if draft state leaks into stable tokens.",
+      "s100p_equivalent_implementation": "Represent draft tokens in the scheduler but forbid them from updating committed prefix state until accepted by strict rules.",
+      "why_it_matters_for_dllm": "Late denoising steps underfill NPU/BPU compute; speculative draft work keeps dense kernels useful."
+    },
+    {
+      "fallback_plan": "Require all visible tokens to be stable before commit, accepting lower speed.",
+      "id": "dual_path_progressive_revision",
+      "implementation_status": "planned_after_truth",
+      "lladacpp_design_point": "Keep early visible tokens revisable and refresh unstable tokens through a sparse side path.",
+      "required_tests": [
+        "revision mask trace",
+        "stable token never silently changes",
+        "unstable token revision budget enforced"
+      ],
+      "risk": "Revision state bugs can make output appear stable while logits truth disagrees.",
+      "s100p_equivalent_implementation": "Track visible, stable, and revisable masks in CPU-side state; let BPU focus on dense block denoising until a verified sparse path exists.",
+      "why_it_matters_for_dllm": "dLLM tokens may become visible before they are truly stable; correctness needs revision without stalling dense accelerator passes."
+    },
+    {
+      "fallback_plan": "Disable cache reuse for correctness gates.",
+      "id": "prefix_kv_cache_reuse",
+      "implementation_status": "planned_after_phase5",
+      "lladacpp_design_point": "Reuse prefix KV state across denoising steps and invalidate only the affected sparse regions.",
+      "required_tests": [
+        "cache hit rate recorded",
+        "cache invalidation on revision",
+        "full recompute comparison"
+      ],
+      "risk": "Bad invalidation can preserve stale hidden state and pass only synthetic cases.",
+      "s100p_equivalent_implementation": "Start with CPU reference cache hashes and version ids; only promote to BPU visible buffers after layer-level truth passes.",
+      "why_it_matters_for_dllm": "Repeated denoising revisits the same prefix; recomputing it wastes CPU and BPU time."
+    },
+    {
+      "fallback_plan": "Use full logits for every correctness gate.",
+      "id": "selective_logits_skipping",
+      "implementation_status": "planned_after_phase3",
+      "lladacpp_design_point": "Skip redundant logits for tokens already stable, especially when lm_head pressure dominates.",
+      "required_tests": [
+        "full-vs-selective logits comparison",
+        "top1/top5 unchanged for skipped positions",
+        "speedup recorded"
+      ],
+      "risk": "Skipping logits before truth exists can hide correctness failures.",
+      "s100p_equivalent_implementation": "Compute logits only for active or uncertain positions after a full-logits comparison proves identical decisions.",
+      "why_it_matters_for_dllm": "Vocabulary-sized logits are expensive and memory-heavy; stable positions do not need repeated output projection."
+    },
+    {
+      "fallback_plan": "Run with explicit per-step allocation for debug, then optimize after truth gates pass.",
+      "id": "swap_optimized_memory_runtime",
+      "implementation_status": "planned_after_phase7",
+      "lladacpp_design_point": "Use graph-guided NPU-visible memory mapping and pipelined staging.",
+      "required_tests": [
+        "preallocated buffers",
+        "inner loop allocation count",
+        "copy/remap timing trace"
+      ],
+      "risk": "Memory staging can make a numerically wrong graph look like a performance issue.",
+      "s100p_equivalent_implementation": "Define S100P BPU buffer classes for weights, KV/revision state, token state, logits/confidence, and double-buffered staging.",
+      "why_it_matters_for_dllm": "Repeated denoising makes remap and transfer cost part of the inner loop, not only model load."
+    },
+    {
+      "fallback_plan": "Hold at operator alignment and request vendor/compiler metadata for seg00_01.",
+      "id": "operator_library_before_full_graph",
+      "implementation_status": "next_after_phase2",
+      "lladacpp_design_point": "Treat accelerator support as a library of validated ops, not a single opaque full graph.",
+      "required_tests": [
+        "per-op manifest entry",
+        "cosine/max_abs/relative_l2",
+        "official scale/layout only"
+      ],
+      "risk": "Missing vendor source graph or quant metadata can block closure.",
+      "s100p_equivalent_implementation": "Build per-op and per-layer gates for embedding, position/RoPE, RMSNorm, QKV, attention, MLP, residual, and lm_head.",
+      "why_it_matters_for_dllm": "Current Dream7B evidence localizes failures around early segment contracts; full-graph pass/fail is too coarse."
+    },
+    {
+      "fallback_plan": "Keep sensitive layers and lm_head higher precision.",
+      "id": "low_bit_quant_with_activation_calibration",
+      "implementation_status": "blocked_until_op_layer_truth",
+      "lladacpp_design_point": "Treat quantization as a runtime and quality loop, not only offline weight compression.",
+      "required_tests": [
+        "calibration samples >= 64",
+        "top1/top5 degradation",
+        "quality loss bound or blocker"
+      ],
+      "risk": "Current seg00_01 failures could be worsened by unverified activation scaling.",
+      "s100p_equivalent_implementation": "Start with W8A16, record activation ranges by layer, then try W4 only after W8 passes logits gates.",
+      "why_it_matters_for_dllm": "Low-bit paths can change confidence, token stability, and final logits decisions."
+    },
+    {
+      "fallback_plan": "Report fixed-task-only success and keep product route locked.",
+      "id": "fixed_task_validation_before_chat",
+      "implementation_status": "phase11_only",
+      "lladacpp_design_point": "Validate on fixed output lengths and block tasks before claiming broad generation.",
+      "required_tests": [
+        "task count >= 8",
+        "format pass rate",
+        "latency and fallback ratio",
+        "no OpenClaw foreground route"
+      ],
+      "risk": "Fixed-task success can be overclaimed as general dialogue.",
+      "s100p_equivalent_implementation": "Use eight fixed tasks: command, JSON plan, NAS intent, summary, infill, rewrite, Chinese normalization, and safety refusal.",
+      "why_it_matters_for_dllm": "A block runtime can pass narrow tensor tests but still fail format, stability, or semantic quality."
+    }
+  ],
+  "directly_actionable_now": [
+    "Create the isolated track directory and safety boundaries.",
+    "Freeze the v21 baseline into Phase 0 reports.",
+    "Define truth-case schema and operator manifest requirements.",
+    "Keep generation, product routing, 18888/18889, and OpenClaw foreground untouched."
+  ],
+  "hold_conditions": [
+    "If full 31-row PyTorch truth is missing, hold at external_truth_missing_hold.",
+    "If position, embedding, or lm_head op alignment fails, stop block runtime.",
+    "If only fixed tasks pass, do not claim general dialogue deployment."
+  ],
+  "requires_new_implementation": [
+    "PyTorch block-wise diffusion driver with token state trace.",
+    "BPU per-op and layer alignment harness.",
+    "Static block graph compiler path for S100P.",
+    "BPU visible memory staging runtime."
+  ],
+  "schema_version": "dream7b_s100p_lladacpp_phase1_translation_requirements",
+  "source_review": {
+    "code_status": "No project-specific llada.cpp code repository was added to this repo in this run; Phase 1 uses the paper-level design constraints and records code review as pending.",
+    "primary_source": "Efficient On-Device Diffusion LLM Inference with Mobile NPU",
+    "source_url": "https://arxiv.org/html/2606.13740v1"
+  }
+}

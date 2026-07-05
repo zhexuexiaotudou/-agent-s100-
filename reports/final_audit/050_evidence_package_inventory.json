@@ -1,0 +1,107 @@
+{
+  "generated_at": "2026-07-05T13:44:26+08:00",
+  "packages": [
+    {
+      "all_gates_pass": true,
+      "claim_supported": "default service harness with limited copy",
+      "final_verdict": "harness_default_service_integrated_limited_copy_enabled",
+      "limitations": "No arbitrary NAS writes.",
+      "package": {
+        "bytes": 185055,
+        "exists": true,
+        "sha256": "38bc412b3cf0bbf1a159bdc75413a680f9cc2f3c5ec14d9878a8fb962e0c2fbf",
+        "zip_path": "evidence_for_gptpro/digua_ai_nas_harness_default_service_for_gptpro_20260704-143537.zip"
+      },
+      "package_name": "Stage 5 Harness default service"
+    },
+    {
+      "all_gates_pass": true,
+      "claim_supported": "130-case benchmark token reduction",
+      "final_verdict": "tokenizer_token_budget_product_deployed_claim_supported",
+      "limitations": "Benchmark token reduction, not bill savings.",
+      "package": {
+        "bytes": 3959923,
+        "exists": true,
+        "sha256": "cb64cd9dc453a33500626dceac1cd55426bf8a42d17471174ac8c710b7745a54",
+        "zip_path": "digua_ai_nas_tokenizer_product_final_for_gptpro_20260704-135657.zip"
+      },
+      "package_name": "Tokenizer product final"
+    },
+    {
+      "all_gates_pass": true,
+      "claim_supported": "journal production package",
+      "final_verdict": "digua_journal_production_deployed_local_period_summaries",
+      "limitations": "Live rollout and repo merge state are separate.",
+      "package": {
+        "bytes": 104545,
+        "exists": true,
+        "sha256": "0580694351f352c5dd32cb6ef2667b90e5993041571b6838ace085fa7e616c76",
+        "zip_path": "digua_ai_nas_digua_journal_production_for_gptpro_20260704-161200.zip"
+      },
+      "package_name": "Digua Journal production"
+    },
+    {
+      "all_gates_pass": true,
+      "claim_supported": "journal live rollout on S100P",
+      "final_verdict": "digua_journal_live_rollout_passed",
+      "limitations": "Operator approval came from env in the packet.",
+      "package": {
+        "bytes": 42875,
+        "exists": true,
+        "sha256": "0c6c60dbb138b41ceca447363724ab4df460689b60d0d0a1f0447b9dbc0a572c",
+        "zip_path": "digua_journal_live_rollout_for_gptpro_20260704-164953.zip"
+      },
+      "package_name": "Digua Journal live rollout"
+    },
+    {
+      "all_gates_pass": true,
+      "claim_supported": "UI v2 desktop/mobile evidence",
+      "final_verdict": "B_ready_on_temp_service_default_8765_rollout_pending_operator_approval",
+      "limitations": "Prior Playwright evidence; fresh Playwright blocked by missing local Node/npm in this audit.",
+      "package": {
+        "bytes": 2225104,
+        "exists": true,
+        "sha256": "4d75b167ee6ccb4a31d150d2122e106fdd6c6481f845d1c667ee745c42b4c165",
+        "zip_path": "evidence_for_gptpro/digua_ai_nas_ui_v2_design_report_effect_for_gptpro_20260705-122049.zip"
+      },
+      "package_name": "UI v2 verification"
+    },
+    {
+      "all_gates_pass": true,
+      "claim_supported": "context pack, memory, multimodal metadata, RAG eval",
+      "final_verdict": "agent_runtime_deepening_deliverable_ready_for_repo_pr",
+      "limitations": "Metadata-first; high-risk execution remains disabled.",
+      "package": {
+        "exists": false,
+        "sha256": null,
+        "zip_path": null
+      },
+      "package_name": "Agent Runtime deepening"
+    },
+    {
+      "all_gates_pass": false,
+      "claim_supported": "research truth-set and review boundary",
+      "final_verdict": "bpu_operator_alignment_failed_review_required",
+      "limitations": "Research only, not product route.",
+      "package": {
+        "bytes": 30606012,
+        "exists": true,
+        "sha256": "d3e12d6705bf0f652d165148ae07517cc7f48af45ffad1b225741772a449391c",
+        "zip_path": "evidence_for_gptpro/dream7b_s100p_lladacpp_style_continue_for_gptpro_20260704_205844.zip"
+      },
+      "package_name": "Dream7B llada.cpp-style"
+    },
+    {
+      "all_gates_pass": null,
+      "claim_supported": "safe report wording docs",
+      "final_verdict": "safe_claim_docs_generated",
+      "limitations": "Requires human/GPT Pro review before submission.",
+      "package": {
+        "exists": false,
+        "sha256": null,
+        "zip_path": null
+      },
+      "package_name": "Design report safe docs"
+    }
+  ]
+}

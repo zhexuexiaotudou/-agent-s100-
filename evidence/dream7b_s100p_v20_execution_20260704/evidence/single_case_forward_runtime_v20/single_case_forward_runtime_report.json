@@ -1,0 +1,609 @@
+{
+  "schema_version": "dream7b_s100p_v20_single_case_forward_runtime",
+  "started_at_unix": 1783135342.012171,
+  "created_at_utc": "2026-07-04T03:22:22.012181+00:00",
+  "python": "3.10.12 (main, Aug 15 2025, 14:32:43) [GCC 11.4.0]",
+  "platform": "Linux-6.1.158-rt58-DR-4.0.5-2603031328-g9f678e-g6caa4d-aarch64-with-glibc2.35",
+  "args": {
+    "model_dir": "/mnt/nas/openclaw/models/dream7b-hf",
+    "cases_jsonl": "/mnt/nas/openclaw/reports/models/dream7b_s100p_v18_execution_20260704/evidence/targeted_bpu_islands_semantic_v18/cases/semantic_seq128_cases_v18.jsonl",
+    "output_root": "/mnt/nas/openclaw/reports/models/dream7b_s100p_v20_execution_20260704/evidence/single_case_forward_runtime_v20",
+    "case_id": null,
+    "dtype": "bfloat16",
+    "torch_threads": 6,
+    "seq_len": 128
+  },
+  "safety": {
+    "generation_quality_run": false,
+    "product_routes_18888_18889_touched": false,
+    "dream7b_frontend_openclaw_traffic_touched": false,
+    "harness_qwen_openclaw_defaults_modified": false
+  },
+  "events": [
+    {
+      "stage": "case_selected",
+      "at_utc": "2026-07-04T03:22:22.028926+00:00",
+      "elapsed_since_start_seconds": 0.017,
+      "selected_case": {
+        "case_id": "short_chinese_prompt_padded_v18",
+        "semantic_or_diagnostic": "semantic",
+        "unpadded_token_count": 7,
+        "token_ids_sha256": "05d364753172ac2efcd634be0dd5dded78be1858924f7e650c1ddb5367208d55"
+      },
+      "memory": {
+        "returncode": 0,
+        "stdout": "total        used        free      shared  buff/cache   available\nMem:     22841327616  2781609984 15489302528    48234496  4570415104 19779354624\nSwap:              0           0           0",
+        "stderr": ""
+      }
+    },
+    {
+      "stage": "model_config_load_start",
+      "at_utc": "2026-07-04T03:22:23.264167+00:00",
+      "elapsed_since_start_seconds": 1.252,
+      "memory": {
+        "returncode": 0,
+        "stdout": "total        used        free      shared  buff/cache   available\nMem:     22841327616  2877620224 15363604480    48365568  4600102912 19683213312\nSwap:              0           0           0",
+        "stderr": ""
+      }
+    },
+    {
+      "stage": "model_config_load_end",
+      "at_utc": "2026-07-04T03:22:23.315996+00:00",
+      "elapsed_since_start_seconds": 1.304,
+      "config_class": "DreamConfig",
+      "num_hidden_layers": 28,
+      "hidden_size": 3584,
+      "memory": {
+        "returncode": 0,
+        "stdout": "total        used        free      shared  buff/cache   available\nMem:     22841327616  2877620224 15363604480    48365568  4600102912 19683213312\nSwap:              0           0           0",
+        "stderr": ""
+      }
+    },
+    {
+      "stage": "model_no_init_create_start",
+      "at_utc": "2026-07-04T03:22:23.320028+00:00",
+      "elapsed_since_start_seconds": 1.308,
+      "memory": {
+        "returncode": 0,
+        "stdout": "total        used        free      shared  buff/cache   available\nMem:     22841327616  2881355776 15359868928    48365568  4600102912 19679477760\nSwap:              0           0           0",
+        "stderr": ""
+      }
+    },
+    {
+      "stage": "model_no_init_create_end",
+      "at_utc": "2026-07-04T03:23:32.703354+00:00",
+      "elapsed_since_start_seconds": 70.691,
+      "seconds": 69.383,
+      "model_class": "DreamModel",
+      "memory": {
+        "returncode": 0,
+        "stdout": "total        used        free      shared  buff/cache   available\nMem:     22841327616 18134925312   622919680    48365568  4083482624  4425908224\nSwap:              0           0           0",
+        "stderr": ""
+      }
+    },
+    {
+      "stage": "shard_load_start",
+      "at_utc": "2026-07-04T03:23:32.732591+00:00",
+      "elapsed_since_start_seconds": 70.72,
+      "shard": "model-00001-of-00004.safetensors",
+      "memory": {
+        "returncode": 0,
+        "stdout": "total        used        free      shared  buff/cache   available\nMem:     22841327616 18130403328   621740032    48365568  4089184256  4430168064\nSwap:              0           0           0",
+        "stderr": ""
+      }
+    },
+    {
+      "stage": "shard_load_end",
+      "at_utc": "2026-07-04T03:24:26.774484+00:00",
+      "elapsed_since_start_seconds": 124.762,
+      "shard": "model-00001-of-00004.safetensors",
+      "loaded_in_shard": 104,
+      "loaded_total": 104,
+      "seconds": 54.04,
+      "memory": {
+        "returncode": 0,
+        "stdout": "total        used        free      shared  buff/cache   available\nMem:     22841327616 18124505088   689700864    48365568  4027121664  4434821120\nSwap:              0           0           0",
+        "stderr": ""
+      }
+    },
+    {
+      "stage": "shard_load_start",
+      "at_utc": "2026-07-04T03:24:26.780033+00:00",
+      "elapsed_since_start_seconds": 124.768,
+      "shard": "model-00002-of-00004.safetensors",
+      "memory": {
+        "returncode": 0,
+        "stdout": "total        used        free      shared  buff/cache   available\nMem:     22841327616 18124505088   689700864    48365568  4027121664  4434821120\nSwap:              0           0           0",
+        "stderr": ""
+      }
+    },
+    {
+      "stage": "shard_load_end",
+      "at_utc": "2026-07-04T03:25:21.313419+00:00",
+      "elapsed_since_start_seconds": 179.301,
+      "shard": "model-00002-of-00004.safetensors",
+      "loaded_in_shard": 122,
+      "loaded_total": 226,
+      "seconds": 54.533,
+      "memory": {
+        "returncode": 0,
+        "stdout": "total        used        free      shared  buff/cache   available\nMem:     22841327616 18118672384   962985984    48365568  3759669248  4441112576\nSwap:              0           0           0",
+        "stderr": ""
+      }
+    },
+    {
+      "stage": "shard_load_start",
+      "at_utc": "2026-07-04T03:25:21.367174+00:00",
+      "elapsed_since_start_seconds": 179.355,
+      "shard": "model-00003-of-00004.safetensors",
+      "memory": {
+        "returncode": 0,
+        "stdout": "total        used        free      shared  buff/cache   available\nMem:     22841327616 18122407936   959250432    48365568  3759669248  4437377024\nSwap:              0           0           0",
+        "stderr": ""
+      }
+    },
+    {
+      "stage": "shard_load_end",
+      "at_utc": "2026-07-04T03:26:09.291777+00:00",
+      "elapsed_since_start_seconds": 227.28,
+      "shard": "model-00003-of-00004.safetensors",
+      "loaded_in_shard": 112,
+      "loaded_total": 338,
+      "seconds": 47.924,
+      "memory": {
+        "returncode": 0,
+        "stdout": "total        used        free      shared  buff/cache   available\nMem:     22841327616 18130141184   986906624    48365568  3724279808  4429381632\nSwap:              0           0           0",
+        "stderr": ""
+      }
+    },
+    {
+      "stage": "shard_load_start",
+      "at_utc": "2026-07-04T03:26:09.333441+00:00",
+      "elapsed_since_start_seconds": 227.321,
+      "shard": "model-00004-of-00004.safetensors",
+      "memory": {
+        "returncode": 0,
+        "stdout": "total        used        free      shared  buff/cache   available\nMem:     22841327616 18131976192   982384640    48365568  3726966784  4427808768\nSwap:              0           0           0",
+        "stderr": ""
+      }
+    },
+    {
+      "stage": "shard_load_end",
+      "at_utc": "2026-07-04T03:26:21.370256+00:00",
+      "elapsed_since_start_seconds": 239.358,
+      "shard": "model-00004-of-00004.safetensors",
+      "loaded_in_shard": 1,
+      "loaded_total": 339,
+      "seconds": 12.037,
+      "memory": {
+        "returncode": 0,
+        "stdout": "total        used        free      shared  buff/cache   available\nMem:     22841327616 18120441856  2539913216    48365568  2180972544  4439670784\nSwap:              0           0           0",
+        "stderr": ""
+      }
+    },
+    {
+      "stage": "forward_call_start",
+      "at_utc": "2026-07-04T03:26:21.427873+00:00",
+      "elapsed_since_start_seconds": 239.416,
+      "kwargs": {
+        "input_ids": {
+          "shape": [
+            1,
+            128
+          ],
+          "dtype": "torch.int64",
+          "device": "cpu"
+        },
+        "attention_mask": {
+          "shape": [
+            1,
+            128
+          ],
+          "dtype": "torch.bool",
+          "device": "cpu"
+        },
+        "position_ids": {
+          "shape": [
+            1,
+            128
+          ],
+          "dtype": "torch.int64",
+          "device": "cpu"
+        },
+        "use_cache": false,
+        "return_dict": true,
+        "output_hidden_states": false,
+        "num_logits_to_keep": 1
+      },
+      "memory": {
+        "returncode": 0,
+        "stdout": "total        used        free      shared  buff/cache   available\nMem:     22841327616 18120441856  2539913216    48365568  2180972544  4439670784\nSwap:              0           0           0",
+        "stderr": ""
+      }
+    },
+    {
+      "stage": "embedding_start",
+      "at_utc": "2026-07-04T03:26:21.434137+00:00",
+      "elapsed_since_start_seconds": 239.422,
+      "memory": {
+        "returncode": 0,
+        "stdout": "total        used        free      shared  buff/cache   available\nMem:     22841327616 18120441856  2539913216    48365568  2180972544  4439736320\nSwap:              0           0           0",
+        "stderr": ""
+      }
+    },
+    {
+      "stage": "embedding_end",
+      "at_utc": "2026-07-04T03:26:21.447467+00:00",
+      "elapsed_since_start_seconds": 239.435,
+      "seconds": 0.009,
+      "memory": {
+        "returncode": 0,
+        "stdout": "total        used        free      shared  buff/cache   available\nMem:     22841327616 18120441856  2539913216    48365568  2180972544  4439736320\nSwap:              0           0           0",
+        "stderr": ""
+      }
+    },
+    {
+      "stage": "layer_00_start",
+      "at_utc": "2026-07-04T03:26:21.474500+00:00",
+      "elapsed_since_start_seconds": 239.462,
+      "memory": {
+        "returncode": 0,
+        "stdout": "total        used        free      shared  buff/cache   available\nMem:     22841327616 18120572928  2536177664    48365568  2184577024  4439605248\nSwap:              0           0           0",
+        "stderr": ""
+      }
+    },
+    {
+      "stage": "sdpa_start",
+      "at_utc": "2026-07-04T03:26:35.370717+00:00",
+      "elapsed_since_start_seconds": 253.359,
+      "active_layer": "layer_00",
+      "query": {
+        "shape": [
+          1,
+          28,
+          128,
+          128
+        ],
+        "dtype": "torch.bfloat16",
+        "device": "cpu"
+      },
+      "key": {
+        "shape": [
+          1,
+          28,
+          128,
+          128
+        ],
+        "dtype": "torch.bfloat16",
+        "device": "cpu"
+      },
+      "value": {
+        "shape": [
+          1,
+          28,
+          128,
+          128
+        ],
+        "dtype": "torch.bfloat16",
+        "device": "cpu"
+      },
+      "attn_mask": {
+        "shape": [
+          1,
+          128
+        ],
+        "dtype": "torch.bool",
+        "device": "cpu"
+      }
+    },
+    {
+      "stage": "sdpa_end",
+      "at_utc": "2026-07-04T03:26:35.571670+00:00",
+      "elapsed_since_start_seconds": 253.56,
+      "active_layer": "layer_00",
+      "seconds": 0.176,
+      "output": {
+        "shape": [
+          1,
+          28,
+          128,
+          128
+        ],
+        "dtype": "torch.bfloat16",
+        "device": "cpu"
+      },
+      "memory": {
+        "returncode": 0,
+        "stdout": "total        used        free      shared  buff/cache   available\nMem:     22841327616 18141609984  2503081984    48365568  2196635648  4419223552\nSwap:              0           0           0",
+        "stderr": ""
+      }
+    },
+    {
+      "stage": "layer_00_end",
+      "at_utc": "2026-07-04T03:29:37.476493+00:00",
+      "elapsed_since_start_seconds": 435.464,
+      "seconds": 195.997,
+      "memory": {
+        "returncode": 0,
+        "stdout": "total        used        free      shared  buff/cache   available\nMem:     22841327616 18157797376  2449866752    48365568  2233663488  4402970624\nSwap:              0           0           0",
+        "stderr": ""
+      }
+    },
+    {
+      "stage": "layer_01_start",
+      "at_utc": "2026-07-04T03:29:37.499534+00:00",
+      "elapsed_since_start_seconds": 435.487,
+      "memory": {
+        "returncode": 0,
+        "stdout": "total        used        free      shared  buff/cache   available\nMem:     22841327616 18157797376  2449866752    48365568  2233663488  4402970624\nSwap:              0           0           0",
+        "stderr": ""
+      }
+    },
+    {
+      "stage": "sdpa_start",
+      "at_utc": "2026-07-04T03:29:51.401630+00:00",
+      "elapsed_since_start_seconds": 449.389,
+      "active_layer": "layer_01",
+      "query": {
+        "shape": [
+          1,
+          28,
+          128,
+          128
+        ],
+        "dtype": "torch.bfloat16",
+        "device": "cpu"
+      },
+      "key": {
+        "shape": [
+          1,
+          28,
+          128,
+          128
+        ],
+        "dtype": "torch.bfloat16",
+        "device": "cpu"
+      },
+      "value": {
+        "shape": [
+          1,
+          28,
+          128,
+          128
+        ],
+        "dtype": "torch.bfloat16",
+        "device": "cpu"
+      },
+      "attn_mask": {
+        "shape": [
+          1,
+          128
+        ],
+        "dtype": "torch.bool",
+        "device": "cpu"
+      }
+    },
+    {
+      "stage": "sdpa_end",
+      "at_utc": "2026-07-04T03:29:51.604309+00:00",
+      "elapsed_since_start_seconds": 449.592,
+      "active_layer": "layer_01",
+      "seconds": 0.173,
+      "output": {
+        "shape": [
+          1,
+          28,
+          128,
+          128
+        ],
+        "dtype": "torch.bfloat16",
+        "device": "cpu"
+      },
+      "memory": {
+        "returncode": 0,
+        "stdout": "total        used        free      shared  buff/cache   available\nMem:     22841327616 18159960064  2447114240    48365568  2234253312  4400873472\nSwap:              0           0           0",
+        "stderr": ""
+      }
+    },
+    {
+      "stage": "layer_01_end",
+      "at_utc": "2026-07-04T03:32:53.470495+00:00",
+      "elapsed_since_start_seconds": 631.458,
+      "seconds": 195.944,
+      "memory": {
+        "returncode": 0,
+        "stdout": "total        used        free      shared  buff/cache   available\nMem:     22841327616 18152161280  2450259968    48365568  2238906368  4408672256\nSwap:              0           0           0",
+        "stderr": ""
+      }
+    },
+    {
+      "stage": "layer_02_start",
+      "at_utc": "2026-07-04T03:32:53.499721+00:00",
+      "elapsed_since_start_seconds": 631.488,
+      "memory": {
+        "returncode": 0,
+        "stdout": "total        used        free      shared  buff/cache   available\nMem:     22841327616 18152161280  2450259968    48365568  2238906368  4408672256\nSwap:              0           0           0",
+        "stderr": ""
+      }
+    },
+    {
+      "stage": "sdpa_start",
+      "at_utc": "2026-07-04T03:33:07.377399+00:00",
+      "elapsed_since_start_seconds": 645.365,
+      "active_layer": "layer_02",
+      "query": {
+        "shape": [
+          1,
+          28,
+          128,
+          128
+        ],
+        "dtype": "torch.bfloat16",
+        "device": "cpu"
+      },
+      "key": {
+        "shape": [
+          1,
+          28,
+          128,
+          128
+        ],
+        "dtype": "torch.bfloat16",
+        "device": "cpu"
+      },
+      "value": {
+        "shape": [
+          1,
+          28,
+          128,
+          128
+        ],
+        "dtype": "torch.bfloat16",
+        "device": "cpu"
+      },
+      "attn_mask": {
+        "shape": [
+          1,
+          128
+        ],
+        "dtype": "torch.bool",
+        "device": "cpu"
+      }
+    },
+    {
+      "stage": "sdpa_end",
+      "at_utc": "2026-07-04T03:33:07.573695+00:00",
+      "elapsed_since_start_seconds": 645.562,
+      "active_layer": "layer_02",
+      "seconds": 0.173,
+      "output": {
+        "shape": [
+          1,
+          28,
+          128,
+          128
+        ],
+        "dtype": "torch.bfloat16",
+        "device": "cpu"
+      },
+      "memory": {
+        "returncode": 0,
+        "stdout": "total        used        free      shared  buff/cache   available\nMem:     22841327616 18152226816  2450063360    48365568  2239037440  4408606720\nSwap:              0           0           0",
+        "stderr": ""
+      }
+    },
+    {
+      "stage": "manual_stop_after_runtime_localized",
+      "at_utc": "2026-07-04T03:35:31Z",
+      "reason": "two complete decoder layers measured at about 196s each; full 28-layer semantic forward would exceed practical S100P reference export window",
+      "last_completed_layer": "layer_01",
+      "active_layer": "layer_02"
+    }
+  ],
+  "errors": [
+    {
+      "type": "ManualStopAfterRuntimeLocalized",
+      "message": "Stopped after two complete layers and layer_02 SDPA; blocker localized to per-layer BF16 CPU dense/MLP runtime, not SDPA."
+    }
+  ],
+  "hf_rows": [],
+  "status": "manual_stop_after_runtime_localized",
+  "cases_jsonl": {
+    "path": "/mnt/nas/openclaw/reports/models/dream7b_s100p_v18_execution_20260704/evidence/targeted_bpu_islands_semantic_v18/cases/semantic_seq128_cases_v18.jsonl",
+    "sha256": "1472c21c346e4e230fc7dc90aa7f2e01b07336f49af7dbb87624a50b282cf531",
+    "case_count": 8
+  },
+  "selected_case": {
+    "case_id": "short_chinese_prompt_padded_v18",
+    "semantic_or_diagnostic": "semantic",
+    "unpadded_token_count": 7,
+    "token_ids_sha256": "05d364753172ac2efcd634be0dd5dded78be1858924f7e650c1ddb5367208d55"
+  },
+  "last_event": {
+    "stage": "sdpa_end",
+    "at_utc": "2026-07-04T03:33:07.573695+00:00",
+    "elapsed_since_start_seconds": 645.562,
+    "active_layer": "layer_02",
+    "seconds": 0.173,
+    "output": {
+      "shape": [
+        1,
+        28,
+        128,
+        128
+      ],
+      "dtype": "torch.bfloat16",
+      "device": "cpu"
+    },
+    "memory": {
+      "returncode": 0,
+      "stdout": "total        used        free      shared  buff/cache   available\nMem:     22841327616 18152226816  2450063360    48365568  2239037440  4408606720\nSwap:              0           0           0",
+      "stderr": ""
+    }
+  },
+  "runtime_versions": {
+    "torch": "1.8.0a0",
+    "transformers": "4.30.2",
+    "numpy": "1.26.4"
+  },
+  "model_files": {
+    "config": {
+      "path": "/mnt/nas/openclaw/models/dream7b-hf/config.json",
+      "sha256": "11afc7fe7a1881e73dcd70cca6868aaaf8eb89ad45ea5fc6426c3fb82dec9340"
+    },
+    "index": {
+      "path": "/mnt/nas/openclaw/models/dream7b-hf/model.safetensors.index.json",
+      "sha256": "998a078123ffc97763690de7f2a677eb89168af5eaf8a5e12e6bc24d18e25bdb",
+      "weight_count": 339,
+      "shards": [
+        "model-00001-of-00004.safetensors",
+        "model-00002-of-00004.safetensors",
+        "model-00003-of-00004.safetensors",
+        "model-00004-of-00004.safetensors"
+      ]
+    },
+    "tokenizer_config.json": {
+      "path": "/mnt/nas/openclaw/models/dream7b-hf/tokenizer_config.json",
+      "sha256": "b0e9c1a6299d8832a1362d6b24f007de8a2acfe0243d8a3a1d1b57aa8250f7ee",
+      "size_bytes": 7486
+    },
+    "vocab.json": {
+      "path": "/mnt/nas/openclaw/models/dream7b-hf/vocab.json",
+      "sha256": "87a257b04b17642a0688c98cd1df89c398bda4fee532d6f88b38a659ecb4ac8d",
+      "size_bytes": 3383407
+    },
+    "merges.txt": {
+      "path": "/mnt/nas/openclaw/models/dream7b-hf/merges.txt",
+      "sha256": "8831e4f1a044471340f7c0a83d7bd71306a5b867e95fd870f74d0c5308a904d5",
+      "size_bytes": 1671853
+    },
+    "modeling_dream.py": {
+      "path": "/mnt/nas/openclaw/models/dream7b-hf/modeling_dream.py",
+      "sha256": "3166e789f0d69beb1f4fbdee2317953d1c1c3b9bc21479b109afc5dd059de5b3",
+      "size_bytes": 36763
+    },
+    "configuration_dream.py": {
+      "path": "/mnt/nas/openclaw/models/dream7b-hf/configuration_dream.py",
+      "sha256": "24d038962ccf16361595494461000ec0c1b043653c7494d7fc835c96f121f0b9",
+      "size_bytes": 3197
+    }
+  },
+  "model_class": "DreamModel",
+  "parameter_count": 7615616512,
+  "parameter_dtypes_after_init": [
+    "torch.bfloat16"
+  ],
+  "load_summary": {
+    "expected_weight_keys": 339,
+    "loaded_weight_keys": 339,
+    "missing_in_model_count": 0,
+    "missing_in_model_sample": [],
+    "load_error_count": 0,
+    "load_error_sample": [],
+    "parameter_dtypes_after_load": [
+      "torch.bfloat16"
+    ]
+  },
+  "final_status": "fail",
+  "hf_truth_rows": 0
+}

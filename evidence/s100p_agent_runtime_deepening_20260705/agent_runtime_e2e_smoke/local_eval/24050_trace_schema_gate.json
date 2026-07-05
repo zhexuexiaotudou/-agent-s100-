@@ -1,0 +1,116 @@
+{
+  "checks": [
+    {
+      "detail": 30,
+      "label": "trace count >= 30",
+      "ok": true
+    },
+    {
+      "label": "required spans present",
+      "ok": true
+    },
+    {
+      "label": "private leak count zero",
+      "ok": true
+    }
+  ],
+  "cloud_private_raw_egress": false,
+  "evidence": {
+    "sample_trace": {
+      "attributes": {
+        "acl_denied_count": 1,
+        "cloud_private_raw_egress": false,
+        "context_item_count": 2,
+        "qwen_execution_authority": false,
+        "token_estimate": 69
+      },
+      "generated_at": "2026-07-05T04:26:46Z",
+      "private_leak_count": 0,
+      "request_id": "ctx_eval_000",
+      "schema": "digua_agent_runtime_trace_v1",
+      "spans": [
+        {
+          "attributes": {
+            "agent_runtime": true,
+            "sequence": 1
+          },
+          "duration_ms": 1.0,
+          "end_time_unix_nano": 1783225606915588263,
+          "name": "context_pack.compile",
+          "parent_span_id": null,
+          "span_id": "spn_54ae6e30e30d409a",
+          "start_time_unix_nano": 1783225606914588263,
+          "status": "ok",
+          "trace_id": "trc_ddc1a9172e85411fbf8303e3"
+        },
+        {
+          "attributes": {
+            "agent_runtime": true,
+            "sequence": 2
+          },
+          "duration_ms": 1.0,
+          "end_time_unix_nano": 1783225606915611764,
+          "name": "memory.lookup",
+          "parent_span_id": null,
+          "span_id": "spn_e7b9c53ce1484ef4",
+          "start_time_unix_nano": 1783225606914611764,
+          "status": "ok",
+          "trace_id": "trc_ddc1a9172e85411fbf8303e3"
+        },
+        {
+          "attributes": {
+            "agent_runtime": true,
+            "sequence": 3
+          },
+          "duration_ms": 1.0,
+          "end_time_unix_nano": 1783225606915620864,
+          "name": "multimodal_index.lookup",
+          "parent_span_id": null,
+          "span_id": "spn_10d7e26702c74682",
+          "start_time_unix_nano": 1783225606914620864,
+          "status": "ok",
+          "trace_id": "trc_ddc1a9172e85411fbf8303e3"
+        },
+        {
+          "attributes": {
+            "agent_runtime": true,
+            "sequence": 4
+          },
+          "duration_ms": 1.0,
+          "end_time_unix_nano": 1783225606915627414,
+          "name": "rag.retrieve",
+          "parent_span_id": null,
+          "span_id": "spn_33489c50641b411b",
+          "start_time_unix_nano": 1783225606914627414,
+          "status": "ok",
+          "trace_id": "trc_ddc1a9172e85411fbf8303e3"
+        },
+        {
+          "attributes": {
+            "agent_runtime": true,
+            "sequence": 5
+          },
+          "duration_ms": 1.0,
+          "end_time_unix_nano": 1783225606915633414,
+          "name": "safety.redact",
+          "parent_span_id": null,
+          "span_id": "spn_1a3c0643be9e446b",
+          "start_time_unix_nano": 1783225606914633414,
+          "status": "ok",
+          "trace_id": "trc_ddc1a9172e85411fbf8303e3"
+        }
+      ],
+      "trace_hash": "7b2178ba1212dbdd74db9a23eb8aa513",
+      "trace_id": "trc_ddc1a9172e85411fbf8303e3"
+    },
+    "trace_path": "/mnt/nas/openclaw/reports/qwen25_ai_nas/agent_runtime_e2e_smoke/local_eval/agent_runtime_trace_samples.jsonl"
+  },
+  "failures": [],
+  "generated_at": "2026-07-05T04:26:51Z",
+  "name": "trace_schema_gate",
+  "ok": true,
+  "public_mcp_exposed": false,
+  "qwen_execution_authority": false,
+  "schema": "digua_agent_runtime_gate_v1",
+  "verdict": "ok_trace_schema_gate"
+}

@@ -1,0 +1,83 @@
+{
+  "allowed_claim": "Dream7B is in research/evidence mode; v21 provides semantic HF truth but no deployable BPU route.",
+  "available_artifacts": [
+    {
+      "exists": true,
+      "path": "docs/DREAM7B_S100P_SEQ128_LOGITS_VALIDITY_ROUTE_STATUS_20260704.md",
+      "size_bytes": 9405
+    },
+    {
+      "exists": true,
+      "path": "01_final_evidence/dream7b_s100p_gate_packet_v21.json",
+      "size_bytes": 21525
+    },
+    {
+      "exists": true,
+      "path": "reports/2010_semantic_hf_truth_loader_gate.json",
+      "size_bytes": 21453
+    },
+    {
+      "exists": true,
+      "path": "reports/2020_semantic_bpu_island_battery.json",
+      "size_bytes": 26627
+    },
+    {
+      "exists": true,
+      "path": "reports/2060_final_v21_gate_packet_and_package.json",
+      "size_bytes": 19901
+    },
+    {
+      "exists": true,
+      "path": "evidence_for_gptpro/dream7b_s100p_v21_for_gptpro_20260704_122503.zip",
+      "size_bytes": 145201881
+    },
+    {
+      "exists": true,
+      "path": "evidence/semantic_hf_truth_v21/semantic_truth_export_report.json",
+      "size_bytes": 12305
+    },
+    {
+      "exists": true,
+      "path": "evidence/semantic_island_battery_v21/hf_boundaries_and_island_eval_report.json",
+      "size_bytes": 196349
+    }
+  ],
+  "created_at_utc": "2026-07-04T11:14:10.683800+00:00",
+  "exact_blockers": [
+    "Current full-BPU segmented-HBM path is logits-invalid.",
+    "No semantic BPU island passed all original semantic prompts under strict logits gates.",
+    "The llada-style block driver cannot be truth-gated until the full 31-row reference truth set exists.",
+    "No product or generation route may be touched before logits and fixed-task gates pass."
+  ],
+  "forbidden_claims": [
+    "Dream7B is deployed as OpenClaw foreground model.",
+    "Fixed block success implies general dialogue success.",
+    "CPU/GGUF resident execution is a BPU deployment success.",
+    "Partial semantic island passes are deployable."
+  ],
+  "latest_local_evidence": {
+    "current_full_bpu_path": "falsified_against_HF_PyTorch_BF16_logits_truth",
+    "generation_quality_status": "not_run_by_design",
+    "product_route_status": "not_run_by_design; Qwen + OpenClaw remains current product route",
+    "safety": {
+      "dream7b_frontend_openclaw_traffic_touched": false,
+      "generation_quality_run": false,
+      "harness_qwen_openclaw_defaults_modified": false,
+      "product_routes_18888_18889_touched": false
+    },
+    "seg00_01_status": "strongest localized contract-fault locus from prior v14-v21 route; exact closure remains vendor/compiler metadata blocked",
+    "semantic_bpu_island_status": "partial_semantic_island_signal_not_deployable",
+    "semantic_island_detail": "islands [1], [2], and [1,2] show partial diagnostic signal only, no deployable logits-correct island",
+    "semantic_truth_rows_status": "v21 has 8/8 original semantic HF/PyTorch BF16 truth rows; full llada-style 31-row truth_cases.jsonl is not yet exported"
+  },
+  "missing_artifacts": [
+    "reference/truth_cases.jsonl with >=31 llada-style semantic/canonical/block/revision/infill/control rows",
+    "official seg00_01 source graph and quant metadata",
+    "per-op BPU reference inputs/outputs for Dream7B operator library",
+    "compiled static block graph for block_size=16",
+    "S100P block-wise runtime trace for fixed block tasks"
+  ],
+  "schema_version": "dream7b_s100p_lladacpp_phase0_baseline_lock",
+  "status": "phase0_baseline_locked",
+  "track": "Dream7B S100P llada.cpp-style correctness-first research track"
+}

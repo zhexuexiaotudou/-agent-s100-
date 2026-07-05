@@ -1,0 +1,192 @@
+{
+  "available_bpu_artifacts": [
+    {
+      "exists": true,
+      "path": "dream_s100p_lladacpp/configs/bpu_operator_manifest.json",
+      "sha256": "1850e7dccd825aa5c49594c5717a5e11466a960d56a12c9b7a455c05475adad8",
+      "size_bytes": 593
+    },
+    {
+      "exists": true,
+      "path": "evidence/dream7b_s100p_v21_execution_20260704_bpu_outputs.tar.gz",
+      "sha256": "ff783bf4ee2493c4ad49f571d9f52b796a2da8686d1851a6a0da0950bed87336",
+      "size_bytes": 100050126
+    }
+  ],
+  "available_runtime_artifacts": [
+    {
+      "exists": true,
+      "path": "dream_s100p_lladacpp/configs/block_runtime_config.json",
+      "sha256": "72c442d05669af8c07d42927f996428ef9d0348183b5d3d5fc0e39ed93797b36",
+      "size_bytes": 245
+    },
+    {
+      "exists": true,
+      "path": "dream_s100p_lladacpp/configs/memory_layout_config.json",
+      "sha256": "b70178a2aec2bc1c4f8f0b5aad3f834545b98bc2bae536c0b0f1ab62ffa988ac",
+      "size_bytes": 390
+    }
+  ],
+  "available_scripts": [
+    {
+      "exists": true,
+      "path": "dream_s100p_lladacpp/reference/truth_case_builder.py",
+      "sha256": "a73869a99b7fac61bb1ad8b6cf9bfac4aaeba93eb2d3ef657c73b50083615a34",
+      "size_bytes": 12392
+    },
+    {
+      "exists": true,
+      "path": "dream_s100p_lladacpp/reference/export_full_truth_31.py",
+      "sha256": "737f3c20f18c037fc0a57c4eeda2e3cf835d8d076f04f40ceb58a7b0d9e611f0",
+      "size_bytes": 15369
+    },
+    {
+      "exists": true,
+      "path": "dream_s100p_lladacpp/reference/validate_truth_rows.py",
+      "sha256": "f3d2753fdd867ebbc9d51c00a546558feb50bf5f728988d4fa3491410b858168",
+      "size_bytes": 6677
+    },
+    {
+      "exists": true,
+      "path": "dream_s100p_lladacpp/reference/pytorch_block_driver.py",
+      "sha256": "0ce6454396feaaf0d2938ab849c5774b2635a47ea1edc9935aeac1f3a4547f5e",
+      "size_bytes": 6168
+    },
+    {
+      "exists": true,
+      "path": "tools/build_dream_s100p_lladacpp_continue.py",
+      "sha256": "4fc2eb72b7d8546d123698705b2d64fb19bb1eb83028a1a6c8fd3466eb0a3a62",
+      "size_bytes": 18130
+    }
+  ],
+  "blockers": [
+    "31-row truth set was missing before this continue run.",
+    "No BPU operator-level input/output checksum table exists for the new llada.cpp-style track.",
+    "seg00_01 is not closed by official source graph and quant metadata."
+  ],
+  "created_at_utc": "2026-07-04T12:55:30.105777+00:00",
+  "current_verdict": "external_truth_missing_hold",
+  "dtype": "bfloat16 target, float32 saved arrays",
+  "existing_truth_files": [
+    {
+      "exists": true,
+      "path": "evidence/semantic_hf_truth_v21/semantic_truth_export_report.json",
+      "sha256": "89664e3200f6940f7de1507f111159f7bb3938a8684dbc1922dd4b6c447acfc6",
+      "size_bytes": 12305
+    },
+    {
+      "exists": true,
+      "path": "evidence/v21_combined_cases/semantic_plus_canonical_seq128_cases_v21.jsonl",
+      "sha256": "cc03600f7e8c622818799b15383dff0e6b8d58055f5c059fa8fb6b698da01205",
+      "size_bytes": 22449
+    }
+  ],
+  "missing_truth_categories_before_continue": [
+    "canonical",
+    "block_wise",
+    "revision",
+    "fixed_output",
+    "infill",
+    "control_command"
+  ],
+  "model_identity": {
+    "files": [
+      {
+        "exists": true,
+        "path": "tmp/true_batch_inputs/dream7b-hf/SHA256SUMS",
+        "sha256": "00943b62e19d3080f930603f6a65e210f11e239dc8b1c7a65d9b98090330ff8a",
+        "size_bytes": 550
+      },
+      {
+        "exists": true,
+        "path": "tmp/true_batch_inputs/dream7b-hf/config.json",
+        "sha256": "11afc7fe7a1881e73dcd70cca6868aaaf8eb89ad45ea5fc6426c3fb82dec9340",
+        "size_bytes": 927
+      },
+      {
+        "exists": true,
+        "path": "tmp/true_batch_inputs/dream7b-hf/model.safetensors.index.json",
+        "sha256": "998a078123ffc97763690de7f2a677eb89168af5eaf8a5e12e6bc24d18e25bdb",
+        "size_bytes": 27752
+      },
+      {
+        "exists": true,
+        "path": "tmp/true_batch_inputs/dream7b-hf/tokenizer_config.json",
+        "sha256": "b0e9c1a6299d8832a1362d6b24f007de8a2acfe0243d8a3a1d1b57aa8250f7ee",
+        "size_bytes": 7486
+      },
+      {
+        "exists": true,
+        "path": "tmp/true_batch_inputs/dream7b-hf/vocab.json",
+        "sha256": "87a257b04b17642a0688c98cd1df89c398bda4fee532d6f88b38a659ecb4ac8d",
+        "size_bytes": 3383407
+      },
+      {
+        "exists": true,
+        "path": "tmp/true_batch_inputs/dream7b-hf/merges.txt",
+        "sha256": "8831e4f1a044471340f7c0a83d7bd71306a5b867e95fd870f74d0c5308a904d5",
+        "size_bytes": 1671853
+      },
+      {
+        "exists": true,
+        "path": "tmp/true_batch_inputs/dream7b-hf/tokenization_dream.py",
+        "sha256": "1d7f04104fa673831f48256e3cd42cd0bbd1bddd801b4abea5c74cc47d98bdd2",
+        "size_bytes": 14028
+      },
+      {
+        "exists": true,
+        "path": "tmp/true_batch_inputs/dream7b-hf/modeling_dream.py",
+        "sha256": "3166e789f0d69beb1f4fbdee2317953d1c1c3b9bc21479b109afc5dd059de5b3",
+        "size_bytes": 36763
+      },
+      {
+        "exists": true,
+        "path": "tmp/true_batch_inputs/dream7b-hf/configuration_dream.py",
+        "sha256": "24d038962ccf16361595494461000ec0c1b043653c7494d7fc835c96f121f0b9",
+        "size_bytes": 3197
+      }
+    ],
+    "model_dir": "F:\\Project\\Digua\\tmp\\true_batch_inputs\\dream7b-hf"
+  },
+  "next_actions": [
+    "Build 31 truth cases.",
+    "Export HF/PyTorch truth with the v21 torch2 CUDA environment.",
+    "Validate truth rows.",
+    "Run PyTorch truth replay block driver.",
+    "Stop at BPU operator alignment if no true BPU op outputs exist."
+  ],
+  "safety": {
+    "dream7b_frontend_openclaw_traffic_touched": false,
+    "generation_quality_run": false,
+    "harness_qwen_openclaw_defaults_modified": false,
+    "product_routes_18888_18889_touched": false
+  },
+  "schema_version": "dream7b_s100p_lladacpp_continue_baseline_lock_v1",
+  "semantic_truth_row_count": 8,
+  "tokenizer_identity": {
+    "merges": {
+      "exists": true,
+      "path": "tmp/true_batch_inputs/dream7b-hf/merges.txt",
+      "sha256": "8831e4f1a044471340f7c0a83d7bd71306a5b867e95fd870f74d0c5308a904d5",
+      "size_bytes": 1671853
+    },
+    "tokenization_dream": {
+      "exists": true,
+      "path": "tmp/true_batch_inputs/dream7b-hf/tokenization_dream.py",
+      "sha256": "1d7f04104fa673831f48256e3cd42cd0bbd1bddd801b4abea5c74cc47d98bdd2",
+      "size_bytes": 14028
+    },
+    "tokenizer_config": {
+      "exists": true,
+      "path": "tmp/true_batch_inputs/dream7b-hf/tokenizer_config.json",
+      "sha256": "b0e9c1a6299d8832a1362d6b24f007de8a2acfe0243d8a3a1d1b57aa8250f7ee",
+      "size_bytes": 7486
+    },
+    "vocab": {
+      "exists": true,
+      "path": "tmp/true_batch_inputs/dream7b-hf/vocab.json",
+      "sha256": "87a257b04b17642a0688c98cd1df89c398bda4fee532d6f88b38a659ecb4ac8d",
+      "size_bytes": 3383407
+    }
+  }
+}

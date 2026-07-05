@@ -1,0 +1,179 @@
+{
+  "checks": [
+    {
+      "detail": 30,
+      "label": "context pack count >= 30",
+      "ok": true
+    },
+    {
+      "label": "each pack has evidence refs",
+      "ok": true
+    },
+    {
+      "label": "acl denied items excluded",
+      "ok": true
+    },
+    {
+      "label": "no private leaks",
+      "ok": true
+    },
+    {
+      "label": "qwen execution false",
+      "ok": true
+    }
+  ],
+  "cloud_private_raw_egress": false,
+  "evidence": {
+    "pack_count": 30,
+    "sample_pack": {
+      "acl_denied_count": 1,
+      "allowed_tool_ids": [
+        "agent_runtime.context_pack.compile",
+        "agent_runtime.memory.lookup",
+        "agent_runtime.multimodal_index.search",
+        "agent_runtime.rag.query",
+        "harness.copy.preview",
+        "harness.copy.dry_run"
+      ],
+      "budget_ok": true,
+      "cloud_private_raw_egress": false,
+      "context_items": [
+        {
+          "evidence_ref": "policy_0",
+          "media_type": "text",
+          "rank": 1,
+          "raw_content_stored": false,
+          "snippet": "Case 0: OpenClaw remains the gateway, Qwen is advisory only, and copy execution must pass the Harness allowlist dispatcher.",
+          "snippet_token_estimate": 31,
+          "source": "document_policy_0.md",
+          "source_hash": "d8713d2785921f51db4a8762",
+          "title": "AI-NAS policy note 0"
+        },
+        {
+          "evidence_ref": "private_0",
+          "media_type": "text",
+          "rank": 2,
+          "raw_content_stored": false,
+          "snippet": "Private source <PRIVATE_HASH:7c7420660f37> with <PRIVATE_HASH:5e884898da28> marker.",
+          "snippet_token_estimate": 21,
+          "source": "<PRIVATE_HASH:34dfc64a4a07>",
+          "source_hash": "34dfc64a4a07153e25172511",
+          "title": "private raw path should be redacted"
+        }
+      ],
+      "evidence_refs": [
+        "policy_0",
+        "private_0"
+      ],
+      "ok": true,
+      "pack_id": "ctxpack_4524273a0f4ef68c6b2f418e",
+      "private_leak_count": 0,
+      "query": "case 0 should explain OpenClaw Harness and dispatcher-only execution",
+      "qwen_execution_authority": false,
+      "redaction_count": 3,
+      "redaction_map_exported": false,
+      "request_id": "ctx_eval_000",
+      "schema": "digua_agent_runtime_context_pack_v1",
+      "token_budget": 4096,
+      "token_estimate": 69,
+      "tool_intent": "answer_with_evidence",
+      "trace": {
+        "attributes": {
+          "acl_denied_count": 1,
+          "cloud_private_raw_egress": false,
+          "context_item_count": 2,
+          "qwen_execution_authority": false,
+          "token_estimate": 69
+        },
+        "generated_at": "2026-07-05T04:24:06Z",
+        "private_leak_count": 0,
+        "request_id": "ctx_eval_000",
+        "schema": "digua_agent_runtime_trace_v1",
+        "spans": [
+          {
+            "attributes": {
+              "agent_runtime": true,
+              "sequence": 1
+            },
+            "duration_ms": 1.0,
+            "end_time_unix_nano": 1783225446440782400,
+            "name": "context_pack.compile",
+            "parent_span_id": null,
+            "span_id": "spn_67c99275cbba4577",
+            "start_time_unix_nano": 1783225446439782400,
+            "status": "ok",
+            "trace_id": "trc_54bd4975658f4c9c8fb95d7f"
+          },
+          {
+            "attributes": {
+              "agent_runtime": true,
+              "sequence": 2
+            },
+            "duration_ms": 1.0,
+            "end_time_unix_nano": 1783225446440782400,
+            "name": "memory.lookup",
+            "parent_span_id": null,
+            "span_id": "spn_96d7c919f8484b19",
+            "start_time_unix_nano": 1783225446439782400,
+            "status": "ok",
+            "trace_id": "trc_54bd4975658f4c9c8fb95d7f"
+          },
+          {
+            "attributes": {
+              "agent_runtime": true,
+              "sequence": 3
+            },
+            "duration_ms": 1.0,
+            "end_time_unix_nano": 1783225446440782400,
+            "name": "multimodal_index.lookup",
+            "parent_span_id": null,
+            "span_id": "spn_588c794d8a6947ac",
+            "start_time_unix_nano": 1783225446439782400,
+            "status": "ok",
+            "trace_id": "trc_54bd4975658f4c9c8fb95d7f"
+          },
+          {
+            "attributes": {
+              "agent_runtime": true,
+              "sequence": 4
+            },
+            "duration_ms": 1.0,
+            "end_time_unix_nano": 1783225446440782400,
+            "name": "rag.retrieve",
+            "parent_span_id": null,
+            "span_id": "spn_ecbfbb88102b4196",
+            "start_time_unix_nano": 1783225446439782400,
+            "status": "ok",
+            "trace_id": "trc_54bd4975658f4c9c8fb95d7f"
+          },
+          {
+            "attributes": {
+              "agent_runtime": true,
+              "sequence": 5
+            },
+            "duration_ms": 1.0,
+            "end_time_unix_nano": 1783225446440782400,
+            "name": "safety.redact",
+            "parent_span_id": null,
+            "span_id": "spn_9e09bd4769e249e3",
+            "start_time_unix_nano": 1783225446439782400,
+            "status": "ok",
+            "trace_id": "trc_54bd4975658f4c9c8fb95d7f"
+          }
+        ],
+        "trace_hash": "bf72542bbd90fa7aa360ebe6a8745909",
+        "trace_id": "trc_54bd4975658f4c9c8fb95d7f"
+      },
+      "user_id_hash": "06e55b633481f7bb",
+      "workspace": "openclaw"
+    }
+  },
+  "failures": [],
+  "generated_at": "2026-07-05T04:24:06Z",
+  "name": "context_pack_compiler_gate",
+  "ok": true,
+  "public_mcp_exposed": false,
+  "qwen_execution_authority": false,
+  "schema": "digua_agent_runtime_gate_v1",
+  "verdict": "ok_context_pack_compiler_gate"
+}

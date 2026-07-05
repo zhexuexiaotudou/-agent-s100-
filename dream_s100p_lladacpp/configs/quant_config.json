@@ -1,0 +1,7 @@
+{
+  "activation_calibration_required": true,
+  "first_quant_target": "W8A16",
+  "lm_head_policy": "higher precision or CPU side until truth-proven",
+  "sensitive_layers_policy": "keep higher precision until quantified",
+  "w4_attempt_allowed_after": "W8A16 logits gate pass"
+}

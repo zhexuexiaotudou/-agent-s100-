@@ -1,0 +1,33 @@
+{
+  "checks": [
+    {
+      "label": "agent runtime UI nav present",
+      "ok": true
+    },
+    {
+      "label": "agent runtime status endpoint wired",
+      "ok": true
+    },
+    {
+      "label": "no dangerous frontend actions",
+      "ok": true
+    },
+    {
+      "label": "qwen not presented as executor",
+      "ok": true
+    }
+  ],
+  "cloud_private_raw_egress": false,
+  "evidence": {
+    "ui_js": "F:\\Project\\Digua\\web\\static\\digua_ai_nas_v2.js",
+    "ui_js_sha256": "60671d26c02d35cea780253661a0aad1a89a668718905d8e0d40a181924f15a4"
+  },
+  "failures": [],
+  "generated_at": "2026-07-05T04:24:06Z",
+  "name": "agent_runtime_safety_ui_gate",
+  "ok": true,
+  "public_mcp_exposed": false,
+  "qwen_execution_authority": false,
+  "schema": "digua_agent_runtime_gate_v1",
+  "verdict": "ok_agent_runtime_safety_ui_gate"
+}

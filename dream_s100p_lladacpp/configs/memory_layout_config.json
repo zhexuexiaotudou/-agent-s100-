@@ -1,0 +1,19 @@
+{
+  "buffer_classes": [
+    "input_tokens",
+    "attention_or_diffusion_mask",
+    "kv_revision_state",
+    "token_state",
+    "logits_or_confidence",
+    "graph_io_binding",
+    "double_buffered_staging"
+  ],
+  "inner_loop_allocation_target": 0,
+  "status": "planned",
+  "trace_required": [
+    "copy_time_ms",
+    "remap_count",
+    "staging_timeline",
+    "buffer_overwrite_check"
+  ]
+}

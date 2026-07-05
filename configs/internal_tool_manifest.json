@@ -1,0 +1,81 @@
+{
+  "manifest_id": "digua_agent_runtime_internal_tool_manifest_v1",
+  "scope": "internal_only",
+  "public_mcp_exposed": false,
+  "qwen_tool_execution_authority": false,
+  "cloud_private_raw_egress_allowed": false,
+  "tools": [
+    {
+      "tool_id": "agent_runtime.context_pack.compile",
+      "description": "Compile redacted context packs with evidence refs.",
+      "mutates_state": false,
+      "dispatcher_only": false
+    },
+    {
+      "tool_id": "agent_runtime.memory.record",
+      "description": "Record redacted local memory events.",
+      "mutates_state": true,
+      "dispatcher_only": true
+    },
+    {
+      "tool_id": "agent_runtime.memory.lookup",
+      "description": "Read local redacted memory summaries.",
+      "mutates_state": false,
+      "dispatcher_only": false
+    },
+    {
+      "tool_id": "agent_runtime.multimodal_index.scan",
+      "description": "Scan metadata under the configured Personal root.",
+      "mutates_state": true,
+      "dispatcher_only": true
+    },
+    {
+      "tool_id": "agent_runtime.multimodal_index.search",
+      "description": "Search metadata-only multimodal index.",
+      "mutates_state": false,
+      "dispatcher_only": false
+    },
+    {
+      "tool_id": "agent_runtime.rag.query",
+      "description": "Answer with SQLite FTS-first local evidence refs.",
+      "mutates_state": false,
+      "dispatcher_only": false
+    },
+    {
+      "tool_id": "agent_runtime.rag.evaluate",
+      "description": "Run local RAG and privacy evaluation gates.",
+      "mutates_state": true,
+      "dispatcher_only": true
+    },
+    {
+      "tool_id": "harness.copy.preview",
+      "description": "Existing Harness copy preview route.",
+      "mutates_state": false,
+      "dispatcher_only": false
+    },
+    {
+      "tool_id": "harness.copy.dry_run",
+      "description": "Existing Harness copy dry-run route.",
+      "mutates_state": false,
+      "dispatcher_only": false
+    },
+    {
+      "tool_id": "harness.copy.confirm",
+      "description": "Existing Harness copy confirmation route.",
+      "mutates_state": true,
+      "dispatcher_only": true
+    },
+    {
+      "tool_id": "harness.copy.execute",
+      "description": "Existing Harness allowlisted dispatcher execute route.",
+      "mutates_state": true,
+      "dispatcher_only": true
+    },
+    {
+      "tool_id": "harness.copy.rollback",
+      "description": "Existing Harness allowlisted dispatcher rollback route.",
+      "mutates_state": true,
+      "dispatcher_only": true
+    }
+  ]
+}

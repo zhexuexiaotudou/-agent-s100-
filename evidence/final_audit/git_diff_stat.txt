@@ -1,0 +1,296 @@
+$ git status --short
+ M README.md
+ M docs/DREAM7B_S100P_SEQ128_LOGITS_VALIDITY_ROUTE_STATUS_20260704.md
+ M scripts/probes/ai_nas_operator_portal_server.py
+ M src/openclaw/harness_default_middleware.py
+?? 01_final_evidence/digua_ai_nas_agent_runtime_deepening_local_package.json
+?? 01_final_evidence/digua_ai_nas_agent_runtime_deepening_local_package.md
+?? 01_final_evidence/digua_ai_nas_agent_runtime_deepening_packet.json
+?? 01_final_evidence/digua_ai_nas_agent_runtime_deepening_packet.md
+?? 01_final_evidence/digua_ai_nas_final_audit_gate_packet.json
+?? 01_final_evidence/digua_ai_nas_final_audit_gate_packet.md
+?? 01_final_evidence/digua_ai_nas_ui_v2_design_report_effect_gate_packet.json
+?? 01_final_evidence/digua_ai_nas_ui_v2_design_report_effect_gate_packet.md
+?? 01_final_evidence/dream7b_s100p_lladacpp_style_continue_gate_packet.json
+?? 01_final_evidence/dream7b_s100p_lladacpp_style_continue_gate_packet.md
+?? 01_final_evidence/dream7b_s100p_lladacpp_style_continue_package.json
+?? 01_final_evidence/dream7b_s100p_lladacpp_style_continue_package.md
+?? benchmarks/agent_runtime_eval_cases.jsonl
+?? benchmarks/copy_route_eval_cases.jsonl
+?? benchmarks/journal_eval_cases.jsonl
+?? benchmarks/nas_search_eval_cases.jsonl
+?? benchmarks/privacy_eval_cases.jsonl
+?? benchmarks/rag_eval_cases.jsonl
+?? benchmarks/token_budget_eval_cases.jsonl
+?? benchmarks/ui_flow_eval_cases.jsonl
+?? configs/agent_runtime_feature_flags.json
+?? configs/context_pack_policy.json
+?? configs/internal_tool_manifest.json
+?? configs/memory_policy.json
+?? configs/multimodal_index_policy.json
+?? configs/rag_eval_policy.json
+?? docs/DEFENSE_QA_SAFE_BOUNDARY.md
+?? docs/DEMO_SCRIPT_AND_SCREENSHOT_LIST.md
+?? docs/DREAM7B_S100P_LLADACPP_STYLE_CONTINUE_DECISION.md
+?? docs/DREAM7B_S100P_LLADACPP_STYLE_DECISION.md
+?? docs/FINAL_APPLICATION_FIELDS_SAFE_VERSION.md
+?? docs/FINAL_FUNCTION_AND_FEATURES_SAFE_VERSION.md
+?? docs/FINAL_PROJECT_DESCRIPTION_SAFE_VERSION.md
+?? docs/FINAL_TECHNICAL_FEATURES_SAFE_VERSION.md
+?? docs/LLADACPP_TO_S100P_TRANSLATION_PLAN.md
+?? docs/REFERENCES_CANDIDATES.md
+?? docs/REFERENCES_FINAL_GBT7714.md
+?? docs/REFERENCES_FINAL_IEEE.md
+?? docs/REFERENCE_TO_REPORT_MAPPING.md
+?? docs/REPORT_SECTIONS_FILLED_SAFE_CLAIMS.md
+?? docs/TOKENIZER_AND_TOKEN_COST_REPORT_SECTION.md
+?? docs/TOKENIZER_LOCAL_FIRST_ROUTE_DESIGN.md
+?? docs/TOKEN_BUDGET_BENCHMARK_SUMMARY_FOR_REPORT.md
+?? docs/UNSUPPORTED_OR_OVERCLAIMED_PHRASES.md
+?? docs/ai_nas_agent_runtime_deepening_20260705.md
+?? docs/ai_nas_design_report_web_verification_20260704.md
+?? docs/ai_nas_desktop_ui_v2_20260704.md
+?? docs/final_audit/
+?? dream_s100p_lladacpp/
+?? evidence/dream7b_s100p_longrun_20260704/
+?? evidence/dream7b_s100p_v18_execution_20260704/
+?? evidence/dream7b_s100p_v19_execution_20260704/
+?? evidence/dream7b_s100p_v20_execution_20260704/
+?? evidence/dream7b_s100p_v21_execution_20260704/
+?? evidence/final_audit/
+?? evidence/final_demo/
+?? evidence/gguf_f16_longrun/
+?? evidence/hf_boundaries_v21/
+?? evidence/longrun_artifact_registry.json
+?? evidence/position_delta_basis_longrun/
+?? evidence/position_delta_basis_model_v19/
+?? evidence/position_delta_basis_model_v21/
+?? evidence/s100p_agent_runtime_deepening_20260705/
+?? evidence/semantic_hf_truth_v21/
+?? evidence/semantic_island_battery_v21/
+?? evidence/ui_v2/
+?? evidence/v21_combined_cases/
+?? evidence/write_sandbox_manifest.json
+?? evidence/x86_gpu_semantic_truth_export_bundle_v20/
+?? migrations/create_agent_runtime_tables.sql
+?? migrations/create_multimodal_index_tables.sql
+?? migrations/create_rag_eval_tables.sql
+?? operator_approval/
+?? operator_candidates/
+?? reports/17070_token_budget_final_package_manifest.json
+?? reports/2000_longrun_baseline_lock.json
+?? reports/2000_longrun_baseline_lock.md
+?? reports/24000_openclaw_capability_inventory.json
+?? reports/24010_context_pack_compiler_gate.json
+?? reports/24020_agent_memory_manager_gate.json
+?? reports/24030_multimodal_index_gate.json
+?? reports/24040_fts_first_rag_eval_gate.json
+?? reports/24050_trace_schema_gate.json
+?? reports/24060_internal_tool_manifest_gate.json
+?? reports/24070_continuous_eval_dataset_gate.json
+?? reports/24080_default_service_integration_gate.json
+?? reports/24090_agent_runtime_eval_gate.json
+?? reports/24100_agent_runtime_final_evidence_package.json
+?? reports/24110_agent_runtime_final_evidence_package.md
+?? reports/24120_agent_runtime_safety_ui_gate.json
+?? reports/24130_agent_runtime_s100p_acceptance_gate.json
+?? reports/AI_NAS_FINAL_DEMO_EVIDENCE.json
+?? reports/AI_NAS_FINAL_DEMO_EVIDENCE.md
+?? reports/AUDIT_TRACE_ROLLBACK_EVIDENCE.json
+?? reports/AUDIT_TRACE_ROLLBACK_EVIDENCE.md
+?? reports/DATABASE_INDEXING_EVIDENCE.json
+?? reports/DATABASE_INDEXING_EVIDENCE.md
+?? reports/FINAL_READONLY_AI_NAS_DEMO_CASES.json
+?? reports/FINAL_READONLY_AI_NAS_DEMO_CASES.md
+?? reports/FINAL_SERVICE_HEALTH_AND_IDENTITY.json
+?? reports/FINAL_SERVICE_HEALTH_AND_IDENTITY.md
+?? reports/WEB_MOBILE_ACCESS_EVIDENCE.json
+?? reports/WEB_MOBILE_ACCESS_EVIDENCE.md
+?? reports/agent_runtime/
+?? reports/agent_runtime_trace_samples.jsonl
+?? reports/final_audit/
+?? reports/stage3_shadow/
+?? reports/token_budget_traces.jsonl
+?? reports/ui_v2_default_service_disable_attempt.json
+?? reports/ui_v2_default_service_disable_attempt.md
+?? reports/ui_v2_default_service_enable_attempt.json
+?? reports/ui_v2_default_service_enable_attempt.md
+?? reports/ui_v2_default_service_preflight.json
+?? reports/ui_v2_default_service_preflight.md
+?? scripts/check_agent_runtime_status.sh
+?? scripts/check_ui_v2_default_service_status.sh
+?? scripts/disable_agent_runtime_extensions.sh
+?? scripts/disable_ui_v2_default_service.sh
+?? scripts/enable_ui_v2_default_service.sh
+?? scripts/probes/ai_nas_final_claim_support_package.py
+?? scripts/probes/ai_nas_token_budget_product_deployment.py
+?? scripts/run_agent_runtime_e2e_smoke.sh
+?? scripts/run_agent_runtime_eval_suite.sh
+?? src/agent_runtime/
+?? src/openclaw/routes/agent_runtime_routes.py
+?? tests/test_agent_runtime_core.py
+?? tests/test_agent_runtime_routes.py
+?? tests/test_document_fts_rag.py
+?? tests/test_personal_inventory_sqlite_readonly.py
+?? tests/test_ui_v2_security_boundaries.py
+?? tools/build_agent_runtime_deepening.py
+?? tools/build_dream_s100p_lladacpp_continue.py
+?? tools/build_dream_s100p_lladacpp_track.py
+?? tools/build_final_audit_package.py
+?? tools/finalize_agent_runtime_acceptance.py
+?? web/ai_nas_desktop_v2.html
+?? web/archive/
+?? web/static/digua_ai_nas_v2.css
+?? web/static/digua_ai_nas_v2.js
+
+$ git diff --stat
+ README.md                                          |   6 +
+ ...SEQ128_LOGITS_VALIDITY_ROUTE_STATUS_20260704.md |  18 +
+ scripts/probes/ai_nas_operator_portal_server.py    | 814 ++++++++++++++++++++-
+ src/openclaw/harness_default_middleware.py         |  13 +
+ 4 files changed, 841 insertions(+), 10 deletions(-)
+
+$ git diff --name-only
+README.md
+docs/DREAM7B_S100P_SEQ128_LOGITS_VALIDITY_ROUTE_STATUS_20260704.md
+scripts/probes/ai_nas_operator_portal_server.py
+src/openclaw/harness_default_middleware.py
+
+$ suspicious status entries
+?? evidence/gguf_f16_longrun/
+?? tests/test_personal_inventory_sqlite_readonly.py
+$ suspicious tracked entries
+deliverables/codex_dream7b_s100p_research_run_20260701/tools/export_gguf_reference_logits.py
+deliverables/dream7b_s100p_v3_execution_20260701/raw_evidence_subset/gguf_reference/zeros/gguf_last_logits.npy
+deliverables/dream7b_s100p_v3_execution_20260701/reference/previous_codex_gptpro_pack/tools/export_gguf_reference_logits.py
+deliverables/dream7b_s100p_v3_execution_20260701/tools/export_gguf_reference_logits.py
+evidence/dream7b_s100p_v16_execution_20260703_windows_safe/evidence/hbm_introspection_v16/hrt_dump_bin/model_infer_input_0__input_0.bin
+evidence/dream7b_s100p_v16_execution_20260703_windows_safe/evidence/hbm_introspection_v16/hrt_dump_bin/model_infer_input_1__input_1.bin
+evidence/dream7b_s100p_v16_execution_20260703_windows_safe/evidence/hbm_introspection_v16/hrt_dump_bin/model_infer_output_0__output_0.bin
+evidence/dream7b_s100p_v16_execution_20260703_windows_safe/evidence/hbm_introspection_v16/hrt_dump_bin/task-2-layer-0-BPU-hbir.mul_id_63_bpu_segment_0-input-0-_input_1-frame_260440331107.data.bin
+evidence/dream7b_s100p_v16_execution_20260703_windows_safe/evidence/hbm_introspection_v16/hrt_dump_bin/task-2-layer-1-native_View-hbir.reshape_id_1_cpu_segment_1-input-0-_input_0-frame_260440347423.data.bin
+evidence/dream7b_s100p_v16_execution_20260703_windows_safe/evidence/hbm_introspection_v16/hrt_dump_bin/task-2-layer-1-native_View-hbir.reshape_id_1_cpu_segment_1-output-0-hbir.reshape_id_1_0-frame_260440348177.data.bin
+evidence/dream7b_s100p_v16_execution_20260703_windows_safe/evidence/hbm_introspection_v16/hrt_dump_bin/task-2-layer-2-native_GatherND-qnt.const_fake_quant_id_3_cpu_segment_2-input-0-hbir.reshape_id_1_0-frame_260440348827.data.bin
+evidence/dream7b_s100p_v16_execution_20260703_windows_safe/evidence/hbm_introspection_v16/hrt_dump_bin/task-2-layer-2-native_GatherND-qnt.const_fake_quant_id_3_cpu_segment_2-output-0-qnt.const_fake_quant_id_3_0-frame_260440351127.data.bin
+evidence/dream7b_s100p_v16_execution_20260703_windows_safe/evidence/hbm_introspection_v16/hrt_dump_bin/task-2-layer-3-BPU-hbir.add_id_137_bpu_segment_3-input-0-qnt.const_fake_quant_id_3_0-frame_260440356438.data.bin
+evidence/dream7b_s100p_v16_execution_20260703_windows_safe/evidence/hbm_introspection_v16/hrt_dump_bin/task-2-layer-3-BPU-hbir.add_id_137_bpu_segment_3-output-0-_output_0-frame_260440370396.data.bin
+evidence/dream7b_s100p_v16_execution_20260703_windows_safe/evidence/hbm_introspection_v16/hrt_dump_npy/task-2-layer-0-BPU-hbir.mul_id_63_bpu_segment_0-input-0-_input_1-frame_260458339066.data.bin
+evidence/dream7b_s100p_v16_execution_20260703_windows_safe/evidence/hbm_introspection_v16/hrt_dump_npy/task-2-layer-1-native_View-hbir.reshape_id_1_cpu_segment_1-input-0-_input_0-frame_260458359833.data.bin
+evidence/dream7b_s100p_v16_execution_20260703_windows_safe/evidence/hbm_introspection_v16/hrt_dump_npy/task-2-layer-1-native_View-hbir.reshape_id_1_cpu_segment_1-output-0-hbir.reshape_id_1_0-frame_260458360676.data.bin
+evidence/dream7b_s100p_v16_execution_20260703_windows_safe/evidence/hbm_introspection_v16/hrt_dump_npy/task-2-layer-2-native_GatherND-qnt.const_fake_quant_id_3_cpu_segment_2-input-0-hbir.reshape_id_1_0-frame_260458361335.data.bin
+evidence/dream7b_s100p_v16_execution_20260703_windows_safe/evidence/hbm_introspection_v16/hrt_dump_npy/task-2-layer-2-native_GatherND-qnt.const_fake_quant_id_3_cpu_segment_2-output-0-qnt.const_fake_quant_id_3_0-frame_260458362590.data.bin
+evidence/dream7b_s100p_v16_execution_20260703_windows_safe/evidence/hbm_introspection_v16/hrt_dump_npy/task-2-layer-3-BPU-hbir.add_id_137_bpu_segment_3-input-0-qnt.const_fake_quant_id_3_0-frame_260458367726.data.bin
+evidence/dream7b_s100p_v16_execution_20260703_windows_safe/evidence/hbm_introspection_v16/hrt_dump_npy/task-2-layer-3-BPU-hbir.add_id_137_bpu_segment_3-output-0-_output_0-frame_260458381525.data.bin
+evidence/dream7b_s100p_v16_execution_20260703_windows_safe/evidence/hbm_introspection_v16/hrt_dump_txt/task-2-layer-0-BPU-hbir.mul_id_63_bpu_segment_0-input-0-_input_1-frame_260448472638.data.bin
+evidence/dream7b_s100p_v16_execution_20260703_windows_safe/evidence/hbm_introspection_v16/hrt_dump_txt/task-2-layer-1-native_View-hbir.reshape_id_1_cpu_segment_1-input-0-_input_0-frame_260448496696.data.bin
+evidence/dream7b_s100p_v16_execution_20260703_windows_safe/evidence/hbm_introspection_v16/hrt_dump_txt/task-2-layer-1-native_View-hbir.reshape_id_1_cpu_segment_1-output-0-hbir.reshape_id_1_0-frame_260448497473.data.bin
+evidence/dream7b_s100p_v16_execution_20260703_windows_safe/evidence/hbm_introspection_v16/hrt_dump_txt/task-2-layer-2-native_GatherND-qnt.const_fake_quant_id_3_cpu_segment_2-input-0-hbir.reshape_id_1_0-frame_260448498085.data.bin
+evidence/dream7b_s100p_v16_execution_20260703_windows_safe/evidence/hbm_introspection_v16/hrt_dump_txt/task-2-layer-2-native_GatherND-qnt.const_fake_quant_id_3_cpu_segment_2-output-0-qnt.const_fake_quant_id_3_0-frame_260448499333.data.bin
+evidence/dream7b_s100p_v16_execution_20260703_windows_safe/evidence/hbm_introspection_v16/hrt_dump_txt/task-2-layer-3-BPU-hbir.add_id_137_bpu_segment_3-input-0-qnt.const_fake_quant_id_3_0-frame_260448504449.data.bin
+evidence/dream7b_s100p_v16_execution_20260703_windows_safe/evidence/hbm_introspection_v16/hrt_dump_txt/task-2-layer-3-BPU-hbir.add_id_137_bpu_segment_3-output-0-_output_0-frame_260448518064.data.bin
+evidence/gguf_f16_reference_v13/gguf_artifact_and_runner_probe.log
+evidence/gguf_f16_reference_v14/gguf_f16_logits_runner_probe.log
+evidence/gguf_f16_reference_v14/historical_q4km_control/ramp_gguf_last_logits.npy
+evidence/gguf_f16_reference_v14/historical_q4km_control/seq128_logits_reference_compare.json
+evidence/gguf_f16_reference_v14/historical_q4km_control/seq128_logits_reference_compare.md
+evidence/gguf_f16_reference_v14/historical_q4km_control/zeros_gguf_last_logits.npy
+evidence/gguf_f16_reference_v15/gguf_f16_reference_probe.log
+evidence/gguf_f16_reference_v16/gguf_f16_escalation_probe.log
+evidence/gguf_f16_reference_v17/gguf_f16_search_v17.log
+evidence/gguf_f16_reference_v17/workspace_gguf_search_v17.log
+evidence/reference_matrix_v6/gguf_q4_k_m/zeros/last_logits.npy
+evidence/reference_matrix_v7/gguf_q4_k_m/zeros/last_logits.npy
+evidence/seg00_01_exact_graph_v14/ramp/add_input_embedding_raw.bin
+evidence/seg00_01_exact_graph_v14/ramp/add_output_raw.bin
+evidence/seg00_01_exact_graph_v14/ramp/gathernd_output_raw.bin
+evidence/seg00_01_exact_graph_v14/ramp/hrt_dump_raw/model_infer_input_0__input_0.bin
+evidence/seg00_01_exact_graph_v14/ramp/hrt_dump_raw/model_infer_input_1__input_1.bin
+evidence/seg00_01_exact_graph_v14/ramp/hrt_dump_raw/model_infer_output_0__output_0.bin
+evidence/seg00_01_exact_graph_v14/ramp/hrt_dump_raw/task-2-layer-0-BPU-hbir.mul_id_63_bpu_segment_0-input-0-_input_1-frame_247050590409.data.bin
+evidence/seg00_01_exact_graph_v14/ramp/hrt_dump_raw/task-2-layer-3-BPU-hbir.add_id_137_bpu_segment_3-output-0-_output_0-frame_247050635242.data.bin
+evidence/seg00_01_exact_graph_v14/ramp/model_infer_output_raw.bin
+evidence/seg00_01_exact_graph_v14/short_chinese_prompt_padded/add_input_embedding_raw.bin
+evidence/seg00_01_exact_graph_v14/short_chinese_prompt_padded/add_output_raw.bin
+evidence/seg00_01_exact_graph_v14/short_chinese_prompt_padded/gathernd_output_raw.bin
+evidence/seg00_01_exact_graph_v14/short_chinese_prompt_padded/hrt_dump_raw/model_infer_input_0__input_0.bin
+evidence/seg00_01_exact_graph_v14/short_chinese_prompt_padded/hrt_dump_raw/model_infer_input_1__input_1.bin
+evidence/seg00_01_exact_graph_v14/short_chinese_prompt_padded/hrt_dump_raw/model_infer_output_0__output_0.bin
+evidence/seg00_01_exact_graph_v14/short_chinese_prompt_padded/hrt_dump_raw/task-2-layer-0-BPU-hbir.mul_id_63_bpu_segment_0-input-0-_input_1-frame_247064785021.data.bin
+evidence/seg00_01_exact_graph_v14/short_chinese_prompt_padded/hrt_dump_raw/task-2-layer-3-BPU-hbir.add_id_137_bpu_segment_3-output-0-_output_0-frame_247064830906.data.bin
+evidence/seg00_01_exact_graph_v14/short_chinese_prompt_padded/model_infer_output_raw.bin
+evidence/seg00_01_exact_graph_v14/zeros/add_input_embedding_raw.bin
+evidence/seg00_01_exact_graph_v14/zeros/add_output_raw.bin
+evidence/seg00_01_exact_graph_v14/zeros/gathernd_output_raw.bin
+evidence/seg00_01_exact_graph_v14/zeros/hrt_dump_raw/model_infer_input_0__input_0.bin
+evidence/seg00_01_exact_graph_v14/zeros/hrt_dump_raw/model_infer_input_1__input_1.bin
+evidence/seg00_01_exact_graph_v14/zeros/hrt_dump_raw/model_infer_output_0__output_0.bin
+evidence/seg00_01_exact_graph_v14/zeros/hrt_dump_raw/task-2-layer-0-BPU-hbir.mul_id_63_bpu_segment_0-input-0-_input_1-frame_247035032623.data.bin
+evidence/seg00_01_exact_graph_v14/zeros/hrt_dump_raw/task-2-layer-3-BPU-hbir.add_id_137_bpu_segment_3-output-0-_output_0-frame_247035077081.data.bin
+evidence/seg00_01_exact_graph_v14/zeros/model_infer_output_raw.bin
+evidence/seg00_01_mul_add_input1_v15/hrt_dump_npy/task-2-layer-0-BPU-hbir.mul_id_63_bpu_segment_0-input-0-_input_1-frame_258711162302.data.bin
+evidence/seg00_01_mul_add_input1_v15/hrt_dump_npy/task-2-layer-1-native__View-hbir.reshape_id_1_cpu_segment_1-input-0-_input_0-frame_258711173498.data.bin
+evidence/seg00_01_mul_add_input1_v15/hrt_dump_npy/task-2-layer-1-native__View-hbir.reshape_id_1_cpu_segment_1-output-0-hbir.reshape_id_1_ 0-frame_258711174292.data.bin
+evidence/seg00_01_mul_add_input1_v15/hrt_dump_npy/task-2-layer-2-native__GatherND-qnt.const_fake_quant_id_3_cpu_segment_2-input-0-hbir.reshape_id_1_ 0-frame_258711175046.data.bin
+evidence/seg00_01_mul_add_input1_v15/hrt_dump_npy/task-2-layer-2-native__GatherND-qnt.const_fake_quant_id_3_cpu_segment_2-output-0-qnt.const_fake_quant_id_3_ 0-frame_258711176702.data.bin
+evidence/seg00_01_mul_add_input1_v15/hrt_dump_npy/task-2-layer-3-BPU-hbir.add_id_137_bpu_segment_3-input-0-qnt.const_fake_quant_id_3_ 0-frame_258711182158.data.bin
+evidence/seg00_01_mul_add_input1_v15/hrt_dump_npy/task-2-layer-3-BPU-hbir.add_id_137_bpu_segment_3-output-0-_output_0-frame_258711195786.data.bin
+evidence/seg00_01_mul_add_input1_v15/hrt_dump_txt/task-2-layer-0-BPU-hbir.mul_id_63_bpu_segment_0-input-0-_input_1-frame_258720242055.data.bin
+evidence/seg00_01_mul_add_input1_v15/hrt_dump_txt/task-2-layer-1-native__View-hbir.reshape_id_1_cpu_segment_1-input-0-_input_0-frame_258720262663.data.bin
+evidence/seg00_01_mul_add_input1_v15/hrt_dump_txt/task-2-layer-1-native__View-hbir.reshape_id_1_cpu_segment_1-output-0-hbir.reshape_id_1_ 0-frame_258720263474.data.bin
+evidence/seg00_01_mul_add_input1_v15/hrt_dump_txt/task-2-layer-2-native__GatherND-qnt.const_fake_quant_id_3_cpu_segment_2-input-0-hbir.reshape_id_1_ 0-frame_258720264118.data.bin
+evidence/seg00_01_mul_add_input1_v15/hrt_dump_txt/task-2-layer-2-native__GatherND-qnt.const_fake_quant_id_3_cpu_segment_2-output-0-qnt.const_fake_quant_id_3_ 0-frame_258720265398.data.bin
+evidence/seg00_01_mul_add_input1_v15/hrt_dump_txt/task-2-layer-3-BPU-hbir.add_id_137_bpu_segment_3-input-0-qnt.const_fake_quant_id_3_ 0-frame_258720270765.data.bin
+evidence/seg00_01_mul_add_input1_v15/hrt_dump_txt/task-2-layer-3-BPU-hbir.add_id_137_bpu_segment_3-output-0-_output_0-frame_258720284545.data.bin
+evidence/seg00_01_operator_metadata_v13/hrt_dump_zeros/model_infer_input_0__input_0.bin
+evidence/seg00_01_operator_metadata_v13/hrt_dump_zeros/model_infer_input_1__input_1.bin
+evidence/seg00_01_operator_metadata_v13/hrt_dump_zeros/model_infer_output_0__output_0.bin
+evidence/seg00_01_operator_metadata_v13/hrt_dump_zeros/task-2-layer-0-BPU-hbir.mul_id_63_bpu_segment_0-input-0-_input_1-frame_236055086906.data.bin
+evidence/seg00_01_operator_metadata_v13/hrt_dump_zeros/task-2-layer-1-native__View-hbir.reshape_id_1_cpu_segment_1-input-0-_input_0-frame_236055105710.data.bin
+evidence/seg00_01_operator_metadata_v13/hrt_dump_zeros/task-2-layer-1-native__View-hbir.reshape_id_1_cpu_segment_1-output-0-hbir.reshape_id_1_ 0-frame_236055106496.data.bin
+evidence/seg00_01_operator_metadata_v13/hrt_dump_zeros/task-2-layer-2-native__GatherND-qnt.const_fake_quant_id_3_cpu_segment_2-input-0-hbir.reshape_id_1_ 0-frame_236055107149.data.bin
+evidence/seg00_01_operator_metadata_v13/hrt_dump_zeros/task-2-layer-2-native__GatherND-qnt.const_fake_quant_id_3_cpu_segment_2-output-0-qnt.const_fake_quant_id_3_ 0-frame_236055108544.data.bin
+evidence/seg00_01_operator_metadata_v13/hrt_dump_zeros/task-2-layer-3-BPU-hbir.add_id_137_bpu_segment_3-input-0-qnt.const_fake_quant_id_3_ 0-frame_236055155070.data.bin
+evidence/seg00_01_operator_metadata_v13/hrt_dump_zeros/task-2-layer-3-BPU-hbir.add_id_137_bpu_segment_3-output-0-_output_0-frame_236055169731.data.bin
+evidence_for_gptpro/ai_nas_harness_stage1_fixed_gptpro_20260702-232901/reports/latest_shadow_run/harness_runtime_trace.sqlite3
+evidence_for_gptpro/ai_nas_harness_stage1_fixed_gptpro_20260702-233035/reports/latest_shadow_run/harness_runtime_trace.sqlite3
+evidence_for_gptpro/ai_nas_harness_stage1_gptpro_20260702-225922/reports/latest_shadow_run/harness_runtime_trace.sqlite3
+hobot_dnn/dnn_benchmark_example/config/Rdkultra/mobilenetv1_224x224_nv12_pyramid.bin
+hobot_dnn/dnn_benchmark_example/config/X3/mobilenetv1_224x224_nv12_pyramid.bin
+hobot_dnn/dnn_benchmark_example/config/X5/mobilenetv1_224x224_nv12.bin
+hobot_dnn/dnn_node_sample/config/yolov5_672x672_nv12.bin
+reports/1050_gguf_reference_matrix.json
+reports/1050_gguf_reference_matrix.md
+reports/1350_gguf_f16_logits_reference.json
+reports/1350_gguf_f16_logits_reference.md
+reports/1490_gguf_f16_logits_runner_closure.json
+reports/1490_gguf_f16_logits_runner_closure.md
+reports/1670_gguf_f16_reference_closure.json
+reports/1670_gguf_f16_reference_closure.md
+reports/1770_gguf_f16_reference_escalation.json
+reports/1770_gguf_f16_reference_escalation.md
+reports/1880_gguf_f16_reference_escalation.json
+reports/1880_gguf_f16_reference_escalation.md
+reports/2110_gguf_f16_reference_escalation.json
+reports/2110_gguf_f16_reference_escalation.md
+reports/320_gguf_reference_matrix.json
+reports/320_gguf_reference_matrix.md
+reports/430_gguf_f16_q4_reference_matrix.json
+reports/430_gguf_f16_q4_reference_matrix.md
+reports/930_gguf_f16_reference_crosscheck.json
+reports/930_gguf_f16_reference_crosscheck.md
+reports/GGUF_F16_STATUS_V17.md
+reports/harness_shadow_probe_20260702-224907-985752/harness_memory.sqlite3
+reports/harness_shadow_probe_20260702-224907-985752/harness_runtime_trace.sqlite3
+reports/harness_shadow_probe_20260702-225400-128474/harness_memory.sqlite3
+reports/harness_shadow_probe_20260702-225400-128474/harness_runtime_trace.sqlite3
+reports/harness_shadow_probe_20260702-232718-819400/harness_runtime_trace.sqlite3
+reports/harness_shadow_probe_20260702-232732-545085/harness_memory.sqlite3
+reports/harness_shadow_probe_20260702-232732-545085/harness_runtime_trace.sqlite3
+reports/harness_shadow_probe_20260702-232815-136372/harness_memory.sqlite3
+reports/harness_shadow_probe_20260702-232815-136372/harness_runtime_trace.sqlite3
+reports/harness_stage1_memory_boundary_gate.sqlite3
+reports/operator_portal_contract_20260625-001846-838613/operator_portal_contract.sqlite3
+scripts/probes/ai_nas_sqlite_index_integrity_contract_probe.py
+scripts/probes/ai_nas_sqlite_index_integrity_contract_probe.sh
+scripts/probes/dream7b_gguf_param_matrix_probe.py
+tools/export_gguf_reference_matrix.py

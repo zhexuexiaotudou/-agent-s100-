@@ -1,0 +1,17 @@
+{
+  "policy_id": "digua_agent_runtime_context_pack_policy_v1",
+  "max_token_budget": 4096,
+  "raw_private_content_exported": false,
+  "redaction_map_exported": false,
+  "acl_denied_items_included": false,
+  "qwen_execution_authority": false,
+  "cloud_private_raw_egress": false,
+  "required_fields": [
+    "pack_id",
+    "request_id",
+    "context_items",
+    "evidence_refs",
+    "token_estimate",
+    "allowed_tool_ids"
+  ]
+}

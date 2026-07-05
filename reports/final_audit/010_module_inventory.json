@@ -1,0 +1,310 @@
+{
+  "generated_at": "2026-07-05T13:44:26+08:00",
+  "modules": [
+    {
+      "endpoints": [
+        "GET /api/health",
+        "GET /ui"
+      ],
+      "evidence_files": [
+        "scripts/probes/ai_nas_operator_portal_server.py",
+        "src/openclaw/harness_default_middleware.py"
+      ],
+      "known_limitations": [
+        "Gateway remains LAN/S100P-loopback scoped; no public exposure claim."
+      ],
+      "module": "OpenClaw Gateway / operator portal",
+      "status": "live_deployed"
+    },
+    {
+      "endpoints": [
+        "GET /health",
+        "GET /v1/models"
+      ],
+      "evidence_files": [
+        "scripts/qwen25_openai_gateway.py"
+      ],
+      "known_limitations": [
+        "Qwen is an advisor/router; it has no autonomous tool execution authority."
+      ],
+      "module": "Qwen local gateway",
+      "status": "live_deployed"
+    },
+    {
+      "endpoints": [
+        "GET /api/harness/status"
+      ],
+      "evidence_files": [
+        "01_final_evidence/digua_ai_nas_harness_default_service_gate_packet.json"
+      ],
+      "known_limitations": [
+        "Only limited, confirmed single-file copy is enabled."
+      ],
+      "module": "Workspace Harness",
+      "status": "live_deployed"
+    },
+    {
+      "endpoints": [],
+      "evidence_files": [
+        "tools/token_budget/cloud_route_decider.py",
+        "reports/17120_token_budget_product_final_summary.json"
+      ],
+      "known_limitations": [
+        "Benchmark evidence is not real billing evidence."
+      ],
+      "module": "Policy Router",
+      "status": "tested"
+    },
+    {
+      "endpoints": [],
+      "evidence_files": [
+        "src/harness/copy_route_guard.py",
+        "01_final_evidence/digua_ai_nas_harness_default_service_gate_packet.json"
+      ],
+      "known_limitations": [
+        "Mutating execution must stay behind dispatcher, hash, target-absent, and signed-token checks."
+      ],
+      "module": "allowlist dispatcher",
+      "status": "live_deployed"
+    },
+    {
+      "endpoints": [
+        "UI Files page",
+        "document FTS query"
+      ],
+      "evidence_files": [
+        "tests/test_personal_inventory_sqlite_readonly.py",
+        "evidence/ui_v2/api/ui_v2_api_smoke.json"
+      ],
+      "known_limitations": [
+        "Some UI evidence marks SQLite inventory status degraded while read-only operation DB remains ok."
+      ],
+      "module": "NAS Search",
+      "status": "tested"
+    },
+    {
+      "endpoints": [],
+      "evidence_files": [
+        "tests/test_personal_inventory_sqlite_readonly.py",
+        "migrations/create_agent_runtime_tables.sql"
+      ],
+      "known_limitations": [
+        "Runtime SQLite DB files are intentionally excluded from the audit package."
+      ],
+      "module": "SQLite index",
+      "status": "tested"
+    },
+    {
+      "endpoints": [
+        "POST /api/agent-runtime/rag/query"
+      ],
+      "evidence_files": [
+        "tests/test_document_fts_rag.py",
+        "reports/24040_fts_first_rag_eval_gate.json"
+      ],
+      "known_limitations": [
+        "FTS-first local RAG; embedding is optional and not default."
+      ],
+      "module": "Document FTS / RAG",
+      "status": "tested"
+    },
+    {
+      "endpoints": [],
+      "evidence_files": [
+        "reports/AI_NAS_FINAL_DEMO_EVIDENCE.json",
+        "reports/24110_agent_runtime_final_evidence_package.md"
+      ],
+      "known_limitations": [
+        "Reports are evidence packages, not external certification."
+      ],
+      "module": "Report generation",
+      "status": "tested"
+    },
+    {
+      "endpoints": [
+        "harness token budget integration"
+      ],
+      "evidence_files": [
+        "reports/17120_token_budget_product_final_summary.json",
+        "SELF_CHECK.py"
+      ],
+      "known_limitations": [
+        "Can claim benchmark cloud-input token reduction, not real bill savings."
+      ],
+      "module": "Token Budget & Privacy Router",
+      "status": "tested"
+    },
+    {
+      "endpoints": [
+        "/api/nas/copy/preview",
+        "/api/nas/copy/dry-run",
+        "/api/nas/copy/confirm",
+        "/api/nas/copy/execute",
+        "/api/nas/copy/rollback"
+      ],
+      "evidence_files": [
+        "src/openclaw/routes/nas_copy_routes.py",
+        "tests/test_copy_route_guard.py"
+      ],
+      "known_limitations": [
+        "Delete, move, rename, chmod, overwrite, recursive operations are forbidden."
+      ],
+      "module": "Copy Route default service",
+      "status": "live_deployed"
+    },
+    {
+      "endpoints": [
+        "OpenClaw /journal page/API"
+      ],
+      "evidence_files": [
+        "01_final_evidence/digua_ai_nas_digua_journal_production_gate_packet.json",
+        "01_final_evidence/digua_journal_live_rollout_gate_packet.json"
+      ],
+      "known_limitations": [
+        "Repo integration is dirty/uncommitted; live rollout and repo merge status must be distinguished."
+      ],
+      "module": "Digua Journal",
+      "status": "live_deployed"
+    },
+    {
+      "endpoints": [
+        "GET /ui on 8765",
+        "GET /ui on 18766"
+      ],
+      "evidence_files": [
+        "01_final_evidence/digua_ai_nas_ui_v2_design_report_effect_gate_packet.json",
+        "evidence/ui_v2/playwright/ui_v2_playwright_validation.json"
+      ],
+      "known_limitations": [
+        "Fresh Playwright was not rerun in this audit because local Node/npm are missing."
+      ],
+      "module": "UI v2",
+      "status": "live_deployed"
+    },
+    {
+      "endpoints": [
+        "GET /api/agent-runtime/status",
+        "GET /api/agent-runtime/tool-manifest",
+        "GET /api/agent-runtime/memory/stats",
+        "GET /api/agent-runtime/multimodal-index/status",
+        "GET /api/agent-runtime/eval/status",
+        "POST /api/agent-runtime/context-pack",
+        "POST /api/agent-runtime/memory/record",
+        "POST /api/agent-runtime/multimodal-index/scan",
+        "POST /api/agent-runtime/rag/query"
+      ],
+      "evidence_files": [
+        "01_final_evidence/digua_ai_nas_agent_runtime_deepening_packet.json",
+        "src/agent_runtime/service.py"
+      ],
+      "known_limitations": [
+        "HTTP POST auth remains enforced; unauthenticated context-pack smoke is blocked."
+      ],
+      "module": "Agent Runtime Context Pack",
+      "status": "live_deployed"
+    },
+    {
+      "endpoints": [
+        "GET /api/agent-runtime/memory/stats",
+        "POST /api/agent-runtime/memory/record"
+      ],
+      "evidence_files": [
+        "src/agent_runtime/memory.py",
+        "reports/24020_agent_memory_manager_gate.json"
+      ],
+      "known_limitations": [
+        "Raw private content rows are expected to remain zero."
+      ],
+      "module": "Memory Manager",
+      "status": "live_deployed"
+    },
+    {
+      "endpoints": [
+        "GET /api/agent-runtime/multimodal-index/status"
+      ],
+      "evidence_files": [
+        "src/agent_runtime/multimodal_index.py",
+        "reports/24030_multimodal_index_gate.json"
+      ],
+      "known_limitations": [
+        "Metadata-only index by default; thumbnail, OCR, embedding, video keyframe, and audio transcript are not default-enabled."
+      ],
+      "module": "Multimodal NAS Index",
+      "status": "live_deployed"
+    },
+    {
+      "endpoints": [],
+      "evidence_files": [
+        "reports/24090_agent_runtime_eval_gate.json",
+        "benchmarks/rag_eval_cases.jsonl"
+      ],
+      "known_limitations": [
+        "Eval dataset is controlled benchmark evidence."
+      ],
+      "module": "RAG Eval",
+      "status": "tested"
+    },
+    {
+      "endpoints": [],
+      "evidence_files": [
+        "reports/24050_trace_schema_gate.json",
+        "reports/agent_runtime_trace_samples.jsonl"
+      ],
+      "known_limitations": [
+        "Trace schema is local audit-like evidence, not a full OpenTelemetry backend."
+      ],
+      "module": "OpenTelemetry-like Trace",
+      "status": "tested"
+    },
+    {
+      "endpoints": [
+        "GET /api/agent-runtime/tool-manifest"
+      ],
+      "evidence_files": [
+        "configs/internal_tool_manifest.json",
+        "reports/24060_internal_tool_manifest_gate.json"
+      ],
+      "known_limitations": [
+        "No public MCP exposure is allowed."
+      ],
+      "module": "Internal Tool Manifest",
+      "status": "live_deployed"
+    },
+    {
+      "endpoints": [],
+      "evidence_files": [
+        "reports/24070_continuous_eval_dataset_gate.json",
+        "benchmarks/agent_runtime_eval_cases.jsonl"
+      ],
+      "known_limitations": [
+        "Dataset is a gate suite, not longitudinal production telemetry."
+      ],
+      "module": "Continuous Eval Dataset",
+      "status": "tested"
+    },
+    {
+      "endpoints": [],
+      "evidence_files": [
+        "01_final_evidence/",
+        "evidence_for_gptpro/"
+      ],
+      "known_limitations": [
+        "Final audit package is a review artifact; repo remains dirty."
+      ],
+      "module": "Audit / Gate / Evidence Packet",
+      "status": "tested"
+    },
+    {
+      "endpoints": [],
+      "evidence_files": [
+        "01_final_evidence/dream7b_s100p_lladacpp_style_continue_gate_packet.json",
+        "dream_s100p_lladacpp/"
+      ],
+      "known_limitations": [
+        "Not a product route; stops at BPU operator alignment review boundary."
+      ],
+      "module": "Dream7B research branch",
+      "status": "deprecated_or_research_only"
+    }
+  ]
+}

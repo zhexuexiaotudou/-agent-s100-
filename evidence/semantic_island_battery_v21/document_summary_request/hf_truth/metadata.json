@@ -1,0 +1,112 @@
+{
+  "case_id": "document_summary_request",
+  "semantic_or_diagnostic": "semantic",
+  "elapsed_seconds": 1.301668,
+  "token_ids_sha256": "6eade2d854d75ba1cb9d89aaacbf720e1b1ea3ca62b4a1e23f4f4bae197fcf75",
+  "truth": {
+    "path": "evidence\\semantic_island_battery_v21\\document_summary_request\\hf_truth\\hf_truth_logits.npy",
+    "size_bytes": 608384,
+    "sha256": "3bf12a5ce083db4fa110ff5182678b81b70b7bfe2e36729d63f4184c83dc8051",
+    "stats": {
+      "shape": [
+        152064
+      ],
+      "dtype": "float32",
+      "size": 152064,
+      "min": -11.625,
+      "max": 18.5,
+      "mean": -6.989191055297852,
+      "std": 1.2956078052520752,
+      "abs_max": 18.5,
+      "nonzero_count": 152064,
+      "allzero": false,
+      "constant": false,
+      "nan_count": 0,
+      "inf_count": 0
+    }
+  },
+  "boundaries": {
+    "layer_00_output": {
+      "path": "evidence\\semantic_island_battery_v21\\document_summary_request\\hf_boundaries\\layer_00_output.npy",
+      "size_bytes": 1835136,
+      "sha256": "6ee0123a084193877dd68b9f48d52faac0336dfb1bd8f2eaa930a3eb19775080",
+      "stats": {
+        "shape": [
+          128,
+          3584
+        ],
+        "dtype": "float32",
+        "size": 458752,
+        "min": -2.1875,
+        "max": 1.7578125,
+        "mean": -0.00048799763317219913,
+        "std": 0.18563087284564972,
+        "abs_max": 2.1875,
+        "nonzero_count": 458279,
+        "allzero": false,
+        "constant": false,
+        "nan_count": 0,
+        "inf_count": 0
+      }
+    },
+    "layer_01_output": {
+      "path": "evidence\\semantic_island_battery_v21\\document_summary_request\\hf_boundaries\\layer_01_output.npy",
+      "size_bytes": 1835136,
+      "sha256": "3e5871a2c2489b6947798ce401d58ef8ef3df6611f2c1edd18263549e1e9a834",
+      "stats": {
+        "shape": [
+          128,
+          3584
+        ],
+        "dtype": "float32",
+        "size": 458752,
+        "min": -6.5,
+        "max": 2.46875,
+        "mean": 0.0011387491831555963,
+        "std": 0.22492527961730957,
+        "abs_max": 6.5,
+        "nonzero_count": 458389,
+        "allzero": false,
+        "constant": false,
+        "nan_count": 0,
+        "inf_count": 0
+      }
+    },
+    "layer_02_output": {
+      "path": "evidence\\semantic_island_battery_v21\\document_summary_request\\hf_boundaries\\layer_02_output.npy",
+      "size_bytes": 1835136,
+      "sha256": "fcc858648b9117e4ce92154ec3be91a5272d9f3157a30af957e03fae8ff418b1",
+      "stats": {
+        "shape": [
+          128,
+          3584
+        ],
+        "dtype": "float32",
+        "size": 458752,
+        "min": -4.84375,
+        "max": 2.96875,
+        "mean": -0.0011395083274692297,
+        "std": 0.256694495677948,
+        "abs_max": 4.84375,
+        "nonzero_count": 458361,
+        "allzero": false,
+        "constant": false,
+        "nan_count": 0,
+        "inf_count": 0
+      }
+    }
+  },
+  "top10": [
+    151643,
+    0,
+    4894,
+    25984,
+    220,
+    8958,
+    16,
+    1112,
+    17839,
+    753
+  ],
+  "status": "pass"
+}

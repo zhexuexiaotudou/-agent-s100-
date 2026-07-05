@@ -1,0 +1,112 @@
+{
+  "case_id": "short_chinese_prompt_padded",
+  "semantic_or_diagnostic": "semantic",
+  "elapsed_seconds": 1.293972,
+  "token_ids_sha256": "ac26ad530204a4bc2196cff5fd05bf83a46048a578fdabab2b9073439addd01a",
+  "truth": {
+    "path": "evidence\\hf_boundaries_v21\\short_chinese_prompt_padded\\hf_truth\\hf_truth_logits.npy",
+    "size_bytes": 608384,
+    "sha256": "3a5dd5e81b37dd3ecb523e5ef3fbf2cef62aa6bea9441198e5700e8e3c426a13",
+    "stats": {
+      "shape": [
+        152064
+      ],
+      "dtype": "float32",
+      "size": 152064,
+      "min": -13.0,
+      "max": 8.75,
+      "mean": -9.121015548706055,
+      "std": 2.049726963043213,
+      "abs_max": 13.0,
+      "nonzero_count": 152064,
+      "allzero": false,
+      "constant": false,
+      "nan_count": 0,
+      "inf_count": 0
+    }
+  },
+  "boundaries": {
+    "layer_00_output": {
+      "path": "evidence\\hf_boundaries_v21\\short_chinese_prompt_padded\\hf_boundaries\\layer_00_output.npy",
+      "size_bytes": 1835136,
+      "sha256": "0c99a7e793ecd359cd02d22d2096f0c5a773dcf0a29ab8cbe662b164c00c6887",
+      "stats": {
+        "shape": [
+          128,
+          3584
+        ],
+        "dtype": "float32",
+        "size": 458752,
+        "min": -1.9375,
+        "max": 1.796875,
+        "mean": -0.00046221193042583764,
+        "std": 0.1929185390472412,
+        "abs_max": 1.9375,
+        "nonzero_count": 458290,
+        "allzero": false,
+        "constant": false,
+        "nan_count": 0,
+        "inf_count": 0
+      }
+    },
+    "layer_01_output": {
+      "path": "evidence\\hf_boundaries_v21\\short_chinese_prompt_padded\\hf_boundaries\\layer_01_output.npy",
+      "size_bytes": 1835136,
+      "sha256": "c486d5e9eb0705a7a8dee32c81511b9b87e4d4165b38625a138201244bfda1df",
+      "stats": {
+        "shape": [
+          128,
+          3584
+        ],
+        "dtype": "float32",
+        "size": 458752,
+        "min": -6.4375,
+        "max": 2.515625,
+        "mean": 0.0014611132210120559,
+        "std": 0.23226314783096313,
+        "abs_max": 6.4375,
+        "nonzero_count": 458290,
+        "allzero": false,
+        "constant": false,
+        "nan_count": 0,
+        "inf_count": 0
+      }
+    },
+    "layer_02_output": {
+      "path": "evidence\\hf_boundaries_v21\\short_chinese_prompt_padded\\hf_boundaries\\layer_02_output.npy",
+      "size_bytes": 1835136,
+      "sha256": "457b4cd6c5cbe49f9767f9b71f2825c228d157fde8f8cc2f8ef65ae044ba0605",
+      "stats": {
+        "shape": [
+          128,
+          3584
+        ],
+        "dtype": "float32",
+        "size": 458752,
+        "min": -5.1875,
+        "max": 2.78125,
+        "mean": -0.0002785788383334875,
+        "std": 0.2610380947589874,
+        "abs_max": 5.1875,
+        "nonzero_count": 458453,
+        "allzero": false,
+        "constant": false,
+        "nan_count": 0,
+        "inf_count": 0
+      }
+    }
+  },
+  "top10": [
+    151643,
+    0,
+    6313,
+    2055,
+    2219,
+    4894,
+    16,
+    220,
+    773,
+    9370
+  ],
+  "status": "pass"
+}

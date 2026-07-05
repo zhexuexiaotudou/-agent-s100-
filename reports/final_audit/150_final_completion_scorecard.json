@@ -1,0 +1,103 @@
+{
+  "generated_at": "2026-07-05T13:44:26+08:00",
+  "scorecard": [
+    {
+      "dimension": "Core product closure",
+      "evidence": "live 8765/18080, harness, pytest",
+      "gap": "repo dirty and final review pending",
+      "score": 4,
+      "status": "mostly complete"
+    },
+    {
+      "dimension": "OpenClaw integration",
+      "evidence": "8765 health and /ui",
+      "gap": "public exposure remains forbidden",
+      "score": 4,
+      "status": "live"
+    },
+    {
+      "dimension": "Qwen local gateway",
+      "evidence": "18080 /v1/models",
+      "gap": "health metadata has historical fields",
+      "score": 4,
+      "status": "live"
+    },
+    {
+      "dimension": "Harness / security controls",
+      "evidence": "default service packet and live status",
+      "gap": "24h stability not proven by this audit",
+      "score": 4,
+      "status": "strong"
+    },
+    {
+      "dimension": "Token Budget",
+      "evidence": "130 cases, real tokenizer",
+      "gap": "not billing evidence",
+      "score": 5,
+      "status": "supported"
+    },
+    {
+      "dimension": "NAS index / RAG",
+      "evidence": "tests and RAG gates",
+      "gap": "embedding default-off, sqlite degraded note",
+      "score": 3,
+      "status": "FTS-first"
+    },
+    {
+      "dimension": "Digua Journal",
+      "evidence": "journal packets",
+      "gap": "repo merge status dirty",
+      "score": 4,
+      "status": "live rollout evidence"
+    },
+    {
+      "dimension": "UI v2",
+      "evidence": "8765/18766 /ui, screenshots",
+      "gap": "fresh Playwright not run",
+      "score": 3,
+      "status": "live route and prior screenshots"
+    },
+    {
+      "dimension": "Agent Runtime deepening",
+      "evidence": "harness agent_runtime status",
+      "gap": "metadata-first multimodal",
+      "score": 4,
+      "status": "live"
+    },
+    {
+      "dimension": "Evidence package integrity",
+      "evidence": "final audit zip and self check",
+      "gap": "human/GPT Pro review still needed",
+      "score": 4,
+      "status": "generated"
+    },
+    {
+      "dimension": "Design report consistency",
+      "evidence": "claim matrix",
+      "gap": "several claims require downgrading",
+      "score": 3,
+      "status": "needs wording cleanup"
+    },
+    {
+      "dimension": "Security boundary",
+      "evidence": "live status",
+      "gap": "staging review still required",
+      "score": 5,
+      "status": "no high-risk default"
+    },
+    {
+      "dimension": "Live-machine testing",
+      "evidence": "ssh curl snapshots",
+      "gap": "fresh browser blocked locally",
+      "score": 4,
+      "status": "S100P live checks passed"
+    },
+    {
+      "dimension": "Repo deliverability",
+      "evidence": "git status",
+      "gap": "large dirty tree",
+      "score": 1,
+      "status": "hold"
+    }
+  ]
+}

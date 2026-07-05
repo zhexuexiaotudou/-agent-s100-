@@ -1,0 +1,36 @@
+{
+  "all_gates_pass": true,
+  "cloud_private_raw_egress": false,
+  "copy_execute_requires": {
+    "dispatcher": true,
+    "signed_token": true,
+    "source_rehash": true,
+    "target_absent": true,
+    "user_confirmation": true
+  },
+  "copy_routes": [
+    "/api/nas/copy/preview",
+    "/api/nas/copy/dry-run",
+    "/api/nas/copy/confirm",
+    "/api/nas/copy/execute",
+    "/api/nas/copy/rollback"
+  ],
+  "dispatcher_exists": true,
+  "forbidden_actions": [
+    "delete",
+    "move",
+    "rename",
+    "chmod",
+    "chown",
+    "overwrite",
+    "recursive",
+    "recursive_delete",
+    "arbitrary_shell"
+  ],
+  "generated_at": "2026-07-05T13:44:26+08:00",
+  "harness_status": "complete_except_24h_soak",
+  "live_ok": true,
+  "packet_final_verdict": "harness_default_service_integrated_limited_copy_enabled",
+  "qwen_execution_authority": false,
+  "remaining_enhancement": "24h default service stability observation is not proven by this audit."
+}

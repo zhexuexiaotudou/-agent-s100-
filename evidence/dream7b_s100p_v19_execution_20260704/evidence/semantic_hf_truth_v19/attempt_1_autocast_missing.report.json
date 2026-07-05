@@ -1,0 +1,207 @@
+{
+  "schema_version": "dream7b_s100p_v19_semantic_hf_truth_loader",
+  "created_at_utc": "2026-07-03T17:32:50.606124+00:00",
+  "python": "3.10.12 (main, Aug 15 2025, 14:32:43) [GCC 11.4.0]",
+  "platform": "Linux-6.1.158-rt58-DR-4.0.5-2603031328-g9f678e-g6caa4d-aarch64-with-glibc2.35",
+  "args": {
+    "model_dir": "/mnt/nas/openclaw/models/dream7b-hf",
+    "cases_jsonl": "/mnt/nas/openclaw/reports/models/dream7b_s100p_v18_execution_20260704/evidence/targeted_bpu_islands_semantic_v18/cases/semantic_seq128_cases_v18.jsonl",
+    "output_root": "/mnt/nas/openclaw/reports/models/dream7b_s100p_v19_execution_20260704/evidence/semantic_hf_truth_v19",
+    "dtype": "bfloat16",
+    "torch_threads": 4,
+    "seq_len": 128,
+    "min_rows": 8
+  },
+  "safety": {
+    "generation_quality_run": false,
+    "product_routes_18888_18889_touched": false,
+    "dream7b_frontend_openclaw_traffic_touched": false,
+    "harness_qwen_openclaw_defaults_modified": false
+  },
+  "hf_rows": [],
+  "errors": [
+    {
+      "route": "route_a_safetensors_direct_loader",
+      "type": "AttributeError",
+      "message": "module 'torch' has no attribute 'autocast'"
+    }
+  ],
+  "status": "route_a_exception",
+  "routes_attempted": [
+    "route_a_safetensors_direct_loader"
+  ],
+  "stage_log": [
+    {
+      "stage": "route_a_start",
+      "at_utc": "2026-07-03T17:32:51.619646+00:00",
+      "memory": {
+        "returncode": 0,
+        "stdout": "total        used        free      shared  buff/cache   available\nMem:     22841327616  2901999616 18519425024    48365568  1419902976 19658833920\nSwap:              0           0           0",
+        "stderr": ""
+      }
+    },
+    {
+      "stage": "route_a_config_loaded",
+      "at_utc": "2026-07-03T17:32:51.657894+00:00",
+      "config_class": "DreamConfig",
+      "memory": {
+        "returncode": 0,
+        "stdout": "total        used        free      shared  buff/cache   available\nMem:     22841327616  2905145344 18516279296    48365568  1419902976 19655688192\nSwap:              0           0           0",
+        "stderr": ""
+      }
+    },
+    {
+      "stage": "route_a_model_no_init_created",
+      "at_utc": "2026-07-03T17:34:01.011765+00:00",
+      "seconds": 69.35,
+      "memory": {
+        "returncode": 0,
+        "stdout": "total        used        free      shared  buff/cache   available\nMem:     22841327616 18164088832  3256549376    48365568  1420689408  4396744704\nSwap:              0           0           0",
+        "stderr": ""
+      }
+    },
+    {
+      "stage": "route_a_shard_loaded",
+      "at_utc": "2026-07-03T17:34:54.808854+00:00",
+      "shard": "model-00001-of-00004.safetensors",
+      "loaded_in_shard": 104,
+      "loaded_total": 104,
+      "seconds": 53.79,
+      "memory": {
+        "returncode": 0,
+        "stdout": "total        used        free      shared  buff/cache   available\nMem:     22841327616 18152423424   672858112    48365568  4016046080  4407033856\nSwap:              0           0           0",
+        "stderr": ""
+      }
+    },
+    {
+      "stage": "route_a_shard_loaded",
+      "at_utc": "2026-07-03T17:35:49.335351+00:00",
+      "shard": "model-00002-of-00004.safetensors",
+      "loaded_in_shard": 122,
+      "loaded_total": 226,
+      "seconds": 54.473,
+      "memory": {
+        "returncode": 0,
+        "stdout": "total        used        free      shared  buff/cache   available\nMem:     22841327616 18167234560   778436608    48365568  3895656448  4392222720\nSwap:              0           0           0",
+        "stderr": ""
+      }
+    },
+    {
+      "stage": "route_a_shard_loaded",
+      "at_utc": "2026-07-03T17:36:37.168388+00:00",
+      "shard": "model-00003-of-00004.safetensors",
+      "loaded_in_shard": 112,
+      "loaded_total": 338,
+      "seconds": 47.828,
+      "memory": {
+        "returncode": 0,
+        "stdout": "total        used        free      shared  buff/cache   available\nMem:     22841327616 18159501312   908132352    48365568  3773693952  4399824896\nSwap:              0           0           0",
+        "stderr": ""
+      }
+    },
+    {
+      "stage": "route_a_shard_loaded",
+      "at_utc": "2026-07-03T17:36:49.356767+00:00",
+      "shard": "model-00004-of-00004.safetensors",
+      "loaded_in_shard": 1,
+      "loaded_total": 339,
+      "seconds": 12.136,
+      "memory": {
+        "returncode": 0,
+        "stdout": "total        used        free      shared  buff/cache   available\nMem:     22841327616 18163236864  2334064640    48365568  2344026112  4400414720\nSwap:              0           0           0",
+        "stderr": ""
+      }
+    },
+    {
+      "stage": "route_a_forward_start",
+      "at_utc": "2026-07-03T17:36:49.409197+00:00",
+      "case_count": 8,
+      "memory": {
+        "returncode": 0,
+        "stdout": "total        used        free      shared  buff/cache   available\nMem:     22841327616 18163236864  2334064640    48365568  2344026112  4400414720\nSwap:              0           0           0",
+        "stderr": ""
+      }
+    },
+    {
+      "stage": "route_a_exception",
+      "at_utc": "2026-07-03T17:36:49.424985+00:00",
+      "error_type": "AttributeError",
+      "message": "module 'torch' has no attribute 'autocast'",
+      "memory": {
+        "returncode": 0,
+        "stdout": "total        used        free      shared  buff/cache   available\nMem:     22841327616 18163236864  2334064640    48365568  2344026112  4400414720\nSwap:              0           0           0",
+        "stderr": ""
+      }
+    }
+  ],
+  "runtime_versions": {
+    "torch": "1.8.0a0",
+    "transformers": "4.30.2",
+    "numpy": "1.26.4"
+  },
+  "model_files": {
+    "config": {
+      "path": "/mnt/nas/openclaw/models/dream7b-hf/config.json",
+      "sha256": "11afc7fe7a1881e73dcd70cca6868aaaf8eb89ad45ea5fc6426c3fb82dec9340"
+    },
+    "index": {
+      "path": "/mnt/nas/openclaw/models/dream7b-hf/model.safetensors.index.json",
+      "sha256": "998a078123ffc97763690de7f2a677eb89168af5eaf8a5e12e6bc24d18e25bdb",
+      "weight_count": 339,
+      "shards": [
+        "model-00001-of-00004.safetensors",
+        "model-00002-of-00004.safetensors",
+        "model-00003-of-00004.safetensors",
+        "model-00004-of-00004.safetensors"
+      ]
+    },
+    "tokenizer_config.json": {
+      "path": "/mnt/nas/openclaw/models/dream7b-hf/tokenizer_config.json",
+      "sha256": "b0e9c1a6299d8832a1362d6b24f007de8a2acfe0243d8a3a1d1b57aa8250f7ee",
+      "size_bytes": 7486
+    },
+    "vocab.json": {
+      "path": "/mnt/nas/openclaw/models/dream7b-hf/vocab.json",
+      "sha256": "87a257b04b17642a0688c98cd1df89c398bda4fee532d6f88b38a659ecb4ac8d",
+      "size_bytes": 3383407
+    },
+    "merges.txt": {
+      "path": "/mnt/nas/openclaw/models/dream7b-hf/merges.txt",
+      "sha256": "8831e4f1a044471340f7c0a83d7bd71306a5b867e95fd870f74d0c5308a904d5",
+      "size_bytes": 1671853
+    },
+    "modeling_dream.py": {
+      "path": "/mnt/nas/openclaw/models/dream7b-hf/modeling_dream.py",
+      "sha256": "3166e789f0d69beb1f4fbdee2317953d1c1c3b9bc21479b109afc5dd059de5b3",
+      "size_bytes": 36763
+    },
+    "configuration_dream.py": {
+      "path": "/mnt/nas/openclaw/models/dream7b-hf/configuration_dream.py",
+      "sha256": "24d038962ccf16361595494461000ec0c1b043653c7494d7fc835c96f121f0b9",
+      "size_bytes": 3197
+    }
+  },
+  "model_class": "DreamModel",
+  "parameter_count": 7615616512,
+  "parameter_dtypes_after_init": [
+    "torch.bfloat16"
+  ],
+  "route_a_load_summary": {
+    "expected_weight_keys": 339,
+    "loaded_weight_keys": 339,
+    "missing_in_model_count": 0,
+    "missing_in_model_sample": [],
+    "load_error_count": 0,
+    "load_error_sample": [],
+    "parameter_dtypes_after_load": [
+      "torch.bfloat16"
+    ]
+  },
+  "cases_jsonl": {
+    "path": "/mnt/nas/openclaw/reports/models/dream7b_s100p_v18_execution_20260704/evidence/targeted_bpu_islands_semantic_v18/cases/semantic_seq128_cases_v18.jsonl",
+    "sha256": "1472c21c346e4e230fc7dc90aa7f2e01b07336f49af7dbb87624a50b282cf531",
+    "case_count": 8
+  },
+  "final_status": "fail",
+  "hf_truth_rows": 0
+}

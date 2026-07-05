@@ -1,0 +1,229 @@
+{
+  "final_verdict": "final_audit_hold_due_to_repo_state_dirty",
+  "generated_at": "2026-07-05T13:44:26+08:00",
+  "key_completed_items": [
+    "S100P SSH, OpenClaw 8765, Harness status, Qwen 18080, and UI `/ui` checks passed via SSH loopback.",
+    "`py -3 -m pytest tests` passed.",
+    "Harness default service keeps dangerous actions and Qwen tool execution disabled.",
+    "Token-budget benchmark uses real Qwen tokenizer with 130 cases and 0 private leak count.",
+    "Agent Runtime reports context/memory/multimodal/RAG/tool-manifest status through harness status."
+  ],
+  "key_missing_or_hold_items": [
+    "Large modified/untracked repo state blocks ready/PR verdict.",
+    "Fresh Playwright and JS node check could not run because local Node/npm/npx are missing.",
+    "Tracked Python compile has one historical Dream7B research probe indentation error.",
+    "Dream7B remains research-only at BPU operator alignment review boundary.",
+    "Embedding/OCR/video/audio extraction are optional/default-off; do not overclaim semantic multimodal RAG."
+  ],
+  "package_note": "Zip SHA256 is reported outside the packet to avoid circular package hashing.",
+  "repo_summary": {
+    "branch": "main",
+    "modified_files_count": 4,
+    "repo_security_review_required": true,
+    "untracked_files_count": 139
+  },
+  "risks": [
+    {
+      "current_status": "modified=4, untracked=139",
+      "estimated_effort": "medium",
+      "evidence_needed": "clean git status or scoped PR status",
+      "impact": "Cannot call the repository PR-ready or release-ready.",
+      "item": "Repo has substantial modified and untracked files",
+      "owner": "Codex + operator",
+      "priority": "P0",
+      "recommended_fix": "Review, remove private/heavy artifacts, stage scoped deliverables, and commit intentionally."
+    },
+    {
+      "current_status": "repo_security_review_required",
+      "estimated_effort": "short",
+      "evidence_needed": "package SELF_CHECK pass and git ignore/staging review",
+      "impact": "Potential sqlite/model/credential-like files must not be submitted accidentally.",
+      "item": "Security review required for suspicious file-name patterns",
+      "owner": "Codex",
+      "priority": "P0",
+      "recommended_fix": "Audit suspicious paths and ensure final package excludes runtime DBs, redaction maps, keys, tokenizer raw assets, and model weights."
+    },
+    {
+      "current_status": "Node/npm/npx missing on Windows PATH",
+      "estimated_effort": "short",
+      "evidence_needed": "fresh desktop >=10 and mobile >=6 flow report",
+      "impact": "UI proof relies on existing screenshots plus live curl, not fresh browser interaction.",
+      "item": "Fresh UI Playwright could not run in this audit",
+      "owner": "Codex workstation",
+      "priority": "P1",
+      "recommended_fix": "Install Node/npm or run browser automation from an environment with Playwright."
+    },
+    {
+      "current_status": "scripts/probes/dream7b_gguf_param_matrix_probe.py line 2 IndentationError",
+      "estimated_effort": "short",
+      "evidence_needed": "tracked py_compile passes",
+      "impact": "Full py_compile is not clean even though product pytest passes.",
+      "item": "Tracked Python compile has one Dream7B research probe syntax error",
+      "owner": "Codex",
+      "priority": "P1",
+      "recommended_fix": "Fix or quarantine the historical research probe."
+    },
+    {
+      "current_status": "Current /ui responds on 8765, but previous UI packet says 8765 rollout was pending operator approval.",
+      "estimated_effort": "medium",
+      "evidence_needed": "fresh gate packet with 8765 browser screenshots",
+      "impact": "Design report wording must distinguish previous packet evidence from current live route evidence.",
+      "item": "UI v2 rollout evidence should be reconciled",
+      "owner": "Codex + operator",
+      "priority": "P1",
+      "recommended_fix": "Run a fresh S100P UI v2 default-service gate and update the UI packet."
+    },
+    {
+      "current_status": "UI packet reports sqlite_readonly_inventory_status=degraded",
+      "estimated_effort": "short",
+      "evidence_needed": "fresh UI/API smoke with sqlite inventory ok or documented fallback",
+      "impact": "File inventory claim should be bounded to read-only fallback unless refreshed.",
+      "item": "SQLite inventory degraded in prior UI API smoke",
+      "owner": "Codex",
+      "priority": "P2",
+      "recommended_fix": "Refresh inventory DB or make degradation reason visible in report."
+    },
+    {
+      "current_status": "metadata-only multimodal index; thumbnail/OCR/embedding false",
+      "estimated_effort": "future",
+      "evidence_needed": "feature-specific gated rollout",
+      "impact": "Do not claim production semantic vision/audio RAG.",
+      "item": "Multimodal/OCR/embedding features are default-off",
+      "owner": "Codex",
+      "priority": "P2",
+      "recommended_fix": "Keep safe wording or create separate feature-flag gate."
+    },
+    {
+      "current_status": "bpu_operator_alignment_failed_review_required",
+      "estimated_effort": "large",
+      "evidence_needed": "operator-level BPU artifacts and reviewed route gate",
+      "impact": "Dream7B cannot be used as product route evidence.",
+      "item": "Dream7B BPU operator alignment remains blocked",
+      "owner": "Research",
+      "priority": "Research",
+      "recommended_fix": "Collect true per-op BPU outputs, layout records, and quant scale evidence."
+    }
+  ],
+  "s100p": {
+    "host": "192.168.127.10",
+    "openclaw_url": "http://127.0.0.1:8765",
+    "qwen_url": "http://127.0.0.1:18080",
+    "ssh_user": "sunrise"
+  },
+  "schema_version": "digua_ai_nas_final_audit_gate_packet_v1",
+  "scorecard": [
+    {
+      "dimension": "Core product closure",
+      "evidence": "live 8765/18080, harness, pytest",
+      "gap": "repo dirty and final review pending",
+      "score": 4,
+      "status": "mostly complete"
+    },
+    {
+      "dimension": "OpenClaw integration",
+      "evidence": "8765 health and /ui",
+      "gap": "public exposure remains forbidden",
+      "score": 4,
+      "status": "live"
+    },
+    {
+      "dimension": "Qwen local gateway",
+      "evidence": "18080 /v1/models",
+      "gap": "health metadata has historical fields",
+      "score": 4,
+      "status": "live"
+    },
+    {
+      "dimension": "Harness / security controls",
+      "evidence": "default service packet and live status",
+      "gap": "24h stability not proven by this audit",
+      "score": 4,
+      "status": "strong"
+    },
+    {
+      "dimension": "Token Budget",
+      "evidence": "130 cases, real tokenizer",
+      "gap": "not billing evidence",
+      "score": 5,
+      "status": "supported"
+    },
+    {
+      "dimension": "NAS index / RAG",
+      "evidence": "tests and RAG gates",
+      "gap": "embedding default-off, sqlite degraded note",
+      "score": 3,
+      "status": "FTS-first"
+    },
+    {
+      "dimension": "Digua Journal",
+      "evidence": "journal packets",
+      "gap": "repo merge status dirty",
+      "score": 4,
+      "status": "live rollout evidence"
+    },
+    {
+      "dimension": "UI v2",
+      "evidence": "8765/18766 /ui, screenshots",
+      "gap": "fresh Playwright not run",
+      "score": 3,
+      "status": "live route and prior screenshots"
+    },
+    {
+      "dimension": "Agent Runtime deepening",
+      "evidence": "harness agent_runtime status",
+      "gap": "metadata-first multimodal",
+      "score": 4,
+      "status": "live"
+    },
+    {
+      "dimension": "Evidence package integrity",
+      "evidence": "final audit zip and self check",
+      "gap": "human/GPT Pro review still needed",
+      "score": 4,
+      "status": "generated"
+    },
+    {
+      "dimension": "Design report consistency",
+      "evidence": "claim matrix",
+      "gap": "several claims require downgrading",
+      "score": 3,
+      "status": "needs wording cleanup"
+    },
+    {
+      "dimension": "Security boundary",
+      "evidence": "live status",
+      "gap": "staging review still required",
+      "score": 5,
+      "status": "no high-risk default"
+    },
+    {
+      "dimension": "Live-machine testing",
+      "evidence": "ssh curl snapshots",
+      "gap": "fresh browser blocked locally",
+      "score": 4,
+      "status": "S100P live checks passed"
+    },
+    {
+      "dimension": "Repo deliverability",
+      "evidence": "git status",
+      "gap": "large dirty tree",
+      "score": 1,
+      "status": "hold"
+    }
+  ],
+  "service_summary": {
+    "agent_runtime_status_ok": true,
+    "default_service_live": true,
+    "harness_live": true,
+    "qwen_live": true,
+    "ui_v2_live_on_18766": true,
+    "ui_v2_live_on_8765": true
+  },
+  "test_summary": {
+    "node_check_passed": false,
+    "overall": "pass_with_environment_and_research_branch_warnings",
+    "pytest_passed": true,
+    "self_check_passed": true
+  },
+  "verdict_reason": "Repo state is dirty; core service evidence is strong but submission/PR readiness is on hold."
+}

@@ -1,0 +1,42 @@
+{
+  "checks": [
+    {
+      "label": "ports unchanged",
+      "ok": true
+    },
+    {
+      "label": "qwen advisory only",
+      "ok": true
+    },
+    {
+      "label": "public mcp disabled",
+      "ok": true
+    }
+  ],
+  "cloud_private_raw_egress": false,
+  "evidence": {
+    "harness": "existing copy route guard and token budget gate",
+    "new_agent_runtime_features": [
+      "context_pack_compiler",
+      "agent_memory_manager_v1",
+      "nas_multimodal_index_v1",
+      "fts_first_hybrid_rag_v1",
+      "rag_eval_gate",
+      "otel_like_local_trace_schema",
+      "internal_tool_manifest",
+      "continuous_eval_dataset"
+    ],
+    "openclaw_gateway": "existing 8765 operator portal/default service",
+    "ports_changed": false,
+    "public_mcp_exposed": false,
+    "qwen": "advisory local model endpoint; no tool execution authority"
+  },
+  "failures": [],
+  "generated_at": "2026-07-05T04:26:46Z",
+  "name": "openclaw_capability_inventory",
+  "ok": true,
+  "public_mcp_exposed": false,
+  "qwen_execution_authority": false,
+  "schema": "digua_agent_runtime_gate_v1",
+  "verdict": "ok_openclaw_capability_inventory"
+}

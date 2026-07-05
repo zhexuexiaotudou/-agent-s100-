@@ -1,0 +1,122 @@
+{
+  "generated_at": "2026-07-05T16:07:35+08:00",
+  "harness": {
+    "agent_runtime": {
+      "cloud_private_raw_egress": false,
+      "datastores": {
+        "keys": [
+          "memory_db",
+          "multimodal_db",
+          "rag_db"
+        ],
+        "type": "dict"
+      },
+      "feature_flags": {
+        "keys": [
+          "agent_runtime_enabled",
+          "cloud_private_raw_egress_enabled",
+          "context_pack_enabled",
+          "memory_manager_enabled",
+          "multimodal_index_enabled",
+          "public_mcp_enabled",
+          "qwen_tool_execution_enabled",
+          "rag_enabled",
+          "rag_eval_enabled"
+        ],
+        "type": "dict"
+      },
+      "internal_tool_manifest": {
+        "keys": [
+          "cloud_private_raw_egress_allowed",
+          "missing_tool_ids",
+          "mutating_not_dispatcher_only",
+          "ok",
+          "public_mcp_exposed",
+          "qwen_tool_execution_authority",
+          "tool_count"
+        ],
+        "type": "dict"
+      },
+      "memory": {
+        "keys": [
+          "cloud_private_raw_egress",
+          "db_path",
+          "events",
+          "facts",
+          "ok",
+          "preferences",
+          "private_leak_count",
+          "procedures",
+          "qwen_execution_authority",
+          "raw_content_rows",
+          "reflections",
+          "schema"
+        ],
+        "type": "dict"
+      },
+      "multimodal_index": {
+        "keys": [
+          "counts",
+          "db_path",
+          "feature_flags",
+          "indexed_count",
+          "ok",
+          "private_leak_count",
+          "raw_path_rows"
+        ],
+        "type": "dict"
+      },
+      "ok": true,
+      "public_mcp_exposed": false,
+      "qwen_execution_authority": false,
+      "raw_private_content_in_status": false,
+      "routes": {
+        "count": 9,
+        "type": "list"
+      },
+      "schema": "digua_agent_runtime_status_v1",
+      "service": "agent_runtime"
+    },
+    "cloud_private_raw_egress": false,
+    "copy_execute_enabled": true,
+    "copy_execute_requires": {
+      "dispatcher": true,
+      "signed_token": "[REDACTED]",
+      "source_rehash": true,
+      "target_absent": true,
+      "user_confirmation": true
+    },
+    "copy_routes": {
+      "count": 5,
+      "type": "list"
+    },
+    "dispatcher": "/mnt/nas/openclaw/scripts/probes/ai_nas_allowlisted_tool.sh",
+    "dispatcher_exists": true,
+    "dispatcher_sha256": "d099f8071ab3710778520bf610ce2bca07fbc7976effe0a6d99791cf42ebb23a",
+    "forbidden_actions": {
+      "count": 9,
+      "type": "list"
+    },
+    "ok": true,
+    "policy_id": "digua_stage5_harness_default_service_policy_v1",
+    "privacy_redaction_gate_enabled": true,
+    "qwen_execution_authority": false,
+    "raw_private_content_in_status": false,
+    "readonly_workspaces_enabled": true,
+    "service": "harness_default_service",
+    "token_budget_gate_enabled": "[REDACTED]"
+  },
+  "security": {
+    "full_repo_forbidden_path_hits_count": 0,
+    "full_repo_forbidden_path_hits_sample": [],
+    "full_repo_security_review_required": false,
+    "git_status_exit_code": 0,
+    "git_status_short": " M README.md\n M docs/DREAM7B_S100P_SEQ128_LOGITS_VALIDITY_ROUTE_STATUS_20260704.md\n M evidence_zips/dream7b_s100p_v5_for_gptpro_20260701_161232_MANIFEST.json\n M evidence_zips/dream7b_s100p_v5_for_gptpro_20260701_161232_SHA256SUMS.txt\n M scripts/probes/ai_nas_operator_portal_server.py\n M src/openclaw/harness_default_middleware.py\n?? 01_final_evidence/digua_ai_nas_agent_runtime_deepening_local_package.json\n?? 01_final_evidence/digua_ai_nas_agent_runtime_deepening_local_package.md\n?? 01_final_evidence/digua_ai_nas_agent_runtime_deepening_packet.json\n?? 01_final_evidence/digua_ai_nas_agent_runtime_deepening_packet.md\n?? 01_final_evidence/digua_ai_nas_final_audit_gate_packet.json\n?? 01_final_evidence/digua_ai_nas_final_audit_gate_packet.md\n?? 01_final_evidence/digua_ai_nas_production_delivery_gate_packet.json\n?? 01_final_evidence/digua_ai_nas_production_delivery_gate_packet.md\n?? 01_final_evidence/digua_ai_nas_ui_v2_design_report_effect_gate_packet.json\n?? 01_final_evidence/digua_ai_nas_ui_v2_design_report_effect_gate_packet.md\n?? 01_final_evidence/dream7b_s100p_lladacpp_style_continue_gate_packet.json\n?? 01_final_evidence/dream7b_s100p_lladacpp_style_continue_gate_packet.md\n?? 01_final_evidence/dream7b_s100p_lladacpp_style_continue_package.json\n?? 01_final_evidence/dream7b_s100p_lladacpp_style_continue_package.md\n?? benchmarks/agent_runtime_eval_cases.jsonl\n?? benchmarks/copy_route_eval_cases.jsonl\n?? benchmarks/journal_eval_cases.jsonl\n?? benchmarks/nas_search_eval_cases.jsonl\n?? benchmarks/privacy_eval_cases.jsonl\n?? benchmarks/rag_eval_cases.jsonl\n?? benchmarks/token_budget_eval_cases.jsonl\n?? benchmarks/ui_flow_eval_cases.jsonl\n?? configs/agent_runtime_feature_flags.json\n?? configs/context_pack_policy.json\n?? configs/internal_tool_manifest.json\n?? configs/memory_policy.json\n?? configs/multimodal_index_policy.json\n?? configs/rag_eval_policy.json\n?? docs/DEFENSE_QA_SAFE_BOUNDARY.md\n?? docs/DELIVERY_ACCEPTANCE_CHECKLIST.md\n?? docs/DEMO_SCRIPT_AND_SCREENSHOT_LIST.md\n?? docs/DREAM7B_S100P_LLADACPP_STYLE_CONTINUE_DECISION.md\n?? docs/DREAM7B_S100P_LLADACPP_STYLE_DECISION.md\n?? docs/FINAL_ACCEPTANCE_STATUS.md\n?? docs/FINAL_APPLICATION_FIELDS_SAFE_VERSION.md\n?? docs/FINAL_DELIVERY_SUMMARY.md\n?? docs/FINAL_DEMO_SCRIPT_3MIN.md\n?? docs/FINAL_DESIGN_REPORT_CLAIMS_FOR_SUBMISSION.md\n?? docs/FINAL_FUNCTION_AND_FEATURES_SAFE_VERSION.md\n?? docs/FINAL_PROJECT_DESCRIPTION_SAFE_VERSION.md\n?? docs/FINAL_TECHNICAL_FEATURES_SAFE_VERSION.md\n?? docs/LLADACPP_TO_S100P_TRANSLATION_PLAN.md\n?? docs/PRODUCTION_DEPLOYMENT_RUNBOOK.md\n?? docs/PRODUCTION_ROLLBACK_RUNBOOK.md\n?? docs/REFERENCES_CANDIDATES.md\n?? docs/REFERENCES_FINAL_GBT7714.md\n?? docs/REFERENCES_FINAL_IEEE.md\n?? docs/REFERENCE_TO_REPORT_MAPPING.md\n?? docs/REPORT_SECTIONS_FILLED_SAFE_CLAIMS.md\n?? docs/TOKENIZER_AND_TOKEN_COST_REPORT_SECTION.md\n?? docs/TOKENIZER_LOCAL_FIRST_ROUTE_DESIGN.md\n?? docs/TOKEN_BUDGET_BENCHMARK_SUMMARY_FOR_REPORT.md\n?? docs/UNSAFE_CLAIMS_TO_AVOID.md\n?? docs/UNSUPPORTED_OR_OVERCLAIMED_PHRASES.md\n?? docs/ai_nas_agent_runtime_deepening_20260705.md\n?? docs/ai_nas_design_report_web_verification_20260704.md\n?? docs/ai_nas_desktop_ui_v2_20260704.md\n?? docs/final_audit/DEMO_READINESS_CHECKLIST.md\n?? docs/final_audit/DESIGN_REPORT_CLAIM_FIX_LIST.md\n?? docs/final_audit/FINAL_PROJECT_COMPLETION_SUMMARY.md\n?? docs/final_audit/NEXT_ACTIONS_PRIORITY_LIST.md\n?? docs/final_audit/SUBMISSION_READINESS_CHECKLIST.md\n?? dream_s100p_lladacpp/\n?? evidence/dream7b_s100p_longrun_20260704/\n?? evidence/dream7b_s100p_v18_execution_20260704/\n?? evidence/dream7b_s100p_v19_execution_20260704/\n?? evidence/dream7b_s100p_v20_execution_20260704/\n?? evidence/dream7b_s100p_v21_execution_20260704/\n?? evidence/final_audit/\n?? evidence/final_demo/\n?? evidence/hf_boundaries_v21/\n?? evidence/longrun_artifact_registry.json\n?? evidence/position_delta_basis_longrun/\n?? evidence/position_delta_basis_model_v19/\n?? evidence/position_delta_basis_model_v21/\n?? evidence/production_delivery/final_production_status.txt\n?? evidence/production_delivery/final_production_status_rerun.txt\n?? evidence/production_delivery/final_release_cached_files_before_commit.txt\n?? evidence/production_delivery/final_release_unstaged_files_before_commit.txt\n?? evidence/production_delivery/full_pytest_output.txt\n?? evidence/production_delivery/full_pytest_result.json\n?? evidence/production_delivery/local_test_gates.json\n?? evidence/production_delivery/local_test_outputs.txt\n?? evidence/production_delivery/package_self_check.json\n?? evidence/production_delivery/playwright_ui_gate.json\n?? evidence/production_delivery/production_collect_summary.json\n?? evidence/production_delivery/repo_security_scan.json\n?? evidence/production_delivery/s100p_live_api_gate.json\n?? evidence/production_delivery/s100p_preflight.txt\n?? evidence/production_delivery/screenshots/\n?? evidence/production_delivery/soak_summary.json\n?? evidence/production_delivery/soak_trace.jsonl\n?? evidence/s100p_agent_runtime_deepening_20260705/\n?? evidence/semantic_hf_truth_v21/\n?? evidence/semantic_island_battery_v21/\n?? evidence/ui_v2/\n?? evidence/v21_combined_cases/\n?? evidence/write_sandbox_manifest.json\n?? evidence/x86_gpu_semantic_truth_export_bundle_v20/\n?? migrations/create_agent_runtime_tables.sql\n?? migrations/create_multimodal_index_tables.sql\n?? migrations/create_rag_eval_tables.sql\n?? operator_approval/\n?? operator_candidates/\n?? reports/17070_token_budget_final_package_manifest.json\n?? reports/2000_longrun_baseline_lock.json\n?? reports/2000_longrun_baseline_lock.md\n?? reports/24000_openclaw_capability_inventory.json\n?? reports/24010_context_pack_compiler_gate.json\n?? reports/24020_agent_memory_manager_gate.json\n?? reports/24030_multimodal_index_gate.json\n?? reports/24040_fts_first_rag_eval_gate.json\n?? reports/24050_trace_schema_gate.json\n?? reports/24060_internal_tool_manifest_gate.json\n?? reports/24070_continuous_eval_dataset_gate.json\n?? reports/24080_default_service_integration_gate.json\n?? reports/24090_agent_runtime_eval_gate.json\n?? reports/24100_agent_runtime_final_evidence_package.json\n?? reports/24110_agent_runtime_final_evidence_package.md\n?? reports/24120_agent_runtime_safety_ui_gate.json\n?? reports/24130_agent_runtime_s100p_acceptance_gate.json\n?? reports/AI_NAS_FINAL_DEMO_EVIDENCE.json\n?? reports/AI_NAS_FINAL_DEMO_EVIDENCE.md\n?? reports/AUDIT_TRACE_ROLLBACK_EVIDENCE.json\n?? reports/AUDIT_TRACE_ROLLBACK_EVIDENCE.md\n?? reports/DATABASE_INDEXING_EVIDENCE.json\n?? reports/DATABASE_INDEXING_EVIDENCE.md\n?? reports/FINAL_READONLY_AI_NAS_DEMO_CASES.json\n?? reports/FINAL_READONLY_AI_NAS_DEMO_CASES.md\n?? reports/FINAL_SERVICE_HEALTH_AND_IDENTITY.json\n?? reports/FINAL_SERVICE_HEALTH_AND_IDENTITY.md\n?? reports/WEB_MOBILE_ACCESS_EVIDENCE.json\n?? reports/WEB_MOBILE_ACCESS_EVIDENCE.md\n?? reports/agent_runtime_trace_samples.jsonl\n?? reports/final_audit/\n?? reports/production_delivery/\n?? reports/stage3_shadow/\n?? reports/token_budget_traces.jsonl\n?? reports/ui_v2_default_service_disable_attempt.json\n?? reports/ui_v2_default_service_disable_attempt.md\n?? reports/ui_v2_default_service_enable_attempt.json\n?? reports/ui_v2_default_service_enable_attempt.md\n?? reports/ui_v2_default_service_preflight.json\n?? reports/ui_v2_default_service_preflight.md\n?? scripts/check_agent_runtime_status.sh\n?? scripts/check_ui_v2_default_service_status.sh\n?? scripts/disable_agent_runtime_extensions.sh\n?? scripts/disable_ui_v2_default_service.sh\n?? scripts/enable_ui_v2_default_service.sh\n?? scripts/probes/ai_nas_token_budget_product_deployment.py\n?? scripts/production/\n?? scripts/run_agent_runtime_e2e_smoke.sh\n?? scripts/run_agent_runtime_eval_suite.sh\n?? src/agent_runtime/\n?? src/openclaw/routes/agent_runtime_routes.py\n?? tests/test_agent_runtime_core.py\n?? tests/test_agent_runtime_routes.py\n?? tests/test_document_fts_rag.py\n?? tests/test_ui_v2_security_boundaries.py\n?? tools/build_agent_runtime_deepening.py\n?? tools/build_dream_s100p_lladacpp_continue.py\n?? tools/build_dream_s100p_lladacpp_track.py\n?? tools/finalize_agent_runtime_acceptance.py\n?? tools/production_delivery_gate.py\n?? web/ai_nas_desktop_v2.html\n?? web/archive/\n?? web/static/digua_ai_nas_v2.css\n?? web/static/digua_ai_nas_v2.js\n",
+    "note": "Historical repo artifacts are reported separately from this production delivery package scope.",
+    "production_scope_clean": true,
+    "production_scope_forbidden_path_hits": [],
+    "status_entry_count": 174,
+    "tracked_exit_code": 0,
+    "tracked_file_count": 5501
+  }
+}

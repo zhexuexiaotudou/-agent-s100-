@@ -1,0 +1,83 @@
+{
+    "ok":  true,
+    "generated_at":  "2026-07-05T16:05:28.5764585+08:00",
+    "browser_path":  "Browser plugin via SSH local tunnel to S100P loopback 8765",
+    "target_url":  "http://127.0.0.1:28765/ui",
+    "s100p_target":  "sunrise@192.168.127.10 127.0.0.1:8765",
+    "desktop_ok":  true,
+    "mobile_ok":  true,
+    "full_page_screenshots_complete":  true,
+    "required_pages":  [
+                           {
+                               "page":  "Dashboard",
+                               "file":  "dashboard_full.png"
+                           },
+                           {
+                               "page":  "AI Assistant",
+                               "file":  "ai_assistant_full.png"
+                           },
+                           {
+                               "page":  "Files",
+                               "file":  "files_full.png"
+                           },
+                           {
+                               "page":  "Documents",
+                               "file":  "documents_full.png"
+                           },
+                           {
+                               "page":  "Reports",
+                               "file":  "reports_full.png"
+                           },
+                           {
+                               "page":  "Journal",
+                               "file":  "journal_full.png"
+                           },
+                           {
+                               "page":  "Audit",
+                               "file":  "audit_full.png"
+                           },
+                           {
+                               "page":  "Settings",
+                               "file":  "settings_full.png"
+                           },
+                           {
+                               "page":  "Token Budget",
+                               "file":  "token_budget_full.png"
+                           },
+                           {
+                               "page":  "Copy Route",
+                               "file":  "copy_route_allowed_preview_full.png"
+                           }
+                       ],
+    "missing_required_screenshots":  [
+
+                                     ],
+    "screenshot_dir":  "evidence/production_delivery/screenshots/final_release_full_pages",
+    "screenshots":  [
+                        "evidence/production_delivery/screenshots/final_release_full_pages/ai_assistant_full.png",
+                        "evidence/production_delivery/screenshots/final_release_full_pages/audit_full.png",
+                        "evidence/production_delivery/screenshots/final_release_full_pages/copy_route_allowed_preview_full.png",
+                        "evidence/production_delivery/screenshots/final_release_full_pages/copy_route_full.png",
+                        "evidence/production_delivery/screenshots/final_release_full_pages/dashboard_full.png",
+                        "evidence/production_delivery/screenshots/final_release_full_pages/dashboard_mobile_full.png",
+                        "evidence/production_delivery/screenshots/final_release_full_pages/documents_full.png",
+                        "evidence/production_delivery/screenshots/final_release_full_pages/files_full.png",
+                        "evidence/production_delivery/screenshots/final_release_full_pages/journal_full.png",
+                        "evidence/production_delivery/screenshots/final_release_full_pages/reports_full.png",
+                        "evidence/production_delivery/screenshots/final_release_full_pages/settings_full.png",
+                        "evidence/production_delivery/screenshots/final_release_full_pages/token_budget_full.png"
+                    ],
+    "console_error_count":  0,
+    "framework_overlay_detected":  false,
+    "page_identity_ok":  true,
+    "not_blank_ok":  true,
+    "interaction_proof":  {
+                              "copy_route_ui_preview":  "preview_allowed on Collections/CodexPreflight/source/production_delivery_probe.txt to Collections/CodexPreflight/target/final_ui_copy_route_preview_*.txt",
+                              "copy_route_api_chain":  "collect gate passed preview/dry-run/confirm/execute/rollback with rollback target_missing=true"
+                          },
+    "browser_notes":  [
+                          "Browser domSnapshot failed with incrementalAriaSnapshot unavailable; read-only evaluate and Browser screenshots were used instead.",
+                          "Gateway access for screenshots used 127.0.0.1-only SSH local forwarding; no public or LAN exposure was added."
+                      ],
+    "mobile_screenshot":  "evidence/production_delivery/screenshots/final_release_full_pages/dashboard_mobile_full.png"
+}

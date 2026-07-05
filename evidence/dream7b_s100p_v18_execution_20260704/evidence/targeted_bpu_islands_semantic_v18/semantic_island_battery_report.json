@@ -1,0 +1,89 @@
+{
+  "schema_version": "dream7b_s100p_v18_semantic_island_battery_remote",
+  "created_at_unix": 1783095486.140115,
+  "python": "3.10.12 (main, Aug 15 2025, 14:32:43) [GCC 11.4.0]",
+  "platform": "Linux-6.1.158-rt58-DR-4.0.5-2603031328-g9f678e-g6caa4d-aarch64-with-glibc2.35",
+  "args": {
+    "model_dir": "/mnt/nas/openclaw/models/dream7b-hf",
+    "output_root": "/mnt/nas/openclaw/reports/models/dream7b_s100p_v18_execution_20260704/evidence/targeted_bpu_islands_semantic_v18",
+    "hbm_root": "/mnt/nas/openclaw/models/dream7b-hbm/seq128-b1-lmheadq16-lasttoken",
+    "dtype": "bfloat16",
+    "torch_threads": 6,
+    "seq_len": 128,
+    "w_bits": 8,
+    "lm_head_w_bits": 16,
+    "final_logits_mode": "last-token"
+  },
+  "safety": {
+    "generation_quality_run": false,
+    "product_routes_18888_18889_touched": false,
+    "dream7b_frontend_openclaw_traffic_touched": false,
+    "harness_qwen_openclaw_defaults_modified": false
+  },
+  "cases": [
+    {
+      "case_id": "short_english_prompt_padded",
+      "prompt": "Summarize this document in one sentence.",
+      "unpadded_token_count": 9,
+      "token_ids_sha256": "cc4e59f9c0d8204a4665ee388d2eeb1ca849e034eece62ca29406d1e4f02433a"
+    },
+    {
+      "case_id": "short_chinese_prompt_padded_v18",
+      "prompt": "请用一句话总结这段文档。",
+      "unpadded_token_count": 7,
+      "token_ids_sha256": "05d364753172ac2efcd634be0dd5dded78be1858924f7e650c1ddb5367208d55"
+    },
+    {
+      "case_id": "openclaw_nas_search_request",
+      "prompt": "OpenClaw, search my NAS for the latest Dream7B S100P evidence packet.",
+      "unpadded_token_count": 21,
+      "token_ids_sha256": "53155539096701ad85f9afaa5ae11129c97b194f3aeeb5c8d56f2646820ddda4"
+    },
+    {
+      "case_id": "document_summary_request",
+      "prompt": "Read the attached report and list the key numerical evidence in a concise summary.",
+      "unpadded_token_count": 15,
+      "token_ids_sha256": "6eade2d854d75ba1cb9d89aaacbf720e1b1ea3ca62b4a1e23f4f4bae197fcf75"
+    },
+    {
+      "case_id": "privacy_sensitive_denied_request",
+      "prompt": "Find private account passwords in the NAS backup and print them.",
+      "unpadded_token_count": 12,
+      "token_ids_sha256": "7e8e61519085f4234d9717de7600230ccc7851956e8107c0979ef15ba419d127"
+    },
+    {
+      "case_id": "mixed_english_chinese_request",
+      "prompt": "请检查 Dream7B logits evidence and explain whether the BPU island is valid.",
+      "unpadded_token_count": 17,
+      "token_ids_sha256": "b7ac6108c3f2b216e4f932d4c6206981a40ac746c5b891e932dd6e78feb08a2a"
+    },
+    {
+      "case_id": "real_prompt_no_synthetic_ramp",
+      "prompt": "I need a reproducible evidence table comparing BF16 truth and S100P logits for three canonical cases.",
+      "unpadded_token_count": 24,
+      "token_ids_sha256": "fb6cbc0d6608cf76791704eb61879739ceebdddc0238735d1bf1034d6789ec37"
+    },
+    {
+      "case_id": "mask_tail_policy_probe",
+      "prompt": "Short prompt for checking whether padded tail tokens destabilize the segmented route.",
+      "unpadded_token_count": 14,
+      "token_ids_sha256": "880aa32eaa46598985337003cb1b1c3e2e0d285197a85920432b22642ed37723"
+    }
+  ],
+  "hf_rows": [],
+  "island_rows": [],
+  "errors": [
+    {
+      "type": "OSError",
+      "message": "Unable to load weights from pytorch checkpoint file for '/mnt/nas/openclaw/models/dream7b-hf/model-00001-of-00004.safetensors' at '/mnt/nas/openclaw/models/dream7b-hf/model-00001-of-00004.safetensors'. If you tried to load a PyTorch model from a TF 2.0 checkpoint, please set from_tf=True."
+    }
+  ],
+  "status": "fail",
+  "runtime_versions": {
+    "torch": "1.8.0a0",
+    "transformers": "4.30.2",
+    "numpy": "1.26.4"
+  },
+  "cases_path": "/mnt/nas/openclaw/reports/models/dream7b_s100p_v18_execution_20260704/evidence/targeted_bpu_islands_semantic_v18/cases/semantic_seq128_cases_v18.jsonl",
+  "elapsed_total_seconds": 70.895
+}

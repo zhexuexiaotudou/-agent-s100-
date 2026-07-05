@@ -1,0 +1,74 @@
+{
+  "blocked_next_required_evidence": [
+    "Real per-op BPU outputs for embedding lookup, position/RoPE path, and lm_head.",
+    "Official layout and quant scale records for each BPU op.",
+    "seg00_01 source graph or vendor/compiler metadata sufficient to close the early contract fault."
+  ],
+  "created_at_utc": "2026-07-04T12:58:44.488540+00:00",
+  "final_verdict": "bpu_operator_alignment_failed_review_required",
+  "forbidden_claims": [
+    "Dream7B is deployed as the AI-NAS default model.",
+    "Dream7B general dialogue works on S100P.",
+    "BPU full model path is fixed.",
+    "Fixed block truth replay is product generation."
+  ],
+  "reports": {
+    "baseline": "dream_s100p_lladacpp/reports/30200_continue_baseline_lock.json",
+    "bpu_operator_alignment": "dream_s100p_lladacpp/reports/30240_bpu_operator_alignment_gate.json",
+    "pytorch_block_driver": "dream_s100p_lladacpp/reports/30230_pytorch_block_driver_gate.json",
+    "truth_export": "dream_s100p_lladacpp/reports/30210_full_truth_31_export_gate.json",
+    "truth_validation": "dream_s100p_lladacpp/reports/30220_full_truth_31_validation_gate.json"
+  },
+  "review_questions": {
+    "31_row_truth_set_complete": true,
+    "bpu_block_graph_really_ran": false,
+    "bpu_operator_library_covered_ops": [
+      "embedding_lookup",
+      "position_or_rotary_path",
+      "rmsnorm_or_layernorm",
+      "linear_matmul",
+      "qkv_projection",
+      "attention_score",
+      "softmax_or_equivalent",
+      "attention_value",
+      "mlp_up_gate_down",
+      "activation_function",
+      "residual_add",
+      "lm_head",
+      "mask_update_or_confidence",
+      "dequant_quant_path"
+    ],
+    "can_enter_product_route_now": false,
+    "fixed_task_pass_rate": "not_reached_bpu_operator_alignment_failed",
+    "memory_staging_reduces_remap_copy": false,
+    "position_embedding_lm_head_passed": false,
+    "prefix_kv_revision_selective_logits_effective": false,
+    "pytorch_block_wise_driver_passed": "truth_replay_pass_not_generation",
+    "quantization_precision": "not_reached_bpu_operator_alignment_failed",
+    "research_branch_only_now": true,
+    "runtime_uses_blockwise_diffusion_driver": false,
+    "seg00_01_closed": false,
+    "speed_and_quality_worth_continuing": "review_required_after_operator_artifact_gap"
+  },
+  "safe_claim": "Dream7B now has a 31-row llada.cpp-style HF/PyTorch truth set and a truth-replay block-driver gate; BPU operator alignment remains blocked and review is required.",
+  "safety": {
+    "dream7b_frontend_openclaw_traffic_touched": false,
+    "generation_quality_run": false,
+    "harness_qwen_openclaw_defaults_modified": false,
+    "product_routes_18888_18889_touched": false
+  },
+  "schema_version": "dream7b_s100p_lladacpp_style_continue_gate_packet_v1",
+  "summary": "31-row HF/PyTorch truth and truth-replay block driver are reviewable, but the route stops at BPU operator alignment because true per-op BPU outputs/layout/scale records are missing.",
+  "truth_jsonl": {
+    "exists": true,
+    "path": "dream_s100p_lladacpp/reference/full_truth_31.jsonl",
+    "sha256": "c988643af429fb80cc309c15e7e4251e1f01699a89c10320334f15d0e9e2879c",
+    "size_bytes": 219910
+  },
+  "truth_manifest": {
+    "exists": true,
+    "path": "dream_s100p_lladacpp/reference/full_truth_31_manifest.json",
+    "sha256": "7041a59472abe8d7efea000afc7e90ffcf7f991b89ccd003b7a2c3941f955dbc",
+    "size_bytes": 3325
+  }
+}

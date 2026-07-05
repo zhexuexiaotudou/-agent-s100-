@@ -1,0 +1,112 @@
+{
+  "case_id": "real_prompt_no_synthetic_ramp",
+  "semantic_or_diagnostic": "semantic",
+  "elapsed_seconds": 1.286906,
+  "token_ids_sha256": "fb6cbc0d6608cf76791704eb61879739ceebdddc0238735d1bf1034d6789ec37",
+  "truth": {
+    "path": "evidence\\hf_boundaries_v21\\real_prompt_no_synthetic_ramp\\hf_truth\\hf_truth_logits.npy",
+    "size_bytes": 608384,
+    "sha256": "db732e2e2cbff1c7f129db0f37f30842aa0519e876dbbae8b9d0b68e244f22b5",
+    "stats": {
+      "shape": [
+        152064
+      ],
+      "dtype": "float32",
+      "size": 152064,
+      "min": -14.0625,
+      "max": 12.875,
+      "mean": -9.078083038330078,
+      "std": 1.2356327772140503,
+      "abs_max": 14.0625,
+      "nonzero_count": 152064,
+      "allzero": false,
+      "constant": false,
+      "nan_count": 0,
+      "inf_count": 0
+    }
+  },
+  "boundaries": {
+    "layer_00_output": {
+      "path": "evidence\\hf_boundaries_v21\\real_prompt_no_synthetic_ramp\\hf_boundaries\\layer_00_output.npy",
+      "size_bytes": 1835136,
+      "sha256": "1df19733a90c308319ecacff8f598fb6027739ac47fdc7bf8c6d7ecda8508737",
+      "stats": {
+        "shape": [
+          128,
+          3584
+        ],
+        "dtype": "float32",
+        "size": 458752,
+        "min": -2.046875,
+        "max": 1.671875,
+        "mean": -0.00018113608530256897,
+        "std": 0.17881865799427032,
+        "abs_max": 2.046875,
+        "nonzero_count": 458300,
+        "allzero": false,
+        "constant": false,
+        "nan_count": 0,
+        "inf_count": 0
+      }
+    },
+    "layer_01_output": {
+      "path": "evidence\\hf_boundaries_v21\\real_prompt_no_synthetic_ramp\\hf_boundaries\\layer_01_output.npy",
+      "size_bytes": 1835136,
+      "sha256": "a478858956ace4b7c4b5655404a0ccd43cfc570dd202688bbc594186a1e1d639",
+      "stats": {
+        "shape": [
+          128,
+          3584
+        ],
+        "dtype": "float32",
+        "size": 458752,
+        "min": -6.125,
+        "max": 2.828125,
+        "mean": 0.001434576348401606,
+        "std": 0.2176351249217987,
+        "abs_max": 6.125,
+        "nonzero_count": 458344,
+        "allzero": false,
+        "constant": false,
+        "nan_count": 0,
+        "inf_count": 0
+      }
+    },
+    "layer_02_output": {
+      "path": "evidence\\hf_boundaries_v21\\real_prompt_no_synthetic_ramp\\hf_boundaries\\layer_02_output.npy",
+      "size_bytes": 1835136,
+      "sha256": "9f71e659101fa63a0f61dc12c4a24e995acc567b92c0a65ea6f43a1f7783511a",
+      "stats": {
+        "shape": [
+          128,
+          3584
+        ],
+        "dtype": "float32",
+        "size": 458752,
+        "min": -4.15625,
+        "max": 3.296875,
+        "mean": -0.0008720755577087402,
+        "std": 0.2550366222858429,
+        "abs_max": 4.15625,
+        "nonzero_count": 458362,
+        "allzero": false,
+        "constant": false,
+        "nan_count": 0,
+        "inf_count": 0
+      }
+    }
+  },
+  "top10": [
+    151643,
+    0,
+    25984,
+    1112,
+    4894,
+    16,
+    496,
+    82,
+    220,
+    1940
+  ],
+  "status": "pass"
+}

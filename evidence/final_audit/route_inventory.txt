@@ -1,0 +1,300 @@
+configs\journal_workspace.json:13:    "document_rag",
+configs\journal_workspace.json:16:    "token_budget",
+src\openclaw\harness_default_middleware.py:28:from src.harness.token_budget_integration import route_token_budget
+src\openclaw\harness_default_middleware.py:130:            "token_budget_gate_enabled": bool(self.feature_flags.get("token_budget_gate_enabled", False)),
+src\openclaw\harness_default_middleware.py:428:    def token_budget_route(self, payload: dict[str, Any]) -> DefaultServiceResponse:
+src\openclaw\harness_default_middleware.py:429:        if not self.feature_flags.get("token_budget_gate_enabled", False):
+src\openclaw\harness_default_middleware.py:430:            return DefaultServiceResponse(503, {"ok": False, "error": "token_budget_gate_disabled"})
+src\openclaw\harness_default_middleware.py:431:        result = route_token_budget(payload)
+configs\context_pack_policy.json:3:  "max_token_budget": 4096,
+configs\journal_feature_flags.json:7:  "collect_document_rag": true,
+configs\journal_feature_flags.json:9:  "collect_token_budget": true,
+configs\harness_default_service_policy.json:6:    "document_rag",
+configs\harness_default_service_policy.json:61:    "requires_token_budget_gate": true
+configs\harness_default_service_policy.json:63:  "default_status_endpoint": "/api/harness/status",
+configs\harness_default_service_policy.json:65:    "/api/nas/copy/preview",
+configs\harness_default_service_policy.json:66:    "/api/nas/copy/dry-run",
+configs\harness_default_service_policy.json:67:    "/api/nas/copy/confirm",
+configs\harness_default_service_policy.json:68:    "/api/nas/copy/execute",
+configs\harness_default_service_policy.json:69:    "/api/nas/copy/rollback"
+src\openclaw\routes\token_budget_routes.py:9:def token_budget_route_response(payload: dict[str, Any], *, report_root: str | Path | None = None, personal_root: str | Path | None = None) -> tuple[int, dict[str, Any]]:
+src\openclaw\routes\token_budget_routes.py:10:    result = HarnessDefaultMiddleware(report_root=report_root, personal_root=personal_root).token_budget_route(payload)
+configs\harness_default_service_feature_flags.json:4:  "token_budget_gate_enabled": true,
+configs\agent_runtime_feature_flags.json:4:  "context_pack_token_budget": 4096,
+configs\agent_runtime_feature_flags.json:6:  "multimodal_index_enabled": true,
+configs\agent_runtime_feature_flags.json:7:  "rag_enabled": true,
+configs\agent_runtime_feature_flags.json:8:  "rag_eval_enabled": true,
+configs\rag_eval_policy.json:2:  "policy_id": "digua_agent_runtime_rag_eval_policy_v1",
+configs\rag_eval_policy.json:4:  "minimum_citation_coverage": 0.9,
+src\openclaw\routes\journal_routes.py:100:    if normalized in {"/api/journal/health", "/journal/health"}:
+src\openclaw\routes\journal_routes.py:102:    if normalized in {"/api/journal/timeline", "/journal/timeline"}:
+src\openclaw\routes\journal_routes.py:104:    if normalized in {"/api/journal/projects", "/journal/projects"}:
+src\openclaw\routes\journal_routes.py:106:    if normalized in {"/api/journal/manual-entry", "/journal/manual-entry"} and method.upper() == "POST":
+src\openclaw\routes\journal_routes.py:108:    if normalized in {"/api/journal/generate-summary", "/journal/generate-summary"} and method.upper() == "POST":
+src\openclaw\routes\journal_routes.py:110:    if normalized in {"/api/journal/export", "/journal/export"} and method.upper() == "POST":
+configs\internal_tool_manifest.json:27:      "tool_id": "agent_runtime.multimodal_index.scan",
+configs\internal_tool_manifest.json:33:      "tool_id": "agent_runtime.multimodal_index.search",
+configs\internal_tool_manifest.json:34:      "description": "Search metadata-only multimodal index.",
+configs\internal_tool_manifest.json:39:      "tool_id": "agent_runtime.rag.query",
+configs\internal_tool_manifest.json:45:      "tool_id": "agent_runtime.rag.evaluate",
+src\openclaw\routes\agent_runtime_routes.py:24:    if normalized == "/api/agent-runtime/status":
+src\openclaw\routes\agent_runtime_routes.py:26:    if normalized == "/api/agent-runtime/tool-manifest":
+src\openclaw\routes\agent_runtime_routes.py:28:    if normalized == "/api/agent-runtime/memory/stats":
+src\openclaw\routes\agent_runtime_routes.py:30:    if normalized == "/api/agent-runtime/multimodal-index/status":
+src\openclaw\routes\agent_runtime_routes.py:31:        return 200, service.multimodal_status()
+src\openclaw\routes\agent_runtime_routes.py:32:    if normalized == "/api/agent-runtime/eval/status":
+src\openclaw\routes\agent_runtime_routes.py:37:    if normalized == "/api/agent-runtime/context-pack":
+src\openclaw\routes\agent_runtime_routes.py:40:    if normalized == "/api/agent-runtime/memory/record":
+src\openclaw\routes\agent_runtime_routes.py:43:    if normalized == "/api/agent-runtime/multimodal-index/scan":
+src\openclaw\routes\agent_runtime_routes.py:44:        result = service.scan_multimodal(payload)
+src\openclaw\routes\agent_runtime_routes.py:46:    if normalized == "/api/agent-runtime/rag/query":
+src\openclaw\routes\agent_runtime_routes.py:47:        result = service.rag_query(payload)
+scripts/probes\ai_nas_acl_identity_gate_probe.py:51:            with urllib.request.urlopen(f"{base_url}/api/storage/status", timeout=0.5) as resp:
+scripts/probes\ai_nas_acl_identity_gate_probe.py:71:           "--identity-db-path",str(ident_db),"--storage-max-files","200","--no-refresh"]
+scripts/probes\ai_nas_acl_identity_gate_probe.py:129:    print("\n--- Storage ACL Enforcement: Write ---")
+scripts/probes\ai_nas_acl_identity_gate_probe.py:132:    r = multipart(f"{BASE}/api/storage/upload?path=Inbox","alice_f.txt",b"alice",alice_tok2)
+scripts/probes\ai_nas_acl_identity_gate_probe.py:134:    r = multipart(f"{BASE}/api/storage/upload?path=Inbox","bob_f.txt",b"bob",bob_tok2)
+scripts/probes\ai_nas_acl_identity_gate_probe.py:137:    print("\n--- Storage ACL Enforcement: Read ---")
+scripts/probes\ai_nas_acl_identity_gate_probe.py:138:    r = h("GET", f"{BASE}/api/storage/acl-list?path=Inbox", token=alice_tok)
+scripts/probes\ai_nas_acl_identity_gate_probe.py:140:    r = h("GET", f"{BASE}/api/storage/acl-list?path=Documents", token=alice_tok)
+scripts/probes\ai_nas_acl_identity_gate_probe.py:142:    r = h("GET", f"{BASE}/api/storage/acl-list?path=Photos", token=alice_tok)
+scripts/probes\ai_nas_acl_identity_gate_probe.py:146:    r = h("GET", f"{BASE}/api/storage/list"); chk("No-auth root list works", r["ok"], fails)
+scripts/probes\ai_nas_acl_identity_gate_probe.py:147:    r = h("GET", f"{BASE}/api/storage/status"); chk("No-auth status works", r["ok"] and r["payload"].get("ok"), fails)
+scripts/probes\ai_nas_acl_identity_gate_probe.py:148:    r = h("GET", f"{BASE}/api/storage/list?path=..", token=atok)
+scripts/probes\ai_nas_acl_identity_gate_probe.py:154:    r = h("GET", f"{BASE}/api/storage/acl-list?path=Documents", token=atok)
+configs\multimodal_index_policy.json:2:  "policy_id": "digua_agent_runtime_multimodal_index_policy_v1",
+scripts/probes\ai_nas_7b_unified_gate.py:17:    health as qwen_health, summarize, rag_answer, suggest_archive,
+scripts/probes\ai_nas_7b_unified_gate.py:61:        rag = rag_answer("这些文档的主要内容是什么", chunks[:2])
+scripts/probes\ai_nas_7b_unified_gate.py:62:        results["tests"].append({"feature": "A5_rag", "query": "文档摘要", "ok": rag.get("ok", False), "answer": rag.get("answer", "")[:300], "citations": rag.get("citations", []), "evidence": rag.get("evidence", {})})
+web\static\harness_status.js:1:async function fetchHarnessStatus(url = "/api/harness/status") {
+web\static\harness_status.js:13:    token_budget_gate_enabled: Boolean(data && data.token_budget_gate_enabled),
+scripts/probes\ai_nas_bpu_headroom_slo_probe.py:75:            add_job(interactive, slot, "interactive", "folder_rag_question", 28.0)
+scripts/probes\ai_nas_bpu_headroom_slo_probe.py:183:        failures.append("average_bpu_utilization_outside_headroom_band")
+scripts/probes\ai_nas_bpu_headroom_slo_probe.py:223:            "do_not_target_100_percent_average_bpu": True,
+scripts/probes\ai_nas_bpu_headroom_slo_probe.py:225:            "accepted_average_band_pct": [args.min_avg_util, args.max_avg_util],
+scripts/probes\ai_nas_bpu_headroom_slo_probe.py:234:            "average_utilization_pct": sim["utilization"]["avg"],
+scripts/probes\ai_nas_bpu_headroom_slo_probe.py:268:        f"- average_utilization_pct: `{payload['summary']['average_utilization_pct']}`",
+scripts/probes\ai_nas_bpu_headroom_slo_probe.py:275:        "- policy: preserve scheduling headroom; do not optimize for 100% average BPU utilization",
+src\harness\token_budget_integration.py:13:from tools.token_budget.cloud_route_decider import decide_route
+src\harness\token_budget_integration.py:14:from tools.token_budget.context_compressor import ContextCompressor
+src\harness\token_budget_integration.py:15:from tools.token_budget.privacy_redactor import PrivacyRedactor, find_private_leaks
+src\harness\token_budget_integration.py:16:from tools.token_budget.qwen_token_counter import QwenTokenCounter
+src\harness\token_budget_integration.py:17:from tools.token_budget.token_trace import append_trace, make_trace_record
+src\harness\token_budget_integration.py:20:DEFAULT_TRACE_PATH = REPO_ROOT / "reports" / "token_budget_traces_sample.jsonl"
+src\harness\token_budget_integration.py:203:        path = REPO_ROOT / "reports" / "17070_token_budget_benchmark_results.json"
+src\harness\token_budget_integration.py:205:            path = REPO_ROOT / "reports" / "17050_token_budget_benchmark_results.json"
+src\harness\token_budget_integration.py:210:def estimate_token_budget(payload: Dict[str, Any], *, record_trace: bool = True) -> Dict[str, Any]:
+src\harness\token_budget_integration.py:214:def route_token_budget(payload: Dict[str, Any], *, record_trace: bool = True) -> Dict[str, Any]:
+scripts/probes\ai_nas_appliance_experience_acceptance_probe.py:133:        evidence = match.get("evidence_fragments") or []
+web\static\digua_journal.js:18:    const data = await api("/api/journal/health");
+web\static\digua_journal.js:29:    const data = await api("/api/journal/timeline");
+web\static\digua_journal.js:46:    const data = await api("/api/journal/projects");
+web\static\digua_journal.js:69:  const result = await api("/api/journal/manual-entry", { method: "POST", body: JSON.stringify(payload) });
+web\static\digua_journal.js:75:    const result = await api("/api/journal/generate-summary", {
+web\static\digua_journal.js:85:    const result = await api("/api/journal/export", {
+src\digua_journal\journal_token_trace.py:10:    from tools.token_budget.qwen_token_counter import QwenTokenCounter
+src\digua_journal\journal_token_trace.py:11:except Exception:  # pragma: no cover - optional runtime dependency
+src\digua_journal\event_model.py:16:    "document_rag",
+src\digua_journal\event_model.py:19:    "token_budget",
+src\digua_journal\event_model.py:30:    "rag_hit",
+web\static\digua_ai_nas_v2.js:61:    authToken: safeLocalStorageGet("diguaAiNasToken"),
+web\static\digua_ai_nas_v2.js:62:    authUser: safeJsonParse(safeLocalStorageGet("diguaAiNasUser"), null),
+web\static\digua_ai_nas_v2.js:63:    storage: {
+web\static\digua_ai_nas_v2.js:73:    storageOperation: { type: "", status: "idle", result: null, error: "" },
+web\static\digua_ai_nas_v2.js:79:    agentRuntime: { status: "idle", statusPayload: null, manifest: null, memory: null, multimodal: null, evalStatus: null, contextPack: null, error: "" },
+web\static\digua_ai_nas_v2.js:84:    settings: { status: "idle", storage: null, users: [], harness: null, token: null, error: "" },
+web\static\digua_ai_nas_v2.js:89:  function safeLocalStorageGet(key) {
+web\static\digua_ai_nas_v2.js:91:      return window.localStorage.getItem(key) || "";
+web\static\digua_ai_nas_v2.js:97:  function safeLocalStorageSet(key, value) {
+web\static\digua_ai_nas_v2.js:99:      window.localStorage.setItem(key, value);
+web\static\digua_ai_nas_v2.js:106:  function safeLocalStorageRemove(key) {
+web\static\digua_ai_nas_v2.js:108:      window.localStorage.removeItem(key);
+web\static\digua_ai_nas_v2.js:200:        <div class="storage-card">
+web\static\digua_ai_nas_v2.js:203:          <div class="storage-meta"><span>1.28 TB / 2.00 TB</span><span>64%</span></div>
+web\static\digua_ai_nas_v2.js:413:    const selected = currentStorageEntries().find((row) => row.relative_path === appState.selectedFile) || currentStorageEntries()[0] || null;
+web\static\digua_ai_nas_v2.js:415:      ${pageHeader("文件", "浏览当前 NAS Personal root 中真实可见的文件路径。", `${button("新建文件夹", { variant: "secondary", icon: "files", action: "storageShowNewFolder", disabled: appState.storage.status !== "ready" })}${button("上传", { variant: "secondary", icon: "upload", action: "storageShowUpload", disabled: appState.storage.status !== "ready" })}${button("刷新", { icon: "plus", action: "storageRefresh" })}`)}
+web\static\digua_ai_nas_v2.js:417:        ${button("上一级", { variant: "secondary", icon: "chevron", action: "storageUp", disabled: !appState.storage.relativePath || appState.storage.status !== "ready" })}
+web\static\digua_ai_nas_v2.js:419:          ${renderStorageBreadcrumbs()}
+web\static\digua_ai_nas_v2.js:421:        <input id="storageSearch" class="control search" value="${escapeHtml(appState.fileSearch)}" placeholder="在当前目录搜索文件或文件夹..." aria-label="搜索当前目录">
+web\static\digua_ai_nas_v2.js:423:      ${renderStorageOperationPanel()}
+web\static\digua_ai_nas_v2.js:434:    if (appState.storage.status === "auth") return renderStorageLogin();
+web\static\digua_ai_nas_v2.js:435:    if (appState.storage.status === "unconfigured") {
+web\static\digua_ai_nas_v2.js:438:    const current = appState.storage.relativePath;
+web\static\digua_ai_nas_v2.js:439:    const roots = appState.storage.rootFolders.length ? appState.storage.rootFolders : currentStorageEntries().filter((entry) => entry.is_dir);
+web\static\digua_ai_nas_v2.js:440:    const folders = currentStorageEntries().filter((entry) => entry.is_dir);
+web\static\digua_ai_nas_v2.js:448:      <div class="storage-root-note">根：${escapeHtml(appState.storage.root || "未连接")}</div>
+web\static\digua_ai_nas_v2.js:449:      <div class="copy-actions">${button("刷新目录", { variant: "tertiary", icon: "plus", action: "storageRefresh" })}${button("退出", { variant: "tertiary", action: "storageLogout", disabled: !appState.authToken })}</div>
+web\static\digua_ai_nas_v2.js:453:  function renderStorageLogin() {
+web\static\digua_ai_nas_v2.js:458:        <label>用户名<input id="storageUsername" class="control" value="admin" autocomplete="username"></label>
+web\static\digua_ai_nas_v2.js:459:        <label>密码<input id="storagePassword" class="control" type="password" placeholder="输入管理员密码" autocomplete="current-password"></label>
+web\static\digua_ai_nas_v2.js:461:          ${button("登录", { icon: "lock", action: "storageLogin" })}
+web\static\digua_ai_nas_v2.js:462:          ${button("首次初始化", { variant: "secondary", icon: "plus", action: "storageBootstrap" })}
+web\static\digua_ai_nas_v2.js:464:        ${appState.storage.error ? `<p class="inline-error">${escapeHtml(appState.storage.error)}</p>` : ""}
+web\static\digua_ai_nas_v2.js:469:  function renderStorageOperationPanel() {
+web\static\digua_ai_nas_v2.js:470:    const operation = appState.storageOperation || {};
+web\static\digua_ai_nas_v2.js:472:    const current = appState.storage.relativePath || "";
+web\static\digua_ai_nas_v2.js:478:          <label>目标相对路径<input id="storageNewFolderPath" class="control" value="${escapeHtml(defaultPath)}" aria-label="新建文件夹相对路径"></label>
+web\static\digua_ai_nas_v2.js:480:            ${button("创建", { icon: "plus", action: "storageCreateFolder", disabled: operation.status === "loading" })}
+web\static\digua_ai_nas_v2.js:481:            ${button("取消", { variant: "secondary", action: "storageCancelOperation" })}
+web\static\digua_ai_nas_v2.js:484:        ${renderStorageOperationResult()}
+web\static\digua_ai_nas_v2.js:491:          <label>目标目录<input id="storageUploadDir" class="control" value="${escapeHtml(current)}" placeholder="留空表示 Personal root" aria-label="上传目标目录"></label>
+web\static\digua_ai_nas_v2.js:492:          <label>选择文件<input id="storageUploadInput" class="control file-input" type="file" aria-label="选择上传文件"></label>
+web\static\digua_ai_nas_v2.js:494:            ${button("上传文件", { icon: "upload", action: "storageUploadFile", disabled: operation.status === "loading" })}
+web\static\digua_ai_nas_v2.js:495:            ${button("取消", { variant: "secondary", action: "storageCancelOperation" })}
+web\static\digua_ai_nas_v2.js:498:        ${renderStorageOperationResult()}
+web\static\digua_ai_nas_v2.js:504:  function renderStorageOperationResult() {
+web\static\digua_ai_nas_v2.js:505:    const operation = appState.storageOperation || {};
+web\static\digua_ai_nas_v2.js:509:    return `<div class="soft-note"><strong>${escapeHtml(operation.result.action || "storage")} 已完成</strong>${renderKeyValueRows([
+web\static\digua_ai_nas_v2.js:517:    if (appState.storage.status === "loading" || appState.storage.status === "idle") {
+web\static\digua_ai_nas_v2.js:520:    if (appState.storage.status === "auth") {
+web\static\digua_ai_nas_v2.js:523:    if (appState.storage.status === "unconfigured") {
+web\static\digua_ai_nas_v2.js:526:    if (appState.storage.status === "error") {
+web\static\digua_ai_nas_v2.js:527:      return `<section class="panel explorer-panel"><div class="empty-state">${svg("alert")}<strong>目录读取失败</strong><p>${escapeHtml(appState.storage.error || "storage_list_failed")}</p></div></section>`;
+web\static\digua_ai_nas_v2.js:529:    const entries = currentStorageEntries();
+web\static\digua_ai_nas_v2.js:530:    const current = appState.storage.relativePath;
+web\static\digua_ai_nas_v2.js:537:              ${current ? `<tr class="up-row"><td></td><td colspan="5"><button class="link-button file-name" type="button" data-open-path="${escapeHtml(appState.storage.parent)}">.. 返回上一级</button></td></tr>` : ""}
+web\static\digua_ai_nas_v2.js:538:              ${entries.length ? entries.map((row) => renderStorageRow(row, selected)) : `<tr><td colspan="6"><div class="empty-line">当前目录没有可见文件。</div></td></tr>`}
+web\static\digua_ai_nas_v2.js:542:        <div class="table-footer"><span class="muted small">当前目录 ${appState.storage.entries.length} 项，可见 ${entries.length} 项</span><span class="muted small">${escapeHtml(current || "根目录")}</span></div>
+web\static\digua_ai_nas_v2.js:547:  function renderStorageRow(row, selected) {
+web\static\digua_ai_nas_v2.js:559:      <td>${escapeHtml(formatStorageTime(row.mtime))}</td>
+web\static\digua_ai_nas_v2.js:565:    if (appState.storage.status === "auth") {
+web\static\digua_ai_nas_v2.js:573:    const downloadPath = file.download_url || `/api/storage/download?path=${encodeURIComponent(file.relative_path)}`;
+web\static\digua_ai_nas_v2.js:576:      <div class="tabs"><button class="chip active" type="button">详情</button><button class="chip" type="button" data-action="storageSnapshotSelected">快照</button></div>
+web\static\digua_ai_nas_v2.js:582:        <dt>修改时间</dt><dd>${escapeHtml(formatStorageTime(file.mtime))}</dd>
+web\static\digua_ai_nas_v2.js:586:        ${file.is_dir ? button("进入文件夹", { variant: "secondary", icon: "files", action: "openSelectedFolder" }) : `<button class="btn secondary" type="button" data-action="storageDownload" data-download-path="${escapeHtml(downloadPath)}">${svg("download")}下载</button>`}
+web\static\digua_ai_nas_v2.js:587:        ${button("复制路径", { variant: "secondary", icon: "copy", action: "storageCopySelected" })}
+web\static\digua_ai_nas_v2.js:588:        ${button("分享", { variant: "secondary", icon: "link", action: "storageShareSelected" })}
+web\static\digua_ai_nas_v2.js:600:          <dt>当前根</dt><dd>${escapeHtml(appState.storage.root || "由服务端配置")}</dd>
+web\static\digua_ai_nas_v2.js:601:          <dt>当前目录</dt><dd>${escapeHtml(appState.storage.relativePath || "根目录")}</dd>
+web\static\digua_ai_nas_v2.js:602:          <dt>条目数</dt><dd>${String(appState.storage.entries.length)}</dd>
+web\static\digua_ai_nas_v2.js:615:        <div class="copy-actions" style="margin-top:16px">${button("复制受控路径", { action: "storageCopySelected" })}${button("高风险写操作已禁用", { variant: "secondary", disabled: true })}</div>
+web\static\digua_ai_nas_v2.js:636:  function renderStorageBreadcrumbs() {
+web\static\digua_ai_nas_v2.js:637:    const parts = pathParts(appState.storage.relativePath);
+web\static\digua_ai_nas_v2.js:647:  function currentStorageEntries() {
+web\static\digua_ai_nas_v2.js:649:    const entries = (appState.storage.entries || []).slice().sort((a, b) => Number(Boolean(b.is_dir)) - Number(Boolean(a.is_dir)) || String(a.name).localeCompare(String(b.name), "zh-Hans-CN"));
+web\static\digua_ai_nas_v2.js:654:  function cleanStoragePath(path) {
+web\static\digua_ai_nas_v2.js:659:    const cleaned = cleanStoragePath(path);
+web\static\digua_ai_nas_v2.js:703:  function formatStorageTime(value) {
+web\static\digua_ai_nas_v2.js:726:        ${card(`${sectionTitle("文档库", "", "")}<div class="tabs">${["真实路径", "PDF", "DOCX", "TXT/MD", "CSV"].map((t, i) => `<button class="chip ${i === 0 ? "active" : ""}" type="button">${t}</button>`).join("")}</div><div style="margin:14px 0"><input id="documentPath" class="control search" value="${escapeHtml(appState.documents.path)}" placeholder="文档目录，例如 Documents" aria-label="文档目录"></div>${stateBlock || `<div class="doc-list">${items.map((doc) => renderDocItem(doc)).join("")}</div><div class="storage-meta"><span>共 ${fmtCount(items.length)} 个可见文档</span><span>${svg("calendar")}</span></div>`}`)}
+web\static\digua_ai_nas_v2.js:740:    const time = formatStorageTime(doc.mtime || doc[4]);
+web\static\digua_ai_nas_v2.js:775:          <div class="storage-meta"><span>共 ${fmtCount(reports.length)} 份报告</span><span>${appState.reports.export?.path ? "最近已导出" : "等待导出"}</span></div>`)}
+web\static\digua_ai_nas_v2.js:789:        <div class="muted small">${escapeHtml(formatStorageTime(report.mtime))} · ${escapeHtml(formatBytes(report.size_bytes || 0))}</div>
+web\static\digua_ai_nas_v2.js:829:            <div class="metric"><span class="muted small">平均降幅</span><strong>${escapeHtml(fmtRatio(analysis.average_reduction_ratio))}</strong><span class="small muted">cloud token reduction</span></div>
+web\static\digua_ai_nas_v2.js:836:            ["Naive Cloud Tokens", analysis.average_naive_cloud_tokens ?? "—"],
+web\static\digua_ai_nas_v2.js:837:            ["Optimized Tokens", analysis.average_optimized_cloud_tokens ?? "—"]
+web\static\digua_ai_nas_v2.js:843:            ["Report Path", benchmark.report_path || benchmark.path || "reports/17070_token_budget_benchmark_results.json"],
+web\static\digua_ai_nas_v2.js:934:      row.action || row.operation || "storage",
+web\static\digua_ai_nas_v2.js:1012:    const multimodal = state.multimodal || status.multimodal_index || {};
+web\static\digua_ai_nas_v2.js:1021:          ["Multimodal Index", flags.multimodal_index_enabled ? "启用" : "禁用"],
+web\static\digua_ai_nas_v2.js:1022:          ["RAG", flags.rag_enabled ? "启用" : "禁用"],
+web\static\digua_ai_nas_v2.js:1038:          ["Index items", multimodal.indexed_count || 0],
+web\static\digua_ai_nas_v2.js:1039:          ["Documents", multimodal.counts?.document || 0],
+web\static\digua_ai_nas_v2.js:1040:          ["Images", multimodal.counts?.image || 0],
+web\static\digua_ai_nas_v2.js:1041:          ["Videos", multimodal.counts?.video || 0],
+web\static\digua_ai_nas_v2.js:1042:          ["Audio", multimodal.counts?.audio || 0]
+web\static\digua_ai_nas_v2.js:1047:          ["RAG cases", metrics.rag_case_count || "—"],
+web\static\digua_ai_nas_v2.js:1048:          ["Citation coverage", metrics.rag_citation_coverage != null ? fmtRatio(metrics.rag_citation_coverage) : "—"],
+web\static\digua_ai_nas_v2.js:1049:          ["No-evidence refusal", metrics.rag_no_evidence_refusal_rate != null ? fmtRatio(metrics.rag_no_evidence_refusal_rate) : "—"],
+web\static\digua_ai_nas_v2.js:1064:          ["Multimodal DB", status.datastores?.multimodal_db || "—"],
+web\static\digua_ai_nas_v2.js:1065:          ["RAG DB", status.datastores?.rag_db || "—"],
+web\static\digua_ai_nas_v2.js:1122:    const storage = appState.settings.storage || {};
+web\static\digua_ai_nas_v2.js:1123:    const capacity = storage.capacity || {};
+web\static\digua_ai_nas_v2.js:1131:          ["Personal Root", storage.personal_root || storage.root || "服务端配置"],
+web\static\digua_ai_nas_v2.js:1147:          ["平均降幅", analysis.average_reduction_ratio != null ? `${Math.round(analysis.average_reduction_ratio * 10000) / 100}%` : "见报告"],
+web\static\digua_ai_nas_v2.js:1291:    safeLocalStorageSet("diguaAiNasToken", appState.authToken);
+web\static\digua_ai_nas_v2.js:1292:    safeLocalStorageSet("diguaAiNasUser", JSON.stringify(appState.authUser));
+web\static\digua_ai_nas_v2.js:1416:        appState.tokenBudget = { ...appState.tokenBudget, status: "error", summary: null, benchmark: null, error: summary.data?.error || `token_budget_failed:${summary.status}` };
+web\static\digua_ai_nas_v2.js:1427:      task_type: "ui_v2_token_budget_smoke",
+web\static\digua_ai_nas_v2.js:1529:        ${button("退出文件接口", { variant: "secondary", action: "storageLogout", disabled: !appState.authToken })}
+web\static\digua_ai_nas_v2.js:1576:    const selected = selectedStorageEntry();
+web\static\digua_ai_nas_v2.js:1683:        fetchJson("/api/journal/health"),
+web\static\digua_ai_nas_v2.js:1684:        fetchJson("/api/journal/timeline")
+web\static\digua_ai_nas_v2.js:1703:    const result = await fetchJson("/api/journal/manual-entry", {
+web\static\digua_ai_nas_v2.js:1718:    const result = await fetchJson("/api/journal/generate-summary", {
+web\static\digua_ai_nas_v2.js:1731:    const result = await fetchJson("/api/journal/export", {
+web\static\digua_ai_nas_v2.js:1824:      const [storage, users, harness, token] = await Promise.all([
+web\static\digua_ai_nas_v2.js:1825:        fetchJson("/api/storage/status"),
+web\static\digua_ai_nas_v2.js:1827:        fetchJson("/api/harness/status"),
+web\static\digua_ai_nas_v2.js:1832:        storage: storage.data || null,
+web\static\digua_ai_nas_v2.js:1848:      const [status, manifest, memory, multimodal, evalStatus] = await Promise.all([
+web\static\digua_ai_nas_v2.js:1849:        fetchJson("/api/agent-runtime/status"),
+web\static\digua_ai_nas_v2.js:1850:        fetchJson("/api/agent-runtime/tool-manifest"),
+web\static\digua_ai_nas_v2.js:1851:        fetchJson("/api/agent-runtime/memory/stats"),
+web\static\digua_ai_nas_v2.js:1852:        fetchJson("/api/agent-runtime/multimodal-index/status"),
+web\static\digua_ai_nas_v2.js:1853:        fetchJson("/api/agent-runtime/eval/status")
+web\static\digua_ai_nas_v2.js:1861:        multimodal: multimodal.data || null,
+web\static\digua_ai_nas_v2.js:1880:      const result = await fetchJson("/api/agent-runtime/context-pack", {
+web\static\digua_ai_nas_v2.js:1940:      files: () => loadStoragePath(appState.storage.relativePath || ""),
+web\static\digua_ai_nas_v2.js:1954:  async function loadStoragePath(path = appState.storage.relativePath) {
+web\static\digua_ai_nas_v2.js:1955:    const relativePath = cleanStoragePath(path);
+web\static\digua_ai_nas_v2.js:1957:      appState.storage = { ...appState.storage, status: "auth", relativePath, error: "" };
+web\static\digua_ai_nas_v2.js:1961:    appState.storage = { ...appState.storage, status: "loading", relativePath, error: "" };
+web\static\digua_ai_nas_v2.js:1964:      const result = await fetchJson(`/api/storage/list?path=${encodeURIComponent(relativePath)}`);
+web\static\digua_ai_nas_v2.js:1967:        appState.storage = {
+web\static\digua_ai_nas_v2.js:1968:          ...appState.storage,
+web\static\digua_ai_nas_v2.js:1974:          rootFolders: relativePath ? appState.storage.rootFolders : entries.filter((entry) => entry.is_dir),
+web\static\digua_ai_nas_v2.js:1982:        appState.storage = { ...appState.storage, status: "auth", error: "" };
+web\static\digua_ai_nas_v2.js:1984:        appState.storage = { ...appState.storage, status: "unconfigured", error: "personal_root_not_configured" };
+web\static\digua_ai_nas_v2.js:1986:        appState.storage = { ...appState.storage, status: "error", error: result.data?.error || `storage_list_failed:${result.status}` };
+web\static\digua_ai_nas_v2.js:1989:      appState.storage = { ...appState.storage, status: "error", error: `storage_list_failed:${error.message || error}` };
+web\static\digua_ai_nas_v2.js:1994:  async function submitStorageLogin({ bootstrap = false } = {}) {
+web\static\digua_ai_nas_v2.js:1995:    const username = document.getElementById("storageUsername")?.value.trim() || "";
+web\static\digua_ai_nas_v2.js:1996:    const password = document.getElementById("storagePassword")?.value || "";
+web\static\digua_ai_nas_v2.js:1998:      appState.storage = { ...appState.storage, status: "auth", error: "请输入用户名和密码。" };
+web\static\digua_ai_nas_v2.js:2002:    appState.storage = { ...appState.storage, status: "auth", error: "" };
+web\static\digua_ai_nas_v2.js:2011:          appState.storage = { ...appState.storage, status: "auth", error: created.data?.error || "初始化失败。" };
+web\static\digua_ai_nas_v2.js:2021:        appState.storage = { ...appState.storage, status: "auth", error: result.data?.error || "登录失败。" };
+web\static\digua_ai_nas_v2.js:2027:      safeLocalStorageSet("diguaAiNasToken", appState.authToken);
+web\static\digua_ai_nas_v2.js:2028:      safeLocalStorageSet("diguaAiNasUser", JSON.stringify(appState.authUser));
+web\static\digua_ai_nas_v2.js:2030:      await loadStoragePath(appState.storage.relativePath || "");
+web\static\digua_ai_nas_v2.js:2032:      appState.storage = { ...appState.storage, status: "auth", error: `登录失败：${error.message || error}` };
+web\static\digua_ai_nas_v2.js:2037:  function logoutStorage() {
+web\static\digua_ai_nas_v2.js:2041:    appState.storage = { ...appState.storage, status: "auth", entries: [], rootFolders: [], error: "" };
+web\static\digua_ai_nas_v2.js:2042:    safeLocalStorageRemove("diguaAiNasToken");
+web\static\digua_ai_nas_v2.js:2043:    safeLocalStorageRemove("diguaAiNasUser");
+web\static\digua_ai_nas_v2.js:2048:  function selectedStorageEntry() {
+web\static\digua_ai_nas_v2.js:2049:    return (appState.storage.entries || []).find((entry) => entry.relative_path === appState.selectedFile) || null;
+web\static\digua_ai_nas_v2.js:2062:  async function downloadStorageFile(downloadUrl) {
+web\static\digua_ai_nas_v2.js:2088:  function showStorageOperation(type) {
+web\static\digua_ai_nas_v2.js:2089:    appState.storageOperation = { type, status: "idle", result: null, error: "" };
+web\static\digua_ai_nas_v2.js:2093:  function cancelStorageOperation() {
+web\static\digua_ai_nas_v2.js:2094:    appState.storageOperation = { type: "", status: "idle", result: null, error: "" };
+web\static\digua_ai_nas_v2.js:2098:  async function createStorageFolder() {
+web\static\digua_ai_nas_v2.js:2099:    const path = cleanStoragePath(document.getElementById("storageNewFolderPath")?.value || "");
+web\static\digua_ai_nas_v2.js:2101:      appState.storageOperation = { ...appState.storageOperation, status: "error", error: "请输入相对路径。" };
+web\static\digua_ai_nas_v2.js:2105:    appState.storageOperation = { ...appState.storageOperation, status: "loading", error: "" };
+web\static\digua_ai_nas_v2.js:2108:      const result = await fetchJson("/api/storage/create-folder", { method: "POST", body: { path } });
+web\static\digua_ai_nas_v2.js:2110:        appState.storageOperation = { ...appState.storageOperation, status: "error", error: result.data?.error || `create_folder_failed:${result.status}` };
+web\static\digua_ai_nas_v2.js:2114:      appState.storageOperation = { type: "new-folder", status: "ready", result: { action: "create-folder", ...result.data.folder }, error: "" };
+web\static\digua_ai_nas_v2.js:2116:      await loadStoragePath(appState.storage.relativePath || parentPath(path));
+web\static\digua_ai_nas_v2.js:2119:      appState.storageOperation = { ...appState.storageOperation, status: "error", error: error.message || String(error) };
+web\static\digua_ai_nas_v2.js:2124:  async function uploadStorageFile() {
+web\static\digua_ai_nas_v2.js:2125:    const input = document.getElementById("storageUploadInput");
+web\static\digua_ai_nas_v2.js:2128:      appState.storageOperation = { ...appState.storageOperation, status: "error", error: "请选择要上传的文件。" };
+web\static\digua_ai_nas_v2.js:2132:    appState.storageOperation = { ...appState.storageOperation, status: "loading", error: "" };
+web\static\digua_ai_nas_v2.js:2136:      const result = await fetchJson("/api/storage/upload-file", {
+web\static\digua_ai_nas_v2.js:2139:          target_dir: cleanStoragePath(document.getElementById("storageUploadDir")?.value || appState.storage.relativePath || ""),
+web\static\digua_ai_nas_v2.js:2146:        appState.storageOperation = { ...appState.storageOperation, status: "error", error: result.data?.error || `upload_failed:${result.status}` };
+web\static\digua_ai_nas_v2.js:2150:      appState.storageOperation = { type: "upload", status: "ready", result: { action: "upload-file", ...result.data.file }, error: "" };
+web\static\digua_ai_nas_v2.js:2151:      await loadStoragePath(appState.storage.relativePath || "");
+web\static\digua_ai_nas_v2.js:2154:      appState.storageOperation = { ...appState.storageOperation, status: "error", error: error.message || String(error) };
+web\static\digua_ai_nas_v2.js:2171:  async function shareSelectedStorageItem() {
+web\static\digua_ai_nas_v2.js:2172:    const selected = selectedStorageEntry();
+web\static\digua_ai_nas_v2.js:2177:    const previewUrl = selected.is_dir ? "" : `${window.location.origin}/api/storage/download?preview=1&path=${encodeURIComponent(selected.relative_path)}`;
+web\static\digua_ai_nas_v2.js:2190:  async function snapshotSelectedStorageItem() {
+web\static\digua_ai_nas_v2.js:2191:    const selected = selectedStorageEntry();
+web\static\digua_ai_nas_v2.js:2220:    const selected = selectedStorageEntry();
+web\static\digua_ai_nas_v2.js:2225:    const target = cleanStoragePath(document.getElementById("copyTarget")?.value || appState.copy.target || `copy_${selected.name}`);
+web\static\digua_ai_nas_v2.js:2238:      preview: "/api/nas/copy/preview",
+web\static\digua_ai_nas_v2.js:2239:      dry: "/api/nas/copy/dry-run",
+web\static\digua_ai_nas_v2.js:2240:      confirm: "/api/nas/copy/confirm",
+web\static\digua_ai_nas_v2.js:2241:      execute: "/api/nas/copy/execute",
+web\static\digua_ai_nas_v2.js:2242:      rollback: "/api/nas/copy/rollback"
+web\static\digua_ai_nas_v2.js:2265:      const result = await fetchJson("/api/harness/status");
+web\static\digua_ai_nas_v2.js:2276:      const result = await fetchJson("/api/journal/health");
+web\static\digua_ai_nas_v2.js:2295:      loadStoragePath(openPathButton.dataset.openPath || "");
+web\static\digua_ai_nas_v2.js:2374:    } else if (action === "storageLogin") {
+web\static\digua_ai_nas_v2.js:2375:      submitStorageLogin();
+web\static\digua_ai_nas_v2.js:2376:    } else if (action === "storageBootstrap") {
+web\static\digua_ai_nas_v2.js:2377:      submitStorageLogin({ bootstrap: true });
+web\static\digua_ai_nas_v2.js:2378:    } else if (action === "storageLogout") {

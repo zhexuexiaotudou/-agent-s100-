@@ -1,0 +1,74 @@
+{
+  "generated_at": "2026-07-04T11:54:15+08:00",
+  "collected_at": "2026-07-04T11:54:17+08:00",
+  "chrome": "/usr/bin/chromium-browser",
+  "remote_dir": "/mnt/nas/openclaw/reports/final_demo/screenshots/20260704-115358",
+  "records": [
+    {
+      "name": "openclaw_desktop_home",
+      "url": "http://127.0.0.1:8765/",
+      "viewport": "1440x1000",
+      "http": {
+        "ok": true,
+        "status": 200,
+        "elapsed_ms": 3.66,
+        "url": "http://127.0.0.1:8765/"
+      },
+      "screenshot_ok": true,
+      "returncode": 0,
+      "elapsed_ms": 1822.413,
+      "remote_path": "/mnt/nas/openclaw/reports/final_demo/screenshots/20260704-115358/openclaw_desktop_home.png",
+      "size_bytes": 34679,
+      "stderr_tail": "34679 bytes written to file /home/sunrise/snap/chromium/common/digua_final_demo_20260704_115411/openclaw_desktop_home.png\n",
+      "local_path": "evidence/final_demo/screenshots/openclaw_desktop_home.png",
+      "local_sha256": "e22b7fc498886de11d1a95dd7494e5c40bda7db2f9ddc920e4ef6e04939018ec"
+    },
+    {
+      "name": "openclaw_mobile_home",
+      "url": "http://127.0.0.1:8765/",
+      "viewport": "390x844",
+      "http": {
+        "ok": true,
+        "status": 200,
+        "elapsed_ms": 1.288,
+        "url": "http://127.0.0.1:8765/"
+      },
+      "screenshot_ok": true,
+      "returncode": 0,
+      "elapsed_ms": 1059.371,
+      "remote_path": "/mnt/nas/openclaw/reports/final_demo/screenshots/20260704-115358/openclaw_mobile_home.png",
+      "size_bytes": 27857,
+      "stderr_tail": "27857 bytes written to file /home/sunrise/snap/chromium/common/digua_final_demo_20260704_115411/openclaw_mobile_home.png\n",
+      "local_path": "evidence/final_demo/screenshots/openclaw_mobile_home.png",
+      "local_sha256": "b1db96b609efc08b60ccc7753d6af2b1a2cbe593e754c4273d9a38449b5d3ad8"
+    }
+  ],
+  "ssh": {
+    "ok": true,
+    "returncode": 0,
+    "elapsed_ms": 3174.593,
+    "stderr_tail": "bash: line 1: $'\\r': command not found\n"
+  },
+  "copied": [
+    {
+      "remote_path": "/mnt/nas/openclaw/reports/final_demo/screenshots/20260704-115358/openclaw_desktop_home.png",
+      "local_path": "evidence/final_demo/screenshots/openclaw_desktop_home.png",
+      "scp_ok": true,
+      "stderr_tail": ""
+    },
+    {
+      "remote_path": "/mnt/nas/openclaw/reports/final_demo/screenshots/20260704-115358/openclaw_mobile_home.png",
+      "local_path": "evidence/final_demo/screenshots/openclaw_mobile_home.png",
+      "scp_ok": true,
+      "stderr_tail": ""
+    }
+  ],
+  "summary": {
+    "desktop_http_ok": true,
+    "desktop_screenshot_ok": true,
+    "desktop_screenshot": "evidence/final_demo/screenshots/openclaw_desktop_home.png",
+    "mobile_http_ok": true,
+    "mobile_screenshot_ok": true,
+    "mobile_screenshot": "evidence/final_demo/screenshots/openclaw_mobile_home.png"
+  }
+}

@@ -1,0 +1,140 @@
+{
+  "case_id": "openclaw_nas_search_request",
+  "island": [
+    1,
+    2
+  ],
+  "semantic_or_diagnostic": "semantic",
+  "route": "HF torch2 prefix through layer 0, S100P BPU island 1..2, HF torch2 suffix 3..27 + final norm + lm_head",
+  "conversion_used": "official_runtime_output_scale_direct_float32_no_target_affine",
+  "bpu_hidden_path": "evidence\\dream7b_s100p_v21_execution_20260704\\evidence\\semantic_island_battery_v21\\bpu_outputs\\openclaw_nas_search_request\\island_1_2\\island_final_hidden.npy",
+  "logits": {
+    "path": "evidence\\semantic_island_battery_v21\\openclaw_nas_search_request\\island_1_2\\island_logits.npy",
+    "size_bytes": 608384,
+    "sha256": "d74353a919f8cea925236c40add24be87f93e875fa77d3de4d978afd8d278bc2",
+    "stats": {
+      "shape": [
+        152064
+      ],
+      "dtype": "float32",
+      "size": 152064,
+      "min": -9.625,
+      "max": 13.6875,
+      "mean": -5.6039323806762695,
+      "std": 1.085475206375122,
+      "abs_max": 13.6875,
+      "nonzero_count": 152064,
+      "allzero": false,
+      "constant": false,
+      "nan_count": 0,
+      "inf_count": 0
+    }
+  },
+  "final_metrics": {
+    "shape_match": true,
+    "reference_top1": 151643,
+    "candidate_top1": 151643,
+    "top1_agreement": true,
+    "reference_top1_in_candidate_top5": true,
+    "top5_overlap": 4,
+    "cosine": 0.9937816767405678,
+    "pearson_centered": 0.8423165096490229,
+    "relative_l2": 0.41450870316737987,
+    "max_abs_error": 14.5625,
+    "mean_abs_error": 3.9307745237543124,
+    "candidate_normalized_entropy": 0.010168721301413074,
+    "reference_normalized_entropy": 0.0014840486944809512,
+    "candidate_stats": {
+      "shape": [
+        152064
+      ],
+      "dtype": "float32",
+      "size": 152064,
+      "min": -9.625,
+      "max": 13.6875,
+      "mean": -5.6039323806762695,
+      "std": 1.085475206375122,
+      "abs_max": 13.6875,
+      "nonzero_count": 152064,
+      "allzero": false,
+      "constant": false,
+      "nan_count": 0,
+      "inf_count": 0
+    },
+    "reference_stats": {
+      "shape": [
+        152064
+      ],
+      "dtype": "float32",
+      "size": 152064,
+      "min": -14.1875,
+      "max": 10.9375,
+      "mean": -9.534625053405762,
+      "std": 1.1301578283309937,
+      "abs_max": 14.1875,
+      "nonzero_count": 152064,
+      "allzero": false,
+      "constant": false,
+      "nan_count": 0,
+      "inf_count": 0
+    }
+  },
+  "boundary_metrics": {
+    "shape_match": true,
+    "reference_top1": 5244,
+    "candidate_top1": 109212,
+    "top1_agreement": false,
+    "reference_top1_in_candidate_top5": false,
+    "top5_overlap": 0,
+    "cosine": 0.612339475350366,
+    "pearson_centered": 0.6123206745169606,
+    "relative_l2": 0.7943162808298739,
+    "max_abs_error": 4.85697814822197,
+    "mean_abs_error": 0.14591159573835455,
+    "candidate_normalized_entropy": 0.9988116292315081,
+    "reference_normalized_entropy": 0.9967581263465377,
+    "candidate_stats": {
+      "shape": [
+        458752
+      ],
+      "dtype": "float32",
+      "size": 458752,
+      "min": -0.4555218517780304,
+      "max": 0.4555218517780304,
+      "mean": -0.0018541099270805717,
+      "std": 0.17635919153690338,
+      "abs_max": 0.4555218517780304,
+      "nonzero_count": 456976,
+      "allzero": false,
+      "constant": false,
+      "nan_count": 0,
+      "inf_count": 0
+    },
+    "reference_stats": {
+      "shape": [
+        458752
+      ],
+      "dtype": "float32",
+      "size": 458752,
+      "min": -5.3125,
+      "max": 3.515625,
+      "mean": -0.0015574514400213957,
+      "std": 0.25592219829559326,
+      "abs_max": 5.3125,
+      "nonzero_count": 458408,
+      "allzero": false,
+      "constant": false,
+      "nan_count": 0,
+      "inf_count": 0
+    }
+  },
+  "strict_gate": {
+    "reference_top1_in_candidate_top5_required": true,
+    "cosine_min": 0.95,
+    "relative_l2_max": 0.3,
+    "no_allzero_or_constant_logits": true
+  },
+  "strict_pass": false,
+  "elapsed_seconds": 1.348098,
+  "status": "pass"
+}

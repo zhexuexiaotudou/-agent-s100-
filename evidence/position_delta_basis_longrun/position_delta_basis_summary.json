@@ -1,0 +1,200 @@
+{
+  "rows": [
+    {
+      "case_id": "zeros",
+      "models": [
+        {
+          "heldout": "canonical",
+          "model": "scalar_broadcast_zero",
+          "shape_match": true,
+          "cosine": null,
+          "pearson_centered": null,
+          "relative_l2": 0.9999999999978806,
+          "max_abs_error": 0.00885125994682312,
+          "mean_abs_error": 0.0004968553187016626
+        },
+        {
+          "heldout": "canonical",
+          "model": "linear_k_times_constant_1_by_token_index",
+          "shape_match": true,
+          "cosine": null,
+          "pearson_centered": null,
+          "relative_l2": 0.9999999999978806,
+          "max_abs_error": 0.00885125994682312,
+          "mean_abs_error": 0.0004968553187016626
+        },
+        {
+          "heldout": "reversed",
+          "model": "scalar_broadcast_zero",
+          "shape_match": true,
+          "cosine": null,
+          "pearson_centered": null,
+          "relative_l2": 0.9999999999978806,
+          "max_abs_error": 0.00885125994682312,
+          "mean_abs_error": 0.0004968553187016626
+        },
+        {
+          "heldout": "reversed",
+          "model": "linear_k_times_constant_1_by_token_index",
+          "shape_match": true,
+          "cosine": null,
+          "pearson_centered": null,
+          "relative_l2": 0.9999999999978806,
+          "max_abs_error": 0.00885125994682312,
+          "mean_abs_error": 0.0004968553187016626
+        },
+        {
+          "heldout": "random_permutation",
+          "model": "scalar_broadcast_zero",
+          "shape_match": true,
+          "cosine": null,
+          "pearson_centered": null,
+          "relative_l2": 0.9999999999978806,
+          "max_abs_error": 0.00885125994682312,
+          "mean_abs_error": 0.0004968553187016626
+        },
+        {
+          "heldout": "random_permutation",
+          "model": "linear_k_times_constant_1_by_token_index",
+          "shape_match": true,
+          "cosine": null,
+          "pearson_centered": null,
+          "relative_l2": 0.9999999999978806,
+          "max_abs_error": 0.00885125994682312,
+          "mean_abs_error": 0.0004968553187016626
+        }
+      ]
+    },
+    {
+      "case_id": "ramp",
+      "models": [
+        {
+          "heldout": "canonical",
+          "model": "scalar_broadcast_zero",
+          "shape_match": true,
+          "cosine": null,
+          "pearson_centered": null,
+          "relative_l2": 0.999999999999936,
+          "max_abs_error": 0.668208122253418,
+          "mean_abs_error": 0.015034729199672954
+        },
+        {
+          "heldout": "canonical",
+          "model": "linear_k_times_constant_1_by_token_index",
+          "shape_match": true,
+          "cosine": 0.1375824639436401,
+          "pearson_centered": 0.1376195279280966,
+          "relative_l2": 6.412420517303066,
+          "max_abs_error": 2.7983256727457047,
+          "mean_abs_error": 0.08302926760439597
+        },
+        {
+          "heldout": "reversed",
+          "model": "scalar_broadcast_zero",
+          "shape_match": true,
+          "cosine": null,
+          "pearson_centered": null,
+          "relative_l2": 0.9999999999999365,
+          "max_abs_error": 0.6751194000244141,
+          "mean_abs_error": 0.01506194099397332
+        },
+        {
+          "heldout": "reversed",
+          "model": "linear_k_times_constant_1_by_token_index",
+          "shape_match": true,
+          "cosine": 0.13132193898522015,
+          "pearson_centered": 0.13135270159983337,
+          "relative_l2": 6.377345930759401,
+          "max_abs_error": 2.773954465985298,
+          "mean_abs_error": 0.08338199518598166
+        },
+        {
+          "heldout": "random_permutation",
+          "model": "scalar_broadcast_zero",
+          "shape_match": true,
+          "cosine": null,
+          "pearson_centered": null,
+          "relative_l2": 0.9999999999999312,
+          "max_abs_error": 0.4680245816707611,
+          "mean_abs_error": 0.014322057703298577
+        },
+        {
+          "heldout": "random_permutation",
+          "model": "linear_k_times_constant_1_by_token_index",
+          "shape_match": true,
+          "cosine": 0.13275926772207472,
+          "pearson_centered": 0.1327863609761679,
+          "relative_l2": 6.909406260443287,
+          "max_abs_error": 2.8037212938070297,
+          "mean_abs_error": 0.08281438984531646
+        }
+      ]
+    },
+    {
+      "case_id": "short_chinese_prompt_padded",
+      "models": [
+        {
+          "heldout": "canonical",
+          "model": "scalar_broadcast_zero",
+          "shape_match": true,
+          "cosine": null,
+          "pearson_centered": null,
+          "relative_l2": 0.9999999999999056,
+          "max_abs_error": 0.44735145568847656,
+          "mean_abs_error": 0.009738560790135036
+        },
+        {
+          "heldout": "canonical",
+          "model": "linear_k_times_constant_1_by_token_index",
+          "shape_match": true,
+          "cosine": 0.022970204616639,
+          "pearson_centered": 0.022876737200316324,
+          "relative_l2": 3.3573153493615355,
+          "max_abs_error": 0.5198590755462646,
+          "mean_abs_error": 0.035175917226296795
+        },
+        {
+          "heldout": "reversed",
+          "model": "scalar_broadcast_zero",
+          "shape_match": true,
+          "cosine": null,
+          "pearson_centered": null,
+          "relative_l2": 0.999999999999907,
+          "max_abs_error": 0.44183456897735596,
+          "mean_abs_error": 0.009807791999052351
+        },
+        {
+          "heldout": "reversed",
+          "model": "linear_k_times_constant_1_by_token_index",
+          "shape_match": true,
+          "cosine": 0.02662503659778271,
+          "pearson_centered": 0.02650655697676857,
+          "relative_l2": 3.3080193589453444,
+          "max_abs_error": 0.5197378247976303,
+          "mean_abs_error": 0.03519277010746735
+        },
+        {
+          "heldout": "random_permutation",
+          "model": "scalar_broadcast_zero",
+          "shape_match": true,
+          "cosine": null,
+          "pearson_centered": null,
+          "relative_l2": 0.999999999999905,
+          "max_abs_error": 0.43947023153305054,
+          "mean_abs_error": 0.009923307952445401
+        },
+        {
+          "heldout": "random_permutation",
+          "model": "linear_k_times_constant_1_by_token_index",
+          "shape_match": true,
+          "cosine": 0.02714696376388858,
+          "pearson_centered": 0.02704052010959497,
+          "relative_l2": 3.3721833849686247,
+          "max_abs_error": 0.5142209529876709,
+          "mean_abs_error": 0.03484615567662557
+        }
+      ]
+    }
+  ],
+  "verdict": "token_dependent_nonrecoverable_without_internal_tensor"
+}

@@ -1,0 +1,23 @@
+{
+  "available_truth_status": {
+    "block_truth_rows": 0,
+    "control_command_truth_rows": 0,
+    "fixed_output_truth_rows": 0,
+    "llada_style_truth_cases_jsonl_exists": false,
+    "prompt_infill_truth_rows": 0,
+    "revision_truth_rows": 0,
+    "v21_original_semantic_rows": 8,
+    "v21_total_island_eval_truth_rows": 11
+  },
+  "created_at_utc": "2026-07-04T11:14:10.683800+00:00",
+  "next_action": "Export reference/truth_cases.jsonl on an x86/GPU torch2 environment using semantic, canonical, block-wise, revision, fixed-output, infill, and control-command cases.",
+  "reason": "v21 unblocks original semantic HF truth, but this track still lacks the full 31-row PyTorch reference truth set required before any BPU runtime claim.",
+  "required_truth_rows": 31,
+  "safety": {
+    "bpu_runtime_claim_allowed": false,
+    "generation_allowed": false,
+    "openclaw_product_route_allowed": false
+  },
+  "schema_version": "dream7b_s100p_lladacpp_phase2_truth_export_gate",
+  "verdict": "external_truth_missing_hold"
+}
