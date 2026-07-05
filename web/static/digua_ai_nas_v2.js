@@ -1394,7 +1394,7 @@
         ${card(`${sectionTitle("报告类型")}<div class="tabs">${(types.length ? types : ["待生成"]).map((type, index) => `<button class="chip ${index === 0 ? "active" : ""}" type="button">${escapeHtml(type)}</button>`).join("")}</div>
           <div class="report-list">${stateBlock || reports.map(renderReportItem).join("")}</div>
           <div class="storage-meta"><span>共 ${fmtCount(reports.length)} 份报告</span><span>${appState.reports.export?.path ? "最近已导出" : "等待导出"}</span></div>`)}
-        ${card(selected ? renderReportPreview(selected) : `<div class="empty-state">${svg("search")}<strong>没有报告可预览</strong><p>运行验证后会在这里显示 reports 和 evidence 目录中的真实文件。</p></div>`, "report-preview")}
+        ${card(selected ? renderReportPreview(selected) : `<div class="empty-state">${svg("search")}<strong>没有报告可预览</strong><p>运行验证后会在这里显示本地报告列表。</p></div>`, "report-preview")}
       </div>
       ${renderStatePanel("报告")}
     `;
