@@ -603,7 +603,7 @@
       title: "文件夹已创建",
       icon: "files",
       subtitle: action.path || "新建文件夹",
-      rows: [["路径", action.path || "—"], ["处理方式", "本地受控写入"], ["执行者", "OpenClaw API"]],
+      rows: [["位置", action.path || "—"], ["处理方式", "本地受控写入"], ["执行者", "本地受控服务"]],
       tags: ["已写入 NAS", "Qwen 无执行权"]
     });
     if (operation === "snapshot_create") return renderAssistantOperationCard(copilot, {
@@ -1049,7 +1049,7 @@
       return card(`
         <div class="answer-header compact-header"><strong>${svg("files")} 新建文件夹</strong>${badge("受控写入", "warning")}</div>
         <div class="operation-grid">
-          <label>目标相对路径<input id="storageNewFolderPath" class="control" value="${escapeHtml(defaultPath)}" aria-label="新建文件夹相对路径"></label>
+          <label>目标位置<input id="storageNewFolderPath" class="control" value="${escapeHtml(defaultPath)}" aria-label="新建文件夹目标位置"></label>
           <div class="copy-actions">
             ${button("创建", { icon: "plus", action: "storageCreateFolder", disabled: operation.status === "loading" })}
             ${button("取消", { variant: "secondary", action: "storageCancelOperation" })}
@@ -1079,7 +1079,7 @@
     const operation = appState.storageOperation || {};
     if (operation.status === "loading") return `<div class="skeleton-list"><span></span><span></span></div>`;
     if (operation.error) return `<div class="soft-note error-note"><strong>操作失败</strong><p>${escapeHtml(operation.error)}</p></div>`;
-    if (!operation.result) return `<p class="muted small">后端会校验相对路径、身份权限、目标是否已存在，并写入操作日志。</p>`;
+    if (!operation.result) return `<p class="muted small">服务会校验位置、身份权限、目标是否已存在，并写入操作日志。</p>`;
     return `<div class="soft-note"><strong>${escapeHtml(operationTitle(operation.result.action || "storage"))}已完成</strong>${renderKeyValueRows([
       ["位置", operation.result.path || operation.result.relative_path || "—"],
       ["大小", operation.result.size_bytes ? formatBytes(operation.result.size_bytes) : "—"],
@@ -1137,7 +1137,7 @@
 
   function renderFileDetail(file) {
     if (appState.storage.status === "auth") {
-      return `<div class="empty-state">${svg("lock")}<strong>等待登录</strong><p>登录后这里会显示所选文件或文件夹的真实相对路径。</p></div>`;
+      return `<div class="empty-state">${svg("lock")}<strong>等待登录</strong><p>登录后这里会显示所选文件或文件夹的信息。</p></div>`;
     }
     if (!file) {
       return `<div class="empty-state">${svg("files")}<strong>未选择项目</strong><p>从中间列表选择一个真实文件，或进入任意文件夹继续浏览。</p></div>`;
@@ -1163,7 +1163,7 @@
       </div>
       <div class="card" style="margin-top:14px;box-shadow:none">
         <strong>路径边界</strong>
-        <p class="muted small">前端只提交相对路径，后端统一解析到 configured Personal root，并阻止越界路径。</p>
+        <p class="muted small">所有文件动作都会在本地服务中校验位置和权限，并阻止越界访问。</p>
         <div class="copy-stepper">
           <div class="copy-step complete">${badge("✓", "success")}<br>预览</div>
           <div class="copy-step complete">${badge("✓", "success")}<br>读权限</div>
@@ -1178,11 +1178,11 @@
         ${!file.is_dir ? `<div class="login-stack" style="margin-top:16px">
           <label>受控复制目标<input id="copyTarget" class="control" value="${escapeHtml(appState.copy.target || `${parentPath(file.relative_path) ? `${parentPath(file.relative_path)}/` : ""}copy_${file.name}`)}" aria-label="受控复制目标"></label>
           <div class="copy-actions">
-            ${button("Preview", { action: "copyPreview" })}
-            ${button("Dry-run", { variant: "secondary", action: "copyDryRun" })}
-            ${button("Confirm", { variant: "secondary", action: "copyConfirm" })}
-            ${button("Execute", { variant: "secondary", action: "copyExecute" })}
-            ${button("Rollback", { variant: "tertiary", action: "copyRollback", disabled: !appState.copy.rollbackManifestPath })}
+            ${button("预览", { action: "copyPreview" })}
+            ${button("试运行", { variant: "secondary", action: "copyDryRun" })}
+            ${button("确认", { variant: "secondary", action: "copyConfirm" })}
+            ${button("执行", { variant: "secondary", action: "copyExecute" })}
+            ${button("回滚", { variant: "tertiary", action: "copyRollback", disabled: !appState.copy.rollbackManifestPath })}
           </div>
           ${renderCopyRouteResult()}
         </div>` : ""}
@@ -1197,7 +1197,7 @@
     if (!result) return `<p class="muted small">复制链路只允许单文件、目标不存在、人工确认后执行；删除/移动/覆盖不会执行。</p>`;
     const ok = result.ok ? "success" : "danger";
     return `<div class="soft-note ${ok === "danger" ? "error-note" : ""}">
-      <strong>${escapeHtml(result.route || "copy-route")} · ${escapeHtml(result.status || result.error || "returned")}</strong>
+      <strong>复制检查 · ${escapeHtml(statusLabel(result.status || result.error || "returned"))}</strong>
       ${renderKeyValueRows([
         ["原因", (result.reason_codes || [result.error || "—"]).join(", ")],
         ["审批短语", result.approval_phrase || appState.copy.approvalPhrase || "—"],
@@ -2330,7 +2330,7 @@
   function assistantAttach() {
     const selected = selectedStorageEntry();
     showWorkflow("附件", `
-      <p>附件不会绕过文件权限。先在“文件”页选择真实 NAS 文件，AI 助手只接收相对路径和脱敏上下文。</p>
+      <p>附件不会绕过文件权限。先在“文件”页选择真实 NAS 文件，AI 助手只接收受控文件引用和脱敏上下文。</p>
       ${renderKeyValueRows([
         ["当前选中", selected?.relative_path || appState.selectedFile || "未选择"],
         ["文件接口", appState.authToken ? "已登录" : "未登录"],
@@ -2467,7 +2467,7 @@
     const body = document.getElementById("journalBody")?.value.trim() || "Codex 网页端逐条验证时创建的受控样本记录。";
     const result = await fetchJson("/api/journal/manual-entry", {
       method: "POST",
-      body: { project_id: "project_ai_nas_web_verify", title, body, evidence_refs: ["web-ui-verification"] }
+      body: { project_id: "project_ai_nas_web_verify", title, body, evidence_refs: ["ui_local_check"] }
     });
     if (result.ok && result.data?.ok) {
       showToast("手动笔记已写入本地 Journal");
@@ -2891,7 +2891,7 @@
   async function createStorageFolder() {
     const path = cleanStoragePath(document.getElementById("storageNewFolderPath")?.value || "");
     if (!path) {
-      appState.storageOperation = { ...appState.storageOperation, status: "error", error: "请输入相对路径。" };
+      appState.storageOperation = { ...appState.storageOperation, status: "error", error: "请输入目标位置。" };
       renderShell();
       return;
     }
@@ -2967,7 +2967,7 @@
       showToast("请先选择文件或文件夹");
       return;
     }
-    await copyText(selected.relative_path, "已复制相对路径");
+    await copyText(selected.relative_path, "已复制文件位置");
     showWorkflow("本地只读分享", `
       <p>分享入口生成的是本地受控分享材料，不创建公网链接。访问者仍需要登录，并通过读权限校验。</p>
       ${renderKeyValueRows([
@@ -3089,7 +3089,7 @@
     }
     const copyPathButton = event.target.closest("[data-copy-path]");
     if (copyPathButton) {
-      copyText(copyPathButton.dataset.copyPath || "", "相对路径已复制");
+      copyText(copyPathButton.dataset.copyPath || "", "文件位置已复制");
       return;
     }
     const fileButton = event.target.closest("[data-file-path]");
@@ -3188,7 +3188,7 @@
       if (selected?.is_dir) loadStoragePath(selected.relative_path || "");
     } else if (action === "storageCopySelected") {
       const selected = selectedStorageEntry();
-      copyText(selected?.relative_path || appState.storage.relativePath || "", "相对路径已复制");
+      copyText(selected?.relative_path || appState.storage.relativePath || "", "文件位置已复制");
     } else if (action === "storageDownload") {
       downloadStorageFile(actionButton.dataset.downloadPath || "");
     } else if (action === "storageShareSelected") {
