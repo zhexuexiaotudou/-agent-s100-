@@ -697,9 +697,9 @@
     const body = `${kpis}<div class="product-card-list">${
       evidence.length
         ? evidence.slice(0, 5).map((item) => renderProductCard(
-            item.name || item.relative_path || "文档片段",
-            `${item.relative_path || "本地文档"}${item.snippet ? ` · ${item.snippet}` : ""}`,
-            [item.extension || "文档", item.evidence_ref || "本地证据"],
+            displayName(item, "文档片段"),
+            item.snippet || item.summary || "本地索引返回摘要，原文保留在 NAS。",
+            [item.extension || fileType(item) || "文档", evidenceLabel(item), "本地保留"],
             "docs"
           )).join("")
         : renderProductEmpty("没有找到可引用证据")
@@ -710,9 +710,9 @@
   function renderAssistantStorageList(copilot) {
     const action = copilot.nas_action || {};
     const entries = Array.isArray(action.entries) ? action.entries : Array.isArray(copilot.entries) ? copilot.entries : [];
-    const body = `${renderKpiStrip([["条目", entries.length], ["路径", copilot.path || action.path || "/"], ["权限", "只读"]])}
+    const body = `${renderKpiStrip([["条目", entries.length], ["位置", displayLocation(copilot.path || action.path || "")], ["权限", "只读"]])}
       <div class="product-card-list">${entries.length ? entries.slice(0, 8).map((entry) => renderProductCard(
-        entry.name || entry.relative_path || "文件",
+        displayName(entry, "文件"),
         [entry.is_dir ? "文件夹" : fileType(entry), entry.size_bytes && !entry.is_dir ? formatBytes(entry.size_bytes) : "", entry.mtime ? formatDateTime(entry.mtime) : ""].filter(Boolean).join(" · "),
         [entry.is_dir ? "可进入" : "可预览/下载", "本地 ACL"],
         entry.is_dir ? "files" : "docs"
@@ -858,6 +858,8 @@
       mkdir: "新建文件夹",
       copy: "受控复制",
       storage: "本地存储操作",
+      "create-folder": "新建文件夹",
+      "upload-file": "上传文件",
       storage_create_folder: "新建文件夹",
       storage_copy: "受控复制",
       storage_rename: "重命名检查",
@@ -1078,10 +1080,10 @@
     if (operation.status === "loading") return `<div class="skeleton-list"><span></span><span></span></div>`;
     if (operation.error) return `<div class="soft-note error-note"><strong>操作失败</strong><p>${escapeHtml(operation.error)}</p></div>`;
     if (!operation.result) return `<p class="muted small">后端会校验相对路径、身份权限、目标是否已存在，并写入操作日志。</p>`;
-    return `<div class="soft-note"><strong>${escapeHtml(operation.result.action || "storage")} 已完成</strong>${renderKeyValueRows([
-      ["路径", operation.result.path || operation.result.relative_path || "—"],
+    return `<div class="soft-note"><strong>${escapeHtml(operationTitle(operation.result.action || "storage"))}已完成</strong>${renderKeyValueRows([
+      ["位置", operation.result.path || operation.result.relative_path || "—"],
       ["大小", operation.result.size_bytes ? formatBytes(operation.result.size_bytes) : "—"],
-      ["SHA256", operation.result.sha256 || "—"]
+      ["校验", operation.result.sha256 ? "已生成" : "—"]
     ])}</div>`;
   }
 
@@ -1111,7 +1113,7 @@
             </tbody>
           </table>
         </div>
-        <div class="table-footer"><span class="muted small">当前目录 ${appState.storage.entries.length} 项，可见 ${entries.length} 项</span><span class="muted small">${escapeHtml(current || "根目录")}</span></div>
+        <div class="table-footer"><span class="muted small">当前目录 ${appState.storage.entries.length} 项，可见 ${entries.length} 项</span><span class="muted small">${escapeHtml(displayLocation(current))}</span></div>
       </section>
     `;
   }
@@ -1147,8 +1149,8 @@
       <div class="detail-hero"><span class="file-glyph ${glyph}">${escapeHtml(file.is_dir ? "DIR" : type.slice(0, 4))}</span><div><strong>${escapeHtml(file.name)}</strong><div class="muted small">${escapeHtml(type)} · ${file.is_dir ? "文件夹" : escapeHtml(formatBytes(file.size_bytes))}</div></div></div>
       <div class="tabs"><button class="chip active" type="button">详情</button><button class="chip" type="button" data-action="storageSnapshotSelected">快照</button></div>
       <dl class="meta-grid" style="margin-top:16px">
-        <dt>相对路径</dt><dd>${escapeHtml(file.relative_path || file.name)}</dd>
-        <dt>所在目录</dt><dd>${escapeHtml(parentPath(file.relative_path) || "根目录")}</dd>
+        <dt>位置</dt><dd>${escapeHtml(displayLocation(file.relative_path || file.name))}</dd>
+        <dt>路径状态</dt><dd>已选择，可复制</dd>
         <dt>类型</dt><dd>${escapeHtml(file.mime_type || type)}</dd>
         <dt>大小</dt><dd>${file.is_dir ? "—" : escapeHtml(formatBytes(file.size_bytes))}</dd>
         <dt>修改时间</dt><dd>${escapeHtml(formatStorageTime(file.mtime))}</dd>
@@ -1169,8 +1171,8 @@
           <div class="copy-step">${badge("4", "neutral")}<br>复制工作流</div>
         </div>
         <div class="meta-grid">
-          <dt>当前根</dt><dd>${escapeHtml(appState.storage.root || "由服务端配置")}</dd>
-          <dt>当前目录</dt><dd>${escapeHtml(appState.storage.relativePath || "根目录")}</dd>
+          <dt>个人空间</dt><dd>${appState.storage.root ? "已配置" : "由服务端配置"}</dd>
+          <dt>当前位置</dt><dd>${escapeHtml(displayLocation(appState.storage.relativePath))}</dd>
           <dt>条目数</dt><dd>${String(appState.storage.entries.length)}</dd>
         </div>
         ${!file.is_dir ? `<div class="login-stack" style="margin-top:16px">
@@ -1199,8 +1201,8 @@
       ${renderKeyValueRows([
         ["原因", (result.reason_codes || [result.error || "—"]).join(", ")],
         ["审批短语", result.approval_phrase || appState.copy.approvalPhrase || "—"],
-        ["目标哈希", result.target_path_hash || "—"],
-        ["回滚清单", result.rollback_manifest_path || appState.copy.rollbackManifestPath || "—"]
+        ["目标校验", result.target_path_hash ? "已生成" : "—"],
+        ["回滚记录", result.rollback_manifest_path || appState.copy.rollbackManifestPath ? "已生成" : "—"]
       ])}
     </div>`;
   }
@@ -1264,6 +1266,25 @@
 
   function resultStatusText(value, readyText = "已生成") {
     return value ? readyText : "待生成";
+  }
+
+  function presentMetaValue(key, value) {
+    const label = String(key || "");
+    const text = value == null ? "" : String(value);
+    if (!text) return "—";
+    if (/哈希|SHA|清单|令牌/i.test(label)) return resultStatusText(text);
+    if (/API|接口/i.test(label)) return "本地受控接口";
+    if (/路径|目录|位置|来源|目标|当前根|当前选中/i.test(label)) {
+      if (/已|根目录|个人空间|本地|服务端/.test(text) && text.length <= 16) return text;
+      return resultStatusText(text, "已选择");
+    }
+    if (/Trace|Policy|ID/i.test(label) && text.length > 8) return "已记录";
+    if ((/[\\/]/.test(text) || /[a-f0-9]{16,}/i.test(text)) && text.length > 24) return "已记录";
+    return value;
+  }
+
+  function productMetaRows(rows) {
+    return rows.map(([key, value]) => [key, presentMetaValue(key, value)]);
   }
 
   function fileType(entry) {
@@ -1381,11 +1402,11 @@
 
   function renderReportItem(report) {
     const active = report.id === appState.reports.selectedId ? " active" : "";
-    const status = report.degraded ? badge("Degraded", "neutral") : badge("Ready", "success");
+    const status = report.degraded ? badge("待生成", "neutral") : badge("可查看", "success");
     return `<article class="report-item${active}" data-report-id="${escapeHtml(report.id)}">
       <div>
         <strong>${escapeHtml(report.title || report.type || "报告")}</strong>
-        <div class="muted small">${escapeHtml(report.relative_path || report.path || "等待生成")}</div>
+        <div class="path-summary">${escapeHtml(report.relative_path || report.path ? displayLocation(report.relative_path || report.path) : "等待生成")}</div>
         <div class="muted small">${escapeHtml(formatStorageTime(report.mtime))} · ${escapeHtml(formatBytes(report.size_bytes || 0))}</div>
       </div>
       <div class="report-meta">${badge(report.type || "报告", "neutral")}${status}</div>
@@ -1399,18 +1420,18 @@
       <div class="answer-body">
         ${renderKeyValueRows([
           ["类型", report.type || "—"],
-          ["路径", report.relative_path || report.path || "—"],
-          ["Trace", report.trace_id || "—"],
+          ["位置", report.relative_path || report.path ? "已生成" : "待生成"],
+          ["记录", report.trace_id ? "已记录" : "—"],
           ["大小", report.size_bytes ? formatBytes(report.size_bytes) : "—"]
         ])}
         <pre class="summary-pre report-pre">${escapeHtml(preview)}</pre>
       </div>
       <div class="answer-footer">
         <div class="actions">
-          ${button("复制路径", { variant: "secondary", icon: "copy", action: "reportCopyPath", disabled: !report.path })}
+          ${button("复制报告位置", { variant: "secondary", icon: "copy", action: "reportCopyPath", disabled: !report.path })}
           ${button("导出 Markdown", { icon: "download", action: "reportExport", disabled: report.degraded || !report.path })}
         </div>
-        <span class="muted small">${appState.reports.export?.path ? `最近导出：${escapeHtml(appState.reports.export.path)}` : "导出会写入本地 report_root/ui_v2_report_exports。"}</span>
+        <span class="muted small">${appState.reports.export?.path ? "最近导出已生成" : "导出会保存在本地报告目录。"}</span>
       </div>
     `;
   }
@@ -1969,7 +1990,7 @@
   }
 
   function renderKeyValueRows(rows) {
-    return `<dl class="meta-grid">${rows.map(([key, value]) => `<dt>${escapeHtml(key)}</dt><dd>${escapeHtml(value ?? "—")}</dd>`).join("")}</dl>`;
+    return `<dl class="meta-grid">${productMetaRows(rows).map(([key, value]) => `<dt>${escapeHtml(key)}</dt><dd>${escapeHtml(value ?? "—")}</dd>`).join("")}</dl>`;
   }
 
   function renderOperationRows(rows) {
@@ -1980,9 +2001,9 @@
   function renderDocumentEvidence(items) {
     if (!items.length) return `<div class="empty-state compact">${svg("search")} 没有可引用证据</div>`;
     return items.slice(0, 8).map((item, i) => `<article class="evidence-card">
-      <div class="file-cell"><span class="doc-glyph ${fileGlyph(item)}">${escapeHtml(fileType(item).slice(0, 4))}</span><strong>${escapeHtml(item.name || item.relative_path)}</strong></div>
-      <div class="muted small" style="margin:8px 0">证据 ${escapeHtml(item.evidence_ref || i + 1)} · ${escapeHtml(item.relative_path || item.document_relative_path || "")}</div>
-      <p class="muted small">${escapeHtml(item.snippet || item.summary || "本地索引返回的文件元数据，原文仍保留在 NAS Personal root。")}</p>
+      <div class="file-cell"><span class="doc-glyph ${fileGlyph(item)}">${escapeHtml(fileType(item).slice(0, 4))}</span><strong title="${escapeHtml(displayName(item, "文档证据"))}">${escapeHtml(displayName(item, "文档证据"))}</strong></div>
+      <div class="evidence-meta"><span>${escapeHtml(evidenceLabel(item, i))}</span><span>${escapeHtml(fileType(item) || "文档")}</span><span>本地保留</span></div>
+      <p class="muted small">${escapeHtml(item.snippet || item.summary || "本地索引返回的摘要信息，原文仍保留在 NAS。")}</p>
     </article>`).join("");
   }
 
@@ -2946,15 +2967,14 @@
       showToast("请先选择文件或文件夹");
       return;
     }
-    const previewUrl = selected.is_dir ? "" : `${window.location.origin}/api/storage/download?preview=1&path=${encodeURIComponent(selected.relative_path)}`;
     await copyText(selected.relative_path, "已复制相对路径");
     showWorkflow("本地只读分享", `
       <p>分享入口生成的是本地受控分享材料，不创建公网链接。访问者仍需要登录，并通过读权限校验。</p>
       ${renderKeyValueRows([
-        ["相对路径", selected.relative_path],
+        ["位置", displayLocation(selected.relative_path)],
         ["类型", selected.is_dir ? "文件夹" : "文件"],
         ["访问范围", "本地认证预览"],
-        ["预览 API", previewUrl || "文件夹不提供直接预览"]
+        ["预览方式", selected.is_dir ? "文件夹不提供直接预览" : "登录后本地预览"]
       ])}
     `);
   }

@@ -120,6 +120,55 @@ textarea:focus-visible {
   clip-path: inset(50%);
 }
 
+.app-shell,
+.main-area,
+.page,
+.page-inner,
+.card,
+.panel,
+.grid > *,
+.three-column > *,
+.layout-with-panel > *,
+.file-workspace > *,
+.audit-layout > *,
+.reports-layout > *,
+.journal-grid > *,
+.product-result-content,
+.answer-body,
+.answer-footer,
+.doc-copy {
+  min-width: 0;
+}
+
+.clamp-1,
+.doc-title,
+.file-name,
+.result-title,
+.report-item strong,
+.file-cell strong {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.clamp-2,
+.result-meta,
+.path-summary,
+.evidence-card p,
+.manual-note p {
+  display: -webkit-box;
+  overflow: hidden;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+}
+
+.path-summary {
+  margin-top: 4px;
+  color: var(--text-muted);
+  font-size: var(--font-xs);
+  line-height: 1.35;
+}
+
 .app-shell {
   display: grid;
   grid-template-columns: var(--sidebar-width) minmax(0, 1fr);
@@ -810,11 +859,11 @@ textarea:focus-visible {
 }
 
 .three-column {
-  grid-template-columns: 310px minmax(0, 1fr) 320px;
+  grid-template-columns: minmax(240px, 0.78fr) minmax(360px, 1.58fr) minmax(240px, 0.82fr);
 }
 
 .file-workspace {
-  grid-template-columns: 200px minmax(560px, 1fr) 300px;
+  grid-template-columns: minmax(180px, 0.62fr) minmax(420px, 1.7fr) minmax(260px, 0.82fr);
 }
 
 .audit-layout {
@@ -1163,6 +1212,17 @@ textarea:focus-visible {
   padding: 12px;
 }
 
+.product-result-card > *,
+.operation-product-card > *,
+.search-result-card > *,
+.evidence-card > *,
+.doc-item > *,
+.report-item > *,
+.task-row > *,
+.mini-row > * {
+  min-width: 0;
+}
+
 .product-icon,
 .operation-icon {
   width: 40px;
@@ -1281,7 +1341,6 @@ textarea:focus-visible {
   color: var(--text-primary);
   font-weight: 820;
   line-height: 1.25;
-  overflow-wrap: anywhere;
 }
 
 .result-meta,
@@ -1289,6 +1348,7 @@ textarea:focus-visible {
   color: var(--text-secondary);
   font-size: 12px;
   line-height: 1.35;
+  overflow-wrap: break-word;
 }
 
 .result-match {
@@ -1343,6 +1403,11 @@ textarea:focus-visible {
   border-radius: var(--radius-md);
   background: var(--bg-surface);
   padding: 12px;
+}
+
+.evidence-card {
+  display: grid;
+  gap: 8px;
 }
 
 .evidence-card + .evidence-card,
@@ -1464,6 +1529,10 @@ textarea:focus-visible {
   padding: 0 12px;
   text-align: left;
   vertical-align: middle;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 .data-table th:nth-child(1),
@@ -1525,12 +1594,12 @@ textarea:focus-visible {
   align-items: center;
   gap: 10px;
   min-width: 0;
+  max-width: 100%;
 }
 
 .file-name {
   max-width: 100%;
   justify-content: flex-start;
-  overflow-wrap: anywhere;
   text-align: left;
 }
 
@@ -1574,6 +1643,11 @@ textarea:focus-visible {
   align-items: center;
   gap: 12px;
   margin-bottom: 18px;
+  min-width: 0;
+}
+
+.detail-hero > div {
+  min-width: 0;
 }
 
 .meta-grid {
@@ -1590,7 +1664,8 @@ textarea:focus-visible {
 .meta-grid dd {
   margin: 0;
   color: var(--text-main);
-  overflow-wrap: anywhere;
+  min-width: 0;
+  overflow-wrap: break-word;
 }
 
 .copy-stepper {
@@ -1635,10 +1710,34 @@ textarea:focus-visible {
   gap: 12px;
 }
 
+.doc-copy {
+  display: grid;
+  align-content: start;
+  gap: 2px;
+}
+
 .doc-title {
   color: var(--text-main);
   font-weight: 680;
   margin-bottom: 5px;
+}
+
+.evidence-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.evidence-meta span {
+  min-height: 24px;
+  display: inline-flex;
+  align-items: center;
+  border-radius: 7px;
+  background: var(--bg-subtle);
+  color: var(--text-secondary);
+  padding: 0 8px;
+  font-size: var(--font-xs);
+  font-weight: 680;
 }
 
 .question-bubble {
