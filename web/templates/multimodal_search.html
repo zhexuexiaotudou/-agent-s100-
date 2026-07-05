@@ -1,0 +1,70 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Digua Multimodal Search</title>
+    <link rel="stylesheet" href="/static/digua_multimodal_search.css" />
+  </head>
+  <body>
+    <main class="mm-shell" data-view="multimodal-search">
+      <header class="mm-topbar">
+        <div>
+          <p class="mm-kicker">AI NAS</p>
+          <h1>Multimodal Search</h1>
+        </div>
+        <div class="mm-status" id="mm-status">
+          <span class="mm-status-dot" aria-hidden="true"></span>
+          <span id="mm-status-text">Checking</span>
+        </div>
+      </header>
+
+      <section class="mm-workbench" aria-label="Search workbench">
+        <form class="mm-authbar" id="mm-auth-form">
+          <label class="mm-field">
+            <span>User</span>
+            <input id="mm-username" name="username" type="text" autocomplete="username" placeholder="admin" />
+          </label>
+          <label class="mm-field">
+            <span>Password</span>
+            <input id="mm-password" name="password" type="password" autocomplete="current-password" placeholder="password" />
+          </label>
+          <button class="mm-button" id="mm-login" type="submit">Login</button>
+          <div class="mm-auth-state" id="mm-auth-state">Local session</div>
+        </form>
+
+        <form class="mm-searchbar" id="mm-search-form">
+          <label class="mm-field">
+            <span>Query</span>
+            <input id="mm-query" name="query" type="search" autocomplete="off" placeholder="invoice, white photo, meeting audio" />
+          </label>
+          <label class="mm-select">
+            <span>Mode</span>
+            <select id="mm-modality" name="modality">
+              <option value="all">All</option>
+              <option value="document">Documents</option>
+              <option value="image">Images</option>
+              <option value="video">Videos</option>
+              <option value="audio">Audio</option>
+              <option value="code">Code</option>
+              <option value="archive">Archives</option>
+            </select>
+          </label>
+          <button class="mm-button primary" type="submit">Search</button>
+          <button class="mm-button" id="mm-rebuild" type="button">Rebuild</button>
+        </form>
+
+        <div class="mm-metrics" id="mm-metrics" aria-label="Index metrics"></div>
+      </section>
+
+      <section class="mm-content" aria-live="polite">
+        <div class="mm-results" id="mm-results"></div>
+        <aside class="mm-panel" id="mm-panel">
+          <h2>Evidence</h2>
+          <dl id="mm-evidence"></dl>
+        </aside>
+      </section>
+    </main>
+    <script src="/static/digua_multimodal_search.js" defer></script>
+  </body>
+</html>

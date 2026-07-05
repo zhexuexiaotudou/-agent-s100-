@@ -1,0 +1,20 @@
+{
+  "models": [
+    {
+      "model_id": "digua-local-visual-text-embedding-v1",
+      "family": "local_feature_embedding",
+      "backend": "pillow_numpy",
+      "device": "cpu",
+      "vector_dim": 16,
+      "local_only": true,
+      "weights_committed_to_repo": false,
+      "cloud_used": false,
+      "claim_boundary": "Local lightweight visual-text embedding for color/metadata-oriented image search; not face recognition or full visual understanding."
+    }
+  ],
+  "preferred_order": [
+    "siglip_local_cache",
+    "openclip_local_cache",
+    "digua-local-visual-text-embedding-v1"
+  ]
+}

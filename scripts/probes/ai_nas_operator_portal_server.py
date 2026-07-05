@@ -2,25 +2,31 @@
 from __future__ import annotations
 
 import argparse
+import base64
+import binascii
 import hashlib
 import json
 import os
 import platform
 import shutil
+import sqlite3
 import subprocess
 import sys
 import tarfile
 import time
 import urllib.error
 import urllib.request
+import mimetypes
+import zipfile
 import threading
 import tempfile
 import re
+import xml.etree.ElementTree as ET
 from datetime import datetime
 from http import HTTPStatus
 from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 from pathlib import Path
-from urllib.parse import urlparse
+from urllib.parse import parse_qs, quote, urlparse
 
 REPO_ROOT = Path(__file__).resolve().parents[2]
 if str(REPO_ROOT) not in sys.path:
@@ -32,8 +38,16 @@ except Exception:
     TokenBudgetIntegration = None  # type: ignore[assignment]
 
 try:
+    from src.digua_journal.event_model import redact_private_text
+except Exception:
+    def redact_private_text(text: object) -> tuple[str, int]:  # type: ignore[no-redef]
+        return str(text or ""), 0
+
+try:
+    from src.openclaw.routes.agent_runtime_routes import agent_runtime_route_response
     from src.openclaw.routes.harness_status_routes import harness_status_response
     from src.openclaw.routes.journal_routes import journal_route_response
+    from src.openclaw.routes.multimodal_search_routes import multimodal_route_response
     from src.openclaw.routes.nas_copy_routes import (
         copy_confirm_response,
         copy_dry_run_response,
@@ -42,8 +56,10 @@ try:
         copy_rollback_response,
     )
 except Exception:
+    agent_runtime_route_response = None  # type: ignore[assignment]
     harness_status_response = None  # type: ignore[assignment]
     journal_route_response = None  # type: ignore[assignment]
+    multimodal_route_response = None  # type: ignore[assignment]
     copy_preview_response = None  # type: ignore[assignment]
     copy_dry_run_response = None  # type: ignore[assignment]
     copy_confirm_response = None  # type: ignore[assignment]
@@ -143,6 +159,7 @@ REMOTE_SYNC_EXTRA_FILENAMES = [
     "services.json",
 ]
 OPERATOR_DECISION_DIRNAME = "operator_decisions"
+MAX_UPLOAD_BYTES = 5 * 1024 * 1024
 
 
 def iso_timestamp() -> str:
@@ -646,6 +663,157 @@ NAS_PORTAL_HTML = """<!doctype html>
 </html>
 """
 
+DOCUMENT_EXTENSIONS = {".txt", ".md", ".markdown", ".csv", ".json", ".log", ".rst", ".docx", ".pdf"}
+TEXT_DOCUMENT_EXTENSIONS = {".txt", ".md", ".markdown", ".csv", ".json", ".log", ".rst"}
+
+
+def extract_docx_text(path: Path, *, max_chars: int = 20000) -> str:
+    try:
+        with zipfile.ZipFile(path) as archive:
+            raw = archive.read("word/document.xml")
+    except (OSError, KeyError, zipfile.BadZipFile):
+        return ""
+    try:
+        root = ET.fromstring(raw)
+    except ET.ParseError:
+        return ""
+    ns = {"w": "http://schemas.openxmlformats.org/wordprocessingml/2006/main"}
+    parts = [node.text or "" for node in root.findall(".//w:t", ns)]
+    return " ".join(part for part in parts if part).strip()[:max_chars]
+
+
+def extract_local_document_text(path: Path, *, max_chars: int = 20000) -> str:
+    suffix = path.suffix.lower()
+    if suffix == ".docx":
+        return extract_docx_text(path, max_chars=max_chars)
+    if suffix not in TEXT_DOCUMENT_EXTENSIONS:
+        return ""
+    try:
+        raw = path.read_bytes()[: max_chars * 4]
+    except OSError:
+        return ""
+    return raw.decode("utf-8", errors="replace")[:max_chars]
+
+
+def query_terms(query: str) -> list[str]:
+    cleaned = query.strip().lower()
+    parts = [item for item in re.split(r"[\s,，。；;:：/\\|()（）]+", cleaned) if len(item) >= 2]
+    if cleaned and cleaned not in parts:
+        parts.insert(0, cleaned)
+    return parts[:12]
+
+
+def local_snippet(text: str, terms: list[str], *, max_chars: int = 180) -> str:
+    if not text:
+        return ""
+    lower = text.lower()
+    index = -1
+    for term in terms:
+        index = lower.find(term)
+        if index >= 0:
+            break
+    if index < 0:
+        index = 0
+    start = max(0, index - 40)
+    snippet = text[start : start + max_chars].replace("\r", " ").replace("\n", " ")
+    return re.sub(r"\s+", " ", snippet).strip()
+
+
+def sqlite_readonly_uri(path: Path) -> str:
+    resolved = path.resolve(strict=False)
+    return "file:" + quote(str(resolved), safe="/:\\") + "?mode=ro"
+
+
+def readonly_sqlite_summary(db_path: Path | None) -> dict:
+    if not db_path:
+        return {"configured": False, "ok": True, "status": "not_configured", "operation_log_count": 0}
+    if not db_path.exists():
+        return {"configured": True, "ok": True, "status": "missing", "path": str(db_path), "operation_log_count": 0}
+    try:
+        con = sqlite3.connect(sqlite_readonly_uri(db_path), uri=True)
+        try:
+            row = con.execute("SELECT name FROM sqlite_master WHERE type='table' AND name='file_operations'").fetchone()
+            count = 0
+            if row:
+                count = int(con.execute("SELECT COUNT(*) FROM file_operations").fetchone()[0])
+            return {
+                "configured": True,
+                "ok": True,
+                "status": "readonly_ok",
+                "path": str(db_path),
+                "operation_log_count": count,
+            }
+        finally:
+            con.close()
+    except sqlite3.DatabaseError as exc:
+        return {
+            "configured": True,
+            "ok": False,
+            "status": "degraded",
+            "path": str(db_path),
+            "operation_log_count": None,
+            "error": f"{type(exc).__name__}:{exc}",
+        }
+    except OSError as exc:
+        return {
+            "configured": True,
+            "ok": False,
+            "status": "degraded",
+            "path": str(db_path),
+            "operation_log_count": None,
+            "error": f"{type(exc).__name__}:{exc}",
+        }
+
+
+def split_document_chunks(text: str, *, chunk_chars: int = 900) -> list[str]:
+    compact = re.sub(r"\s+", " ", text or "").strip()
+    if not compact:
+        return []
+    return [compact[index : index + chunk_chars] for index in range(0, min(len(compact), 20000), chunk_chars)]
+
+
+def fts_query_from_terms(terms: list[str]) -> str:
+    cleaned: list[str] = []
+    for term in terms:
+        token = re.sub(r"[^\w\u4e00-\u9fff]+", " ", term, flags=re.UNICODE).strip()
+        if not token:
+            continue
+        cleaned.extend(part for part in token.split() if part)
+    if not cleaned:
+        return ""
+    return " OR ".join(f'"{item}"' for item in cleaned[:12])
+
+
+def init_document_fts_db(db_path: Path) -> None:
+    db_path.parent.mkdir(parents=True, exist_ok=True)
+    con = sqlite3.connect(str(db_path))
+    try:
+        con.executescript(
+            """
+            CREATE TABLE IF NOT EXISTS documents(
+              id TEXT PRIMARY KEY,
+              title TEXT NOT NULL,
+              file_path_hash TEXT NOT NULL,
+              file_type TEXT NOT NULL,
+              relative_path TEXT NOT NULL,
+              updated_at TEXT NOT NULL
+            );
+            CREATE TABLE IF NOT EXISTS document_chunks(
+              id TEXT PRIMARY KEY,
+              document_id TEXT NOT NULL REFERENCES documents(id) ON DELETE CASCADE,
+              chunk_index INTEGER NOT NULL,
+              redacted_text TEXT NOT NULL,
+              source_hash TEXT NOT NULL,
+              page_no INTEGER
+            );
+            CREATE VIRTUAL TABLE IF NOT EXISTS document_chunks_fts
+              USING fts5(chunk_id UNINDEXED, redacted_text, source_hash UNINDEXED, tokenize='unicode61');
+            """
+        )
+        con.commit()
+    finally:
+        con.close()
+
 
 class PortalState:
     def __init__(
@@ -660,6 +828,8 @@ class PortalState:
         remote_sync_dir: Path | None = None,
         personal_root: Path | None = None,
         sqlite_index_path: Path | None = None,
+        operation_db_path: Path | None = None,
+        document_fts_db_path: Path | None = None,
         identity_db_path: Path | None = None,
         snapshot_db_path: Path | None = None,
         backup_db_path: Path | None = None,
@@ -688,6 +858,8 @@ class PortalState:
         self.refresh_result: dict | None = None
         self.personal_root = personal_root
         self.sqlite_index_path = sqlite_index_path
+        self.operation_db_path = operation_db_path
+        self.document_fts_db_path = document_fts_db_path
         self.identity_db_path = identity_db_path
         self.snapshot_db_path = snapshot_db_path
         self.backup_db_path = backup_db_path
@@ -712,12 +884,15 @@ class PortalState:
         if self.personal_root:
             self.personal_root.mkdir(parents=True, exist_ok=True)
             self.sqlite_index_path = self.sqlite_index_path or (self.report_root / "personal_inventory.sqlite3")
+            self.operation_db_path = self.operation_db_path or (self.report_root / "operator_portal_operations.sqlite3")
+            self.document_fts_db_path = self.document_fts_db_path or (self.report_root / "document_fts.sqlite3")
             self.identity_db_path = self.identity_db_path or (self.report_root / "identity.sqlite3")
             self.snapshot_db_path = self.snapshot_db_path or (self.report_root / "snapshot.sqlite3")
             self.backup_db_path = self.backup_db_path or (self.report_root / "backup.sqlite3")
             self.media_db_path = self.media_db_path or (self.report_root / "media.sqlite3")
             self.ops_db_path = self.ops_db_path or (self.report_root / "ops.sqlite3")
             self.app_db_path = self.app_db_path or (self.report_root / "apps.sqlite3")
+            self.report_root.mkdir(parents=True, exist_ok=True)
             self.identity_store = IdentityStore(self.identity_db_path)
             self.snapshot_store = SnapshotStore(self.personal_root, self.snapshot_db_path)
             self.backup_manager = BackupManager(self.backup_db_path)
@@ -770,7 +945,14 @@ class PortalState:
     def storage_status_payload(self) -> dict:
         if not self.personal_root:
             return {"ok": False, "error": "personal_root_not_configured"}
-        payload = storage_status(self.personal_root, self.sqlite_index_path)
+        payload = storage_status(self.personal_root, None)
+        inventory = readonly_sqlite_summary(self.sqlite_index_path)
+        operation_log = readonly_sqlite_summary(self.operation_db_path)
+        payload["sqlite_index_path"] = str(self.sqlite_index_path) if self.sqlite_index_path else None
+        payload["sqlite_readonly_status"] = inventory
+        payload["operation_db_path"] = str(self.operation_db_path) if self.operation_db_path else None
+        payload["operation_log_count"] = operation_log.get("operation_log_count")
+        payload["operation_log_status"] = operation_log
         return {"ok": True, **payload}
 
     def storage_list_payload(self, relative_path: str = "", user: dict | None = None) -> tuple[int, dict]:
@@ -785,13 +967,301 @@ class PortalState:
         except (StoragePathError, FileNotFoundError, NotADirectoryError) as exc:
             return HTTPStatus.BAD_REQUEST, {"ok": False, "error": str(exc)}
 
+    def document_items_payload(self, relative_path: str = "Documents", user: dict | None = None, *, limit: int = 250) -> tuple[int, dict]:
+        if not self.personal_root:
+            return HTTPStatus.SERVICE_UNAVAILABLE, {"ok": False, "error": "personal_root_not_configured"}
+        rel = normalize_storage_relative_path(relative_path or "Documents")
+        if user and not self.can_read(user, rel):
+            return HTTPStatus.FORBIDDEN, {"ok": False, "error": "permission_denied", "required": "read", "path": rel}
+        try:
+            root = resolve_storage_path(self.personal_root, rel)
+        except StoragePathError as exc:
+            return HTTPStatus.BAD_REQUEST, {"ok": False, "error": str(exc)}
+        if not root.exists():
+            return HTTPStatus.NOT_FOUND, {"ok": False, "error": "document_path_not_found", "path": rel}
+        if root.is_file():
+            candidates = [root]
+        else:
+            candidates = []
+            for path in root.rglob("*"):
+                if len(candidates) >= limit:
+                    break
+                if path.is_symlink() or not path.is_file():
+                    continue
+                if path.suffix.lower() not in DOCUMENT_EXTENSIONS:
+                    continue
+                candidates.append(path)
+        items = []
+        for path in candidates:
+            item_rel = path.relative_to(self.personal_root).as_posix()
+            if user and not self.can_read(user, item_rel):
+                continue
+            try:
+                stat = path.stat()
+            except OSError:
+                continue
+            items.append(
+                {
+                    "relative_path": item_rel,
+                    "name": path.name,
+                    "extension": path.suffix,
+                    "mime_type": mimetypes.guess_type(path.name)[0] or "application/octet-stream",
+                    "size_bytes": stat.st_size,
+                    "mtime": datetime.fromtimestamp(stat.st_mtime).isoformat(),
+                    "is_dir": False,
+                    "text_extractable": path.suffix.lower() in TEXT_DOCUMENT_EXTENSIONS or path.suffix.lower() == ".docx",
+                }
+            )
+        return HTTPStatus.OK, {"ok": True, "path": rel, "items": items, "truncated": len(items) >= limit}
+
+    def sync_document_fts_index(self, relative_path: str, user: dict | None = None) -> tuple[int, dict]:
+        if not self.document_fts_db_path:
+            return HTTPStatus.SERVICE_UNAVAILABLE, {"ok": False, "error": "document_fts_db_not_configured"}
+        status, payload = self.document_items_payload(relative_path, user, limit=500)
+        if status != HTTPStatus.OK:
+            return status, payload
+        try:
+            init_document_fts_db(self.document_fts_db_path)
+            con = sqlite3.connect(str(self.document_fts_db_path))
+            con.execute("PRAGMA foreign_keys=ON")
+        except sqlite3.DatabaseError as exc:
+            return HTTPStatus.SERVICE_UNAVAILABLE, {"ok": False, "error": f"document_fts_init_failed:{type(exc).__name__}:{exc}"}
+        indexed_docs = 0
+        indexed_chunks = 0
+        try:
+            with con:
+                for item in payload.get("items") or []:
+                    rel = str(item.get("relative_path") or "")
+                    if not rel:
+                        continue
+                    path = resolve_storage_path(self.personal_root, rel) if self.personal_root else Path(rel)
+                    text = extract_local_document_text(path)
+                    chunks = split_document_chunks(text)
+                    if not chunks:
+                        continue
+                    doc_id = hashlib.sha256(rel.encode("utf-8", errors="replace")).hexdigest()
+                    file_path_hash = hashlib.sha256(str(path).encode("utf-8", errors="replace")).hexdigest()
+                    con.execute(
+                        """
+                        INSERT OR REPLACE INTO documents(id,title,file_path_hash,file_type,relative_path,updated_at)
+                        VALUES(?,?,?,?,?,?)
+                        """,
+                        (
+                            doc_id,
+                            str(item.get("name") or path.name),
+                            file_path_hash,
+                            str(item.get("extension") or path.suffix),
+                            rel,
+                            str(item.get("mtime") or datetime.fromtimestamp(path.stat().st_mtime).isoformat()),
+                        ),
+                    )
+                    old_chunk_ids = [row[0] for row in con.execute("SELECT id FROM document_chunks WHERE document_id=?", (doc_id,)).fetchall()]
+                    for chunk_id in old_chunk_ids:
+                        con.execute("DELETE FROM document_chunks_fts WHERE chunk_id=?", (chunk_id,))
+                    con.execute("DELETE FROM document_chunks WHERE document_id=?", (doc_id,))
+                    for index, chunk in enumerate(chunks):
+                        redacted_text, _redactions = redact_private_text(chunk)
+                        source_hash = hashlib.sha256(f"{rel}:{index}".encode("utf-8", errors="replace")).hexdigest()
+                        chunk_id = hashlib.sha256(f"{doc_id}:{index}".encode("utf-8", errors="replace")).hexdigest()
+                        con.execute(
+                            """
+                            INSERT INTO document_chunks(id,document_id,chunk_index,redacted_text,source_hash,page_no)
+                            VALUES(?,?,?,?,?,?)
+                            """,
+                            (chunk_id, doc_id, index, redacted_text, source_hash, None),
+                        )
+                        con.execute(
+                            "INSERT INTO document_chunks_fts(chunk_id, redacted_text, source_hash) VALUES(?,?,?)",
+                            (chunk_id, redacted_text, source_hash),
+                        )
+                        indexed_chunks += 1
+                    indexed_docs += 1
+            return HTTPStatus.OK, {
+                "ok": True,
+                "path": payload.get("path"),
+                "retrieval_mode": "sqlite_fts_first",
+                "embedding_feature_flag": False,
+                "indexed_documents": indexed_docs,
+                "indexed_chunks": indexed_chunks,
+                "db_path": str(self.document_fts_db_path),
+            }
+        except (sqlite3.DatabaseError, OSError, StoragePathError) as exc:
+            return HTTPStatus.SERVICE_UNAVAILABLE, {"ok": False, "error": f"document_fts_sync_failed:{type(exc).__name__}:{exc}"}
+        finally:
+            con.close()
+
+    def document_fts_recall(self, query: str, relative_path: str, user: dict | None = None) -> tuple[int, dict]:
+        sync_status, sync_payload = self.sync_document_fts_index(relative_path, user)
+        if sync_status != HTTPStatus.OK:
+            return sync_status, sync_payload
+        terms = query_terms(query)
+        match_query = fts_query_from_terms(terms)
+        if not match_query:
+            return HTTPStatus.BAD_REQUEST, {"ok": False, "error": "query_terms_empty"}
+        try:
+            con = sqlite3.connect(str(self.document_fts_db_path))
+            con.row_factory = sqlite3.Row
+            rows = con.execute(
+                """
+                SELECT c.id AS chunk_id, c.redacted_text, c.source_hash, c.chunk_index,
+                       d.title, d.relative_path, d.file_type, bm25(document_chunks_fts) AS rank
+                FROM document_chunks_fts
+                JOIN document_chunks c ON c.id = document_chunks_fts.chunk_id
+                JOIN documents d ON d.id = c.document_id
+                WHERE document_chunks_fts MATCH ?
+                ORDER BY rank
+                LIMIT 8
+                """,
+                (match_query,),
+            ).fetchall()
+            evidence = []
+            for index, row in enumerate(rows, start=1):
+                rel = str(row["relative_path"])
+                if user and not self.can_read(user, rel):
+                    continue
+                snippet = local_snippet(str(row["redacted_text"]), terms, max_chars=220) or str(row["redacted_text"])[:220]
+                evidence.append(
+                    {
+                        "evidence_ref": f"ev_{index}_{str(row['source_hash'])[:10]}",
+                        "chunk_id": row["chunk_id"],
+                        "name": row["title"],
+                        "relative_path": rel,
+                        "extension": row["file_type"],
+                        "chunk_index": row["chunk_index"],
+                        "source_hash": row["source_hash"],
+                        "snippet": snippet,
+                        "score": float(row["rank"] or 0),
+                    }
+                )
+            return HTTPStatus.OK, {
+                "ok": True,
+                "query": query,
+                "path": relative_path,
+                "retrieval_mode": "sqlite_fts_first",
+                "embedding_feature_flag": False,
+                "embedding_enabled": False,
+                "fts_sync": sync_payload,
+                "evidence": evidence,
+                "evidence_refs": [item["evidence_ref"] for item in evidence],
+                "evidence_count": len(evidence),
+            }
+        except sqlite3.DatabaseError as exc:
+            return HTTPStatus.SERVICE_UNAVAILABLE, {"ok": False, "error": f"document_fts_query_failed:{type(exc).__name__}:{exc}", "retrieval_mode": "sqlite_fts_first_degraded"}
+        finally:
+            try:
+                con.close()
+            except Exception:
+                pass
+
+    def document_query_payload(self, query: str, relative_path: str = "Documents", user: dict | None = None) -> tuple[int, dict]:
+        query = str(query or "").strip()
+        if not query:
+            return HTTPStatus.BAD_REQUEST, {"ok": False, "error": "query_required"}
+        status, payload = self.document_fts_recall(query, normalize_storage_relative_path(relative_path or "Documents"), user)
+        if status != HTTPStatus.OK:
+            return status, payload
+        evidence = payload.get("evidence") or []
+        if evidence:
+            refs = "、".join(payload.get("evidence_refs") or [])
+            names = "、".join(str(item.get("name") or item.get("relative_path")) for item in evidence[:3])
+            answer = f"SQLite FTS-first RAG 在 {payload.get('path')} 下召回 {len(evidence)} 条证据：{names}。证据引用：{refs}。"
+        else:
+            answer = f"未找到可靠证据：在 {payload.get('path')} 下没有与“{query}”匹配的 FTS 证据。"
+        return HTTPStatus.OK, {
+            "ok": True,
+            "query": query,
+            "path": payload.get("path"),
+            "answer": answer,
+            "evidence": evidence,
+            "evidence_refs": payload.get("evidence_refs") or [],
+            "evidence_count": len(evidence),
+            "readable_count": payload.get("fts_sync", {}).get("indexed_documents", 0),
+            "retrieval_mode": payload.get("retrieval_mode") or "sqlite_fts_first",
+            "embedding_feature_flag": False,
+            "embedding_enabled": False,
+            "cloud_used": False,
+            "qwen_execution_authority": False,
+            "raw_private_content_returned": False,
+        }
+
     def record_operation(self, action: str, source: str | None, target: str | None, status: str, detail: str | None = None) -> None:
-        if not self.sqlite_index_path:
+        if not self.operation_db_path:
             return
         try:
-            log_file_operation(self.sqlite_index_path, action, source, target, status, detail)
+            log_file_operation(self.operation_db_path, action, source, target, status, detail)
         except Exception:
             return
+
+    def storage_create_folder(self, relative_path: str, user: dict) -> tuple[int, dict]:
+        try:
+            rel = normalize_storage_relative_path(relative_path)
+            if not rel:
+                return HTTPStatus.BAD_REQUEST, {"ok": False, "error": "folder_path_required"}
+            parent_rel = str(Path(rel).parent).replace("\\", "/")
+            if parent_rel == ".":
+                parent_rel = ""
+            target = resolve_storage_path(self.personal_root, rel) if self.personal_root else Path(rel)
+            parent = resolve_storage_path(self.personal_root, parent_rel) if self.personal_root else target.parent
+        except StoragePathError as exc:
+            return HTTPStatus.BAD_REQUEST, {"ok": False, "error": str(exc)}
+        if not self.can_write(user, rel):
+            self.record_operation("mkdir", None, rel, "permission_denied", str(user.get("username")))
+            return HTTPStatus.FORBIDDEN, {"ok": False, "error": "permission_denied", "required": "write", "path": rel}
+        if not parent.exists() or not parent.is_dir():
+            return HTTPStatus.BAD_REQUEST, {"ok": False, "error": "parent_directory_not_found", "path": parent_rel}
+        if target.exists():
+            return HTTPStatus.CONFLICT, {"ok": False, "error": "target_already_exists", "path": rel}
+        try:
+            target.mkdir(parents=False, exist_ok=False)
+        except OSError as exc:
+            return HTTPStatus.INTERNAL_SERVER_ERROR, {"ok": False, "error": f"mkdir_failed:{type(exc).__name__}:{exc}", "path": rel}
+        self.record_operation("mkdir", None, rel, "created", str(user.get("username")))
+        return HTTPStatus.OK, {"ok": True, "folder": {"relative_path": rel, "path": rel, "name": target.name}}
+
+    def storage_upload_file(self, payload: dict, user: dict) -> tuple[int, dict]:
+        filename = str(payload.get("filename") or "").strip()
+        if not filename or "/" in filename or "\\" in filename or filename in {".", ".."}:
+            return HTTPStatus.BAD_REQUEST, {"ok": False, "error": "invalid_filename"}
+        try:
+            target_dir = normalize_storage_relative_path(payload.get("target_dir") or "")
+            target_rel = normalize_storage_relative_path(f"{target_dir}/{filename}" if target_dir else filename)
+            target = resolve_storage_path(self.personal_root, target_rel) if self.personal_root else Path(target_rel)
+            parent = resolve_storage_path(self.personal_root, target_dir) if self.personal_root else target.parent
+        except StoragePathError as exc:
+            return HTTPStatus.BAD_REQUEST, {"ok": False, "error": str(exc)}
+        if not self.can_write(user, target_rel):
+            self.record_operation("upload", None, target_rel, "permission_denied", str(user.get("username")))
+            return HTTPStatus.FORBIDDEN, {"ok": False, "error": "permission_denied", "required": "write", "path": target_rel}
+        if not parent.exists() or not parent.is_dir():
+            return HTTPStatus.BAD_REQUEST, {"ok": False, "error": "target_directory_not_found", "path": target_dir}
+        if target.exists() and not bool(payload.get("overwrite")):
+            self.record_operation("upload", None, target_rel, "target_already_exists", str(user.get("username")))
+            return HTTPStatus.CONFLICT, {"ok": False, "error": "target_already_exists", "path": target_rel}
+        if bool(payload.get("overwrite")):
+            self.record_operation("upload", None, target_rel, "overwrite_disabled", str(user.get("username")))
+            return HTTPStatus.FORBIDDEN, {"ok": False, "error": "overwrite_disabled_by_default_service", "path": target_rel}
+        try:
+            content = base64.b64decode(str(payload.get("content_base64") or ""), validate=True)
+        except (binascii.Error, ValueError) as exc:
+            return HTTPStatus.BAD_REQUEST, {"ok": False, "error": f"invalid_base64:{exc}"}
+        if len(content) > MAX_UPLOAD_BYTES:
+            return HTTPStatus.REQUEST_ENTITY_TOO_LARGE, {"ok": False, "error": "upload_too_large", "max_bytes": MAX_UPLOAD_BYTES}
+        try:
+            target.write_bytes(content)
+        except OSError as exc:
+            return HTTPStatus.INTERNAL_SERVER_ERROR, {"ok": False, "error": f"upload_write_failed:{type(exc).__name__}:{exc}", "path": target_rel}
+        sha256 = hashlib.sha256(content).hexdigest()
+        self.record_operation("upload", None, target_rel, "created", str(user.get("username")))
+        return HTTPStatus.OK, {
+            "ok": True,
+            "file": {
+                "relative_path": target_rel,
+                "path": target_rel,
+                "name": filename,
+                "size_bytes": len(content),
+                "sha256": sha256,
+            },
+        }
 
     def storage_rename(self, relative_path: str, new_name: str, user: dict) -> tuple[int, dict]:
         try:
@@ -861,12 +1331,136 @@ class PortalState:
                 if status == HTTPStatus.OK:
                     payload["nas_action"] = {"operation": "list", "status": "completed", "entries": payload.get("entries") or []}
                 return status, payload
-            return HTTPStatus.OK, {"ok": True, "nas_action": {"operation": "delete", "status": "confirmation_required", "path": normalize_storage_relative_path(rel)}}
+            return HTTPStatus.OK, {
+                "ok": True,
+                "nas_action": {
+                    "operation": "inspect",
+                    "status": "read_only_completed",
+                    "path": normalize_storage_relative_path(rel),
+                    "qwen_execution_authority": False,
+                    "forbidden_actions": ["delete", "move", "rename", "chmod", "chown", "recursive", "overwrite"],
+                },
+            }
         return HTTPStatus.OK, {"ok": True, "nas_action": {"operation": "none", "status": "no_action"}}
 
     def audit_summary_payload(self) -> dict:
-        operations = latest_file_operations(self.sqlite_index_path, limit=50) if self.sqlite_index_path else []
+        if not self.operation_db_path:
+            return {"ok": True, "operations": []}
+        try:
+            operations = latest_file_operations(self.operation_db_path, limit=50)
+        except Exception as exc:
+            return {
+                "ok": True,
+                "operations": [],
+                "warning": f"audit_operations_unavailable:{type(exc).__name__}:{exc}",
+            }
         return {"ok": True, "operations": operations}
+
+    def list_reports_payload(self, limit: int = 80) -> dict:
+        roots = [self.report_root, *self.evidence_roots, self.journal_export_dir]
+        seen: set[str] = set()
+        reports: list[dict] = []
+        type_map = [
+            ("token", "Token Budget 报告"),
+            ("gate", "Gate 报告"),
+            ("evidence", "证据报告"),
+            ("journal", "地瓜日记导出"),
+            ("document", "文档问答报告"),
+            ("folder", "文件夹摘要报告"),
+        ]
+        for root in roots:
+            if not root or not root.exists():
+                continue
+            try:
+                candidates = []
+                scan_cap = max(limit * 5, 240)
+                for path in root.rglob("*"):
+                    if path.is_file() and path.suffix.lower() in {".md", ".json"}:
+                        candidates.append(path)
+                        if len(candidates) >= scan_cap:
+                            break
+            except OSError:
+                continue
+            for path in sorted(candidates, key=lambda item: item.stat().st_mtime if item.exists() else 0, reverse=True):
+                if len(reports) >= limit:
+                    break
+                key = str(path.resolve(strict=False))
+                if key in seen:
+                    continue
+                seen.add(key)
+                name_lower = path.name.lower()
+                report_type = "证据报告"
+                for needle, label in type_map:
+                    if needle in name_lower:
+                        report_type = label
+                        break
+                try:
+                    stat = path.stat()
+                    preview = path.read_text(encoding="utf-8", errors="replace")[:1600] if path.suffix.lower() == ".md" else json.dumps(read_json(path) or {}, ensure_ascii=False, indent=2)[:1600]
+                except OSError:
+                    continue
+                reports.append(
+                    {
+                        "id": hashlib.sha256(key.encode("utf-8", errors="replace")).hexdigest()[:16],
+                        "title": path.name,
+                        "type": report_type,
+                        "path": str(path),
+                        "relative_path": path.relative_to(REPO_ROOT).as_posix() if path.is_relative_to(REPO_ROOT) else str(path),
+                        "size_bytes": stat.st_size,
+                        "mtime": datetime.fromtimestamp(stat.st_mtime).isoformat(),
+                        "preview": preview,
+                        "trace_id": hashlib.sha256(f"report:{key}".encode("utf-8", errors="replace")).hexdigest()[:12],
+                        "export_available": True,
+                    }
+                )
+        required_types = ["文件夹摘要报告", "文档问答报告", "证据报告", "Token Budget 报告", "Gate 报告", "地瓜日记导出"]
+        present = {report["type"] for report in reports}
+        for label in required_types:
+            if label not in present:
+                reports.append(
+                    {
+                        "id": hashlib.sha256(label.encode("utf-8")).hexdigest()[:16],
+                        "title": label,
+                        "type": label,
+                        "path": None,
+                        "relative_path": "",
+                        "size_bytes": 0,
+                        "mtime": None,
+                        "preview": "当前没有可预览报告，入口保留 degraded 状态。",
+                        "trace_id": f"missing_{hashlib.sha256(label.encode('utf-8')).hexdigest()[:8]}",
+                        "export_available": False,
+                        "degraded": True,
+                    }
+                )
+        return {"ok": True, "reports": reports[:limit], "report_count": len(reports), "required_types": required_types}
+
+    def export_report_payload(self, report_id: str) -> tuple[int, dict]:
+        reports = self.list_reports_payload(limit=200).get("reports") or []
+        selected = next((report for report in reports if str(report.get("id")) == str(report_id)), None)
+        if not selected:
+            return HTTPStatus.NOT_FOUND, {"ok": False, "error": "report_not_found"}
+        if selected.get("degraded") or not selected.get("path"):
+            return HTTPStatus.SERVICE_UNAVAILABLE, {"ok": False, "error": "report_export_degraded", "report": selected}
+        source = Path(str(selected.get("path")))
+        if not source.exists() or not source.is_file():
+            return HTTPStatus.NOT_FOUND, {"ok": False, "error": "report_file_missing", "path": str(source)}
+        export_dir = self.report_root / "ui_v2_report_exports"
+        export_dir.mkdir(parents=True, exist_ok=True)
+        target = export_dir / f"{source.stem}_{compact_timestamp()}.md"
+        if source.suffix.lower() == ".md":
+            text = source.read_text(encoding="utf-8", errors="replace")
+        else:
+            text = "# Report export\n\n```json\n" + json.dumps(read_json(source) or {}, ensure_ascii=False, indent=2) + "\n```\n"
+        target.write_text(text, encoding="utf-8")
+        return HTTPStatus.OK, {
+            "ok": True,
+            "export": {
+                "path": str(target),
+                "relative_path": target.relative_to(REPO_ROOT).as_posix() if target.is_relative_to(REPO_ROOT) else str(target),
+                "size_bytes": target.stat().st_size,
+                "source": str(source),
+            },
+        }
 
     def refresh(self) -> dict:
         with self.refresh_lock:
@@ -1259,6 +1853,21 @@ class PortalHandler(BaseHTTPRequestHandler):
             return
         self.send_text(text, content_type)
 
+    def send_storage_file(self, path: Path, *, preview: bool = False) -> None:
+        if not path.exists() or not path.is_file():
+            self.send_json({"ok": False, "error": "file_not_found"}, HTTPStatus.NOT_FOUND)
+            return
+        raw = path.read_bytes()
+        content_type = mimetypes.guess_type(path.name)[0] or "application/octet-stream"
+        self.send_response(HTTPStatus.OK)
+        self.send_header("Content-Type", content_type)
+        self.send_header("Cache-Control", "no-store")
+        self.send_header("Content-Length", str(len(raw)))
+        disposition = "inline" if preview else "attachment"
+        self.send_header("Content-Disposition", f'{disposition}; filename="{path.name}"')
+        self.end_headers()
+        self.wfile.write(raw)
+
     def send_portal_html(self, path: Path) -> None:
         try:
             text = path.read_text(encoding="utf-8")
@@ -1313,6 +1922,24 @@ class PortalHandler(BaseHTTPRequestHandler):
 
     def do_GET(self) -> None:
         route = urlparse(self.path).path.rstrip("/") or "/"
+        if route in {"/ui", "/ui/index.html"}:
+            self.send_file_text(REPO_ROOT / "web" / "ai_nas_desktop_v2.html", "text/html; charset=utf-8")
+            return
+        if route == "/static/digua_ai_nas_v2.css":
+            self.send_file_text(REPO_ROOT / "web" / "static" / "digua_ai_nas_v2.css", "text/css; charset=utf-8")
+            return
+        if route == "/static/digua_ai_nas_v2.js":
+            self.send_file_text(REPO_ROOT / "web" / "static" / "digua_ai_nas_v2.js", "application/javascript; charset=utf-8")
+            return
+        if route in {"/multimodal-search", "/multimodal-search/"}:
+            self.send_file_text(REPO_ROOT / "web" / "templates" / "multimodal_search.html", "text/html; charset=utf-8")
+            return
+        if route == "/static/digua_multimodal_search.css":
+            self.send_file_text(REPO_ROOT / "web" / "static" / "digua_multimodal_search.css", "text/css; charset=utf-8")
+            return
+        if route == "/static/digua_multimodal_search.js":
+            self.send_file_text(REPO_ROOT / "web" / "static" / "digua_multimodal_search.js", "application/javascript; charset=utf-8")
+            return
         if route in {"/", "/operator_portal.html"}:
             if self.state.nas_portal:
                 self.send_text(NAS_PORTAL_HTML, "text/html; charset=utf-8")
@@ -1347,10 +1974,30 @@ class PortalHandler(BaseHTTPRequestHandler):
             if status:
                 self.send_json(error or {}, status)
                 return
-            query = urlparse(self.path).query
-            params = dict(item.split("=", 1) if "=" in item else (item, "") for item in query.split("&") if item)
-            status_code, payload = self.state.storage_list_payload(params.get("path", ""), user)
+            params = parse_qs(urlparse(self.path).query, keep_blank_values=True)
+            status_code, payload = self.state.storage_list_payload((params.get("path") or [""])[0], user)
             self.send_json(payload, status_code)
+            return
+        if route == "/api/storage/download":
+            if not self.require_product():
+                return
+            status, error, user = self.state.require_user(self.headers.get("Authorization"))
+            if status:
+                self.send_json(error or {}, status)
+                return
+            params = parse_qs(urlparse(self.path).query, keep_blank_values=True)
+            rel = (params.get("path") or [""])[0]
+            try:
+                normalized = normalize_storage_relative_path(rel)
+                target = resolve_storage_path(self.state.personal_root, normalized)
+            except StoragePathError as exc:
+                self.send_json({"ok": False, "error": str(exc)}, HTTPStatus.BAD_REQUEST)
+                return
+            if not self.state.can_read(user or {}, normalized):
+                self.send_json({"ok": False, "error": "permission_denied", "required": "read", "path": normalized}, HTTPStatus.FORBIDDEN)
+                return
+            preview = (params.get("preview") or [""])[0] in {"1", "true", "yes"}
+            self.send_storage_file(target, preview=preview)
             return
         if route == "/api/storage/operations":
             if not self.require_product():
@@ -1359,7 +2006,22 @@ class PortalHandler(BaseHTTPRequestHandler):
             if status:
                 self.send_json(error or {}, status)
                 return
-            self.send_json({"ok": True, "operations": latest_file_operations(self.state.sqlite_index_path, limit=50) if self.state.sqlite_index_path else []})
+            try:
+                operations = latest_file_operations(self.state.operation_db_path, limit=50) if self.state.operation_db_path else []
+                self.send_json({"ok": True, "operations": operations})
+            except Exception as exc:
+                self.send_json({"ok": True, "operations": [], "warning": f"operation_log_unavailable:{type(exc).__name__}:{exc}"})
+            return
+        if route == "/api/documents/list":
+            if not self.require_product():
+                return
+            status, error, user = self.state.require_user(self.headers.get("Authorization"))
+            if status:
+                self.send_json(error or {}, status)
+                return
+            params = parse_qs(urlparse(self.path).query, keep_blank_values=True)
+            status_code, payload = self.state.document_items_payload((params.get("path") or ["Documents"])[0], user)
+            self.send_json(payload, status_code)
             return
         if route == "/api/identity/users":
             if not self.require_product():
@@ -1427,6 +2089,39 @@ class PortalHandler(BaseHTTPRequestHandler):
                 self.send_json(error or {}, status)
                 return
             self.send_json(self.state.audit_summary_payload())
+            return
+        if route == "/api/reports/list":
+            if not self.require_product():
+                return
+            status, error, _user = self.state.require_user(self.headers.get("Authorization"))
+            if status:
+                self.send_json(error or {}, status)
+                return
+            self.send_json(self.state.list_reports_payload())
+            return
+        if route.startswith("/api/agent-runtime"):
+            if agent_runtime_route_response is None:
+                self.send_json({"ok": False, "error": "agent_runtime_unavailable"}, HTTPStatus.SERVICE_UNAVAILABLE)
+                return
+            status_code, result = agent_runtime_route_response(
+                route,
+                method="GET",
+                report_root=self.state.report_root,
+                personal_root=self.state.personal_root,
+            )
+            self.send_json(result, status_code)
+            return
+        if route.startswith("/api/multimodal-search") or route.startswith("/api/multimodal-index"):
+            if multimodal_route_response is None:
+                self.send_json({"ok": False, "error": "multimodal_search_unavailable"}, HTTPStatus.SERVICE_UNAVAILABLE)
+                return
+            status_code, result = multimodal_route_response(
+                route,
+                method="GET",
+                report_root=self.state.report_root,
+                personal_root=self.state.personal_root,
+            )
+            self.send_json(result, status_code)
             return
         if route == "/api/harness/status":
             if harness_status_response is None:
@@ -1504,6 +2199,15 @@ class PortalHandler(BaseHTTPRequestHandler):
                     "/api/journal/health",
                     "/api/journal/timeline",
                     "/api/journal/projects",
+                    "/api/agent-runtime/status",
+                    "/api/agent-runtime/tool-manifest",
+                    "/api/agent-runtime/memory/stats",
+                    "/api/agent-runtime/multimodal-index/status",
+                    "/api/agent-runtime/eval/status",
+                    "/api/multimodal-search/status",
+                    "/api/multimodal-index/stats",
+                    "/api/multimodal-index/item/{asset_id}",
+                    "/api/multimodal-search/eval/summary",
                     "/api/latest",
                     "/api/latest.goal_progress",
                     "/api/latest.operator_decisions",
@@ -1511,10 +2215,22 @@ class PortalHandler(BaseHTTPRequestHandler):
                     "/api/portal-report",
                     "/api/operator-decisions",
                     "/api/harness/status",
+                    "/api/reports/list",
+                    "/api/storage/status",
+                    "/api/storage/list",
+                    "/api/storage/download",
+                    "/api/documents/list",
+                    "/api/identity/users",
                     "/api/contracts/operator-portal",
                     "/api/token-budget/summary",
                     "/api/token-budget/benchmark-summary",
                     "/api/token-budget/trace/{run_id}",
+                    "POST /api/identity/create-user",
+                    "POST /api/identity/login",
+                    "POST /api/storage/create-folder",
+                    "POST /api/storage/upload-file",
+                    "POST /api/documents/query",
+                    "POST /api/reports/export",
                     "POST /api/nas/copy/preview",
                     "POST /api/nas/copy/dry-run",
                     "POST /api/nas/copy/confirm",
@@ -1524,6 +2240,13 @@ class PortalHandler(BaseHTTPRequestHandler):
                     "POST /api/operator-decision",
                     "POST /api/token-budget/estimate",
                     "POST /api/token-budget/route",
+                    "POST /api/agent-runtime/context-pack",
+                    "POST /api/agent-runtime/memory/record",
+                    "POST /api/agent-runtime/multimodal-index/scan",
+                    "POST /api/agent-runtime/rag/query",
+                    "POST /api/multimodal-index/rebuild",
+                    "POST /api/multimodal-search/query",
+                    "POST /api/multimodal-search/eval/run",
                     "POST /api/journal/manual-entry",
                     "POST /api/journal/generate-summary",
                     "POST /api/journal/export",
@@ -1540,6 +2263,56 @@ class PortalHandler(BaseHTTPRequestHandler):
                 self.send_json(payload or {}, status)
                 return
             self.send_journal_response("POST", route, payload)
+            return
+        if route.startswith("/api/agent-runtime"):
+            if agent_runtime_route_response is None:
+                self.send_json({"ok": False, "error": "agent_runtime_unavailable"}, HTTPStatus.SERVICE_UNAVAILABLE)
+                return
+            if not self.require_product():
+                return
+            auth_status, error, user = self.state.require_user(self.headers.get("Authorization"))
+            if auth_status:
+                self.send_json(error or {}, auth_status)
+                return
+            status, payload = self.read_json_body()
+            if status:
+                self.send_json(payload or {}, status)
+                return
+            payload = payload or {}
+            payload.setdefault("user_id", str((user or {}).get("username") or "operator"))
+            status_code, result = agent_runtime_route_response(
+                route,
+                method="POST",
+                payload=payload,
+                report_root=self.state.report_root,
+                personal_root=self.state.personal_root,
+            )
+            self.send_json(result, status_code)
+            return
+        if route.startswith("/api/multimodal-search") or route.startswith("/api/multimodal-index"):
+            if multimodal_route_response is None:
+                self.send_json({"ok": False, "error": "multimodal_search_unavailable"}, HTTPStatus.SERVICE_UNAVAILABLE)
+                return
+            if not self.require_product():
+                return
+            auth_status, error, user = self.state.require_user(self.headers.get("Authorization"))
+            if auth_status:
+                self.send_json(error or {}, auth_status)
+                return
+            status, payload = self.read_json_body()
+            if status:
+                self.send_json(payload or {}, status)
+                return
+            payload = payload or {}
+            payload.setdefault("user_id", str((user or {}).get("username") or "operator"))
+            status_code, result = multimodal_route_response(
+                route,
+                method="POST",
+                payload=payload,
+                report_root=self.state.report_root,
+                personal_root=self.state.personal_root,
+            )
+            self.send_json(result, status_code)
             return
         if route == "/api/identity/create-user":
             if not self.require_product():
@@ -1592,6 +2365,38 @@ class PortalHandler(BaseHTTPRequestHandler):
             ) if self.state.identity_store else {"ok": False, "error": "identity_store_unavailable"}
             self.send_json(result, HTTPStatus.OK if result.get("ok") else HTTPStatus.BAD_REQUEST)
             return
+        if route == "/api/storage/create-folder":
+            if not self.require_product():
+                return
+            auth_status, error, user = self.state.require_user(self.headers.get("Authorization"))
+            if auth_status:
+                self.send_json(error or {}, auth_status)
+                return
+            status, payload = self.read_json_body()
+            if status:
+                self.send_json(payload or {}, status)
+                return
+            status_code, result = self.state.storage_create_folder(str(payload.get("path") or ""), user or {})
+            self.send_json(result, status_code)
+            return
+        if route == "/api/storage/upload-file":
+            if not self.require_product():
+                return
+            content_length = int(self.headers.get("Content-Length", "0") or "0")
+            if content_length > (MAX_UPLOAD_BYTES * 2):
+                self.send_json({"ok": False, "error": "request_too_large", "max_payload_bytes": MAX_UPLOAD_BYTES * 2}, HTTPStatus.REQUEST_ENTITY_TOO_LARGE)
+                return
+            auth_status, error, user = self.state.require_user(self.headers.get("Authorization"))
+            if auth_status:
+                self.send_json(error or {}, auth_status)
+                return
+            status, payload = self.read_json_body()
+            if status:
+                self.send_json(payload or {}, status)
+                return
+            status_code, result = self.state.storage_upload_file(payload or {}, user or {})
+            self.send_json(result, status_code)
+            return
         if route == "/api/storage/rename":
             if not self.require_product():
                 return
@@ -1618,6 +2423,38 @@ class PortalHandler(BaseHTTPRequestHandler):
                 self.send_json(payload or {}, status)
                 return
             status_code, result = self.state.copilot_chat(str(payload.get("message") or ""), user or {})
+            self.send_json(result, status_code)
+            return
+        if route == "/api/documents/query":
+            if not self.require_product():
+                return
+            auth_status, error, user = self.state.require_user(self.headers.get("Authorization"))
+            if auth_status:
+                self.send_json(error or {}, auth_status)
+                return
+            status, payload = self.read_json_body()
+            if status:
+                self.send_json(payload or {}, status)
+                return
+            status_code, result = self.state.document_query_payload(
+                str(payload.get("query") or payload.get("message") or ""),
+                str(payload.get("path") or "Documents"),
+                user or {},
+            )
+            self.send_json(result, status_code)
+            return
+        if route == "/api/reports/export":
+            if not self.require_product():
+                return
+            auth_status, error, _user = self.state.require_user(self.headers.get("Authorization"))
+            if auth_status:
+                self.send_json(error or {}, auth_status)
+                return
+            status, payload = self.read_json_body()
+            if status:
+                self.send_json(payload or {}, status)
+                return
+            status_code, result = self.state.export_report_payload(str(payload.get("report_id") or ""))
             self.send_json(result, status_code)
             return
         if route == "/api/snapshot/create":
@@ -1850,6 +2687,10 @@ class PortalHandler(BaseHTTPRequestHandler):
                 "routes": [
                     "POST /api/refresh",
                     "POST /api/operator-decision",
+                    "POST /api/storage/create-folder",
+                    "POST /api/storage/upload-file",
+                    "POST /api/documents/query",
+                    "POST /api/reports/export",
                     "POST /api/nas/copy/preview",
                     "POST /api/nas/copy/dry-run",
                     "POST /api/nas/copy/confirm",
@@ -1857,6 +2698,10 @@ class PortalHandler(BaseHTTPRequestHandler):
                     "POST /api/nas/copy/rollback",
                     "POST /api/token-budget/estimate",
                     "POST /api/token-budget/route",
+                    "POST /api/agent-runtime/context-pack",
+                    "POST /api/agent-runtime/memory/record",
+                    "POST /api/agent-runtime/multimodal-index/scan",
+                    "POST /api/agent-runtime/rag/query",
                     "POST /api/journal/manual-entry",
                     "POST /api/journal/generate-summary",
                     "POST /api/journal/export",
@@ -1880,6 +2725,8 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--no-refresh", action="store_true", help="Serve the latest existing portal report without generating a fresh one on start.")
     parser.add_argument("--personal-root", type=Path, default=None, help="Enable NAS product APIs against this personal storage root.")
     parser.add_argument("--sqlite-index-path", type=Path, default=None)
+    parser.add_argument("--operation-db-path", type=Path, default=None)
+    parser.add_argument("--document-fts-db-path", type=Path, default=None)
     parser.add_argument("--identity-db-path", type=Path, default=None)
     parser.add_argument("--snapshot-db-path", type=Path, default=None)
     parser.add_argument("--backup-db-path", type=Path, default=None)
@@ -1912,6 +2759,8 @@ def main() -> int:
         remote_sync_dir=args.remote_sync_dir,
         personal_root=args.personal_root,
         sqlite_index_path=args.sqlite_index_path,
+        operation_db_path=args.operation_db_path,
+        document_fts_db_path=args.document_fts_db_path,
         identity_db_path=args.identity_db_path,
         snapshot_db_path=args.snapshot_db_path,
         backup_db_path=args.backup_db_path,

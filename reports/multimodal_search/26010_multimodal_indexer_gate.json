@@ -1,0 +1,41 @@
+{
+  "ok": true,
+  "rebuild": {
+    "counts": {
+      "archive": 1,
+      "audio": 5,
+      "code": 5,
+      "document": 10,
+      "image": 10,
+      "video": 6
+    },
+    "duration_sec": 0.015,
+    "image_embedding_available": true,
+    "image_embedding_model": {
+      "backend": "pillow_numpy",
+      "device": "cpu",
+      "local_only": true,
+      "model_family": "local_feature_embedding",
+      "model_name": "digua-local-visual-text-embedding-v1",
+      "precision": "float32",
+      "vector_dim": 16,
+      "weights_committed_to_repo": false
+    },
+    "image_embeddings": 10,
+    "indexed_assets": 37,
+    "ok": true,
+    "privacy": {
+      "cloud_used": false,
+      "private_leak_count": 0,
+      "raw_path_rows": 0
+    },
+    "text_chunks": 15
+  },
+  "vector_store": {
+    "backend": "numpy",
+    "degraded": false,
+    "ok": true,
+    "vector_count": 10,
+    "vector_dim": 16
+  }
+}

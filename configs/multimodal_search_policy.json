@@ -1,0 +1,21 @@
+{
+  "policy_id": "digua_multimodal_search_v1_policy",
+  "root_allowlist_required": true,
+  "raw_private_path_return_allowed": false,
+  "raw_media_copy_to_repo_allowed": false,
+  "thumbnail_cache_git_allowed": false,
+  "cloud_vision_allowed": false,
+  "cloud_ocr_allowed": false,
+  "cloud_asr_allowed": false,
+  "face_identification_allowed": false,
+  "biometric_recognition_allowed": false,
+  "sensitive_attribute_inference_allowed": false,
+  "qwen_tool_execution_allowed": false,
+  "destructive_actions_allowed": false,
+  "default_retrieval_mode": "fts_first_plus_image_embedding",
+  "optional_capabilities": {
+    "ocr": "feature_flag_disabled_by_default",
+    "video_keyframes": "metadata_only_by_default",
+    "audio_transcript": "metadata_only_by_default"
+  }
+}

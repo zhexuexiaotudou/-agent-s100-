@@ -1,0 +1,21 @@
+# 26050_multimodal_security_gate
+
+- ok: `True`
+
+```json
+{
+  "cloud_used": false,
+  "destructive_actions_enabled": false,
+  "ok": true,
+  "optional_content_features": {
+    "asr_enabled": false,
+    "audio_transcript_enabled": false,
+    "ocr_enabled": false,
+    "video_keyframe_embedding_enabled": false,
+    "video_keyframe_enabled": false
+  },
+  "private_leak_count": 0,
+  "qwen_tool_execution_enabled": false,
+  "raw_path_returned": false
+}
+```
