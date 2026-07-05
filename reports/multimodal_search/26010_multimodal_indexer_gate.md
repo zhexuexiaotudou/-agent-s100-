@@ -14,7 +14,7 @@
       "image": 10,
       "video": 6
     },
-    "duration_sec": 0.015,
+    "duration_sec": 0.017,
     "image_embedding_available": true,
     "image_embedding_model": {
       "backend": "pillow_numpy",

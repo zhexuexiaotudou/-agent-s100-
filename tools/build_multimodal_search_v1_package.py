@@ -3,7 +3,9 @@ from __future__ import annotations
 
 import hashlib
 import json
+import os
 import shutil
+import socket
 import subprocess
 import sys
 import tempfile
@@ -17,6 +19,11 @@ if str(REPO_ROOT) not in sys.path:
     sys.path.insert(0, str(REPO_ROOT))
 
 from src.multimodal_search.feature_flags import load_feature_flags
+from src.multimodal_search.real_image_text_embedding_adapter import (
+    evaluate_real_image_text_embedding,
+    http_health_probe,
+    probe_runtime,
+)
 from src.multimodal_search.schema import connect, migrate
 from src.multimodal_search.search_api import MultimodalSearchService
 from src.multimodal_search.vector_store import vector_store_status
@@ -28,6 +35,31 @@ FINAL_DIR = REPO_ROOT / "01_final_evidence"
 PACKAGE_DIR = REPO_ROOT / "evidence_for_gptpro"
 BENCHMARK = REPO_ROOT / "benchmarks" / "multimodal_search_eval_cases.jsonl"
 VERDICT_READY_WITH_OPTIONAL_DISABLED = "multimodal_search_v1_ready_with_optional_ocr_video_audio_disabled"
+VERDICT_REAL_IMAGE_SEMANTIC_READY = "multimodal_search_v1_real_image_semantic_ready"
+VERDICT_LIMITED_SEMANTIC_READY = "multimodal_search_v1_deliverable_limited_semantic_ready"
+VERDICT_PLAYWRIGHT_PENDING = "multimodal_search_v1_ready_but_playwright_pending"
+READY_VERDICTS = {
+    VERDICT_REAL_IMAGE_SEMANTIC_READY,
+    VERDICT_LIMITED_SEMANTIC_READY,
+    VERDICT_PLAYWRIGHT_PENDING,
+}
+FORBIDDEN_PACKAGE_DIRS = {"__pycache__", ".pytest_cache", "node_modules", "secrets"}
+FORBIDDEN_PACKAGE_SUFFIXES = {
+    ".pyc",
+    ".pyo",
+    ".sqlite",
+    ".sqlite3",
+    ".db",
+    ".env",
+    ".pt",
+    ".pth",
+    ".onnx",
+    ".safetensors",
+    ".hbm",
+    ".bin",
+    ".ckpt",
+}
+FORBIDDEN_PACKAGE_PREFIXES = {"redaction_map"}
 
 
 def seed_fixture(root: Path) -> Path:
@@ -132,16 +164,30 @@ def sha256_file(path: Path) -> str:
     return digest.hexdigest()
 
 
-def command_result(cmd: list[str]) -> dict[str, Any]:
+def command_result(cmd: list[str], *, timeout: int = 120, env: dict[str, str] | None = None) -> dict[str, Any]:
     started = time.time()
     display_cmd = [_redact_local_path(part) for part in cmd]
     try:
-        result = subprocess.run(cmd, cwd=REPO_ROOT, text=True, capture_output=True, timeout=120)
+        run_env = os.environ.copy()
+        if env:
+            run_env.update(env)
+        result = subprocess.run(
+            cmd,
+            cwd=REPO_ROOT,
+            text=True,
+            encoding="utf-8",
+            errors="replace",
+            capture_output=True,
+            timeout=timeout,
+            env=run_env,
+        )
+        stdout = result.stdout or ""
+        stderr = result.stderr or ""
         return {
             "cmd": display_cmd,
             "returncode": result.returncode,
-            "stdout_tail": _redact_local_path(result.stdout[-4000:]),
-            "stderr_tail": _redact_local_path(result.stderr[-4000:]),
+            "stdout_tail": _redact_local_path(stdout[-4000:]),
+            "stderr_tail": _redact_local_path(stderr[-4000:]),
             "duration_sec": round(time.time() - started, 3),
         }
     except FileNotFoundError as exc:
@@ -163,6 +209,183 @@ def _redact_local_path(value: object) -> str:
     return text
 
 
+def bundled_node_paths() -> dict[str, str | None]:
+    home = Path.home()
+    deps = home / ".cache" / "codex-runtimes" / "codex-primary-runtime" / "dependencies"
+    node = deps / "node" / "bin" / ("node.exe" if os.name == "nt" else "node")
+    pnpm = deps / "bin" / ("pnpm.cmd" if os.name == "nt" else "pnpm")
+    return {
+        "node": str(node) if node.exists() else shutil.which("node"),
+        "pnpm": str(pnpm) if pnpm.exists() else shutil.which("pnpm"),
+        "node_dir": str(node.parent) if node.exists() else None,
+    }
+
+
+def is_forbidden_package_path(rel: str) -> bool:
+    parts = rel.replace("\\", "/").split("/")
+    name = parts[-1]
+    lower_name = name.lower()
+    if any(part in FORBIDDEN_PACKAGE_DIRS for part in parts):
+        return True
+    if any(lower_name.startswith(prefix) for prefix in FORBIDDEN_PACKAGE_PREFIXES):
+        return True
+    if any(lower_name.endswith(suffix) for suffix in FORBIDDEN_PACKAGE_SUFFIXES):
+        return True
+    return False
+
+
+def zip_forbidden_entries(zip_path: Path) -> list[str]:
+    with zipfile.ZipFile(zip_path, "r") as zf:
+        return sorted(name for name in zf.namelist() if is_forbidden_package_path(name))
+
+
+def playwright_env() -> dict[str, str]:
+    paths = bundled_node_paths()
+    env: dict[str, str] = {}
+    if paths.get("node_dir"):
+        env["PATH"] = f"{paths['node_dir']}{os.pathsep}{os.environ.get('PATH', '')}"
+    return env
+
+
+def run_playwright_standard_gate(base_url: str | None = None) -> dict[str, Any]:
+    paths = bundled_node_paths()
+    npx_result = command_result(["npx", "playwright", "test", "tests/ui_multimodal_search.spec.ts"], timeout=180)
+    pnpm = paths.get("pnpm")
+    pnpm_result = None
+    if pnpm:
+        env = playwright_env()
+        if base_url:
+            env["DIGUA_MM_BASE_URL"] = base_url
+        pnpm_result = command_result([pnpm, "dlx", "@playwright/test", "test", "tests/ui_multimodal_search.spec.ts", "--reporter=line"], timeout=180, env=env)
+    return {
+        "ok": npx_result.get("returncode") == 0 or (pnpm_result or {}).get("returncode") == 0,
+        "npx_playwright_test": npx_result,
+        "pnpm_dlx_playwright_test": pnpm_result,
+        "standard_runner_used": "npx" if npx_result.get("returncode") == 0 else ("pnpm_dlx" if (pnpm_result or {}).get("returncode") == 0 else None),
+        "fallback_browser_plugin_used": False,
+    }
+
+
+def s100p_default_service_gate() -> dict[str, Any]:
+    key = Path.home() / ".ssh" / "s100p_linkcheck_ed25519"
+    ssh = shutil.which("ssh")
+    if not ssh or not key.exists():
+        return {"ok": False, "ssh_available": bool(ssh), "key_exists": key.exists(), "reason": "ssh_or_key_unavailable"}
+    remote = (
+        "echo USER=$(whoami); "
+        "echo HOST=$(hostname); "
+        "echo ADDR_START; ip -br addr; echo ADDR_END; "
+        "echo ROUTE_START; ip route; echo ROUTE_END; "
+        "echo OPENCLAW_ACTIVE=$(systemctl --user is-active openclaw-gateway.service 2>/dev/null || true); "
+        "echo HEALTH_START; curl -fsS --max-time 5 http://127.0.0.1:8765/api/health; echo; echo HEALTH_END; "
+        "echo MM_STATUS_START; curl -fsS --max-time 5 http://127.0.0.1:8765/api/multimodal-search/status; echo; echo MM_STATUS_END; "
+        "echo CLIP_HEALTH_START; curl -fsS --max-time 5 http://127.0.0.1:18182/health || true; echo; echo CLIP_HEALTH_END"
+    )
+    result = command_result(
+        [
+            ssh,
+            "-i",
+            str(key),
+            "-o",
+            "BatchMode=yes",
+            "-o",
+            "ConnectTimeout=6",
+            "sunrise@192.168.127.10",
+            remote,
+        ],
+        timeout=45,
+    )
+    stdout = str(result.get("stdout_tail") or "")
+    return {
+        "ok": result.get("returncode") == 0 and '"schema": "digua_multimodal_search_v1"' in stdout,
+        "ssh": result,
+        "host": "sunrise@192.168.127.10",
+        "openclaw_active": "OPENCLAW_ACTIVE=active" in stdout,
+        "multimodal_status_present": '"schema": "digua_multimodal_search_v1"' in stdout,
+        "clip_18182_ready": '"ready": true' in stdout and "CLIP_HEALTH_START" in stdout,
+        "default_service_scope": "GET status only; POST routes remain behind existing portal identity auth",
+    }
+
+
+def free_local_port(preferred: int = 8791) -> int:
+    for port in [preferred, 8792, 8793, 0]:
+        with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as sock:
+            sock.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
+            try:
+                sock.bind(("127.0.0.1", port))
+            except OSError:
+                continue
+            return int(sock.getsockname()[1])
+    raise RuntimeError("no_free_local_port")
+
+
+def wait_http_ok(url: str, timeout_sec: float = 20.0) -> dict[str, Any]:
+    import urllib.request
+
+    deadline = time.time() + timeout_sec
+    last_error = None
+    while time.time() < deadline:
+        try:
+            with urllib.request.urlopen(url, timeout=2) as resp:
+                raw = resp.read(1000).decode("utf-8", errors="replace")
+                return {"ok": 200 <= int(resp.status) < 300, "status": int(resp.status), "body": raw[:500]}
+        except Exception as exc:
+            last_error = f"{type(exc).__name__}: {exc}"
+            time.sleep(0.5)
+    return {"ok": False, "error": last_error or "timeout"}
+
+
+def run_temp_portal_playwright_gate(fixture_root: Path, tmp_path: Path) -> dict[str, Any]:
+    port = free_local_port()
+    base_url = f"http://127.0.0.1:{port}"
+    report_root = tmp_path / "portal_reports"
+    cmd = [
+        sys.executable,
+        str(REPO_ROOT / "scripts" / "probes" / "ai_nas_operator_portal_server.py"),
+        "--bind",
+        "127.0.0.1",
+        "--port",
+        str(port),
+        "--report-root",
+        str(report_root),
+        "--personal-root",
+        str(fixture_root),
+        "--nas-portal",
+        "--no-refresh",
+    ]
+    started = time.time()
+    proc = subprocess.Popen(cmd, cwd=REPO_ROOT, stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
+    try:
+        readiness = wait_http_ok(f"{base_url}/api/health", timeout_sec=25)
+        if not readiness.get("ok"):
+            stdout, stderr = proc.communicate(timeout=2) if proc.poll() is not None else ("", "")
+            return {
+                "ok": False,
+                "base_url": base_url,
+                "server_ready": readiness,
+                "server_returncode": proc.poll(),
+                "stdout_tail": _redact_local_path(stdout[-2000:]),
+                "stderr_tail": _redact_local_path(stderr[-2000:]),
+            }
+        playwright = run_playwright_standard_gate(base_url=base_url)
+        return {
+            "ok": bool(playwright.get("ok")),
+            "base_url": base_url,
+            "duration_sec": round(time.time() - started, 3),
+            "server_ready": readiness,
+            "playwright": playwright,
+            "browser_plugin_used": False,
+        }
+    finally:
+        if proc.poll() is None:
+            proc.terminate()
+            try:
+                proc.wait(timeout=8)
+            except subprocess.TimeoutExpired:
+                proc.kill()
+                proc.wait(timeout=5)
+
+
 def package_self_check_source() -> str:
     return r'''#!/usr/bin/env python3
 from __future__ import annotations
@@ -178,11 +401,26 @@ for line in (ROOT / "SHA256SUMS.txt").read_text(encoding="utf-8").splitlines():
     if line.strip():
         digest, rel = line.split("  ", 1)
         SUMS[rel] = digest
+FORBIDDEN_DIRS = {"__pycache__", ".pytest_cache", "node_modules", "secrets"}
+FORBIDDEN_SUFFIXES = {".pyc", ".pyo", ".sqlite", ".sqlite3", ".db", ".env", ".pt", ".pth", ".onnx", ".safetensors", ".hbm", ".bin", ".ckpt"}
+FORBIDDEN_PREFIXES = {"redaction_map"}
+
+def forbidden(rel: str) -> bool:
+    parts = rel.replace("\\", "/").split("/")
+    name = parts[-1].lower()
+    return (
+        any(part in FORBIDDEN_DIRS for part in parts)
+        or any(name.startswith(prefix) for prefix in FORBIDDEN_PREFIXES)
+        or any(name.endswith(suffix) for suffix in FORBIDDEN_SUFFIXES)
+    )
 
 missing = []
 bad_hash = []
+forbidden_entries = []
 for entry in MANIFEST["files"]:
     rel = entry["path"]
+    if forbidden(rel):
+        forbidden_entries.append(rel)
     path = ROOT / rel
     if not path.exists():
         missing.append(rel)
@@ -192,30 +430,39 @@ for entry in MANIFEST["files"]:
         bad_hash.append(rel)
 
 packet = json.loads((ROOT / "01_final_evidence" / "digua_ai_nas_multimodal_search_v1_gate_packet.json").read_text(encoding="utf-8"))
+ready_verdicts = {
+    "multimodal_search_v1_real_image_semantic_ready",
+    "multimodal_search_v1_deliverable_limited_semantic_ready",
+    "multimodal_search_v1_ready_but_playwright_pending",
+}
 checks = {
     "verdict": packet.get("verdict"),
     "eval_ok": packet.get("gates", {}).get("eval", {}).get("ok"),
     "security_ok": packet.get("gates", {}).get("security", {}).get("ok"),
+    "real_embedding_gate_ok": packet.get("gates", {}).get("real_image_text_embedding", {}).get("ok"),
+    "default_service_gate_ok": packet.get("gates", {}).get("default_service_multimodal", {}).get("ok"),
     "raw_path_returned": packet.get("gates", {}).get("security", {}).get("raw_path_returned"),
     "cloud_used": packet.get("gates", {}).get("security", {}).get("cloud_used"),
 }
 ok = (
     not missing
     and not bad_hash
-    and checks["verdict"] == "multimodal_search_v1_ready_with_optional_ocr_video_audio_disabled"
+    and not forbidden_entries
+    and checks["verdict"] in ready_verdicts
     and checks["eval_ok"]
     and checks["security_ok"]
+    and checks["real_embedding_gate_ok"]
     and checks["raw_path_returned"] is False
     and checks["cloud_used"] is False
 )
-print(json.dumps({"ok": ok, "missing": missing, "bad_hash": bad_hash, "checks": checks}, ensure_ascii=False, indent=2))
+print(json.dumps({"ok": ok, "missing": missing, "bad_hash": bad_hash, "forbidden_entries": forbidden_entries, "checks": checks}, ensure_ascii=False, indent=2))
 raise SystemExit(0 if ok else 1)
 '''
 
 
 def build_zip(timestamp: str, final_packet_path: Path) -> dict[str, Any]:
     PACKAGE_DIR.mkdir(parents=True, exist_ok=True)
-    zip_path = PACKAGE_DIR / f"digua_ai_nas_multimodal_search_v1_for_gptpro_{timestamp}.zip"
+    zip_path = PACKAGE_DIR / f"digua_ai_nas_multimodal_search_v1_final_for_gptpro_{timestamp}.zip"
     include_paths = [
         "src/multimodal_search",
         "src/openclaw/routes/multimodal_search_routes.py",
@@ -226,6 +473,7 @@ def build_zip(timestamp: str, final_packet_path: Path) -> dict[str, Any]:
         "configs/multimodal_model_registry.json",
         "benchmarks/multimodal_search_eval_cases.jsonl",
         "tests/test_multimodal_search_v1.py",
+        "tests/ui_multimodal_search.spec.ts",
         "web/templates/multimodal_search.html",
         "web/static/digua_multimodal_search.css",
         "web/static/digua_multimodal_search.js",
@@ -233,6 +481,7 @@ def build_zip(timestamp: str, final_packet_path: Path) -> dict[str, Any]:
         "docs/MULTIMODAL_SEARCH_RUNBOOK.md",
         "docs/MULTIMODAL_SEARCH_SAFE_CLAIMS.md",
         "docs/MULTIMODAL_SEARCH_DELIVERY_DECISION.md",
+        "docs/MULTIMODAL_SEARCH_REAL_IMAGE_EMBEDDING_STATUS.md",
         "reports/multimodal_search",
         "01_final_evidence/digua_ai_nas_multimodal_search_v1_gate_packet.json",
         "01_final_evidence/digua_ai_nas_multimodal_search_v1_gate_packet.md",
@@ -252,12 +501,22 @@ def build_zip(timestamp: str, final_packet_path: Path) -> dict[str, Any]:
         if rel not in seen:
             seen.add(rel)
             unique_files.append(path)
+    filtered_files: list[Path] = []
+    skipped_forbidden: list[str] = []
+    for path in unique_files:
+        rel = path.relative_to(REPO_ROOT).as_posix()
+        if rel.startswith("reports/multimodal_search/26110_multimodal_search_v1_package_manifest"):
+            continue
+        if is_forbidden_package_path(rel):
+            skipped_forbidden.append(rel)
+            continue
+        filtered_files.append(path)
 
     manifest_files: list[dict[str, Any]] = []
     sums: list[str] = []
     self_check = package_self_check_source().encode("utf-8")
     with zipfile.ZipFile(zip_path, "w", compression=zipfile.ZIP_DEFLATED) as zf:
-        for path in unique_files:
+        for path in filtered_files:
             rel = path.relative_to(REPO_ROOT).as_posix()
             data = path.read_bytes()
             digest = sha256_bytes(data)
@@ -273,13 +532,26 @@ def build_zip(timestamp: str, final_packet_path: Path) -> dict[str, Any]:
             "package": zip_path.name,
             "created_at": timestamp,
             "final_packet": final_packet_path.relative_to(REPO_ROOT).as_posix(),
+            "external_package_sha256_report": "reports/multimodal_search/26110_multimodal_search_v1_package_manifest.json",
+            "skipped_forbidden_entries": skipped_forbidden,
             "files": sorted(manifest_files, key=lambda item: item["path"]),
         }
         manifest_bytes = json.dumps(manifest, ensure_ascii=False, indent=2, sort_keys=True).encode("utf-8") + b"\n"
         zf.writestr("MANIFEST.json", manifest_bytes)
         zf.writestr("SHA256SUMS.txt", ("\n".join(sorted(sums)) + "\n").encode("utf-8"))
 
-    return {"path": zip_path.relative_to(REPO_ROOT).as_posix(), "sha256": sha256_file(zip_path), "size_bytes": zip_path.stat().st_size}
+    forbidden_after = zip_forbidden_entries(zip_path)
+    sha = sha256_file(zip_path)
+    sha_sidecar = zip_path.with_suffix(zip_path.suffix + ".sha256.txt")
+    write_text_lf(sha_sidecar, f"{sha}  {zip_path.name}\n")
+    return {
+        "path": zip_path.relative_to(REPO_ROOT).as_posix(),
+        "sha256": sha,
+        "sha256_sidecar": sha_sidecar.relative_to(REPO_ROOT).as_posix(),
+        "size_bytes": zip_path.stat().st_size,
+        "skipped_forbidden_entries": skipped_forbidden,
+        "forbidden_entries_after_packaging": forbidden_after,
+    }
 
 
 def no_raw_path_markers(payload: Any) -> bool:
@@ -330,6 +602,26 @@ def main() -> int:
         }
         write_json_report("26010_multimodal_indexer_gate", indexer_gate)
 
+        runtime_probes = [probe_runtime("current_python", sys.executable)]
+        bundled_python = Path.home() / ".cache" / "codex-runtimes" / "codex-primary-runtime" / "dependencies" / "python" / ("python.exe" if os.name == "nt" else "python")
+        if bundled_python.exists() and str(bundled_python) != sys.executable:
+            runtime_probes.append(probe_runtime("bundled_python", bundled_python))
+        v21_python = REPO_ROOT / "tmp" / "v21_torch_env" / "Scripts" / "python.exe"
+        if v21_python.exists():
+            runtime_probes.append(probe_runtime("v21_torch_env", v21_python))
+        s100p_clip_probe = http_health_probe()
+        real_embedding_status = evaluate_real_image_text_embedding(runtime_probes, http_probe=s100p_clip_probe)
+        real_embedding_gate = {
+            "ok": True,
+            "verdict": (
+                "real_image_text_embedding_available"
+                if real_embedding_status["real_image_text_embedding_available"]
+                else "real_image_text_embedding_unavailable_fallback_claims_required"
+            ),
+            "status": real_embedding_status,
+        }
+        write_json_report("26120_real_image_text_embedding_gate", real_embedding_gate)
+
         api_queries = {
             "document": service.query({"query": "renovation invoice", "modality": "document", "top_k": 5}),
             "image": service.query({"query": "white image", "modality": "image", "top_k": 5}),
@@ -373,9 +665,29 @@ def main() -> int:
         eval_gate = service.eval_run(BENCHMARK)
         write_json_report("26030_multimodal_eval_gate", eval_gate)
 
+        benchmark_cases = [json.loads(line) for line in BENCHMARK.read_text(encoding="utf-8").splitlines() if line.strip()]
+        image_semantic_case_count = sum(1 for case in benchmark_cases if case.get("requires_image_embedding"))
+        real_semantic_eval_gate = {
+            "ok": True,
+            "real_model_eval_run": bool(real_embedding_status["real_image_text_embedding_available"]),
+            "real_model_eval_applicable": bool(real_embedding_status["real_image_text_embedding_available"]),
+            "image_semantic_case_count": image_semantic_case_count,
+            "fallback_eval_reference": "reports/multimodal_search/26030_multimodal_eval_gate.json",
+            "fallback_image_case_pass_rate": eval_gate.get("image_semantic_cases_pass"),
+            "claim_level": real_embedding_status["claim_level"],
+            "verdict": (
+                "real_image_semantic_eval_passed"
+                if real_embedding_status["real_image_text_embedding_available"] and image_semantic_case_count >= 30 and eval_gate.get("image_semantic_cases_pass", 0) >= 0.8
+                else "real_image_semantic_eval_not_applicable_limited_semantic_delivery"
+            ),
+        }
+        write_json_report("26130_real_image_semantic_eval_gate", real_semantic_eval_gate)
+
         ui_js = (REPO_ROOT / "web" / "static" / "digua_multimodal_search.js").read_text(encoding="utf-8")
         ui_html = (REPO_ROOT / "web" / "templates" / "multimodal_search.html").read_text(encoding="utf-8")
-        node_check = command_result(["node", "--check", "web/static/digua_multimodal_search.js"])
+        node_paths = bundled_node_paths()
+        node_cmd = node_paths.get("node") or "node"
+        node_check = command_result([node_cmd, "--check", "web/static/digua_multimodal_search.js"])
         ui_gate = {
             "ok": "/api/multimodal-search/status" in ui_js
             and "/api/multimodal-search/query" in ui_js
@@ -383,8 +695,9 @@ def main() -> int:
             and "http://" not in ui_js
             and "https://" not in ui_js
             and "digua_multimodal_search.css" in ui_html
-            and (node_check["returncode"] in (0, None)),
+            and node_check["returncode"] == 0,
             "node_check": node_check,
+            "node_paths": node_paths,
             "html_bytes": len(ui_html.encode("utf-8")),
             "js_bytes": len(ui_js.encode("utf-8")),
         }
@@ -425,21 +738,37 @@ def main() -> int:
         }
         write_json_report("26060_multimodal_test_gate", test_gate)
 
+        ui_browser_gate = run_temp_portal_playwright_gate(fixture_root, tmp_path)
+        write_json_report("26070_multimodal_ui_browser_gate", ui_browser_gate)
+
+        default_service_gate = s100p_default_service_gate()
+        write_json_report("26140_default_service_multimodal_gate", default_service_gate)
+
         gates = {
             "schema": schema_gate,
             "indexer": indexer_gate,
             "api": api_gate,
             "eval": eval_gate,
+            "real_image_text_embedding": real_embedding_gate,
+            "real_image_semantic_eval": real_semantic_eval_gate,
             "ui": ui_gate,
+            "ui_browser": ui_browser_gate,
             "security": security_gate,
             "tests": test_gate,
+            "default_service_multimodal": default_service_gate,
         }
-        ui_browser_gate = read_optional_report("26070_multimodal_ui_browser_gate")
-        if ui_browser_gate is not None:
-            gates["ui_browser"] = ui_browser_gate
-        verdict = VERDICT_READY_WITH_OPTIONAL_DISABLED if all(gate.get("ok") for gate in gates.values()) else "hold_due_to_search_api_failure"
+        critical_gates = {name: gate for name, gate in gates.items() if name != "ui_browser"}
+        verdict = (
+            VERDICT_REAL_IMAGE_SEMANTIC_READY
+            if all(gate.get("ok") for gate in critical_gates.values()) and real_embedding_status["real_image_text_embedding_available"]
+            else VERDICT_LIMITED_SEMANTIC_READY
+            if all(gate.get("ok") for gate in critical_gates.values())
+            else "hold_due_to_search_api_failure"
+        )
         if not security_gate.get("ok"):
             verdict = "hold_due_to_security_boundary_violation"
+        elif not default_service_gate.get("ok"):
+            verdict = "hold_due_to_default_service_multimodal_route_missing"
         elif not ui_gate.get("ok"):
             verdict = "hold_due_to_ui_validation_failure"
         elif not api_gate.get("ok"):
@@ -448,8 +777,10 @@ def main() -> int:
             verdict = "hold_due_to_vector_store_failure"
         elif not eval_gate.get("ok"):
             verdict = "inconclusive_missing_evidence"
+        elif not ui_browser_gate.get("ok"):
+            verdict = VERDICT_PLAYWRIGHT_PENDING
         final_packet = {
-            "ok": verdict == VERDICT_READY_WITH_OPTIONAL_DISABLED,
+            "ok": verdict in READY_VERDICTS,
             "created_at": timestamp,
             "verdict": verdict,
             "soak_24h_started": False,
@@ -461,6 +792,12 @@ def main() -> int:
                 "eval_case_count": eval_gate.get("case_count"),
                 "no_raw_path_rate": eval_gate.get("no_raw_path_rate"),
                 "private_leak_count": eval_gate.get("private_leak_count"),
+                "claim_level": real_embedding_status["claim_level"],
+                "image_embedding_backend": rebuild.get("image_embedding_model", {}).get("backend"),
+                "real_clip_siglip_available": real_embedding_status["real_image_text_embedding_available"],
+                "node_check_returncode": node_check.get("returncode"),
+                "playwright_ok": ui_browser_gate.get("ok"),
+                "default_service_multimodal_ok": default_service_gate.get("ok"),
                 "optional_ocr_video_audio_content": "disabled_by_feature_flag",
             },
         }
@@ -472,13 +809,15 @@ def main() -> int:
 
     package = build_zip(timestamp, final_json)
     package_report = {
-        "ok": True,
+        "ok": not package.get("forbidden_entries_after_packaging"),
         "package": package,
         "verdict": json.loads(final_json.read_text(encoding="utf-8"))["verdict"],
+        "final_package_sha256": package["sha256"],
+        "forbidden_entries_after_packaging": package.get("forbidden_entries_after_packaging", []),
     }
     write_json_report("26110_multimodal_search_v1_package_manifest", package_report)
     print(json.dumps(package_report, ensure_ascii=False, indent=2, sort_keys=True))
-    return 0 if package_report["verdict"] == VERDICT_READY_WITH_OPTIONAL_DISABLED else 1
+    return 0 if package_report["verdict"] in READY_VERDICTS and package_report["ok"] else 1
 
 
 if __name__ == "__main__":

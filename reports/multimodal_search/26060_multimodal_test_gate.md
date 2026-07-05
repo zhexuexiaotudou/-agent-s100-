@@ -13,17 +13,17 @@
       "tests/test_multimodal_search_v1.py",
       "-q"
     ],
-    "duration_sec": 1.476,
+    "duration_sec": 1.541,
     "returncode": 0,
     "stderr_tail": "",
-    "stdout_tail": "..........                                                               [100%]\n10 passed in 1.07s\n"
+    "stdout_tail": "..........                                                               [100%]\n10 passed in 1.16s\n"
   },
   "self_check": {
     "cmd": [
       "<python>",
       "SELF_CHECK.py"
     ],
-    "duration_sec": 0.049,
+    "duration_sec": 0.043,
     "returncode": 0,
     "stderr_tail": "",
     "stdout_tail": "{\n  \"ok\": true,\n  \"missing\": [],\n  \"checks\": {\n    \"missing_required_count\": 0,\n    \"real_qwen_tokenizer_used\": true,\n    \"private_leak_count\": 0,\n    \"total_cases\": 130,\n    \"quality_pass_rate\": 1.0,\n    \"final_verdict\": \"tokenizer_token_budget_product_deployed_claim_supported\"\n  }\n}\n"

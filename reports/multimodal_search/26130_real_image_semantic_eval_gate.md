@@ -1,0 +1,17 @@
+# 26130_real_image_semantic_eval_gate
+
+- ok: `True`
+- verdict: `real_image_semantic_eval_not_applicable_limited_semantic_delivery`
+
+```json
+{
+  "claim_level": "limited_semantic_color_brightness_aspect",
+  "fallback_eval_reference": "reports/multimodal_search/26030_multimodal_eval_gate.json",
+  "fallback_image_case_pass_rate": 1.0,
+  "image_semantic_case_count": 10,
+  "ok": true,
+  "real_model_eval_applicable": false,
+  "real_model_eval_run": false,
+  "verdict": "real_image_semantic_eval_not_applicable_limited_semantic_delivery"
+}
+```

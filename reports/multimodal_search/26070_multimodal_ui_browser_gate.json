@@ -1,38 +1,41 @@
 {
-  "browser_dom_snapshot_error": "in_app_browser_snapshot_api_unavailable",
-  "browser_dom_snapshot_ok": false,
-  "browser_path": "in_app_browser_locator_evaluate_screenshot",
-  "desktop": {
-    "auth": "Signed in: mm_ui_admin",
-    "body_has_auth_required": false,
-    "body_has_request_failed": false,
-    "console_error_or_warning_count": 0,
-    "evidence_contains_ref": true,
-    "first_title": "white_shirt_photo.png",
-    "result_count": 10,
-    "status": "Results ready",
-    "title": "Digua Multimodal Search",
-    "url": "http://127.0.0.1:8791/multimodal-search"
-  },
-  "fallback_reason": "Browser domSnapshot failed in plugin runtime; Python Playwright and Node were unavailable on this host, so validation used the Browser plugin locator, evaluate, and screenshot APIs.",
-  "flow": "local multimodal page -> login -> image search -> evidence side panel",
-  "mobile": {
-    "auth": "Signed in: mm_ui_admin",
-    "body_has_auth_required": false,
-    "first_title": "renovation_invoice_receipt.txt",
-    "has_horizontal_overflow": false,
-    "result_count": 10,
-    "scroll_width": 375,
-    "shell_width": 355,
-    "status": "Results ready",
-    "viewport_width": 390
-  },
+  "base_url": "http://127.0.0.1:8791",
+  "browser_plugin_used": false,
+  "duration_sec": 8.37,
   "ok": true,
-  "python_playwright_available": false,
-  "screenshots_captured": true,
-  "temporary_server": {
-    "asset_count": 37,
-    "image_embeddings": 10,
-    "stopped_after_validation": true
+  "playwright": {
+    "fallback_browser_plugin_used": false,
+    "npx_playwright_test": {
+      "cmd": [
+        "npx",
+        "playwright",
+        "test",
+        "tests/ui_multimodal_search.spec.ts"
+      ],
+      "duration_sec": 0.003,
+      "error": "[WinError 2] 系统找不到指定的文件。",
+      "returncode": null
+    },
+    "ok": true,
+    "pnpm_dlx_playwright_test": {
+      "cmd": [
+        "C:\\Users\\zhexu\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\bin\\pnpm.cmd",
+        "dlx",
+        "@playwright/test",
+        "test",
+        "tests/ui_multimodal_search.spec.ts",
+        "--reporter=line"
+      ],
+      "duration_sec": 6.708,
+      "returncode": 0,
+      "stderr_tail": "(node:16576) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.\n(Use `node --trace-warnings ...` to show where the warning was created)\n",
+      "stdout_tail": "\nRunning 1 test using 1 worker\n\n\n\n[1/1] tests\\ui_multimodal_search.spec.ts:8:5 › multimodal search UI supports login, rebuild, query, and evidence inspection\n  1 passed (5.9s)\n"
+    },
+    "standard_runner_used": "pnpm_dlx"
+  },
+  "server_ready": {
+    "body": "{\n  \"ok\": true,\n  \"tool_id\": \"ai_nas_operator_portal_server\",\n  \"operator_portal_contract\": {\n    \"found\": true,\n    \"filename\": \"operator_portal_contract.json\",\n    \"path\": \"tmp\\\\stage2_7_package_rerun_candidate_20260703-130304\\\\reports\\\\operator_portal_contract.json\",\n    \"verdict\": \"failed_ai_nas_operator_portal_contract\",\n    \"generated_at\": \"2026-06-25T00:18:47.016707+08:00\",\n    \"selection_policy\": \"generated_at_then_mtime\"\n  },\n  \"portal_html\": \"F:\\\\Project\\\\Digua\\\\scripts\\\\probes\\\\operat",
+    "ok": true,
+    "status": 200
   }
 }

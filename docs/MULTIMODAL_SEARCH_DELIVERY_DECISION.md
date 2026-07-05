@@ -4,11 +4,12 @@ Date: 2026-07-05
 
 ## Decision
 
-Target verdict: `multimodal_search_v1_ready_with_optional_ocr_video_audio_disabled`.
+Target verdict: `multimodal_search_v1_deliverable_limited_semantic_ready` unless `26120_real_image_text_embedding_gate` and `26130_real_image_semantic_eval_gate` validate a real local CLIP/SigLIP-compatible backend.
 
 This verdict is valid when the generated gate packet shows:
 
 - image embedding count is positive;
+- image embedding backend and claim level are explicitly recorded;
 - document FTS search returns evidence refs;
 - metadata indexing covers video/audio/code/archive samples;
 - eval benchmark has at least 40 cases;
@@ -17,7 +18,8 @@ This verdict is valid when the generated gate packet shows:
 - cloud usage is false;
 - Qwen execution authority is false;
 - UI contract references only local multimodal APIs;
-- pytest and self-check gates pass.
+- pytest and self-check gates pass;
+- package contents contain no `__pycache__`, `.pyc`, `.pytest_cache`, `node_modules`, runtime DB, secret, redaction map, or model weight files.
 
 ## Evidence Source
 
@@ -35,10 +37,15 @@ Expected outputs:
 - `reports/multimodal_search/26030_multimodal_eval_gate.json`
 - `reports/multimodal_search/26040_multimodal_ui_gate.json`
 - `reports/multimodal_search/26050_multimodal_security_gate.json`
+- `reports/multimodal_search/26060_multimodal_test_gate.json`
+- `reports/multimodal_search/26070_multimodal_ui_browser_gate.json`
+- `reports/multimodal_search/26120_real_image_text_embedding_gate.json`
+- `reports/multimodal_search/26130_real_image_semantic_eval_gate.json`
+- `reports/multimodal_search/26140_default_service_multimodal_gate.json`
 - `reports/multimodal_search/26100_multimodal_search_v1_final_gate_packet.json`
 - `01_final_evidence/digua_ai_nas_multimodal_search_v1_gate_packet.json`
-- `evidence_for_gptpro/digua_ai_nas_multimodal_search_v1_for_gptpro_<timestamp>.zip`
+- `evidence_for_gptpro/digua_ai_nas_multimodal_search_v1_final_for_gptpro_<timestamp>.zip`
 
 ## Boundary
 
-No 24-hour soak is part of this decision. A shorter live validation or one-hour stability pass can be added separately if the deployment target is running and the user asks for it.
+No 24-hour soak is part of this decision. A shorter live validation or one-hour stability pass can be added separately if the deployment target is running and the user asks for it. The current final cleanup does not start a 24-hour soak.
