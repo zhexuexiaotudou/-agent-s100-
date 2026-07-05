@@ -17,6 +17,8 @@ def _service(report_root: str | Path | None, personal_root: str | Path | None) -
         roots=roots,
         feature_flags_path=Path("configs/multimodal_search_feature_flags.json"),
         max_files=5000,
+        yolo_db_path=root / "yolo_index" / "runtime" / "yolo_index.db",
+        yolo_report_root=root,
     )
 
 

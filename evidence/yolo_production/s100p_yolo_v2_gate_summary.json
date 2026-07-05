@@ -1,0 +1,135 @@
+{
+  "api_ok": true,
+  "detection_count": 66,
+  "eval_case_count": 50,
+  "final_verdict": "s100p_yolo_multimodal_search_v2_image_video_limited_ready",
+  "first_asset_item_ok": true,
+  "generated_at": "2026-07-05T11:42:32Z",
+  "harness_live": true,
+  "http_search": [
+    {
+      "labels": [
+        "car"
+      ],
+      "ok": true,
+      "query": "找所有汽车",
+      "result_count": 2
+    },
+    {
+      "labels": [
+        "laptop"
+      ],
+      "ok": true,
+      "query": "找所有电脑截图",
+      "result_count": 2
+    },
+    {
+      "labels": [
+        "person"
+      ],
+      "ok": true,
+      "query": "找出现人的视频片段",
+      "result_count": 5
+    },
+    {
+      "labels": [
+        "keyboard",
+        "book"
+      ],
+      "ok": true,
+      "query": "找所有书和键盘",
+      "result_count": 2
+    }
+  ],
+  "hybrid_ok": true,
+  "hybrid_yolo_object_results": 2,
+  "identity_test_user_created_or_existing": true,
+  "image_index_ok": true,
+  "indexed_count": 8,
+  "keyframe_count": 4,
+  "label_counts": {
+    "book": 6,
+    "bus": 2,
+    "car": 6,
+    "keyboard": 6,
+    "kite": 7,
+    "laptop": 2,
+    "mouse": 3,
+    "person": 31,
+    "stop sign": 1,
+    "tv": 2
+  },
+  "login_ok": true,
+  "node_check_ok": true,
+  "node_versions": {
+    "node": "v20.19.2",
+    "npm": "10.8.2"
+  },
+  "object_search_ok": true,
+  "openclaw_8765_live": true,
+  "private_leak_count": 0,
+  "pytest_all": {
+    "ok": true,
+    "summary": "22 passed in 3.30s on S100P"
+  },
+  "qwen_18080_live": true,
+  "raw_path_rows": 0,
+  "reports": {},
+  "route_search": [
+    {
+      "labels": [
+        "car"
+      ],
+      "ok": true,
+      "query": "找所有汽车",
+      "result_count": 2,
+      "status": 200
+    },
+    {
+      "labels": [
+        "laptop"
+      ],
+      "ok": true,
+      "query": "找所有电脑截图",
+      "result_count": 2,
+      "status": 200
+    },
+    {
+      "labels": [
+        "person"
+      ],
+      "ok": true,
+      "query": "找出现人的视频片段",
+      "result_count": 5,
+      "status": 200
+    },
+    {
+      "labels": [
+        "keyboard",
+        "book"
+      ],
+      "ok": true,
+      "query": "找所有书和键盘",
+      "result_count": 2,
+      "status": 200
+    }
+  ],
+  "s100p_host": "192.168.127.10",
+  "s100p_reachable": true,
+  "sample_detections": 66,
+  "schema_ok": true,
+  "security_ok": true,
+  "strict_eval_pass_rate": 1.0,
+  "test_matrix_ok": true,
+  "ui_gate": {
+    "baseURL": "http://127.0.0.1:18765",
+    "errors": [],
+    "ok": true,
+    "screenshot": "F:\\Project\\Digua\\evidence\\yolo_production\\screenshots\\yolo_multimodal_search_v2_ui.png"
+  },
+  "ui_ok": true,
+  "ui_tunnel_note": "PC Playwright used an SSH tunnel to S100P 127.0.0.1:8765 because the production gateway is intentionally bound to loopback.",
+  "ui_url": "http://192.168.127.10:8765/multimodal-search",
+  "video_index_ok": true,
+  "yolo_backend_available": true
+}

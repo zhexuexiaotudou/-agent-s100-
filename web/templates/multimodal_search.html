@@ -50,11 +50,32 @@
               <option value="archive">Archives</option>
             </select>
           </label>
+          <label class="mm-select">
+            <span>Object</span>
+            <select id="mm-object" name="object">
+              <option value="">Any object</option>
+              <option value="person">Person</option>
+              <option value="car">Car</option>
+              <option value="bus">Bus</option>
+              <option value="laptop">Laptop</option>
+              <option value="book">Book</option>
+              <option value="keyboard">Keyboard</option>
+              <option value="mouse">Mouse</option>
+              <option value="tv">TV</option>
+              <option value="kite">Kite</option>
+              <option value="cup">Cup</option>
+              <option value="bottle">Bottle</option>
+              <option value="chair">Chair</option>
+              <option value="backpack">Backpack</option>
+              <option value="cell phone">Phone</option>
+            </select>
+          </label>
           <button class="mm-button primary" type="submit">Search</button>
           <button class="mm-button" id="mm-rebuild" type="button">Rebuild</button>
         </form>
 
         <div class="mm-metrics" id="mm-metrics" aria-label="Index metrics"></div>
+        <div class="mm-yolo-strip" id="mm-yolo-strip" aria-label="YOLO status"></div>
       </section>
 
       <section class="mm-content" aria-live="polite">

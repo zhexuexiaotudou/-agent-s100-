@@ -66,6 +66,11 @@ except Exception:
     copy_execute_response = None  # type: ignore[assignment]
     copy_rollback_response = None  # type: ignore[assignment]
 
+try:
+    from src.openclaw.routes.yolo_index_routes import yolo_route_response
+except Exception:
+    yolo_route_response = None  # type: ignore[assignment]
+
 from ai_nas_app_ecosystem import AppEcosystem
 from ai_nas_backup import BackupManager
 from ai_nas_common import (
@@ -2123,6 +2128,18 @@ class PortalHandler(BaseHTTPRequestHandler):
             )
             self.send_json(result, status_code)
             return
+        if route.startswith("/api/yolo-index"):
+            if yolo_route_response is None:
+                self.send_json({"ok": False, "error": "yolo_index_unavailable"}, HTTPStatus.SERVICE_UNAVAILABLE)
+                return
+            status_code, result = yolo_route_response(
+                route,
+                method="GET",
+                report_root=self.state.report_root,
+                personal_root=self.state.personal_root,
+            )
+            self.send_json(result, status_code)
+            return
         if route == "/api/harness/status":
             if harness_status_response is None:
                 self.send_json({"ok": False, "error": "harness_default_service_unavailable"}, HTTPStatus.SERVICE_UNAVAILABLE)
@@ -2208,6 +2225,9 @@ class PortalHandler(BaseHTTPRequestHandler):
                     "/api/multimodal-index/stats",
                     "/api/multimodal-index/item/{asset_id}",
                     "/api/multimodal-search/eval/summary",
+                    "/api/yolo-index/status",
+                    "/api/yolo-index/item/{asset_id}",
+                    "/api/yolo-index/eval/summary",
                     "/api/latest",
                     "/api/latest.goal_progress",
                     "/api/latest.operator_decisions",
@@ -2247,6 +2267,9 @@ class PortalHandler(BaseHTTPRequestHandler):
                     "POST /api/multimodal-index/rebuild",
                     "POST /api/multimodal-search/query",
                     "POST /api/multimodal-search/eval/run",
+                    "POST /api/yolo-index/rebuild",
+                    "POST /api/yolo-index/search",
+                    "POST /api/yolo-index/eval/run",
                     "POST /api/journal/manual-entry",
                     "POST /api/journal/generate-summary",
                     "POST /api/journal/export",
@@ -2306,6 +2329,31 @@ class PortalHandler(BaseHTTPRequestHandler):
             payload = payload or {}
             payload.setdefault("user_id", str((user or {}).get("username") or "operator"))
             status_code, result = multimodal_route_response(
+                route,
+                method="POST",
+                payload=payload,
+                report_root=self.state.report_root,
+                personal_root=self.state.personal_root,
+            )
+            self.send_json(result, status_code)
+            return
+        if route.startswith("/api/yolo-index"):
+            if yolo_route_response is None:
+                self.send_json({"ok": False, "error": "yolo_index_unavailable"}, HTTPStatus.SERVICE_UNAVAILABLE)
+                return
+            if not self.require_product():
+                return
+            auth_status, error, user = self.state.require_user(self.headers.get("Authorization"))
+            if auth_status:
+                self.send_json(error or {}, auth_status)
+                return
+            status, payload = self.read_json_body()
+            if status:
+                self.send_json(payload or {}, status)
+                return
+            payload = payload or {}
+            payload.setdefault("user_id", str((user or {}).get("username") or "operator"))
+            status_code, result = yolo_route_response(
                 route,
                 method="POST",
                 payload=payload,

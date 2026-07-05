@@ -25,6 +25,8 @@ class MultimodalSearchService:
         roots: list[str | Path],
         feature_flags_path: str | Path | None = None,
         max_files: int = 5000,
+        yolo_db_path: str | Path | None = None,
+        yolo_report_root: str | Path | None = None,
     ) -> None:
         self.db_path = Path(db_path)
         self.vector_dir = Path(vector_dir)
@@ -32,6 +34,8 @@ class MultimodalSearchService:
         self.roots = [Path(root) for root in roots]
         self.flags: MultimodalFeatureFlags = load_feature_flags(feature_flags_path)
         self.max_files = max_files
+        self.yolo_db_path = Path(yolo_db_path) if yolo_db_path else None
+        self.yolo_report_root = Path(yolo_report_root) if yolo_report_root else self.db_path.parents[2] if len(self.db_path.parents) > 2 else self.db_path.parent
 
     def status(self) -> dict[str, Any]:
         migrate(self.db_path)
@@ -49,6 +53,7 @@ class MultimodalSearchService:
             "counts": counts,
             "indexed_count": sum(counts.values()),
             "embedding_count": embedding_count,
+            "yolo_index": self._yolo_status_summary(),
             "raw_path_rows": raw_path_rows,
             "private_leak_count": 0,
             "cloud_used": False,
@@ -75,8 +80,9 @@ class MultimodalSearchService:
         trace_id = new_trace_id()
         retriever = HybridRetriever(self.db_path, vector_dir=self.vector_dir, flags=self.flags)
         retrieved = retriever.search(plan, top_k=top_k)
+        yolo_results = self._query_yolo(payload, top_k=top_k)
         run_id = "mm_run_" + uuid.uuid4().hex[:16]
-        results = retrieved["results"]
+        results = self._merge_results(retrieved["results"], yolo_results, top_k=top_k)
         conn = connect(self.db_path)
         try:
             conn.execute(
@@ -98,9 +104,10 @@ class MultimodalSearchService:
             "query_redacted": plan.query_redacted,
             "retrieval_mode": plan.retrieval_mode,
             "results": results,
-            "degraded": retrieved["degraded"],
-            "degraded_reason": retrieved["degraded_reason"],
+            "degraded": retrieved["degraded"] and not bool(yolo_results),
+            "degraded_reason": None if yolo_results else retrieved["degraded_reason"],
             "feature_flags": self.flags.to_dict(),
+            "yolo_object_results": len(yolo_results),
             "privacy": {"raw_path_returned": False, "private_leak_count": 0, "cloud_used": False},
         }
         self.trace.write({"event": "multimodal_query", "trace_id": trace_id, "run_id": run_id, "result_count": len(results), "degraded": response["degraded"]})
@@ -122,6 +129,53 @@ class MultimodalSearchService:
         result = run_eval(self, cases_path)
         self.trace.write({"event": "multimodal_eval", "ok": result.get("ok"), "case_count": result.get("case_count")})
         return result
+
+    def _yolo_status_summary(self) -> dict[str, Any]:
+        if not self.yolo_db_path:
+            return {"available": False}
+        try:
+            from src.yolo_index.service import YoloIndexService
+
+            service = YoloIndexService(db_path=self.yolo_db_path, report_root=self.yolo_report_root, roots=self.roots)
+            status = service.status()
+            return {
+                "available": True,
+                "indexed_count": status.get("indexed_count"),
+                "detection_count": status.get("detection_count"),
+                "keyframe_count": status.get("keyframe_count"),
+                "degraded": status.get("degraded"),
+                "degraded_reason": status.get("degraded_reason"),
+            }
+        except Exception as exc:
+            return {"available": False, "error": f"{type(exc).__name__}:{exc}"}
+
+    def _query_yolo(self, payload: dict[str, Any], *, top_k: int) -> list[dict[str, Any]]:
+        if not self.yolo_db_path or not self.yolo_db_path.exists():
+            return []
+        try:
+            from src.yolo_index.service import YoloIndexService
+
+            service = YoloIndexService(db_path=self.yolo_db_path, report_root=self.yolo_report_root, roots=self.roots)
+            result = service.search({**payload, "top_k": top_k})
+            return result.get("results") or []
+        except Exception:
+            return []
+
+    @staticmethod
+    def _merge_results(base_results: list[dict[str, Any]], yolo_results: list[dict[str, Any]], *, top_k: int) -> list[dict[str, Any]]:
+        merged: list[dict[str, Any]] = []
+        seen: set[tuple[str, str | None]] = set()
+        for item in yolo_results + base_results:
+            key = (str(item.get("asset_id")), item.get("keyframe_id"))
+            if key in seen:
+                continue
+            seen.add(key)
+            merged.append(dict(item))
+            if len(merged) >= top_k:
+                break
+        for idx, item in enumerate(merged, start=1):
+            item["rank"] = idx
+        return merged
 
 
 def _now() -> str:

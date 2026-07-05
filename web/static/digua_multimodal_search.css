@@ -127,7 +127,7 @@ h2 {
 }
 
 .mm-searchbar {
-  grid-template-columns: minmax(220px, 1fr) 160px auto auto;
+  grid-template-columns: minmax(220px, 1fr) 150px 150px auto auto;
   align-items: end;
 }
 
@@ -186,6 +186,13 @@ select {
   flex-wrap: wrap;
   gap: 8px;
   margin-top: 12px;
+}
+
+.mm-yolo-strip {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 10px;
 }
 
 .mm-pill {
@@ -258,6 +265,44 @@ select {
   padding: 4px 8px;
   font-size: 11px;
   font-weight: 800;
+}
+
+.mm-tag.object {
+  background: #fff4e5;
+  color: var(--amber);
+}
+
+.mm-yolo-chip {
+  display: inline-flex;
+  align-items: center;
+  min-height: 26px;
+  padding: 0 9px;
+  border-radius: 8px;
+  border: 1px solid var(--line);
+  background: #fff;
+  color: var(--muted);
+  font-size: 12px;
+  font-weight: 800;
+}
+
+.mm-yolo-chip.ok {
+  border-color: #b7decf;
+  background: #eef7f3;
+  color: var(--green);
+}
+
+.mm-yolo-chip.warning {
+  border-color: #ead49a;
+  background: #fff8e6;
+  color: var(--amber);
+}
+
+.mm-detections {
+  margin: 7px 0 0;
+  color: var(--amber);
+  font-size: 12px;
+  font-weight: 800;
+  overflow-wrap: anywhere;
 }
 
 .mm-panel {

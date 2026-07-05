@@ -249,6 +249,8 @@ class MultimodalSearchV1Test(unittest.TestCase):
         self.assertIn("/api/multimodal-search/status", js)
         self.assertIn("/api/multimodal-search/query", js)
         self.assertIn("/api/multimodal-index/rebuild", js)
+        self.assertIn("/api/yolo-index/status", js)
+        self.assertIn("/api/yolo-index/search", js)
         self.assertIn("/api/identity/login", js)
         self.assertIn("diguaAiNasToken", js)
         self.assertNotIn("http://", js)
