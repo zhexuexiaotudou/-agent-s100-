@@ -567,7 +567,7 @@ New OpenClaw + NAS baseline artifacts:
 - [config/control_action_allowlist.disabled.json](config/control_action_allowlist.disabled.json): disabled-by-default B-009 control policy template.
 - [config/service_convergence_confirmations.disabled.json](config/service_convergence_confirmations.disabled.json): disabled-by-default B-010 service convergence confirmation template.
 - [config/dream7b_deployment.example.json](config/dream7b_deployment.example.json): Dream 7B local model path and bounded smoke-test config template.
-- [config/home_assistant.env.example](config/home_assistant.env.example): read-only Home Assistant URL/token environment template.
+- [config/home_assistant_env_example.txt](config/home_assistant_env_example.txt): read-only Home Assistant URL/token environment template.
 - [scripts/probes/baseline_status_probe.sh](scripts/probes/baseline_status_probe.sh): writes a read-only roll-up status report for both baseline tracks.
 - [scripts/probes/baseline_gap_decision_probe.sh](scripts/probes/baseline_gap_decision_probe.sh): writes a read-only remaining-gap and next-decision report for both baseline tracks.
 - [scripts/probes/baseline_acceptance_probe.sh](scripts/probes/baseline_acceptance_probe.sh): writes a read-only acceptance gate matrix for all A/B baseline IDs.

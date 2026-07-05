@@ -17,7 +17,7 @@ from ai_nas_harness.config_io import filename_stamp, load_json_yaml, safe_write_
 from ai_nas_harness.context_builder import build_context, estimate_baseline_context_size
 from ai_nas_harness.memory_store import MemoryStore
 from ai_nas_harness.path_resolver import critical_asset_map, find_production_context_root, find_repo_root, resolve_asset
-from ai_nas_harness.redaction import redact_cloud_payload
+from ai_nas_harness.privacy_filter import redact_cloud_payload
 from ai_nas_harness.runtime_trace_writer import RuntimeTraceWriter
 from ai_nas_harness.tool_filter import ToolExposureFilter
 

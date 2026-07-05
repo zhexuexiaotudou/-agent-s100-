@@ -12,7 +12,7 @@ if str(ROOT) not in sys.path:
 
 from ai_nas_harness.argument_policy import stable_args_hash
 from ai_nas_harness.config_io import safe_write_json, safe_write_text, utc_stamp
-from ai_nas_harness.redaction import redact_cloud_payload
+from ai_nas_harness.privacy_filter import redact_cloud_payload
 from ai_nas_harness.tool_filter import ToolExposureFilter
 
 

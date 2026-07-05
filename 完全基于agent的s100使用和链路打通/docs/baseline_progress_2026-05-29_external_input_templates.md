@@ -32,7 +32,7 @@ meaning: the plugin path can trigger the Dream 7B smoke gate; no model inference
 
 ## B-008 Home Assistant
 
-- Added `config/home_assistant.env.example`.
+- Added `config/home_assistant_env_example.txt`.
 - The existing HA probe remains read-only and only calls `GET /api/` and `GET /api/states`.
 - Real URL/token are still external inputs and should not be committed.
 

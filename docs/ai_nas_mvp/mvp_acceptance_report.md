@@ -33,7 +33,7 @@ MVP v1 已形成可演示闭环：便宜 NAS 继续负责存储基础能力，S1
 - `scripts/probes/ai_nas_index_daemon_resident_probe.py`
 - `scripts/probes/ai_nas_index_rename_detection_probe.py`
 - `scripts/probes/ai_nas_index_observability_contract_probe.py`
-- `scripts/probes/ai_nas_sqlite_index_integrity_contract_probe.py`
+- `scripts/probes/ai_nas_index_integrity_contract_probe.py`
 - `scripts/probes/ai_nas_incremental_scan_efficiency_contract_probe.py`
 - `scripts/probes/ai_nas_index_search_isolation_slo_probe.py`
 - `scripts/probes/ai_nas_file_search_probe.py`

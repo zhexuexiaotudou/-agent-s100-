@@ -168,7 +168,7 @@ python3 scripts/probes/ai_nas_index_daemon_smoke_probe.py
 python3 scripts/probes/ai_nas_index_daemon_resident_probe.py
 python3 scripts/probes/ai_nas_index_rename_detection_probe.py
 python3 scripts/probes/ai_nas_index_observability_contract_probe.py
-python3 scripts/probes/ai_nas_sqlite_index_integrity_contract_probe.py
+python3 scripts/probes/ai_nas_index_integrity_contract_probe.py
 python3 scripts/probes/ai_nas_incremental_scan_efficiency_contract_probe.py
 python3 scripts/probes/ai_nas_index_search_isolation_slo_probe.py
 python3 scripts/probes/ai_nas_perf_benchmark_probe.py

@@ -28,7 +28,7 @@ probes/gates.
   - `gates/tool_exposure_minimization_gate.py`
   - `gates/memory_boundary_gate.py`
   - `gates/runtime_trace_completeness_gate.py`
-  - `gates/cloud_egress_redaction_gate.py`
+  - `gates/cloud_egress_privacy_gate.py`
   - `gates/run_harness_stage1_gates.py`
 - Added rollback script: `scripts/disable_harness_shadow.sh`.
 
@@ -60,7 +60,7 @@ Stage 1 combined gate report:
 | `tool_exposure_minimization_gate` | `ok_tool_exposure_minimization_gate` | 37/37 |
 | `memory_boundary_gate` | `ok_memory_boundary_gate` | 11/11 |
 | `runtime_trace_completeness_gate` | `ok_runtime_trace_completeness_gate` | 19/19 |
-| `cloud_egress_redaction_gate` | `ok_cloud_egress_redaction_gate` | 11/11 |
+| `cloud_egress_privacy_gate` | `ok_cloud_egress_privacy_gate` | 11/11 |
 
 Combined verdict: `ok_harness_stage1_gates`.
 

@@ -10,7 +10,7 @@ import uuid
 from dataclasses import replace
 from typing import Any
 
-from ai_nas_harness.redaction import detect_private_leaks
+from ai_nas_harness.privacy_filter import detect_private_leaks
 
 from .copy_route_types import (
     COPY_EXECUTE_TOOL_ID,

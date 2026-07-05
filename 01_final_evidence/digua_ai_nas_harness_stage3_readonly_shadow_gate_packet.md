@@ -12,7 +12,7 @@
 | `11020_stage3_policy_first_shadow_decision_gate` | `stage3_policy_first_shadow_decision_gate` | `ok_stage3_policy_first_shadow_decision_gate` | 7/7 | 0 |
 | `11030_stage3_readonly_shadow_execution_gate` | `stage3_readonly_shadow_execution_gate` | `ok_stage3_readonly_shadow_execution_gate` | 11/11 | 0 |
 | `11040_stage3_health_resource_latency_gate` | `stage3_health_resource_latency_gate` | `ok_stage3_health_resource_latency_gate` | 10/10 | 0 |
-| `11045_stage3_cloud_egress_redaction_gate` | `stage3_cloud_egress_redaction_gate` | `ok_stage3_cloud_egress_redaction_gate` | 6/6 | 0 |
+| `11045_stage3_cloud_egress_privacy_gate` | `stage3_cloud_egress_privacy_gate` | `ok_stage3_cloud_egress_privacy_gate` | 6/6 | 0 |
 | `11050_stage3_shadow_rollback_gate` | `stage3_shadow_rollback_gate` | `ok_stage3_shadow_rollback_gate` | 9/9 | 0 |
 | `11060_stage3_final_gate_packet` | `stage3_final_gate_packet` | `stage3_readonly_shadow_pass_but_hold_for_longer_soak` | 9/9 | 0 |
 

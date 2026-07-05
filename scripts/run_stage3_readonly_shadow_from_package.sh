@@ -54,7 +54,7 @@ required = [
     "reports/11020_stage3_policy_first_shadow_decision_gate.json",
     "reports/11030_stage3_readonly_shadow_execution_gate.json",
     "reports/11040_stage3_health_resource_latency_gate.json",
-    "reports/11045_stage3_cloud_egress_redaction_gate.json",
+    "reports/11045_stage3_cloud_egress_privacy_gate.json",
     "reports/11050_stage3_shadow_rollback_gate.json",
     "reports/11060_stage3_final_gate_packet.json",
     "reports/stage3_readonly_shadow_execution_trace.jsonl",

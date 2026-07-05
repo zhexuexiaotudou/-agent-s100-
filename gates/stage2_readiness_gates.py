@@ -25,7 +25,7 @@ from ai_nas_harness.approval_token import create_approval_token, validate_approv
 from ai_nas_harness.argument_policy import ArgumentPolicyFilter, stable_args_hash
 from ai_nas_harness.config_io import load_json_yaml, safe_write_json, safe_write_text, utc_stamp
 from ai_nas_harness.path_resolver import critical_asset_map, find_package_root, find_production_context_root, find_repo_root
-from ai_nas_harness.redaction import redact_cloud_payload
+from ai_nas_harness.privacy_filter import redact_cloud_payload
 from ai_nas_harness.tool_filter import ToolExposureFilter
 from gates.harness_gate_common import gate_payload, write_gate_report
 from stage2_sidecar.readonly_bridge import run_bridge

@@ -125,7 +125,7 @@ case "$tool_id" in
     exec python3 "$script_dir/ai_nas_index_observability_contract_probe.py" "$@"
     ;;
   ai_nas_sqlite_index_integrity_contract)
-    exec python3 "$script_dir/ai_nas_sqlite_index_integrity_contract_probe.py" "$@"
+    exec python3 "$script_dir/ai_nas_index_integrity_contract_probe.py" "$@"
     ;;
   ai_nas_incremental_scan_efficiency_contract)
     exec python3 "$script_dir/ai_nas_incremental_scan_efficiency_contract_probe.py" "$@"

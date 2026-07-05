@@ -29,7 +29,7 @@ REPORT_MAP = {
     "stage3_policy_first_shadow_decision_gate": "11020_stage3_policy_first_shadow_decision_gate",
     "stage3_readonly_shadow_execution_gate": "11030_stage3_readonly_shadow_execution_gate",
     "stage3_health_resource_latency_gate": "11040_stage3_health_resource_latency_gate",
-    "stage3_cloud_egress_redaction_gate": "11045_stage3_cloud_egress_redaction_gate",
+    "stage3_cloud_egress_privacy_gate": "11045_stage3_cloud_egress_privacy_gate",
     "stage3_shadow_rollback_gate": "11050_stage3_shadow_rollback_gate",
     "stage3_final_gate_packet": "11060_stage3_final_gate_packet",
 }
@@ -946,7 +946,7 @@ def health_resource_latency_gate(report_root: Path, execution: dict[str, Any]) -
     return gate_payload("stage3_health_resource_latency_gate", checks, failures, {"summary": summary, "health_summary": health_summary})
 
 
-def cloud_egress_redaction_gate(report_root: Path) -> dict[str, Any]:
+def cloud_egress_privacy_gate(report_root: Path) -> dict[str, Any]:
     checks: list[dict[str, Any]] = []
     failures: list[str] = []
     scenarios = [
@@ -993,7 +993,7 @@ def cloud_egress_redaction_gate(report_root: Path) -> dict[str, Any]:
             "raw_private_payload_stored_count": raw_private_payload_stored_count,
         },
     }
-    return gate_payload("stage3_cloud_egress_redaction_gate", checks, failures, detail)
+    return gate_payload("stage3_cloud_egress_privacy_gate", checks, failures, detail)
 
 
 def shadow_rollback_gate(report_root: Path, ssh: SshRunner, baseline: dict[str, Any], execution: dict[str, Any]) -> dict[str, Any]:
@@ -1109,7 +1109,7 @@ def final_gate_packet(results: list[dict[str, Any]]) -> dict[str, Any]:
         "policy_first_decision_pass": by_id["stage3_policy_first_shadow_decision_gate"]["failure_count"] == 0,
         "readonly_execution_pass": by_id["stage3_readonly_shadow_execution_gate"]["failure_count"] == 0,
         "health_resource_latency_pass": by_id["stage3_health_resource_latency_gate"]["failure_count"] == 0,
-        "cloud_redaction_pass": by_id["stage3_cloud_egress_redaction_gate"]["failure_count"] == 0,
+        "cloud_redaction_pass": by_id["stage3_cloud_egress_privacy_gate"]["failure_count"] == 0,
         "rollback_pass": by_id["stage3_shadow_rollback_gate"]["failure_count"] == 0,
         "stage4_not_entered": True,
         "write_actions_not_enabled": True,
@@ -1138,7 +1138,7 @@ def write_final_outputs(results: list[dict[str, Any]], package_info: dict[str, A
     ]
     by_id = {item["gate_id"]: item for item in results}
     execution_summary = ((by_id["stage3_readonly_shadow_execution_gate"].get("detail") or {}).get("summary") or {})
-    cloud_summary = ((by_id["stage3_cloud_egress_redaction_gate"].get("detail") or {}).get("summary") or {})
+    cloud_summary = ((by_id["stage3_cloud_egress_privacy_gate"].get("detail") or {}).get("summary") or {})
     package_lines = [
         "- Final zip and `.sha256.txt` are generated after this packet is materialized.",
         "- Package integrity is verified by `MANIFEST.json`, `SHA256SUMS.txt`, and the adjacent `.sha256.txt` file.",
@@ -1367,7 +1367,7 @@ def run_all(args: argparse.Namespace) -> list[dict[str, Any]]:
     health["report_paths"] = write_numbered_report(health, report_root)
     results.append(health)
 
-    cloud = cloud_egress_redaction_gate(report_root)
+    cloud = cloud_egress_privacy_gate(report_root)
     cloud["report_paths"] = write_numbered_report(cloud, report_root)
     results.append(cloud)
 

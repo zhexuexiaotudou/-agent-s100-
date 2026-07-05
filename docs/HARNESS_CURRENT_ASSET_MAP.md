@@ -257,7 +257,7 @@ New Stage 1 gate IDs:
 - `tool_exposure_minimization_gate`
 - `memory_boundary_gate`
 - `runtime_trace_completeness_gate`
-- `cloud_egress_redaction_gate`
+- `cloud_egress_privacy_gate`
 - `harness_stage1_gate_report`
 
 ## Report Schemas

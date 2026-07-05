@@ -10,7 +10,7 @@
 - `tool_exposure_minimization_gate` verdict `ok_tool_exposure_minimization_gate` passed `37/37`
 - `memory_boundary_gate` verdict `ok_memory_boundary_gate` passed `11/11`
 - `runtime_trace_completeness_gate` verdict `ok_runtime_trace_completeness_gate` passed `19/19`
-- `cloud_egress_redaction_gate` verdict `ok_cloud_egress_redaction_gate` passed `12/12`
+- `cloud_egress_privacy_gate` verdict `ok_cloud_egress_privacy_gate` passed `12/12`
 
 ## Failures
 

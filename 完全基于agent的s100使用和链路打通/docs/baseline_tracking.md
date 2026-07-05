@@ -1184,7 +1184,7 @@ inputs:
 
 ```text
 config/dream7b_deployment.example.json
-config/home_assistant.env.example
+config/home_assistant_env_example.txt
 scripts/probes/dream7b_smoke_probe.sh
 docs/baseline_progress_2026-05-29_external_input_templates.md
 ```

@@ -16,6 +16,7 @@ output/
 *.zip
 *.zip.sha256
 *.zip.sha256.txt
+digua-ai-nas-web-verify-*/
 evidence/**/*.npy
 evidence/**/*.npz
 evidence/**/*.tar.gz
@@ -48,6 +49,9 @@ configs/*.local.json
 # Digua AI-NAS: do not commit model/tokenizer artifacts or secrets
 evidence/token_budget/qwen2_5-1_5b-hf/
 models/
+*.sqlite
+*.sqlite3
+*.db
 *.safetensors
 *.bin
 *.gguf
@@ -61,6 +65,15 @@ secrets/
 credentials/
 redaction_map*.json
 *redaction_map*
+tokenizer.json
+vocab.json
+merges.txt
+tokenizer_config.json
+
+# Frontend verification caches
+node_modules/
+playwright-report/
+test-results/
 
 # OS/editor files
 Thumbs.db

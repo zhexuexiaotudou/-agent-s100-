@@ -75,7 +75,7 @@ const allowedTools = new Map([
   ["ai_nas_index_observability_contract", []],
   ["ai_nas_index_observability_contract_probe", []],
   ["ai_nas_sqlite_index_integrity_contract", []],
-  ["ai_nas_sqlite_index_integrity_contract_probe", []],
+  ["ai_nas_index_integrity_contract_probe", []],
   ["ai_nas_incremental_scan_efficiency_contract", []],
   ["ai_nas_incremental_scan_efficiency_contract_probe", []],
   ["ai_nas_index_search_isolation_slo", []],

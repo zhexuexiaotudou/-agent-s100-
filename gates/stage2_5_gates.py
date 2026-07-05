@@ -21,7 +21,7 @@ if str(ROOT) not in sys.path:
 
 from ai_nas_harness.argument_policy import stable_args_hash
 from ai_nas_harness.config_io import safe_write_json, safe_write_text, utc_stamp
-from ai_nas_harness.redaction import redact_cloud_payload
+from ai_nas_harness.privacy_filter import redact_cloud_payload
 from gates.harness_gate_common import gate_payload
 from gates.stage2_s100p_live_gates import (
     PREVIOUS_PACKAGE,

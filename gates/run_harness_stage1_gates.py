@@ -23,7 +23,7 @@ GATE_MODULES = [
     "tool_exposure_minimization_gate",
     "memory_boundary_gate",
     "runtime_trace_completeness_gate",
-    "cloud_egress_redaction_gate",
+    "cloud_egress_privacy_gate",
 ]
 
 

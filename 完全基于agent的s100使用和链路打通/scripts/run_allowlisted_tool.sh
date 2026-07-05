@@ -62,7 +62,7 @@ Usage:
   scripts/run_allowlisted_tool.sh ai_nas_index_observability_contract
   scripts/run_allowlisted_tool.sh ai_nas_index_observability_contract_probe
   scripts/run_allowlisted_tool.sh ai_nas_sqlite_index_integrity_contract
-  scripts/run_allowlisted_tool.sh ai_nas_sqlite_index_integrity_contract_probe
+  scripts/run_allowlisted_tool.sh ai_nas_index_integrity_contract_probe
   scripts/run_allowlisted_tool.sh ai_nas_incremental_scan_efficiency_contract
   scripts/run_allowlisted_tool.sh ai_nas_incremental_scan_efficiency_contract_probe
   scripts/run_allowlisted_tool.sh ai_nas_index_search_isolation_slo
@@ -232,7 +232,7 @@ ai_nas_index_rename_detection_probe  Alias for ai_nas_index_rename_detection
 ai_nas_index_observability_contract  AI-NAS SQLite index status observability contract
 ai_nas_index_observability_contract_probe  Alias for ai_nas_index_observability_contract
 ai_nas_sqlite_index_integrity_contract  AI-NAS SQLite/FTS integrity and orphan cleanup contract
-ai_nas_sqlite_index_integrity_contract_probe  Alias for ai_nas_sqlite_index_integrity_contract
+ai_nas_index_integrity_contract_probe  Alias for ai_nas_sqlite_index_integrity_contract
 ai_nas_incremental_scan_efficiency_contract  AI-NAS incremental SQLite/FTS scan efficiency contract
 ai_nas_incremental_scan_efficiency_contract_probe  Alias for ai_nas_incremental_scan_efficiency_contract
 ai_nas_index_search_isolation_slo  AI-NAS bounded index/search isolation SLO acceptance
@@ -483,9 +483,9 @@ EOF
     tool_path="$repo_dir/scripts/probes/ai_nas_index_observability_contract_probe.sh"
     max_args=0
     ;;
-  ai_nas_sqlite_index_integrity_contract|ai_nas_sqlite_index_integrity_contract_probe)
+  ai_nas_sqlite_index_integrity_contract|ai_nas_index_integrity_contract_probe)
     shift
-    tool_path="$repo_dir/scripts/probes/ai_nas_sqlite_index_integrity_contract_probe.sh"
+    tool_path="$repo_dir/scripts/probes/ai_nas_index_integrity_contract_probe.sh"
     max_args=0
     ;;
   ai_nas_incremental_scan_efficiency_contract|ai_nas_incremental_scan_efficiency_contract_probe)
