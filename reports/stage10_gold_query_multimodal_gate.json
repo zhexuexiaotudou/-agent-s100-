@@ -1,0 +1,738 @@
+{
+  "blockers": [],
+  "checks": [
+    {
+      "detail": "DIGUA_DEMO_AUTH_TOKEN or /tmp/stage9_demo_token.txt",
+      "name": "auth token available",
+      "ok": true
+    },
+    {
+      "detail": {
+        "blocked": null,
+        "degraded": false,
+        "error": null,
+        "ok": true,
+        "result_count": 8,
+        "status": 200
+      },
+      "name": "multimodal laptop query ok",
+      "ok": true
+    },
+    {
+      "detail": {
+        "blocked": null,
+        "degraded": false,
+        "error": null,
+        "ok": true,
+        "result_count": 8,
+        "status": 200
+      },
+      "name": "multimodal pet query ok",
+      "ok": true
+    },
+    {
+      "detail": {
+        "blocked": null,
+        "degraded": false,
+        "error": null,
+        "ok": true,
+        "result_count": 0,
+        "status": 200
+      },
+      "name": "multimodal video query ok",
+      "ok": true
+    },
+    {
+      "detail": {
+        "blocked": null,
+        "degraded": null,
+        "error": null,
+        "ok": true,
+        "result_count": 0,
+        "status": 200
+      },
+      "name": "AI Space pet query ok",
+      "ok": true
+    },
+    {
+      "detail": {
+        "blocked": false,
+        "degraded": true,
+        "error": null,
+        "ok": true,
+        "result_count": 0,
+        "status": 200
+      },
+      "name": "person white query safely handled",
+      "ok": true
+    },
+    {
+      "detail": {
+        "biometric_recognition_enabled": false,
+        "blocked": true,
+        "blocked_reason": "face_identification_disabled",
+        "cloud_used": false,
+        "face_identification_enabled": false,
+        "intent": "person_identity_recognition",
+        "ok": true,
+        "raw_path_returned": false,
+        "results": [],
+        "sensitive_attribute_inference_enabled": false
+      },
+      "name": "identity query blocked",
+      "ok": true
+    },
+    {
+      "detail": {
+        "answer": "",
+        "cloud_ocr_enabled": false,
+        "cloud_used": false,
+        "error": "no_grounded_answer",
+        "evidence_refs": [],
+        "mode": "document_rag",
+        "no_grounded_answer": true,
+        "ok": false,
+        "raw_path_returned": false,
+        "raw_private_content_returned": false,
+        "retrieval_mode": "sqlite_fts_first",
+        "retrieved_chunks": [],
+        "route_module": "src.openclaw.routes.document_rag_routes",
+        "schema": "digua_document_rag_query_v1"
+      },
+      "name": "invoice grounded or explicit no answer",
+      "ok": true
+    },
+    {
+      "detail": {
+        "answer": "",
+        "cloud_ocr_enabled": false,
+        "cloud_used": false,
+        "error": "no_grounded_answer",
+        "evidence_refs": [],
+        "mode": "document_rag",
+        "no_grounded_answer": true,
+        "ok": false,
+        "raw_path_returned": false,
+        "raw_private_content_returned": false,
+        "retrieval_mode": "sqlite_fts_first",
+        "retrieved_chunks": [],
+        "route_module": "src.openclaw.routes.document_rag_routes",
+        "schema": "digua_document_rag_query_v1"
+      },
+      "name": "contract grounded or explicit no answer",
+      "ok": true
+    },
+    {
+      "detail": "redacted",
+      "name": "no raw path in query responses",
+      "ok": true
+    },
+    {
+      "detail": "cloud_used=false",
+      "name": "cloud not used for private query flow",
+      "ok": true
+    }
+  ],
+  "evidence": {
+    "auth_token_supplied": true,
+    "flows": {
+      "ai_space_pet": {
+        "ok": true,
+        "payload": {
+          "cloud_used": false,
+          "ok": true,
+          "query_redacted": "找宠物照片",
+          "raw_path_returned": false,
+          "results": [],
+          "schema": "digua_ai_space_v1"
+        },
+        "status": 200
+      },
+      "contract_rag": {
+        "error": "HTTP Error 404: Not Found",
+        "ok": false,
+        "payload": {
+          "answer": "",
+          "cloud_ocr_enabled": false,
+          "cloud_used": false,
+          "error": "no_grounded_answer",
+          "evidence_refs": [],
+          "mode": "document_rag",
+          "no_grounded_answer": true,
+          "ok": false,
+          "raw_path_returned": false,
+          "raw_private_content_returned": false,
+          "retrieval_mode": "sqlite_fts_first",
+          "retrieved_chunks": [],
+          "route_module": "[redacted]",
+          "schema": "digua_document_rag_query_v1"
+        },
+        "status": 404
+      },
+      "identity_block": {
+        "ok": true,
+        "payload": {
+          "biometric_recognition_enabled": false,
+          "blocked": true,
+          "blocked_reason": "face_identification_disabled",
+          "cloud_used": false,
+          "face_identification_enabled": false,
+          "intent": "person_identity_recognition",
+          "ok": true,
+          "raw_path_returned": false,
+          "results": [],
+          "sensitive_attribute_inference_enabled": false
+        },
+        "status": 200
+      },
+      "invoice_rag": {
+        "error": "HTTP Error 404: Not Found",
+        "ok": false,
+        "payload": {
+          "answer": "",
+          "cloud_ocr_enabled": false,
+          "cloud_used": false,
+          "error": "no_grounded_answer",
+          "evidence_refs": [],
+          "mode": "document_rag",
+          "no_grounded_answer": true,
+          "ok": false,
+          "raw_path_returned": false,
+          "raw_private_content_returned": false,
+          "retrieval_mode": "sqlite_fts_first",
+          "retrieved_chunks": [],
+          "route_module": "[redacted]",
+          "schema": "digua_document_rag_query_v1"
+        },
+        "status": 404
+      },
+      "multimodal_laptop": {
+        "ok": true,
+        "payload": {
+          "degraded": false,
+          "degraded_reason": null,
+          "feature_flags": {
+            "asr_enabled": false,
+            "audio_transcript_enabled": false,
+            "biometric_recognition_enabled": false,
+            "cloud_asr_enabled": false,
+            "cloud_ocr_enabled": false,
+            "cloud_vision_enabled": false,
+            "destructive_actions_enabled": false,
+            "document_embedding_enabled": false,
+            "face_identification_enabled": false,
+            "image_embedding_enabled": true,
+            "image_embedding_required_for_delivery": true,
+            "local_asr_required_for_delivery": true,
+            "local_vlm_caption_enabled": false,
+            "min_live_image_embeddings": 5,
+            "multimodal_metadata_index_enabled": true,
+            "multimodal_search_enabled": true,
+            "ocr_enabled": false,
+            "production_semantic_model_required": true,
+            "qwen_tool_execution_enabled": false,
+            "sensitive_attribute_inference_enabled": false,
+            "subtitle_extraction_enabled": true,
+            "symbolic_caption_enabled": true,
+            "vector_extension_enabled": "auto",
+            "vector_numpy_fallback_enabled": true,
+            "video_keyframe_embedding_enabled": false,
+            "video_keyframe_enabled": false
+          },
+          "ok": true,
+          "privacy": {
+            "cloud_used": false,
+            "private_leak_count": 0,
+            "raw_path_returned": false
+          },
+          "query_redacted": "找有电脑的照片",
+          "results": [
+            {
+              "asset_id": "mm_c37aabfcaf6b3bc426f5132a",
+              "evidence_ref": "mm_ev_98bf46109b225e4273",
+              "matched_by": [
+                "image_embedding",
+                "metadata"
+              ],
+              "modality": "image",
+              "path_hash": "[redacted]",
+              "privacy_level": "private_local_only",
+              "rank": 1,
+              "score": 0.586644,
+              "score_components": {
+                "fts": null,
+                "image_embedding": 0.20596444606781006,
+                "metadata": 0.35
+              },
+              "snippet_redacted": "",
+              "thumbnail_url": "[redacted]",
+              "timestamp_sec": null,
+              "title_redacted": "white_shirt_person.jpg"
+            },
+            {
+              "asset_id": "mm_a616a1f8e921f0e2fe56deac",
+              "evidence_ref": "mm_ev_d1d83b127b6348a755",
+              "matched_by": [
+                "image_embedding",
+                "metadata"
+              ],
+              "modality": "image",
+              "path_hash": "[redacted]",
+              "privacy_level": "private_local_only",
+              "rank": 2,
+              "score": 0.351342,
+              "score_components": {
+                "fts": null,
+                "image_embedding": 0.20510324835777283,
+                "metadata": 0.11666666666666665
+              },
+              "snippet_redacted": "",
+              "thumbnail_url": "[redacted]",
+              "timestamp_sec": null,
+              "title_redacted": "cat_indoor.jpg"
+            },
+            {
+              "asset_id": "mm_b76f015810d5ee993c55c954",
+              "evidence_ref": "mm_ev_2eb55a743c4d770abf",
+              "matched_by": [
+                "image_embedding",
+                "metadata"
+              ],
+              "modality": "image",
+              "path_hash": "[redacted]",
+              "privacy_level": "private_local_only",
+              "rank": 3,
+              "score": 0.290287,
+              "score_components": {
+                "fts": null,
+                "image_embedding": 0.20346912741661072,
+                "metadata": 0.05833333333333333
+              },
+              "snippet_redacted": "",
+              "thumbnail_url": "[redacted]",
+              "timestamp_sec": null,
+              "title_redacted": "laptop_desk.jpg"
+            },
+            {
+              "asset_id": "mm_fe27a249e779244339cdcf4b",
+              "evidence_ref": "mm_ev_d2961b36a4ac824e97",
+              "matched_by": [
+                "image_embedding",
+                "metadata"
+              ],
+              "modality": "image",
+              "path_hash": "[redacted]",
+              "privacy_level": "private_local_only",
+              "rank": 4,
+              "score": 0.289667,
+              "score_components": {
+                "fts": null,
+                "image_embedding": 0.20861265063285828,
+                "metadata": 0.049999999999999996
+              },
+              "snippet_redacted": "",
+              "thumbnail_url": "[redacted]",
+              "timestamp_sec": null,
+              "title_redacted": "invoice_photo.jpg"
+            },
+            {
+              "asset_id": "mm_8a598f86ea97becc7abafc92",
+              "evidence_ref": "mm_ev_181690345aa9dff715",
+              "matched_by": [
+                "image_embedding",
+                "metadata"
+              ],
+              "modality": "image",
+              "path_hash": "[redacted]",
+              "privacy_level": "private_local_only",
+              "rank": 5,
+              "score": 0.274498,
+              "score_components": {
+                "fts": null,
+                "image_embedding": 0.20596444606781006,
+                "metadata": 0.03888888888888889
+              },
+              "snippet_redacted": "",
+              "thumbnail_url": "[redacted]",
+              "timestamp_sec": null,
+              "title_redacted": "white_shirt_person.jpg"
+            },
+            {
+              "asset_id": "mm_501b64c01d23847dfed162f2",
+              "evidence_ref": "mm_ev_c0820d847757e789cb",
+              "matched_by": [
+                "image_embedding",
+                "metadata"
+              ],
+              "modality": "image",
+              "path_hash": "[redacted]",
+              "privacy_level": "private_local_only",
+              "rank": 6,
+              "score": 0.270176,
+              "score_components": {
+                "fts": null,
+                "image_embedding": 0.20596444606781006,
+                "metadata": 0.034999999999999996
+              },
+              "snippet_redacted": "",
+              "thumbnail_url": "[redacted]",
+              "timestamp_sec": null,
+              "title_redacted": "white_shirt_person_001.jpg"
+            },
+            {
+              "asset_id": "mm_c8704cabad977fbe7f2cae48",
+              "evidence_ref": "mm_ev_ada77616f24370af99",
+              "matched_by": [
+                "image_embedding",
+                "metadata"
+              ],
+              "modality": "image",
+              "path_hash": "[redacted]",
+              "privacy_level": "private_local_only",
+              "rank": 7,
+              "score": 0.266573,
+              "score_components": {
+                "fts": null,
+                "image_embedding": 0.20596444606781006,
+                "metadata": 0.031818181818181815
+              },
+              "snippet_redacted": "",
+              "thumbnail_url": "[redacted]",
+              "timestamp_sec": null,
+              "title_redacted": "white_shirt_person_002.jpg"
+            },
+            {
+              "asset_id": "mm_3003db6d87ab1d23f284ec5c",
+              "evidence_ref": "mm_ev_f5a430540bbe07f595",
+              "matched_by": [
+                "image_embedding",
+                "metadata"
+              ],
+              "modality": "image",
+              "path_hash": "[redacted]",
+              "privacy_level": "private_local_only",
+              "rank": 8,
+              "score": 0.264645,
+              "score_components": {
+                "fts": null,
+                "image_embedding": 0.20596444606781006,
+                "metadata": 0.029166666666666664
+              },
+              "snippet_redacted": "",
+              "thumbnail_url": "[redacted]",
+              "timestamp_sec": null,
+              "title_redacted": "white_shirt_person_003.jpg"
+            }
+          ],
+          "retrieval_mode": "fts_first_plus_image_embedding",
+          "run_id": "mm_run_2c72b9fc350e4713",
+          "trace_id": "mm_trace_eb24479d238c495b",
+          "yolo_object_results": 0
+        },
+        "status": 200
+      },
+      "multimodal_pet": {
+        "ok": true,
+        "payload": {
+          "degraded": false,
+          "degraded_reason": null,
+          "feature_flags": {
+            "asr_enabled": false,
+            "audio_transcript_enabled": false,
+            "biometric_recognition_enabled": false,
+            "cloud_asr_enabled": false,
+            "cloud_ocr_enabled": false,
+            "cloud_vision_enabled": false,
+            "destructive_actions_enabled": false,
+            "document_embedding_enabled": false,
+            "face_identification_enabled": false,
+            "image_embedding_enabled": true,
+            "image_embedding_required_for_delivery": true,
+            "local_asr_required_for_delivery": true,
+            "local_vlm_caption_enabled": false,
+            "min_live_image_embeddings": 5,
+            "multimodal_metadata_index_enabled": true,
+            "multimodal_search_enabled": true,
+            "ocr_enabled": false,
+            "production_semantic_model_required": true,
+            "qwen_tool_execution_enabled": false,
+            "sensitive_attribute_inference_enabled": false,
+            "subtitle_extraction_enabled": true,
+            "symbolic_caption_enabled": true,
+            "vector_extension_enabled": "auto",
+            "vector_numpy_fallback_enabled": true,
+            "video_keyframe_embedding_enabled": false,
+            "video_keyframe_enabled": false
+          },
+          "ok": true,
+          "privacy": {
+            "cloud_used": false,
+            "private_leak_count": 0,
+            "raw_path_returned": false
+          },
+          "query_redacted": "找宠物照片",
+          "results": [
+            {
+              "asset_id": "mm_c37aabfcaf6b3bc426f5132a",
+              "evidence_ref": "mm_ev_98bf46109b225e4273",
+              "matched_by": [
+                "image_embedding",
+                "metadata"
+              ],
+              "modality": "image",
+              "path_hash": "[redacted]",
+              "privacy_level": "private_local_only",
+              "rank": 1,
+              "score": 0.583627,
+              "score_components": {
+                "fts": null,
+                "image_embedding": 0.20353484153747559,
+                "metadata": 0.35
+              },
+              "snippet_redacted": "",
+              "thumbnail_url": "[redacted]",
+              "timestamp_sec": null,
+              "title_redacted": "white_shirt_person.jpg"
+            },
+            {
+              "asset_id": "mm_a6d3b203eba767157fdd871f",
+              "evidence_ref": "mm_ev_d15374d6109bce32db",
+              "matched_by": [
+                "image_embedding",
+                "metadata"
+              ],
+              "modality": "image",
+              "path_hash": "[redacted]",
+              "privacy_level": "private_local_only",
+              "rank": 2,
+              "score": 0.410486,
+              "score_components": {
+                "fts": null,
+                "image_embedding": 0.20397190749645233,
+                "metadata": 0.175
+              },
+              "snippet_redacted": "",
+              "thumbnail_url": "[redacted]",
+              "timestamp_sec": null,
+              "title_redacted": "red_shirt_person.jpg"
+            },
+            {
+              "asset_id": "mm_b76f015810d5ee993c55c954",
+              "evidence_ref": "mm_ev_2eb55a743c4d770abf",
+              "matched_by": [
+                "image_embedding",
+                "metadata"
+              ],
+              "modality": "image",
+              "path_hash": "[redacted]",
+              "privacy_level": "private_local_only",
+              "rank": 3,
+              "score": 0.292141,
+              "score_components": {
+                "fts": null,
+                "image_embedding": 0.2039506584405899,
+                "metadata": 0.05833333333333333
+              },
+              "snippet_redacted": "",
+              "thumbnail_url": "[redacted]",
+              "timestamp_sec": null,
+              "title_redacted": "laptop_desk.jpg"
+            },
+            {
+              "asset_id": "mm_fe27a249e779244339cdcf4b",
+              "evidence_ref": "mm_ev_d2961b36a4ac824e97",
+              "matched_by": [
+                "image_embedding",
+                "metadata"
+              ],
+              "modality": "image",
+              "path_hash": "[redacted]",
+              "privacy_level": "private_local_only",
+              "rank": 4,
+              "score": 0.288177,
+              "score_components": {
+                "fts": null,
+                "image_embedding": 0.2073785960674286,
+                "metadata": 0.049999999999999996
+              },
+              "snippet_redacted": "",
+              "thumbnail_url": "[redacted]",
+              "timestamp_sec": null,
+              "title_redacted": "invoice_photo.jpg"
+            },
+            {
+              "asset_id": "mm_8a598f86ea97becc7abafc92",
+              "evidence_ref": "mm_ev_181690345aa9dff715",
+              "matched_by": [
+                "image_embedding",
+                "metadata"
+              ],
+              "modality": "image",
+              "path_hash": "[redacted]",
+              "privacy_level": "private_local_only",
+              "rank": 5,
+              "score": 0.271202,
+              "score_components": {
+                "fts": null,
+                "image_embedding": 0.20353484153747559,
+                "metadata": 0.03888888888888889
+              },
+              "snippet_redacted": "",
+              "thumbnail_url": "[redacted]",
+              "timestamp_sec": null,
+              "title_redacted": "white_shirt_person.jpg"
+            },
+            {
+              "asset_id": "mm_501b64c01d23847dfed162f2",
+              "evidence_ref": "mm_ev_c0820d847757e789cb",
+              "matched_by": [
+                "image_embedding",
+                "metadata"
+              ],
+              "modality": "image",
+              "path_hash": "[redacted]",
+              "privacy_level": "private_local_only",
+              "rank": 6,
+              "score": 0.266905,
+              "score_components": {
+                "fts": null,
+                "image_embedding": 0.20353484153747559,
+                "metadata": 0.034999999999999996
+              },
+              "snippet_redacted": "",
+              "thumbnail_url": "[redacted]",
+              "timestamp_sec": null,
+              "title_redacted": "white_shirt_person_001.jpg"
+            },
+            {
+              "asset_id": "mm_c8704cabad977fbe7f2cae48",
+              "evidence_ref": "mm_ev_ada77616f24370af99",
+              "matched_by": [
+                "image_embedding",
+                "metadata"
+              ],
+              "modality": "image",
+              "path_hash": "[redacted]",
+              "privacy_level": "private_local_only",
+              "rank": 7,
+              "score": 0.263326,
+              "score_components": {
+                "fts": null,
+                "image_embedding": 0.20353484153747559,
+                "metadata": 0.031818181818181815
+              },
+              "snippet_redacted": "",
+              "thumbnail_url": "[redacted]",
+              "timestamp_sec": null,
+              "title_redacted": "white_shirt_person_002.jpg"
+            },
+            {
+              "asset_id": "mm_3003db6d87ab1d23f284ec5c",
+              "evidence_ref": "mm_ev_f5a430540bbe07f595",
+              "matched_by": [
+                "image_embedding",
+                "metadata"
+              ],
+              "modality": "image",
+              "path_hash": "[redacted]",
+              "privacy_level": "private_local_only",
+              "rank": 8,
+              "score": 0.261083,
+              "score_components": {
+                "fts": null,
+                "image_embedding": 0.20353484153747559,
+                "metadata": 0.029166666666666664
+              },
+              "snippet_redacted": "",
+              "thumbnail_url": "[redacted]",
+              "timestamp_sec": null,
+              "title_redacted": "white_shirt_person_003.jpg"
+            }
+          ],
+          "retrieval_mode": "fts_first_plus_image_embedding",
+          "run_id": "mm_run_662b9a77df6a4389",
+          "trace_id": "mm_trace_7f0ca33e3895463d",
+          "yolo_object_results": 0
+        },
+        "status": 200
+      },
+      "multimodal_video": {
+        "ok": true,
+        "payload": {
+          "degraded": false,
+          "degraded_reason": null,
+          "feature_flags": {
+            "asr_enabled": false,
+            "audio_transcript_enabled": false,
+            "biometric_recognition_enabled": false,
+            "cloud_asr_enabled": false,
+            "cloud_ocr_enabled": false,
+            "cloud_vision_enabled": false,
+            "destructive_actions_enabled": false,
+            "document_embedding_enabled": false,
+            "face_identification_enabled": false,
+            "image_embedding_enabled": true,
+            "image_embedding_required_for_delivery": true,
+            "local_asr_required_for_delivery": true,
+            "local_vlm_caption_enabled": false,
+            "min_live_image_embeddings": 5,
+            "multimodal_metadata_index_enabled": true,
+            "multimodal_search_enabled": true,
+            "ocr_enabled": false,
+            "production_semantic_model_required": true,
+            "qwen_tool_execution_enabled": false,
+            "sensitive_attribute_inference_enabled": false,
+            "subtitle_extraction_enabled": true,
+            "symbolic_caption_enabled": true,
+            "vector_extension_enabled": "auto",
+            "vector_numpy_fallback_enabled": true,
+            "video_keyframe_embedding_enabled": false,
+            "video_keyframe_enabled": false
+          },
+          "ok": true,
+          "privacy": {
+            "cloud_used": false,
+            "private_leak_count": 0,
+            "raw_path_returned": false
+          },
+          "query_redacted": "找视频里有人的片段",
+          "results": [],
+          "retrieval_mode": "fts_first_plus_image_embedding",
+          "run_id": "mm_run_ba57a1b40d6d41a9",
+          "trace_id": "mm_trace_e1a8b2509dec4778",
+          "yolo_object_results": 0
+        },
+        "status": 200
+      },
+      "person_white": {
+        "ok": true,
+        "payload": {
+          "biometric_recognition_enabled": false,
+          "blocked": false,
+          "cloud_used": false,
+          "degraded": true,
+          "degraded_reason": "no_matching_person_attribute",
+          "face_identification_enabled": false,
+          "ok": true,
+          "query": {
+            "blocked": false,
+            "blocked_reason": null,
+            "co_occurs_with": null,
+            "modality": null,
+            "query_redacted": "找穿白色上衣的人",
+            "require_person": true,
+            "upper_color": "white"
+          },
+          "raw_path_returned": false,
+          "results": [],
+          "schema": "[redacted]",
+          "sensitive_attribute_inference_enabled": false
+        },
+        "status": 200
+      }
+    }
+  },
+  "generated_at": "2026-07-06T13:00:15Z",
+  "ok": true,
+  "verdict": "ok_stage10_gold_query_multimodal_gate"
+}

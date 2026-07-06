@@ -1,0 +1,13 @@
+[Unit]
+Description=Digua AI-NAS index worker
+After=network-online.target openclaw-gateway.service
+
+[Service]
+Type=oneshot
+WorkingDirectory=%h/openclaw
+EnvironmentFile=-%h/.config/digua-ai-nas/digua.env
+ExecStart=/usr/bin/python3 scripts/product_smoke_test.py --base-url http://127.0.0.1:8765 --report-root ${DIGUA_NAS_MOUNT}/reports/product_delivery
+
+[Install]
+WantedBy=default.target
+

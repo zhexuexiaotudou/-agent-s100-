@@ -145,6 +145,69 @@ Current boundary: product smoke has `failure_count=0` and
 the same real-data reason: the S100P YOLO backend completed with
 `runtime_target=s100p_bpu_hbm`, but the current demo images produced zero boxes.
 
+## Stage 10 Release Product Delivery
+
+Stage 10 turns the current demo system into a release-oriented S100P package
+and adds a reproducible demo corpus workflow.
+
+- Final S100P verdict: `ok_stage10_release_product_delivery_gate`
+- Acceptance note: `docs/STAGE10_RELEASE_PRODUCT_DELIVERY_ACCEPTANCE_20260706.md`
+- Final report: `reports/stage10_release_product_delivery_gate.json`
+- Product smoke: `reports/product_smoke_test_20260706-210340/product_smoke_test.json`
+- S100P package SHA256:
+  `66caaca4df00914ea18111f9fc1fbcb1fdd861f75a33c6ed63a7685d1a72b51a`
+- Evidence bundle SHA256:
+  `3a4ace7dc4fd3e1abdb4f8a7a9c1d28118adf06d17c1f1f88e659fc8796c61fa`
+
+- Release package command:
+  `python3 scripts/build_release.py --version 0.1.0 --out dist/`
+- Final release gate:
+  `python3 gates/stage10_release_product_delivery_gate.py --report-root /mnt/nas/openclaw/reports/qwen25_ai_nas --personal-root /mnt/nas/openclaw/Personal --base-url http://127.0.0.1:8765 --timeout 240`
+- Demo corpus: `demo_corpus/` contains recipes, manifests, license notices,
+  Wikimedia/Open Images downloaders, synthetic OCR/RAG document generation,
+  Personal demo-root builder, and verification scripts.
+- Package integrity checks confirm generated demo fixtures declared in manifests
+  are present in the release tarball.
+- Release installer: `release/install/install_s100p.sh` supports preflight,
+  NAS mount planning, model path verification, venv setup, systemd unit
+  planning, first-run wizard, upgrade, rollback, uninstall, and support bundle
+  collection.
+
+Release package outputs:
+
+- `dist/digua-ai-nas-s100p-0.1.0.tar.gz`
+- `dist/digua-ai-nas-s100p-0.1.0.zip`
+- `dist/digua-ai-nas-s100p-0.1.0.sha256`
+- `dist/release_manifest.json`
+
+User quickstart:
+
+```bash
+sudo bash release/install/install_s100p.sh \
+  --nas-protocol nfs \
+  --nas-host 192.168.1.20 \
+  --nas-share /OpenClawWorkspace \
+  --mount-point /mnt/nas/openclaw \
+  --personal-root /mnt/nas/openclaw/Personal \
+  --install-root /opt/digua-ai-nas
+```
+
+Stage 10 safety boundary:
+
+- model weights are not bundled;
+- third-party images are not bundled by default;
+- private user data and runtime DB files are excluded from release packages;
+- Gateway defaults to loopback/LAN, not public internet;
+- NAS access remains allowlisted to the configured OpenClaw workspace;
+- delete, overwrite, uncontrolled move/rename, Qwen autonomous file execution,
+  hidden chain-of-thought storage, cloud vision/OCR/ASR, and private raw cloud
+  egress remain disabled.
+
+Current Stage 10 recording boundary: YOLO bbox recording must either show real
+`detection_count > 0` or record the explicit blocker
+`yolo_demo_images_not_detectable`. Do not claim bbox detection while the live
+S100P product smoke reports zero YOLO boxes.
+
 ## AI Space Product Acceptance
 
 The AI Space / Smart Classification / Subtitle Extraction delivery gate is now

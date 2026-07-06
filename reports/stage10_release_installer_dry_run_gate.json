@@ -1,0 +1,605 @@
+{
+  "blockers": [],
+  "checks": [
+    {
+      "detail": "",
+      "name": "installer dry-run wrote report",
+      "ok": true
+    },
+    {
+      "detail": {
+        "blockers": [],
+        "dry_run": true,
+        "install_root": "/opt/digua-ai-nas",
+        "models": {
+          "blockers": [],
+          "dry_run": true,
+          "model_weights_bundled": false,
+          "models": {
+            "asr": {
+              "exists": false,
+              "name": "whisper_tiny",
+              "path_configured": false,
+              "path_env": "DIGUA_ASR_MODEL_DIR",
+              "required": false,
+              "required_for_demo": false,
+              "sha256_policy": "user-provided",
+              "status": "degraded"
+            },
+            "clip": {
+              "exists": false,
+              "name": "ai_nas_clip_vit_base_patch32",
+              "path_configured": false,
+              "path_env": "DIGUA_CLIP_MODEL_DIR",
+              "required": false,
+              "required_for_demo": true,
+              "sha256_policy": "user-provided",
+              "status": "degraded"
+            },
+            "ocr": {
+              "exists": false,
+              "name": "local_ocr",
+              "path_configured": false,
+              "path_env": "DIGUA_OCR_MODEL_DIR",
+              "required": false,
+              "required_for_demo": true,
+              "sha256_policy": "user-provided",
+              "status": "degraded"
+            },
+            "qwen": {
+              "exists": false,
+              "name": "Qwen local",
+              "path_configured": false,
+              "path_env": "DIGUA_QWEN_MODEL_DIR",
+              "required": true,
+              "required_for_demo": false,
+              "sha256_policy": "user-provided",
+              "status": "missing_required"
+            },
+            "yolo": {
+              "exists": false,
+              "name": "s100p_yolo_hbm",
+              "path_configured": false,
+              "path_env": "DIGUA_YOLO_MODEL_PATH",
+              "required": false,
+              "required_for_demo": true,
+              "sha256_policy": "user-provided",
+              "status": "degraded"
+            }
+          },
+          "ok": true,
+          "warnings": [
+            "clip_demo_model_missing:DIGUA_CLIP_MODEL_DIR",
+            "yolo_demo_model_missing:DIGUA_YOLO_MODEL_PATH",
+            "ocr_demo_model_missing:DIGUA_OCR_MODEL_DIR"
+          ]
+        },
+        "nas": {
+          "blockers": [],
+          "credential_file_supplied": false,
+          "dry_run": true,
+          "loopback_or_lan_only": true,
+          "mount_point": "/mnt/nas/openclaw",
+          "nas_host": "",
+          "nas_share": "",
+          "ok": true,
+          "password_logged": false,
+          "personal_root": "/mnt/nas/openclaw/Personal",
+          "protocol": "local",
+          "redacted_fstab_fragment": "local-directory-mode"
+        },
+        "nas_mount": "/mnt/nas/openclaw",
+        "next_commands": {
+          "smoke": "python3 scripts/product_smoke_test.py --base-url http://127.0.0.1:8765 --report-root /mnt/nas/openclaw/reports/product_delivery",
+          "uninstall": "bash release/install/uninstall_s100p.sh --dry-run",
+          "verify": "python3 release/scripts/verify_install.py --base-url http://127.0.0.1:8765"
+        },
+        "ok": true,
+        "personal_root": "/mnt/nas/openclaw/Personal",
+        "pip_executed": false,
+        "preflight": {
+          "arch": "aarch64",
+          "blockers": [],
+          "bpu_available": true,
+          "disk_free_kb": 347440,
+          "ffmpeg_ok": true,
+          "min_disk_kb": 262144,
+          "mount_writable": true,
+          "nas_reachable": true,
+          "network_ok": true,
+          "ok": true,
+          "os_release": "Ubuntu 22.04.5 LTS",
+          "personal_root_ok": true,
+          "pip_ok": true,
+          "ports_available": false,
+          "python_ok": true,
+          "python_version": "3.10.12",
+          "s100p_detected": true,
+          "sqlite3_ok": false,
+          "systemd_user_ok": true,
+          "venv_ok": true,
+          "warn_disk_kb": 1048576,
+          "warnings": [
+            "disk_free_below_1g",
+            "ports_8765_or_18080_already_listening"
+          ]
+        },
+        "public_exposure_enabled": false,
+        "system_python_modified": false,
+        "systemd": {
+          "blockers": [],
+          "dry_run": true,
+          "enabled_on_apply": [
+            "openclaw-gateway.service",
+            "qwen25-local-openai-gateway.service",
+            "digua-ai-nightly-index.timer"
+          ],
+          "loopback_default": true,
+          "mode": "user",
+          "ok": true,
+          "target_dir": "/home/sunrise/.config/systemd/user",
+          "units": [
+            "openclaw-gateway.service",
+            "qwen25-local-openai-gateway.service",
+            "digua-ai-index-worker.service",
+            "digua-ai-nightly-index.timer"
+          ]
+        },
+        "venv_target": "/opt/digua-ai-nas/venv"
+      },
+      "name": "dry-run flag true",
+      "ok": true
+    },
+    {
+      "detail": {
+        "blockers": [],
+        "dry_run": true,
+        "install_root": "/opt/digua-ai-nas",
+        "models": {
+          "blockers": [],
+          "dry_run": true,
+          "model_weights_bundled": false,
+          "models": {
+            "asr": {
+              "exists": false,
+              "name": "whisper_tiny",
+              "path_configured": false,
+              "path_env": "DIGUA_ASR_MODEL_DIR",
+              "required": false,
+              "required_for_demo": false,
+              "sha256_policy": "user-provided",
+              "status": "degraded"
+            },
+            "clip": {
+              "exists": false,
+              "name": "ai_nas_clip_vit_base_patch32",
+              "path_configured": false,
+              "path_env": "DIGUA_CLIP_MODEL_DIR",
+              "required": false,
+              "required_for_demo": true,
+              "sha256_policy": "user-provided",
+              "status": "degraded"
+            },
+            "ocr": {
+              "exists": false,
+              "name": "local_ocr",
+              "path_configured": false,
+              "path_env": "DIGUA_OCR_MODEL_DIR",
+              "required": false,
+              "required_for_demo": true,
+              "sha256_policy": "user-provided",
+              "status": "degraded"
+            },
+            "qwen": {
+              "exists": false,
+              "name": "Qwen local",
+              "path_configured": false,
+              "path_env": "DIGUA_QWEN_MODEL_DIR",
+              "required": true,
+              "required_for_demo": false,
+              "sha256_policy": "user-provided",
+              "status": "missing_required"
+            },
+            "yolo": {
+              "exists": false,
+              "name": "s100p_yolo_hbm",
+              "path_configured": false,
+              "path_env": "DIGUA_YOLO_MODEL_PATH",
+              "required": false,
+              "required_for_demo": true,
+              "sha256_policy": "user-provided",
+              "status": "degraded"
+            }
+          },
+          "ok": true,
+          "warnings": [
+            "clip_demo_model_missing:DIGUA_CLIP_MODEL_DIR",
+            "yolo_demo_model_missing:DIGUA_YOLO_MODEL_PATH",
+            "ocr_demo_model_missing:DIGUA_OCR_MODEL_DIR"
+          ]
+        },
+        "nas": {
+          "blockers": [],
+          "credential_file_supplied": false,
+          "dry_run": true,
+          "loopback_or_lan_only": true,
+          "mount_point": "/mnt/nas/openclaw",
+          "nas_host": "",
+          "nas_share": "",
+          "ok": true,
+          "password_logged": false,
+          "personal_root": "/mnt/nas/openclaw/Personal",
+          "protocol": "local",
+          "redacted_fstab_fragment": "local-directory-mode"
+        },
+        "nas_mount": "/mnt/nas/openclaw",
+        "next_commands": {
+          "smoke": "python3 scripts/product_smoke_test.py --base-url http://127.0.0.1:8765 --report-root /mnt/nas/openclaw/reports/product_delivery",
+          "uninstall": "bash release/install/uninstall_s100p.sh --dry-run",
+          "verify": "python3 release/scripts/verify_install.py --base-url http://127.0.0.1:8765"
+        },
+        "ok": true,
+        "personal_root": "/mnt/nas/openclaw/Personal",
+        "pip_executed": false,
+        "preflight": {
+          "arch": "aarch64",
+          "blockers": [],
+          "bpu_available": true,
+          "disk_free_kb": 347440,
+          "ffmpeg_ok": true,
+          "min_disk_kb": 262144,
+          "mount_writable": true,
+          "nas_reachable": true,
+          "network_ok": true,
+          "ok": true,
+          "os_release": "Ubuntu 22.04.5 LTS",
+          "personal_root_ok": true,
+          "pip_ok": true,
+          "ports_available": false,
+          "python_ok": true,
+          "python_version": "3.10.12",
+          "s100p_detected": true,
+          "sqlite3_ok": false,
+          "systemd_user_ok": true,
+          "venv_ok": true,
+          "warn_disk_kb": 1048576,
+          "warnings": [
+            "disk_free_below_1g",
+            "ports_8765_or_18080_already_listening"
+          ]
+        },
+        "public_exposure_enabled": false,
+        "system_python_modified": false,
+        "systemd": {
+          "blockers": [],
+          "dry_run": true,
+          "enabled_on_apply": [
+            "openclaw-gateway.service",
+            "qwen25-local-openai-gateway.service",
+            "digua-ai-nightly-index.timer"
+          ],
+          "loopback_default": true,
+          "mode": "user",
+          "ok": true,
+          "target_dir": "/home/sunrise/.config/systemd/user",
+          "units": [
+            "openclaw-gateway.service",
+            "qwen25-local-openai-gateway.service",
+            "digua-ai-index-worker.service",
+            "digua-ai-nightly-index.timer"
+          ]
+        },
+        "venv_target": "/opt/digua-ai-nas/venv"
+      },
+      "name": "system python untouched",
+      "ok": true
+    },
+    {
+      "detail": {
+        "blockers": [],
+        "dry_run": true,
+        "install_root": "/opt/digua-ai-nas",
+        "models": {
+          "blockers": [],
+          "dry_run": true,
+          "model_weights_bundled": false,
+          "models": {
+            "asr": {
+              "exists": false,
+              "name": "whisper_tiny",
+              "path_configured": false,
+              "path_env": "DIGUA_ASR_MODEL_DIR",
+              "required": false,
+              "required_for_demo": false,
+              "sha256_policy": "user-provided",
+              "status": "degraded"
+            },
+            "clip": {
+              "exists": false,
+              "name": "ai_nas_clip_vit_base_patch32",
+              "path_configured": false,
+              "path_env": "DIGUA_CLIP_MODEL_DIR",
+              "required": false,
+              "required_for_demo": true,
+              "sha256_policy": "user-provided",
+              "status": "degraded"
+            },
+            "ocr": {
+              "exists": false,
+              "name": "local_ocr",
+              "path_configured": false,
+              "path_env": "DIGUA_OCR_MODEL_DIR",
+              "required": false,
+              "required_for_demo": true,
+              "sha256_policy": "user-provided",
+              "status": "degraded"
+            },
+            "qwen": {
+              "exists": false,
+              "name": "Qwen local",
+              "path_configured": false,
+              "path_env": "DIGUA_QWEN_MODEL_DIR",
+              "required": true,
+              "required_for_demo": false,
+              "sha256_policy": "user-provided",
+              "status": "missing_required"
+            },
+            "yolo": {
+              "exists": false,
+              "name": "s100p_yolo_hbm",
+              "path_configured": false,
+              "path_env": "DIGUA_YOLO_MODEL_PATH",
+              "required": false,
+              "required_for_demo": true,
+              "sha256_policy": "user-provided",
+              "status": "degraded"
+            }
+          },
+          "ok": true,
+          "warnings": [
+            "clip_demo_model_missing:DIGUA_CLIP_MODEL_DIR",
+            "yolo_demo_model_missing:DIGUA_YOLO_MODEL_PATH",
+            "ocr_demo_model_missing:DIGUA_OCR_MODEL_DIR"
+          ]
+        },
+        "nas": {
+          "blockers": [],
+          "credential_file_supplied": false,
+          "dry_run": true,
+          "loopback_or_lan_only": true,
+          "mount_point": "/mnt/nas/openclaw",
+          "nas_host": "",
+          "nas_share": "",
+          "ok": true,
+          "password_logged": false,
+          "personal_root": "/mnt/nas/openclaw/Personal",
+          "protocol": "local",
+          "redacted_fstab_fragment": "local-directory-mode"
+        },
+        "nas_mount": "/mnt/nas/openclaw",
+        "next_commands": {
+          "smoke": "python3 scripts/product_smoke_test.py --base-url http://127.0.0.1:8765 --report-root /mnt/nas/openclaw/reports/product_delivery",
+          "uninstall": "bash release/install/uninstall_s100p.sh --dry-run",
+          "verify": "python3 release/scripts/verify_install.py --base-url http://127.0.0.1:8765"
+        },
+        "ok": true,
+        "personal_root": "/mnt/nas/openclaw/Personal",
+        "pip_executed": false,
+        "preflight": {
+          "arch": "aarch64",
+          "blockers": [],
+          "bpu_available": true,
+          "disk_free_kb": 347440,
+          "ffmpeg_ok": true,
+          "min_disk_kb": 262144,
+          "mount_writable": true,
+          "nas_reachable": true,
+          "network_ok": true,
+          "ok": true,
+          "os_release": "Ubuntu 22.04.5 LTS",
+          "personal_root_ok": true,
+          "pip_ok": true,
+          "ports_available": false,
+          "python_ok": true,
+          "python_version": "3.10.12",
+          "s100p_detected": true,
+          "sqlite3_ok": false,
+          "systemd_user_ok": true,
+          "venv_ok": true,
+          "warn_disk_kb": 1048576,
+          "warnings": [
+            "disk_free_below_1g",
+            "ports_8765_or_18080_already_listening"
+          ]
+        },
+        "public_exposure_enabled": false,
+        "system_python_modified": false,
+        "systemd": {
+          "blockers": [],
+          "dry_run": true,
+          "enabled_on_apply": [
+            "openclaw-gateway.service",
+            "qwen25-local-openai-gateway.service",
+            "digua-ai-nightly-index.timer"
+          ],
+          "loopback_default": true,
+          "mode": "user",
+          "ok": true,
+          "target_dir": "/home/sunrise/.config/systemd/user",
+          "units": [
+            "openclaw-gateway.service",
+            "qwen25-local-openai-gateway.service",
+            "digua-ai-index-worker.service",
+            "digua-ai-nightly-index.timer"
+          ]
+        },
+        "venv_target": "/opt/digua-ai-nas/venv"
+      },
+      "name": "no public exposure",
+      "ok": true
+    },
+    {
+      "detail": [],
+      "name": "installer plan ok",
+      "ok": true
+    }
+  ],
+  "evidence": {
+    "installer": {
+      "blockers": [],
+      "dry_run": true,
+      "install_root": "/opt/digua-ai-nas",
+      "models": {
+        "blockers": [],
+        "dry_run": true,
+        "model_weights_bundled": false,
+        "models": {
+          "asr": {
+            "exists": false,
+            "name": "whisper_tiny",
+            "path_configured": false,
+            "path_env": "DIGUA_ASR_MODEL_DIR",
+            "required": false,
+            "required_for_demo": false,
+            "sha256_policy": "user-provided",
+            "status": "degraded"
+          },
+          "clip": {
+            "exists": false,
+            "name": "ai_nas_clip_vit_base_patch32",
+            "path_configured": false,
+            "path_env": "DIGUA_CLIP_MODEL_DIR",
+            "required": false,
+            "required_for_demo": true,
+            "sha256_policy": "user-provided",
+            "status": "degraded"
+          },
+          "ocr": {
+            "exists": false,
+            "name": "local_ocr",
+            "path_configured": false,
+            "path_env": "DIGUA_OCR_MODEL_DIR",
+            "required": false,
+            "required_for_demo": true,
+            "sha256_policy": "user-provided",
+            "status": "degraded"
+          },
+          "qwen": {
+            "exists": false,
+            "name": "Qwen local",
+            "path_configured": false,
+            "path_env": "DIGUA_QWEN_MODEL_DIR",
+            "required": true,
+            "required_for_demo": false,
+            "sha256_policy": "user-provided",
+            "status": "missing_required"
+          },
+          "yolo": {
+            "exists": false,
+            "name": "s100p_yolo_hbm",
+            "path_configured": false,
+            "path_env": "DIGUA_YOLO_MODEL_PATH",
+            "required": false,
+            "required_for_demo": true,
+            "sha256_policy": "user-provided",
+            "status": "degraded"
+          }
+        },
+        "ok": true,
+        "warnings": [
+          "clip_demo_model_missing:DIGUA_CLIP_MODEL_DIR",
+          "yolo_demo_model_missing:DIGUA_YOLO_MODEL_PATH",
+          "ocr_demo_model_missing:DIGUA_OCR_MODEL_DIR"
+        ]
+      },
+      "nas": {
+        "blockers": [],
+        "credential_file_supplied": false,
+        "dry_run": true,
+        "loopback_or_lan_only": true,
+        "mount_point": "/mnt/nas/openclaw",
+        "nas_host": "",
+        "nas_share": "",
+        "ok": true,
+        "password_logged": false,
+        "personal_root": "/mnt/nas/openclaw/Personal",
+        "protocol": "local",
+        "redacted_fstab_fragment": "local-directory-mode"
+      },
+      "nas_mount": "/mnt/nas/openclaw",
+      "next_commands": {
+        "smoke": "python3 scripts/product_smoke_test.py --base-url http://127.0.0.1:8765 --report-root /mnt/nas/openclaw/reports/product_delivery",
+        "uninstall": "bash release/install/uninstall_s100p.sh --dry-run",
+        "verify": "python3 release/scripts/verify_install.py --base-url http://127.0.0.1:8765"
+      },
+      "ok": true,
+      "personal_root": "/mnt/nas/openclaw/Personal",
+      "pip_executed": false,
+      "preflight": {
+        "arch": "aarch64",
+        "blockers": [],
+        "bpu_available": true,
+        "disk_free_kb": 347440,
+        "ffmpeg_ok": true,
+        "min_disk_kb": 262144,
+        "mount_writable": true,
+        "nas_reachable": true,
+        "network_ok": true,
+        "ok": true,
+        "os_release": "Ubuntu 22.04.5 LTS",
+        "personal_root_ok": true,
+        "pip_ok": true,
+        "ports_available": false,
+        "python_ok": true,
+        "python_version": "3.10.12",
+        "s100p_detected": true,
+        "sqlite3_ok": false,
+        "systemd_user_ok": true,
+        "venv_ok": true,
+        "warn_disk_kb": 1048576,
+        "warnings": [
+          "disk_free_below_1g",
+          "ports_8765_or_18080_already_listening"
+        ]
+      },
+      "public_exposure_enabled": false,
+      "system_python_modified": false,
+      "systemd": {
+        "blockers": [],
+        "dry_run": true,
+        "enabled_on_apply": [
+          "openclaw-gateway.service",
+          "qwen25-local-openai-gateway.service",
+          "digua-ai-nightly-index.timer"
+        ],
+        "loopback_default": true,
+        "mode": "user",
+        "ok": true,
+        "target_dir": "/home/sunrise/.config/systemd/user",
+        "units": [
+          "openclaw-gateway.service",
+          "qwen25-local-openai-gateway.service",
+          "digua-ai-index-worker.service",
+          "digua-ai-nightly-index.timer"
+        ]
+      },
+      "venv_target": "/opt/digua-ai-nas/venv"
+    },
+    "run": {
+      "cmd": [
+        "bash",
+        "release/install/install_s100p.sh",
+        "--dry-run",
+        "--report-out",
+        "/mnt/nas/openclaw/reports/qwen25_ai_nas/stage10_release_installer_dry_run_gate_install.json"
+      ],
+      "ok": true,
+      "returncode": 0,
+      "stderr": "",
+      "stdout": "[],\n  \"dry_run\": true,\n  \"install_root\": \"/opt/digua-ai-nas\",\n  \"models\": {\n    \"blockers\": [],\n    \"dry_run\": true,\n    \"model_weights_bundled\": false,\n    \"models\": {\n      \"asr\": {\n        \"exists\": false,\n        \"name\": \"whisper_tiny\",\n        \"path_configured\": false,\n        \"path_env\": \"DIGUA_ASR_MODEL_DIR\",\n        \"required\": false,\n        \"required_for_demo\": false,\n        \"sha256_policy\": \"user-provided\",\n        \"status\": \"degraded\"\n      },\n      \"clip\": {\n        \"exists\": false,\n        \"name\": \"ai_nas_clip_vit_base_patch32\",\n        \"path_configured\": false,\n        \"path_env\": \"DIGUA_CLIP_MODEL_DIR\",\n        \"required\": false,\n        \"required_for_demo\": true,\n        \"sha256_policy\": \"user-provided\",\n        \"status\": \"degraded\"\n      },\n      \"ocr\": {\n        \"exists\": false,\n        \"name\": \"local_ocr\",\n        \"path_configured\": false,\n        \"path_env\": \"DIGUA_OCR_MODEL_DIR\",\n        \"required\": false,\n        \"required_for_demo\": true,\n        \"sha256_policy\": \"user-provided\",\n        \"status\": \"degraded\"\n      },\n      \"qwen\": {\n        \"exists\": false,\n        \"name\": \"Qwen local\",\n        \"path_configured\": false,\n        \"path_env\": \"DIGUA_QWEN_MODEL_DIR\",\n        \"required\": true,\n        \"required_for_demo\": false,\n        \"sha256_policy\": \"user-provided\",\n        \"status\": \"missing_required\"\n      },\n      \"yolo\": {\n        \"exists\": false,\n        \"name\": \"s100p_yolo_hbm\",\n        \"path_configured\": false,\n        \"path_env\": \"DIGUA_YOLO_MODEL_PATH\",\n        \"required\": false,\n        \"required_for_demo\": true,\n        \"sha256_policy\": \"user-provided\",\n        \"status\": \"degraded\"\n      }\n    },\n    \"ok\": true,\n    \"warnings\": [\n      \"clip_demo_model_missing:DIGUA_CLIP_MODEL_DIR\",\n      \"yolo_demo_model_missing:DIGUA_YOLO_MODEL_PATH\",\n      \"ocr_demo_model_missing:DIGUA_OCR_MODEL_DIR\"\n    ]\n  },\n  \"nas\": {\n    \"blockers\": [],\n    \"credential_file_supplied\": false,\n    \"dry_run\": true,\n    \"loopback_or_lan_only\": true,\n    \"mount_point\": \"/mnt/nas/openclaw\",\n    \"nas_host\": \"\",\n    \"nas_share\": \"\",\n    \"ok\": true,\n    \"password_logged\": false,\n    \"personal_root\": \"/mnt/nas/openclaw/Personal\",\n    \"protocol\": \"local\",\n    \"redacted_fstab_fragment\": \"local-directory-mode\"\n  },\n  \"nas_mount\": \"/mnt/nas/openclaw\",\n  \"next_commands\": {\n    \"smoke\": \"python3 scripts/product_smoke_test.py --base-url http://127.0.0.1:8765 --report-root /mnt/nas/openclaw/reports/product_delivery\",\n    \"uninstall\": \"bash release/install/uninstall_s100p.sh --dry-run\",\n    \"verify\": \"python3 release/scripts/verify_install.py --base-url http://127.0.0.1:8765\"\n  },\n  \"ok\": true,\n  \"personal_root\": \"/mnt/nas/openclaw/Personal\",\n  \"pip_executed\": false,\n  \"preflight\": {\n    \"arch\": \"aarch64\",\n    \"blockers\": [],\n    \"bpu_available\": true,\n    \"disk_free_kb\": 347440,\n    \"ffmpeg_ok\": true,\n    \"min_disk_kb\": 262144,\n    \"mount_writable\": true,\n    \"nas_reachable\": true,\n    \"network_ok\": true,\n    \"ok\": true,\n    \"os_release\": \"Ubuntu 22.04.5 LTS\",\n    \"personal_root_ok\": true,\n    \"pip_ok\": true,\n    \"ports_available\": false,\n    \"python_ok\": true,\n    \"python_version\": \"3.10.12\",\n    \"s100p_detected\": true,\n    \"sqlite3_ok\": false,\n    \"systemd_user_ok\": true,\n    \"venv_ok\": true,\n    \"warn_disk_kb\": 1048576,\n    \"warnings\": [\n      \"disk_free_below_1g\",\n      \"ports_8765_or_18080_already_listening\"\n    ]\n  },\n  \"public_exposure_enabled\": false,\n  \"system_python_modified\": false,\n  \"systemd\": {\n    \"blockers\": [],\n    \"dry_run\": true,\n    \"enabled_on_apply\": [\n      \"openclaw-gateway.service\",\n      \"qwen25-local-openai-gateway.service\",\n      \"digua-ai-nightly-index.timer\"\n    ],\n    \"loopback_default\": true,\n    \"mode\": \"user\",\n    \"ok\": true,\n    \"target_dir\": \"/home/sunrise/.config/systemd/user\",\n    \"units\": [\n      \"openclaw-gateway.service\",\n      \"qwen25-local-openai-gateway.service\",\n      \"digua-ai-index-worker.service\",\n      \"digua-ai-nightly-index.timer\"\n    ]\n  },\n  \"venv_target\": \"/opt/digua-ai-nas/venv\"\n}\n"
+    }
+  },
+  "generated_at": "2026-07-06T13:01:04Z",
+  "ok": true,
+  "verdict": "ok_stage10_release_installer_dry_run_gate"
+}

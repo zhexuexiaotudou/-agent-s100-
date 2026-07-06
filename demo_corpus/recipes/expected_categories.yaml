@@ -1,0 +1,35 @@
+categories:
+  - id: person_photo
+    zh: "人物照片"
+    expected_labels: ["person"]
+  - id: white_shirt
+    zh: "白色上衣"
+    expected_person_attrs: ["upper_white"]
+  - id: pet
+    zh: "宠物动物"
+    expected_labels: ["cat", "dog"]
+  - id: cat
+    zh: "猫咪照片"
+    expected_labels: ["cat"]
+  - id: dog
+    zh: "狗狗照片"
+    expected_labels: ["dog"]
+  - id: electronics
+    zh: "电子设备"
+    expected_labels: ["laptop", "computer"]
+  - id: books
+    zh: "书本文具"
+    expected_labels: ["book", "cup"]
+  - id: vehicle
+    zh: "车辆交通"
+    expected_labels: ["car"]
+  - id: invoice
+    zh: "票据发票"
+    expected_ocr_terms: ["发票", "金额", "日期", "合计"]
+  - id: contract
+    zh: "合同资料"
+    expected_ocr_terms: ["合同", "付款", "条款"]
+  - id: course
+    zh: "课程资料"
+    expected_ocr_terms: ["课程", "笔记", "作业", "考试"]
+

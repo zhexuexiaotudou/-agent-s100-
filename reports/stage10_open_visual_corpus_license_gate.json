@@ -1,0 +1,38 @@
+{
+  "blockers": [],
+  "checks": [
+    {
+      "detail": 100,
+      "name": "manifest records exist",
+      "ok": true
+    },
+    {
+      "detail": "license docs",
+      "name": "license docs exist",
+      "ok": true
+    },
+    {
+      "detail": "downloaded/.gitignore",
+      "name": "downloaded ignored",
+      "ok": true
+    },
+    {
+      "detail": [],
+      "name": "third-party files manifest-only",
+      "ok": true
+    },
+    {
+      "detail": "redacted",
+      "name": "no raw paths in manifests",
+      "ok": true
+    }
+  ],
+  "evidence": {
+    "failures": [],
+    "record_count": 100,
+    "third_party_count": 0
+  },
+  "generated_at": "2026-07-06T12:57:34Z",
+  "ok": true,
+  "verdict": "ok_stage10_open_visual_corpus_license_gate"
+}

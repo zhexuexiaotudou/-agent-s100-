@@ -1,0 +1,8 @@
+protocol: nfs
+host: 192.168.1.20
+share: /OpenClawWorkspace
+mount_point: /mnt/nas/openclaw
+personal_root: /mnt/nas/openclaw/Personal
+options: rw,nofail,x-systemd.automount
+credentials_file: ""
+

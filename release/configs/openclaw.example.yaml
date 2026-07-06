@@ -1,0 +1,18 @@
+gateway:
+  bind_host: 127.0.0.1
+  port: 8765
+  public_exposure: false
+  admin_token_required: true
+nas:
+  mount_point: /mnt/nas/openclaw
+  personal_root: /mnt/nas/openclaw/Personal
+  allowed_roots:
+    - /mnt/nas/openclaw/Personal
+security:
+  delete_enabled: false
+  overwrite_enabled: false
+  uncontrolled_move_enabled: false
+  uncontrolled_rename_enabled: false
+  qwen_execution_authority: false
+  private_raw_cloud_egress: false
+

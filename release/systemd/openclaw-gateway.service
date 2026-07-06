@@ -1,0 +1,15 @@
+[Unit]
+Description=Digua OpenClaw AI-NAS gateway
+After=network-online.target
+
+[Service]
+Type=simple
+WorkingDirectory=%h/openclaw
+EnvironmentFile=-%h/.config/digua-ai-nas/digua.env
+ExecStart=/usr/bin/python3 scripts/probes/ai_nas_operator_portal_server.py --host 127.0.0.1 --port 8765 --personal-root ${DIGUA_PERSONAL_ROOT}
+Restart=on-failure
+RestartSec=5
+
+[Install]
+WantedBy=default.target
+

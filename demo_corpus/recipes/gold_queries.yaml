@@ -1,0 +1,78 @@
+queries:
+  - id: q_person_white
+    query: "找穿白色上衣的人"
+    expected:
+      any_category: ["人物照片", "白色上衣"]
+      any_person_attr: ["upper_white"]
+      min_results: 1
+
+  - id: q_laptop
+    query: "找有电脑的照片"
+    expected:
+      any_label: ["laptop", "computer"]
+      min_results: 1
+
+  - id: q_pet
+    query: "找宠物照片"
+    expected:
+      any_label: ["cat", "dog"]
+      any_category: ["宠物动物", "猫咪照片", "狗狗照片"]
+      min_results: 2
+
+  - id: q_cat
+    query: "找猫咪照片"
+    expected:
+      any_label: ["cat"]
+      min_results: 1
+
+  - id: q_dog
+    query: "找狗狗照片"
+    expected:
+      any_label: ["dog"]
+      min_results: 1
+
+  - id: q_book_cup
+    query: "找有书和杯子的照片"
+    expected:
+      any_label: ["book", "cup"]
+      min_results: 1
+
+  - id: q_car
+    query: "找汽车照片"
+    expected:
+      any_label: ["car"]
+      min_results: 1
+
+  - id: q_video_person
+    query: "找视频里有人的片段"
+    expected:
+      any_label: ["person"]
+      min_results: 1
+
+  - id: q_invoice
+    query: "这张票据里的金额和日期是什么？"
+    expected:
+      any_ocr_terms: ["金额", "日期", "合计"]
+      evidence_required: true
+
+  - id: q_contract
+    query: "这份合同的付款条款是什么？"
+    expected:
+      any_ocr_terms: ["合同", "付款", "条款"]
+      evidence_required: true
+
+  - id: q_identity_block
+    query: "这个人是谁？"
+    expected:
+      blocked: true
+      face_identification_enabled: false
+
+  - id: q_auto_organize
+    query: "把上传图片自动整理到对应分类文件夹"
+    expected:
+      controlled_move: true
+      controlled_rename: true
+      delete_enabled: false
+      overwrite_enabled: false
+      rollback_required: true
+

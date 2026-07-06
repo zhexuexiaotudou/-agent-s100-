@@ -1,0 +1,128 @@
+{
+  "blockers": [],
+  "checks": [
+    {
+      "detail": "",
+      "name": "upgrade dry-run ok",
+      "ok": true
+    },
+    {
+      "detail": {
+        "backup_root": "/opt/digua-ai-nas_backup_20260706-210340",
+        "blockers": [],
+        "config_backup_required": true,
+        "db_migration_destructive": false,
+        "dry_run": true,
+        "install_root": "/opt/digua-ai-nas",
+        "ok": true,
+        "rollback_command": "bash release/install/upgrade_s100p.sh --rollback-from /opt/digua-ai-nas_backup_20260706-210340"
+      },
+      "name": "upgrade is dry-run",
+      "ok": true
+    },
+    {
+      "detail": {
+        "backup_root": "/opt/digua-ai-nas_backup_20260706-210340",
+        "blockers": [],
+        "config_backup_required": true,
+        "db_migration_destructive": false,
+        "dry_run": true,
+        "install_root": "/opt/digua-ai-nas",
+        "ok": true,
+        "rollback_command": "bash release/install/upgrade_s100p.sh --rollback-from /opt/digua-ai-nas_backup_20260706-210340"
+      },
+      "name": "backup planned",
+      "ok": true
+    },
+    {
+      "detail": "",
+      "name": "uninstall dry-run ok",
+      "ok": true
+    },
+    {
+      "detail": {
+        "actions": [
+          "disable:openclaw-gateway.service",
+          "stop:openclaw-gateway.service",
+          "disable:qwen25-local-openai-gateway.service",
+          "stop:qwen25-local-openai-gateway.service",
+          "disable:digua-ai-index-worker.service",
+          "stop:digua-ai-index-worker.service",
+          "disable:digua-ai-nightly-index.timer",
+          "stop:digua-ai-nightly-index.timer",
+          "remove_install_root:/opt/digua-ai-nas"
+        ],
+        "dry_run": true,
+        "install_root": "/opt/digua-ai-nas",
+        "nas_data_removed": false,
+        "ok": true,
+        "personal_data_removed": false,
+        "systemd_mode": "user"
+      },
+      "name": "uninstall does not remove NAS data",
+      "ok": true
+    }
+  ],
+  "evidence": {
+    "runs": {
+      "uninstall": {
+        "cmd": [
+          "bash",
+          "release/install/uninstall_s100p.sh",
+          "--dry-run",
+          "--json-out",
+          "/mnt/nas/openclaw/reports/qwen25_ai_nas/stage10_release_upgrade_rollback_gate_uninstall.json"
+        ],
+        "ok": true,
+        "returncode": 0,
+        "stderr": "",
+        "stdout": "{\n  \"actions\": [\n    \"disable:openclaw-gateway.service\",\n    \"stop:openclaw-gateway.service\",\n    \"disable:qwen25-local-openai-gateway.service\",\n    \"stop:qwen25-local-openai-gateway.service\",\n    \"disable:digua-ai-index-worker.service\",\n    \"stop:digua-ai-index-worker.service\",\n    \"disable:digua-ai-nightly-index.timer\",\n    \"stop:digua-ai-nightly-index.timer\",\n    \"remove_install_root:/opt/digua-ai-nas\"\n  ],\n  \"dry_run\": true,\n  \"install_root\": \"/opt/digua-ai-nas\",\n  \"nas_data_removed\": false,\n  \"ok\": true,\n  \"personal_data_removed\": false,\n  \"systemd_mode\": \"user\"\n}\n"
+      },
+      "upgrade": {
+        "cmd": [
+          "bash",
+          "release/install/upgrade_s100p.sh",
+          "--dry-run",
+          "--json-out",
+          "/mnt/nas/openclaw/reports/qwen25_ai_nas/stage10_release_upgrade_rollback_gate_upgrade.json"
+        ],
+        "ok": true,
+        "returncode": 0,
+        "stderr": "",
+        "stdout": "{\n  \"backup_root\": \"/opt/digua-ai-nas_backup_20260706-210340\",\n  \"blockers\": [],\n  \"config_backup_required\": true,\n  \"db_migration_destructive\": false,\n  \"dry_run\": true,\n  \"install_root\": \"/opt/digua-ai-nas\",\n  \"ok\": true,\n  \"rollback_command\": \"bash release/install/upgrade_s100p.sh --rollback-from /opt/digua-ai-nas_backup_20260706-210340\"\n}\n"
+      }
+    },
+    "uninstall": {
+      "actions": [
+        "disable:openclaw-gateway.service",
+        "stop:openclaw-gateway.service",
+        "disable:qwen25-local-openai-gateway.service",
+        "stop:qwen25-local-openai-gateway.service",
+        "disable:digua-ai-index-worker.service",
+        "stop:digua-ai-index-worker.service",
+        "disable:digua-ai-nightly-index.timer",
+        "stop:digua-ai-nightly-index.timer",
+        "remove_install_root:/opt/digua-ai-nas"
+      ],
+      "dry_run": true,
+      "install_root": "/opt/digua-ai-nas",
+      "nas_data_removed": false,
+      "ok": true,
+      "personal_data_removed": false,
+      "systemd_mode": "user"
+    },
+    "upgrade": {
+      "backup_root": "/opt/digua-ai-nas_backup_20260706-210340",
+      "blockers": [],
+      "config_backup_required": true,
+      "db_migration_destructive": false,
+      "dry_run": true,
+      "install_root": "/opt/digua-ai-nas",
+      "ok": true,
+      "rollback_command": "bash release/install/upgrade_s100p.sh --rollback-from /opt/digua-ai-nas_backup_20260706-210340"
+    }
+  },
+  "generated_at": "2026-07-06T13:03:41Z",
+  "ok": true,
+  "verdict": "ok_stage10_release_upgrade_rollback_gate"
+}

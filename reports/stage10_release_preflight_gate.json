@@ -1,0 +1,99 @@
+{
+  "blockers": [],
+  "checks": [
+    {
+      "detail": "",
+      "name": "preflight script ran",
+      "ok": true
+    },
+    {
+      "detail": [],
+      "name": "preflight ok",
+      "ok": true
+    },
+    {
+      "detail": "aarch64",
+      "name": "arch aarch64",
+      "ok": true
+    },
+    {
+      "detail": {
+        "arch": "aarch64",
+        "blockers": [],
+        "bpu_available": true,
+        "disk_free_kb": 347440,
+        "ffmpeg_ok": true,
+        "min_disk_kb": 262144,
+        "mount_writable": true,
+        "nas_reachable": true,
+        "network_ok": true,
+        "ok": true,
+        "os_release": "Ubuntu 22.04.5 LTS",
+        "personal_root_ok": true,
+        "pip_ok": true,
+        "ports_available": false,
+        "python_ok": true,
+        "python_version": "3.10.12",
+        "s100p_detected": true,
+        "sqlite3_ok": false,
+        "systemd_user_ok": true,
+        "venv_ok": true,
+        "warn_disk_kb": 1048576,
+        "warnings": [
+          "disk_free_below_1g",
+          "ports_8765_or_18080_already_listening"
+        ]
+      },
+      "name": "systemd user ok",
+      "ok": true
+    }
+  ],
+  "evidence": {
+    "preflight": {
+      "arch": "aarch64",
+      "blockers": [],
+      "bpu_available": true,
+      "disk_free_kb": 347440,
+      "ffmpeg_ok": true,
+      "min_disk_kb": 262144,
+      "mount_writable": true,
+      "nas_reachable": true,
+      "network_ok": true,
+      "ok": true,
+      "os_release": "Ubuntu 22.04.5 LTS",
+      "personal_root_ok": true,
+      "pip_ok": true,
+      "ports_available": false,
+      "python_ok": true,
+      "python_version": "3.10.12",
+      "s100p_detected": true,
+      "sqlite3_ok": false,
+      "systemd_user_ok": true,
+      "venv_ok": true,
+      "warn_disk_kb": 1048576,
+      "warnings": [
+        "disk_free_below_1g",
+        "ports_8765_or_18080_already_listening"
+      ]
+    },
+    "run": {
+      "cmd": [
+        "bash",
+        "release/install/preflight_check.sh",
+        "--mount-point",
+        "/mnt/nas/openclaw",
+        "--personal-root",
+        "/mnt/nas/openclaw/Personal",
+        "--json-out",
+        "/mnt/nas/openclaw/reports/qwen25_ai_nas/stage10_release_preflight_gate_preflight.json"
+      ],
+      "ok": true,
+      "returncode": 0,
+      "stderr": "",
+      "stdout": "{\n  \"arch\": \"aarch64\",\n  \"blockers\": [],\n  \"bpu_available\": true,\n  \"disk_free_kb\": 347440,\n  \"ffmpeg_ok\": true,\n  \"min_disk_kb\": 262144,\n  \"mount_writable\": true,\n  \"nas_reachable\": true,\n  \"network_ok\": true,\n  \"ok\": true,\n  \"os_release\": \"Ubuntu 22.04.5 LTS\",\n  \"personal_root_ok\": true,\n  \"pip_ok\": true,\n  \"ports_available\": false,\n  \"python_ok\": true,\n  \"python_version\": \"3.10.12\",\n  \"s100p_detected\": true,\n  \"sqlite3_ok\": false,\n  \"systemd_user_ok\": true,\n  \"venv_ok\": true,\n  \"warn_disk_kb\": 1048576,\n  \"warnings\": [\n    \"disk_free_below_1g\",\n    \"ports_8765_or_18080_already_listening\"\n  ]\n}\n"
+    }
+  },
+  "generated_at": "2026-07-06T13:01:03Z",
+  "ok": true,
+  "verdict": "ok_stage10_release_preflight_gate"
+}

@@ -1,0 +1,107 @@
+{
+  "blockers": [],
+  "checks": [
+    {
+      "detail": "",
+      "name": "NAS config report exists",
+      "ok": true
+    },
+    {
+      "detail": [],
+      "name": "NAS config ok",
+      "ok": true
+    },
+    {
+      "detail": {
+        "blockers": [],
+        "credential_file_supplied": false,
+        "dry_run": true,
+        "loopback_or_lan_only": true,
+        "mount_point": "/mnt/nas/openclaw",
+        "nas_host": "",
+        "nas_share": "",
+        "ok": true,
+        "password_logged": false,
+        "personal_root": "/mnt/nas/openclaw/Personal",
+        "protocol": "local",
+        "redacted_fstab_fragment": "local-directory-mode"
+      },
+      "name": "password not logged",
+      "ok": true
+    },
+    {
+      "detail": {
+        "blockers": [],
+        "credential_file_supplied": false,
+        "dry_run": true,
+        "loopback_or_lan_only": true,
+        "mount_point": "/mnt/nas/openclaw",
+        "nas_host": "",
+        "nas_share": "",
+        "ok": true,
+        "password_logged": false,
+        "personal_root": "/mnt/nas/openclaw/Personal",
+        "protocol": "local",
+        "redacted_fstab_fragment": "local-directory-mode"
+      },
+      "name": "loopback or LAN only",
+      "ok": true
+    },
+    {
+      "detail": {
+        "blockers": [],
+        "credential_file_supplied": false,
+        "dry_run": true,
+        "loopback_or_lan_only": true,
+        "mount_point": "/mnt/nas/openclaw",
+        "nas_host": "",
+        "nas_share": "",
+        "ok": true,
+        "password_logged": false,
+        "personal_root": "/mnt/nas/openclaw/Personal",
+        "protocol": "local",
+        "redacted_fstab_fragment": "local-directory-mode"
+      },
+      "name": "Personal root scoped",
+      "ok": true
+    }
+  ],
+  "evidence": {
+    "nas": {
+      "blockers": [],
+      "credential_file_supplied": false,
+      "dry_run": true,
+      "loopback_or_lan_only": true,
+      "mount_point": "/mnt/nas/openclaw",
+      "nas_host": "",
+      "nas_share": "",
+      "ok": true,
+      "password_logged": false,
+      "personal_root": "/mnt/nas/openclaw/Personal",
+      "protocol": "local",
+      "redacted_fstab_fragment": "local-directory-mode"
+    },
+    "run": {
+      "cmd": [
+        "bash",
+        "release/install/configure_nas_mount.sh",
+        "--dry-run",
+        "--nas-protocol",
+        "local",
+        "--mount-point",
+        "/mnt/nas/openclaw",
+        "--personal-root",
+        "/mnt/nas/openclaw/Personal",
+        "--json-out",
+        "/mnt/nas/openclaw/reports/qwen25_ai_nas/stage10_release_nas_mount_gate_nas.json"
+      ],
+      "ok": true,
+      "returncode": 0,
+      "stderr": "",
+      "stdout": "{\n  \"blockers\": [],\n  \"credential_file_supplied\": false,\n  \"dry_run\": true,\n  \"loopback_or_lan_only\": true,\n  \"mount_point\": \"/mnt/nas/openclaw\",\n  \"nas_host\": \"\",\n  \"nas_share\": \"\",\n  \"ok\": true,\n  \"password_logged\": false,\n  \"personal_root\": \"/mnt/nas/openclaw/Personal\",\n  \"protocol\": \"local\",\n  \"redacted_fstab_fragment\": \"local-directory-mode\"\n}\n"
+    }
+  },
+  "generated_at": "2026-07-06T13:01:13Z",
+  "ok": true,
+  "verdict": "ok_stage10_release_nas_mount_gate"
+}

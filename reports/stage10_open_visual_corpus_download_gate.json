@@ -1,0 +1,43 @@
+{
+  "blockers": [],
+  "checks": [
+    {
+      "detail": 100,
+      "name": "manifest total meets minimum",
+      "ok": true
+    },
+    {
+      "detail": 100,
+      "name": "some local generated files exist",
+      "ok": true
+    },
+    {
+      "detail": {
+        "audio": 3,
+        "document": 54,
+        "image": 40,
+        "video": 3
+      },
+      "name": "documents generated",
+      "ok": true
+    },
+    {
+      "detail": [],
+      "name": "no unreadable or missing non-manifest-only files",
+      "ok": true
+    }
+  ],
+  "evidence": {
+    "existing_file_count": 100,
+    "failures": [],
+    "modalities": {
+      "audio": 3,
+      "document": 54,
+      "image": 40,
+      "video": 3
+    }
+  },
+  "generated_at": "2026-07-06T12:57:34Z",
+  "ok": true,
+  "verdict": "ok_stage10_open_visual_corpus_download_gate"
+}

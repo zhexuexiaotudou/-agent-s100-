@@ -1,0 +1,26 @@
+qwen:
+  name: Qwen local
+  required: true
+  path_env: DIGUA_QWEN_MODEL_DIR
+  sha256: user-provided
+clip:
+  name: ai_nas_clip_vit_base_patch32
+  required_for_demo: true
+  path_env: DIGUA_CLIP_MODEL_DIR
+  sha256: user-provided
+yolo:
+  name: s100p_yolo_hbm
+  required_for_demo: true
+  path_env: DIGUA_YOLO_MODEL_PATH
+  sha256: user-provided
+ocr:
+  name: local_ocr
+  required_for_demo: true
+  path_env: DIGUA_OCR_MODEL_DIR
+  sha256: user-provided
+asr:
+  name: whisper_tiny
+  required_for_demo: false
+  path_env: DIGUA_ASR_MODEL_DIR
+  sha256: user-provided
+

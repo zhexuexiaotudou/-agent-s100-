@@ -1,0 +1,75 @@
+image_classes:
+  person:
+    min_count: 12
+    sources: ["open_images", "wikimedia"]
+    expected_labels: ["person"]
+  white_shirt_person:
+    min_count: 6
+    sources: ["wikimedia", "local_user"]
+    expected_person_attrs: ["person_present", "upper_white"]
+  red_clothes:
+    min_count: 4
+    sources: ["wikimedia", "local_user"]
+    expected_person_attrs: ["upper_red"]
+  black_clothes:
+    min_count: 4
+    sources: ["wikimedia", "local_user"]
+    expected_person_attrs: ["upper_black"]
+  cat:
+    min_count: 8
+    sources: ["open_images", "wikimedia"]
+    expected_labels: ["cat"]
+  dog:
+    min_count: 8
+    sources: ["open_images", "wikimedia"]
+    expected_labels: ["dog"]
+  laptop:
+    min_count: 8
+    sources: ["open_images", "wikimedia"]
+    expected_labels: ["laptop", "computer"]
+  book:
+    min_count: 6
+    sources: ["open_images", "wikimedia"]
+    expected_labels: ["book"]
+  cup:
+    min_count: 6
+    sources: ["open_images", "wikimedia"]
+    expected_labels: ["cup"]
+  car:
+    min_count: 8
+    sources: ["open_images", "wikimedia"]
+    expected_labels: ["car"]
+  landscape:
+    min_count: 4
+    sources: ["wikimedia"]
+    expected_labels: ["landscape"]
+
+documents:
+  invoice:
+    min_count: 5
+    generated: true
+    expected_ocr_terms: ["发票", "金额", "日期", "合计"]
+  contract:
+    min_count: 5
+    generated: true
+    expected_ocr_terms: ["合同", "付款", "条款", "甲方", "乙方"]
+  course_note:
+    min_count: 5
+    generated: true
+    expected_ocr_terms: ["课程", "笔记", "作业", "考试"]
+  screenshot_note:
+    min_count: 3
+    generated: true
+    expected_ocr_terms: ["截图", "资料", "待办"]
+
+videos:
+  person_video:
+    min_count: 2
+    expected_labels: ["person"]
+
+audio:
+  transcript_sample:
+    min_count: 3
+    generated: true
+    expected_transcript_terms: ["会议", "备忘", "行动项"]
+

@@ -1,0 +1,19 @@
+{
+  "actions": [
+    "disable:openclaw-gateway.service",
+    "stop:openclaw-gateway.service",
+    "disable:qwen25-local-openai-gateway.service",
+    "stop:qwen25-local-openai-gateway.service",
+    "disable:digua-ai-index-worker.service",
+    "stop:digua-ai-index-worker.service",
+    "disable:digua-ai-nightly-index.timer",
+    "stop:digua-ai-nightly-index.timer",
+    "remove_install_root:/opt/digua-ai-nas"
+  ],
+  "dry_run": true,
+  "install_root": "/opt/digua-ai-nas",
+  "nas_data_removed": false,
+  "ok": true,
+  "personal_data_removed": false,
+  "systemd_mode": "user"
+}
