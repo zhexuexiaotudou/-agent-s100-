@@ -1,0 +1,912 @@
+{
+  "ai_space_searches": [
+    {
+      "ok": true,
+      "query": "票据发票",
+      "raw_path_returned": false,
+      "result_count": 10,
+      "top_titles": [
+        "white_shirt_person.jpg",
+        "red_shirt_person.jpg",
+        "cat_indoor.jpg",
+        "dog_grass.jpg",
+        "car_street.jpg"
+      ]
+    },
+    {
+      "ok": true,
+      "query": "合同资料",
+      "raw_path_returned": false,
+      "result_count": 10,
+      "top_titles": [
+        "white_shirt_person.jpg",
+        "red_shirt_person.jpg",
+        "cat_indoor.jpg",
+        "dog_grass.jpg",
+        "car_street.jpg"
+      ]
+    },
+    {
+      "ok": true,
+      "query": "课程资料",
+      "raw_path_returned": false,
+      "result_count": 10,
+      "top_titles": [
+        "white_shirt_person.jpg",
+        "red_shirt_person.jpg",
+        "cat_indoor.jpg",
+        "dog_grass.jpg",
+        "car_street.jpg"
+      ]
+    },
+    {
+      "ok": true,
+      "query": "截图资料",
+      "raw_path_returned": false,
+      "result_count": 10,
+      "top_titles": [
+        "white_shirt_person.jpg",
+        "red_shirt_person.jpg",
+        "cat_indoor.jpg",
+        "dog_grass.jpg",
+        "car_street.jpg"
+      ]
+    },
+    {
+      "ok": true,
+      "query": "OpenClaw 周会",
+      "raw_path_returned": false,
+      "result_count": 0,
+      "top_titles": []
+    },
+    {
+      "ok": true,
+      "query": "收据 128.80",
+      "raw_path_returned": false,
+      "result_count": 0,
+      "top_titles": []
+    }
+  ],
+  "auth_token_present": true,
+  "auto_organizer": {},
+  "failures": [],
+  "generated_at": "2026-07-06T13:39:34Z",
+  "improvement_signals": {
+    "ai_space_searches_with_hits": 4,
+    "auto_organizer_execute_ok": false,
+    "auto_organizer_plan_ok": false,
+    "auto_organizer_rollback_verified": false,
+    "document_rag_expected_term_hits": 0,
+    "grounded_document_rag_queries": 0,
+    "grounded_ocr_queries": 0,
+    "ocr_expected_term_hits": 0
+  },
+  "label": "before",
+  "ok": true,
+  "path": "DemoDocs/digua_stable_demo_documents/Documents",
+  "queries": [
+    {
+      "document_rag": {
+        "evidence_count": 0,
+        "expected_term_count": 4,
+        "http_ok": false,
+        "matched_term_count": 0,
+        "matched_terms": [],
+        "no_grounded_answer": true,
+        "ok": false,
+        "raw_path_returned": false,
+        "top_names": []
+      },
+      "id": "invoice_amount_date",
+      "ocr": {
+        "evidence_count": 0,
+        "expected_term_count": 4,
+        "http_ok": false,
+        "matched_term_count": 0,
+        "matched_terms": [],
+        "no_grounded_answer": true,
+        "ok": false,
+        "raw_path_returned": false,
+        "top_names": []
+      },
+      "query": "这张票据里的金额和日期是什么？"
+    },
+    {
+      "document_rag": {
+        "evidence_count": 0,
+        "expected_term_count": 6,
+        "http_ok": false,
+        "matched_term_count": 0,
+        "matched_terms": [],
+        "no_grounded_answer": true,
+        "ok": false,
+        "raw_path_returned": false,
+        "top_names": []
+      },
+      "id": "contract_payment_terms",
+      "ocr": {
+        "evidence_count": 0,
+        "expected_term_count": 6,
+        "http_ok": false,
+        "matched_term_count": 0,
+        "matched_terms": [],
+        "no_grounded_answer": true,
+        "ok": false,
+        "raw_path_returned": false,
+        "top_names": []
+      },
+      "query": "这份合同的付款条款是什么？"
+    },
+    {
+      "document_rag": {
+        "evidence_count": 0,
+        "expected_term_count": 5,
+        "http_ok": false,
+        "matched_term_count": 0,
+        "matched_terms": [],
+        "no_grounded_answer": true,
+        "ok": false,
+        "raw_path_returned": false,
+        "top_names": []
+      },
+      "id": "course_note_summary",
+      "ocr": {
+        "evidence_count": 0,
+        "expected_term_count": 5,
+        "http_ok": false,
+        "matched_term_count": 0,
+        "matched_terms": [],
+        "no_grounded_answer": true,
+        "ok": false,
+        "raw_path_returned": false,
+        "top_names": []
+      },
+      "query": "这份课程资料讲了什么？"
+    },
+    {
+      "document_rag": {
+        "evidence_count": 0,
+        "expected_term_count": 3,
+        "http_ok": false,
+        "matched_term_count": 0,
+        "matched_terms": [],
+        "no_grounded_answer": true,
+        "ok": false,
+        "raw_path_returned": false,
+        "top_names": []
+      },
+      "id": "receipt_total",
+      "ocr": {
+        "evidence_count": 0,
+        "expected_term_count": 3,
+        "http_ok": false,
+        "matched_term_count": 0,
+        "matched_terms": [],
+        "no_grounded_answer": true,
+        "ok": false,
+        "raw_path_returned": false,
+        "top_names": []
+      },
+      "query": "这张收据的金额是多少？"
+    },
+    {
+      "document_rag": {
+        "evidence_count": 0,
+        "expected_term_count": 5,
+        "http_ok": false,
+        "matched_term_count": 0,
+        "matched_terms": [],
+        "no_grounded_answer": true,
+        "ok": false,
+        "raw_path_returned": false,
+        "top_names": []
+      },
+      "id": "screenshot_meeting",
+      "ocr": {
+        "evidence_count": 0,
+        "expected_term_count": 5,
+        "http_ok": false,
+        "matched_term_count": 0,
+        "matched_terms": [],
+        "no_grounded_answer": true,
+        "ok": false,
+        "raw_path_returned": false,
+        "top_names": []
+      },
+      "query": "OpenClaw 周会有哪些待办？"
+    }
+  ],
+  "rebuilds": {},
+  "statuses": {
+    "ai_space": {
+      "ok": true,
+      "payload": {
+        "asset_count": 25,
+        "cloud_used": false,
+        "degraded": false,
+        "degraded_reason": null,
+        "evidence_count": 25,
+        "modality_counts": {
+          "image": 25
+        },
+        "ok": true,
+        "raw_path_returned": false,
+        "schema": "digua_ai_space_v1"
+      },
+      "status": 200
+    },
+    "auto_organizer": {
+      "ok": true,
+      "payload": {
+        "ai_driven_classification_enabled": true,
+        "allowed_source_roots": [
+          "Uploads",
+          "待整理"
+        ],
+        "classification_priority": [
+          "asset_id",
+          "ai_space_asset_view",
+          "smart_asset_names",
+          "smart_category_memberships",
+          "yolo_labels",
+          "person_attribute",
+          "ocr_tags",
+          "subtitle_tags",
+          "media_index",
+          "fallback_filename_heuristic"
+        ],
+        "cloud_private_raw_egress": false,
+        "controlled_move_enabled": true,
+        "controlled_rename_enabled": true,
+        "delete_enabled": false,
+        "diagnostic_fallback_flag": "allow_filename_fallback_for_diagnostic",
+        "executed_item_count": 6,
+        "fallback_default_blocked": true,
+        "last_ai_driven_plan": {
+          "ai_driven": true,
+          "fallback_used": false,
+          "plan_id": "plan_859800f745ea4a89",
+          "resolution_source": "ai_space+smart_naming+smart_classification",
+          "status": "rolled_back"
+        },
+        "last_fallback_blocker": null,
+        "last_rollback_status": {
+          "plan_id": "plan_859800f745ea4a89",
+          "status": "rolled_back"
+        },
+        "ok": true,
+        "overwrite_enabled": false,
+        "plan_count": 28,
+        "qwen_execution_authority": false,
+        "raw_path_returned": false,
+        "rollback_required": true,
+        "rolled_back_item_count": 17,
+        "schema": "digua_auto_organizer_v1",
+        "target_root": "AI整理",
+        "uncontrolled_move_enabled": false,
+        "uncontrolled_rename_enabled": false
+      },
+      "status": 200
+    },
+    "document_rag": {
+      "ok": true,
+      "payload": {
+        "chunk_count": 88,
+        "cloud_ocr_enabled": false,
+        "cloud_used": false,
+        "degraded": false,
+        "document_count": 88,
+        "fts_db_hash": "3f7ee09a9a166a4b",
+        "ok": true,
+        "raw_path_returned": false,
+        "raw_private_content_returned": false,
+        "retrieval_mode": "sqlite_fts_first",
+        "route_module": "src.openclaw.routes.document_rag_routes",
+        "schema": "digua_document_rag_status_v1"
+      },
+      "status": 200
+    },
+    "multimodal": {
+      "ok": true,
+      "payload": {
+        "cloud_used": false,
+        "counts": {
+          "image": 24
+        },
+        "degraded": false,
+        "degraded_reason": null,
+        "delivery_blockers": [],
+        "embedding_count": 24,
+        "feature_flags": {
+          "asr_enabled": false,
+          "audio_transcript_enabled": false,
+          "biometric_recognition_enabled": false,
+          "cloud_asr_enabled": false,
+          "cloud_ocr_enabled": false,
+          "cloud_vision_enabled": false,
+          "destructive_actions_enabled": false,
+          "document_embedding_enabled": false,
+          "face_identification_enabled": false,
+          "image_embedding_enabled": true,
+          "image_embedding_required_for_delivery": true,
+          "local_asr_required_for_delivery": true,
+          "local_vlm_caption_enabled": false,
+          "min_live_image_embeddings": 5,
+          "multimodal_metadata_index_enabled": true,
+          "multimodal_search_enabled": true,
+          "ocr_enabled": false,
+          "production_semantic_model_required": true,
+          "qwen_tool_execution_enabled": false,
+          "sensitive_attribute_inference_enabled": false,
+          "subtitle_extraction_enabled": true,
+          "symbolic_caption_enabled": true,
+          "vector_extension_enabled": "auto",
+          "vector_numpy_fallback_enabled": true,
+          "video_keyframe_embedding_enabled": false,
+          "video_keyframe_enabled": false
+        },
+        "image_asset_count": 24,
+        "image_embedding_model": {
+          "available": true,
+          "backend": "transformers_clip",
+          "device": "cpu",
+          "local_only": true,
+          "model_family": "clip",
+          "model_name": "ai_nas_clip_vit_base_patch32",
+          "precision": "float32",
+          "production_semantic": true,
+          "unavailable_reason": null,
+          "vector_dim": 512,
+          "weights_committed_to_repo": false
+        },
+        "indexed_count": 24,
+        "ok": true,
+        "private_leak_count": 0,
+        "production_semantic_embedding_count": 24,
+        "production_semantic_model_available": true,
+        "qwen_tool_execution_enabled": false,
+        "raw_path_rows": 0,
+        "schema": "digua_multimodal_search_v1",
+        "yolo_index": {
+          "available": true,
+          "degraded": true,
+          "degraded_reason": "no_yolo_detections_indexed",
+          "detection_count": 0,
+          "indexed_count": 1,
+          "keyframe_count": 0
+        }
+      },
+      "status": 200
+    },
+    "ocr": {
+      "ok": true,
+      "payload": {
+        "chunk_count": 88,
+        "cloud_ocr_enabled": false,
+        "cloud_used": false,
+        "degraded": false,
+        "degraded_reason": null,
+        "document_count": 88,
+        "ocr_index_backing": "document_fts",
+        "ok": true,
+        "raw_path_returned": false,
+        "raw_private_content_returned": false,
+        "route_module": "src.openclaw.routes.document_rag_routes",
+        "schema": "digua_ocr_status_v1"
+      },
+      "status": 200
+    },
+    "product": {
+      "ok": true,
+      "payload": {
+        "gates": {
+          "copy_governance": {
+            "evidence_ref": "c0523ade6d78e035",
+            "filename": "destructive_action_governance.json",
+            "found": true,
+            "generated_at": "2026-06-18T16:48:42.722659+08:00",
+            "verdict": "ok_ai_nas_destructive_action_governance"
+          },
+          "document_pipeline": {
+            "evidence_ref": "6f5f0dcff76bcdc5",
+            "filename": "document_pipeline_acceptance.json",
+            "found": true,
+            "generated_at": "2026-06-18T16:51:13.886316+08:00",
+            "verdict": "ok_ai_nas_document_pipeline_acceptance"
+          },
+          "edge_cloud_router": {
+            "evidence_ref": "8e0cad8c13cc8ec1",
+            "filename": "edge_cloud_router.json",
+            "found": true,
+            "generated_at": "2026-06-30T20:15:48.798990+08:00",
+            "verdict": "ok_ai_nas_edge_cloud_router"
+          },
+          "ocr_runtime": {
+            "evidence_ref": "bae7ef6fc9d6bbba",
+            "filename": "ocr_runtime_contract.json",
+            "found": true,
+            "generated_at": "2026-06-17T12:45:50.111236+08:00",
+            "verdict": "ok_ai_nas_ocr_runtime_contract"
+          },
+          "photo_pipeline": {
+            "evidence_ref": "23f0387ff52a95b2",
+            "filename": "photo_pipeline_acceptance.json",
+            "found": true,
+            "generated_at": "2026-06-17T13:06:42.268703+08:00",
+            "verdict": "ok_ai_nas_photo_pipeline_acceptance"
+          },
+          "production_readiness": {
+            "evidence_ref": "e9acbd5047939db5",
+            "filename": "production_readiness_gate.json",
+            "found": true,
+            "generated_at": "2026-07-06T02:59:26.730238+08:00",
+            "verdict": "ready_ai_nas_production_readiness_gate"
+          }
+        },
+        "generated_at": "2026-07-06T21:39:41+0800",
+        "modules": {
+          "ai_space": {
+            "degraded_reason": null,
+            "evidence": {},
+            "metrics": {
+              "asset_count": 25,
+              "cloud_used": false,
+              "evidence_count": 25,
+              "raw_path_returned": false
+            },
+            "name": "ai_space",
+            "ok": true,
+            "status": "ok"
+          },
+          "assistant_trace": {
+            "degraded_reason": null,
+            "evidence": {},
+            "metrics": {
+              "cloud_private_raw_egress": false,
+              "hidden_chain_of_thought_saved": false,
+              "last_entrypoint": "assistant_chat",
+              "last_trace_id": "trace_3f11e1ffb23f48c1b44f",
+              "non_synthetic_trace_count": 20,
+              "qwen_execution_authority": false,
+              "raw_path_returned": false,
+              "required_steps": [
+                "received",
+                "qwen_router",
+                "privacy_tokenizer",
+                "task_classifier",
+                "route_decision",
+                "token_budget",
+                "tool_execution",
+                "safety_gate",
+                "evidence_summary",
+                "final_answer"
+              ],
+              "trace_count_visible": 20
+            },
+            "name": "assistant_trace",
+            "ok": true,
+            "status": "ok"
+          },
+          "audit": {
+            "degraded_reason": null,
+            "evidence": {},
+            "metrics": {
+              "operation_count": 14
+            },
+            "name": "audit",
+            "ok": true,
+            "status": "ok"
+          },
+          "auto_organizer": {
+            "degraded_reason": null,
+            "evidence": {},
+            "metrics": {
+              "controlled_move_enabled": true,
+              "controlled_rename_enabled": true,
+              "delete_enabled": false,
+              "fallback_default_blocked": true,
+              "last_ai_driven_plan": {
+                "ai_driven": true,
+                "fallback_used": false,
+                "plan_id": "plan_859800f745ea4a89",
+                "resolution_source": "ai_space+smart_naming+smart_classification",
+                "status": "rolled_back"
+              },
+              "last_fallback_blocker": null,
+              "last_rollback_status": {
+                "plan_id": "plan_859800f745ea4a89",
+                "status": "rolled_back"
+              },
+              "overwrite_enabled": false,
+              "plan_count": 28,
+              "rollback_required": true,
+              "uncontrolled_move_enabled": false,
+              "uncontrolled_rename_enabled": false
+            },
+            "name": "auto_organizer",
+            "ok": true,
+            "status": "ok"
+          },
+          "backup": {
+            "degraded_reason": null,
+            "evidence": {
+              "evidence_ref": "92d18a6547fe79a3",
+              "filename": "backup_sync_gate.json",
+              "found": false,
+              "generated_at": null,
+              "verdict": null
+            },
+            "metrics": {
+              "run_count": 0,
+              "task_count": 2
+            },
+            "name": "backup",
+            "ok": true,
+            "status": "ok"
+          },
+          "copy_plan": {
+            "degraded_reason": null,
+            "evidence": {
+              "evidence_ref": "c0523ade6d78e035",
+              "filename": "destructive_action_governance.json",
+              "found": true,
+              "generated_at": "2026-06-18T16:48:42.722659+08:00",
+              "verdict": "ok_ai_nas_destructive_action_governance"
+            },
+            "metrics": {},
+            "name": "copy_plan",
+            "ok": true,
+            "status": "ok"
+          },
+          "documents": {
+            "degraded_reason": null,
+            "evidence": {
+              "evidence_ref": "6f5f0dcff76bcdc5",
+              "filename": "document_pipeline_acceptance.json",
+              "found": true,
+              "generated_at": "2026-06-18T16:51:13.886316+08:00",
+              "verdict": "ok_ai_nas_document_pipeline_acceptance"
+            },
+            "metrics": {},
+            "name": "documents",
+            "ok": true,
+            "status": "ok"
+          },
+          "gateway": {
+            "degraded_reason": null,
+            "evidence": {
+              "evidence_ref": "1dac9567664b13ac",
+              "filename": "operator_portal_contract.json",
+              "found": true,
+              "generated_at": "2026-06-18T16:04:08.346324+08:00",
+              "verdict": "ok_ai_nas_operator_portal_contract"
+            },
+            "metrics": {},
+            "name": "gateway",
+            "ok": true,
+            "status": "ok"
+          },
+          "harness": {
+            "degraded_reason": null,
+            "evidence": {},
+            "metrics": {
+              "cloud_private_raw_egress": false,
+              "copy_execute_enabled": true,
+              "qwen_execution_authority": false
+            },
+            "name": "harness",
+            "ok": true,
+            "status": "ok"
+          },
+          "job_queue": {
+            "degraded_reason": null,
+            "evidence": {},
+            "metrics": {
+              "counts": {
+                "completed": 72,
+                "running": 1
+              }
+            },
+            "name": "job_queue",
+            "ok": true,
+            "status": "ok"
+          },
+          "journal": {
+            "degraded_reason": null,
+            "evidence": {
+              "evidence_ref": "5b452b9ae1108fed",
+              "filename": "digua_journal_production_deployment.json",
+              "found": false,
+              "generated_at": null,
+              "verdict": null
+            },
+            "metrics": {},
+            "name": "journal",
+            "ok": true,
+            "status": "ok"
+          },
+          "media": {
+            "degraded_reason": null,
+            "evidence": {},
+            "metrics": {
+              "album_count": 1,
+              "cloud_used": false,
+              "destructive_actions_enabled": false,
+              "duplicate_group_count": 1,
+              "last_indexed_at": "2026-07-06T10:41:29.884272+00:00",
+              "local_only": true,
+              "media_count": 19,
+              "ok": true,
+              "photo_count": 19,
+              "physical_file_moved": false,
+              "physical_file_renamed": false,
+              "raw_path_returned": false,
+              "schema": "digua_media_album_v2",
+              "unsupported_extensions": {},
+              "video_count": 0
+            },
+            "name": "media",
+            "ok": true,
+            "status": "ok"
+          },
+          "multimodal": {
+            "degraded_reason": null,
+            "evidence": {},
+            "metrics": {
+              "cloud_used": false,
+              "embedding_count": 24,
+              "indexed_count": 24,
+              "private_leak_count": 0
+            },
+            "name": "multimodal",
+            "ok": true,
+            "status": "ok"
+          },
+          "ocr": {
+            "degraded_reason": null,
+            "evidence": {
+              "evidence_ref": "bae7ef6fc9d6bbba",
+              "filename": "ocr_runtime_contract.json",
+              "found": true,
+              "generated_at": "2026-06-17T12:45:50.111236+08:00",
+              "verdict": "ok_ai_nas_ocr_runtime_contract"
+            },
+            "metrics": {},
+            "name": "ocr",
+            "ok": true,
+            "status": "ok"
+          },
+          "ocr_rag": {
+            "degraded_reason": null,
+            "evidence": {},
+            "metrics": {
+              "chunk_count": 88,
+              "cloud_ocr_enabled": false,
+              "document_count": 88,
+              "raw_private_content_returned": false,
+              "retrieval_mode": "sqlite_fts_first"
+            },
+            "name": "ocr_rag",
+            "ok": true,
+            "status": "ok"
+          },
+          "ops": {
+            "degraded_reason": null,
+            "evidence": {
+              "evidence_ref": "395b4b840e0985dc",
+              "filename": "ops_observability_gate.json",
+              "found": false,
+              "generated_at": null,
+              "verdict": null
+            },
+            "metrics": {
+              "active_alert_count": 0,
+              "health_check_count": 0
+            },
+            "name": "ops",
+            "ok": true,
+            "status": "ok"
+          },
+          "person_attribute": {
+            "degraded_reason": "person_attributes_missing",
+            "evidence": {},
+            "metrics": {
+              "attribute_count": 0,
+              "cloud_used": false,
+              "person_detection_count": 0,
+              "raw_path_returned": false,
+              "video_keyframe_count": 0
+            },
+            "name": "person_attribute",
+            "ok": true,
+            "status": "degraded"
+          },
+          "photos": {
+            "degraded_reason": null,
+            "evidence": {
+              "evidence_ref": "23f0387ff52a95b2",
+              "filename": "photo_pipeline_acceptance.json",
+              "found": true,
+              "generated_at": "2026-06-17T13:06:42.268703+08:00",
+              "verdict": "ok_ai_nas_photo_pipeline_acceptance"
+            },
+            "metrics": {
+              "photo_count": 19
+            },
+            "name": "photos",
+            "ok": true,
+            "status": "ok"
+          },
+          "qwen": {
+            "degraded_reason": null,
+            "evidence": {},
+            "metrics": {
+              "health_status": 200,
+              "model": "Qwen2.5-1.5B-Instruct-S100P-official"
+            },
+            "name": "qwen",
+            "ok": true,
+            "status": "ok"
+          },
+          "router": {
+            "degraded_reason": null,
+            "evidence": {
+              "evidence_ref": "8e0cad8c13cc8ec1",
+              "filename": "edge_cloud_router.json",
+              "found": true,
+              "generated_at": "2026-06-30T20:15:48.798990+08:00",
+              "verdict": "ok_ai_nas_edge_cloud_router"
+            },
+            "metrics": {},
+            "name": "router",
+            "ok": true,
+            "status": "ok"
+          },
+          "smart_classification": {
+            "degraded_reason": null,
+            "evidence": {},
+            "metrics": {
+              "category_count": 29,
+              "hit_category_count": 21,
+              "membership_count": 525,
+              "physical_file_moved": false,
+              "smart_name_count": 78
+            },
+            "name": "smart_classification",
+            "ok": true,
+            "status": "ok"
+          },
+          "smart_naming": {
+            "degraded_reason": null,
+            "evidence": {},
+            "metrics": {
+              "cloud_used": false,
+              "name_count": 78,
+              "physical_file_renamed": false
+            },
+            "name": "smart_naming",
+            "ok": true,
+            "status": "ok"
+          },
+          "snapshot": {
+            "degraded_reason": null,
+            "evidence": {
+              "evidence_ref": "c0efcbab2b0dafa1",
+              "filename": "snapshot_recovery_gate.json",
+              "found": false,
+              "generated_at": null,
+              "verdict": null
+            },
+            "metrics": {
+              "snapshot_count": 2,
+              "trash_count": 0,
+              "version_count": 0
+            },
+            "name": "snapshot",
+            "ok": true,
+            "status": "ok"
+          },
+          "subtitle": {
+            "degraded_reason": null,
+            "evidence": {},
+            "metrics": {
+              "cloud_used": false,
+              "fixture_only_for_ci": false,
+              "segment_count": 1,
+              "transcript_count": 1
+            },
+            "name": "subtitle",
+            "ok": true,
+            "status": "ok"
+          },
+          "yolo": {
+            "degraded_reason": "no_yolo_detections_indexed",
+            "evidence": {},
+            "metrics": {
+              "cloud_used": false,
+              "detection_count": 0,
+              "indexed_count": 1,
+              "keyframe_count": 0,
+              "raw_path_rows": 0,
+              "runtime_target": "s100p_bpu_hbm"
+            },
+            "name": "yolo",
+            "ok": true,
+            "status": "degraded"
+          }
+        },
+        "ok": true,
+        "overall": {
+          "degraded_modules": [
+            "yolo",
+            "person_attribute"
+          ],
+          "failed_modules": [],
+          "production_ready": true,
+          "readiness_verdict": "ready_ai_nas_production_readiness_gate",
+          "status": "ok",
+          "warning_count": 2
+        },
+        "privacy_boundary": {
+          "biometric_recognition_enabled": false,
+          "cloud_asr_enabled": false,
+          "cloud_private_raw_egress": false,
+          "cloud_vision_enabled": false,
+          "controlled_move_rename_boundary": {
+            "auto_organizer_required": true,
+            "controlled_move_enabled": true,
+            "controlled_rename_enabled": true,
+            "delete_enabled": false,
+            "overwrite_enabled": false,
+            "uncontrolled_move_enabled": false,
+            "uncontrolled_rename_enabled": false
+          },
+          "face_identification_enabled": false,
+          "product_status_exposes_absolute_paths": false,
+          "qwen_execution_authority": false,
+          "raw_path_returned": false,
+          "sensitive_attribute_inference_enabled": false
+        },
+        "schema": "digua_product_status_v1"
+      },
+      "status": 200
+    },
+    "smart_classification": {
+      "ok": true,
+      "payload": {
+        "biometric_recognition_enabled": false,
+        "category_count": 29,
+        "cloud_used": false,
+        "degraded": false,
+        "degraded_reason": null,
+        "destructive_actions_enabled": false,
+        "face_recognition_used": false,
+        "hit_category_count": 21,
+        "membership_count": 525,
+        "ok": true,
+        "physical_file_moved": false,
+        "physical_file_renamed": false,
+        "raw_path_returned": false,
+        "schema": "digua_smart_classification_v1",
+        "sensitive_attribute_inference_enabled": false,
+        "smart_name_count": 78
+      },
+      "status": 200
+    },
+    "smart_naming": {
+      "ok": true,
+      "payload": {
+        "cloud_used": false,
+        "face_recognition_used": false,
+        "name_count": 78,
+        "ok": true,
+        "physical_file_renamed": false,
+        "raw_path_returned": false,
+        "schema": "digua_smart_naming_v1",
+        "sensitive_attribute_inference_enabled": false
+      },
+      "status": 200
+    }
+  },
+  "uploads_root": "Uploads/stage_demo_docs"
+}

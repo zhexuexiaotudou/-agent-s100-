@@ -1,0 +1,267 @@
+{
+  "auth_token_present": true,
+  "generated_at": "2026-07-06T13:56:31Z",
+  "ok": true,
+  "path": "Documents/DemoDocs/digua_stable_demo_documents/Documents",
+  "queries": [
+    {
+      "document_rag": {
+        "error": null,
+        "evidence_count": 8,
+        "expected_term_count": 4,
+        "http_ok": true,
+        "matched_term_count": 4,
+        "matched_terms": [
+          "发票",
+          "金额",
+          "日期",
+          "303.69"
+        ],
+        "no_grounded_answer": false,
+        "ok": true,
+        "raw_path_returned": false,
+        "top_names": [
+          "invoice_001_ground_truth.txt",
+          "invoice_001_ground_truth.txt",
+          "invoice_001_ground_truth.txt",
+          "invoice_001_ground_truth.txt",
+          "invoice_001_ground_truth.txt"
+        ]
+      },
+      "id": "invoice_amount_date_keywords",
+      "ocr": {
+        "error": null,
+        "evidence_count": 8,
+        "expected_term_count": 4,
+        "http_ok": true,
+        "matched_term_count": 4,
+        "matched_terms": [
+          "发票",
+          "金额",
+          "日期",
+          "303.69"
+        ],
+        "no_grounded_answer": false,
+        "ok": true,
+        "raw_path_returned": false,
+        "top_names": [
+          "invoice_001_ground_truth.txt",
+          "invoice_001_ground_truth.txt",
+          "invoice_001_ground_truth.txt",
+          "invoice_001_ground_truth.txt",
+          "invoice_001_ground_truth.txt"
+        ]
+      },
+      "query": "发票 金额 日期 303.69"
+    },
+    {
+      "document_rag": {
+        "error": null,
+        "evidence_count": 8,
+        "expected_term_count": 6,
+        "http_ok": true,
+        "matched_term_count": 4,
+        "matched_terms": [
+          "合同",
+          "付款条款",
+          "30%",
+          "3840"
+        ],
+        "no_grounded_answer": false,
+        "ok": true,
+        "raw_path_returned": false,
+        "top_names": [
+          "contract_001_ground_truth.txt",
+          "contract_001_ground_truth.txt",
+          "contract_001_ground_truth.txt",
+          "contract_001_ground_truth.txt",
+          "contract_001_ground_truth.txt"
+        ]
+      },
+      "id": "contract_payment_terms_keywords",
+      "ocr": {
+        "error": null,
+        "evidence_count": 8,
+        "expected_term_count": 6,
+        "http_ok": true,
+        "matched_term_count": 4,
+        "matched_terms": [
+          "合同",
+          "付款条款",
+          "30%",
+          "3840"
+        ],
+        "no_grounded_answer": false,
+        "ok": true,
+        "raw_path_returned": false,
+        "top_names": [
+          "contract_001_ground_truth.txt",
+          "contract_001_ground_truth.txt",
+          "contract_001_ground_truth.txt",
+          "contract_001_ground_truth.txt",
+          "contract_001_ground_truth.txt"
+        ]
+      },
+      "query": "合同 付款条款 30% 70% 3840 8960"
+    },
+    {
+      "document_rag": {
+        "error": null,
+        "evidence_count": 8,
+        "expected_term_count": 5,
+        "http_ok": true,
+        "matched_term_count": 5,
+        "matched_terms": [
+          "电机学",
+          "变压器",
+          "等效电路",
+          "电压调整率",
+          "相量图"
+        ],
+        "no_grounded_answer": false,
+        "ok": true,
+        "raw_path_returned": false,
+        "top_names": [
+          "course_note_ground_truth.txt",
+          "course_note_ground_truth.txt",
+          "course_note_ground_truth.txt",
+          "course_note_ground_truth.txt",
+          "course_note_ground_truth.txt"
+        ]
+      },
+      "id": "course_note_keywords",
+      "ocr": {
+        "error": null,
+        "evidence_count": 8,
+        "expected_term_count": 5,
+        "http_ok": true,
+        "matched_term_count": 5,
+        "matched_terms": [
+          "电机学",
+          "变压器",
+          "等效电路",
+          "电压调整率",
+          "相量图"
+        ],
+        "no_grounded_answer": false,
+        "ok": true,
+        "raw_path_returned": false,
+        "top_names": [
+          "course_note_ground_truth.txt",
+          "course_note_ground_truth.txt",
+          "course_note_ground_truth.txt",
+          "course_note_ground_truth.txt",
+          "course_note_ground_truth.txt"
+        ]
+      },
+      "query": "课程资料"
+    },
+    {
+      "document_rag": {
+        "error": null,
+        "evidence_count": 8,
+        "expected_term_count": 3,
+        "http_ok": true,
+        "matched_term_count": 3,
+        "matched_terms": [
+          "收据",
+          "128.80",
+          "校园文具店"
+        ],
+        "no_grounded_answer": false,
+        "ok": true,
+        "raw_path_returned": false,
+        "top_names": [
+          "receipt_001_ground_truth.txt",
+          "receipt_001_ground_truth.txt",
+          "receipt_001_ground_truth.txt",
+          "receipt_001_ground_truth.txt",
+          "receipt_001_ground_truth.txt"
+        ]
+      },
+      "id": "receipt_total_keywords",
+      "ocr": {
+        "error": null,
+        "evidence_count": 8,
+        "expected_term_count": 3,
+        "http_ok": true,
+        "matched_term_count": 3,
+        "matched_terms": [
+          "收据",
+          "128.80",
+          "校园文具店"
+        ],
+        "no_grounded_answer": false,
+        "ok": true,
+        "raw_path_returned": false,
+        "top_names": [
+          "receipt_001_ground_truth.txt",
+          "receipt_001_ground_truth.txt",
+          "receipt_001_ground_truth.txt",
+          "receipt_001_ground_truth.txt",
+          "receipt_001_ground_truth.txt"
+        ]
+      },
+      "query": "收据 128.80 校园文具店"
+    },
+    {
+      "document_rag": {
+        "error": null,
+        "evidence_count": 8,
+        "expected_term_count": 5,
+        "http_ok": true,
+        "matched_term_count": 5,
+        "matched_terms": [
+          "S100P",
+          "Qwen",
+          "AI Space",
+          "Auto Organizer",
+          "Demo"
+        ],
+        "no_grounded_answer": false,
+        "ok": true,
+        "raw_path_returned": false,
+        "top_names": [
+          "screenshot_001_ground_truth.txt",
+          "screenshot_001_ground_truth.txt",
+          "screenshot_001_ground_truth.txt",
+          "screenshot_001_ground_truth.txt",
+          "screenshot_001_ground_truth.txt"
+        ]
+      },
+      "id": "screenshot_meeting_keywords",
+      "ocr": {
+        "error": null,
+        "evidence_count": 8,
+        "expected_term_count": 5,
+        "http_ok": true,
+        "matched_term_count": 5,
+        "matched_terms": [
+          "S100P",
+          "Qwen",
+          "AI Space",
+          "Auto Organizer",
+          "Demo"
+        ],
+        "no_grounded_answer": false,
+        "ok": true,
+        "raw_path_returned": false,
+        "top_names": [
+          "screenshot_001_ground_truth.txt",
+          "screenshot_001_ground_truth.txt",
+          "screenshot_001_ground_truth.txt",
+          "screenshot_001_ground_truth.txt",
+          "screenshot_001_ground_truth.txt"
+        ]
+      },
+      "query": "OpenClaw 周会 S100P Qwen AI Space Auto Organizer Demo"
+    }
+  ],
+  "summary": {
+    "document_rag_expected_term_hits": 21,
+    "document_rag_ok_queries": 5,
+    "ocr_expected_term_hits": 21,
+    "ocr_ok_queries": 5,
+    "query_count": 5
+  }
+}

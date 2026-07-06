@@ -1,0 +1,193 @@
+{
+  "ai_space": {
+    "cloud_used": false,
+    "ok": true,
+    "raw_path_returned": false,
+    "rebuilt_assets": 42,
+    "schema": "digua_ai_space_v1",
+    "status": {
+      "asset_count": 42,
+      "cloud_used": false,
+      "degraded": false,
+      "degraded_reason": null,
+      "evidence_count": 42,
+      "modality_counts": {
+        "document": 10,
+        "image": 32
+      },
+      "ok": true,
+      "raw_path_returned": false,
+      "schema": "digua_ai_space_v1"
+    }
+  },
+  "generated_at": "2026-07-06T13:52:22Z",
+  "multimodal": {
+    "counts": {
+      "document": 19,
+      "image": 36
+    },
+    "duration_sec": 157.778,
+    "image_embedding_available": true,
+    "image_embedding_model": {
+      "available": true,
+      "backend": "transformers_clip",
+      "device": "cpu",
+      "local_only": true,
+      "model_family": "clip",
+      "model_name": "ai_nas_clip_vit_base_patch32",
+      "precision": "float32",
+      "production_semantic": true,
+      "unavailable_reason": null,
+      "vector_dim": 512,
+      "weights_committed_to_repo": false
+    },
+    "image_embeddings": 36,
+    "indexed_assets": 55,
+    "ok": true,
+    "privacy": {
+      "cloud_used": false,
+      "private_leak_count": 0,
+      "raw_path_rows": 0
+    },
+    "text_chunks": 10
+  },
+  "ok": true,
+  "roots": [
+    "/mnt/nas/openclaw/Personal/Photos/stage7_smart_album_demo",
+    "/mnt/nas/openclaw/Personal/Uploads/stage7_auto_classify",
+    "/mnt/nas/openclaw/demo_data/photos",
+    "/mnt/nas/openclaw/Personal/Documents/DemoDocs/digua_stable_demo_documents/Documents",
+    "/mnt/nas/openclaw/Personal/DemoDocs/digua_stable_demo_documents/Documents",
+    "/mnt/nas/openclaw/Personal/Uploads/stage_demo_docs"
+  ],
+  "smart_classification": {
+    "generated_smart_names": 42,
+    "inserted_memberships": 817,
+    "ok": true,
+    "physical_file_moved": false,
+    "physical_file_renamed": false,
+    "raw_path_returned": false,
+    "schema": "digua_smart_classification_v1",
+    "status": {
+      "biometric_recognition_enabled": false,
+      "category_count": 29,
+      "cloud_used": false,
+      "degraded": false,
+      "degraded_reason": null,
+      "destructive_actions_enabled": false,
+      "face_recognition_used": false,
+      "hit_category_count": 23,
+      "membership_count": 817,
+      "ok": true,
+      "physical_file_moved": false,
+      "physical_file_renamed": false,
+      "raw_path_returned": false,
+      "schema": "digua_smart_classification_v1",
+      "sensitive_attribute_inference_enabled": false,
+      "smart_name_count": 95
+    }
+  },
+  "statuses": {
+    "ai_space": {
+      "asset_count": 42,
+      "cloud_used": false,
+      "degraded": false,
+      "degraded_reason": null,
+      "evidence_count": 42,
+      "modality_counts": {
+        "document": 10,
+        "image": 32
+      },
+      "ok": true,
+      "raw_path_returned": false,
+      "schema": "digua_ai_space_v1"
+    },
+    "multimodal": {
+      "cloud_used": false,
+      "counts": {
+        "document": 10,
+        "image": 31
+      },
+      "degraded": false,
+      "degraded_reason": null,
+      "delivery_blockers": [],
+      "embedding_count": 31,
+      "feature_flags": {
+        "asr_enabled": false,
+        "audio_transcript_enabled": false,
+        "biometric_recognition_enabled": false,
+        "cloud_asr_enabled": false,
+        "cloud_ocr_enabled": false,
+        "cloud_vision_enabled": false,
+        "destructive_actions_enabled": false,
+        "document_embedding_enabled": false,
+        "face_identification_enabled": false,
+        "image_embedding_enabled": true,
+        "image_embedding_required_for_delivery": true,
+        "local_asr_required_for_delivery": true,
+        "local_vlm_caption_enabled": false,
+        "min_live_image_embeddings": 5,
+        "multimodal_metadata_index_enabled": true,
+        "multimodal_search_enabled": true,
+        "ocr_enabled": false,
+        "production_semantic_model_required": true,
+        "qwen_tool_execution_enabled": false,
+        "sensitive_attribute_inference_enabled": false,
+        "subtitle_extraction_enabled": true,
+        "symbolic_caption_enabled": true,
+        "vector_extension_enabled": "auto",
+        "vector_numpy_fallback_enabled": true,
+        "video_keyframe_embedding_enabled": false,
+        "video_keyframe_enabled": false
+      },
+      "image_asset_count": 31,
+      "image_embedding_model": {
+        "available": true,
+        "backend": "transformers_clip",
+        "device": "cpu",
+        "local_only": true,
+        "model_family": "clip",
+        "model_name": "ai_nas_clip_vit_base_patch32",
+        "precision": "float32",
+        "production_semantic": true,
+        "unavailable_reason": null,
+        "vector_dim": 512,
+        "weights_committed_to_repo": false
+      },
+      "indexed_count": 41,
+      "ok": true,
+      "private_leak_count": 0,
+      "production_semantic_embedding_count": 31,
+      "production_semantic_model_available": true,
+      "qwen_tool_execution_enabled": false,
+      "raw_path_rows": 0,
+      "schema": "digua_multimodal_search_v1",
+      "yolo_index": {
+        "available": true,
+        "degraded": true,
+        "degraded_reason": "no_yolo_detections_indexed",
+        "detection_count": 0,
+        "indexed_count": 1,
+        "keyframe_count": 0
+      }
+    },
+    "smart_classification": {
+      "biometric_recognition_enabled": false,
+      "category_count": 29,
+      "cloud_used": false,
+      "degraded": false,
+      "degraded_reason": null,
+      "destructive_actions_enabled": false,
+      "face_recognition_used": false,
+      "hit_category_count": 23,
+      "membership_count": 817,
+      "ok": true,
+      "physical_file_moved": false,
+      "physical_file_renamed": false,
+      "raw_path_returned": false,
+      "schema": "digua_smart_classification_v1",
+      "sensitive_attribute_inference_enabled": false,
+      "smart_name_count": 95
+    }
+  }
+}
