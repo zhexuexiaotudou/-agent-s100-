@@ -1,0 +1,1902 @@
+{
+  "blockers": [],
+  "checks": [
+    {
+      "detail": null,
+      "name": "local_media assistant ok",
+      "ok": true
+    },
+    {
+      "detail": "trace_94d68efbc5614bf9a3ef",
+      "name": "local_media trace id present",
+      "ok": true
+    },
+    {
+      "detail": null,
+      "name": "local_media trace fetch ok",
+      "ok": true
+    },
+    {
+      "detail": [
+        "received",
+        "qwen_router",
+        "privacy_tokenizer",
+        "task_classifier",
+        "route_decision",
+        "token_budget",
+        "tool_execution",
+        "safety_gate",
+        "evidence_summary",
+        "final_answer"
+      ],
+      "name": "local_media all required steps",
+      "ok": true
+    },
+    {
+      "detail": {
+        "evidence_summary": {
+          "evidence_refs": [],
+          "payload_source": "real_execution_context",
+          "product_demo_allowed": true,
+          "raw_path_returned": false,
+          "raw_private_content_logged": false,
+          "synthetic_trace": false
+        },
+        "final_answer": {
+          "answer_redacted": "已通过本地媒体/AI Space 索引检索，返回 0 条匹配结果。",
+          "hidden_chain_of_thought_exposed": false,
+          "payload_source": "real_execution_context",
+          "product_demo_allowed": true,
+          "synthetic_trace": false
+        },
+        "privacy_tokenizer": {
+          "cloud_private_egress": false,
+          "payload_source": "real_execution_context",
+          "privacy_level": "high",
+          "privacy_spans": [
+            "private_nas_context"
+          ],
+          "product_demo_allowed": true,
+          "redaction_count": 0,
+          "redaction_map_included": false,
+          "synthetic_trace": false
+        },
+        "qwen_router": {
+          "payload_source": "real_execution_context",
+          "product_demo_allowed": true,
+          "qwen_execution_authority": false,
+          "qwen_touched": true,
+          "router_output": {
+            "classifier": "qwen_gateway_structured_router",
+            "elapsed_ms": 1.504,
+            "local_tool_id": "local_storage_list",
+            "model": "Qwen2.5-1.5B-Instruct-S100P-official",
+            "original_query_sent": true,
+            "policy_route": {
+              "local_tool_id": "local_storage_list",
+              "privacy_level": "high",
+              "route": "local",
+              "task_complexity": "simple"
+            },
+            "privacy_level": "high",
+            "qwen_execution_authority": false,
+            "raw_content_preview": "{\"route\": \"local\", \"privacy_level\": \"none\", \"task_complexity\": \"simple\", \"reason\": \"simple local NAS task stays on device\", \"local_tool_id\": \"ai_nas_allowlisted_tools\", \"classifier\": \"qwen_gateway_structured_router\", \"privacy_hits\": {}, \"simple_hits\": {\"local_file_qa\": [\"照片\"]}, \"original_query_preview\": \"列出最近上传的照片\"}",
+            "reason": "simple local NAS task stays on device",
+            "route": "local",
+            "task_complexity": "simple"
+          },
+          "synthetic_trace": false
+        },
+        "received": {
+          "entrypoint": "assistant_chat",
+          "request": {
+            "payload_source": "real_execution_context",
+            "product_demo_allowed": true,
+            "query_hash": "89297c93584e3917db02c0932bd77b48748e5bfbdb5641615604462ad73b4c8d",
+            "synthetic_trace": false
+          }
+        },
+        "route_decision": {
+          "cloud_allowed": false,
+          "cloud_stub": false,
+          "cloud_used": false,
+          "payload_source": "real_execution_context",
+          "product_demo_allowed": true,
+          "real_cloud_call": false,
+          "route": "private_local_only",
+          "synthetic_trace": false
+        },
+        "safety_gate": {
+          "delete_enabled": false,
+          "hidden_chain_of_thought_saved": false,
+          "overwrite_enabled": false,
+          "payload_source": "real_execution_context",
+          "product_demo_allowed": true,
+          "raw_path_returned": false,
+          "raw_private_cloud_egress": false,
+          "synthetic_trace": false,
+          "uncontrolled_move_enabled": false
+        },
+        "task_classifier": {
+          "action_intent": {
+            "action": "storage_list",
+            "path": "Photos",
+            "quoted": []
+          },
+          "payload_source": "real_execution_context",
+          "product_demo_allowed": true,
+          "synthetic_trace": false,
+          "task_complexity": "simple",
+          "task_type": "media_search"
+        },
+        "token_budget": {
+          "after_tokens": "[redacted]",
+          "before_tokens": "[redacted]",
+          "cloud_payload_contains_private_context": false,
+          "payload_source": "real_execution_context",
+          "product_demo_allowed": true,
+          "redaction_applied": false,
+          "reduction_ratio": 1.0,
+          "run_id": "token-budget-e6c4e243064d",
+          "synthetic_trace": false,
+          "token_counts": "[redacted]"
+        },
+        "tool_execution": {
+          "input_redacted": {
+            "query_hash": "89297c93584e3917db02c0932bd77b48748e5bfbdb5641615604462ad73b4c8d",
+            "task_type": "media_search"
+          },
+          "output_summary": {
+            "evidence_refs": [],
+            "no_grounded_answer": null,
+            "qwen_execution_authority": false,
+            "result": {
+              "cloud_used": false,
+              "evidence_refs": [],
+              "raw_path_returned": false,
+              "result_count": 0,
+              "status": "completed",
+              "tool_execution": "local_media_search"
+            },
+            "result_count": 0,
+            "status": "completed",
+            "tool": "local_media_search"
+          },
+          "payload_source": "real_execution_context",
+          "product_demo_allowed": true,
+          "qwen_execution_authority": false,
+          "synthetic_trace": false,
+          "tool": "local_media_search"
+        }
+      },
+      "name": "local_media trace uses real execution context",
+      "ok": true
+    },
+    {
+      "detail": {
+        "product_demo_allowed": true,
+        "synthetic_trace": false
+      },
+      "name": "local_media trace not synthetic",
+      "ok": true
+    },
+    {
+      "detail": {
+        "after_tokens": 34,
+        "answer_redacted": "已通过本地媒体/AI Space 索引检索，返回 0 条匹配结果。",
+        "before_tokens": 26,
+        "cloud_allowed": false,
+        "cloud_payload_contains_private_context": false,
+        "cloud_stub": false,
+        "cloud_used": false,
+        "evidence_refs": [],
+        "hidden_chain_of_thought_saved": false,
+        "no_grounded_answer": false,
+        "ok": true,
+        "privacy_level": "high",
+        "privacy_spans": [
+          "private_nas_context"
+        ],
+        "qwen_execution_authority": false,
+        "qwen_touched": true,
+        "raw_path_returned": false,
+        "raw_private_cloud_egress": false,
+        "real_cloud_call": false,
+        "redaction_applied": false,
+        "reduction_ratio": 1.0,
+        "route": "private_local_only",
+        "schema": "digua_assistant_chat_v2",
+        "steps": [
+          "received",
+          "qwen_router",
+          "privacy_tokenizer",
+          "task_classifier",
+          "route_decision",
+          "token_budget",
+          "tool_execution",
+          "safety_gate",
+          "evidence_summary",
+          "final_answer"
+        ],
+        "task_complexity": "simple",
+        "task_type": "media_search",
+        "tool_execution": "local_media_search",
+        "tool_status": "completed",
+        "trace_id": "trace_94d68efbc5614bf9a3ef"
+      },
+      "name": "local_media no hidden CoT",
+      "ok": true
+    },
+    {
+      "detail": "redacted",
+      "name": "local_media no raw path",
+      "ok": true
+    },
+    {
+      "detail": null,
+      "name": "private_docs assistant ok",
+      "ok": true
+    },
+    {
+      "detail": "trace_3f11e1ffb23f48c1b44f",
+      "name": "private_docs trace id present",
+      "ok": true
+    },
+    {
+      "detail": null,
+      "name": "private_docs trace fetch ok",
+      "ok": true
+    },
+    {
+      "detail": [
+        "received",
+        "qwen_router",
+        "privacy_tokenizer",
+        "task_classifier",
+        "route_decision",
+        "token_budget",
+        "tool_execution",
+        "safety_gate",
+        "evidence_summary",
+        "final_answer"
+      ],
+      "name": "private_docs all required steps",
+      "ok": true
+    },
+    {
+      "detail": {
+        "evidence_summary": {
+          "evidence_refs": [],
+          "payload_source": "real_execution_context",
+          "product_demo_allowed": true,
+          "raw_path_returned": false,
+          "raw_private_content_logged": false,
+          "synthetic_trace": false
+        },
+        "final_answer": {
+          "answer_redacted": "本地文档 RAG 没有找到足够证据，已拒绝强答。",
+          "hidden_chain_of_thought_exposed": false,
+          "payload_source": "real_execution_context",
+          "product_demo_allowed": true,
+          "synthetic_trace": false
+        },
+        "privacy_tokenizer": {
+          "cloud_private_egress": false,
+          "payload_source": "real_execution_context",
+          "privacy_level": "high",
+          "privacy_spans": [
+            "invoice",
+            "contract",
+            "amount",
+            "private_nas_context"
+          ],
+          "product_demo_allowed": true,
+          "redaction_count": 1,
+          "redaction_map_included": false,
+          "synthetic_trace": false
+        },
+        "qwen_router": {
+          "payload_source": "real_execution_context",
+          "product_demo_allowed": true,
+          "qwen_execution_authority": false,
+          "qwen_touched": true,
+          "router_output": {
+            "classifier": "qwen_gateway_structured_router",
+            "elapsed_ms": 1.416,
+            "local_tool_id": "local_document_rag",
+            "model": "Qwen2.5-1.5B-Instruct-S100P-official",
+            "original_query_sent": true,
+            "policy_route": {
+              "local_tool_id": "local_document_rag",
+              "privacy_level": "high",
+              "route": "local",
+              "task_complexity": "simple"
+            },
+            "privacy_level": "high",
+            "qwen_execution_authority": false,
+            "raw_content_preview": "{\"route\": \"local\", \"privacy_level\": \"high\", \"task_complexity\": \"simple\", \"reason\": \"privacy-sensitive or personal NAS query stays on device\", \"local_tool_id\": \"ai_nas_allowlisted_tools\", \"classifier\": \"qwen_gateway_structured_router\", \"privacy_hits\": {\"contract\": [\"合同\"], \"invoice\": [\"发票\"], \"finance\": [\"金额\"]}, \"simple_hits\": {\"summary\": [\"总结\"]}, \"original_query_preview\": \"总结我的家庭发票和合同里涉及金额的内容\"}",
+            "reason": "privacy-sensitive or personal NAS query stays on device",
+            "route": "local",
+            "task_complexity": "simple"
+          },
+          "synthetic_trace": false
+        },
+        "received": {
+          "entrypoint": "assistant_chat",
+          "request": {
+            "payload_source": "real_execution_context",
+            "product_demo_allowed": true,
+            "query_hash": "e4e3edc84f09cddb6eed59177b79acb07f41919db068d792ff353d261eb0e09a",
+            "synthetic_trace": false
+          }
+        },
+        "route_decision": {
+          "cloud_allowed": false,
+          "cloud_stub": false,
+          "cloud_used": false,
+          "payload_source": "real_execution_context",
+          "product_demo_allowed": true,
+          "real_cloud_call": false,
+          "route": "private_local_only",
+          "synthetic_trace": false
+        },
+        "safety_gate": {
+          "delete_enabled": false,
+          "hidden_chain_of_thought_saved": false,
+          "overwrite_enabled": false,
+          "payload_source": "real_execution_context",
+          "product_demo_allowed": true,
+          "raw_path_returned": false,
+          "raw_private_cloud_egress": false,
+          "synthetic_trace": false,
+          "uncontrolled_move_enabled": false
+        },
+        "task_classifier": {
+          "action_intent": {
+            "action": "document_query",
+            "path": "Documents",
+            "query": "总结我的家庭发票和合同里涉及金额的内容",
+            "quoted": []
+          },
+          "payload_source": "real_execution_context",
+          "product_demo_allowed": true,
+          "synthetic_trace": false,
+          "task_complexity": "complex",
+          "task_type": "private_document_query"
+        },
+        "token_budget": {
+          "after_tokens": "[redacted]",
+          "before_tokens": "[redacted]",
+          "cloud_payload_contains_private_context": false,
+          "payload_source": "real_execution_context",
+          "product_demo_allowed": true,
+          "redaction_applied": true,
+          "reduction_ratio": 1.0,
+          "run_id": "token-budget-1e813af2d409",
+          "synthetic_trace": false,
+          "token_counts": "[redacted]"
+        },
+        "tool_execution": {
+          "input_redacted": {
+            "query_hash": "e4e3edc84f09cddb6eed59177b79acb07f41919db068d792ff353d261eb0e09a",
+            "task_type": "private_document_query"
+          },
+          "output_summary": {
+            "evidence_refs": [],
+            "no_grounded_answer": true,
+            "qwen_execution_authority": false,
+            "result": {
+              "cloud_used": false,
+              "evidence_refs": [],
+              "no_grounded_answer": true,
+              "raw_path_returned": false,
+              "raw_private_content_returned": false,
+              "result_count": 0,
+              "status": "completed",
+              "tool_execution": "local_document_rag"
+            },
+            "result_count": 0,
+            "status": "completed",
+            "tool": "local_document_rag"
+          },
+          "payload_source": "real_execution_context",
+          "product_demo_allowed": true,
+          "qwen_execution_authority": false,
+          "synthetic_trace": false,
+          "tool": "local_document_rag"
+        }
+      },
+      "name": "private_docs trace uses real execution context",
+      "ok": true
+    },
+    {
+      "detail": {
+        "product_demo_allowed": true,
+        "synthetic_trace": false
+      },
+      "name": "private_docs trace not synthetic",
+      "ok": true
+    },
+    {
+      "detail": {
+        "after_tokens": 45,
+        "answer_redacted": "本地文档 RAG 没有找到足够证据，已拒绝强答。",
+        "before_tokens": 31,
+        "cloud_allowed": false,
+        "cloud_payload_contains_private_context": false,
+        "cloud_stub": false,
+        "cloud_used": false,
+        "evidence_refs": [],
+        "hidden_chain_of_thought_saved": false,
+        "no_grounded_answer": true,
+        "ok": true,
+        "privacy_level": "high",
+        "privacy_spans": [
+          "invoice",
+          "contract",
+          "amount",
+          "private_nas_context"
+        ],
+        "qwen_execution_authority": false,
+        "qwen_touched": true,
+        "raw_path_returned": false,
+        "raw_private_cloud_egress": false,
+        "real_cloud_call": false,
+        "redaction_applied": true,
+        "reduction_ratio": 1.0,
+        "route": "private_local_only",
+        "schema": "digua_assistant_chat_v2",
+        "steps": [
+          "received",
+          "qwen_router",
+          "privacy_tokenizer",
+          "task_classifier",
+          "route_decision",
+          "token_budget",
+          "tool_execution",
+          "safety_gate",
+          "evidence_summary",
+          "final_answer"
+        ],
+        "task_complexity": "complex",
+        "task_type": "private_document_query",
+        "tool_execution": "local_document_rag",
+        "tool_status": "completed",
+        "trace_id": "trace_3f11e1ffb23f48c1b44f"
+      },
+      "name": "private_docs no hidden CoT",
+      "ok": true
+    },
+    {
+      "detail": "redacted",
+      "name": "private_docs no raw path",
+      "ok": true
+    },
+    {
+      "detail": null,
+      "name": "public_complex assistant ok",
+      "ok": true
+    },
+    {
+      "detail": "trace_d04d760413e640138170",
+      "name": "public_complex trace id present",
+      "ok": true
+    },
+    {
+      "detail": null,
+      "name": "public_complex trace fetch ok",
+      "ok": true
+    },
+    {
+      "detail": [
+        "received",
+        "qwen_router",
+        "privacy_tokenizer",
+        "task_classifier",
+        "route_decision",
+        "token_budget",
+        "tool_execution",
+        "safety_gate",
+        "evidence_summary",
+        "final_answer"
+      ],
+      "name": "public_complex all required steps",
+      "ok": true
+    },
+    {
+      "detail": {
+        "evidence_summary": {
+          "evidence_refs": [
+            "router:cloud_overflow"
+          ],
+          "payload_source": "real_execution_context",
+          "product_demo_allowed": true,
+          "raw_path_returned": false,
+          "raw_private_content_logged": false,
+          "synthetic_trace": false
+        },
+        "final_answer": {
+          "answer_redacted": "公开复杂任务已完成本地 Qwen 路由、隐私分词和 token 预算；当前按受控云端边界返回。",
+          "hidden_chain_of_thought_exposed": false,
+          "payload_source": "real_execution_context",
+          "product_demo_allowed": true,
+          "synthetic_trace": false
+        },
+        "privacy_tokenizer": {
+          "cloud_private_egress": false,
+          "payload_source": "real_execution_context",
+          "privacy_level": "none",
+          "privacy_spans": [],
+          "product_demo_allowed": true,
+          "redaction_count": 0,
+          "redaction_map_included": false,
+          "synthetic_trace": false
+        },
+        "qwen_router": {
+          "payload_source": "real_execution_context",
+          "product_demo_allowed": true,
+          "qwen_execution_authority": false,
+          "qwen_touched": true,
+          "router_output": {
+            "classifier": "qwen_gateway_structured_router",
+            "elapsed_ms": 1.441,
+            "local_tool_id": null,
+            "model": "Qwen2.5-1.5B-Instruct-S100P-official",
+            "original_query_sent": true,
+            "policy_route": {
+              "local_tool_id": null,
+              "privacy_level": "none",
+              "route": "cloud",
+              "task_complexity": "complex"
+            },
+            "privacy_level": "none",
+            "qwen_execution_authority": false,
+            "raw_content_preview": "{\"route\": \"cloud\", \"privacy_level\": \"none\", \"task_complexity\": \"complex\", \"reason\": \"public non-private complex market or strategy request\", \"local_tool_id\": null, \"classifier\": \"qwen_gateway_structured_router\", \"privacy_hits\": {}, \"simple_hits\": {}, \"original_query_preview\": \"不要引用本地文件，只根据公开信息比较高端 AI NAS 的发展趋势\"}",
+            "reason": "public non-private complex market or strategy request",
+            "route": "cloud",
+            "task_complexity": "complex"
+          },
+          "synthetic_trace": false
+        },
+        "received": {
+          "entrypoint": "assistant_chat",
+          "request": {
+            "payload_source": "real_execution_context",
+            "product_demo_allowed": true,
+            "query_hash": "a15aba4de0d0f02118b3ba036f56432f276cddd7b61136283611df5c7507da44",
+            "synthetic_trace": false
+          }
+        },
+        "route_decision": {
+          "cloud_allowed": true,
+          "cloud_stub": true,
+          "cloud_used": false,
+          "payload_source": "real_execution_context",
+          "product_demo_allowed": true,
+          "real_cloud_call": false,
+          "route": "cloud_allowed_redacted",
+          "synthetic_trace": false
+        },
+        "safety_gate": {
+          "delete_enabled": false,
+          "hidden_chain_of_thought_saved": false,
+          "overwrite_enabled": false,
+          "payload_source": "real_execution_context",
+          "product_demo_allowed": true,
+          "raw_path_returned": false,
+          "raw_private_cloud_egress": false,
+          "synthetic_trace": false,
+          "uncontrolled_move_enabled": false
+        },
+        "task_classifier": {
+          "action_intent": null,
+          "payload_source": "real_execution_context",
+          "product_demo_allowed": true,
+          "synthetic_trace": false,
+          "task_complexity": "complex",
+          "task_type": "public_complex_query"
+        },
+        "token_budget": {
+          "after_tokens": "[redacted]",
+          "before_tokens": "[redacted]",
+          "cloud_payload_contains_private_context": false,
+          "payload_source": "real_execution_context",
+          "product_demo_allowed": true,
+          "redaction_applied": true,
+          "reduction_ratio": 1.0,
+          "run_id": "token-budget-f24039f1e64c",
+          "synthetic_trace": false,
+          "token_counts": "[redacted]"
+        },
+        "tool_execution": {
+          "input_redacted": {
+            "query_hash": "a15aba4de0d0f02118b3ba036f56432f276cddd7b61136283611df5c7507da44",
+            "task_type": "public_complex_query"
+          },
+          "output_summary": {
+            "evidence_refs": [
+              "router:cloud_overflow"
+            ],
+            "no_grounded_answer": null,
+            "qwen_execution_authority": false,
+            "result": {
+              "cloud_available": false,
+              "cloud_stub": true,
+              "cloud_used": false,
+              "evidence_refs": [
+                "router:cloud_overflow"
+              ],
+              "raw_path_returned": false,
+              "real_cloud_call": false,
+              "result_count": 1,
+              "status": "completed",
+              "tool_execution": "controlled_cloud_overflow"
+            },
+            "result_count": 1,
+            "status": "completed",
+            "tool": "controlled_cloud_overflow"
+          },
+          "payload_source": "real_execution_context",
+          "product_demo_allowed": true,
+          "qwen_execution_authority": false,
+          "synthetic_trace": false,
+          "tool": "controlled_cloud_overflow"
+        }
+      },
+      "name": "public_complex trace uses real execution context",
+      "ok": true
+    },
+    {
+      "detail": {
+        "product_demo_allowed": true,
+        "synthetic_trace": false
+      },
+      "name": "public_complex trace not synthetic",
+      "ok": true
+    },
+    {
+      "detail": {
+        "after_tokens": 44,
+        "answer_redacted": "公开复杂任务已完成本地 Qwen 路由、隐私分词和 token 预算；当前按受控云端边界返回。",
+        "before_tokens": 35,
+        "cloud_allowed": true,
+        "cloud_payload_contains_private_context": false,
+        "cloud_stub": true,
+        "cloud_used": false,
+        "evidence_refs": [
+          "router:cloud_overflow"
+        ],
+        "hidden_chain_of_thought_saved": false,
+        "no_grounded_answer": false,
+        "ok": true,
+        "privacy_level": "none",
+        "privacy_spans": [],
+        "qwen_execution_authority": false,
+        "qwen_touched": true,
+        "raw_path_returned": false,
+        "raw_private_cloud_egress": false,
+        "real_cloud_call": false,
+        "redaction_applied": true,
+        "reduction_ratio": 1.0,
+        "route": "cloud_allowed_redacted",
+        "schema": "digua_assistant_chat_v2",
+        "steps": [
+          "received",
+          "qwen_router",
+          "privacy_tokenizer",
+          "task_classifier",
+          "route_decision",
+          "token_budget",
+          "tool_execution",
+          "safety_gate",
+          "evidence_summary",
+          "final_answer"
+        ],
+        "task_complexity": "complex",
+        "task_type": "public_complex_query",
+        "tool_execution": "controlled_cloud_overflow",
+        "tool_status": "completed",
+        "trace_id": "trace_d04d760413e640138170"
+      },
+      "name": "public_complex no hidden CoT",
+      "ok": true
+    },
+    {
+      "detail": "redacted",
+      "name": "public_complex no raw path",
+      "ok": true
+    },
+    {
+      "detail": {
+        "after_tokens": 34,
+        "answer_redacted": "已通过本地媒体/AI Space 索引检索，返回 0 条匹配结果。",
+        "before_tokens": 26,
+        "cloud_allowed": false,
+        "cloud_payload_contains_private_context": false,
+        "cloud_stub": false,
+        "cloud_used": false,
+        "evidence_refs": [],
+        "hidden_chain_of_thought_saved": false,
+        "no_grounded_answer": false,
+        "ok": true,
+        "privacy_level": "high",
+        "privacy_spans": [
+          "private_nas_context"
+        ],
+        "qwen_execution_authority": false,
+        "qwen_touched": true,
+        "raw_path_returned": false,
+        "raw_private_cloud_egress": false,
+        "real_cloud_call": false,
+        "redaction_applied": false,
+        "reduction_ratio": 1.0,
+        "route": "private_local_only",
+        "schema": "digua_assistant_chat_v2",
+        "steps": [
+          "received",
+          "qwen_router",
+          "privacy_tokenizer",
+          "task_classifier",
+          "route_decision",
+          "token_budget",
+          "tool_execution",
+          "safety_gate",
+          "evidence_summary",
+          "final_answer"
+        ],
+        "task_complexity": "simple",
+        "task_type": "media_search",
+        "tool_execution": "local_media_search",
+        "tool_status": "completed",
+        "trace_id": "trace_94d68efbc5614bf9a3ef"
+      },
+      "name": "query A touched qwen",
+      "ok": true
+    },
+    {
+      "detail": "media_search",
+      "name": "query A task type media_search",
+      "ok": true
+    },
+    {
+      "detail": {
+        "after_tokens": 34,
+        "answer_redacted": "已通过本地媒体/AI Space 索引检索，返回 0 条匹配结果。",
+        "before_tokens": 26,
+        "cloud_allowed": false,
+        "cloud_payload_contains_private_context": false,
+        "cloud_stub": false,
+        "cloud_used": false,
+        "evidence_refs": [],
+        "hidden_chain_of_thought_saved": false,
+        "no_grounded_answer": false,
+        "ok": true,
+        "privacy_level": "high",
+        "privacy_spans": [
+          "private_nas_context"
+        ],
+        "qwen_execution_authority": false,
+        "qwen_touched": true,
+        "raw_path_returned": false,
+        "raw_private_cloud_egress": false,
+        "real_cloud_call": false,
+        "redaction_applied": false,
+        "reduction_ratio": 1.0,
+        "route": "private_local_only",
+        "schema": "digua_assistant_chat_v2",
+        "steps": [
+          "received",
+          "qwen_router",
+          "privacy_tokenizer",
+          "task_classifier",
+          "route_decision",
+          "token_budget",
+          "tool_execution",
+          "safety_gate",
+          "evidence_summary",
+          "final_answer"
+        ],
+        "task_complexity": "simple",
+        "task_type": "media_search",
+        "tool_execution": "local_media_search",
+        "tool_status": "completed",
+        "trace_id": "trace_94d68efbc5614bf9a3ef"
+      },
+      "name": "query A simple local route",
+      "ok": true
+    },
+    {
+      "detail": false,
+      "name": "query A no cloud",
+      "ok": true
+    },
+    {
+      "detail": "local_media_search",
+      "name": "query A local media tool",
+      "ok": true
+    },
+    {
+      "detail": [
+        "invoice",
+        "contract",
+        "amount",
+        "private_nas_context"
+      ],
+      "name": "query B privacy spans",
+      "ok": true
+    },
+    {
+      "detail": "high",
+      "name": "query B high privacy",
+      "ok": true
+    },
+    {
+      "detail": "private_local_only",
+      "name": "query B private local only",
+      "ok": true
+    },
+    {
+      "detail": {
+        "after_tokens": 45,
+        "answer_redacted": "本地文档 RAG 没有找到足够证据，已拒绝强答。",
+        "before_tokens": 31,
+        "cloud_allowed": false,
+        "cloud_payload_contains_private_context": false,
+        "cloud_stub": false,
+        "cloud_used": false,
+        "evidence_refs": [],
+        "hidden_chain_of_thought_saved": false,
+        "no_grounded_answer": true,
+        "ok": true,
+        "privacy_level": "high",
+        "privacy_spans": [
+          "invoice",
+          "contract",
+          "amount",
+          "private_nas_context"
+        ],
+        "qwen_execution_authority": false,
+        "qwen_touched": true,
+        "raw_path_returned": false,
+        "raw_private_cloud_egress": false,
+        "real_cloud_call": false,
+        "redaction_applied": true,
+        "reduction_ratio": 1.0,
+        "route": "private_local_only",
+        "schema": "digua_assistant_chat_v2",
+        "steps": [
+          "received",
+          "qwen_router",
+          "privacy_tokenizer",
+          "task_classifier",
+          "route_decision",
+          "token_budget",
+          "tool_execution",
+          "safety_gate",
+          "evidence_summary",
+          "final_answer"
+        ],
+        "task_complexity": "complex",
+        "task_type": "private_document_query",
+        "tool_execution": "local_document_rag",
+        "tool_status": "completed",
+        "trace_id": "trace_3f11e1ffb23f48c1b44f"
+      },
+      "name": "query B cloud disallowed",
+      "ok": true
+    },
+    {
+      "detail": false,
+      "name": "query B no private cloud egress",
+      "ok": true
+    },
+    {
+      "detail": {
+        "after_tokens": 44,
+        "answer_redacted": "公开复杂任务已完成本地 Qwen 路由、隐私分词和 token 预算；当前按受控云端边界返回。",
+        "before_tokens": 35,
+        "cloud_allowed": true,
+        "cloud_payload_contains_private_context": false,
+        "cloud_stub": true,
+        "cloud_used": false,
+        "evidence_refs": [
+          "router:cloud_overflow"
+        ],
+        "hidden_chain_of_thought_saved": false,
+        "no_grounded_answer": false,
+        "ok": true,
+        "privacy_level": "none",
+        "privacy_spans": [],
+        "qwen_execution_authority": false,
+        "qwen_touched": true,
+        "raw_path_returned": false,
+        "raw_private_cloud_egress": false,
+        "real_cloud_call": false,
+        "redaction_applied": true,
+        "reduction_ratio": 1.0,
+        "route": "cloud_allowed_redacted",
+        "schema": "digua_assistant_chat_v2",
+        "steps": [
+          "received",
+          "qwen_router",
+          "privacy_tokenizer",
+          "task_classifier",
+          "route_decision",
+          "token_budget",
+          "tool_execution",
+          "safety_gate",
+          "evidence_summary",
+          "final_answer"
+        ],
+        "task_complexity": "complex",
+        "task_type": "public_complex_query",
+        "tool_execution": "controlled_cloud_overflow",
+        "tool_status": "completed",
+        "trace_id": "trace_d04d760413e640138170"
+      },
+      "name": "query C no privacy",
+      "ok": true
+    },
+    {
+      "detail": "complex",
+      "name": "query C complex",
+      "ok": true
+    },
+    {
+      "detail": "cloud_allowed_redacted",
+      "name": "query C cloud allowed redacted",
+      "ok": true
+    },
+    {
+      "detail": true,
+      "name": "query C redaction applied",
+      "ok": true
+    },
+    {
+      "detail": {
+        "after_tokens": 44,
+        "answer_redacted": "公开复杂任务已完成本地 Qwen 路由、隐私分词和 token 预算；当前按受控云端边界返回。",
+        "before_tokens": 35,
+        "cloud_allowed": true,
+        "cloud_payload_contains_private_context": false,
+        "cloud_stub": true,
+        "cloud_used": false,
+        "evidence_refs": [
+          "router:cloud_overflow"
+        ],
+        "hidden_chain_of_thought_saved": false,
+        "no_grounded_answer": false,
+        "ok": true,
+        "privacy_level": "none",
+        "privacy_spans": [],
+        "qwen_execution_authority": false,
+        "qwen_touched": true,
+        "raw_path_returned": false,
+        "raw_private_cloud_egress": false,
+        "real_cloud_call": false,
+        "redaction_applied": true,
+        "reduction_ratio": 1.0,
+        "route": "cloud_allowed_redacted",
+        "schema": "digua_assistant_chat_v2",
+        "steps": [
+          "received",
+          "qwen_router",
+          "privacy_tokenizer",
+          "task_classifier",
+          "route_decision",
+          "token_budget",
+          "tool_execution",
+          "safety_gate",
+          "evidence_summary",
+          "final_answer"
+        ],
+        "task_complexity": "complex",
+        "task_type": "public_complex_query",
+        "tool_execution": "controlled_cloud_overflow",
+        "tool_status": "completed",
+        "trace_id": "trace_d04d760413e640138170"
+      },
+      "name": "query C token fields present",
+      "ok": true
+    },
+    {
+      "detail": false,
+      "name": "query C no private cloud payload",
+      "ok": true
+    },
+    {
+      "detail": {
+        "cloud_stub": true,
+        "real_cloud_call": false
+      },
+      "name": "query C cloud stub declared when no real cloud",
+      "ok": true
+    }
+  ],
+  "evidence": {
+    "base_url": "http://127.0.0.1:8765",
+    "cloud_stub_expected_without_AI_NAS_CLOUD_CHAT_URL": true,
+    "runs": {
+      "local_media": {
+        "assistant": {
+          "elapsed_ms": 337.611,
+          "ok": true,
+          "payload": {
+            "after_tokens": 34,
+            "answer_redacted": "已通过本地媒体/AI Space 索引检索，返回 0 条匹配结果。",
+            "before_tokens": 26,
+            "cloud_allowed": false,
+            "cloud_payload_contains_private_context": false,
+            "cloud_stub": false,
+            "cloud_used": false,
+            "evidence_refs": [],
+            "hidden_chain_of_thought_saved": false,
+            "no_grounded_answer": false,
+            "ok": true,
+            "privacy_level": "high",
+            "privacy_spans": [
+              "private_nas_context"
+            ],
+            "qwen_execution_authority": false,
+            "qwen_touched": true,
+            "raw_path_returned": false,
+            "raw_private_cloud_egress": false,
+            "real_cloud_call": false,
+            "redaction_applied": false,
+            "reduction_ratio": 1.0,
+            "route": "private_local_only",
+            "schema": "digua_assistant_chat_v2",
+            "steps": [
+              "received",
+              "qwen_router",
+              "privacy_tokenizer",
+              "task_classifier",
+              "route_decision",
+              "token_budget",
+              "tool_execution",
+              "safety_gate",
+              "evidence_summary",
+              "final_answer"
+            ],
+            "task_complexity": "simple",
+            "task_type": "media_search",
+            "tool_execution": "local_media_search",
+            "tool_status": "completed",
+            "trace_id": "trace_94d68efbc5614bf9a3ef"
+          },
+          "status": 200
+        },
+        "query": "列出最近上传的照片",
+        "trace": {
+          "elapsed_ms": 20.039,
+          "ok": true,
+          "payload": {
+            "hidden_chain_of_thought_saved": false,
+            "ok": true,
+            "product_demo_allowed": true,
+            "raw_path_returned": false,
+            "schema": "digua_assistant_trace_v1",
+            "steps": [
+              {
+                "created_at": "2026-07-06T10:45:14Z",
+                "payload": {
+                  "entrypoint": "assistant_chat",
+                  "request": {
+                    "payload_source": "real_execution_context",
+                    "product_demo_allowed": true,
+                    "query_hash": "89297c93584e3917db02c0932bd77b48748e5bfbdb5641615604462ad73b4c8d",
+                    "synthetic_trace": false
+                  }
+                },
+                "status": "ok",
+                "step_id": "step_1faf8112123b4ce685e8",
+                "step_index": 0,
+                "step_name": "received",
+                "trace_id": "trace_94d68efbc5614bf9a3ef"
+              },
+              {
+                "created_at": "2026-07-06T10:45:14Z",
+                "payload": {
+                  "payload_source": "real_execution_context",
+                  "product_demo_allowed": true,
+                  "qwen_execution_authority": false,
+                  "qwen_touched": true,
+                  "router_output": {
+                    "classifier": "qwen_gateway_structured_router",
+                    "elapsed_ms": 1.504,
+                    "local_tool_id": "local_storage_list",
+                    "model": "Qwen2.5-1.5B-Instruct-S100P-official",
+                    "original_query_sent": true,
+                    "policy_route": {
+                      "local_tool_id": "local_storage_list",
+                      "privacy_level": "high",
+                      "route": "local",
+                      "task_complexity": "simple"
+                    },
+                    "privacy_level": "high",
+                    "qwen_execution_authority": false,
+                    "raw_content_preview": "{\"route\": \"local\", \"privacy_level\": \"none\", \"task_complexity\": \"simple\", \"reason\": \"simple local NAS task stays on device\", \"local_tool_id\": \"ai_nas_allowlisted_tools\", \"classifier\": \"qwen_gateway_structured_router\", \"privacy_hits\": {}, \"simple_hits\": {\"local_file_qa\": [\"照片\"]}, \"original_query_preview\": \"列出最近上传的照片\"}",
+                    "reason": "simple local NAS task stays on device",
+                    "route": "local",
+                    "task_complexity": "simple"
+                  },
+                  "synthetic_trace": false
+                },
+                "status": "ok",
+                "step_id": "step_da60769f60c64ee098eb",
+                "step_index": 1,
+                "step_name": "qwen_router",
+                "trace_id": "trace_94d68efbc5614bf9a3ef"
+              },
+              {
+                "created_at": "2026-07-06T10:45:14Z",
+                "payload": {
+                  "cloud_private_egress": false,
+                  "payload_source": "real_execution_context",
+                  "privacy_level": "high",
+                  "privacy_spans": [
+                    "private_nas_context"
+                  ],
+                  "product_demo_allowed": true,
+                  "redaction_count": 0,
+                  "redaction_map_included": false,
+                  "synthetic_trace": false
+                },
+                "status": "ok",
+                "step_id": "step_d52850291cc14bfd8cd3",
+                "step_index": 2,
+                "step_name": "privacy_tokenizer",
+                "trace_id": "trace_94d68efbc5614bf9a3ef"
+              },
+              {
+                "created_at": "2026-07-06T10:45:14Z",
+                "payload": {
+                  "action_intent": {
+                    "action": "storage_list",
+                    "path": "Photos",
+                    "quoted": []
+                  },
+                  "payload_source": "real_execution_context",
+                  "product_demo_allowed": true,
+                  "synthetic_trace": false,
+                  "task_complexity": "simple",
+                  "task_type": "media_search"
+                },
+                "status": "ok",
+                "step_id": "step_2bfd33578ca14325a897",
+                "step_index": 3,
+                "step_name": "task_classifier",
+                "trace_id": "trace_94d68efbc5614bf9a3ef"
+              },
+              {
+                "created_at": "2026-07-06T10:45:14Z",
+                "payload": {
+                  "cloud_allowed": false,
+                  "cloud_stub": false,
+                  "cloud_used": false,
+                  "payload_source": "real_execution_context",
+                  "product_demo_allowed": true,
+                  "real_cloud_call": false,
+                  "route": "private_local_only",
+                  "synthetic_trace": false
+                },
+                "status": "ok",
+                "step_id": "step_b7d220380eae4136bb90",
+                "step_index": 4,
+                "step_name": "route_decision",
+                "trace_id": "trace_94d68efbc5614bf9a3ef"
+              },
+              {
+                "created_at": "2026-07-06T10:45:14Z",
+                "payload": {
+                  "after_tokens": "[redacted]",
+                  "before_tokens": "[redacted]",
+                  "cloud_payload_contains_private_context": false,
+                  "payload_source": "real_execution_context",
+                  "product_demo_allowed": true,
+                  "redaction_applied": false,
+                  "reduction_ratio": 1.0,
+                  "run_id": "token-budget-e6c4e243064d",
+                  "synthetic_trace": false,
+                  "token_counts": "[redacted]"
+                },
+                "status": "ok",
+                "step_id": "step_8b39b330c7874c398c6f",
+                "step_index": 5,
+                "step_name": "token_budget",
+                "trace_id": "trace_94d68efbc5614bf9a3ef"
+              },
+              {
+                "created_at": "2026-07-06T10:45:14Z",
+                "payload": {
+                  "input_redacted": {
+                    "query_hash": "89297c93584e3917db02c0932bd77b48748e5bfbdb5641615604462ad73b4c8d",
+                    "task_type": "media_search"
+                  },
+                  "output_summary": {
+                    "evidence_refs": [],
+                    "no_grounded_answer": null,
+                    "qwen_execution_authority": false,
+                    "result": {
+                      "cloud_used": false,
+                      "evidence_refs": [],
+                      "raw_path_returned": false,
+                      "result_count": 0,
+                      "status": "completed",
+                      "tool_execution": "local_media_search"
+                    },
+                    "result_count": 0,
+                    "status": "completed",
+                    "tool": "local_media_search"
+                  },
+                  "payload_source": "real_execution_context",
+                  "product_demo_allowed": true,
+                  "qwen_execution_authority": false,
+                  "synthetic_trace": false,
+                  "tool": "local_media_search"
+                },
+                "status": "ok",
+                "step_id": "step_48e4313c0c864183a592",
+                "step_index": 6,
+                "step_name": "tool_execution",
+                "trace_id": "trace_94d68efbc5614bf9a3ef"
+              },
+              {
+                "created_at": "2026-07-06T10:45:15Z",
+                "payload": {
+                  "delete_enabled": false,
+                  "hidden_chain_of_thought_saved": false,
+                  "overwrite_enabled": false,
+                  "payload_source": "real_execution_context",
+                  "product_demo_allowed": true,
+                  "raw_path_returned": false,
+                  "raw_private_cloud_egress": false,
+                  "synthetic_trace": false,
+                  "uncontrolled_move_enabled": false
+                },
+                "status": "ok",
+                "step_id": "step_649a5c2a81d9407d841b",
+                "step_index": 7,
+                "step_name": "safety_gate",
+                "trace_id": "trace_94d68efbc5614bf9a3ef"
+              },
+              {
+                "created_at": "2026-07-06T10:45:15Z",
+                "payload": {
+                  "evidence_refs": [],
+                  "payload_source": "real_execution_context",
+                  "product_demo_allowed": true,
+                  "raw_path_returned": false,
+                  "raw_private_content_logged": false,
+                  "synthetic_trace": false
+                },
+                "status": "ok",
+                "step_id": "step_fdc2b6c9ed3741b59483",
+                "step_index": 8,
+                "step_name": "evidence_summary",
+                "trace_id": "trace_94d68efbc5614bf9a3ef"
+              },
+              {
+                "created_at": "2026-07-06T10:45:15Z",
+                "payload": {
+                  "answer_redacted": "已通过本地媒体/AI Space 索引检索，返回 0 条匹配结果。",
+                  "hidden_chain_of_thought_exposed": false,
+                  "payload_source": "real_execution_context",
+                  "product_demo_allowed": true,
+                  "synthetic_trace": false
+                },
+                "status": "ok",
+                "step_id": "step_00ea08a987674dcca72e",
+                "step_index": 9,
+                "step_name": "final_answer",
+                "trace_id": "trace_94d68efbc5614bf9a3ef"
+              }
+            ],
+            "synthetic_trace": false,
+            "trace": {
+              "created_at": "2026-07-06T10:45:14Z",
+              "entrypoint": "assistant_chat",
+              "session_id": "stage9_demo3_real_trace",
+              "status": "completed",
+              "trace_id": "trace_94d68efbc5614bf9a3ef",
+              "updated_at": "2026-07-06T10:45:15Z"
+            }
+          },
+          "status": 200
+        }
+      },
+      "private_docs": {
+        "assistant": {
+          "elapsed_ms": 438.755,
+          "ok": true,
+          "payload": {
+            "after_tokens": 45,
+            "answer_redacted": "本地文档 RAG 没有找到足够证据，已拒绝强答。",
+            "before_tokens": 31,
+            "cloud_allowed": false,
+            "cloud_payload_contains_private_context": false,
+            "cloud_stub": false,
+            "cloud_used": false,
+            "evidence_refs": [],
+            "hidden_chain_of_thought_saved": false,
+            "no_grounded_answer": true,
+            "ok": true,
+            "privacy_level": "high",
+            "privacy_spans": [
+              "invoice",
+              "contract",
+              "amount",
+              "private_nas_context"
+            ],
+            "qwen_execution_authority": false,
+            "qwen_touched": true,
+            "raw_path_returned": false,
+            "raw_private_cloud_egress": false,
+            "real_cloud_call": false,
+            "redaction_applied": true,
+            "reduction_ratio": 1.0,
+            "route": "private_local_only",
+            "schema": "digua_assistant_chat_v2",
+            "steps": [
+              "received",
+              "qwen_router",
+              "privacy_tokenizer",
+              "task_classifier",
+              "route_decision",
+              "token_budget",
+              "tool_execution",
+              "safety_gate",
+              "evidence_summary",
+              "final_answer"
+            ],
+            "task_complexity": "complex",
+            "task_type": "private_document_query",
+            "tool_execution": "local_document_rag",
+            "tool_status": "completed",
+            "trace_id": "trace_3f11e1ffb23f48c1b44f"
+          },
+          "status": 200
+        },
+        "query": "总结我的家庭发票和合同里涉及金额的内容",
+        "trace": {
+          "elapsed_ms": 19.978,
+          "ok": true,
+          "payload": {
+            "hidden_chain_of_thought_saved": false,
+            "ok": true,
+            "product_demo_allowed": true,
+            "raw_path_returned": false,
+            "schema": "digua_assistant_trace_v1",
+            "steps": [
+              {
+                "created_at": "2026-07-06T10:45:15Z",
+                "payload": {
+                  "entrypoint": "assistant_chat",
+                  "request": {
+                    "payload_source": "real_execution_context",
+                    "product_demo_allowed": true,
+                    "query_hash": "e4e3edc84f09cddb6eed59177b79acb07f41919db068d792ff353d261eb0e09a",
+                    "synthetic_trace": false
+                  }
+                },
+                "status": "ok",
+                "step_id": "step_65e1532294994758bfa2",
+                "step_index": 0,
+                "step_name": "received",
+                "trace_id": "trace_3f11e1ffb23f48c1b44f"
+              },
+              {
+                "created_at": "2026-07-06T10:45:15Z",
+                "payload": {
+                  "payload_source": "real_execution_context",
+                  "product_demo_allowed": true,
+                  "qwen_execution_authority": false,
+                  "qwen_touched": true,
+                  "router_output": {
+                    "classifier": "qwen_gateway_structured_router",
+                    "elapsed_ms": 1.416,
+                    "local_tool_id": "local_document_rag",
+                    "model": "Qwen2.5-1.5B-Instruct-S100P-official",
+                    "original_query_sent": true,
+                    "policy_route": {
+                      "local_tool_id": "local_document_rag",
+                      "privacy_level": "high",
+                      "route": "local",
+                      "task_complexity": "simple"
+                    },
+                    "privacy_level": "high",
+                    "qwen_execution_authority": false,
+                    "raw_content_preview": "{\"route\": \"local\", \"privacy_level\": \"high\", \"task_complexity\": \"simple\", \"reason\": \"privacy-sensitive or personal NAS query stays on device\", \"local_tool_id\": \"ai_nas_allowlisted_tools\", \"classifier\": \"qwen_gateway_structured_router\", \"privacy_hits\": {\"contract\": [\"合同\"], \"invoice\": [\"发票\"], \"finance\": [\"金额\"]}, \"simple_hits\": {\"summary\": [\"总结\"]}, \"original_query_preview\": \"总结我的家庭发票和合同里涉及金额的内容\"}",
+                    "reason": "privacy-sensitive or personal NAS query stays on device",
+                    "route": "local",
+                    "task_complexity": "simple"
+                  },
+                  "synthetic_trace": false
+                },
+                "status": "ok",
+                "step_id": "step_b4ea6f5c1f9f4d67bf78",
+                "step_index": 1,
+                "step_name": "qwen_router",
+                "trace_id": "trace_3f11e1ffb23f48c1b44f"
+              },
+              {
+                "created_at": "2026-07-06T10:45:15Z",
+                "payload": {
+                  "cloud_private_egress": false,
+                  "payload_source": "real_execution_context",
+                  "privacy_level": "high",
+                  "privacy_spans": [
+                    "invoice",
+                    "contract",
+                    "amount",
+                    "private_nas_context"
+                  ],
+                  "product_demo_allowed": true,
+                  "redaction_count": 1,
+                  "redaction_map_included": false,
+                  "synthetic_trace": false
+                },
+                "status": "ok",
+                "step_id": "step_3b9eb535e309436c9224",
+                "step_index": 2,
+                "step_name": "privacy_tokenizer",
+                "trace_id": "trace_3f11e1ffb23f48c1b44f"
+              },
+              {
+                "created_at": "2026-07-06T10:45:15Z",
+                "payload": {
+                  "action_intent": {
+                    "action": "document_query",
+                    "path": "Documents",
+                    "query": "总结我的家庭发票和合同里涉及金额的内容",
+                    "quoted": []
+                  },
+                  "payload_source": "real_execution_context",
+                  "product_demo_allowed": true,
+                  "synthetic_trace": false,
+                  "task_complexity": "complex",
+                  "task_type": "private_document_query"
+                },
+                "status": "ok",
+                "step_id": "step_183d1a406deb42da844c",
+                "step_index": 3,
+                "step_name": "task_classifier",
+                "trace_id": "trace_3f11e1ffb23f48c1b44f"
+              },
+              {
+                "created_at": "2026-07-06T10:45:15Z",
+                "payload": {
+                  "cloud_allowed": false,
+                  "cloud_stub": false,
+                  "cloud_used": false,
+                  "payload_source": "real_execution_context",
+                  "product_demo_allowed": true,
+                  "real_cloud_call": false,
+                  "route": "private_local_only",
+                  "synthetic_trace": false
+                },
+                "status": "ok",
+                "step_id": "step_d033a10423a54d4f85fb",
+                "step_index": 4,
+                "step_name": "route_decision",
+                "trace_id": "trace_3f11e1ffb23f48c1b44f"
+              },
+              {
+                "created_at": "2026-07-06T10:45:15Z",
+                "payload": {
+                  "after_tokens": "[redacted]",
+                  "before_tokens": "[redacted]",
+                  "cloud_payload_contains_private_context": false,
+                  "payload_source": "real_execution_context",
+                  "product_demo_allowed": true,
+                  "redaction_applied": true,
+                  "reduction_ratio": 1.0,
+                  "run_id": "token-budget-1e813af2d409",
+                  "synthetic_trace": false,
+                  "token_counts": "[redacted]"
+                },
+                "status": "ok",
+                "step_id": "step_9346b197f4d04af294ac",
+                "step_index": 5,
+                "step_name": "token_budget",
+                "trace_id": "trace_3f11e1ffb23f48c1b44f"
+              },
+              {
+                "created_at": "2026-07-06T10:45:15Z",
+                "payload": {
+                  "input_redacted": {
+                    "query_hash": "e4e3edc84f09cddb6eed59177b79acb07f41919db068d792ff353d261eb0e09a",
+                    "task_type": "private_document_query"
+                  },
+                  "output_summary": {
+                    "evidence_refs": [],
+                    "no_grounded_answer": true,
+                    "qwen_execution_authority": false,
+                    "result": {
+                      "cloud_used": false,
+                      "evidence_refs": [],
+                      "no_grounded_answer": true,
+                      "raw_path_returned": false,
+                      "raw_private_content_returned": false,
+                      "result_count": 0,
+                      "status": "completed",
+                      "tool_execution": "local_document_rag"
+                    },
+                    "result_count": 0,
+                    "status": "completed",
+                    "tool": "local_document_rag"
+                  },
+                  "payload_source": "real_execution_context",
+                  "product_demo_allowed": true,
+                  "qwen_execution_authority": false,
+                  "synthetic_trace": false,
+                  "tool": "local_document_rag"
+                },
+                "status": "ok",
+                "step_id": "step_5f8d6853192e44c5b82c",
+                "step_index": 6,
+                "step_name": "tool_execution",
+                "trace_id": "trace_3f11e1ffb23f48c1b44f"
+              },
+              {
+                "created_at": "2026-07-06T10:45:15Z",
+                "payload": {
+                  "delete_enabled": false,
+                  "hidden_chain_of_thought_saved": false,
+                  "overwrite_enabled": false,
+                  "payload_source": "real_execution_context",
+                  "product_demo_allowed": true,
+                  "raw_path_returned": false,
+                  "raw_private_cloud_egress": false,
+                  "synthetic_trace": false,
+                  "uncontrolled_move_enabled": false
+                },
+                "status": "ok",
+                "step_id": "step_1a8637c94b384a75b07f",
+                "step_index": 7,
+                "step_name": "safety_gate",
+                "trace_id": "trace_3f11e1ffb23f48c1b44f"
+              },
+              {
+                "created_at": "2026-07-06T10:45:15Z",
+                "payload": {
+                  "evidence_refs": [],
+                  "payload_source": "real_execution_context",
+                  "product_demo_allowed": true,
+                  "raw_path_returned": false,
+                  "raw_private_content_logged": false,
+                  "synthetic_trace": false
+                },
+                "status": "ok",
+                "step_id": "step_c102a8deaac846c59428",
+                "step_index": 8,
+                "step_name": "evidence_summary",
+                "trace_id": "trace_3f11e1ffb23f48c1b44f"
+              },
+              {
+                "created_at": "2026-07-06T10:45:15Z",
+                "payload": {
+                  "answer_redacted": "本地文档 RAG 没有找到足够证据，已拒绝强答。",
+                  "hidden_chain_of_thought_exposed": false,
+                  "payload_source": "real_execution_context",
+                  "product_demo_allowed": true,
+                  "synthetic_trace": false
+                },
+                "status": "ok",
+                "step_id": "step_d82adb8ca4dc4e76aa6c",
+                "step_index": 9,
+                "step_name": "final_answer",
+                "trace_id": "trace_3f11e1ffb23f48c1b44f"
+              }
+            ],
+            "synthetic_trace": false,
+            "trace": {
+              "created_at": "2026-07-06T10:45:15Z",
+              "entrypoint": "assistant_chat",
+              "session_id": "stage9_demo3_real_trace",
+              "status": "completed",
+              "trace_id": "trace_3f11e1ffb23f48c1b44f",
+              "updated_at": "2026-07-06T10:45:15Z"
+            }
+          },
+          "status": 200
+        }
+      },
+      "public_complex": {
+        "assistant": {
+          "elapsed_ms": 318.897,
+          "ok": true,
+          "payload": {
+            "after_tokens": 44,
+            "answer_redacted": "公开复杂任务已完成本地 Qwen 路由、隐私分词和 token 预算；当前按受控云端边界返回。",
+            "before_tokens": 35,
+            "cloud_allowed": true,
+            "cloud_payload_contains_private_context": false,
+            "cloud_stub": true,
+            "cloud_used": false,
+            "evidence_refs": [
+              "router:cloud_overflow"
+            ],
+            "hidden_chain_of_thought_saved": false,
+            "no_grounded_answer": false,
+            "ok": true,
+            "privacy_level": "none",
+            "privacy_spans": [],
+            "qwen_execution_authority": false,
+            "qwen_touched": true,
+            "raw_path_returned": false,
+            "raw_private_cloud_egress": false,
+            "real_cloud_call": false,
+            "redaction_applied": true,
+            "reduction_ratio": 1.0,
+            "route": "cloud_allowed_redacted",
+            "schema": "digua_assistant_chat_v2",
+            "steps": [
+              "received",
+              "qwen_router",
+              "privacy_tokenizer",
+              "task_classifier",
+              "route_decision",
+              "token_budget",
+              "tool_execution",
+              "safety_gate",
+              "evidence_summary",
+              "final_answer"
+            ],
+            "task_complexity": "complex",
+            "task_type": "public_complex_query",
+            "tool_execution": "controlled_cloud_overflow",
+            "tool_status": "completed",
+            "trace_id": "trace_d04d760413e640138170"
+          },
+          "status": 200
+        },
+        "query": "不要引用本地文件，只根据公开信息比较高端 AI NAS 的发展趋势",
+        "trace": {
+          "elapsed_ms": 20.174,
+          "ok": true,
+          "payload": {
+            "hidden_chain_of_thought_saved": false,
+            "ok": true,
+            "product_demo_allowed": true,
+            "raw_path_returned": false,
+            "schema": "digua_assistant_trace_v1",
+            "steps": [
+              {
+                "created_at": "2026-07-06T10:45:15Z",
+                "payload": {
+                  "entrypoint": "assistant_chat",
+                  "request": {
+                    "payload_source": "real_execution_context",
+                    "product_demo_allowed": true,
+                    "query_hash": "a15aba4de0d0f02118b3ba036f56432f276cddd7b61136283611df5c7507da44",
+                    "synthetic_trace": false
+                  }
+                },
+                "status": "ok",
+                "step_id": "step_d265b65fdd1e42d98b90",
+                "step_index": 0,
+                "step_name": "received",
+                "trace_id": "trace_d04d760413e640138170"
+              },
+              {
+                "created_at": "2026-07-06T10:45:15Z",
+                "payload": {
+                  "payload_source": "real_execution_context",
+                  "product_demo_allowed": true,
+                  "qwen_execution_authority": false,
+                  "qwen_touched": true,
+                  "router_output": {
+                    "classifier": "qwen_gateway_structured_router",
+                    "elapsed_ms": 1.441,
+                    "local_tool_id": null,
+                    "model": "Qwen2.5-1.5B-Instruct-S100P-official",
+                    "original_query_sent": true,
+                    "policy_route": {
+                      "local_tool_id": null,
+                      "privacy_level": "none",
+                      "route": "cloud",
+                      "task_complexity": "complex"
+                    },
+                    "privacy_level": "none",
+                    "qwen_execution_authority": false,
+                    "raw_content_preview": "{\"route\": \"cloud\", \"privacy_level\": \"none\", \"task_complexity\": \"complex\", \"reason\": \"public non-private complex market or strategy request\", \"local_tool_id\": null, \"classifier\": \"qwen_gateway_structured_router\", \"privacy_hits\": {}, \"simple_hits\": {}, \"original_query_preview\": \"不要引用本地文件，只根据公开信息比较高端 AI NAS 的发展趋势\"}",
+                    "reason": "public non-private complex market or strategy request",
+                    "route": "cloud",
+                    "task_complexity": "complex"
+                  },
+                  "synthetic_trace": false
+                },
+                "status": "ok",
+                "step_id": "step_5905203aa2644ca9b1f6",
+                "step_index": 1,
+                "step_name": "qwen_router",
+                "trace_id": "trace_d04d760413e640138170"
+              },
+              {
+                "created_at": "2026-07-06T10:45:15Z",
+                "payload": {
+                  "cloud_private_egress": false,
+                  "payload_source": "real_execution_context",
+                  "privacy_level": "none",
+                  "privacy_spans": [],
+                  "product_demo_allowed": true,
+                  "redaction_count": 0,
+                  "redaction_map_included": false,
+                  "synthetic_trace": false
+                },
+                "status": "ok",
+                "step_id": "step_dde866ca18bd4ff08b57",
+                "step_index": 2,
+                "step_name": "privacy_tokenizer",
+                "trace_id": "trace_d04d760413e640138170"
+              },
+              {
+                "created_at": "2026-07-06T10:45:15Z",
+                "payload": {
+                  "action_intent": null,
+                  "payload_source": "real_execution_context",
+                  "product_demo_allowed": true,
+                  "synthetic_trace": false,
+                  "task_complexity": "complex",
+                  "task_type": "public_complex_query"
+                },
+                "status": "ok",
+                "step_id": "step_ed1081da8d8642a9a6e1",
+                "step_index": 3,
+                "step_name": "task_classifier",
+                "trace_id": "trace_d04d760413e640138170"
+              },
+              {
+                "created_at": "2026-07-06T10:45:15Z",
+                "payload": {
+                  "cloud_allowed": true,
+                  "cloud_stub": true,
+                  "cloud_used": false,
+                  "payload_source": "real_execution_context",
+                  "product_demo_allowed": true,
+                  "real_cloud_call": false,
+                  "route": "cloud_allowed_redacted",
+                  "synthetic_trace": false
+                },
+                "status": "ok",
+                "step_id": "step_f46aef5d2192456a8332",
+                "step_index": 4,
+                "step_name": "route_decision",
+                "trace_id": "trace_d04d760413e640138170"
+              },
+              {
+                "created_at": "2026-07-06T10:45:15Z",
+                "payload": {
+                  "after_tokens": "[redacted]",
+                  "before_tokens": "[redacted]",
+                  "cloud_payload_contains_private_context": false,
+                  "payload_source": "real_execution_context",
+                  "product_demo_allowed": true,
+                  "redaction_applied": true,
+                  "reduction_ratio": 1.0,
+                  "run_id": "token-budget-f24039f1e64c",
+                  "synthetic_trace": false,
+                  "token_counts": "[redacted]"
+                },
+                "status": "ok",
+                "step_id": "step_3e88f3513e3d4625b521",
+                "step_index": 5,
+                "step_name": "token_budget",
+                "trace_id": "trace_d04d760413e640138170"
+              },
+              {
+                "created_at": "2026-07-06T10:45:15Z",
+                "payload": {
+                  "input_redacted": {
+                    "query_hash": "a15aba4de0d0f02118b3ba036f56432f276cddd7b61136283611df5c7507da44",
+                    "task_type": "public_complex_query"
+                  },
+                  "output_summary": {
+                    "evidence_refs": [
+                      "router:cloud_overflow"
+                    ],
+                    "no_grounded_answer": null,
+                    "qwen_execution_authority": false,
+                    "result": {
+                      "cloud_available": false,
+                      "cloud_stub": true,
+                      "cloud_used": false,
+                      "evidence_refs": [
+                        "router:cloud_overflow"
+                      ],
+                      "raw_path_returned": false,
+                      "real_cloud_call": false,
+                      "result_count": 1,
+                      "status": "completed",
+                      "tool_execution": "controlled_cloud_overflow"
+                    },
+                    "result_count": 1,
+                    "status": "completed",
+                    "tool": "controlled_cloud_overflow"
+                  },
+                  "payload_source": "real_execution_context",
+                  "product_demo_allowed": true,
+                  "qwen_execution_authority": false,
+                  "synthetic_trace": false,
+                  "tool": "controlled_cloud_overflow"
+                },
+                "status": "ok",
+                "step_id": "step_ccf692be449e4ec8aa08",
+                "step_index": 6,
+                "step_name": "tool_execution",
+                "trace_id": "trace_d04d760413e640138170"
+              },
+              {
+                "created_at": "2026-07-06T10:45:15Z",
+                "payload": {
+                  "delete_enabled": false,
+                  "hidden_chain_of_thought_saved": false,
+                  "overwrite_enabled": false,
+                  "payload_source": "real_execution_context",
+                  "product_demo_allowed": true,
+                  "raw_path_returned": false,
+                  "raw_private_cloud_egress": false,
+                  "synthetic_trace": false,
+                  "uncontrolled_move_enabled": false
+                },
+                "status": "ok",
+                "step_id": "step_33ac32aead1b43afbcfb",
+                "step_index": 7,
+                "step_name": "safety_gate",
+                "trace_id": "trace_d04d760413e640138170"
+              },
+              {
+                "created_at": "2026-07-06T10:45:15Z",
+                "payload": {
+                  "evidence_refs": [
+                    "router:cloud_overflow"
+                  ],
+                  "payload_source": "real_execution_context",
+                  "product_demo_allowed": true,
+                  "raw_path_returned": false,
+                  "raw_private_content_logged": false,
+                  "synthetic_trace": false
+                },
+                "status": "ok",
+                "step_id": "step_37f5d93505fa4b878519",
+                "step_index": 8,
+                "step_name": "evidence_summary",
+                "trace_id": "trace_d04d760413e640138170"
+              },
+              {
+                "created_at": "2026-07-06T10:45:15Z",
+                "payload": {
+                  "answer_redacted": "公开复杂任务已完成本地 Qwen 路由、隐私分词和 token 预算；当前按受控云端边界返回。",
+                  "hidden_chain_of_thought_exposed": false,
+                  "payload_source": "real_execution_context",
+                  "product_demo_allowed": true,
+                  "synthetic_trace": false
+                },
+                "status": "ok",
+                "step_id": "step_a0c1756c6d4642e4b1d6",
+                "step_index": 9,
+                "step_name": "final_answer",
+                "trace_id": "trace_d04d760413e640138170"
+              }
+            ],
+            "synthetic_trace": false,
+            "trace": {
+              "created_at": "2026-07-06T10:45:15Z",
+              "entrypoint": "assistant_chat",
+              "session_id": "stage9_demo3_real_trace",
+              "status": "completed",
+              "trace_id": "trace_d04d760413e640138170",
+              "updated_at": "2026-07-06T10:45:15Z"
+            }
+          },
+          "status": 200
+        }
+      }
+    },
+    "session_id": "stage9_demo3_real_trace"
+  },
+  "generated_at": "2026-07-06T10:45:15Z",
+  "ok": true,
+  "verdict": "ok_stage9_demo3_real_trace_flow_gate"
+}

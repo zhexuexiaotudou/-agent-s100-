@@ -1,0 +1,4321 @@
+{
+  "blockers": [],
+  "checks": [
+    {
+      "detail": "set --auth-token or DIGUA_DEMO_AUTH_TOKEN",
+      "name": "auth token configured",
+      "ok": true
+    },
+    {
+      "detail": "/mnt/nas/openclaw/Personal",
+      "name": "personal root configured",
+      "ok": true
+    },
+    {
+      "detail": null,
+      "name": "upload ok",
+      "ok": true
+    },
+    {
+      "detail": [
+        {
+          "job_id": "job_487f2e2cf4354829a19b",
+          "job_type": "media_upload",
+          "ok": true,
+          "result_ok": true,
+          "status": "completed"
+        },
+        {
+          "job_id": "job_bd0c3c1b637f4eacad84",
+          "job_type": "multimodal_rebuild",
+          "ok": true,
+          "result_ok": true,
+          "status": "completed"
+        },
+        {
+          "job_id": "job_1a188c1e9ef64d5fa79a",
+          "job_type": "yolo_index",
+          "ok": true,
+          "result_ok": true,
+          "status": "completed"
+        },
+        {
+          "job_id": "job_9156c05ae67f4c18a84f",
+          "job_type": "person_attribute_rebuild",
+          "ok": true,
+          "result_ok": true,
+          "status": "completed"
+        },
+        {
+          "job_id": "job_690dd09669e34f3ea953",
+          "job_type": "smart_classification_rebuild",
+          "ok": true,
+          "result_ok": true,
+          "status": "completed"
+        },
+        {
+          "job_id": "job_2a9e8f754f75454189bd",
+          "job_type": "smart_naming_generate",
+          "ok": true,
+          "result_ok": true,
+          "status": "completed"
+        },
+        {
+          "job_id": "job_89ae44646ed74b8489f0",
+          "job_type": "ai_space_rebuild",
+          "ok": true,
+          "result_ok": true,
+          "status": "completed"
+        }
+      ],
+      "name": "upload pipeline jobs completed",
+      "ok": true
+    },
+    {
+      "detail": false,
+      "name": "upload cloud false",
+      "ok": true
+    },
+    {
+      "detail": {
+        "naming": {
+          "item": {
+            "asset_id": "mm_4fcb416795f0b157752f85df",
+            "display_name_zh": "照片_本地资料_照片_20260706_766",
+            "naming_reason": {
+              "core_feature": "本地资料",
+              "date": "20260706",
+              "main_category": "照片",
+              "scene_or_attribute": "照片",
+              "sequence": "766",
+              "used_fields": [
+                "modality",
+                "category_names",
+                "object_labels",
+                "person_attrs",
+                "title_redacted"
+              ]
+            },
+            "risk_flags": {
+              "age_gender_race_emotion_health_inferred": false,
+              "cloud_used": false,
+              "face_recognition_used": false,
+              "identity_inference_used": false,
+              "physical_file_renamed": false,
+              "sensitive_number_removed": true
+            },
+            "source_title_redacted": "IMG_0001_20260706_184129.jpg",
+            "suggested_filename_zh": "照片_本地资料_照片_20260706_766.jpg",
+            "updated_at": "2026-07-06T10:45:02Z"
+          },
+          "ok": true,
+          "raw_path_returned": false,
+          "schema": "digua_smart_naming_v1"
+        },
+        "upload": {
+          "asset_id": "mm_4fcb416795f0b157752f85df",
+          "display_name_zh": "照片_本地资料_照片_20260706_766",
+          "naming_reason": {
+            "core_feature": "本地资料",
+            "date": "20260706",
+            "main_category": "照片",
+            "scene_or_attribute": "照片",
+            "sequence": "766",
+            "used_fields": [
+              "modality",
+              "category_names",
+              "object_labels",
+              "person_attrs",
+              "title_redacted"
+            ]
+          },
+          "risk_flags": {
+            "age_gender_race_emotion_health_inferred": false,
+            "cloud_used": false,
+            "face_recognition_used": false,
+            "identity_inference_used": false,
+            "physical_file_renamed": false,
+            "sensitive_number_removed": true
+          },
+          "source_title_redacted": "IMG_0001_20260706_184129.jpg",
+          "suggested_filename_zh": "照片_本地资料_照片_20260706_766.jpg",
+          "updated_at": "2026-07-06T10:45:02Z"
+        }
+      },
+      "name": "smart naming present",
+      "ok": true
+    },
+    {
+      "detail": {
+        "computer": {
+          "elapsed_ms": 42.782,
+          "ok": true,
+          "payload": {
+            "cloud_used": false,
+            "ok": true,
+            "query_redacted": "有电脑的照片",
+            "raw_path_returned": false,
+            "results": [],
+            "schema": "digua_ai_space_v1"
+          },
+          "status": 200
+        },
+        "pet": {
+          "elapsed_ms": 43.649,
+          "ok": true,
+          "payload": {
+            "cloud_used": false,
+            "ok": true,
+            "query_redacted": "宠物照片",
+            "raw_path_returned": false,
+            "results": [
+              {
+                "asset_id": "mm_4fcb416795f0b157752f85df",
+                "asset_kind": "photo",
+                "capture_time": null,
+                "category_names": [
+                  "书本文具",
+                  "人物照片",
+                  "合同资料",
+                  "宠物动物",
+                  "宠物照片",
+                  "待整理",
+                  "截图资料",
+                  "旅行照片",
+                  "狗狗照片",
+                  "猫咪照片",
+                  "电子设备",
+                  "白色上衣",
+                  "票据发票",
+                  "红色衣服",
+                  "课程资料",
+                  "车辆交通",
+                  "风景旅行",
+                  "食物聚会",
+                  "黑色衣服"
+                ],
+                "display_name_zh": "照片_本地资料_照片_20260706_766",
+                "evidence_refs": [
+                  "asset:mm_4fcb416795f0b"
+                ],
+                "modality": "image",
+                "object_labels": [],
+                "ocr_status": "none",
+                "person_attrs": [],
+                "privacy_level": "private_local_only",
+                "smart_naming": {
+                  "display_name_zh": "照片_本地资料_照片_20260706_766",
+                  "risk_flags": {
+                    "age_gender_race_emotion_health_inferred": false,
+                    "cloud_used": false,
+                    "face_recognition_used": false,
+                    "identity_inference_used": false,
+                    "physical_file_renamed": false,
+                    "sensitive_number_removed": true
+                  },
+                  "suggested_filename_zh": "照片_本地资料_照片_20260706_766.jpg"
+                },
+                "suggested_filename_zh": "照片_本地资料_照片_20260706_766.jpg",
+                "summary_redacted": "Local indexed photo. Detected: no local object labels. OCR status: none. Summary is symbolic, not VLM caption.",
+                "time_bucket": "today",
+                "title_redacted": "IMG_0001_20260706_184129.jpg",
+                "transcript_status": "none",
+                "updated_at": "2026-07-06T10:45:02Z"
+              },
+              {
+                "asset_id": "mm_57d887fa11149ab79bcb4849",
+                "asset_kind": "photo",
+                "capture_time": null,
+                "category_names": [
+                  "书本文具",
+                  "人物照片",
+                  "合同资料",
+                  "宠物动物",
+                  "宠物照片",
+                  "待整理",
+                  "截图资料",
+                  "旅行照片",
+                  "狗狗照片",
+                  "猫咪照片",
+                  "电子设备",
+                  "白色上衣",
+                  "票据发票",
+                  "红色衣服",
+                  "课程资料",
+                  "车辆交通",
+                  "风景旅行",
+                  "食物聚会",
+                  "黑色衣服"
+                ],
+                "display_name_zh": "照片_本地资料_照片_20260706_258",
+                "evidence_refs": [
+                  "asset:mm_57d887fa11149"
+                ],
+                "modality": "image",
+                "object_labels": [],
+                "ocr_status": "none",
+                "person_attrs": [],
+                "privacy_level": "private_local_only",
+                "smart_naming": {
+                  "display_name_zh": "照片_本地资料_照片_20260706_258",
+                  "risk_flags": {
+                    "age_gender_race_emotion_health_inferred": false,
+                    "cloud_used": false,
+                    "face_recognition_used": false,
+                    "identity_inference_used": false,
+                    "physical_file_renamed": false,
+                    "sensitive_number_removed": true
+                  },
+                  "suggested_filename_zh": "照片_本地资料_照片_20260706_258.jpg"
+                },
+                "suggested_filename_zh": "照片_本地资料_照片_20260706_258.jpg",
+                "summary_redacted": "Local indexed photo. Detected: no local object labels. OCR status: none. Summary is symbolic, not VLM caption.",
+                "time_bucket": "today",
+                "title_redacted": "IMG_0001_20260706_183711.jpg",
+                "transcript_status": "none",
+                "updated_at": "2026-07-06T10:45:02Z"
+              },
+              {
+                "asset_id": "mm_582e4658c30ab2fc729855c9",
+                "asset_kind": "photo",
+                "capture_time": null,
+                "category_names": [
+                  "书本文具",
+                  "人物照片",
+                  "合同资料",
+                  "宠物动物",
+                  "宠物照片",
+                  "待整理",
+                  "截图资料",
+                  "旅行照片",
+                  "狗狗照片",
+                  "猫咪照片",
+                  "电子设备",
+                  "白色上衣",
+                  "票据发票",
+                  "红色衣服",
+                  "课程资料",
+                  "车辆交通",
+                  "风景旅行",
+                  "食物聚会",
+                  "黑色衣服"
+                ],
+                "display_name_zh": "照片_本地资料_照片_20260706_788",
+                "evidence_refs": [
+                  "asset:mm_582e4658c30ab"
+                ],
+                "modality": "image",
+                "object_labels": [],
+                "ocr_status": "none",
+                "person_attrs": [],
+                "privacy_level": "private_local_only",
+                "smart_naming": {
+                  "display_name_zh": "照片_本地资料_照片_20260706_788",
+                  "risk_flags": {
+                    "age_gender_race_emotion_health_inferred": false,
+                    "cloud_used": false,
+                    "face_recognition_used": false,
+                    "identity_inference_used": false,
+                    "physical_file_renamed": false,
+                    "sensitive_number_removed": true
+                  },
+                  "suggested_filename_zh": "照片_本地资料_照片_20260706_788.jpg"
+                },
+                "suggested_filename_zh": "照片_本地资料_照片_20260706_788.jpg",
+                "summary_redacted": "Local indexed photo. Detected: no local object labels. OCR status: none. Summary is symbolic, not VLM caption.",
+                "time_bucket": "today",
+                "title_redacted": "IMG_0001_20260706_174811.jpg",
+                "transcript_status": "none",
+                "updated_at": "2026-07-06T10:45:02Z"
+              },
+              {
+                "asset_id": "mm_5f4359413319a5cec79abb54",
+                "asset_kind": "photo",
+                "capture_time": null,
+                "category_names": [
+                  "书本文具",
+                  "人物照片",
+                  "合同资料",
+                  "宠物动物",
+                  "宠物照片",
+                  "待整理",
+                  "截图资料",
+                  "旅行照片",
+                  "狗狗照片",
+                  "猫咪照片",
+                  "电子设备",
+                  "白色上衣",
+                  "票据发票",
+                  "红色衣服",
+                  "课程资料",
+                  "车辆交通",
+                  "风景旅行",
+                  "食物聚会",
+                  "黑色衣服"
+                ],
+                "display_name_zh": "照片_本地资料_照片_20260706_283",
+                "evidence_refs": [
+                  "asset:mm_5f4359413319a"
+                ],
+                "modality": "image",
+                "object_labels": [],
+                "ocr_status": "none",
+                "person_attrs": [],
+                "privacy_level": "private_local_only",
+                "smart_naming": {
+                  "display_name_zh": "照片_本地资料_照片_20260706_283",
+                  "risk_flags": {
+                    "age_gender_race_emotion_health_inferred": false,
+                    "cloud_used": false,
+                    "face_recognition_used": false,
+                    "identity_inference_used": false,
+                    "physical_file_renamed": false,
+                    "sensitive_number_removed": true
+                  },
+                  "suggested_filename_zh": "照片_本地资料_照片_20260706_283.jpg"
+                },
+                "suggested_filename_zh": "照片_本地资料_照片_20260706_283.jpg",
+                "summary_redacted": "Local indexed photo. Detected: no local object labels. OCR status: none. Summary is symbolic, not VLM caption.",
+                "time_bucket": "today",
+                "title_redacted": "IMG_0001_20260706_174134.jpg",
+                "transcript_status": "none",
+                "updated_at": "2026-07-06T10:45:02Z"
+              },
+              {
+                "asset_id": "mm_aba7e0655e1c679ca510930a",
+                "asset_kind": "photo",
+                "capture_time": null,
+                "category_names": [
+                  "书本文具",
+                  "人物照片",
+                  "合同资料",
+                  "宠物动物",
+                  "宠物照片",
+                  "待整理",
+                  "截图资料",
+                  "旅行照片",
+                  "狗狗照片",
+                  "猫咪照片",
+                  "电子设备",
+                  "白色上衣",
+                  "票据发票",
+                  "红色衣服",
+                  "课程资料",
+                  "车辆交通",
+                  "风景旅行",
+                  "食物聚会",
+                  "黑色衣服"
+                ],
+                "display_name_zh": "照片_本地资料_照片_20260706_240",
+                "evidence_refs": [
+                  "asset:mm_aba7e0655e1c6"
+                ],
+                "modality": "image",
+                "object_labels": [],
+                "ocr_status": "none",
+                "person_attrs": [],
+                "privacy_level": "private_local_only",
+                "smart_naming": {
+                  "display_name_zh": "照片_本地资料_照片_20260706_240",
+                  "risk_flags": {
+                    "age_gender_race_emotion_health_inferred": false,
+                    "cloud_used": false,
+                    "face_recognition_used": false,
+                    "identity_inference_used": false,
+                    "physical_file_renamed": false,
+                    "sensitive_number_removed": true
+                  },
+                  "suggested_filename_zh": "照片_本地资料_照片_20260706_240.jpg"
+                },
+                "suggested_filename_zh": "照片_本地资料_照片_20260706_240.jpg",
+                "summary_redacted": "Local indexed photo. Detected: no local object labels. OCR status: none. Summary is symbolic, not VLM caption.",
+                "time_bucket": "today",
+                "title_redacted": "IMG_0001_20260706_172922.jpg",
+                "transcript_status": "none",
+                "updated_at": "2026-07-06T10:45:02Z"
+              },
+              {
+                "asset_id": "mm_6f0a6ed3a381960eb05e91f0",
+                "asset_kind": "photo",
+                "capture_time": null,
+                "category_names": [
+                  "书本文具",
+                  "人物照片",
+                  "合同资料",
+                  "宠物动物",
+                  "宠物照片",
+                  "待整理",
+                  "截图资料",
+                  "旅行照片",
+                  "狗狗照片",
+                  "猫咪照片",
+                  "电子设备",
+                  "白色上衣",
+                  "票据发票",
+                  "红色衣服",
+                  "课程资料",
+                  "车辆交通",
+                  "风景旅行",
+                  "食物聚会",
+                  "黑色衣服"
+                ],
+                "display_name_zh": "照片_本地资料_照片_20260706_796",
+                "evidence_refs": [
+                  "asset:mm_6f0a6ed3a3819"
+                ],
+                "modality": "image",
+                "object_labels": [],
+                "ocr_status": "none",
+                "person_attrs": [],
+                "privacy_level": "private_local_only",
+                "smart_naming": {
+                  "display_name_zh": "照片_本地资料_照片_20260706_796",
+                  "risk_flags": {
+                    "age_gender_race_emotion_health_inferred": false,
+                    "cloud_used": false,
+                    "face_recognition_used": false,
+                    "identity_inference_used": false,
+                    "physical_file_renamed": false,
+                    "sensitive_number_removed": true
+                  },
+                  "suggested_filename_zh": "照片_本地资料_照片_20260706_796.jpg"
+                },
+                "suggested_filename_zh": "照片_本地资料_照片_20260706_796.jpg",
+                "summary_redacted": "Local indexed photo. Detected: no local object labels. OCR status: none. Summary is symbolic, not VLM caption.",
+                "time_bucket": "today",
+                "title_redacted": "IMG_0001_20260706_172643.jpg",
+                "transcript_status": "none",
+                "updated_at": "2026-07-06T10:45:02Z"
+              },
+              {
+                "asset_id": "yasset_8a3babf602a00ac012949a05",
+                "asset_kind": "photo",
+                "capture_time": null,
+                "category_names": [
+                  "书本文具",
+                  "人物照片",
+                  "合同资料",
+                  "宠物动物",
+                  "宠物照片",
+                  "待整理",
+                  "截图资料",
+                  "旅行照片",
+                  "狗狗照片",
+                  "猫咪照片",
+                  "电子设备",
+                  "白色上衣",
+                  "票据发票",
+                  "红色衣服",
+                  "课程资料",
+                  "车辆交通",
+                  "风景旅行",
+                  "食物聚会",
+                  "黑色衣服"
+                ],
+                "display_name_zh": "照片_本地资料_照片_20260706_248",
+                "evidence_refs": [
+                  "asset:yasset_8a3babf60"
+                ],
+                "modality": "image",
+                "object_labels": [],
+                "ocr_status": "none",
+                "person_attrs": [],
+                "privacy_level": "private_local_only",
+                "smart_naming": {
+                  "display_name_zh": "照片_本地资料_照片_20260706_248",
+                  "risk_flags": {
+                    "age_gender_race_emotion_health_inferred": false,
+                    "cloud_used": false,
+                    "face_recognition_used": false,
+                    "identity_inference_used": false,
+                    "physical_file_renamed": false,
+                    "sensitive_number_removed": true
+                  },
+                  "suggested_filename_zh": "照片_本地资料_照片_20260706_248"
+                },
+                "suggested_filename_zh": "照片_本地资料_照片_20260706_248",
+                "summary_redacted": "Local indexed photo. Detected: no local object labels. OCR status: none. Summary is symbolic, not VLM caption.",
+                "time_bucket": "today",
+                "title_redacted": "IMG 0001 20260706 184129",
+                "transcript_status": "none",
+                "updated_at": "2026-07-06T10:45:02Z"
+              },
+              {
+                "asset_id": "yasset_69a73ad6a4a978a71c170369",
+                "asset_kind": "photo",
+                "capture_time": null,
+                "category_names": [
+                  "书本文具",
+                  "人物照片",
+                  "合同资料",
+                  "宠物动物",
+                  "宠物照片",
+                  "待整理",
+                  "截图资料",
+                  "旅行照片",
+                  "狗狗照片",
+                  "猫咪照片",
+                  "电子设备",
+                  "白色上衣",
+                  "票据发票",
+                  "红色衣服",
+                  "课程资料",
+                  "车辆交通",
+                  "风景旅行",
+                  "食物聚会",
+                  "黑色衣服"
+                ],
+                "display_name_zh": "照片_本地资料_照片_20260706_108",
+                "evidence_refs": [
+                  "asset:yasset_69a73ad6a"
+                ],
+                "modality": "image",
+                "object_labels": [],
+                "ocr_status": "none",
+                "person_attrs": [],
+                "privacy_level": "private_local_only",
+                "smart_naming": {
+                  "display_name_zh": "照片_本地资料_照片_20260706_108",
+                  "risk_flags": {
+                    "age_gender_race_emotion_health_inferred": false,
+                    "cloud_used": false,
+                    "face_recognition_used": false,
+                    "identity_inference_used": false,
+                    "physical_file_renamed": false,
+                    "sensitive_number_removed": true
+                  },
+                  "suggested_filename_zh": "照片_本地资料_照片_20260706_108"
+                },
+                "suggested_filename_zh": "照片_本地资料_照片_20260706_108",
+                "summary_redacted": "Local indexed photo. Detected: no local object labels. OCR status: none. Summary is symbolic, not VLM caption.",
+                "time_bucket": "today",
+                "title_redacted": "IMG 0001 20260706 183711",
+                "transcript_status": "none",
+                "updated_at": "2026-07-06T10:45:02Z"
+              }
+            ],
+            "schema": "digua_ai_space_v1"
+          },
+          "status": 200
+        },
+        "white_person": {
+          "elapsed_ms": 43.46,
+          "ok": true,
+          "payload": {
+            "cloud_used": false,
+            "ok": true,
+            "query_redacted": "穿白色上衣的人",
+            "raw_path_returned": false,
+            "results": [],
+            "schema": "digua_ai_space_v1"
+          },
+          "status": 200
+        }
+      },
+      "name": "ai space query APIs ok",
+      "ok": true
+    },
+    {
+      "detail": {
+        "computer": {
+          "elapsed_ms": 2321.494,
+          "ok": true,
+          "payload": {
+            "degraded": false,
+            "degraded_reason": null,
+            "feature_flags": {
+              "asr_enabled": false,
+              "audio_transcript_enabled": false,
+              "biometric_recognition_enabled": false,
+              "cloud_asr_enabled": false,
+              "cloud_ocr_enabled": false,
+              "cloud_vision_enabled": false,
+              "destructive_actions_enabled": false,
+              "document_embedding_enabled": false,
+              "face_identification_enabled": false,
+              "image_embedding_enabled": true,
+              "image_embedding_required_for_delivery": true,
+              "local_asr_required_for_delivery": true,
+              "local_vlm_caption_enabled": false,
+              "min_live_image_embeddings": 5,
+              "multimodal_metadata_index_enabled": true,
+              "multimodal_search_enabled": true,
+              "ocr_enabled": false,
+              "production_semantic_model_required": true,
+              "qwen_tool_execution_enabled": false,
+              "sensitive_attribute_inference_enabled": false,
+              "subtitle_extraction_enabled": true,
+              "symbolic_caption_enabled": true,
+              "vector_extension_enabled": "auto",
+              "vector_numpy_fallback_enabled": true,
+              "video_keyframe_embedding_enabled": false,
+              "video_keyframe_enabled": false
+            },
+            "ok": true,
+            "privacy": {
+              "cloud_used": false,
+              "private_leak_count": 0,
+              "raw_path_returned": false
+            },
+            "query_redacted": "找有电脑的照片",
+            "results": [
+              {
+                "asset_id": "mm_6f0a6ed3a381960eb05e91f0",
+                "evidence_ref": "mm_ev_69dbec4beae60cf014",
+                "matched_by": [
+                  "image_embedding",
+                  "metadata"
+                ],
+                "modality": "image",
+                "path_hash": "3ce41b105d11c8291900e1b84e636e65",
+                "privacy_level": "private_local_only",
+                "rank": 1,
+                "score": 0.587509,
+                "score_components": {
+                  "fts": null,
+                  "image_embedding": 0.20596444606781006,
+                  "metadata": 0.35
+                },
+                "snippet_redacted": "",
+                "thumbnail_url": "/api/multimodal-index/item/mm_6f0a6ed3a381960eb05e91f0",
+                "timestamp_sec": null,
+                "title_redacted": "IMG_0001_20260706_172643.jpg"
+              },
+              {
+                "asset_id": "mm_aba7e0655e1c679ca510930a",
+                "evidence_ref": "mm_ev_82bef3fcef1cfcf056",
+                "matched_by": [
+                  "image_embedding",
+                  "metadata"
+                ],
+                "modality": "image",
+                "path_hash": "14140bbdff5acb60aef7d2362b06bd67",
+                "privacy_level": "private_local_only",
+                "rank": 2,
+                "score": 0.412478,
+                "score_components": {
+                  "fts": null,
+                  "image_embedding": 0.20596444606781006,
+                  "metadata": 0.175
+                },
+                "snippet_redacted": "",
+                "thumbnail_url": "/api/multimodal-index/item/mm_aba7e0655e1c679ca510930a",
+                "timestamp_sec": null,
+                "title_redacted": "IMG_0001_20260706_172922.jpg"
+              },
+              {
+                "asset_id": "mm_5f4359413319a5cec79abb54",
+                "evidence_ref": "mm_ev_009bcbe11bac5ac89a",
+                "matched_by": [
+                  "image_embedding",
+                  "metadata"
+                ],
+                "modality": "image",
+                "path_hash": "e868b2dfedad30dade5582b7b8fb8e9c",
+                "privacy_level": "private_local_only",
+                "rank": 3,
+                "score": 0.354129,
+                "score_components": {
+                  "fts": null,
+                  "image_embedding": 0.20596444606781006,
+                  "metadata": 0.11666666666666665
+                },
+                "snippet_redacted": "",
+                "thumbnail_url": "/api/multimodal-index/item/mm_5f4359413319a5cec79abb54",
+                "timestamp_sec": null,
+                "title_redacted": "IMG_0001_20260706_174134.jpg"
+              },
+              {
+                "asset_id": "mm_582e4658c30ab2fc729855c9",
+                "evidence_ref": "mm_ev_2c5733a17e7d070a0e",
+                "matched_by": [
+                  "image_embedding",
+                  "metadata"
+                ],
+                "modality": "image",
+                "path_hash": "58f6ce614a79b5ba8bbd369555093bbf",
+                "privacy_level": "private_local_only",
+                "rank": 4,
+                "score": 0.324962,
+                "score_components": {
+                  "fts": null,
+                  "image_embedding": 0.20596444606781006,
+                  "metadata": 0.0875
+                },
+                "snippet_redacted": "",
+                "thumbnail_url": "/api/multimodal-index/item/mm_582e4658c30ab2fc729855c9",
+                "timestamp_sec": null,
+                "title_redacted": "IMG_0001_20260706_174811.jpg"
+              },
+              {
+                "asset_id": "mm_57d887fa11149ab79bcb4849",
+                "evidence_ref": "mm_ev_72b18604a5c1bf9ca7",
+                "matched_by": [
+                  "image_embedding",
+                  "metadata"
+                ],
+                "modality": "image",
+                "path_hash": "a739f578a54e98aa61c93004055b3741",
+                "privacy_level": "private_local_only",
+                "rank": 5,
+                "score": 0.307478,
+                "score_components": {
+                  "fts": null,
+                  "image_embedding": 0.20596444606781006,
+                  "metadata": 0.06999999999999999
+                },
+                "snippet_redacted": "",
+                "thumbnail_url": "/api/multimodal-index/item/mm_57d887fa11149ab79bcb4849",
+                "timestamp_sec": null,
+                "title_redacted": "IMG_0001_20260706_183711.jpg"
+              },
+              {
+                "asset_id": "mm_4fcb416795f0b157752f85df",
+                "evidence_ref": "mm_ev_6290260c2f78ad8557",
+                "matched_by": [
+                  "image_embedding",
+                  "metadata"
+                ],
+                "modality": "image",
+                "path_hash": "ad024d1e5784713b1893c80d11c8dc31",
+                "privacy_level": "private_local_only",
+                "rank": 6,
+                "score": 0.295843,
+                "score_components": {
+                  "fts": null,
+                  "image_embedding": 0.20596444606781006,
+                  "metadata": 0.05833333333333333
+                },
+                "snippet_redacted": "",
+                "thumbnail_url": "/api/multimodal-index/item/mm_4fcb416795f0b157752f85df",
+                "timestamp_sec": null,
+                "title_redacted": "IMG_0001_20260706_184129.jpg"
+              }
+            ],
+            "retrieval_mode": "fts_first_plus_image_embedding",
+            "run_id": "mm_run_1849374e5910451d",
+            "trace_id": "mm_trace_0dd557b53f384a19",
+            "yolo_object_results": 0
+          },
+          "status": 200
+        },
+        "pet": {
+          "elapsed_ms": 2114.391,
+          "ok": true,
+          "payload": {
+            "degraded": false,
+            "degraded_reason": null,
+            "feature_flags": {
+              "asr_enabled": false,
+              "audio_transcript_enabled": false,
+              "biometric_recognition_enabled": false,
+              "cloud_asr_enabled": false,
+              "cloud_ocr_enabled": false,
+              "cloud_vision_enabled": false,
+              "destructive_actions_enabled": false,
+              "document_embedding_enabled": false,
+              "face_identification_enabled": false,
+              "image_embedding_enabled": true,
+              "image_embedding_required_for_delivery": true,
+              "local_asr_required_for_delivery": true,
+              "local_vlm_caption_enabled": false,
+              "min_live_image_embeddings": 5,
+              "multimodal_metadata_index_enabled": true,
+              "multimodal_search_enabled": true,
+              "ocr_enabled": false,
+              "production_semantic_model_required": true,
+              "qwen_tool_execution_enabled": false,
+              "sensitive_attribute_inference_enabled": false,
+              "subtitle_extraction_enabled": true,
+              "symbolic_caption_enabled": true,
+              "vector_extension_enabled": "auto",
+              "vector_numpy_fallback_enabled": true,
+              "video_keyframe_embedding_enabled": false,
+              "video_keyframe_enabled": false
+            },
+            "ok": true,
+            "privacy": {
+              "cloud_used": false,
+              "private_leak_count": 0,
+              "raw_path_returned": false
+            },
+            "query_redacted": "找宠物照片",
+            "results": [
+              {
+                "asset_id": "mm_6f0a6ed3a381960eb05e91f0",
+                "evidence_ref": "mm_ev_69dbec4beae60cf014",
+                "matched_by": [
+                  "image_embedding",
+                  "metadata"
+                ],
+                "modality": "image",
+                "path_hash": "3ce41b105d11c8291900e1b84e636e65",
+                "privacy_level": "private_local_only",
+                "rank": 1,
+                "score": 0.58508,
+                "score_components": {
+                  "fts": null,
+                  "image_embedding": 0.20353484153747559,
+                  "metadata": 0.35
+                },
+                "snippet_redacted": "",
+                "thumbnail_url": "/api/multimodal-index/item/mm_6f0a6ed3a381960eb05e91f0",
+                "timestamp_sec": null,
+                "title_redacted": "IMG_0001_20260706_172643.jpg"
+              },
+              {
+                "asset_id": "mm_aba7e0655e1c679ca510930a",
+                "evidence_ref": "mm_ev_82bef3fcef1cfcf056",
+                "matched_by": [
+                  "image_embedding",
+                  "metadata"
+                ],
+                "modality": "image",
+                "path_hash": "14140bbdff5acb60aef7d2362b06bd67",
+                "privacy_level": "private_local_only",
+                "rank": 2,
+                "score": 0.410048,
+                "score_components": {
+                  "fts": null,
+                  "image_embedding": 0.20353484153747559,
+                  "metadata": 0.175
+                },
+                "snippet_redacted": "",
+                "thumbnail_url": "/api/multimodal-index/item/mm_aba7e0655e1c679ca510930a",
+                "timestamp_sec": null,
+                "title_redacted": "IMG_0001_20260706_172922.jpg"
+              },
+              {
+                "asset_id": "mm_5f4359413319a5cec79abb54",
+                "evidence_ref": "mm_ev_009bcbe11bac5ac89a",
+                "matched_by": [
+                  "image_embedding",
+                  "metadata"
+                ],
+                "modality": "image",
+                "path_hash": "e868b2dfedad30dade5582b7b8fb8e9c",
+                "privacy_level": "private_local_only",
+                "rank": 3,
+                "score": 0.3517,
+                "score_components": {
+                  "fts": null,
+                  "image_embedding": 0.20353484153747559,
+                  "metadata": 0.11666666666666665
+                },
+                "snippet_redacted": "",
+                "thumbnail_url": "/api/multimodal-index/item/mm_5f4359413319a5cec79abb54",
+                "timestamp_sec": null,
+                "title_redacted": "IMG_0001_20260706_174134.jpg"
+              },
+              {
+                "asset_id": "mm_582e4658c30ab2fc729855c9",
+                "evidence_ref": "mm_ev_2c5733a17e7d070a0e",
+                "matched_by": [
+                  "image_embedding",
+                  "metadata"
+                ],
+                "modality": "image",
+                "path_hash": "58f6ce614a79b5ba8bbd369555093bbf",
+                "privacy_level": "private_local_only",
+                "rank": 4,
+                "score": 0.322533,
+                "score_components": {
+                  "fts": null,
+                  "image_embedding": 0.20353484153747559,
+                  "metadata": 0.0875
+                },
+                "snippet_redacted": "",
+                "thumbnail_url": "/api/multimodal-index/item/mm_582e4658c30ab2fc729855c9",
+                "timestamp_sec": null,
+                "title_redacted": "IMG_0001_20260706_174811.jpg"
+              },
+              {
+                "asset_id": "mm_57d887fa11149ab79bcb4849",
+                "evidence_ref": "mm_ev_72b18604a5c1bf9ca7",
+                "matched_by": [
+                  "image_embedding",
+                  "metadata"
+                ],
+                "modality": "image",
+                "path_hash": "a739f578a54e98aa61c93004055b3741",
+                "privacy_level": "private_local_only",
+                "rank": 5,
+                "score": 0.305048,
+                "score_components": {
+                  "fts": null,
+                  "image_embedding": 0.20353484153747559,
+                  "metadata": 0.06999999999999999
+                },
+                "snippet_redacted": "",
+                "thumbnail_url": "/api/multimodal-index/item/mm_57d887fa11149ab79bcb4849",
+                "timestamp_sec": null,
+                "title_redacted": "IMG_0001_20260706_183711.jpg"
+              },
+              {
+                "asset_id": "mm_4fcb416795f0b157752f85df",
+                "evidence_ref": "mm_ev_6290260c2f78ad8557",
+                "matched_by": [
+                  "image_embedding",
+                  "metadata"
+                ],
+                "modality": "image",
+                "path_hash": "ad024d1e5784713b1893c80d11c8dc31",
+                "privacy_level": "private_local_only",
+                "rank": 6,
+                "score": 0.293413,
+                "score_components": {
+                  "fts": null,
+                  "image_embedding": 0.20353484153747559,
+                  "metadata": 0.05833333333333333
+                },
+                "snippet_redacted": "",
+                "thumbnail_url": "/api/multimodal-index/item/mm_4fcb416795f0b157752f85df",
+                "timestamp_sec": null,
+                "title_redacted": "IMG_0001_20260706_184129.jpg"
+              }
+            ],
+            "retrieval_mode": "fts_first_plus_image_embedding",
+            "run_id": "mm_run_de156d51821a42eb",
+            "trace_id": "mm_trace_8f1bf279550d4b52",
+            "yolo_object_results": 0
+          },
+          "status": 200
+        },
+        "video_person": {
+          "elapsed_ms": 1389.158,
+          "ok": true,
+          "payload": {
+            "degraded": false,
+            "degraded_reason": null,
+            "feature_flags": {
+              "asr_enabled": false,
+              "audio_transcript_enabled": false,
+              "biometric_recognition_enabled": false,
+              "cloud_asr_enabled": false,
+              "cloud_ocr_enabled": false,
+              "cloud_vision_enabled": false,
+              "destructive_actions_enabled": false,
+              "document_embedding_enabled": false,
+              "face_identification_enabled": false,
+              "image_embedding_enabled": true,
+              "image_embedding_required_for_delivery": true,
+              "local_asr_required_for_delivery": true,
+              "local_vlm_caption_enabled": false,
+              "min_live_image_embeddings": 5,
+              "multimodal_metadata_index_enabled": true,
+              "multimodal_search_enabled": true,
+              "ocr_enabled": false,
+              "production_semantic_model_required": true,
+              "qwen_tool_execution_enabled": false,
+              "sensitive_attribute_inference_enabled": false,
+              "subtitle_extraction_enabled": true,
+              "symbolic_caption_enabled": true,
+              "vector_extension_enabled": "auto",
+              "vector_numpy_fallback_enabled": true,
+              "video_keyframe_embedding_enabled": false,
+              "video_keyframe_enabled": false
+            },
+            "ok": true,
+            "privacy": {
+              "cloud_used": false,
+              "private_leak_count": 0,
+              "raw_path_returned": false
+            },
+            "query_redacted": "视频里有人",
+            "results": [],
+            "retrieval_mode": "fts_first_plus_image_embedding",
+            "run_id": "mm_run_c92359c11e3842e2",
+            "trace_id": "mm_trace_50f74cd98a2a4b7d",
+            "yolo_object_results": 0
+          },
+          "status": 200
+        },
+        "white_person": {
+          "elapsed_ms": 2471.967,
+          "ok": true,
+          "payload": {
+            "degraded": false,
+            "degraded_reason": null,
+            "feature_flags": {
+              "asr_enabled": false,
+              "audio_transcript_enabled": false,
+              "biometric_recognition_enabled": false,
+              "cloud_asr_enabled": false,
+              "cloud_ocr_enabled": false,
+              "cloud_vision_enabled": false,
+              "destructive_actions_enabled": false,
+              "document_embedding_enabled": false,
+              "face_identification_enabled": false,
+              "image_embedding_enabled": true,
+              "image_embedding_required_for_delivery": true,
+              "local_asr_required_for_delivery": true,
+              "local_vlm_caption_enabled": false,
+              "min_live_image_embeddings": 5,
+              "multimodal_metadata_index_enabled": true,
+              "multimodal_search_enabled": true,
+              "ocr_enabled": false,
+              "production_semantic_model_required": true,
+              "qwen_tool_execution_enabled": false,
+              "sensitive_attribute_inference_enabled": false,
+              "subtitle_extraction_enabled": true,
+              "symbolic_caption_enabled": true,
+              "vector_extension_enabled": "auto",
+              "vector_numpy_fallback_enabled": true,
+              "video_keyframe_embedding_enabled": false,
+              "video_keyframe_enabled": false
+            },
+            "ok": true,
+            "privacy": {
+              "cloud_used": false,
+              "private_leak_count": 0,
+              "raw_path_returned": false
+            },
+            "query_redacted": "找穿白色上衣的人",
+            "results": [
+              {
+                "asset_id": "mm_4fcb416795f0b157752f85df",
+                "evidence_ref": "mm_ev_015000137590224242",
+                "matched_by": [
+                  "image_embedding"
+                ],
+                "modality": "image",
+                "path_hash": "ad024d1e5784713b1893c80d11c8dc31",
+                "privacy_level": "private_local_only",
+                "rank": 1,
+                "score": 0.24639,
+                "score_components": {
+                  "fts": null,
+                  "image_embedding": 0.22999700903892517,
+                  "metadata": null
+                },
+                "snippet_redacted": "",
+                "thumbnail_url": "/api/multimodal-index/item/mm_4fcb416795f0b157752f85df",
+                "timestamp_sec": null,
+                "title_redacted": "IMG_0001_20260706_184129.jpg"
+              },
+              {
+                "asset_id": "mm_57d887fa11149ab79bcb4849",
+                "evidence_ref": "mm_ev_d603d55820f0568275",
+                "matched_by": [
+                  "image_embedding"
+                ],
+                "modality": "image",
+                "path_hash": "a739f578a54e98aa61c93004055b3741",
+                "privacy_level": "private_local_only",
+                "rank": 2,
+                "score": 0.246126,
+                "score_components": {
+                  "fts": null,
+                  "image_embedding": 0.22999700903892517,
+                  "metadata": null
+                },
+                "snippet_redacted": "",
+                "thumbnail_url": "/api/multimodal-index/item/mm_57d887fa11149ab79bcb4849",
+                "timestamp_sec": null,
+                "title_redacted": "IMG_0001_20260706_183711.jpg"
+              },
+              {
+                "asset_id": "mm_582e4658c30ab2fc729855c9",
+                "evidence_ref": "mm_ev_4afd83ee02262d5252",
+                "matched_by": [
+                  "image_embedding"
+                ],
+                "modality": "image",
+                "path_hash": "58f6ce614a79b5ba8bbd369555093bbf",
+                "privacy_level": "private_local_only",
+                "rank": 3,
+                "score": 0.24587,
+                "score_components": {
+                  "fts": null,
+                  "image_embedding": 0.22999700903892517,
+                  "metadata": null
+                },
+                "snippet_redacted": "",
+                "thumbnail_url": "/api/multimodal-index/item/mm_582e4658c30ab2fc729855c9",
+                "timestamp_sec": null,
+                "title_redacted": "IMG_0001_20260706_174811.jpg"
+              },
+              {
+                "asset_id": "mm_5f4359413319a5cec79abb54",
+                "evidence_ref": "mm_ev_78c46c0f8dfc7c2170",
+                "matched_by": [
+                  "image_embedding"
+                ],
+                "modality": "image",
+                "path_hash": "e868b2dfedad30dade5582b7b8fb8e9c",
+                "privacy_level": "private_local_only",
+                "rank": 4,
+                "score": 0.245622,
+                "score_components": {
+                  "fts": null,
+                  "image_embedding": 0.22999700903892517,
+                  "metadata": null
+                },
+                "snippet_redacted": "",
+                "thumbnail_url": "/api/multimodal-index/item/mm_5f4359413319a5cec79abb54",
+                "timestamp_sec": null,
+                "title_redacted": "IMG_0001_20260706_174134.jpg"
+              },
+              {
+                "asset_id": "mm_aba7e0655e1c679ca510930a",
+                "evidence_ref": "mm_ev_89c3ad97cc23f4aa57",
+                "matched_by": [
+                  "image_embedding"
+                ],
+                "modality": "image",
+                "path_hash": "14140bbdff5acb60aef7d2362b06bd67",
+                "privacy_level": "private_local_only",
+                "rank": 5,
+                "score": 0.245382,
+                "score_components": {
+                  "fts": null,
+                  "image_embedding": 0.22999700903892517,
+                  "metadata": null
+                },
+                "snippet_redacted": "",
+                "thumbnail_url": "/api/multimodal-index/item/mm_aba7e0655e1c679ca510930a",
+                "timestamp_sec": null,
+                "title_redacted": "IMG_0001_20260706_172922.jpg"
+              },
+              {
+                "asset_id": "mm_6f0a6ed3a381960eb05e91f0",
+                "evidence_ref": "mm_ev_975f2d53cb6b92f699",
+                "matched_by": [
+                  "image_embedding"
+                ],
+                "modality": "image",
+                "path_hash": "3ce41b105d11c8291900e1b84e636e65",
+                "privacy_level": "private_local_only",
+                "rank": 6,
+                "score": 0.245149,
+                "score_components": {
+                  "fts": null,
+                  "image_embedding": 0.22999700903892517,
+                  "metadata": null
+                },
+                "snippet_redacted": "",
+                "thumbnail_url": "/api/multimodal-index/item/mm_6f0a6ed3a381960eb05e91f0",
+                "timestamp_sec": null,
+                "title_redacted": "IMG_0001_20260706_172643.jpg"
+              }
+            ],
+            "retrieval_mode": "fts_first_plus_image_embedding",
+            "run_id": "mm_run_26ddaede07d6419f",
+            "trace_id": "mm_trace_2014280203ca43c6",
+            "yolo_object_results": 0
+          },
+          "status": 200
+        }
+      },
+      "name": "multimodal query APIs ok",
+      "ok": true
+    },
+    {
+      "detail": {
+        "elapsed_ms": 36.846,
+        "ok": true,
+        "payload": {
+          "biometric_recognition_enabled": false,
+          "blocked": false,
+          "cloud_used": false,
+          "degraded": true,
+          "degraded_reason": "no_matching_person_attribute",
+          "face_identification_enabled": false,
+          "ok": true,
+          "query": {
+            "blocked": false,
+            "blocked_reason": null,
+            "co_occurs_with": null,
+            "modality": null,
+            "query_redacted": "找穿白色上衣的人",
+            "require_person": true,
+            "upper_color": "white"
+          },
+          "raw_path_returned": false,
+          "results": [],
+          "schema": "digua_person_attribute_search_v1",
+          "sensitive_attribute_inference_enabled": false
+        },
+        "status": 200
+      },
+      "name": "person attribute white query ok",
+      "ok": true
+    },
+    {
+      "detail": {
+        "elapsed_ms": 26.658,
+        "ok": true,
+        "payload": {
+          "biometric_recognition_enabled": false,
+          "blocked": true,
+          "blocked_reason": "face_identification_disabled",
+          "cloud_used": false,
+          "face_identification_enabled": false,
+          "intent": "person_identity_recognition",
+          "ok": true,
+          "raw_path_returned": false,
+          "results": [],
+          "sensitive_attribute_inference_enabled": false
+        },
+        "status": 200
+      },
+      "name": "identity query blocked",
+      "ok": true
+    },
+    {
+      "detail": {
+        "biometric_recognition_enabled": false,
+        "blocked": true,
+        "blocked_reason": "face_identification_disabled",
+        "cloud_used": false,
+        "face_identification_enabled": false,
+        "intent": "person_identity_recognition",
+        "ok": true,
+        "raw_path_returned": false,
+        "results": [],
+        "sensitive_attribute_inference_enabled": false
+      },
+      "name": "person unsafe features disabled",
+      "ok": true
+    },
+    {
+      "detail": {
+        "elapsed_ms": 59.136,
+        "ok": true,
+        "payload": {
+          "degraded": true,
+          "degraded_reason": "no_matching_yolo_detection",
+          "labels": [
+            "person",
+            "cat",
+            "dog",
+            "laptop"
+          ],
+          "ok": true,
+          "privacy": {
+            "cloud_used": false,
+            "raw_path_returned": false
+          },
+          "query_redacted": "person laptop cat dog",
+          "results": [],
+          "run_id": "yolo_search_14c28f7e4e354b97"
+        },
+        "status": 200
+      },
+      "name": "yolo search ok",
+      "ok": true
+    },
+    {
+      "detail": {
+        "elapsed_ms": 11.777,
+        "ok": true,
+        "payload": {
+          "chunk_count": 88,
+          "cloud_ocr_enabled": false,
+          "cloud_used": false,
+          "degraded": false,
+          "degraded_reason": null,
+          "document_count": 88,
+          "ocr_index_backing": "document_fts",
+          "ok": true,
+          "raw_path_returned": false,
+          "raw_private_content_returned": false,
+          "route_module": "src.openclaw.routes.document_rag_routes",
+          "schema": "digua_ocr_status_v1"
+        },
+        "status": 200
+      },
+      "name": "ocr status ok",
+      "ok": true
+    },
+    {
+      "detail": {
+        "elapsed_ms": 11.706,
+        "ok": true,
+        "payload": {
+          "chunk_count": 88,
+          "cloud_ocr_enabled": false,
+          "cloud_used": false,
+          "degraded": false,
+          "document_count": 88,
+          "fts_db_hash": "3f7ee09a9a166a4b",
+          "ok": true,
+          "raw_path_returned": false,
+          "raw_private_content_returned": false,
+          "retrieval_mode": "sqlite_fts_first",
+          "route_module": "src.openclaw.routes.document_rag_routes",
+          "schema": "digua_document_rag_status_v1"
+        },
+        "status": 200
+      },
+      "name": "document rag status ok",
+      "ok": true
+    },
+    {
+      "detail": {
+        "elapsed_ms": 3267.851,
+        "error": "HTTP Error 404: Not Found",
+        "ok": false,
+        "payload": {
+          "answer": "",
+          "cloud_ocr_enabled": false,
+          "cloud_used": false,
+          "error": "no_grounded_answer",
+          "evidence_refs": [],
+          "mode": "document_rag",
+          "no_grounded_answer": true,
+          "ok": false,
+          "raw_path_returned": false,
+          "raw_private_content_returned": false,
+          "retrieval_mode": "sqlite_fts_first",
+          "retrieved_chunks": [],
+          "route_module": "src.openclaw.routes.document_rag_routes",
+          "schema": "digua_document_rag_query_v1"
+        },
+        "status": 404
+      },
+      "name": "rag grounded or explicitly refused",
+      "ok": true
+    },
+    {
+      "detail": {
+        "approval_phrase": "APPROVE AUTO ORGANIZE plan_4f468a8aedf84601",
+        "approval_required": true,
+        "cloud_private_raw_egress": false,
+        "controlled_move_enabled": true,
+        "controlled_rename_enabled": true,
+        "delete_enabled": false,
+        "delete_original": false,
+        "diagnostic_fallback_allowed": false,
+        "fallback_default_blocked": true,
+        "item_count": 1,
+        "items": [
+          {
+            "ai_driven": true,
+            "asset_id": "mm_4fcb416795f0b157752f85df",
+            "category_zh": "票据发票",
+            "classification_basis": {
+              "ai_driven": true,
+              "category_names": [
+                "票据发票",
+                "旅行照片",
+                "人物照片",
+                "白色上衣",
+                "宠物照片",
+                "待整理",
+                "红色衣服",
+                "黑色衣服",
+                "宠物动物",
+                "猫咪照片",
+                "狗狗照片",
+                "风景旅行",
+                "车辆交通",
+                "电子设备",
+                "书本文具",
+                "食物聚会",
+                "合同资料",
+                "课程资料",
+                "截图资料"
+              ],
+              "category_zh": "票据发票",
+              "confidence": 0.75,
+              "evidence_refs": [
+                "asset:mm_4fcb416795f0b"
+              ],
+              "fallback_available": false,
+              "fallback_used": false,
+              "matched_asset_id": "mm_4fcb416795f0b157752f85df",
+              "modality": "image",
+              "object_labels": [],
+              "ocr_tags": [],
+              "person_attrs": [],
+              "resolution_source": "ai_space+smart_naming+smart_classification",
+              "source": "ai_space+smart_naming+smart_classification",
+              "source_priority": [
+                "asset_id",
+                "ai_space_asset_view",
+                "smart_asset_names",
+                "smart_category_memberships",
+                "yolo_labels",
+                "person_attribute",
+                "ocr_tags",
+                "subtitle_tags",
+                "media_index",
+                "fallback_filename_heuristic"
+              ],
+              "subtitle_tags": [],
+              "title_redacted": "IMG_0001_20260706_184129.jpg"
+            },
+            "conflict_policy": "auto_suffix_target_if_exists_no_overwrite",
+            "fallback_used": false,
+            "final_filename": "照片_本地资料_照片_20260706_766.jpg",
+            "item_id": "item_280c29891c2f4188",
+            "naming_basis": {
+              "core_feature": "本地资料",
+              "date": "20260706",
+              "display_name_zh": "照片_本地资料_照片_20260706_766",
+              "fallback_used": false,
+              "main_category": "照片",
+              "resolution_source": "ai_space+smart_naming+smart_classification",
+              "scene_or_attribute": "照片",
+              "sequence": "766",
+              "source": "smart_naming",
+              "suggested_filename_zh": "照片_本地资料_照片_20260706_766.jpg",
+              "used_fields": [
+                "modality",
+                "category_names",
+                "object_labels",
+                "person_attrs",
+                "title_redacted"
+              ]
+            },
+            "operation": "move_and_rename",
+            "original_filename": "IMG_0001_20260706_184129.jpg",
+            "plan_id": "plan_4f468a8aedf84601",
+            "resolution_source": "ai_space+smart_naming+smart_classification",
+            "rollback_available": true,
+            "source_hash": "04a0d2bc95a835a336790c69dbff9ba6df6f50d05e233f2702b63d8494adf7e4",
+            "source_rel": "Uploads/stage9_demo2/IMG_0001_20260706_184129.jpg",
+            "source_sha256": "a2a97f28c9fe98e7c25a0e508394ad0b9794660bf73d9b2cb533a60ca51f4566",
+            "status": "planned",
+            "suggested_filename_zh": "照片_本地资料_照片_20260706_766.jpg",
+            "target_category_zh": "票据发票",
+            "target_exists": false,
+            "target_hash": "e9cde85587e50d7fd50e7b419bd9732a08fa7508e91ef26ad8a1b683ac09630c",
+            "target_rel": "AI整理/票据发票/照片_本地资料_照片_20260706_766.jpg"
+          }
+        ],
+        "mode": "move_and_rename",
+        "ok": true,
+        "overwrite_enabled": false,
+        "plan_id": "plan_4f468a8aedf84601",
+        "qwen_execution_authority": false,
+        "raw_path_returned": false,
+        "schema": "digua_auto_organizer_plan_v1"
+      },
+      "name": "auto organizer plan ok",
+      "ok": true
+    },
+    {
+      "detail": {
+        "ai_driven": true,
+        "asset_id": "mm_4fcb416795f0b157752f85df",
+        "category_zh": "票据发票",
+        "classification_basis": {
+          "ai_driven": true,
+          "category_names": [
+            "票据发票",
+            "旅行照片",
+            "人物照片",
+            "白色上衣",
+            "宠物照片",
+            "待整理",
+            "红色衣服",
+            "黑色衣服",
+            "宠物动物",
+            "猫咪照片",
+            "狗狗照片",
+            "风景旅行",
+            "车辆交通",
+            "电子设备",
+            "书本文具",
+            "食物聚会",
+            "合同资料",
+            "课程资料",
+            "截图资料"
+          ],
+          "category_zh": "票据发票",
+          "confidence": 0.75,
+          "evidence_refs": [
+            "asset:mm_4fcb416795f0b"
+          ],
+          "fallback_available": false,
+          "fallback_used": false,
+          "matched_asset_id": "mm_4fcb416795f0b157752f85df",
+          "modality": "image",
+          "object_labels": [],
+          "ocr_tags": [],
+          "person_attrs": [],
+          "resolution_source": "ai_space+smart_naming+smart_classification",
+          "source": "ai_space+smart_naming+smart_classification",
+          "source_priority": [
+            "asset_id",
+            "ai_space_asset_view",
+            "smart_asset_names",
+            "smart_category_memberships",
+            "yolo_labels",
+            "person_attribute",
+            "ocr_tags",
+            "subtitle_tags",
+            "media_index",
+            "fallback_filename_heuristic"
+          ],
+          "subtitle_tags": [],
+          "title_redacted": "IMG_0001_20260706_184129.jpg"
+        },
+        "conflict_policy": "auto_suffix_target_if_exists_no_overwrite",
+        "fallback_used": false,
+        "final_filename": "照片_本地资料_照片_20260706_766.jpg",
+        "item_id": "item_280c29891c2f4188",
+        "naming_basis": {
+          "core_feature": "本地资料",
+          "date": "20260706",
+          "display_name_zh": "照片_本地资料_照片_20260706_766",
+          "fallback_used": false,
+          "main_category": "照片",
+          "resolution_source": "ai_space+smart_naming+smart_classification",
+          "scene_or_attribute": "照片",
+          "sequence": "766",
+          "source": "smart_naming",
+          "suggested_filename_zh": "照片_本地资料_照片_20260706_766.jpg",
+          "used_fields": [
+            "modality",
+            "category_names",
+            "object_labels",
+            "person_attrs",
+            "title_redacted"
+          ]
+        },
+        "operation": "move_and_rename",
+        "original_filename": "IMG_0001_20260706_184129.jpg",
+        "plan_id": "plan_4f468a8aedf84601",
+        "resolution_source": "ai_space+smart_naming+smart_classification",
+        "rollback_available": true,
+        "source_hash": "04a0d2bc95a835a336790c69dbff9ba6df6f50d05e233f2702b63d8494adf7e4",
+        "source_rel": "Uploads/stage9_demo2/IMG_0001_20260706_184129.jpg",
+        "source_sha256": "a2a97f28c9fe98e7c25a0e508394ad0b9794660bf73d9b2cb533a60ca51f4566",
+        "status": "planned",
+        "suggested_filename_zh": "照片_本地资料_照片_20260706_766.jpg",
+        "target_category_zh": "票据发票",
+        "target_exists": false,
+        "target_hash": "e9cde85587e50d7fd50e7b419bd9732a08fa7508e91ef26ad8a1b683ac09630c",
+        "target_rel": "AI整理/票据发票/照片_本地资料_照片_20260706_766.jpg"
+      },
+      "name": "auto organizer plan item ai-driven",
+      "ok": true
+    },
+    {
+      "detail": "ai_space+smart_naming+smart_classification",
+      "name": "auto organizer resolution source real",
+      "ok": true
+    },
+    {
+      "detail": {
+        "ai_driven": true,
+        "category_names": [
+          "票据发票",
+          "旅行照片",
+          "人物照片",
+          "白色上衣",
+          "宠物照片",
+          "待整理",
+          "红色衣服",
+          "黑色衣服",
+          "宠物动物",
+          "猫咪照片",
+          "狗狗照片",
+          "风景旅行",
+          "车辆交通",
+          "电子设备",
+          "书本文具",
+          "食物聚会",
+          "合同资料",
+          "课程资料",
+          "截图资料"
+        ],
+        "category_zh": "票据发票",
+        "confidence": 0.75,
+        "evidence_refs": [
+          "asset:mm_4fcb416795f0b"
+        ],
+        "fallback_available": false,
+        "fallback_used": false,
+        "matched_asset_id": "mm_4fcb416795f0b157752f85df",
+        "modality": "image",
+        "object_labels": [],
+        "ocr_tags": [],
+        "person_attrs": [],
+        "resolution_source": "ai_space+smart_naming+smart_classification",
+        "source": "ai_space+smart_naming+smart_classification",
+        "source_priority": [
+          "asset_id",
+          "ai_space_asset_view",
+          "smart_asset_names",
+          "smart_category_memberships",
+          "yolo_labels",
+          "person_attribute",
+          "ocr_tags",
+          "subtitle_tags",
+          "media_index",
+          "fallback_filename_heuristic"
+        ],
+        "subtitle_tags": [],
+        "title_redacted": "IMG_0001_20260706_184129.jpg"
+      },
+      "name": "auto organizer ai-driven basis",
+      "ok": true
+    },
+    {
+      "detail": {
+        "elapsed_ms": 41.157,
+        "ok": true,
+        "payload": {
+          "cloud_private_raw_egress": false,
+          "items": [
+            {
+              "ai_driven": true,
+              "asset_id": "mm_4fcb416795f0b157752f85df",
+              "category_zh": "票据发票",
+              "classification_basis": {
+                "ai_driven": true,
+                "category_names": [
+                  "票据发票",
+                  "旅行照片",
+                  "人物照片",
+                  "白色上衣",
+                  "宠物照片",
+                  "待整理",
+                  "红色衣服",
+                  "黑色衣服",
+                  "宠物动物",
+                  "猫咪照片",
+                  "狗狗照片",
+                  "风景旅行",
+                  "车辆交通",
+                  "电子设备",
+                  "书本文具",
+                  "食物聚会",
+                  "合同资料",
+                  "课程资料",
+                  "截图资料"
+                ],
+                "category_zh": "票据发票",
+                "confidence": 0.75,
+                "evidence_refs": [
+                  "asset:mm_4fcb416795f0b"
+                ],
+                "fallback_available": false,
+                "fallback_used": false,
+                "matched_asset_id": "mm_4fcb416795f0b157752f85df",
+                "modality": "image",
+                "object_labels": [],
+                "ocr_tags": [],
+                "person_attrs": [],
+                "resolution_source": "ai_space+smart_naming+smart_classification",
+                "source": "ai_space+smart_naming+smart_classification",
+                "source_priority": [
+                  "asset_id",
+                  "ai_space_asset_view",
+                  "smart_asset_names",
+                  "smart_category_memberships",
+                  "yolo_labels",
+                  "person_attribute",
+                  "ocr_tags",
+                  "subtitle_tags",
+                  "media_index",
+                  "fallback_filename_heuristic"
+                ],
+                "subtitle_tags": [],
+                "title_redacted": "IMG_0001_20260706_184129.jpg"
+              },
+              "conflict_policy": "auto_suffix_target_if_exists_no_overwrite",
+              "created_at": "2026-07-06T10:45:14Z",
+              "executed_at": null,
+              "fallback_used": false,
+              "final_filename": "照片_本地资料_照片_20260706_766.jpg",
+              "item_id": "item_280c29891c2f4188",
+              "naming_basis": {
+                "core_feature": "本地资料",
+                "date": "20260706",
+                "display_name_zh": "照片_本地资料_照片_20260706_766",
+                "fallback_used": false,
+                "main_category": "照片",
+                "resolution_source": "ai_space+smart_naming+smart_classification",
+                "scene_or_attribute": "照片",
+                "sequence": "766",
+                "source": "smart_naming",
+                "suggested_filename_zh": "照片_本地资料_照片_20260706_766.jpg",
+                "used_fields": [
+                  "modality",
+                  "category_names",
+                  "object_labels",
+                  "person_attrs",
+                  "title_redacted"
+                ]
+              },
+              "operation": "move_and_rename",
+              "original_filename": "IMG_0001_20260706_184129.jpg",
+              "plan_id": "plan_4f468a8aedf84601",
+              "raw_path_returned": false,
+              "resolution_source": "ai_space+smart_naming+smart_classification",
+              "rollback_available": true,
+              "source_exists": true,
+              "source_hash": "04a0d2bc95a835a336790c69dbff9ba6df6f50d05e233f2702b63d8494adf7e4",
+              "source_rel": "Uploads/stage9_demo2/IMG_0001_20260706_184129.jpg",
+              "source_sha256": "a2a97f28c9fe98e7c25a0e508394ad0b9794660bf73d9b2cb533a60ca51f4566",
+              "source_sha256_current": "a2a97f28c9fe98e7c25a0e508394ad0b9794660bf73d9b2cb533a60ca51f4566",
+              "status": "planned",
+              "suggested_filename_zh": "照片_本地资料_照片_20260706_766.jpg",
+              "target_category_zh": "票据发票",
+              "target_exists": false,
+              "target_hash": "e9cde85587e50d7fd50e7b419bd9732a08fa7508e91ef26ad8a1b683ac09630c",
+              "target_rel": "AI整理/票据发票/照片_本地资料_照片_20260706_766.jpg",
+              "would_execute": true
+            }
+          ],
+          "ok": true,
+          "plan_id": "plan_4f468a8aedf84601",
+          "qwen_execution_authority": false,
+          "raw_path_returned": false,
+          "schema": "digua_auto_organizer_dry_run_v1"
+        },
+        "status": 200
+      },
+      "name": "dry run ok",
+      "ok": true
+    },
+    {
+      "detail": {
+        "elapsed_ms": 43.045,
+        "ok": true,
+        "payload": {
+          "approval_token": "7dc454520dcf77d03856333b3a36cb559f05bcaf80c9fadaae66dfadc0a57d1e",
+          "cloud_private_raw_egress": false,
+          "ok": true,
+          "plan_id": "plan_4f468a8aedf84601",
+          "qwen_execution_authority": false,
+          "raw_path_returned": false,
+          "status": "approved"
+        },
+        "status": 200
+      },
+      "name": "approval ok",
+      "ok": true
+    },
+    {
+      "detail": {
+        "elapsed_ms": 65.338,
+        "ok": true,
+        "payload": {
+          "cloud_private_raw_egress": false,
+          "delete_allowed": false,
+          "error_count": 0,
+          "errors": [],
+          "executed_count": 1,
+          "items": [
+            {
+              "ai_driven": true,
+              "asset_id": "mm_4fcb416795f0b157752f85df",
+              "category_zh": "票据发票",
+              "classification_basis": {
+                "ai_driven": true,
+                "category_names": [
+                  "票据发票",
+                  "旅行照片",
+                  "人物照片",
+                  "白色上衣",
+                  "宠物照片",
+                  "待整理",
+                  "红色衣服",
+                  "黑色衣服",
+                  "宠物动物",
+                  "猫咪照片",
+                  "狗狗照片",
+                  "风景旅行",
+                  "车辆交通",
+                  "电子设备",
+                  "书本文具",
+                  "食物聚会",
+                  "合同资料",
+                  "课程资料",
+                  "截图资料"
+                ],
+                "category_zh": "票据发票",
+                "confidence": 0.75,
+                "evidence_refs": [
+                  "asset:mm_4fcb416795f0b"
+                ],
+                "fallback_available": false,
+                "fallback_used": false,
+                "matched_asset_id": "mm_4fcb416795f0b157752f85df",
+                "modality": "image",
+                "object_labels": [],
+                "ocr_tags": [],
+                "person_attrs": [],
+                "resolution_source": "ai_space+smart_naming+smart_classification",
+                "source": "ai_space+smart_naming+smart_classification",
+                "source_priority": [
+                  "asset_id",
+                  "ai_space_asset_view",
+                  "smart_asset_names",
+                  "smart_category_memberships",
+                  "yolo_labels",
+                  "person_attribute",
+                  "ocr_tags",
+                  "subtitle_tags",
+                  "media_index",
+                  "fallback_filename_heuristic"
+                ],
+                "subtitle_tags": [],
+                "title_redacted": "IMG_0001_20260706_184129.jpg"
+              },
+              "conflict_policy": "auto_suffix_target_if_exists_no_overwrite",
+              "created_at": "2026-07-06T10:45:14Z",
+              "executed_at": null,
+              "fallback_used": false,
+              "final_filename": "照片_本地资料_照片_20260706_766.jpg",
+              "item_id": "item_280c29891c2f4188",
+              "naming_basis": {
+                "core_feature": "本地资料",
+                "date": "20260706",
+                "display_name_zh": "照片_本地资料_照片_20260706_766",
+                "fallback_used": false,
+                "main_category": "照片",
+                "resolution_source": "ai_space+smart_naming+smart_classification",
+                "scene_or_attribute": "照片",
+                "sequence": "766",
+                "source": "smart_naming",
+                "suggested_filename_zh": "照片_本地资料_照片_20260706_766.jpg",
+                "used_fields": [
+                  "modality",
+                  "category_names",
+                  "object_labels",
+                  "person_attrs",
+                  "title_redacted"
+                ]
+              },
+              "operation": "move_and_rename",
+              "original_filename": "IMG_0001_20260706_184129.jpg",
+              "plan_id": "plan_4f468a8aedf84601",
+              "raw_path_returned": false,
+              "resolution_source": "ai_space+smart_naming+smart_classification",
+              "rollback": {
+                "operation": "move_and_rename",
+                "restore_policy": "restore_original_or_rollback_prefixed_if_conflict",
+                "source_rel": "Uploads/stage9_demo2/IMG_0001_20260706_184129.jpg",
+                "source_sha256": "a2a97f28c9fe98e7c25a0e508394ad0b9794660bf73d9b2cb533a60ca51f4566",
+                "target_rel": "AI整理/票据发票/照片_本地资料_照片_20260706_766.jpg",
+                "target_sha256": "a2a97f28c9fe98e7c25a0e508394ad0b9794660bf73d9b2cb533a60ca51f4566"
+              },
+              "rollback_available": true,
+              "rollback_json": null,
+              "source_hash": "04a0d2bc95a835a336790c69dbff9ba6df6f50d05e233f2702b63d8494adf7e4",
+              "source_rel": "Uploads/stage9_demo2/IMG_0001_20260706_184129.jpg",
+              "source_sha256": "a2a97f28c9fe98e7c25a0e508394ad0b9794660bf73d9b2cb533a60ca51f4566",
+              "status": "executed",
+              "suggested_filename_zh": "照片_本地资料_照片_20260706_766.jpg",
+              "target_category_zh": "票据发票",
+              "target_hash": "e9cde85587e50d7fd50e7b419bd9732a08fa7508e91ef26ad8a1b683ac09630c",
+              "target_rel": "AI整理/票据发票/照片_本地资料_照片_20260706_766.jpg",
+              "target_sha256": "a2a97f28c9fe98e7c25a0e508394ad0b9794660bf73d9b2cb533a60ca51f4566"
+            }
+          ],
+          "move_allowed_controlled": true,
+          "ok": true,
+          "overwrite_allowed": false,
+          "plan_id": "plan_4f468a8aedf84601",
+          "qwen_execution_authority": false,
+          "raw_path_returned": false,
+          "rename_allowed_controlled": true,
+          "rollback_manifest": "auto_organizer/plan_4f468a8aedf84601/rollback_manifest.json",
+          "schema": "digua_auto_organizer_execute_v1",
+          "status": "executed"
+        },
+        "status": 200
+      },
+      "name": "execute ok",
+      "ok": true
+    },
+    {
+      "detail": {
+        "elapsed_ms": 64.426,
+        "ok": true,
+        "payload": {
+          "cloud_private_raw_egress": false,
+          "error_count": 0,
+          "errors": [],
+          "items": [
+            {
+              "item_id": "item_280c29891c2f4188",
+              "restore_rel": "Uploads/stage9_demo2/IMG_0001_20260706_184129.jpg",
+              "status": "rolled_back",
+              "target_rel": "AI整理/票据发票/照片_本地资料_照片_20260706_766.jpg"
+            }
+          ],
+          "ok": true,
+          "plan_id": "plan_4f468a8aedf84601",
+          "qwen_execution_authority": false,
+          "raw_path_returned": false,
+          "rollback_manifest": "auto_organizer/plan_4f468a8aedf84601/rollback_manifest.json",
+          "rollback_verified": true,
+          "rolled_back_count": 1,
+          "schema": "digua_auto_organizer_rollback_v1"
+        },
+        "status": 200
+      },
+      "name": "rollback ok",
+      "ok": true
+    },
+    {
+      "detail": {
+        "cloud_private_raw_egress": false,
+        "delete_allowed": false,
+        "error_count": 0,
+        "errors": [],
+        "executed_count": 1,
+        "items": [
+          {
+            "ai_driven": true,
+            "asset_id": "mm_4fcb416795f0b157752f85df",
+            "category_zh": "票据发票",
+            "classification_basis": {
+              "ai_driven": true,
+              "category_names": [
+                "票据发票",
+                "旅行照片",
+                "人物照片",
+                "白色上衣",
+                "宠物照片",
+                "待整理",
+                "红色衣服",
+                "黑色衣服",
+                "宠物动物",
+                "猫咪照片",
+                "狗狗照片",
+                "风景旅行",
+                "车辆交通",
+                "电子设备",
+                "书本文具",
+                "食物聚会",
+                "合同资料",
+                "课程资料",
+                "截图资料"
+              ],
+              "category_zh": "票据发票",
+              "confidence": 0.75,
+              "evidence_refs": [
+                "asset:mm_4fcb416795f0b"
+              ],
+              "fallback_available": false,
+              "fallback_used": false,
+              "matched_asset_id": "mm_4fcb416795f0b157752f85df",
+              "modality": "image",
+              "object_labels": [],
+              "ocr_tags": [],
+              "person_attrs": [],
+              "resolution_source": "ai_space+smart_naming+smart_classification",
+              "source": "ai_space+smart_naming+smart_classification",
+              "source_priority": [
+                "asset_id",
+                "ai_space_asset_view",
+                "smart_asset_names",
+                "smart_category_memberships",
+                "yolo_labels",
+                "person_attribute",
+                "ocr_tags",
+                "subtitle_tags",
+                "media_index",
+                "fallback_filename_heuristic"
+              ],
+              "subtitle_tags": [],
+              "title_redacted": "IMG_0001_20260706_184129.jpg"
+            },
+            "conflict_policy": "auto_suffix_target_if_exists_no_overwrite",
+            "created_at": "2026-07-06T10:45:14Z",
+            "executed_at": null,
+            "fallback_used": false,
+            "final_filename": "照片_本地资料_照片_20260706_766.jpg",
+            "item_id": "item_280c29891c2f4188",
+            "naming_basis": {
+              "core_feature": "本地资料",
+              "date": "20260706",
+              "display_name_zh": "照片_本地资料_照片_20260706_766",
+              "fallback_used": false,
+              "main_category": "照片",
+              "resolution_source": "ai_space+smart_naming+smart_classification",
+              "scene_or_attribute": "照片",
+              "sequence": "766",
+              "source": "smart_naming",
+              "suggested_filename_zh": "照片_本地资料_照片_20260706_766.jpg",
+              "used_fields": [
+                "modality",
+                "category_names",
+                "object_labels",
+                "person_attrs",
+                "title_redacted"
+              ]
+            },
+            "operation": "move_and_rename",
+            "original_filename": "IMG_0001_20260706_184129.jpg",
+            "plan_id": "plan_4f468a8aedf84601",
+            "raw_path_returned": false,
+            "resolution_source": "ai_space+smart_naming+smart_classification",
+            "rollback": {
+              "operation": "move_and_rename",
+              "restore_policy": "restore_original_or_rollback_prefixed_if_conflict",
+              "source_rel": "Uploads/stage9_demo2/IMG_0001_20260706_184129.jpg",
+              "source_sha256": "a2a97f28c9fe98e7c25a0e508394ad0b9794660bf73d9b2cb533a60ca51f4566",
+              "target_rel": "AI整理/票据发票/照片_本地资料_照片_20260706_766.jpg",
+              "target_sha256": "a2a97f28c9fe98e7c25a0e508394ad0b9794660bf73d9b2cb533a60ca51f4566"
+            },
+            "rollback_available": true,
+            "rollback_json": null,
+            "source_hash": "04a0d2bc95a835a336790c69dbff9ba6df6f50d05e233f2702b63d8494adf7e4",
+            "source_rel": "Uploads/stage9_demo2/IMG_0001_20260706_184129.jpg",
+            "source_sha256": "a2a97f28c9fe98e7c25a0e508394ad0b9794660bf73d9b2cb533a60ca51f4566",
+            "status": "executed",
+            "suggested_filename_zh": "照片_本地资料_照片_20260706_766.jpg",
+            "target_category_zh": "票据发票",
+            "target_hash": "e9cde85587e50d7fd50e7b419bd9732a08fa7508e91ef26ad8a1b683ac09630c",
+            "target_rel": "AI整理/票据发票/照片_本地资料_照片_20260706_766.jpg",
+            "target_sha256": "a2a97f28c9fe98e7c25a0e508394ad0b9794660bf73d9b2cb533a60ca51f4566"
+          }
+        ],
+        "move_allowed_controlled": true,
+        "ok": true,
+        "overwrite_allowed": false,
+        "plan_id": "plan_4f468a8aedf84601",
+        "qwen_execution_authority": false,
+        "raw_path_returned": false,
+        "rename_allowed_controlled": true,
+        "rollback_manifest": "auto_organizer/plan_4f468a8aedf84601/rollback_manifest.json",
+        "schema": "digua_auto_organizer_execute_v1",
+        "status": "executed"
+      },
+      "name": "delete blocked",
+      "ok": true
+    },
+    {
+      "detail": {
+        "cloud_private_raw_egress": false,
+        "delete_allowed": false,
+        "error_count": 0,
+        "errors": [],
+        "executed_count": 1,
+        "items": [
+          {
+            "ai_driven": true,
+            "asset_id": "mm_4fcb416795f0b157752f85df",
+            "category_zh": "票据发票",
+            "classification_basis": {
+              "ai_driven": true,
+              "category_names": [
+                "票据发票",
+                "旅行照片",
+                "人物照片",
+                "白色上衣",
+                "宠物照片",
+                "待整理",
+                "红色衣服",
+                "黑色衣服",
+                "宠物动物",
+                "猫咪照片",
+                "狗狗照片",
+                "风景旅行",
+                "车辆交通",
+                "电子设备",
+                "书本文具",
+                "食物聚会",
+                "合同资料",
+                "课程资料",
+                "截图资料"
+              ],
+              "category_zh": "票据发票",
+              "confidence": 0.75,
+              "evidence_refs": [
+                "asset:mm_4fcb416795f0b"
+              ],
+              "fallback_available": false,
+              "fallback_used": false,
+              "matched_asset_id": "mm_4fcb416795f0b157752f85df",
+              "modality": "image",
+              "object_labels": [],
+              "ocr_tags": [],
+              "person_attrs": [],
+              "resolution_source": "ai_space+smart_naming+smart_classification",
+              "source": "ai_space+smart_naming+smart_classification",
+              "source_priority": [
+                "asset_id",
+                "ai_space_asset_view",
+                "smart_asset_names",
+                "smart_category_memberships",
+                "yolo_labels",
+                "person_attribute",
+                "ocr_tags",
+                "subtitle_tags",
+                "media_index",
+                "fallback_filename_heuristic"
+              ],
+              "subtitle_tags": [],
+              "title_redacted": "IMG_0001_20260706_184129.jpg"
+            },
+            "conflict_policy": "auto_suffix_target_if_exists_no_overwrite",
+            "created_at": "2026-07-06T10:45:14Z",
+            "executed_at": null,
+            "fallback_used": false,
+            "final_filename": "照片_本地资料_照片_20260706_766.jpg",
+            "item_id": "item_280c29891c2f4188",
+            "naming_basis": {
+              "core_feature": "本地资料",
+              "date": "20260706",
+              "display_name_zh": "照片_本地资料_照片_20260706_766",
+              "fallback_used": false,
+              "main_category": "照片",
+              "resolution_source": "ai_space+smart_naming+smart_classification",
+              "scene_or_attribute": "照片",
+              "sequence": "766",
+              "source": "smart_naming",
+              "suggested_filename_zh": "照片_本地资料_照片_20260706_766.jpg",
+              "used_fields": [
+                "modality",
+                "category_names",
+                "object_labels",
+                "person_attrs",
+                "title_redacted"
+              ]
+            },
+            "operation": "move_and_rename",
+            "original_filename": "IMG_0001_20260706_184129.jpg",
+            "plan_id": "plan_4f468a8aedf84601",
+            "raw_path_returned": false,
+            "resolution_source": "ai_space+smart_naming+smart_classification",
+            "rollback": {
+              "operation": "move_and_rename",
+              "restore_policy": "restore_original_or_rollback_prefixed_if_conflict",
+              "source_rel": "Uploads/stage9_demo2/IMG_0001_20260706_184129.jpg",
+              "source_sha256": "a2a97f28c9fe98e7c25a0e508394ad0b9794660bf73d9b2cb533a60ca51f4566",
+              "target_rel": "AI整理/票据发票/照片_本地资料_照片_20260706_766.jpg",
+              "target_sha256": "a2a97f28c9fe98e7c25a0e508394ad0b9794660bf73d9b2cb533a60ca51f4566"
+            },
+            "rollback_available": true,
+            "rollback_json": null,
+            "source_hash": "04a0d2bc95a835a336790c69dbff9ba6df6f50d05e233f2702b63d8494adf7e4",
+            "source_rel": "Uploads/stage9_demo2/IMG_0001_20260706_184129.jpg",
+            "source_sha256": "a2a97f28c9fe98e7c25a0e508394ad0b9794660bf73d9b2cb533a60ca51f4566",
+            "status": "executed",
+            "suggested_filename_zh": "照片_本地资料_照片_20260706_766.jpg",
+            "target_category_zh": "票据发票",
+            "target_hash": "e9cde85587e50d7fd50e7b419bd9732a08fa7508e91ef26ad8a1b683ac09630c",
+            "target_rel": "AI整理/票据发票/照片_本地资料_照片_20260706_766.jpg",
+            "target_sha256": "a2a97f28c9fe98e7c25a0e508394ad0b9794660bf73d9b2cb533a60ca51f4566"
+          }
+        ],
+        "move_allowed_controlled": true,
+        "ok": true,
+        "overwrite_allowed": false,
+        "plan_id": "plan_4f468a8aedf84601",
+        "qwen_execution_authority": false,
+        "raw_path_returned": false,
+        "rename_allowed_controlled": true,
+        "rollback_manifest": "auto_organizer/plan_4f468a8aedf84601/rollback_manifest.json",
+        "schema": "digua_auto_organizer_execute_v1",
+        "status": "executed"
+      },
+      "name": "overwrite blocked",
+      "ok": true
+    },
+    {
+      "detail": {
+        "cloud_private_raw_egress": false,
+        "delete_allowed": false,
+        "error_count": 0,
+        "errors": [],
+        "executed_count": 1,
+        "items": [
+          {
+            "ai_driven": true,
+            "asset_id": "mm_4fcb416795f0b157752f85df",
+            "category_zh": "票据发票",
+            "classification_basis": {
+              "ai_driven": true,
+              "category_names": [
+                "票据发票",
+                "旅行照片",
+                "人物照片",
+                "白色上衣",
+                "宠物照片",
+                "待整理",
+                "红色衣服",
+                "黑色衣服",
+                "宠物动物",
+                "猫咪照片",
+                "狗狗照片",
+                "风景旅行",
+                "车辆交通",
+                "电子设备",
+                "书本文具",
+                "食物聚会",
+                "合同资料",
+                "课程资料",
+                "截图资料"
+              ],
+              "category_zh": "票据发票",
+              "confidence": 0.75,
+              "evidence_refs": [
+                "asset:mm_4fcb416795f0b"
+              ],
+              "fallback_available": false,
+              "fallback_used": false,
+              "matched_asset_id": "mm_4fcb416795f0b157752f85df",
+              "modality": "image",
+              "object_labels": [],
+              "ocr_tags": [],
+              "person_attrs": [],
+              "resolution_source": "ai_space+smart_naming+smart_classification",
+              "source": "ai_space+smart_naming+smart_classification",
+              "source_priority": [
+                "asset_id",
+                "ai_space_asset_view",
+                "smart_asset_names",
+                "smart_category_memberships",
+                "yolo_labels",
+                "person_attribute",
+                "ocr_tags",
+                "subtitle_tags",
+                "media_index",
+                "fallback_filename_heuristic"
+              ],
+              "subtitle_tags": [],
+              "title_redacted": "IMG_0001_20260706_184129.jpg"
+            },
+            "conflict_policy": "auto_suffix_target_if_exists_no_overwrite",
+            "created_at": "2026-07-06T10:45:14Z",
+            "executed_at": null,
+            "fallback_used": false,
+            "final_filename": "照片_本地资料_照片_20260706_766.jpg",
+            "item_id": "item_280c29891c2f4188",
+            "naming_basis": {
+              "core_feature": "本地资料",
+              "date": "20260706",
+              "display_name_zh": "照片_本地资料_照片_20260706_766",
+              "fallback_used": false,
+              "main_category": "照片",
+              "resolution_source": "ai_space+smart_naming+smart_classification",
+              "scene_or_attribute": "照片",
+              "sequence": "766",
+              "source": "smart_naming",
+              "suggested_filename_zh": "照片_本地资料_照片_20260706_766.jpg",
+              "used_fields": [
+                "modality",
+                "category_names",
+                "object_labels",
+                "person_attrs",
+                "title_redacted"
+              ]
+            },
+            "operation": "move_and_rename",
+            "original_filename": "IMG_0001_20260706_184129.jpg",
+            "plan_id": "plan_4f468a8aedf84601",
+            "raw_path_returned": false,
+            "resolution_source": "ai_space+smart_naming+smart_classification",
+            "rollback": {
+              "operation": "move_and_rename",
+              "restore_policy": "restore_original_or_rollback_prefixed_if_conflict",
+              "source_rel": "Uploads/stage9_demo2/IMG_0001_20260706_184129.jpg",
+              "source_sha256": "a2a97f28c9fe98e7c25a0e508394ad0b9794660bf73d9b2cb533a60ca51f4566",
+              "target_rel": "AI整理/票据发票/照片_本地资料_照片_20260706_766.jpg",
+              "target_sha256": "a2a97f28c9fe98e7c25a0e508394ad0b9794660bf73d9b2cb533a60ca51f4566"
+            },
+            "rollback_available": true,
+            "rollback_json": null,
+            "source_hash": "04a0d2bc95a835a336790c69dbff9ba6df6f50d05e233f2702b63d8494adf7e4",
+            "source_rel": "Uploads/stage9_demo2/IMG_0001_20260706_184129.jpg",
+            "source_sha256": "a2a97f28c9fe98e7c25a0e508394ad0b9794660bf73d9b2cb533a60ca51f4566",
+            "status": "executed",
+            "suggested_filename_zh": "照片_本地资料_照片_20260706_766.jpg",
+            "target_category_zh": "票据发票",
+            "target_hash": "e9cde85587e50d7fd50e7b419bd9732a08fa7508e91ef26ad8a1b683ac09630c",
+            "target_rel": "AI整理/票据发票/照片_本地资料_照片_20260706_766.jpg",
+            "target_sha256": "a2a97f28c9fe98e7c25a0e508394ad0b9794660bf73d9b2cb533a60ca51f4566"
+          }
+        ],
+        "move_allowed_controlled": true,
+        "ok": true,
+        "overwrite_allowed": false,
+        "plan_id": "plan_4f468a8aedf84601",
+        "qwen_execution_authority": false,
+        "raw_path_returned": false,
+        "rename_allowed_controlled": true,
+        "rollback_manifest": "auto_organizer/plan_4f468a8aedf84601/rollback_manifest.json",
+        "schema": "digua_auto_organizer_execute_v1",
+        "status": "executed"
+      },
+      "name": "qwen no execution authority",
+      "ok": true
+    },
+    {
+      "detail": "redacted",
+      "name": "no raw path in flow",
+      "ok": true
+    }
+  ],
+  "evidence": {
+    "asset_id": "mm_4fcb416795f0b157752f85df",
+    "base_url": "http://127.0.0.1:8765",
+    "fixture_only_for_ci": false,
+    "flow": {
+      "ai_space_queries": {
+        "computer": {
+          "elapsed_ms": 42.782,
+          "ok": true,
+          "payload": {
+            "cloud_used": false,
+            "ok": true,
+            "query_redacted": "有电脑的照片",
+            "raw_path_returned": false,
+            "results": [],
+            "schema": "digua_ai_space_v1"
+          },
+          "status": 200
+        },
+        "pet": {
+          "elapsed_ms": 43.649,
+          "ok": true,
+          "payload": {
+            "cloud_used": false,
+            "ok": true,
+            "query_redacted": "宠物照片",
+            "raw_path_returned": false,
+            "results": [
+              {
+                "asset_id": "mm_4fcb416795f0b157752f85df",
+                "asset_kind": "photo",
+                "capture_time": null,
+                "category_names": [
+                  "书本文具",
+                  "人物照片",
+                  "合同资料",
+                  "宠物动物",
+                  "宠物照片",
+                  "待整理",
+                  "截图资料",
+                  "旅行照片",
+                  "狗狗照片",
+                  "猫咪照片",
+                  "电子设备",
+                  "白色上衣",
+                  "票据发票",
+                  "红色衣服",
+                  "课程资料",
+                  "车辆交通",
+                  "风景旅行",
+                  "食物聚会",
+                  "黑色衣服"
+                ],
+                "display_name_zh": "照片_本地资料_照片_20260706_766",
+                "evidence_refs": [
+                  "asset:mm_4fcb416795f0b"
+                ],
+                "modality": "image",
+                "object_labels": [],
+                "ocr_status": "none",
+                "person_attrs": [],
+                "privacy_level": "private_local_only",
+                "smart_naming": {
+                  "display_name_zh": "照片_本地资料_照片_20260706_766",
+                  "risk_flags": {
+                    "age_gender_race_emotion_health_inferred": false,
+                    "cloud_used": false,
+                    "face_recognition_used": false,
+                    "identity_inference_used": false,
+                    "physical_file_renamed": false,
+                    "sensitive_number_removed": true
+                  },
+                  "suggested_filename_zh": "照片_本地资料_照片_20260706_766.jpg"
+                },
+                "suggested_filename_zh": "照片_本地资料_照片_20260706_766.jpg",
+                "summary_redacted": "Local indexed photo. Detected: no local object labels. OCR status: none. Summary is symbolic, not VLM caption.",
+                "time_bucket": "today",
+                "title_redacted": "IMG_0001_20260706_184129.jpg",
+                "transcript_status": "none",
+                "updated_at": "2026-07-06T10:45:02Z"
+              },
+              {
+                "asset_id": "mm_57d887fa11149ab79bcb4849",
+                "asset_kind": "photo",
+                "capture_time": null,
+                "category_names": [
+                  "书本文具",
+                  "人物照片",
+                  "合同资料",
+                  "宠物动物",
+                  "宠物照片",
+                  "待整理",
+                  "截图资料",
+                  "旅行照片",
+                  "狗狗照片",
+                  "猫咪照片",
+                  "电子设备",
+                  "白色上衣",
+                  "票据发票",
+                  "红色衣服",
+                  "课程资料",
+                  "车辆交通",
+                  "风景旅行",
+                  "食物聚会",
+                  "黑色衣服"
+                ],
+                "display_name_zh": "照片_本地资料_照片_20260706_258",
+                "evidence_refs": [
+                  "asset:mm_57d887fa11149"
+                ],
+                "modality": "image",
+                "object_labels": [],
+                "ocr_status": "none",
+                "person_attrs": [],
+                "privacy_level": "private_local_only",
+                "smart_naming": {
+                  "display_name_zh": "照片_本地资料_照片_20260706_258",
+                  "risk_flags": {
+                    "age_gender_race_emotion_health_inferred": false,
+                    "cloud_used": false,
+                    "face_recognition_used": false,
+                    "identity_inference_used": false,
+                    "physical_file_renamed": false,
+                    "sensitive_number_removed": true
+                  },
+                  "suggested_filename_zh": "照片_本地资料_照片_20260706_258.jpg"
+                },
+                "suggested_filename_zh": "照片_本地资料_照片_20260706_258.jpg",
+                "summary_redacted": "Local indexed photo. Detected: no local object labels. OCR status: none. Summary is symbolic, not VLM caption.",
+                "time_bucket": "today",
+                "title_redacted": "IMG_0001_20260706_183711.jpg",
+                "transcript_status": "none",
+                "updated_at": "2026-07-06T10:45:02Z"
+              },
+              {
+                "asset_id": "mm_582e4658c30ab2fc729855c9",
+                "asset_kind": "photo",
+                "capture_time": null,
+                "category_names": [
+                  "书本文具",
+                  "人物照片",
+                  "合同资料",
+                  "宠物动物",
+                  "宠物照片",
+                  "待整理",
+                  "截图资料",
+                  "旅行照片",
+                  "狗狗照片",
+                  "猫咪照片",
+                  "电子设备",
+                  "白色上衣",
+                  "票据发票",
+                  "红色衣服",
+                  "课程资料",
+                  "车辆交通",
+                  "风景旅行",
+                  "食物聚会",
+                  "黑色衣服"
+                ],
+                "display_name_zh": "照片_本地资料_照片_20260706_788",
+                "evidence_refs": [
+                  "asset:mm_582e4658c30ab"
+                ],
+                "modality": "image",
+                "object_labels": [],
+                "ocr_status": "none",
+                "person_attrs": [],
+                "privacy_level": "private_local_only",
+                "smart_naming": {
+                  "display_name_zh": "照片_本地资料_照片_20260706_788",
+                  "risk_flags": {
+                    "age_gender_race_emotion_health_inferred": false,
+                    "cloud_used": false,
+                    "face_recognition_used": false,
+                    "identity_inference_used": false,
+                    "physical_file_renamed": false,
+                    "sensitive_number_removed": true
+                  },
+                  "suggested_filename_zh": "照片_本地资料_照片_20260706_788.jpg"
+                },
+                "suggested_filename_zh": "照片_本地资料_照片_20260706_788.jpg",
+                "summary_redacted": "Local indexed photo. Detected: no local object labels. OCR status: none. Summary is symbolic, not VLM caption.",
+                "time_bucket": "today",
+                "title_redacted": "IMG_0001_20260706_174811.jpg",
+                "transcript_status": "none",
+                "updated_at": "2026-07-06T10:45:02Z"
+              },
+              {
+                "asset_id": "mm_5f4359413319a5cec79abb54",
+                "asset_kind": "photo",
+                "capture_time": null,
+                "category_names": [
+                  "书本文具",
+                  "人物照片",
+                  "合同资料",
+                  "宠物动物",
+                  "宠物照片",
+                  "待整理",
+                  "截图资料",
+                  "旅行照片",
+                  "狗狗照片",
+                  "猫咪照片",
+                  "电子设备",
+                  "白色上衣",
+                  "票据发票",
+                  "红色衣服",
+                  "课程资料",
+                  "车辆交通",
+                  "风景旅行",
+                  "食物聚会",
+                  "黑色衣服"
+                ],
+                "display_name_zh": "照片_本地资料_照片_20260706_283",
+                "evidence_refs": [
+                  "asset:mm_5f4359413319a"
+                ],
+                "modality": "image",
+                "object_labels": [],
+                "ocr_status": "none",
+                "person_attrs": [],
+                "privacy_level": "private_local_only",
+                "smart_naming": {
+                  "display_name_zh": "照片_本地资料_照片_20260706_283",
+                  "risk_flags": {
+                    "age_gender_race_emotion_health_inferred": false,
+                    "cloud_used": false,
+                    "face_recognition_used": false,
+                    "identity_inference_used": false,
+                    "physical_file_renamed": false,
+                    "sensitive_number_removed": true
+                  },
+                  "suggested_filename_zh": "照片_本地资料_照片_20260706_283.jpg"
+                },
+                "suggested_filename_zh": "照片_本地资料_照片_20260706_283.jpg",
+                "summary_redacted": "Local indexed photo. Detected: no local object labels. OCR status: none. Summary is symbolic, not VLM caption.",
+                "time_bucket": "today",
+                "title_redacted": "IMG_0001_20260706_174134.jpg",
+                "transcript_status": "none",
+                "updated_at": "2026-07-06T10:45:02Z"
+              },
+              {
+                "asset_id": "mm_aba7e0655e1c679ca510930a",
+                "asset_kind": "photo",
+                "capture_time": null,
+                "category_names": [
+                  "书本文具",
+                  "人物照片",
+                  "合同资料",
+                  "宠物动物",
+                  "宠物照片",
+                  "待整理",
+                  "截图资料",
+                  "旅行照片",
+                  "狗狗照片",
+                  "猫咪照片",
+                  "电子设备",
+                  "白色上衣",
+                  "票据发票",
+                  "红色衣服",
+                  "课程资料",
+                  "车辆交通",
+                  "风景旅行",
+                  "食物聚会",
+                  "黑色衣服"
+                ],
+                "display_name_zh": "照片_本地资料_照片_20260706_240",
+                "evidence_refs": [
+                  "asset:mm_aba7e0655e1c6"
+                ],
+                "modality": "image",
+                "object_labels": [],
+                "ocr_status": "none",
+                "person_attrs": [],
+                "privacy_level": "private_local_only",
+                "smart_naming": {
+                  "display_name_zh": "照片_本地资料_照片_20260706_240",
+                  "risk_flags": {
+                    "age_gender_race_emotion_health_inferred": false,
+                    "cloud_used": false,
+                    "face_recognition_used": false,
+                    "identity_inference_used": false,
+                    "physical_file_renamed": false,
+                    "sensitive_number_removed": true
+                  },
+                  "suggested_filename_zh": "照片_本地资料_照片_20260706_240.jpg"
+                },
+                "suggested_filename_zh": "照片_本地资料_照片_20260706_240.jpg",
+                "summary_redacted": "Local indexed photo. Detected: no local object labels. OCR status: none. Summary is symbolic, not VLM caption.",
+                "time_bucket": "today",
+                "title_redacted": "IMG_0001_20260706_172922.jpg",
+                "transcript_status": "none",
+                "updated_at": "2026-07-06T10:45:02Z"
+              },
+              {
+                "asset_id": "mm_6f0a6ed3a381960eb05e91f0",
+                "asset_kind": "photo",
+                "capture_time": null,
+                "category_names": [
+                  "书本文具",
+                  "人物照片",
+                  "合同资料",
+                  "宠物动物",
+                  "宠物照片",
+                  "待整理",
+                  "截图资料",
+                  "旅行照片",
+                  "狗狗照片",
+                  "猫咪照片",
+                  "电子设备",
+                  "白色上衣",
+                  "票据发票",
+                  "红色衣服",
+                  "课程资料",
+                  "车辆交通",
+                  "风景旅行",
+                  "食物聚会",
+                  "黑色衣服"
+                ],
+                "display_name_zh": "照片_本地资料_照片_20260706_796",
+                "evidence_refs": [
+                  "asset:mm_6f0a6ed3a3819"
+                ],
+                "modality": "image",
+                "object_labels": [],
+                "ocr_status": "none",
+                "person_attrs": [],
+                "privacy_level": "private_local_only",
+                "smart_naming": {
+                  "display_name_zh": "照片_本地资料_照片_20260706_796",
+                  "risk_flags": {
+                    "age_gender_race_emotion_health_inferred": false,
+                    "cloud_used": false,
+                    "face_recognition_used": false,
+                    "identity_inference_used": false,
+                    "physical_file_renamed": false,
+                    "sensitive_number_removed": true
+                  },
+                  "suggested_filename_zh": "照片_本地资料_照片_20260706_796.jpg"
+                },
+                "suggested_filename_zh": "照片_本地资料_照片_20260706_796.jpg",
+                "summary_redacted": "Local indexed photo. Detected: no local object labels. OCR status: none. Summary is symbolic, not VLM caption.",
+                "time_bucket": "today",
+                "title_redacted": "IMG_0001_20260706_172643.jpg",
+                "transcript_status": "none",
+                "updated_at": "2026-07-06T10:45:02Z"
+              },
+              {
+                "asset_id": "yasset_8a3babf602a00ac012949a05",
+                "asset_kind": "photo",
+                "capture_time": null,
+                "category_names": [
+                  "书本文具",
+                  "人物照片",
+                  "合同资料",
+                  "宠物动物",
+                  "宠物照片",
+                  "待整理",
+                  "截图资料",
+                  "旅行照片",
+                  "狗狗照片",
+                  "猫咪照片",
+                  "电子设备",
+                  "白色上衣",
+                  "票据发票",
+                  "红色衣服",
+                  "课程资料",
+                  "车辆交通",
+                  "风景旅行",
+                  "食物聚会",
+                  "黑色衣服"
+                ],
+                "display_name_zh": "照片_本地资料_照片_20260706_248",
+                "evidence_refs": [
+                  "asset:yasset_8a3babf60"
+                ],
+                "modality": "image",
+                "object_labels": [],
+                "ocr_status": "none",
+                "person_attrs": [],
+                "privacy_level": "private_local_only",
+                "smart_naming": {
+                  "display_name_zh": "照片_本地资料_照片_20260706_248",
+                  "risk_flags": {
+                    "age_gender_race_emotion_health_inferred": false,
+                    "cloud_used": false,
+                    "face_recognition_used": false,
+                    "identity_inference_used": false,
+                    "physical_file_renamed": false,
+                    "sensitive_number_removed": true
+                  },
+                  "suggested_filename_zh": "照片_本地资料_照片_20260706_248"
+                },
+                "suggested_filename_zh": "照片_本地资料_照片_20260706_248",
+                "summary_redacted": "Local indexed photo. Detected: no local object labels. OCR status: none. Summary is symbolic, not VLM caption.",
+                "time_bucket": "today",
+                "title_redacted": "IMG 0001 20260706 184129",
+                "transcript_status": "none",
+                "updated_at": "2026-07-06T10:45:02Z"
+              },
+              {
+                "asset_id": "yasset_69a73ad6a4a978a71c170369",
+                "asset_kind": "photo",
+                "capture_time": null,
+                "category_names": [
+                  "书本文具",
+                  "人物照片",
+                  "合同资料",
+                  "宠物动物",
+                  "宠物照片",
+                  "待整理",
+                  "截图资料",
+                  "旅行照片",
+                  "狗狗照片",
+                  "猫咪照片",
+                  "电子设备",
+                  "白色上衣",
+                  "票据发票",
+                  "红色衣服",
+                  "课程资料",
+                  "车辆交通",
+                  "风景旅行",
+                  "食物聚会",
+                  "黑色衣服"
+                ],
+                "display_name_zh": "照片_本地资料_照片_20260706_108",
+                "evidence_refs": [
+                  "asset:yasset_69a73ad6a"
+                ],
+                "modality": "image",
+                "object_labels": [],
+                "ocr_status": "none",
+                "person_attrs": [],
+                "privacy_level": "private_local_only",
+                "smart_naming": {
+                  "display_name_zh": "照片_本地资料_照片_20260706_108",
+                  "risk_flags": {
+                    "age_gender_race_emotion_health_inferred": false,
+                    "cloud_used": false,
+                    "face_recognition_used": false,
+                    "identity_inference_used": false,
+                    "physical_file_renamed": false,
+                    "sensitive_number_removed": true
+                  },
+                  "suggested_filename_zh": "照片_本地资料_照片_20260706_108"
+                },
+                "suggested_filename_zh": "照片_本地资料_照片_20260706_108",
+                "summary_redacted": "Local indexed photo. Detected: no local object labels. OCR status: none. Summary is symbolic, not VLM caption.",
+                "time_bucket": "today",
+                "title_redacted": "IMG 0001 20260706 183711",
+                "transcript_status": "none",
+                "updated_at": "2026-07-06T10:45:02Z"
+              }
+            ],
+            "schema": "digua_ai_space_v1"
+          },
+          "status": 200
+        },
+        "white_person": {
+          "elapsed_ms": 43.46,
+          "ok": true,
+          "payload": {
+            "cloud_used": false,
+            "ok": true,
+            "query_redacted": "穿白色上衣的人",
+            "raw_path_returned": false,
+            "results": [],
+            "schema": "digua_ai_space_v1"
+          },
+          "status": 200
+        }
+      },
+      "approve": {
+        "elapsed_ms": 43.045,
+        "ok": true,
+        "payload": {
+          "approval_token": "7dc454520dcf77d03856333b3a36cb559f05bcaf80c9fadaae66dfadc0a57d1e",
+          "cloud_private_raw_egress": false,
+          "ok": true,
+          "plan_id": "plan_4f468a8aedf84601",
+          "qwen_execution_authority": false,
+          "raw_path_returned": false,
+          "status": "approved"
+        },
+        "status": 200
+      },
+      "dry_run": {
+        "elapsed_ms": 41.157,
+        "ok": true,
+        "payload": {
+          "cloud_private_raw_egress": false,
+          "items": [
+            {
+              "ai_driven": true,
+              "asset_id": "mm_4fcb416795f0b157752f85df",
+              "category_zh": "票据发票",
+              "classification_basis": {
+                "ai_driven": true,
+                "category_names": [
+                  "票据发票",
+                  "旅行照片",
+                  "人物照片",
+                  "白色上衣",
+                  "宠物照片",
+                  "待整理",
+                  "红色衣服",
+                  "黑色衣服",
+                  "宠物动物",
+                  "猫咪照片",
+                  "狗狗照片",
+                  "风景旅行",
+                  "车辆交通",
+                  "电子设备",
+                  "书本文具",
+                  "食物聚会",
+                  "合同资料",
+                  "课程资料",
+                  "截图资料"
+                ],
+                "category_zh": "票据发票",
+                "confidence": 0.75,
+                "evidence_refs": [
+                  "asset:mm_4fcb416795f0b"
+                ],
+                "fallback_available": false,
+                "fallback_used": false,
+                "matched_asset_id": "mm_4fcb416795f0b157752f85df",
+                "modality": "image",
+                "object_labels": [],
+                "ocr_tags": [],
+                "person_attrs": [],
+                "resolution_source": "ai_space+smart_naming+smart_classification",
+                "source": "ai_space+smart_naming+smart_classification",
+                "source_priority": [
+                  "asset_id",
+                  "ai_space_asset_view",
+                  "smart_asset_names",
+                  "smart_category_memberships",
+                  "yolo_labels",
+                  "person_attribute",
+                  "ocr_tags",
+                  "subtitle_tags",
+                  "media_index",
+                  "fallback_filename_heuristic"
+                ],
+                "subtitle_tags": [],
+                "title_redacted": "IMG_0001_20260706_184129.jpg"
+              },
+              "conflict_policy": "auto_suffix_target_if_exists_no_overwrite",
+              "created_at": "2026-07-06T10:45:14Z",
+              "executed_at": null,
+              "fallback_used": false,
+              "final_filename": "照片_本地资料_照片_20260706_766.jpg",
+              "item_id": "item_280c29891c2f4188",
+              "naming_basis": {
+                "core_feature": "本地资料",
+                "date": "20260706",
+                "display_name_zh": "照片_本地资料_照片_20260706_766",
+                "fallback_used": false,
+                "main_category": "照片",
+                "resolution_source": "ai_space+smart_naming+smart_classification",
+                "scene_or_attribute": "照片",
+                "sequence": "766",
+                "source": "smart_naming",
+                "suggested_filename_zh": "照片_本地资料_照片_20260706_766.jpg",
+                "used_fields": [
+                  "modality",
+                  "category_names",
+                  "object_labels",
+                  "person_attrs",
+                  "title_redacted"
+                ]
+              },
+              "operation": "move_and_rename",
+              "original_filename": "IMG_0001_20260706_184129.jpg",
+              "plan_id": "plan_4f468a8aedf84601",
+              "raw_path_returned": false,
+              "resolution_source": "ai_space+smart_naming+smart_classification",
+              "rollback_available": true,
+              "source_exists": true,
+              "source_hash": "04a0d2bc95a835a336790c69dbff9ba6df6f50d05e233f2702b63d8494adf7e4",
+              "source_rel": "Uploads/stage9_demo2/IMG_0001_20260706_184129.jpg",
+              "source_sha256": "a2a97f28c9fe98e7c25a0e508394ad0b9794660bf73d9b2cb533a60ca51f4566",
+              "source_sha256_current": "a2a97f28c9fe98e7c25a0e508394ad0b9794660bf73d9b2cb533a60ca51f4566",
+              "status": "planned",
+              "suggested_filename_zh": "照片_本地资料_照片_20260706_766.jpg",
+              "target_category_zh": "票据发票",
+              "target_exists": false,
+              "target_hash": "e9cde85587e50d7fd50e7b419bd9732a08fa7508e91ef26ad8a1b683ac09630c",
+              "target_rel": "AI整理/票据发票/照片_本地资料_照片_20260706_766.jpg",
+              "would_execute": true
+            }
+          ],
+          "ok": true,
+          "plan_id": "plan_4f468a8aedf84601",
+          "qwen_execution_authority": false,
+          "raw_path_returned": false,
+          "schema": "digua_auto_organizer_dry_run_v1"
+        },
+        "status": 200
+      },
+      "execute": {
+        "elapsed_ms": 65.338,
+        "ok": true,
+        "payload": {
+          "cloud_private_raw_egress": false,
+          "delete_allowed": false,
+          "error_count": 0,
+          "errors": [],
+          "executed_count": 1,
+          "items": [
+            {
+              "ai_driven": true,
+              "asset_id": "mm_4fcb416795f0b157752f85df",
+              "category_zh": "票据发票",
+              "classification_basis": {
+                "ai_driven": true,
+                "category_names": [
+                  "票据发票",
+                  "旅行照片",
+                  "人物照片",
+                  "白色上衣",
+                  "宠物照片",
+                  "待整理",
+                  "红色衣服",
+                  "黑色衣服",
+                  "宠物动物",
+                  "猫咪照片",
+                  "狗狗照片",
+                  "风景旅行",
+                  "车辆交通",
+                  "电子设备",
+                  "书本文具",
+                  "食物聚会",
+                  "合同资料",
+                  "课程资料",
+                  "截图资料"
+                ],
+                "category_zh": "票据发票",
+                "confidence": 0.75,
+                "evidence_refs": [
+                  "asset:mm_4fcb416795f0b"
+                ],
+                "fallback_available": false,
+                "fallback_used": false,
+                "matched_asset_id": "mm_4fcb416795f0b157752f85df",
+                "modality": "image",
+                "object_labels": [],
+                "ocr_tags": [],
+                "person_attrs": [],
+                "resolution_source": "ai_space+smart_naming+smart_classification",
+                "source": "ai_space+smart_naming+smart_classification",
+                "source_priority": [
+                  "asset_id",
+                  "ai_space_asset_view",
+                  "smart_asset_names",
+                  "smart_category_memberships",
+                  "yolo_labels",
+                  "person_attribute",
+                  "ocr_tags",
+                  "subtitle_tags",
+                  "media_index",
+                  "fallback_filename_heuristic"
+                ],
+                "subtitle_tags": [],
+                "title_redacted": "IMG_0001_20260706_184129.jpg"
+              },
+              "conflict_policy": "auto_suffix_target_if_exists_no_overwrite",
+              "created_at": "2026-07-06T10:45:14Z",
+              "executed_at": null,
+              "fallback_used": false,
+              "final_filename": "照片_本地资料_照片_20260706_766.jpg",
+              "item_id": "item_280c29891c2f4188",
+              "naming_basis": {
+                "core_feature": "本地资料",
+                "date": "20260706",
+                "display_name_zh": "照片_本地资料_照片_20260706_766",
+                "fallback_used": false,
+                "main_category": "照片",
+                "resolution_source": "ai_space+smart_naming+smart_classification",
+                "scene_or_attribute": "照片",
+                "sequence": "766",
+                "source": "smart_naming",
+                "suggested_filename_zh": "照片_本地资料_照片_20260706_766.jpg",
+                "used_fields": [
+                  "modality",
+                  "category_names",
+                  "object_labels",
+                  "person_attrs",
+                  "title_redacted"
+                ]
+              },
+              "operation": "move_and_rename",
+              "original_filename": "IMG_0001_20260706_184129.jpg",
+              "plan_id": "plan_4f468a8aedf84601",
+              "raw_path_returned": false,
+              "resolution_source": "ai_space+smart_naming+smart_classification",
+              "rollback": {
+                "operation": "move_and_rename",
+                "restore_policy": "restore_original_or_rollback_prefixed_if_conflict",
+                "source_rel": "Uploads/stage9_demo2/IMG_0001_20260706_184129.jpg",
+                "source_sha256": "a2a97f28c9fe98e7c25a0e508394ad0b9794660bf73d9b2cb533a60ca51f4566",
+                "target_rel": "AI整理/票据发票/照片_本地资料_照片_20260706_766.jpg",
+                "target_sha256": "a2a97f28c9fe98e7c25a0e508394ad0b9794660bf73d9b2cb533a60ca51f4566"
+              },
+              "rollback_available": true,
+              "rollback_json": null,
+              "source_hash": "04a0d2bc95a835a336790c69dbff9ba6df6f50d05e233f2702b63d8494adf7e4",
+              "source_rel": "Uploads/stage9_demo2/IMG_0001_20260706_184129.jpg",
+              "source_sha256": "a2a97f28c9fe98e7c25a0e508394ad0b9794660bf73d9b2cb533a60ca51f4566",
+              "status": "executed",
+              "suggested_filename_zh": "照片_本地资料_照片_20260706_766.jpg",
+              "target_category_zh": "票据发票",
+              "target_hash": "e9cde85587e50d7fd50e7b419bd9732a08fa7508e91ef26ad8a1b683ac09630c",
+              "target_rel": "AI整理/票据发票/照片_本地资料_照片_20260706_766.jpg",
+              "target_sha256": "a2a97f28c9fe98e7c25a0e508394ad0b9794660bf73d9b2cb533a60ca51f4566"
+            }
+          ],
+          "move_allowed_controlled": true,
+          "ok": true,
+          "overwrite_allowed": false,
+          "plan_id": "plan_4f468a8aedf84601",
+          "qwen_execution_authority": false,
+          "raw_path_returned": false,
+          "rename_allowed_controlled": true,
+          "rollback_manifest": "auto_organizer/plan_4f468a8aedf84601/rollback_manifest.json",
+          "schema": "digua_auto_organizer_execute_v1",
+          "status": "executed"
+        },
+        "status": 200
+      },
+      "multimodal": {
+        "computer": {
+          "elapsed_ms": 2321.494,
+          "ok": true,
+          "payload": {
+            "degraded": false,
+            "degraded_reason": null,
+            "feature_flags": {
+              "asr_enabled": false,
+              "audio_transcript_enabled": false,
+              "biometric_recognition_enabled": false,
+              "cloud_asr_enabled": false,
+              "cloud_ocr_enabled": false,
+              "cloud_vision_enabled": false,
+              "destructive_actions_enabled": false,
+              "document_embedding_enabled": false,
+              "face_identification_enabled": false,
+              "image_embedding_enabled": true,
+              "image_embedding_required_for_delivery": true,
+              "local_asr_required_for_delivery": true,
+              "local_vlm_caption_enabled": false,
+              "min_live_image_embeddings": 5,
+              "multimodal_metadata_index_enabled": true,
+              "multimodal_search_enabled": true,
+              "ocr_enabled": false,
+              "production_semantic_model_required": true,
+              "qwen_tool_execution_enabled": false,
+              "sensitive_attribute_inference_enabled": false,
+              "subtitle_extraction_enabled": true,
+              "symbolic_caption_enabled": true,
+              "vector_extension_enabled": "auto",
+              "vector_numpy_fallback_enabled": true,
+              "video_keyframe_embedding_enabled": false,
+              "video_keyframe_enabled": false
+            },
+            "ok": true,
+            "privacy": {
+              "cloud_used": false,
+              "private_leak_count": 0,
+              "raw_path_returned": false
+            },
+            "query_redacted": "找有电脑的照片",
+            "results": [
+              {
+                "asset_id": "mm_6f0a6ed3a381960eb05e91f0",
+                "evidence_ref": "mm_ev_69dbec4beae60cf014",
+                "matched_by": [
+                  "image_embedding",
+                  "metadata"
+                ],
+                "modality": "image",
+                "path_hash": "3ce41b105d11c8291900e1b84e636e65",
+                "privacy_level": "private_local_only",
+                "rank": 1,
+                "score": 0.587509,
+                "score_components": {
+                  "fts": null,
+                  "image_embedding": 0.20596444606781006,
+                  "metadata": 0.35
+                },
+                "snippet_redacted": "",
+                "thumbnail_url": "/api/multimodal-index/item/mm_6f0a6ed3a381960eb05e91f0",
+                "timestamp_sec": null,
+                "title_redacted": "IMG_0001_20260706_172643.jpg"
+              },
+              {
+                "asset_id": "mm_aba7e0655e1c679ca510930a",
+                "evidence_ref": "mm_ev_82bef3fcef1cfcf056",
+                "matched_by": [
+                  "image_embedding",
+                  "metadata"
+                ],
+                "modality": "image",
+                "path_hash": "14140bbdff5acb60aef7d2362b06bd67",
+                "privacy_level": "private_local_only",
+                "rank": 2,
+                "score": 0.412478,
+                "score_components": {
+                  "fts": null,
+                  "image_embedding": 0.20596444606781006,
+                  "metadata": 0.175
+                },
+                "snippet_redacted": "",
+                "thumbnail_url": "/api/multimodal-index/item/mm_aba7e0655e1c679ca510930a",
+                "timestamp_sec": null,
+                "title_redacted": "IMG_0001_20260706_172922.jpg"
+              },
+              {
+                "asset_id": "mm_5f4359413319a5cec79abb54",
+                "evidence_ref": "mm_ev_009bcbe11bac5ac89a",
+                "matched_by": [
+                  "image_embedding",
+                  "metadata"
+                ],
+                "modality": "image",
+                "path_hash": "e868b2dfedad30dade5582b7b8fb8e9c",
+                "privacy_level": "private_local_only",
+                "rank": 3,
+                "score": 0.354129,
+                "score_components": {
+                  "fts": null,
+                  "image_embedding": 0.20596444606781006,
+                  "metadata": 0.11666666666666665
+                },
+                "snippet_redacted": "",
+                "thumbnail_url": "/api/multimodal-index/item/mm_5f4359413319a5cec79abb54",
+                "timestamp_sec": null,
+                "title_redacted": "IMG_0001_20260706_174134.jpg"
+              },
+              {
+                "asset_id": "mm_582e4658c30ab2fc729855c9",
+                "evidence_ref": "mm_ev_2c5733a17e7d070a0e",
+                "matched_by": [
+                  "image_embedding",
+                  "metadata"
+                ],
+                "modality": "image",
+                "path_hash": "58f6ce614a79b5ba8bbd369555093bbf",
+                "privacy_level": "private_local_only",
+                "rank": 4,
+                "score": 0.324962,
+                "score_components": {
+                  "fts": null,
+                  "image_embedding": 0.20596444606781006,
+                  "metadata": 0.0875
+                },
+                "snippet_redacted": "",
+                "thumbnail_url": "/api/multimodal-index/item/mm_582e4658c30ab2fc729855c9",
+                "timestamp_sec": null,
+                "title_redacted": "IMG_0001_20260706_174811.jpg"
+              },
+              {
+                "asset_id": "mm_57d887fa11149ab79bcb4849",
+                "evidence_ref": "mm_ev_72b18604a5c1bf9ca7",
+                "matched_by": [
+                  "image_embedding",
+                  "metadata"
+                ],
+                "modality": "image",
+                "path_hash": "a739f578a54e98aa61c93004055b3741",
+                "privacy_level": "private_local_only",
+                "rank": 5,
+                "score": 0.307478,
+                "score_components": {
+                  "fts": null,
+                  "image_embedding": 0.20596444606781006,
+                  "metadata": 0.06999999999999999
+                },
+                "snippet_redacted": "",
+                "thumbnail_url": "/api/multimodal-index/item/mm_57d887fa11149ab79bcb4849",
+                "timestamp_sec": null,
+                "title_redacted": "IMG_0001_20260706_183711.jpg"
+              },
+              {
+                "asset_id": "mm_4fcb416795f0b157752f85df",
+                "evidence_ref": "mm_ev_6290260c2f78ad8557",
+                "matched_by": [
+                  "image_embedding",
+                  "metadata"
+                ],
+                "modality": "image",
+                "path_hash": "ad024d1e5784713b1893c80d11c8dc31",
+                "privacy_level": "private_local_only",
+                "rank": 6,
+                "score": 0.295843,
+                "score_components": {
+                  "fts": null,
+                  "image_embedding": 0.20596444606781006,
+                  "metadata": 0.05833333333333333
+                },
+                "snippet_redacted": "",
+                "thumbnail_url": "/api/multimodal-index/item/mm_4fcb416795f0b157752f85df",
+                "timestamp_sec": null,
+                "title_redacted": "IMG_0001_20260706_184129.jpg"
+              }
+            ],
+            "retrieval_mode": "fts_first_plus_image_embedding",
+            "run_id": "mm_run_1849374e5910451d",
+            "trace_id": "mm_trace_0dd557b53f384a19",
+            "yolo_object_results": 0
+          },
+          "status": 200
+        },
+        "pet": {
+          "elapsed_ms": 2114.391,
+          "ok": true,
+          "payload": {
+            "degraded": false,
+            "degraded_reason": null,
+            "feature_flags": {
+              "asr_enabled": false,
+              "audio_transcript_enabled": false,
+              "biometric_recognition_enabled": false,
+              "cloud_asr_enabled": false,
+              "cloud_ocr_enabled": false,
+              "cloud_vision_enabled": false,
+              "destructive_actions_enabled": false,
+              "document_embedding_enabled": false,
+              "face_identification_enabled": false,
+              "image_embedding_enabled": true,
+              "image_embedding_required_for_delivery": true,
+              "local_asr_required_for_delivery": true,
+              "local_vlm_caption_enabled": false,
+              "min_live_image_embeddings": 5,
+              "multimodal_metadata_index_enabled": true,
+              "multimodal_search_enabled": true,
+              "ocr_enabled": false,
+              "production_semantic_model_required": true,
+              "qwen_tool_execution_enabled": false,
+              "sensitive_attribute_inference_enabled": false,
+              "subtitle_extraction_enabled": true,
+              "symbolic_caption_enabled": true,
+              "vector_extension_enabled": "auto",
+              "vector_numpy_fallback_enabled": true,
+              "video_keyframe_embedding_enabled": false,
+              "video_keyframe_enabled": false
+            },
+            "ok": true,
+            "privacy": {
+              "cloud_used": false,
+              "private_leak_count": 0,
+              "raw_path_returned": false
+            },
+            "query_redacted": "找宠物照片",
+            "results": [
+              {
+                "asset_id": "mm_6f0a6ed3a381960eb05e91f0",
+                "evidence_ref": "mm_ev_69dbec4beae60cf014",
+                "matched_by": [
+                  "image_embedding",
+                  "metadata"
+                ],
+                "modality": "image",
+                "path_hash": "3ce41b105d11c8291900e1b84e636e65",
+                "privacy_level": "private_local_only",
+                "rank": 1,
+                "score": 0.58508,
+                "score_components": {
+                  "fts": null,
+                  "image_embedding": 0.20353484153747559,
+                  "metadata": 0.35
+                },
+                "snippet_redacted": "",
+                "thumbnail_url": "/api/multimodal-index/item/mm_6f0a6ed3a381960eb05e91f0",
+                "timestamp_sec": null,
+                "title_redacted": "IMG_0001_20260706_172643.jpg"
+              },
+              {
+                "asset_id": "mm_aba7e0655e1c679ca510930a",
+                "evidence_ref": "mm_ev_82bef3fcef1cfcf056",
+                "matched_by": [
+                  "image_embedding",
+                  "metadata"
+                ],
+                "modality": "image",
+                "path_hash": "14140bbdff5acb60aef7d2362b06bd67",
+                "privacy_level": "private_local_only",
+                "rank": 2,
+                "score": 0.410048,
+                "score_components": {
+                  "fts": null,
+                  "image_embedding": 0.20353484153747559,
+                  "metadata": 0.175
+                },
+                "snippet_redacted": "",
+                "thumbnail_url": "/api/multimodal-index/item/mm_aba7e0655e1c679ca510930a",
+                "timestamp_sec": null,
+                "title_redacted": "IMG_0001_20260706_172922.jpg"
+              },
+              {
+                "asset_id": "mm_5f4359413319a5cec79abb54",
+                "evidence_ref": "mm_ev_009bcbe11bac5ac89a",
+                "matched_by": [
+                  "image_embedding",
+                  "metadata"
+                ],
+                "modality": "image",
+                "path_hash": "e868b2dfedad30dade5582b7b8fb8e9c",
+                "privacy_level": "private_local_only",
+                "rank": 3,
+                "score": 0.3517,
+                "score_components": {
+                  "fts": null,
+                  "image_embedding": 0.20353484153747559,
+                  "metadata": 0.11666666666666665
+                },
+                "snippet_redacted": "",
+                "thumbnail_url": "/api/multimodal-index/item/mm_5f4359413319a5cec79abb54",
+                "timestamp_sec": null,
+                "title_redacted": "IMG_0001_20260706_174134.jpg"
+              },
+              {
+                "asset_id": "mm_582e4658c30ab2fc729855c9",
+                "evidence_ref": "mm_ev_2c5733a17e7d070a0e",
+                "matched_by": [
+                  "image_embedding",
+                  "metadata"
+                ],
+                "modality": "image",
+                "path_hash": "58f6ce614a79b5ba8bbd369555093bbf",
+                "privacy_level": "private_local_only",
+                "rank": 4,
+                "score": 0.322533,
+                "score_components": {
+                  "fts": null,
+                  "image_embedding": 0.20353484153747559,
+                  "metadata": 0.0875
+                },
+                "snippet_redacted": "",
+                "thumbnail_url": "/api/multimodal-index/item/mm_582e4658c30ab2fc729855c9",
+                "timestamp_sec": null,
+                "title_redacted": "IMG_0001_20260706_174811.jpg"
+              },
+              {
+                "asset_id": "mm_57d887fa11149ab79bcb4849",
+                "evidence_ref": "mm_ev_72b18604a5c1bf9ca7",
+                "matched_by": [
+                  "image_embedding",
+                  "metadata"
+                ],
+                "modality": "image",
+                "path_hash": "a739f578a54e98aa61c93004055b3741",
+                "privacy_level": "private_local_only",
+                "rank": 5,
+                "score": 0.305048,
+                "score_components": {
+                  "fts": null,
+                  "image_embedding": 0.20353484153747559,
+                  "metadata": 0.06999999999999999
+                },
+                "snippet_redacted": "",
+                "thumbnail_url": "/api/multimodal-index/item/mm_57d887fa11149ab79bcb4849",
+                "timestamp_sec": null,
+                "title_redacted": "IMG_0001_20260706_183711.jpg"
+              },
+              {
+                "asset_id": "mm_4fcb416795f0b157752f85df",
+                "evidence_ref": "mm_ev_6290260c2f78ad8557",
+                "matched_by": [
+                  "image_embedding",
+                  "metadata"
+                ],
+                "modality": "image",
+                "path_hash": "ad024d1e5784713b1893c80d11c8dc31",
+                "privacy_level": "private_local_only",
+                "rank": 6,
+                "score": 0.293413,
+                "score_components": {
+                  "fts": null,
+                  "image_embedding": 0.20353484153747559,
+                  "metadata": 0.05833333333333333
+                },
+                "snippet_redacted": "",
+                "thumbnail_url": "/api/multimodal-index/item/mm_4fcb416795f0b157752f85df",
+                "timestamp_sec": null,
+                "title_redacted": "IMG_0001_20260706_184129.jpg"
+              }
+            ],
+            "retrieval_mode": "fts_first_plus_image_embedding",
+            "run_id": "mm_run_de156d51821a42eb",
+            "trace_id": "mm_trace_8f1bf279550d4b52",
+            "yolo_object_results": 0
+          },
+          "status": 200
+        },
+        "video_person": {
+          "elapsed_ms": 1389.158,
+          "ok": true,
+          "payload": {
+            "degraded": false,
+            "degraded_reason": null,
+            "feature_flags": {
+              "asr_enabled": false,
+              "audio_transcript_enabled": false,
+              "biometric_recognition_enabled": false,
+              "cloud_asr_enabled": false,
+              "cloud_ocr_enabled": false,
+              "cloud_vision_enabled": false,
+              "destructive_actions_enabled": false,
+              "document_embedding_enabled": false,
+              "face_identification_enabled": false,
+              "image_embedding_enabled": true,
+              "image_embedding_required_for_delivery": true,
+              "local_asr_required_for_delivery": true,
+              "local_vlm_caption_enabled": false,
+              "min_live_image_embeddings": 5,
+              "multimodal_metadata_index_enabled": true,
+              "multimodal_search_enabled": true,
+              "ocr_enabled": false,
+              "production_semantic_model_required": true,
+              "qwen_tool_execution_enabled": false,
+              "sensitive_attribute_inference_enabled": false,
+              "subtitle_extraction_enabled": true,
+              "symbolic_caption_enabled": true,
+              "vector_extension_enabled": "auto",
+              "vector_numpy_fallback_enabled": true,
+              "video_keyframe_embedding_enabled": false,
+              "video_keyframe_enabled": false
+            },
+            "ok": true,
+            "privacy": {
+              "cloud_used": false,
+              "private_leak_count": 0,
+              "raw_path_returned": false
+            },
+            "query_redacted": "视频里有人",
+            "results": [],
+            "retrieval_mode": "fts_first_plus_image_embedding",
+            "run_id": "mm_run_c92359c11e3842e2",
+            "trace_id": "mm_trace_50f74cd98a2a4b7d",
+            "yolo_object_results": 0
+          },
+          "status": 200
+        },
+        "white_person": {
+          "elapsed_ms": 2471.967,
+          "ok": true,
+          "payload": {
+            "degraded": false,
+            "degraded_reason": null,
+            "feature_flags": {
+              "asr_enabled": false,
+              "audio_transcript_enabled": false,
+              "biometric_recognition_enabled": false,
+              "cloud_asr_enabled": false,
+              "cloud_ocr_enabled": false,
+              "cloud_vision_enabled": false,
+              "destructive_actions_enabled": false,
+              "document_embedding_enabled": false,
+              "face_identification_enabled": false,
+              "image_embedding_enabled": true,
+              "image_embedding_required_for_delivery": true,
+              "local_asr_required_for_delivery": true,
+              "local_vlm_caption_enabled": false,
+              "min_live_image_embeddings": 5,
+              "multimodal_metadata_index_enabled": true,
+              "multimodal_search_enabled": true,
+              "ocr_enabled": false,
+              "production_semantic_model_required": true,
+              "qwen_tool_execution_enabled": false,
+              "sensitive_attribute_inference_enabled": false,
+              "subtitle_extraction_enabled": true,
+              "symbolic_caption_enabled": true,
+              "vector_extension_enabled": "auto",
+              "vector_numpy_fallback_enabled": true,
+              "video_keyframe_embedding_enabled": false,
+              "video_keyframe_enabled": false
+            },
+            "ok": true,
+            "privacy": {
+              "cloud_used": false,
+              "private_leak_count": 0,
+              "raw_path_returned": false
+            },
+            "query_redacted": "找穿白色上衣的人",
+            "results": [
+              {
+                "asset_id": "mm_4fcb416795f0b157752f85df",
+                "evidence_ref": "mm_ev_015000137590224242",
+                "matched_by": [
+                  "image_embedding"
+                ],
+                "modality": "image",
+                "path_hash": "ad024d1e5784713b1893c80d11c8dc31",
+                "privacy_level": "private_local_only",
+                "rank": 1,
+                "score": 0.24639,
+                "score_components": {
+                  "fts": null,
+                  "image_embedding": 0.22999700903892517,
+                  "metadata": null
+                },
+                "snippet_redacted": "",
+                "thumbnail_url": "/api/multimodal-index/item/mm_4fcb416795f0b157752f85df",
+                "timestamp_sec": null,
+                "title_redacted": "IMG_0001_20260706_184129.jpg"
+              },
+              {
+                "asset_id": "mm_57d887fa11149ab79bcb4849",
+                "evidence_ref": "mm_ev_d603d55820f0568275",
+                "matched_by": [
+                  "image_embedding"
+                ],
+                "modality": "image",
+                "path_hash": "a739f578a54e98aa61c93004055b3741",
+                "privacy_level": "private_local_only",
+                "rank": 2,
+                "score": 0.246126,
+                "score_components": {
+                  "fts": null,
+                  "image_embedding": 0.22999700903892517,
+                  "metadata": null
+                },
+                "snippet_redacted": "",
+                "thumbnail_url": "/api/multimodal-index/item/mm_57d887fa11149ab79bcb4849",
+                "timestamp_sec": null,
+                "title_redacted": "IMG_0001_20260706_183711.jpg"
+              },
+              {
+                "asset_id": "mm_582e4658c30ab2fc729855c9",
+                "evidence_ref": "mm_ev_4afd83ee02262d5252",
+                "matched_by": [
+                  "image_embedding"
+                ],
+                "modality": "image",
+                "path_hash": "58f6ce614a79b5ba8bbd369555093bbf",
+                "privacy_level": "private_local_only",
+                "rank": 3,
+                "score": 0.24587,
+                "score_components": {
+                  "fts": null,
+                  "image_embedding": 0.22999700903892517,
+                  "metadata": null
+                },
+                "snippet_redacted": "",
+                "thumbnail_url": "/api/multimodal-index/item/mm_582e4658c30ab2fc729855c9",
+                "timestamp_sec": null,
+                "title_redacted": "IMG_0001_20260706_174811.jpg"
+              },
+              {
+                "asset_id": "mm_5f4359413319a5cec79abb54",
+                "evidence_ref": "mm_ev_78c46c0f8dfc7c2170",
+                "matched_by": [
+                  "image_embedding"
+                ],
+                "modality": "image",
+                "path_hash": "e868b2dfedad30dade5582b7b8fb8e9c",
+                "privacy_level": "private_local_only",
+                "rank": 4,
+                "score": 0.245622,
+                "score_components": {
+                  "fts": null,
+                  "image_embedding": 0.22999700903892517,
+                  "metadata": null
+                },
+                "snippet_redacted": "",
+                "thumbnail_url": "/api/multimodal-index/item/mm_5f4359413319a5cec79abb54",
+                "timestamp_sec": null,
+                "title_redacted": "IMG_0001_20260706_174134.jpg"
+              },
+              {
+                "asset_id": "mm_aba7e0655e1c679ca510930a",
+                "evidence_ref": "mm_ev_89c3ad97cc23f4aa57",
+                "matched_by": [
+                  "image_embedding"
+                ],
+                "modality": "image",
+                "path_hash": "14140bbdff5acb60aef7d2362b06bd67",
+                "privacy_level": "private_local_only",
+                "rank": 5,
+                "score": 0.245382,
+                "score_components": {
+                  "fts": null,
+                  "image_embedding": 0.22999700903892517,
+                  "metadata": null
+                },
+                "snippet_redacted": "",
+                "thumbnail_url": "/api/multimodal-index/item/mm_aba7e0655e1c679ca510930a",
+                "timestamp_sec": null,
+                "title_redacted": "IMG_0001_20260706_172922.jpg"
+              },
+              {
+                "asset_id": "mm_6f0a6ed3a381960eb05e91f0",
+                "evidence_ref": "mm_ev_975f2d53cb6b92f699",
+                "matched_by": [
+                  "image_embedding"
+                ],
+                "modality": "image",
+                "path_hash": "3ce41b105d11c8291900e1b84e636e65",
+                "privacy_level": "private_local_only",
+                "rank": 6,
+                "score": 0.245149,
+                "score_components": {
+                  "fts": null,
+                  "image_embedding": 0.22999700903892517,
+                  "metadata": null
+                },
+                "snippet_redacted": "",
+                "thumbnail_url": "/api/multimodal-index/item/mm_6f0a6ed3a381960eb05e91f0",
+                "timestamp_sec": null,
+                "title_redacted": "IMG_0001_20260706_172643.jpg"
+              }
+            ],
+            "retrieval_mode": "fts_first_plus_image_embedding",
+            "run_id": "mm_run_26ddaede07d6419f",
+            "trace_id": "mm_trace_2014280203ca43c6",
+            "yolo_object_results": 0
+          },
+          "status": 200
+        }
+      },
+      "naming": {
+        "elapsed_ms": 17.847,
+        "ok": true,
+        "payload": {
+          "item": {
+            "asset_id": "mm_4fcb416795f0b157752f85df",
+            "display_name_zh": "照片_本地资料_照片_20260706_766",
+            "naming_reason": {
+              "core_feature": "本地资料",
+              "date": "20260706",
+              "main_category": "照片",
+              "scene_or_attribute": "照片",
+              "sequence": "766",
+              "used_fields": [
+                "modality",
+                "category_names",
+                "object_labels",
+                "person_attrs",
+                "title_redacted"
+              ]
+            },
+            "risk_flags": {
+              "age_gender_race_emotion_health_inferred": false,
+              "cloud_used": false,
+              "face_recognition_used": false,
+              "identity_inference_used": false,
+              "physical_file_renamed": false,
+              "sensitive_number_removed": true
+            },
+            "source_title_redacted": "IMG_0001_20260706_184129.jpg",
+            "suggested_filename_zh": "照片_本地资料_照片_20260706_766.jpg",
+            "updated_at": "2026-07-06T10:45:02Z"
+          },
+          "ok": true,
+          "raw_path_returned": false,
+          "schema": "digua_smart_naming_v1"
+        },
+        "status": 200
+      },
+      "ocr_status": {
+        "elapsed_ms": 11.777,
+        "ok": true,
+        "payload": {
+          "chunk_count": 88,
+          "cloud_ocr_enabled": false,
+          "cloud_used": false,
+          "degraded": false,
+          "degraded_reason": null,
+          "document_count": 88,
+          "ocr_index_backing": "document_fts",
+          "ok": true,
+          "raw_path_returned": false,
+          "raw_private_content_returned": false,
+          "route_module": "src.openclaw.routes.document_rag_routes",
+          "schema": "digua_ocr_status_v1"
+        },
+        "status": 200
+      },
+      "person": {
+        "identity_block": {
+          "elapsed_ms": 26.658,
+          "ok": true,
+          "payload": {
+            "biometric_recognition_enabled": false,
+            "blocked": true,
+            "blocked_reason": "face_identification_disabled",
+            "cloud_used": false,
+            "face_identification_enabled": false,
+            "intent": "person_identity_recognition",
+            "ok": true,
+            "raw_path_returned": false,
+            "results": [],
+            "sensitive_attribute_inference_enabled": false
+          },
+          "status": 200
+        },
+        "white_person": {
+          "elapsed_ms": 36.846,
+          "ok": true,
+          "payload": {
+            "biometric_recognition_enabled": false,
+            "blocked": false,
+            "cloud_used": false,
+            "degraded": true,
+            "degraded_reason": "no_matching_person_attribute",
+            "face_identification_enabled": false,
+            "ok": true,
+            "query": {
+              "blocked": false,
+              "blocked_reason": null,
+              "co_occurs_with": null,
+              "modality": null,
+              "query_redacted": "找穿白色上衣的人",
+              "require_person": true,
+              "upper_color": "white"
+            },
+            "raw_path_returned": false,
+            "results": [],
+            "schema": "digua_person_attribute_search_v1",
+            "sensitive_attribute_inference_enabled": false
+          },
+          "status": 200
+        }
+      },
+      "plan": {
+        "elapsed_ms": 88.761,
+        "ok": true,
+        "payload": {
+          "approval_phrase": "APPROVE AUTO ORGANIZE plan_4f468a8aedf84601",
+          "approval_required": true,
+          "cloud_private_raw_egress": false,
+          "controlled_move_enabled": true,
+          "controlled_rename_enabled": true,
+          "delete_enabled": false,
+          "delete_original": false,
+          "diagnostic_fallback_allowed": false,
+          "fallback_default_blocked": true,
+          "item_count": 1,
+          "items": [
+            {
+              "ai_driven": true,
+              "asset_id": "mm_4fcb416795f0b157752f85df",
+              "category_zh": "票据发票",
+              "classification_basis": {
+                "ai_driven": true,
+                "category_names": [
+                  "票据发票",
+                  "旅行照片",
+                  "人物照片",
+                  "白色上衣",
+                  "宠物照片",
+                  "待整理",
+                  "红色衣服",
+                  "黑色衣服",
+                  "宠物动物",
+                  "猫咪照片",
+                  "狗狗照片",
+                  "风景旅行",
+                  "车辆交通",
+                  "电子设备",
+                  "书本文具",
+                  "食物聚会",
+                  "合同资料",
+                  "课程资料",
+                  "截图资料"
+                ],
+                "category_zh": "票据发票",
+                "confidence": 0.75,
+                "evidence_refs": [
+                  "asset:mm_4fcb416795f0b"
+                ],
+                "fallback_available": false,
+                "fallback_used": false,
+                "matched_asset_id": "mm_4fcb416795f0b157752f85df",
+                "modality": "image",
+                "object_labels": [],
+                "ocr_tags": [],
+                "person_attrs": [],
+                "resolution_source": "ai_space+smart_naming+smart_classification",
+                "source": "ai_space+smart_naming+smart_classification",
+                "source_priority": [
+                  "asset_id",
+                  "ai_space_asset_view",
+                  "smart_asset_names",
+                  "smart_category_memberships",
+                  "yolo_labels",
+                  "person_attribute",
+                  "ocr_tags",
+                  "subtitle_tags",
+                  "media_index",
+                  "fallback_filename_heuristic"
+                ],
+                "subtitle_tags": [],
+                "title_redacted": "IMG_0001_20260706_184129.jpg"
+              },
+              "conflict_policy": "auto_suffix_target_if_exists_no_overwrite",
+              "fallback_used": false,
+              "final_filename": "照片_本地资料_照片_20260706_766.jpg",
+              "item_id": "item_280c29891c2f4188",
+              "naming_basis": {
+                "core_feature": "本地资料",
+                "date": "20260706",
+                "display_name_zh": "照片_本地资料_照片_20260706_766",
+                "fallback_used": false,
+                "main_category": "照片",
+                "resolution_source": "ai_space+smart_naming+smart_classification",
+                "scene_or_attribute": "照片",
+                "sequence": "766",
+                "source": "smart_naming",
+                "suggested_filename_zh": "照片_本地资料_照片_20260706_766.jpg",
+                "used_fields": [
+                  "modality",
+                  "category_names",
+                  "object_labels",
+                  "person_attrs",
+                  "title_redacted"
+                ]
+              },
+              "operation": "move_and_rename",
+              "original_filename": "IMG_0001_20260706_184129.jpg",
+              "plan_id": "plan_4f468a8aedf84601",
+              "resolution_source": "ai_space+smart_naming+smart_classification",
+              "rollback_available": true,
+              "source_hash": "04a0d2bc95a835a336790c69dbff9ba6df6f50d05e233f2702b63d8494adf7e4",
+              "source_rel": "Uploads/stage9_demo2/IMG_0001_20260706_184129.jpg",
+              "source_sha256": "a2a97f28c9fe98e7c25a0e508394ad0b9794660bf73d9b2cb533a60ca51f4566",
+              "status": "planned",
+              "suggested_filename_zh": "照片_本地资料_照片_20260706_766.jpg",
+              "target_category_zh": "票据发票",
+              "target_exists": false,
+              "target_hash": "e9cde85587e50d7fd50e7b419bd9732a08fa7508e91ef26ad8a1b683ac09630c",
+              "target_rel": "AI整理/票据发票/照片_本地资料_照片_20260706_766.jpg"
+            }
+          ],
+          "mode": "move_and_rename",
+          "ok": true,
+          "overwrite_enabled": false,
+          "plan_id": "plan_4f468a8aedf84601",
+          "qwen_execution_authority": false,
+          "raw_path_returned": false,
+          "schema": "digua_auto_organizer_plan_v1"
+        },
+        "status": 200
+      },
+      "rag": {
+        "elapsed_ms": 3267.851,
+        "error": "HTTP Error 404: Not Found",
+        "ok": false,
+        "payload": {
+          "answer": "",
+          "cloud_ocr_enabled": false,
+          "cloud_used": false,
+          "error": "no_grounded_answer",
+          "evidence_refs": [],
+          "mode": "document_rag",
+          "no_grounded_answer": true,
+          "ok": false,
+          "raw_path_returned": false,
+          "raw_private_content_returned": false,
+          "retrieval_mode": "sqlite_fts_first",
+          "retrieved_chunks": [],
+          "route_module": "src.openclaw.routes.document_rag_routes",
+          "schema": "digua_document_rag_query_v1"
+        },
+        "status": 404
+      },
+      "rag_status": {
+        "elapsed_ms": 11.706,
+        "ok": true,
+        "payload": {
+          "chunk_count": 88,
+          "cloud_ocr_enabled": false,
+          "cloud_used": false,
+          "degraded": false,
+          "document_count": 88,
+          "fts_db_hash": "3f7ee09a9a166a4b",
+          "ok": true,
+          "raw_path_returned": false,
+          "raw_private_content_returned": false,
+          "retrieval_mode": "sqlite_fts_first",
+          "route_module": "src.openclaw.routes.document_rag_routes",
+          "schema": "digua_document_rag_status_v1"
+        },
+        "status": 200
+      },
+      "rollback": {
+        "elapsed_ms": 64.426,
+        "ok": true,
+        "payload": {
+          "cloud_private_raw_egress": false,
+          "error_count": 0,
+          "errors": [],
+          "items": [
+            {
+              "item_id": "item_280c29891c2f4188",
+              "restore_rel": "Uploads/stage9_demo2/IMG_0001_20260706_184129.jpg",
+              "status": "rolled_back",
+              "target_rel": "AI整理/票据发票/照片_本地资料_照片_20260706_766.jpg"
+            }
+          ],
+          "ok": true,
+          "plan_id": "plan_4f468a8aedf84601",
+          "qwen_execution_authority": false,
+          "raw_path_returned": false,
+          "rollback_manifest": "auto_organizer/plan_4f468a8aedf84601/rollback_manifest.json",
+          "rollback_verified": true,
+          "rolled_back_count": 1,
+          "schema": "digua_auto_organizer_rollback_v1"
+        },
+        "status": 200
+      },
+      "upload": {
+        "elapsed_ms": 212784.51,
+        "ok": true,
+        "payload": {
+          "asset_id": "mm_4fcb416795f0b157752f85df",
+          "cloud_used": false,
+          "jobs": [
+            {
+              "job_id": "job_487f2e2cf4354829a19b",
+              "job_type": "media_upload",
+              "ok": true,
+              "result_ok": true,
+              "status": "completed"
+            },
+            {
+              "job_id": "job_bd0c3c1b637f4eacad84",
+              "job_type": "multimodal_rebuild",
+              "ok": true,
+              "result_ok": true,
+              "status": "completed"
+            },
+            {
+              "job_id": "job_1a188c1e9ef64d5fa79a",
+              "job_type": "yolo_index",
+              "ok": true,
+              "result_ok": true,
+              "status": "completed"
+            },
+            {
+              "job_id": "job_9156c05ae67f4c18a84f",
+              "job_type": "person_attribute_rebuild",
+              "ok": true,
+              "result_ok": true,
+              "status": "completed"
+            },
+            {
+              "job_id": "job_690dd09669e34f3ea953",
+              "job_type": "smart_classification_rebuild",
+              "ok": true,
+              "result_ok": true,
+              "status": "completed"
+            },
+            {
+              "job_id": "job_2a9e8f754f75454189bd",
+              "job_type": "smart_naming_generate",
+              "ok": true,
+              "result_ok": true,
+              "status": "completed"
+            },
+            {
+              "job_id": "job_89ae44646ed74b8489f0",
+              "job_type": "ai_space_rebuild",
+              "ok": true,
+              "result_ok": true,
+              "status": "completed"
+            }
+          ],
+          "media_item": {
+            "asset_id": "mm_4fcb416795f0b157752f85df",
+            "ctime": 1783334750.3715417,
+            "display_name_zh": null,
+            "extension": ".jpg",
+            "height": null,
+            "id": 19,
+            "import_event_id": null,
+            "indexed_at": "2026-07-06T10:41:29.881801+00:00",
+            "modality": "image",
+            "mtime": 1783334750.3715417,
+            "name_redacted": "IMG_0001_20260706_184129.jpg",
+            "path_hash": "ad024d1e5784713b1893c80d11c8dc31",
+            "phash": null,
+            "raw_path_returned": false,
+            "size_bytes": 14051,
+            "source_root_hash": "f8fac90ca3278eac",
+            "suggested_filename_zh": null,
+            "tags": null,
+            "taken_at": "2026-07-06T10:45:50.371542+00:00",
+            "title_redacted": "IMG_0001_20260706_184129.jpg",
+            "upload_session_id": null,
+            "width": null
+          },
+          "ok": true,
+          "path_hash": "ad024d1e5784713b1893c80d11c8dc31",
+          "physical_file_moved": false,
+          "physical_file_renamed": false,
+          "pipeline": {
+            "ai_space_rebuild": {
+              "cloud_used": false,
+              "ok": true,
+              "raw_path_returned": false,
+              "rebuilt_assets": 12,
+              "schema": "digua_ai_space_v1",
+              "status": {
+                "asset_count": 12,
+                "cloud_used": false,
+                "degraded": false,
+                "degraded_reason": null,
+                "evidence_count": 12,
+                "modality_counts": {
+                  "image": 12
+                },
+                "ok": true,
+                "raw_path_returned": false,
+                "schema": "digua_ai_space_v1"
+              }
+            },
+            "media_index": {
+              "indexed": 1,
+              "ok": true,
+              "raw_path_returned": false,
+              "scanned": 6,
+              "skipped": 5,
+              "truncated": false,
+              "unsupported": 0
+            },
+            "media_upload": {
+              "ok": true,
+              "schema": "digua_media_upload_v1"
+            },
+            "multimodal_rebuild": {
+              "counts": {
+                "image": 6
+              },
+              "duration_sec": 26.125,
+              "image_embedding_available": true,
+              "image_embedding_model": {
+                "available": true,
+                "backend": "transformers_clip",
+                "device": "cpu",
+                "local_only": true,
+                "model_family": "clip",
+                "model_name": "ai_nas_clip_vit_base_patch32",
+                "precision": "float32",
+                "production_semantic": true,
+                "unavailable_reason": null,
+                "vector_dim": 512,
+                "weights_committed_to_repo": false
+              },
+              "image_embeddings": 6,
+              "indexed_assets": 6,
+              "ok": true,
+              "privacy": {
+                "cloud_used": false,
+                "private_leak_count": 0,
+                "raw_path_rows": 0
+              },
+              "text_chunks": 0
+            },
+            "person_attribute_rebuild": {
+              "biometric_recognition_enabled": false,
+              "cloud_used": false,
+              "face_identification_enabled": false,
+              "inserted": 0,
+              "ok": true,
+              "raw_path_returned": false,
+              "schema": "digua_person_attribute_search_v1",
+              "sensitive_attribute_inference_enabled": false,
+              "skipped_no_path": 0,
+              "status": {
+                "attribute_count": 0,
+                "biometric_recognition_enabled": false,
+                "cloud_used": false,
+                "degraded": true,
+                "degraded_reason": "person_attributes_missing",
+                "face_identification_enabled": false,
+                "ok": true,
+                "person_detection_count": 0,
+                "raw_path_returned": false,
+                "schema": "digua_person_attribute_search_v1",
+                "sensitive_attribute_inference_enabled": false,
+                "video_keyframe_count": 0
+              }
+            },
+            "smart_classification_rebuild": {
+              "generated_smart_names": 12,
+              "inserted_memberships": 252,
+              "ok": true,
+              "physical_file_moved": false,
+              "physical_file_renamed": false,
+              "raw_path_returned": false,
+              "schema": "digua_smart_classification_v1",
+              "status": {
+                "biometric_recognition_enabled": false,
+                "category_count": 29,
+                "cloud_used": false,
+                "degraded": false,
+                "degraded_reason": null,
+                "destructive_actions_enabled": false,
+                "face_recognition_used": false,
+                "hit_category_count": 21,
+                "membership_count": 252,
+                "ok": true,
+                "physical_file_moved": false,
+                "physical_file_renamed": false,
+                "raw_path_returned": false,
+                "schema": "digua_smart_classification_v1",
+                "sensitive_attribute_inference_enabled": false,
+                "smart_name_count": 77
+              }
+            },
+            "smart_naming_generate": {
+              "item": {
+                "asset_id": "mm_4fcb416795f0b157752f85df",
+                "cloud_used": false,
+                "display_name_zh": "照片_本地资料_照片_20260706_766",
+                "naming_reason": {
+                  "core_feature": "本地资料",
+                  "date": "20260706",
+                  "main_category": "照片",
+                  "scene_or_attribute": "照片",
+                  "sequence": "766",
+                  "used_fields": [
+                    "modality",
+                    "category_names",
+                    "object_labels",
+                    "person_attrs",
+                    "title_redacted"
+                  ]
+                },
+                "physical_file_renamed": false,
+                "raw_path_returned": false,
+                "risk_flags": {
+                  "age_gender_race_emotion_health_inferred": false,
+                  "cloud_used": false,
+                  "face_recognition_used": false,
+                  "identity_inference_used": false,
+                  "physical_file_renamed": false,
+                  "sensitive_number_removed": true
+                },
+                "suggested_filename_zh": "照片_本地资料_照片_20260706_766.jpg"
+              },
+              "ok": true,
+              "raw_path_returned": false,
+              "schema": "digua_smart_naming_v1"
+            },
+            "yolo_index": {
+              "asset_count": 6,
+              "backend": {
+                "available": true,
+                "backend": "s100p_tros_dnn_node_example",
+                "config_exists": true,
+                "local_only": true,
+                "machine": "aarch64",
+                "model_family": "yolo",
+                "model_id": "s100p-yolov8n-hbm-cv-object-v2",
+                "model_name": "yolov8n_640x640_nv12",
+                "model_path_hash": "930503e65ceacf78333a5c398a808e3a532bf4fbde5dc122169219117ca7783d",
+                "ok": true,
+                "ros_setup_exists": true,
+                "runtime_target": "s100p_bpu_hbm",
+                "tros_setup_exists": true,
+                "weights_committed_to_repo": false,
+                "workdir_exists": true
+              },
+              "counts": {
+                "detections": 0,
+                "errors": 0,
+                "image": 6,
+                "keyframes": 0,
+                "video": 0
+              },
+              "elapsed_ms": 184129.112,
+              "errors": [],
+              "evidence_dir": "yolo_index/evidence/yolo_run_fe4b15cdcec64ab7",
+              "evidence_ref": "yolo_index/evidence/yolo_run_fe4b15cdcec64ab7/rebuild_summary.json",
+              "ok": true,
+              "privacy": {
+                "cloud_used": false,
+                "local_only": true,
+                "raw_path_returned": false
+              },
+              "run_id": "yolo_run_fe4b15cdcec64ab7",
+              "schema": "digua_yolo_index_v2"
+            }
+          },
+          "raw_path_returned": false,
+          "schema": "digua_media_upload_auto_classify_v1",
+          "sha256": "a2a97f28c9fe98e7c25a0e508394ad0b9794660bf73d9b2cb533a60ca51f4566",
+          "size_bytes": 14051,
+          "smart_naming": {
+            "asset_id": "mm_4fcb416795f0b157752f85df",
+            "display_name_zh": "照片_本地资料_照片_20260706_766",
+            "naming_reason": {
+              "core_feature": "本地资料",
+              "date": "20260706",
+              "main_category": "照片",
+              "scene_or_attribute": "照片",
+              "sequence": "766",
+              "used_fields": [
+                "modality",
+                "category_names",
+                "object_labels",
+                "person_attrs",
+                "title_redacted"
+              ]
+            },
+            "risk_flags": {
+              "age_gender_race_emotion_health_inferred": false,
+              "cloud_used": false,
+              "face_recognition_used": false,
+              "identity_inference_used": false,
+              "physical_file_renamed": false,
+              "sensitive_number_removed": true
+            },
+            "source_title_redacted": "IMG_0001_20260706_184129.jpg",
+            "suggested_filename_zh": "照片_本地资料_照片_20260706_766.jpg",
+            "updated_at": "2026-07-06T10:45:02Z"
+          },
+          "upload_event": {
+            "original_file_renamed": false,
+            "overwrite_performed": false,
+            "status": "saved_to_personal_nas"
+          }
+        },
+        "status": 200
+      },
+      "yolo": {
+        "elapsed_ms": 59.136,
+        "ok": true,
+        "payload": {
+          "degraded": true,
+          "degraded_reason": "no_matching_yolo_detection",
+          "labels": [
+            "person",
+            "cat",
+            "dog",
+            "laptop"
+          ],
+          "ok": true,
+          "privacy": {
+            "cloud_used": false,
+            "raw_path_returned": false
+          },
+          "query_redacted": "person laptop cat dog",
+          "results": [],
+          "run_id": "yolo_search_14c28f7e4e354b97"
+        },
+        "status": 200
+      }
+    },
+    "production_demo_requires_real_user_asset": false,
+    "recording_script_parameters": {
+      "filename": "IMG_0001_20260706_184129.jpg",
+      "queries": [
+        "穿白色上衣的人",
+        "有电脑的照片",
+        "宠物照片",
+        "这个人是谁",
+        "这张票据里的金额和日期是什么？"
+      ],
+      "target_dir": "Uploads/stage9_demo2"
+    },
+    "source_rel": "Uploads/stage9_demo2/IMG_0001_20260706_184129.jpg"
+  },
+  "generated_at": "2026-07-06T10:45:14Z",
+  "ok": true,
+  "verdict": "ok_stage9_demo2_real_user_flow_gate"
+}

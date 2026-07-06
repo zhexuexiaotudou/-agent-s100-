@@ -73,11 +73,18 @@ def assistant_trace_route_response(
     if method.upper() != "GET":
         return 405, {"ok": False, "error": "method_not_allowed", "raw_path_returned": False}
     if normalized == "/api/assistant/trace/status":
-        recent = recorder.list_traces(limit=5)
+        recent = recorder.list_traces(limit=20)
+        traces = recent.get("traces") or []
+        expanded = [recorder.get_trace(str(item.get("trace_id"))) for item in traces[:20] if item.get("trace_id")]
+        non_synthetic = [item for item in expanded if item.get("ok") and item.get("synthetic_trace") is False]
+        last_trace = traces[0] if traces else {}
         return 200, {
             "ok": True,
             "schema": "digua_assistant_trace_status_v1",
-            "trace_count_visible": len(recent.get("traces") or []),
+            "trace_count_visible": len(traces),
+            "non_synthetic_trace_count": len(non_synthetic),
+            "last_trace_id": last_trace.get("trace_id"),
+            "last_entrypoint": last_trace.get("entrypoint"),
             "required_steps": list(STANDARD_STEPS),
             "hidden_chain_of_thought_saved": False,
             "raw_path_returned": False,

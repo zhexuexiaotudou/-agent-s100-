@@ -37,7 +37,13 @@ def main() -> int:
     _code, plan = auto_organizer_route_response(
         "/api/auto-organize/plan",
         method="POST",
-        payload={"mode": "move_and_rename", "source_root": "Uploads", "source_rel_paths": [source_rel], "limit": 1},
+        payload={
+            "mode": "move_and_rename",
+            "source_root": "Uploads",
+            "source_rel_paths": [source_rel],
+            "limit": 1,
+            "allow_filename_fallback_for_diagnostic": True,
+        },
         report_root=args.report_root,
         personal_root=personal_root,
     )

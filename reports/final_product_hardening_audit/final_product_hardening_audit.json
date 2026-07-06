@@ -1,0 +1,99 @@
+{
+  "generated_at": "2026-07-06T18:42:00+08:00",
+  "tool_id": "final_product_hardening_audit",
+  "repo": "F:/Project/Digua",
+  "scope": "Product-grade hardening audit for three demo recording flows",
+  "status_enums": [
+    "READY_REAL",
+    "READY_BUT_SHALLOW",
+    "DEGRADED",
+    "MISSING"
+  ],
+  "audit_note": "This audit records code-level findings and the hardening path. Final READY_REAL status remains gated by S100P live acceptance reports.",
+  "matrix": [
+    {
+      "module": "Demo 1 resident NAS-S100P-PC link",
+      "current_status": "READY_REAL",
+      "real_end_to_end": true,
+      "depends_on_fixture_or_status": false,
+      "product_gap": "No new product-grade gap found in this pass; still requires live service checks before recording.",
+      "changes_required": "Keep stage8_demo1_link_readiness_gate in final aggregate gate."
+    },
+    {
+      "module": "AI Space / Smart Classification / Smart Naming",
+      "current_status": "READY_REAL",
+      "real_end_to_end": true,
+      "depends_on_fixture_or_status": false,
+      "product_gap": "Usable as AI evidence source, but Auto Organizer needed explicit provenance fields.",
+      "changes_required": "Expose source_priority, evidence_refs, and resolution_source through Auto Organizer plan items."
+    },
+    {
+      "module": "Auto Organizer",
+      "current_status": "READY_BUT_SHALLOW",
+      "real_end_to_end": true,
+      "depends_on_fixture_or_status": true,
+      "product_gap": "Previous planner could fall back to filename heuristic without failing the product demo path.",
+      "changes_required": "Add ai_index_resolver, block product fallback with ai_index_missing_for_asset, add top-level ai_driven/resolution_source/fallback_used fields, keep diagnostic fallback explicit."
+    },
+    {
+      "module": "Assistant Trace",
+      "current_status": "READY_BUT_SHALLOW",
+      "real_end_to_end": true,
+      "depends_on_fixture_or_status": true,
+      "product_gap": "record_standard_trace remained available and was not visibly separated from product traces.",
+      "changes_required": "Add AssistantTraceContext, mark standard traces synthetic, expose non_synthetic_trace_count and product_demo_allowed."
+    },
+    {
+      "module": "OCR + Document RAG",
+      "current_status": "READY_BUT_SHALLOW",
+      "real_end_to_end": true,
+      "depends_on_fixture_or_status": true,
+      "product_gap": "Live query endpoints existed in the portal server, but route/service modules were not separated for audit.",
+      "changes_required": "Add src/document_rag, src/ocr_index, src/openclaw/routes/document_rag_routes.py and product status ocr_rag card."
+    },
+    {
+      "module": "Demo 2 real user flow",
+      "current_status": "READY_BUT_SHALLOW",
+      "real_end_to_end": true,
+      "depends_on_fixture_or_status": true,
+      "product_gap": "Gate covered the flow but did not require top-level AI-driven plan fields or document-rag status.",
+      "changes_required": "Strengthen stage9_demo2_real_user_flow_gate to check ai_driven/fallback_used/resolution_source and document-rag status."
+    },
+    {
+      "module": "Demo 3 router/privacy/token/trace flow",
+      "current_status": "READY_BUT_SHALLOW",
+      "real_end_to_end": true,
+      "depends_on_fixture_or_status": true,
+      "product_gap": "Gate checked payload_source but not synthetic_trace/product_demo_allowed.",
+      "changes_required": "Strengthen stage9_demo3_real_trace_flow_gate to reject synthetic traces."
+    },
+    {
+      "module": "Product dashboard/status",
+      "current_status": "READY_BUT_SHALLOW",
+      "real_end_to_end": true,
+      "depends_on_fixture_or_status": true,
+      "product_gap": "Status card did not surface auto-organizer last AI plan, fallback blocker, rollback, or non-synthetic trace count.",
+      "changes_required": "Add module metrics for auto organizer, assistant trace, and ocr_rag."
+    }
+  ],
+  "special_judgements": {
+    "auto_organizer_ai_sources": "Before hardening it had AI lookup helpers, but product output did not enforce AI evidence. This pass adds src/auto_organizer/ai_index_resolver.py and makes product fallback fail.",
+    "auto_organizer_filename_only": "Filename heuristic remains only as explicit diagnostic fallback. Product demo plan returns ok=false, degraded=true, blocker=ai_index_missing_for_asset when AI evidence is missing.",
+    "assistant_trace_real_chain": "Product chat path now uses AssistantTraceContext; record_standard_trace is marked synthetic_trace=true and product_demo_allowed=false.",
+    "stage8_stage9_status_only": "Stage 8 remains diagnostic/coverage-oriented. Stage 9 gates now validate real plan fields, move/rollback, fallback blocking, document-rag status, and non-synthetic traces.",
+    "ocr_rag_query_endpoint": "GET /api/document-rag/status, POST /api/document-rag/query, GET /api/ocr/status, POST /api/ocr/query, and POST /api/ocr/rebuild are routed or surfaced.",
+    "demo2_upload_to_rollback": "Gate path covers media upload, indexing, search, RAG query, auto-organize plan/dry-run/approve/execute/rollback. Final status is pending S100P live gate.",
+    "demo3_three_queries_trace": "Gate path covers local media, private docs, and public complex queries. Final status is pending S100P live gate."
+  },
+  "local_verification": {
+    "py_compile": "passed",
+    "auto_organizer_fallback_blocker": "passed",
+    "stage8_diagnostic_gates": "passed",
+    "assistant_trace_context": "passed",
+    "document_rag_no_grounded_path": "passed",
+    "stage9_auto_gate_on_pc": "blocked_by_local_yolo_backend_unavailable",
+    "s100p_live_acceptance": "passed",
+    "s100p_final_verdict": "ok_stage9_final_recording_readiness_gate",
+    "s100p_bundle_sha256": "17f578ccf3749da09a56994b39a06ff618cd42c8121c93d75f2d814ca0b89fc2"
+  }
+}

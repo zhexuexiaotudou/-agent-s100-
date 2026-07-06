@@ -76,6 +76,7 @@ def main() -> int:
     yolo = http_post_json(args.base_url, "/api/yolo-index/search", {"query": "person laptop cat dog", "top_k": 8}, timeout=args.timeout, auth_token=auth_token)
     naming = http_get_json(args.base_url, f"/api/smart-naming/item/{asset_id}", timeout=args.timeout) if asset_id else {"ok": False, "payload": {}}
     ocr_status = http_get_json(args.base_url, "/api/ocr/status", timeout=args.timeout)
+    rag_status = http_get_json(args.base_url, "/api/document-rag/status", timeout=args.timeout)
     rag = http_post_json(args.base_url, "/api/document-rag/query", {"query": "这张票据里的金额和日期是什么？", "path": "Documents"}, timeout=args.timeout, auth_token=auth_token)
     plan = http_post_json(args.base_url, "/api/auto-organize/plan", {"mode": "move_and_rename", "source_root": "Uploads", "source_rel_paths": [source_rel], "limit": 1}, timeout=args.timeout, auth_token=auth_token)
     plan_payload = plan.get("payload") or {}
@@ -103,6 +104,7 @@ def main() -> int:
         "yolo": yolo,
         "naming": naming,
         "ocr_status": ocr_status,
+        "rag_status": rag_status,
         "rag": rag,
         "plan": plan,
         "dry_run": dry_run,
@@ -126,8 +128,11 @@ def main() -> int:
             check("person unsafe features disabled", all((person["identity_block"].get("payload") or {}).get(flag) is False for flag in ["face_identification_enabled", "biometric_recognition_enabled", "sensitive_attribute_inference_enabled"]), person["identity_block"].get("payload")),
             check("yolo search ok", yolo.get("ok") is True and (yolo.get("payload") or {}).get("ok") is True, yolo),
             check("ocr status ok", ocr_status.get("ok") is True and (ocr_status.get("payload") or {}).get("ok") is True, ocr_status),
+            check("document rag status ok", rag_status.get("ok") is True and (rag_status.get("payload") or {}).get("ok") is True, rag_status),
             check("rag grounded or explicitly refused", (rag.get("payload") or {}).get("ok") is True or (rag.get("payload") or {}).get("no_grounded_answer") is True, rag),
             check("auto organizer plan ok", plan.get("ok") is True and plan_payload.get("ok") is True and plan_payload.get("item_count") == 1, plan_payload),
+            check("auto organizer plan item ai-driven", plan_item.get("ai_driven") is True and plan_item.get("fallback_used") is False, plan_item),
+            check("auto organizer resolution source real", str(plan_item.get("resolution_source") or "") not in {"", "fallback_filename", "fallback_filename_heuristic"}, plan_item.get("resolution_source")),
             check("auto organizer ai-driven basis", basis.get("source") not in {"", "fallback_filename_heuristic", "local_filename_and_existing_naming_policy"} and basis.get("fallback_used") is False, basis),
             check("dry run ok", dry_run.get("ok") is True and (dry_run.get("payload") or {}).get("ok") is True, dry_run),
             check("approval ok", approve.get("ok") is True and (approve.get("payload") or {}).get("ok") is True, approve),

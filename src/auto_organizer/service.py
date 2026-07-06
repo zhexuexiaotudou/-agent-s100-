@@ -10,6 +10,7 @@ from typing import Any
 
 from .conflict_policy import unique_target_rel
 from .executor import execute_copy, execute_move, rollback_move
+from .ai_index_resolver import SOURCE_PRIORITY
 from .naming_policy import normalize_rel, path_hash, suggest_name
 from .planner import collect_source_files
 from .rollback import write_rollback_manifest
@@ -44,6 +45,7 @@ class AutoOrganizerService:
             plan_count = conn.execute("SELECT count(*) FROM auto_organize_plans").fetchone()[0]
             executed_count = conn.execute("SELECT count(*) FROM auto_organize_items WHERE status='executed'").fetchone()[0]
             rolled_back_count = conn.execute("SELECT count(*) FROM auto_organize_items WHERE status='rolled_back'").fetchone()[0]
+            recent_state = self._recent_state(conn)
         finally:
             conn.close()
         return {
@@ -62,17 +64,12 @@ class AutoOrganizerService:
             "allowed_source_roots": list(self.flags.get("auto_organize_allowed_source_roots") or ["Uploads", "待整理"]),
             "target_root": str(self.flags.get("auto_organize_target_root") or "AI整理"),
             "ai_driven_classification_enabled": True,
-            "classification_priority": [
-                "asset_id",
-                "ai_space_asset_view",
-                "smart_asset_names",
-                "smart_category_memberships",
-                "yolo_labels",
-                "person_attribute",
-                "ocr_tags",
-                "subtitle_tags",
-                "fallback_filename_heuristic",
-            ],
+            "classification_priority": SOURCE_PRIORITY,
+            "fallback_default_blocked": True,
+            "diagnostic_fallback_flag": "allow_filename_fallback_for_diagnostic",
+            "last_ai_driven_plan": recent_state.get("last_ai_driven_plan"),
+            "last_fallback_blocker": recent_state.get("last_fallback_blocker"),
+            "last_rollback_status": recent_state.get("last_rollback_status"),
             "qwen_execution_authority": False,
             "cloud_private_raw_egress": False,
             "raw_path_returned": False,
@@ -96,18 +93,43 @@ class AutoOrganizerService:
             return self._error("source_root_not_allowlisted")
         if target_root != normalize_rel(str(self.flags.get("auto_organize_target_root") or "AI整理")):
             return self._error("target_root_not_allowlisted")
+        allow_filename_fallback = bool(payload.get("allow_filename_fallback_for_diagnostic"))
         max_items = int(payload.get("limit") or self.flags.get("auto_organize_max_items_per_plan") or 50)
         files = collect_source_files(self.personal_root, source_root, limit=max_items, source_rel_paths=payload.get("source_rel_paths"))
         plan_id = "plan_" + uuid.uuid4().hex[:16]
         created_at = _now()
         reserved: set[str] = set()
         items: list[dict[str, Any]] = []
+        fallback_blockers: list[dict[str, Any]] = []
         max_file_bytes = int(self.flags.get("auto_organize_max_file_bytes") or 52_428_800)
         for path in files:
             if path.stat().st_size > max_file_bytes:
                 continue
             source_rel = self._rel(path)
             name = suggest_name(path, source_rel, report_root=self.report_root, personal_root=self.personal_root)
+            basis = name.get("classification_basis") if isinstance(name.get("classification_basis"), dict) else {}
+            fallback_used = bool(name.get("fallback_used") or basis.get("fallback_used"))
+            if fallback_used and not allow_filename_fallback:
+                fallback_blockers.append(
+                    {
+                        "asset_id": name.get("asset_id"),
+                        "source_rel": source_rel,
+                        "source_hash": path_hash(source_rel),
+                        "ai_driven": False,
+                        "resolution_source": name.get("resolution_source") or basis.get("resolution_source") or "fallback_filename",
+                        "fallback_used": True,
+                        "fallback_available": True,
+                        "blocker": name.get("blocker") or basis.get("blocker") or "ai_index_missing_for_asset",
+                        "classification_basis": basis,
+                        "naming_basis": name.get("naming_basis") or {},
+                        "raw_path_returned": False,
+                    }
+                )
+                continue
+            if fallback_used and allow_filename_fallback:
+                basis["diagnostic_fallback_allowed"] = True
+                basis["product_demo_allowed"] = False
+                name["classification_basis"] = basis
             category = normalize_rel(str(name["category_zh"]))
             target_rel = unique_target_rel(
                 self.personal_root,
@@ -124,6 +146,7 @@ class AutoOrganizerService:
                 "source_hash": path_hash(source_rel),
                 "source_sha256": source_sha,
                 "target_category_zh": category,
+                "category_zh": category,
                 "target_rel": target_rel,
                 "target_hash": path_hash(target_rel),
                 "original_filename": path.name,
@@ -131,6 +154,9 @@ class AutoOrganizerService:
                 "final_filename": Path(target_rel).name,
                 "operation": mode,
                 "status": "planned",
+                "ai_driven": bool(name.get("ai_driven") and not fallback_used),
+                "resolution_source": str(name.get("resolution_source") or basis.get("source") or ""),
+                "fallback_used": fallback_used,
                 "classification_basis": name["classification_basis"],
                 "naming_basis": name["naming_basis"],
                 "conflict_policy": "auto_suffix_target_if_exists_no_overwrite",
@@ -138,6 +164,21 @@ class AutoOrganizerService:
                 "target_exists": (self.personal_root / target_rel).exists(),
             }
             items.append(item)
+        if fallback_blockers and not allow_filename_fallback:
+            return self._public(
+                {
+                    "ok": False,
+                    "schema": "digua_auto_organizer_plan_v1",
+                    "degraded": True,
+                    "blocker": "ai_index_missing_for_asset",
+                    "fallback_available": True,
+                    "fallback_used": True,
+                    "fallback_default_blocked": True,
+                    "item_count": 0,
+                    "items": fallback_blockers[:100],
+                    "raw_path_returned": False,
+                }
+            )
         migrate(self.db_path)
         conn = connect(self.db_path)
         try:
@@ -196,6 +237,8 @@ class AutoOrganizerService:
                 "controlled_rename_enabled": mode == "move_and_rename",
                 "delete_enabled": False,
                 "overwrite_enabled": False,
+                "fallback_default_blocked": True,
+                "diagnostic_fallback_allowed": allow_filename_fallback,
                 "raw_path_returned": False,
             }
         )
@@ -387,8 +430,58 @@ class AutoOrganizerService:
             row["naming_basis"] = json.loads(row.pop("naming_basis_json") or "{}")
             if not include_private:
                 row.pop("rollback_json", None)
-            items.append(row)
+            items.append(self._decorate_public_item(row))
         return self._public({"ok": True, "schema": "digua_auto_organizer_plan_detail_v1", "plan": dict(plan_row), "items": items, "raw_path_returned": False})
+
+    @staticmethod
+    def _decorate_public_item(row: dict[str, Any]) -> dict[str, Any]:
+        basis = row.get("classification_basis") if isinstance(row.get("classification_basis"), dict) else {}
+        row.setdefault("category_zh", row.get("target_category_zh"))
+        row.setdefault("ai_driven", bool(basis.get("ai_driven")) and basis.get("fallback_used") is not True)
+        row.setdefault("resolution_source", basis.get("resolution_source") or basis.get("source"))
+        row.setdefault("fallback_used", bool(basis.get("fallback_used")))
+        row.setdefault("rollback_available", True)
+        row.setdefault("raw_path_returned", False)
+        return row
+
+    @staticmethod
+    def _recent_state(conn: Any) -> dict[str, Any]:
+        state: dict[str, Any] = {
+            "last_ai_driven_plan": None,
+            "last_fallback_blocker": None,
+            "last_rollback_status": None,
+        }
+        try:
+            row = conn.execute(
+                """
+                SELECT p.plan_id,p.status,i.classification_basis_json,i.created_at
+                FROM auto_organize_plans p
+                LEFT JOIN auto_organize_items i ON i.plan_id=p.plan_id
+                ORDER BY p.created_at DESC,i.created_at DESC
+                LIMIT 1
+                """
+            ).fetchone()
+        except Exception:
+            return state
+        if not row:
+            return state
+        basis = json.loads(row["classification_basis_json"] or "{}") if row["classification_basis_json"] else {}
+        state["last_ai_driven_plan"] = {
+            "plan_id": row["plan_id"],
+            "status": row["status"],
+            "ai_driven": bool(basis.get("ai_driven")) and basis.get("fallback_used") is not True,
+            "resolution_source": basis.get("resolution_source") or basis.get("source"),
+            "fallback_used": bool(basis.get("fallback_used")),
+        }
+        if basis.get("fallback_used"):
+            state["last_fallback_blocker"] = {
+                "blocker": basis.get("blocker") or "ai_index_missing_for_asset",
+                "fallback_available": basis.get("fallback_available", True),
+                "product_demo_allowed": basis.get("product_demo_allowed", False),
+            }
+        if row["status"] in {"rolled_back", "rollback_partial"}:
+            state["last_rollback_status"] = {"plan_id": row["plan_id"], "status": row["status"]}
+        return state
 
     def _pre_execute_error(self, source: Path, target: Path, item: dict[str, Any]) -> str | None:
         if not source.exists() or not source.is_file() or source.is_symlink():

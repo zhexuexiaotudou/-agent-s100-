@@ -91,12 +91,17 @@ class AssistantTraceRecorder:
             request={
                 "query_hash": hashlib.sha256(query.encode("utf-8", errors="replace")).hexdigest(),
                 "query_preview_redacted": _redacted_query(query),
+                "payload_source": "synthetic_standard_trace",
+                "synthetic_trace": True,
+                "product_demo_allowed": False,
             },
         )
         for step in STANDARD_STEPS:
             if step == "received":
                 continue
-            self.add_step(trace_id, step, _payload_for_step(step, entrypoint, query))
+            payload = _payload_for_step(step, entrypoint, query)
+            payload.update({"payload_source": "synthetic_standard_trace", "synthetic_trace": True, "product_demo_allowed": False})
+            self.add_step(trace_id, step, payload)
         self.finish(trace_id, status="completed")
         return self.get_trace(trace_id)
 
@@ -116,6 +121,8 @@ class AssistantTraceRecorder:
                 "query_hash": hashlib.sha256(query.encode("utf-8", errors="replace")).hexdigest(),
                 "query_preview_redacted": _redacted_query(query),
                 "payload_source": "real_execution_context",
+                "synthetic_trace": False,
+                "product_demo_allowed": True,
             },
         )
         for step in STANDARD_STEPS:
@@ -123,6 +130,8 @@ class AssistantTraceRecorder:
                 continue
             payload = dict(step_payloads.get(step) or {})
             payload.setdefault("payload_source", "real_execution_context")
+            payload.setdefault("synthetic_trace", False)
+            payload.setdefault("product_demo_allowed", True)
             self.add_step(trace_id, step, payload, status="ok" if step_payloads.get(step) is not None else "missing_context")
         self.finish(trace_id, status="completed")
         return self.get_trace(trace_id)
@@ -138,14 +147,23 @@ class AssistantTraceRecorder:
         finally:
             conn.close()
         decoded_steps = []
+        synthetic_trace = False
+        product_demo_allowed = True
         for step in steps:
             step["payload"] = json.loads(step.pop("payload_json") or "{}")
+            payload = step["payload"] if isinstance(step.get("payload"), dict) else {}
+            request = payload.get("request") if isinstance(payload.get("request"), dict) else {}
+            synthetic_trace = synthetic_trace or bool(payload.get("synthetic_trace")) or bool(request.get("synthetic_trace"))
+            if payload.get("product_demo_allowed") is False or request.get("product_demo_allowed") is False:
+                product_demo_allowed = False
             decoded_steps.append(step)
         payload = {
             "ok": True,
             "schema": "digua_assistant_trace_v1",
             "trace": dict(trace),
             "steps": decoded_steps,
+            "synthetic_trace": synthetic_trace,
+            "product_demo_allowed": product_demo_allowed and not synthetic_trace,
             "hidden_chain_of_thought_saved": False,
             "raw_path_returned": False,
         }

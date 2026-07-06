@@ -30,6 +30,7 @@ REQUIRED_MODULES = {
     "smart_naming",
     "subtitle",
     "job_queue",
+    "ocr_rag",
     "ocr",
     "documents",
     "media",
@@ -116,6 +117,7 @@ def build_payload(base_url: str, timeout: int) -> dict[str, Any]:
         "smart_naming_status": http_get_json(base_url, "/api/smart-naming/status", timeout),
         "auto_organizer_status": http_get_json(base_url, "/api/auto-organize/status", timeout),
         "assistant_trace_status": http_get_json(base_url, "/api/assistant/trace/status", timeout),
+        "document_rag_status": http_get_json(base_url, "/api/document-rag/status", timeout),
         "subtitle_status": http_get_json(base_url, "/api/subtitle/status", timeout),
         "jobs_status": http_get_json(base_url, "/api/jobs/status", timeout),
     }
@@ -138,6 +140,7 @@ def build_payload(base_url: str, timeout: int) -> dict[str, Any]:
     smart_naming = checks["smart_naming_status"].get("payload") or {}
     auto_organizer = checks["auto_organizer_status"].get("payload") or {}
     assistant_trace = checks["assistant_trace_status"].get("payload") or {}
+    document_rag = checks["document_rag_status"].get("payload") or {}
     subtitle = checks["subtitle_status"].get("payload") or {}
     jobs = checks["jobs_status"].get("payload") or {}
 
@@ -239,6 +242,7 @@ def build_payload(base_url: str, timeout: int) -> dict[str, Any]:
     add_failure(failures, auto_organizer.get("delete_enabled") is False, "auto_organizer_delete_not_false")
     add_failure(failures, auto_organizer.get("overwrite_enabled") is False, "auto_organizer_overwrite_not_false")
     add_failure(failures, auto_organizer.get("rollback_required") is True, "auto_organizer_rollback_required_not_true")
+    add_failure(failures, auto_organizer.get("fallback_default_blocked") is True, "auto_organizer_fallback_default_not_blocked")
     add_failure(failures, auto_organizer.get("qwen_execution_authority") is False, "auto_organizer_qwen_execution_authority_not_false")
     add_failure(failures, auto_organizer.get("cloud_private_raw_egress") is False, "auto_organizer_cloud_private_raw_egress_not_false")
     add_failure(failures, auto_organizer.get("raw_path_returned") is False, "auto_organizer_raw_path_not_false")
@@ -248,8 +252,14 @@ def build_payload(base_url: str, timeout: int) -> dict[str, Any]:
     add_failure(failures, assistant_trace.get("raw_path_returned") is False, "assistant_trace_raw_path_not_false")
     add_failure(failures, assistant_trace.get("cloud_private_raw_egress") is False, "assistant_trace_cloud_private_raw_egress_not_false")
     add_failure(failures, assistant_trace.get("qwen_execution_authority") is False, "assistant_trace_qwen_execution_authority_not_false")
+    add_failure(failures, "non_synthetic_trace_count" in assistant_trace, "assistant_trace_non_synthetic_count_missing")
     required_trace_steps = {"received", "qwen_router", "privacy_tokenizer", "task_classifier", "route_decision", "token_budget", "tool_execution", "safety_gate", "evidence_summary", "final_answer"}
     add_failure(failures, required_trace_steps.issubset(set(assistant_trace.get("required_steps") or [])), "assistant_trace_required_steps_missing")
+
+    add_failure(failures, bool(document_rag.get("ok")), "document_rag_status_not_ok")
+    add_failure(failures, document_rag.get("cloud_ocr_enabled") is False, "document_rag_cloud_ocr_not_false")
+    add_failure(failures, document_rag.get("raw_private_content_returned") is False, "document_rag_raw_private_content_not_false")
+    add_failure(failures, document_rag.get("raw_path_returned") is False, "document_rag_raw_path_not_false")
 
     add_failure(failures, bool(subtitle.get("ok")), "subtitle_status_not_ok")
     add_failure(failures, subtitle.get("degraded") is False, "subtitle_degraded")
@@ -281,6 +291,8 @@ def build_payload(base_url: str, timeout: int) -> dict[str, Any]:
             "smart_name_count": smart_naming.get("name_count"),
             "auto_organizer_plan_count": auto_organizer.get("plan_count"),
             "assistant_trace_count_visible": assistant_trace.get("trace_count_visible"),
+            "assistant_non_synthetic_trace_count": assistant_trace.get("non_synthetic_trace_count"),
+            "document_rag_chunk_count": document_rag.get("chunk_count"),
             "subtitle_segment_count": subtitle.get("segment_count"),
             "production_ready": (product.get("overall") or {}).get("production_ready"),
             "readiness_verdict": (product.get("overall") or {}).get("readiness_verdict"),

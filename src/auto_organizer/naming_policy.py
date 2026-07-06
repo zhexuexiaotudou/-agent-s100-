@@ -11,6 +11,8 @@ from typing import Any
 
 from src.smart_classification.chinese_namer import ChineseSmartNamer
 
+from .ai_index_resolver import SOURCE_PRIORITY, resolve_asset_for_source
+
 
 ILLEGAL_FILENAME_CHARS = re.compile(r'[\\/:*?"<>|\r\n\t]+')
 
@@ -73,6 +75,12 @@ def category_for_title(title: str, modality: str) -> str:
 
 
 def suggest_name(path: Path, source_rel: str, *, report_root: str | Path | None = None, personal_root: str | Path | None = None) -> dict[str, Any]:
+    if report_root and personal_root:
+        resolution = resolve_asset_for_source(source_rel, personal_root, report_root)
+        if resolution.get("ok") and resolution.get("ai_driven"):
+            return _suggest_name_from_ai_metadata(path, source_rel, resolution)
+        if resolution.get("blocker") == "ai_index_missing_for_asset":
+            return _mark_filename_fallback_blocked(_suggest_name_from_filename(path, source_rel), resolution)
     ai_metadata = _lookup_ai_metadata(path, source_rel, report_root=report_root, personal_root=personal_root)
     if ai_metadata:
         return _suggest_name_from_ai_metadata(path, source_rel, ai_metadata)
@@ -104,14 +112,24 @@ def _suggest_name_from_filename(path: Path, source_rel: str) -> dict[str, Any]:
         "category_zh": category,
         "display_name_zh": generated.get("display_name_zh"),
         "suggested_filename_zh": suggested,
+        "ai_driven": False,
+        "resolution_source": "fallback_filename",
+        "fallback_available": True,
+        "fallback_used": True,
+        "product_demo_allowed": False,
         "classification_basis": {
             "source": "fallback_filename_heuristic",
             "fallback_used": True,
+            "ai_driven": False,
+            "resolution_source": "fallback_filename",
+            "fallback_available": True,
+            "product_demo_allowed": False,
+            "source_priority": SOURCE_PRIORITY,
             "modality": modality,
             "title_redacted": title[:160],
             "category_zh": category,
         },
-        "naming_basis": generated.get("naming_reason") or {},
+        "naming_basis": _naming_basis(generated.get("naming_reason") or {}, source="fallback_filename_heuristic"),
     }
 
 
@@ -146,25 +164,25 @@ def _suggest_name_from_ai_metadata(path: Path, source_rel: str, metadata: dict[s
     suggested = safe_filename(str(generated.get("suggested_filename_zh") or generated.get("display_name_zh") or path.name))
     if path.suffix and not suggested.lower().endswith(path.suffix.lower()):
         suggested = safe_filename(suggested + path.suffix.lower())
+    resolution_source = str(metadata.get("resolution_source") or metadata.get("source") or "ai_index")
+    naming_source = "smart_naming" if smart_name else "ai_metadata_chinese_namer"
     return {
         "asset_id": asset_id,
         "category_zh": category,
         "display_name_zh": generated.get("display_name_zh"),
         "suggested_filename_zh": suggested,
+        "ai_driven": True,
+        "resolution_source": resolution_source,
+        "fallback_available": False,
+        "fallback_used": False,
+        "confidence": metadata.get("confidence"),
         "classification_basis": {
-            "source": str(metadata.get("source") or "ai_index"),
+            "source": resolution_source,
             "fallback_used": False,
-            "source_priority": [
-                "asset_id",
-                "ai_space_asset_view",
-                "smart_asset_names",
-                "smart_category_memberships",
-                "yolo_labels",
-                "person_attribute",
-                "ocr_tags",
-                "subtitle_tags",
-                "fallback_filename_heuristic",
-            ],
+            "ai_driven": True,
+            "resolution_source": resolution_source,
+            "fallback_available": False,
+            "source_priority": metadata.get("source_priority") or SOURCE_PRIORITY,
             "matched_asset_id": asset_id,
             "modality": modality,
             "title_redacted": title[:160],
@@ -172,10 +190,53 @@ def _suggest_name_from_ai_metadata(path: Path, source_rel: str, metadata: dict[s
             "category_names": categories[:20],
             "object_labels": labels[:20],
             "person_attrs": attrs[:20],
+            "ocr_tags": [str(item) for item in metadata.get("ocr_tags") or []][:20],
+            "subtitle_tags": [str(item) for item in metadata.get("subtitle_tags") or []][:20],
             "evidence_refs": [str(item) for item in metadata.get("evidence_refs") or []][:20],
+            "confidence": metadata.get("confidence"),
         },
-        "naming_basis": generated.get("naming_reason") or {},
+        "naming_basis": _naming_basis(
+            generated.get("naming_reason") or {},
+            source=naming_source,
+            display_name_zh=generated.get("display_name_zh"),
+            suggested_filename_zh=suggested,
+            resolution_source=resolution_source,
+        ),
     }
+
+
+def _mark_filename_fallback_blocked(fallback: dict[str, Any], resolution: dict[str, Any]) -> dict[str, Any]:
+    fallback["ai_driven"] = False
+    fallback["resolution_source"] = "fallback_filename"
+    fallback["fallback_available"] = True
+    fallback["fallback_used"] = True
+    fallback["product_demo_allowed"] = False
+    fallback["blocker"] = "ai_index_missing_for_asset"
+    basis = dict(fallback.get("classification_basis") or {})
+    basis.update(
+        {
+            "source": "fallback_filename_heuristic",
+            "fallback_used": True,
+            "ai_driven": False,
+            "resolution_source": "fallback_filename",
+            "fallback_available": True,
+            "product_demo_allowed": False,
+            "blocker": "ai_index_missing_for_asset",
+            "asset_candidates": resolution.get("asset_candidates") or [],
+            "source_priority": resolution.get("source_priority") or SOURCE_PRIORITY,
+        }
+    )
+    fallback["classification_basis"] = basis
+    fallback["naming_basis"] = _naming_basis(fallback.get("naming_basis") or {}, source="fallback_filename_heuristic")
+    return fallback
+
+
+def _naming_basis(reason: dict[str, Any], *, source: str, **extra: Any) -> dict[str, Any]:
+    basis = dict(reason) if isinstance(reason, dict) else {}
+    basis.setdefault("source", source)
+    basis.setdefault("fallback_used", source == "fallback_filename_heuristic")
+    basis.update({key: value for key, value in extra.items() if value is not None})
+    return basis
 
 
 def _choose_category(categories: list[str], generated: dict[str, Any], title: str, modality: str) -> str:

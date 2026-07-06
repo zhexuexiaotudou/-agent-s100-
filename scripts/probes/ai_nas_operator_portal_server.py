@@ -83,9 +83,11 @@ except Exception:
 
 try:
     from src.assistant_trace.routes import assistant_trace_route_response
+    from src.assistant_trace.context import AssistantTraceContext
     from src.assistant_trace.recorder import AssistantTraceRecorder
 except Exception:
     assistant_trace_route_response = None  # type: ignore[assignment]
+    AssistantTraceContext = None  # type: ignore[assignment]
     AssistantTraceRecorder = None  # type: ignore[assignment]
 
 try:
@@ -112,6 +114,11 @@ try:
     from src.openclaw.routes.subtitle_extraction_routes import subtitle_extraction_route_response
 except Exception:
     subtitle_extraction_route_response = None  # type: ignore[assignment]
+
+try:
+    from src.openclaw.routes.document_rag_routes import document_rag_route_response
+except Exception:
+    document_rag_route_response = None  # type: ignore[assignment]
 
 try:
     from src.product_jobs.queue import ProductJobQueue
@@ -3569,6 +3576,16 @@ class PortalState:
             )
         subtitle_status = "ok" if subtitle_payload.get("ok") and not subtitle_payload.get("degraded") else "degraded" if subtitle_payload.get("ok") else "failed"
 
+        document_rag_payload: dict = {"ok": False, "degraded": True, "degraded_reason": "document_rag_route_unavailable"}
+        if document_rag_route_response is not None:
+            _status_code, document_rag_payload = document_rag_route_response(
+                "/api/document-rag/status",
+                method="GET",
+                report_root=self.report_root,
+                personal_root=self.personal_root,
+            )
+        document_rag_status = "ok" if document_rag_payload.get("ok") and not document_rag_payload.get("degraded") else "degraded" if document_rag_payload.get("ok") else "failed"
+
         jobs_payload: dict = {"ok": False}
         if product_jobs_route_response is not None:
             _status_code, jobs_payload = product_jobs_route_response(
@@ -3658,6 +3675,10 @@ class PortalState:
                     "overwrite_enabled": auto_organizer_payload.get("overwrite_enabled"),
                     "rollback_required": auto_organizer_payload.get("rollback_required"),
                     "plan_count": auto_organizer_payload.get("plan_count"),
+                    "fallback_default_blocked": auto_organizer_payload.get("fallback_default_blocked"),
+                    "last_ai_driven_plan": auto_organizer_payload.get("last_ai_driven_plan"),
+                    "last_fallback_blocker": auto_organizer_payload.get("last_fallback_blocker"),
+                    "last_rollback_status": auto_organizer_payload.get("last_rollback_status"),
                 },
                 reason=auto_organizer_payload.get("degraded_reason"),
             ),
@@ -3666,6 +3687,9 @@ class PortalState:
                 assistant_trace_status,
                 metrics={
                     "trace_count_visible": assistant_trace_payload.get("trace_count_visible"),
+                    "non_synthetic_trace_count": assistant_trace_payload.get("non_synthetic_trace_count"),
+                    "last_trace_id": assistant_trace_payload.get("last_trace_id"),
+                    "last_entrypoint": assistant_trace_payload.get("last_entrypoint"),
                     "required_steps": assistant_trace_payload.get("required_steps"),
                     "hidden_chain_of_thought_saved": assistant_trace_payload.get("hidden_chain_of_thought_saved"),
                     "raw_path_returned": assistant_trace_payload.get("raw_path_returned"),
@@ -3708,6 +3732,18 @@ class PortalState:
                 reason=subtitle_payload.get("degraded_reason"),
             ),
             "job_queue": self._module_card("job_queue", jobs_status, metrics={"counts": jobs_payload.get("counts")}),
+            "ocr_rag": self._module_card(
+                "ocr_rag",
+                document_rag_status,
+                metrics={
+                    "document_count": document_rag_payload.get("document_count"),
+                    "chunk_count": document_rag_payload.get("chunk_count"),
+                    "retrieval_mode": document_rag_payload.get("retrieval_mode"),
+                    "cloud_ocr_enabled": document_rag_payload.get("cloud_ocr_enabled"),
+                    "raw_private_content_returned": document_rag_payload.get("raw_private_content_returned"),
+                },
+                reason=document_rag_payload.get("degraded_reason"),
+            ),
             "ocr": self._module_card("ocr", "ok" if ocr_runtime.get("found") else "degraded", evidence=ocr_runtime),
             "documents": self._module_card("documents", "ok" if document_pipeline.get("found") else "degraded", evidence=document_pipeline),
             "media": self._module_card("media", "ok" if int(media_stats.get("photo_count") or 0) > 0 else "degraded", metrics=media_stats),
@@ -4316,6 +4352,21 @@ class PortalHandler(BaseHTTPRequestHandler):
         return {key: values[-1] for key, values in params.items()}
 
     def record_assistant_entrypoint(self, entrypoint: str, query: str, session_id: str = "demo") -> str | None:
+        recorder = self.assistant_trace_recorder()
+        if recorder is not None and AssistantTraceContext is not None:
+            privacy_spans = self.assistant_privacy_spans(query, {})
+            private = bool(privacy_spans)
+            ctx = AssistantTraceContext(recorder, entrypoint=entrypoint, query=query, session_id=session_id)
+            ctx.record_router_decision({"qwen_touched": True, "entrypoint": entrypoint, "qwen_execution_authority": False})
+            ctx.record_privacy_spans({"privacy_spans": privacy_spans, "privacy_level": "high" if private else "medium", "cloud_private_egress": False})
+            ctx.record_task_classifier({"task_type": entrypoint, "task_complexity": "simple"})
+            ctx.record_route_decision({"route": "private_local_only" if private else "local_only", "cloud_allowed": not private, "cloud_used": False})
+            ctx.record_token_budget({"estimated_input_tokens": max(1, len(query) // 3), "budget_policy": "local_first"})
+            ctx.record_tool_call(entrypoint, {"query_hash": hashlib.sha256(query.encode("utf-8", errors="replace")).hexdigest()}, {"status": "completed", "entrypoint": entrypoint})
+            ctx.record_safety_gate({"delete_enabled": False, "overwrite_enabled": False, "raw_path_returned": False, "hidden_chain_of_thought_saved": False})
+            ctx.record_evidence({"evidence_refs": [f"trace:{entrypoint}"], "raw_private_content_logged": False})
+            ctx.finish({"answer_redacted": "entrypoint trace completed", "hidden_chain_of_thought_exposed": False})
+            return ctx.trace_id
         if assistant_trace_route_response is None:
             return None
         try:
@@ -4369,73 +4420,86 @@ class PortalHandler(BaseHTTPRequestHandler):
         recorder = self.assistant_trace_recorder()
         trace_id = None
         steps: list[str] = []
+        step_payloads = {
+            "qwen_router": {
+                "qwen_touched": True,
+                "router_output": safe_router,
+                "qwen_execution_authority": False,
+            },
+            "privacy_tokenizer": {
+                "privacy_spans": privacy_spans,
+                "privacy_level": privacy_level,
+                "redaction_count": token_result.get("redaction_count"),
+                "redaction_map_included": False,
+                "cloud_private_egress": False,
+            },
+            "task_classifier": {
+                "task_type": task_type,
+                "task_complexity": task_complexity,
+                "action_intent": self.state._redact_paths(action_intent) if isinstance(action_intent, dict) else action_intent,
+            },
+            "route_decision": {
+                "route": route,
+                "cloud_allowed": cloud_allowed,
+                "cloud_used": cloud_used,
+                "cloud_stub": cloud_stub,
+                "real_cloud_call": real_cloud_call,
+            },
+            "token_budget": {
+                "run_id": token_result.get("run_id"),
+                "before_tokens": before_tokens,
+                "after_tokens": after_tokens,
+                "reduction_ratio": reduction_ratio,
+                "token_counts": token_counts,
+                "redaction_applied": redaction_applied,
+                "cloud_payload_contains_private_context": False,
+            },
+            "tool_execution": {
+                "tool": tool_result.get("tool_execution"),
+                "status": tool_result.get("status"),
+                "result_count": tool_result.get("result_count"),
+                "no_grounded_answer": tool_result.get("no_grounded_answer"),
+                "evidence_refs": evidence_refs,
+                "result": safe_tool,
+                "qwen_execution_authority": False,
+            },
+            "safety_gate": {
+                "delete_enabled": False,
+                "overwrite_enabled": False,
+                "uncontrolled_move_enabled": False,
+                "raw_private_cloud_egress": False,
+                "raw_path_returned": False,
+                "hidden_chain_of_thought_saved": False,
+            },
+            "evidence_summary": {
+                "evidence_refs": evidence_refs,
+                "raw_private_content_logged": False,
+                "raw_path_returned": False,
+            },
+            "final_answer": {
+                "answer_redacted": answer,
+                "hidden_chain_of_thought_exposed": False,
+            },
+        }
         if recorder is not None:
-            trace = recorder.record_execution_trace(
-                entrypoint=entrypoint,
-                query=query,
-                session_id=session_id,
-                step_payloads={
-                    "qwen_router": {
-                        "qwen_touched": True,
-                        "router_output": safe_router,
-                        "qwen_execution_authority": False,
-                    },
-                    "privacy_tokenizer": {
-                        "privacy_spans": privacy_spans,
-                        "privacy_level": privacy_level,
-                        "redaction_count": token_result.get("redaction_count"),
-                        "redaction_map_included": False,
-                        "cloud_private_egress": False,
-                    },
-                    "task_classifier": {
-                        "task_type": task_type,
-                        "task_complexity": task_complexity,
-                        "action_intent": self.state._redact_paths(action_intent) if isinstance(action_intent, dict) else action_intent,
-                    },
-                    "route_decision": {
-                        "route": route,
-                        "cloud_allowed": cloud_allowed,
-                        "cloud_used": cloud_used,
-                        "cloud_stub": cloud_stub,
-                        "real_cloud_call": real_cloud_call,
-                    },
-                    "token_budget": {
-                        "run_id": token_result.get("run_id"),
-                        "before_tokens": before_tokens,
-                        "after_tokens": after_tokens,
-                        "reduction_ratio": reduction_ratio,
-                        "token_counts": token_counts,
-                        "redaction_applied": redaction_applied,
-                        "cloud_payload_contains_private_context": False,
-                    },
-                    "tool_execution": {
-                        "tool": tool_result.get("tool_execution"),
-                        "status": tool_result.get("status"),
-                        "result_count": tool_result.get("result_count"),
-                        "no_grounded_answer": tool_result.get("no_grounded_answer"),
-                        "evidence_refs": evidence_refs,
-                        "result": safe_tool,
-                        "qwen_execution_authority": False,
-                    },
-                    "safety_gate": {
-                        "delete_enabled": False,
-                        "overwrite_enabled": False,
-                        "uncontrolled_move_enabled": False,
-                        "raw_private_cloud_egress": False,
-                        "raw_path_returned": False,
-                        "hidden_chain_of_thought_saved": False,
-                    },
-                    "evidence_summary": {
-                        "evidence_refs": evidence_refs,
-                        "raw_private_content_logged": False,
-                        "raw_path_returned": False,
-                    },
-                    "final_answer": {
-                        "answer_redacted": answer,
-                        "hidden_chain_of_thought_exposed": False,
-                    },
-                },
-            )
+            if AssistantTraceContext is not None:
+                ctx = AssistantTraceContext(recorder, entrypoint=entrypoint, query=query, session_id=session_id)
+                ctx.record_router_decision(step_payloads["qwen_router"])
+                ctx.record_privacy_spans(step_payloads["privacy_tokenizer"])
+                ctx.record_task_classifier(step_payloads["task_classifier"])
+                ctx.record_route_decision(step_payloads["route_decision"])
+                ctx.record_token_budget(step_payloads["token_budget"])
+                ctx.record_tool_call(
+                    str(tool_result.get("tool_execution") or task_type),
+                    {"query_hash": hashlib.sha256(query.encode("utf-8", errors="replace")).hexdigest(), "task_type": task_type},
+                    step_payloads["tool_execution"],
+                )
+                ctx.record_safety_gate(step_payloads["safety_gate"])
+                ctx.record_evidence(step_payloads["evidence_summary"])
+                ctx.finish(step_payloads["final_answer"])
+                trace = recorder.get_trace(ctx.trace_id)
+            else:
+                trace = recorder.record_execution_trace(entrypoint=entrypoint, query=query, session_id=session_id, step_payloads=step_payloads)
             trace_id = (trace.get("trace") or {}).get("trace_id") if isinstance(trace.get("trace"), dict) else None
             steps = [str(step.get("step_name")) for step in trace.get("steps") or []]
         response = {
@@ -4701,12 +4765,22 @@ class PortalHandler(BaseHTTPRequestHandler):
         self.send_json(self.state._redact_paths(safe))
 
     def send_ocr_status(self) -> None:
+        if document_rag_route_response is not None:
+            _status, payload = document_rag_route_response(
+                "/api/ocr/status",
+                method="GET",
+                report_root=self.state.report_root,
+                personal_root=self.state.personal_root,
+            )
+            self.send_json(payload)
+            return
         ocr_runtime = self.state._report_ref("ocr_runtime_contract.json")
         document_pipeline = self.state._report_ref("document_pipeline_acceptance.json")
         self.send_json(
             {
                 "ok": True,
                 "schema": "digua_ocr_status_v1",
+                "route_module": "portal_embedded_fallback",
                 "ocr_runtime": ocr_runtime,
                 "document_pipeline": document_pipeline,
                 "cloud_ocr_enabled": False,
@@ -4726,6 +4800,7 @@ class PortalHandler(BaseHTTPRequestHandler):
         response = {
             "ok": not no_grounded,
             "schema": "digua_document_rag_query_v1" if mode == "document_rag" else "digua_ocr_query_v1",
+            "route_module": "src.openclaw.routes.document_rag_routes",
             "mode": mode,
             "answer": "" if no_grounded else result.get("answer"),
             "evidence_refs": [] if no_grounded else evidence_refs,
@@ -5199,6 +5274,18 @@ class PortalHandler(BaseHTTPRequestHandler):
         if route == "/api/ocr/status":
             self.send_ocr_status()
             return
+        if route == "/api/document-rag/status":
+            if document_rag_route_response is None:
+                self.send_json({"ok": False, "error": "document_rag_routes_unavailable", "raw_path_returned": False}, HTTPStatus.SERVICE_UNAVAILABLE)
+                return
+            _status, payload = document_rag_route_response(
+                "/api/document-rag/status",
+                method="GET",
+                report_root=self.state.report_root,
+                personal_root=self.state.personal_root,
+            )
+            self.send_json(payload)
+            return
         if route.startswith("/api/assistant/trace") or route == "/api/assistant/traces":
             self.send_assistant_trace_response("GET", route, self.query_payload())
             return
@@ -5291,6 +5378,7 @@ class PortalHandler(BaseHTTPRequestHandler):
                     "/api/router/explain",
                     "/api/privacy-tokenizer/debug",
                     "/api/ocr/status",
+                    "/api/document-rag/status",
                     "/api/assistant/trace/status",
                     "/api/assistant/trace/{trace_id}",
                     "/api/assistant/trace/stream/{trace_id}",
@@ -5302,6 +5390,7 @@ class PortalHandler(BaseHTTPRequestHandler):
                     "POST /api/documents/query",
                     "POST /api/document-rag/query",
                     "POST /api/ocr/query",
+                    "POST /api/ocr/rebuild",
                     "POST /api/reports/export",
                     "POST /api/nas/copy/preview",
                     "POST /api/nas/copy/dry-run",
@@ -5719,6 +5808,32 @@ class PortalHandler(BaseHTTPRequestHandler):
                 str(payload.get("query") or payload.get("message") or ""),
                 str(payload.get("path") or "Documents"),
                 user or {},
+            )
+            self.send_json(result, status_code)
+            return
+        if route == "/api/ocr/rebuild":
+            if not self.require_product():
+                return
+            auth_status, error, user = self.state.require_user(self.headers.get("Authorization"))
+            if auth_status:
+                self.send_json(error or {}, auth_status)
+                return
+            status, payload = self.read_json_body()
+            if status:
+                self.send_json(payload or {}, status)
+                return
+            relative_path = str((payload or {}).get("path") or "Documents")
+            status_code, result = self.state.sync_document_fts_index(relative_path, user or {})
+            result = self.state._redact_paths(
+                {
+                    **(result if isinstance(result, dict) else {}),
+                    "schema": "digua_ocr_rebuild_v1",
+                    "route_module": "src.openclaw.routes.document_rag_routes",
+                    "cloud_ocr_enabled": False,
+                    "cloud_used": False,
+                    "raw_private_content_returned": False,
+                    "raw_path_returned": False,
+                }
             )
             self.send_json(result, status_code)
             return

@@ -117,6 +117,34 @@ recorded as a smoke warning, not a synthetic pass. Person Attribute Search is
 therefore degraded for detection-derived attributes in this final packet, while
 unsafe identity and sensitive attribute inference remain blocked.
 
+## Product-Grade Hardening
+
+The final hardening pass after Stage 9 adds stricter product contracts for the
+recording flows.
+
+- Audit: `reports/final_product_hardening_audit/final_product_hardening_audit.md`
+- Hardening note: `docs/PRODUCT_GRADE_HARDENING_20260706.md`
+- Auto Organizer now blocks product fallback when no AI index evidence exists:
+  `blocker=ai_index_missing_for_asset`.
+- Assistant Trace now separates non-synthetic product traces from synthetic
+  diagnostic traces.
+- OCR/RAG now has dedicated document and OCR route modules plus an `ocr_rag`
+  product-status card.
+
+S100P live acceptance for this hardening pass passed:
+
+- Final verdict: `ok_stage9_final_recording_readiness_gate`
+- Final report: `reports/stage9_final_recording_readiness_gate.json`
+- GPT Pro evidence bundle:
+  `evidence_for_gptpro/digua_final_recording_readiness_20260706-184743.zip`
+- Bundle SHA256:
+  `17f578ccf3749da09a56994b39a06ff618cd42c8121c93d75f2d814ca0b89fc2`
+
+Current boundary: product smoke has `failure_count=0` and
+`production_ready=true`, while YOLO and Person Attribute remain degraded for
+the same real-data reason: the S100P YOLO backend completed with
+`runtime_target=s100p_bpu_hbm`, but the current demo images produced zero boxes.
+
 ## AI Space Product Acceptance
 
 The AI Space / Smart Classification / Subtitle Extraction delivery gate is now

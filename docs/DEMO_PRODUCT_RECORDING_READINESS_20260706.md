@@ -56,6 +56,29 @@ The final gate replays the user-like flow instead of only checking module status
 
 Current S100P YOLO boundary: the real `s100p_bpu_hbm` backend completes local processing and indexes assets, but the current demo-image set produced zero YOLO boxes during final smoke. This is recorded as a product warning, not a pass-by-simulation. The Auto Organizer acceptance remains AI-driven because it resolves the neutral filename through AI Space and smart classification indexes rather than filename heuristics.
 
+## Product-Grade Hardening Follow-Up
+
+The later 2026-07-06 hardening pass tightens the recording contract without
+rewriting the acceptance above:
+
+- Auto Organizer product plans must be AI-index driven. Filename fallback is
+  diagnostic only and is blocked by default with
+  `ai_index_missing_for_asset`.
+- Assistant Trace product flows must use non-synthetic execution context traces.
+  `record_standard_trace()` is marked synthetic and not product-demo allowed.
+- OCR/RAG status and query behavior is surfaced through dedicated
+  `document_rag` / `ocr_index` route modules and a product `ocr_rag` card.
+- The hardening audit is recorded at
+  `reports/final_product_hardening_audit/final_product_hardening_audit.md`.
+
+This follow-up is accepted by the later S100P Stage 9 live Gate run:
+
+- Final verdict: `ok_stage9_final_recording_readiness_gate`
+- GPT Pro evidence bundle:
+  `evidence_for_gptpro/digua_final_recording_readiness_20260706-184743.zip`
+- Bundle SHA256:
+  `17f578ccf3749da09a56994b39a06ff618cd42c8121c93d75f2d814ca0b89fc2`
+
 ## Can Say
 
 The final demo is ready to record on the S100P test machine. The assistant can identify private NAS requests, route them through the local chain, use bounded product APIs, return evidence-grounded results or an explicit no-grounded-answer refusal, and keep controlled file organization behind approval plus rollback.

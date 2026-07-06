@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import argparse
 import base64
+import hashlib
 import shutil
 from pathlib import Path
 
@@ -42,6 +43,7 @@ def main() -> int:
     source_rel = args.source_rel.replace("\\", "/").strip("/")
     source = personal_root / source_rel
     fixture_only = seed_neutral_demo_image(source, args.demo_image)
+    source_sha_before = sha256_file(source)
     rebuild_payload = {"roots": [str(source.parent)], "max_files": 20, "include_video": False}
     rebuilds = {
         "multimodal": multimodal_route_response("/api/multimodal-index/rebuild", method="POST", payload=rebuild_payload, report_root=args.report_root, personal_root=personal_root)[1],
@@ -57,6 +59,32 @@ def main() -> int:
         report_root=args.report_root,
         personal_root=personal_root,
     )
+    _code, dry_run = auto_organizer_route_response("/api/auto-organize/dry-run", method="POST", payload={"plan_id": plan.get("plan_id")}, report_root=args.report_root, personal_root=personal_root)
+    _code, approved = auto_organizer_route_response(
+        "/api/auto-organize/approve",
+        method="POST",
+        payload={"plan_id": plan.get("plan_id"), "approval_phrase": plan.get("approval_phrase"), "approved_by": "stage9_auto_organizer_ai_driven_gate"},
+        report_root=args.report_root,
+        personal_root=personal_root,
+    )
+    _code, executed = auto_organizer_route_response(
+        "/api/auto-organize/execute",
+        method="POST",
+        payload={"plan_id": plan.get("plan_id"), "approval_token": approved.get("approval_token")},
+        report_root=args.report_root,
+        personal_root=personal_root,
+    )
+    _code, rolled_back = auto_organizer_route_response("/api/auto-organize/rollback", method="POST", payload={"plan_id": plan.get("plan_id")}, report_root=args.report_root, personal_root=personal_root)
+    unindexed_rel = "Uploads/stage9_ai_driven_unindexed/IMG_9999.jpg"
+    unindexed = personal_root / unindexed_rel
+    seed_neutral_demo_image(unindexed, None)
+    _code, fallback_plan = auto_organizer_route_response(
+        "/api/auto-organize/plan",
+        method="POST",
+        payload={"mode": "move_and_rename", "source_root": "Uploads", "source_rel_paths": [unindexed_rel], "limit": 1},
+        report_root=args.report_root,
+        personal_root=personal_root,
+    )
     item = (plan.get("items") or [{}])[0] if isinstance(plan.get("items"), list) else {}
     basis = item.get("classification_basis") if isinstance(item.get("classification_basis"), dict) else {}
     source_name = str(basis.get("source") or "")
@@ -69,11 +97,23 @@ def main() -> int:
         check("smart classification rebuild ok", rebuilds["smart_classification"].get("ok") is True, rebuilds["smart_classification"].get("error")),
         check("ai space rebuild ok", rebuilds["ai_space"].get("ok") is True, rebuilds["ai_space"].get("error")),
         check("plan created one item", plan.get("ok") is True and plan.get("item_count") == 1, plan.get("error")),
+        check("plan item top-level ai-driven", item.get("ai_driven") is True, item),
+        check("plan item fallback false", item.get("fallback_used") is False, item),
+        check("plan item resolution source real", str(item.get("resolution_source") or "") not in {"", "fallback_filename", "fallback_filename_heuristic"}, item.get("resolution_source")),
         check("classification source not fallback", source_name not in {"", "fallback_filename_heuristic", "local_filename_and_existing_naming_policy"}, basis),
         check("classification marked ai-driven", basis.get("fallback_used") is False, basis),
+        check("classification has evidence refs", bool(basis.get("evidence_refs")), basis.get("evidence_refs")),
         check("category generated", bool(item.get("target_category_zh")), item.get("target_category_zh")),
         check("suggested Chinese filename generated", bool(item.get("suggested_filename_zh")) and not str(item.get("suggested_filename_zh")).lower().startswith("img_0001"), item.get("suggested_filename_zh")),
-        check("raw path not returned", not has_raw_path({"plan": plan, "rebuilds": rebuilds}), "redacted"),
+        check("dry run ok", dry_run.get("ok") is True and (dry_run.get("items") or [{}])[0].get("would_execute") is True, dry_run),
+        check("approval ok", approved.get("ok") is True and bool(approved.get("approval_token")), approved),
+        check("execute ok", executed.get("ok") is True and executed.get("executed_count") == 1, executed),
+        check("rollback ok", rolled_back.get("ok") is True and rolled_back.get("rollback_verified") is True, rolled_back),
+        check("rollback preserved sha256", source.exists() and sha256_file(source) == source_sha_before, source_rel),
+        check("delete false", executed.get("delete_allowed") is False, executed),
+        check("overwrite false", executed.get("overwrite_allowed") is False, executed),
+        check("unindexed fallback blocked", fallback_plan.get("ok") is False and fallback_plan.get("blocker") == "ai_index_missing_for_asset" and fallback_plan.get("fallback_available") is True, fallback_plan),
+        check("raw path not returned", not has_raw_path({"plan": plan, "dry_run": dry_run, "approved": approved, "executed": executed, "rolled_back": rolled_back, "fallback_plan": fallback_plan, "rebuilds": rebuilds}), "redacted"),
     ]
     payload = gate_payload(
         "ok_stage9_auto_organizer_ai_driven_gate",
@@ -85,6 +125,11 @@ def main() -> int:
             "source_rel": source_rel,
             "classification_basis": basis,
             "plan": plan,
+            "dry_run": dry_run,
+            "approved": approved,
+            "executed": executed,
+            "rolled_back": rolled_back,
+            "fallback_plan": fallback_plan,
             "rebuilds": rebuilds,
         },
     )
@@ -102,6 +147,14 @@ def seed_neutral_demo_image(target: Path, demo_image: Path | None) -> bool:
     if not target.exists():
         target.write_bytes(base64.b64decode(TINY_JPEG_BASE64))
     return True
+
+
+def sha256_file(path: Path) -> str:
+    digest = hashlib.sha256()
+    with path.open("rb") as handle:
+        for chunk in iter(lambda: handle.read(1024 * 1024), b""):
+            digest.update(chunk)
+    return digest.hexdigest()
 
 
 if __name__ == "__main__":

@@ -42,6 +42,7 @@ def main() -> int:
                 check(f"{key} trace fetch ok", trace.get("ok") is True and trace_payload.get("ok") is True, trace_payload.get("error")),
                 check(f"{key} all required steps", set(STANDARD_STEPS).issubset(set(step_names)), step_names),
                 check(f"{key} trace uses real execution context", all((step_payloads.get(step) or {}).get("payload_source") == "real_execution_context" for step in STANDARD_STEPS if step != "received"), step_payloads),
+                check(f"{key} trace not synthetic", trace_payload.get("synthetic_trace") is False and trace_payload.get("product_demo_allowed") is True, {"synthetic_trace": trace_payload.get("synthetic_trace"), "product_demo_allowed": trace_payload.get("product_demo_allowed")}),
                 check(f"{key} no hidden CoT", trace_payload.get("hidden_chain_of_thought_saved") is False and payload.get("hidden_chain_of_thought_saved") is False, payload),
                 check(f"{key} no raw path", not has_raw_path({"assistant": payload, "trace": trace_payload}), "redacted"),
             ]

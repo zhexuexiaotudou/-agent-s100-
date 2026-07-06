@@ -27,7 +27,19 @@ def main() -> int:
     source_rel = "Uploads/stage8_auto_organize_rollback/white_shirt_person_rollback.jpg"
     source = fixture_file(personal_root, source_rel, b"stage8 rollback fixture\n")
     source_sha = sha256_file(source)
-    _code, plan = auto_organizer_route_response("/api/auto-organize/plan", method="POST", payload={"mode": "move_and_rename", "source_root": "Uploads", "source_rel_paths": [source_rel], "limit": 1}, report_root=args.report_root, personal_root=personal_root)
+    _code, plan = auto_organizer_route_response(
+        "/api/auto-organize/plan",
+        method="POST",
+        payload={
+            "mode": "move_and_rename",
+            "source_root": "Uploads",
+            "source_rel_paths": [source_rel],
+            "limit": 1,
+            "allow_filename_fallback_for_diagnostic": True,
+        },
+        report_root=args.report_root,
+        personal_root=personal_root,
+    )
     _code, approved = auto_organizer_route_response("/api/auto-organize/approve", method="POST", payload={"plan_id": plan.get("plan_id"), "approval_phrase": plan.get("approval_phrase"), "approved_by": "stage8_gate"}, report_root=args.report_root, personal_root=personal_root)
     _code, executed = auto_organizer_route_response("/api/auto-organize/execute", method="POST", payload={"plan_id": plan.get("plan_id"), "approval_token": approved.get("approval_token")}, report_root=args.report_root, personal_root=personal_root)
     target_rel = ((executed.get("items") or [{}])[0] or {}).get("target_rel")
