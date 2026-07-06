@@ -9,6 +9,7 @@ from typing import Any
 from .eval import run_eval
 from .feature_flags import MultimodalFeatureFlags, load_feature_flags
 from .hybrid_retriever import HybridRetriever
+from .clip_embedding_adapter import PRODUCTION_FAMILIES, load_image_text_model
 from .indexer import MultimodalIndexer
 from .query_planner import plan_query
 from .schema import connect, migrate
@@ -39,13 +40,46 @@ class MultimodalSearchService:
 
     def status(self) -> dict[str, Any]:
         migrate(self.db_path)
+        image_model = load_image_text_model()
+        model_identity = image_model.get_model_identity()
         conn = connect(self.db_path)
         try:
             counts = {row["modality"]: row["c"] for row in conn.execute("SELECT modality, count(*) AS c FROM mm_assets GROUP BY modality")}
             embedding_count = conn.execute("SELECT count(*) FROM mm_embeddings").fetchone()[0]
+            image_asset_count = int(counts.get("image") or 0)
+            production_semantic_embedding_count = 0
+            if (
+                model_identity.get("production_semantic")
+                and model_identity.get("model_family") in PRODUCTION_FAMILIES
+                and int(model_identity.get("vector_dim") or 0) >= 128
+            ):
+                production_semantic_embedding_count = conn.execute(
+                    "SELECT count(*) FROM mm_embeddings WHERE modality='image' AND model_id=? AND vector_dim>=128",
+                    (model_identity.get("model_name"),),
+                ).fetchone()[0]
             raw_path_rows = conn.execute("SELECT count(*) FROM mm_assets WHERE path_hash IS NULL OR length(path_hash) < 16").fetchone()[0]
         finally:
             conn.close()
+        production_semantic_model_available = bool(
+            image_model.available
+            and model_identity.get("production_semantic")
+            and model_identity.get("model_family") in PRODUCTION_FAMILIES
+            and int(model_identity.get("vector_dim") or 0) >= 128
+        )
+        delivery_blockers: list[str] = []
+        if self.flags.image_embedding_required_for_delivery and embedding_count == 0:
+            delivery_blockers.append("image_embeddings_missing")
+        if self.flags.image_embedding_required_for_delivery and image_asset_count == 0:
+            delivery_blockers.append("image_assets_missing")
+        if self.flags.production_semantic_model_required and not production_semantic_model_available:
+            delivery_blockers.append("production_semantic_model_unavailable")
+        if self.flags.production_semantic_model_required and production_semantic_embedding_count < int(self.flags.min_live_image_embeddings):
+            delivery_blockers.append("production_semantic_embeddings_below_minimum")
+        if raw_path_rows > 0:
+            delivery_blockers.append("raw_path_rows_present")
+        if bool(self.flags.cloud_vision_enabled or self.flags.cloud_ocr_enabled or self.flags.cloud_asr_enabled):
+            delivery_blockers.append("cloud_ai_enabled")
+        degraded = bool(delivery_blockers)
         return {
             "ok": True,
             "schema": "digua_multimodal_search_v1",
@@ -53,13 +87,18 @@ class MultimodalSearchService:
             "counts": counts,
             "indexed_count": sum(counts.values()),
             "embedding_count": embedding_count,
+            "image_asset_count": image_asset_count,
+            "production_semantic_embedding_count": production_semantic_embedding_count,
+            "image_embedding_model": model_identity,
+            "production_semantic_model_available": production_semantic_model_available,
             "yolo_index": self._yolo_status_summary(),
             "raw_path_rows": raw_path_rows,
             "private_leak_count": 0,
             "cloud_used": False,
             "qwen_tool_execution_enabled": False,
-            "degraded": self.flags.image_embedding_enabled and embedding_count == 0,
-            "degraded_reason": "image_embeddings_missing" if self.flags.image_embedding_enabled and embedding_count == 0 else None,
+            "delivery_blockers": delivery_blockers,
+            "degraded": degraded,
+            "degraded_reason": delivery_blockers[0] if delivery_blockers else None,
         }
 
     def rebuild(self, payload: dict[str, Any] | None = None) -> dict[str, Any]:

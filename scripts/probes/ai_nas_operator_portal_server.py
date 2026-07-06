@@ -22,7 +22,7 @@ import threading
 import tempfile
 import re
 import xml.etree.ElementTree as ET
-from datetime import datetime
+from datetime import datetime, timezone
 from http import HTTPStatus
 from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 from pathlib import Path
@@ -70,6 +70,41 @@ try:
     from src.openclaw.routes.yolo_index_routes import yolo_route_response
 except Exception:
     yolo_route_response = None  # type: ignore[assignment]
+
+try:
+    from src.openclaw.routes.ai_space_routes import ai_space_route_response
+except Exception:
+    ai_space_route_response = None  # type: ignore[assignment]
+
+try:
+    from src.openclaw.routes.person_attribute_routes import person_attribute_route_response
+except Exception:
+    person_attribute_route_response = None  # type: ignore[assignment]
+
+try:
+    from src.openclaw.routes.product_jobs_routes import product_jobs_route_response
+except Exception:
+    product_jobs_route_response = None  # type: ignore[assignment]
+
+try:
+    from src.openclaw.routes.smart_classification_routes import smart_classification_route_response
+except Exception:
+    smart_classification_route_response = None  # type: ignore[assignment]
+
+try:
+    from src.openclaw.routes.smart_naming_routes import smart_naming_route_response
+except Exception:
+    smart_naming_route_response = None  # type: ignore[assignment]
+
+try:
+    from src.openclaw.routes.subtitle_extraction_routes import subtitle_extraction_route_response
+except Exception:
+    subtitle_extraction_route_response = None  # type: ignore[assignment]
+
+try:
+    from src.product_jobs.queue import ProductJobQueue
+except Exception:
+    ProductJobQueue = None  # type: ignore[assignment]
 
 try:
     from src.yolo_index.labels import labels_from_query
@@ -311,6 +346,53 @@ COPILOT_DOCUMENT_QUERY_TERMS = (
     "\u95ee\u7b54",
 )
 COPILOT_STATUS_TERMS = ("status", "health", "summary", "list", "report", "audit", "\u72b6\u6001", "\u5065\u5eb7", "\u6982\u89c8", "\u6c47\u603b", "\u5217\u8868", "\u62a5\u544a", "\u5ba1\u8ba1")
+COPILOT_STORAGE_INVENTORY_TERMS = (
+    "what files",
+    "which files",
+    "how many files",
+    "file count",
+    "number of files",
+    "count files",
+    "file inventory",
+    "inventory",
+    "file types",
+    "how much space",
+    "space usage",
+    "disk usage",
+    "storage usage",
+    "\u6709\u4ec0\u4e48\u6587\u4ef6",
+    "\u6709\u54ea\u4e9b\u6587\u4ef6",
+    "\u6709\u591a\u5c11\u6587\u4ef6",
+    "\u591a\u5c11\u6587\u4ef6",
+    "\u51e0\u4e2a\u6587\u4ef6",
+    "\u591a\u5c11\u4e2a\u6587\u4ef6",
+    "\u6587\u4ef6\u6570",
+    "\u6587\u4ef6\u6570\u91cf",
+    "\u4e00\u5171\u6709\u591a\u5c11",
+    "\u603b\u5171\u6709\u591a\u5c11",
+    "\u7edf\u8ba1\u6587\u4ef6",
+    "\u6587\u4ef6\u7edf\u8ba1",
+    "\u76d8\u70b9\u6587\u4ef6",
+    "\u6587\u4ef6\u76d8\u70b9",
+    "\u76ee\u5f55\u7edf\u8ba1",
+    "\u54ea\u4e9b\u6587\u4ef6",
+    "\u4ec0\u4e48\u6587\u4ef6",
+    "\u5206\u522b\u662f\u4ec0\u4e48\u7c7b\u578b",
+    "\u90fd\u662f\u4ec0\u4e48\u7c7b\u578b",
+    "\u5404\u662f\u4ec0\u4e48\u7c7b\u578b",
+    "\u6309\u7c7b\u578b",
+    "\u6587\u4ef6\u7c7b\u578b",
+    "\u7c7b\u578b",
+    "\u5360\u591a\u5927\u7a7a\u95f4",
+    "\u5360\u7528\u7a7a\u95f4",
+    "\u5360\u7528\u591a\u5c11",
+    "\u5360\u591a\u5c11",
+    "\u7a7a\u95f4\u5360\u7528",
+    "\u591a\u5927\u7a7a\u95f4",
+    "\u591a\u5927",
+    "\u5bb9\u91cf",
+    "\u5927\u5c0f",
+)
 
 
 def iso_timestamp() -> str:
@@ -414,6 +496,74 @@ def contains_any(text: str, terms: tuple[str, ...]) -> bool:
     return any(term.lower() in lower for term in terms)
 
 
+def product_hidden_storage_name(name: str) -> bool:
+    value = str(name or "").strip()
+    if not value:
+        return False
+    if value.startswith("."):
+        return True
+    return bool(
+        re.search(r"^(Codex|OpenClaw|qwen25|qwen3|ai_nas_|yolo_run_|production_|stage\d+_|tmp_)", value, re.IGNORECASE)
+        or re.search(
+            r"(QwenRouter|ProductUiSmoke|CodexPreflight|agent_runtime|capability_inventory|eval_gate|safety_ui_gate|tool_manifest|context_pack|probe|gate|manifest)",
+            value,
+            re.IGNORECASE,
+        )
+    )
+
+
+def product_file_type(path: Path) -> str:
+    if path.is_dir():
+        return "\u6587\u4ef6\u5939"
+    ext = path.suffix.lower()
+    mapping = {
+        ".pdf": "PDF",
+        ".doc": "Word",
+        ".docx": "Word",
+        ".xls": "Excel",
+        ".xlsx": "Excel",
+        ".csv": "CSV",
+        ".txt": "TXT",
+        ".md": "Markdown",
+        ".jpg": "\u7167\u7247",
+        ".jpeg": "\u7167\u7247",
+        ".png": "\u56fe\u7247",
+        ".webp": "\u56fe\u7247",
+        ".gif": "\u56fe\u7247",
+        ".mp4": "\u89c6\u9891",
+        ".mov": "\u89c6\u9891",
+        ".mkv": "\u89c6\u9891",
+        ".mp3": "\u97f3\u9891",
+        ".wav": "\u97f3\u9891",
+        ".zip": "\u538b\u7f29\u5305",
+        ".json": "JSON",
+    }
+    if ext in mapping:
+        return mapping[ext]
+    mime = mimetypes.guess_type(path.name)[0] or ""
+    if mime.startswith("image/"):
+        return "\u56fe\u7247"
+    if mime.startswith("video/"):
+        return "\u89c6\u9891"
+    if mime.startswith("audio/"):
+        return "\u97f3\u9891"
+    if mime.startswith("text/"):
+        return "\u6587\u672c"
+    return "\u6587\u4ef6"
+
+
+def human_size(size_bytes: int) -> str:
+    value = float(max(0, int(size_bytes or 0)))
+    units = ["B", "KB", "MB", "GB", "TB"]
+    unit = 0
+    while value >= 1024 and unit < len(units) - 1:
+        value /= 1024
+        unit += 1
+    if unit == 0:
+        return f"{int(value)} {units[unit]}"
+    return f"{value:.1f} {units[unit]}"
+
+
 def infer_copilot_search_intent(message: str) -> dict | None:
     text = str(message or "").strip()
     if not text:
@@ -478,6 +628,7 @@ def copilot_action_tool_id(action: str | None) -> str | None:
         "search": "local_nas_search",
         "document_query": "local_document_rag",
         "storage_list": "local_storage_list",
+        "storage_inventory": "local_storage_inventory",
         "storage_list_or_inspect": "local_storage_list_or_inspect",
         "storage_inspect": "local_storage_inspect",
         "storage_copy": "harness_copy_route",
@@ -516,6 +667,37 @@ def infer_copilot_action_intent(message: str) -> dict | None:
     has_document = contains_any(text, COPILOT_DOCUMENT_QUERY_TERMS)
     has_status = contains_any(text, COPILOT_STATUS_TERMS)
     has_inspect = contains_any(text, COPILOT_INSPECT_TERMS)
+    has_storage_scope = contains_any(text, COPILOT_NAS_SCOPE_TERMS) or "nas" in text.lower()
+    has_file_scope = "\u6587\u4ef6" in text or "\u6587\u6863" in text or "\u76ee\u5f55" in text or "\u7167\u7247" in text or "file" in text.lower()
+    has_inventory_count_term = (
+        "\u591a\u5c11" in text
+        or "\u51e0\u4e2a" in text
+        or "\u6570\u91cf" in text
+        or "\u6570\u76ee" in text
+        or "\u6587\u4ef6\u6570" in text
+        or "\u7edf\u8ba1" in text
+        or "\u76d8\u70b9" in text
+        or "how many" in text.lower()
+        or "count" in text.lower()
+    )
+    has_inventory_shape_term = (
+        "\u4ec0\u4e48" in text
+        or "\u54ea\u4e9b" in text
+        or "\u6709\u5565" in text
+        or "\u6709\u54ea" in text
+        or "\u7c7b\u578b" in text
+        or "\u7a7a\u95f4" in text
+        or "\u5360\u7528" in text
+        or "\u5927\u5c0f" in text
+        or "\u5bb9\u91cf" in text
+    )
+    has_inventory_question = has_storage_scope and (
+        contains_any(text, COPILOT_STORAGE_INVENTORY_TERMS)
+        or ("\u6587\u4ef6" in text and ("\u4ec0\u4e48" in text or "\u54ea\u4e9b" in text or "\u6709\u5565" in text or "\u6709\u54ea" in text))
+        or (has_file_scope and has_inventory_count_term)
+        or (has_file_scope and has_inventory_shape_term)
+        or ("\u7c7b\u578b" in text and ("\u7a7a\u95f4" in text or "\u5927\u5c0f" in text))
+    )
     if has_snapshot:
         return {
             "action": "snapshot_create",
@@ -567,6 +749,8 @@ def infer_copilot_action_intent(message: str) -> dict | None:
             "quoted": quoted,
         }
     lower = text.lower()
+    if has_inventory_question:
+        return {"action": "storage_inventory", "path": copilot_default_path_for_message(text), "quoted": quoted}
     if has_status and ("storage" in lower or "nas" in lower or "\u5b58\u50a8" in text):
         return {"action": "storage_status", "quoted": quoted}
     if has_status and ("media" in lower or "\u5a92\u4f53" in text or "\u76f8\u518c" in text):
@@ -1662,6 +1846,126 @@ class PortalState:
         except (StoragePathError, FileNotFoundError, NotADirectoryError) as exc:
             return HTTPStatus.BAD_REQUEST, {"ok": False, "error": str(exc)}
 
+    def storage_inventory_payload(self, relative_path: str = "", user: dict | None = None, *, limit: int = 40) -> tuple[int, dict]:
+        if not self.personal_root:
+            return HTTPStatus.SERVICE_UNAVAILABLE, {"ok": False, "error": "personal_root_not_configured"}
+        rel = normalize_storage_relative_path(relative_path)
+        if user and not self.can_read(user, rel):
+            return HTTPStatus.FORBIDDEN, {"ok": False, "error": "permission_denied", "required": "read", "path": rel}
+        try:
+            directory = resolve_storage_path(self.personal_root, rel)
+            if not directory.exists():
+                raise FileNotFoundError(str(directory))
+            if not directory.is_dir():
+                raise NotADirectoryError(str(directory))
+        except (StoragePathError, FileNotFoundError, NotADirectoryError) as exc:
+            return HTTPStatus.BAD_REQUEST, {"ok": False, "error": str(exc)}
+
+        scan_budget = max(1, min(int(self.storage_max_files or 5000), 5000))
+        scanned_files = 0
+        truncated = False
+        entries: list[dict] = []
+        type_counts: dict[str, int] = {}
+        total_size = 0
+        total_files = 0
+        total_dirs = 0
+
+        def add_type(label: str, count: int = 1) -> None:
+            type_counts[label] = int(type_counts.get(label, 0)) + count
+
+        def dir_usage(path: Path) -> tuple[int, int, int, bool]:
+            nonlocal scanned_files
+            size = 0
+            file_count = 0
+            dir_count = 0
+            hit_limit = False
+            for root, dirs, files in os.walk(path):
+                dirs[:] = [name for name in dirs if not product_hidden_storage_name(name)]
+                if Path(root) != path:
+                    dir_count += 1
+                for filename in files:
+                    if product_hidden_storage_name(filename):
+                        continue
+                    if scanned_files >= scan_budget:
+                        return size, file_count, dir_count, True
+                    scanned_files += 1
+                    file_count += 1
+                    try:
+                        child = Path(root) / filename
+                        size += child.stat().st_size
+                        add_type(product_file_type(child))
+                    except OSError:
+                        continue
+            return size, file_count, dir_count, hit_limit
+
+        try:
+            children = sorted(directory.iterdir(), key=lambda p: (not p.is_dir(), p.name.lower()))
+        except OSError as exc:
+            return HTTPStatus.BAD_REQUEST, {"ok": False, "error": str(exc)}
+
+        for child in children:
+            if product_hidden_storage_name(child.name):
+                continue
+            try:
+                stat = child.stat()
+            except OSError:
+                continue
+            item_type = product_file_type(child)
+            if child.is_dir():
+                size, file_count, dir_count, hit_limit = dir_usage(child)
+                truncated = truncated or hit_limit
+                total_dirs += 1 + dir_count
+                total_files += file_count
+                add_type("\u6587\u4ef6\u5939")
+                entry = {
+                    "name": child.name,
+                    "is_dir": True,
+                    "file_type": item_type,
+                    "size_bytes": size,
+                    "file_count": file_count,
+                    "dir_count": dir_count,
+                    "mtime": datetime.fromtimestamp(stat.st_mtime, timezone.utc).astimezone().isoformat(),
+                }
+            else:
+                if scanned_files >= scan_budget:
+                    truncated = True
+                    continue
+                scanned_files += 1
+                total_files += 1
+                size = stat.st_size
+                add_type(item_type)
+                entry = {
+                    "name": child.name,
+                    "is_dir": False,
+                    "file_type": item_type,
+                    "size_bytes": size,
+                    "file_count": 1,
+                    "dir_count": 0,
+                    "mtime": datetime.fromtimestamp(stat.st_mtime, timezone.utc).astimezone().isoformat(),
+                    "extension": child.suffix.lower(),
+                    "mime_type": mimetypes.guess_type(child.name)[0] or "application/octet-stream",
+                }
+            total_size += int(entry.get("size_bytes") or 0)
+            entries.append(entry)
+
+        entries.sort(key=lambda item: (not bool(item.get("is_dir")), str(item.get("name") or "").lower()))
+        return HTTPStatus.OK, {
+            "ok": True,
+            "relative_path": rel,
+            "entry_count": len(entries),
+            "entries": entries[:limit],
+            "summary": {
+                "top_level_count": len(entries),
+                "file_count": total_files,
+                "dir_count": total_dirs,
+                "total_size_bytes": total_size,
+                "type_counts": dict(sorted(type_counts.items(), key=lambda kv: (-kv[1], kv[0]))),
+                "scanned_files": scanned_files,
+                "truncated": truncated,
+                "limit": limit,
+            },
+        }
+
     def document_items_payload(self, relative_path: str = "Documents", user: dict | None = None, *, limit: int = 250) -> tuple[int, dict]:
         if not self.personal_root:
             return HTTPStatus.SERVICE_UNAVAILABLE, {"ok": False, "error": "personal_root_not_configured"}
@@ -1958,6 +2262,193 @@ class PortalState:
             },
         }
 
+    def media_status_payload(self, *, ensure_index: bool = False, max_files: int = 5000) -> dict:
+        if not self.media_center:
+            return {"ok": False, "error": "media_center_unavailable", "raw_path_returned": False}
+        if ensure_index and self.personal_root and int((self.media_center.stats() or {}).get("photo_count") or 0) == 0:
+            self.media_center.index_photos(self.personal_root, asset_root=self.personal_root, max_files=max_files, source_id="personal_autoscan")
+        status = self.media_center.status()
+        status.update(
+            {
+                "schema": "digua_media_album_v2",
+                "raw_path_returned": False,
+                "physical_file_renamed": False,
+                "physical_file_moved": False,
+                "destructive_actions_enabled": False,
+            }
+        )
+        return status
+
+    def media_upload_photo(self, payload: dict, user: dict) -> tuple[int, dict]:
+        if not self.personal_root or not self.media_center:
+            return HTTPStatus.SERVICE_UNAVAILABLE, {"ok": False, "error": "media_center_unavailable", "raw_path_returned": False}
+        raw_filename = str(payload.get("filename") or payload.get("name") or "uploaded_photo.jpg").strip()
+        filename = self._safe_upload_filename(raw_filename)
+        if not filename:
+            return HTTPStatus.BAD_REQUEST, {"ok": False, "error": "invalid_filename", "raw_path_returned": False}
+        if Path(filename).suffix.lower() not in {".jpg", ".jpeg", ".png", ".webp", ".bmp", ".gif", ".tif", ".tiff"}:
+            return HTTPStatus.BAD_REQUEST, {"ok": False, "error": "unsupported_upload_format", "supported": ["jpg", "jpeg", "png", "webp", "bmp", "gif", "tif", "tiff"], "raw_path_returned": False}
+        try:
+            target_dir = normalize_storage_relative_path(payload.get("target_dir") or "Uploads")
+            parent = resolve_storage_path(self.personal_root, target_dir)
+        except StoragePathError as exc:
+            return HTTPStatus.BAD_REQUEST, {"ok": False, "error": str(exc), "raw_path_returned": False}
+        if not self.can_write(user, target_dir):
+            self.record_operation("media_upload", None, target_dir, "permission_denied", str(user.get("username")))
+            return HTTPStatus.FORBIDDEN, {"ok": False, "error": "permission_denied", "required": "write", "raw_path_returned": False}
+        parent.mkdir(parents=True, exist_ok=True)
+        try:
+            content = base64.b64decode(str(payload.get("content_base64") or payload.get("data_base64") or ""), validate=True)
+        except (binascii.Error, ValueError) as exc:
+            return HTTPStatus.BAD_REQUEST, {"ok": False, "error": f"invalid_base64:{exc}", "raw_path_returned": False}
+        if len(content) > MAX_UPLOAD_BYTES:
+            return HTTPStatus.REQUEST_ENTITY_TOO_LARGE, {"ok": False, "error": "upload_too_large", "max_bytes": MAX_UPLOAD_BYTES, "raw_path_returned": False}
+        target = self._unique_child(parent, filename)
+        try:
+            target.write_bytes(content)
+        except OSError as exc:
+            return HTTPStatus.INTERNAL_SERVER_ERROR, {"ok": False, "error": f"upload_write_failed:{type(exc).__name__}:{exc}", "raw_path_returned": False}
+
+        target_rel = target.resolve(strict=False).relative_to(self.personal_root.resolve(strict=False)).as_posix()
+        self.record_operation("media_upload", None, target_rel, "created", str(user.get("username")))
+        bounded_rebuild = bool(payload.get("upload_scope_only") or payload.get("bounded_rebuild"))
+        media_asset_root = parent if bounded_rebuild else self.personal_root
+        media_index = self.media_center.index_photos(parent, asset_root=media_asset_root, source_id="media_upload")
+        media_item = self.media_center.item_for_path(target, asset_root=media_asset_root) or {}
+        asset_id = media_item.get("asset_id") or self.media_center.asset_id_for_path(target, media_asset_root)
+        sha256 = hashlib.sha256(content).hexdigest()
+        jobs: list[dict] = []
+        pipeline: dict[str, dict] = {"media_index": media_index}
+
+        def run_pipeline_job(job_type: str, fn) -> dict:
+            queue = self._product_job_queue()
+            job = queue.enqueue(job_type, {"asset_id": asset_id, "path_hash": media_item.get("path_hash")}) if queue else {"ok": False, "job_type": job_type}
+            job_id = job.get("job_id")
+            if queue and job_id:
+                queue.mark_running(job_id)
+            try:
+                result = fn()
+                if queue and job_id:
+                    queue.complete(job_id, evidence_ref=str(result.get("verdict") or result.get("schema") or job_type))
+                job.update({"status": "completed", "result_ok": bool(result.get("ok", True))})
+                pipeline[job_type] = self._redact_paths(result)
+            except Exception as exc:
+                if queue and job_id:
+                    queue.fail(job_id, f"{type(exc).__name__}")
+                job.update({"status": "failed", "error": f"{type(exc).__name__}"})
+                pipeline[job_type] = {"ok": False, "error": job["error"]}
+            jobs.append(job)
+            return job
+
+        run_pipeline_job("media_upload", lambda: {"ok": True, "schema": "digua_media_upload_v1"})
+        rebuild_payload = {"roots": [str(parent)], "max_files": 20, "include_video": False} if bounded_rebuild else {}
+        if bool(payload.get("auto_process", True)):
+            if multimodal_route_response is not None:
+                run_pipeline_job("multimodal_rebuild", lambda: multimodal_route_response("/api/multimodal-index/rebuild", method="POST", payload=rebuild_payload, report_root=self.report_root, personal_root=self.personal_root)[1])
+            if yolo_route_response is not None:
+                run_pipeline_job("yolo_index", lambda: yolo_route_response("/api/yolo-index/rebuild", method="POST", payload=rebuild_payload, report_root=self.report_root, personal_root=self.personal_root)[1])
+            if person_attribute_route_response is not None:
+                run_pipeline_job("person_attribute_rebuild", lambda: person_attribute_route_response("/api/person-attribute/rebuild", method="POST", payload=rebuild_payload, report_root=self.report_root, personal_root=self.personal_root)[1])
+            if smart_classification_route_response is not None:
+                run_pipeline_job("smart_classification_rebuild", lambda: smart_classification_route_response("/api/smart-classification/rebuild", method="POST", payload={}, report_root=self.report_root, personal_root=self.personal_root)[1])
+            if smart_naming_route_response is not None:
+                run_pipeline_job(
+                    "smart_naming_generate",
+                    lambda: smart_naming_route_response(
+                        "/api/smart-naming/generate",
+                        method="POST",
+                        payload={
+                            "asset_id": asset_id,
+                            "asset": {
+                                "asset_id": asset_id,
+                                "title_redacted": media_item.get("title_redacted") or filename,
+                                "modality": "image",
+                                "mtime": target.stat().st_mtime,
+                            },
+                        },
+                        report_root=self.report_root,
+                        personal_root=self.personal_root,
+                    )[1],
+                )
+            if ai_space_route_response is not None:
+                run_pipeline_job("ai_space_rebuild", lambda: ai_space_route_response("/api/ai-space/rebuild", method="POST", payload={}, report_root=self.report_root, personal_root=self.personal_root)[1])
+
+        naming_item = {}
+        if smart_naming_route_response is not None:
+            _code, naming_item = smart_naming_route_response(f"/api/smart-naming/item/{asset_id}", method="GET", report_root=self.report_root, personal_root=self.personal_root)
+        return HTTPStatus.OK, {
+            "ok": True,
+            "schema": "digua_media_upload_auto_classify_v1",
+            "asset_id": asset_id,
+            "path_hash": media_item.get("path_hash"),
+            "sha256": sha256,
+            "size_bytes": len(content),
+            "media_item": media_item,
+            "jobs": jobs,
+            "pipeline": pipeline,
+            "smart_naming": naming_item.get("item") if isinstance(naming_item, dict) else None,
+            "upload_event": {
+                "status": "saved_to_personal_nas",
+                "original_file_renamed": False,
+                "overwrite_performed": False,
+            },
+            "physical_file_moved": False,
+            "physical_file_renamed": False,
+            "cloud_used": False,
+            "raw_path_returned": False,
+        }
+
+    def media_index_payload(self, relative_path: str, user: dict) -> tuple[int, dict]:
+        if not self.personal_root or not self.media_center:
+            return HTTPStatus.SERVICE_UNAVAILABLE, {"ok": False, "error": "media_center_unavailable", "raw_path_returned": False}
+        try:
+            rel = normalize_storage_relative_path(relative_path or "")
+            root = resolve_storage_path(self.personal_root, rel)
+        except StoragePathError as exc:
+            return HTTPStatus.BAD_REQUEST, {"ok": False, "error": str(exc), "raw_path_returned": False}
+        if not self.can_read(user, rel):
+            return HTTPStatus.FORBIDDEN, {"ok": False, "error": "permission_denied", "required": "read", "raw_path_returned": False}
+        result = self.media_center.index_photos(root, asset_root=self.personal_root, source_id="manual_api")
+        return HTTPStatus.OK, {"ok": True, "index": result, "status": self.media_status_payload(), "raw_path_returned": False}
+
+    def _product_job_queue(self):
+        if ProductJobQueue is None:
+            return None
+        return ProductJobQueue(self.report_root / "product_jobs" / "runtime" / "product_jobs.db")
+
+    @staticmethod
+    def _safe_upload_filename(filename: str) -> str:
+        base = Path(filename).name.strip()
+        base = re.sub(r'[\\/:*?"<>|\r\n\t]+', "_", base)
+        base = re.sub(r"\s+", "_", base)
+        if base in {"", ".", ".."}:
+            return ""
+        return base[:120]
+
+    @staticmethod
+    def _unique_child(parent: Path, filename: str) -> Path:
+        candidate = parent / filename
+        if not candidate.exists():
+            return candidate
+        stem = candidate.stem
+        suffix = candidate.suffix
+        for index in range(1, 1000):
+            numbered = parent / f"{stem}_{index:03d}{suffix}"
+            if not numbered.exists():
+                return numbered
+        raise FileExistsError("no_unique_upload_name_available")
+
+    @staticmethod
+    def _redact_paths(value):
+        if isinstance(value, dict):
+            return {key: PortalState._redact_paths(item) for key, item in value.items()}
+        if isinstance(value, list):
+            return [PortalState._redact_paths(item) for item in value]
+        if isinstance(value, str):
+            text = re.sub(r"([A-Za-z]:\\[^\s\"']+|/mnt/nas/[^\s\"']+|/home/[^\s\"']+|/root/[^\s\"']+|/opt/[^\s\"']+)", "[redacted-path]", value)
+            return text
+        return value
+
     def storage_rename(self, relative_path: str, new_name: str, user: dict) -> tuple[int, dict]:
         try:
             source_rel = normalize_storage_relative_path(relative_path)
@@ -2186,6 +2677,40 @@ class PortalState:
                 "forbidden_actions": ["delete", "move", "rename", "chmod", "chown", "recursive", "overwrite"],
             },
         )
+
+    def _copilot_storage_inventory(self, intent: dict, user: dict, router: dict) -> tuple[int, dict]:
+        rel = str(intent.get("path") or "")
+        status, payload = self.storage_inventory_payload(rel, user)
+        if status != HTTPStatus.OK:
+            return self._copilot_attach_router(status, payload, router, assistant_mode="local_storage_inventory")
+        summary = payload.get("summary") or {}
+        entries = payload.get("entries") or []
+        type_counts = summary.get("type_counts") or {}
+        top_types = "、".join([f"{name} {count}" for name, count in list(type_counts.items())[:4]]) or "暂无"
+        payload.update(
+            {
+                "assistant_mode": "local_storage_inventory",
+                "route": "local_storage_inventory",
+                "model": "S100P storage inventory via Qwen router",
+                "answer": (
+                    f"已在本地个人空间完成只读盘点：顶层条目 {int(summary.get('top_level_count') or 0)} 个，"
+                    f"文件 {int(summary.get('file_count') or 0)} 个，文件夹 {int(summary.get('dir_count') or 0)} 个，"
+                    f"估算占用 {human_size(int(summary.get('total_size_bytes') or 0))}。主要类型：{top_types}。"
+                ),
+                "cloud_used": False,
+                "qwen_execution_authority": False,
+                "nas_action": {
+                    "operation": "inventory",
+                    "status": "completed",
+                    "path": normalize_storage_relative_path(rel),
+                    "entries": entries,
+                    "summary": summary,
+                    "qwen_execution_authority": False,
+                    "direct_nas_write_performed": False,
+                },
+            }
+        )
+        return self._copilot_attach_router(status, payload, router, assistant_mode="local_storage_inventory")
 
     def _copilot_document_query(self, intent: dict, user: dict, router: dict) -> tuple[int, dict]:
         status, payload = self.document_query_payload(str(intent.get("query") or ""), str(intent.get("path") or "Documents"), user)
@@ -2533,6 +3058,8 @@ class PortalState:
             return self._copilot_storage_path(str(intent.get("path") or ""), user, router)
         if action == "storage_list":
             return self._copilot_storage_path(str(intent.get("path") or ""), user, router)
+        if action == "storage_inventory":
+            return self._copilot_storage_inventory(intent, user, router)
         if action == "storage_create_folder":
             path = str(intent.get("path") or "").strip()
             if not path:
@@ -2866,6 +3393,300 @@ class PortalState:
                 "warning": f"audit_operations_unavailable:{type(exc).__name__}:{exc}",
             }
         return {"ok": True, "operations": operations}
+
+    def _report_ref(self, filename: str) -> dict:
+        report = self.latest(filename)
+        path = str(report.get("path") or "")
+        evidence_ref = hashlib.sha256(path.encode("utf-8", errors="replace")).hexdigest()[:16] if path else hashlib.sha256(filename.encode("utf-8")).hexdigest()[:16]
+        return {
+            "found": bool(report.get("found")),
+            "filename": filename,
+            "verdict": report.get("verdict"),
+            "generated_at": report.get("generated_at"),
+            "evidence_ref": evidence_ref,
+        }
+
+    def _module_card(self, name: str, status: str, *, metrics: dict | None = None, evidence: dict | None = None, reason: str | None = None) -> dict:
+        status = status if status in {"ok", "degraded", "failed"} else "degraded"
+        return {
+            "name": name,
+            "ok": status != "failed",
+            "status": status,
+            "metrics": metrics or {},
+            "evidence": evidence or {},
+            "degraded_reason": reason if status == "degraded" else None,
+        }
+
+    def product_evidence_payload(self, limit: int = 40) -> dict:
+        reports = self.list_reports_payload(limit=limit).get("reports") or []
+        items = []
+        for report in reports[:limit]:
+            evidence_ref = report.get("trace_id") or hashlib.sha256(str(report.get("id") or report.get("title") or "").encode("utf-8")).hexdigest()[:12]
+            items.append(
+                {
+                    "id": report.get("id"),
+                    "title": report.get("title"),
+                    "type": report.get("type"),
+                    "mtime": report.get("mtime"),
+                    "size_bytes": report.get("size_bytes"),
+                    "evidence_ref": evidence_ref,
+                    "export_available": bool(report.get("export_available")),
+                    "degraded": bool(report.get("degraded")),
+                }
+            )
+        return {
+            "ok": True,
+            "items": items,
+            "report_count": len(items),
+            "raw_path_returned": False,
+            "path_redaction": "absolute paths are intentionally omitted from the product evidence API",
+        }
+
+    def product_status_payload(self) -> dict:
+        readiness = self._report_ref("production_readiness_gate.json")
+        edge_router = self._report_ref("edge_cloud_router.json")
+        ocr_runtime = self._report_ref("ocr_runtime_contract.json")
+        document_pipeline = self._report_ref("document_pipeline_acceptance.json")
+        photo_pipeline = self._report_ref("photo_pipeline_acceptance.json")
+        copy_governance = self._report_ref("destructive_action_governance.json")
+        journal_deploy = self._report_ref("digua_journal_production_deployment.json")
+        backup_gate = self._report_ref("backup_sync_gate.json")
+        snapshot_gate = self._report_ref("snapshot_recovery_gate.json")
+        ops_gate = self._report_ref("ops_observability_gate.json")
+
+        qwen_health = http_health("qwen", normalize_health_url(self.qwen_gateway_url), timeout=3)
+        qwen_status = "ok" if qwen_health.get("ok") else "degraded"
+        harness_payload = harness_status_response(report_root=self.report_root, personal_root=self.personal_root) if harness_status_response else {"ok": False}
+        harness_status = "ok" if harness_payload.get("ok") and not harness_payload.get("qwen_execution_authority") and not harness_payload.get("cloud_private_raw_egress") else "failed"
+
+        yolo_payload: dict = {"ok": False, "degraded": True, "degraded_reason": "yolo_route_unavailable"}
+        if yolo_route_response is not None:
+            _status_code, yolo_payload = yolo_route_response(
+                "/api/yolo-index/status",
+                method="GET",
+                report_root=self.report_root,
+                personal_root=self.personal_root,
+            )
+        yolo_status = "ok" if yolo_payload.get("ok") and not yolo_payload.get("degraded") else "degraded" if yolo_payload.get("ok") else "failed"
+
+        multimodal_payload: dict = {"ok": False, "degraded": True, "degraded_reason": "multimodal_route_unavailable"}
+        if multimodal_route_response is not None:
+            _status_code, multimodal_payload = multimodal_route_response(
+                "/api/multimodal-search/status",
+                method="GET",
+                report_root=self.report_root,
+                personal_root=self.personal_root,
+            )
+        multimodal_status = "ok" if multimodal_payload.get("ok") and not multimodal_payload.get("degraded") else "degraded" if multimodal_payload.get("ok") else "failed"
+
+        person_payload: dict = {"ok": False, "degraded": True, "degraded_reason": "person_attribute_route_unavailable"}
+        if person_attribute_route_response is not None:
+            _status_code, person_payload = person_attribute_route_response(
+                "/api/person-attribute/status",
+                method="GET",
+                report_root=self.report_root,
+                personal_root=self.personal_root,
+            )
+        person_status = "ok" if person_payload.get("ok") and not person_payload.get("degraded") else "degraded" if person_payload.get("ok") else "failed"
+
+        ai_space_payload: dict = {"ok": False, "degraded": True, "degraded_reason": "ai_space_route_unavailable"}
+        if ai_space_route_response is not None:
+            _status_code, ai_space_payload = ai_space_route_response(
+                "/api/ai-space/status",
+                method="GET",
+                report_root=self.report_root,
+                personal_root=self.personal_root,
+            )
+        ai_space_status = "ok" if ai_space_payload.get("ok") and not ai_space_payload.get("degraded") else "degraded" if ai_space_payload.get("ok") else "failed"
+
+        smart_payload: dict = {"ok": False, "degraded": True, "degraded_reason": "smart_classification_route_unavailable"}
+        if smart_classification_route_response is not None:
+            _status_code, smart_payload = smart_classification_route_response(
+                "/api/smart-classification/status",
+                method="GET",
+                report_root=self.report_root,
+                personal_root=self.personal_root,
+            )
+        smart_status = "ok" if smart_payload.get("ok") and not smart_payload.get("degraded") else "degraded" if smart_payload.get("ok") else "failed"
+
+        smart_naming_payload: dict = {"ok": False, "degraded": True, "degraded_reason": "smart_naming_route_unavailable"}
+        if smart_naming_route_response is not None:
+            _status_code, smart_naming_payload = smart_naming_route_response(
+                "/api/smart-naming/status",
+                method="GET",
+                report_root=self.report_root,
+                personal_root=self.personal_root,
+            )
+        smart_naming_status = "ok" if smart_naming_payload.get("ok") and int(smart_naming_payload.get("name_count") or 0) > 0 else "degraded" if smart_naming_payload.get("ok") else "failed"
+
+        subtitle_payload: dict = {"ok": False, "degraded": True, "degraded_reason": "subtitle_route_unavailable"}
+        if subtitle_extraction_route_response is not None:
+            _status_code, subtitle_payload = subtitle_extraction_route_response(
+                "/api/subtitle/status",
+                method="GET",
+                report_root=self.report_root,
+                personal_root=self.personal_root,
+            )
+        subtitle_status = "ok" if subtitle_payload.get("ok") and not subtitle_payload.get("degraded") else "degraded" if subtitle_payload.get("ok") else "failed"
+
+        jobs_payload: dict = {"ok": False}
+        if product_jobs_route_response is not None:
+            _status_code, jobs_payload = product_jobs_route_response(
+                "/api/jobs/status",
+                method="GET",
+                report_root=self.report_root,
+                personal_root=self.personal_root,
+            )
+        jobs_status = "ok" if jobs_payload.get("ok") else "failed"
+
+        media_stats = self.media_status_payload() if self.media_center else {}
+        backup_stats = self.backup_manager.stats() if self.backup_manager else {}
+        snapshot_stats = self.snapshot_store.stats() if self.snapshot_store else {}
+        ops_stats = self.ops_manager.stats() if self.ops_manager else {}
+        audit_payload = self.audit_summary_payload()
+
+        production_ready = readiness.get("verdict") == "ready_ai_nas_production_readiness_gate"
+        modules = {
+            "gateway": self._module_card("gateway", "ok" if self.product_enabled() else "failed", evidence=self._report_ref("operator_portal_contract.json")),
+            "qwen": self._module_card("qwen", qwen_status, metrics={"health_status": qwen_health.get("status"), "model": (qwen_health.get("payload") or {}).get("model")}),
+            "harness": self._module_card(
+                "harness",
+                harness_status,
+                metrics={
+                    "copy_execute_enabled": harness_payload.get("copy_execute_enabled"),
+                    "qwen_execution_authority": harness_payload.get("qwen_execution_authority"),
+                    "cloud_private_raw_egress": harness_payload.get("cloud_private_raw_egress"),
+                },
+            ),
+            "router": self._module_card("router", "ok" if edge_router.get("found") else "degraded", evidence=edge_router),
+            "multimodal": self._module_card(
+                "multimodal",
+                multimodal_status,
+                metrics={
+                    "indexed_count": multimodal_payload.get("indexed_count"),
+                    "embedding_count": multimodal_payload.get("embedding_count"),
+                    "cloud_used": multimodal_payload.get("cloud_used"),
+                    "private_leak_count": multimodal_payload.get("private_leak_count"),
+                },
+                reason=multimodal_payload.get("degraded_reason"),
+            ),
+            "yolo": self._module_card(
+                "yolo",
+                yolo_status,
+                metrics={
+                    "runtime_target": (yolo_payload.get("backend") or {}).get("runtime_target"),
+                    "indexed_count": yolo_payload.get("indexed_count"),
+                    "detection_count": yolo_payload.get("detection_count"),
+                    "keyframe_count": yolo_payload.get("keyframe_count"),
+                    "cloud_used": yolo_payload.get("cloud_used"),
+                    "raw_path_rows": yolo_payload.get("raw_path_rows"),
+                },
+                reason=yolo_payload.get("degraded_reason"),
+            ),
+            "person_attribute": self._module_card(
+                "person_attribute",
+                person_status,
+                metrics={
+                    "person_detection_count": person_payload.get("person_detection_count"),
+                    "attribute_count": person_payload.get("attribute_count"),
+                    "video_keyframe_count": person_payload.get("video_keyframe_count"),
+                    "cloud_used": person_payload.get("cloud_used"),
+                    "raw_path_returned": person_payload.get("raw_path_returned"),
+                },
+                reason=person_payload.get("degraded_reason"),
+            ),
+            "ai_space": self._module_card(
+                "ai_space",
+                ai_space_status,
+                metrics={
+                    "asset_count": ai_space_payload.get("asset_count"),
+                    "evidence_count": ai_space_payload.get("evidence_count"),
+                    "cloud_used": ai_space_payload.get("cloud_used"),
+                    "raw_path_returned": ai_space_payload.get("raw_path_returned"),
+                },
+                reason=ai_space_payload.get("degraded_reason"),
+            ),
+            "smart_classification": self._module_card(
+                "smart_classification",
+                smart_status,
+                metrics={
+                    "category_count": smart_payload.get("category_count"),
+                    "membership_count": smart_payload.get("membership_count"),
+                    "hit_category_count": smart_payload.get("hit_category_count"),
+                    "smart_name_count": smart_payload.get("smart_name_count"),
+                    "physical_file_moved": smart_payload.get("physical_file_moved"),
+                },
+                reason=smart_payload.get("degraded_reason"),
+            ),
+            "smart_naming": self._module_card(
+                "smart_naming",
+                smart_naming_status,
+                metrics={
+                    "name_count": smart_naming_payload.get("name_count"),
+                    "physical_file_renamed": smart_naming_payload.get("physical_file_renamed"),
+                    "cloud_used": smart_naming_payload.get("cloud_used"),
+                },
+                reason=smart_naming_payload.get("degraded_reason"),
+            ),
+            "subtitle": self._module_card(
+                "subtitle",
+                subtitle_status,
+                metrics={
+                    "transcript_count": subtitle_payload.get("transcript_count"),
+                    "segment_count": subtitle_payload.get("segment_count"),
+                    "cloud_used": subtitle_payload.get("cloud_used"),
+                    "fixture_only_for_ci": subtitle_payload.get("fixture_only_for_ci"),
+                },
+                reason=subtitle_payload.get("degraded_reason"),
+            ),
+            "job_queue": self._module_card("job_queue", jobs_status, metrics={"counts": jobs_payload.get("counts")}),
+            "ocr": self._module_card("ocr", "ok" if ocr_runtime.get("found") else "degraded", evidence=ocr_runtime),
+            "documents": self._module_card("documents", "ok" if document_pipeline.get("found") else "degraded", evidence=document_pipeline),
+            "media": self._module_card("media", "ok" if int(media_stats.get("photo_count") or 0) > 0 else "degraded", metrics=media_stats),
+            "photos": self._module_card("photos", "ok" if int(media_stats.get("photo_count") or 0) > 0 else "degraded", metrics={"photo_count": media_stats.get("photo_count")}, evidence=photo_pipeline),
+            "copy_plan": self._module_card("copy_plan", "ok" if copy_governance.get("found") else "degraded", evidence=copy_governance),
+            "backup": self._module_card("backup", "ok", metrics=backup_stats, evidence=backup_gate),
+            "snapshot": self._module_card("snapshot", "ok", metrics=snapshot_stats, evidence=snapshot_gate),
+            "journal": self._module_card("journal", "ok" if journal_route_response is not None else "degraded", evidence=journal_deploy),
+            "ops": self._module_card("ops", "ok", metrics=ops_stats, evidence=ops_gate),
+            "audit": self._module_card("audit", "ok" if audit_payload.get("ok") else "degraded", metrics={"operation_count": len(audit_payload.get("operations") or [])}),
+        }
+        failed = [name for name, card in modules.items() if card.get("status") == "failed"]
+        degraded = [name for name, card in modules.items() if card.get("status") == "degraded"]
+        overall_status = "failed" if failed else "ok"
+        return {
+            "ok": not failed,
+            "schema": "digua_product_status_v1",
+            "generated_at": iso_timestamp(),
+            "overall": {
+                "status": overall_status,
+                "production_ready": production_ready,
+                "readiness_verdict": readiness.get("verdict"),
+                "failed_modules": failed,
+                "degraded_modules": degraded,
+                "warning_count": len(degraded),
+            },
+            "modules": modules,
+            "gates": {
+                "production_readiness": readiness,
+                "edge_cloud_router": edge_router,
+                "ocr_runtime": ocr_runtime,
+                "document_pipeline": document_pipeline,
+                "photo_pipeline": photo_pipeline,
+                "copy_governance": copy_governance,
+            },
+            "privacy_boundary": {
+                "cloud_private_raw_egress": bool(harness_payload.get("cloud_private_raw_egress")),
+                "qwen_execution_authority": bool(harness_payload.get("qwen_execution_authority")),
+                "cloud_vision_enabled": bool(multimodal_payload.get("feature_flags", {}).get("cloud_vision_enabled")),
+                "cloud_asr_enabled": bool(subtitle_payload.get("cloud_used")),
+                "face_identification_enabled": bool(person_payload.get("face_identification_enabled")),
+                "biometric_recognition_enabled": bool(person_payload.get("biometric_recognition_enabled")),
+                "sensitive_attribute_inference_enabled": bool(person_payload.get("sensitive_attribute_inference_enabled")),
+                "raw_path_returned": False,
+                "product_status_exposes_absolute_paths": False,
+            },
+        }
 
     def list_reports_payload(self, limit: int = 80) -> dict:
         roots = [self.report_root, *self.evidence_roots, self.journal_export_dir]
@@ -3451,6 +4272,33 @@ class PortalHandler(BaseHTTPRequestHandler):
         if route == "/static/digua_multimodal_search.js":
             self.send_file_text(REPO_ROOT / "web" / "static" / "digua_multimodal_search.js", "application/javascript; charset=utf-8")
             return
+        if route in {"/ai-space", "/ai-space/"}:
+            self.send_file_text(REPO_ROOT / "web" / "templates" / "ai_space.html", "text/html; charset=utf-8")
+            return
+        if route == "/static/ai_space.css":
+            self.send_file_text(REPO_ROOT / "web" / "static" / "ai_space.css", "text/css; charset=utf-8")
+            return
+        if route == "/static/ai_space.js":
+            self.send_file_text(REPO_ROOT / "web" / "static" / "ai_space.js", "application/javascript; charset=utf-8")
+            return
+        if route in {"/smart-classification", "/smart-classification/"}:
+            self.send_file_text(REPO_ROOT / "web" / "templates" / "smart_classification.html", "text/html; charset=utf-8")
+            return
+        if route == "/static/smart_classification.css":
+            self.send_file_text(REPO_ROOT / "web" / "static" / "smart_classification.css", "text/css; charset=utf-8")
+            return
+        if route == "/static/smart_classification.js":
+            self.send_file_text(REPO_ROOT / "web" / "static" / "smart_classification.js", "application/javascript; charset=utf-8")
+            return
+        if route in {"/subtitle-extraction", "/subtitle-extraction/"}:
+            self.send_file_text(REPO_ROOT / "web" / "templates" / "subtitle_extraction.html", "text/html; charset=utf-8")
+            return
+        if route == "/static/subtitle_extraction.css":
+            self.send_file_text(REPO_ROOT / "web" / "static" / "subtitle_extraction.css", "text/css; charset=utf-8")
+            return
+        if route == "/static/subtitle_extraction.js":
+            self.send_file_text(REPO_ROOT / "web" / "static" / "subtitle_extraction.js", "application/javascript; charset=utf-8")
+            return
         if route in {"/", "/operator_portal.html"}:
             if self.state.nas_portal:
                 self.send_text(NAS_PORTAL_HTML, "text/html; charset=utf-8")
@@ -3472,6 +4320,16 @@ class PortalHandler(BaseHTTPRequestHandler):
             return
         if route.startswith("/api/journal") or route.startswith("/journal/"):
             self.send_journal_response("GET", route)
+            return
+        if route == "/api/product/status":
+            if not self.require_product():
+                return
+            self.send_json(self.state.product_status_payload())
+            return
+        if route == "/api/product/evidence/latest":
+            if not self.require_product():
+                return
+            self.send_json(self.state.product_evidence_payload())
             return
         if route == "/api/storage/status":
             if not self.require_product():
@@ -3577,7 +4435,7 @@ class PortalHandler(BaseHTTPRequestHandler):
             manager = self.state.backup_manager
             self.send_json({"ok": True, "tasks": manager.list_tasks() if manager else [], "runs": manager.list_runs(limit=20) if manager else [], "stats": manager.stats() if manager else {}})
             return
-        if route == "/api/media/summary":
+        if route in {"/api/media/status", "/api/media/photos", "/api/media/timeline", "/api/media/albums", "/api/media/duplicates", "/api/media/summary"}:
             if not self.require_product():
                 return
             status, error, _user = self.state.require_user(self.headers.get("Authorization"))
@@ -3585,7 +4443,25 @@ class PortalHandler(BaseHTTPRequestHandler):
                 self.send_json(error or {}, status)
                 return
             media = self.state.media_center
-            self.send_json({"ok": True, "stats": media.stats() if media else {}, "albums": media.list_albums() if media else []})
+            if route == "/api/media/status":
+                self.send_json(self.state.media_status_payload(ensure_index=True))
+                return
+            if route == "/api/media/photos":
+                params = parse_qs(urlparse(self.path).query, keep_blank_values=True)
+                limit = int((params.get("limit") or ["100"])[0] or "100")
+                offset = int((params.get("offset") or ["0"])[0] or "0")
+                self.send_json({"ok": True, "schema": "digua_media_album_v2", "photos": media.list_photos(limit=limit, offset=offset) if media else [], "raw_path_returned": False})
+                return
+            if route == "/api/media/timeline":
+                self.send_json({"ok": True, "schema": "digua_media_album_v2", "timeline": media.timeline() if media else [], "raw_path_returned": False})
+                return
+            if route == "/api/media/albums":
+                self.send_json({"ok": True, "schema": "digua_media_album_v2", "albums": media.list_albums() if media else [], "raw_path_returned": False})
+                return
+            if route == "/api/media/duplicates":
+                self.send_json({"ok": True, "schema": "digua_media_album_v2", "duplicates": media.find_duplicates() if media else [], "raw_path_returned": False})
+                return
+            self.send_json({"ok": True, "schema": "digua_media_album_v2", "stats": self.state.media_status_payload(), "albums": media.list_albums() if media else [], "photos": media.list_photos(limit=24) if media else [], "raw_path_returned": False})
             return
         if route == "/api/ops/summary":
             if not self.require_product():
@@ -3654,6 +4530,78 @@ class PortalHandler(BaseHTTPRequestHandler):
                 self.send_json({"ok": False, "error": "yolo_index_unavailable"}, HTTPStatus.SERVICE_UNAVAILABLE)
                 return
             status_code, result = yolo_route_response(
+                route,
+                method="GET",
+                report_root=self.state.report_root,
+                personal_root=self.state.personal_root,
+            )
+            self.send_json(result, status_code)
+            return
+        if route.startswith("/api/person-attribute"):
+            if person_attribute_route_response is None:
+                self.send_json({"ok": False, "error": "person_attribute_unavailable"}, HTTPStatus.SERVICE_UNAVAILABLE)
+                return
+            status_code, result = person_attribute_route_response(
+                route,
+                method="GET",
+                report_root=self.state.report_root,
+                personal_root=self.state.personal_root,
+            )
+            self.send_json(result, status_code)
+            return
+        if route.startswith("/api/ai-space"):
+            if ai_space_route_response is None:
+                self.send_json({"ok": False, "error": "ai_space_unavailable"}, HTTPStatus.SERVICE_UNAVAILABLE)
+                return
+            status_code, result = ai_space_route_response(
+                route,
+                method="GET",
+                report_root=self.state.report_root,
+                personal_root=self.state.personal_root,
+            )
+            self.send_json(result, status_code)
+            return
+        if route.startswith("/api/smart-classification"):
+            if smart_classification_route_response is None:
+                self.send_json({"ok": False, "error": "smart_classification_unavailable"}, HTTPStatus.SERVICE_UNAVAILABLE)
+                return
+            status_code, result = smart_classification_route_response(
+                route,
+                method="GET",
+                report_root=self.state.report_root,
+                personal_root=self.state.personal_root,
+            )
+            self.send_json(result, status_code)
+            return
+        if route.startswith("/api/smart-naming"):
+            if smart_naming_route_response is None:
+                self.send_json({"ok": False, "error": "smart_naming_unavailable"}, HTTPStatus.SERVICE_UNAVAILABLE)
+                return
+            status_code, result = smart_naming_route_response(
+                route,
+                method="GET",
+                report_root=self.state.report_root,
+                personal_root=self.state.personal_root,
+            )
+            self.send_json(result, status_code)
+            return
+        if route.startswith("/api/subtitle"):
+            if subtitle_extraction_route_response is None:
+                self.send_json({"ok": False, "error": "subtitle_extraction_unavailable"}, HTTPStatus.SERVICE_UNAVAILABLE)
+                return
+            status_code, result = subtitle_extraction_route_response(
+                route,
+                method="GET",
+                report_root=self.state.report_root,
+                personal_root=self.state.personal_root,
+            )
+            self.send_json(result, status_code)
+            return
+        if route.startswith("/api/jobs"):
+            if product_jobs_route_response is None:
+                self.send_json({"ok": False, "error": "product_jobs_unavailable"}, HTTPStatus.SERVICE_UNAVAILABLE)
+                return
+            status_code, result = product_jobs_route_response(
                 route,
                 method="GET",
                 report_root=self.state.report_root,
@@ -3733,6 +4681,9 @@ class PortalHandler(BaseHTTPRequestHandler):
                 "routes": [
                     "/",
                     "/journal",
+                    "/ai-space",
+                    "/smart-classification",
+                    "/subtitle-extraction",
                     "/api/health",
                     "/api/journal/health",
                     "/api/journal/timeline",
@@ -3749,6 +4700,26 @@ class PortalHandler(BaseHTTPRequestHandler):
                     "/api/yolo-index/status",
                     "/api/yolo-index/item/{asset_id}",
                     "/api/yolo-index/eval/summary",
+                    "/api/person-attribute/status",
+                    "/api/media/status",
+                    "/api/media/photos",
+                    "/api/media/timeline",
+                    "/api/media/albums",
+                    "/api/media/duplicates",
+                    "/api/ai-space/status",
+                    "/api/ai-space/assets",
+                    "/api/ai-space/asset/{asset_id}",
+                    "/api/ai-space/facets",
+                    "/api/smart-classification/status",
+                    "/api/smart-classification/categories",
+                    "/api/smart-classification/category/{category_id}/items",
+                    "/api/smart-naming/status",
+                    "/api/smart-naming/item/{asset_id}",
+                    "/api/subtitle/status",
+                    "/api/subtitle/transcript/{asset_id}",
+                    "/api/jobs/status",
+                    "/api/jobs/{job_id}",
+                    "/api/jobs/recent",
                     "/api/latest",
                     "/api/latest.goal_progress",
                     "/api/latest.operator_decisions",
@@ -3791,6 +4762,22 @@ class PortalHandler(BaseHTTPRequestHandler):
                     "POST /api/yolo-index/rebuild",
                     "POST /api/yolo-index/search",
                     "POST /api/yolo-index/eval/run",
+                    "POST /api/person-attribute/rebuild",
+                    "POST /api/person-attribute/search",
+                    "POST /api/media/index",
+                    "POST /api/media/upload",
+                    "POST /api/ai-space/rebuild",
+                    "POST /api/ai-space/search",
+                    "POST /api/smart-classification/categories",
+                    "POST /api/smart-classification/rebuild",
+                    "POST /api/smart-classification/category/{category_id}/materialize-copy-plan",
+                    "POST /api/smart-naming/generate",
+                    "POST /api/smart-naming/batch-generate",
+                    "POST /api/subtitle/extract",
+                    "POST /api/subtitle/search",
+                    "POST /api/subtitle/summarize",
+                    "POST /api/jobs/enqueue",
+                    "POST /api/jobs/cancel",
                     "POST /api/journal/manual-entry",
                     "POST /api/journal/generate-summary",
                     "POST /api/journal/export",
@@ -3881,6 +4868,120 @@ class PortalHandler(BaseHTTPRequestHandler):
                 report_root=self.state.report_root,
                 personal_root=self.state.personal_root,
             )
+            self.send_json(result, status_code)
+            return
+        if route.startswith("/api/person-attribute"):
+            if person_attribute_route_response is None:
+                self.send_json({"ok": False, "error": "person_attribute_unavailable"}, HTTPStatus.SERVICE_UNAVAILABLE)
+                return
+            if not self.require_product():
+                return
+            auth_status, error, user = self.state.require_user(self.headers.get("Authorization"))
+            if auth_status:
+                self.send_json(error or {}, auth_status)
+                return
+            status, payload = self.read_json_body()
+            if status:
+                self.send_json(payload or {}, status)
+                return
+            payload = payload or {}
+            payload.setdefault("user_id", str((user or {}).get("username") or "operator"))
+            status_code, result = person_attribute_route_response(route, method="POST", payload=payload, report_root=self.state.report_root, personal_root=self.state.personal_root)
+            self.send_json(result, status_code)
+            return
+        if route.startswith("/api/ai-space"):
+            if ai_space_route_response is None:
+                self.send_json({"ok": False, "error": "ai_space_unavailable"}, HTTPStatus.SERVICE_UNAVAILABLE)
+                return
+            if not self.require_product():
+                return
+            auth_status, error, user = self.state.require_user(self.headers.get("Authorization"))
+            if auth_status:
+                self.send_json(error or {}, auth_status)
+                return
+            status, payload = self.read_json_body()
+            if status:
+                self.send_json(payload or {}, status)
+                return
+            payload = payload or {}
+            payload.setdefault("user_id", str((user or {}).get("username") or "operator"))
+            status_code, result = ai_space_route_response(route, method="POST", payload=payload, report_root=self.state.report_root, personal_root=self.state.personal_root)
+            self.send_json(result, status_code)
+            return
+        if route.startswith("/api/smart-classification"):
+            if smart_classification_route_response is None:
+                self.send_json({"ok": False, "error": "smart_classification_unavailable"}, HTTPStatus.SERVICE_UNAVAILABLE)
+                return
+            if not self.require_product():
+                return
+            auth_status, error, user = self.state.require_user(self.headers.get("Authorization"))
+            if auth_status:
+                self.send_json(error or {}, auth_status)
+                return
+            status, payload = self.read_json_body()
+            if status:
+                self.send_json(payload or {}, status)
+                return
+            payload = payload or {}
+            payload.setdefault("user_id", str((user or {}).get("username") or "operator"))
+            status_code, result = smart_classification_route_response(route, method="POST", payload=payload, report_root=self.state.report_root, personal_root=self.state.personal_root)
+            self.send_json(result, status_code)
+            return
+        if route.startswith("/api/smart-naming"):
+            if smart_naming_route_response is None:
+                self.send_json({"ok": False, "error": "smart_naming_unavailable"}, HTTPStatus.SERVICE_UNAVAILABLE)
+                return
+            if not self.require_product():
+                return
+            auth_status, error, user = self.state.require_user(self.headers.get("Authorization"))
+            if auth_status:
+                self.send_json(error or {}, auth_status)
+                return
+            status, payload = self.read_json_body()
+            if status:
+                self.send_json(payload or {}, status)
+                return
+            payload = payload or {}
+            payload.setdefault("user_id", str((user or {}).get("username") or "operator"))
+            status_code, result = smart_naming_route_response(route, method="POST", payload=payload, report_root=self.state.report_root, personal_root=self.state.personal_root)
+            self.send_json(result, status_code)
+            return
+        if route.startswith("/api/subtitle"):
+            if subtitle_extraction_route_response is None:
+                self.send_json({"ok": False, "error": "subtitle_extraction_unavailable"}, HTTPStatus.SERVICE_UNAVAILABLE)
+                return
+            if not self.require_product():
+                return
+            auth_status, error, user = self.state.require_user(self.headers.get("Authorization"))
+            if auth_status:
+                self.send_json(error or {}, auth_status)
+                return
+            status, payload = self.read_json_body()
+            if status:
+                self.send_json(payload or {}, status)
+                return
+            payload = payload or {}
+            payload.setdefault("user_id", str((user or {}).get("username") or "operator"))
+            status_code, result = subtitle_extraction_route_response(route, method="POST", payload=payload, report_root=self.state.report_root, personal_root=self.state.personal_root)
+            self.send_json(result, status_code)
+            return
+        if route.startswith("/api/jobs"):
+            if product_jobs_route_response is None:
+                self.send_json({"ok": False, "error": "product_jobs_unavailable"}, HTTPStatus.SERVICE_UNAVAILABLE)
+                return
+            if not self.require_product():
+                return
+            auth_status, error, user = self.state.require_user(self.headers.get("Authorization"))
+            if auth_status:
+                self.send_json(error or {}, auth_status)
+                return
+            status, payload = self.read_json_body()
+            if status:
+                self.send_json(payload or {}, status)
+                return
+            payload = payload or {}
+            payload.setdefault("user_id", str((user or {}).get("username") or "operator"))
+            status_code, result = product_jobs_route_response(route, method="POST", payload=payload, report_root=self.state.report_root, personal_root=self.state.personal_root)
             self.send_json(result, status_code)
             return
         if route == "/api/identity/create-user":
@@ -4099,17 +5200,26 @@ class PortalHandler(BaseHTTPRequestHandler):
             if status:
                 self.send_json(payload or {}, status)
                 return
-            rel = str(payload.get("path") or "")
-            if not self.state.can_read(user or {}, rel):
-                self.send_json({"ok": False, "error": "permission_denied", "required": "read", "path": rel}, HTTPStatus.FORBIDDEN)
+            status_code, result = self.state.media_index_payload(str(payload.get("path") or ""), user or {})
+            self.send_json(result, status_code)
+            return
+        if route == "/api/media/upload":
+            if not self.require_product():
                 return
-            try:
-                root = resolve_storage_path(self.state.personal_root, rel)
-            except StoragePathError as exc:
-                self.send_json({"ok": False, "error": str(exc)}, HTTPStatus.BAD_REQUEST)
+            content_length = int(self.headers.get("Content-Length", "0") or "0")
+            if content_length > (MAX_UPLOAD_BYTES * 2):
+                self.send_json({"ok": False, "error": "request_too_large", "max_payload_bytes": MAX_UPLOAD_BYTES * 2, "raw_path_returned": False}, HTTPStatus.REQUEST_ENTITY_TOO_LARGE)
                 return
-            result = self.state.media_center.index_photos(root) if self.state.media_center else {"scanned": 0, "indexed": 0, "skipped": 0}
-            self.send_json({"ok": True, "index": result})
+            auth_status, error, user = self.state.require_user(self.headers.get("Authorization"))
+            if auth_status:
+                self.send_json(error or {}, auth_status)
+                return
+            status, payload = self.read_json_body()
+            if status:
+                self.send_json(payload or {}, status)
+                return
+            status_code, result = self.state.media_upload_photo(payload or {}, user or {})
+            self.send_json(result, status_code)
             return
         if route == "/api/media/create-album":
             if not self.require_product():

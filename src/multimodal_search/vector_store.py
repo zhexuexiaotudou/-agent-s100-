@@ -26,6 +26,14 @@ class NumpyVectorStore:
         np.save(self.matrix_path, self.matrix)
         self.meta_path.write_text(json.dumps(self.records, ensure_ascii=False, indent=2, sort_keys=True) + "\n", encoding="utf-8")
 
+    def clear(self) -> None:
+        self.records = []
+        self.matrix = np.zeros((0, 0), dtype=np.float32)
+        if self.matrix_path.exists():
+            self.matrix_path.unlink()
+        if self.meta_path.exists():
+            self.meta_path.unlink()
+
     def add(self, *, embedding_id: str, asset_id: str, modality: str, model_id: str, vector: np.ndarray, privacy_level: str) -> str:
         arr = np.asarray(vector, dtype=np.float32)
         if self.matrix.size and self.matrix.shape[1] != arr.shape[0]:

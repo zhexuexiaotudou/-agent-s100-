@@ -251,6 +251,8 @@ def _labels_from_stem(stem: str) -> list[str]:
     text = stem.lower().replace("-", "_")
     known = [
         "person",
+        "cat",
+        "dog",
         "car",
         "bus",
         "laptop",

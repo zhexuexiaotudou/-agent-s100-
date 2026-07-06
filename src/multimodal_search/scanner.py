@@ -87,24 +87,26 @@ def scan_nas_sources(root_allowlist: Iterable[str | Path], *, max_files: int = 5
         root = Path(raw_root)
         if not root.exists():
             continue
-        for path in root.rglob("*"):
+        root_base = root.parent if root.is_file() else root
+        paths = [root] if root.is_file() else root.rglob("*")
+        for path in paths:
             if len(assets) >= max_files:
                 return assets
             if path.is_symlink() or not path.is_file():
                 continue
             try:
                 resolved = path.resolve()
-                resolved.relative_to(root.resolve())
+                resolved.relative_to(root_base.resolve())
                 stat = path.stat()
             except Exception:
                 continue
             modality = classify_file_modality(path)
-            rel = resolved.relative_to(root.resolve()).as_posix()
+            rel = resolved.relative_to(root_base.resolve()).as_posix()
             p_hash = hash_text(rel, 32)
             assets.append(
                 ScannedAsset(
                     asset_id="mm_" + hash_text(f"{rel}:{stat.st_size}:{int(stat.st_mtime)}", 24),
-                    root=root,
+                    root=root_base,
                     path=path,
                     modality=modality,
                     file_type=path.suffix.lower().lstrip(".") or "unknown",

@@ -59,6 +59,7 @@ class ModelIdentity:
     precision: str
     local_only: bool
     weights_committed_to_repo: bool
+    production_semantic: bool = False
 
     def to_dict(self) -> dict[str, Any]:
         return {
@@ -70,6 +71,7 @@ class ModelIdentity:
             "precision": self.precision,
             "local_only": self.local_only,
             "weights_committed_to_repo": self.weights_committed_to_repo,
+            "production_semantic": self.production_semantic,
         }
 
 

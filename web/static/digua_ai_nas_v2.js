@@ -384,13 +384,14 @@
     const searchResults = Array.isArray(copilot.search?.results) ? copilot.search.results : [];
     const evidence = Array.isArray(copilot.evidence) ? copilot.evidence : [];
     if (searchResults.length) {
-      return searchResults.slice(0, 4).map((item) => {
+      return searchResults.slice(0, 4).map((item, index) => {
         const display = item.display || {};
-        return `<div class="mini-row"><span>${svg(item.preview_kind === "image" ? "media" : "files")} ${escapeHtml(display.name || item.title_redacted || "本地结果")}</span><span class="muted small">${escapeHtml(display.match_score_label || "本地")}</span></div>`;
+        const typeLabel = display.type_label || (item.modality === "image" ? "照片" : "结果");
+        return `<div class="mini-row"><span>${svg(item.preview_kind === "image" ? "media" : "files")} ${escapeHtml(productResultTitle(item, index, typeLabel))}</span><span class="muted small">${escapeHtml(display.match_score_label || "本地")}</span></div>`;
       }).join("");
     }
     if (evidence.length) {
-      return evidence.slice(0, 4).map((item) => `<div class="mini-row"><span>${svg("docs")} ${escapeHtml(item.name || item.relative_path || "文档证据")}</span><span class="muted small">${escapeHtml(item.evidence_ref || "本地")}</span></div>`).join("");
+      return evidence.slice(0, 4).map((item, index) => `<div class="mini-row"><span>${svg("docs")} ${escapeHtml(displayName(item, "文档证据"))}</span><span class="muted small">${escapeHtml(evidenceLabel(item, index))}</span></div>`).join("");
     }
     return `<article class="manual-note">发送问题后，这里只显示真实返回的本地证据。没有证据时不会用样例文件补齐。</article>`;
   }
@@ -399,7 +400,7 @@
     const tools = [
       ["找有人的图片", "本地 YOLO 相册检索", "media"],
       ["总结 Documents 文档", "本地文档问答", "docs"],
-      ["列出 NAS 根目录", "权限感知文件浏览", "files"],
+      ["列出文件列表", "权限感知文件浏览", "files"],
       ["查看存储状态", "本地容量和索引概览", "settings"]
     ];
     return tools.map(([title, desc, icon]) => `<div class="mini-row"><span>${svg(icon)} ${escapeHtml(title)}</span><span class="muted small">${escapeHtml(desc)}</span></div>`).join("");
@@ -407,13 +408,44 @@
 
   function assistantRoutePanel() {
     const copilot = appState.assistant.copilot || {};
-    const router = copilot.qwen_router || appState.assistant.route || {};
+    const router = copilot.qwen_router || {};
+    const routeMeta = copilot.qwen_router || appState.assistant.route || {};
+    const action = copilot.nas_action || {};
+    const mode = String(copilot.assistant_mode || appState.assistant.mode || "").toLowerCase();
+    const responseRoute = String(copilot.route || "").toLowerCase();
+    const answerText = String(appState.assistant.answer || copilot.answer || "");
+    const modeToolId = mode.startsWith("local_storage") ? "local_storage" : mode === "local_document_query" ? "local_document_rag" : mode === "local_yolo_search" || mode === "local_multimodal_search" ? "local_multimodal_search" : "";
+    const responseRouteToolId = responseRoute.startsWith("local_storage") ? "local_storage" : responseRoute.includes("document") ? "local_document_rag" : responseRoute.includes("yolo") || responseRoute.includes("multimodal") ? "local_multimodal_search" : "";
+    const answerToolId = answerText.includes("只读盘点") || answerText.includes("文件盘点") || answerText.includes("顶层条目") ? "local_storage_inventory" : "";
+    const actionToolId = {
+      inventory: "local_storage_inventory",
+      list: "local_storage_list",
+      inspect: "local_storage_inspect",
+      storage_status: "local_storage_status",
+      media_summary: "local_media_summary",
+      audit_summary: "local_audit_summary",
+      reports_list: "local_reports_list",
+      document_query: "local_document_rag"
+    }[action.operation] || "";
+    const toolId = answerToolId || responseRouteToolId || modeToolId || actionToolId || router.local_tool_id || copilot.search?.retrieval_mode || "";
     return renderKeyValueRows([
       ["处理位置", copilot.cloud_used ? "受控云端" : "S100P 本地"],
-      ["隐私级别", privacyLabel(router.privacy_level || "local_only")],
-      ["本地工具", router.local_tool_id || copilot.search?.retrieval_mode || "按问题判断"],
+      ["隐私级别", privacyLabel(routeMeta.privacy_level || "local_only")],
+      ["本地工具", appState.assistant.toolLabel || localToolLabel(toolId) || "按问题判断"],
       ["云端调用", copilot.cloud_used ? "已调用" : "未调用"]
     ]);
+  }
+
+  function assistantToolLabelFromCopilot(copilot) {
+    const mode = String(copilot?.assistant_mode || "").toLowerCase();
+    const route = String(copilot?.route || "").toLowerCase();
+    const action = copilot?.nas_action || {};
+    if (mode.startsWith("local_storage") || route.startsWith("local_storage") || ["inventory", "list", "inspect", "storage_status"].includes(action.operation)) return "本地文件服务";
+    if (mode === "local_yolo_search" || mode === "local_multimodal_search" || route.includes("yolo") || route.includes("multimodal")) return "本地多模态检索";
+    if (mode === "local_document_query" || route.includes("document") || action.operation === "document_query") return "本地文档问答";
+    if (route.includes("audit") || action.operation === "audit_summary") return "本地审计查询";
+    if (route.includes("report") || action.operation === "reports_list") return "本地报告查询";
+    return "";
   }
 
   function assistantPage() {
@@ -432,7 +464,7 @@
             </div>
           `, "prompt-card")}
           <div class="chips">
-            ${["找出有人的照片", "总结 Documents 里的发票文档", "列出 NAS 根目录", "查看 NAS 存储状态"].map((text) => `<button class="chip" type="button" data-prompt="${escapeHtml(text)}">${escapeHtml(text)}</button>`).join("")}
+            ${["找出有人的照片", "总结文档里的发票内容", "列出文件列表", "查看存储状态"].map((text) => `<button class="chip" type="button" data-prompt="${escapeHtml(text)}">${escapeHtml(text)}</button>`).join("")}
           </div>
           ${renderAssistantAnswer()}
           <div class="actions" style="margin-top:14px">
@@ -465,7 +497,7 @@
     if (appState.assistant.status !== "ready") {
       return card(`
         <div class="answer-header"><strong>${svg("assistant")} AI 助手回答</strong>${badge("等待输入", "neutral")}</div>
-        <div class="answer-body"><p>输入自然语言后，网页会调用 S100P 上的 <code>/api/copilot/chat</code> 和 <code>/api/token-budget/route</code>，展示真实的工具路由、隐私脱敏和 token 判断结果。</p></div>
+        <div class="answer-body"><p>输入自然语言后，网页会先在 S100P 本地完成理解、隐私判断和必要的工具路由，再展示结果摘要。</p></div>
       `, "answer-card");
     }
     const route = appState.assistant.route || {};
@@ -474,7 +506,7 @@
     const search = copilot.search || null;
     const qwenRouter = copilot.qwen_router || null;
     const isAssistantAnswer = Boolean(mode && appState.assistant.answer);
-    const answerBadge = mode === "local_qwen_chat" ? "本地 Qwen 返回" : mode === "cloud_overflow_chat" ? "云端返回" : mode === "cloud_overflow_stub" ? "云端未配置" : mode === "local_yolo_search" || mode === "local_multimodal_search" ? "本地检索返回" : "本地 API 返回";
+    const answerBadge = mode === "local_qwen_chat" ? "本地 Qwen 返回" : mode === "cloud_overflow_chat" ? "云端返回" : mode === "cloud_overflow_stub" ? "云端未配置" : mode === "local_yolo_search" || mode === "local_multimodal_search" ? "本地检索返回" : mode.startsWith("local_storage") ? "本地文件返回" : mode === "local_document_query" ? "本地文档返回" : "本地服务返回";
     return card(`
       <div class="answer-header"><strong>${svg("assistant")} AI 助手回答</strong>${badge(answerBadge, "success")}</div>
       <div class="answer-body">
@@ -491,7 +523,7 @@
   }
 
   function renderAssistantText(text) {
-    const safe = String(text || "").trim();
+    const safe = scrubProductText(String(text || "")).trim();
     if (!safe) return "<p>本地助手没有返回正文。</p>";
     return safe
       .split(/\n{2,}/)
@@ -502,12 +534,10 @@
   function renderQwenRouter(router) {
     if (!router || typeof router !== "object") return "";
     return renderKeyValueRows([
-      ["Qwen 判断", router.route || "local"],
+      ["处理方式", routeLabel("", router.route || "local")],
       ["隐私级别", router.privacy_level || "none"],
       ["任务复杂度", router.task_complexity || "simple"],
-      ["本地工具", router.local_tool_id || "无"],
-      ["分类器", router.classifier || "unknown"],
-      ["Fallback", router.fallback_from_real_qwen || router.qwen_router_failed ? "是" : "否"],
+      ["本地工具", localToolLabel(router.local_tool_id)],
       ["判断理由", router.guardrail_reason || router.reason || "已完成本地路由判断"]
     ]);
   }
@@ -546,7 +576,7 @@
     const rawTokens = route?.token_counts?.raw_user_prompt_tokens ?? copilot?.usage?.prompt_tokens ?? "—";
     const processing = copilot.cloud_used ? "云端" : "S100P 本地";
     const privacy = privacyLabel(qwenRouter?.privacy_level || route?.privacy_level || "local_only");
-    const model = copilot.model || (mode === "local_yolo_search" ? "S100P YOLO Object Index" : "Qwen2.5 本地模型");
+    const model = mode === "local_yolo_search" || mode === "local_multimodal_search" ? "本地多模态索引" : copilot.model ? "本地 Qwen" : "本地 Qwen";
     return `
       <div class="assistant-service-summary" aria-label="服务摘要">
         <span class="service-pill strong">${svg("home")} ${escapeHtml(processing)}</span>
@@ -561,11 +591,11 @@
   function renderAssistantDetails(copilot, route, qwenRouter, mode) {
     const rows = [
       ["处理链路", routeLabel(mode, qwenRouter?.route || route?.route)],
-      ["模型/来源", copilot.model || "Qwen2.5-1.5B-Instruct-S100P-official"],
+      ["模型/来源", mode === "local_yolo_search" || mode === "local_multimodal_search" ? "本地多模态索引" : "本地 Qwen"],
       ["处理位置", copilot.cloud_used ? "云端" : "S100P 本地"],
       ["隐私级别", privacyLabel(qwenRouter?.privacy_level || route?.privacy_level || "local_only")],
-      ["本地工具", qwenRouter?.local_tool_id || copilot.search?.retrieval_mode || "无"],
-      ["工具执行者", "Harness / allowlist dispatcher"],
+      ["本地工具", localToolLabel(qwenRouter?.local_tool_id || copilot.search?.retrieval_mode)],
+      ["执行边界", "本地受控工具"],
       ["Qwen 工具执行权", copilot.qwen_execution_authority ? "开启" : "关闭，只做理解和建议"],
       ["输入 token", route?.token_counts?.raw_user_prompt_tokens ?? copilot.usage?.prompt_tokens ?? "—"],
       ["脱敏次数", route?.redaction_count ?? 0],
@@ -587,6 +617,7 @@
     if (mode === "local_document_query") return renderAssistantDocumentResult(copilot);
     const action = copilot.nas_action || {};
     const operation = String(action.operation || "");
+    if (operation === "inventory") return renderAssistantStorageInventory(copilot);
     if (operation === "list") return renderAssistantStorageList(copilot);
     if (operation === "inspect") return renderAssistantOperationCard(copilot, {
       title: "只读文件检查",
@@ -713,11 +744,34 @@
     const body = `${renderKpiStrip([["条目", entries.length], ["位置", displayLocation(copilot.path || action.path || "")], ["权限", "只读"]])}
       <div class="product-card-list">${entries.length ? entries.slice(0, 8).map((entry) => renderProductCard(
         displayName(entry, "文件"),
-        [entry.is_dir ? "文件夹" : fileType(entry), entry.size_bytes && !entry.is_dir ? formatBytes(entry.size_bytes) : "", entry.mtime ? formatDateTime(entry.mtime) : ""].filter(Boolean).join(" · "),
+        [entry.file_type || (entry.is_dir ? "文件夹" : fileType(entry)), entry.size_bytes ? formatBytes(entry.size_bytes) : "", entry.mtime ? formatDateTime(entry.mtime) : ""].filter(Boolean).join(" · "),
         [entry.is_dir ? "可进入" : "可预览/下载", "本地 ACL"],
         entry.is_dir ? "files" : "docs"
       )).join("") : renderProductEmpty("当前目录没有可显示条目")}</div>`;
     return renderProductSection("文件列表", `${entries.length} 个条目 · 只读`, body, { icon: "files" });
+  }
+
+  function renderAssistantStorageInventory(copilot) {
+    const action = copilot.nas_action || {};
+    const entries = Array.isArray(action.entries) ? action.entries : Array.isArray(copilot.entries) ? copilot.entries : [];
+    const summary = action.summary || copilot.summary || {};
+    const typeCounts = summary.type_counts || {};
+    const typeTags = Object.entries(typeCounts).slice(0, 6).map(([name, count]) => `${name} ${count}`);
+    const body = `${renderKpiStrip([
+      ["顶层条目", summary.top_level_count ?? entries.length],
+      ["文件", summary.file_count ?? "—"],
+      ["文件夹", summary.dir_count ?? "—"],
+      ["总占用", summary.total_size_bytes ? formatBytes(summary.total_size_bytes) : "0 B"]
+    ])}
+      ${typeTags.length ? `<div class="result-tags inventory-tags">${typeTags.map((tag) => `<span class="result-tag">${escapeHtml(tag)}</span>`).join("")}</div>` : ""}
+      <div class="product-card-list">${entries.length ? entries.slice(0, 10).map((entry) => renderProductCard(
+        displayName(entry, entry.is_dir ? "文件夹" : "文件"),
+        [entry.file_type || (entry.is_dir ? "文件夹" : fileType(entry)), entry.size_bytes ? formatBytes(entry.size_bytes) : "0 B", entry.file_count && entry.is_dir ? `${entry.file_count} 个文件` : ""].filter(Boolean).join(" · "),
+        [entry.is_dir ? "文件夹" : "文件", "本地只读"],
+        entry.is_dir ? "files" : "docs"
+      )).join("") : renderProductEmpty("没有可显示的用户文件")}</div>
+      ${summary.truncated ? `<p class="muted small">结果已按扫描上限截断，更多内容可进入文件页继续查看。</p>` : ""}`;
+    return renderProductSection("文件盘点", `${entries.length} 个条目 · 未上云`, body, { icon: "files" });
   }
 
   function renderAssistantOperationCard(copilot, options) {
@@ -769,12 +823,12 @@
 
   function renderAssistantStorageStatus(copilot) {
     const body = renderKpiStrip([
-      ["Personal root", copilot.root ? "已配置" : "未配置"],
+      ["个人空间", copilot.root ? "已配置" : "未配置"],
       ["文件数", copilot.file_count ?? copilot.files ?? copilot.total_files],
       ["目录数", copilot.dir_count ?? copilot.dirs ?? copilot.total_dirs],
       ["容量", copilot.total_size_bytes ? formatBytes(copilot.total_size_bytes) : ""]
     ]);
-    return renderProductSection("NAS 存储状态", "本地 Personal root", body || renderProductEmpty("没有返回存储统计"), { icon: "files" });
+    return renderProductSection("NAS 存储状态", "本地个人空间", body || renderProductEmpty("没有返回存储统计"), { icon: "files" });
   }
 
   function renderAssistantOpsSummary(copilot) {
@@ -945,18 +999,18 @@
     return `<section class="assistant-search-section">
       <div class="assistant-search-head"><strong>${svg("search")} 本地检索结果</strong><span>${escapeHtml(count)} 个${escapeHtml(typeLabel)} · 未上云</span></div>
       <div class="search-result-grid">
-      ${results.map(renderAssistantSearchResult).join("")}
+      ${results.map((item, index) => renderAssistantSearchResult(item, index)).join("")}
       </div>
     </section>`;
   }
 
-  function renderAssistantSearchResult(item) {
+  function renderAssistantSearchResult(item, index = 0) {
     const display = item.display || {};
-    const title = display.name || item.title_redacted || "本地索引结果";
+    const typeLabel = display.type_label || (item.modality === "image" ? "照片" : "文件");
+    const title = productResultTitle(item, index, typeLabel);
     const score = Number(display.match_score ?? item.score);
     const scoreText = display.match_score_label || (Number.isFinite(score) ? fmtRatio(score) : "已匹配");
     const match = display.match_label || "本地索引匹配";
-    const typeLabel = display.type_label || (item.modality === "image" ? "照片" : "文件");
     const meta = [display.date_label, typeLabel, display.size_label].filter(Boolean).join(" · ");
     const canOpenImage = Boolean(item.preview_url && item.preview_kind === "image");
     const openAttrs = canOpenImage
@@ -986,7 +1040,7 @@
   function filesPage() {
     const selected = currentStorageEntries().find((row) => row.relative_path === appState.selectedFile) || currentStorageEntries()[0] || null;
     return `
-      ${pageHeader("文件", "浏览当前 NAS Personal root 中真实可见的文件路径。", `${button("新建文件夹", { variant: "secondary", icon: "files", action: "storageShowNewFolder", disabled: appState.storage.status !== "ready" })}${button("上传", { variant: "secondary", icon: "upload", action: "storageShowUpload", disabled: appState.storage.status !== "ready" })}${button("刷新", { icon: "plus", action: "storageRefresh" })}`)}
+      ${pageHeader("文件", "浏览本地个人空间中当前用户可见的文件。", `${button("新建文件夹", { variant: "secondary", icon: "files", action: "storageShowNewFolder", disabled: appState.storage.status !== "ready" })}${button("上传", { variant: "secondary", icon: "upload", action: "storageShowUpload", disabled: appState.storage.status !== "ready" })}${button("刷新", { icon: "plus", action: "storageRefresh" })}`)}
       <div class="explorer-toolbar" style="margin-bottom:16px">
         ${button("上一级", { variant: "secondary", icon: "chevron", action: "storageUp", disabled: !appState.storage.relativePath || appState.storage.status !== "ready" })}
         <div class="breadcrumb-bar" aria-label="当前路径">
@@ -1007,26 +1061,26 @@
   function renderFolderTree() {
     if (appState.storage.status === "auth") return renderStorageLogin();
     if (appState.storage.status === "unconfigured") {
-      return `<strong>NAS 根目录未配置</strong><p class="muted small">启动服务时需要传入 <code>--personal-root</code>，前端不会回退到占位文件。</p>`;
+      return `<strong>个人空间未配置</strong><p class="muted small">服务端尚未启用个人空间，因此不会展示占位文件。</p>`;
     }
     const current = appState.storage.relativePath;
-    const roots = appState.storage.rootFolders.length ? appState.storage.rootFolders : currentStorageEntries().filter((entry) => entry.is_dir);
+    const roots = (appState.storage.rootFolders.length ? appState.storage.rootFolders : currentStorageEntries().filter((entry) => entry.is_dir)).filter((entry) => !isProductHiddenEntry(entry));
     const folders = currentStorageEntries().filter((entry) => entry.is_dir);
     return `
-      <strong>NAS Personal root</strong>
+      <strong>本地个人空间</strong>
       <button class="folder-item ${current ? "" : "active"}" type="button" data-open-path="">${svg("files")}<span>根目录</span></button>
       <div class="folder-section">
-        ${roots.map((entry) => `<button class="folder-item ${entry.relative_path === current ? "active" : ""}" type="button" data-open-path="${escapeHtml(entry.relative_path)}">${svg("files")}<span>${escapeHtml(entry.name)}</span></button>`).join("")}
+        ${roots.map((entry) => `<button class="folder-item ${entry.relative_path === current ? "active" : ""}" type="button" data-open-path="${escapeHtml(entry.relative_path)}">${svg("files")}<span>${escapeHtml(displayName(entry, "文件夹"))}</span></button>`).join("")}
       </div>
-      ${current ? `<div class="tree-subhead">当前目录</div><div class="folder-section">${folders.length ? folders.map((entry) => `<button class="folder-item child" type="button" data-open-path="${escapeHtml(entry.relative_path)}">${svg("files")}<span>${escapeHtml(entry.name)}</span></button>`).join("") : `<p class="muted small">当前目录没有下级文件夹。</p>`}</div>` : ""}
-      <div class="storage-root-note">根：${escapeHtml(appState.storage.root || "未连接")}</div>
+      ${current ? `<div class="tree-subhead">当前目录</div><div class="folder-section">${folders.length ? folders.map((entry) => `<button class="folder-item child" type="button" data-open-path="${escapeHtml(entry.relative_path)}">${svg("files")}<span>${escapeHtml(displayName(entry, "文件夹"))}</span></button>`).join("") : `<p class="muted small">当前目录没有下级文件夹。</p>`}</div>` : ""}
+      <div class="storage-root-note">个人空间：${appState.storage.root ? "已连接" : "未连接"}</div>
       <div class="copy-actions">${button("刷新目录", { variant: "tertiary", icon: "plus", action: "storageRefresh" })}${button("退出", { variant: "tertiary", action: "storageLogout", disabled: !appState.authToken })}</div>
     `;
   }
 
   function renderStorageLogin() {
     return `
-      <strong>登录后查看真实 NAS 文件</strong>
+      <strong>登录后查看本地文件</strong>
       <p class="muted small">文件接口要求身份令牌。首次本地演示可先初始化管理员，已有用户直接登录。</p>
       <div class="login-stack">
         <label>用户名<input id="storageUsername" class="control" value="admin" autocomplete="username"></label>
@@ -1062,7 +1116,7 @@
       return card(`
         <div class="answer-header compact-header"><strong>${svg("upload")} 上传到当前目录</strong>${badge("无覆盖", "warning")}</div>
         <div class="operation-grid">
-          <label>目标目录<input id="storageUploadDir" class="control" value="${escapeHtml(current)}" placeholder="留空表示 Personal root" aria-label="上传目标目录"></label>
+          <label>目标目录<input id="storageUploadDir" class="control" value="${escapeHtml(current)}" placeholder="留空表示个人空间" aria-label="上传目标目录"></label>
           <label>选择文件<input id="storageUploadInput" class="control file-input" type="file" aria-label="选择上传文件"></label>
           <div class="copy-actions">
             ${button("上传文件", { icon: "upload", action: "storageUploadFile", disabled: operation.status === "loading" })}
@@ -1092,10 +1146,10 @@
       return `<section class="panel explorer-panel"><div class="panel-header"><strong>读取 NAS 目录</strong></div><div class="skeleton-list"><span></span><span></span><span></span><span></span></div></section>`;
     }
     if (appState.storage.status === "auth") {
-      return `<section class="panel explorer-panel"><div class="empty-state">${svg("lock")}<strong>需要登录</strong><p>登录后才能读取 NAS Personal root 的真实文件列表。</p></div></section>`;
+      return `<section class="panel explorer-panel"><div class="empty-state">${svg("lock")}<strong>需要登录</strong><p>登录后才能读取本地个人空间的真实文件列表。</p></div></section>`;
     }
     if (appState.storage.status === "unconfigured") {
-      return `<section class="panel explorer-panel"><div class="empty-state">${svg("alert")}<strong>未配置真实根目录</strong><p>服务端没有启用 <code>--personal-root</code>，因此不会展示占位文件。</p></div></section>`;
+      return `<section class="panel explorer-panel"><div class="empty-state">${svg("alert")}<strong>未配置个人空间</strong><p>服务端没有启用个人空间，因此不会展示占位文件。</p></div></section>`;
     }
     if (appState.storage.status === "error") {
       return `<section class="panel explorer-panel"><div class="empty-state">${svg("alert")}<strong>目录读取失败</strong><p>${escapeHtml(appState.storage.error || "storage_list_failed")}</p></div></section>`;
@@ -1105,7 +1159,7 @@
     return `
       <section class="panel explorer-panel">
         <div class="table-wrap">
-          <table class="data-table">
+          <table class="data-table file-table">
             <thead><tr><th><input type="checkbox" aria-label="选择全部"></th><th>文件名</th><th>类型</th><th>大小</th><th>修改时间</th><th>更多</th></tr></thead>
             <tbody>
               ${current ? `<tr class="up-row"><td></td><td colspan="5"><button class="link-button file-name" type="button" data-open-path="${escapeHtml(appState.storage.parent)}">.. 返回上一级</button></td></tr>` : ""}
@@ -1122,11 +1176,12 @@
     const type = fileType(row);
     const glyph = fileGlyph(row);
     const selectedClass = selected && row.relative_path === selected.relative_path ? "selected" : "";
+    const friendlyName = displayName(row, row.is_dir ? "文件夹" : "文件");
     const nameButton = row.is_dir
-      ? `<button class="link-button file-name" type="button" data-open-path="${escapeHtml(row.relative_path)}">${escapeHtml(row.name)}</button>`
-      : `<button class="link-button file-name" type="button" data-file-path="${escapeHtml(row.relative_path)}">${escapeHtml(row.name)}</button>`;
+      ? `<button class="link-button file-name" type="button" data-open-path="${escapeHtml(row.relative_path)}">${escapeHtml(friendlyName)}</button>`
+      : `<button class="link-button file-name" type="button" data-file-path="${escapeHtml(row.relative_path)}">${escapeHtml(friendlyName)}</button>`;
     return `<tr class="${selectedClass}" data-file-path="${escapeHtml(row.relative_path)}">
-      <td><input type="checkbox" aria-label="选择 ${escapeHtml(row.name)}"></td>
+      <td><input type="checkbox" aria-label="选择 ${escapeHtml(friendlyName)}"></td>
       <td><div class="file-cell"><span class="file-glyph ${glyph}">${escapeHtml(row.is_dir ? "DIR" : type.slice(0, 4))}</span>${nameButton}</div></td>
       <td>${escapeHtml(type)}</td>
       <td>${row.is_dir ? "—" : escapeHtml(formatBytes(row.size_bytes))}</td>
@@ -1209,18 +1264,29 @@
 
   function renderStorageBreadcrumbs() {
     const parts = pathParts(appState.storage.relativePath);
-    const crumbs = [`<button class="crumb ${parts.length ? "" : "active"}" type="button" data-open-path="">NAS</button>`];
+    const crumbs = [`<button class="crumb ${parts.length ? "" : "active"}" type="button" data-open-path="">个人空间</button>`];
     let current = "";
     parts.forEach((part, index) => {
       current = current ? `${current}/${part}` : part;
-      crumbs.push(`<span class="crumb-sep">/</span><button class="crumb ${index === parts.length - 1 ? "active" : ""}" type="button" data-open-path="${escapeHtml(current)}">${escapeHtml(part)}</button>`);
+      crumbs.push(`<span class="crumb-sep">/</span><button class="crumb ${index === parts.length - 1 ? "active" : ""}" type="button" data-open-path="${escapeHtml(current)}">${escapeHtml(displayLocation(current))}</button>`);
     });
     return crumbs.join("");
   }
 
+  function isProductHiddenEntry(entry) {
+    const name = String(entry?.name || baseName(entry?.relative_path || "") || "").trim();
+    if (!name) return false;
+    if (name.startsWith(".")) return true;
+    return /^(Codex|OpenClaw|qwen25|qwen3|ai_nas_|yolo_run_|production_|stage\d+_|tmp_)/i.test(name)
+      || /(QwenRouter|ProductUiSmoke|CodexPreflight|agent_runtime|capability_inventory|eval_gate|safety_ui_gate|tool_manifest|context_pack|probe|gate|manifest)/i.test(name);
+  }
+
   function currentStorageEntries() {
     const query = appState.fileSearch.trim().toLowerCase();
-    const entries = (appState.storage.entries || []).slice().sort((a, b) => Number(Boolean(b.is_dir)) - Number(Boolean(a.is_dir)) || String(a.name).localeCompare(String(b.name), "zh-Hans-CN"));
+    const entries = (appState.storage.entries || [])
+      .filter((entry) => !isProductHiddenEntry(entry))
+      .slice()
+      .sort((a, b) => Number(Boolean(b.is_dir)) - Number(Boolean(a.is_dir)) || String(a.name).localeCompare(String(b.name), "zh-Hans-CN"));
     if (!query) return entries;
     return entries.filter((entry) => String(entry.name || "").toLowerCase().includes(query) || String(entry.relative_path || "").toLowerCase().includes(query));
   }
@@ -1245,27 +1311,76 @@
     return parts.length ? parts[parts.length - 1] : String(path || "");
   }
 
+  function humanizeName(name) {
+    const raw = String(name || "").trim();
+    if (!raw) return "";
+    const withoutExt = raw.replace(/\.[A-Za-z0-9]{1,8}$/u, "");
+    return withoutExt.replace(/[_-]+/g, " ").replace(/\s+/g, " ").trim() || raw;
+  }
+
   function displayName(item, fallback = "本地项目") {
-    return item?.name || item?.title || baseName(item?.relative_path || item?.document_relative_path || item?.path) || fallback;
+    const name = item?.name || item?.title || baseName(item?.relative_path || item?.document_relative_path || item?.path);
+    return humanizeName(name) || fallback;
   }
 
   function displayLocation(path) {
     const parts = pathParts(path);
     if (!parts.length) return "根目录";
-    if (parts.length === 1) return "个人空间";
-    const parent = parts.slice(0, -1).filter(Boolean);
-    if (!parent.length) return "个人空间";
-    const tail = parent.slice(-2).join(" / ");
-    return tail ? `位于 ${tail}` : "个人空间";
+    const top = String(parts[0] || "").toLowerCase();
+    const friendly = {
+      documents: "文档库",
+      docs: "文档库",
+      photos: "相册",
+      pictures: "相册",
+      videos: "视频库",
+      albums: "相册",
+      reports: "本地报告",
+      downloads: "下载区",
+      inbox: "收件箱"
+    };
+    return friendly[top] || "本地个人空间";
   }
 
   function evidenceLabel(item, index = 0) {
-    const ref = item?.evidence_ref || item?.id || index + 1;
-    return `证据 ${String(ref).replace(/^evidence[_-]?/i, "")}`;
+    return `证据 ${index + 1}`;
   }
 
   function resultStatusText(value, readyText = "已生成") {
     return value ? readyText : "待生成";
+  }
+
+  function localToolLabel(value) {
+    const raw = String(value || "").toLowerCase();
+    if (!raw || raw === "none" || raw === "无") return "无";
+    if (raw.includes("yolo") || raw.includes("multimodal") || raw.includes("media")) return "本地多模态检索";
+    if (raw.includes("document") || raw.includes("rag") || raw.includes("fts")) return "本地文档问答";
+    if (raw.includes("storage") || raw.includes("nas") || raw.includes("file")) return "本地文件服务";
+    if (raw.includes("audit")) return "本地审计查询";
+    if (raw.includes("report")) return "本地报告查询";
+    return "本地受控工具";
+  }
+
+  function isCameraFileName(name) {
+    return /^(IMG|DSC|PXL|VID)[_-]?\d{6,}([_-]?\d+)?\.[A-Za-z0-9]{2,5}$/i.test(String(name || ""));
+  }
+
+  function productResultTitle(item, index = 0, typeLabel = "结果") {
+    const display = item?.display || {};
+    const raw = display.name || item?.title_redacted || item?.name || item?.relative_path || "";
+    if (isCameraFileName(raw)) return `${typeLabel || "照片"} ${index + 1}`;
+    return displayName({ name: raw, title: item?.title_redacted, relative_path: item?.relative_path }, `本地${typeLabel || "结果"} ${index + 1}`);
+  }
+
+  function scrubProductText(text) {
+    return String(text || "")
+      .replace(/SHA-?256/gi, "校验")
+      .replace(/[A-Fa-f0-9]{32,}/g, "已生成校验值")
+      .replace(/\b(?:IMG|DSC|PXL|VID)[_-]?\d{6,}(?:[_-]?\d+)?\.(?:jpg|jpeg|png|webp|mp4|mov)\b/gi, "本地照片")
+      .replace(/\b[A-Za-z0-9]+(?:_[A-Za-z0-9]+){3,}(?:\.[A-Za-z0-9]{1,8})?\b/g, "本地记录")
+      .replace(/[A-Za-z]:\\[^\s)]+/g, "本地位置")
+      .replace(/\/mnt\/nas\/[^\s)]+/g, "本地位置")
+      .replace(/(?:[A-Za-z0-9_.-]+\/){2,}[A-Za-z0-9_.-]+/g, "本地位置")
+      .replace(/\/api\/[^\s)]+/g, "本地受控接口");
   }
 
   function presentMetaValue(key, value) {
@@ -1384,7 +1499,7 @@
   }
 
   function reportsPage() {
-    const stateBlock = apiStateBlock(appState.reports, "当前 reports / evidence / Journal exports 中没有可预览报告。");
+    const stateBlock = apiStateBlock(appState.reports, "当前没有可预览报告。");
     const reports = appState.reports.items || [];
     const selected = reports.find((report) => report.id === appState.reports.selectedId) || reports[0] || null;
     const types = [...new Set(reports.map((report) => report.type).filter(Boolean))];
@@ -1392,7 +1507,7 @@
       ${pageHeader("报告", "汇总文件夹摘要、文档问答、证据报告、Token Budget、Gate 和地瓜日记导出。", `${button("刷新", { variant: "secondary", icon: "plus", action: "reportsRefresh" })}${button("导出选中", { icon: "download", action: "reportExport", disabled: !selected || selected.degraded })}`)}
       <div class="reports-layout">
         ${card(`${sectionTitle("报告类型")}<div class="tabs">${(types.length ? types : ["待生成"]).map((type, index) => `<button class="chip ${index === 0 ? "active" : ""}" type="button">${escapeHtml(type)}</button>`).join("")}</div>
-          <div class="report-list">${stateBlock || reports.map(renderReportItem).join("")}</div>
+          <div class="report-list">${stateBlock || reports.map((report, index) => renderReportItem(report, index)).join("")}</div>
           <div class="storage-meta"><span>共 ${fmtCount(reports.length)} 份报告</span><span>${appState.reports.export?.path ? "最近已导出" : "等待导出"}</span></div>`)}
         ${card(selected ? renderReportPreview(selected) : `<div class="empty-state">${svg("search")}<strong>没有报告可预览</strong><p>运行验证后会在这里显示本地报告列表。</p></div>`, "report-preview")}
       </div>
@@ -1400,13 +1515,19 @@
     `;
   }
 
-  function renderReportItem(report) {
+  function reportDisplayTitle(report, index = 0) {
+    const type = String(report?.type || "").trim();
+    const base = type && type !== "unknown" ? type : "本地报告";
+    return `${base} ${index + 1}`;
+  }
+
+  function renderReportItem(report, index = 0) {
     const active = report.id === appState.reports.selectedId ? " active" : "";
     const status = report.degraded ? badge("待生成", "neutral") : badge("可查看", "success");
     return `<article class="report-item${active}" data-report-id="${escapeHtml(report.id)}">
       <div>
-        <strong>${escapeHtml(report.title || report.type || "报告")}</strong>
-        <div class="path-summary">${escapeHtml(report.relative_path || report.path ? displayLocation(report.relative_path || report.path) : "等待生成")}</div>
+        <strong>${escapeHtml(reportDisplayTitle(report, index))}</strong>
+        <div class="path-summary">${escapeHtml(report.relative_path || report.path ? "本地报告 · 已生成" : "等待生成")}</div>
         <div class="muted small">${escapeHtml(formatStorageTime(report.mtime))} · ${escapeHtml(formatBytes(report.size_bytes || 0))}</div>
       </div>
       <div class="report-meta">${badge(report.type || "报告", "neutral")}${status}</div>
@@ -1414,9 +1535,9 @@
   }
 
   function renderReportPreview(report) {
-    const preview = report.preview || "没有预览内容。";
+    const preview = scrubProductText(report.preview || "没有预览内容。").slice(0, 1600);
     return `
-      <div class="answer-header"><strong>${escapeHtml(report.title || "报告预览")}</strong>${badge(report.degraded ? "待生成" : "可导出", report.degraded ? "neutral" : "success")}</div>
+      <div class="answer-header"><strong>${escapeHtml(report.type || "报告预览")}</strong>${badge(report.degraded ? "待生成" : "可导出", report.degraded ? "neutral" : "success")}</div>
       <div class="answer-body">
         ${renderKeyValueRows([
           ["类型", report.type || "—"],
@@ -1536,7 +1657,7 @@
   function auditPage() {
     const stateBlock = apiStateBlock(appState.audit, "当前还没有文件操作审计记录。");
     const realRows = (appState.audit.operations || []).map((row, index) => [
-      row.created_at || row.ts || "—",
+      formatStorageTime(row.created_at || row.ts),
       row.user || appState.authUser?.username || "web",
       auditServiceLabel(row),
       auditOperationLabel(row),
@@ -1569,7 +1690,7 @@
       <div class="audit-layout">
         <section class="panel">
           ${stateBlock || (rows.length ? `<div class="table-wrap">
-            <table class="data-table">
+            <table class="data-table audit-table">
               <thead><tr><th>时间</th><th>用户</th><th>本地服务</th><th>操作</th><th>状态</th><th>耗时</th><th>资源</th><th>记录编号</th><th>更多</th></tr></thead>
               <tbody>${rows.map((row) => `<tr class="${row[8] === appState.selectedAuditRecord ? "selected" : ""}" data-record-id="${row[8]}"><td>${escapeHtml(row[0])}</td><td>${escapeHtml(row[1])}</td><td>${escapeHtml(row[2])}</td><td>${escapeHtml(row[3])}</td><td>${badge(row[4], row[5])}</td><td>${escapeHtml(row[6])}</td><td>${escapeHtml(row[7])}</td><td><button class="link-button record-id" type="button" data-record-id="${escapeHtml(row[8])}">${escapeHtml(row[8])}</button></td><td>${iconButton("plus", "更多")}</td></tr>`).join("")}</tbody>
             </table>
@@ -1589,7 +1710,7 @@
     return `
       <div class="answer-header"><strong>记录详情</strong>${iconButton("plus", "关闭")}</div>
       <div class="answer-body">
-        <div class="detail-hero"><span class="icon-chip">${svg("assistant")}</span><div><strong class="record-id">${row[8]}</strong><div class="muted small">${row[0]}（GMT+08:00）</div></div>${badge(row[4], row[5])}</div>
+        <div class="detail-hero"><span class="icon-chip">${svg("assistant")}</span><div><strong class="record-id">${row[8]}</strong><div class="muted small">${row[0]}</div></div>${badge(row[4], row[5])}</div>
         <div class="detail-section"><div class="row-meta"><strong>处理摘要</strong>${badge(row[4], row[5])}</div>${renderKeyValueRows([
           ["执行状态", row[4]],
           ["用户", row[1]],
@@ -1692,17 +1813,20 @@
     const summary = appState.media.summary || {};
     const stats = summary.stats || {};
     const albums = summary.albums || [];
+    const photos = summary.photos || [];
     return `
-      ${pageHeader("相册", "读取 NAS Personal 中的照片/视频索引和相册记录。", `${button("索引媒体", { icon: "media", action: "mediaIndex" })}${button("刷新", { variant: "secondary", icon: "plus", action: "mediaRefresh" })}`)}
+      ${pageHeader("相册", "读取本地照片、视频索引和相册记录。", `${button("索引媒体", { icon: "media", action: "mediaIndex" })}${button("刷新", { variant: "secondary", icon: "plus", action: "mediaRefresh" })}`)}
       <div class="grid two-col">
         ${card(`${sectionTitle("媒体统计")} ${stateBlock || renderKeyValueRows([
           ["照片", stats.photo_count || stats.photos || 0],
           ["视频", stats.video_count || stats.videos || 0],
           ["相册", stats.album_count || albums.length || 0],
-          ["重复组", stats.duplicate_group_count || 0]
+          ["重复组", stats.duplicate_group_count || 0],
+          ["最近索引", stats.last_indexed_at || "—"]
         ])}`)}
         ${card(`${sectionTitle("相册列表", "新建相册", "mediaCreateAlbum")}<div class="doc-list">${albums.length ? albums.map((album) => `<article class="doc-item"><span class="doc-glyph png">ALB</span><div><div class="doc-title">${escapeHtml(album.name || album.album_name || "相册")}</div><div class="muted small">${escapeHtml(album.description || "本地相册记录")}</div></div></article>`).join("") : `<div class="empty-state compact">暂无相册</div>`}</div>`)}
       </div>
+      ${card(`${sectionTitle("照片索引样本")}<div class="doc-list">${photos.length ? photos.slice(0, 12).map((photo) => `<article class="doc-item"><span class="doc-glyph png">IMG</span><div><div class="doc-title">${escapeHtml(photo.display_name_zh || photo.title_redacted || photo.asset_id || "照片")}</div><div class="muted small">${escapeHtml(photo.suggested_filename_zh || photo.extension || "本地照片")}</div></div></article>`).join("") : `<div class="empty-state compact">暂无照片索引</div>`}</div>`)}
       ${renderStatePanel("相册")}
     `;
   }
@@ -1995,7 +2119,7 @@
 
   function renderOperationRows(rows) {
     if (!rows.length) return `<div class="empty-state compact">${svg("search")} 暂无操作日志</div>`;
-    return `<div class="table-wrap"><table class="data-table"><thead><tr><th>时间</th><th>动作</th><th>来源</th><th>目标</th><th>状态</th></tr></thead><tbody>${rows.map((row, index) => `<tr data-record-id="${escapeHtml(auditRecordId(row, index))}"><td>${escapeHtml(row.created_at || row.ts || "—")}</td><td>${escapeHtml(operationTitle(row.action || row.operation || "—"))}</td><td>${escapeHtml(row.source || row.source_path || "—")}</td><td>${escapeHtml(row.target || row.target_path || "—")}</td><td>${badge(row.status || "recorded", String(row.status || "").includes("disabled") ? "danger" : "success")}</td></tr>`).join("")}</tbody></table></div>`;
+    return `<div class="table-wrap"><table class="data-table"><thead><tr><th>时间</th><th>动作</th><th>来源</th><th>目标</th><th>状态</th></tr></thead><tbody>${rows.map((row, index) => `<tr data-record-id="${escapeHtml(auditRecordId(row, index))}"><td>${escapeHtml(row.created_at || row.ts || "—")}</td><td>${escapeHtml(operationTitle(row.action || row.operation || "—"))}</td><td>${escapeHtml(row.source || row.source_path ? "已记录" : "—")}</td><td>${escapeHtml(row.target || row.target_path ? "已记录" : "—")}</td><td>${badge(row.status || "recorded", String(row.status || "").includes("disabled") ? "danger" : "success")}</td></tr>`).join("")}</tbody></table></div>`;
   }
 
   function renderDocumentEvidence(items) {
@@ -2196,6 +2320,7 @@
           route: route.data || null,
           mode: copilotData.assistant_mode || "",
           copilot: copilotData,
+          toolLabel: assistantToolLabelFromCopilot(copilotData),
           error: ""
         };
       } else {
@@ -2242,13 +2367,13 @@
       return `已通过本地受控服务读取目录，返回 ${fmtCount(action.entries?.length)} 个条目。`;
     }
     if (action.operation === "copy") {
-      return "已识别为受控复制任务，直接复制未执行，需要走 preview / dry-run / confirm / execute / rollback 链路。";
+      return "已识别为受控复制任务，直接复制未执行，需要先预览、试运行、确认，再执行或回滚。";
     }
     if (action.operation === "inspect") {
       return "已完成只读路径检查；模型没有获得文件写入或高风险工具执行权。";
     }
     if (action.operation) {
-      return "该意图已进入安全边界检查，默认服务仅允许只读检查和受控单文件 copy route。";
+      return "该意图已进入安全边界检查，默认服务仅允许只读检查和受控单文件复制。";
     }
     if (data.error) return data.error;
     return "已完成本地意图理解，本次没有触发文件写入工具。";
@@ -2256,7 +2381,7 @@
 
   function openNotifications() {
     showWorkflow("通知", `
-      <div class="mini-row"><span>${badge("成功", "success")} 文件接口已连接真实 NAS Personal root</span><span class="muted small">当前会话</span></div>
+      <div class="mini-row"><span>${badge("成功", "success")} 文件接口已连接本地个人空间</span><span class="muted small">当前会话</span></div>
       <div class="mini-row"><span>${badge("安全", "warning")} 删除、移动、覆盖、递归操作保持禁用</span><span class="muted small">本地执行边界</span></div>
       <div class="mini-row"><span>${badge("待处理", "neutral")} 写入操作需要身份令牌和路径权限</span><span class="muted small">ACL</span></div>
     `);
@@ -2268,7 +2393,7 @@
       ${renderKeyValueRows([
         ["读操作", "目录浏览、下载、文档检索、审计查询"],
         ["安全写操作", "新建文件夹、无覆盖上传、手动 Journal、备份任务记录"],
-        ["受控写操作", "单文件 copy route：preview / dry-run / confirm / execute / rollback"],
+        ["受控写操作", "单文件复制：预览、试运行、确认、执行、回滚"],
         ["默认禁用", "删除、移动、重命名、改权限、覆盖、递归操作"]
       ])}
     `);
@@ -2330,9 +2455,9 @@
   function assistantAttach() {
     const selected = selectedStorageEntry();
     showWorkflow("附件", `
-      <p>附件不会绕过文件权限。先在“文件”页选择真实 NAS 文件，AI 助手只接收受控文件引用和脱敏上下文。</p>
+      <p>附件不会绕过文件权限。先在“文件”页选择本地文件，AI 助手只接收受控文件引用和脱敏上下文。</p>
       ${renderKeyValueRows([
-        ["当前选中", selected?.relative_path || appState.selectedFile || "未选择"],
+        ["当前选中", selected ? displayName(selected, "已选择文件") : appState.selectedFile ? displayLocation(appState.selectedFile) : "未选择"],
         ["文件接口", appState.authToken ? "已登录" : "未登录"],
         ["后续动作", "选择文件后可复制路径，或在输入框引用路径触发本地工具路由"]
       ])}
@@ -2997,7 +3122,7 @@
       showWorkflow("创建快照", `
         ${renderKeyValueRows([
           ["名称", result.data.snapshot?.name || safeName],
-          ["源路径", sourcePath || "Personal root"],
+          ["来源", sourcePath ? displayLocation(sourcePath) : "个人空间"],
           ["文件数", result.data.snapshot?.file_count ?? "—"],
           ["大小", result.data.snapshot?.total_size ? formatBytes(result.data.snapshot.total_size) : "—"]
         ])}
@@ -3011,7 +3136,7 @@
   async function runCopyRoute(step) {
     const selected = selectedStorageEntry();
     if (!selected || selected.is_dir) {
-      showToast("请选择一个真实文件再验证 copy route");
+      showToast("请选择一个文件再验证复制链路");
       return;
     }
     const target = cleanStoragePath(document.getElementById("copyTarget")?.value || appState.copy.target || `copy_${selected.name}`);

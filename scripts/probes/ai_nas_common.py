@@ -2494,14 +2494,65 @@ def load_sqlite_inventory_payload(db_path: Path, root: Path) -> dict:
     }
 
 
+def open_readonly_sqlite_connection(db_path: Path | str, *, row_factory: bool = False) -> sqlite3.Connection:
+    path = Path(db_path)
+    uri_path = quote(str(path.resolve()).replace("\\", "/"), safe="/:")
+    con = sqlite3.connect(f"file:{uri_path}?mode=ro&immutable=1", uri=True)
+    if row_factory:
+        con.row_factory = sqlite3.Row
+    return con
+
+
 def sqlite_index_status(db_path: Path) -> dict:
-    con = open_index_db(db_path)
     try:
-        sqlite_runtime = {
-            "journal_mode": con.execute("PRAGMA journal_mode").fetchone()[0],
-            "locking_mode": con.execute("PRAGMA locking_mode").fetchone()[0],
+        con = open_readonly_sqlite_connection(db_path, row_factory=True)
+    except sqlite3.OperationalError as exc:
+        return {
+            "db_path": str(db_path),
+            "exists": Path(db_path).exists(),
+            "status": "unreadable",
+            "error": str(exc),
+            "file_count": 0,
+            "failed_count": 0,
+            "recent_failures": [],
+            "recent_changes": [],
+            "ocr": {"status_counts": {}, "recent": []},
+            "image_captions": {"status_counts": {}, "recent": []},
+            "image_embeddings": {"status_counts": {}, "recent": []},
+            "queue_progress": {"processed": 0, "max_files": None, "complete": False},
         }
-        latest = con.execute("SELECT * FROM index_runs ORDER BY id DESC LIMIT 1").fetchone()
+    try:
+        def readonly_pragma_value(name: str) -> str:
+            try:
+                row = con.execute(f"PRAGMA {name}").fetchone()
+            except sqlite3.OperationalError as exc:
+                return f"unavailable:{exc}"
+            return str(row[0]) if row else "unknown"
+
+        sqlite_runtime = {
+            "journal_mode": readonly_pragma_value("journal_mode"),
+            "locking_mode": readonly_pragma_value("locking_mode"),
+        }
+        tables = {
+            row["name"]
+            for row in con.execute("SELECT name FROM sqlite_master WHERE type IN ('table', 'view')")
+        }
+        if "records" not in tables:
+            return {
+                "db_path": str(db_path),
+                "exists": True,
+                "sqlite_runtime": sqlite_runtime,
+                "status": "not_built",
+                "file_count": 0,
+                "failed_count": 0,
+                "recent_failures": [],
+                "recent_changes": [],
+                "ocr": {"status_counts": {}, "recent": []},
+                "image_captions": {"status_counts": {}, "recent": []},
+                "image_embeddings": {"status_counts": {}, "recent": []},
+                "queue_progress": {"processed": 0, "max_files": None, "complete": False},
+            }
+        latest = con.execute("SELECT * FROM index_runs ORDER BY id DESC LIMIT 1").fetchone() if "index_runs" in tables else None
         file_count = con.execute("SELECT COUNT(*) AS count FROM records").fetchone()["count"]
         failed_count = con.execute(
             "SELECT COUNT(*) AS count FROM records WHERE type = 'Documents' AND parse_error IS NOT NULL"
@@ -2517,84 +2568,95 @@ def sqlite_index_status(db_path: Path) -> dict:
                 """
             )
         ]
-        recent_changes = [
-            dict(row)
-            for row in con.execute(
-                """
-                SELECT action, relative_path, reason, created_at
-                FROM change_log
-                WHERE run_id = COALESCE((SELECT MAX(id) FROM index_runs), -1)
-                ORDER BY id DESC
-                LIMIT 20
-                """
-            )
-        ]
-        ocr_status_counts = {
-            row["status"]: row["count"]
-            for row in con.execute("SELECT status, COUNT(*) AS count FROM ocr_results GROUP BY status")
-        }
-        recent_ocr_results = [
-            {
-                "relative_path": row["relative_path"],
-                "status": row["status"],
-                "engine": row["engine"],
-                "error": row["error"],
-                "updated_at": row["updated_at"],
+        recent_changes = []
+        if "change_log" in tables:
+            recent_changes = [
+                dict(row)
+                for row in con.execute(
+                    """
+                    SELECT action, relative_path, reason, created_at
+                    FROM change_log
+                    WHERE run_id = COALESCE((SELECT MAX(id) FROM index_runs), -1)
+                    ORDER BY id DESC
+                    LIMIT 20
+                    """
+                )
+            ]
+        ocr_status_counts = {}
+        recent_ocr_results = []
+        if "ocr_results" in tables:
+            ocr_status_counts = {
+                row["status"]: row["count"]
+                for row in con.execute("SELECT status, COUNT(*) AS count FROM ocr_results GROUP BY status")
             }
-            for row in con.execute(
-                """
-                SELECT relative_path, status, engine, error, updated_at
-                FROM ocr_results
-                ORDER BY updated_at DESC
-                LIMIT 10
-                """
-            )
-        ]
-        image_embedding_status_counts = {
-            row["status"]: row["count"]
-            for row in con.execute("SELECT status, COUNT(*) AS count FROM image_embeddings GROUP BY status")
-        }
-        recent_image_embeddings = [
-            {
-                "relative_path": row["relative_path"],
-                "model_id": row["model_id"],
-                "status": row["status"],
-                "engine": row["engine"],
-                "error": row["error"],
-                "updated_at": row["updated_at"],
+            recent_ocr_results = [
+                {
+                    "relative_path": row["relative_path"],
+                    "status": row["status"],
+                    "engine": row["engine"],
+                    "error": row["error"],
+                    "updated_at": row["updated_at"],
+                }
+                for row in con.execute(
+                    """
+                    SELECT relative_path, status, engine, error, updated_at
+                    FROM ocr_results
+                    ORDER BY updated_at DESC
+                    LIMIT 10
+                    """
+                )
+            ]
+        image_embedding_status_counts = {}
+        recent_image_embeddings = []
+        if "image_embeddings" in tables:
+            image_embedding_status_counts = {
+                row["status"]: row["count"]
+                for row in con.execute("SELECT status, COUNT(*) AS count FROM image_embeddings GROUP BY status")
             }
-            for row in con.execute(
-                """
-                SELECT relative_path, model_id, status, engine, error, updated_at
-                FROM image_embeddings
-                ORDER BY updated_at DESC
-                LIMIT 10
-                """
-            )
-        ]
-        image_caption_status_counts = {
-            row["status"]: row["count"]
-            for row in con.execute("SELECT status, COUNT(*) AS count FROM image_captions GROUP BY status")
-        }
-        recent_image_captions = [
-            {
-                "relative_path": row["relative_path"],
-                "provider": row["provider"],
-                "model_id": row["model_id"],
-                "status": row["status"],
-                "caption": row["caption"][:240],
-                "error": row["error"],
-                "updated_at": row["updated_at"],
+            recent_image_embeddings = [
+                {
+                    "relative_path": row["relative_path"],
+                    "model_id": row["model_id"],
+                    "status": row["status"],
+                    "engine": row["engine"],
+                    "error": row["error"],
+                    "updated_at": row["updated_at"],
+                }
+                for row in con.execute(
+                    """
+                    SELECT relative_path, model_id, status, engine, error, updated_at
+                    FROM image_embeddings
+                    ORDER BY updated_at DESC
+                    LIMIT 10
+                    """
+                )
+            ]
+        image_caption_status_counts = {}
+        recent_image_captions = []
+        if "image_captions" in tables:
+            image_caption_status_counts = {
+                row["status"]: row["count"]
+                for row in con.execute("SELECT status, COUNT(*) AS count FROM image_captions GROUP BY status")
             }
-            for row in con.execute(
-                """
-                SELECT relative_path, provider, model_id, status, caption, error, updated_at
-                FROM image_captions
-                ORDER BY updated_at DESC
-                LIMIT 10
-                """
-            )
-        ]
+            recent_image_captions = [
+                {
+                    "relative_path": row["relative_path"],
+                    "provider": row["provider"],
+                    "model_id": row["model_id"],
+                    "status": row["status"],
+                    "caption": row["caption"][:240],
+                    "error": row["error"],
+                    "updated_at": row["updated_at"],
+                }
+                for row in con.execute(
+                    """
+                    SELECT relative_path, provider, model_id, status, caption, error, updated_at
+                    FROM image_captions
+                    ORDER BY updated_at DESC
+                    LIMIT 10
+                    """
+                )
+            ]
     finally:
         con.close()
 

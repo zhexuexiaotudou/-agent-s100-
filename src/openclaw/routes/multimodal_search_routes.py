@@ -9,7 +9,14 @@ from src.multimodal_search.search_api import MultimodalSearchService
 def _service(report_root: str | Path | None, personal_root: str | Path | None) -> MultimodalSearchService:
     root = Path(report_root or "reports")
     runtime = root / "multimodal_search" / "runtime"
-    roots = [Path(personal_root)] if personal_root else [root]
+    if personal_root:
+        personal = Path(personal_root)
+        roots = [personal]
+        for extra in (personal.parent / "yolo_v2_fixture", personal.parent / "demo_data"):
+            if extra.exists():
+                roots.append(extra)
+    else:
+        roots = [root]
     return MultimodalSearchService(
         db_path=runtime / "multimodal_search.db",
         vector_dir=runtime / "vectors",

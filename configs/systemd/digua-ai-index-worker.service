@@ -1,0 +1,15 @@
+[Unit]
+Description=Digua AI-NAS product index worker
+After=network-online.target openclaw-gateway.service
+Wants=network-online.target
+
+[Service]
+Type=simple
+WorkingDirectory=/mnt/nas/openclaw
+Environment=PYTHONPATH=/mnt/nas/openclaw
+ExecStart=/usr/bin/python3 -m src.product_jobs.worker --db-path /mnt/nas/openclaw/reports/qwen25_ai_nas/product_jobs/runtime/product_jobs.db
+Restart=on-failure
+RestartSec=30s
+
+[Install]
+WantedBy=default.target

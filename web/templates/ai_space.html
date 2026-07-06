@@ -1,0 +1,25 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Digua AI Space</title>
+  <link rel="stylesheet" href="/static/ai_space.css">
+</head>
+<body>
+  <main class="shell">
+    <header class="toolbar">
+      <h1>AI Space</h1>
+      <input id="query" placeholder="Search assets, labels, categories">
+      <button id="search">Search</button>
+      <button id="rebuild">Rebuild</button>
+    </header>
+    <section id="status" class="status"></section>
+    <section class="layout">
+      <aside id="facets" class="facets"></aside>
+      <section id="cards" class="cards"></section>
+    </section>
+  </main>
+  <script src="/static/ai_space.js"></script>
+</body>
+</html>

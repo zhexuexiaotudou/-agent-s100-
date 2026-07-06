@@ -9,8 +9,16 @@ Type=simple
 WorkingDirectory=/mnt/nas/openclaw
 Environment=AI_NAS_PERSONAL_ROOT=/mnt/nas/openclaw/Personal
 Environment=AI_NAS_REPORT_ROOT=/mnt/nas/openclaw/reports/qwen25_ai_nas
+Environment=DIGUA_CLIP_BACKEND=clip
+Environment=DIGUA_CLIP_MODEL_DIR=/mnt/nas/openclaw/models/ai_nas_clip_vit_base_patch32
+Environment=DIGUA_CLIP_DEVICE=cpu
+Environment=DIGUA_CLIP_REQUIRE_PRODUCTION=1
+Environment=DIGUA_ASR_BACKEND=transformers_whisper
+Environment=DIGUA_ASR_MODEL_DIR=/mnt/nas/openclaw/models/whisper_tiny
+Environment=DIGUA_ASR_DEVICE=cpu
+Environment=DIGUA_ASR_REQUIRE_REAL=1
 ExecStartPre=/usr/bin/test -r /mnt/nas/openclaw/scripts/probes/ai_nas_operator_portal_server.py
-ExecStart=/usr/bin/python3 /mnt/nas/openclaw/scripts/probes/ai_nas_operator_portal_server.py --bind 127.0.0.1 --port 8765 --report-root /mnt/nas/openclaw/reports/qwen25_ai_nas --evidence-root /mnt/nas/openclaw/reports/qwen25_ai_nas --evidence-root /mnt/nas/openclaw/reports/ai_nas_mvp --personal-root /mnt/nas/openclaw/Personal --nas-portal --no-refresh --qwen-gateway-url http://127.0.0.1:18080 --openclaw-model-gateway-url http://127.0.0.1:18080
+ExecStart=/usr/bin/python3 /mnt/nas/openclaw/scripts/probes/ai_nas_operator_portal_server.py --bind 127.0.0.1 --port 8765 --report-root /mnt/nas/openclaw/reports/qwen25_ai_nas --evidence-root /mnt/nas/openclaw/reports/qwen25_ai_nas --evidence-root /mnt/nas/openclaw/reports/ai_nas_mvp --evidence-root /mnt/nas/openclaw/reports/product_delivery --personal-root /mnt/nas/openclaw/Personal --nas-portal --no-refresh --qwen-gateway-url http://127.0.0.1:18080 --openclaw-model-gateway-url http://127.0.0.1:18080
 Restart=on-failure
 RestartSec=30s
 

@@ -10,7 +10,7 @@ from .archive_indexer import archive_metadata
 from .audio_indexer import audio_metadata
 from .document_indexer import chunk_text, extract_text
 from .feature_flags import MultimodalFeatureFlags
-from .image_embedding_adapter import load_image_text_model
+from .clip_embedding_adapter import load_image_text_model
 from .image_indexer import image_metadata
 from .scanner import ScannedAsset, scan_nas_sources
 from .schema import connect, migrate
@@ -46,6 +46,7 @@ class MultimodalIndexer:
         image_embeddings = 0
         conn = connect(self.db_path)
         try:
+            self.vector_store.clear()
             conn.execute("DELETE FROM mm_search_results")
             conn.execute("DELETE FROM mm_search_runs")
             conn.execute("DELETE FROM mm_embeddings")
@@ -61,13 +62,17 @@ class MultimodalIndexer:
                 chunks += self._index_text(conn, asset)
                 self._index_media_metadata(conn, asset)
                 if asset.modality == "image" and self.flags.image_embedding_enabled and self.image_model.available:
-                    vector = self.image_model.embed_image(asset.path)
+                    model_identity = self.image_model.get_model_identity()
+                    try:
+                        vector = self.image_model.embed_image(asset.path)
+                    except Exception:
+                        continue
                     embedding_id = "emb_" + hashlib.sha256((asset.asset_id + asset.sha256).encode("utf-8")).hexdigest()[:24]
                     vector_ref = self.vector_store.add(
                         embedding_id=embedding_id,
                         asset_id=asset.asset_id,
                         modality="image",
-                        model_id=self.image_model.get_model_identity()["model_name"],
+                        model_id=model_identity["model_name"],
                         vector=vector,
                         privacy_level="private_local_only",
                     )
@@ -83,7 +88,7 @@ class MultimodalIndexer:
                             asset.asset_id,
                             None,
                             "image",
-                            self.image_model.get_model_identity()["model_name"],
+                            model_identity["model_name"],
                             int(vector.shape[0]),
                             vector_ref,
                             vector_sha,

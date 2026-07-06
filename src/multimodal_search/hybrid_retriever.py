@@ -6,7 +6,7 @@ from typing import Any
 
 from .evidence_builder import build_result
 from .feature_flags import MultimodalFeatureFlags
-from .image_embedding_adapter import load_image_text_model
+from .clip_embedding_adapter import load_image_text_model
 from .query_planner import QueryPlan
 from .schema import connect
 from .vector_store import NumpyVectorStore

@@ -12,6 +12,8 @@ class LabelAlias:
 
 LABEL_ZH: dict[str, str] = {
     "person": "人",
+    "cat": "猫咪",
+    "dog": "狗狗",
     "car": "汽车",
     "bus": "公交车",
     "truck": "卡车",
@@ -39,6 +41,12 @@ ALIASES: tuple[LabelAlias, ...] = (
     LabelAlias("出现人", "person"),
     LabelAlias("person", "person", "en"),
     LabelAlias("people", "person", "en"),
+    LabelAlias("猫", "cat"),
+    LabelAlias("猫咪", "cat"),
+    LabelAlias("cat", "cat", "en"),
+    LabelAlias("狗", "dog"),
+    LabelAlias("狗狗", "dog"),
+    LabelAlias("dog", "dog", "en"),
     LabelAlias("车", "car"),
     LabelAlias("汽车", "car"),
     LabelAlias("轿车", "car"),

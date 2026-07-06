@@ -7,7 +7,7 @@ device.
 
 ## Current Status
 
-Status timestamp: 2026-07-04 14:35 CST.
+Status timestamp: 2026-07-06 14:29 CST.
 
 The three demo expectations are now satisfied on the S100P test machine:
 
@@ -40,6 +40,73 @@ typed approval, signed approval token, source rehash, target-absent check, and
 the allowlisted dispatcher. Delete, move, rename, chmod, chown, overwrite,
 recursive operations, arbitrary shell execution, Qwen autonomous tool execution,
 and private raw cloud egress remain out of scope.
+
+## Product Delivery Acceptance
+
+The roadmap product-smoke loop is now available on S100P.
+
+- Product status API: `http://127.0.0.1:8765/api/product/status` on S100P
+- Product evidence API: `http://127.0.0.1:8765/api/product/evidence/latest` on S100P
+- Product smoke verdict: `ok_product_smoke_test`
+- Product smoke report: `/mnt/nas/openclaw/reports/product_delivery/product_smoke_test_20260706-142946/product_smoke_test.json`
+- Final readiness verdict: `ready_ai_nas_production_readiness_gate`
+- Final readiness report: `/mnt/nas/openclaw/reports/product_delivery/production_readiness_gate_20260706-025926-730286/production_readiness_gate.json`
+- Acceptance note: `docs/product_delivery_acceptance_20260706.md`
+
+The live product smoke verified `failure_count=0`, `warning_count=0`,
+`production_ready=true`, `yolo_runtime_target=s100p_bpu_hbm`,
+`yolo_detection_count=66`, `multimodal_embedding_count=5`,
+`ai_space_asset_count=13`, `smart_category_count=29`,
+`smart_name_count=43`, and `subtitle_segment_count=1`.
+
+## AI Space Product Acceptance
+
+The AI Space / Smart Classification / Subtitle Extraction delivery gate is now
+passing on S100P.
+
+- Stage 7 verdict: `ok_stage7_ai_space_product_delivery_gate`
+- Stage 7 report: `/mnt/nas/openclaw/reports/qwen25_ai_nas/stage7_ai_space_product_delivery_gate.json`
+- GPT Pro bundle: `/mnt/nas/openclaw/evidence_for_gptpro/digua_ai_space_product_delivery_latest.zip`
+- Acceptance note: `docs/AI_SPACE_PRODUCT_ACCEPTANCE_20260706.md`
+
+Validated modules:
+
+- Live local CLIP image embeddings: `model_family=clip`, `vector_dim=512`,
+  `production_semantic_embedding_count=17`, `cloud_used=false`.
+- Person Attribute Search: `person_detection_count=31`, `attribute_count=31`,
+  identity requests are blocked.
+- AI Space: `asset_count=220`, `evidence_count=220`, no raw path return.
+- Smart Classification: `category_count=12`, `membership_count=986`, virtual
+  collections only; no physical file move.
+- Subtitle Extraction: local `transformers_whisper` backend, `segment_count=1`,
+  SRT/VTT generated, `cloud_used=false`.
+
+## Smart Album Upload And Chinese Naming Acceptance
+
+The smart album auto-classification and Chinese naming delivery gate is passing
+on S100P.
+
+- Stage 7 verdict: `ok_stage7_smart_album_classification_delivery_gate`
+- Stage 7 report: `/mnt/nas/openclaw/reports/qwen25_ai_nas/stage7_smart_album_classification_delivery_gate.json`
+- Product smoke report: `/mnt/nas/openclaw/reports/product_delivery/product_smoke_test_20260706-142946/product_smoke_test.json`
+- GPT Pro bundle: `/mnt/nas/openclaw/evidence_for_gptpro/digua_smart_album_classification_delivery_latest.zip`
+- Delivery note: `docs/SMART_ALBUM_CLASSIFICATION_DELIVERY.md`
+
+Validated flow:
+
+- `POST /api/media/upload` saves the uploaded image under Personal NAS and
+  records media upload, multimodal rebuild, YOLO index, person-attribute,
+  smart-classification, smart-naming, and AI Space jobs.
+- Uploaded `white_shirt_person_004.jpg` returned asset
+  `mm_fb98a8eb7d323bbbdea2f181`, hit `人物照片` and `白色上衣`, and generated
+  `人物照片_白色上衣_照片_20260706_429.jpg`.
+- Chinese naming gate verified the format
+  `主类别_核心特征_场景或属性_日期_序号`, no illegal filename characters, no
+  phone/ID-style sensitive numbers, and sample names for `人物照片`, `猫咪`,
+  `票据发票`, and `笔记本电脑`.
+- Final live smoke after fixture restoration verified `yolo_detection_count=66`,
+  `person_detection_count=31`, `ai_space_asset_count=13`,
+  `smart_category_count=29`, and `smart_name_count=43`.
 
 ## Demo Story
 
@@ -100,6 +167,13 @@ Recommended one-line pitch:
 | `scripts/probes/qwen25_ai_nas_acceptance_packet.py` | Qwen AI-NAS acceptance packet generator |
 | `scripts/probes/ai_nas_openclaw_nas_control_gate_probe.py` | OpenClaw NAS control, ACL, and destructive-action gate |
 | `scripts/probes/ai_nas_operator_portal_server.py` | AI-NAS Web OS / operator portal server |
+| `scripts/product_smoke_test.py` | Product-level live HTTP smoke gate for `/api/product/status`, evidence, YOLO, multimodal, and harness boundaries |
+| `gates/stage7_ai_space_product_delivery_gate.py` | Aggregate product gate for live CLIP, person attributes, AI Space, smart classification, and subtitle extraction |
+| `src/person_attribute/` | Local-only non-identifying person attribute search |
+| `src/ai_space/` | AI Space catalog and facets |
+| `src/smart_classification/` | Virtual smart classification collections |
+| `src/subtitle_extraction/` | Local ASR transcript, SRT/VTT, and search support |
+| `src/product_jobs/` | Product background job queue API |
 | `src/harness/` | Harness policy, copy route guard, and token-budget integration |
 | `src/openclaw/` | OpenClaw default-service middleware and API route adapters |
 | `gates/stage*_gates.py` | Stage-gated AI-NAS harness validation scripts |
@@ -134,6 +208,16 @@ ssh -i C:\Users\zhexu\.ssh\s100p_linkcheck_ed25519 sunrise@192.168.127.10 `
   'cd /mnt/nas/openclaw/scripts/probes && python3 ai_nas_edge_cloud_router_probe.py --report-root /mnt/nas/openclaw/reports/qwen25_ai_nas --use-qwen-classifier --require-qwen-touch --qwen-base-url http://127.0.0.1:18080 --execute-cloud --use-local-cloud-stub --require-cloud-call --timeout 180'
 ```
 
+```powershell
+ssh -i C:\Users\zhexu\.ssh\s100p_linkcheck_ed25519 sunrise@192.168.127.10 `
+  'cd /mnt/nas/openclaw && python3 scripts/product_smoke_test.py --base-url http://127.0.0.1:8765 --report-root /mnt/nas/openclaw/reports/product_delivery'
+```
+
+```powershell
+ssh -i C:\Users\zhexu\.ssh\s100p_linkcheck_ed25519 sunrise@192.168.127.10 `
+  'cd /mnt/nas/openclaw && DIGUA_CLIP_BACKEND=clip DIGUA_CLIP_MODEL_DIR=/mnt/nas/openclaw/models/ai_nas_clip_vit_base_patch32 DIGUA_CLIP_DEVICE=cpu DIGUA_CLIP_REQUIRE_PRODUCTION=1 DIGUA_ASR_BACKEND=transformers_whisper DIGUA_ASR_MODEL_DIR=/mnt/nas/openclaw/models/whisper_tiny DIGUA_ASR_REQUIRE_REAL=1 python3 gates/stage7_ai_space_product_delivery_gate.py --report-root /mnt/nas/openclaw/reports/qwen25_ai_nas --personal-root /mnt/nas/openclaw/Personal --no-rebuild'
+```
+
 ## Boundaries
 
 - The router demo uses a controlled local cloud stub unless `--cloud-base-url`
@@ -141,6 +225,9 @@ ssh -i C:\Users\zhexu\.ssh\s100p_linkcheck_ed25519 sunrise@192.168.127.10 `
 - Qwen `/health` still contains historical model/profile metadata fields that
   can look inconsistent. For acceptance, use the gate verdicts and generated
   report paths above as the source of truth.
+- Do not claim face recognition, family member identity recognition, age/gender/race/emotion/health inference, cloud vision, or cloud ASR.
+- Smart Classification creates virtual collections by default. Physical organization must go through Copy Plan / Harness approval and rollback.
+- The subtitle gate validates local ASR mechanics with a synthetic demo audio fixture; production demos should use real user-provided media.
 - Dream7B is no longer the promoted product path. It remains useful as runtime,
   batching, telemetry, and validation history. The latest seq128 segmented-HBM
   research route is logits-invalid for the current full-BPU path and must stay

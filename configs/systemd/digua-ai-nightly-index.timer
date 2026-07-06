@@ -1,0 +1,10 @@
+[Unit]
+Description=Nightly Digua AI-NAS indexing wakeup
+
+[Timer]
+OnCalendar=*-*-* 03:20:00
+Persistent=true
+Unit=digua-ai-index-worker.service
+
+[Install]
+WantedBy=timers.target
