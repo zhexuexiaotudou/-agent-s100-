@@ -83,8 +83,10 @@ except Exception:
 
 try:
     from src.assistant_trace.routes import assistant_trace_route_response
+    from src.assistant_trace.recorder import AssistantTraceRecorder
 except Exception:
     assistant_trace_route_response = None  # type: ignore[assignment]
+    AssistantTraceRecorder = None  # type: ignore[assignment]
 
 try:
     from src.openclaw.routes.person_attribute_routes import person_attribute_route_response
@@ -4330,6 +4332,281 @@ class PortalHandler(BaseHTTPRequestHandler):
             return None
         return ((trace.get("trace") or {}).get("trace_id") if isinstance(trace.get("trace"), dict) else None)
 
+    def assistant_trace_recorder(self):
+        if AssistantTraceRecorder is None:
+            return None
+        return AssistantTraceRecorder(db_path=self.state.report_root / "assistant_trace" / "runtime" / "assistant_trace.db")
+
+    def send_assistant_chat(self, payload: dict) -> None:
+        query = str(payload.get("query") or payload.get("message") or "")
+        if not query.strip():
+            self.send_json({"ok": False, "error": "query_required", "raw_path_returned": False}, HTTPStatus.BAD_REQUEST)
+            return
+        session_id = str(payload.get("session_id") or "demo3")
+        entrypoint = str(payload.get("entrypoint") or "assistant_chat")
+        action_intent = infer_copilot_action_intent(query)
+        router = self.state.copilot_qwen_route(query, action_intent)
+        task_type = self.assistant_task_type(query, action_intent, router)
+        privacy_spans = self.assistant_privacy_spans(query, router)
+        privacy_level = self.assistant_privacy_level(task_type, privacy_spans, router)
+        task_complexity = "complex" if task_type in {"private_document_query", "public_complex_query"} else "simple"
+        route = self.assistant_route_label(task_type, privacy_level, router)
+        token_result = self.assistant_token_budget(query, task_type, privacy_spans, task_complexity)
+        tool_result = self.assistant_tool_execution(query, task_type, router, action_intent)
+        answer = self.assistant_answer(query, task_type, tool_result, route)
+        token_counts = token_result.get("token_counts") if isinstance(token_result.get("token_counts"), dict) else {}
+        before_tokens = int(token_counts.get("naive_cloud_payload_tokens") or 0)
+        after_tokens = int(token_counts.get("optimized_cloud_payload_tokens") or token_counts.get("redacted_payload_tokens") or 0)
+        reduction_ratio = float(token_counts.get("reduction_ratio") or 0.0)
+        redaction_applied = bool((token_result.get("redaction_count") or 0) or route == "cloud_allowed_redacted")
+        cloud_used = bool(tool_result.get("cloud_used"))
+        cloud_stub = bool(tool_result.get("cloud_stub"))
+        real_cloud_call = bool(tool_result.get("real_cloud_call"))
+        cloud_allowed = route == "cloud_allowed_redacted" and privacy_level == "none"
+        evidence_refs = [str(item) for item in tool_result.get("evidence_refs") or []][:20]
+        safe_router = self.state._redact_paths(dict(router))
+        safe_tool = self.state._redact_paths(dict(tool_result))
+        recorder = self.assistant_trace_recorder()
+        trace_id = None
+        steps: list[str] = []
+        if recorder is not None:
+            trace = recorder.record_execution_trace(
+                entrypoint=entrypoint,
+                query=query,
+                session_id=session_id,
+                step_payloads={
+                    "qwen_router": {
+                        "qwen_touched": True,
+                        "router_output": safe_router,
+                        "qwen_execution_authority": False,
+                    },
+                    "privacy_tokenizer": {
+                        "privacy_spans": privacy_spans,
+                        "privacy_level": privacy_level,
+                        "redaction_count": token_result.get("redaction_count"),
+                        "redaction_map_included": False,
+                        "cloud_private_egress": False,
+                    },
+                    "task_classifier": {
+                        "task_type": task_type,
+                        "task_complexity": task_complexity,
+                        "action_intent": self.state._redact_paths(action_intent) if isinstance(action_intent, dict) else action_intent,
+                    },
+                    "route_decision": {
+                        "route": route,
+                        "cloud_allowed": cloud_allowed,
+                        "cloud_used": cloud_used,
+                        "cloud_stub": cloud_stub,
+                        "real_cloud_call": real_cloud_call,
+                    },
+                    "token_budget": {
+                        "run_id": token_result.get("run_id"),
+                        "before_tokens": before_tokens,
+                        "after_tokens": after_tokens,
+                        "reduction_ratio": reduction_ratio,
+                        "token_counts": token_counts,
+                        "redaction_applied": redaction_applied,
+                        "cloud_payload_contains_private_context": False,
+                    },
+                    "tool_execution": {
+                        "tool": tool_result.get("tool_execution"),
+                        "status": tool_result.get("status"),
+                        "result_count": tool_result.get("result_count"),
+                        "no_grounded_answer": tool_result.get("no_grounded_answer"),
+                        "evidence_refs": evidence_refs,
+                        "result": safe_tool,
+                        "qwen_execution_authority": False,
+                    },
+                    "safety_gate": {
+                        "delete_enabled": False,
+                        "overwrite_enabled": False,
+                        "uncontrolled_move_enabled": False,
+                        "raw_private_cloud_egress": False,
+                        "raw_path_returned": False,
+                        "hidden_chain_of_thought_saved": False,
+                    },
+                    "evidence_summary": {
+                        "evidence_refs": evidence_refs,
+                        "raw_private_content_logged": False,
+                        "raw_path_returned": False,
+                    },
+                    "final_answer": {
+                        "answer_redacted": answer,
+                        "hidden_chain_of_thought_exposed": False,
+                    },
+                },
+            )
+            trace_id = (trace.get("trace") or {}).get("trace_id") if isinstance(trace.get("trace"), dict) else None
+            steps = [str(step.get("step_name")) for step in trace.get("steps") or []]
+        response = {
+            "ok": True,
+            "schema": "digua_assistant_chat_v2",
+            "trace_id": trace_id,
+            "answer_redacted": answer,
+            "qwen_touched": True,
+            "task_type": task_type,
+            "task_complexity": task_complexity,
+            "privacy_spans": privacy_spans,
+            "privacy_level": privacy_level,
+            "route": route,
+            "cloud_allowed": cloud_allowed,
+            "cloud_used": cloud_used,
+            "cloud_stub": cloud_stub,
+            "real_cloud_call": real_cloud_call,
+            "raw_private_cloud_egress": False,
+            "redaction_applied": redaction_applied,
+            "before_tokens": before_tokens,
+            "after_tokens": after_tokens,
+            "reduction_ratio": reduction_ratio,
+            "cloud_payload_contains_private_context": False,
+            "tool_execution": tool_result.get("tool_execution"),
+            "tool_status": tool_result.get("status"),
+            "evidence_refs": evidence_refs,
+            "no_grounded_answer": bool(tool_result.get("no_grounded_answer")),
+            "steps": steps,
+            "hidden_chain_of_thought_saved": False,
+            "qwen_execution_authority": False,
+            "raw_path_returned": False,
+        }
+        self.send_json(self.state._redact_paths(response))
+
+    def assistant_task_type(self, query: str, action_intent: dict | None, router: dict) -> str:
+        text = str(query or "").lower()
+        if any(term in text for term in ["发票", "合同", "金额", "invoice", "contract", "amount"]):
+            return "private_document_query"
+        if ("公开" in query or "public" in text) and any(term in query for term in ["趋势", "比较", "发展"]):
+            return "public_complex_query"
+        if any(term in query for term in ["照片", "相册", "上传"]) or any(term in text for term in ["photo", "album", "upload"]):
+            return "media_search"
+        if isinstance(action_intent, dict) and action_intent.get("action") == "search":
+            return "media_search"
+        return str(router.get("local_tool_id") or "local_chat")
+
+    def assistant_privacy_spans(self, query: str, router: dict) -> list[str]:
+        text = str(query or "").lower()
+        spans: list[str] = []
+        for marker, label in [
+            ("invoice", "invoice"),
+            ("发票", "invoice"),
+            ("contract", "contract"),
+            ("合同", "contract"),
+            ("amount", "amount"),
+            ("金额", "amount"),
+            ("family", "private_nas_context"),
+            ("家庭", "private_nas_context"),
+            ("personal/", "private_nas_context"),
+            ("/mnt/nas/", "private_nas_context"),
+        ]:
+            if marker in text and label not in spans:
+                spans.append(label)
+        if router.get("privacy_level") == "high" and "private_nas_context" not in spans:
+            spans.append("private_nas_context")
+        return spans
+
+    @staticmethod
+    def assistant_privacy_level(task_type: str, privacy_spans: list[str], router: dict) -> str:
+        if privacy_spans or task_type == "private_document_query":
+            return "high"
+        if task_type == "public_complex_query":
+            return "none"
+        return "medium"
+
+    @staticmethod
+    def assistant_route_label(task_type: str, privacy_level: str, router: dict) -> str:
+        if privacy_level == "high":
+            return "private_local_only"
+        if task_type == "public_complex_query":
+            return "cloud_allowed_redacted"
+        return "local_only"
+
+    def assistant_token_budget(self, query: str, task_type: str, privacy_spans: list[str], task_complexity: str) -> dict:
+        if TokenBudgetIntegration is None:
+            return {"ok": False, "error": "token_budget_unavailable", "token_counts": {}}
+        try:
+            api = TokenBudgetIntegration()
+            return api.estimate(
+                {
+                    "query": query,
+                    "task_type": task_type,
+                    "category": task_type,
+                    "workspace": "openclaw_assistant",
+                    "private_markers": privacy_spans,
+                    "sensitivity": "high" if privacy_spans else "",
+                    "complexity": task_complexity,
+                },
+                record_trace=True,
+            )
+        except Exception as exc:
+            return {"ok": False, "error": f"{type(exc).__name__}:{exc}", "token_counts": {}}
+
+    def assistant_tool_execution(self, query: str, task_type: str, router: dict, action_intent: dict | None) -> dict:
+        if task_type == "media_search":
+            if ai_space_route_response is None:
+                return {"tool_execution": "local_media_search", "status": "unavailable", "result_count": 0, "cloud_used": False}
+            status_code, result = ai_space_route_response(
+                "/api/ai-space/search",
+                method="POST",
+                payload={"query": query, "top_k": 8},
+                report_root=self.state.report_root,
+                personal_root=self.state.personal_root,
+            )
+            results = result.get("results") if isinstance(result.get("results"), list) else []
+            return {
+                "tool_execution": "local_media_search",
+                "status": "completed" if status_code == HTTPStatus.OK and result.get("ok") else "failed",
+                "result_count": len(results),
+                "evidence_refs": [ref for item in results for ref in (item.get("evidence_refs") or [])][:20],
+                "cloud_used": False,
+                "raw_path_returned": False,
+            }
+        if task_type == "private_document_query":
+            status_code, result = self.state.document_query_payload(query, "Documents", None)
+            evidence_refs = [str(item) for item in result.get("evidence_refs") or []]
+            return {
+                "tool_execution": "local_document_rag",
+                "status": "completed" if status_code == HTTPStatus.OK else "failed",
+                "result_count": int(result.get("evidence_count") or 0),
+                "evidence_refs": evidence_refs,
+                "no_grounded_answer": int(result.get("evidence_count") or 0) == 0,
+                "cloud_used": False,
+                "raw_private_content_returned": False,
+                "raw_path_returned": False,
+            }
+        if task_type == "public_complex_query":
+            status_code, result = self.state._copilot_cloud_overflow(query, {}, router)
+            return {
+                "tool_execution": "controlled_cloud_overflow",
+                "status": "completed" if status_code == HTTPStatus.OK and result.get("ok") else "stub_or_failed",
+                "result_count": 1 if result.get("ok") else 0,
+                "evidence_refs": ["router:cloud_overflow"],
+                "cloud_used": bool(result.get("cloud_used")),
+                "cloud_stub": not bool(result.get("cloud_used")),
+                "real_cloud_call": bool(result.get("cloud_used")),
+                "cloud_available": result.get("cloud_available"),
+                "raw_path_returned": False,
+            }
+        status_code, result = self.state.local_qwen_chat(query, {})
+        return {
+            "tool_execution": "local_qwen_chat",
+            "status": "completed" if status_code == HTTPStatus.OK and result.get("ok") else "failed",
+            "result_count": 1 if result.get("ok") else 0,
+            "evidence_refs": ["qwen:local_chat"],
+            "cloud_used": False,
+            "raw_path_returned": False,
+        }
+
+    @staticmethod
+    def assistant_answer(query: str, task_type: str, tool_result: dict, route: str) -> str:
+        if task_type == "media_search":
+            return f"已通过本地媒体/AI Space 索引检索，返回 {int(tool_result.get('result_count') or 0)} 条匹配结果。"
+        if task_type == "private_document_query":
+            if tool_result.get("no_grounded_answer"):
+                return "本地文档 RAG 没有找到足够证据，已拒绝强答。"
+            return f"已在本地文档 RAG 中找到 {int(tool_result.get('result_count') or 0)} 条证据，未发送私有内容到云端。"
+        if task_type == "public_complex_query":
+            return "公开复杂任务已完成本地 Qwen 路由、隐私分词和 token 预算；当前按受控云端边界返回。"
+        return "已由本地 Qwen/本地工具链处理。"
+
     def send_assistant_trace_response(self, method: str, route: str, payload: dict | None = None) -> None:
         if assistant_trace_route_response is None:
             self.send_json({"ok": False, "error": "assistant_trace_unavailable"}, HTTPStatus.SERVICE_UNAVAILABLE)
@@ -4422,6 +4699,47 @@ class PortalHandler(BaseHTTPRequestHandler):
             "qwen_execution_authority": False,
         }
         self.send_json(self.state._redact_paths(safe))
+
+    def send_ocr_status(self) -> None:
+        ocr_runtime = self.state._report_ref("ocr_runtime_contract.json")
+        document_pipeline = self.state._report_ref("document_pipeline_acceptance.json")
+        self.send_json(
+            {
+                "ok": True,
+                "schema": "digua_ocr_status_v1",
+                "ocr_runtime": ocr_runtime,
+                "document_pipeline": document_pipeline,
+                "cloud_ocr_enabled": False,
+                "cloud_used": False,
+                "raw_private_content_returned": False,
+                "raw_path_returned": False,
+            }
+        )
+
+    def send_document_rag_or_ocr_query(self, payload: dict, user: dict, *, mode: str) -> None:
+        query = str(payload.get("query") or payload.get("message") or "")
+        path = str(payload.get("path") or "Documents")
+        status_code, result = self.state.document_query_payload(query, path, user)
+        evidence = result.get("evidence") if isinstance(result.get("evidence"), list) else []
+        evidence_refs = [str(item) for item in result.get("evidence_refs") or []]
+        no_grounded = status_code != HTTPStatus.OK or not evidence
+        response = {
+            "ok": not no_grounded,
+            "schema": "digua_document_rag_query_v1" if mode == "document_rag" else "digua_ocr_query_v1",
+            "mode": mode,
+            "answer": "" if no_grounded else result.get("answer"),
+            "evidence_refs": [] if no_grounded else evidence_refs,
+            "retrieved_chunks": [] if no_grounded else self.state._redact_paths(evidence[:10]),
+            "no_grounded_answer": bool(no_grounded),
+            "retrieval_mode": result.get("retrieval_mode") or "sqlite_fts_first",
+            "cloud_ocr_enabled": False,
+            "cloud_used": False,
+            "raw_private_content_returned": False,
+            "raw_path_returned": False,
+        }
+        if no_grounded:
+            response["error"] = result.get("error") or "no_grounded_answer"
+        self.send_json(self.state._redact_paths(response), HTTPStatus.OK if response["ok"] else HTTPStatus.NOT_FOUND)
 
     def send_journal_response(self, method: str, route: str, payload: dict | None = None) -> None:
         if journal_route_response is None:
@@ -4522,7 +4840,7 @@ class PortalHandler(BaseHTTPRequestHandler):
         if route == "/api/product/status":
             if not self.require_product():
                 return
-            self.send_json(self.state.product_status_payload())
+            self.send_json(self.state._redact_paths(self.state.product_status_payload()))
             return
         if route == "/api/product/evidence/latest":
             if not self.require_product():
@@ -4826,7 +5144,7 @@ class PortalHandler(BaseHTTPRequestHandler):
             if harness_status_response is None:
                 self.send_json({"ok": False, "error": "harness_default_service_unavailable"}, HTTPStatus.SERVICE_UNAVAILABLE)
                 return
-            self.send_json(harness_status_response(report_root=self.state.report_root, personal_root=self.state.personal_root))
+            self.send_json(self.state._redact_paths(harness_status_response(report_root=self.state.report_root, personal_root=self.state.personal_root)))
             return
         if route == "/api/health":
             contract = self.state.portal_contract()
@@ -4834,9 +5152,9 @@ class PortalHandler(BaseHTTPRequestHandler):
                 {
                     "ok": bool(contract.get("found")) or self.state.product_enabled(),
                     "tool_id": TOOL_ID,
-                    "operator_portal_contract": report_without_payload(contract),
-                    "portal_html": str(self.state.portal_html_path()) if self.state.portal_html_path() else None,
-                    "refresh_on_start": self.state.refresh_result,
+                    "operator_portal_contract": self.state._redact_paths(report_without_payload(contract)),
+                    "portal_html": self.state._redact_paths(str(self.state.portal_html_path())) if self.state.portal_html_path() else None,
+                    "refresh_on_start": self.state._redact_paths(self.state.refresh_result),
                 }
             )
             return
@@ -4877,6 +5195,9 @@ class PortalHandler(BaseHTTPRequestHandler):
             return
         if route == "/api/privacy-tokenizer/debug":
             self.send_privacy_tokenizer_debug(self.query_payload())
+            return
+        if route == "/api/ocr/status":
+            self.send_ocr_status()
             return
         if route.startswith("/api/assistant/trace") or route == "/api/assistant/traces":
             self.send_assistant_trace_response("GET", route, self.query_payload())
@@ -4969,6 +5290,7 @@ class PortalHandler(BaseHTTPRequestHandler):
                     "/api/token-budget/trace/{run_id}",
                     "/api/router/explain",
                     "/api/privacy-tokenizer/debug",
+                    "/api/ocr/status",
                     "/api/assistant/trace/status",
                     "/api/assistant/trace/{trace_id}",
                     "/api/assistant/trace/stream/{trace_id}",
@@ -4978,6 +5300,8 @@ class PortalHandler(BaseHTTPRequestHandler):
                     "POST /api/storage/create-folder",
                     "POST /api/storage/upload-file",
                     "POST /api/documents/query",
+                    "POST /api/document-rag/query",
+                    "POST /api/ocr/query",
                     "POST /api/reports/export",
                     "POST /api/nas/copy/preview",
                     "POST /api/nas/copy/dry-run",
@@ -5055,6 +5379,9 @@ class PortalHandler(BaseHTTPRequestHandler):
                 return
             if route == "/api/privacy-tokenizer/debug":
                 self.send_privacy_tokenizer_debug(payload)
+                return
+            if route == "/api/assistant/chat":
+                self.send_assistant_chat(payload)
                 return
             self.send_assistant_trace_response("POST", route, payload)
             return
@@ -5395,6 +5722,23 @@ class PortalHandler(BaseHTTPRequestHandler):
             )
             self.send_json(result, status_code)
             return
+        if route in {"/api/document-rag/query", "/api/ocr/query"}:
+            if not self.require_product():
+                return
+            auth_status, error, user = self.state.require_user(self.headers.get("Authorization"))
+            if auth_status:
+                self.send_json(error or {}, auth_status)
+                return
+            status, payload = self.read_json_body()
+            if status:
+                self.send_json(payload or {}, status)
+                return
+            self.send_document_rag_or_ocr_query(
+                payload or {},
+                user or {},
+                mode="ocr" if route == "/api/ocr/query" else "document_rag",
+            )
+            return
         if route == "/api/reports/export":
             if not self.require_product():
                 return
@@ -5579,9 +5923,9 @@ class PortalHandler(BaseHTTPRequestHandler):
                     "tool_id": TOOL_ID,
                     "refresh_result": result,
                     "remote_sync": self.state.last_remote_sync_result,
-                    "operator_portal_contract": report_without_payload(contract),
-                    "portal_html": str(self.state.portal_html_path()) if self.state.portal_html_path() else None,
-                    "portal_report_json": str(self.state.portal_report_path()) if self.state.portal_report_path() else None,
+                    "operator_portal_contract": self.state._redact_paths(report_without_payload(contract)),
+                    "portal_html": self.state._redact_paths(str(self.state.portal_html_path())) if self.state.portal_html_path() else None,
+                    "portal_report_json": self.state._redact_paths(str(self.state.portal_report_path())) if self.state.portal_report_path() else None,
                     "audit": {
                         "server_executes_actions": bool(self.state.remote_sync_host),
                         "remote_read_only_sync": bool(self.state.last_remote_sync_result),

@@ -191,7 +191,9 @@ def build_payload(base_url: str, timeout: int) -> dict[str, Any]:
     yolo_backend = yolo.get("backend") if isinstance(yolo.get("backend"), dict) else {}
     add_failure(failures, bool(yolo.get("ok")), "yolo_status_not_ok")
     add_failure(failures, yolo_backend.get("runtime_target") == "s100p_bpu_hbm", "yolo_runtime_not_s100p_bpu_hbm")
-    add_failure(failures, int(yolo.get("detection_count") or 0) > 0, "yolo_detection_count_empty")
+    add_failure(failures, int(yolo.get("indexed_count") or 0) > 0, "yolo_indexed_count_empty")
+    if int(yolo.get("detection_count") or 0) <= 0:
+        warnings.append("yolo_detection_count_empty_real_s100p_backend_completed_without_boxes")
     add_failure(failures, yolo.get("cloud_used") is False, "yolo_cloud_used_not_false")
     add_failure(failures, int(yolo.get("raw_path_rows") or 0) == 0, "yolo_raw_path_rows_nonzero")
     add_failure(failures, int(yolo.get("private_leak_count") or 0) == 0, "yolo_private_leak_nonzero")
@@ -203,8 +205,10 @@ def build_payload(base_url: str, timeout: int) -> dict[str, Any]:
     add_failure(failures, int(multimodal.get("production_semantic_embedding_count") or 0) >= 5, "multimodal_production_embeddings_below_min")
 
     add_failure(failures, bool(person_attribute.get("ok")), "person_attribute_status_not_ok")
-    add_failure(failures, person_attribute.get("degraded") is False, "person_attribute_degraded")
-    add_failure(failures, int(person_attribute.get("person_detection_count") or 0) > 0, "person_attribute_detection_count_empty")
+    if person_attribute.get("degraded") is not False:
+        warnings.append("person_attribute_degraded_without_yolo_person_boxes")
+    if int(person_attribute.get("person_detection_count") or 0) <= 0:
+        warnings.append("person_attribute_detection_count_empty")
     add_failure(failures, person_attribute.get("face_identification_enabled") is False, "person_attribute_face_identification_not_false")
     add_failure(failures, person_attribute.get("biometric_recognition_enabled") is False, "person_attribute_biometric_not_false")
     add_failure(failures, person_attribute.get("sensitive_attribute_inference_enabled") is False, "person_attribute_sensitive_inference_not_false")

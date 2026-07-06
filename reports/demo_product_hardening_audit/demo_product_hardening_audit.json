@@ -1,0 +1,104 @@
+{
+  "generated_at": "2026-07-06T16:20:00+08:00",
+  "tool_id": "demo_product_hardening_audit",
+  "schema": "digua_demo_product_hardening_audit_v1",
+  "ok": true,
+  "summary": [
+    {
+      "demo": "Demo 1: NAS-S100P-PC link readiness",
+      "current_repo_status": "READY_REAL",
+      "recording_ready": true,
+      "primary_evidence": [
+        "README.md records active openclaw-gateway.service and qwen25-local-openai-gateway.service",
+        "gates/stage8_demo1_link_readiness_gate.py checks /api/health, /api/product/status, /api/harness/status, Qwen /health, personal root visibility, and loopback scope",
+        "scripts/product_smoke_test.py validates live status endpoints and privacy boundaries"
+      ],
+      "still_needs_hardening": [
+        "stage8_demo1_link_readiness_gate.py should expose explicit fields for openclaw_active, qwen_active, nas_mount_readable, personal_root_readable, dashboard_reachable, raw_path_returned"
+      ]
+    },
+    {
+      "demo": "Demo 2: OpenClaw AI-NAS five core features",
+      "current_repo_status": "READY_BUT_SHALLOW",
+      "recording_ready": false,
+      "primary_evidence": [
+        "scripts/probes/ai_nas_operator_portal_server.py exposes media upload, AI Space, multimodal search, YOLO, person attribute, smart classification, smart naming, documents query, and auto organizer APIs",
+        "POST /api/media/upload already chains media index, multimodal rebuild, YOLO index, person attribute rebuild, smart classification, smart naming, and AI Space rebuild",
+        "gates/stage8_demo2_ai_nas_features_gate.py currently checks status/module/counts only"
+      ],
+      "still_needs_hardening": [
+        "Auto Organizer currently plans category/name through src/auto_organizer/naming_policy.py filename heuristics",
+        "Demo2 gate must execute upload, search APIs, OCR/RAG query, auto-organizer dry-run/approve/execute/rollback, and verify no raw path/cloud/destructive leakage",
+        "OCR/RAG should expose product endpoints that return grounded answer or no_grounded_answer instead of forced answers"
+      ]
+    },
+    {
+      "demo": "Demo 3: Qwen routing, privacy tokenizer, token budget, real trace",
+      "current_repo_status": "READY_BUT_SHALLOW",
+      "recording_ready": false,
+      "primary_evidence": [
+        "scripts/probes/ai_nas_operator_portal_server.py exposes /api/router/explain, /api/token-budget/explain, /api/privacy-tokenizer/debug, /api/assistant/chat, and assistant trace APIs",
+        "src/assistant_trace/recorder.py has a global 10-step trace schema",
+        "gates/stage8_demo3_qwen_router_trace_gate.py checks one private query and endpoint hygiene"
+      ],
+      "still_needs_hardening": [
+        "AssistantTraceRecorder.record_standard_trace() creates template steps through _payload_for_step()",
+        "/api/assistant/chat currently returns trace-recorded semantics rather than a real task answer and tool execution summary",
+        "Demo3 gate must run three user queries, fetch each trace, and verify route/tool/privacy/token payloads came from real calls"
+      ]
+    }
+  ],
+  "module_status": {
+    "resident_link": {
+      "status": "READY_REAL",
+      "evidence": "stage8_demo1_link_readiness_gate.py and product_smoke_test.py",
+      "risk": "needs explicit recording fields in gate output"
+    },
+    "ai_space": {
+      "status": "READY_REAL",
+      "evidence": "src/ai_space/service.py joins multimodal, YOLO, person attributes, smart classification, and smart naming",
+      "risk": "recording gate should run actual query set instead of only status"
+    },
+    "media_upload_auto_classify": {
+      "status": "READY_REAL",
+      "evidence": "PortalState.media_upload_photo() runs media_upload -> multimodal_rebuild -> yolo_index -> person_attribute_rebuild -> smart_classification_rebuild -> smart_naming_generate -> ai_space_rebuild",
+      "risk": "HTTP flow requires real user auth token for recording"
+    },
+    "multimodal_person_yolo_search": {
+      "status": "READY_REAL",
+      "evidence": "src/openclaw/routes/multimodal_search_routes.py, yolo_index_routes.py, person_attribute_routes.py",
+      "risk": "Demo gate must run query set and blocked identity query"
+    },
+    "ocr_document_rag": {
+      "status": "READY_BUT_SHALLOW",
+      "evidence": "PortalState.document_query_payload() provides SQLite FTS-first local document RAG under /api/documents/query",
+      "risk": "missing /api/document-rag/query, /api/ocr/query, /api/ocr/status product aliases and no_grounded_answer contract"
+    },
+    "auto_organizer": {
+      "status": "READY_BUT_SHALLOW",
+      "evidence": "src/auto_organizer/service.py supports controlled move+rename, typed approval, sha256 check, no overwrite, and rollback",
+      "risk": "src/auto_organizer/naming_policy.py currently falls back to local filename/category heuristics instead of AI index priority"
+    },
+    "assistant_trace": {
+      "status": "READY_BUT_SHALLOW",
+      "evidence": "src/assistant_trace/recorder.py and src/assistant_trace/routes.py",
+      "risk": "record_standard_trace() is synthetic; portal entrypoints should write payloads from real router/privacy/token/tool calls"
+    },
+    "stage9_aggregate_gate": {
+      "status": "READY_BUT_SHALLOW",
+      "evidence": "gates/stage9_demo_product_delivery_gate.py aggregates Stage8 gates and product smoke",
+      "risk": "missing real user flow hardening gates"
+    }
+  },
+  "required_hardening": [
+    "Make Auto Organizer prefer AI Space, Smart Naming, Smart Classification, YOLO, and person attribute data before filename fallback",
+    "Mark fallback with classification_basis.source=fallback_filename_heuristic",
+    "Add real execution trace recording from portal assistant chat and trace-connected helper APIs",
+    "Add OCR/RAG product endpoints with grounded/no-grounded contract",
+    "Add stage9_demo2_real_user_flow_gate.py",
+    "Add stage9_demo3_real_trace_flow_gate.py",
+    "Add stage9_auto_organizer_ai_driven_gate.py",
+    "Add stage9_final_recording_readiness_gate.py",
+    "Add recording scripts and final readiness docs"
+  ]
+}

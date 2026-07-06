@@ -2,11 +2,12 @@ from __future__ import annotations
 
 import argparse
 import platform
+import re
 import subprocess
 from pathlib import Path
 
 from ai_space_gate_common import add_common_args, check, write_gate
-from stage8_demo_common import gate_payload, http_get_json
+from stage8_demo_common import gate_payload, has_raw_path, http_get_json
 
 
 NAME = "stage8_demo1_link_readiness_gate"
@@ -25,16 +26,30 @@ def main() -> int:
     qwen = _http_url(args.qwen_url, timeout=args.timeout)
     systemd = _systemd_status()
     personal_root = Path(args.personal_root) if args.personal_root else None
+    readiness = {
+        "openclaw_active": systemd.get("openclaw_active") is True or health.get("ok") is True,
+        "qwen_active": systemd.get("qwen_active") is True or qwen.get("ok") is True,
+        "nas_mount_readable": bool(personal_root and personal_root.exists() and personal_root.parent.exists()),
+        "personal_root_readable": bool(personal_root and personal_root.exists()),
+        "dashboard_reachable": health.get("ok") is True and (health.get("payload") or {}).get("ok") is True,
+        "raw_path_returned": has_raw_path({"health": health, "product": product, "harness": harness, "qwen": qwen}) is True,
+    }
     checks = [
         check("portal health ok", health.get("ok") is True and (health.get("payload") or {}).get("ok") is True, health),
         check("product status ok", product.get("ok") is True and (product.get("payload") or {}).get("ok") is True, product),
         check("harness status ok", harness.get("ok") is True and (harness.get("payload") or {}).get("ok") is True, harness),
         check("qwen health ok", qwen.get("ok") is True, qwen),
-        check("personal root mounted/visible", bool(personal_root and personal_root.exists()), str(personal_root)),
+        check("personal root mounted/visible", bool(personal_root and personal_root.exists()), "configured" if personal_root else "missing"),
         check("gateway not publicly exposed by gate", str(args.base_url).startswith("http://127.0.0.1") or str(args.base_url).startswith("http://localhost"), args.base_url),
         check("resident control plane observed", systemd.get("openclaw_active") is True or health.get("ok") is True, systemd),
+        check("openclaw active explicit", readiness["openclaw_active"] is True, readiness),
+        check("qwen active explicit", readiness["qwen_active"] is True, readiness),
+        check("nas mount readable explicit", readiness["nas_mount_readable"] is True, readiness),
+        check("personal root readable explicit", readiness["personal_root_readable"] is True, readiness),
+        check("dashboard reachable explicit", readiness["dashboard_reachable"] is True, readiness),
+        check("no raw path returned explicit", readiness["raw_path_returned"] is False, readiness),
     ]
-    payload = gate_payload("ok_stage8_demo1_link_readiness_gate", "blocked_stage8_demo1_link_readiness_gate", checks, {"health": health, "product": product, "harness": harness, "qwen": qwen, "systemd": systemd})
+    payload = gate_payload("ok_stage8_demo1_link_readiness_gate", "blocked_stage8_demo1_link_readiness_gate", checks, {"recording_readiness": readiness, "health": health, "product": product, "harness": harness, "qwen": qwen, "systemd": systemd})
     json_path, md_path = write_gate(args.report_root, NAME, payload)
     print(md_path)
     print(json_path)
@@ -54,9 +69,19 @@ def _http_url(url: str, *, timeout: int) -> dict:
                 payload = json.loads(raw)
             except json.JSONDecodeError:
                 payload = {"raw": raw[:1000]}
-            return {"ok": 200 <= response.status < 300, "status": response.status, "elapsed_ms": round((time.perf_counter() - started) * 1000, 3), "payload": payload}
+            return {"ok": 200 <= response.status < 300, "status": response.status, "elapsed_ms": round((time.perf_counter() - started) * 1000, 3), "payload": _redact_paths(payload)}
     except Exception as exc:
-        return {"ok": False, "status": None, "elapsed_ms": round((time.perf_counter() - started) * 1000, 3), "error": f"{type(exc).__name__}:{exc}"}
+        return {"ok": False, "status": None, "elapsed_ms": round((time.perf_counter() - started) * 1000, 3), "error": _redact_paths(f"{type(exc).__name__}:{exc}")}
+
+
+def _redact_paths(value):
+    if isinstance(value, dict):
+        return {key: _redact_paths(item) for key, item in value.items()}
+    if isinstance(value, list):
+        return [_redact_paths(item) for item in value]
+    if isinstance(value, str):
+        return re.sub(r"([A-Za-z]:\\[^\s\"']+|/mnt/nas/[^\s\"']+|/home/[^\s\"']+|/root/[^\s\"']+|/opt/[^\s\"']+)", "[redacted-path]", value)
+    return value
 
 
 def _systemd_status() -> dict:

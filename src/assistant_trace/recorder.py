@@ -100,6 +100,33 @@ class AssistantTraceRecorder:
         self.finish(trace_id, status="completed")
         return self.get_trace(trace_id)
 
+    def record_execution_trace(
+        self,
+        *,
+        entrypoint: str,
+        query: str,
+        session_id: str = "demo",
+        step_payloads: dict[str, dict[str, Any]] | None = None,
+    ) -> dict[str, Any]:
+        step_payloads = step_payloads or {}
+        trace_id = self.create_trace(
+            entrypoint=entrypoint,
+            session_id=session_id,
+            request={
+                "query_hash": hashlib.sha256(query.encode("utf-8", errors="replace")).hexdigest(),
+                "query_preview_redacted": _redacted_query(query),
+                "payload_source": "real_execution_context",
+            },
+        )
+        for step in STANDARD_STEPS:
+            if step == "received":
+                continue
+            payload = dict(step_payloads.get(step) or {})
+            payload.setdefault("payload_source", "real_execution_context")
+            self.add_step(trace_id, step, payload, status="ok" if step_payloads.get(step) is not None else "missing_context")
+        self.finish(trace_id, status="completed")
+        return self.get_trace(trace_id)
+
     def get_trace(self, trace_id: str) -> dict[str, Any]:
         migrate(self.db_path)
         conn = connect(self.db_path)

@@ -3,6 +3,7 @@ from __future__ import annotations
 import hashlib
 import json
 import mimetypes
+import re
 import subprocess
 import time
 import uuid
@@ -111,7 +112,7 @@ class VideoKeyframeExtractor:
                         "ok": False,
                         "keyframe_id": keyframe_id,
                         "timestamp_sec": ts,
-                        "error": (completed.stderr or completed.stdout or "ffmpeg_keyframe_failed")[-500:],
+                        "error": redact_paths((completed.stderr or completed.stdout or "ffmpeg_keyframe_failed")[-500:]),
                     }
                 )
                 continue
@@ -125,6 +126,10 @@ class VideoKeyframeExtractor:
                 }
             )
         return frames
+
+
+def redact_paths(value: str) -> str:
+    return re.sub(r"([A-Za-z]:\\[^\s\"']+|/mnt/nas/[^\s\"']+|/home/[^\s\"']+|/root/[^\s\"']+|/opt/[^\s\"']+)", "[redacted-path]", value)
 
 
 class YoloIndexer:
@@ -178,7 +183,7 @@ class YoloIndexer:
                     conn.commit()
                 except Exception as exc:
                     counts["errors"] += 1
-                    errors.append({"asset_hash": path_hash(candidate.path)[:16], "error": f"{type(exc).__name__}:{exc}"})
+                    errors.append({"asset_hash": path_hash(candidate.path)[:16], "error": redact_paths(f"{type(exc).__name__}:{exc}")})
                     conn.commit()
         finally:
             conn.close()
@@ -194,7 +199,8 @@ class YoloIndexer:
             "elapsed_ms": elapsed_ms,
             "errors": errors[:20],
             "privacy": {"raw_path_returned": False, "cloud_used": False, "local_only": True},
-            "evidence_dir": str(evidence_dir),
+            "evidence_dir": f"yolo_index/evidence/{run_id}",
+            "evidence_ref": f"yolo_index/evidence/{run_id}/rebuild_summary.json",
         }
         trace_path.write_text(json.dumps(result, ensure_ascii=False, indent=2, sort_keys=True), encoding="utf-8")
         return result

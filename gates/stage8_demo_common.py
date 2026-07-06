@@ -24,18 +24,21 @@ def has_raw_path(payload: Any) -> bool:
     return bool(RAW_PATH_RE.search(json.dumps(payload, ensure_ascii=False)))
 
 
-def http_get_json(base_url: str, path: str, *, timeout: int = 12) -> dict[str, Any]:
-    return _http_json("GET", base_url, path, None, timeout=timeout)
+def http_get_json(base_url: str, path: str, *, timeout: int = 12, auth_token: str | None = None) -> dict[str, Any]:
+    return _http_json("GET", base_url, path, None, timeout=timeout, auth_token=auth_token)
 
 
-def http_post_json(base_url: str, path: str, payload: dict[str, Any], *, timeout: int = 20) -> dict[str, Any]:
-    return _http_json("POST", base_url, path, payload, timeout=timeout)
+def http_post_json(base_url: str, path: str, payload: dict[str, Any], *, timeout: int = 20, auth_token: str | None = None) -> dict[str, Any]:
+    return _http_json("POST", base_url, path, payload, timeout=timeout, auth_token=auth_token)
 
 
-def _http_json(method: str, base_url: str, path: str, payload: dict[str, Any] | None, *, timeout: int) -> dict[str, Any]:
+def _http_json(method: str, base_url: str, path: str, payload: dict[str, Any] | None, *, timeout: int, auth_token: str | None = None) -> dict[str, Any]:
     url = base_url.rstrip("/") + path
     data = None if payload is None else json.dumps(payload, ensure_ascii=False).encode("utf-8")
-    req = urllib.request.Request(url, data=data, method=method, headers={"Accept": "application/json", "Content-Type": "application/json"})
+    headers = {"Accept": "application/json", "Content-Type": "application/json"}
+    if auth_token:
+        headers["Authorization"] = f"Bearer {auth_token}"
+    req = urllib.request.Request(url, data=data, method=method, headers=headers)
     started = time.perf_counter()
     try:
         with urllib.request.urlopen(req, timeout=timeout) as response:

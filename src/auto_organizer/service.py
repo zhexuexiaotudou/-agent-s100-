@@ -61,6 +61,18 @@ class AutoOrganizerService:
             "rollback_required": bool(self.flags.get("auto_organize_rollback_required", True)),
             "allowed_source_roots": list(self.flags.get("auto_organize_allowed_source_roots") or ["Uploads", "待整理"]),
             "target_root": str(self.flags.get("auto_organize_target_root") or "AI整理"),
+            "ai_driven_classification_enabled": True,
+            "classification_priority": [
+                "asset_id",
+                "ai_space_asset_view",
+                "smart_asset_names",
+                "smart_category_memberships",
+                "yolo_labels",
+                "person_attribute",
+                "ocr_tags",
+                "subtitle_tags",
+                "fallback_filename_heuristic",
+            ],
             "qwen_execution_authority": False,
             "cloud_private_raw_egress": False,
             "raw_path_returned": False,
@@ -95,7 +107,7 @@ class AutoOrganizerService:
             if path.stat().st_size > max_file_bytes:
                 continue
             source_rel = self._rel(path)
-            name = suggest_name(path, source_rel)
+            name = suggest_name(path, source_rel, report_root=self.report_root, personal_root=self.personal_root)
             category = normalize_rel(str(name["category_zh"]))
             target_rel = unique_target_rel(
                 self.personal_root,

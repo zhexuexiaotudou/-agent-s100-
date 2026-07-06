@@ -230,10 +230,11 @@ exit "$status"
             ),
             encoding="utf-8",
         )
-        if completed.returncode not in {0, 124}:
-            raise YoloBackendError(f"yolo_launch_failed:{completed.returncode}:{combined[-600:]}")
+        timeout_after_render = "__DIGUA_YOLO_LAUNCH_STATUS=124" in combined and render_src.exists()
+        if completed.returncode not in {0, 124} and not timeout_after_render:
+            raise YoloBackendError(f"yolo_launch_failed:{completed.returncode}:{redact_paths(combined[-600:])}")
         if not render_src.exists():
-            raise YoloBackendError(f"yolo_render_missing:{completed.returncode}:{combined[-600:]}")
+            raise YoloBackendError(f"yolo_render_missing:{completed.returncode}:{redact_paths(combined[-600:])}")
         if render_src.exists():
             try:
                 shutil.copy2(render_src, artifact / f"{evidence_ref}_render.jpeg")
@@ -245,6 +246,12 @@ exit "$status"
 
 def json_safe_log(payload: dict[str, Any]) -> str:
     return json.dumps(payload, ensure_ascii=False, indent=2, sort_keys=True)
+
+
+def redact_paths(value: str) -> str:
+    import re
+
+    return re.sub(r"([A-Za-z]:\\[^\s\"']+|/mnt/nas/[^\s\"']+|/home/[^\s\"']+|/root/[^\s\"']+|/opt/[^\s\"']+)", "[redacted-path]", value)
 
 
 def _labels_from_stem(stem: str) -> list[str]:

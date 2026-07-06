@@ -7,7 +7,7 @@ device.
 
 ## Current Status
 
-Status timestamp: 2026-07-06 15:46 CST.
+Status timestamp: 2026-07-06 17:53 CST.
 
 The three demo expectations are now satisfied on the S100P test machine:
 
@@ -82,6 +82,40 @@ Validated additions:
 - Resident link: `openclaw-gateway.service` and
   `qwen25-local-openai-gateway.service` are both active; portal remains
   loopback-scoped on `127.0.0.1:8765`.
+
+## Final Demo Recording Readiness
+
+The final demo hardening loop is passing on the S100P real machine with
+user-like flows.
+
+- Final verdict: `ok_stage9_final_recording_readiness_gate`
+- Final report: `reports/stage9_final_recording_readiness_gate.json`
+- Final report markdown: `reports/stage9_final_recording_readiness_gate.md`
+- GPT Pro evidence bundle: `evidence_for_gptpro/digua_final_recording_readiness_20260706-175314.zip`
+- Bundle SHA256: `c59b2e8ebfbdc2621a09fa892da6008962fd70b8719602b3dcf8c068166a2982`
+- Recording readiness note: `docs/DEMO_PRODUCT_RECORDING_READINESS_20260706.md`
+
+Validated final additions:
+
+- Auto Organizer classifies neutral filenames through AI Space and smart
+  classification indexes before falling back to filename heuristics.
+- `/api/assistant/chat` records the ten standard trace steps from real router,
+  privacy, token-budget, tool-execution, and safety context.
+- OCR/RAG product endpoints are available at `/api/document-rag/query`,
+  `/api/ocr/query`, and `/api/ocr/status`.
+- Demo 2 replayed upload, local indexing, AI Space/multimodal/person safety,
+  YOLO search, OCR/RAG, Auto Organizer approve/execute, and rollback.
+- Demo 3 replayed assistant requests for local media search, private document
+  summarization, and public complex routing.
+- Final safety flags remained false for raw path return, delete, overwrite,
+  uncontrolled move/rename, hidden chain-of-thought storage, and private cloud
+  egress.
+
+Current boundary: the real S100P YOLO backend completed local processing and
+indexed assets, but the final demo image set produced zero YOLO boxes. This is
+recorded as a smoke warning, not a synthetic pass. Person Attribute Search is
+therefore degraded for detection-derived attributes in this final packet, while
+unsafe identity and sensitive attribute inference remain blocked.
 
 ## AI Space Product Acceptance
 
