@@ -1,0 +1,90 @@
+{
+  "generated_at": "2026-07-06T14:45:00+08:00",
+  "tool_id": "demo_product_gap_audit",
+  "ok": true,
+  "scope": "read_only_pre_implementation_audit",
+  "workspace": "F:\\Project\\Digua",
+  "s100p_target": {
+    "ssh": "sunrise@192.168.127.10",
+    "nas_mount": "169.254.143.37:/OpenClawWorkspace on /mnt/nas/openclaw",
+    "portal_health": "http://127.0.0.1:8765/api/health ok",
+    "qwen_health": "http://127.0.0.1:18080/health ok",
+    "product_status": "http://127.0.0.1:8765/api/product/status ok",
+    "harness_status": "http://127.0.0.1:8765/api/harness/status ok",
+    "openclaw_gateway_systemd_user_unit": "inactive",
+    "qwen_systemd_user_unit": "active",
+    "note": "The AI-NAS portal on 127.0.0.1:8765 is live even though the older OpenClaw CLI user unit is inactive."
+  },
+  "source_file_checks": {
+    "README.md": true,
+    "docs/product_delivery_acceptance_20260706.md": true,
+    "docs/AI_SPACE_PRODUCT_ACCEPTANCE_20260706.md": true,
+    "docs/SMART_ALBUM_CLASSIFICATION_DELIVERY.md": true,
+    "configs/product_feature_flags.json": true,
+    "scripts/product_smoke_test.py": true,
+    "src/smart_classification/service.py": true,
+    "src/openclaw/routes/smart_classification_routes.py": true,
+    "src/openclaw/routes/multimodal_search_routes.py": true,
+    "src/openclaw/routes/yolo_index_routes.py": true,
+    "src/openclaw/routes/person_attribute_routes.py": true,
+    "src/openclaw/routes/subtitle_extraction_routes.py": true,
+    "src/harness": true,
+    "src/auto_organizer": false,
+    "src/assistant_trace": false
+  },
+  "demo_readiness": {
+    "demo1_link_readiness": {
+      "screen_recordable": true,
+      "evidence": [
+        "PC can SSH to S100P at sunrise@192.168.127.10",
+        "S100P aarch64 host ubuntu is reachable",
+        "NAS is mounted at /mnt/nas/openclaw",
+        "AI-NAS portal health, product status, and harness status return ok",
+        "Qwen local health returns ok"
+      ],
+      "gap": [
+        "openclaw-gateway.service is inactive while the portal is live as a standalone Python process; recording should use the live 8765 portal as evidence unless systemd is repaired later."
+      ]
+    },
+    "demo2_ai_nas_features": {
+      "ai_space": "recordable_from_stage7_evidence_and_live_product_status",
+      "upload_auto_classify_chinese_naming": "recordable_from_stage7_evidence",
+      "multimodal_person_search": "recordable_with_bounded_fixture_evidence",
+      "ocr_document_rag": "partially_recordable; OCR/RAG must remain evidence-bounded",
+      "auto_organizer_move_rename": "not_recordable_before_implementation",
+      "gap": [
+        "Smart Classification only creates virtual collections and materialize-copy-plan.",
+        "No src/auto_organizer module exists.",
+        "No controlled move_and_rename execution, approval, rollback manifest, or delete-block gate exists.",
+        "product_smoke_test.py still requires move and rename to be forbidden actions."
+      ]
+    },
+    "demo3_router_trace": {
+      "router": "recordable_from_existing edge-cloud router evidence",
+      "token_budget": "partially_recordable via existing token-budget routes",
+      "assistant_trace_global": "not_recordable_before_implementation",
+      "gap": [
+        "No src/assistant_trace module exists.",
+        "No /api/assistant/chat, /api/assistant/trace/<trace_id>, or /api/assistant/traces API exists.",
+        "No /api/router/explain, /api/token-budget/explain, or /api/privacy-tokenizer/debug endpoint was found in the current route scan.",
+        "Existing UI has route/progress hints, but not a product-grade global assistant trace for every entry point."
+      ]
+    }
+  },
+  "required_implementation": [
+    "Add Auto Organizer controlled move_and_rename service, route, UI, and gates.",
+    "Update product smoke and claim boundary from move/rename forbidden to uncontrolled move/rename forbidden with controlled Auto Organizer allowed.",
+    "Add assistant trace storage, APIs, route wrappers, and global coverage gate.",
+    "Add demo1/demo2/demo3 Stage 8 gates and Stage 9 aggregate product delivery gate."
+  ],
+  "safety_boundary_to_preserve": {
+    "delete_enabled": false,
+    "overwrite_enabled": false,
+    "arbitrary_shell_enabled": false,
+    "recursive_destructive_enabled": false,
+    "qwen_execution_authority": false,
+    "cloud_private_raw_egress": false,
+    "face_recognition_used": false,
+    "sensitive_attribute_inference_enabled": false
+  }
+}

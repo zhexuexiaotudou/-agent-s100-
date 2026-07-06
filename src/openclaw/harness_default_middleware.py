@@ -130,6 +130,13 @@ class HarnessDefaultMiddleware:
             "token_budget_gate_enabled": bool(self.feature_flags.get("token_budget_gate_enabled", False)),
             "privacy_redaction_gate_enabled": bool(self.feature_flags.get("privacy_redaction_gate_enabled", False)),
             "copy_routes": self.service_policy.get("copy_routes", []),
+            "controlled_move_enabled": bool(self.feature_flags.get("controlled_move_enabled", True)),
+            "controlled_rename_enabled": bool(self.feature_flags.get("controlled_rename_enabled", True)),
+            "uncontrolled_move_enabled": False,
+            "uncontrolled_rename_enabled": False,
+            "delete_enabled": bool(self.feature_flags.get("delete_enabled", False)),
+            "overwrite_enabled": False,
+            "auto_organizer_required_for_move_rename": True,
             "copy_execute_enabled": bool(self.feature_flags.get("copy_execute_enabled", False)),
             "copy_execute_requires": {
                 "user_confirmation": bool(self.feature_flags.get("copy_execute_requires_user_confirmation", False)),

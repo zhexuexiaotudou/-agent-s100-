@@ -85,6 +85,7 @@ rename, delete, or overwrite user NAS files.
 
 ## Current Boundary
 
-- Physical organization is a Copy Plan only.
-- Copy execution still requires Harness preview, dry-run, typed approval, execute, and rollback manifest.
+- Smart classification and smart naming still do not directly rename or move source files.
+- Physical organization is now available only through the separate Auto Organizer flow: plan, dry-run, typed approval, controlled move+rename, conflict-safe suffixing, and rollback manifest.
+- Uncontrolled move/rename, delete, overwrite, recursive operation, Qwen autonomous execution, and cloud-derived private writes remain disabled.
 - No face recognition, identity recognition, age/gender/race/emotion/health inference, or cloud person recognition is enabled.

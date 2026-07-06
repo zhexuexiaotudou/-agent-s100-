@@ -7,7 +7,7 @@ device.
 
 ## Current Status
 
-Status timestamp: 2026-07-06 14:29 CST.
+Status timestamp: 2026-07-06 15:46 CST.
 
 The three demo expectations are now satisfied on the S100P test machine:
 
@@ -35,11 +35,12 @@ limited, user-confirmed copy enabled.
 - Package SHA256: `38bc412b3cf0bbf1a159bdc75413a680f9cc2f3c5ec14d9878a8fb962e0c2fbf`
 - Live status endpoint: `http://127.0.0.1:8765/api/harness/status` on S100P
 
-The default harness path allows only bounded copy flows that pass policy,
-typed approval, signed approval token, source rehash, target-absent check, and
-the allowlisted dispatcher. Delete, move, rename, chmod, chown, overwrite,
-recursive operations, arbitrary shell execution, Qwen autonomous tool execution,
-and private raw cloud egress remain out of scope.
+The default harness path allows bounded copy flows and the Auto Organizer
+controlled move+rename flow. Both require explicit product policy, typed
+approval or equivalent operator confirmation, target no-overwrite guarantees,
+and rollback evidence. Uncontrolled move/rename, delete, chmod, chown,
+overwrite, recursive operations, arbitrary shell execution, Qwen autonomous
+tool execution, and private raw cloud egress remain out of scope.
 
 ## Product Delivery Acceptance
 
@@ -58,6 +59,29 @@ The live product smoke verified `failure_count=0`, `warning_count=0`,
 `yolo_detection_count=66`, `multimodal_embedding_count=5`,
 `ai_space_asset_count=13`, `smart_category_count=29`,
 `smart_name_count=43`, and `subtitle_segment_count=1`.
+
+## Demo Product Delivery Acceptance
+
+The multimodal Auto Organizer delivery gate is passing on the S100P real
+machine.
+
+- Stage 9 verdict: `ok_stage9_demo_product_delivery_gate`
+- Stage 9 report: `/mnt/nas/openclaw/reports/qwen25_ai_nas/stage9_demo_product_delivery_gate.json`
+- Product smoke report: `/mnt/nas/openclaw/reports/qwen25_ai_nas/product_smoke_test_20260706-154654/product_smoke_test.json`
+- GPT Pro bundle: `/mnt/nas/openclaw/evidence_for_gptpro/digua_demo_product_delivery_20260706-154654.zip`
+- Bundle SHA256: `e79382b588b7a1a8ff0ab991ed8c334578928925282d9089f9452e1b59d5d708`
+
+Validated additions:
+
+- Auto Organizer: controlled move+rename, conflict-safe suffixing,
+  delete/overwrite blocking, rollback manifest, and rollback restore.
+- Assistant Trace: global 10-step trace contract for assistant entrypoints
+  without hidden chain-of-thought storage.
+- Demo 3 explain endpoints: Qwen router explain, token-budget explain,
+  privacy-tokenizer debug, and assistant trace APIs.
+- Resident link: `openclaw-gateway.service` and
+  `qwen25-local-openai-gateway.service` are both active; portal remains
+  loopback-scoped on `127.0.0.1:8765`.
 
 ## AI Space Product Acceptance
 
@@ -148,6 +172,10 @@ Recommended one-line pitch:
   and other private requests are forced local even if the cloud path exists.
 - **Evidence-first delivery**: every demo claim is backed by JSON/Markdown
   reports on `/mnt/nas/openclaw/reports/...`, not by screenshots alone.
+- **Controlled Auto Organizer**: physical organization is now allowed only
+  through the Auto Organizer plan/dry-run/approve/execute/rollback flow. It
+  does not enable arbitrary NAS move/rename, delete, overwrite, or Qwen
+  autonomous file operations.
 - **Model pivot is clear**: Dream7B artifacts are retained as toolchain history;
   the current product route is Qwen + OpenClaw + AI-NAS gates. The current
   Dream7B seq128 S100P logits-validity research status is summarized in
@@ -173,6 +201,8 @@ Recommended one-line pitch:
 | `src/ai_space/` | AI Space catalog and facets |
 | `src/smart_classification/` | Virtual smart classification collections |
 | `src/subtitle_extraction/` | Local ASR transcript, SRT/VTT, and search support |
+| `src/auto_organizer/` | Controlled move+rename planner, executor, conflict policy, and rollback |
+| `src/assistant_trace/` | Global assistant execution trace schema, recorder, and routes |
 | `src/product_jobs/` | Product background job queue API |
 | `src/harness/` | Harness policy, copy route guard, and token-budget integration |
 | `src/openclaw/` | OpenClaw default-service middleware and API route adapters |
@@ -216,6 +246,11 @@ ssh -i C:\Users\zhexu\.ssh\s100p_linkcheck_ed25519 sunrise@192.168.127.10 `
 ```powershell
 ssh -i C:\Users\zhexu\.ssh\s100p_linkcheck_ed25519 sunrise@192.168.127.10 `
   'cd /mnt/nas/openclaw && DIGUA_CLIP_BACKEND=clip DIGUA_CLIP_MODEL_DIR=/mnt/nas/openclaw/models/ai_nas_clip_vit_base_patch32 DIGUA_CLIP_DEVICE=cpu DIGUA_CLIP_REQUIRE_PRODUCTION=1 DIGUA_ASR_BACKEND=transformers_whisper DIGUA_ASR_MODEL_DIR=/mnt/nas/openclaw/models/whisper_tiny DIGUA_ASR_REQUIRE_REAL=1 python3 gates/stage7_ai_space_product_delivery_gate.py --report-root /mnt/nas/openclaw/reports/qwen25_ai_nas --personal-root /mnt/nas/openclaw/Personal --no-rebuild'
+```
+
+```powershell
+ssh -i C:\Users\zhexu\.ssh\s100p_linkcheck_ed25519 sunrise@192.168.127.10 `
+  'cd /mnt/nas/openclaw && DIGUA_CLIP_BACKEND=clip DIGUA_CLIP_MODEL_DIR=/mnt/nas/openclaw/models/ai_nas_clip_vit_base_patch32 DIGUA_CLIP_DEVICE=cpu DIGUA_CLIP_REQUIRE_PRODUCTION=1 DIGUA_ASR_BACKEND=transformers_whisper DIGUA_ASR_MODEL_DIR=/mnt/nas/openclaw/models/whisper_tiny DIGUA_ASR_REQUIRE_REAL=1 python3 gates/stage9_demo_product_delivery_gate.py --report-root /mnt/nas/openclaw/reports/qwen25_ai_nas --personal-root /mnt/nas/openclaw/Personal --base-url http://127.0.0.1:8765 --qwen-url http://127.0.0.1:18080/health --timeout 45'
 ```
 
 ## Boundaries

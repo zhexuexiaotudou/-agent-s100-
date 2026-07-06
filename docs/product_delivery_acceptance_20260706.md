@@ -112,8 +112,80 @@ yolo.raw_path_rows=0
   readiness gate and must not be described as eliminated.
 - Gateway exposure remains loopback/LAN scoped; no public gateway exposure was
   added.
-- No delete, move, rename, overwrite, recursive operation, arbitrary shell, or
-  broader NAS permission was enabled.
+- No uncontrolled move/rename, delete, overwrite, recursive operation,
+  arbitrary shell, or broader NAS permission was enabled.
+
+## Demo Product Delivery Stage 8/9 Update - 2026-07-06 15:46 CST
+
+The multimodal Auto Organizer prompt has now passed real S100P acceptance.
+
+Final command:
+
+```bash
+cd /mnt/nas/openclaw
+DIGUA_CLIP_BACKEND=clip \
+DIGUA_CLIP_MODEL_DIR=/mnt/nas/openclaw/models/ai_nas_clip_vit_base_patch32 \
+DIGUA_CLIP_DEVICE=cpu \
+DIGUA_CLIP_REQUIRE_PRODUCTION=1 \
+DIGUA_ASR_BACKEND=transformers_whisper \
+DIGUA_ASR_MODEL_DIR=/mnt/nas/openclaw/models/whisper_tiny \
+DIGUA_ASR_DEVICE=cpu \
+DIGUA_ASR_REQUIRE_REAL=1 \
+python3 gates/stage9_demo_product_delivery_gate.py \
+  --report-root /mnt/nas/openclaw/reports/qwen25_ai_nas \
+  --personal-root /mnt/nas/openclaw/Personal \
+  --base-url http://127.0.0.1:8765 \
+  --qwen-url http://127.0.0.1:18080/health \
+  --timeout 45
+```
+
+Final evidence:
+
+| Gate | Verdict | Evidence |
+| --- | --- | --- |
+| Demo 1 link readiness | `ok_stage8_demo1_link_readiness_gate` | `/mnt/nas/openclaw/reports/qwen25_ai_nas/stage8_demo1_link_readiness_gate.json` |
+| Auto Organizer move+rename | `ok_stage8_auto_organize_move_rename_gate` | `/mnt/nas/openclaw/reports/qwen25_ai_nas/stage8_auto_organize_move_rename_gate.json` |
+| Auto Organizer delete/overwrite block | `ok_stage8_auto_organize_delete_block_gate` | `/mnt/nas/openclaw/reports/qwen25_ai_nas/stage8_auto_organize_delete_block_gate.json` |
+| Auto Organizer rollback | `ok_stage8_auto_organize_rollback_gate` | `/mnt/nas/openclaw/reports/qwen25_ai_nas/stage8_auto_organize_rollback_gate.json` |
+| Assistant Trace coverage | `ok_stage8_assistant_trace_global_coverage_gate` | `/mnt/nas/openclaw/reports/qwen25_ai_nas/stage8_assistant_trace_global_coverage_gate.json` |
+| Demo 2 AI-NAS features | `ok_stage8_demo2_ai_nas_features_gate` | `/mnt/nas/openclaw/reports/qwen25_ai_nas/stage8_demo2_ai_nas_features_gate.json` |
+| Demo 3 Qwen router trace | `ok_stage8_demo3_qwen_router_trace_gate` | `/mnt/nas/openclaw/reports/qwen25_ai_nas/stage8_demo3_qwen_router_trace_gate.json` |
+| Product smoke | `ok_product_smoke_test` | `/mnt/nas/openclaw/reports/qwen25_ai_nas/product_smoke_test_20260706-154654/product_smoke_test.json` |
+| Stage 9 aggregate | `ok_stage9_demo_product_delivery_gate` | `/mnt/nas/openclaw/reports/qwen25_ai_nas/stage9_demo_product_delivery_gate.json` |
+
+Final product smoke summary:
+
+```text
+failure_count=0
+warning_count=0
+production_ready=true
+yolo_runtime_target=s100p_bpu_hbm
+yolo_detection_count=66
+multimodal_embedding_count=5
+ai_space_asset_count=13
+smart_category_count=29
+smart_name_count=43
+subtitle_segment_count=1
+auto_organizer_plan_count=9
+assistant_trace_count_visible=5
+```
+
+GPT Pro bundle:
+
+```text
+/mnt/nas/openclaw/evidence_for_gptpro/digua_demo_product_delivery_20260706-154654.zip
+sha256=e79382b588b7a1a8ff0ab991ed8c334578928925282d9089f9452e1b59d5d708
+```
+
+Updated boundary:
+
+- Controlled move+rename is enabled only through Auto Organizer plan,
+  dry-run, typed approval, execute, conflict-safe suffixing, and rollback.
+- Uncontrolled move/rename remains disabled.
+- Delete, overwrite, recursive operation, chmod/chown, arbitrary shell, Qwen
+  autonomous file execution, and private raw cloud egress remain disabled.
+- `openclaw-gateway.service` and `qwen25-local-openai-gateway.service` were
+  active in the final Demo 1 gate; portal exposure stayed on `127.0.0.1:8765`.
 
 ## GPT Pro Review
 

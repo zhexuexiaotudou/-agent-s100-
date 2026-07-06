@@ -1,0 +1,41 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>AI 自动整理</title>
+  <link rel="stylesheet" href="/static/auto_organizer.css">
+</head>
+<body>
+  <main class="ao-shell">
+    <header>
+      <h1>AI 自动整理</h1>
+      <button id="refresh" type="button">刷新</button>
+    </header>
+    <section class="ao-grid">
+      <form id="planForm" class="panel">
+        <h2>整理计划</h2>
+        <label>来源根目录<input name="source_root" value="Uploads"></label>
+        <label>目标根目录<input name="target_root" value="AI整理"></label>
+        <label>模式<select name="mode"><option value="move_and_rename">受控移动并中文重命名</option><option value="copy">复制并中文命名</option></select></label>
+        <button type="submit">生成计划</button>
+      </form>
+      <section class="panel">
+        <h2>状态</h2>
+        <pre id="statusBox"></pre>
+      </section>
+    </section>
+    <section class="panel">
+      <h2>当前计划</h2>
+      <div class="toolbar">
+        <button id="dryRun" type="button">Dry Run</button>
+        <button id="approve" type="button">确认</button>
+        <button id="execute" type="button">执行</button>
+        <button id="rollback" type="button">回滚</button>
+      </div>
+      <div id="planBox"></div>
+    </section>
+  </main>
+  <script src="/static/auto_organizer.js"></script>
+</body>
+</html>

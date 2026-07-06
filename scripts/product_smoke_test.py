@@ -34,6 +34,8 @@ REQUIRED_MODULES = {
     "documents",
     "media",
     "photos",
+    "auto_organizer",
+    "assistant_trace",
     "copy_plan",
     "backup",
     "snapshot",
@@ -112,6 +114,8 @@ def build_payload(base_url: str, timeout: int) -> dict[str, Any]:
         "ai_space_status": http_get_json(base_url, "/api/ai-space/status", timeout),
         "smart_classification_status": http_get_json(base_url, "/api/smart-classification/status", timeout),
         "smart_naming_status": http_get_json(base_url, "/api/smart-naming/status", timeout),
+        "auto_organizer_status": http_get_json(base_url, "/api/auto-organize/status", timeout),
+        "assistant_trace_status": http_get_json(base_url, "/api/assistant/trace/status", timeout),
         "subtitle_status": http_get_json(base_url, "/api/subtitle/status", timeout),
         "jobs_status": http_get_json(base_url, "/api/jobs/status", timeout),
     }
@@ -132,6 +136,8 @@ def build_payload(base_url: str, timeout: int) -> dict[str, Any]:
     ai_space = checks["ai_space_status"].get("payload") or {}
     smart = checks["smart_classification_status"].get("payload") or {}
     smart_naming = checks["smart_naming_status"].get("payload") or {}
+    auto_organizer = checks["auto_organizer_status"].get("payload") or {}
+    assistant_trace = checks["assistant_trace_status"].get("payload") or {}
     subtitle = checks["subtitle_status"].get("payload") or {}
     jobs = checks["jobs_status"].get("payload") or {}
 
@@ -160,12 +166,26 @@ def build_payload(base_url: str, timeout: int) -> dict[str, Any]:
     add_failure(failures, privacy.get("biometric_recognition_enabled") is False, "biometric_recognition_enabled_not_false")
     add_failure(failures, privacy.get("sensitive_attribute_inference_enabled") is False, "sensitive_attribute_inference_enabled_not_false")
     add_failure(failures, privacy.get("raw_path_returned") is False, "product_status_raw_path_flag_not_false")
+    controlled_boundary = privacy.get("controlled_move_rename_boundary") if isinstance(privacy.get("controlled_move_rename_boundary"), dict) else {}
+    add_failure(failures, controlled_boundary.get("controlled_move_enabled") is True, "controlled_move_boundary_not_true")
+    add_failure(failures, controlled_boundary.get("controlled_rename_enabled") is True, "controlled_rename_boundary_not_true")
+    add_failure(failures, controlled_boundary.get("uncontrolled_move_enabled") is False, "uncontrolled_move_boundary_not_false")
+    add_failure(failures, controlled_boundary.get("uncontrolled_rename_enabled") is False, "uncontrolled_rename_boundary_not_false")
+    add_failure(failures, controlled_boundary.get("delete_enabled") is False, "controlled_boundary_delete_not_false")
+    add_failure(failures, controlled_boundary.get("overwrite_enabled") is False, "controlled_boundary_overwrite_not_false")
 
     add_failure(failures, bool(harness.get("ok")), "harness_status_not_ok")
     add_failure(failures, harness.get("qwen_execution_authority") is False, "harness_qwen_execution_authority_not_false")
     add_failure(failures, harness.get("cloud_private_raw_egress") is False, "harness_cloud_private_raw_egress_not_false")
+    add_failure(failures, harness.get("controlled_move_enabled") is True, "harness_controlled_move_not_true")
+    add_failure(failures, harness.get("controlled_rename_enabled") is True, "harness_controlled_rename_not_true")
+    add_failure(failures, harness.get("uncontrolled_move_enabled") is False, "harness_uncontrolled_move_not_false")
+    add_failure(failures, harness.get("uncontrolled_rename_enabled") is False, "harness_uncontrolled_rename_not_false")
+    add_failure(failures, harness.get("delete_enabled") is False, "harness_delete_not_false")
+    add_failure(failures, harness.get("overwrite_enabled") is False, "harness_overwrite_not_false")
+    add_failure(failures, harness.get("auto_organizer_required_for_move_rename") is True, "harness_auto_organizer_required_not_true")
     forbidden = set(harness.get("forbidden_actions") or [])
-    for action in ("delete", "move", "rename", "overwrite", "recursive", "arbitrary_shell"):
+    for action in ("delete", "overwrite", "recursive", "arbitrary_shell"):
         add_failure(failures, action in forbidden, f"harness_forbidden_action_missing:{action}")
 
     yolo_backend = yolo.get("backend") if isinstance(yolo.get("backend"), dict) else {}
@@ -207,6 +227,26 @@ def build_payload(base_url: str, timeout: int) -> dict[str, Any]:
     add_failure(failures, smart_naming.get("physical_file_renamed") is False, "smart_naming_physical_rename_not_false")
     add_failure(failures, smart_naming.get("cloud_used") is False, "smart_naming_cloud_used_not_false")
 
+    add_failure(failures, bool(auto_organizer.get("ok")), "auto_organizer_status_not_ok")
+    add_failure(failures, auto_organizer.get("controlled_move_enabled") is True, "auto_organizer_controlled_move_not_true")
+    add_failure(failures, auto_organizer.get("controlled_rename_enabled") is True, "auto_organizer_controlled_rename_not_true")
+    add_failure(failures, auto_organizer.get("uncontrolled_move_enabled") is False, "auto_organizer_uncontrolled_move_not_false")
+    add_failure(failures, auto_organizer.get("uncontrolled_rename_enabled") is False, "auto_organizer_uncontrolled_rename_not_false")
+    add_failure(failures, auto_organizer.get("delete_enabled") is False, "auto_organizer_delete_not_false")
+    add_failure(failures, auto_organizer.get("overwrite_enabled") is False, "auto_organizer_overwrite_not_false")
+    add_failure(failures, auto_organizer.get("rollback_required") is True, "auto_organizer_rollback_required_not_true")
+    add_failure(failures, auto_organizer.get("qwen_execution_authority") is False, "auto_organizer_qwen_execution_authority_not_false")
+    add_failure(failures, auto_organizer.get("cloud_private_raw_egress") is False, "auto_organizer_cloud_private_raw_egress_not_false")
+    add_failure(failures, auto_organizer.get("raw_path_returned") is False, "auto_organizer_raw_path_not_false")
+
+    add_failure(failures, bool(assistant_trace.get("ok")), "assistant_trace_status_not_ok")
+    add_failure(failures, assistant_trace.get("hidden_chain_of_thought_saved") is False, "assistant_trace_hidden_cot_not_false")
+    add_failure(failures, assistant_trace.get("raw_path_returned") is False, "assistant_trace_raw_path_not_false")
+    add_failure(failures, assistant_trace.get("cloud_private_raw_egress") is False, "assistant_trace_cloud_private_raw_egress_not_false")
+    add_failure(failures, assistant_trace.get("qwen_execution_authority") is False, "assistant_trace_qwen_execution_authority_not_false")
+    required_trace_steps = {"received", "qwen_router", "privacy_tokenizer", "task_classifier", "route_decision", "token_budget", "tool_execution", "safety_gate", "evidence_summary", "final_answer"}
+    add_failure(failures, required_trace_steps.issubset(set(assistant_trace.get("required_steps") or [])), "assistant_trace_required_steps_missing")
+
     add_failure(failures, bool(subtitle.get("ok")), "subtitle_status_not_ok")
     add_failure(failures, subtitle.get("degraded") is False, "subtitle_degraded")
     add_failure(failures, int(subtitle.get("segment_count") or 0) > 0, "subtitle_segment_count_empty")
@@ -235,6 +275,8 @@ def build_payload(base_url: str, timeout: int) -> dict[str, Any]:
             "ai_space_asset_count": ai_space.get("asset_count"),
             "smart_category_count": smart.get("category_count"),
             "smart_name_count": smart_naming.get("name_count"),
+            "auto_organizer_plan_count": auto_organizer.get("plan_count"),
+            "assistant_trace_count_visible": assistant_trace.get("trace_count_visible"),
             "subtitle_segment_count": subtitle.get("segment_count"),
             "production_ready": (product.get("overall") or {}).get("production_ready"),
             "readiness_verdict": (product.get("overall") or {}).get("readiness_verdict"),
@@ -248,7 +290,7 @@ def build_payload(base_url: str, timeout: int) -> dict[str, Any]:
             "personal_source_modified": False,
             "service_restart_performed": False,
             "delete_performed": False,
-            "move_performed": False,
+            "uncontrolled_move_performed": False,
             "overwrite_performed": False,
             "writes": "product smoke JSON/Markdown report only",
         },

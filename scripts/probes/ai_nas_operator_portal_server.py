@@ -77,6 +77,16 @@ except Exception:
     ai_space_route_response = None  # type: ignore[assignment]
 
 try:
+    from src.openclaw.routes.auto_organizer_routes import auto_organizer_route_response
+except Exception:
+    auto_organizer_route_response = None  # type: ignore[assignment]
+
+try:
+    from src.assistant_trace.routes import assistant_trace_route_response
+except Exception:
+    assistant_trace_route_response = None  # type: ignore[assignment]
+
+try:
     from src.openclaw.routes.person_attribute_routes import person_attribute_route_response
 except Exception:
     person_attribute_route_response = None  # type: ignore[assignment]
@@ -494,6 +504,14 @@ def normalize_chat_completions_url(base_or_url: str) -> str:
 def contains_any(text: str, terms: tuple[str, ...]) -> bool:
     lower = text.lower()
     return any(term.lower() in lower for term in terms)
+
+
+def _router_debug_redact(text: str) -> str:
+    redacted = str(text or "")
+    redacted = re.sub(r"(?i)\b(invoice|contract)\b", "[private-marker]", redacted)
+    redacted = re.sub(r"(?i)\bPersonal/[^\s\"']*", "[private-path]", redacted)
+    redacted = re.sub(r"(?i)\b(发票|合同|家庭照片|金额)\b", "[private-marker]", redacted)
+    return redacted
 
 
 def product_hidden_storage_name(name: str) -> bool:
@@ -3499,6 +3517,26 @@ class PortalState:
             )
         ai_space_status = "ok" if ai_space_payload.get("ok") and not ai_space_payload.get("degraded") else "degraded" if ai_space_payload.get("ok") else "failed"
 
+        auto_organizer_payload: dict = {"ok": False, "degraded": True, "degraded_reason": "auto_organizer_route_unavailable"}
+        if auto_organizer_route_response is not None:
+            _status_code, auto_organizer_payload = auto_organizer_route_response(
+                "/api/auto-organize/status",
+                method="GET",
+                report_root=self.report_root,
+                personal_root=self.personal_root,
+            )
+        auto_organizer_status = "ok" if auto_organizer_payload.get("ok") else "failed"
+
+        assistant_trace_payload: dict = {"ok": False, "degraded": True, "degraded_reason": "assistant_trace_route_unavailable"}
+        if assistant_trace_route_response is not None:
+            _status_code, assistant_trace_payload = assistant_trace_route_response(
+                "/api/assistant/trace/status",
+                method="GET",
+                report_root=self.report_root,
+                personal_root=self.personal_root,
+            )
+        assistant_trace_status = "ok" if assistant_trace_payload.get("ok") and not assistant_trace_payload.get("hidden_chain_of_thought_saved") else "failed"
+
         smart_payload: dict = {"ok": False, "degraded": True, "degraded_reason": "smart_classification_route_unavailable"}
         if smart_classification_route_response is not None:
             _status_code, smart_payload = smart_classification_route_response(
@@ -3606,6 +3644,34 @@ class PortalState:
                 },
                 reason=ai_space_payload.get("degraded_reason"),
             ),
+            "auto_organizer": self._module_card(
+                "auto_organizer",
+                auto_organizer_status,
+                metrics={
+                    "controlled_move_enabled": auto_organizer_payload.get("controlled_move_enabled"),
+                    "controlled_rename_enabled": auto_organizer_payload.get("controlled_rename_enabled"),
+                    "uncontrolled_move_enabled": auto_organizer_payload.get("uncontrolled_move_enabled"),
+                    "uncontrolled_rename_enabled": auto_organizer_payload.get("uncontrolled_rename_enabled"),
+                    "delete_enabled": auto_organizer_payload.get("delete_enabled"),
+                    "overwrite_enabled": auto_organizer_payload.get("overwrite_enabled"),
+                    "rollback_required": auto_organizer_payload.get("rollback_required"),
+                    "plan_count": auto_organizer_payload.get("plan_count"),
+                },
+                reason=auto_organizer_payload.get("degraded_reason"),
+            ),
+            "assistant_trace": self._module_card(
+                "assistant_trace",
+                assistant_trace_status,
+                metrics={
+                    "trace_count_visible": assistant_trace_payload.get("trace_count_visible"),
+                    "required_steps": assistant_trace_payload.get("required_steps"),
+                    "hidden_chain_of_thought_saved": assistant_trace_payload.get("hidden_chain_of_thought_saved"),
+                    "raw_path_returned": assistant_trace_payload.get("raw_path_returned"),
+                    "cloud_private_raw_egress": assistant_trace_payload.get("cloud_private_raw_egress"),
+                    "qwen_execution_authority": assistant_trace_payload.get("qwen_execution_authority"),
+                },
+                reason=assistant_trace_payload.get("degraded_reason"),
+            ),
             "smart_classification": self._module_card(
                 "smart_classification",
                 smart_status,
@@ -3685,6 +3751,15 @@ class PortalState:
                 "sensitive_attribute_inference_enabled": bool(person_payload.get("sensitive_attribute_inference_enabled")),
                 "raw_path_returned": False,
                 "product_status_exposes_absolute_paths": False,
+                "controlled_move_rename_boundary": {
+                    "controlled_move_enabled": bool(auto_organizer_payload.get("controlled_move_enabled")),
+                    "controlled_rename_enabled": bool(auto_organizer_payload.get("controlled_rename_enabled")),
+                    "uncontrolled_move_enabled": False,
+                    "uncontrolled_rename_enabled": False,
+                    "auto_organizer_required": True,
+                    "delete_enabled": False,
+                    "overwrite_enabled": False,
+                },
             },
         }
 
@@ -4234,6 +4309,120 @@ class PortalHandler(BaseHTTPRequestHandler):
             self.send_json({"ok": False, "error": f"token_budget_init_failed:{type(exc).__name__}:{exc}"}, HTTPStatus.SERVICE_UNAVAILABLE)
             return None
 
+    def query_payload(self) -> dict:
+        params = parse_qs(urlparse(self.path).query, keep_blank_values=True)
+        return {key: values[-1] for key, values in params.items()}
+
+    def record_assistant_entrypoint(self, entrypoint: str, query: str, session_id: str = "demo") -> str | None:
+        if assistant_trace_route_response is None:
+            return None
+        try:
+            status_code, trace = assistant_trace_route_response(
+                "/api/assistant/trace/record-entrypoint",
+                method="POST",
+                payload={"entrypoint": entrypoint, "query": query, "session_id": session_id},
+                report_root=self.state.report_root,
+                personal_root=self.state.personal_root,
+            )
+        except Exception:
+            return None
+        if status_code >= 400 or not isinstance(trace, dict):
+            return None
+        return ((trace.get("trace") or {}).get("trace_id") if isinstance(trace.get("trace"), dict) else None)
+
+    def send_assistant_trace_response(self, method: str, route: str, payload: dict | None = None) -> None:
+        if assistant_trace_route_response is None:
+            self.send_json({"ok": False, "error": "assistant_trace_unavailable"}, HTTPStatus.SERVICE_UNAVAILABLE)
+            return
+        status_code, result = assistant_trace_route_response(
+            route,
+            method=method,
+            payload=payload or {},
+            report_root=self.state.report_root,
+            personal_root=self.state.personal_root,
+        )
+        self.send_json(result, status_code)
+
+    def send_router_explain(self, payload: dict) -> None:
+        query = str(payload.get("query") or payload.get("message") or payload.get("q") or "")
+        if not query:
+            self.send_json({"ok": False, "error": "query_required", "raw_path_returned": False}, HTTPStatus.BAD_REQUEST)
+            return
+        action_intent = infer_copilot_action_intent(query)
+        router = self.state.copilot_qwen_route(query, action_intent)
+        redacted_query, redaction_count = redact_private_text(query)
+        redacted_query = _router_debug_redact(str(redacted_query))
+        safe_router = self.state._redact_paths(dict(router))
+        safe_router.pop("raw_content_preview", None)
+        safe_action = self.state._redact_paths(action_intent) if isinstance(action_intent, dict) else action_intent
+        trace_id = self.record_assistant_entrypoint("router_explain", query, session_id=str(payload.get("session_id") or "demo3"))
+        result = {
+            "ok": True,
+            "schema": "digua_router_explain_v1",
+            "trace_id": trace_id,
+            "query_redacted": str(redacted_query)[:240],
+            "redaction_count": int(redaction_count or 0),
+            "qwen_touched": True,
+            "route_decision": safe_router,
+            "action_intent": safe_action,
+            "cloud_private_raw_egress": False,
+            "qwen_execution_authority": False,
+            "raw_path_returned": False,
+        }
+        self.send_json(self.state._redact_paths(result))
+
+    def send_token_budget_explain(self, payload: dict) -> None:
+        api = self.token_budget_api()
+        if api is None:
+            return
+        query = str(payload.get("query") or payload.get("message") or payload.get("prompt") or "")
+        request_payload = dict(payload)
+        request_payload.setdefault("query", query)
+        request_payload.setdefault("case_id", f"explain_{hashlib.sha256(query.encode('utf-8', errors='replace')).hexdigest()[:12]}")
+        result = api.estimate(request_payload, record_trace=True)
+        trace_id = self.record_assistant_entrypoint("token_budget_explain", query, session_id=str(payload.get("session_id") or "demo3"))
+        safe = {
+            "ok": bool(result.get("ok")),
+            "schema": "digua_token_budget_explain_v1",
+            "trace_id": trace_id,
+            "run_id": result.get("run_id"),
+            "case_id": result.get("case_id"),
+            "route": result.get("route"),
+            "route_reason": result.get("route_reason"),
+            "cloud_allowed": result.get("cloud_allowed"),
+            "cloud_call_avoided": result.get("cloud_call_avoided"),
+            "token_counts": result.get("token_counts"),
+            "redaction_count": result.get("redaction_count"),
+            "private_leak_count": result.get("private_leak_count"),
+            "redaction_map_included": False,
+            "raw_path_returned": False,
+            "cloud_private_raw_egress": False,
+            "qwen_execution_authority": False,
+        }
+        self.send_json(self.state._redact_paths(safe), HTTPStatus.OK if safe["ok"] else HTTPStatus.BAD_REQUEST)
+
+    def send_privacy_tokenizer_debug(self, payload: dict) -> None:
+        api = self.token_budget_api()
+        if api is None:
+            return
+        text = str(payload.get("query") or payload.get("message") or payload.get("text") or "")
+        redacted = api.redactor.redact(text)
+        marker_hashes = [hashlib.sha256(value.encode("utf-8", errors="replace")).hexdigest()[:12] for value in redacted.redaction_map.values()]
+        trace_id = self.record_assistant_entrypoint("privacy_tokenizer_debug", text, session_id=str(payload.get("session_id") or "demo3"))
+        safe = {
+            "ok": True,
+            "schema": "digua_privacy_tokenizer_debug_v1",
+            "trace_id": trace_id,
+            "redacted_preview": redacted.redacted_text[:240],
+            "redaction_count": redacted.redaction_count,
+            "privacy_span_hashes": marker_hashes[:50],
+            "redaction_map_included": False,
+            "raw_path_returned": False,
+            "cloud_private_raw_egress": False,
+            "qwen_execution_authority": False,
+        }
+        self.send_json(self.state._redact_paths(safe))
+
     def send_journal_response(self, method: str, route: str, payload: dict | None = None) -> None:
         if journal_route_response is None:
             self.send_json({"ok": False, "error": "digua_journal_routes_unavailable"}, HTTPStatus.SERVICE_UNAVAILABLE)
@@ -4280,6 +4469,15 @@ class PortalHandler(BaseHTTPRequestHandler):
             return
         if route == "/static/ai_space.js":
             self.send_file_text(REPO_ROOT / "web" / "static" / "ai_space.js", "application/javascript; charset=utf-8")
+            return
+        if route in {"/auto-organizer", "/auto-organizer/"}:
+            self.send_file_text(REPO_ROOT / "web" / "templates" / "auto_organizer.html", "text/html; charset=utf-8")
+            return
+        if route == "/static/auto_organizer.css":
+            self.send_file_text(REPO_ROOT / "web" / "static" / "auto_organizer.css", "text/css; charset=utf-8")
+            return
+        if route == "/static/auto_organizer.js":
+            self.send_file_text(REPO_ROOT / "web" / "static" / "auto_organizer.js", "application/javascript; charset=utf-8")
             return
         if route in {"/smart-classification", "/smart-classification/"}:
             self.send_file_text(REPO_ROOT / "web" / "templates" / "smart_classification.html", "text/html; charset=utf-8")
@@ -4561,6 +4759,21 @@ class PortalHandler(BaseHTTPRequestHandler):
             )
             self.send_json(result, status_code)
             return
+        if route.startswith("/api/auto-organize"):
+            if auto_organizer_route_response is None:
+                self.send_json({"ok": False, "error": "auto_organizer_unavailable"}, HTTPStatus.SERVICE_UNAVAILABLE)
+                return
+            params = parse_qs(urlparse(self.path).query, keep_blank_values=True)
+            payload = {key: values[-1] for key, values in params.items()}
+            status_code, result = auto_organizer_route_response(
+                route,
+                method="GET",
+                payload=payload,
+                report_root=self.state.report_root,
+                personal_root=self.state.personal_root,
+            )
+            self.send_json(result, status_code)
+            return
         if route.startswith("/api/smart-classification"):
             if smart_classification_route_response is None:
                 self.send_json({"ok": False, "error": "smart_classification_unavailable"}, HTTPStatus.SERVICE_UNAVAILABLE)
@@ -4656,6 +4869,18 @@ class PortalHandler(BaseHTTPRequestHandler):
         if route == "/api/operator-decisions":
             self.send_json({"ok": True, "operator_decisions": self.state.latest_operator_decisions(limit=50)})
             return
+        if route == "/api/router/explain":
+            self.send_router_explain(self.query_payload())
+            return
+        if route == "/api/token-budget/explain":
+            self.send_token_budget_explain(self.query_payload())
+            return
+        if route == "/api/privacy-tokenizer/debug":
+            self.send_privacy_tokenizer_debug(self.query_payload())
+            return
+        if route.startswith("/api/assistant/trace") or route == "/api/assistant/traces":
+            self.send_assistant_trace_response("GET", route, self.query_payload())
+            return
         if route == "/api/token-budget/summary":
             api = self.token_budget_api()
             if api is None:
@@ -4682,6 +4907,7 @@ class PortalHandler(BaseHTTPRequestHandler):
                     "/",
                     "/journal",
                     "/ai-space",
+                    "/auto-organizer",
                     "/smart-classification",
                     "/subtitle-extraction",
                     "/api/health",
@@ -4710,6 +4936,9 @@ class PortalHandler(BaseHTTPRequestHandler):
                     "/api/ai-space/assets",
                     "/api/ai-space/asset/{asset_id}",
                     "/api/ai-space/facets",
+                    "/api/auto-organize/status",
+                    "/api/auto-organize/recent",
+                    "/api/auto-organize/plan/{plan_id}",
                     "/api/smart-classification/status",
                     "/api/smart-classification/categories",
                     "/api/smart-classification/category/{category_id}/items",
@@ -4735,8 +4964,15 @@ class PortalHandler(BaseHTTPRequestHandler):
                     "/api/identity/users",
                     "/api/contracts/operator-portal",
                     "/api/token-budget/summary",
+                    "/api/token-budget/explain",
                     "/api/token-budget/benchmark-summary",
                     "/api/token-budget/trace/{run_id}",
+                    "/api/router/explain",
+                    "/api/privacy-tokenizer/debug",
+                    "/api/assistant/trace/status",
+                    "/api/assistant/trace/{trace_id}",
+                    "/api/assistant/trace/stream/{trace_id}",
+                    "/api/assistant/traces",
                     "POST /api/identity/create-user",
                     "POST /api/identity/login",
                     "POST /api/storage/create-folder",
@@ -4752,6 +4988,11 @@ class PortalHandler(BaseHTTPRequestHandler):
                     "POST /api/operator-decision",
                     "POST /api/token-budget/estimate",
                     "POST /api/token-budget/route",
+                    "POST /api/token-budget/explain",
+                    "POST /api/router/explain",
+                    "POST /api/privacy-tokenizer/debug",
+                    "POST /api/assistant/chat",
+                    "POST /api/assistant/trace/record-entrypoint",
                     "POST /api/agent-runtime/context-pack",
                     "POST /api/agent-runtime/memory/record",
                     "POST /api/agent-runtime/multimodal-index/scan",
@@ -4768,6 +5009,11 @@ class PortalHandler(BaseHTTPRequestHandler):
                     "POST /api/media/upload",
                     "POST /api/ai-space/rebuild",
                     "POST /api/ai-space/search",
+                    "POST /api/auto-organize/plan",
+                    "POST /api/auto-organize/dry-run",
+                    "POST /api/auto-organize/approve",
+                    "POST /api/auto-organize/execute",
+                    "POST /api/auto-organize/rollback",
                     "POST /api/smart-classification/categories",
                     "POST /api/smart-classification/rebuild",
                     "POST /api/smart-classification/category/{category_id}/materialize-copy-plan",
@@ -4794,6 +5040,23 @@ class PortalHandler(BaseHTTPRequestHandler):
                 self.send_json(payload or {}, status)
                 return
             self.send_journal_response("POST", route, payload)
+            return
+        if route in {"/api/router/explain", "/api/token-budget/explain", "/api/privacy-tokenizer/debug", "/api/assistant/chat", "/api/assistant/trace/record-entrypoint"}:
+            status, payload = self.read_json_body()
+            if status:
+                self.send_json(payload or {}, status)
+                return
+            payload = payload or {}
+            if route == "/api/router/explain":
+                self.send_router_explain(payload)
+                return
+            if route == "/api/token-budget/explain":
+                self.send_token_budget_explain(payload)
+                return
+            if route == "/api/privacy-tokenizer/debug":
+                self.send_privacy_tokenizer_debug(payload)
+                return
+            self.send_assistant_trace_response("POST", route, payload)
             return
         if route.startswith("/api/agent-runtime"):
             if agent_runtime_route_response is None:
@@ -4906,6 +5169,25 @@ class PortalHandler(BaseHTTPRequestHandler):
             payload = payload or {}
             payload.setdefault("user_id", str((user or {}).get("username") or "operator"))
             status_code, result = ai_space_route_response(route, method="POST", payload=payload, report_root=self.state.report_root, personal_root=self.state.personal_root)
+            self.send_json(result, status_code)
+            return
+        if route.startswith("/api/auto-organize"):
+            if auto_organizer_route_response is None:
+                self.send_json({"ok": False, "error": "auto_organizer_unavailable"}, HTTPStatus.SERVICE_UNAVAILABLE)
+                return
+            if not self.require_product():
+                return
+            auth_status, error, user = self.state.require_user(self.headers.get("Authorization"))
+            if auth_status:
+                self.send_json(error or {}, auth_status)
+                return
+            status, payload = self.read_json_body()
+            if status:
+                self.send_json(payload or {}, status)
+                return
+            payload = payload or {}
+            payload.setdefault("approved_by", str((user or {}).get("username") or "operator"))
+            status_code, result = auto_organizer_route_response(route, method="POST", payload=payload, report_root=self.state.report_root, personal_root=self.state.personal_root)
             self.send_json(result, status_code)
             return
         if route.startswith("/api/smart-classification"):
@@ -5370,6 +5652,11 @@ class PortalHandler(BaseHTTPRequestHandler):
                     "POST /api/storage/upload-file",
                     "POST /api/documents/query",
                     "POST /api/reports/export",
+                    "POST /api/router/explain",
+                    "POST /api/token-budget/explain",
+                    "POST /api/privacy-tokenizer/debug",
+                    "POST /api/assistant/chat",
+                    "POST /api/assistant/trace/record-entrypoint",
                     "POST /api/nas/copy/preview",
                     "POST /api/nas/copy/dry-run",
                     "POST /api/nas/copy/confirm",
