@@ -28,8 +28,12 @@ class HybridRetriever:
         degraded_reason = None
         image_vectors_allowed = not plan.modality_filters or "image" in plan.modality_filters
         if image_vectors_allowed and self.flags.image_embedding_enabled and self.image_model.available:
-            query_vec = self.image_model.embed_text(plan.visual_query_en)
-            image_rows = self._image_vectors(query_vec, top_k=top_k * 2)
+            try:
+                query_vec = self.image_model.embed_text(plan.visual_query_en)
+                image_rows = self._image_vectors(query_vec, top_k=top_k * 2)
+            except Exception as exc:
+                degraded = True
+                degraded_reason = f"image_embedding_search_failed:{type(exc).__name__}"
         elif image_vectors_allowed and self.flags.image_embedding_enabled:
             degraded = True
             degraded_reason = "image_embedding_model_unavailable"

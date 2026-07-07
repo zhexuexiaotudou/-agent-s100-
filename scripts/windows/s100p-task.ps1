@@ -5,6 +5,7 @@ param(
     'diagnose-nas',
     'repair-nas-runtime',
     'diagnose-openclaw',
+    'diagnose-openclaw-health',
     'check-overnight',
     'refresh-baseline-readonly',
     'run-startup-link-check'
@@ -66,7 +67,8 @@ function Invoke-External {
   $p.StartInfo = $psi
   [void]$p.Start()
   if ($StandardInput) {
-    $p.StandardInput.Write($StandardInput)
+    $normalizedInput = $StandardInput -replace "`r`n", "`n" -replace "`r", "`n"
+    $p.StandardInput.Write($normalizedInput)
   }
   $p.StandardInput.Close()
 
@@ -188,7 +190,18 @@ sudo -n env XDG_RUNTIME_DIR=/run/user/0 journalctl --user -u openclaw-gateway.se
   grep -Ei 'ws client ready|received message|dispatch complete|EAI_AGAIN|open.feishu.cn|99991672|error|warn' |
   tail -80 || true
 echo '--- listeners'
-ss -ltnp 2>/dev/null | grep -E '18789|3000|8080|22' || true
+ss -ltnp 2>/dev/null | grep -E '8765|18080|18789|3000|8080|22' || true
+'@
+    }
+    'diagnose-openclaw-health' {
+      return @'
+set +e
+echo '--- openclaw-health'
+curl -i -sS --max-time 5 http://127.0.0.1:8765/api/health | head -20
+echo '--- openclaw-ui'
+curl -i -sS --max-time 5 http://127.0.0.1:8765/ui | head -20
+echo '--- qwen-health'
+curl -i -sS --max-time 5 http://127.0.0.1:18080/health | head -20
 '@
     }
     'check-overnight' {

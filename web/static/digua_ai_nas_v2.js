@@ -2,6 +2,8 @@
   "use strict";
 
   const app = document.getElementById("app");
+  const MEDIA_UPLOAD_MAX_BYTES = 5 * 1024 * 1024;
+  const EXECUTION_BOUNDARY_IMPLEMENTATION = "Harness / allowlist dispatcher";
 
   const icons = {
     home: '<path d="M3 10.5 12 3l9 7.5"/><path d="M5 9.5V21h14V9.5"/><path d="M9 21v-7h6v7"/>',
@@ -17,6 +19,11 @@
     help: '<circle cx="12" cy="12" r="9"/><path d="M9.8 9a2.4 2.4 0 0 1 4.5 1.2c0 1.7-2.3 2-2.3 3.8"/><path d="M12 17.4v.1"/>',
     chevron: '<path d="m9 18 6-6-6-6"/>',
     plus: '<path d="M12 5v14"/><path d="M5 12h14"/>',
+    minus: '<path d="M5 12h14"/>',
+    zoomIn: '<circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/><path d="M11 8v6"/><path d="M8 11h6"/>',
+    zoomOut: '<circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/><path d="M8 11h6"/>',
+    fit: '<path d="M4 9V4h5"/><path d="M20 9V4h-5"/><path d="M4 15v5h5"/><path d="M20 15v5h-5"/>',
+    rotate: '<path d="M21 12a9 9 0 1 1-3-6.7"/><path d="M21 3v6h-6"/>',
     upload: '<path d="M12 16V4"/><path d="m7 9 5-5 5 5"/><path d="M5 20h14"/>',
     send: '<path d="m22 2-7 20-4-9-9-4Z"/><path d="M22 2 11 13"/>',
     search: '<circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/>',
@@ -29,6 +36,7 @@
     check: '<path d="m5 12 4 4L19 6"/>',
     alert: '<path d="M12 4 3 20h18Z"/><path d="M12 9v5"/><path d="M12 17.5v.1"/>',
     lock: '<path d="M6 10h12v10H6Z"/><path d="M8 10V8a4 4 0 0 1 8 0v2"/>',
+    trash: '<path d="M3 6h18"/><path d="M8 6V4h8v2"/><path d="M6 6l1 15h10l1-15"/><path d="M10 11v6"/><path d="M14 11v6"/>',
     calendar: '<path d="M5 4h14v16H5Z"/><path d="M8 2v4"/><path d="M16 2v4"/><path d="M5 9h14"/>'
   };
 
@@ -57,7 +65,7 @@
     selectedAuditRecord: "",
     toast: "",
     workflow: { open: false, title: "", body: "", tone: "neutral" },
-    imageViewer: { open: false, title: "", meta: "", match: "", previewUrl: "", objectUrl: "", status: "idle", error: "" },
+    imageViewer: { open: false, title: "", meta: "", match: "", previewUrl: "", objectUrl: "", status: "idle", error: "", requestId: "", zoom: 1, rotation: 0, offsetX: 0, offsetY: 0 },
     loading: false,
     authToken: safeLocalStorageGet("diguaAiNasToken"),
     authUser: safeJsonParse(safeLocalStorageGet("diguaAiNasUser"), null),
@@ -81,13 +89,45 @@
     dashboard: { status: "idle", storage: null, token: null, audit: null, runtime: null, error: "" },
     journal: { status: "loading", text: "读取日记索引", events: [], summary: null, export: null, error: "" },
     audit: { status: "idle", operations: [], error: "", query: "" },
-    media: { status: "idle", summary: null, error: "" },
+    media: { status: "idle", summary: null, error: "", selectedAlbumName: "", selectedAlbumStatus: "idle", selectedAlbumPhotos: [], selectedAlbumError: "", uploadStatus: "idle", uploadError: "" },
+    aiAlbum: {
+      status: "idle",
+      error: "",
+      statusPayload: null,
+      facets: null,
+      assets: [],
+      mediaPhotos: [],
+      smartCategories: [],
+      autoStatus: null,
+      autoOrganize: null,
+      autoOrganizeStatus: "idle",
+      organizeStatus: null,
+      organizeRunStatus: "idle",
+      organizeLastRun: null,
+      organizeError: "",
+      activeTab: "all",
+      selectedCategory: "",
+      selectedAssetId: "",
+      query: "",
+      searchStatus: "idle",
+      searchResults: null,
+      searchError: "",
+      blockedQuery: null,
+      planStatus: "idle",
+      planResult: null,
+      planError: ""
+    },
     backup: { status: "idle", summary: null, error: "", taskName: "本地备份任务" },
     settings: { status: "idle", storage: null, users: [], harness: null, token: null, error: "" },
-    copy: { target: "", status: "idle", result: null, approvalPhrase: "", signedToken: null, rollbackManifestPath: "", manifestId: "" }
+    copy: { target: "", status: "idle", result: null, approvalPhrase: "", signedToken: null, rollbackManifestPath: "", manifestId: "" },
+    trash: { status: "idle", pending: null, error: "" }
   };
   let backupCreatePromise = null;
   const previewObjectUrlCache = new Map();
+  const previewObjectPromiseCache = new Map();
+  let imageViewerDrag = null;
+  let aiAlbumSelectTimer = null;
+  let previewLazyObserver = null;
 
   function safeLocalStorageGet(key) {
     try {
@@ -139,7 +179,13 @@
 
   function getInitialPage() {
     const hash = window.location.hash.replace("#", "");
-    return navItems.some((item) => item.id === hash) ? hash : "dashboard";
+    if (navItems.some((item) => item.id === hash)) return hash;
+    const routePageMap = {
+      "/ai-album": "media"
+    };
+    const path = window.location.pathname.replace(/\/+$/, "") || "/";
+    const routePage = routePageMap[path];
+    return routePage && navItems.some((item) => item.id === routePage) ? routePage : "dashboard";
   }
 
   function badge(text, type = "neutral") {
@@ -150,6 +196,27 @@
     const attr = extra.trim().startsWith("<") ? "" : extra;
     const inner = extra.trim().startsWith("<") ? extra : "";
     return `<button class="icon-button" type="button" aria-label="${escapeHtml(label)}" ${attr}>${svg(iconName)}${inner}</button>`;
+  }
+
+  function storageTrashAttrs(payload = {}) {
+    const relativePath = payload.relativePath || payload.relative_path || "";
+    const pathHash = payload.pathHash || payload.path_hash || "";
+    if (!relativePath && !pathHash) return "";
+    return [
+      'data-action="storageTrashPrompt"',
+      `data-trash-kind="${escapeHtml(payload.kind || "file")}"`,
+      `data-trash-title="${escapeHtml(payload.title || "file")}"`,
+      relativePath ? `data-trash-relative-path="${escapeHtml(relativePath)}"` : "",
+      pathHash ? `data-trash-path-hash="${escapeHtml(pathHash)}"` : "",
+      payload.previewUrl ? `data-trash-preview-url="${escapeHtml(payload.previewUrl)}"` : ""
+    ].filter(Boolean).join(" ");
+  }
+
+  function storageTrashButton(payload = {}) {
+    const attrs = storageTrashAttrs(payload);
+    if (!attrs) return "";
+    const title = payload.title || "file";
+    return `<button class="icon-button trash-button" type="button" title="移入回收站" aria-label="移入回收站 ${escapeHtml(title)}" ${attrs}>${svg("trash")}</button>`;
   }
 
   function button(label, options = {}) {
@@ -189,7 +256,7 @@
       ${renderImageViewerPanel()}
     `;
     renderToast();
-    hydrateAssistantSearchPreviews();
+    hydrateAssistantSearchPreviewsV2();
   }
 
   function renderSidebar() {
@@ -414,8 +481,8 @@
     const mode = String(copilot.assistant_mode || appState.assistant.mode || "").toLowerCase();
     const responseRoute = String(copilot.route || "").toLowerCase();
     const answerText = String(appState.assistant.answer || copilot.answer || "");
-    const modeToolId = mode.startsWith("local_storage") ? "local_storage" : mode === "local_document_query" ? "local_document_rag" : mode === "local_yolo_search" || mode === "local_multimodal_search" ? "local_multimodal_search" : "";
-    const responseRouteToolId = responseRoute.startsWith("local_storage") ? "local_storage" : responseRoute.includes("document") ? "local_document_rag" : responseRoute.includes("yolo") || responseRoute.includes("multimodal") ? "local_multimodal_search" : "";
+    const modeToolId = mode.startsWith("local_storage") ? "local_storage" : mode === "local_document_query" ? "local_document_rag" : mode === "local_yolo_search" || mode === "local_multimodal_search" ? "local_multimodal_search" : mode === "local_ai_album_category_search" ? "ai_album_primary_category" : "";
+    const responseRouteToolId = responseRoute.startsWith("local_storage") ? "local_storage" : responseRoute.includes("document") ? "local_document_rag" : responseRoute.includes("yolo") || responseRoute.includes("multimodal") ? "local_multimodal_search" : responseRoute.includes("album") ? "ai_album_primary_category" : "";
     const answerToolId = answerText.includes("只读盘点") || answerText.includes("文件盘点") || answerText.includes("顶层条目") ? "local_storage_inventory" : "";
     const actionToolId = {
       inventory: "local_storage_inventory",
@@ -441,6 +508,7 @@
     const route = String(copilot?.route || "").toLowerCase();
     const action = copilot?.nas_action || {};
     if (mode.startsWith("local_storage") || route.startsWith("local_storage") || ["inventory", "list", "inspect", "storage_status"].includes(action.operation)) return "本地文件服务";
+    if (mode === "local_ai_album_category_search" || route.includes("album_primary")) return "本地相册分类检索";
     if (mode === "local_yolo_search" || mode === "local_multimodal_search" || route.includes("yolo") || route.includes("multimodal")) return "本地多模态检索";
     if (mode === "local_document_query" || route.includes("document") || action.operation === "document_query") return "本地文档问答";
     if (route.includes("audit") || action.operation === "audit_summary") return "本地审计查询";
@@ -506,7 +574,7 @@
     const search = copilot.search || null;
     const qwenRouter = copilot.qwen_router || null;
     const isAssistantAnswer = Boolean(mode && appState.assistant.answer);
-    const answerBadge = mode === "local_qwen_chat" ? "本地 Qwen 返回" : mode === "cloud_overflow_chat" ? "云端返回" : mode === "cloud_overflow_stub" ? "云端未配置" : mode === "local_yolo_search" || mode === "local_multimodal_search" ? "本地检索返回" : mode.startsWith("local_storage") ? "本地文件返回" : mode === "local_document_query" ? "本地文档返回" : "本地服务返回";
+    const answerBadge = mode === "local_qwen_chat" ? "本地 Qwen 返回" : mode === "cloud_overflow_chat" ? "云端返回" : mode === "cloud_overflow_stub" ? "云端未配置" : mode === "local_yolo_search" || mode === "local_multimodal_search" || mode === "local_ai_album_category_search" ? "本地检索返回" : mode.startsWith("local_storage") ? "本地文件返回" : mode === "local_document_query" ? "本地文档返回" : "本地服务返回";
     return card(`
       <div class="answer-header"><strong>${svg("assistant")} AI 助手回答</strong>${badge(answerBadge, "success")}</div>
       <div class="answer-body">
@@ -545,6 +613,7 @@
   function routeLabel(mode, route) {
     if (mode === "local_yolo_search") return "本地图片检索";
     if (mode === "local_multimodal_search") return "本地多模态检索";
+    if (mode === "local_ai_album_category_search") return "本地相册分类检索";
     if (mode === "local_document_query") return "本地文档问答";
     if (mode === "local_storage_list") return "本地文件浏览";
     if (mode === "local_storage_inspect") return "本地文件检查";
@@ -576,7 +645,7 @@
     const rawTokens = route?.token_counts?.raw_user_prompt_tokens ?? copilot?.usage?.prompt_tokens ?? "—";
     const processing = copilot.cloud_used ? "云端" : "S100P 本地";
     const privacy = privacyLabel(qwenRouter?.privacy_level || route?.privacy_level || "local_only");
-    const model = mode === "local_yolo_search" || mode === "local_multimodal_search" ? "本地多模态索引" : copilot.model ? "本地 Qwen" : "本地 Qwen";
+    const model = mode === "local_ai_album_category_search" ? "本地相册分类索引" : mode === "local_yolo_search" || mode === "local_multimodal_search" ? "本地多模态索引" : copilot.model ? "本地 Qwen" : "本地 Qwen";
     return `
       <div class="assistant-service-summary" aria-label="服务摘要">
         <span class="service-pill strong">${svg("home")} ${escapeHtml(processing)}</span>
@@ -591,7 +660,7 @@
   function renderAssistantDetails(copilot, route, qwenRouter, mode) {
     const rows = [
       ["处理链路", routeLabel(mode, qwenRouter?.route || route?.route)],
-      ["模型/来源", mode === "local_yolo_search" || mode === "local_multimodal_search" ? "本地多模态索引" : "本地 Qwen"],
+      ["模型/来源", mode === "local_ai_album_category_search" ? "本地相册分类索引" : mode === "local_yolo_search" || mode === "local_multimodal_search" ? "本地多模态索引" : "本地 Qwen"],
       ["处理位置", copilot.cloud_used ? "云端" : "S100P 本地"],
       ["隐私级别", privacyLabel(qwenRouter?.privacy_level || route?.privacy_level || "local_only")],
       ["本地工具", localToolLabel(qwenRouter?.local_tool_id || copilot.search?.retrieval_mode)],
@@ -613,7 +682,21 @@
 
   function renderAssistantProductResult(copilot, mode) {
     if (!copilot || typeof copilot !== "object") return "";
-    if (copilot.search) return renderAssistantSearchResults(copilot.search);
+    if (copilot.search) {
+      const fallback = copilot.fallback_inventory;
+      const fallbackSection = fallback && fallback.ok ? renderAssistantStorageInventory({
+        nas_action: {
+          operation: "inventory",
+          status: fallback.status || "completed",
+          path: fallback.relative_path || fallback.requested_scope || "",
+          entries: Array.isArray(fallback.entries) ? fallback.entries : [],
+          summary: fallback.summary || {}
+        },
+        summary: fallback.summary || {},
+        entries: Array.isArray(fallback.entries) ? fallback.entries : []
+      }) : "";
+      return `${renderAssistantSearchResults(copilot.search)}${fallbackSection}`;
+    }
     if (mode === "local_document_query") return renderAssistantDocumentResult(copilot);
     const action = copilot.nas_action || {};
     const operation = String(action.operation || "");
@@ -700,15 +783,22 @@
     </section>`;
   }
 
-  function renderProductCard(title, meta = "", tags = [], icon = "docs") {
+  function renderProductCard(title, meta = "", tags = [], icon = "docs", options = {}) {
     const safeTags = tags.filter(Boolean);
-    return `<article class="product-result-card">
+    const documentOpenUrl = options.documentOpenUrl || "";
+    const canOpenDocument = Boolean(documentOpenUrl);
+    const trashButton = storageTrashButton(options.trashPayload || {});
+    const openAttrs = canOpenDocument
+      ? ` tabindex="0" role="button" aria-label="双击打开 ${escapeHtml(title || "文档")}" data-document-open-url="${escapeHtml(documentOpenUrl)}" data-document-title="${escapeHtml(options.documentTitle || title || "文档")}" data-document-filename="${escapeHtml(options.documentFileName || title || "document")}"`
+      : "";
+    return `<article class="product-result-card${canOpenDocument ? " is-openable" : ""}${trashButton ? " has-actions" : ""}"${openAttrs}>
       <span class="product-icon">${svg(icon)}</span>
       <div class="product-result-content">
         <div class="result-title">${escapeHtml(title || "本地结果")}</div>
         ${meta ? `<div class="result-meta">${escapeHtml(meta)}</div>` : ""}
         ${safeTags.length ? `<div class="result-tags">${safeTags.map((tag) => `<span class="result-tag">${escapeHtml(tag)}</span>`).join("")}</div>` : ""}
       </div>
+      ${trashButton ? `<div class="result-card-actions">${trashButton}</div>` : ""}
     </article>`;
   }
 
@@ -730,8 +820,9 @@
         ? evidence.slice(0, 5).map((item) => renderProductCard(
             displayName(item, "文档片段"),
             item.snippet || item.summary || "本地索引返回摘要，原文保留在 NAS。",
-            [item.extension || fileType(item) || "文档", evidenceLabel(item), "本地保留"],
-            "docs"
+            [item.extension || fileType(item) || "文档", evidenceLabel(item), "本地保留", documentOpenUrl(item) ? "双击打开" : ""],
+            "docs",
+            { documentOpenUrl: documentOpenUrl(item), documentTitle: displayName(item, "文档证据"), documentFileName: item.name || baseName(item.relative_path || "") || "document", trashPayload: item.relative_path ? { kind: "document", title: displayName(item, "document"), relativePath: item.relative_path } : null }
           )).join("")
         : renderProductEmpty("没有找到可引用证据")
     }</div>`;
@@ -994,7 +1085,8 @@
     const count = search.result_count ?? results.length;
     const typeLabel = results[0]?.display?.type_label || (search.modality === "image" ? "照片" : "结果");
     if (!results.length) {
-      return `<section class="assistant-search-section"><div class="assistant-search-head"><strong>${svg("search")} 本地检索结果</strong><span>0 个结果 · 未上云</span></div><div class="empty-state compact">${svg("search")} 未找到匹配的本地索引结果。</div></section>`;
+      const fallbackText = search.fallback_inventory_performed ? "索引未命中，已继续做 NAS 只读盘点。" : "未找到匹配的本地索引结果。";
+      return `<section class="assistant-search-section"><div class="assistant-search-head"><strong>${svg("search")} 本地检索结果</strong><span>0 个结果 · 未上云</span></div><div class="empty-state compact">${svg("search")} ${escapeHtml(fallbackText)}</div></section>`;
     }
     return `<section class="assistant-search-section">
       <div class="assistant-search-head"><strong>${svg("search")} 本地检索结果</strong><span>${escapeHtml(count)} 个${escapeHtml(typeLabel)} · 未上云</span></div>
@@ -1013,14 +1105,18 @@
     const match = display.match_label || "本地索引匹配";
     const meta = [display.date_label, typeLabel, display.size_label].filter(Boolean).join(" · ");
     const canOpenImage = Boolean(item.preview_url && item.preview_kind === "image");
+    const trashButton = canOpenImage && item.path_hash
+      ? storageTrashButton({ kind: "image", title, pathHash: item.path_hash, previewUrl: item.preview_url })
+      : "";
     const openAttrs = canOpenImage
       ? ` tabindex="0" role="button" aria-label="双击打开 ${escapeHtml(title)}" data-image-preview-url="${escapeHtml(item.preview_url)}" data-image-title="${escapeHtml(title)}" data-image-meta="${escapeHtml(meta || "NAS 本地文件")}" data-image-match="${escapeHtml(`${match} · ${scoreText}`)}"`
       : "";
     const preview = item.preview_url && item.preview_kind === "image"
       ? `<div class="search-thumb has-preview"><img class="search-preview-image" alt="${escapeHtml(title)} 预览" data-preview-url="${escapeHtml(item.preview_url)}" hidden><span class="thumb-loading">加载预览</span></div>`
       : `<div class="search-thumb"><span class="search-thumb-placeholder">${svg("docs")}<small>无预览</small></span></div>`;
-    return `<article class="search-result-card${canOpenImage ? " is-openable" : ""}"${openAttrs}>
+    return `<article class="search-result-card${canOpenImage ? " is-openable" : ""}${trashButton ? " has-actions" : ""}"${openAttrs}>
       ${preview}
+      ${trashButton}
       <div class="search-result-content">
         <div class="result-title">${escapeHtml(title)}</div>
         <div class="result-meta">${escapeHtml(meta || "NAS 本地文件")}</div>
@@ -1323,6 +1419,14 @@
     return humanizeName(name) || fallback;
   }
 
+  function documentOpenUrl(item) {
+    if (!item) return "";
+    if (item.open_url) return item.open_url;
+    if (item.preview_url && item.preview_kind !== "image") return item.preview_url;
+    const rel = item.relative_path || item.document_relative_path || "";
+    return rel ? `/api/storage/download?path=${encodeURIComponent(rel)}&preview=1` : "";
+  }
+
   function displayLocation(path) {
     const parts = pathParts(path);
     if (!parts.length) return "根目录";
@@ -1352,6 +1456,7 @@
   function localToolLabel(value) {
     const raw = String(value || "").toLowerCase();
     if (!raw || raw === "none" || raw === "无") return "无";
+    if (raw.includes("album_primary") || raw.includes("ai_album")) return "本地相册分类检索";
     if (raw.includes("yolo") || raw.includes("multimodal") || raw.includes("media")) return "本地多模态检索";
     if (raw.includes("document") || raw.includes("rag") || raw.includes("fts")) return "本地文档问答";
     if (raw.includes("storage") || raw.includes("nas") || raw.includes("file")) return "本地文件服务";
@@ -1376,7 +1481,7 @@
       .replace(/SHA-?256/gi, "校验")
       .replace(/[A-Fa-f0-9]{32,}/g, "已生成校验值")
       .replace(/\b(?:IMG|DSC|PXL|VID)[_-]?\d{6,}(?:[_-]?\d+)?\.(?:jpg|jpeg|png|webp|mp4|mov)\b/gi, "本地照片")
-      .replace(/\b[A-Za-z0-9]+(?:_[A-Za-z0-9]+){3,}(?:\.[A-Za-z0-9]{1,8})?\b/g, "本地记录")
+      .replace(/\b(?:mm|yasset|asset|trace|run)_[A-Za-z0-9_]{12,}\b/g, "本地记录")
       .replace(/[A-Za-z]:\\[^\s)]+/g, "本地位置")
       .replace(/\/mnt\/nas\/[^\s)]+/g, "本地位置")
       .replace(/(?:[A-Za-z0-9_.-]+\/){2,}[A-Za-z0-9_.-]+/g, "本地位置")
@@ -1390,7 +1495,7 @@
     if (/哈希|SHA|清单|令牌/i.test(label)) return resultStatusText(text);
     if (/API|接口/i.test(label)) return "本地受控接口";
     if (/路径|目录|位置|来源|目标|当前根|当前选中/i.test(label)) {
-      if (/已|根目录|个人空间|本地|服务端/.test(text) && text.length <= 16) return text;
+      if (/关闭|禁止|开启|需复查|无|有|已|根目录|个人空间|本地|服务端/.test(text) && text.length <= 16) return text;
       return resultStatusText(text, "已选择");
     }
     if (/Trace|Policy|ID/i.test(label) && text.length > 8) return "已记录";
@@ -1808,25 +1913,565 @@
     `;
   }
 
+  function mediaPhotoTitle(photo) {
+    return photo.display_name_zh || photo.suggested_filename_zh || photo.title_redacted || photo.name_redacted || photo.asset_id || "照片";
+  }
+
+  function mediaPhotoPreviewUrl(photo) {
+    if (photo.preview_url) return photo.preview_url;
+    if (photo.path_hash) return `/api/media/preview?path_hash=${encodeURIComponent(photo.path_hash)}`;
+    return "";
+  }
+
+  function renderMediaPhotoItem(photo) {
+    const title = mediaPhotoTitle(photo);
+    const previewUrl = mediaPhotoPreviewUrl(photo);
+    const categories = mediaPhotoCategoryNames(photo).slice(0, 3);
+    const meta = [
+      formatBytes(photo.size_bytes),
+      formatStorageTime(photo.taken_at || photo.mtime)
+    ].filter(Boolean).join(" · ");
+    const openAttrs = previewUrl
+      ? ` tabindex="0" role="button" aria-label="双击打开图片预览" data-image-preview-url="${escapeHtml(previewUrl)}" data-image-title="图片预览" data-image-meta="${escapeHtml(meta || "本地照片")}" data-image-match="相册预览 · 本地"`
+      : "";
+    const trashButton = previewUrl && photo.path_hash
+      ? storageTrashButton({ kind: "image", title, pathHash: photo.path_hash, previewUrl })
+      : "";
+    const thumb = previewUrl
+      ? `<div class="search-thumb media-photo-thumb has-preview"><img class="search-preview-image" alt="图片预览" data-preview-url="${escapeHtml(previewUrl)}" hidden><span class="thumb-loading">加载预览</span></div>`
+      : `<span class="doc-glyph png">IMG</span>`;
+    return `<article class="doc-item media-photo-item${previewUrl ? " is-openable" : ""}${trashButton ? " has-actions" : ""}"${openAttrs}>
+      ${thumb}
+      ${trashButton}
+      <div class="doc-copy">
+        <div class="media-photo-meta">${escapeHtml(meta || "本地相册索引")}</div>
+        <div class="result-tags">${categories.length ? categories.map((name) => `<span class="result-tag">${escapeHtml(name)}</span>`).join("") : `<span class="result-tag">待整理</span>`}</div>
+      </div>
+    </article>`;
+  }
+
+  function renderMediaAlbumItem(album, selectedAlbumName) {
+    const name = album.name || album.album_name || "相册";
+    const count = Number(album.item_count || album.photo_count || 0);
+    const active = selectedAlbumName === name ? " active" : "";
+    return `<button class="doc-item media-album-item${active}" type="button" data-action="mediaSelectAlbum" data-album-name="${escapeHtml(name)}">
+      <span class="doc-glyph png">ALB</span>
+      <div class="doc-copy">
+        <div class="doc-title">${escapeHtml(name)}</div>
+        <div class="muted small">${escapeHtml(album.description || "本地相册记录")} · ${fmtCount(count)} 张</div>
+      </div>
+      ${svg("chevron")}
+    </button>`;
+  }
+
+  function renderMediaPhotoList(photos, selectedAlbumName) {
+    if (appState.media.selectedAlbumStatus === "loading") {
+      return `<div class="skeleton-list"><span></span><span></span><span></span></div>`;
+    }
+    if (appState.media.selectedAlbumStatus === "error") {
+      return `<div class="empty-state compact">${svg("alert")} ${escapeHtml(appState.media.selectedAlbumError || "相册读取失败")}</div>`;
+    }
+    if (!photos.length) {
+      return `<div class="empty-state compact">${selectedAlbumName ? "这个相册还没有绑定照片。" : "暂无照片索引"}</div>`;
+    }
+    return `<div class="doc-list media-photo-list">${photos.slice(0, 500).map(renderMediaPhotoItem).join("")}</div>`;
+  }
+
+  function renderMediaUploadInput() {
+    return `<input id="mediaUploadInput" type="file" accept="image/*" hidden aria-hidden="true">`;
+  }
+
+  function renderMediaUploadStatus() {
+    if (appState.media.uploadStatus === "loading") {
+      return `<div class="soft-note media-upload-status">${svg("upload")} 正在上传图片并刷新本地相册。</div>`;
+    }
+    if (appState.media.uploadStatus === "error") {
+      return `<div class="soft-note error-note media-upload-status">${svg("alert")} ${escapeHtml(appState.media.uploadError || "图片上传失败")}</div>`;
+    }
+    return "";
+  }
+
   function mediaPage() {
     const stateBlock = apiStateBlock(appState.media, "还没有媒体索引记录。");
     const summary = appState.media.summary || {};
     const stats = summary.stats || {};
-    const albums = summary.albums || [];
     const photos = summary.photos || [];
+    const categories = mediaPhotoCategoryEntries(photos);
+    const selectedCategory = String(appState.aiAlbum.selectedCategory || "");
+    const visiblePhotos = selectedCategory
+      ? photos.filter((photo) => mediaPhotoCategoryNames(photo).includes(selectedCategory))
+      : photos;
+    const auto = appState.aiAlbum.autoOrganize || {};
+    const autoLabel = appState.aiAlbum.autoOrganizeStatus === "loading" ? "检查中" : ((auto.changed || auto.view_rebuilt) ? "已自动整理" : "已是最新");
+    const photoSectionTitle = selectedCategory ? `分类：${selectedCategory}` : "全部图片";
+    const uploadBusy = appState.media.uploadStatus === "loading";
     return `
-      ${pageHeader("相册", "读取本地照片、视频索引和相册记录。", `${button("索引媒体", { icon: "media", action: "mediaIndex" })}${button("刷新", { variant: "secondary", icon: "plus", action: "mediaRefresh" })}`)}
-      <div class="grid two-col">
-        ${card(`${sectionTitle("媒体统计")} ${stateBlock || renderKeyValueRows([
-          ["照片", stats.photo_count || stats.photos || 0],
-          ["视频", stats.video_count || stats.videos || 0],
-          ["相册", stats.album_count || albums.length || 0],
-          ["重复组", stats.duplicate_group_count || 0],
-          ["最近索引", stats.last_indexed_at || "—"]
-        ])}`)}
-        ${card(`${sectionTitle("相册列表", "新建相册", "mediaCreateAlbum")}<div class="doc-list">${albums.length ? albums.map((album) => `<article class="doc-item"><span class="doc-glyph png">ALB</span><div><div class="doc-title">${escapeHtml(album.name || album.album_name || "相册")}</div><div class="muted small">${escapeHtml(album.description || "本地相册记录")}</div></div></article>`).join("") : `<div class="empty-state compact">暂无相册</div>`}</div>`)}
+      ${pageHeader("相册", "NAS 图片自动增量整理和本地 AI 分类。", `${button(uploadBusy ? "上传中" : "上传图片", { icon: "upload", action: "mediaUploadChoose", disabled: uploadBusy })}${button("刷新", { variant: "secondary", icon: "plus", action: "mediaRefresh" })}`)}
+      ${renderMediaUploadInput()}
+      ${renderMediaUploadStatus()}
+      <div class="ai-album-kpis">
+        <div><span>图片</span><strong>${fmtCount(photos.length || stats.photo_count || 0)}</strong></div>
+        <div><span>分类</span><strong>${fmtCount(categories.length)}</strong></div>
+        <div><span>自动整理</span><strong>${escapeHtml(autoLabel)}</strong></div>
+        <div><span>最近索引</span><strong>${escapeHtml(formatStorageTime(stats.last_indexed_at) || "—")}</strong></div>
       </div>
-      ${card(`${sectionTitle("照片索引样本")}<div class="doc-list">${photos.length ? photos.slice(0, 12).map((photo) => `<article class="doc-item"><span class="doc-glyph png">IMG</span><div><div class="doc-title">${escapeHtml(photo.display_name_zh || photo.title_redacted || photo.asset_id || "照片")}</div><div class="muted small">${escapeHtml(photo.suggested_filename_zh || photo.extension || "本地照片")}</div></div></article>`).join("") : `<div class="empty-state compact">暂无照片索引</div>`}</div>`)}
+      ${stateBlock || `<div class="ai-album-tabs" role="tablist">
+        <button class="chip${selectedCategory ? "" : " active"}" type="button" data-action="aiAlbumCategory" data-category="">全部 <span>${fmtCount(photos.length)}</span></button>
+        ${categories.map(([name, count]) => `<button class="chip${selectedCategory === name ? " active" : ""}" type="button" data-action="aiAlbumCategory" data-category="${escapeHtml(name)}">${escapeHtml(name)} <span>${fmtCount(count)}</span></button>`).join("")}
+      </div>
+      ${card(`${sectionTitle(photoSectionTitle, "", "")}${renderMediaPhotoList(visiblePhotos, "")}`)}`}
+    `;
+  }
+
+  function renderMediaOrganizeStatusPanel(status, totalImages, categoryCount) {
+    const pending = Number(status?.pending_count ?? 0);
+    const organized = Number(status?.organized_count ?? Math.max(0, totalImages - pending));
+    const busy = appState.aiAlbum.organizeRunStatus === "loading";
+    const lastRun = appState.aiAlbum.organizeLastRun || {};
+    const methodCounts = lastRun.method_counts || {};
+    const methodText = lastRun.processed_count != null
+      ? `本次处理 ${fmtCount(lastRun.processed_count)} 张，CLIP ${fmtCount(methodCounts.clip_similarity || 0)} 张，证据规则 ${fmtCount(methodCounts.evidence_rules || 0)} 张，兜底 ${fmtCount(methodCounts.fallback_other || 0)} 张`
+      : "已整理图片会跳过，只处理待整理图片";
+    const stateText = busy
+      ? "正在整理未归类图片"
+      : pending > 0
+        ? `还有 ${fmtCount(pending)} 张待整理`
+        : totalImages > 0
+          ? "所有图片已整理"
+          : "暂无图片";
+    return `
+      <section class="media-organize-panel" aria-label="相册整理状态">
+        <div class="media-organize-head">
+          <div>
+            <strong>${escapeHtml(stateText)}</strong>
+            <span>${escapeHtml(methodText)}</span>
+          </div>
+          ${button(busy ? "整理中" : pending > 0 ? "一键整理" : "已整理", { icon: "check", action: "mediaOrganizeNow", disabled: busy || pending <= 0 })}
+        </div>
+        <div class="media-organize-counts">
+          <span>总图片 <strong>${fmtCount(totalImages)}</strong></span>
+          <span>已整理 <strong>${fmtCount(organized)}</strong></span>
+          <span>待整理 <strong>${fmtCount(pending)}</strong></span>
+          <span>主分类 <strong>${fmtCount(categoryCount)}</strong></span>
+        </div>
+      </section>
+    `;
+  }
+
+  function mediaPageV2() {
+    const stateBlock = apiStateBlock(appState.media, "还没有媒体索引记录。");
+    const summary = appState.media.summary || {};
+    const stats = summary.stats || {};
+    const photos = summary.photos || [];
+    const organize = appState.aiAlbum.organizeStatus || {};
+    const primaryCategories = aiAlbumPrimaryCategories();
+    const categories = mediaPhotoCategoryEntries(photos);
+    const selectedCategory = String(appState.aiAlbum.selectedCategory || "");
+    const visiblePhotos = selectedCategory
+      ? photos.filter((photo) => mediaPhotoCategoryNames(photo).includes(selectedCategory))
+      : photos;
+    const uploadBusy = appState.media.uploadStatus === "loading";
+    const organizeBusy = appState.aiAlbum.organizeRunStatus === "loading";
+    const totalImages = Number(organize.total_images ?? photos.length ?? stats.photo_count ?? 0);
+    const pendingCount = Number(organize.pending_count ?? 0);
+    const organizedCount = Number(organize.organized_count ?? Math.max(0, totalImages - pendingCount));
+    const categoryCount = primaryCategories.filter((item) => Number(item.count || 0) > 0).length || categories.filter(([name]) => name !== "待整理").length;
+    const photoSectionTitle = selectedCategory ? `分类：${selectedCategory}` : "全部图片";
+    const headerActions = [
+      button(uploadBusy ? "上传中" : "上传图片", { icon: "upload", action: "mediaUploadChoose", disabled: uploadBusy || organizeBusy }),
+      button(pendingCount > 0 ? "一键整理" : "已整理", { icon: "check", action: "mediaOrganizeNow", disabled: organizeBusy || pendingCount <= 0 }),
+      button("刷新", { variant: "secondary", icon: "plus", action: "mediaRefresh", disabled: organizeBusy })
+    ].join("");
+    return `
+      ${pageHeader("相册", "NAS 图片自动增量整理和本地 AI 主分类。", headerActions)}
+      ${renderMediaUploadInput()}
+      ${renderMediaUploadStatus()}
+      ${renderMediaOrganizeStatusPanel(organize, totalImages, categoryCount)}
+      <div class="ai-album-kpis">
+        <div><span>总图片</span><strong>${fmtCount(totalImages)}</strong></div>
+        <div><span>已整理</span><strong>${fmtCount(organizedCount)}</strong></div>
+        <div><span>待整理</span><strong>${fmtCount(pendingCount)}</strong></div>
+        <div><span>最近索引</span><strong>${escapeHtml(formatStorageTime(stats.last_indexed_at) || "-")}</strong></div>
+      </div>
+      ${stateBlock || `<div class="ai-album-tabs" role="tablist">
+        <button class="chip${selectedCategory ? "" : " active"}" type="button" data-action="aiAlbumCategory" data-category="">全部 <span>${fmtCount(photos.length)}</span></button>
+        ${categories.map(([name, count]) => `<button class="chip${selectedCategory === name ? " active" : ""}" type="button" data-action="aiAlbumCategory" data-category="${escapeHtml(name)}">${escapeHtml(name)} <span>${fmtCount(count)}</span></button>`).join("")}
+      </div>
+      ${card(`${sectionTitle(photoSectionTitle, "", "")}${renderMediaPhotoList(visiblePhotos, "")}`)}`}
+    `;
+  }
+
+  function aiAlbumAssetId(asset) {
+    return String(asset?.asset_id || asset?.id || asset?.media_id || "");
+  }
+
+  function aiAlbumAssetTitle(asset, fallback = "本地素材") {
+    return asset?.display_name_zh || asset?.suggested_filename_zh || asset?.title_redacted || asset?.name_redacted || aiAlbumAssetId(asset) || fallback;
+  }
+
+  function aiAlbumCategoryNames(asset) {
+    const values = [];
+    for (const key of ["category_names", "categories", "tags", "object_labels"]) {
+      const current = asset?.[key];
+      if (Array.isArray(current)) values.push(...current);
+    }
+    if (asset?.asset_kind) values.push(asset.asset_kind);
+    return Array.from(new Set(values.map((item) => String(item || "").trim()).filter(Boolean)));
+  }
+
+  function mediaTitleKey(value) {
+    return String(value || "")
+      .toLowerCase()
+      .replace(/\.(jpg|jpeg|png|webp|bmp|gif|tif|tiff)$/i, "")
+      .replace(/[_-]+/g, " ")
+      .replace(/\s+/g, " ")
+      .trim();
+  }
+
+  function aiAlbumMediaPhotoForAsset(asset) {
+    const assetId = aiAlbumAssetId(asset);
+    const photos = Array.isArray(appState.aiAlbum.mediaPhotos) ? appState.aiAlbum.mediaPhotos : [];
+    if (assetId) {
+      const exact = photos.find((photo) => String(photo.asset_id || "") === assetId);
+      if (exact) return exact;
+    }
+    const title = mediaTitleKey(asset?.title_redacted || asset?.suggested_filename_zh || asset?.display_name_zh || "");
+    return title ? photos.find((photo) => mediaTitleKey(photo.title_redacted || photo.suggested_filename_zh || photo.display_name_zh || "") === title) || null : null;
+  }
+
+  function mediaPhotoAiAsset(photo) {
+    const assets = Array.isArray(appState.aiAlbum.assets) ? appState.aiAlbum.assets : [];
+    const assetId = String(photo?.asset_id || "");
+    if (assetId) {
+      const exact = assets.find((asset) => aiAlbumAssetId(asset) === assetId);
+      if (exact) return exact;
+    }
+    const title = mediaTitleKey(photo?.title_redacted || photo?.suggested_filename_zh || photo?.display_name_zh || "");
+    return title ? assets.find((asset) => mediaTitleKey(asset?.title_redacted || asset?.suggested_filename_zh || asset?.display_name_zh || "") === title) || null : null;
+  }
+
+  function aiAlbumPrimaryCategories() {
+    const status = appState.aiAlbum.organizeStatus || {};
+    return Array.isArray(status.categories) ? status.categories : [];
+  }
+
+  function mediaPhotoPrimaryStatus(photo) {
+    const status = appState.aiAlbum.organizeStatus || {};
+    const items = Array.isArray(status.photo_status) ? status.photo_status : [];
+    if (!items.length) return null;
+    const assetId = String(photo?.asset_id || "");
+    const pathHash = String(photo?.path_hash || "");
+    return items.find((item) => (assetId && String(item.asset_id || "") === assetId) || (pathHash && String(item.path_hash || "") === pathHash)) || null;
+  }
+
+  function mediaPhotoCategoryNames(photo) {
+    const primary = mediaPhotoPrimaryStatus(photo);
+    if (primary?.state === "organized" && primary.category_name) return [String(primary.category_name)];
+    if (primary?.state === "pending") return ["待整理"];
+    const asset = mediaPhotoAiAsset(photo);
+    if (!asset) return [];
+    const categories = aiAlbumCategoryNames(asset).filter((name) => !/^image$|^photo$|^本地素材$/i.test(String(name || "")));
+    const meaningful = categories.filter((name) => !/^待整理$/i.test(String(name || "")));
+    return meaningful.length ? meaningful : ["待整理"];
+  }
+
+  function mediaPhotoCategoryEntries(photos) {
+    const counts = new Map();
+    for (const photo of photos || []) {
+      for (const name of mediaPhotoCategoryNames(photo)) {
+        const key = String(name || "").trim();
+        if (!key) continue;
+        counts.set(key, Number(counts.get(key) || 0) + 1);
+      }
+    }
+    return Array.from(counts.entries()).sort((a, b) => b[1] - a[1] || String(a[0]).localeCompare(String(b[0]), "zh-CN"));
+  }
+
+  function aiAlbumPreviewUrl(asset) {
+    const photo = aiAlbumMediaPhotoForAsset(asset);
+    if (!photo) return "";
+    return mediaPhotoPreviewUrl(photo);
+  }
+
+  function aiAlbumAssetMeta(asset) {
+    const photo = aiAlbumMediaPhotoForAsset(asset) || {};
+    return [
+      asset?.modality || photo.extension || "asset",
+      photo.size_bytes ? formatBytes(photo.size_bytes) : "",
+      formatStorageTime(asset?.created_at || asset?.taken_at || photo.taken_at || photo.mtime)
+    ].filter(Boolean).join(" · ");
+  }
+
+  function aiAlbumFacetEntries(name, limit = 10) {
+    const facets = appState.aiAlbum.facets?.facets || appState.aiAlbum.facets || {};
+    const values = facets?.[name] || {};
+    if (!values || typeof values !== "object" || Array.isArray(values)) return [];
+    return Object.entries(values)
+      .map(([key, value]) => [key, Number(value || 0)])
+      .filter(([key]) => key)
+      .sort((a, b) => b[1] - a[1] || String(a[0]).localeCompare(String(b[0]), "zh-CN"))
+      .slice(0, limit);
+  }
+
+  function aiAlbumSmartCategoryEntries(limit = 10) {
+    const categories = Array.isArray(appState.aiAlbum.smartCategories) ? appState.aiAlbum.smartCategories : [];
+    return categories
+      .map((item) => [
+        item.name || item.category_name || item.label || item.id || "分类",
+        Number(item.item_count || item.asset_count || item.count || 0)
+      ])
+      .filter(([, count]) => count > 0)
+      .slice(0, limit);
+  }
+
+  function aiAlbumAllCategories() {
+    const merged = new Map();
+    for (const [name, count] of [...aiAlbumFacetEntries("category", 16), ...aiAlbumSmartCategoryEntries(16)]) {
+      const key = String(name || "").trim();
+      if (!key) continue;
+      merged.set(key, Math.max(Number(merged.get(key) || 0), Number(count || 0)));
+    }
+    return Array.from(merged.entries()).sort((a, b) => b[1] - a[1] || a[0].localeCompare(b[0], "zh-CN")).slice(0, 18);
+  }
+
+  function aiAlbumMatchesTab(asset, tab) {
+    const text = `${asset?.modality || ""} ${asset?.asset_kind || ""} ${aiAlbumCategoryNames(asset).join(" ")} ${asset?.summary_redacted || ""}`.toLowerCase();
+    const includesAny = (terms) => terms.some((term) => text.includes(term));
+    if (tab === "photos") return includesAny(["image", "photo", "照片"]);
+    if (tab === "videos") return includesAny(["video", "视频"]);
+    if (tab === "documents") return includesAny(["document", "文档", "资料", "课程"]);
+    if (tab === "people") return includesAny(["person", "people", "人物", "人像", "上衣", "服装"]);
+    if (tab === "invoices") return includesAny(["invoice", "receipt", "票据", "发票", "收据"]);
+    if (tab === "contracts") return includesAny(["contract", "合同", "协议"]);
+    return true;
+  }
+
+  function aiAlbumVisibleAssets(tabOverride = "") {
+    const state = appState.aiAlbum;
+    const source = Array.isArray(state.searchResults) ? state.searchResults : state.assets;
+    const activeTab = tabOverride || state.activeTab || "all";
+    const selectedCategory = String(state.selectedCategory || "");
+    return (source || []).filter((asset) => {
+      const categoryText = aiAlbumCategoryNames(asset).join(" ");
+      const categoryOk = !selectedCategory || categoryText.includes(selectedCategory);
+      return categoryOk && aiAlbumMatchesTab(asset, activeTab);
+    });
+  }
+
+  function aiAlbumSelectedAsset() {
+    const visible = aiAlbumVisibleAssets();
+    const selectedId = appState.aiAlbum.selectedAssetId;
+    return visible.find((asset) => aiAlbumAssetId(asset) === selectedId) || visible[0] || null;
+  }
+
+  function aiAlbumTabItems() {
+    const all = Array.isArray(appState.aiAlbum.searchResults) ? appState.aiAlbum.searchResults : appState.aiAlbum.assets;
+    const countFor = (tab) => (all || []).filter((asset) => aiAlbumMatchesTab(asset, tab)).length;
+    return [
+      ["all", "全部", (all || []).length],
+      ["photos", "照片", countFor("photos")],
+      ["people", "人物/服装", countFor("people")],
+      ["invoices", "票据", countFor("invoices")],
+      ["contracts", "合同", countFor("contracts")],
+      ["documents", "资料", countFor("documents")],
+      ["videos", "视频", countFor("videos")]
+    ];
+  }
+
+  function renderAiAlbumSearchBlock() {
+    const state = appState.aiAlbum;
+    const blocked = state.blockedQuery;
+    const searchInfo = state.searchStatus === "loading"
+      ? `<div class="ai-album-search-state">${svg("search")} 正在检索本地索引</div>`
+      : state.searchStatus === "error"
+        ? `<div class="soft-note error-note">${svg("alert")} ${escapeHtml(state.searchError || "搜索失败")}</div>`
+        : blocked
+          ? `<div class="soft-note warning-note">${svg("lock")} 已拦截身份识别类查询：${escapeHtml(blocked.query)}</div>`
+          : Array.isArray(state.searchResults)
+            ? `<div class="ai-album-search-state">${svg("check")} 当前显示 ${fmtCount(state.searchResults.length)} 条搜索结果</div>`
+            : "";
+    return `
+      <section class="ai-album-toolbar">
+        <div class="ai-album-search">
+          ${svg("search")}
+          <input id="aiAlbumSearch" class="control" value="${escapeHtml(state.query || "")}" placeholder="搜索：票据发票、穿白色上衣的人、合同资料..." aria-label="相册搜索">
+          ${button("搜索", { icon: "search", action: "aiAlbumSearch" })}
+        </div>
+        <div class="ai-album-presets">
+          <button class="chip" type="button" data-action="aiAlbumPreset" data-query="票据发票">票据发票</button>
+          <button class="chip" type="button" data-action="aiAlbumPreset" data-query="穿白色上衣的人">白色上衣</button>
+          <button class="chip" type="button" data-action="aiAlbumPreset" data-query="合同资料">合同资料</button>
+          <button class="chip" type="button" data-action="aiAlbumPreset" data-query="这个人是谁">安全拦截</button>
+        </div>
+        ${searchInfo}
+      </section>
+    `;
+  }
+
+  function renderAiAlbumSidebar() {
+    const state = appState.aiAlbum;
+    const categories = aiAlbumAllCategories();
+    const modality = aiAlbumFacetEntries("modality", 6);
+    return `
+      <aside class="ai-album-sidebar">
+        <div class="ai-album-sidebar-section">
+          <div class="section-title compact"><h2>智能分类</h2></div>
+          <button class="ai-album-category${state.selectedCategory ? "" : " active"}" type="button" data-action="aiAlbumCategory" data-category="">
+            <span>全部分类</span><strong>${fmtCount((state.assets || []).length)}</strong>
+          </button>
+          ${categories.length ? categories.map(([name, count]) => `<button class="ai-album-category${state.selectedCategory === name ? " active" : ""}" type="button" data-action="aiAlbumCategory" data-category="${escapeHtml(name)}"><span>${escapeHtml(name)}</span><strong>${fmtCount(count)}</strong></button>`).join("") : `<div class="empty-state compact">暂无分类索引</div>`}
+        </div>
+        <div class="ai-album-sidebar-section">
+          <div class="section-title compact"><h2>素材类型</h2></div>
+          ${modality.length ? modality.map(([name, count]) => `<div class="mini-row"><span>${escapeHtml(name)}</span><span class="muted small">${fmtCount(count)}</span></div>`).join("") : `<div class="mini-row"><span>image</span><span class="muted small">${fmtCount(state.assets.length)}</span></div>`}
+        </div>
+        <div class="ai-album-boundary">
+          <strong>${svg("lock")} 安全边界</strong>
+          <span>身份识别：关闭</span>
+          <span>敏感属性推断：关闭</span>
+          <span>原始路径返回：关闭</span>
+          <span>云端私有原文外发：关闭</span>
+        </div>
+      </aside>
+    `;
+  }
+
+  function renderAiAlbumTabs() {
+    const active = appState.aiAlbum.activeTab || "all";
+    return `<div class="ai-album-tabs" role="tablist">${aiAlbumTabItems().map(([id, label, count]) => `<button class="chip${active === id ? " active" : ""}" type="button" role="tab" aria-selected="${active === id ? "true" : "false"}" data-action="aiAlbumTab" data-tab="${escapeHtml(id)}">${escapeHtml(label)} <span>${fmtCount(count)}</span></button>`).join("")}</div>`;
+  }
+
+  function renderAiAlbumAssetCard(asset, index = 0) {
+    const id = aiAlbumAssetId(asset);
+    const title = aiAlbumAssetTitle(asset, `本地素材 ${index + 1}`);
+    const previewUrl = aiAlbumPreviewUrl(asset);
+    const mediaPhoto = aiAlbumMediaPhotoForAsset(asset);
+    const pathHash = asset?.path_hash || mediaPhoto?.path_hash || "";
+    const meta = aiAlbumAssetMeta(asset);
+    const categories = aiAlbumCategoryNames(asset).slice(0, 4);
+    const selected = id && id === appState.aiAlbum.selectedAssetId ? " active" : "";
+    const openAttrs = previewUrl
+      ? ` data-image-preview-url="${escapeHtml(previewUrl)}" data-image-title="${escapeHtml(title)}" data-image-meta="${escapeHtml(meta || "相册预览")}" data-image-match="相册 · 本地"`
+      : "";
+    const trashButton = previewUrl && pathHash
+      ? storageTrashButton({ kind: "image", title, pathHash, previewUrl })
+      : "";
+    const thumb = previewUrl
+      ? `<div class="search-thumb ai-album-thumb has-preview"><img class="search-preview-image" alt="${escapeHtml(title)} 预览" data-preview-url="${escapeHtml(previewUrl)}" hidden><span class="thumb-loading">加载预览</span></div>`
+      : `<div class="search-thumb ai-album-thumb">${svg(asset?.modality === "video" ? "media" : "docs")}<span>无预览</span></div>`;
+    return `<article class="ai-album-asset-card${selected}${previewUrl ? " is-openable" : ""}${trashButton ? " has-actions" : ""}" tabindex="0" role="button" data-action="aiAlbumSelectAsset" data-ai-album-asset-id="${escapeHtml(id)}"${openAttrs}>
+      ${thumb}
+      ${trashButton}
+      <div class="ai-album-asset-copy">
+        <strong title="${escapeHtml(title)}">${escapeHtml(title)}</strong>
+        <span class="muted small">${escapeHtml(meta || asset?.privacy_level || "本地 AI Space")}</span>
+        <p>${escapeHtml(asset?.summary_redacted || asset?.match_reason || asset?.description || "本地索引摘要，原始文件不在页面暴露。")}</p>
+        <div class="result-tags">${categories.length ? categories.map((name) => `<span class="result-tag">${escapeHtml(name)}</span>`).join("") : `<span class="result-tag">本地素材</span>`}</div>
+      </div>
+    </article>`;
+  }
+
+  function renderAiAlbumGrid() {
+    const assets = aiAlbumVisibleAssets();
+    if (appState.aiAlbum.status === "loading") {
+      return `<div class="skeleton-list ai-album-skeleton"><span></span><span></span><span></span><span></span></div>`;
+    }
+    if (!assets.length) {
+      return `<div class="empty-state ai-album-empty">${svg("search")}<strong>没有匹配素材</strong><p>调整分类或搜索词后重新检索本地 AI Space 索引。</p></div>`;
+    }
+    return `<div class="ai-album-grid">${assets.map(renderAiAlbumAssetCard).join("")}</div>`;
+  }
+
+  function renderAiAlbumRiskFlags(asset) {
+    const flags = asset?.smart_naming?.risk_flags || asset?.risk_flags || {};
+    const rows = [
+      ["身份识别", flags.identity_inference_used ? "需复查" : "关闭"],
+      ["敏感属性", flags.sensitive_attribute_inference_used ? "需复查" : "关闭"],
+      ["云端调用", flags.cloud_used || asset?.cloud_used ? "需复查" : "关闭"],
+      ["原始路径", flags.raw_path_returned || asset?.raw_path_returned ? "需复查" : "关闭"]
+    ];
+    return `<div class="ai-album-flag-list">${rows.map(([label, value]) => `<span class="${value === "关闭" ? "ok" : "warn"}">${escapeHtml(label)}：${escapeHtml(value)}</span>`).join("")}</div>`;
+  }
+
+  function renderAiAlbumDetailPanel() {
+    const asset = aiAlbumSelectedAsset();
+    if (!asset) {
+      return `<aside class="ai-album-detail"><div class="empty-state compact">${svg("media")} 选择一张照片或素材后查看详情。</div></aside>`;
+    }
+    const categories = aiAlbumCategoryNames(asset);
+    const evidence = Array.isArray(asset.evidence_refs) ? asset.evidence_refs : [];
+    const photo = aiAlbumMediaPhotoForAsset(asset) || {};
+    return `<aside class="ai-album-detail">
+      <div class="answer-header"><strong>${svg("media")} 素材详情</strong>${badge(asset.privacy_level || "private_local_only", "success")}</div>
+      <div class="ai-album-detail-title">
+        <strong>${escapeHtml(aiAlbumAssetTitle(asset))}</strong>
+        <span>${escapeHtml(asset.summary_redacted || "本地符号化摘要")}</span>
+      </div>
+      ${renderAiAlbumRiskFlags(asset)}
+      ${renderKeyValueRows([
+        ["素材类型", asset.modality || photo.extension || "image"],
+        ["智能命名", asset.suggested_filename_zh || asset.display_name_zh || "待生成"],
+        ["OCR 状态", asset.ocr_status || "none"],
+        ["证据引用", evidence.length ? `${evidence.length} 条` : "无"],
+        ["大小", photo.size_bytes ? formatBytes(photo.size_bytes) : "—"],
+        ["时间", formatStorageTime(asset.created_at || asset.taken_at || photo.taken_at || photo.mtime)]
+      ])}
+      <div class="detail-section">
+        <strong>分类标签</strong>
+        <div class="result-tags">${categories.length ? categories.map((name) => `<span class="result-tag">${escapeHtml(name)}</span>`).join("") : `<span class="result-tag">未分类</span>`}</div>
+      </div>
+      <div class="detail-section">
+        <strong>可执行动作</strong>
+        <p class="muted small">当前页面只允许查看、检索和生成受控整理计划。不会提供删除、覆盖或裸路径操作。</p>
+        <div class="actions">${button("生成整理计划", { icon: "table", action: "aiAlbumPlan" })}</div>
+      </div>
+    </aside>`;
+  }
+
+  function renderAiAlbumPlanSummary() {
+    const state = appState.aiAlbum;
+    if (state.planStatus === "loading") return `<div class="soft-note">${svg("table")} 正在创建受控整理计划...</div>`;
+    if (state.planStatus === "error") return `<div class="soft-note error-note">${svg("alert")} ${escapeHtml(state.planError || "整理计划创建失败")}</div>`;
+    if (!state.planResult) return "";
+    const result = state.planResult;
+    const ok = result.ok !== false;
+    const count = result.item_count ?? (Array.isArray(result.items) ? result.items.length : 0);
+    return `<div class="ai-album-plan-summary ${ok ? "" : "blocked"}">
+      <strong>${ok ? "整理计划已生成" : "整理计划未生成"}</strong>
+      <span>${escapeHtml(result.blocker || result.error || `${fmtCount(count)} 个候选项`)}</span>
+      <button class="link-button" type="button" data-action="aiAlbumShowPlan">查看工作流 ${svg("chevron")}</button>
+    </div>`;
+  }
+
+  function aiAlbumPage() {
+    const state = appState.aiAlbum;
+    const stateBlock = apiStateBlock(state, "相册暂无素材。");
+    const status = state.statusPayload || {};
+    const photos = state.mediaPhotos || [];
+    const uploadBusy = appState.media.uploadStatus === "loading";
+    const organize = state.autoOrganize || {};
+    const organizeLabel = state.autoOrganizeStatus === "loading" ? "检查中" : (organize.ok === false ? "需复查" : (organize.changed ? "已增量整理" : "已是最新"));
+    return `
+      ${pageHeader("相册", "在本地索引、媒体预览和智能分类上检索照片。", `${button(uploadBusy ? "上传中" : "上传图片", { icon: "upload", action: "mediaUploadChoose", disabled: uploadBusy })}${button("刷新", { variant: "secondary", icon: "plus", action: "aiAlbumRefresh" })}${button("生成整理计划", { icon: "table", action: "aiAlbumPlan", disabled: state.status === "auth" || state.status === "loading" })}`)}
+      ${renderMediaUploadInput()}
+      ${renderMediaUploadStatus()}
+      <div class="ai-album-kpis">
+        <div><span>自动整理</span><strong>${escapeHtml(organizeLabel)}</strong></div>
+        <div><span>AI Space 素材</span><strong>${fmtCount(status.asset_count || state.assets.length)}</strong></div>
+        <div><span>媒体预览</span><strong>${fmtCount(photos.length)}</strong></div>
+        <div><span>云端调用</span><strong>${status.cloud_used ? "需复查" : "关闭"}</strong></div>
+        <div><span>原始路径</span><strong>${status.raw_path_returned ? "需复查" : "关闭"}</strong></div>
+      </div>
+      ${stateBlock || `${renderAiAlbumSearchBlock()}
+      <div class="ai-album-layout">
+        ${renderAiAlbumSidebar()}
+        <section class="ai-album-main">
+          ${renderAiAlbumTabs()}
+          ${renderAiAlbumPlanSummary()}
+          ${renderAiAlbumGrid()}
+        </section>
+        ${renderAiAlbumDetailPanel()}
+      </div>`}
       ${renderStatePanel("相册")}
     `;
   }
@@ -1909,7 +2554,7 @@
     reports: reportsPage,
     tokenBudget: tokenBudgetPage,
     agentRuntime: agentRuntimePage,
-    media: mediaPage,
+    media: mediaPageV2,
     backup: backupPage,
     journal: journalPage,
     audit: auditPage,
@@ -1957,26 +2602,90 @@
     `;
   }
 
+  function clampImageViewerZoom(value) {
+    const next = Number(value);
+    if (!Number.isFinite(next)) return 1;
+    return Math.min(5, Math.max(0.25, next));
+  }
+
+  function imageViewerTransform(viewer) {
+    const zoom = clampImageViewerZoom(viewer.zoom || 1);
+    const rotation = Number(viewer.rotation || 0);
+    const offsetX = Number(viewer.offsetX || 0);
+    const offsetY = Number(viewer.offsetY || 0);
+    return `translate(${offsetX}px, ${offsetY}px) rotate(${rotation}deg) scale(${zoom})`;
+  }
+
+  function imageViewerZoomLabel(viewer) {
+    return `${Math.round(clampImageViewerZoom(viewer.zoom || 1) * 100)}%`;
+  }
+
+  function updateImageViewerTransform(patch) {
+    if (!appState.imageViewer.open) return;
+    const current = appState.imageViewer || {};
+    const nextZoom = Object.prototype.hasOwnProperty.call(patch, "zoom") ? clampImageViewerZoom(patch.zoom) : clampImageViewerZoom(current.zoom || 1);
+    const next = {
+      ...current,
+      ...patch,
+      zoom: nextZoom,
+      offsetX: nextZoom <= 1 && !Object.prototype.hasOwnProperty.call(patch, "offsetX") ? 0 : Number(patch.offsetX ?? current.offsetX ?? 0),
+      offsetY: nextZoom <= 1 && !Object.prototype.hasOwnProperty.call(patch, "offsetY") ? 0 : Number(patch.offsetY ?? current.offsetY ?? 0)
+    };
+    appState.imageViewer = next;
+    renderShell();
+  }
+
+  function zoomImageViewer(factor) {
+    const current = appState.imageViewer || {};
+    const nextZoom = clampImageViewerZoom((current.zoom || 1) * factor);
+    updateImageViewerTransform({
+      zoom: nextZoom,
+      offsetX: nextZoom <= 1 ? 0 : current.offsetX || 0,
+      offsetY: nextZoom <= 1 ? 0 : current.offsetY || 0
+    });
+  }
+
+  function resetImageViewerTransform() {
+    updateImageViewerTransform({ zoom: 1, rotation: 0, offsetX: 0, offsetY: 0 });
+  }
+
+  function rotateImageViewer() {
+    const current = appState.imageViewer || {};
+    updateImageViewerTransform({ rotation: ((Number(current.rotation || 0) + 90) % 360), offsetX: 0, offsetY: 0 });
+  }
+
   function renderImageViewerPanel() {
     const viewer = appState.imageViewer || {};
     if (!viewer.open) return "";
     const meta = [viewer.meta, viewer.match].filter(Boolean).join(" · ");
+    const canTransform = Boolean(viewer.objectUrl);
+    const zoomLabel = imageViewerZoomLabel(viewer);
+    const imgStyle = `transform: ${imageViewerTransform(viewer)};`;
     const body = viewer.status === "error"
       ? `<div class="image-viewer-state">${svg("alert")}<strong>图片打开失败</strong><p>${escapeHtml(viewer.error || "preview_unavailable")}</p></div>`
       : viewer.objectUrl
-        ? `<img class="image-viewer-img" src="${escapeHtml(viewer.objectUrl)}" alt="${escapeHtml(viewer.title || "图片预览")}">`
-        : `<div class="image-viewer-state"><div class="spinner"></div><strong>正在打开图片</strong></div>`;
+        ? `<img class="image-viewer-img" src="${escapeHtml(viewer.objectUrl)}" alt="${escapeHtml(viewer.title || "图片预览")}" style="${escapeHtml(imgStyle)}" draggable="false">`
+        : `<div class="image-viewer-state"><div class="spinner"></div><strong>正在打开图片</strong><p>首次读取可能需要几秒，超过 12 秒会显示重试状态。</p></div>`;
     return `
       <div class="image-viewer-backdrop" role="presentation" data-action="closeImageViewer"></div>
       <section class="image-viewer-panel" role="dialog" aria-modal="true" aria-label="${escapeHtml(viewer.title || "图片预览")}">
         <header class="image-viewer-header">
-          <div>
+          <div class="image-viewer-title">
             <strong>${escapeHtml(viewer.title || "图片预览")}</strong>
             ${meta ? `<span>${escapeHtml(meta)}</span>` : ""}
           </div>
-          <button class="icon-button image-viewer-close" type="button" aria-label="关闭图片预览" data-action="closeImageViewer">${svg("plus")}</button>
+          <div class="image-viewer-actions">
+            <div class="image-viewer-toolbar" role="toolbar" aria-label="图片查看工具">
+              <button class="icon-button" type="button" title="缩小" aria-label="缩小" data-action="imageZoomOut" ${canTransform ? "" : "disabled"}>${svg("zoomOut")}</button>
+              <span class="image-viewer-zoom" aria-label="当前缩放">${escapeHtml(zoomLabel)}</span>
+              <button class="icon-button" type="button" title="放大" aria-label="放大" data-action="imageZoomIn" ${canTransform ? "" : "disabled"}>${svg("zoomIn")}</button>
+              <button class="icon-button" type="button" title="适配窗口" aria-label="适配窗口" data-action="imageFit" ${canTransform ? "" : "disabled"}>${svg("fit")}</button>
+              <button class="icon-button" type="button" title="旋转" aria-label="旋转" data-action="imageRotate" ${canTransform ? "" : "disabled"}>${svg("rotate")}</button>
+            </div>
+            <button class="icon-button image-viewer-close" type="button" aria-label="关闭图片预览" data-action="closeImageViewer">${svg("plus")}</button>
+          </div>
         </header>
-        <div class="image-viewer-body">${body}</div>
+        <div class="image-viewer-body${canTransform ? " is-transformable" : ""}" data-image-viewer-body>${body}</div>
       </section>
     `;
   }
@@ -1992,7 +2701,8 @@
   }
 
   function closeImageViewer() {
-    appState.imageViewer = { open: false, title: "", meta: "", match: "", previewUrl: "", objectUrl: "", status: "idle", error: "" };
+    imageViewerDrag = null;
+    appState.imageViewer = { open: false, title: "", meta: "", match: "", previewUrl: "", objectUrl: "", status: "idle", error: "", requestId: "", zoom: 1, rotation: 0, offsetX: 0, offsetY: 0 };
     renderShell();
   }
 
@@ -2009,6 +2719,30 @@
     return { ok: response.ok, status: response.status, data };
   }
 
+  async function loadPreviewObjectUrl(previewUrl) {
+    if (!previewUrl) throw new Error("preview_url_missing");
+    const cachedObjectUrl = previewObjectUrlCache.get(previewUrl);
+    if (cachedObjectUrl) return cachedObjectUrl;
+    const cachedPromise = previewObjectPromiseCache.get(previewUrl);
+    if (cachedPromise) return cachedPromise;
+    const promise = (async () => {
+      const headers = {};
+      if (appState.authToken) headers.Authorization = `Bearer ${appState.authToken}`;
+      const response = await fetch(previewUrl, { headers });
+      if (!response.ok) throw new Error(`preview_${response.status}`);
+      const blob = await response.blob();
+      const objectUrl = URL.createObjectURL(blob);
+      previewObjectUrlCache.set(previewUrl, objectUrl);
+      return objectUrl;
+    })();
+    previewObjectPromiseCache.set(previewUrl, promise);
+    try {
+      return await promise;
+    } finally {
+      previewObjectPromiseCache.delete(previewUrl);
+    }
+  }
+
   async function hydrateAssistantSearchPreviews() {
     const images = Array.from(document.querySelectorAll("img[data-preview-url]"));
     if (!images.length) return;
@@ -2018,26 +2752,8 @@
       const container = img.closest(".search-thumb");
       const loading = container?.querySelector(".thumb-loading");
       try {
-        const cachedObjectUrl = previewObjectUrlCache.get(img.dataset.previewUrl);
-        if (cachedObjectUrl) {
-          img.onload = () => {
-            img.hidden = false;
-            if (loading) loading.hidden = true;
-            container?.classList.add("preview-ready");
-          };
-          img.src = cachedObjectUrl;
-          const card = img.closest(".search-result-card");
-          if (card) card.dataset.imageObjectUrl = cachedObjectUrl;
-          return;
-        }
-        const headers = {};
-        if (appState.authToken) headers.Authorization = `Bearer ${appState.authToken}`;
-        const response = await fetch(img.dataset.previewUrl, { headers });
-        if (!response.ok) throw new Error(`preview_${response.status}`);
-        const blob = await response.blob();
-        const objectUrl = URL.createObjectURL(blob);
-        previewObjectUrlCache.set(img.dataset.previewUrl, objectUrl);
-        const card = img.closest(".search-result-card");
+        const objectUrl = await loadPreviewObjectUrl(img.dataset.previewUrl);
+        const card = img.closest("[data-image-preview-url]");
         if (card) card.dataset.imageObjectUrl = objectUrl;
         img.onload = () => {
           img.hidden = false;
@@ -2052,10 +2768,60 @@
     }));
   }
 
+  async function hydratePreviewImageV2(img) {
+    if (!img || img.dataset.loaded === "1") return;
+    img.dataset.loaded = "1";
+    const container = img.closest(".search-thumb");
+    const loading = container?.querySelector(".thumb-loading");
+    try {
+      const objectUrl = await loadPreviewObjectUrl(img.dataset.previewUrl);
+      const card = img.closest("[data-image-preview-url]");
+      if (card) card.dataset.imageObjectUrl = objectUrl;
+      img.onload = () => {
+        img.hidden = false;
+        if (loading) loading.hidden = true;
+        container?.classList.add("preview-ready");
+      };
+      img.src = objectUrl;
+    } catch (error) {
+      container?.classList.add("preview-unavailable");
+      if (loading) loading.textContent = "预览不可用";
+    }
+  }
+
+  function hydrateAssistantSearchPreviewsV2() {
+    const images = Array.from(document.querySelectorAll("img[data-preview-url]"));
+    if (!images.length) return;
+    if (previewLazyObserver) {
+      previewLazyObserver.disconnect();
+      previewLazyObserver = null;
+    }
+    const immediate = images.slice(0, 18);
+    const deferred = images.slice(18);
+    for (const img of immediate) {
+      window.setTimeout(() => hydratePreviewImageV2(img), 0);
+    }
+    if ("IntersectionObserver" in window) {
+      previewLazyObserver = new IntersectionObserver((entries) => {
+        for (const entry of entries) {
+          if (!entry.isIntersecting) continue;
+          previewLazyObserver?.unobserve(entry.target);
+          hydratePreviewImageV2(entry.target);
+        }
+      }, { rootMargin: "280px 0px" });
+      for (const img of deferred) previewLazyObserver.observe(img);
+      return;
+    }
+    deferred.slice(0, 12).forEach((img, index) => {
+      window.setTimeout(() => hydratePreviewImageV2(img), 300 + index * 120);
+    });
+  }
+
   async function openSearchImageViewer(card) {
     if (!card?.dataset?.imagePreviewUrl) return;
     const previewUrl = card.dataset.imagePreviewUrl;
     const existingObjectUrl = card.dataset.imageObjectUrl || previewObjectUrlCache.get(previewUrl) || card.querySelector(".search-preview-image")?.src || "";
+    const requestId = `${Date.now()}-${Math.random().toString(16).slice(2)}`;
     appState.imageViewer = {
       open: true,
       title: card.dataset.imageTitle || "图片预览",
@@ -2064,23 +2830,31 @@
       previewUrl,
       objectUrl: existingObjectUrl || "",
       status: existingObjectUrl ? "ready" : "loading",
-      error: ""
+      error: "",
+      requestId,
+      zoom: 1,
+      rotation: 0,
+      offsetX: 0,
+      offsetY: 0
     };
     renderShell();
     if (existingObjectUrl) return;
+    let timeoutId = 0;
     try {
-      const headers = {};
-      if (appState.authToken) headers.Authorization = `Bearer ${appState.authToken}`;
-      const response = await fetch(previewUrl, { headers });
-      if (!response.ok) throw new Error(`preview_${response.status}`);
-      const blob = await response.blob();
-      const objectUrl = URL.createObjectURL(blob);
-      previewObjectUrlCache.set(previewUrl, objectUrl);
+      const timeoutPromise = new Promise((_, reject) => {
+        timeoutId = window.setTimeout(() => reject(new DOMException("preview_timeout", "AbortError")), 15000);
+      });
+      const objectUrl = await Promise.race([loadPreviewObjectUrl(previewUrl), timeoutPromise]);
+      if (!appState.imageViewer.open || appState.imageViewer.requestId !== requestId) return;
       appState.imageViewer = { ...appState.imageViewer, objectUrl, status: "ready", error: "" };
       renderShell();
     } catch (error) {
-      appState.imageViewer = { ...appState.imageViewer, status: "error", error: error.message || String(error) };
+      if (!appState.imageViewer.open || appState.imageViewer.requestId !== requestId) return;
+      const message = error?.name === "AbortError" ? "图片读取超时，请关闭后重试，或先等待缩略图加载完成。" : (error.message || String(error));
+      appState.imageViewer = { ...appState.imageViewer, status: "error", error: message };
       renderShell();
+    } finally {
+      if (timeoutId) window.clearTimeout(timeoutId);
     }
   }
 
@@ -2124,11 +2898,24 @@
 
   function renderDocumentEvidence(items) {
     if (!items.length) return `<div class="empty-state compact">${svg("search")} 没有可引用证据</div>`;
-    return items.slice(0, 8).map((item, i) => `<article class="evidence-card">
-      <div class="file-cell"><span class="doc-glyph ${fileGlyph(item)}">${escapeHtml(fileType(item).slice(0, 4))}</span><strong title="${escapeHtml(displayName(item, "文档证据"))}">${escapeHtml(displayName(item, "文档证据"))}</strong></div>
+    return items.slice(0, 8).map((item, i) => {
+      const openUrl = documentOpenUrl(item);
+      const title = displayName(item, "文档证据");
+      const openAttrs = openUrl
+        ? ` tabindex="0" role="button" aria-label="双击打开 ${escapeHtml(title)}" data-document-open-url="${escapeHtml(openUrl)}" data-document-title="${escapeHtml(title)}" data-document-filename="${escapeHtml(item.name || baseName(item.relative_path || "") || "document")}"`
+        : "";
+      const trashButton = item.relative_path
+        ? storageTrashButton({ kind: "document", title, relativePath: item.relative_path })
+        : "";
+      return `<article class="evidence-card${openUrl ? " is-openable" : ""}${trashButton ? " has-actions" : ""}"${openAttrs}>
+      <div class="evidence-card-head">
+        <div class="file-cell"><span class="doc-glyph ${fileGlyph(item)}">${escapeHtml(fileType(item).slice(0, 4))}</span><strong title="${escapeHtml(displayName(item, "文档证据"))}">${escapeHtml(displayName(item, "文档证据"))}</strong></div>
+        ${trashButton}
+      </div>
       <div class="evidence-meta"><span>${escapeHtml(evidenceLabel(item, i))}</span><span>${escapeHtml(fileType(item) || "文档")}</span><span>本地保留</span></div>
       <p class="muted small">${escapeHtml(item.snippet || item.summary || "本地索引返回的摘要信息，原文仍保留在 NAS。")}</p>
-    </article>`).join("");
+    </article>`;
+    }).join("");
   }
 
   async function ensureDefaultLogin() {
@@ -2338,6 +3125,7 @@
     const action = data.nas_action || {};
     if (data.search) return data.answer || "已完成本地检索。";
     if (mode === "local_document_query") {
+      if (data.answer) return data.answer;
       const count = data.evidence_count ?? (Array.isArray(data.evidence) ? data.evidence.length : 0);
       return count
         ? `已在本地文档库完成检索，找到 ${count} 条可引用证据。下方卡片列出来源文件和摘要片段，私有文档未发送到云端。`
@@ -2545,7 +3333,7 @@
   function assistantAgents() {
     showWorkflow("可用能力", `
       <div class="grid two-col">
-        ${card(`<strong>本地图片检索</strong><p class="muted small">通过 AI 助手输入“找有人的图片”，返回本地 YOLO 索引结果。</p>${button("打开助手", { variant: "secondary", page: "assistant" })}`)}
+        ${card(`<strong>本地图片检索</strong><p class="muted small">通过 AI 助手输入“找有人的图片”，优先走 YOLO 对象索引，再走本地多模态语义检索。</p>${button("打开助手", { variant: "secondary", page: "assistant" })}`)}
         ${card(`<strong>文档问答</strong><p class="muted small">跳转到文档页执行真实路径检索，不展示样例文件。</p>${button("打开文档", { variant: "secondary", page: "documents" })}`)}
         ${card(`<strong>文件管理</strong><p class="muted small">在权限内浏览、上传和创建文件夹。</p>${button("打开文件", { variant: "secondary", page: "files" })}`)}
         ${card(`<strong>审计查看</strong><p class="muted small">查看真实本地操作记录和脱敏详情。</p>${button("打开审计", { variant: "secondary", page: "audit" })}`)}
@@ -2654,8 +3442,543 @@
     if (appState.page === "audit") renderShell();
   }
 
+  async function runAiAlbumAutoOrganize(options = {}) {
+    if (!appState.authToken) return null;
+    if (!options.noRender) {
+      appState.aiAlbum = { ...appState.aiAlbum, autoOrganizeStatus: "loading" };
+      if (appState.page === "aiAlbum") renderShell();
+    }
+    try {
+      const result = await fetchJson("/api/ai-album/auto-organize", {
+        method: "POST",
+        body: { max_files: 10000 }
+      });
+      appState.aiAlbum = {
+        ...appState.aiAlbum,
+        autoOrganize: result.data || null,
+        autoOrganizeStatus: result.ok && result.data?.ok !== false ? "ready" : "error"
+      };
+      if (!options.silent && result.ok && result.data?.ok !== false) {
+        showToast(result.data?.changed ? "已整理新增图片" : "没有新增图片需要整理");
+      }
+      return result;
+    } catch (error) {
+      appState.aiAlbum = {
+        ...appState.aiAlbum,
+        autoOrganizeStatus: "error",
+        autoOrganize: { ok: false, error: error.message || String(error) }
+      };
+      if (!options.silent) showToast(`自动整理失败：${error.message || error}`);
+      return null;
+    } finally {
+      if (!options.noRender && appState.page === "aiAlbum") renderShell();
+    }
+  }
+
   async function loadMediaData() {
+    if (appState.authToken) await runAiAlbumAutoOrganize({ silent: true, noRender: true });
     await loadProtectedSummary("media", "/api/media/summary");
+    if (!appState.authToken || !appState.media.summary) return;
+    let photoItems = Array.isArray(appState.media.summary.photos) ? appState.media.summary.photos : [];
+    try {
+      const photos = await fetchJson("/api/media/photos?limit=500");
+      if (photos.ok && photos.data?.ok && Array.isArray(photos.data.photos)) {
+        photoItems = photos.data.photos;
+        appState.media = {
+          ...appState.media,
+          summary: { ...appState.media.summary, photos: photoItems }
+        };
+      }
+    } catch (_error) {
+      // Keep the summary payload visible if the full photo endpoint is degraded.
+    }
+    const settledValue = (result) => (result.status === "fulfilled" ? result.value : { ok: false, status: 0, data: null });
+    try {
+      const [statusResult, facetsResult, assetsResult, categoriesResult, organizeStatusResult] = await Promise.allSettled([
+        fetchJson("/api/ai-space/status"),
+        fetchJson("/api/ai-space/facets"),
+        fetchJson("/api/ai-space/assets?limit=10000"),
+        fetchJson("/api/smart-classification/categories"),
+        fetchJson("/api/ai-album/organize-status?max_files=10000")
+      ]);
+      const status = settledValue(statusResult);
+      const facets = settledValue(facetsResult);
+      const assets = settledValue(assetsResult);
+      const categories = settledValue(categoriesResult);
+      const organizeStatus = settledValue(organizeStatusResult);
+      const previousAssets = Array.isArray(appState.aiAlbum.assets) ? appState.aiAlbum.assets : [];
+      const previousCategories = Array.isArray(appState.aiAlbum.smartCategories) ? appState.aiAlbum.smartCategories : [];
+      appState.aiAlbum = {
+        ...appState.aiAlbum,
+        status: status.ok && status.data?.ok !== false ? "ready" : "error",
+        error: status.ok ? "" : status.data?.error || `ai_album_failed:${status.status}`,
+        statusPayload: status.data || null,
+        facets: facets.data || null,
+        assets: Array.isArray(assets.data?.assets) ? assets.data.assets : previousAssets,
+        mediaPhotos: photoItems,
+        smartCategories: Array.isArray(categories.data?.categories) ? categories.data.categories : previousCategories,
+        organizeStatus: organizeStatus.ok && organizeStatus.data?.ok !== false ? organizeStatus.data : appState.aiAlbum.organizeStatus
+      };
+    } catch (_error) {
+      appState.aiAlbum = {
+        ...appState.aiAlbum,
+        mediaPhotos: photoItems
+      };
+    }
+    if (appState.page === "media") renderShell();
+  }
+
+  async function selectMediaAlbum(albumName) {
+    const name = String(albumName || "").trim();
+    if (!name) return;
+    appState.media = {
+      ...appState.media,
+      selectedAlbumName: name,
+      selectedAlbumStatus: "loading",
+      selectedAlbumPhotos: [],
+      selectedAlbumError: ""
+    };
+    if (appState.page === "media") renderShell();
+    try {
+      const result = await fetchJson(`/api/media/album?name=${encodeURIComponent(name)}`);
+      if (result.ok && result.data?.ok) {
+        appState.media = {
+          ...appState.media,
+          selectedAlbumName: name,
+          selectedAlbumStatus: "ready",
+          selectedAlbumPhotos: Array.isArray(result.data.photos) ? result.data.photos : [],
+          selectedAlbumError: ""
+        };
+      } else {
+        appState.media = {
+          ...appState.media,
+          selectedAlbumName: name,
+          selectedAlbumStatus: "error",
+          selectedAlbumPhotos: [],
+          selectedAlbumError: result.data?.error || `album_failed:${result.status}`
+        };
+      }
+    } catch (error) {
+      appState.media = {
+        ...appState.media,
+        selectedAlbumName: name,
+        selectedAlbumStatus: "error",
+        selectedAlbumPhotos: [],
+        selectedAlbumError: error.message || String(error)
+      };
+    }
+    if (appState.page === "media") renderShell();
+  }
+
+  function clearMediaAlbumSelection() {
+    appState.media = {
+      ...appState.media,
+      selectedAlbumName: "",
+      selectedAlbumStatus: "idle",
+      selectedAlbumPhotos: [],
+      selectedAlbumError: ""
+    };
+    renderShell();
+  }
+
+  function scheduleAiAlbumSelectAsset(assetId) {
+    window.clearTimeout(aiAlbumSelectTimer);
+    aiAlbumSelectTimer = window.setTimeout(() => {
+      appState.aiAlbum = { ...appState.aiAlbum, selectedAssetId: assetId || "" };
+      renderShell();
+    }, 180);
+  }
+
+  function aiAlbumNormalizeSearchResult(item) {
+    const raw = item?.asset || item?.item || item?.media || item || {};
+    const id = String(raw.asset_id || item?.asset_id || raw.id || item?.id || "");
+    const base = id ? (appState.aiAlbum.assets || []).find((asset) => aiAlbumAssetId(asset) === id) || {} : {};
+    return {
+      ...base,
+      ...raw,
+      asset_id: id || raw.asset_id || base.asset_id,
+      match_reason: item?.match_reason || item?.reason || item?.summary || raw.match_reason || raw.summary_redacted || "",
+      search_score: item?.score ?? item?.match_score ?? raw.score ?? raw.match_score
+    };
+  }
+
+  function aiAlbumIsIdentityQuery(query) {
+    return /(这个人是谁|是谁|认出|身份|名字|姓名|人脸识别|识别这个人|face\s*id|identity|who\s+is)/i.test(String(query || ""));
+  }
+
+  function aiAlbumLooksPersonQuery(query) {
+    return /(人|人物|人像|上衣|衣服|服装|person|people|shirt|clothes)/i.test(String(query || ""));
+  }
+
+  function aiAlbumPayloadResults(payload) {
+    const candidates = [
+      payload?.results,
+      payload?.assets,
+      payload?.items,
+      payload?.matches,
+      payload?.search?.results
+    ];
+    for (const current of candidates) {
+      if (Array.isArray(current)) return current;
+    }
+    return [];
+  }
+
+  async function loadAiAlbumData() {
+    if (!appState.authToken) {
+      appState.aiAlbum = { ...appState.aiAlbum, status: "auth", error: "" };
+      if (appState.page === "aiAlbum") renderShell();
+      return;
+    }
+    appState.aiAlbum = { ...appState.aiAlbum, status: "loading", error: "" };
+    if (appState.page === "aiAlbum") renderShell();
+    try {
+      await runAiAlbumAutoOrganize({ silent: true, noRender: true });
+      const [status, facets, assets, photos, categories, autoStatus] = await Promise.all([
+        fetchJson("/api/ai-space/status"),
+        fetchJson("/api/ai-space/facets"),
+        fetchJson("/api/ai-space/assets?limit=500"),
+        fetchJson("/api/media/photos?limit=500"),
+        fetchJson("/api/smart-classification/categories"),
+        fetchJson("/api/auto-organize/status")
+      ]);
+      const assetItems = Array.isArray(assets.data?.assets) ? assets.data.assets : [];
+      const photoItems = Array.isArray(photos.data?.photos) ? photos.data.photos : [];
+      const categoryItems = Array.isArray(categories.data?.categories) ? categories.data.categories : [];
+      const firstId = assetItems[0] ? aiAlbumAssetId(assetItems[0]) : "";
+      const selectedAssetId = appState.aiAlbum.selectedAssetId && assetItems.some((asset) => aiAlbumAssetId(asset) === appState.aiAlbum.selectedAssetId)
+        ? appState.aiAlbum.selectedAssetId
+        : firstId;
+      const hardError = !status.ok || status.data?.ok === false || !assets.ok || assets.data?.ok === false;
+      appState.aiAlbum = {
+        ...appState.aiAlbum,
+        status: hardError ? "error" : assetItems.length ? "ready" : "ready-empty",
+        error: hardError ? (status.data?.error || assets.data?.error || `ai_album_failed:${status.status || assets.status}`) : "",
+        statusPayload: status.data || null,
+        facets: facets.data || null,
+        assets: assetItems,
+        mediaPhotos: photoItems,
+        smartCategories: categoryItems,
+        autoStatus: autoStatus.data || null,
+        selectedAssetId,
+        searchResults: null,
+        searchStatus: "idle",
+        searchError: "",
+        blockedQuery: null
+      };
+    } catch (error) {
+      appState.aiAlbum = { ...appState.aiAlbum, status: "error", error: error.message || String(error) };
+    }
+    if (appState.page === "aiAlbum") renderShell();
+  }
+
+  function setMediaUploadState(status, error = "") {
+    appState.media = { ...appState.media, uploadStatus: status, uploadError: error };
+    if (appState.page === "media" || appState.page === "aiAlbum") renderShell();
+  }
+
+  function chooseMediaUploadFile() {
+    if (!appState.authToken) {
+      showToast("请先连接 NAS 文件接口");
+      return;
+    }
+    const input = document.getElementById("mediaUploadInput");
+    if (!input) {
+      showToast("上传入口未就绪");
+      return;
+    }
+    input.value = "";
+    input.click();
+  }
+
+  function mediaUploadLooksImage(file) {
+    const name = String(file?.name || "").toLowerCase();
+    return Boolean(file?.type?.startsWith("image/")) || /\.(jpg|jpeg|png|webp|bmp|gif|tif|tiff)$/.test(name);
+  }
+
+  function fileToBase64(file) {
+    return new Promise((resolve, reject) => {
+      const reader = new FileReader();
+      reader.onerror = () => reject(reader.error || new Error("file_read_failed"));
+      reader.onload = () => {
+        const value = String(reader.result || "");
+        resolve(value.includes(",") ? value.split(",", 2)[1] : value);
+      };
+      reader.readAsDataURL(file);
+    });
+  }
+
+  async function rebuildAiAlbumIndex(options = {}) {
+    if (!appState.authToken) {
+      showToast("请先连接 NAS 文件接口");
+      return null;
+    }
+    if (!options.silent) showToast("正在刷新相册索引");
+    const result = await fetchJson("/api/ai-album/rebuild", {
+      method: "POST",
+      body: {
+        max_files: 5000,
+        yolo_max_files: 16,
+        include_video: false,
+        run_yolo: false
+      }
+    });
+    if (!result.ok || result.data?.ok === false) {
+      const message = result.data?.error || (result.data?.required_failed || []).join(", ") || `ai_album_rebuild_failed:${result.status}`;
+      if (!options.silent) showToast(`索引刷新失败：${message}`);
+      return result;
+    }
+    await loadMediaData();
+    if (!options.silent) showToast("相册索引已更新");
+    return result;
+  }
+
+  async function runMediaOrganizeNow() {
+    if (!appState.authToken) {
+      showToast("请先连接 NAS 文件接口");
+      return;
+    }
+    appState.aiAlbum = { ...appState.aiAlbum, organizeRunStatus: "loading", organizeError: "" };
+    if (appState.page === "media") renderShell();
+    try {
+      const result = await fetchJson("/api/ai-album/organize-now", {
+        method: "POST",
+        body: { max_files: 10000 }
+      });
+      if (!result.ok || result.data?.ok === false) {
+        const message = result.data?.error || `organize_failed:${result.status}`;
+        appState.aiAlbum = { ...appState.aiAlbum, organizeRunStatus: "error", organizeError: message };
+        showToast(`整理失败：${message}`);
+        if (appState.page === "media") renderShell();
+        return;
+      }
+      appState.aiAlbum = {
+        ...appState.aiAlbum,
+        organizeRunStatus: "ready",
+        organizeLastRun: result.data || null,
+        organizeStatus: result.data?.status || appState.aiAlbum.organizeStatus,
+        organizeError: ""
+      };
+      const pending = Number(result.data?.status?.pending_count ?? 0);
+      showToast(`整理完成：待整理 ${fmtCount(pending)} 张`);
+      await loadMediaData();
+    } catch (error) {
+      const message = error.message || String(error);
+      appState.aiAlbum = { ...appState.aiAlbum, organizeRunStatus: "error", organizeError: message };
+      showToast(`整理失败：${message}`);
+      if (appState.page === "media") renderShell();
+    }
+  }
+
+  async function uploadMediaImageFile(file) {
+    if (!file) return;
+    if (!mediaUploadLooksImage(file)) {
+      showToast("只支持上传图片文件");
+      return;
+    }
+    if (file.size > MEDIA_UPLOAD_MAX_BYTES) {
+      showToast(`图片超过 ${formatBytes(MEDIA_UPLOAD_MAX_BYTES)}，请先压缩后上传`);
+      return;
+    }
+    setMediaUploadState("loading");
+    showToast("正在上传图片");
+    try {
+      const contentBase64 = await fileToBase64(file);
+      const result = await fetchJson("/api/media/upload", {
+        method: "POST",
+        body: {
+          filename: file.name || `uploaded_${Date.now()}.jpg`,
+          content_base64: contentBase64,
+          target_dir: "Uploads",
+          auto_process: false
+        }
+      });
+      if (!result.ok || result.data?.ok === false) {
+        throw new Error(result.data?.error || `upload_failed:${result.status}`);
+      }
+      await loadMediaData();
+      setMediaUploadState("ready");
+      showToast("图片已上传到相册");
+    } catch (error) {
+      const message = error.message || String(error);
+      setMediaUploadState("error", message);
+      showToast(`上传失败：${message}`);
+    }
+  }
+
+  async function runAiAlbumSearch(queryOverride = "") {
+    const query = String(queryOverride || document.getElementById("aiAlbumSearch")?.value || appState.aiAlbum.query || "").trim();
+    appState.aiAlbum = { ...appState.aiAlbum, query };
+    if (!query) {
+      appState.aiAlbum = { ...appState.aiAlbum, searchStatus: "idle", searchResults: null, searchError: "", blockedQuery: null };
+      renderShell();
+      return;
+    }
+    if (aiAlbumIsIdentityQuery(query)) {
+      appState.aiAlbum = {
+        ...appState.aiAlbum,
+        searchStatus: "blocked",
+        searchResults: [],
+        searchError: "",
+        blockedQuery: {
+          query,
+          reason: "identity_recognition_blocked",
+          face_identification_enabled: false,
+          biometric_recognition_enabled: false,
+          sensitive_attribute_inference_enabled: false
+        }
+      };
+      renderShell();
+      showToast("身份识别类查询已在本地拦截");
+      return;
+    }
+    if (!appState.authToken) {
+      appState.aiAlbum = { ...appState.aiAlbum, status: "auth", searchStatus: "idle" };
+      renderShell();
+      return;
+    }
+    appState.aiAlbum = { ...appState.aiAlbum, searchStatus: "loading", searchResults: [], searchError: "", blockedQuery: null };
+    renderShell();
+    try {
+      const primaryPath = aiAlbumLooksPersonQuery(query) ? "/api/person-attribute/search" : "/api/ai-space/search";
+      const primary = await fetchJson(primaryPath, { method: "POST", body: { query, top_k: 40 } });
+      let results = primary.ok && primary.data?.ok !== false ? aiAlbumPayloadResults(primary.data).map(aiAlbumNormalizeSearchResult) : [];
+      let secondary = null;
+      if (!results.length && primaryPath !== "/api/multimodal-search/query") {
+        const fallbackPath = primaryPath === "/api/person-attribute/search" ? "/api/ai-space/search" : "/api/multimodal-search/query";
+        secondary = await fetchJson(fallbackPath, { method: "POST", body: { query, top_k: 40 } });
+        if (secondary.ok && secondary.data?.ok !== false) {
+          results = aiAlbumPayloadResults(secondary.data).map(aiAlbumNormalizeSearchResult);
+        }
+      }
+      const ok = primary.ok && primary.data?.ok !== false;
+      appState.aiAlbum = {
+        ...appState.aiAlbum,
+        searchStatus: results.length ? "ready" : ok ? "ready-empty" : "error",
+        searchResults: results,
+        searchError: ok ? "" : primary.data?.error || `search_failed:${primary.status}`,
+        searchTrace: { primary: primary.data || null, secondary: secondary?.data || null }
+      };
+    } catch (error) {
+      appState.aiAlbum = { ...appState.aiAlbum, searchStatus: "error", searchResults: [], searchError: error.message || String(error) };
+    }
+    renderShell();
+  }
+
+  function showAiAlbumPlanWorkflow() {
+    const result = appState.aiAlbum.planResult;
+    if (!result) {
+      showWorkflow("相册整理计划", `<div class="empty-state compact">${svg("table")} 还没有生成整理计划。</div>`, "neutral");
+      return;
+    }
+    showWorkflow("相册整理计划", renderAiAlbumPlanWorkflow(result), result.ok === false ? "danger" : "neutral");
+  }
+
+  function renderAiAlbumPlanWorkflow(result) {
+    const items = Array.isArray(result.items) ? result.items : [];
+    const dryRun = result.dry_run_result || null;
+    const approve = result.approve_result || null;
+    const execute = result.execute_result || null;
+    const rollback = result.rollback_result || null;
+    const boundaryRows = [
+      ["计划状态", result.ok === false ? "未生成" : "已生成"],
+      ["候选项", result.item_count ?? items.length ?? 0],
+      ["阻塞原因", result.blocker || result.error || "—"],
+      ["审批短语", result.approval_phrase || "—"],
+      ["删除允许", result.delete_allowed ? "需复查" : "关闭"],
+      ["覆盖允许", result.overwrite_allowed ? "需复查" : "关闭"],
+      ["模型工具权限", result.qwen_execution_authority ? "需复查" : "关闭"],
+      ["原始路径返回", result.raw_path_returned ? "需复查" : "关闭"]
+    ];
+    return `
+      <div class="ai-album-workflow">
+        ${renderKeyValueRows(boundaryRows)}
+        <div class="detail-section">
+          <strong>计划条目</strong>
+          ${items.length ? `<div class="product-card-list">${items.slice(0, 8).map((item, index) => renderProductCard(
+            item.suggested_filename_zh || item.display_name_zh || `整理项 ${index + 1}`,
+            item.reason || item.category_name || item.resolution_source || "受控移动与命名计划",
+            [item.ai_driven ? "AI 分类" : "规则计划", item.fallback_used ? "需复查" : "本地索引", "不删除不覆盖"],
+            "media"
+          )).join("")}</div>` : `<div class="empty-state compact">${escapeHtml(result.blocker || "当前没有可整理项。")}</div>`}
+        </div>
+        <div class="ai-album-workflow-actions">
+          ${button("干跑检查", { variant: "secondary", icon: "table", action: "aiAlbumPlanDryRun", disabled: !result.plan_id })}
+          ${button("审批计划", { variant: "secondary", icon: "check", action: "aiAlbumPlanApprove", disabled: !result.plan_id || !result.approval_phrase })}
+          ${button("执行计划", { icon: "check", action: "aiAlbumPlanExecute", disabled: !result.plan_id || !result.approval_token })}
+          ${button("回滚", { variant: "secondary", icon: "backup", action: "aiAlbumPlanRollback", disabled: !result.plan_id })}
+        </div>
+        ${dryRun ? `<div class="soft-note">${svg("table")} 干跑：${escapeHtml(dryRun.ok ? "通过" : dryRun.error || "未通过")}</div>` : ""}
+        ${approve ? `<div class="soft-note">${svg("check")} 审批：${escapeHtml(approve.ok ? "已签发审批令牌" : approve.error || "未通过")}</div>` : ""}
+        ${execute ? `<div class="soft-note ${execute.ok ? "" : "error-note"}">${svg("check")} 执行：${escapeHtml(execute.ok ? "已完成受控移动/命名" : execute.error || "未完成")}</div>` : ""}
+        ${rollback ? `<div class="soft-note">${svg("backup")} 回滚：${escapeHtml(rollback.ok ? "已验证" : rollback.error || "未完成")}</div>` : ""}
+      </div>
+    `;
+  }
+
+  async function createAiAlbumOrganizePlan() {
+    if (!appState.authToken) {
+      appState.aiAlbum = { ...appState.aiAlbum, status: "auth" };
+      renderShell();
+      return;
+    }
+    appState.aiAlbum = { ...appState.aiAlbum, planStatus: "loading", planError: "", planResult: null };
+    renderShell();
+    try {
+      const visibleCount = aiAlbumVisibleAssets().length || 1;
+      const result = await fetchJson("/api/auto-organize/plan", {
+        method: "POST",
+        body: {
+          mode: "move_and_rename",
+          source_root: "Uploads",
+          limit: Math.min(3, Math.max(1, visibleCount))
+        }
+      });
+      if (result.ok && result.data) {
+        appState.aiAlbum = { ...appState.aiAlbum, planStatus: result.data.ok === false ? "error" : "ready", planResult: result.data, planError: result.data.ok === false ? (result.data.blocker || result.data.error || "plan_blocked") : "" };
+        showAiAlbumPlanWorkflow();
+      } else {
+        appState.aiAlbum = { ...appState.aiAlbum, planStatus: "error", planError: result.data?.error || `plan_failed:${result.status}`, planResult: result.data || null };
+      }
+    } catch (error) {
+      appState.aiAlbum = { ...appState.aiAlbum, planStatus: "error", planError: error.message || String(error), planResult: null };
+    }
+    renderShell();
+  }
+
+  async function runAiAlbumPlanStep(step) {
+    const current = appState.aiAlbum.planResult || {};
+    const planId = current.plan_id;
+    if (!planId) {
+      showToast("请先生成整理计划");
+      return;
+    }
+    const pathMap = {
+      dryRun: "/api/auto-organize/dry-run",
+      approve: "/api/auto-organize/approve",
+      execute: "/api/auto-organize/execute",
+      rollback: "/api/auto-organize/rollback"
+    };
+    const payloadMap = {
+      dryRun: { plan_id: planId },
+      approve: { plan_id: planId, approval_phrase: current.approval_phrase, approved_by: appState.authUser?.username || "ai_album_ui" },
+      execute: { plan_id: planId, approval_token: current.approval_token },
+      rollback: { plan_id: planId }
+    };
+    const path = pathMap[step];
+    if (!path) return;
+    try {
+      const result = await fetchJson(path, { method: "POST", body: payloadMap[step] });
+      const data = result.data || { ok: false, error: `step_failed:${result.status}` };
+      const next = { ...current, [`${step === "dryRun" ? "dry_run" : step}_result`]: data };
+      if (step === "approve" && data.approval_token) next.approval_token = data.approval_token;
+      appState.aiAlbum = { ...appState.aiAlbum, planResult: next, planStatus: data.ok === false ? "error" : "ready", planError: data.ok === false ? (data.error || `${step}_failed`) : "" };
+      showAiAlbumPlanWorkflow();
+    } catch (error) {
+      appState.aiAlbum = { ...appState.aiAlbum, planStatus: "error", planError: error.message || String(error) };
+      showAiAlbumPlanWorkflow();
+    }
+    renderShell();
   }
 
   async function loadBackupData() {
@@ -3003,6 +4326,149 @@
     }
   }
 
+  async function openDocumentCard(card) {
+    const openUrl = card?.dataset?.documentOpenUrl || "";
+    if (!openUrl) return;
+    const title = card.dataset.documentTitle || "文档";
+    const filename = card.dataset.documentFilename || "document";
+    try {
+      const response = await fetch(openUrl, {
+        headers: appState.authToken ? { Authorization: `Bearer ${appState.authToken}` } : {}
+      });
+      if (!response.ok) throw new Error(`document_${response.status}`);
+      const blob = await response.blob();
+      const objectUrl = URL.createObjectURL(blob);
+      const anchor = document.createElement("a");
+      anchor.href = objectUrl;
+      anchor.target = "_blank";
+      anchor.rel = "noopener";
+      anchor.download = filename;
+      document.body.appendChild(anchor);
+      anchor.click();
+      anchor.remove();
+      window.setTimeout(() => URL.revokeObjectURL(objectUrl), 60000);
+      showToast("文档已打开");
+    } catch (error) {
+      showToast(`文档打开失败：${error.message || error}`);
+    }
+  }
+
+  function storageTrashPayloadFromButton(button) {
+    const dataset = button?.dataset || {};
+    return {
+      kind: dataset.trashKind || "file",
+      title: dataset.trashTitle || "file",
+      relativePath: dataset.trashRelativePath || "",
+      pathHash: dataset.trashPathHash || "",
+      previewUrl: dataset.trashPreviewUrl || ""
+    };
+  }
+
+  function renderStorageTrashConfirm(payload) {
+    const status = appState.trash.status || "idle";
+    const busy = status === "loading";
+    const error = appState.trash.error || "";
+    const typeLabel = payload.kind === "image" ? "图片" : payload.kind === "document" ? "文档" : "文件";
+    return `
+      <div class="trash-confirm">
+        <div class="soft-note">
+          <strong>${svg("trash")} 移入回收站</strong>
+          <p>将这个${escapeHtml(typeLabel)}移入本地 NAS 回收站。它不会立即永久删除，30 天后由服务自动清理。</p>
+        </div>
+        <div class="trash-confirm-target">
+          <span>${escapeHtml(typeLabel)}</span>
+          <strong>${escapeHtml(payload.title || "未命名文件")}</strong>
+        </div>
+        ${error ? `<div class="soft-note error-note"><strong>操作失败</strong><p>${escapeHtml(error)}</p></div>` : ""}
+        <div class="actions">
+          <button class="btn secondary" type="button" data-action="storageTrashCancel" ${busy ? "disabled" : ""}>取消</button>
+          <button class="btn trash-confirm-button" type="button" data-action="storageTrashConfirm" ${busy ? "disabled" : ""}>${busy ? "正在移入回收站" : "移入回收站"}</button>
+        </div>
+      </div>
+    `;
+  }
+
+  function openStorageTrashPrompt(button) {
+    const payload = storageTrashPayloadFromButton(button);
+    if (!payload.relativePath && !payload.pathHash) {
+      showToast("缺少可删除文件标识");
+      return;
+    }
+    appState.trash = { status: "idle", pending: payload, error: "" };
+    showWorkflow("移入回收站", renderStorageTrashConfirm(payload), "neutral");
+  }
+
+  function clearPreviewCache(previewUrl) {
+    if (!previewUrl) return;
+    const objectUrl = previewObjectUrlCache.get(previewUrl);
+    if (objectUrl) URL.revokeObjectURL(objectUrl);
+    previewObjectUrlCache.delete(previewUrl);
+    previewObjectPromiseCache.delete(previewUrl);
+  }
+
+  function removeTrashedAssistantReferences(payload) {
+    const assistant = appState.assistant || {};
+    const copilot = assistant.copilot || null;
+    if (!copilot || typeof copilot !== "object") return;
+    const relativePath = payload.relativePath || "";
+    const pathHash = payload.pathHash || "";
+    const shouldKeep = (item) => {
+      if (!item || typeof item !== "object") return true;
+      if (relativePath && String(item.relative_path || item.path || "") === relativePath) return false;
+      if (pathHash && String(item.path_hash || "") === pathHash) return false;
+      return true;
+    };
+    const nextCopilot = { ...copilot };
+    if (Array.isArray(copilot.evidence)) {
+      nextCopilot.evidence = copilot.evidence.filter(shouldKeep);
+      nextCopilot.evidence_count = nextCopilot.evidence.length;
+    }
+    if (copilot.search && Array.isArray(copilot.search.results)) {
+      const nextResults = copilot.search.results.filter(shouldKeep);
+      nextCopilot.search = { ...copilot.search, results: nextResults, result_count: nextResults.length };
+    }
+    appState.assistant = { ...assistant, copilot: nextCopilot };
+  }
+
+  async function confirmStorageTrash() {
+    const pending = appState.trash.pending || null;
+    if (!pending || (!pending.relativePath && !pending.pathHash)) {
+      closeWorkflow();
+      showToast("没有可移入回收站的目标");
+      return;
+    }
+    appState.trash = { ...appState.trash, status: "loading", error: "" };
+    showWorkflow("移入回收站", renderStorageTrashConfirm(pending), "neutral");
+    try {
+      const body = { source: "web-ui" };
+      if (pending.relativePath) body.relative_path = pending.relativePath;
+      if (pending.pathHash) body.path_hash = pending.pathHash;
+      const result = await fetchJson("/api/storage/trash", { method: "POST", body });
+      if (!result.ok || result.data?.ok === false) {
+        throw new Error(result.data?.error || `trash_failed:${result.status}`);
+      }
+      clearPreviewCache(pending.previewUrl);
+      removeTrashedAssistantReferences(pending);
+      if (pending.previewUrl && appState.imageViewer.previewUrl === pending.previewUrl) {
+        appState.imageViewer = { open: false, title: "", meta: "", match: "", previewUrl: "", objectUrl: "", status: "idle", error: "", requestId: "", zoom: 1, rotation: 0, offsetX: 0, offsetY: 0 };
+      }
+      appState.trash = { status: "ready", pending: null, error: "" };
+      closeWorkflow();
+      showToast("已移入回收站，30 天后自动清理");
+      if (appState.page === "media") {
+        await loadMediaData();
+      } else if (appState.page === "aiAlbum") {
+        await loadAiAlbumData();
+      } else {
+        renderShell();
+      }
+    } catch (error) {
+      const message = error.message || String(error);
+      appState.trash = { ...appState.trash, status: "error", error: message };
+      showWorkflow("移入回收站", renderStorageTrashConfirm(pending), "danger");
+    }
+  }
+
   function showStorageOperation(type) {
     appState.storageOperation = { type, status: "idle", result: null, error: "" };
     renderShell();
@@ -3256,6 +4722,14 @@
       closeWorkflow();
     } else if (action === "closeImageViewer") {
       closeImageViewer();
+    } else if (action === "imageZoomIn") {
+      zoomImageViewer(1.2);
+    } else if (action === "imageZoomOut") {
+      zoomImageViewer(1 / 1.2);
+    } else if (action === "imageFit") {
+      resetImageViewerTransform();
+    } else if (action === "imageRotate") {
+      rotateImageViewer();
     } else if (action === "openNotifications") {
       openNotifications();
     } else if (action === "openHelp") {
@@ -3308,6 +4782,12 @@
       createStorageFolder();
     } else if (action === "storageUploadFile") {
       uploadStorageFile();
+    } else if (action === "storageTrashPrompt") {
+      openStorageTrashPrompt(actionButton);
+    } else if (action === "storageTrashConfirm") {
+      confirmStorageTrash();
+    } else if (action === "storageTrashCancel") {
+      closeWorkflow();
     } else if (action === "openSelectedFolder") {
       const selected = selectedStorageEntry();
       if (selected?.is_dir) loadStoragePath(selected.relative_path || "");
@@ -3373,12 +4853,47 @@
       showWorkflow("审计分页", renderKeyValueRows([["当前页大小", "10 条/页"], ["数据来源", appState.audit.operations.length ? "真实操作日志" : "暂无审计记录"], ["说明", "当前实机页以本地最近 50 条操作为上限。"]]));
     } else if (action === "mediaRefresh") {
       loadMediaData();
+    } else if (action === "mediaOrganizeNow") {
+      runMediaOrganizeNow();
     } else if (action === "mediaIndex") {
-      fetchJson("/api/media/index", { method: "POST", body: { path: "Photos" } }).then(() => loadMediaData());
-      showToast("媒体索引任务已提交");
+      loadMediaData();
+      showToast("已刷新现有媒体索引");
+    } else if (action === "mediaUploadChoose") {
+      chooseMediaUploadFile();
+    } else if (action === "mediaSelectAlbum") {
+      selectMediaAlbum(actionButton.dataset.albumName || "");
+    } else if (action === "mediaClearAlbum") {
+      clearMediaAlbumSelection();
     } else if (action === "mediaCreateAlbum") {
       fetchJson("/api/media/create-album", { method: "POST", body: { name: `本地相册-${Date.now()}`, description: "网页端创建的本地相册记录" } }).then(() => loadMediaData());
       showToast("相册创建请求已提交");
+    } else if (action === "aiAlbumRefresh") {
+      loadAiAlbumData();
+    } else if (action === "aiAlbumSearch") {
+      runAiAlbumSearch();
+    } else if (action === "aiAlbumPreset") {
+      appState.aiAlbum = { ...appState.aiAlbum, query: actionButton.dataset.query || "" };
+      runAiAlbumSearch(appState.aiAlbum.query);
+    } else if (action === "aiAlbumTab") {
+      appState.aiAlbum = { ...appState.aiAlbum, activeTab: actionButton.dataset.tab || "all" };
+      renderShell();
+    } else if (action === "aiAlbumCategory") {
+      appState.aiAlbum = { ...appState.aiAlbum, selectedCategory: actionButton.dataset.category || "" };
+      renderShell();
+    } else if (action === "aiAlbumSelectAsset") {
+      scheduleAiAlbumSelectAsset(actionButton.dataset.aiAlbumAssetId || "");
+    } else if (action === "aiAlbumPlan") {
+      createAiAlbumOrganizePlan();
+    } else if (action === "aiAlbumShowPlan") {
+      showAiAlbumPlanWorkflow();
+    } else if (action === "aiAlbumPlanDryRun") {
+      runAiAlbumPlanStep("dryRun");
+    } else if (action === "aiAlbumPlanApprove") {
+      runAiAlbumPlanStep("approve");
+    } else if (action === "aiAlbumPlanExecute") {
+      runAiAlbumPlanStep("execute");
+    } else if (action === "aiAlbumPlanRollback") {
+      runAiAlbumPlanStep("rollback");
     } else if (action === "backupRefresh") {
       loadBackupData();
     } else if (action === "backupCreate") {
@@ -3393,11 +4908,67 @@
   });
 
   app.addEventListener("dblclick", (event) => {
+    if (event.target.closest("[data-action='storageTrashPrompt'], .trash-button")) return;
+    const documentCard = event.target.closest("[data-document-open-url]");
+    if (documentCard) {
+      event.preventDefault();
+      openDocumentCard(documentCard);
+      return;
+    }
     const imageCard = event.target.closest("[data-image-preview-url]");
     if (!imageCard) return;
+    window.clearTimeout(aiAlbumSelectTimer);
     event.preventDefault();
     openSearchImageViewer(imageCard);
   });
+
+  app.addEventListener("change", (event) => {
+    if (event.target && event.target.id === "mediaUploadInput") {
+      const file = event.target.files && event.target.files[0];
+      event.target.value = "";
+      uploadMediaImageFile(file);
+    }
+  });
+
+  app.addEventListener("pointerdown", (event) => {
+    const body = event.target.closest("[data-image-viewer-body]");
+    if (!body || !appState.imageViewer.open || !appState.imageViewer.objectUrl || event.target.closest("button")) return;
+    event.preventDefault();
+    imageViewerDrag = {
+      pointerId: event.pointerId,
+      startX: event.clientX,
+      startY: event.clientY,
+      offsetX: Number(appState.imageViewer.offsetX || 0),
+      offsetY: Number(appState.imageViewer.offsetY || 0)
+    };
+    body.classList.add("is-dragging");
+    body.setPointerCapture?.(event.pointerId);
+  });
+
+  app.addEventListener("pointermove", (event) => {
+    if (!imageViewerDrag || imageViewerDrag.pointerId !== event.pointerId || !appState.imageViewer.open) return;
+    const offsetX = imageViewerDrag.offsetX + event.clientX - imageViewerDrag.startX;
+    const offsetY = imageViewerDrag.offsetY + event.clientY - imageViewerDrag.startY;
+    appState.imageViewer = { ...appState.imageViewer, offsetX, offsetY };
+    const img = document.querySelector(".image-viewer-img");
+    if (img) img.style.transform = imageViewerTransform(appState.imageViewer);
+  });
+
+  function finishImageViewerDrag(event) {
+    if (!imageViewerDrag || (event?.pointerId != null && imageViewerDrag.pointerId !== event.pointerId)) return;
+    document.querySelector("[data-image-viewer-body]")?.classList.remove("is-dragging");
+    imageViewerDrag = null;
+  }
+
+  app.addEventListener("pointerup", finishImageViewerDrag);
+  app.addEventListener("pointercancel", finishImageViewerDrag);
+
+  app.addEventListener("wheel", (event) => {
+    const body = event.target.closest("[data-image-viewer-body]");
+    if (!body || !appState.imageViewer.open || !appState.imageViewer.objectUrl) return;
+    event.preventDefault();
+    zoomImageViewer(event.deltaY < 0 ? 1.12 : 1 / 1.12);
+  }, { passive: false });
 
   app.addEventListener("input", (event) => {
     if (event.target && event.target.id === "assistantPrompt") {
@@ -3422,12 +4993,25 @@
     if (event.target && event.target.id === "auditSearch") {
       appState.audit = { ...appState.audit, query: event.target.value };
     }
+    if (event.target && event.target.id === "aiAlbumSearch") {
+      appState.aiAlbum = { ...appState.aiAlbum, query: event.target.value };
+    }
   });
 
   app.addEventListener("keydown", (event) => {
+    if ((event.key === "Enter" || event.key === " ") && event.target?.closest?.("[data-action='storageTrashPrompt'], .trash-button")) return;
+    if ((event.key === "Enter" || event.key === " ") && event.target?.closest?.("[data-document-open-url]")) {
+      event.preventDefault();
+      openDocumentCard(event.target.closest("[data-document-open-url]"));
+      return;
+    }
     if ((event.key === "Enter" || event.key === " ") && event.target?.closest?.("[data-image-preview-url]")) {
       event.preventDefault();
       openSearchImageViewer(event.target.closest("[data-image-preview-url]"));
+    }
+    if (event.key === "Enter" && event.target && event.target.id === "aiAlbumSearch") {
+      event.preventDefault();
+      runAiAlbumSearch();
     }
   });
 
@@ -3435,6 +5019,15 @@
     if (event.key === "Escape" && appState.imageViewer.open) {
       event.preventDefault();
       closeImageViewer();
+    } else if ((event.key === "+" || event.key === "=") && appState.imageViewer.open) {
+      event.preventDefault();
+      zoomImageViewer(1.2);
+    } else if ((event.key === "-" || event.key === "_") && appState.imageViewer.open) {
+      event.preventDefault();
+      zoomImageViewer(1 / 1.2);
+    } else if (event.key === "0" && appState.imageViewer.open) {
+      event.preventDefault();
+      resetImageViewerTransform();
     }
   });
 

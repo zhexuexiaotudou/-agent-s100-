@@ -62,6 +62,7 @@
 - 实战记录见 `docs/04_openclaw_windows_ics_deploy.md`。
 - AI-NAS 十个 goal 已在 Digua 工作区闭环，最新整理见 `docs/ai_nas_progress_2026-06-24.md`。
 - 当前最重要的新增缺口不是普通文件搜索，而是细粒度图像语义和 embedding：例如“找穿白色上衣的照片”需要 region-level clothing attributes，而不能只用整图白色程度。
+- 2026-07-07 已把“找有人的图片”打通到真实 S100P YOLO 对象检测：当前 16 张真实相册候选图重建得到 27 个检测框，其中 `person=17`；AI 助手 `/api/copilot/chat` 返回 `local_yolo_search`、8 张真实 NAS 图片卡片、预览 200、未上云、未返回裸路径。细粒度“白色上衣”等服装属性仍归 B-016。
 
 ## 2026-05-27 当前进展核对
 

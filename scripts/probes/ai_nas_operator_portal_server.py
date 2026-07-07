@@ -67,6 +67,13 @@ except Exception:
     copy_rollback_response = None  # type: ignore[assignment]
 
 try:
+    from src.multimodal_search.schema import connect as connect_multimodal_db
+    from src.multimodal_search.schema import migrate as migrate_multimodal_db
+except Exception:
+    connect_multimodal_db = None  # type: ignore[assignment]
+    migrate_multimodal_db = None  # type: ignore[assignment]
+
+try:
     from src.openclaw.routes.yolo_index_routes import yolo_route_response
 except Exception:
     yolo_route_response = None  # type: ignore[assignment]
@@ -208,6 +215,13 @@ except Exception:
             "selection_policy": "fallback_generated_at_then_mtime",
             "payload": payload,
         }
+
+
+try:
+    from ai_nas_embedding_adapter import product_embedding_runtime_status, request_product_embedding
+except Exception:
+    product_embedding_runtime_status = None  # type: ignore[assignment]
+    request_product_embedding = None  # type: ignore[assignment]
 
 
 TOOL_ID = "ai_nas_operator_portal_server"
@@ -356,13 +370,43 @@ COPILOT_DOCUMENT_QUERY_TERMS = (
     "doc",
     "pdf",
     "invoice",
+    "receipt",
     "contract",
+    "bill",
+    "expense",
+    "amount",
     "rag",
     "\u6587\u6863",
     "\u6587\u4ef6",
     "\u53d1\u7968",
+    "\u6536\u636e",
+    "\u8d26\u5355",
+    "\u5f00\u652f",
+    "\u91d1\u989d",
     "\u5408\u540c",
     "\u95ee\u7b54",
+)
+COPILOT_DOCUMENT_QUERY_ACTION_TERMS = (
+    "query",
+    "find",
+    "search",
+    "summarize",
+    "summary",
+    "amount",
+    "total",
+    "info",
+    "content",
+    "\u67e5",
+    "\u627e",
+    "\u95ee",
+    "\u603b\u7ed3",
+    "\u6458\u8981",
+    "\u91d1\u989d",
+    "\u5408\u8ba1",
+    "\u603b\u989d",
+    "\u591a\u5c11",
+    "\u4fe1\u606f",
+    "\u5185\u5bb9",
 )
 COPILOT_STATUS_TERMS = ("status", "health", "summary", "list", "report", "audit", "\u72b6\u6001", "\u5065\u5eb7", "\u6982\u89c8", "\u6c47\u603b", "\u5217\u8868", "\u62a5\u544a", "\u5ba1\u8ba1")
 COPILOT_STORAGE_INVENTORY_TERMS = (
@@ -411,6 +455,9 @@ COPILOT_STORAGE_INVENTORY_TERMS = (
     "\u591a\u5927",
     "\u5bb9\u91cf",
     "\u5927\u5c0f",
+    "\u4fe1\u606f",
+    "\u60c5\u51b5",
+    "\u6982\u51b5",
 )
 
 
@@ -539,6 +586,263 @@ def product_hidden_storage_name(name: str) -> bool:
     )
 
 
+AI_ALBUM_PERSONAL_MATERIAL_DIRS = (
+    "Photos",
+    "Movies",
+    "Documents",
+    "DemoDocs",
+    "Uploads",
+    "Inbox",
+    "Collections",
+    "Sorted",
+    "AI整理",
+)
+
+AI_ALBUM_NAS_MATERIAL_DIRS = (
+    "demo_data",
+    "yolo_v2_fixture",
+    "documents",
+    "photos",
+    "robot_datasets",
+)
+
+AI_ALBUM_DEMO_CORPUS_MATERIAL_DIRS = (
+    "samples_generated",
+    "downloaded",
+)
+
+AI_ALBUM_MATERIAL_EXTENSIONS = {
+    ".jpg",
+    ".jpeg",
+    ".png",
+    ".webp",
+    ".bmp",
+    ".gif",
+    ".tif",
+    ".tiff",
+    ".mp4",
+    ".mov",
+    ".mkv",
+    ".webm",
+    ".avi",
+    ".pdf",
+    ".doc",
+    ".docx",
+    ".txt",
+    ".md",
+    ".xlsx",
+    ".pptx",
+    ".csv",
+}
+
+AI_ALBUM_IMAGE_EXTENSIONS = {
+    ".jpg",
+    ".jpeg",
+    ".png",
+    ".webp",
+    ".bmp",
+    ".gif",
+    ".tif",
+    ".tiff",
+}
+
+AI_ALBUM_AUTO_MAX_FILES = 10000
+
+AI_ALBUM_PRIMARY_CATEGORIES = (
+    {
+        "id": "cat_album_primary_people",
+        "name": "人物生活",
+        "name_en": "People and Daily Life",
+        "icon": "user",
+        "description": "人物、肖像、家庭、日常生活照片。",
+        "clip_prompt": "a photo of people, portraits, family, friends, daily life",
+        "object_terms": ("person", "people", "human"),
+        "person_terms": ("person_present",),
+        "title_terms": ("person", "people", "portrait", "family", "friends", "人物", "人像", "家庭", "合影"),
+    },
+    {
+        "id": "cat_album_primary_animals",
+        "name": "动物",
+        "name_en": "Animals",
+        "icon": "paw",
+        "description": "宠物、野生动物和其他动物照片。",
+        "clip_prompt": "a photo of animals, pets, cats, dogs, wildlife",
+        "object_terms": ("cat", "dog", "bird", "horse", "sheep", "cow", "elephant", "bear", "zebra", "giraffe", "animal"),
+        "person_terms": (),
+        "title_terms": ("cat", "dog", "pet", "animal", "wildlife", "kitten", "puppy", "猫", "狗", "宠物", "动物"),
+    },
+    {
+        "id": "cat_album_primary_landscape",
+        "name": "自然风景",
+        "name_en": "Nature and Landscape",
+        "icon": "mountain",
+        "description": "山水、海边、森林、天空、户外风景。",
+        "clip_prompt": "a landscape nature photo, mountains, beach, ocean, forest, sky, outdoor scenery",
+        "object_terms": ("kite", "surfboard", "skis", "snowboard"),
+        "person_terms": (),
+        "title_terms": ("mountain", "beach", "ocean", "sea", "lake", "river", "forest", "tree", "grass", "sky", "cloud", "landscape", "travel", "outdoor", "风景", "旅行", "山", "海", "森林", "天空", "草地"),
+    },
+    {
+        "id": "cat_album_primary_city",
+        "name": "城市建筑",
+        "name_en": "City and Architecture",
+        "icon": "home",
+        "description": "城市、街道、建筑、桥梁、室内空间。",
+        "clip_prompt": "a city architecture photo, buildings, streets, bridges, rooms, urban scenes",
+        "object_terms": ("traffic light", "stop sign", "parking meter", "bench", "fire hydrant"),
+        "person_terms": (),
+        "title_terms": ("building", "city", "street", "road", "bridge", "architecture", "urban", "room", "hotel", "城市", "建筑", "街道", "桥", "室内"),
+    },
+    {
+        "id": "cat_album_primary_transport",
+        "name": "交通工具",
+        "name_en": "Transportation",
+        "icon": "car",
+        "description": "汽车、公交、火车、飞机、船和道路交通。",
+        "clip_prompt": "a photo of vehicles and transportation, cars, buses, trains, airplanes, boats",
+        "object_terms": ("car", "bus", "truck", "bicycle", "motorcycle", "train", "airplane", "boat"),
+        "person_terms": (),
+        "title_terms": ("car", "bus", "truck", "train", "airplane", "boat", "vehicle", "traffic", "汽车", "车辆", "公交", "火车", "飞机", "船"),
+    },
+    {
+        "id": "cat_album_primary_food",
+        "name": "食物饮品",
+        "name_en": "Food and Drinks",
+        "icon": "utensils",
+        "description": "餐食、饮料、聚餐、食材。",
+        "clip_prompt": "a photo of food, drinks, meals, restaurants, dishes",
+        "object_terms": ("banana", "apple", "sandwich", "orange", "broccoli", "carrot", "hot dog", "pizza", "donut", "cake", "cup", "bottle", "wine glass", "bowl", "dining table"),
+        "person_terms": (),
+        "title_terms": ("food", "meal", "dinner", "drink", "restaurant", "dish", "party", "食物", "饮品", "餐", "聚餐", "菜"),
+    },
+    {
+        "id": "cat_album_primary_docs",
+        "name": "文档截图",
+        "name_en": "Documents and Screenshots",
+        "icon": "docs",
+        "description": "截图、扫描件、票据、合同、课程资料、文字图片。",
+        "clip_prompt": "a screenshot or scanned document, text, forms, receipts, contracts, course material",
+        "object_terms": ("book", "laptop", "keyboard", "mouse", "cell phone", "tv"),
+        "person_terms": (),
+        "title_terms": ("screenshot", "screen", "invoice", "receipt", "contract", "document", "paper", "book", "course", "scan", "截图", "票据", "发票", "合同", "资料", "文档", "课程", "扫描"),
+    },
+    {
+        "id": "cat_album_primary_other",
+        "name": "其他图片",
+        "name_en": "Other Images",
+        "icon": "media",
+        "description": "证据不足、抽象、物体特写或暂不适合细分的图片。",
+        "clip_prompt": "an abstract, texture, object, miscellaneous or uncategorized photo",
+        "object_terms": (),
+        "person_terms": (),
+        "title_terms": ("image", "photo", "misc", "other", "图片", "照片", "其他"),
+    },
+)
+
+AI_ALBUM_PRIMARY_CATEGORY_IDS = {str(item["id"]) for item in AI_ALBUM_PRIMARY_CATEGORIES}
+AI_ALBUM_PRIMARY_CATEGORY_NAMES = {str(item["name"]) for item in AI_ALBUM_PRIMARY_CATEGORIES}
+AI_ALBUM_COPILOT_CATEGORY_ALIASES = {
+    "cat_album_primary_people": (
+        "人物",
+        "人像",
+        "有人",
+        "有人的",
+        "有人物",
+        "人的照片",
+        "人物照片",
+        "肖像",
+        "合影",
+        "家庭",
+        "朋友",
+        "person",
+        "people",
+        "human",
+        "portrait",
+        "family",
+    ),
+    "cat_album_primary_animals": ("动物", "宠物", "猫", "狗", "鸟", "animal", "animals", "pet", "cat", "dog", "wildlife"),
+    "cat_album_primary_landscape": ("风景", "自然", "山", "海", "森林", "天空", "草地", "户外", "landscape", "nature", "mountain", "beach", "forest", "sky"),
+    "cat_album_primary_city": ("城市", "建筑", "街道", "桥", "室内", "city", "building", "architecture", "street", "bridge", "urban"),
+    "cat_album_primary_transport": ("车辆", "交通", "汽车", "公交", "火车", "飞机", "船", "car", "vehicle", "transport", "bus", "train", "airplane", "boat"),
+    "cat_album_primary_food": ("食物", "餐食", "饮品", "饮料", "美食", "food", "drink", "meal", "restaurant"),
+    "cat_album_primary_docs": ("文档", "截图", "扫描", "票据", "合同", "资料", "课件", "document", "screenshot", "scan", "invoice", "contract"),
+    "cat_album_primary_other": ("其他图片", "其它图片", "抽象", "未分类", "other image", "other images"),
+}
+AI_ALBUM_EXPLICIT_CATEGORY_QUERY_TERMS = (
+    "相册分类",
+    "相册类别",
+    "按分类",
+    "按类别",
+    "分类里",
+    "类别里",
+    "分类为",
+    "类别为",
+    "这个分类",
+    "这个类别",
+    "category",
+    "album category",
+)
+
+AI_ALBUM_PROJECT_ARTIFACT_NAMES = {
+    ".git",
+    ".pytest_cache",
+    "01_final_evidence",
+    "ai_nas_harness",
+    "archive",
+    "backups",
+    "benchmarks",
+    "browser-smoke",
+    "config",
+    "configs",
+    "dist",
+    "docs",
+    "evidence_for_gptpro",
+    "gates",
+    "logs",
+    "migrations",
+    "models",
+    "openclaw-plugins",
+    "queues",
+    "release",
+    "reports",
+    "runtimes",
+    "scripts",
+    "src",
+    "tests",
+    "tmp",
+    "toolchains",
+}
+
+
+def _path_is_relative_to(path: Path, root: Path) -> bool:
+    try:
+        path.resolve(strict=False).relative_to(root.resolve(strict=False))
+        return True
+    except ValueError:
+        return False
+
+
+def _cosine_similarity(left: list[float], right: list[float]) -> float:
+    if not left or not right:
+        return 0.0
+    limit = min(len(left), len(right))
+    dot = 0.0
+    left_norm = 0.0
+    right_norm = 0.0
+    for index in range(limit):
+        try:
+            a = float(left[index])
+            b = float(right[index])
+        except (TypeError, ValueError):
+            continue
+        dot += a * b
+        left_norm += a * a
+        right_norm += b * b
+    if left_norm <= 0.0 or right_norm <= 0.0:
+        return 0.0
+    return dot / ((left_norm ** 0.5) * (right_norm ** 0.5))
+
+
 def product_file_type(path: Path) -> str:
     if path.is_dir():
         return "\u6587\u4ef6\u5939"
@@ -646,6 +950,43 @@ def copilot_default_path_for_message(message: str, fallback: str = "") -> str:
     if "root" in lower or "\u6839\u76ee\u5f55" in text:
         return ""
     return fallback
+
+
+def copilot_inventory_path_for_message(message: str, fallback: str = "") -> str:
+    text = str(message or "")
+    lower = text.lower()
+    has_document = "documents" in lower or "document" in lower or "\u6587\u6863" in text or "\u6587\u4ef6" in text
+    has_photo = "photos" in lower or "pictures" in lower or "photo" in lower or "image" in lower or "\u7167\u7247" in text or "\u56fe\u7247" in text or "\u76f8\u518c" in text
+    has_video = "videos" in lower or "movies" in lower or "video" in lower or "\u89c6\u9891" in text or "\u7535\u5f71" in text
+    hit_count = sum(1 for hit in (has_document, has_photo, has_video) if hit)
+    if hit_count >= 2:
+        return ""
+    if has_photo:
+        return "Photos"
+    if has_video:
+        return "Videos"
+    if has_document:
+        return "Documents"
+    return copilot_default_path_for_message(text, fallback)
+
+
+DOCUMENT_PATH_IN_TEXT_RE = re.compile(r"(?i)\bDocuments(?:/[A-Za-z0-9_.\-\u4e00-\u9fff]+)*")
+
+
+def copilot_document_path_for_message(message: str, quoted: list[str] | None = None, fallback: str = "Documents") -> str:
+    for value in quoted or []:
+        if "/" in value or "\\" in value:
+            try:
+                return normalize_storage_relative_path(value)
+            except StoragePathError:
+                continue
+    match = DOCUMENT_PATH_IN_TEXT_RE.search(str(message or "").replace("\\", "/"))
+    if match:
+        try:
+            return normalize_storage_relative_path(match.group(0))
+        except StoragePathError:
+            pass
+    return copilot_default_path_for_message(message, fallback)
 
 
 def copilot_action_tool_id(action: str | None) -> str | None:
@@ -764,20 +1105,20 @@ def infer_copilot_action_intent(message: str) -> dict | None:
         }
     if contains_any(text, COPILOT_CREATE_FOLDER_TERMS):
         return {"action": "storage_create_folder", "path": quoted[0] if quoted else "", "quoted": quoted}
+    if has_document and (has_summary or contains_any(text, COPILOT_DOCUMENT_QUERY_ACTION_TERMS)):
+        return {
+            "action": "document_query",
+            "query": text,
+            "path": copilot_document_path_for_message(text, quoted, "Documents"),
+            "quoted": quoted,
+        }
     if has_inspect:
         inspect_path = quoted[0] if quoted else copilot_default_path_for_message(text)
         if inspect_path or quoted or "root" in text.lower() or "\u6839\u76ee\u5f55" in text:
             return {"action": "storage_list_or_inspect", "path": inspect_path, "quoted": quoted}
-    if has_document and (has_summary or "query" in text.lower() or "\u67e5" in text or "\u627e" in text or "\u95ee" in text):
-        return {
-            "action": "document_query",
-            "query": text,
-            "path": quoted[0] if quoted and ("/" in quoted[0] or "\\" in quoted[0]) else copilot_default_path_for_message(text, "Documents"),
-            "quoted": quoted,
-        }
-    lower = text.lower()
     if has_inventory_question:
-        return {"action": "storage_inventory", "path": copilot_default_path_for_message(text), "quoted": quoted}
+        return {"action": "storage_inventory", "path": copilot_inventory_path_for_message(text), "quoted": quoted}
+    lower = text.lower()
     if has_status and ("storage" in lower or "nas" in lower or "\u5b58\u50a8" in text):
         return {"action": "storage_status", "quoted": quoted}
     if has_status and ("media" in lower or "\u5a92\u4f53" in text or "\u76f8\u518c" in text):
@@ -1051,6 +1392,20 @@ def sanitize_copilot_search_result(item: dict) -> dict:
         "preview_kind",
     }
     return {key: value for key, value in item.items() if key in allowed}
+
+
+def copilot_search_reason_display(reason: object) -> str:
+    code = str(reason or "no_matching_local_index_result")
+    if code.startswith("image_embedding_search_failed:ValueError") or code.startswith("local_multimodal_search_exception:ValueError"):
+        return "\u56fe\u50cf\u8bed\u4e49\u5411\u91cf\u7d22\u5f15\u7248\u672c\u4e0d\u4e00\u81f4\uff1a\u5f53\u524d\u6587\u672c\u5411\u91cf\u4e0e\u5df2\u6709\u56fe\u7247\u5411\u91cf\u7ef4\u5ea6\u4e0d\u4e00\u81f4\uff0c\u9700\u8981\u91cd\u5efa\u56fe\u50cf\u8bed\u4e49\u7d22\u5f15"
+    mapping = {
+        "local_index_results_without_resolvable_media_preview": "\u65e7\u7d22\u5f15\u7ed3\u679c\u65e0\u6cd5\u89e3\u6790\u5230\u5f53\u524d\u76f8\u518c\u9884\u89c8\uff0c\u5df2\u8fc7\u6ee4",
+        "no_matching_yolo_detection": "YOLO \u5bf9\u8c61\u7d22\u5f15\u6ca1\u6709\u547d\u4e2d\u5339\u914d\u56fe\u7247",
+        "no_yolo_detections_indexed": "YOLO \u5bf9\u8c61\u7d22\u5f15\u5c1a\u6ca1\u6709\u53ef\u7528\u68c0\u6d4b\u7ed3\u679c",
+        "no_matching_person_attribute": "\u4eba\u7269\u5c5e\u6027\u7d22\u5f15\u6ca1\u6709\u547d\u4e2d\u5339\u914d\u56fe\u7247",
+        "no_matching_local_index_result": "\u672c\u5730\u89c6\u89c9\u7d22\u5f15\u6ca1\u6709\u547d\u4e2d\u5339\u914d\u56fe\u7247",
+    }
+    return mapping.get(code, code)
 
 
 def http_post_json(name: str, url: str, payload: dict, timeout: int = 60) -> dict:
@@ -1561,6 +1916,47 @@ def query_terms(query: str) -> list[str]:
     return parts[:12]
 
 
+def query_terms(query: str) -> list[str]:  # type: ignore[no-redef]
+    cleaned = str(query or "").strip().lower()
+    parts = [item for item in re.split(r"[\s,，。；;:：?？、|()（）]+", cleaned) if len(item) >= 2]
+    if cleaned and cleaned not in parts:
+        parts.insert(0, cleaned)
+    for pattern in (
+        r"\d{4}\u5e74\d{1,2}\u6708\d{1,2}\u65e5",
+        r"\d{4}[-/]\d{1,2}[-/]\d{1,2}",
+        r"\d+(?:\.\d+)?\s*(?:\u5143|\u5757|cny|rmb|usd)",
+        r"\d{3,}",
+    ):
+        parts.extend(match.group(0).lower() for match in re.finditer(pattern, cleaned, flags=re.IGNORECASE))
+    for keyword in (
+        "\u5bb6\u5ead\u5f00\u652f",
+        "\u5bb6\u5ead",
+        "\u5f00\u652f",
+        "\u8d26\u5355",
+        "\u91d1\u989d",
+        "\u5408\u8ba1",
+        "\u603b\u989d",
+        "\u65e5\u671f",
+        "\u53d1\u7968",
+        "\u6536\u636e",
+        "\u5408\u540c",
+        "family",
+        "expense",
+        "bill",
+        "amount",
+        "total",
+    ):
+        if keyword in cleaned:
+            parts.append(keyword)
+    deduped: list[str] = []
+    seen: set[str] = set()
+    for part in parts:
+        if part and part not in seen:
+            seen.add(part)
+            deduped.append(part)
+    return deduped[:12]
+
+
 def local_snippet(text: str, terms: list[str], *, max_chars: int = 180) -> str:
     if not text:
         return ""
@@ -1640,6 +2036,126 @@ def fts_query_from_terms(terms: list[str]) -> str:
     if not cleaned:
         return ""
     return " OR ".join(f'"{item}"' for item in cleaned[:12])
+
+
+DOCUMENT_AMOUNT_RE = re.compile(
+    r"(?<!\d)(?:\u4eba\u6c11\u5e01|RMB|CNY)?\s*([0-9][0-9,]*(?:\.[0-9]+)?)\s*(\u5143|\u5757|\u7f8e\u5143|USD|RMB|CNY)",
+    re.IGNORECASE,
+)
+
+
+def document_amount_hits(evidence: list[dict]) -> list[str]:
+    hits: list[str] = []
+    seen: set[str] = set()
+    for item in evidence:
+        text = str(item.get("snippet") or "")
+        for match in DOCUMENT_AMOUNT_RE.finditer(text):
+            number = match.group(1).replace(",", "")
+            unit = match.group(2)
+            value = f"{number}{unit}"
+            key = value.lower()
+            if key not in seen:
+                seen.add(key)
+                hits.append(value)
+    return hits
+
+
+def document_storage_open_url(relative_path: str, *, preview: bool = True) -> str:
+    rel = normalize_storage_relative_path(relative_path)
+    suffix = "&preview=1" if preview else ""
+    return f"/api/storage/download?path={quote(rel, safe='')}{suffix}"
+
+
+def build_document_grounded_answer_prompt(query: str, evidence: list[dict]) -> str:
+    blocks: list[str] = []
+    for index, item in enumerate(evidence[:5], start=1):
+        snippet = re.sub(r"\s+", " ", str(item.get("snippet") or item.get("summary") or "")).strip()
+        if not snippet:
+            continue
+        name = Path(str(item.get("name") or item.get("relative_path") or f"document_{index}")).name
+        ref = str(item.get("evidence_ref") or f"ev_{index}")
+        blocks.append(f"[{index}] ref={ref}; name={name}\n{snippet}")
+    evidence_text = "\n\n".join(blocks) or "(no evidence)"
+    amounts = document_amount_hits(evidence)
+    amount_text = f"\n检测到的金额：{'、'.join(amounts[:5])}" if amounts else ""
+    return (
+        "根据本地文档证据回答。不要寒暄，不要让用户自己查看文档，不要编造，不要输出 NAS 原始路径。\n"
+        f"问题：{query}\n"
+        f"证据：\n{evidence_text}{amount_text}\n"
+        "答案："
+    )
+
+
+def build_document_grounded_retry_prompt(query: str, evidence: list[dict]) -> str:
+    amounts = document_amount_hits(evidence)
+    exact_amount = amounts[0] if amounts else ""
+    refs = ", ".join(str(item.get("evidence_ref") or f"ev_{index}") for index, item in enumerate(evidence[:3], start=1))
+    target_answer = normalize_document_money_answer_sentence(query, exact_amount, evidence) if exact_amount else ""
+    target_line = f"Target answer sentence: {target_answer}\n" if target_answer else ""
+    return (
+        "Answer strictly from local document evidence facts.\n"
+        f"Evidence refs: {refs or 'local_document_evidence'}.\n"
+        f"Evidence facts: detected_amounts={', '.join(amounts[:5]) if amounts else 'none'}; user_question={query}.\n"
+        f"{target_line}"
+        "If Target answer sentence is present, return that sentence exactly.\n"
+        f"Return exactly one short Chinese sentence. Include the exact text {exact_amount or 'from evidence'}."
+        " Do not approximate. Do not ask a follow-up. Do not mention raw NAS paths.\n"
+        "Answer:"
+    )
+
+
+def normalize_document_answer_amount_units(answer: str, evidence: list[dict]) -> str:
+    normalized = str(answer or "")
+    for amount in document_amount_hits(evidence):
+        if not contains_any(amount, ("元", "块", "人民币")):
+            continue
+        token = re.sub(r"\D+", "", amount)
+        if not token:
+            continue
+        normalized = re.sub(rf"(?<![\d.]){re.escape(token)}\s*人民币", f"{token}元", normalized)
+    return normalized
+
+
+def normalize_document_money_answer_sentence(query: str, answer: str, evidence: list[dict]) -> str:
+    amounts = document_amount_hits(evidence)
+    preferred = [item for item in amounts if contains_any(item, ("元", "块", "人民币"))]
+    if not preferred:
+        return answer
+    text = " ".join([str(query or "")] + [str(item.get("snippet") or "") for item in evidence[:2]])
+    if not contains_any(text, ("账单", "开支", "合计", "amount", "bill", "expense", "total")):
+        return answer
+    date_match = re.search(r"20\d{2}年\d{1,2}月\d{1,2}日", text)
+    date_text = date_match.group(0) if date_match else ""
+    subject = f"{date_text}家庭开支账单" if date_text and contains_any(text, ("家庭", "开支")) else "该本地文档"
+    return f"根据本地文档，{subject}的合计金额是 {preferred[0]}。"
+
+
+def document_answer_from_evidence(path: str, evidence: list[dict], evidence_refs: list[str]) -> str:
+    refs = "、".join(evidence_refs)
+    names = "、".join(str(item.get("name") or item.get("relative_path")) for item in evidence[:3])
+    amounts = document_amount_hits(evidence)
+    amount_text = f" 命中金额：{'、'.join(amounts[:3])}。" if amounts else ""
+    snippets = [str(item.get("snippet") or "").strip() for item in evidence[:2] if str(item.get("snippet") or "").strip()]
+    snippet_text = " 证据片段：" + " / ".join(snippets) if snippets else ""
+    return f"已在本地文档索引中找到 {len(evidence)} 条证据：{names}。{amount_text}证据引用：{refs}。{snippet_text}".strip()
+
+
+def document_answer_from_evidence(path: str, evidence: list[dict], evidence_refs: list[str]) -> str:  # type: ignore[no-redef]
+    separator = "\u3001"
+    refs = separator.join(evidence_refs)
+    names = separator.join(str(item.get("name") or item.get("relative_path")) for item in evidence[:3])
+    amounts = document_amount_hits(evidence)
+    if amounts:
+        direct_answer = normalize_document_money_answer_sentence("", "", evidence)
+        if direct_answer:
+            return direct_answer
+    amount_text = f" \u547d\u4e2d\u91d1\u989d\uff1a{separator.join(amounts[:3])}\u3002" if amounts else ""
+    snippets = [str(item.get("snippet") or "").strip() for item in evidence[:2] if str(item.get("snippet") or "").strip()]
+    snippet_text = " \u8bc1\u636e\u7247\u6bb5\uff1a" + " / ".join(snippets) if snippets else ""
+    return (
+        f"\u5df2\u5728\u672c\u5730\u6587\u6863\u7d22\u5f15\u4e2d\u627e\u5230 {len(evidence)} "
+        f"\u6761\u8bc1\u636e\uff1a{names}\u3002{amount_text}\u8bc1\u636e\u5f15\u7528\uff1a{refs}\u3002{snippet_text}"
+    ).strip()
 
 
 def init_document_fts_db(db_path: Path) -> None:
@@ -1732,6 +2248,7 @@ class PortalState:
         self.openclaw_model_gateway_url = openclaw_model_gateway_url
         self.qwen_gateway_url = (qwen_gateway_url or DEFAULT_QWEN_GATEWAY_URL).rstrip("/")
         self.qwen_model = qwen_model or DEFAULT_QWEN_MODEL
+        self.ai_album_clip_text_cache: dict[str, dict] = {}
         self.journal_report_root = journal_report_root or report_root
         self.journal_evidence_dir = journal_evidence_dir or (report_root / "digua_journal_evidence")
         self.journal_export_dir = journal_export_dir or (report_root / "digua_journal_exports")
@@ -1759,6 +2276,10 @@ class PortalState:
             self.media_center = MediaCenter(self.media_db_path)
             self.ops_manager = OpsManager(self.ops_db_path)
             self.app_ecosystem = AppEcosystem(self.app_db_path)
+            try:
+                self.snapshot_store.cleanup_expired_trash(30)
+            except Exception:
+                pass
         if refresh_on_start:
             self.refresh_result = self.refresh()
 
@@ -1843,10 +2364,52 @@ class PortalState:
             cache[digest] = found
         return found
 
+    def media_file_by_path_hash(
+        self,
+        path_hash: str,
+        user: dict,
+        cache: dict[str, tuple[Path | None, str | None]] | None = None,
+    ) -> tuple[Path | None, str | None]:
+        digest = str(path_hash or "").strip().lower()
+        if not self.media_center or not re.fullmatch(r"[0-9a-f]{16,64}", digest):
+            return None, None
+        cache_key = f"media:{digest}"
+        if cache is not None and cache_key in cache:
+            return cache[cache_key]
+        found: tuple[Path | None, str | None] = (None, None)
+        target = self.media_center.photo_path_by_hash(digest)
+        if target:
+            try:
+                resolved = target.resolve(strict=True)
+                allowed, _denial_status = self.media_preview_access(resolved, user or {})
+                if allowed:
+                    relative_path = None
+                    if self.personal_root:
+                        try:
+                            relative_path = resolved.relative_to(self.personal_root.resolve(strict=True)).as_posix()
+                        except (OSError, ValueError):
+                            relative_path = None
+                    found = (resolved, relative_path)
+            except OSError:
+                found = (None, None)
+        if cache is not None:
+            cache[cache_key] = found
+        return found
+
     def can_write(self, user: dict, relative_path: str) -> bool:
         if not self.identity_store:
             return False
         return self.identity_store.check_acl(str(user.get("username") or ""), relative_path, "write")
+
+    def _relative_path_for_personal_file(self, path: Path) -> str | None:
+        if not self.personal_root:
+            return None
+        try:
+            resolved = path.resolve(strict=True)
+            personal = self.personal_root.resolve(strict=True)
+            return resolved.relative_to(personal).as_posix()
+        except (OSError, ValueError):
+            return None
 
     def storage_status_payload(self) -> dict:
         if not self.personal_root:
@@ -1993,6 +2556,129 @@ class PortalState:
             },
         }
 
+    def ai_album_material_inventory_payload(self, user: dict | None = None, *, limit: int = 40) -> tuple[int, dict]:
+        scope = self.ai_album_organizer_scope()
+        roots: list[Path] = list(scope.get("root_paths") or [])
+        if not roots:
+            return HTTPStatus.SERVICE_UNAVAILABLE, {k: v for k, v in scope.items() if k != "root_paths"}
+        personal = self.personal_root.resolve(strict=False) if self.personal_root else None
+        workspace = personal.parent.resolve(strict=False) if personal else None
+        scan_budget = max(1, min(int(self.storage_max_files or 5000), 5000))
+        scanned_files = 0
+        total_files = 0
+        total_dirs = 0
+        total_size = 0
+        truncated = False
+        type_counts: dict[str, int] = {}
+        root_entries: list[dict] = []
+        sample_entries: list[dict] = []
+
+        def add_type(path: Path) -> str:
+            label = product_file_type(path)
+            type_counts[label] = int(type_counts.get(label, 0)) + 1
+            return label
+
+        for root in roots:
+            if scanned_files >= scan_budget:
+                truncated = True
+                break
+            if personal and _path_is_relative_to(root, personal):
+                try:
+                    root_rel = root.resolve(strict=False).relative_to(personal).as_posix()
+                except ValueError:
+                    root_rel = ""
+                if user and not self.can_read(user, root_rel):
+                    continue
+            public_rel = self._public_workspace_relative(root, workspace or root.parent)
+            root_file_count = 0
+            root_dir_count = 0
+            root_size = 0
+            root_types: dict[str, int] = {}
+            for current, dirs, files in os.walk(root):
+                dirs[:] = [
+                    name
+                    for name in dirs
+                    if not product_hidden_storage_name(name)
+                    and not name.startswith("@")
+                    and name.lower() not in AI_ALBUM_PROJECT_ARTIFACT_NAMES
+                ]
+                if Path(current) != root:
+                    root_dir_count += 1
+                for filename in files:
+                    if scanned_files >= scan_budget:
+                        truncated = True
+                        break
+                    if product_hidden_storage_name(filename):
+                        continue
+                    path = Path(current) / filename
+                    if path.suffix.lower() not in AI_ALBUM_MATERIAL_EXTENSIONS:
+                        continue
+                    scanned_files += 1
+                    root_file_count += 1
+                    total_files += 1
+                    label = add_type(path)
+                    root_types[label] = int(root_types.get(label, 0)) + 1
+                    try:
+                        size = path.stat().st_size
+                    except OSError:
+                        size = 0
+                    root_size += size
+                    total_size += size
+                    if len(sample_entries) < limit:
+                        try:
+                            rel = path.resolve(strict=False).relative_to(root.resolve(strict=False)).as_posix()
+                        except ValueError:
+                            rel = path.name
+                        sample_entries.append(
+                            {
+                                "root": public_rel,
+                                "name": path.name,
+                                "relative_name": rel,
+                                "file_type": label,
+                                "size_bytes": size,
+                                "mtime": datetime.fromtimestamp(path.stat().st_mtime, timezone.utc).astimezone().isoformat() if path.exists() else None,
+                            }
+                        )
+                if truncated:
+                    break
+            total_dirs += root_dir_count
+            root_entries.append(
+                {
+                    "name": root.name,
+                    "relative": public_rel,
+                    "file_count": root_file_count,
+                    "dir_count": root_dir_count,
+                    "size_bytes": root_size,
+                    "type_counts": dict(sorted(root_types.items(), key=lambda kv: (-kv[1], kv[0]))),
+                }
+            )
+            if truncated:
+                break
+        root_entries.sort(key=lambda item: (-int(item.get("file_count") or 0), str(item.get("relative") or "")))
+        return HTTPStatus.OK, {
+            "ok": True,
+            "schema": "digua_ai_album_material_inventory_v1",
+            "relative_path": "AI相册整理范围",
+            "entry_count": len(root_entries),
+            "entries": root_entries[:limit],
+            "sample_entries": sample_entries[:limit],
+            "summary": {
+                "top_level_count": len(root_entries),
+                "file_count": total_files,
+                "dir_count": total_dirs,
+                "total_size_bytes": total_size,
+                "type_counts": dict(sorted(type_counts.items(), key=lambda kv: (-kv[1], kv[0]))),
+                "scanned_files": scanned_files,
+                "truncated": truncated,
+                "limit": limit,
+                "scope": "demo_test_personal_material_only",
+            },
+            "scope": {k: v for k, v in scope.items() if k != "root_paths"},
+            "cloud_used": False,
+            "qwen_execution_authority": False,
+            "raw_path_returned": False,
+        }
+
     def document_items_payload(self, relative_path: str = "Documents", user: dict | None = None, *, limit: int = 250) -> tuple[int, dict]:
         if not self.personal_root:
             return HTTPStatus.SERVICE_UNAVAILABLE, {"ok": False, "error": "personal_root_not_configured"}
@@ -2127,6 +2813,8 @@ class PortalState:
         try:
             con = sqlite3.connect(str(self.document_fts_db_path))
             con.row_factory = sqlite3.Row
+            scope = normalize_storage_relative_path(relative_path or "")
+            scope_like = f"{scope}/%" if scope else "%"
             rows = con.execute(
                 """
                 SELECT c.id AS chunk_id, c.redacted_text, c.source_hash, c.chunk_index,
@@ -2135,30 +2823,41 @@ class PortalState:
                 JOIN document_chunks c ON c.id = document_chunks_fts.chunk_id
                 JOIN documents d ON d.id = c.document_id
                 WHERE document_chunks_fts MATCH ?
+                  AND (? = '' OR d.relative_path = ? OR d.relative_path LIKE ?)
                 ORDER BY rank
-                LIMIT 8
+                LIMIT 24
                 """,
-                (match_query,),
+                (match_query, scope, scope, scope_like),
             ).fetchall()
             evidence = []
+            seen_chunks: set[str] = set()
             for index, row in enumerate(rows, start=1):
                 rel = str(row["relative_path"])
                 if user and not self.can_read(user, rel):
                     continue
+                chunk_key = str(row["chunk_id"] or row["source_hash"] or f"{rel}:{row['chunk_index']}")
+                if chunk_key in seen_chunks:
+                    continue
+                seen_chunks.add(chunk_key)
                 snippet = local_snippet(str(row["redacted_text"]), terms, max_chars=220) or str(row["redacted_text"])[:220]
                 evidence.append(
                     {
-                        "evidence_ref": f"ev_{index}_{str(row['source_hash'])[:10]}",
+                        "evidence_ref": f"ev_{len(evidence) + 1}_{str(row['source_hash'])[:10]}",
                         "chunk_id": row["chunk_id"],
                         "name": row["title"],
                         "relative_path": rel,
                         "extension": row["file_type"],
+                        "open_url": document_storage_open_url(rel, preview=True),
+                        "download_url": document_storage_open_url(rel, preview=False),
+                        "open_kind": "document",
                         "chunk_index": row["chunk_index"],
                         "source_hash": row["source_hash"],
                         "snippet": snippet,
                         "score": float(row["rank"] or 0),
                     }
                 )
+                if len(evidence) >= 8:
+                    break
             return HTTPStatus.OK, {
                 "ok": True,
                 "query": query,
@@ -2201,6 +2900,40 @@ class PortalState:
             "evidence": evidence,
             "evidence_refs": payload.get("evidence_refs") or [],
             "evidence_count": len(evidence),
+            "readable_count": payload.get("fts_sync", {}).get("indexed_documents", 0),
+            "retrieval_mode": payload.get("retrieval_mode") or "sqlite_fts_first",
+            "embedding_feature_flag": False,
+            "embedding_enabled": False,
+            "cloud_used": False,
+            "qwen_execution_authority": False,
+            "raw_private_content_returned": False,
+        }
+
+    def document_query_payload(self, query: str, relative_path: str = "Documents", user: dict | None = None) -> tuple[int, dict]:  # type: ignore[no-redef]
+        query = str(query or "").strip()
+        if not query:
+            return HTTPStatus.BAD_REQUEST, {"ok": False, "error": "query_required"}
+        status, payload = self.document_fts_recall(query, normalize_storage_relative_path(relative_path or "Documents"), user)
+        if status != HTTPStatus.OK:
+            return status, payload
+        evidence = payload.get("evidence") or []
+        if evidence:
+            answer = document_answer_from_evidence(
+                str(payload.get("path") or ""),
+                evidence,
+                [str(item) for item in payload.get("evidence_refs") or []],
+            )
+        else:
+            answer = f"未找到可靠证据：在 {payload.get('path')} 下没有与“{query}”匹配的 FTS 证据。"
+        return HTTPStatus.OK, {
+            "ok": True,
+            "query": query,
+            "path": payload.get("path"),
+            "answer": answer,
+            "evidence": evidence,
+            "evidence_refs": payload.get("evidence_refs") or [],
+            "evidence_count": len(evidence),
+            "amount_hits": document_amount_hits(evidence),
             "readable_count": payload.get("fts_sync", {}).get("indexed_documents", 0),
             "retrieval_mode": payload.get("retrieval_mode") or "sqlite_fts_first",
             "embedding_feature_flag": False,
@@ -2289,6 +3022,74 @@ class PortalState:
             },
         }
 
+    def storage_trash_payload(self, payload: dict | None, user: dict) -> tuple[int, dict]:
+        if not self.personal_root or not self.snapshot_store:
+            return HTTPStatus.SERVICE_UNAVAILABLE, {"ok": False, "error": "snapshot_store_unavailable", "raw_path_returned": False}
+        payload = payload or {}
+        rel = ""
+        target: Path | None = None
+        path_hash_value = str(payload.get("path_hash") or "").strip().lower()
+        if path_hash_value:
+            target, rel = self.media_file_by_path_hash(path_hash_value, user or {})
+            if not target:
+                target, rel = self.storage_file_by_path_hash(path_hash_value, user or {})
+        if not target:
+            try:
+                rel = normalize_storage_relative_path(payload.get("relative_path") or payload.get("path") or "")
+                if not rel:
+                    return HTTPStatus.BAD_REQUEST, {"ok": False, "error": "path_required", "raw_path_returned": False}
+                target = resolve_storage_path(self.personal_root, rel)
+            except StoragePathError as exc:
+                return HTTPStatus.BAD_REQUEST, {"ok": False, "error": str(exc), "raw_path_returned": False}
+        resolved_rel = self._relative_path_for_personal_file(target)
+        if not resolved_rel:
+            self.record_operation("trash", None, rel or None, "outside_personal_root_blocked", str(user.get("username")))
+            return HTTPStatus.FORBIDDEN, {
+                "ok": False,
+                "error": "trash_only_supported_for_personal_files",
+                "raw_path_returned": False,
+            }
+        if resolved_rel.startswith(".trash/") or resolved_rel in {".trash", ".snapshots", ".versions"} or resolved_rel.startswith(".snapshots/") or resolved_rel.startswith(".versions/"):
+            return HTTPStatus.FORBIDDEN, {"ok": False, "error": "recovery_area_delete_blocked", "raw_path_returned": False}
+        if not target.exists() or not target.is_file():
+            return HTTPStatus.NOT_FOUND, {"ok": False, "error": "file_not_found", "raw_path_returned": False}
+        if not self.can_read(user, resolved_rel) or not self.can_write(user, resolved_rel):
+            self.record_operation("trash", resolved_rel, None, "permission_denied", str(user.get("username")))
+            return HTTPStatus.FORBIDDEN, {"ok": False, "error": "permission_denied", "required": "write", "raw_path_returned": False}
+        result = self.snapshot_store.trash_file(target, str(user.get("username") or ""))
+        if not result.get("ok"):
+            self.record_operation("trash", resolved_rel, None, str(result.get("error") or "failed"), str(user.get("username")))
+            return HTTPStatus.BAD_REQUEST, {"ok": False, "error": result.get("error") or "trash_failed", "raw_path_returned": False}
+        media_remove: dict = {"ok": True, "removed": 0}
+        if self.media_center:
+            try:
+                media_remove = self.media_center.remove_photo_path(target)
+            except Exception as exc:
+                media_remove = {"ok": False, "error": f"{type(exc).__name__}:{exc}", "raw_path_returned": False}
+        self.record_operation("trash", resolved_rel, str(result.get("trash_id") or ""), "moved_to_trash", str(user.get("username")))
+        return HTTPStatus.OK, {
+            "ok": True,
+            "schema": "digua_storage_trash_v1",
+            "retention_days": 30,
+            "result": {
+                "trash_id": result.get("trash_id"),
+                "original_path": result.get("original_path"),
+                "size_bytes": result.get("size_bytes"),
+                "expires_at": result.get("expires_at"),
+            },
+            "media_index": media_remove,
+            "physical_file_deleted": False,
+            "moved_to_trash": True,
+            "raw_path_returned": False,
+        }
+
+    def storage_trash_cleanup_payload(self, payload: dict | None, user: dict) -> tuple[int, dict]:
+        if not self.snapshot_store:
+            return HTTPStatus.SERVICE_UNAVAILABLE, {"ok": False, "error": "snapshot_store_unavailable", "raw_path_returned": False}
+        result = self.snapshot_store.cleanup_expired_trash(30)
+        self.record_operation("trash_cleanup", None, None, "completed", str(user.get("username")))
+        return HTTPStatus.OK, {"ok": bool(result.get("ok")), "schema": "digua_storage_trash_cleanup_v1", "result": result, "raw_path_returned": False}
+
     def media_status_payload(self, *, ensure_index: bool = False, max_files: int = 5000) -> dict:
         if not self.media_center:
             return {"ok": False, "error": "media_center_unavailable", "raw_path_returned": False}
@@ -2305,6 +3106,955 @@ class PortalState:
             }
         )
         return status
+
+    def ai_album_organizer_scope(self) -> dict:
+        if not self.personal_root:
+            return {"ok": False, "error": "personal_root_not_configured", "root_paths": [], "raw_path_returned": False}
+        personal = self.personal_root.resolve(strict=False)
+        workspace = personal.parent.resolve(strict=False)
+        candidates: list[tuple[str, Path]] = []
+        for rel in AI_ALBUM_PERSONAL_MATERIAL_DIRS:
+            candidates.append(("personal_material", personal / rel))
+        for rel in AI_ALBUM_NAS_MATERIAL_DIRS:
+            candidates.append(("nas_demo_material", workspace / rel))
+        for rel in AI_ALBUM_DEMO_CORPUS_MATERIAL_DIRS:
+            candidates.append(("demo_corpus_material", workspace / "demo_corpus" / rel))
+
+        roots: list[Path] = []
+        included_roots: list[dict] = []
+        skipped_roots: list[dict] = []
+        seen: set[str] = set()
+        for scope, candidate in candidates:
+            resolved = candidate.resolve(strict=False)
+            public_rel = self._public_workspace_relative(resolved, workspace)
+            if not resolved.exists() or not resolved.is_dir():
+                skipped_roots.append({"scope": scope, "relative": public_rel, "reason": "missing"})
+                continue
+            if self._is_project_artifact_material_path(resolved, workspace, personal):
+                skipped_roots.append({"scope": scope, "relative": public_rel, "reason": "project_artifact_excluded"})
+                continue
+            key = str(resolved)
+            if key in seen:
+                continue
+            seen.add(key)
+            roots.append(resolved)
+            included_roots.append({"scope": scope, "relative": public_rel, "name": resolved.name})
+        return {
+            "ok": bool(roots),
+            "schema": "digua_ai_album_organizer_scope_v1",
+            "root_paths": roots,
+            "included_roots": included_roots,
+            "included_root_count": len(included_roots),
+            "skipped_roots": skipped_roots,
+            "excluded_policy": {
+                "project_artifact_names": sorted(AI_ALBUM_PROJECT_ARTIFACT_NAMES),
+                "personal_project_prefix_filter": "product_hidden_storage_name",
+                "scope": "demo_test_personal_material_only",
+            },
+            "raw_path_returned": False,
+        }
+
+    def ai_album_rebuild_payload(self, payload: dict, user: dict) -> tuple[int, dict]:
+        if not self.personal_root:
+            return HTTPStatus.SERVICE_UNAVAILABLE, {"ok": False, "error": "personal_root_not_configured", "raw_path_returned": False}
+        scope = self.ai_album_organizer_scope()
+        roots: list[Path] = list(scope.get("root_paths") or [])
+        if not roots:
+            return HTTPStatus.BAD_REQUEST, {k: v for k, v in scope.items() if k != "root_paths"}
+
+        max_files = int(payload.get("max_files") or 5000)
+        media_max_files = int(payload.get("media_max_files") or max_files)
+        run_yolo = bool(payload.get("run_yolo", False))
+        yolo_max_files = int(payload.get("yolo_max_files") or min(max_files, 16))
+        include_video = bool(payload.get("include_video", True))
+        root_strings = [str(root) for root in roots]
+        pipeline: dict[str, dict] = {}
+
+        def run_stage(name: str, fn, *, required: bool = False) -> None:
+            try:
+                result = fn()
+                pipeline[name] = self._redact_paths(result if isinstance(result, dict) else {"ok": bool(result)})
+            except Exception as exc:
+                pipeline[name] = {"ok": False, "error": f"{type(exc).__name__}:{exc}", "required": required}
+
+        if self.media_center:
+            media_results = []
+            for root in roots:
+                media_results.append(self.media_center.index_photos(root, asset_root=root, max_files=media_max_files, source_id="ai_album_organizer_scope"))
+            pipeline["media_index"] = {
+                "ok": True,
+                "root_count": len(media_results),
+                "indexed": sum(int(item.get("indexed") or 0) for item in media_results),
+                "scanned": sum(int(item.get("scanned") or 0) for item in media_results),
+                "skipped": sum(int(item.get("skipped") or 0) for item in media_results),
+                "raw_path_returned": False,
+            }
+        else:
+            pipeline["media_index"] = {"ok": False, "error": "media_center_unavailable", "required": False, "raw_path_returned": False}
+
+        if multimodal_route_response is not None:
+            run_stage(
+                "multimodal_rebuild",
+                lambda: multimodal_route_response(
+                    "/api/multimodal-index/rebuild",
+                    method="POST",
+                    payload={"roots": root_strings, "max_files": max_files, "user_id": str(user.get("username") or "operator")},
+                    report_root=self.report_root,
+                    personal_root=self.personal_root,
+                )[1],
+                required=True,
+            )
+        else:
+            pipeline["multimodal_rebuild"] = {"ok": False, "error": "multimodal_search_unavailable", "required": True}
+
+        if yolo_route_response is not None and run_yolo:
+            run_stage(
+                "yolo_index",
+                lambda: yolo_route_response(
+                    "/api/yolo-index/rebuild",
+                    method="POST",
+                    payload={"roots": root_strings, "max_files": yolo_max_files, "include_video": include_video, "user_id": str(user.get("username") or "operator")},
+                    report_root=self.report_root,
+                    personal_root=self.personal_root,
+                )[1],
+            )
+        elif not run_yolo:
+            pipeline["yolo_index"] = {
+                "ok": True,
+                "skipped": True,
+                "reason": "lightweight_rebuild_preserves_existing_yolo_index",
+                "run_yolo": False,
+                "raw_path_returned": False,
+            }
+        else:
+            pipeline["yolo_index"] = {"ok": False, "error": "yolo_index_unavailable", "required": False}
+
+        if person_attribute_route_response is not None and run_yolo:
+            run_stage(
+                "person_attribute_rebuild",
+                lambda: person_attribute_route_response(
+                    "/api/person-attribute/rebuild",
+                    method="POST",
+                    payload={"roots": root_strings, "max_files": yolo_max_files, "user_id": str(user.get("username") or "operator")},
+                    report_root=self.report_root,
+                    personal_root=self.personal_root,
+                )[1],
+            )
+        elif not run_yolo:
+            pipeline["person_attribute_rebuild"] = {
+                "ok": True,
+                "skipped": True,
+                "reason": "lightweight_rebuild_preserves_existing_person_attribute_index",
+                "run_yolo": False,
+                "raw_path_returned": False,
+            }
+        else:
+            pipeline["person_attribute_rebuild"] = {"ok": False, "error": "person_attribute_unavailable", "required": False}
+
+        if smart_classification_route_response is not None:
+            run_stage(
+                "smart_classification_rebuild",
+                lambda: smart_classification_route_response(
+                    "/api/smart-classification/rebuild",
+                    method="POST",
+                    payload={"user_id": str(user.get("username") or "operator")},
+                    report_root=self.report_root,
+                    personal_root=self.personal_root,
+                )[1],
+                required=True,
+            )
+        else:
+            pipeline["smart_classification_rebuild"] = {"ok": False, "error": "smart_classification_unavailable", "required": True}
+
+        if ai_space_route_response is not None:
+            run_stage(
+                "ai_space_rebuild",
+                lambda: ai_space_route_response(
+                    "/api/ai-space/rebuild",
+                    method="POST",
+                    payload={"user_id": str(user.get("username") or "operator")},
+                    report_root=self.report_root,
+                    personal_root=self.personal_root,
+                )[1],
+                required=True,
+            )
+        else:
+            pipeline["ai_space_rebuild"] = {"ok": False, "error": "ai_space_unavailable", "required": True}
+
+        required_failed = [
+            name
+            for name, result in pipeline.items()
+            if bool(result.get("required")) and result.get("ok") is False
+        ]
+        response_scope = {k: v for k, v in scope.items() if k != "root_paths"}
+        response = {
+            "ok": not required_failed,
+            "schema": "digua_ai_album_rebuild_v1",
+            "scope": response_scope,
+            "pipeline": pipeline,
+            "required_failed": required_failed,
+            "cloud_used": False,
+            "raw_path_returned": False,
+        }
+        return (HTTPStatus.OK if response["ok"] else HTTPStatus.BAD_REQUEST), response
+
+    def ai_album_auto_organize_payload(self, payload: dict | None, user: dict) -> tuple[int, dict]:
+        if not self.personal_root or not self.media_center:
+            return HTTPStatus.SERVICE_UNAVAILABLE, {"ok": False, "error": "media_center_unavailable", "raw_path_returned": False}
+        payload = payload or {}
+        scope = self.ai_album_organizer_scope()
+        roots: list[Path] = list(scope.get("root_paths") or [])
+        if not roots:
+            return HTTPStatus.BAD_REQUEST, {k: v for k, v in scope.items() if k != "root_paths"}
+        max_files = max(1, min(int(payload.get("max_files") or AI_ALBUM_AUTO_MAX_FILES), AI_ALBUM_AUTO_MAX_FILES))
+        force = bool(payload.get("force"))
+        media_results: list[dict] = []
+        for root in roots:
+            media_results.append(
+                self.media_center.index_photos(
+                    root,
+                    asset_root=root,
+                    max_files=max_files,
+                    source_id="ai_album_auto_incremental",
+                )
+            )
+        media_index = {
+            "ok": True,
+            "root_count": len(media_results),
+            "scanned": sum(int(item.get("scanned") or 0) for item in media_results),
+            "indexed": sum(int(item.get("indexed") or 0) for item in media_results),
+            "skipped": sum(int(item.get("skipped") or 0) for item in media_results),
+            "unsupported": sum(int(item.get("unsupported") or 0) for item in media_results),
+            "truncated": any(bool(item.get("truncated")) for item in media_results),
+            "raw_path_returned": False,
+        }
+        sync_result = self._sync_ai_album_media_rows_to_multimodal_assets(roots, max_files=max_files)
+        mm_counts = self._count_ai_album_multimodal_assets()
+        ai_counts = self._count_ai_album_ai_space_assets()
+        changed = bool(force or int(media_index.get("indexed") or 0) or int(sync_result.get("upserted") or 0) or int(sync_result.get("deleted") or 0))
+        stale_view = int(ai_counts.get("image") or 0) < int(mm_counts.get("image") or 0)
+        should_rebuild_view = bool(changed or stale_view or force)
+        pipeline: dict[str, dict] = {
+            "media_index": media_index,
+            "multimodal_asset_sync": sync_result,
+        }
+        if should_rebuild_view:
+            if smart_classification_route_response is not None:
+                try:
+                    _code, result = smart_classification_route_response(
+                        "/api/smart-classification/rebuild",
+                        method="POST",
+                        payload={"user_id": str(user.get("username") or "operator"), "source": "ai_album_auto_incremental"},
+                        report_root=self.report_root,
+                        personal_root=self.personal_root,
+                    )
+                    pipeline["smart_classification_rebuild"] = self._redact_paths(result)
+                except Exception as exc:
+                    pipeline["smart_classification_rebuild"] = {"ok": False, "error": f"{type(exc).__name__}:{exc}", "required": True}
+            elif ai_space_route_response is not None:
+                try:
+                    _code, result = ai_space_route_response(
+                        "/api/ai-space/rebuild",
+                        method="POST",
+                        payload={"user_id": str(user.get("username") or "operator"), "source": "ai_album_auto_incremental"},
+                        report_root=self.report_root,
+                        personal_root=self.personal_root,
+                    )
+                    pipeline["ai_space_rebuild"] = self._redact_paths(result)
+                except Exception as exc:
+                    pipeline["ai_space_rebuild"] = {"ok": False, "error": f"{type(exc).__name__}:{exc}", "required": True}
+            else:
+                pipeline["ai_space_rebuild"] = {"ok": False, "error": "ai_space_unavailable", "required": True}
+        else:
+            pipeline["ai_space_rebuild"] = {
+                "ok": True,
+                "skipped": True,
+                "reason": "no_new_or_changed_ai_album_media",
+                "raw_path_returned": False,
+            }
+            pipeline["smart_classification_rebuild"] = {
+                "ok": True,
+                "skipped": True,
+                "reason": "no_new_or_changed_ai_album_media",
+                "raw_path_returned": False,
+            }
+        after_ai_counts = self._count_ai_album_ai_space_assets()
+        required_failed = [
+            name
+            for name, result in pipeline.items()
+            if bool(result.get("required")) and result.get("ok") is False
+        ]
+        response_scope = {k: v for k, v in scope.items() if k != "root_paths"}
+        return (HTTPStatus.OK if not required_failed else HTTPStatus.BAD_REQUEST), {
+            "ok": not required_failed,
+            "schema": "digua_ai_album_auto_incremental_v1",
+            "scope": response_scope,
+            "changed": changed,
+            "view_rebuilt": should_rebuild_view,
+            "stale_view_detected": stale_view,
+            "counts": {
+                "media_images_indexed": sync_result.get("candidate_images"),
+                "multimodal_images": mm_counts.get("image", 0),
+                "ai_space_images_before": ai_counts.get("image", 0),
+                "ai_space_images_after": after_ai_counts.get("image", 0),
+            },
+            "pipeline": pipeline,
+            "required_failed": required_failed,
+            "physical_file_moved": False,
+            "physical_file_renamed": False,
+            "destructive_actions_enabled": False,
+            "cloud_used": False,
+            "raw_path_returned": False,
+        }
+
+    def ai_album_organize_status_payload(self, payload: dict | None = None) -> tuple[int, dict]:
+        if not self.personal_root or not self.media_center:
+            return HTTPStatus.SERVICE_UNAVAILABLE, {"ok": False, "error": "media_center_unavailable", "raw_path_returned": False}
+        payload = payload or {}
+        scope = self.ai_album_organizer_scope()
+        roots: list[Path] = list(scope.get("root_paths") or [])
+        if not roots:
+            return HTTPStatus.BAD_REQUEST, {k: v for k, v in scope.items() if k != "root_paths"}
+        max_files = max(1, min(int(payload.get("max_files") or AI_ALBUM_AUTO_MAX_FILES), AI_ALBUM_AUTO_MAX_FILES))
+        rows = self._ai_album_current_image_rows(roots, max_files=max_files)
+        self._ensure_ai_album_primary_categories()
+        memberships = self._ai_album_primary_memberships([str(row.get("asset_id") or "") for row in rows])
+        category_meta = {str(item["id"]): item for item in AI_ALBUM_PRIMARY_CATEGORIES}
+        category_counts: dict[str, int] = {str(item["id"]): 0 for item in AI_ALBUM_PRIMARY_CATEGORIES}
+        photo_status: list[dict] = []
+        organized = 0
+        pending = 0
+        multi_primary = 0
+        for row in rows:
+            asset_id = str(row.get("asset_id") or "")
+            primary = memberships.get(asset_id) or []
+            selected = self._select_primary_membership(primary)
+            if selected:
+                category_id = str(selected.get("category_id") or "")
+                category = category_meta.get(category_id) or {}
+                organized += 1
+                category_counts[category_id] = int(category_counts.get(category_id) or 0) + 1
+                if len(primary) > 1:
+                    multi_primary += 1
+                photo_status.append(
+                    {
+                        "asset_id": asset_id,
+                        "path_hash": row.get("path_hash"),
+                        "state": "organized",
+                        "category_id": category_id,
+                        "category_name": category.get("name") or selected.get("category_name"),
+                    }
+                )
+            else:
+                pending += 1
+                photo_status.append(
+                    {
+                        "asset_id": asset_id,
+                        "path_hash": row.get("path_hash"),
+                        "state": "pending",
+                        "category_id": None,
+                        "category_name": None,
+                    }
+                )
+        categories = [
+            {
+                "id": str(item["id"]),
+                "name": str(item["name"]),
+                "name_en": str(item["name_en"]),
+                "description": str(item["description"]),
+                "count": int(category_counts.get(str(item["id"])) or 0),
+            }
+            for item in AI_ALBUM_PRIMARY_CATEGORIES
+        ]
+        response_scope = {k: v for k, v in scope.items() if k != "root_paths"}
+        return HTTPStatus.OK, {
+            "ok": True,
+            "schema": "digua_ai_album_primary_organize_status_v1",
+            "scope": response_scope,
+            "total_images": len(rows),
+            "organized_count": organized,
+            "pending_count": pending,
+            "all_organized": pending == 0,
+            "multi_primary_count": multi_primary,
+            "categories": categories,
+            "photo_status": photo_status,
+            "policy": {
+                "exclusive_primary_category": True,
+                "physical_file_moved": False,
+                "physical_file_renamed": False,
+                "cloud_used": False,
+                "raw_path_returned": False,
+                "category_set": "people, animals, landscape, city, transport, food, documents, other",
+            },
+            "raw_path_returned": False,
+        }
+
+    def ai_album_organize_pending_payload(self, payload: dict | None, user: dict) -> tuple[int, dict]:
+        if not self.personal_root or not self.media_center:
+            return HTTPStatus.SERVICE_UNAVAILABLE, {"ok": False, "error": "media_center_unavailable", "raw_path_returned": False}
+        payload = payload or {}
+        max_files = max(1, min(int(payload.get("max_files") or AI_ALBUM_AUTO_MAX_FILES), AI_ALBUM_AUTO_MAX_FILES))
+        auto_status, auto_payload = self.ai_album_auto_organize_payload({"max_files": max_files, "force": bool(payload.get("force_index"))}, user)
+        if auto_status >= 400 or auto_payload.get("ok") is False:
+            return auto_status, {
+                "ok": False,
+                "schema": "digua_ai_album_primary_organize_v1",
+                "error": "auto_incremental_index_failed",
+                "auto_organize": auto_payload,
+                "raw_path_returned": False,
+            }
+        scope = self.ai_album_organizer_scope()
+        roots: list[Path] = list(scope.get("root_paths") or [])
+        if not roots:
+            return HTTPStatus.BAD_REQUEST, {k: v for k, v in scope.items() if k != "root_paths"}
+        rows = self._ai_album_current_image_rows(roots, max_files=max_files)
+        self._ensure_ai_album_primary_categories()
+        assets = self._ai_album_ai_space_assets_by_id()
+        memberships = self._ai_album_primary_memberships([str(row.get("asset_id") or "") for row in rows])
+        smart_db_path = self._ai_album_smart_db_path()
+        method_counts: dict[str, int] = {
+            "skipped_existing": 0,
+            "evidence_rules": 0,
+            "clip_similarity": 0,
+            "fallback_other": 0,
+            "reclassified_force": 0,
+        }
+        processed = 0
+        cleaned_non_primary = 0
+        collapsed_multi_primary = 0
+        errors: list[str] = []
+        force = bool(payload.get("force"))
+        conn = sqlite3.connect(str(smart_db_path))
+        conn.row_factory = sqlite3.Row
+        try:
+            for row in rows:
+                asset_id = str(row.get("asset_id") or "")
+                if not asset_id:
+                    continue
+                primary = memberships.get(asset_id) or []
+                selected = self._select_primary_membership(primary)
+                if selected and not force:
+                    cleaned_non_primary += self._delete_non_primary_memberships(conn, asset_id, keep_primary_id=str(selected.get("category_id") or ""))
+                    if len(primary) > 1:
+                        collapsed_multi_primary += self._collapse_primary_memberships(conn, asset_id, keep_primary_id=str(selected.get("category_id") or ""))
+                    method_counts["skipped_existing"] += 1
+                    continue
+                if selected and force:
+                    method_counts["reclassified_force"] += 1
+                asset = assets.get(asset_id) or {}
+                try:
+                    assignment = self._classify_ai_album_image(row, asset)
+                except Exception as exc:
+                    errors.append(f"{asset_id[:16]}:{type(exc).__name__}:{exc}")
+                    assignment = self._fallback_ai_album_assignment(asset_id, reason=f"{type(exc).__name__}")
+                self._delete_all_memberships_for_asset(conn, asset_id)
+                conn.execute(
+                    """
+                    INSERT OR REPLACE INTO smart_category_memberships(category_id,asset_id,score,matched_by_json,evidence_refs_json,created_at)
+                    VALUES(?,?,?,?,?,?)
+                    """,
+                    (
+                        assignment["category_id"],
+                        asset_id,
+                        float(assignment.get("score") or 0.0),
+                        json.dumps(assignment.get("matched_by") or [], ensure_ascii=False, sort_keys=True),
+                        json.dumps(assignment.get("evidence_refs") or [f"asset:{asset_id[:16]}"], ensure_ascii=False, sort_keys=True),
+                        datetime.now(timezone.utc).isoformat(),
+                    ),
+                )
+                method_counts[str(assignment.get("method") or "fallback_other")] = int(method_counts.get(str(assignment.get("method") or "fallback_other")) or 0) + 1
+                processed += 1
+            conn.commit()
+        finally:
+            conn.close()
+        ai_space_rebuild: dict = {"ok": False, "error": "ai_space_unavailable"}
+        if ai_space_route_response is not None:
+            try:
+                _code, ai_space_rebuild = ai_space_route_response(
+                    "/api/ai-space/rebuild",
+                    method="POST",
+                    payload={"user_id": str(user.get("username") or "operator"), "source": "ai_album_primary_organize"},
+                    report_root=self.report_root,
+                    personal_root=self.personal_root,
+                )
+            except Exception as exc:
+                ai_space_rebuild = {"ok": False, "error": f"{type(exc).__name__}:{exc}"}
+        _status, organize_status = self.ai_album_organize_status_payload({"max_files": max_files})
+        response_scope = {k: v for k, v in scope.items() if k != "root_paths"}
+        return HTTPStatus.OK, {
+            "ok": True,
+            "schema": "digua_ai_album_primary_organize_v1",
+            "scope": response_scope,
+            "processed_count": processed,
+            "skipped_existing_count": method_counts.get("skipped_existing", 0),
+            "cleaned_non_primary_memberships": cleaned_non_primary,
+            "collapsed_multi_primary_memberships": collapsed_multi_primary,
+            "method_counts": method_counts,
+            "auto_organize": auto_payload,
+            "ai_space_rebuild": self._redact_paths(ai_space_rebuild),
+            "status": organize_status,
+            "errors": errors[:10],
+            "physical_file_moved": False,
+            "physical_file_renamed": False,
+            "destructive_actions_enabled": False,
+            "cloud_used": False,
+            "raw_path_returned": False,
+        }
+
+    def _ai_album_current_image_rows(self, roots: list[Path], *, max_files: int) -> list[dict]:
+        if not self.media_center:
+            return []
+        allowed_roots = [Path(root).resolve(strict=False) for root in roots]
+        rows: list[dict] = []
+        seen: set[str] = set()
+        for row in self.media_center.indexed_rows(limit=max_files, modality="image"):
+            asset_id = str(row.get("asset_id") or "")
+            if not asset_id or asset_id in seen:
+                continue
+            path_text = str(row.get("file_path") or "")
+            if not path_text:
+                continue
+            path = Path(path_text)
+            if path.suffix.lower() not in AI_ALBUM_IMAGE_EXTENSIONS:
+                continue
+            try:
+                resolved = path.resolve(strict=True)
+            except OSError:
+                continue
+            if not any(_path_is_relative_to(resolved, root) for root in allowed_roots):
+                continue
+            seen.add(asset_id)
+            rows.append(dict(row))
+        return rows
+
+    def _ai_album_smart_db_path(self) -> Path:
+        return self.report_root / "smart_classification" / "runtime" / "smart_classification.db"
+
+    def _ensure_ai_album_primary_categories(self) -> None:
+        db_path = self._ai_album_smart_db_path()
+        try:
+            from src.smart_classification.schema import migrate as migrate_smart_db
+
+            migrate_smart_db(db_path)
+        except Exception:
+            db_path.parent.mkdir(parents=True, exist_ok=True)
+        if smart_classification_route_response is not None:
+            try:
+                smart_classification_route_response(
+                    "/api/smart-classification/categories",
+                    method="GET",
+                    report_root=self.report_root,
+                    personal_root=self.personal_root,
+                )
+            except Exception:
+                pass
+        conn = sqlite3.connect(str(db_path))
+        try:
+            now = datetime.now(timezone.utc).isoformat()
+            for item in AI_ALBUM_PRIMARY_CATEGORIES:
+                rule = {
+                    "album_primary": True,
+                    "exclusive_group": "ai_album_primary_v1",
+                    "preserve_memberships_on_rebuild": True,
+                    "manual_assignment_only": True,
+                    "clip_prompt": item["clip_prompt"],
+                }
+                conn.execute(
+                    """
+                    INSERT OR REPLACE INTO smart_categories(category_id,name,name_zh,name_en,icon,description,rule_json,created_by,created_at,updated_at,enabled)
+                    VALUES(?,?,?,?,?,?,?,?,COALESCE((SELECT created_at FROM smart_categories WHERE category_id=?),?),?,1)
+                    """,
+                    (
+                        item["id"],
+                        item["name"],
+                        item["name"],
+                        item["name_en"],
+                        item["icon"],
+                        item["description"],
+                        json.dumps(rule, ensure_ascii=False, sort_keys=True),
+                        "album_primary",
+                        item["id"],
+                        now,
+                        now,
+                    ),
+                )
+            conn.commit()
+        finally:
+            conn.close()
+
+    def _ai_album_primary_memberships(self, asset_ids: list[str]) -> dict[str, list[dict]]:
+        ids = [asset_id for asset_id in asset_ids if asset_id]
+        if not ids:
+            return {}
+        self._ensure_ai_album_primary_categories()
+        placeholders = ",".join("?" for _ in ids)
+        category_placeholders = ",".join("?" for _ in AI_ALBUM_PRIMARY_CATEGORY_IDS)
+        params = [*ids, *sorted(AI_ALBUM_PRIMARY_CATEGORY_IDS)]
+        conn = sqlite3.connect(str(self._ai_album_smart_db_path()))
+        conn.row_factory = sqlite3.Row
+        try:
+            rows = [
+                dict(row)
+                for row in conn.execute(
+                    f"""
+                    SELECT m.*, c.name AS category_name
+                    FROM smart_category_memberships m
+                    JOIN smart_categories c ON c.category_id=m.category_id
+                    WHERE m.asset_id IN ({placeholders})
+                      AND m.category_id IN ({category_placeholders})
+                    """,
+                    tuple(params),
+                )
+            ]
+        finally:
+            conn.close()
+        out: dict[str, list[dict]] = {}
+        for row in rows:
+            out.setdefault(str(row.get("asset_id") or ""), []).append(row)
+        return out
+
+    @staticmethod
+    def _select_primary_membership(rows: list[dict]) -> dict | None:
+        if not rows:
+            return None
+        return sorted(rows, key=lambda row: (float(row.get("score") or 0.0), str(row.get("created_at") or "")), reverse=True)[0]
+
+    def _delete_non_primary_memberships(self, conn: sqlite3.Connection, asset_id: str, *, keep_primary_id: str) -> int:
+        before = int(conn.execute("SELECT count(*) FROM smart_category_memberships WHERE asset_id=?", (asset_id,)).fetchone()[0])
+        primary_ids = sorted(AI_ALBUM_PRIMARY_CATEGORY_IDS)
+        placeholders = ",".join("?" for _ in primary_ids)
+        conn.execute(
+            f"DELETE FROM smart_category_memberships WHERE asset_id=? AND category_id NOT IN ({placeholders})",
+            (asset_id, *primary_ids),
+        )
+        self._collapse_primary_memberships(conn, asset_id, keep_primary_id=keep_primary_id)
+        after = int(conn.execute("SELECT count(*) FROM smart_category_memberships WHERE asset_id=?", (asset_id,)).fetchone()[0])
+        return max(0, before - after)
+
+    def _collapse_primary_memberships(self, conn: sqlite3.Connection, asset_id: str, *, keep_primary_id: str) -> int:
+        before = int(
+            conn.execute(
+                f"SELECT count(*) FROM smart_category_memberships WHERE asset_id=? AND category_id IN ({','.join('?' for _ in AI_ALBUM_PRIMARY_CATEGORY_IDS)})",
+                (asset_id, *sorted(AI_ALBUM_PRIMARY_CATEGORY_IDS)),
+            ).fetchone()[0]
+        )
+        conn.execute(
+            f"DELETE FROM smart_category_memberships WHERE asset_id=? AND category_id IN ({','.join('?' for _ in AI_ALBUM_PRIMARY_CATEGORY_IDS)}) AND category_id<>?",
+            (asset_id, *sorted(AI_ALBUM_PRIMARY_CATEGORY_IDS), keep_primary_id),
+        )
+        after = int(
+            conn.execute(
+                f"SELECT count(*) FROM smart_category_memberships WHERE asset_id=? AND category_id IN ({','.join('?' for _ in AI_ALBUM_PRIMARY_CATEGORY_IDS)})",
+                (asset_id, *sorted(AI_ALBUM_PRIMARY_CATEGORY_IDS)),
+            ).fetchone()[0]
+        )
+        return max(0, before - after)
+
+    @staticmethod
+    def _delete_all_memberships_for_asset(conn: sqlite3.Connection, asset_id: str) -> None:
+        conn.execute("DELETE FROM smart_category_memberships WHERE asset_id=?", (asset_id,))
+
+    def _ai_album_ai_space_assets_by_id(self) -> dict[str, dict]:
+        if ai_space_route_response is None:
+            return {}
+        try:
+            _code, payload = ai_space_route_response(
+                "/api/ai-space/assets",
+                method="GET",
+                payload={"limit": 10000},
+                report_root=self.report_root,
+                personal_root=self.personal_root,
+            )
+        except Exception:
+            return {}
+        assets = payload.get("assets") if isinstance(payload, dict) else None
+        if not isinstance(assets, list):
+            return {}
+        return {str(asset.get("asset_id") or ""): asset for asset in assets if isinstance(asset, dict) and asset.get("asset_id")}
+
+    def _classify_ai_album_image(self, row: dict, asset: dict) -> dict:
+        evidence_assignment = self._classify_ai_album_by_evidence(row, asset)
+        if evidence_assignment:
+            return evidence_assignment
+        clip_assignment = self._classify_ai_album_by_clip(row, asset)
+        if clip_assignment:
+            return clip_assignment
+        return self._fallback_ai_album_assignment(str(row.get("asset_id") or ""), reason="no_local_visual_semantic_evidence")
+
+    def _classify_ai_album_by_evidence(self, row: dict, asset: dict) -> dict | None:
+        labels = {str(item or "").strip().lower() for item in asset.get("object_labels") or [] if str(item or "").strip()}
+        person_attrs = {str(item or "").strip().lower() for item in asset.get("person_attrs") or [] if str(item or "").strip()}
+        text = " ".join(
+            [
+                str(row.get("title_redacted") or ""),
+                str(row.get("name") or ""),
+                str(row.get("extension") or ""),
+                str(asset.get("title_redacted") or ""),
+                str(asset.get("summary_redacted") or ""),
+                " ".join(str(item or "") for item in asset.get("category_names") or []),
+                " ".join(labels),
+                " ".join(person_attrs),
+            ]
+        ).lower()
+        best: dict | None = None
+        for item in AI_ALBUM_PRIMARY_CATEGORIES:
+            if item["id"] == "cat_album_primary_other":
+                continue
+            matched: list[str] = []
+            score = 0.0
+            object_hits = labels.intersection(str(term).lower() for term in item.get("object_terms") or [])
+            if object_hits:
+                matched.append("object_labels")
+                score += 0.7
+            person_hits = person_attrs.intersection(str(term).lower() for term in item.get("person_terms") or [])
+            if person_hits:
+                matched.append("person_attrs")
+                score += 0.85
+            title_terms = [str(term).lower() for term in item.get("title_terms") or []]
+            if any(term and term in text for term in title_terms):
+                matched.append("title_or_summary_terms")
+                score += 0.35
+            if not matched:
+                continue
+            candidate = {
+                "category_id": item["id"],
+                "score": min(score, 1.0),
+                "matched_by": matched,
+                "evidence_refs": asset.get("evidence_refs") or [f"asset:{str(row.get('asset_id') or '')[:16]}"],
+                "method": "evidence_rules",
+            }
+            if not best or float(candidate["score"]) > float(best["score"]):
+                best = candidate
+        return best
+
+    def _classify_ai_album_by_clip(self, row: dict, asset: dict) -> dict | None:
+        if product_embedding_runtime_status is None or request_product_embedding is None:
+            return None
+        try:
+            runtime = product_embedding_runtime_status()
+        except Exception:
+            return None
+        if not runtime.get("configured"):
+            return None
+        text_vectors = self._ai_album_clip_text_vectors(runtime)
+        if not text_vectors:
+            return None
+        path_text = str(row.get("file_path") or "")
+        if not path_text:
+            return None
+        path = Path(path_text)
+        try:
+            normalized = request_product_embedding(input_type="image", path=path, relative_path=str(row.get("title_redacted") or row.get("path_hash") or "album-image"))
+        except Exception:
+            return None
+        image_vector = normalized.get("vector") or []
+        if not image_vector:
+            return None
+        best_id = ""
+        best_score = -1.0
+        for category_id, text_vector in text_vectors.items():
+            score = _cosine_similarity(image_vector, text_vector)
+            if score > best_score:
+                best_id = category_id
+                best_score = score
+        if not best_id:
+            return None
+        return {
+            "category_id": best_id,
+            "score": max(0.0, min(1.0, best_score)),
+            "matched_by": ["clip_similarity", f"score:{best_score:.4f}", f"model:{normalized.get('model_id') or runtime.get('model_id') or 'local_clip'}"],
+            "evidence_refs": asset.get("evidence_refs") or [f"asset:{str(row.get('asset_id') or '')[:16]}"],
+            "method": "clip_similarity",
+        }
+
+    def _ai_album_clip_text_vectors(self, runtime: dict) -> dict[str, list[float]]:
+        if request_product_embedding is None:
+            return {}
+        endpoint_key = "|".join(
+            [
+                str(os.environ.get("AI_NAS_IMAGE_TEXT_EMBEDDING_ENDPOINT") or os.environ.get("AI_NAS_CLIP_ENDPOINT") or ""),
+                str(runtime.get("model_id") or ""),
+                "ai_album_primary_v1",
+            ]
+        )
+        cached = self.ai_album_clip_text_cache.get(endpoint_key)
+        if cached and isinstance(cached.get("vectors"), dict):
+            return cached["vectors"]
+        vectors: dict[str, list[float]] = {}
+        for item in AI_ALBUM_PRIMARY_CATEGORIES:
+            try:
+                normalized = request_product_embedding(input_type="text", text=str(item["clip_prompt"]), relative_path="")
+            except Exception:
+                return {}
+            vector = normalized.get("vector") or []
+            if not vector:
+                return {}
+            vectors[str(item["id"])] = vector
+        self.ai_album_clip_text_cache = {endpoint_key: {"vectors": vectors, "created_at": datetime.now(timezone.utc).isoformat()}}
+        return vectors
+
+    @staticmethod
+    def _fallback_ai_album_assignment(asset_id: str, *, reason: str) -> dict:
+        return {
+            "category_id": "cat_album_primary_other",
+            "score": 0.15,
+            "matched_by": [f"fallback_other:{reason}"],
+            "evidence_refs": [f"asset:{str(asset_id or '')[:16]}"],
+            "method": "fallback_other",
+        }
+
+    def _sync_ai_album_media_rows_to_multimodal_assets(self, roots: list[Path], *, max_files: int) -> dict:
+        if not self.media_center:
+            return {"ok": False, "error": "media_center_unavailable", "raw_path_returned": False}
+        if connect_multimodal_db is None or migrate_multimodal_db is None:
+            return {"ok": False, "error": "multimodal_schema_unavailable", "raw_path_returned": False}
+        allowed_roots = [Path(root).resolve(strict=False) for root in roots]
+        db_path = self.report_root / "multimodal_search" / "runtime" / "multimodal_search.db"
+        migrate_multimodal_db(db_path)
+        rows = self.media_center.indexed_rows(limit=max_files, modality="image")
+        now = datetime.now(timezone.utc).isoformat()
+        candidate_images = 0
+        upserted = 0
+        unchanged = 0
+        skipped = 0
+        conn = connect_multimodal_db(db_path)
+        try:
+            for row in rows:
+                path_text = str(row.get("file_path") or "")
+                if not path_text:
+                    skipped += 1
+                    continue
+                path = Path(path_text)
+                if path.suffix.lower() not in AI_ALBUM_IMAGE_EXTENSIONS:
+                    skipped += 1
+                    continue
+                try:
+                    resolved = path.resolve(strict=True)
+                except OSError:
+                    skipped += 1
+                    continue
+                if not any(_path_is_relative_to(resolved, root) for root in allowed_roots):
+                    skipped += 1
+                    continue
+                candidate_images += 1
+                asset_id = str(row.get("asset_id") or "")
+                path_hash = str(row.get("path_hash") or "")
+                if not asset_id or not path_hash:
+                    skipped += 1
+                    continue
+                size_bytes = int(row.get("size_bytes") or 0)
+                mtime = int(float(row.get("mtime") or 0))
+                sha256 = str(row.get("sha256") or "")
+                existing = conn.execute(
+                    "SELECT sha256,mtime,size_bytes,index_status FROM mm_assets WHERE asset_id=?",
+                    (asset_id,),
+                ).fetchone()
+                if existing and str(existing["sha256"] or "") == sha256 and int(existing["mtime"] or 0) == mtime and int(existing["size_bytes"] or 0) == size_bytes:
+                    unchanged += 1
+                    continue
+                parent_hash = hashlib.sha256(str(resolved.parent).encode("utf-8", errors="replace")).hexdigest()[:32]
+                conn.execute(
+                    """
+                    INSERT OR REPLACE INTO mm_assets(
+                      asset_id,source_id,modality,file_type,title_redacted,path_hash,parent_hash,size_bytes,mtime,sha256,
+                      privacy_level,index_status,created_at,updated_at
+                    ) VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?)
+                    """,
+                    (
+                        asset_id,
+                        "ai_album_auto_incremental",
+                        "image",
+                        path.suffix.lower().lstrip(".") or "image",
+                        row.get("title_redacted") or row.get("name") or "image",
+                        path_hash,
+                        parent_hash,
+                        size_bytes,
+                        mtime,
+                        sha256,
+                        "private_local_only",
+                        "indexed_media_only",
+                        now,
+                        now,
+                    ),
+                )
+                upserted += 1
+            conn.commit()
+        finally:
+            conn.close()
+        return {
+            "ok": True,
+            "candidate_images": candidate_images,
+            "upserted": upserted,
+            "unchanged": unchanged,
+            "skipped": skipped,
+            "db": "multimodal_search/runtime/multimodal_search.db",
+            "raw_path_returned": False,
+        }
+
+    def _count_ai_album_multimodal_assets(self) -> dict[str, int]:
+        db_path = self.report_root / "multimodal_search" / "runtime" / "multimodal_search.db"
+        return self._count_by_modality(db_path, "mm_assets")
+
+    def _count_ai_album_ai_space_assets(self) -> dict[str, int]:
+        db_path = self.report_root / "ai_space" / "runtime" / "ai_space.db"
+        return self._count_by_modality(db_path, "ai_space_asset_views")
+
+    @staticmethod
+    def _count_by_modality(db_path: Path, table: str) -> dict[str, int]:
+        if not db_path.exists():
+            return {}
+        try:
+            conn = sqlite3.connect(str(db_path))
+            conn.row_factory = sqlite3.Row
+            try:
+                rows = conn.execute(f"SELECT modality,count(*) AS c FROM {table} GROUP BY modality").fetchall()
+                return {str(row["modality"] or "other"): int(row["c"] or 0) for row in rows}
+            finally:
+                conn.close()
+        except sqlite3.Error:
+            return {}
+
+    def media_preview_access(self, resolved: Path, user: dict) -> tuple[bool, HTTPStatus]:
+        if self.personal_root:
+            try:
+                personal = self.personal_root.resolve(strict=True)
+                relative_path = resolved.resolve(strict=True).relative_to(personal).as_posix()
+                if self.can_read(user, relative_path):
+                    return True, HTTPStatus.OK
+                return False, HTTPStatus.FORBIDDEN
+            except (OSError, ValueError):
+                pass
+        scope = self.ai_album_organizer_scope()
+        for root in scope.get("root_paths") or []:
+            try:
+                if _path_is_relative_to(resolved, Path(root)):
+                    return True, HTTPStatus.OK
+            except OSError:
+                continue
+        return False, HTTPStatus.NOT_FOUND
+
+    @staticmethod
+    def _public_workspace_relative(path: Path, workspace: Path) -> str:
+        try:
+            return path.resolve(strict=False).relative_to(workspace.resolve(strict=False)).as_posix()
+        except ValueError:
+            return path.name
+
+    @staticmethod
+    def _is_project_artifact_material_path(path: Path, workspace: Path, personal: Path) -> bool:
+        try:
+            parts = path.resolve(strict=False).relative_to(workspace.resolve(strict=False)).parts
+        except ValueError:
+            return True
+        if not parts:
+            return True
+        first = parts[0].strip()
+        first_lower = first.lower()
+        if first.startswith("@") or first_lower in AI_ALBUM_PROJECT_ARTIFACT_NAMES:
+            return True
+        if _path_is_relative_to(path, personal) and len(parts) >= 2:
+            return product_hidden_storage_name(parts[1])
+        return False
 
     def media_upload_photo(self, payload: dict, user: dict) -> tuple[int, dict]:
         if not self.personal_root or not self.media_center:
@@ -2707,20 +4457,28 @@ class PortalState:
 
     def _copilot_storage_inventory(self, intent: dict, user: dict, router: dict) -> tuple[int, dict]:
         rel = str(intent.get("path") or "")
-        status, payload = self.storage_inventory_payload(rel, user)
+        quoted = intent.get("quoted") or []
+        try:
+            normalized_rel = normalize_storage_relative_path(rel)
+        except StoragePathError:
+            normalized_rel = rel
+        use_material_scope = not quoted and normalized_rel in {"", "Photos", "Videos", "Documents"}
+        status, payload = self.ai_album_material_inventory_payload(user, limit=40) if use_material_scope else self.storage_inventory_payload(rel, user)
         if status != HTTPStatus.OK:
             return self._copilot_attach_router(status, payload, router, assistant_mode="local_storage_inventory")
         summary = payload.get("summary") or {}
         entries = payload.get("entries") or []
         type_counts = summary.get("type_counts") or {}
         top_types = "、".join([f"{name} {count}" for name, count in list(type_counts.items())[:4]]) or "暂无"
+        scope_label = payload.get("relative_path") or normalized_rel
+        scope_text = "AI 相册整理范围" if use_material_scope else "本地个人空间"
         payload.update(
             {
                 "assistant_mode": "local_storage_inventory",
                 "route": "local_storage_inventory",
                 "model": "S100P storage inventory via Qwen router",
                 "answer": (
-                    f"已在本地个人空间完成只读盘点：顶层条目 {int(summary.get('top_level_count') or 0)} 个，"
+                    f"已在{scope_text}完成只读盘点：顶层条目 {int(summary.get('top_level_count') or 0)} 个，"
                     f"文件 {int(summary.get('file_count') or 0)} 个，文件夹 {int(summary.get('dir_count') or 0)} 个，"
                     f"估算占用 {human_size(int(summary.get('total_size_bytes') or 0))}。主要类型：{top_types}。"
                 ),
@@ -2729,9 +4487,10 @@ class PortalState:
                 "nas_action": {
                     "operation": "inventory",
                     "status": "completed",
-                    "path": normalize_storage_relative_path(rel),
+                    "path": scope_label,
                     "entries": entries,
                     "summary": summary,
+                    "organizer_scope": "demo_test_personal_material_only" if use_material_scope else "personal_root_acl",
                     "qwen_execution_authority": False,
                     "direct_nas_write_performed": False,
                 },
@@ -2739,14 +4498,189 @@ class PortalState:
         )
         return self._copilot_attach_router(status, payload, router, assistant_mode="local_storage_inventory")
 
+    def _local_qwen_document_answer_completion(self, query: str, evidence: list[dict]) -> dict:
+        prompt = build_document_grounded_answer_prompt(query, evidence)
+        if document_amount_hits(evidence) and contains_any(
+            query,
+            ("金额", "多少钱", "多少", "合计", "账单", "开支", "amount", "total", "bill", "expense"),
+        ):
+            prompt = build_document_grounded_retry_prompt(query, evidence)
+        payload = {
+            "model": self.qwen_model,
+            "messages": [
+                {"role": "user", "content": prompt},
+            ],
+            "temperature": 0.0,
+            "max_tokens": 256,
+            "stream": False,
+            "disable_ai_nas_tools": True,
+            "metadata": {
+                "source": "openclaw_operator_portal",
+                "purpose": "local_document_grounded_answer",
+                "evidence_count": len(evidence),
+                "disable_ai_nas_tools": True,
+                "qwen_execution_authority": False,
+                "raw_path_returned": False,
+            },
+        }
+        return http_post_json(
+            "local_qwen_document_grounded_answer",
+            normalize_chat_completions_url(self.qwen_gateway_url or DEFAULT_QWEN_GATEWAY_URL),
+            payload,
+            timeout=180,
+        )
+
+    def _local_qwen_document_answer_retry_completion(self, query: str, evidence: list[dict]) -> dict:
+        payload = {
+            "model": self.qwen_model,
+            "messages": [
+                {"role": "user", "content": build_document_grounded_retry_prompt(query, evidence)},
+            ],
+            "temperature": 0.0,
+            "max_tokens": 120,
+            "stream": False,
+            "disable_ai_nas_tools": True,
+            "metadata": {
+                "source": "openclaw_operator_portal",
+                "purpose": "local_document_grounded_answer_retry",
+                "evidence_count": len(evidence),
+                "disable_ai_nas_tools": True,
+                "qwen_execution_authority": False,
+                "raw_path_returned": False,
+            },
+        }
+        return http_post_json(
+            "local_qwen_document_grounded_answer_retry",
+            normalize_chat_completions_url(self.qwen_gateway_url or DEFAULT_QWEN_GATEWAY_URL),
+            payload,
+            timeout=180,
+        )
+
+    def local_qwen_document_answer(self, query: str, evidence: list[dict]) -> dict:
+        if not evidence:
+            return {"ok": False, "error": "no_document_evidence"}
+        result = self._local_qwen_document_answer_completion(query, evidence)
+        if not result.get("ok"):
+            return {
+                "ok": False,
+                "error": "local_qwen_document_answer_failed",
+                "upstream_status": result.get("status"),
+                "upstream_error": result.get("error") or (result.get("payload") or {}).get("error") if isinstance(result.get("payload"), dict) else result.get("error"),
+                "elapsed_ms": result.get("elapsed_ms"),
+            }
+        content, _metadata, upstream = chat_completion_content(result)
+        answer = content.strip()
+        if not answer:
+            return {"ok": False, "error": "local_qwen_document_answer_empty", "elapsed_ms": result.get("elapsed_ms")}
+        amounts = document_amount_hits(evidence)
+        amount_sensitive = bool(amounts) and contains_any(
+            query,
+            ("金额", "多少钱", "多少", "合计", "账单", "开支", "amount", "total", "bill", "expense"),
+        )
+        def grounding_validation_error(answer_text: str) -> str | None:
+            if not amount_sensitive:
+                return None
+            amount_digits = [re.sub(r"\D+", "", item) for item in amounts if re.sub(r"\D+", "", item)]
+            preferred_digits = [
+                re.sub(r"\D+", "", item)
+                for item in amounts
+                if re.sub(r"\D+", "", item) and contains_any(item, ("元", "块", "人民币"))
+            ]
+            if preferred_digits:
+                exact_amount = any(
+                    re.search(rf"(?<![\d.]){re.escape(token)}(?![\d.])\s*(?:元|人民币|块)", answer_text)
+                    for token in preferred_digits
+                    if token
+                )
+            else:
+                exact_amount = any(
+                    re.search(rf"(?<![\d.]){re.escape(token)}(?![\d.])", answer_text)
+                    for token in amount_digits
+                    if token
+                )
+            generic = contains_any(
+                answer_text,
+                ("有什么问题", "需要我", "请问您", "无法确定", "无法回答", "请您提供更多", "提供更多", "澄清", "误解", "告诉我"),
+            )
+            approximate = contains_any(answer_text, ("约等于", "约为", "大约", "≈", "approx"))
+            if generic or approximate or not exact_amount:
+                return "local_qwen_document_answer_failed_grounding_validation"
+            return None
+
+        validation_error = grounding_validation_error(answer)
+        if validation_error:
+            retry_attempts = 3 if amount_sensitive else 1
+            retry_answer = ""
+            retry_error = ""
+            retry_elapsed_ms = result.get("elapsed_ms")
+            for retry_index in range(1, retry_attempts + 1):
+                retry = self._local_qwen_document_answer_retry_completion(query, evidence)
+                retry_elapsed_ms = retry.get("elapsed_ms")
+                if not retry.get("ok"):
+                    retry_error = retry.get("error") or (retry.get("payload") or {}).get("error") if isinstance(retry.get("payload"), dict) else retry.get("error")
+                    continue
+                retry_content, _retry_metadata, retry_upstream = chat_completion_content(retry)
+                retry_answer = retry_content.strip()
+                if retry_answer and not grounding_validation_error(retry_answer):
+                    retry_answer = normalize_document_answer_amount_units(retry_answer, evidence)
+                    retry_answer = normalize_document_money_answer_sentence(query, retry_answer, evidence)
+                    return {
+                        "ok": True,
+                        "answer": retry_answer,
+                        "model": retry_upstream.get("model") or self.qwen_model,
+                        "finish_reason": ((retry_upstream.get("choices") or [{}])[0] or {}).get("finish_reason") if isinstance(retry_upstream.get("choices"), list) else None,
+                        "usage": retry_upstream.get("usage") if isinstance(retry_upstream.get("usage"), dict) else {},
+                        "elapsed_ms": retry.get("elapsed_ms"),
+                        "retried": True,
+                        "retry_attempt_count": retry_index,
+                        "first_answer_rejected": True,
+                    }
+            return {
+                "ok": False,
+                "error": validation_error,
+                "qwen_answer_preview": answer[:200],
+                "qwen_retry_answer_preview": retry_answer[:200],
+                "retry_error": retry_error,
+                "retry_attempt_count": retry_attempts,
+                "elapsed_ms": retry_elapsed_ms,
+            }
+        answer = normalize_document_answer_amount_units(answer, evidence)
+        answer = normalize_document_money_answer_sentence(query, answer, evidence)
+        return {
+            "ok": True,
+            "answer": answer,
+            "model": upstream.get("model") or self.qwen_model,
+            "finish_reason": ((upstream.get("choices") or [{}])[0] or {}).get("finish_reason") if isinstance(upstream.get("choices"), list) else None,
+            "usage": upstream.get("usage") if isinstance(upstream.get("usage"), dict) else {},
+            "elapsed_ms": result.get("elapsed_ms"),
+        }
+
     def _copilot_document_query(self, intent: dict, user: dict, router: dict) -> tuple[int, dict]:
         status, payload = self.document_query_payload(str(intent.get("query") or ""), str(intent.get("path") or "Documents"), user)
         if status == HTTPStatus.OK:
+            evidence = payload.get("evidence") if isinstance(payload.get("evidence"), list) else []
+            if evidence:
+                qwen_answer = self.local_qwen_document_answer(str(intent.get("query") or ""), evidence)
+                if qwen_answer.get("ok"):
+                    payload["answer"] = qwen_answer.get("answer") or payload.get("answer")
+                    payload["document_answer_source"] = "local_qwen_grounded_rag"
+                    payload["qwen_document_answer_used"] = True
+                    payload["qwen_document_answer_retry_used"] = bool(qwen_answer.get("retried"))
+                    payload["qwen_document_answer_retry_attempts"] = qwen_answer.get("retry_attempt_count") or 0
+                    payload["grounded_answer_model"] = qwen_answer.get("model")
+                    payload["grounded_answer_elapsed_ms"] = qwen_answer.get("elapsed_ms")
+                    payload["usage"] = qwen_answer.get("usage") or {}
+                else:
+                    payload["document_answer_source"] = "deterministic_evidence_fallback"
+                    payload["qwen_document_answer_used"] = False
+                    payload["qwen_document_answer_retry_used"] = False
+                    payload["qwen_document_answer_retry_attempts"] = qwen_answer.get("retry_attempt_count") or 0
+                    payload["grounded_qwen_error"] = qwen_answer.get("error")
             payload.update(
                 {
                     "assistant_mode": "local_document_query",
                     "route": "local_document_query",
-                    "model": "SQLite FTS-first RAG via Qwen router",
+                    "model": payload.get("grounded_answer_model") or "SQLite FTS-first RAG via Qwen router",
                     "nas_action": {
                         "operation": "document_query",
                         "status": "completed",
@@ -3230,6 +5164,137 @@ class PortalState:
             },
         }
 
+    @staticmethod
+    def _copilot_album_label_for_category(category_id: str) -> str:
+        return {
+            "cat_album_primary_people": "person",
+            "cat_album_primary_animals": "animal",
+            "cat_album_primary_landscape": "landscape",
+            "cat_album_primary_city": "architecture",
+            "cat_album_primary_transport": "vehicle",
+            "cat_album_primary_food": "food",
+            "cat_album_primary_docs": "document",
+            "cat_album_primary_other": "other",
+        }.get(category_id, "album_category")
+
+    @staticmethod
+    def _copilot_explicit_album_category_request(intent: dict) -> bool:
+        query = str(intent.get("query") or "")
+        lower = query.lower()
+        if any(str(term).lower() in lower for term in AI_ALBUM_EXPLICIT_CATEGORY_QUERY_TERMS):
+            return True
+        for category in AI_ALBUM_PRIMARY_CATEGORIES:
+            if str(category.get("name") or "") in query or str(category.get("name_en") or "").lower() in lower:
+                return True
+        return False
+
+    @staticmethod
+    def _copilot_album_category_for_intent(intent: dict) -> dict | None:
+        if not PortalState._copilot_explicit_album_category_request(intent):
+            return None
+        query = str(intent.get("query") or "")
+        lower = query.lower()
+        labels = {str(label).lower() for label in (intent.get("labels") or [])}
+        if "person" in labels and not any(term in query for term in ("无人机", "机器人")):
+            return next((item for item in AI_ALBUM_PRIMARY_CATEGORIES if item["id"] == "cat_album_primary_people"), None)
+        label_category = {
+            "cat": "cat_album_primary_animals",
+            "dog": "cat_album_primary_animals",
+            "bird": "cat_album_primary_animals",
+            "car": "cat_album_primary_transport",
+            "bus": "cat_album_primary_transport",
+            "truck": "cat_album_primary_transport",
+            "bicycle": "cat_album_primary_transport",
+            "motorcycle": "cat_album_primary_transport",
+            "train": "cat_album_primary_transport",
+            "airplane": "cat_album_primary_transport",
+            "boat": "cat_album_primary_transport",
+        }
+        for label, category_id in label_category.items():
+            if label in labels:
+                return next((item for item in AI_ALBUM_PRIMARY_CATEGORIES if item["id"] == category_id), None)
+        for category in AI_ALBUM_PRIMARY_CATEGORIES:
+            category_id = str(category["id"])
+            terms = AI_ALBUM_COPILOT_CATEGORY_ALIASES.get(category_id) or ()
+            if any(str(term).lower() in lower or str(term) in query for term in terms):
+                return category
+        return None
+
+    def _copilot_album_primary_search(self, intent: dict, user: dict, *, limit: int = 8) -> dict:
+        category = self._copilot_album_category_for_intent(intent)
+        if not category:
+            return {"ok": False, "degraded_reason": "no_album_primary_category_intent"}
+        if not self.personal_root or not self.media_center:
+            return {"ok": False, "degraded_reason": "media_center_unavailable"}
+        scope = self.ai_album_organizer_scope()
+        roots: list[Path] = list(scope.get("root_paths") or [])
+        if not roots:
+            return {"ok": False, "degraded_reason": "ai_album_scope_empty"}
+        rows = self._ai_album_current_image_rows(roots, max_files=AI_ALBUM_AUTO_MAX_FILES)
+        memberships = self._ai_album_primary_memberships([str(row.get("asset_id") or "") for row in rows])
+        category_id = str(category["id"])
+        category_name = str(category["name"])
+        category_label = self._copilot_album_label_for_category(category_id)
+        matched: list[dict] = []
+        for row in rows:
+            asset_id = str(row.get("asset_id") or "")
+            selected = self._select_primary_membership(memberships.get(asset_id) or [])
+            if not selected or str(selected.get("category_id") or "") != category_id:
+                continue
+            path_text = str(row.get("file_path") or "")
+            if path_text:
+                try:
+                    resolved = Path(path_text).resolve(strict=True)
+                    allowed, _denial_status = self.media_preview_access(resolved, user or {})
+                    if not allowed:
+                        continue
+                except OSError:
+                    continue
+            try:
+                score = float(selected.get("score") or 0.85)
+            except (TypeError, ValueError):
+                score = 0.85
+            path_hash_value = str(row.get("path_hash") or "")
+            matched.append(
+                {
+                    "rank": 0,
+                    "asset_id": asset_id,
+                    "title_redacted": f"{category_name}照片",
+                    "modality": "image",
+                    "file_type": row.get("extension") or row.get("file_type") or ".jpg",
+                    "size_bytes": row.get("size_bytes"),
+                    "mtime": row.get("mtime"),
+                    "score": min(1.0, max(0.0, score)),
+                    "matched_by": "album_primary_category",
+                    "object_labels": [category_label],
+                    "detections": [{"label": category_label, "label_zh": category_name, "confidence": min(1.0, max(0.0, score))}],
+                    "evidence_ref": f"ai_album_primary:{category_id}:{asset_id}",
+                    "path_hash": path_hash_value,
+                    "privacy_level": "local_only",
+                    "score_components": {"album_primary_score": min(1.0, max(0.0, score))},
+                    "preview_url": f"/api/media/preview?path_hash={quote(path_hash_value, safe='')}" if path_hash_value else "",
+                    "preview_kind": "image" if path_hash_value else "",
+                }
+            )
+        matched.sort(key=lambda item: (float(item.get("score") or 0.0), float(item.get("mtime") or 0.0)), reverse=True)
+        for index, item in enumerate(matched[:limit], start=1):
+            item["rank"] = index
+            item["title_redacted"] = f"{category_name}照片 {index}"
+        return {
+            "ok": True,
+            "schema": "digua_ai_album_primary_search_v1",
+            "query_redacted": str(intent.get("query") or "")[:120],
+            "category_id": category_id,
+            "category_name": category_name,
+            "labels": ["person"] if category_id == "cat_album_primary_people" else [category_label],
+            "results": matched[:limit],
+            "total_count": len(matched),
+            "retrieval_mode": "ai_album_primary_category",
+            "privacy": {"raw_path_returned": False, "cloud_used": False},
+            "cloud_used": False,
+            "raw_path_returned": False,
+        }
+
     def enrich_copilot_search_result(
         self,
         item: dict,
@@ -3238,7 +5303,11 @@ class PortalState:
     ) -> dict:
         safe = sanitize_copilot_search_result(item)
         path_hash_value = str(safe.get("path_hash") or "")
-        path, _relative_path = self.storage_file_by_path_hash(path_hash_value, user, path_cache)
+        path, _relative_path = self.media_file_by_path_hash(path_hash_value, user, path_cache)
+        preview_route = "media" if path else ""
+        if not path:
+            path, _relative_path = self.storage_file_by_path_hash(path_hash_value, user, path_cache)
+            preview_route = "storage" if path else ""
         stat = None
         if path:
             try:
@@ -3269,7 +5338,10 @@ class PortalState:
             "location_label": "NAS 本地索引",
         }
         if path and type_label == "照片" and path_hash_value:
-            safe["preview_url"] = f"/api/storage/preview-by-hash?path_hash={quote(path_hash_value, safe='')}"
+            if preview_route == "media":
+                safe["preview_url"] = f"/api/media/preview?path_hash={quote(path_hash_value, safe='')}"
+            else:
+                safe["preview_url"] = f"/api/storage/preview-by-hash?path_hash={quote(path_hash_value, safe='')}"
             safe["preview_kind"] = "image"
             safe["display"]["preview_available"] = True
         else:
@@ -3283,22 +5355,80 @@ class PortalState:
             for item in (result.get("results") or [])[:8]
             if isinstance(item, dict)
         ]
+        modality = str(intent.get("modality") or "all").lower()
+        if mode != "local_ai_album_category_search" and modality == "image":
+            before_count = len(results)
+            results = [
+                item
+                for item in results
+                if bool((item.get("display") or {}).get("preview_available")) and bool(item.get("preview_url"))
+            ]
+            if before_count and not results:
+                result = {
+                    **result,
+                    "degraded": True,
+                    "degraded_reason": result.get("degraded_reason") or "local_index_results_without_resolvable_media_preview",
+                }
         result_count = len(results)
         query = str(intent.get("query") or "")
         labels = result.get("labels") or intent.get("labels") or []
+        album_category: dict | None = None
+        if result_count == 0 or self._copilot_explicit_album_category_request(intent):
+            album_result = self._copilot_album_primary_search(intent, user, limit=8)
+            album_results = album_result.get("results") if isinstance(album_result.get("results"), list) else []
+            if album_result.get("ok") and album_results:
+                album_category = {
+                    "category_id": album_result.get("category_id"),
+                    "category_name": album_result.get("category_name"),
+                    "total_count": int(album_result.get("total_count") or len(album_results)),
+                }
+                results = [
+                    self.enrich_copilot_search_result(item, user, path_cache)
+                    for item in album_results[:8]
+                    if isinstance(item, dict)
+                ]
+                result_count = int(album_result.get("total_count") or len(results))
+                labels = album_result.get("labels") or labels
+                retrieval_mode = album_result.get("retrieval_mode") or "ai_album_primary_category"
+                source = "AI album primary classification"
+                mode = "local_ai_album_category_search"
+                result = {
+                    **result,
+                    "query_redacted": album_result.get("query_redacted") or result.get("query_redacted"),
+                    "privacy": album_result.get("privacy") or result.get("privacy"),
+                    "degraded": False,
+                    "degraded_reason": None,
+                }
         title_summary = summarize_search_result_titles(results)
+        allow_inventory_fallback = modality not in {"image", "video"}
+        fallback_inventory = self._copilot_search_fallback_inventory(intent, user) if result_count == 0 and allow_inventory_fallback else None
         if result_count:
             image_only = (intent.get("modality") == "image") or all((item.get("display") or {}).get("type_label") == "照片" for item in results)
             unit = "张相关照片" if image_only else "个匹配结果"
-            answer = f"已在本地 NAS 索引中搜索“{query}”，找到 {result_count} {unit}。下方卡片包含预览图、名称、日期和匹配原因。"
+            if album_category:
+                answer = f"已在本地 NAS 相册分类索引中搜索“{query}”，命中“{album_category.get('category_name')}”分类，找到 {result_count} {unit}。下方卡片是真实 NAS 图片预览。"
+            else:
+                answer = f"已在本地 NAS 索引中搜索“{query}”，找到 {result_count} {unit}。下方卡片包含预览图、名称、日期和匹配原因。"
             if title_summary:
                 answer += f" 结果包括：{title_summary}。"
             if "person" in labels:
                 answer += " 这里只表示检测到 person 目标，不做人脸识别，也不判断具体身份。"
         else:
-            reason = result.get("degraded_reason") or "no_matching_local_index_result"
-            answer = f"已执行本地 NAS 搜索“{query}”，当前索引没有返回匹配结果。原因：{reason}。未调用云端，也没有让 Qwen 直接访问或执行 NAS 工具。"
-        return HTTPStatus.OK, {
+            raw_reason = result.get("degraded_reason") or "no_matching_local_index_result"
+            reason = copilot_search_reason_display(raw_reason)
+            if fallback_inventory and fallback_inventory.get("ok"):
+                summary = fallback_inventory.get("summary") or {}
+                scope = fallback_inventory.get("relative_path") or "/"
+                answer = (
+                    f"已查询本地 NAS 索引“{query}”，对象/语义索引没有返回匹配结果。原因：{reason}。"
+                    f"随后已按只读权限盘点 {scope}，返回顶层条目 {int(summary.get('top_level_count') or 0)} 个、"
+                    f"文件 {int(summary.get('file_count') or 0)} 个。未调用云端；Qwen 只做意图理解，"
+                    "NAS 查询由本地受控 API 执行。"
+                )
+            else:
+                media_hint = "这是图片/视频检索请求，因此没有改成目录盘点。" if not allow_inventory_fallback else ""
+                answer = f"已查询本地 NAS 视觉索引“{query}”，当前对象/语义索引没有返回匹配图片。原因：{reason}。{media_hint}未调用云端；Qwen 只做意图理解，NAS 查询由本地受控 API 执行。"
+        payload = {
             "ok": True,
             "assistant_mode": mode,
             "answer": answer,
@@ -3313,8 +5443,12 @@ class PortalState:
                 "retrieval_mode": retrieval_mode,
                 "result_count": result_count,
                 "results": results,
+                "album_category": album_category,
                 "degraded": bool(result.get("degraded")),
                 "degraded_reason": result.get("degraded_reason"),
+                "degraded_reason_display": copilot_search_reason_display(result.get("degraded_reason")) if result.get("degraded_reason") else None,
+                "fallback_inventory_performed": bool(fallback_inventory and fallback_inventory.get("ok")),
+                "fallback_inventory_status": (fallback_inventory or {}).get("status"),
                 "privacy": result.get("privacy") or {"raw_path_returned": False, "cloud_used": False},
             },
             "nas_action": {
@@ -3322,20 +5456,40 @@ class PortalState:
                 "status": "completed" if result_count else "completed_empty",
                 "qwen_execution_authority": False,
                 "direct_nas_write_performed": False,
+                "read_only_inventory_fallback": bool(fallback_inventory and fallback_inventory.get("ok")),
+                "album_primary_category_fallback": bool(album_category),
                 "forbidden_actions": ["delete", "move", "rename", "chmod", "chown", "recursive", "overwrite", "shell"],
             },
             "audit": {
                 "tool_executor": "openclaw_local_api",
                 "local_search_performed": True,
+                "read_only_inventory_fallback": bool(fallback_inventory and fallback_inventory.get("ok")),
+                "album_primary_category_fallback": bool(album_category),
                 "direct_nas_write_performed": False,
                 "cloud_payload_sent": False,
                 "raw_path_returned": False,
                 "prompt_hash": hashlib.sha256(query.encode("utf-8", errors="replace")).hexdigest(),
             },
         }
+        if fallback_inventory:
+            payload["fallback_inventory"] = fallback_inventory
+        return HTTPStatus.OK, payload
+
+    def _copilot_search_fallback_inventory(self, intent: dict, user: dict) -> dict:
+        modality = str(intent.get("modality") or "").lower()
+        scope = {"image": "Photos", "video": "Videos", "document": "Documents"}.get(modality, "")
+        status, payload = self.ai_album_material_inventory_payload(user, limit=20)
+        if isinstance(payload, dict):
+            payload["fallback_from"] = scope or "AI相册整理范围"
+        safe_payload = self._redact_paths(dict(payload)) if isinstance(payload, dict) else {"error": str(payload)}
+        safe_payload["status"] = "completed" if status == HTTPStatus.OK and safe_payload.get("ok") else "failed"
+        safe_payload["requested_scope"] = "AI相册整理范围"
+        safe_payload["raw_path_returned"] = False
+        return safe_payload
 
     def local_copilot_search(self, intent: dict, user: dict) -> tuple[int, dict]:
         query = str(intent.get("query") or "").strip()
+        yolo_empty_result: dict | None = None
         if intent.get("prefer_yolo") and yolo_route_response is not None:
             yolo_payload = {"query": query, "top_k": 8, "user_id": str(user.get("username") or "operator")}
             if intent.get("modality") and intent.get("modality") != "all":
@@ -3348,14 +5502,17 @@ class PortalState:
                 personal_root=self.personal_root,
             )
             if status_code == HTTPStatus.OK and result.get("ok"):
-                return self._copilot_search_response(
-                    mode="local_yolo_search",
-                    intent=intent,
-                    result=result,
-                    source="S100P YOLO object index",
-                    retrieval_mode="yolo_object_index",
-                    user=user,
-                )
+                yolo_results = result.get("results") if isinstance(result.get("results"), list) else []
+                if yolo_results:
+                    return self._copilot_search_response(
+                        mode="local_yolo_search",
+                        intent=intent,
+                        result=result,
+                        source="S100P YOLO object index",
+                        retrieval_mode="yolo_object_index",
+                        user=user,
+                    )
+                yolo_empty_result = result
         if multimodal_route_response is None:
             return HTTPStatus.SERVICE_UNAVAILABLE, {
                 "ok": False,
@@ -3371,14 +5528,46 @@ class PortalState:
         }
         if intent.get("modality") and intent.get("modality") != "all":
             mm_payload["modality"] = intent["modality"]
-        status_code, result = multimodal_route_response(
-            "/api/multimodal-search/query",
-            method="POST",
-            payload=mm_payload,
-            report_root=self.report_root,
-            personal_root=self.personal_root,
-        )
+        try:
+            status_code, result = multimodal_route_response(
+                "/api/multimodal-search/query",
+                method="POST",
+                payload=mm_payload,
+                report_root=self.report_root,
+                personal_root=self.personal_root,
+            )
+        except Exception as exc:
+            if yolo_empty_result is not None:
+                degraded_result = dict(yolo_empty_result)
+                degraded_result["degraded"] = True
+                degraded_result["degraded_reason"] = f"local_multimodal_search_exception:{type(exc).__name__}"
+                degraded_result["multimodal_error"] = str(exc)[:180]
+                return self._copilot_search_response(
+                    mode="local_yolo_search",
+                    intent=intent,
+                    result=degraded_result,
+                    source="S100P YOLO object index",
+                    retrieval_mode="yolo_object_index",
+                    user=user,
+                )
+            return HTTPStatus.BAD_GATEWAY, {
+                "ok": False,
+                "error": "local_multimodal_search_exception",
+                "detail": str(exc)[:180],
+                "route": "local_multimodal_search",
+                "cloud_used": False,
+                "qwen_execution_authority": False,
+            }
         if status_code != HTTPStatus.OK or not result.get("ok"):
+            if yolo_empty_result is not None:
+                return self._copilot_search_response(
+                    mode="local_yolo_search",
+                    intent=intent,
+                    result=yolo_empty_result,
+                    source="S100P YOLO object index",
+                    retrieval_mode="yolo_object_index",
+                    user=user,
+                )
             return HTTPStatus.BAD_GATEWAY, {
                 "ok": False,
                 "error": result.get("error") or "local_multimodal_search_failed",
@@ -4304,12 +6493,14 @@ class PortalHandler(BaseHTTPRequestHandler):
             return
         raw = path.read_bytes()
         content_type = mimetypes.guess_type(path.name)[0] or "application/octet-stream"
+        fallback_name = "download" + (path.suffix if re.fullmatch(r"\.[A-Za-z0-9]{1,12}", path.suffix or "") else "")
+        encoded_name = quote(path.name, safe="")
         self.send_response(HTTPStatus.OK)
         self.send_header("Content-Type", content_type)
         self.send_header("Cache-Control", "no-store")
         self.send_header("Content-Length", str(len(raw)))
         disposition = "inline" if preview else "attachment"
-        self.send_header("Content-Disposition", f'{disposition}; filename="{path.name}"')
+        self.send_header("Content-Disposition", f"{disposition}; filename=\"{fallback_name}\"; filename*=UTF-8''{encoded_name}")
         self.end_headers()
         self.wfile.write(raw)
 
@@ -4836,7 +7027,7 @@ class PortalHandler(BaseHTTPRequestHandler):
 
     def do_GET(self) -> None:
         route = urlparse(self.path).path.rstrip("/") or "/"
-        if route in {"/ui", "/ui/index.html"}:
+        if route in {"/ui", "/ui/index.html", "/ai-album"}:
             self.send_file_text(REPO_ROOT / "web" / "ai_nas_desktop_v2.html", "text/html; charset=utf-8")
             return
         if route == "/static/digua_ai_nas_v2.css":
@@ -5016,6 +7207,16 @@ class PortalHandler(BaseHTTPRequestHandler):
                 return
             self.send_json({"ok": True, "stats": self.state.snapshot_store.stats() if self.state.snapshot_store else {}})
             return
+        if route == "/api/storage/trash":
+            if not self.require_product():
+                return
+            status, error, user = self.state.require_user(self.headers.get("Authorization"))
+            if status:
+                self.send_json(error or {}, status)
+                return
+            items = self.state.snapshot_store.list_trash(str((user or {}).get("username") or "")) if self.state.snapshot_store else []
+            self.send_json({"ok": True, "schema": "digua_storage_trash_v1", "items": items, "retention_days": 30, "raw_path_returned": False})
+            return
         if route == "/api/backup/summary":
             if not self.require_product():
                 return
@@ -5053,6 +7254,78 @@ class PortalHandler(BaseHTTPRequestHandler):
                 self.send_json({"ok": True, "schema": "digua_media_album_v2", "duplicates": media.find_duplicates() if media else [], "raw_path_returned": False})
                 return
             self.send_json({"ok": True, "schema": "digua_media_album_v2", "stats": self.state.media_status_payload(), "albums": media.list_albums() if media else [], "photos": media.list_photos(limit=24) if media else [], "raw_path_returned": False})
+            return
+        if route == "/api/media/album":
+            if not self.require_product():
+                return
+            status, error, _user = self.state.require_user(self.headers.get("Authorization"))
+            if status:
+                self.send_json(error or {}, status)
+                return
+            params = parse_qs(urlparse(self.path).query, keep_blank_values=True)
+            album_name = str((params.get("name") or [""])[0] or "").strip()
+            if not album_name:
+                self.send_json({"ok": False, "error": "album_name_required", "raw_path_returned": False}, HTTPStatus.BAD_REQUEST)
+                return
+            media = self.state.media_center
+            photos = media.get_album_photos(album_name) if media else []
+            self.send_json(
+                {
+                    "ok": True,
+                    "schema": "digua_media_album_v2",
+                    "album": {"name": album_name},
+                    "photos": photos,
+                    "count": len(photos),
+                    "raw_path_returned": False,
+                }
+            )
+            return
+        if route == "/api/media/preview":
+            if not self.require_product():
+                return
+            status, error, user = self.state.require_user(self.headers.get("Authorization"))
+            if status:
+                self.send_json(error or {}, status)
+                return
+            params = parse_qs(urlparse(self.path).query, keep_blank_values=True)
+            path_hash_value = str((params.get("path_hash") or [""])[0] or "").strip().lower()
+            media = self.state.media_center
+            target = media.photo_path_by_hash(path_hash_value) if media else None
+            if not target:
+                self.send_json({"ok": False, "error": "preview_not_found_or_not_authorized", "raw_path_returned": False}, HTTPStatus.NOT_FOUND)
+                return
+            try:
+                resolved = target.resolve(strict=True)
+            except OSError:
+                self.send_json({"ok": False, "error": "preview_not_found_or_not_authorized", "raw_path_returned": False}, HTTPStatus.NOT_FOUND)
+                return
+            allowed, denial_status = self.state.media_preview_access(resolved, user or {})
+            if not allowed:
+                error_name = "permission_denied" if denial_status == HTTPStatus.FORBIDDEN else "preview_not_found_or_not_authorized"
+                self.send_json({"ok": False, "error": error_name, "required": "read", "raw_path_returned": False}, denial_status)
+                return
+            self.send_storage_file(resolved, preview=True)
+            return
+        if route == "/api/ai-album/scope":
+            if not self.require_product():
+                return
+            status, error, _user = self.state.require_user(self.headers.get("Authorization"))
+            if status:
+                self.send_json(error or {}, status)
+                return
+            self.send_json({k: v for k, v in self.state.ai_album_organizer_scope().items() if k != "root_paths"})
+            return
+        if route == "/api/ai-album/organize-status":
+            if not self.require_product():
+                return
+            status, error, _user = self.state.require_user(self.headers.get("Authorization"))
+            if status:
+                self.send_json(error or {}, status)
+                return
+            params = parse_qs(urlparse(self.path).query, keep_blank_values=True)
+            payload = {key: values[-1] for key, values in params.items()}
+            status_code, result = self.state.ai_album_organize_status_payload(payload)
+            self.send_json(result, status_code)
             return
         if route == "/api/ops/summary":
             if not self.require_product():
@@ -5147,6 +7420,7 @@ class PortalHandler(BaseHTTPRequestHandler):
             status_code, result = ai_space_route_response(
                 route,
                 method="GET",
+                payload=self.query_payload(),
                 report_root=self.state.report_root,
                 personal_root=self.state.personal_root,
             )
@@ -5340,6 +7614,8 @@ class PortalHandler(BaseHTTPRequestHandler):
                     "/api/media/timeline",
                     "/api/media/albums",
                     "/api/media/duplicates",
+                    "/api/ai-album/scope",
+                    "/api/ai-album/organize-status",
                     "/api/ai-space/status",
                     "/api/ai-space/assets",
                     "/api/ai-space/asset/{asset_id}",
@@ -5368,6 +7644,7 @@ class PortalHandler(BaseHTTPRequestHandler):
                     "/api/storage/status",
                     "/api/storage/list",
                     "/api/storage/download",
+                    "/api/storage/trash",
                     "/api/documents/list",
                     "/api/identity/users",
                     "/api/contracts/operator-portal",
@@ -5387,6 +7664,8 @@ class PortalHandler(BaseHTTPRequestHandler):
                     "POST /api/identity/login",
                     "POST /api/storage/create-folder",
                     "POST /api/storage/upload-file",
+                    "POST /api/storage/trash",
+                    "POST /api/storage/trash/cleanup",
                     "POST /api/documents/query",
                     "POST /api/document-rag/query",
                     "POST /api/ocr/query",
@@ -5420,6 +7699,9 @@ class PortalHandler(BaseHTTPRequestHandler):
                     "POST /api/person-attribute/search",
                     "POST /api/media/index",
                     "POST /api/media/upload",
+                    "POST /api/ai-album/rebuild",
+                    "POST /api/ai-album/auto-organize",
+                    "POST /api/ai-album/organize-now",
                     "POST /api/ai-space/rebuild",
                     "POST /api/ai-space/search",
                     "POST /api/auto-organize/plan",
@@ -5568,6 +7850,48 @@ class PortalHandler(BaseHTTPRequestHandler):
             status_code, result = person_attribute_route_response(route, method="POST", payload=payload, report_root=self.state.report_root, personal_root=self.state.personal_root)
             self.send_json(result, status_code)
             return
+        if route == "/api/ai-album/auto-organize":
+            if not self.require_product():
+                return
+            auth_status, error, user = self.state.require_user(self.headers.get("Authorization"))
+            if auth_status:
+                self.send_json(error or {}, auth_status)
+                return
+            status, payload = self.read_json_body()
+            if status:
+                self.send_json(payload or {}, status)
+                return
+            status_code, result = self.state.ai_album_auto_organize_payload(payload or {}, user or {})
+            self.send_json(result, status_code)
+            return
+        if route == "/api/ai-album/organize-now":
+            if not self.require_product():
+                return
+            auth_status, error, user = self.state.require_user(self.headers.get("Authorization"))
+            if auth_status:
+                self.send_json(error or {}, auth_status)
+                return
+            status, payload = self.read_json_body()
+            if status:
+                self.send_json(payload or {}, status)
+                return
+            status_code, result = self.state.ai_album_organize_pending_payload(payload or {}, user or {})
+            self.send_json(result, status_code)
+            return
+        if route == "/api/ai-album/rebuild":
+            if not self.require_product():
+                return
+            auth_status, error, user = self.state.require_user(self.headers.get("Authorization"))
+            if auth_status:
+                self.send_json(error or {}, auth_status)
+                return
+            status, payload = self.read_json_body()
+            if status:
+                self.send_json(payload or {}, status)
+                return
+            status_code, result = self.state.ai_album_rebuild_payload(payload or {}, user or {})
+            self.send_json(result, status_code)
+            return
         if route.startswith("/api/ai-space"):
             if ai_space_route_response is None:
                 self.send_json({"ok": False, "error": "ai_space_unavailable"}, HTTPStatus.SERVICE_UNAVAILABLE)
@@ -5583,6 +7907,8 @@ class PortalHandler(BaseHTTPRequestHandler):
                 self.send_json(payload or {}, status)
                 return
             payload = payload or {}
+            for key, value in self.query_payload().items():
+                payload.setdefault(key, value)
             payload.setdefault("user_id", str((user or {}).get("username") or "operator"))
             status_code, result = ai_space_route_response(route, method="POST", payload=payload, report_root=self.state.report_root, personal_root=self.state.personal_root)
             self.send_json(result, status_code)
@@ -5763,6 +8089,34 @@ class PortalHandler(BaseHTTPRequestHandler):
                 self.send_json(payload or {}, status)
                 return
             status_code, result = self.state.storage_upload_file(payload or {}, user or {})
+            self.send_json(result, status_code)
+            return
+        if route == "/api/storage/trash":
+            if not self.require_product():
+                return
+            auth_status, error, user = self.state.require_user(self.headers.get("Authorization"))
+            if auth_status:
+                self.send_json(error or {}, auth_status)
+                return
+            status, payload = self.read_json_body()
+            if status:
+                self.send_json(payload or {}, status)
+                return
+            status_code, result = self.state.storage_trash_payload(payload or {}, user or {})
+            self.send_json(result, status_code)
+            return
+        if route == "/api/storage/trash/cleanup":
+            if not self.require_product():
+                return
+            auth_status, error, user = self.state.require_user(self.headers.get("Authorization"))
+            if auth_status:
+                self.send_json(error or {}, auth_status)
+                return
+            status, payload = self.read_json_body()
+            if status:
+                self.send_json(payload or {}, status)
+                return
+            status_code, result = self.state.storage_trash_cleanup_payload(payload or {}, user or {})
             self.send_json(result, status_code)
             return
         if route == "/api/storage/rename":
@@ -6109,6 +8463,8 @@ class PortalHandler(BaseHTTPRequestHandler):
                     "POST /api/operator-decision",
                     "POST /api/storage/create-folder",
                     "POST /api/storage/upload-file",
+                    "POST /api/storage/trash",
+                    "POST /api/storage/trash/cleanup",
                     "POST /api/documents/query",
                     "POST /api/reports/export",
                     "POST /api/router/explain",

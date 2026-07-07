@@ -9,11 +9,20 @@ Provides:
 """
 from __future__ import annotations
 import hashlib, json, os, shutil, sqlite3, time
-from datetime import datetime, timezone
+from datetime import datetime, timedelta, timezone
 from pathlib import Path
 
 def _now_iso() -> str:
     return datetime.now(timezone.utc).isoformat()
+
+def _parse_iso(value: str) -> datetime | None:
+    try:
+        parsed = datetime.fromisoformat(str(value or "").replace("Z", "+00:00"))
+    except ValueError:
+        return None
+    if parsed.tzinfo is None:
+        parsed = parsed.replace(tzinfo=timezone.utc)
+    return parsed.astimezone(timezone.utc)
 
 def _now_compact() -> str:
     return time.strftime("%Y%m%d-%H%M%S")
@@ -69,6 +78,10 @@ def _init_db(db_path: Path) -> None:
         CREATE INDEX IF NOT EXISTS idx_versions_path ON file_versions(original_path);
         CREATE INDEX IF NOT EXISTS idx_snapshot_files_snap ON snapshot_files(snapshot_id);
     """)
+    try:
+        con.execute("ALTER TABLE trash_entries ADD COLUMN expires_at TEXT")
+    except sqlite3.OperationalError:
+        pass
     con.execute("INSERT OR IGNORE INTO meta(key,value) VALUES('schema_version','1')")
     con.commit(); con.close()
 
@@ -110,17 +123,18 @@ class SnapshotStore:
         ts = _now_timestamp()
         trash_name = f"{ts}_{file_path.name}"
         trash_path = self.trash_root / trash_name
+        expires_at = (datetime.now(timezone.utc) + timedelta(days=30)).isoformat()
         shutil.move(str(file_path), str(trash_path))
         sha = self._hash_file(trash_path)
         con = self._connect()
         try:
             con.execute(
-                "INSERT INTO trash_entries(original_path, trash_path, username, size_bytes, sha256, deleted_at) VALUES(?,?,?,?,?,?)",
-                (rel, trash_name, username, size, sha, _now_iso()),
+                "INSERT INTO trash_entries(original_path, trash_path, username, size_bytes, sha256, deleted_at, expires_at) VALUES(?,?,?,?,?,?,?)",
+                (rel, trash_name, username, size, sha, _now_iso(), expires_at),
             )
             con.commit()
             eid = con.execute("SELECT last_insert_rowid()").fetchone()[0]
-            return {"ok": True, "trash_id": eid, "original_path": rel, "trash_name": trash_name, "size_bytes": size}
+            return {"ok": True, "trash_id": eid, "original_path": rel, "trash_name": trash_name, "size_bytes": size, "expires_at": expires_at}
         finally:
             con.close()
 
@@ -129,12 +143,12 @@ class SnapshotStore:
         try:
             if username:
                 rows = con.execute(
-                    "SELECT id, original_path, trash_path, username, size_bytes, sha256, deleted_at, restored_at FROM trash_entries WHERE restored_at IS NULL AND username=? ORDER BY deleted_at DESC",
+                    "SELECT id, original_path, trash_path, username, size_bytes, sha256, deleted_at, restored_at, expires_at FROM trash_entries WHERE restored_at IS NULL AND username=? ORDER BY deleted_at DESC",
                     (username,),
                 ).fetchall()
             else:
                 rows = con.execute(
-                    "SELECT id, original_path, trash_path, username, size_bytes, sha256, deleted_at, restored_at FROM trash_entries WHERE restored_at IS NULL ORDER BY deleted_at DESC"
+                    "SELECT id, original_path, trash_path, username, size_bytes, sha256, deleted_at, restored_at, expires_at FROM trash_entries WHERE restored_at IS NULL ORDER BY deleted_at DESC"
                 ).fetchall()
             return [dict(row) for row in rows]
         finally:
@@ -184,6 +198,50 @@ class SnapshotStore:
                 count += 1
             con.commit()
             return {"ok": True, "emptied": count}
+        finally:
+            con.close()
+
+    def cleanup_expired_trash(self, retention_days: int = 30, *, now: datetime | None = None) -> dict:
+        """Permanently remove unrestored trash entries older than the retention window."""
+        try:
+            days = max(1, min(int(retention_days), 365))
+        except (TypeError, ValueError):
+            days = 30
+        current = (now or datetime.now(timezone.utc)).astimezone(timezone.utc)
+        cutoff = current - timedelta(days=days)
+        cutoff_iso = cutoff.isoformat()
+        con = self._connect()
+        try:
+            rows = con.execute(
+                """
+                SELECT id, trash_path, deleted_at, expires_at
+                FROM trash_entries
+                WHERE restored_at IS NULL
+                  AND (
+                    (expires_at IS NOT NULL AND expires_at <= ?)
+                    OR (expires_at IS NULL AND deleted_at <= ?)
+                  )
+                """,
+                (current.isoformat(), cutoff_iso),
+            ).fetchall()
+            removed = 0
+            missing = 0
+            for row in rows:
+                fp = self.trash_root / row["trash_path"]
+                if fp.exists():
+                    fp.unlink()
+                    removed += 1
+                else:
+                    missing += 1
+                con.execute("UPDATE trash_entries SET restored_at=? WHERE id=?", (current.isoformat(), row["id"]))
+            con.commit()
+            return {
+                "ok": True,
+                "removed": removed,
+                "missing": missing,
+                "retention_days": days,
+                "cutoff": cutoff_iso,
+            }
         finally:
             con.close()
 

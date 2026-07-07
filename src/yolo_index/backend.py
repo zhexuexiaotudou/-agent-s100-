@@ -20,6 +20,14 @@ YOLO_RECT_RE = re.compile(
     r"det\s+type:\s*([^,]+),\s*score:\s*([-0-9.]+)",
     re.IGNORECASE,
 )
+YOLO_TARGET_TYPE_RE = re.compile(r"target\s+type:\s*([^,]+),\s*rois\.size:\s*\d+", re.IGNORECASE)
+YOLO_ROI_RE = re.compile(
+    r"roi\.type:\s*([^,]*),\s*"
+    r"x_offset:\s*([-0-9.]+)\s+y_offset:\s*([-0-9.]+)\s+"
+    r"width:\s*([-0-9.]+)\s+height:\s*([-0-9.]+)",
+    re.IGNORECASE,
+)
+ROI_LOG_FALLBACK_CONFIDENCE = 0.5
 
 
 @dataclass(frozen=True)
@@ -61,6 +69,43 @@ def parse_yolo_log(text: str, *, evidence_ref: str = "yolo_ev_unassigned", image
             YoloDetection(
                 label=label,
                 confidence=confidence,
+                bbox_x1=nx1,
+                bbox_y1=ny1,
+                bbox_x2=nx2,
+                bbox_y2=ny2,
+                image_width=width,
+                image_height=height,
+                evidence_ref=evidence_ref,
+            )
+        )
+    if detections:
+        return detections
+    current_label = ""
+    for line in (text or "").splitlines():
+        target_match = YOLO_TARGET_TYPE_RE.search(line)
+        if target_match:
+            current_label = target_match.group(1).strip().lower()
+        roi_match = YOLO_ROI_RE.search(line)
+        if not roi_match:
+            continue
+        label = (roi_match.group(1).strip() or current_label).lower()
+        if not label:
+            continue
+        x1 = float(roi_match.group(2))
+        y1 = float(roi_match.group(3))
+        x2 = x1 + float(roi_match.group(4))
+        y2 = y1 + float(roi_match.group(5))
+        if width and height and width > 0 and height > 0:
+            nx1 = _clamp(min(x1, x2) / width)
+            ny1 = _clamp(min(y1, y2) / height)
+            nx2 = _clamp(max(x1, x2) / width)
+            ny2 = _clamp(max(y1, y2) / height)
+        else:
+            nx1, ny1, nx2, ny2 = x1, y1, x2, y2
+        detections.append(
+            YoloDetection(
+                label=label,
+                confidence=ROI_LOG_FALLBACK_CONFIDENCE,
                 bbox_x1=nx1,
                 bbox_y1=ny1,
                 bbox_x2=nx2,

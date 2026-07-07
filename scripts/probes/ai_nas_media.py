@@ -222,12 +222,59 @@ class MediaCenter:
             return [self._public_row(dict(r)) for r in con.execute("SELECT p.* FROM photos p JOIN album_items ai ON p.id=ai.photo_id JOIN albums a ON ai.album_id=a.id WHERE a.name=? ORDER BY p.taken_at DESC",(album_name,)).fetchall()]
         finally: con.close()
 
+    def photo_path_by_hash(self, path_hash: str) -> Path | None:
+        digest = str(path_hash or "").strip().lower()
+        if not re.fullmatch(r"[0-9a-f]{16,64}", digest):
+            return None
+        con = self._connect()
+        try:
+            row = con.execute("SELECT file_path FROM photos WHERE path_hash=? LIMIT 1", (digest,)).fetchone()
+            return Path(row["file_path"]) if row and row["file_path"] else None
+        finally:
+            con.close()
+
+    def remove_photo_path(self, path: Path) -> dict:
+        con = self._connect()
+        try:
+            row = con.execute("SELECT id, asset_id, path_hash FROM photos WHERE file_path=? LIMIT 1", (str(path),)).fetchone()
+            if not row:
+                return {"ok": True, "removed": 0}
+            con.execute("DELETE FROM album_items WHERE photo_id=?", (row["id"],))
+            con.execute("DELETE FROM photos WHERE id=?", (row["id"],))
+            con.commit()
+            return {
+                "ok": True,
+                "removed": 1,
+                "asset_id": row["asset_id"],
+                "path_hash": row["path_hash"],
+                "raw_path_returned": False,
+            }
+        finally:
+            con.close()
+
     def search(self, query: str) -> list[dict]:
         con = self._connect()
         try:
             q = f"%{query}%"
             return [self._public_row(dict(r)) for r in con.execute("SELECT * FROM photos WHERE name LIKE ? OR title_redacted LIKE ? OR extension LIKE ? OR tags LIKE ? ORDER BY taken_at DESC LIMIT 100",(q,q,q,q)).fetchall()]
         finally: con.close()
+
+    def indexed_rows(self, *, limit: int = 10000, modality: str | None = None) -> list[dict]:
+        con = self._connect()
+        try:
+            params: list[object] = []
+            where = ""
+            if modality:
+                where = "WHERE modality=?"
+                params.append(modality)
+            params.append(int(limit))
+            rows = con.execute(
+                f"SELECT * FROM photos {where} ORDER BY mtime DESC LIMIT ?",
+                tuple(params),
+            ).fetchall()
+            return [dict(row) for row in rows]
+        finally:
+            con.close()
 
     def _hash(self, path: Path) -> str:
         try: return hashlib.sha256(path.read_bytes()).hexdigest()

@@ -1,0 +1,228 @@
+{
+  "blockers": [],
+  "checks": [
+    {
+      "detail": {
+        "expires_at": "2026-07-08T05:19:34.102767+00:00",
+        "ok": true,
+        "token": "[redacted-token]",
+        "user": {
+          "id": 1,
+          "role": "admin",
+          "username": "admin"
+        }
+      },
+      "name": "login token available",
+      "ok": true
+    },
+    {
+      "detail": 200,
+      "name": "/ai-album route serves v2 app",
+      "ok": true
+    },
+    {
+      "detail": "aiAlbumPage",
+      "name": "AI Album JS page registered",
+      "ok": true
+    },
+    {
+      "detail": "required API markers",
+      "name": "AI Album API wiring present",
+      "ok": true
+    },
+    {
+      "detail": "front-end local block",
+      "name": "identity query blocked in UI",
+      "ok": true
+    },
+    {
+      "detail": "delete/overwrite/raw-path actions absent",
+      "name": "no destructive AI Album action handlers",
+      "ok": true
+    },
+    {
+      "detail": "layout classes",
+      "name": "AI Album CSS present",
+      "ok": true
+    },
+    {
+      "detail": null,
+      "name": "AI Space status ok",
+      "ok": true
+    },
+    {
+      "detail": 4,
+      "name": "AI Space has assets",
+      "ok": true
+    },
+    {
+      "detail": {
+        "cloud_used": false,
+        "facets": {
+          "category": {
+            "待整理": 4
+          },
+          "modality": {
+            "image": 4
+          },
+          "object_label": {},
+          "privacy_level": {
+            "private_local_only": 4
+          },
+          "time_bucket": {
+            "today": 4
+          }
+        },
+        "ok": true,
+        "raw_path_returned": false,
+        "schema": "digua_ai_space_v1"
+      },
+      "name": "facets returned",
+      "ok": true
+    },
+    {
+      "detail": 4,
+      "name": "assets returned",
+      "ok": true
+    },
+    {
+      "detail": 22,
+      "name": "media photos returned",
+      "ok": true
+    },
+    {
+      "detail": 20,
+      "name": "smart categories returned",
+      "ok": true
+    },
+    {
+      "detail": [],
+      "name": "smart categories are not all-asset false positives",
+      "ok": true
+    },
+    {
+      "detail": [],
+      "name": "evidence-free assets do not claim person/clothing/pet/vehicle/document labels",
+      "ok": true
+    },
+    {
+      "detail": "mm_79552d8c46bdcff6fadb874d",
+      "name": "preview hash available",
+      "ok": true
+    },
+    {
+      "detail": {
+        "bytes": 123788,
+        "content_type": "image/png",
+        "ok": true,
+        "status": 200
+      },
+      "name": "preview endpoint returns bytes",
+      "ok": true
+    },
+    {
+      "detail": {
+        "cloud_used": false,
+        "ok": true,
+        "query_redacted": "票据发票",
+        "raw_path_returned": false,
+        "results": [],
+        "schema": "digua_ai_space_v1"
+      },
+      "name": "AI Space search endpoint ok",
+      "ok": true
+    },
+    {
+      "detail": {
+        "biometric_recognition_enabled": false,
+        "blocked": false,
+        "cloud_used": false,
+        "degraded": true,
+        "degraded_reason": "no_matching_person_attribute",
+        "face_identification_enabled": false,
+        "ok": true,
+        "query": {
+          "blocked": false,
+          "blocked_reason": null,
+          "co_occurs_with": null,
+          "modality": null,
+          "query_redacted": "穿白色上衣的人",
+          "require_person": true,
+          "upper_color": "white"
+        },
+        "raw_path_returned": false,
+        "results": [],
+        "schema": "digua_person_attribute_search_v1",
+        "sensitive_attribute_inference_enabled": false
+      },
+      "name": "person attribute endpoint ok",
+      "ok": true
+    },
+    {
+      "detail": null,
+      "name": "auto organizer status ok",
+      "ok": true
+    },
+    {
+      "detail": null,
+      "name": "auto organizer plan reachable",
+      "ok": true
+    },
+    {
+      "detail": "delete_allowed not true",
+      "name": "delete remains blocked",
+      "ok": true
+    },
+    {
+      "detail": "overwrite_allowed not true",
+      "name": "overwrite remains blocked",
+      "ok": true
+    },
+    {
+      "detail": "qwen_execution_authority not true",
+      "name": "Qwen has no execution authority",
+      "ok": true
+    },
+    {
+      "detail": "redacted",
+      "name": "raw paths not returned by product APIs",
+      "ok": true
+    },
+    {
+      "detail": false,
+      "name": "cloud private processing remains off",
+      "ok": true
+    }
+  ],
+  "evidence": {
+    "asset_count": 4,
+    "bad_evidence_free_asset_count": 0,
+    "base_url": "http://127.0.0.1:8765",
+    "photo_count": 22,
+    "plan_status": {
+      "blocker": null,
+      "item_count": 1,
+      "ok": true,
+      "plan_id_present": true
+    },
+    "preview": {
+      "bytes": 123788,
+      "content_type": "image/png",
+      "ok": true,
+      "status": 200
+    },
+    "safety": {
+      "biometric_recognition_enabled": false,
+      "face_identification_enabled": false,
+      "identity_block_source": "front_end_ui",
+      "raw_path_returned": false,
+      "sensitive_attribute_inference_enabled": false
+    },
+    "search_result_count": 0,
+    "smart_category_count": 20,
+    "suspicious_full_categories": []
+  },
+  "generated_at": "2026-07-07T05:19:30Z",
+  "ok": true,
+  "verdict": "ok_stage11_ai_album_ui_gate"
+}

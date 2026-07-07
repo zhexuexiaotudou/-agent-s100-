@@ -39,6 +39,22 @@ class YoloIndexCoreTest(unittest.TestCase):
         self.assertAlmostEqual(rows[0].bbox_x1 or 0, 138.323 / 640, places=4)
         self.assertEqual(rows[0].evidence_ref, "ev_test")
 
+    def test_parse_s100p_image_utils_roi_log(self):
+        log = """
+        [example-1] [INFO] [ImageUtils]: target type: bus, rois.size: 1
+        [example-1] [INFO] [ImageUtils]: roi.type: bus, x_offset: 9 y_offset: 136 width: 461 height: 311
+        [example-1] [INFO] [ImageUtils]: target type: person, rois.size: 1
+        [example-1] [INFO] [ImageUtils]: roi.type: person, x_offset: 29 y_offset: 235 width: 113 height: 300
+        [example-1] [INFO] [ImageUtils]: target type: stop sign, rois.size: 1
+        [example-1] [INFO] [ImageUtils]: roi.type: stop sign, x_offset: 0 y_offset: 150 width: 19 height: 41
+        """
+        rows = parse_yolo_log(log, evidence_ref="ev_roi", image_size=(640, 640))
+        self.assertEqual([row.label for row in rows], ["bus", "person", "stop sign"])
+        self.assertAlmostEqual(rows[1].bbox_x1 or 0, 29 / 640, places=4)
+        self.assertAlmostEqual(rows[1].bbox_x2 or 0, (29 + 113) / 640, places=4)
+        self.assertEqual(rows[1].confidence, 0.5)
+        self.assertEqual(rows[1].evidence_ref, "ev_roi")
+
     def test_chinese_and_english_label_mapping(self):
         self.assertEqual(labels_from_query("找所有汽车和电脑截图"), ["car", "laptop"])
         self.assertEqual(labels_from_query("videos with person and bus"), ["person", "bus"])

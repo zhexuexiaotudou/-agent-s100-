@@ -50,8 +50,18 @@ class SmartClassificationService:
 
     def ensure_defaults(self) -> None:
         migrate(self.db_path)
+        default_ids = {category_id for category_id, *_rest in DEFAULT_CATEGORIES}
         conn = connect(self.db_path)
         try:
+            conn.execute(
+                """
+                UPDATE smart_categories
+                SET enabled=0, updated_at=?
+                WHERE category_id NOT IN ({})
+                  AND (created_by IS NULL OR created_by='system')
+                """.format(",".join("?" for _ in default_ids)),
+                (_now(), *sorted(default_ids)),
+            )
             for index, (category_id, name_zh, name_en, icon, rule) in enumerate(DEFAULT_CATEGORIES):
                 now = _now()
                 existing = conn.execute("SELECT created_by FROM smart_categories WHERE category_id=?", (category_id,)).fetchone()
@@ -102,7 +112,7 @@ class SmartClassificationService:
         self.ensure_defaults()
         conn = connect(self.db_path)
         try:
-            rows = [dict(row) for row in conn.execute("SELECT * FROM smart_categories ORDER BY name")]
+            rows = [dict(row) for row in conn.execute("SELECT * FROM smart_categories WHERE enabled=1 ORDER BY name")]
             counts = {row["category_id"]: row["c"] for row in conn.execute("SELECT category_id,count(*) AS c FROM smart_category_memberships GROUP BY category_id")}
         finally:
             conn.close()
@@ -114,16 +124,58 @@ class SmartClassificationService:
 
     def rebuild(self, payload: dict[str, Any] | None = None) -> dict[str, Any]:
         self.ensure_defaults()
+        conn = connect(self.db_path)
+        try:
+            preserve_ids: set[str] = set()
+            categories_before = [dict(row) for row in conn.execute("SELECT category_id,rule_json FROM smart_categories WHERE enabled=1")]
+            for category in categories_before:
+                try:
+                    rule = json.loads(category.get("rule_json") or "{}")
+                except json.JSONDecodeError:
+                    rule = {}
+                if rule.get("preserve_memberships_on_rebuild"):
+                    preserve_ids.add(str(category["category_id"]))
+            preserved_asset_ids: set[str] = set()
+            if preserve_ids:
+                placeholders = ",".join("?" for _ in preserve_ids)
+                preserved_asset_ids = {
+                    str(row["asset_id"])
+                    for row in conn.execute(
+                        f"SELECT DISTINCT asset_id FROM smart_category_memberships WHERE category_id IN ({placeholders})",
+                        tuple(sorted(preserve_ids)),
+                    )
+                }
+                conn.execute(
+                    f"DELETE FROM smart_category_memberships WHERE category_id NOT IN ({placeholders})",
+                    tuple(sorted(preserve_ids)),
+                )
+            else:
+                conn.execute("DELETE FROM smart_category_memberships")
+            conn.commit()
+        finally:
+            conn.close()
         self.ai_space.rebuild({})
         assets = self.ai_space.assets({"limit": 10000}).get("assets") or []
         conn = connect(self.db_path)
         inserted = 0
         try:
             categories = [dict(row) for row in conn.execute("SELECT * FROM smart_categories WHERE enabled=1")]
-            conn.execute("DELETE FROM smart_category_memberships")
+            if preserve_ids:
+                placeholders = ",".join("?" for _ in preserve_ids)
+                conn.execute(
+                    f"DELETE FROM smart_category_memberships WHERE category_id NOT IN ({placeholders})",
+                    tuple(sorted(preserve_ids)),
+                )
+            else:
+                conn.execute("DELETE FROM smart_category_memberships")
             for category in categories:
+                category_id = str(category["category_id"])
+                if category_id in preserve_ids:
+                    continue
                 rule = json.loads(category["rule_json"] or "{}")
                 for asset in assets:
+                    if str(asset.get("asset_id") or "") in preserved_asset_ids:
+                        continue
                     ok, score, matched_by = match_rule(asset, rule)
                     if not ok:
                         continue
@@ -145,6 +197,7 @@ class SmartClassificationService:
             conn.commit()
         finally:
             conn.close()
+        self.ai_space.rebuild({})
         naming = SmartNamingService(db_path=self.db_path, ai_space_service=self.ai_space).batch_generate({"limit": 10000})
         return {
             "ok": True,

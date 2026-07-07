@@ -163,6 +163,9 @@ and adds a reproducible demo corpus workflow.
   `python3 scripts/build_release.py --version 0.1.0 --out dist/`
 - Final release gate:
   `python3 gates/stage10_release_product_delivery_gate.py --report-root /mnt/nas/openclaw/reports/qwen25_ai_nas --personal-root /mnt/nas/openclaw/Personal --base-url http://127.0.0.1:8765 --timeout 240`
+- Windows access note:
+  `docs/openclaw_windows_loopback_access_20260706.md` explains why Windows
+  `http://127.0.0.1:8765/ui` needs an SSH tunnel to the S100P loopback gateway.
 - Demo corpus: `demo_corpus/` contains recipes, manifests, license notices,
   Wikimedia/Open Images downloaders, synthetic OCR/RAG document generation,
   Personal demo-root builder, and verification scripts.
@@ -207,6 +210,25 @@ Current Stage 10 recording boundary: YOLO bbox recording must either show real
 `detection_count > 0` or record the explicit blocker
 `yolo_demo_images_not_detectable`. Do not claim bbox detection while the live
 S100P product smoke reports zero YOLO boxes.
+
+## AI Album UI Workspace
+
+The existing v2 Web UI now includes an `AI 相册` workspace at `/ai-album`.
+It combines AI Space, media previews, smart classification, person-attribute
+search, smart naming, and Auto Organizer plan generation into one local
+AI-NAS album page.
+
+- Route: `http://127.0.0.1:8765/ai-album` on S100P loopback.
+- Delivery note: `docs/AI_ALBUM_UI_DELIVERY.md`
+- Gate: `gates/stage11_ai_album_ui_gate.py`
+- S100P verdict: `ok_stage11_ai_album_ui_gate`
+- S100P report:
+  `/mnt/nas/openclaw/reports/qwen25_ai_nas/stage11_ai_album_ui_gate.json`
+- Scope: local search, smart-category browsing, thumbnail grid, double-click
+  image viewer, selected-asset details, identity-query UI block, and controlled
+  Auto Organizer plan workflow.
+- Boundary: no face identity recognition, no sensitive attribute inference, no
+  raw path display, no delete/overwrite UI, no public gateway exposure.
 
 ## AI Space Product Acceptance
 

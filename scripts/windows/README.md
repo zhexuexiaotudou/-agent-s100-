@@ -17,6 +17,7 @@ powershell.exe -ExecutionPolicy Bypass -File .\scripts\windows\s100p-task.ps1 -A
 powershell.exe -ExecutionPolicy Bypass -File .\scripts\windows\s100p-task.ps1 -Action diagnose-nas
 powershell.exe -ExecutionPolicy Bypass -File .\scripts\windows\s100p-task.ps1 -Action repair-nas-runtime
 powershell.exe -ExecutionPolicy Bypass -File .\scripts\windows\s100p-task.ps1 -Action diagnose-openclaw
+powershell.exe -ExecutionPolicy Bypass -File .\scripts\windows\s100p-task.ps1 -Action diagnose-openclaw-health
 powershell.exe -ExecutionPolicy Bypass -File .\scripts\windows\s100p-task.ps1 -Action check-overnight
 powershell.exe -ExecutionPolicy Bypass -File .\scripts\windows\s100p-task.ps1 -Action refresh-baseline-readonly
 powershell.exe -ExecutionPolicy Bypass -File .\scripts\windows\s100p-task.ps1 -Action run-startup-link-check
@@ -30,6 +31,8 @@ Action boundaries:
   `169.254.8.10/16` route. It does not touch `eth1`, Windows networking, NAS
   settings, services, or firewall.
 - `diagnose-openclaw`: read-only gateway status and recent log summary.
+- `diagnose-openclaw-health`: read-only loopback checks for the S100P OpenClaw
+  UI, OpenClaw health API, and local Qwen health API.
 - `check-overnight`: read-only overnight runner and queue status.
 - `refresh-baseline-readonly`: runs allowlisted read-only baseline report
   generators.

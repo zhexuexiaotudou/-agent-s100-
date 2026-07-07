@@ -34,6 +34,14 @@ class UiV2SecurityBoundaryTest(unittest.TestCase):
         self.assertIn("signed_approval_token", self.js)
         self.assertIn("/api/nas/copy/confirm", self.js)
 
+    def test_manual_trash_route_is_soft_delete_ui(self):
+        for step in ["storageTrashPrompt", "storageTrashConfirm", "storageTrashCancel"]:
+            self.assertIn(step, self.js)
+        self.assertIn("/api/storage/trash", self.js)
+        self.assertIn("30 天后", self.js)
+        self.assertNotIn("/api/storage/delete", self.js)
+        self.assertNotIn('method: "DELETE"', self.js)
+
     def test_no_employee_monitoring_language(self):
         forbidden = ["员工监控", "桌面截图", "键鼠记录", "keyboard tracking", "mouse tracking"]
         for phrase in forbidden:
