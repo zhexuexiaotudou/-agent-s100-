@@ -1,0 +1,41 @@
+name: Offline UI
+
+on:
+  pull_request:
+    paths:
+      - "web/ai_nas_desktop_v2.html"
+      - "web/static/digua_ai_nas_v2.css"
+      - "web/static/digua_ai_nas_v2.js"
+      - "tests/test_offline_ui_contract.py"
+      - "tests/test_ui_v2_security_boundaries.py"
+      - ".github/workflows/offline-ui.yml"
+  push:
+    branches:
+      - main
+    paths:
+      - "web/ai_nas_desktop_v2.html"
+      - "web/static/digua_ai_nas_v2.css"
+      - "web/static/digua_ai_nas_v2.js"
+      - "tests/test_offline_ui_contract.py"
+      - "tests/test_ui_v2_security_boundaries.py"
+      - ".github/workflows/offline-ui.yml"
+
+permissions:
+  contents: read
+
+jobs:
+  static-ui-contract:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Check JavaScript syntax
+        run: node --check web/static/digua_ai_nas_v2.js
+      - name: Check offline UI and security contracts
+        run: python -m unittest tests.test_offline_ui_contract tests.test_ui_v2_security_boundaries -v
