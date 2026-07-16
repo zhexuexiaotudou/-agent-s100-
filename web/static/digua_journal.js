@@ -1,10 +1,15 @@
 const api = async (path, options = {}) => {
+  const token = window.sessionStorage.getItem("diguaAiNasToken") || "";
   const response = await fetch(path, {
-    headers: { "Content-Type": "application/json" },
     ...options,
+    headers: { "Content-Type": "application/json", ...(token ? { Authorization: `Bearer ${token}` } : {}), ...(options.headers || {}) },
   });
   return response.json();
 };
+
+const escapeHtml = (value) => String(value ?? "").replace(/[&<>'"]/g, (character) => ({
+  "&": "&amp;", "<": "&lt;", ">": "&gt;", "'": "&#39;", '"': "&quot;"
+})[character]);
 
 const showView = (name) => {
   document.querySelectorAll(".journal-panel").forEach((panel) => panel.classList.add("hidden"));
@@ -29,9 +34,9 @@ const loadTimeline = async () => {
     const data = await api("/api/journal/timeline");
     list.innerHTML = data.events.map((event) => `
       <article class="event-row">
-        <div class="event-meta">${event.event_ts} · ${event.source} · ${event.project_id}</div>
-        <strong>${event.title}</strong>
-        <p>${event.summary}</p>
+        <div class="event-meta">${escapeHtml(event.event_ts)} · ${escapeHtml(event.source)} · ${escapeHtml(event.project_id)}</div>
+        <strong>${escapeHtml(event.title)}</strong>
+        <p>${escapeHtml(event.summary)}</p>
       </article>
     `).join("");
   } catch {
@@ -46,8 +51,8 @@ const loadProjects = async () => {
     const data = await api("/api/journal/projects");
     list.innerHTML = data.projects.map((project) => `
       <article class="project-row">
-        <strong>${project.label}</strong>
-        <p>${project.project_id} · ${project.folder_hashes.length} folders</p>
+        <strong>${escapeHtml(project.label)}</strong>
+        <p>${escapeHtml(project.project_id)} · ${Number(project.folder_hashes?.length || 0)} folders</p>
       </article>
     `).join("");
   } catch {

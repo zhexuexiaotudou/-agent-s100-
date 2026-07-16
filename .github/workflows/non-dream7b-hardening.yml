@@ -1,0 +1,45 @@
+name: Non-Dream7B hardening
+
+on:
+  pull_request:
+    paths-ignore:
+      - "Dream7B/**"
+      - "deliverables/**"
+  push:
+    branches:
+      - main
+    paths-ignore:
+      - "Dream7B/**"
+      - "deliverables/**"
+
+permissions:
+  contents: read
+
+jobs:
+  offline-regression:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.13"
+          cache: pip
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+      - name: Install offline test dependencies
+        run: python -m pip install -r requirements.txt pytest
+      - name: Compile non-Dream7B Python sources
+        run: python -m compileall -q src scripts gates
+      - name: Check browser JavaScript syntax
+        shell: bash
+        run: |
+          set -euo pipefail
+          while IFS= read -r file; do
+            node --check "$file"
+          done < <(find web/static -maxdepth 1 -type f -name '*.js' -print | sort)
+      - name: Run full offline unit suite
+        run: python -m unittest discover -s tests -v
+      - name: Build model-free release package
+        run: python scripts/build_release.py --version ci-${{ github.sha }} --out "${{ runner.temp }}/digua-release"

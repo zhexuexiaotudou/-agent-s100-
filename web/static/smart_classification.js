@@ -1,6 +1,13 @@
 async function api(path, options = {}) {
-  const response = await fetch(path, { headers: { 'Content-Type': 'application/json' }, ...options });
+  const token = window.sessionStorage.getItem('diguaAiNasToken') || '';
+  const headers = { 'Content-Type': 'application/json', ...(token ? { Authorization: `Bearer ${token}` } : {}) };
+  const response = await fetch(path, { ...options, headers: { ...headers, ...(options.headers || {}) } });
   return response.json();
+}
+function escapeHtml(value) {
+  return String(value ?? '').replace(/[&<>'"]/g, character => ({
+    '&': '&amp;', '<': '&lt;', '>': '&gt;', "'": '&#39;', '"': '&quot;'
+  })[character]);
 }
 async function refresh() {
   const status = await api('/api/smart-classification/status');
@@ -9,10 +16,10 @@ async function refresh() {
   const data = await api('/api/smart-classification/categories');
   document.querySelector('#categories').innerHTML = (data.categories || []).map(category => `
     <article class="card">
-      <strong>${category.name_zh || category.name}</strong>
+      <strong>${escapeHtml(category.name_zh || category.name)}</strong>
       <div class="meta">${category.item_count || 0} matched assets</div>
-      <div class="meta">${category.name_en || ''}</div>
-      <pre>${JSON.stringify(category.rule || {}, null, 2)}</pre>
+      <div class="meta">${escapeHtml(category.name_en || '')}</div>
+      <pre>${escapeHtml(JSON.stringify(category.rule || {}, null, 2))}</pre>
     </article>
   `).join('');
 }

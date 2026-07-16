@@ -24,25 +24,8 @@ class LocalAsrBackend:
         if self.backend == "fixture":
             available = not self.require_real
             reason = "fixture_backend_not_allowed_for_product_gate" if self.require_real else None
-        elif self.backend == "faster_whisper":
-            try:
-                import faster_whisper  # noqa: F401
-
-                available = bool(self.model_dir and Path(self.model_dir).exists())
-                reason = None if available else "asr_model_dir_missing"
-            except Exception as exc:
-                reason = f"faster_whisper_unavailable:{type(exc).__name__}"
-        elif self.backend == "vosk":
-            try:
-                import vosk  # noqa: F401
-
-                available = bool(self.model_dir and Path(self.model_dir).exists())
-                reason = None if available else "asr_model_dir_missing"
-            except Exception as exc:
-                reason = f"vosk_unavailable:{type(exc).__name__}"
-        elif self.backend == "whisper_cpp":
-            available = bool(self.model_dir and Path(self.model_dir).exists())
-            reason = None if available else "whisper_cpp_model_missing"
+        elif self.backend in {"faster_whisper", "vosk", "whisper_cpp"}:
+            reason = f"asr_execution_not_implemented:{self.backend}"
         elif self.backend == "transformers_whisper":
             try:
                 from transformers import WhisperForConditionalGeneration, WhisperProcessor  # noqa: F401
@@ -60,6 +43,7 @@ class LocalAsrBackend:
             "model_dir_configured": bool(self.model_dir),
             "device": self.device,
             "available": available,
+            "execution_implemented": self.backend in {"fixture", "transformers_whisper"},
             "real_asr": available and self.backend != "fixture",
             "cloud_used": False,
             "local_only": True,

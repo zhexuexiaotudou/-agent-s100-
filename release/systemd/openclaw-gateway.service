@@ -1,15 +1,16 @@
 [Unit]
 Description=Digua OpenClaw AI-NAS gateway
-After=network-online.target
+After=network-online.target qwen25-local-openai-gateway.service
+Wants=network-online.target
 
 [Service]
 Type=simple
-WorkingDirectory=%h/openclaw
+WorkingDirectory=@DIGUA_INSTALL_ROOT@/app
 EnvironmentFile=-%h/.config/digua-ai-nas/digua.env
-ExecStart=/usr/bin/python3 scripts/probes/ai_nas_operator_portal_server.py --host 127.0.0.1 --port 8765 --personal-root ${DIGUA_PERSONAL_ROOT}
+ExecStartPre=/usr/bin/test -r @DIGUA_INSTALL_ROOT@/app/scripts/probes/ai_nas_operator_portal_server.py
+ExecStart=@DIGUA_INSTALL_ROOT@/venv/bin/python @DIGUA_INSTALL_ROOT@/app/scripts/probes/ai_nas_operator_portal_server.py --bind 127.0.0.1 --port 8765 --report-root @DIGUA_REPORT_ROOT@ --personal-root @DIGUA_PERSONAL_ROOT@ --nas-portal --no-refresh --qwen-gateway-url http://127.0.0.1:18080 --openclaw-model-gateway-url http://127.0.0.1:18080
 Restart=on-failure
 RestartSec=5
 
 [Install]
 WantedBy=default.target
-

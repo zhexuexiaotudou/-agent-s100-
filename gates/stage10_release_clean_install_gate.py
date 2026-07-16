@@ -25,7 +25,7 @@ def main() -> int:
         mount = temp / "mnt" / "nas" / "openclaw"
         personal = mount / "Personal"
         out = args.report_root / f"{NAME}_install.json"
-        cmd = ["bash", "release/install/install_s100p.sh", "--install-root", str(install_root), "--mount-point", str(mount), "--personal-root", str(personal), "--nas-protocol", "local", "--skip-pip", "--min-disk-kb", "10240", "--report-out", str(out)]
+        cmd = ["bash", "release/install/install_s100p.sh", "--install-root", str(install_root), "--mount-point", str(mount), "--personal-root", str(personal), "--nas-protocol", "local", "--skip-pip", "--skip-systemd", "--min-disk-kb", "10240", "--report-out", str(out)]
         run = run_cmd(cmd, timeout=180)
         result = json.loads(out.read_text(encoding="utf-8")) if out.exists() else {}
         checks = [
@@ -33,6 +33,10 @@ def main() -> int:
             check("clean install ok", result.get("ok") is True, result.get("blockers")),
             check("venv target created", (install_root / "venv").exists(), str(install_root / "venv")),
             check("personal root created", personal.exists(), str(personal)),
+            check("application source copied", (install_root / "app" / "src" / "product_jobs" / "worker.py").exists(), str(install_root / "app")),
+            check("portal entrypoint copied", (install_root / "app" / "scripts" / "probes" / "ai_nas_operator_portal_server.py").exists(), str(install_root / "app")),
+            check("web UI copied", (install_root / "app" / "web" / "ai_nas_desktop_v2.html").exists(), str(install_root / "app")),
+            check("requirements copied", (install_root / "app" / "requirements.txt").exists(), str(install_root / "app")),
             check("system python untouched", result.get("system_python_modified") is False, result),
         ]
         payload = gate_payload("ok_stage10_release_clean_install_gate", "blocked_stage10_release_clean_install_gate", checks, {"installer": result, "run": run})

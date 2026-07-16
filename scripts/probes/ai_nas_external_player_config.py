@@ -7,7 +7,8 @@ Config via env vars or a JSON config file.
 
 from __future__ import annotations
 
-import json, os
+import json
+import os
 from pathlib import Path
 
 DEFAULT_CONFIG = {
@@ -37,7 +38,12 @@ DEFAULT_CONFIG = {
     "default_player": "jellyfin",
 }
 
-_CONFIG_PATH = Path(os.environ.get("AI_NAS_PLAYER_CONFIG", str(Path(__file__).resolve().parents[2] / "configs" / "external_player.json")))
+_CONFIG_PATH = Path(
+    os.environ.get(
+        "AI_NAS_PLAYER_CONFIG",
+        str(Path(__file__).resolve().parents[2] / "configs" / "external_player.json"),
+    )
+)
 
 
 def load_config() -> dict:
@@ -47,8 +53,8 @@ def load_config() -> dict:
             with open(_CONFIG_PATH, "r", encoding="utf-8") as f:
                 user_cfg = json.load(f)
             _deep_merge(cfg, user_cfg)
-        except Exception:
-            pass
+        except (OSError, json.JSONDecodeError, TypeError):
+            return cfg
     return cfg
 
 
@@ -60,7 +66,9 @@ def _deep_merge(base: dict, override: dict):
             base[k] = v
 
 
-def get_player_url(media_type: str, media_id: str = "", file_path: str = "", player: str = "") -> dict:
+def get_player_url(
+    media_type: str, media_id: str = "", file_path: str = "", player: str = ""
+) -> dict:
     """Generate a player URL for a media item.
 
     Args:
@@ -76,12 +84,22 @@ def get_player_url(media_type: str, media_id: str = "", file_path: str = "", pla
     player_cfg = cfg.get("players", {}).get(player_key)
 
     if not player_cfg:
-        return {"ok": False, "url": "", "player_name": player_key, "evidence": {"error": "player_not_configured", "available_players": list(cfg.get("players", {}).keys())}}
+        return {
+            "ok": False,
+            "url": "",
+            "player_name": player_key,
+            "evidence": {
+                "error": "player_not_configured",
+                "available_players": list(cfg.get("players", {}).keys()),
+            },
+        }
 
     base_url = player_cfg.get("base_url", "")
     template = player_cfg.get("web_player_template", "{base_url}")
 
-    url = template.format(base_url=base_url, media_id=media_id, file_path=file_path, media_type=media_type)
+    url = template.format(
+        base_url=base_url, media_id=media_id, file_path=file_path, media_type=media_type
+    )
 
     return {
         "ok": True,
@@ -97,8 +115,18 @@ def list_players() -> dict:
     cfg = load_config()
     players = []
     for key, pcfg in cfg.get("players", {}).items():
-        players.append({"key": key, "name": pcfg.get("name", key), "base_url": pcfg.get("base_url", "")})
-    return {"ok": True, "default_player": cfg.get("default_player", ""), "players": players}
+        players.append(
+            {
+                "key": key,
+                "name": pcfg.get("name", key),
+                "base_url": pcfg.get("base_url", ""),
+            }
+        )
+    return {
+        "ok": True,
+        "default_player": cfg.get("default_player", ""),
+        "players": players,
+    }
 
 
 def config_status() -> dict:
@@ -116,4 +144,10 @@ if __name__ == "__main__":
     print("\n--- Players ---")
     print(json.dumps(list_players(), ensure_ascii=False, indent=2))
     print("\n--- Example URL ---")
-    print(json.dumps(get_player_url("movie", media_id="12345", player="jellyfin"), ensure_ascii=False, indent=2))
+    print(
+        json.dumps(
+            get_player_url("movie", media_id="12345", player="jellyfin"),
+            ensure_ascii=False,
+            indent=2,
+        )
+    )

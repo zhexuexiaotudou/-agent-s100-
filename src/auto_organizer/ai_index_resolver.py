@@ -159,7 +159,7 @@ def _candidate_asset_ids(path: Path, source_rel: str, *, personal_root: Path) ->
         candidates.insert(0, "mm_" + short_hash(f"{rel_to_root}:{int(stat.st_size)}:{int(stat.st_mtime)}", 24))
         yolo_path_hash = hashlib.sha256(str(resolved).encode("utf-8", errors="replace")).hexdigest()
         candidates.append("yasset_" + hashlib.sha256(f"{yolo_path_hash}:{int(stat.st_size)}:{int(stat.st_mtime)}".encode("utf-8")).hexdigest()[:24])
-    except Exception:
+    except (OSError, ValueError):
         pass
     return _dedupe(candidates)
 
@@ -191,7 +191,7 @@ def _asset_ids_from_runtime_tables(root: Path, path: Path, source_rel: str, *, p
                 (short_hash(rel_to_root, 32),),
             )
         )
-    except Exception:
+    except (OSError, ValueError):
         pass
     for db_path, sql, params in queries:
         ids.extend(_query_scalar_list(db_path, sql, params))
@@ -265,31 +265,21 @@ def _query_rows(db_path: Path, sql_template: str, asset_ids: list[str]) -> list[
         return []
     placeholders = ",".join("?" for _ in asset_ids)
     try:
-        conn = sqlite3.connect(str(db_path))
-        conn.row_factory = sqlite3.Row
-        return [dict(row) for row in conn.execute(sql_template.format(placeholders), asset_ids)]
+        with sqlite3.connect(str(db_path)) as conn:
+            conn.row_factory = sqlite3.Row
+            return [dict(row) for row in conn.execute(sql_template.format(placeholders), asset_ids)]
     except sqlite3.Error:
         return []
-    finally:
-        try:
-            conn.close()  # type: ignore[name-defined]
-        except Exception:
-            pass
 
 
 def _query_scalar_list(db_path: Path, sql: str, params: tuple[Any, ...]) -> list[str]:
     if not db_path.exists():
         return []
     try:
-        conn = sqlite3.connect(str(db_path))
-        return [str(row[0]) for row in conn.execute(sql, params) if row[0]]
+        with sqlite3.connect(str(db_path)) as conn:
+            return [str(row[0]) for row in conn.execute(sql, params) if row[0]]
     except sqlite3.Error:
         return []
-    finally:
-        try:
-            conn.close()  # type: ignore[name-defined]
-        except Exception:
-            pass
 
 
 def _loads(value: Any, fallback: Any) -> Any:

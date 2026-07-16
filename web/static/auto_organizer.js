@@ -2,11 +2,18 @@ let currentPlan = null;
 let approvalToken = null;
 
 async function api(path, options = {}) {
+  const token = window.sessionStorage.getItem("diguaAiNasToken") || "";
   const response = await fetch(path, {
-    headers: { "Content-Type": "application/json" },
     ...options,
+    headers: { "Content-Type": "application/json", ...(token ? { Authorization: `Bearer ${token}` } : {}), ...(options.headers || {}) },
   });
   return response.json();
+}
+
+function escapeHtml(value) {
+  return String(value ?? "").replace(/[&<>'"]/g, (character) => ({
+    "&": "&amp;", "<": "&lt;", ">": "&gt;", "'": "&#39;", '"': "&quot;"
+  })[character]);
 }
 
 function showJson(id, data) {
@@ -17,8 +24,8 @@ function renderPlan(data) {
   currentPlan = data.plan_id || data.plan?.plan_id || currentPlan;
   const items = data.items || [];
   document.getElementById("planBox").innerHTML = items.length
-    ? items.map((item) => `<div class="item"><strong>${item.final_filename || item.suggested_filename_zh || item.item_id}</strong><div>${item.operation} · ${item.status}</div><div class="muted">${item.source_rel || ""} -> ${item.target_rel || ""}</div></div>`).join("")
-    : `<pre>${JSON.stringify(data, null, 2)}</pre>`;
+    ? items.map((item) => `<div class="item"><strong>${escapeHtml(item.final_filename || item.suggested_filename_zh || item.item_id)}</strong><div>${escapeHtml(item.operation)} · ${escapeHtml(item.status)}</div><div class="muted">${escapeHtml(item.source_rel || "")} -&gt; ${escapeHtml(item.target_rel || "")}</div></div>`).join("")
+    : `<pre>${escapeHtml(JSON.stringify(data, null, 2))}</pre>`;
 }
 
 async function refresh() {

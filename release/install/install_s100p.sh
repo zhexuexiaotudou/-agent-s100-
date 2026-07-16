@@ -10,6 +10,7 @@ MOUNT_POINT="/mnt/nas/openclaw"
 PERSONAL_ROOT="/mnt/nas/openclaw/Personal"
 SYSTEMD_MODE="user"
 SKIP_PIP=0
+SKIP_SYSTEMD=0
 REPORT_OUT=""
 MIN_DISK_KB=262144
 
@@ -24,6 +25,7 @@ while [[ $# -gt 0 ]]; do
     --personal-root) PERSONAL_ROOT="${2:-}"; shift 2 ;;
     --systemd-mode) SYSTEMD_MODE="${2:-}"; shift 2 ;;
     --skip-pip) SKIP_PIP=1; shift ;;
+    --skip-systemd) SKIP_SYSTEMD=1; shift ;;
     --report-out) REPORT_OUT="${2:-}"; shift 2 ;;
     --min-disk-kb) MIN_DISK_KB="${2:-}"; shift 2 ;;
     *) shift ;;
@@ -54,15 +56,33 @@ run_json() {
 preflight="$(run_json preflight "$ROOT_DIR/release/install/preflight_check.sh" --nas-host "$NAS_HOST" --mount-point "$MOUNT_POINT" --personal-root "$PERSONAL_ROOT" --min-disk-kb "$MIN_DISK_KB")"
 nas_config="$(run_json nas "$ROOT_DIR/release/install/configure_nas_mount.sh" --dry-run --nas-protocol "$NAS_PROTOCOL" --nas-host "$NAS_HOST" --nas-share "$NAS_SHARE" --mount-point "$MOUNT_POINT" --personal-root "$PERSONAL_ROOT")"
 models="$(run_json models "$ROOT_DIR/release/install/configure_models.sh" --dry-run --model-manifest "$ROOT_DIR/release/configs/model_manifest.yaml")"
-systemd_plan="$(run_json systemd "$ROOT_DIR/release/install/install_systemd_units.sh" --dry-run --mode "$SYSTEMD_MODE" --unit-dir "$ROOT_DIR/release/systemd")"
+systemd_plan="$(run_json systemd "$ROOT_DIR/release/install/install_systemd_units.sh" --dry-run --mode "$SYSTEMD_MODE" --unit-dir "$ROOT_DIR/release/systemd" --install-root "$INSTALL_ROOT" --personal-root "$PERSONAL_ROOT" --report-root "$MOUNT_POINT/reports/qwen25_ai_nas")"
 
 blocker=""
 if [[ "$DRY_RUN" == "0" ]]; then
-  mkdir -p "$INSTALL_ROOT" "$MOUNT_POINT" "$PERSONAL_ROOT"
-  python3 -m venv "$INSTALL_ROOT/venv" || blocker="venv_create_failed"
+  if [[ -z "$INSTALL_ROOT" || "$INSTALL_ROOT" != /* || "$INSTALL_ROOT" == "/" ]]; then
+    blocker="unsafe_install_root"
+  elif ! mkdir -p "$INSTALL_ROOT" "$MOUNT_POINT" "$PERSONAL_ROOT"; then
+    blocker="install_directory_create_failed"
+  fi
+  app_root="$INSTALL_ROOT/app"
+  if [[ -z "$blocker" && "$ROOT_DIR" != "$app_root" ]]; then
+    mkdir -p "$app_root" || blocker="application_directory_create_failed"
+    for entry in src web scripts configs release requirements.txt LICENSE; do
+      if [[ -z "$blocker" && -e "$ROOT_DIR/$entry" ]]; then
+        rm -rf "$app_root/$entry" || blocker="application_replace_failed:$entry"
+        if [[ -z "$blocker" ]]; then
+          cp -a "$ROOT_DIR/$entry" "$app_root/$entry" || blocker="application_copy_failed:$entry"
+        fi
+      fi
+    done
+  fi
+  if [[ -z "$blocker" ]]; then
+    python3 -m venv "$INSTALL_ROOT/venv" || blocker="venv_create_failed"
+  fi
   if [[ -z "$blocker" && "$SKIP_PIP" == "0" ]]; then
-    if [[ -f "$ROOT_DIR/requirements.txt" ]]; then
-      "$INSTALL_ROOT/venv/bin/pip" install -r "$ROOT_DIR/requirements.txt" || blocker="pip_install_failed"
+    if [[ -f "$app_root/requirements.txt" ]]; then
+      "$INSTALL_ROOT/venv/bin/pip" install -r "$app_root/requirements.txt" || blocker="pip_install_failed"
     else
       blocker="requirements_txt_missing"
     fi
@@ -75,10 +95,16 @@ if [[ "$DRY_RUN" == "0" ]]; then
     echo "DIGUA_OPENCLAW_BASE_URL=http://127.0.0.1:8765"
     echo "DIGUA_QWEN_BASE_URL=http://127.0.0.1:18080"
   } > "$HOME/.config/digua-ai-nas/digua.env"
+  if [[ -z "$blocker" && "$SKIP_SYSTEMD" == "0" ]]; then
+    systemd_apply="$(run_json systemd_apply "$app_root/release/install/install_systemd_units.sh" --apply --mode "$SYSTEMD_MODE" --unit-dir "$app_root/release/systemd" --install-root "$INSTALL_ROOT" --personal-root "$PERSONAL_ROOT" --report-root "$MOUNT_POINT/reports/qwen25_ai_nas")"
+    if ! SYSTEMD_APPLY_JSON="$systemd_apply" python3 -c 'import json,os,sys; sys.exit(0 if json.loads(os.environ["SYSTEMD_APPLY_JSON"]).get("ok") else 1)'; then
+      blocker="systemd_install_failed"
+    fi
+  fi
 fi
 
 payload="$(python3 - <<PY
-import json
+import json, os
 preflight=json.loads('''$preflight''')
 nas=json.loads('''$nas_config''')
 models=json.loads('''$models''')
@@ -97,6 +123,8 @@ payload={
   "nas_mount": "$MOUNT_POINT",
   "personal_root": "$PERSONAL_ROOT",
   "venv_target": "$INSTALL_ROOT/venv",
+  "app_root": "$INSTALL_ROOT/app",
+  "application_copied": os.path.isfile("$INSTALL_ROOT/app/scripts/probes/ai_nas_operator_portal_server.py") and os.path.isdir("$INSTALL_ROOT/app/src") and os.path.isdir("$INSTALL_ROOT/app/web"),
   "pip_executed": bool($DRY_RUN == 0 and $SKIP_PIP == 0),
   "system_python_modified": False,
   "public_exposure_enabled": False,

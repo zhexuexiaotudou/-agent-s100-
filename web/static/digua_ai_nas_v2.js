@@ -141,7 +141,8 @@
 
   function safeLocalStorageGet(key) {
     try {
-      return window.localStorage.getItem(key) || "";
+      window.localStorage.removeItem(key);
+      return window.sessionStorage.getItem(key) || "";
     } catch (error) {
       return "";
     }
@@ -149,7 +150,8 @@
 
   function safeLocalStorageSet(key, value) {
     try {
-      window.localStorage.setItem(key, value);
+      window.localStorage.removeItem(key);
+      window.sessionStorage.setItem(key, value);
     } catch (error) {
       return false;
     }
@@ -159,6 +161,7 @@
   function safeLocalStorageRemove(key) {
     try {
       window.localStorage.removeItem(key);
+      window.sessionStorage.removeItem(key);
     } catch (error) {
       return false;
     }
@@ -2927,6 +2930,19 @@
     return { ok: response.ok, status: response.status, data };
   }
 
+  async function uploadFileStream(file, targetDir = "") {
+    const query = new URLSearchParams({ filename: file.name, target_dir: cleanStoragePath(targetDir) });
+    const headers = { Accept: "application/json", "Content-Type": file.type || "application/octet-stream" };
+    if (appState.authToken) headers.Authorization = `Bearer ${appState.authToken}`;
+    const response = await fetch(`/api/storage/upload-stream?${query.toString()}`, {
+      method: "POST",
+      headers,
+      body: file
+    });
+    const data = await response.json();
+    return { ok: response.ok, status: response.status, data };
+  }
+
   async function loadPreviewObjectUrl(previewUrl) {
     if (!previewUrl) throw new Error("preview_url_missing");
     const cachedObjectUrl = previewObjectUrlCache.get(previewUrl);
@@ -3126,21 +3142,6 @@
     }).join("");
   }
 
-  async function ensureDefaultLogin() {
-    if (appState.authToken) return true;
-    const result = await fetchJson("/api/identity/login", {
-      method: "POST",
-      body: { username: "admin", password: "admin123" }
-    });
-    if (!result.ok || !result.data?.ok) return false;
-    appState.authToken = result.data.token || "";
-    appState.authUser = result.data.user || null;
-    safeLocalStorageSet("diguaAiNasToken", appState.authToken);
-    safeLocalStorageSet("diguaAiNasUser", JSON.stringify(appState.authUser));
-    return true;
-  }
-
-
   async function loadDocClassificationData() {
     if (!appState.authToken) {
       appState.docClassification = { ...appState.docClassification, status: "auth", error: "" };
@@ -3213,17 +3214,7 @@
       if (!files || files.length === 0) return;
       for (const file of files) {
         try {
-          const reader = new FileReader();
-          const base64 = await new Promise((resolve, reject) => {
-            reader.onload = () => {
-              const r = reader.result;
-              if (typeof r === "string") { const c = r.indexOf(","); resolve(c >= 0 ? r.slice(c + 1) : r); }
-              else { reject(new Error("read_failed")); }
-            };
-            reader.onerror = () => reject(reader.error);
-            reader.readAsDataURL(file);
-          });
-          const result = await fetchJson("/api/documents/upload", { method: "POST", body: { name: file.name, data: base64, path: "Documents" } });
+          const result = await uploadFileStream(file, "Documents");
           showToast(result.ok && result.data?.ok ? `上传成功: ${file.name}` : `上传失败: ${file.name}`);
         } catch (error) {
           showToast(`上传失败: ${file.name}`);
@@ -3378,12 +3369,9 @@
     const message = appState.prompt.trim();
     if (!message) return;
     if (!appState.authToken) {
-      const ok = await ensureDefaultLogin();
-      if (!ok) {
-        appState.assistant = { ...appState.assistant, status: "auth", error: "auth_required" };
-        renderShell();
-        return;
-      }
+      appState.assistant = { ...appState.assistant, status: "auth", error: "auth_required" };
+      renderShell();
+      return;
     }
     appState.assistant = { status: "loading", answer: "", route: null, error: "" };
     renderShell();
@@ -4828,16 +4816,8 @@
     appState.storageOperation = { ...appState.storageOperation, status: "loading", error: "" };
     renderShell();
     try {
-      const contentBase64 = await fileToBase64(file);
-      const result = await fetchJson("/api/storage/upload-file", {
-        method: "POST",
-        body: {
-          target_dir: cleanStoragePath(document.getElementById("storageUploadDir")?.value || appState.storage.relativePath || ""),
-          filename: file.name,
-          content_base64: contentBase64,
-          overwrite: false
-        }
-      });
+      const targetDir = document.getElementById("storageUploadDir")?.value || appState.storage.relativePath || "";
+      const result = await uploadFileStream(file, targetDir);
       if (!result.ok || !result.data?.ok) {
         appState.storageOperation = { ...appState.storageOperation, status: "error", error: result.data?.error || `upload_failed:${result.status}` };
         renderShell();
@@ -4850,18 +4830,6 @@
       appState.storageOperation = { ...appState.storageOperation, status: "error", error: error.message || String(error) };
       renderShell();
     }
-  }
-
-  function fileToBase64(file) {
-    return new Promise((resolve, reject) => {
-      const reader = new FileReader();
-      reader.onload = () => {
-        const result = String(reader.result || "");
-        resolve(result.includes(",") ? result.split(",").pop() : result);
-      };
-      reader.onerror = () => reject(reader.error || new Error("file_read_failed"));
-      reader.readAsDataURL(file);
-    });
   }
 
   async function shareSelectedStorageItem() {

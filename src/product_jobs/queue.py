@@ -15,7 +15,6 @@ JOB_TYPES = {
     "clip_embedding",
     "yolo_index",
     "person_attribute_rebuild",
-    "ocr_rebuild",
     "subtitle_extract",
     "ai_space_rebuild",
     "smart_classification_rebuild",
@@ -32,6 +31,8 @@ CREATE TABLE IF NOT EXISTS product_jobs (
   status TEXT NOT NULL,
   evidence_ref TEXT,
   error TEXT,
+  attempt_count INTEGER NOT NULL DEFAULT 0,
+  claimed_at TEXT,
   created_at TEXT NOT NULL,
   updated_at TEXT NOT NULL
 );
@@ -53,6 +54,11 @@ class ProductJobQueue:
         conn = self.connect()
         try:
             conn.executescript(SCHEMA_SQL)
+            columns = {row[1] for row in conn.execute("PRAGMA table_info(product_jobs)")}
+            if "attempt_count" not in columns:
+                conn.execute("ALTER TABLE product_jobs ADD COLUMN attempt_count INTEGER NOT NULL DEFAULT 0")
+            if "claimed_at" not in columns:
+                conn.execute("ALTER TABLE product_jobs ADD COLUMN claimed_at TEXT")
             conn.commit()
         finally:
             conn.close()
@@ -109,6 +115,33 @@ class ProductJobQueue:
             conn.close()
         return {"ok": cur.rowcount > 0, "job_id": job_id, "status": "cancelled" if cur.rowcount > 0 else "unchanged"}
 
+    def claim_next(self, *, stale_after_seconds: int = 900) -> dict[str, Any]:
+        now = _now()
+        stale_before = time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime(time.time() - max(1, stale_after_seconds)))
+        conn = self.connect()
+        try:
+            conn.execute("BEGIN IMMEDIATE")
+            conn.execute(
+                "UPDATE product_jobs SET status='queued',error='worker_lease_expired',claimed_at=NULL,updated_at=? WHERE status='running' AND COALESCE(claimed_at,updated_at) < ?",
+                (now, stale_before),
+            )
+            row = conn.execute("SELECT * FROM product_jobs WHERE status='queued' ORDER BY created_at,job_id LIMIT 1").fetchone()
+            if row is None:
+                conn.commit()
+                return {"ok": True, "job": None}
+            cur = conn.execute(
+                "UPDATE product_jobs SET status='running',attempt_count=attempt_count+1,claimed_at=?,updated_at=?,error=NULL WHERE job_id=? AND status='queued'",
+                (now, now, row["job_id"]),
+            )
+            if cur.rowcount != 1:
+                conn.rollback()
+                return {"ok": False, "error": "claim_race"}
+            claimed = conn.execute("SELECT * FROM product_jobs WHERE job_id=?", (row["job_id"],)).fetchone()
+            conn.commit()
+            return {"ok": True, "job": self._row(dict(claimed))}
+        finally:
+            conn.close()
+
     def mark_running(self, job_id: str) -> dict[str, Any]:
         return self._set_status(job_id, "running")
 
@@ -123,7 +156,7 @@ class ProductJobQueue:
         conn = self.connect()
         try:
             cur = conn.execute(
-                "UPDATE product_jobs SET status=?,evidence_ref=COALESCE(?, evidence_ref),error=?,updated_at=? WHERE job_id=?",
+                "UPDATE product_jobs SET status=?,evidence_ref=COALESCE(?, evidence_ref),error=?,claimed_at=NULL,updated_at=? WHERE job_id=?",
                 (status, evidence_ref, error, now, job_id),
             )
             conn.commit()
