@@ -20,6 +20,10 @@ Local UI evidence is recorded in
 Real S100P/NAS functional acceptance and deployment remain explicitly deferred
 until both devices are online.
 
+The non-Dream7B implementation hardening and its deferred live acceptance gates
+are recorded in
+[`docs/non_dream7b_offline_hardening_20260716.md`](docs/non_dream7b_offline_hardening_20260716.md).
+
 ## Current Status
 
 Status timestamp: 2026-07-06 17:53 CST.

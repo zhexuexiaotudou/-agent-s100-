@@ -47,7 +47,8 @@
 
   function authHeaders() {
     try {
-      const token = window.localStorage.getItem("diguaAiNasToken") || "";
+      window.localStorage.removeItem("diguaAiNasToken");
+      const token = window.sessionStorage.getItem("diguaAiNasToken") || "";
       return token ? { Authorization: `Bearer ${token}` } : {};
     } catch (error) {
       return {};
@@ -56,7 +57,8 @@
 
   function getAuthToken() {
     try {
-      return window.localStorage.getItem("diguaAiNasToken") || "";
+      window.localStorage.removeItem("diguaAiNasToken");
+      return window.sessionStorage.getItem("diguaAiNasToken") || "";
     } catch (error) {
       return "";
     }
@@ -64,8 +66,10 @@
 
   function saveAuth(token, user) {
     try {
-      window.localStorage.setItem("diguaAiNasToken", token || "");
-      if (user) window.localStorage.setItem("diguaAiNasUser", JSON.stringify(user));
+      window.localStorage.removeItem("diguaAiNasToken");
+      window.localStorage.removeItem("diguaAiNasUser");
+      window.sessionStorage.setItem("diguaAiNasToken", token || "");
+      if (user) window.sessionStorage.setItem("diguaAiNasUser", JSON.stringify(user));
     } catch (error) {
       return false;
     }

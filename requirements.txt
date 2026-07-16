@@ -1,0 +1,6 @@
+# Core dependencies for the Digua portal, indexes, and offline verification.
+# S100P vendor runtimes (Torch/Transformers/BPU) remain device-managed and are
+# configured separately because generic PyPI wheels are not valid for the BPU.
+numpy>=1.26,<3
+Pillow>=10,<13
+PyYAML>=6,<7

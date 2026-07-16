@@ -1,15 +1,16 @@
 [Unit]
 Description=Digua Qwen local OpenAI-compatible gateway
 After=network-online.target
+Wants=network-online.target
 
 [Service]
 Type=simple
-WorkingDirectory=%h/openclaw
+WorkingDirectory=@DIGUA_INSTALL_ROOT@/app
 EnvironmentFile=-%h/.config/digua-ai-nas/digua.env
-ExecStart=/usr/bin/python3 scripts/qwen25_openai_gateway.py --host 127.0.0.1 --port 18080
+ExecStartPre=/usr/bin/test -r @DIGUA_INSTALL_ROOT@/app/scripts/qwen25_openai_gateway.py
+ExecStart=@DIGUA_INSTALL_ROOT@/venv/bin/python @DIGUA_INSTALL_ROOT@/app/scripts/qwen25_openai_gateway.py --host 127.0.0.1 --port 18080
 Restart=on-failure
 RestartSec=5
 
 [Install]
 WantedBy=default.target
-

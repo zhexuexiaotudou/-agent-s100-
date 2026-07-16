@@ -7,7 +7,7 @@ Wants=network-online.target
 Type=simple
 WorkingDirectory=/mnt/nas/openclaw
 Environment=PYTHONPATH=/mnt/nas/openclaw
-ExecStart=/usr/bin/python3 -m src.product_jobs.worker --db-path /mnt/nas/openclaw/reports/qwen25_ai_nas/product_jobs/runtime/product_jobs.db
+ExecStart=/usr/bin/python3 -m src.product_jobs.worker --db-path /mnt/nas/openclaw/reports/qwen25_ai_nas/product_jobs/runtime/product_jobs.db --report-root /mnt/nas/openclaw/reports/qwen25_ai_nas --personal-root /mnt/nas/openclaw/Personal
 Restart=on-failure
 RestartSec=30s
 

@@ -27,16 +27,11 @@ class DocumentRagService:
         stats = {"document_count": 0, "chunk_count": 0}
         if self.db_path.exists():
             try:
-                conn = sqlite3.connect(str(self.db_path))
-                stats["document_count"] = int(conn.execute("SELECT count(*) FROM documents").fetchone()[0])
-                stats["chunk_count"] = int(conn.execute("SELECT count(*) FROM document_chunks").fetchone()[0])
+                with sqlite3.connect(str(self.db_path)) as conn:
+                    stats["document_count"] = int(conn.execute("SELECT count(*) FROM documents").fetchone()[0])
+                    stats["chunk_count"] = int(conn.execute("SELECT count(*) FROM document_chunks").fetchone()[0])
             except sqlite3.Error:
                 stats["degraded_reason"] = "document_fts_unreadable"
-            finally:
-                try:
-                    conn.close()  # type: ignore[name-defined]
-                except Exception:
-                    pass
         return {
             "ok": True,
             "schema": "digua_document_rag_status_v1",
@@ -62,28 +57,23 @@ class DocumentRagService:
         if not match:
             return self._no_grounded("query_terms_empty", relative_path=relative_path)
         try:
-            conn = sqlite3.connect(str(self.db_path))
-            conn.row_factory = sqlite3.Row
-            rows = conn.execute(
-                """
-                SELECT c.id AS chunk_id,c.redacted_text,c.source_hash,c.chunk_index,
-                       d.title,d.relative_path,d.file_type,bm25(document_chunks_fts) AS rank
-                FROM document_chunks_fts
-                JOIN document_chunks c ON c.id=document_chunks_fts.chunk_id
-                JOIN documents d ON d.id=c.document_id
-                WHERE document_chunks_fts MATCH ?
-                ORDER BY rank
-                LIMIT ?
-                """,
-                (match, int(top_k)),
-            ).fetchall()
+            with sqlite3.connect(str(self.db_path)) as conn:
+                conn.row_factory = sqlite3.Row
+                rows = conn.execute(
+                    """
+                    SELECT c.id AS chunk_id,c.redacted_text,c.source_hash,c.chunk_index,
+                           d.title,d.relative_path,d.file_type,bm25(document_chunks_fts) AS rank
+                    FROM document_chunks_fts
+                    JOIN document_chunks c ON c.id=document_chunks_fts.chunk_id
+                    JOIN documents d ON d.id=c.document_id
+                    WHERE document_chunks_fts MATCH ?
+                    ORDER BY rank
+                    LIMIT ?
+                    """,
+                    (match, int(top_k)),
+                ).fetchall()
         except sqlite3.Error as exc:
             return self._no_grounded(f"document_fts_query_failed:{type(exc).__name__}", relative_path=relative_path)
-        finally:
-            try:
-                conn.close()  # type: ignore[name-defined]
-            except Exception:
-                pass
         evidence = []
         terms = terms_for_query(query)
         for index, row in enumerate(rows, start=1):

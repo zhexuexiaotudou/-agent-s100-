@@ -13,8 +13,6 @@ import hashlib
 import json
 import mimetypes
 import os
-import sqlite3
-import time
 import urllib.error
 import urllib.request
 from pathlib import Path
@@ -64,8 +62,11 @@ def _normalize_ocr_payload(raw: Any) -> dict:
                     return {"text": content}
             if isinstance(content, dict):
                 return content
-        except Exception:
-            pass
+        except (IndexError, KeyError, TypeError) as exc:
+            raw = {
+                **raw,
+                "normalization_warning": f"invalid_choices_shape:{type(exc).__name__}",
+            }
     text = (
         raw.get("text")
         or raw.get("ocr_text")
@@ -86,7 +87,9 @@ def _normalize_ocr_payload(raw: Any) -> dict:
     }
 
 
-def request_product_ocr(path: Path, relative_path: str, settings: dict | None = None) -> dict:
+def request_product_ocr(
+    path: Path, relative_path: str, settings: dict | None = None
+) -> dict:
     settings = settings or product_ocr_runtime_status()
     endpoint = str(os.environ.get("AI_NAS_OCR_ENDPOINT") or "").strip()
     model = str(os.environ.get("AI_NAS_OCR_MODEL") or "").strip()
@@ -118,7 +121,9 @@ def request_product_ocr(path: Path, relative_path: str, settings: dict | None = 
         raw = {"text": raw_text}
     normalized = _normalize_ocr_payload(raw)
     normalized["provider"] = "http_json_ocr"
-    normalized["model_id"] = model or str(normalized.get("model_id") or normalized.get("model") or "http-json-ocr")
+    normalized["model_id"] = model or str(
+        normalized.get("model_id") or normalized.get("model") or "http-json-ocr"
+    )
     normalized["endpoint_configured"] = True
     return normalized
 
@@ -175,7 +180,13 @@ def run_product_ocr_for_record(record: dict) -> dict:
             "metadata": metadata,
             "updated_at": now,
         }
-    except (urllib.error.URLError, TimeoutError, RuntimeError, OSError, json.JSONDecodeError) as exc:
+    except (
+        urllib.error.URLError,
+        TimeoutError,
+        RuntimeError,
+        OSError,
+        json.JSONDecodeError,
+    ) as exc:
         return {
             "path": str(path),
             "relative_path": rel,
@@ -194,7 +205,11 @@ def upsert_product_ocr_evidence(db_path: Path, result: dict) -> dict:
     path = str(result.get("path") or "")
     rel = str(result.get("relative_path") or "")
     if not path or not rel:
-        return {"ok": False, "artifact_created": False, "error": "missing_path_or_relative_path"}
+        return {
+            "ok": False,
+            "artifact_created": False,
+            "error": "missing_path_or_relative_path",
+        }
     metadata = result.get("metadata") or {}
     now = iso_now()
     con = open_index_db(db_path)
@@ -204,8 +219,15 @@ def upsert_product_ocr_evidence(db_path: Path, result: dict) -> dict:
             (path,),
         ).fetchone()
         generation = int(state["active_generation"]) if state else 0
-        privacy_class = str(state["privacy_class"] or "standard") if state else "standard"
-        artifact_id = "ocr-" + hashlib.sha256(f"{path}:{generation}:{result.get('updated_at')}".encode("utf-8")).hexdigest()[:24]
+        privacy_class = (
+            str(state["privacy_class"] or "standard") if state else "standard"
+        )
+        artifact_id = (
+            "ocr-"
+            + hashlib.sha256(
+                f"{path}:{generation}:{result.get('updated_at')}".encode("utf-8")
+            ).hexdigest()[:24]
+        )
         artifact_payload = {
             "status": result.get("status"),
             "text_preview": result.get("text_preview") or "",
@@ -227,7 +249,11 @@ def upsert_product_ocr_evidence(db_path: Path, result: dict) -> dict:
                 generation,
                 f"sqlite://ocr_results/{hashlib.sha256(path.encode('utf-8')).hexdigest()[:16]}",
                 len(json.dumps(artifact_payload, ensure_ascii=False).encode("utf-8")),
-                str(metadata.get("model_id") or result.get("engine") or "product_http_ocr"),
+                str(
+                    metadata.get("model_id")
+                    or result.get("engine")
+                    or "product_http_ocr"
+                ),
                 privacy_class,
                 json.dumps(artifact_payload, ensure_ascii=False),
                 now,
@@ -255,6 +281,11 @@ def upsert_product_ocr_evidence(db_path: Path, result: dict) -> dict:
                 ),
             )
         con.commit()
-        return {"ok": True, "artifact_created": True, "artifact_id": artifact_id, "generation": generation}
+        return {
+            "ok": True,
+            "artifact_created": True,
+            "artifact_id": artifact_id,
+            "generation": generation,
+        }
     finally:
         con.close()

@@ -14,6 +14,9 @@ HTML/CSS/JS、现有路由和 API 调用，以及身份、ACL、受控复制和�
 [`docs/offline_ui_delivery_20260716.md`](docs/offline_ui_delivery_20260716.md)。S100P/NAS 的真实功能验收
 与部署明确延后，待两台设备恢复在线后执行。
 
+非 Dream 7B 已实现功能的离线加固结果，以及设备恢复后的真实链路验收门，记录在
+[`docs/non_dream7b_offline_hardening_20260716.md`](docs/non_dream7b_offline_hardening_20260716.md)。
+
 ## 当前状态
 
 状态时间戳：2026-07-06 17:53 CST。

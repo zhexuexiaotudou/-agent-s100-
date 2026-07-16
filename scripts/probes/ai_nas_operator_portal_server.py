@@ -133,6 +133,11 @@ except Exception:
     ProductJobQueue = None  # type: ignore[assignment]
 
 try:
+    from src.document_classification.classifier import classify_directory as classify_document_directory
+except Exception:
+    classify_document_directory = None  # type: ignore[assignment]
+
+try:
     from src.yolo_index.labels import labels_from_query
 except Exception:
     def labels_from_query(query: str) -> list[str]:  # type: ignore[no-redef]
@@ -245,6 +250,9 @@ REMOTE_SYNC_EXTRA_FILENAMES = [
 ]
 OPERATOR_DECISION_DIRNAME = "operator_decisions"
 MAX_UPLOAD_BYTES = 5 * 1024 * 1024
+MAX_JSON_BODY_BYTES = 8 * 1024 * 1024
+MAX_STREAM_UPLOAD_BYTES = 2 * 1024 * 1024 * 1024
+STREAM_CHUNK_BYTES = 1024 * 1024
 DEFAULT_QWEN_GATEWAY_URL = "http://127.0.0.1:18080"
 DEFAULT_QWEN_MODEL = "Qwen2.5-1.5B-Instruct-S100P-official"
 COPILOT_SEARCH_VERBS = (
@@ -1908,15 +1916,9 @@ def extract_local_document_text(path: Path, *, max_chars: int = 20000) -> str:
     return raw.decode("utf-8", errors="replace")[:max_chars]
 
 
+
+
 def query_terms(query: str) -> list[str]:
-    cleaned = query.strip().lower()
-    parts = [item for item in re.split(r"[\s,，。；;:：/\\|()（）]+", cleaned) if len(item) >= 2]
-    if cleaned and cleaned not in parts:
-        parts.insert(0, cleaned)
-    return parts[:12]
-
-
-def query_terms(query: str) -> list[str]:  # type: ignore[no-redef]
     cleaned = str(query or "").strip().lower()
     parts = [item for item in re.split(r"[\s,，。；;:：?？、|()（）]+", cleaned) if len(item) >= 2]
     if cleaned and cleaned not in parts:
@@ -2130,17 +2132,9 @@ def normalize_document_money_answer_sentence(query: str, answer: str, evidence: 
     return f"根据本地文档，{subject}的合计金额是 {preferred[0]}。"
 
 
+
+
 def document_answer_from_evidence(path: str, evidence: list[dict], evidence_refs: list[str]) -> str:
-    refs = "、".join(evidence_refs)
-    names = "、".join(str(item.get("name") or item.get("relative_path")) for item in evidence[:3])
-    amounts = document_amount_hits(evidence)
-    amount_text = f" 命中金额：{'、'.join(amounts[:3])}。" if amounts else ""
-    snippets = [str(item.get("snippet") or "").strip() for item in evidence[:2] if str(item.get("snippet") or "").strip()]
-    snippet_text = " 证据片段：" + " / ".join(snippets) if snippets else ""
-    return f"已在本地文档索引中找到 {len(evidence)} 条证据：{names}。{amount_text}证据引用：{refs}。{snippet_text}".strip()
-
-
-def document_answer_from_evidence(path: str, evidence: list[dict], evidence_refs: list[str]) -> str:  # type: ignore[no-redef]
     separator = "\u3001"
     refs = separator.join(evidence_refs)
     names = separator.join(str(item.get("name") or item.get("relative_path")) for item in evidence[:3])
@@ -2230,6 +2224,7 @@ class PortalState:
         self.remote_sync_dir = remote_sync_dir
         self.last_remote_sync_result: dict | None = None
         self.refresh_lock = threading.Lock()
+        self.storage_write_lock = threading.Lock()
         self.refresh_result: dict | None = None
         self.personal_root = personal_root
         self.sqlite_index_path = sqlite_index_path
@@ -2278,8 +2273,8 @@ class PortalState:
             self.app_ecosystem = AppEcosystem(self.app_db_path)
             try:
                 self.snapshot_store.cleanup_expired_trash(30)
-            except Exception:
-                pass
+            except Exception as exc:
+                sys.stderr.write(f"snapshot trash cleanup degraded: {type(exc).__name__}: {exc}\n")
         if refresh_on_start:
             self.refresh_result = self.refresh()
 
@@ -2400,6 +2395,149 @@ class PortalState:
         if not self.identity_store:
             return False
         return self.identity_store.check_acl(str(user.get("username") or ""), relative_path, "write")
+
+    def authorized_asset_scope(self, user: dict) -> dict[str, set[str]] | None:
+        """Resolve the caller's current ACL into index identifiers.
+
+        Index databases intentionally avoid raw paths, so authorization must be
+        re-evaluated against the current Personal tree on every request instead
+        of trusting the ACL state that existed when an index was built.
+        """
+        if str(user.get("role") or "") == "admin":
+            return None
+        allowed_hashes: set[str] = set()
+        allowed_asset_ids: set[str] = set()
+        if not self.personal_root or not self.personal_root.exists():
+            return {"path_hashes": allowed_hashes, "asset_ids": allowed_asset_ids}
+        personal = self.personal_root.resolve(strict=True)
+        scanned = 0
+        for path in personal.rglob("*"):
+            if scanned >= self.storage_max_files:
+                break
+            try:
+                if path.is_symlink() or not path.is_file():
+                    continue
+                scanned += 1
+                resolved = path.resolve(strict=True)
+                rel = resolved.relative_to(personal).as_posix()
+                if not self.can_read(user, rel):
+                    continue
+                allowed_hashes.add(hashlib.sha256(rel.encode("utf-8", errors="surrogateescape")).hexdigest()[:32])
+                allowed_hashes.add(hashlib.sha256(str(resolved).encode("utf-8", errors="replace")).hexdigest())
+            except (OSError, ValueError):
+                continue
+
+        index_tables = (
+            (self.report_root / "multimodal_search" / "runtime" / "multimodal_search.db", "mm_assets"),
+            (self.report_root / "yolo_index" / "runtime" / "yolo_index.db", "mm_yolo_assets"),
+        )
+        for db_path, table in index_tables:
+            if not db_path.exists():
+                continue
+            try:
+                uri = f"file:{quote(str(db_path.resolve()).replace('\\', '/'), safe='/:')}?mode=ro&immutable=1"
+                con = sqlite3.connect(uri, uri=True)
+                rows = con.execute(f"SELECT asset_id,path_hash FROM {table}").fetchall()
+                con.close()
+                allowed_asset_ids.update(str(asset_id) for asset_id, path_hash in rows if str(path_hash or "") in allowed_hashes)
+            except sqlite3.DatabaseError:
+                continue
+
+        if self.media_center:
+            for row in self.media_center.indexed_rows(limit=self.storage_max_files):
+                try:
+                    path = Path(str(row.get("file_path") or "")).resolve(strict=True)
+                    rel = path.relative_to(personal).as_posix()
+                except (OSError, ValueError):
+                    continue
+                if self.can_read(user, rel):
+                    allowed_asset_ids.add(str(row.get("asset_id") or ""))
+                    allowed_hashes.add(str(row.get("path_hash") or ""))
+        return {"path_hashes": allowed_hashes, "asset_ids": allowed_asset_ids}
+
+    def filter_index_payload(self, payload: dict, user: dict) -> dict:
+        scope = self.authorized_asset_scope(user)
+        if scope is None:
+            return payload
+        allowed_ids = scope["asset_ids"]
+        allowed_hashes = scope["path_hashes"]
+        denied = object()
+
+        def filtered(value, *, parent_key: str = ""):
+            if isinstance(value, dict):
+                asset_id = str(value.get("asset_id") or "")
+                path_hash = str(value.get("path_hash") or "")
+                if asset_id and asset_id not in allowed_ids:
+                    return denied
+                if path_hash and path_hash not in allowed_hashes:
+                    return denied
+                out: dict = {}
+                for key, item in value.items():
+                    if key == "asset_ids" and isinstance(item, list):
+                        visible_ids = [entry for entry in item if str(entry) in allowed_ids]
+                        out[key] = visible_ids
+                        if "count" in value:
+                            out["count"] = len(visible_ids)
+                        continue
+                    result = filtered(item, parent_key=key)
+                    if result is not denied:
+                        out[key] = result
+                return out
+            if isinstance(value, list):
+                rows = []
+                for item in value:
+                    result = filtered(item, parent_key=parent_key)
+                    if result is not denied:
+                        rows.append(result)
+                return rows
+            return value
+
+        result = filtered(payload)
+        if result is denied or not isinstance(result, dict):
+            result = {"ok": False, "error": "not_found"}
+        for list_key, count_key in (("results", "result_count"), ("assets", "asset_count"), ("photos", "photo_count"), ("items", "item_count")):
+            if isinstance(result.get(list_key), list):
+                result[count_key] = len(result[list_key])
+        result["acl_scope"] = "current_user"
+        result["acl_filtered"] = True
+        return result
+
+    def visible_media_payload(self, user: dict) -> dict:
+        media = self.media_center
+        if not media:
+            return {"photos": [], "timeline": [], "albums": [], "duplicates": [], "stats": {}}
+        scope = self.authorized_asset_scope(user)
+        allowed_ids = None if scope is None else scope["asset_ids"]
+        rows = media.list_photos(limit=self.storage_max_files)
+        photos = rows if allowed_ids is None else [row for row in rows if str(row.get("asset_id") or "") in allowed_ids]
+        dates: dict[str, int] = {}
+        for row in photos:
+            taken_at = str(row.get("taken_at") or "")
+            if taken_at:
+                day = taken_at[:10]
+                dates[day] = dates.get(day, 0) + 1
+        timeline = [{"date": day, "count": dates[day]} for day in sorted(dates, reverse=True)]
+        visible_ids = {str(row.get("asset_id") or "") for row in photos}
+        duplicates = []
+        for group in media.find_duplicates():
+            members = [asset_id for asset_id in group.get("asset_ids") or [] if str(asset_id) in visible_ids]
+            if len(members) > 1:
+                duplicates.append({**group, "asset_ids": members, "count": len(members)})
+        albums = []
+        for album in media.list_albums():
+            album_photos = [row for row in media.get_album_photos(str(album.get("name") or "")) if str(row.get("asset_id") or "") in visible_ids]
+            if album_photos or allowed_ids is None:
+                albums.append({**album, "item_count": len(album_photos) if allowed_ids is not None else album.get("item_count", 0)})
+        stats = {
+            "photo_count": len(photos),
+            "video_count": 0,
+            "media_count": len(photos),
+            "album_count": len(albums),
+            "duplicate_group_count": len(duplicates),
+            "raw_path_returned": False,
+            "acl_scope": "all" if allowed_ids is None else "current_user",
+        }
+        return {"photos": photos, "timeline": timeline, "albums": albums, "duplicates": duplicates, "stats": stats}
 
     def _relative_path_for_personal_file(self, path: Path) -> str | None:
         if not self.personal_root:
@@ -2873,43 +3011,28 @@ class PortalState:
         except sqlite3.DatabaseError as exc:
             return HTTPStatus.SERVICE_UNAVAILABLE, {"ok": False, "error": f"document_fts_query_failed:{type(exc).__name__}:{exc}", "retrieval_mode": "sqlite_fts_first_degraded"}
         finally:
-            try:
-                con.close()
-            except Exception:
-                pass
+            con.close()
+
+
+    def document_classification_payload(self, relative_path: str, user: dict) -> tuple[int, dict]:
+        if not self.personal_root:
+            return HTTPStatus.SERVICE_UNAVAILABLE, {"ok": False, "error": "personal_root_not_configured"}
+        if classify_document_directory is None:
+            return HTTPStatus.SERVICE_UNAVAILABLE, {"ok": False, "error": "document_classification_unavailable"}
+        try:
+            normalized = normalize_storage_relative_path(relative_path or "Documents")
+            resolve_storage_path(self.personal_root, normalized)
+            result = classify_document_directory(
+                self.personal_root,
+                normalized,
+                can_read=lambda path: self.can_read(user, path),
+                max_files=self.storage_max_files,
+            )
+        except (StoragePathError, OSError) as exc:
+            return HTTPStatus.BAD_REQUEST, {"ok": False, "error": f"invalid_document_path:{type(exc).__name__}"}
+        return (HTTPStatus.OK if result.get("ok") else HTTPStatus.NOT_FOUND), result
 
     def document_query_payload(self, query: str, relative_path: str = "Documents", user: dict | None = None) -> tuple[int, dict]:
-        query = str(query or "").strip()
-        if not query:
-            return HTTPStatus.BAD_REQUEST, {"ok": False, "error": "query_required"}
-        status, payload = self.document_fts_recall(query, normalize_storage_relative_path(relative_path or "Documents"), user)
-        if status != HTTPStatus.OK:
-            return status, payload
-        evidence = payload.get("evidence") or []
-        if evidence:
-            refs = "、".join(payload.get("evidence_refs") or [])
-            names = "、".join(str(item.get("name") or item.get("relative_path")) for item in evidence[:3])
-            answer = f"SQLite FTS-first RAG 在 {payload.get('path')} 下召回 {len(evidence)} 条证据：{names}。证据引用：{refs}。"
-        else:
-            answer = f"未找到可靠证据：在 {payload.get('path')} 下没有与“{query}”匹配的 FTS 证据。"
-        return HTTPStatus.OK, {
-            "ok": True,
-            "query": query,
-            "path": payload.get("path"),
-            "answer": answer,
-            "evidence": evidence,
-            "evidence_refs": payload.get("evidence_refs") or [],
-            "evidence_count": len(evidence),
-            "readable_count": payload.get("fts_sync", {}).get("indexed_documents", 0),
-            "retrieval_mode": payload.get("retrieval_mode") or "sqlite_fts_first",
-            "embedding_feature_flag": False,
-            "embedding_enabled": False,
-            "cloud_used": False,
-            "qwen_execution_authority": False,
-            "raw_private_content_returned": False,
-        }
-
-    def document_query_payload(self, query: str, relative_path: str = "Documents", user: dict | None = None) -> tuple[int, dict]:  # type: ignore[no-redef]
         query = str(query or "").strip()
         if not query:
             return HTTPStatus.BAD_REQUEST, {"ok": False, "error": "query_required"}
@@ -3006,7 +3129,12 @@ class PortalState:
         if len(content) > MAX_UPLOAD_BYTES:
             return HTTPStatus.REQUEST_ENTITY_TOO_LARGE, {"ok": False, "error": "upload_too_large", "max_bytes": MAX_UPLOAD_BYTES}
         try:
-            target.write_bytes(content)
+            with target.open("xb") as output:
+                output.write(content)
+                output.flush()
+                os.fsync(output.fileno())
+        except FileExistsError:
+            return HTTPStatus.CONFLICT, {"ok": False, "error": "target_already_exists", "path": target_rel}
         except OSError as exc:
             return HTTPStatus.INTERNAL_SERVER_ERROR, {"ok": False, "error": f"upload_write_failed:{type(exc).__name__}:{exc}", "path": target_rel}
         sha256 = hashlib.sha256(content).hexdigest()
@@ -3019,6 +3147,95 @@ class PortalState:
                 "name": filename,
                 "size_bytes": len(content),
                 "sha256": sha256,
+            },
+        }
+
+    def storage_upload_stream(
+        self,
+        filename: str,
+        target_dir_value: str,
+        content_length: int,
+        stream: object,
+        user: dict,
+    ) -> tuple[int, dict]:
+        filename = str(filename or "").strip()
+        if not filename or "/" in filename or "\\" in filename or filename in {".", ".."}:
+            return HTTPStatus.BAD_REQUEST, {"ok": False, "error": "invalid_filename"}
+        if content_length < 0:
+            return HTTPStatus.BAD_REQUEST, {"ok": False, "error": "invalid_content_length"}
+        if content_length > MAX_STREAM_UPLOAD_BYTES:
+            return HTTPStatus.REQUEST_ENTITY_TOO_LARGE, {
+                "ok": False,
+                "error": "upload_too_large",
+                "max_bytes": MAX_STREAM_UPLOAD_BYTES,
+            }
+        try:
+            target_dir = normalize_storage_relative_path(target_dir_value or "")
+            target_rel = normalize_storage_relative_path(f"{target_dir}/{filename}" if target_dir else filename)
+            target = resolve_storage_path(self.personal_root, target_rel) if self.personal_root else Path(target_rel)
+            parent = resolve_storage_path(self.personal_root, target_dir) if self.personal_root else target.parent
+        except StoragePathError as exc:
+            return HTTPStatus.BAD_REQUEST, {"ok": False, "error": str(exc)}
+        if not self.can_write(user, target_rel):
+            self.record_operation("upload", None, target_rel, "permission_denied", str(user.get("username")))
+            return HTTPStatus.FORBIDDEN, {"ok": False, "error": "permission_denied", "required": "write", "path": target_rel}
+        if not parent.exists() or not parent.is_dir():
+            return HTTPStatus.BAD_REQUEST, {"ok": False, "error": "target_directory_not_found", "path": target_dir}
+        if target.exists():
+            self.record_operation("upload", None, target_rel, "target_already_exists", str(user.get("username")))
+            return HTTPStatus.CONFLICT, {"ok": False, "error": "target_already_exists", "path": target_rel}
+
+        temp_path: Path | None = None
+        digest = hashlib.sha256()
+        remaining = content_length
+        written = 0
+        try:
+            with tempfile.NamedTemporaryFile(prefix=".digua-upload-", suffix=".part", dir=parent, delete=False) as temp_file:
+                temp_path = Path(temp_file.name)
+                while remaining:
+                    chunk = stream.read(min(STREAM_CHUNK_BYTES, remaining))  # type: ignore[attr-defined]
+                    if not chunk:
+                        raise EOFError("request_body_truncated")
+                    temp_file.write(chunk)
+                    digest.update(chunk)
+                    written += len(chunk)
+                    remaining -= len(chunk)
+                temp_file.flush()
+                os.fsync(temp_file.fileno())
+            with self.storage_write_lock:
+                try:
+                    os.link(temp_path, target)
+                except FileExistsError:
+                    return HTTPStatus.CONFLICT, {"ok": False, "error": "target_already_exists", "path": target_rel}
+            linked_temp_path = temp_path
+            temp_path = None
+            try:
+                linked_temp_path.unlink()
+            except OSError as exc:
+                sys.stderr.write(f"upload temp cleanup degraded: {type(exc).__name__}: {exc}\n")
+        except EOFError as exc:
+            return HTTPStatus.BAD_REQUEST, {"ok": False, "error": str(exc), "received_bytes": written}
+        except OSError as exc:
+            return HTTPStatus.INTERNAL_SERVER_ERROR, {
+                "ok": False,
+                "error": f"upload_write_failed:{type(exc).__name__}:{exc}",
+                "path": target_rel,
+            }
+        finally:
+            if temp_path is not None:
+                try:
+                    temp_path.unlink(missing_ok=True)
+                except OSError:
+                    pass
+        self.record_operation("upload", None, target_rel, "created", str(user.get("username")))
+        return HTTPStatus.OK, {
+            "ok": True,
+            "file": {
+                "relative_path": target_rel,
+                "path": target_rel,
+                "name": filename,
+                "size_bytes": written,
+                "sha256": digest.hexdigest(),
             },
         }
 
@@ -3646,8 +3863,8 @@ class PortalState:
                     report_root=self.report_root,
                     personal_root=self.personal_root,
                 )
-            except Exception:
-                pass
+            except Exception as exc:
+                sys.stderr.write(f"smart classification category bootstrap degraded: {type(exc).__name__}: {exc}\n")
         conn = sqlite3.connect(str(db_path))
         try:
             now = datetime.now(timezone.utc).isoformat()
@@ -6461,20 +6678,57 @@ class PortalHandler(BaseHTTPRequestHandler):
     def log_message(self, fmt: str, *args: object) -> None:
         sys.stderr.write("%s - - [%s] %s\n" % (self.address_string(), self.log_date_time_string(), fmt % args))
 
+    def send_security_headers(self, *, strict_script_policy: bool = False) -> None:
+        script_src = "'self'" if strict_script_policy else "'self' 'unsafe-inline'"
+        self.send_header(
+            "Content-Security-Policy",
+            f"default-src 'self'; script-src {script_src}; style-src 'self' 'unsafe-inline'; "
+            "img-src 'self' data: blob:; media-src 'self' blob:; connect-src 'self'; "
+            "object-src 'none'; base-uri 'none'; frame-ancestors 'none'; form-action 'self'",
+        )
+        self.send_header("X-Frame-Options", "DENY")
+        self.send_header("X-Content-Type-Options", "nosniff")
+        self.send_header("Referrer-Policy", "no-referrer")
+        self.send_header("Permissions-Policy", "camera=(), microphone=(), geolocation=()")
+
     def send_json(self, payload: dict, status: int = HTTPStatus.OK) -> None:
         raw = json.dumps(payload, ensure_ascii=False, indent=2).encode("utf-8")
         self.send_response(status)
         self.send_header("Content-Type", "application/json; charset=utf-8")
         self.send_header("Cache-Control", "no-store")
+        self.send_security_headers()
         self.send_header("Content-Length", str(len(raw)))
         self.end_headers()
         self.wfile.write(raw)
+
+    def send_acl_filtered_json(self, payload: dict, status: int, user: dict) -> None:
+        filtered = self.state.filter_index_payload(payload, user)
+        if status == HTTPStatus.OK and filtered.get("error") == "not_found":
+            status = HTTPStatus.NOT_FOUND
+        self.send_json(filtered, status)
 
     def send_text(self, text: str, content_type: str, status: int = HTTPStatus.OK) -> None:
         raw = text.encode("utf-8")
         self.send_response(status)
         self.send_header("Content-Type", content_type)
         self.send_header("Cache-Control", "no-store")
+        strict_script_policy = urlparse(self.path).path in {
+            "/ui",
+            "/ui/index.html",
+            "/ai-album",
+            "/multimodal-search",
+            "/multimodal-search/",
+            "/ai-space",
+            "/ai-space/",
+            "/auto-organizer",
+            "/auto-organizer/",
+            "/smart-classification",
+            "/smart-classification/",
+            "/subtitle-extraction",
+            "/subtitle-extraction/",
+            "/journal",
+        }
+        self.send_security_headers(strict_script_policy=strict_script_policy)
         self.send_header("Content-Length", str(len(raw)))
         self.end_headers()
         self.wfile.write(raw)
@@ -6491,18 +6745,28 @@ class PortalHandler(BaseHTTPRequestHandler):
         if not path.exists() or not path.is_file():
             self.send_json({"ok": False, "error": "file_not_found"}, HTTPStatus.NOT_FOUND)
             return
-        raw = path.read_bytes()
+        try:
+            content_length = path.stat().st_size
+        except OSError as exc:
+            self.send_json({"ok": False, "error": f"file_stat_failed:{type(exc).__name__}:{exc}"}, HTTPStatus.NOT_FOUND)
+            return
         content_type = mimetypes.guess_type(path.name)[0] or "application/octet-stream"
         fallback_name = "download" + (path.suffix if re.fullmatch(r"\.[A-Za-z0-9]{1,12}", path.suffix or "") else "")
         encoded_name = quote(path.name, safe="")
         self.send_response(HTTPStatus.OK)
         self.send_header("Content-Type", content_type)
         self.send_header("Cache-Control", "no-store")
-        self.send_header("Content-Length", str(len(raw)))
+        self.send_security_headers()
+        self.send_header("Content-Length", str(content_length))
         disposition = "inline" if preview else "attachment"
         self.send_header("Content-Disposition", f"{disposition}; filename=\"{fallback_name}\"; filename*=UTF-8''{encoded_name}")
         self.end_headers()
-        self.wfile.write(raw)
+        try:
+            with path.open("rb") as source:
+                while chunk := source.read(STREAM_CHUNK_BYTES):
+                    self.wfile.write(chunk)
+        except (BrokenPipeError, ConnectionResetError):
+            return
 
     def send_portal_html(self, path: Path) -> None:
         try:
@@ -6513,10 +6777,24 @@ class PortalHandler(BaseHTTPRequestHandler):
         self.send_text(inject_runtime_sections(text, self.state.latest_bundle()), "text/html; charset=utf-8")
 
     def read_json_body(self) -> tuple[int | None, dict | None]:
-        length = int(self.headers.get("Content-Length", "0") or "0")
         try:
-            payload = json.loads(self.rfile.read(length).decode("utf-8") or "{}")
-        except json.JSONDecodeError as exc:
+            length = int(self.headers.get("Content-Length", "0") or "0")
+        except ValueError:
+            return HTTPStatus.BAD_REQUEST, {"ok": False, "error": "invalid_content_length"}
+        if length < 0:
+            return HTTPStatus.BAD_REQUEST, {"ok": False, "error": "invalid_content_length"}
+        if length > MAX_JSON_BODY_BYTES:
+            return HTTPStatus.REQUEST_ENTITY_TOO_LARGE, {
+                "ok": False,
+                "error": "request_too_large",
+                "max_payload_bytes": MAX_JSON_BODY_BYTES,
+            }
+        raw = self.rfile.read(length)
+        if len(raw) != length:
+            return HTTPStatus.BAD_REQUEST, {"ok": False, "error": "request_body_truncated"}
+        try:
+            payload = json.loads(raw.decode("utf-8") or "{}")
+        except (UnicodeDecodeError, json.JSONDecodeError) as exc:
             return HTTPStatus.BAD_REQUEST, {"ok": False, "error": f"invalid_json:{exc}"}
         if not isinstance(payload, dict):
             return HTTPStatus.BAD_REQUEST, {"ok": False, "error": "json_object_required"}
@@ -6527,6 +6805,34 @@ class PortalHandler(BaseHTTPRequestHandler):
             self.send_json({"ok": False, "error": "nas_product_api_not_configured"}, HTTPStatus.SERVICE_UNAVAILABLE)
             return False
         return True
+
+    def authenticated_product_user(self, *, admin: bool = False) -> dict | None:
+        if not self.require_product():
+            return None
+        checker = self.state.require_admin if admin else self.state.require_user
+        status, error, user = checker(self.headers.get("Authorization"))
+        if status:
+            self.send_json(error or {}, status)
+            return None
+        return user or {}
+
+    def authorize_index_mutation(self, route: str, user: dict) -> bool:
+        admin_routes = {
+            "/api/agent-runtime/memory/record",
+            "/api/agent-runtime/multimodal-index/scan",
+            "/api/multimodal-index/rebuild",
+            "/api/multimodal-search/eval/run",
+            "/api/yolo-index/rebuild",
+            "/api/yolo-index/eval/run",
+            "/api/person-attribute/rebuild",
+            "/api/ai-album/rebuild",
+            "/api/ai-space/rebuild",
+            "/api/smart-classification/rebuild",
+        }
+        if route not in admin_routes or str(user.get("role") or "") == "admin":
+            return True
+        self.send_json({"ok": False, "error": "admin_required", "route": route}, HTTPStatus.FORBIDDEN)
+        return False
 
     def token_budget_api(self):
         if TokenBudgetIntegration is None:
@@ -6579,7 +6885,7 @@ class PortalHandler(BaseHTTPRequestHandler):
             return None
         return AssistantTraceRecorder(db_path=self.state.report_root / "assistant_trace" / "runtime" / "assistant_trace.db")
 
-    def send_assistant_chat(self, payload: dict) -> None:
+    def send_assistant_chat(self, payload: dict, user: dict) -> None:
         query = str(payload.get("query") or payload.get("message") or "")
         if not query.strip():
             self.send_json({"ok": False, "error": "query_required", "raw_path_returned": False}, HTTPStatus.BAD_REQUEST)
@@ -6594,7 +6900,7 @@ class PortalHandler(BaseHTTPRequestHandler):
         task_complexity = "complex" if task_type in {"private_document_query", "public_complex_query"} else "simple"
         route = self.assistant_route_label(task_type, privacy_level, router)
         token_result = self.assistant_token_budget(query, task_type, privacy_spans, task_complexity)
-        tool_result = self.assistant_tool_execution(query, task_type, router, action_intent)
+        tool_result = self.assistant_tool_execution(query, task_type, router, action_intent, user)
         answer = self.assistant_answer(query, task_type, tool_result, route)
         token_counts = token_result.get("token_counts") if isinstance(token_result.get("token_counts"), dict) else {}
         before_tokens = int(token_counts.get("naive_cloud_payload_tokens") or 0)
@@ -6794,7 +7100,7 @@ class PortalHandler(BaseHTTPRequestHandler):
         except Exception as exc:
             return {"ok": False, "error": f"{type(exc).__name__}:{exc}", "token_counts": {}}
 
-    def assistant_tool_execution(self, query: str, task_type: str, router: dict, action_intent: dict | None) -> dict:
+    def assistant_tool_execution(self, query: str, task_type: str, router: dict, action_intent: dict | None, user: dict) -> dict:
         if task_type == "media_search":
             if ai_space_route_response is None:
                 return {"tool_execution": "local_media_search", "status": "unavailable", "result_count": 0, "cloud_used": False}
@@ -6815,7 +7121,7 @@ class PortalHandler(BaseHTTPRequestHandler):
                 "raw_path_returned": False,
             }
         if task_type == "private_document_query":
-            status_code, result = self.state.document_query_payload(query, "Documents", None)
+            status_code, result = self.state.document_query_payload(query, "Documents", user)
             evidence_refs = [str(item) for item in result.get("evidence_refs") or []]
             return {
                 "tool_execution": "local_document_rag",
@@ -7101,8 +7407,18 @@ class PortalHandler(BaseHTTPRequestHandler):
             self.send_file_text(REPO_ROOT / "web" / "static" / "digua_journal.js", "application/javascript; charset=utf-8")
             return
         if route.startswith("/api/journal") or route.startswith("/journal/"):
+            if not self.require_product():
+                return
+            auth_status, error, user = self.state.require_user(self.headers.get("Authorization"))
+            if auth_status:
+                self.send_json(error or {}, auth_status)
+                return
             self.send_journal_response("GET", route)
             return
+        if route.startswith("/api/") and route != "/api/health":
+            user = self.authenticated_product_user()
+            if user is None:
+                return
         if route == "/api/product/status":
             if not self.require_product():
                 return
@@ -7168,7 +7484,7 @@ class PortalHandler(BaseHTTPRequestHandler):
         if route == "/api/storage/operations":
             if not self.require_product():
                 return
-            status, error, _user = self.state.require_user(self.headers.get("Authorization"))
+            status, error, user = self.state.require_user(self.headers.get("Authorization"))
             if status:
                 self.send_json(error or {}, status)
                 return
@@ -7187,6 +7503,17 @@ class PortalHandler(BaseHTTPRequestHandler):
                 return
             params = parse_qs(urlparse(self.path).query, keep_blank_values=True)
             status_code, payload = self.state.document_items_payload((params.get("path") or ["Documents"])[0], user)
+            self.send_json(payload, status_code)
+            return
+        if route == "/api/documents/classification-status":
+            if not self.require_product():
+                return
+            status, error, user = self.state.require_user(self.headers.get("Authorization"))
+            if status:
+                self.send_json(error or {}, status)
+                return
+            params = parse_qs(urlparse(self.path).query, keep_blank_values=True)
+            status_code, payload = self.state.document_classification_payload((params.get("path") or ["Documents"])[0], user or {})
             self.send_json(payload, status_code)
             return
         if route == "/api/identity/users":
@@ -7230,35 +7557,35 @@ class PortalHandler(BaseHTTPRequestHandler):
         if route in {"/api/media/status", "/api/media/photos", "/api/media/timeline", "/api/media/albums", "/api/media/duplicates", "/api/media/summary"}:
             if not self.require_product():
                 return
-            status, error, _user = self.state.require_user(self.headers.get("Authorization"))
+            status, error, user = self.state.require_user(self.headers.get("Authorization"))
             if status:
                 self.send_json(error or {}, status)
                 return
-            media = self.state.media_center
+            media_payload = self.state.visible_media_payload(user or {})
             if route == "/api/media/status":
-                self.send_json(self.state.media_status_payload(ensure_index=True))
+                self.send_json({"ok": True, "schema": "digua_media_album_v2", **media_payload["stats"], "cloud_used": False, "local_only": True})
                 return
             if route == "/api/media/photos":
                 params = parse_qs(urlparse(self.path).query, keep_blank_values=True)
                 limit = int((params.get("limit") or ["100"])[0] or "100")
                 offset = int((params.get("offset") or ["0"])[0] or "0")
-                self.send_json({"ok": True, "schema": "digua_media_album_v2", "photos": media.list_photos(limit=limit, offset=offset) if media else [], "raw_path_returned": False})
+                self.send_json({"ok": True, "schema": "digua_media_album_v2", "photos": media_payload["photos"][offset:offset + limit], "raw_path_returned": False})
                 return
             if route == "/api/media/timeline":
-                self.send_json({"ok": True, "schema": "digua_media_album_v2", "timeline": media.timeline() if media else [], "raw_path_returned": False})
+                self.send_json({"ok": True, "schema": "digua_media_album_v2", "timeline": media_payload["timeline"], "raw_path_returned": False})
                 return
             if route == "/api/media/albums":
-                self.send_json({"ok": True, "schema": "digua_media_album_v2", "albums": media.list_albums() if media else [], "raw_path_returned": False})
+                self.send_json({"ok": True, "schema": "digua_media_album_v2", "albums": media_payload["albums"], "raw_path_returned": False})
                 return
             if route == "/api/media/duplicates":
-                self.send_json({"ok": True, "schema": "digua_media_album_v2", "duplicates": media.find_duplicates() if media else [], "raw_path_returned": False})
+                self.send_json({"ok": True, "schema": "digua_media_album_v2", "duplicates": media_payload["duplicates"], "raw_path_returned": False})
                 return
-            self.send_json({"ok": True, "schema": "digua_media_album_v2", "stats": self.state.media_status_payload(), "albums": media.list_albums() if media else [], "photos": media.list_photos(limit=24) if media else [], "raw_path_returned": False})
+            self.send_json({"ok": True, "schema": "digua_media_album_v2", "stats": media_payload["stats"], "albums": media_payload["albums"], "photos": media_payload["photos"][:24], "raw_path_returned": False})
             return
         if route == "/api/media/album":
             if not self.require_product():
                 return
-            status, error, _user = self.state.require_user(self.headers.get("Authorization"))
+            status, error, user = self.state.require_user(self.headers.get("Authorization"))
             if status:
                 self.send_json(error or {}, status)
                 return
@@ -7269,6 +7596,10 @@ class PortalHandler(BaseHTTPRequestHandler):
                 return
             media = self.state.media_center
             photos = media.get_album_photos(album_name) if media else []
+            scope = self.state.authorized_asset_scope(user or {})
+            if scope is not None:
+                allowed_ids = scope["asset_ids"]
+                photos = [row for row in photos if str(row.get("asset_id") or "") in allowed_ids]
             self.send_json(
                 {
                     "ok": True,
@@ -7369,17 +7700,23 @@ class PortalHandler(BaseHTTPRequestHandler):
             if agent_runtime_route_response is None:
                 self.send_json({"ok": False, "error": "agent_runtime_unavailable"}, HTTPStatus.SERVICE_UNAVAILABLE)
                 return
+            user = self.authenticated_product_user()
+            if user is None:
+                return
             status_code, result = agent_runtime_route_response(
                 route,
                 method="GET",
                 report_root=self.state.report_root,
                 personal_root=self.state.personal_root,
             )
-            self.send_json(result, status_code)
+            self.send_acl_filtered_json(result, status_code, user)
             return
         if route.startswith("/api/multimodal-search") or route.startswith("/api/multimodal-index"):
             if multimodal_route_response is None:
                 self.send_json({"ok": False, "error": "multimodal_search_unavailable"}, HTTPStatus.SERVICE_UNAVAILABLE)
+                return
+            user = self.authenticated_product_user()
+            if user is None:
                 return
             status_code, result = multimodal_route_response(
                 route,
@@ -7387,11 +7724,14 @@ class PortalHandler(BaseHTTPRequestHandler):
                 report_root=self.state.report_root,
                 personal_root=self.state.personal_root,
             )
-            self.send_json(result, status_code)
+            self.send_acl_filtered_json(result, status_code, user)
             return
         if route.startswith("/api/yolo-index"):
             if yolo_route_response is None:
                 self.send_json({"ok": False, "error": "yolo_index_unavailable"}, HTTPStatus.SERVICE_UNAVAILABLE)
+                return
+            user = self.authenticated_product_user()
+            if user is None:
                 return
             status_code, result = yolo_route_response(
                 route,
@@ -7399,11 +7739,14 @@ class PortalHandler(BaseHTTPRequestHandler):
                 report_root=self.state.report_root,
                 personal_root=self.state.personal_root,
             )
-            self.send_json(result, status_code)
+            self.send_acl_filtered_json(result, status_code, user)
             return
         if route.startswith("/api/person-attribute"):
             if person_attribute_route_response is None:
                 self.send_json({"ok": False, "error": "person_attribute_unavailable"}, HTTPStatus.SERVICE_UNAVAILABLE)
+                return
+            user = self.authenticated_product_user()
+            if user is None:
                 return
             status_code, result = person_attribute_route_response(
                 route,
@@ -7411,11 +7754,14 @@ class PortalHandler(BaseHTTPRequestHandler):
                 report_root=self.state.report_root,
                 personal_root=self.state.personal_root,
             )
-            self.send_json(result, status_code)
+            self.send_acl_filtered_json(result, status_code, user)
             return
         if route.startswith("/api/ai-space"):
             if ai_space_route_response is None:
                 self.send_json({"ok": False, "error": "ai_space_unavailable"}, HTTPStatus.SERVICE_UNAVAILABLE)
+                return
+            user = self.authenticated_product_user()
+            if user is None:
                 return
             status_code, result = ai_space_route_response(
                 route,
@@ -7424,11 +7770,14 @@ class PortalHandler(BaseHTTPRequestHandler):
                 report_root=self.state.report_root,
                 personal_root=self.state.personal_root,
             )
-            self.send_json(result, status_code)
+            self.send_acl_filtered_json(result, status_code, user)
             return
         if route.startswith("/api/auto-organize"):
             if auto_organizer_route_response is None:
                 self.send_json({"ok": False, "error": "auto_organizer_unavailable"}, HTTPStatus.SERVICE_UNAVAILABLE)
+                return
+            user = self.authenticated_product_user()
+            if user is None:
                 return
             params = parse_qs(urlparse(self.path).query, keep_blank_values=True)
             payload = {key: values[-1] for key, values in params.items()}
@@ -7439,11 +7788,14 @@ class PortalHandler(BaseHTTPRequestHandler):
                 report_root=self.state.report_root,
                 personal_root=self.state.personal_root,
             )
-            self.send_json(result, status_code)
+            self.send_acl_filtered_json(result, status_code, user)
             return
         if route.startswith("/api/smart-classification"):
             if smart_classification_route_response is None:
                 self.send_json({"ok": False, "error": "smart_classification_unavailable"}, HTTPStatus.SERVICE_UNAVAILABLE)
+                return
+            user = self.authenticated_product_user()
+            if user is None:
                 return
             status_code, result = smart_classification_route_response(
                 route,
@@ -7451,11 +7803,14 @@ class PortalHandler(BaseHTTPRequestHandler):
                 report_root=self.state.report_root,
                 personal_root=self.state.personal_root,
             )
-            self.send_json(result, status_code)
+            self.send_acl_filtered_json(result, status_code, user)
             return
         if route.startswith("/api/smart-naming"):
             if smart_naming_route_response is None:
                 self.send_json({"ok": False, "error": "smart_naming_unavailable"}, HTTPStatus.SERVICE_UNAVAILABLE)
+                return
+            user = self.authenticated_product_user()
+            if user is None:
                 return
             status_code, result = smart_naming_route_response(
                 route,
@@ -7463,11 +7818,14 @@ class PortalHandler(BaseHTTPRequestHandler):
                 report_root=self.state.report_root,
                 personal_root=self.state.personal_root,
             )
-            self.send_json(result, status_code)
+            self.send_acl_filtered_json(result, status_code, user)
             return
         if route.startswith("/api/subtitle"):
             if subtitle_extraction_route_response is None:
                 self.send_json({"ok": False, "error": "subtitle_extraction_unavailable"}, HTTPStatus.SERVICE_UNAVAILABLE)
+                return
+            user = self.authenticated_product_user()
+            if user is None:
                 return
             status_code, result = subtitle_extraction_route_response(
                 route,
@@ -7475,11 +7833,14 @@ class PortalHandler(BaseHTTPRequestHandler):
                 report_root=self.state.report_root,
                 personal_root=self.state.personal_root,
             )
-            self.send_json(result, status_code)
+            self.send_acl_filtered_json(result, status_code, user)
             return
         if route.startswith("/api/jobs"):
             if product_jobs_route_response is None:
                 self.send_json({"ok": False, "error": "product_jobs_unavailable"}, HTTPStatus.SERVICE_UNAVAILABLE)
+                return
+            user = self.authenticated_product_user(admin=True)
+            if user is None:
                 return
             status_code, result = product_jobs_route_response(
                 route,
@@ -7487,7 +7848,7 @@ class PortalHandler(BaseHTTPRequestHandler):
                 report_root=self.state.report_root,
                 personal_root=self.state.personal_root,
             )
-            self.send_json(result, status_code)
+            self.send_acl_filtered_json(result, status_code, user)
             return
         if route == "/api/harness/status":
             if harness_status_response is None:
@@ -7729,14 +8090,42 @@ class PortalHandler(BaseHTTPRequestHandler):
 
     def do_POST(self) -> None:
         route = urlparse(self.path).path.rstrip("/") or "/"
+        public_routes = {"/api/identity/create-user", "/api/identity/login"}
+        if route.startswith("/api/") and route not in public_routes:
+            user = self.authenticated_product_user()
+            if user is None:
+                return
         if route.startswith("/api/journal") or route.startswith("/journal/"):
+            if not self.require_product():
+                return
+            auth_status, error, user = self.state.require_user(self.headers.get("Authorization"))
+            if auth_status:
+                self.send_json(error or {}, auth_status)
+                return
+            if not self.authorize_index_mutation(route, user or {}):
+                return
             status, payload = self.read_json_body()
             if status:
                 self.send_json(payload or {}, status)
                 return
             self.send_journal_response("POST", route, payload)
             return
-        if route in {"/api/router/explain", "/api/token-budget/explain", "/api/privacy-tokenizer/debug", "/api/assistant/chat", "/api/assistant/trace/record-entrypoint"}:
+        if route == "/api/assistant/chat":
+            if not self.require_product():
+                return
+            auth_status, error, user = self.state.require_user(self.headers.get("Authorization"))
+            if auth_status:
+                self.send_json(error or {}, auth_status)
+                return
+            if not self.authorize_index_mutation(route, user or {}):
+                return
+            status, payload = self.read_json_body()
+            if status:
+                self.send_json(payload or {}, status)
+                return
+            self.send_assistant_chat(payload or {}, user or {})
+            return
+        if route in {"/api/router/explain", "/api/token-budget/explain", "/api/privacy-tokenizer/debug", "/api/assistant/trace/record-entrypoint"}:
             status, payload = self.read_json_body()
             if status:
                 self.send_json(payload or {}, status)
@@ -7750,9 +8139,6 @@ class PortalHandler(BaseHTTPRequestHandler):
                 return
             if route == "/api/privacy-tokenizer/debug":
                 self.send_privacy_tokenizer_debug(payload)
-                return
-            if route == "/api/assistant/chat":
-                self.send_assistant_chat(payload)
                 return
             self.send_assistant_trace_response("POST", route, payload)
             return
@@ -7779,7 +8165,7 @@ class PortalHandler(BaseHTTPRequestHandler):
                 report_root=self.state.report_root,
                 personal_root=self.state.personal_root,
             )
-            self.send_json(result, status_code)
+            self.send_acl_filtered_json(result, status_code, user or {})
             return
         if route.startswith("/api/multimodal-search") or route.startswith("/api/multimodal-index"):
             if multimodal_route_response is None:
@@ -7790,6 +8176,8 @@ class PortalHandler(BaseHTTPRequestHandler):
             auth_status, error, user = self.state.require_user(self.headers.get("Authorization"))
             if auth_status:
                 self.send_json(error or {}, auth_status)
+                return
+            if not self.authorize_index_mutation(route, user or {}):
                 return
             status, payload = self.read_json_body()
             if status:
@@ -7804,7 +8192,7 @@ class PortalHandler(BaseHTTPRequestHandler):
                 report_root=self.state.report_root,
                 personal_root=self.state.personal_root,
             )
-            self.send_json(result, status_code)
+            self.send_acl_filtered_json(result, status_code, user or {})
             return
         if route.startswith("/api/yolo-index"):
             if yolo_route_response is None:
@@ -7815,6 +8203,8 @@ class PortalHandler(BaseHTTPRequestHandler):
             auth_status, error, user = self.state.require_user(self.headers.get("Authorization"))
             if auth_status:
                 self.send_json(error or {}, auth_status)
+                return
+            if not self.authorize_index_mutation(route, user or {}):
                 return
             status, payload = self.read_json_body()
             if status:
@@ -7829,7 +8219,7 @@ class PortalHandler(BaseHTTPRequestHandler):
                 report_root=self.state.report_root,
                 personal_root=self.state.personal_root,
             )
-            self.send_json(result, status_code)
+            self.send_acl_filtered_json(result, status_code, user or {})
             return
         if route.startswith("/api/person-attribute"):
             if person_attribute_route_response is None:
@@ -7841,6 +8231,8 @@ class PortalHandler(BaseHTTPRequestHandler):
             if auth_status:
                 self.send_json(error or {}, auth_status)
                 return
+            if not self.authorize_index_mutation(route, user or {}):
+                return
             status, payload = self.read_json_body()
             if status:
                 self.send_json(payload or {}, status)
@@ -7848,7 +8240,7 @@ class PortalHandler(BaseHTTPRequestHandler):
             payload = payload or {}
             payload.setdefault("user_id", str((user or {}).get("username") or "operator"))
             status_code, result = person_attribute_route_response(route, method="POST", payload=payload, report_root=self.state.report_root, personal_root=self.state.personal_root)
-            self.send_json(result, status_code)
+            self.send_acl_filtered_json(result, status_code, user or {})
             return
         if route == "/api/ai-album/auto-organize":
             if not self.require_product():
@@ -7885,6 +8277,8 @@ class PortalHandler(BaseHTTPRequestHandler):
             if auth_status:
                 self.send_json(error or {}, auth_status)
                 return
+            if not self.authorize_index_mutation(route, user or {}):
+                return
             status, payload = self.read_json_body()
             if status:
                 self.send_json(payload or {}, status)
@@ -7902,6 +8296,8 @@ class PortalHandler(BaseHTTPRequestHandler):
             if auth_status:
                 self.send_json(error or {}, auth_status)
                 return
+            if not self.authorize_index_mutation(route, user or {}):
+                return
             status, payload = self.read_json_body()
             if status:
                 self.send_json(payload or {}, status)
@@ -7911,7 +8307,7 @@ class PortalHandler(BaseHTTPRequestHandler):
                 payload.setdefault(key, value)
             payload.setdefault("user_id", str((user or {}).get("username") or "operator"))
             status_code, result = ai_space_route_response(route, method="POST", payload=payload, report_root=self.state.report_root, personal_root=self.state.personal_root)
-            self.send_json(result, status_code)
+            self.send_acl_filtered_json(result, status_code, user or {})
             return
         if route.startswith("/api/auto-organize"):
             if auto_organizer_route_response is None:
@@ -7923,6 +8319,9 @@ class PortalHandler(BaseHTTPRequestHandler):
             if auth_status:
                 self.send_json(error or {}, auth_status)
                 return
+            if str((user or {}).get("role") or "") != "admin":
+                self.send_json({"ok": False, "error": "admin_required", "route": route}, HTTPStatus.FORBIDDEN)
+                return
             status, payload = self.read_json_body()
             if status:
                 self.send_json(payload or {}, status)
@@ -7930,7 +8329,7 @@ class PortalHandler(BaseHTTPRequestHandler):
             payload = payload or {}
             payload.setdefault("approved_by", str((user or {}).get("username") or "operator"))
             status_code, result = auto_organizer_route_response(route, method="POST", payload=payload, report_root=self.state.report_root, personal_root=self.state.personal_root)
-            self.send_json(result, status_code)
+            self.send_acl_filtered_json(result, status_code, user or {})
             return
         if route.startswith("/api/smart-classification"):
             if smart_classification_route_response is None:
@@ -7942,6 +8341,8 @@ class PortalHandler(BaseHTTPRequestHandler):
             if auth_status:
                 self.send_json(error or {}, auth_status)
                 return
+            if not self.authorize_index_mutation(route, user or {}):
+                return
             status, payload = self.read_json_body()
             if status:
                 self.send_json(payload or {}, status)
@@ -7949,7 +8350,7 @@ class PortalHandler(BaseHTTPRequestHandler):
             payload = payload or {}
             payload.setdefault("user_id", str((user or {}).get("username") or "operator"))
             status_code, result = smart_classification_route_response(route, method="POST", payload=payload, report_root=self.state.report_root, personal_root=self.state.personal_root)
-            self.send_json(result, status_code)
+            self.send_acl_filtered_json(result, status_code, user or {})
             return
         if route.startswith("/api/smart-naming"):
             if smart_naming_route_response is None:
@@ -7968,7 +8369,7 @@ class PortalHandler(BaseHTTPRequestHandler):
             payload = payload or {}
             payload.setdefault("user_id", str((user or {}).get("username") or "operator"))
             status_code, result = smart_naming_route_response(route, method="POST", payload=payload, report_root=self.state.report_root, personal_root=self.state.personal_root)
-            self.send_json(result, status_code)
+            self.send_acl_filtered_json(result, status_code, user or {})
             return
         if route.startswith("/api/subtitle"):
             if subtitle_extraction_route_response is None:
@@ -7987,7 +8388,7 @@ class PortalHandler(BaseHTTPRequestHandler):
             payload = payload or {}
             payload.setdefault("user_id", str((user or {}).get("username") or "operator"))
             status_code, result = subtitle_extraction_route_response(route, method="POST", payload=payload, report_root=self.state.report_root, personal_root=self.state.personal_root)
-            self.send_json(result, status_code)
+            self.send_acl_filtered_json(result, status_code, user or {})
             return
         if route.startswith("/api/jobs"):
             if product_jobs_route_response is None:
@@ -7995,7 +8396,7 @@ class PortalHandler(BaseHTTPRequestHandler):
                 return
             if not self.require_product():
                 return
-            auth_status, error, user = self.state.require_user(self.headers.get("Authorization"))
+            auth_status, error, user = self.state.require_admin(self.headers.get("Authorization"))
             if auth_status:
                 self.send_json(error or {}, auth_status)
                 return
@@ -8006,7 +8407,7 @@ class PortalHandler(BaseHTTPRequestHandler):
             payload = payload or {}
             payload.setdefault("user_id", str((user or {}).get("username") or "operator"))
             status_code, result = product_jobs_route_response(route, method="POST", payload=payload, report_root=self.state.report_root, personal_root=self.state.personal_root)
-            self.send_json(result, status_code)
+            self.send_acl_filtered_json(result, status_code, user or {})
             return
         if route == "/api/identity/create-user":
             if not self.require_product():
@@ -8073,10 +8474,36 @@ class PortalHandler(BaseHTTPRequestHandler):
             status_code, result = self.state.storage_create_folder(str(payload.get("path") or ""), user or {})
             self.send_json(result, status_code)
             return
+        if route == "/api/storage/upload-stream":
+            if not self.require_product():
+                return
+            auth_status, error, user = self.state.require_user(self.headers.get("Authorization"))
+            if auth_status:
+                self.send_json(error or {}, auth_status)
+                return
+            try:
+                content_length = int(self.headers.get("Content-Length", "0") or "0")
+            except ValueError:
+                self.send_json({"ok": False, "error": "invalid_content_length"}, HTTPStatus.BAD_REQUEST)
+                return
+            query = parse_qs(urlparse(self.path).query)
+            status_code, result = self.state.storage_upload_stream(
+                (query.get("filename") or [""])[0],
+                (query.get("target_dir") or [""])[0],
+                content_length,
+                self.rfile,
+                user or {},
+            )
+            self.send_json(result, status_code)
+            return
         if route == "/api/storage/upload-file":
             if not self.require_product():
                 return
-            content_length = int(self.headers.get("Content-Length", "0") or "0")
+            try:
+                content_length = int(self.headers.get("Content-Length", "0") or "0")
+            except ValueError:
+                self.send_json({"ok": False, "error": "invalid_content_length"}, HTTPStatus.BAD_REQUEST)
+                return
             if content_length > (MAX_UPLOAD_BYTES * 2):
                 self.send_json({"ok": False, "error": "request_too_large", "max_payload_bytes": MAX_UPLOAD_BYTES * 2}, HTTPStatus.REQUEST_ENTITY_TOO_LARGE)
                 return
@@ -8163,6 +8590,20 @@ class PortalHandler(BaseHTTPRequestHandler):
                 str(payload.get("path") or "Documents"),
                 user or {},
             )
+            self.send_json(result, status_code)
+            return
+        if route == "/api/documents/classify":
+            if not self.require_product():
+                return
+            auth_status, error, user = self.state.require_user(self.headers.get("Authorization"))
+            if auth_status:
+                self.send_json(error or {}, auth_status)
+                return
+            status, payload = self.read_json_body()
+            if status:
+                self.send_json(payload or {}, status)
+                return
+            status_code, result = self.state.document_classification_payload(str((payload or {}).get("path") or "Documents"), user or {})
             self.send_json(result, status_code)
             return
         if route == "/api/ocr/rebuild":

@@ -1,6 +1,14 @@
 async function api(path, options = {}) {
-  const response = await fetch(path, { headers: { 'Content-Type': 'application/json' }, ...options });
+  const token = window.sessionStorage.getItem('diguaAiNasToken') || '';
+  const headers = { 'Content-Type': 'application/json', ...(token ? { Authorization: `Bearer ${token}` } : {}) };
+  const response = await fetch(path, { ...options, headers: { ...headers, ...(options.headers || {}) } });
   return response.json();
+}
+
+function escapeHtml(value) {
+  return String(value ?? '').replace(/[&<>'"]/g, character => ({
+    '&': '&amp;', '<': '&lt;', '>': '&gt;', "'": '&#39;', '"': '&quot;'
+  })[character]);
 }
 
 function renderStatus(data) {
@@ -11,12 +19,12 @@ function renderStatus(data) {
 function renderCards(items) {
   document.querySelector('#cards').innerHTML = items.map(item => `
     <article class="card">
-      <strong>${item.display_name_zh || item.title_redacted || item.asset_id}</strong>
-      <div class="meta">${item.modality} / ${item.asset_kind} / ${item.privacy_level}</div>
-      ${item.suggested_filename_zh ? `<div class="meta">${item.suggested_filename_zh}</div>` : ''}
-      <div class="tags">${[...(item.object_labels || []), ...(item.person_attrs || []), ...(item.category_names || [])].slice(0, 8).map(tag => `<span class="tag">${tag}</span>`).join('')}</div>
-      <p>${item.summary_redacted || ''}</p>
-      <div class="meta">${(item.evidence_refs || []).join(', ')}</div>
+      <strong>${escapeHtml(item.display_name_zh || item.title_redacted || item.asset_id)}</strong>
+      <div class="meta">${escapeHtml(item.modality)} / ${escapeHtml(item.asset_kind)} / ${escapeHtml(item.privacy_level)}</div>
+      ${item.suggested_filename_zh ? `<div class="meta">${escapeHtml(item.suggested_filename_zh)}</div>` : ''}
+      <div class="tags">${[...(item.object_labels || []), ...(item.person_attrs || []), ...(item.category_names || [])].slice(0, 8).map(tag => `<span class="tag">${escapeHtml(tag)}</span>`).join('')}</div>
+      <p>${escapeHtml(item.summary_redacted || '')}</p>
+      <div class="meta">${escapeHtml((item.evidence_refs || []).join(', '))}</div>
     </article>
   `).join('');
 }
