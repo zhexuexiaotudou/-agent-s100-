@@ -37,14 +37,14 @@
     alert: '<path d="M12 4 3 20h18Z"/><path d="M12 9v5"/><path d="M12 17.5v.1"/>',
     lock: '<path d="M6 10h12v10H6Z"/><path d="M8 10V8a4 4 0 0 1 8 0v2"/>',
     trash: '<path d="M3 6h18"/><path d="M8 6V4h8v2"/><path d="M6 6l1 15h10l1-15"/><path d="M10 11v6"/><path d="M14 11v6"/>',
-    calendar: '<path d="M5 4h14v16H5Z"/><path d="M8 2v4"/><path d="M16 2v4"/><path d="M5 9h14"/>'
+    calendar: '<path d="M5 4h14v16H5Z"/><path d="M8 2v4"/><path d="M16 2v4"/><path d="M5 9h14"/>',
+    menu: '<path d="M4 7h16"/><path d="M4 12h16"/><path d="M4 17h16"/>'
   };
 
   const navItems = [
     { id: "dashboard", label: "首页", icon: "home" },
     { id: "assistant", label: "AI 助手", icon: "assistant" },
     { id: "files", label: "文件", icon: "files" },
-    { id: "documents", label: "文档", icon: "docs" },
     { id: "reports", label: "报告", icon: "table" },
     { id: "tokenBudget", label: "Token", icon: "calendar" },
     { id: "agentRuntime", label: "运行", icon: "assistant" },
@@ -55,8 +55,18 @@
     { id: "settings", label: "设置", icon: "settings" }
   ];
 
+  const navGroups = [
+    { label: "常用", ids: ["dashboard", "assistant", "files", "media", "backup"] },
+    { label: "内容", ids: ["reports", "journal"] },
+    { label: "系统与记录", ids: ["tokenBudget", "agentRuntime", "audit", "settings"] }
+  ];
+
+  const mobilePrimaryNavIds = ["dashboard", "assistant", "files", "media"];
+
   const appState = {
     page: getInitialPage(),
+    fileViewMode: "explorer",
+    docClassification: { status: "idle", items: [], categories: {}, categoryCounts: {}, selectedCategory: "", error: "" },
     debugStatePanels: new URLSearchParams(window.location.search).get("debugStates") === "1",
     prompt: "",
     selectedFile: "",
@@ -179,6 +189,7 @@
 
   function getInitialPage() {
     const hash = window.location.hash.replace("#", "");
+    if (hash === "documents") return "files";
     if (navItems.some((item) => item.id === hash)) return hash;
     const routePageMap = {
       "/ai-album": "media"
@@ -267,34 +278,62 @@
           <strong>地瓜 AI-NAS</strong>
         </div>
         <nav class="nav-list">
-          ${navItems.map(renderNavItem).join("")}
+          ${navGroups.map((group) => `
+            <div class="nav-section">
+              <span class="nav-section-label">${escapeHtml(group.label)}</span>
+              ${group.ids.map((id) => navItems.find((item) => item.id === id)).filter(Boolean).map(renderNavItem).join("")}
+            </div>
+          `).join("")}
         </nav>
-        <div class="storage-card">
-          <strong>存储空间</strong>
-          <div class="progress-track"><div class="progress-fill" style="--value:64%"></div></div>
-          <div class="storage-meta"><span>1.28 TB / 2.00 TB</span><span>64%</span></div>
-        </div>
+        ${renderSidebarStorageCard()}
       </aside>
     `;
   }
 
   function renderBottomNav() {
-    return `<nav class="bottom-nav" aria-label="移动端导航">${navItems.map(renderNavItem).join("")}</nav>`;
+    const primaryItems = mobilePrimaryNavIds.map((id) => navItems.find((item) => item.id === id)).filter(Boolean);
+    const moreActive = !mobilePrimaryNavIds.includes(appState.page);
+    return `<nav class="bottom-nav" aria-label="移动端导航">
+      ${primaryItems.map(renderNavItem).join("")}
+      <button class="nav-item${moreActive ? " active" : ""}" type="button" data-action="openMobileMore"${moreActive ? ' aria-current="page"' : ""}>${svg("menu")}更多</button>
+    </nav>`;
   }
 
   function renderNavItem(item) {
     const active = item.id === appState.page ? " active" : "";
-    return `<button class="nav-item${active}" type="button" data-page="${item.id}">${svg(item.icon)}${escapeHtml(item.label)}</button>`;
+    const current = item.id === appState.page ? ' aria-current="page"' : "";
+    return `<button class="nav-item${active}" type="button" data-page="${item.id}"${current}>${svg(item.icon)}${escapeHtml(item.label)}</button>`;
+  }
+
+  function renderSidebarStorageCard() {
+    const capacity = appState.dashboard?.storage?.capacity || appState.settings?.storage?.capacity || null;
+    const total = Number(capacity?.total_bytes || 0);
+    const used = Number(capacity?.used_bytes || 0);
+    const percent = total > 0 ? Math.min(100, Math.max(0, Math.round((used / total) * 100))) : null;
+    if (percent == null) {
+      return `<div class="storage-card storage-card-unavailable">
+        <span class="storage-card-icon">${svg("backup")}</span>
+        <div><strong>存储容量待连接</strong><p>连接 S100P 与 NAS 后读取真实数据</p></div>
+      </div>`;
+    }
+    return `<div class="storage-card">
+      <strong>存储空间</strong>
+      <div class="progress-track" role="progressbar" aria-label="存储空间使用率" aria-valuemin="0" aria-valuemax="100" aria-valuenow="${percent}"><div class="progress-fill" style="--value:${percent}%"></div></div>
+      <div class="storage-meta"><span>${escapeHtml(formatBytes(used))} / ${escapeHtml(formatBytes(total))}</span><span>${percent}%</span></div>
+    </div>`;
   }
 
   function renderTopbar() {
+    const username = appState.authUser?.username || "";
+    const userLabel = username || "登录";
+    const avatarLabel = username ? username.slice(0, 1).toUpperCase() : "访";
     return `
       <header class="topbar">
-        <div class="local-status"><span class="status-dot"></span>本地优先</div>
+        <div class="local-status">${svg("lock")}<span>本地优先</span></div>
         <div class="topbar-actions">
-          <button class="icon-button" type="button" aria-label="通知" data-action="openNotifications">${svg("bell")}<span class="notification-dot"></span></button>
+          <button class="icon-button" type="button" aria-label="通知" data-action="openNotifications">${svg("bell")}</button>
           <button class="icon-button" type="button" aria-label="帮助" data-action="openHelp">${svg("help")}</button>
-          <button class="user-menu" type="button" aria-label="管理员菜单" data-action="openUserMenu"><span class="avatar">管</span><span>${escapeHtml(appState.authUser?.username || "管理员")}</span>${svg("chevron")}</button>
+          <button class="user-menu" type="button" aria-label="${username ? "用户菜单" : "登录与身份"}" data-action="openUserMenu"><span class="avatar">${escapeHtml(avatarLabel)}</span><span>${escapeHtml(userLabel)}</span>${svg("chevron")}</button>
         </div>
       </header>
     `;
@@ -391,7 +430,7 @@
       <div class="token-stats">
         <div class="metric"><span class="muted small">平均降幅</span><strong>${escapeHtml(fmtRatio(analysis.average_reduction_ratio))}</strong><span class="small muted">云端输入 token</span></div>
         <div class="metric"><span class="muted small">质量通过率</span><strong>${escapeHtml(fmtRatio(analysis.quality_pass_rate))}</strong><span class="small muted">本地评测</span></div>
-        <div class="metric"><span class="muted small">隐私泄漏</span><strong>${fmtCount(analysis.private_leak_count)}</strong><span class="small muted">private_leak_count</span></div>
+        <div class="metric"><span class="muted small">隐私检查</span><strong>${fmtCount(analysis.private_leak_count)}</strong><span class="small muted">检测到的泄漏项</span></div>
       </div>
       ${renderKeyValueRows([
         ["分词器", token.tokenizer_identity?.tokenizer_name || token.tokenizer_identity?.source || "Qwen 分词器"],
@@ -403,43 +442,57 @@
 
   function dashboardPage() {
     const services = dashboardServiceCards();
+    const username = appState.authUser?.username || "";
+    const storageReady = Boolean(appState.dashboard?.storage?.capacity?.total_bytes);
+    const healthReady = appState.health.status === "ok";
     return `
       <h1 class="sr-only">首页</h1>
-      ${renderHealthBanner()}
-      <div class="grid status-grid">
-        ${services.map((item) => card(`
-          <span class="icon-chip ${item.tone}">${svg(item.icon)}</span>
-          <div><strong>${escapeHtml(item.title)}</strong><div class="muted small">${escapeHtml(item.sub)}</div><div style="margin-top:14px">${badge(item.state, item.type)}</div></div>
-        `, "status-card")).join("")}
-      </div>
       ${card(`
-        <div>
-          <h2>欢迎回来，管理员</h2>
-          <p>地瓜 AI-NAS · 本地优先，隐私至上</p>
-          <p>首页只展示当前机器可读取到的状态。私有资料默认留在 S100P 和 NAS，本页不会用演示数据补齐真实结果。</p>
+        <div class="dashboard-welcome-copy">
+          <span class="eyebrow">本地优先 · 隐私保护</span>
+          <h2>${username ? `你好，${escapeHtml(username)}` : "欢迎使用地瓜 AI-NAS"}</h2>
+          <p>从常用任务开始。设备离线时保留页面与操作入口，不用演示数据冒充真实状态。</p>
         </div>
-        <div class="hero-visual">
-          <div class="server-illustration">${svg("lock", "shield-mark")}</div>
+        <div class="dashboard-connection" aria-label="当前连接摘要">
+          <span class="connection-icon">${svg(storageReady && healthReady ? "check" : "link")}</span>
+          <div>
+            <strong>${storageReady && healthReady ? "本地服务已读取" : "设备状态待连接"}</strong>
+            <span>${storageReady ? "已读取真实存储容量" : "连接 S100P 与 NAS 后显示容量和服务状态"}</span>
+          </div>
         </div>
-      `, "hero-card")}
+      `, "dashboard-welcome")}
+      <div class="section-heading"><div><span class="eyebrow">常用任务</span><h2>现在想做什么？</h2></div></div>
       <div class="grid quick-grid">
         ${quickCard("新建对话", "与 AI 助手开始对话", "assistant", "assistant")}
-        ${quickCard("文件问答", "基于文件智能问答", "docs", "documents")}
-        ${quickCard("上传文件", "上传并建立索引", "upload", "files")}
-        ${quickCard("更新知识库", "同步与更新索引", "table", "documents")}
+        ${quickCard("浏览文件", "查看个人空间与文件分类", "files", "files")}
+        ${quickCard("整理相册", "查看图片与本地 AI 分类", "media", "media")}
+        ${quickCard("备份同步", "管理本地备份任务", "backup", "backup")}
       </div>
       <div class="grid two-col">
         ${card(`${sectionTitle("最近本地操作", "查看审计", "dashboardTasks")}${renderDashboardOperations()}`)}
-        ${card(`${sectionTitle("Token / 路由概览", "查看详情", "tokenDetails")}
-          ${renderDashboardTokenOverview()}`)}
+        ${card(`${sectionTitle("连接与身份")}${renderKeyValueRows([
+          ["本地接口", healthReady ? "已读取" : "待连接"],
+          ["S100P / NAS", storageReady ? "已读取真实容量" : "当前未连接"],
+          ["文件身份", appState.authToken ? "当前浏览器已登录" : "尚未登录"],
+          ["数据展示", "只显示接口真实返回"]
+        ])}`, "connection-card")}
       </div>
+      <details class="card system-overview">
+        <summary><span>${svg("settings")}系统状态与技术信息</span><span class="muted small">按需展开</span></summary>
+        <div class="system-overview-body">
+          <div class="grid status-grid">
+            ${services.map((item) => `
+              <div class="status-card">
+                <span class="icon-chip ${item.tone}">${svg(item.icon)}</span>
+                <div><strong>${escapeHtml(item.title)}</strong><div class="muted small">${escapeHtml(item.sub)}</div><div class="status-card-badge">${badge(item.state, item.type)}</div></div>
+              </div>
+            `).join("")}
+          </div>
+          <div class="system-token-overview">${sectionTitle("Token / 路由概览", "查看详情", "tokenDetails")}${renderDashboardTokenOverview()}</div>
+        </div>
+      </details>
       ${renderStatePanel("首页")}
     `;
-  }
-
-  function renderHealthBanner() {
-    const cls = appState.health.status === "ok" ? "success" : appState.health.status === "error" ? "danger" : "neutral";
-    return `<div style="display:flex;justify-content:flex-end;margin-bottom:10px">${badge(appState.health.text, cls)}</div>`;
   }
 
   function quickCard(title, desc, icon, page) {
@@ -517,6 +570,7 @@
   }
 
   function assistantPage() {
+    const hasAnswer = appState.assistant.status === "ready" && Boolean(String(appState.assistant.answer || "").trim());
     return `
       ${pageHeader("AI 助手", "基于本地知识库为您答疑、总结与创作，保护隐私安全。", button("使用指南", { variant: "secondary", action: "assistantGuide" }))}
       <div class="layout-with-panel">
@@ -535,18 +589,23 @@
             ${["找出有人的照片", "总结文档里的发票内容", "列出文件列表", "查看存储状态"].map((text) => `<button class="chip" type="button" data-prompt="${escapeHtml(text)}">${escapeHtml(text)}</button>`).join("")}
           </div>
           ${renderAssistantAnswer()}
-          <div class="actions" style="margin-top:14px">
+          ${hasAnswer ? `<div class="actions assistant-followups">
             ${button("继续追问", { variant: "secondary", icon: "assistant", action: "assistantContinue" })}
             ${button("提炼要点", { variant: "secondary", icon: "docs", action: "assistantKeyPoints" })}
             ${button("生成思维导图", { variant: "secondary", icon: "table", action: "assistantMindmap" })}
             ${button("导出为文档", { variant: "secondary", icon: "download", action: "assistantExport" })}
-          </div>
+          </div>` : ""}
           ${renderStatePanel("AI 助手")}
         </section>
         <aside class="side-stack">
           ${contextPanel("本次证据", assistantEvidencePanel(), "查看详情", "assistantEvidenceSources")}
-          ${contextPanel("可直接尝试", assistantLocalToolsPanel(), "填入示例", "assistantAgents")}
-          ${contextPanel("处理边界", assistantRoutePanel(), "查看详情", "assistantTrace")}
+          <details class="card assistant-context-details">
+            <summary><span>${svg("lock")}处理与隐私信息</span>${svg("chevron")}</summary>
+            <div class="assistant-context-body">
+              ${hasAnswer ? assistantRoutePanel() : '<p class="muted small">完成一次回答后，这里显示实际处理位置、隐私级别与工具调用情况。</p>'}
+              <button class="link-button" type="button" data-action="assistantTrace"${hasAnswer ? "" : " disabled"}>查看处理详情</button>
+            </div>
+          </details>
         </aside>
       </div>
     `;
@@ -565,7 +624,7 @@
     if (appState.assistant.status !== "ready") {
       return card(`
         <div class="answer-header"><strong>${svg("assistant")} AI 助手回答</strong>${badge("等待输入", "neutral")}</div>
-        <div class="answer-body"><p>输入自然语言后，网页会先在 S100P 本地完成理解、隐私判断和必要的工具路由，再展示结果摘要。</p></div>
+        <div class="answer-body"><p>连接设备并输入自然语言后，网页会在 S100P 本地完成理解、隐私判断和必要的工具路由，再展示真实结果摘要。</p></div>
       `, "answer-card");
     }
     const route = appState.assistant.route || {};
@@ -642,7 +701,7 @@
   }
 
   function renderAssistantServiceSummary(copilot, route, qwenRouter, mode) {
-    const rawTokens = route?.token_counts?.raw_user_prompt_tokens ?? copilot?.usage?.prompt_tokens ?? "—";
+    const rawTokens = route?.token_counts?.raw_user_prompt_tokens ?? copilot?.usage?.prompt_tokens ?? "暂无";
     const processing = copilot.cloud_used ? "云端" : "S100P 本地";
     const privacy = privacyLabel(qwenRouter?.privacy_level || route?.privacy_level || "local_only");
     const model = mode === "local_ai_album_category_search" ? "本地相册分类索引" : mode === "local_yolo_search" || mode === "local_multimodal_search" ? "本地多模态索引" : copilot.model ? "本地 Qwen" : "本地 Qwen";
@@ -666,7 +725,7 @@
       ["本地工具", localToolLabel(qwenRouter?.local_tool_id || copilot.search?.retrieval_mode)],
       ["执行边界", "本地受控工具"],
       ["Qwen 工具执行权", copilot.qwen_execution_authority ? "开启" : "关闭，只做理解和建议"],
-      ["输入 token", route?.token_counts?.raw_user_prompt_tokens ?? copilot.usage?.prompt_tokens ?? "—"],
+      ["输入 token", route?.token_counts?.raw_user_prompt_tokens ?? copilot.usage?.prompt_tokens ?? "暂无"],
       ["脱敏次数", route?.redaction_count ?? 0],
       ["云端调用", copilot.cloud_used ? "是" : "否"]
     ];
@@ -707,7 +766,7 @@
       icon: "docs",
       subtitle: action.path || "已完成路径检查",
       rows: [
-        ["路径", action.path || "—"],
+        ["路径", action.path || "暂无"],
         ["处理方式", "只读检查"],
         ["写入权限", "未授予 Qwen"]
       ],
@@ -717,28 +776,28 @@
       title: "文件夹已创建",
       icon: "files",
       subtitle: action.path || "新建文件夹",
-      rows: [["位置", action.path || "—"], ["处理方式", "本地受控写入"], ["执行者", "本地受控服务"]],
+      rows: [["位置", action.path || "暂无"], ["处理方式", "本地受控写入"], ["执行者", "本地受控服务"]],
       tags: ["已写入 NAS", "Qwen 无执行权"]
     });
     if (operation === "snapshot_create") return renderAssistantOperationCard(copilot, {
       title: action.status === "completed" ? "快照已创建" : "快照未完成",
       icon: "save",
       subtitle: action.name || action.path || "本地快照",
-      rows: [["快照名", action.name || "—"], ["路径", action.path || "—"], ["状态", statusLabel(action.status)]],
+      rows: [["快照名", action.name || "暂无"], ["路径", action.path || "暂无"], ["状态", statusLabel(action.status)]],
       tags: ["本地恢复点", "未上云"]
     });
     if (operation === "backup_create_task") return renderAssistantOperationCard(copilot, {
       title: action.status === "completed" ? "备份任务已创建" : "备份任务未完成",
       icon: "backup",
       subtitle: action.name || "本地备份任务",
-      rows: [["任务名", action.name || "—"], ["来源", action.source || "—"], ["目标", action.dest || "—"]],
+      rows: [["任务名", action.name || "暂无"], ["来源", action.source || "暂无"], ["目标", action.dest || "暂无"]],
       tags: ["本地任务", "受控写入"]
     });
     if (operation === "backup_run") return renderAssistantOperationCard(copilot, {
       title: action.status === "completed" ? "备份任务已运行" : "备份运行失败",
       icon: "backup",
       subtitle: action.name || "本地备份",
-      rows: [["任务名", action.name || "—"], ["复制文件", copilot.result?.copied ?? "—"], ["状态", statusLabel(action.status)]],
+      rows: [["任务名", action.name || "暂无"], ["复制文件", copilot.result?.copied ?? "暂无"], ["状态", statusLabel(action.status)]],
       tags: ["本地执行", "结果已记录"]
     });
     if (operation === "media_index") return renderAssistantMediaIndex(copilot);
@@ -746,7 +805,7 @@
       title: action.status === "completed" ? "相册已创建" : "相册未创建",
       icon: "media",
       subtitle: action.name || "本地相册",
-      rows: [["相册名", action.name || "—"], ["状态", statusLabel(action.status)], ["处理位置", "S100P 本地"]],
+      rows: [["相册名", action.name || "暂无"], ["状态", statusLabel(action.status)], ["处理位置", "S100P 本地"]],
       tags: ["媒体库", "本地元数据"]
     });
     if (operation === "journal_summary") return renderAssistantJournalSummary(copilot);
@@ -850,8 +909,8 @@
     const typeTags = Object.entries(typeCounts).slice(0, 6).map(([name, count]) => `${name} ${count}`);
     const body = `${renderKpiStrip([
       ["顶层条目", summary.top_level_count ?? entries.length],
-      ["文件", summary.file_count ?? "—"],
-      ["文件夹", summary.dir_count ?? "—"],
+      ["文件", summary.file_count ?? "暂无"],
+      ["文件夹", summary.dir_count ?? "暂无"],
       ["总占用", summary.total_size_bytes ? formatBytes(summary.total_size_bytes) : "0 B"]
     ])}
       ${typeTags.length ? `<div class="result-tags inventory-tags">${typeTags.map((tag) => `<span class="result-tag">${escapeHtml(tag)}</span>`).join("")}</div>` : ""}
@@ -1135,25 +1194,178 @@
 
   function filesPage() {
     const selected = currentStorageEntries().find((row) => row.relative_path === appState.selectedFile) || currentStorageEntries()[0] || null;
-    return `
-      ${pageHeader("文件", "浏览本地个人空间中当前用户可见的文件。", `${button("新建文件夹", { variant: "secondary", icon: "files", action: "storageShowNewFolder", disabled: appState.storage.status !== "ready" })}${button("上传", { variant: "secondary", icon: "upload", action: "storageShowUpload", disabled: appState.storage.status !== "ready" })}${button("刷新", { icon: "plus", action: "storageRefresh" })}`)}
-      <div class="explorer-toolbar" style="margin-bottom:16px">
-        ${button("上一级", { variant: "secondary", icon: "chevron", action: "storageUp", disabled: !appState.storage.relativePath || appState.storage.status !== "ready" })}
-        <div class="breadcrumb-bar" aria-label="当前路径">
-          ${renderStorageBreadcrumbs()}
+    const viewMode = appState.fileViewMode || "explorer";
+    const explorerActions = `${button("新建文件夹", { variant: "secondary", icon: "files", action: "storageShowNewFolder", disabled: appState.storage.status !== "ready" })}${button("上传", { variant: "secondary", icon: "upload", action: "storageShowUpload", disabled: appState.storage.status !== "ready" })}${button("刷新", { icon: "plus", action: "storageRefresh" })}`;
+    const aiActions = `${button("一键整理", { icon: "assistant", action: "docClassifyAll", disabled: appState.docClassification.status === "loading" })}${button("上传文件", { variant: "secondary", icon: "upload", action: "docUpload", disabled: appState.storage.status !== "ready" })}`;
+    const timelineActions = `${button("刷新", { variant: "secondary", icon: "plus", action: "storageRefresh" })}`;
+    const modeActions = viewMode === "ai" ? aiActions : viewMode === "timeline" ? timelineActions : explorerActions;
+    const pageTitle = viewMode === "ai" ? "AI智能分类" : viewMode === "timeline" ? "时间线" : "文件";
+    const pageSub = viewMode === "ai" ? "AI自动识别文档类型并智能分类" : viewMode === "timeline" ? "按时间排序查看所有文件" : "浏览本地个人空间中当前用户可见的文件。";
+    const explorerContent = viewMode === "explorer" && appState.storage.status === "auth"
+      ? card(renderStorageLogin(), "storage-login-card")
+      : viewMode === "explorer" ? `
+        <div class="explorer-toolbar" style="margin-bottom:16px">
+          ${button("上一级", { variant: "secondary", icon: "chevron", action: "storageUp", disabled: !appState.storage.relativePath || appState.storage.status !== "ready" })}
+          <div class="breadcrumb-bar" aria-label="当前路径">
+            ${renderStorageBreadcrumbs()}
+          </div>
+          <input id="storageSearch" class="control search" value="${escapeHtml(appState.fileSearch)}" placeholder="在当前目录搜索文件或文件夹..." aria-label="搜索当前目录">
         </div>
-        <input id="storageSearch" class="control search" value="${escapeHtml(appState.fileSearch)}" placeholder="在当前目录搜索文件或文件夹..." aria-label="搜索当前目录">
-      </div>
-      ${renderStorageOperationPanel()}
-      <div class="file-workspace">
-        ${card(renderFolderTree(), "folder-tree")}
-        ${renderFileTable(selected)}
-        ${card(renderFileDetail(selected))}
-      </div>
-      ${renderStatePanel("文件")}
+        ${renderStorageOperationPanel()}
+        <div class="file-workspace">
+          ${card(renderFolderTree(), "folder-tree")}
+          ${renderFileTable(selected)}
+          ${card(renderFileDetail(selected))}
+        </div>
+      ` : viewMode === "ai" ? renderFileAiView() : renderFileTimelineView();
+    return `
+      ${pageHeader(pageTitle, pageSub, modeActions)}
+      ${renderFileViewToggle()}
+      ${explorerContent}
+      ${renderStatePanel(pageTitle)}
     `;
   }
 
+  function renderFileViewToggle() {
+    const mode = appState.fileViewMode || "explorer";
+    return `<div class="view-toggle-bar">
+      <div class="segmented-control" role="tablist" aria-label="文件查看模式">
+        <button class="seg-btn${mode === "explorer" ? " seg-active" : ""}" type="button" data-action="fileViewExplorer" role="tab" aria-selected="${mode === "explorer"}" tabindex="${mode === "explorer" ? "0" : "-1"}">
+          <span class="seg-icon">${svg("files")}</span>
+          <span class="seg-label">资源管理器</span>
+        </button>
+        <button class="seg-btn${mode === "ai" ? " seg-active" : ""}" type="button" data-action="fileViewAi" role="tab" aria-selected="${mode === "ai"}" tabindex="${mode === "ai" ? "0" : "-1"}">
+          <span class="seg-icon">${svg("assistant")}</span>
+          <span class="seg-label">AI智能分类</span>
+        </button>
+        <button class="seg-btn${mode === "timeline" ? " seg-active" : ""}" type="button" data-action="fileViewTimeline" role="tab" aria-selected="${mode === "timeline"}" tabindex="${mode === "timeline" ? "0" : "-1"}">
+          <span class="seg-icon">${svg("calendar")}</span>
+          <span class="seg-label">时间线</span>
+        </button>
+      </div>
+    </div>`;
+  }
+
+  function renderFileAiView() {
+    const cls = appState.docClassification || {};
+    const items = Array.isArray(cls.items) ? cls.items : [];
+    const selected = cls.selectedCategory || "";
+    const counts = cls.categoryCounts || {};
+    const busy = cls.status === "loading";
+
+    const visibleItems = selected
+      ? items.filter(item => {
+          const itemCats = Array.isArray(item.categories) ? item.categories : [];
+          const primary = item.primary_category || "";
+          return itemCats.includes(selected) || primary.includes(selected);
+        })
+      : items;
+
+    const catEntries = Object.entries(counts).sort((a, b) => b[1] - a[1]);
+    const totalFiles = items.length;
+    const catCount = catEntries.length;
+
+    return `
+      <div class="ai-album-kpis">
+        <div><span>文件总数</span><strong>${totalFiles}</strong></div>
+        <div><span>分类数</span><strong>${catCount}</strong></div>
+        <div><span>状态</span><strong>${busy ? "扫描中" : (totalFiles > 0 ? "已分类" : "待扫描")}</strong></div>
+      </div>
+      <div class="ai-album-tabs" role="tablist" style="margin-bottom:16px">
+        <button class="chip${selected ? "" : " active"}" type="button" data-action="docCategorySelect" data-category="">全部 <span>${totalFiles}</span></button>
+        ${catEntries.map(([name, count]) => `<button class="chip${selected === name ? " active" : ""}" type="button" data-action="docCategorySelect" data-category="${escapeHtml(name)}">${escapeHtml(name)} <span>${count}</span></button>`).join("")}
+      </div>
+      ${busy ? `<div class="skeleton-list"><span></span><span></span><span></span></div>` :
+        visibleItems.length === 0 ? `<div class="empty-state"><strong>暂无文件</strong><p>请点击"一键整理"扫描文件或上传新文件。</p></div>` :
+        `<div class="doc-grid">${visibleItems.map(item => renderDocClassifiedItem(item)).join("")}</div>`
+      }
+      ${cls.error ? `<div class="soft-note error-note"><strong>分类失败</strong><p>${escapeHtml(cls.error)}</p></div>` : ""}
+    `;
+  }
+
+  function renderDocClassifiedItem(item) {
+    const name = item.name || item.relative_path || "未知";
+    const ext = (item.ext || "").toLowerCase();
+    const size = item.size_bytes ? formatBytes(item.size_bytes) : "";
+    const mtime = item.mtime ? formatStorageTime(item.mtime) : "";
+    const primary = item.primary_category || "待整理";
+    const icon = getDocTypeIcon(ext);
+    return `<div class="doc-card" data-file-path="${escapeHtml(item.relative_path || "")}">
+      <div class="doc-card-icon">${icon}</div>
+      <div class="doc-card-body">
+        <div class="doc-card-name" title="${escapeHtml(name)}">${escapeHtml(name)}</div>
+        <div class="doc-card-meta">
+          <span class="chip small">${escapeHtml(primary)}</span>
+          ${size ? `<span class="muted small">${size}</span>` : ""}
+        </div>
+        <div class="doc-card-time muted small">${escapeHtml(mtime)}</div>
+      </div>
+      <div class="doc-card-actions">
+        ${iconButton("copy", "复制路径", `data-copy-path="${escapeHtml(item.relative_path || "")}"`)}
+        ${storageTrashButton({ kind: "document", title: name, relativePath: item.relative_path || "" })}
+      </div>
+    </div>`;
+  }
+
+  function getDocTypeIcon(ext) {
+    const tableTypes = new Set(["xls", "xlsx", "csv"]);
+    const mediaTypes = new Set(["jpg", "jpeg", "png", "gif", "svg", "mp4", "mp3", "wav"]);
+    const documentTypes = new Set(["pdf", "doc", "docx", "ppt", "pptx", "txt", "md", "epub", "mobi", "msg", "eml"]);
+    const iconName = tableTypes.has(ext) ? "table" : mediaTypes.has(ext) ? "media" : documentTypes.has(ext) ? "docs" : "files";
+    return svg(iconName);
+  }
+
+  function renderFileTimelineView() {
+    const entries = currentStorageEntries();
+    if (appState.storage.status === "loading") {
+      return `<div class="skeleton-list"><span></span><span></span><span></span></div>`;
+    }
+    if (appState.storage.status === "auth") {
+      return `<div class="empty-state"><strong>需要登录</strong><p>登录后查看文件时间线。</p></div>`;
+    }
+    if (entries.length === 0) {
+      return `<div class="empty-state"><strong>暂无文件</strong><p>当前目录没有可见文件。</p></div>`;
+    }
+
+    const sorted = [...entries].sort((a, b) => (b.mtime || 0) - (a.mtime || 0));
+    const groups = { today: [], yesterday: [], thisWeek: [], thisMonth: [], older: [] };
+    const oneDay = 86400000;
+
+    const todayStart = new Date();
+    todayStart.setHours(0, 0, 0, 0);
+    const todayTs = todayStart.getTime();
+    const yesterdayTs = todayTs - oneDay;
+    const weekAgoTs = todayTs - 7 * oneDay;
+    const monthAgoTs = todayTs - 30 * oneDay;
+
+    for (const entry of sorted) {
+      const t = (entry.mtime || 0) * 1000;
+      if (t >= todayTs) groups.today.push(entry);
+      else if (t >= yesterdayTs) groups.yesterday.push(entry);
+      else if (t >= weekAgoTs) groups.thisWeek.push(entry);
+      else if (t >= monthAgoTs) groups.thisMonth.push(entry);
+      else groups.older.push(entry);
+    }
+
+    const labels = { today: "今天", yesterday: "昨天", thisWeek: "本周", thisMonth: "本月", older: "更早" };
+
+    return Object.entries(groups).map(([key, items]) => {
+      if (items.length === 0) return "";
+      return `<div class="timeline-group" style="margin-bottom:16px">
+        <div class="timeline-header" style="font-weight:600;margin-bottom:8px;color:var(--primary);padding:4px 0;border-bottom:1px solid var(--border)">
+          ${labels[key]} <span class="muted small">(${items.length})</span>
+        </div>
+        <div class="doc-grid">${items.map(item => renderDocClassifiedItem({
+          name: displayName(item, "文件"),
+          relative_path: item.relative_path,
+          ext: (item.relative_path || "").split(".").pop() || "",
+          size_bytes: item.size_bytes,
+          mtime: item.mtime,
+          primary_category: item.is_dir ? "文件夹" : ""
+        })).join("")}</div>
+      </div>`;
+    }).join("");
+  }
   function renderFolderTree() {
     if (appState.storage.status === "auth") return renderStorageLogin();
     if (appState.storage.status === "unconfigured") {
@@ -1176,8 +1388,7 @@
 
   function renderStorageLogin() {
     return `
-      <strong>登录后查看本地文件</strong>
-      <p class="muted small">文件接口要求身份令牌。首次本地演示可先初始化管理员，已有用户直接登录。</p>
+      <div class="login-intro">${svg("lock")}<div><strong>登录后查看本地文件</strong><p class="muted small">身份与权限逻辑保持不变；已有用户直接登录，首次使用可初始化管理员。</p></div></div>
       <div class="login-stack">
         <label>用户名<input id="storageUsername" class="control" value="admin" autocomplete="username"></label>
         <label>密码<input id="storagePassword" class="control" type="password" placeholder="输入管理员密码" autocomplete="current-password"></label>
@@ -1231,9 +1442,9 @@
     if (operation.error) return `<div class="soft-note error-note"><strong>操作失败</strong><p>${escapeHtml(operation.error)}</p></div>`;
     if (!operation.result) return `<p class="muted small">服务会校验位置、身份权限、目标是否已存在，并写入操作日志。</p>`;
     return `<div class="soft-note"><strong>${escapeHtml(operationTitle(operation.result.action || "storage"))}已完成</strong>${renderKeyValueRows([
-      ["位置", operation.result.path || operation.result.relative_path || "—"],
-      ["大小", operation.result.size_bytes ? formatBytes(operation.result.size_bytes) : "—"],
-      ["校验", operation.result.sha256 ? "已生成" : "—"]
+      ["位置", operation.result.path || operation.result.relative_path || "暂无"],
+      ["大小", operation.result.size_bytes ? formatBytes(operation.result.size_bytes) : "暂无"],
+      ["校验", operation.result.sha256 ? "已生成" : "暂无"]
     ])}</div>`;
   }
 
@@ -1280,7 +1491,7 @@
       <td><input type="checkbox" aria-label="选择 ${escapeHtml(friendlyName)}"></td>
       <td><div class="file-cell"><span class="file-glyph ${glyph}">${escapeHtml(row.is_dir ? "DIR" : type.slice(0, 4))}</span>${nameButton}</div></td>
       <td>${escapeHtml(type)}</td>
-      <td>${row.is_dir ? "—" : escapeHtml(formatBytes(row.size_bytes))}</td>
+      <td>${row.is_dir ? "暂无" : escapeHtml(formatBytes(row.size_bytes))}</td>
       <td>${escapeHtml(formatStorageTime(row.mtime))}</td>
       <td>${row.is_dir ? iconButton("chevron", "进入文件夹", `data-open-path="${escapeHtml(row.relative_path)}"`) : iconButton("copy", "复制路径", `data-copy-path="${escapeHtml(row.relative_path)}"`)}</td>
     </tr>`;
@@ -1303,7 +1514,7 @@
         <dt>位置</dt><dd>${escapeHtml(displayLocation(file.relative_path || file.name))}</dd>
         <dt>路径状态</dt><dd>已选择，可复制</dd>
         <dt>类型</dt><dd>${escapeHtml(file.mime_type || type)}</dd>
-        <dt>大小</dt><dd>${file.is_dir ? "—" : escapeHtml(formatBytes(file.size_bytes))}</dd>
+        <dt>大小</dt><dd>${file.is_dir ? "暂无" : escapeHtml(formatBytes(file.size_bytes))}</dd>
         <dt>修改时间</dt><dd>${escapeHtml(formatStorageTime(file.mtime))}</dd>
         <dt>权限范围</dt><dd>${badge("当前用户可读", "success")}${file.is_dir ? badge("可继续进入", "neutral") : ""}</dd>
       </dl>
@@ -1350,10 +1561,10 @@
     return `<div class="soft-note ${ok === "danger" ? "error-note" : ""}">
       <strong>复制检查 · ${escapeHtml(statusLabel(result.status || result.error || "returned"))}</strong>
       ${renderKeyValueRows([
-        ["原因", (result.reason_codes || [result.error || "—"]).join(", ")],
-        ["审批短语", result.approval_phrase || appState.copy.approvalPhrase || "—"],
-        ["目标校验", result.target_path_hash ? "已生成" : "—"],
-        ["回滚记录", result.rollback_manifest_path || appState.copy.rollbackManifestPath ? "已生成" : "—"]
+        ["原因", (result.reason_codes || [result.error || "暂无"]).join(", ")],
+        ["审批短语", result.approval_phrase || appState.copy.approvalPhrase || "暂无"],
+        ["目标校验", result.target_path_hash ? "已生成" : "暂无"],
+        ["回滚记录", result.rollback_manifest_path || appState.copy.rollbackManifestPath ? "已生成" : "暂无"]
       ])}
     </div>`;
   }
@@ -1491,7 +1702,7 @@
   function presentMetaValue(key, value) {
     const label = String(key || "");
     const text = value == null ? "" : String(value);
-    if (!text) return "—";
+    if (!text) return "暂无";
     if (/哈希|SHA|清单|令牌/i.test(label)) return resultStatusText(text);
     if (/API|接口/i.test(label)) return "本地受控接口";
     if (/路径|目录|位置|来源|目标|当前根|当前选中/i.test(label)) {
@@ -1542,7 +1753,7 @@
   }
 
   function formatStorageTime(value) {
-    if (!value) return "—";
+    if (!value) return "暂无";
     const date = new Date(value);
     if (Number.isNaN(date.getTime())) return String(value);
     return date.toLocaleString("zh-CN", { hour12: false });
@@ -1557,20 +1768,8 @@
     ["log", "版本更新日志 v2.0", "TXT", "98 KB", "2024-05-05", "txt"]
   ];
 
-  function documentsPage() {
-    const stateBlock = apiStateBlock(appState.documents, "当前文档目录没有可见文件。");
-    const items = appState.documents.items || [];
-    const evidenceItems = appState.documents.answer?.evidence || items;
-    return `
-      ${pageHeader("文档", "本地问答、证据召回与整理建议；原文和路径细节默认不外显。", button("刷新文档库", { icon: "plus", action: "documentsRefresh" }))}
-      <div class="three-column">
-        ${card(`${sectionTitle("文档库", "", "")}<div class="tabs">${["全部", "PDF", "DOCX", "TXT/MD", "CSV"].map((t, i) => `<button class="chip ${i === 0 ? "active" : ""}" type="button">${t}</button>`).join("")}</div><div style="margin:14px 0"><input id="documentPath" class="control search" value="${escapeHtml(appState.documents.path)}" placeholder="文档目录，例如 Documents" aria-label="文档目录"></div>${stateBlock || `<div class="doc-list">${items.map((doc) => renderDocItem(doc)).join("")}</div><div class="storage-meta"><span>共 ${fmtCount(items.length)} 个可见文档</span><span>仅展示摘要</span></div>`}`)}
-        ${renderDocumentQA()}
-        ${card(`${sectionTitle(`引用证据 ${evidenceItems.length}`, "刷新证据", "documentsRefresh")}<input class="control search" placeholder="搜索证据内容" aria-label="搜索证据" style="min-width:100%;margin-bottom:14px">${renderDocumentEvidence(evidenceItems)}`)}
-      </div>
-      ${renderStatePanel("文档")}
-    `;
-  }
+  function documentsPage() { return filesPage(); }
+
 
   function renderDocItem(doc) {
     const id = doc.relative_path || doc[0];
@@ -1645,10 +1844,10 @@
       <div class="answer-header"><strong>${escapeHtml(report.type || "报告预览")}</strong>${badge(report.degraded ? "待生成" : "可导出", report.degraded ? "neutral" : "success")}</div>
       <div class="answer-body">
         ${renderKeyValueRows([
-          ["类型", report.type || "—"],
+          ["类型", report.type || "暂无"],
           ["位置", report.relative_path || report.path ? "已生成" : "待生成"],
-          ["记录", report.trace_id ? "已记录" : "—"],
-          ["大小", report.size_bytes ? formatBytes(report.size_bytes) : "—"]
+          ["记录", report.trace_id ? "已记录" : "暂无"],
+          ["大小", report.size_bytes ? formatBytes(report.size_bytes) : "暂无"]
         ])}
         <pre class="summary-pre report-pre">${escapeHtml(preview)}</pre>
       </div>
@@ -1675,18 +1874,18 @@
           <div class="token-stats">
             <div class="metric"><span class="muted small">平均降幅</span><strong>${escapeHtml(fmtRatio(analysis.average_reduction_ratio))}</strong><span class="small muted">云端输入 token</span></div>
             <div class="metric"><span class="muted small">质量通过率</span><strong>${escapeHtml(fmtRatio(analysis.quality_pass_rate))}</strong><span class="small muted">本地评测质量</span></div>
-            <div class="metric"><span class="muted small">隐私泄漏</span><strong>${fmtCount(analysis.private_leak_count)}</strong><span class="small muted">private_leak_count</span></div>
+            <div class="metric"><span class="muted small">隐私检查</span><strong>${fmtCount(analysis.private_leak_count)}</strong><span class="small muted">检测到的泄漏项</span></div>
           </div>
           ${renderKeyValueRows([
             ["分词器", safeIdentity.tokenizer_name || safeIdentity.source || "Qwen 分词器"],
             ["记录状态", summary.trace_path ? "已生成" : "待生成"],
-            ["原始云端 token", analysis.average_naive_cloud_tokens ?? "—"],
-            ["优化后 token", analysis.average_optimized_cloud_tokens ?? "—"]
+            ["原始云端 token", analysis.average_naive_cloud_tokens ?? "暂无"],
+            ["优化后 token", analysis.average_optimized_cloud_tokens ?? "暂无"]
           ])}`)}
         ${card(`${sectionTitle("Benchmark 证据")}
           ${renderKeyValueRows([
             ["评测状态", appState.tokenBudget.benchmark?.ok ? "已通过" : "待复查"],
-            ["用例数", benchmark.case_count || benchmark.total_cases || (Array.isArray(benchmark.cases) ? benchmark.cases.length : "—")],
+            ["用例数", benchmark.case_count || benchmark.total_cases || (Array.isArray(benchmark.cases) ? benchmark.cases.length : "暂无")],
             ["报告状态", benchmark.report_path || benchmark.path ? "已生成" : "待生成"],
             ["云端默认外发", "禁止"]
           ])}
@@ -1712,8 +1911,8 @@
     const palette = ["#2563eb", "#06b6d4", "#10b981", "#d946ef", "#fb7185", "#f59e0b", "#64748b", "#14b8a6"];
     return routeRows.slice(0, 8).map((item, index) => {
       const route = item.route || item.name || `路由 ${index + 1}`;
-      const tokens = item.tokens || item.count || item.total_tokens || "—";
-      const share = item.share || item.percent || "—";
+      const tokens = item.tokens || item.count || item.total_tokens || "暂无";
+      const share = item.share || item.percent || "暂无";
       const color = item.color || palette[index % palette.length];
       return `<div class="route-row"><span class="route-color" style="background:${escapeHtml(color)}"></span><span>${escapeHtml(route)}</span><span class="muted">${escapeHtml(tokens)}</span><strong>${escapeHtml(share)}</strong></div>`;
     }).join("");
@@ -1751,7 +1950,7 @@
     const markdown = summary?.markdown || "点击“生成总结”后，这里会显示由本地 Journal 引擎生成的日/周/月/年总结。";
     return card(`
       <div class="answer-header"><strong>${escapeHtml(summary?.title || "周期总结")}</strong><div class="actions">${badge(summary ? "已生成" : "等待生成", summary ? "success" : "neutral")}<span class="muted small">事件数：${fmtCount(summary?.event_count || 0)}</span></div></div>
-      <div class="editor-toolbar">${["H1", "H2", "H3", "B", "I", "•", "☑", "🔗", "</>"].map((t) => `<button class="tool-button" type="button" aria-label="${escapeHtml(t)}">${escapeHtml(t)}</button>`).join("")}</div>
+      <div class="editor-toolbar">${["H1", "H2", "H3", "加粗", "斜体", "列表", "任务", "链接", "代码"].map((label) => `<button class="tool-button" type="button" aria-label="${escapeHtml(label)}">${escapeHtml(label)}</button>`).join("")}</div>
       <div class="markdown-body">
         <pre class="summary-pre">${escapeHtml(markdown)}</pre>
       </div>
@@ -1768,7 +1967,7 @@
       auditOperationLabel(row),
       String(row.status || "").includes("disabled") ? "已拒绝" : "已记录",
       String(row.status || "").includes("disabled") ? "danger" : "success",
-      row.duration || "—",
+      row.duration || "暂无",
       auditResourceLabel(row),
       auditRecordId(row, index)
     ]);
@@ -1887,10 +2086,10 @@
         ])}`)}
         ${card(`${sectionTitle("质量评测")} ${renderKeyValueRows([
           ["结论", state.evalStatus?.latest_eval?.verdict || "待生成"],
-          ["用例数", metrics.eval_total_cases || "—"],
-          ["文档问答用例", metrics.rag_case_count || "—"],
-          ["引用覆盖", metrics.rag_citation_coverage != null ? fmtRatio(metrics.rag_citation_coverage) : "—"],
-          ["无证据拒答", metrics.rag_no_evidence_refusal_rate != null ? fmtRatio(metrics.rag_no_evidence_refusal_rate) : "—"],
+          ["用例数", metrics.eval_total_cases || "暂无"],
+          ["文档问答用例", metrics.rag_case_count || "暂无"],
+          ["引用覆盖", metrics.rag_citation_coverage != null ? fmtRatio(metrics.rag_citation_coverage) : "暂无"],
+          ["无证据拒答", metrics.rag_no_evidence_refusal_rate != null ? fmtRatio(metrics.rag_no_evidence_refusal_rate) : "暂无"],
           ["隐私泄漏", metrics.private_leak_count || 0]
         ])}`)}
       </div>`}
@@ -2013,7 +2212,7 @@
         <div><span>图片</span><strong>${fmtCount(photos.length || stats.photo_count || 0)}</strong></div>
         <div><span>分类</span><strong>${fmtCount(categories.length)}</strong></div>
         <div><span>自动整理</span><strong>${escapeHtml(autoLabel)}</strong></div>
-        <div><span>最近索引</span><strong>${escapeHtml(formatStorageTime(stats.last_indexed_at) || "—")}</strong></div>
+        <div><span>最近索引</span><strong>${escapeHtml(formatStorageTime(stats.last_indexed_at) || "暂无")}</strong></div>
       </div>
       ${stateBlock || `<div class="ai-album-tabs" role="tablist">
         <button class="chip${selectedCategory ? "" : " active"}" type="button" data-action="aiAlbumCategory" data-category="">全部 <span>${fmtCount(photos.length)}</span></button>
@@ -2078,10 +2277,19 @@
     const categoryCount = primaryCategories.filter((item) => Number(item.count || 0) > 0).length || categories.filter(([name]) => name !== "待整理").length;
     const photoSectionTitle = selectedCategory ? `分类：${selectedCategory}` : "全部图片";
     const headerActions = [
-      button(uploadBusy ? "上传中" : "上传图片", { icon: "upload", action: "mediaUploadChoose", disabled: uploadBusy || organizeBusy }),
+      button(uploadBusy ? "上传中" : "上传图片", { icon: "upload", action: "mediaUploadChoose", disabled: uploadBusy || organizeBusy || appState.media.status === "auth" }),
       button(pendingCount > 0 ? "一键整理" : "已整理", { icon: "check", action: "mediaOrganizeNow", disabled: organizeBusy || pendingCount <= 0 }),
       button("刷新", { variant: "secondary", icon: "plus", action: "mediaRefresh", disabled: organizeBusy })
     ].join("");
+    if (stateBlock) {
+      return `
+        ${pageHeader("相册", "查看 NAS 图片与本地 AI 主分类。", headerActions)}
+        ${renderMediaUploadInput()}
+        ${renderMediaUploadStatus()}
+        ${card(stateBlock, "media-state-card")}
+        ${renderStatePanel("相册")}
+      `;
+    }
     return `
       ${pageHeader("相册", "NAS 图片自动增量整理和本地 AI 主分类。", headerActions)}
       ${renderMediaUploadInput()}
@@ -2413,7 +2621,7 @@
         ["智能命名", asset.suggested_filename_zh || asset.display_name_zh || "待生成"],
         ["OCR 状态", asset.ocr_status || "none"],
         ["证据引用", evidence.length ? `${evidence.length} 条` : "无"],
-        ["大小", photo.size_bytes ? formatBytes(photo.size_bytes) : "—"],
+        ["大小", photo.size_bytes ? formatBytes(photo.size_bytes) : "暂无"],
         ["时间", formatStorageTime(asset.created_at || asset.taken_at || photo.taken_at || photo.mtime)]
       ])}
       <div class="detail-section">
@@ -2488,7 +2696,7 @@
         ${card(`${sectionTitle("备份任务")} ${stateBlock || renderKeyValueRows([
           ["任务数", stats.task_count || tasksList.length || 0],
           ["运行数", stats.run_count || runs.length || 0],
-          ["最近状态", stats.last_status || "—"],
+          ["最近状态", stats.last_status || "暂无"],
           ["删除/覆盖", "禁用"]
         ])}
         <div class="login-stack" style="margin-top:16px">
@@ -2497,7 +2705,7 @@
           <input id="backupDest" class="control" value="Backups/Documents" aria-label="备份目标">
           <div class="copy-actions">${button("创建任务", { icon: "save", action: "backupCreate" })}${button("运行任务", { variant: "secondary", icon: "backup", action: "backupRun" })}</div>
         </div>`)}
-        ${card(`${sectionTitle("运行记录")}<div class="table-wrap"><table class="data-table"><thead><tr><th>任务</th><th>状态</th><th>扫描</th><th>复制</th><th>时间</th></tr></thead><tbody>${runs.slice(0, 12).map((run) => `<tr><td>${escapeHtml(run.task_name || run.name || "—")}</td><td>${badge(run.status || "recorded", run.status === "ok" || run.status === "completed" ? "success" : "neutral")}</td><td>${fmtCount(run.files_scanned || 0)}</td><td>${fmtCount(run.files_copied || 0)}</td><td>${escapeHtml(run.started_at || "—")}</td></tr>`).join("") || `<tr><td colspan="5"><div class="empty-line">暂无运行记录。</div></td></tr>`}</tbody></table></div>`)}
+        ${card(`${sectionTitle("运行记录")}<div class="table-wrap"><table class="data-table"><thead><tr><th>任务</th><th>状态</th><th>扫描</th><th>复制</th><th>时间</th></tr></thead><tbody>${runs.slice(0, 12).map((run) => `<tr><td>${escapeHtml(run.task_name || run.name || "暂无")}</td><td>${badge(run.status || "recorded", run.status === "ok" || run.status === "completed" ? "success" : "neutral")}</td><td>${fmtCount(run.files_scanned || 0)}</td><td>${fmtCount(run.files_copied || 0)}</td><td>${escapeHtml(run.started_at || "暂无")}</td></tr>`).join("") || `<tr><td colspan="5"><div class="empty-line">暂无运行记录。</div></td></tr>`}</tbody></table></div>`)}
       </div>
       ${renderStatePanel("备份同步")}
     `;
@@ -2516,8 +2724,8 @@
       ${stateBlock || `<div class="grid two-col">
         ${card(`${sectionTitle("存储与用户")} ${renderKeyValueRows([
           ["个人空间", storage.personal_root || storage.root ? "已配置" : "服务端配置"],
-          ["已用空间", capacity.used_bytes ? formatBytes(capacity.used_bytes) : "—"],
-          ["总空间", capacity.total_bytes ? formatBytes(capacity.total_bytes) : "—"],
+          ["已用空间", capacity.used_bytes ? formatBytes(capacity.used_bytes) : "暂无"],
+          ["总空间", capacity.total_bytes ? formatBytes(capacity.total_bytes) : "暂无"],
           ["用户数", appState.settings.users.length]
         ])}`)}
         ${card(`${sectionTitle("受控复制策略")} ${renderKeyValueRows([
@@ -2550,7 +2758,7 @@
     dashboard: dashboardPage,
     assistant: assistantPage,
     files: filesPage,
-    documents: documentsPage,
+    documents: filesPage,
     reports: reportsPage,
     tokenBudget: tokenBudgetPage,
     agentRuntime: agentRuntimePage,
@@ -2883,17 +3091,17 @@
 
   function fmtRatio(value) {
     const n = Number(value);
-    if (!Number.isFinite(n)) return "—";
+    if (!Number.isFinite(n)) return "暂无";
     return `${Math.round(n * 1000) / 10}%`;
   }
 
   function renderKeyValueRows(rows) {
-    return `<dl class="meta-grid">${productMetaRows(rows).map(([key, value]) => `<dt>${escapeHtml(key)}</dt><dd>${escapeHtml(value ?? "—")}</dd>`).join("")}</dl>`;
+    return `<dl class="meta-grid">${productMetaRows(rows).map(([key, value]) => `<dt>${escapeHtml(key)}</dt><dd>${escapeHtml(value ?? "暂无")}</dd>`).join("")}</dl>`;
   }
 
   function renderOperationRows(rows) {
     if (!rows.length) return `<div class="empty-state compact">${svg("search")} 暂无操作日志</div>`;
-    return `<div class="table-wrap"><table class="data-table"><thead><tr><th>时间</th><th>动作</th><th>来源</th><th>目标</th><th>状态</th></tr></thead><tbody>${rows.map((row, index) => `<tr data-record-id="${escapeHtml(auditRecordId(row, index))}"><td>${escapeHtml(row.created_at || row.ts || "—")}</td><td>${escapeHtml(operationTitle(row.action || row.operation || "—"))}</td><td>${escapeHtml(row.source || row.source_path ? "已记录" : "—")}</td><td>${escapeHtml(row.target || row.target_path ? "已记录" : "—")}</td><td>${badge(row.status || "recorded", String(row.status || "").includes("disabled") ? "danger" : "success")}</td></tr>`).join("")}</tbody></table></div>`;
+    return `<div class="table-wrap"><table class="data-table"><thead><tr><th>时间</th><th>动作</th><th>来源</th><th>目标</th><th>状态</th></tr></thead><tbody>${rows.map((row, index) => `<tr data-record-id="${escapeHtml(auditRecordId(row, index))}"><td>${escapeHtml(row.created_at || row.ts || "暂无")}</td><td>${escapeHtml(operationTitle(row.action || row.operation || "暂无"))}</td><td>${escapeHtml(row.source || row.source_path ? "已记录" : "暂无")}</td><td>${escapeHtml(row.target || row.target_path ? "已记录" : "暂无")}</td><td>${badge(row.status || "recorded", String(row.status || "").includes("disabled") ? "danger" : "success")}</td></tr>`).join("")}</tbody></table></div>`;
   }
 
   function renderDocumentEvidence(items) {
@@ -2932,10 +3140,103 @@
     return true;
   }
 
+
+  async function loadDocClassificationData() {
+    if (!appState.authToken) {
+      appState.docClassification = { ...appState.docClassification, status: "auth", error: "" };
+      if (appState.page === "files" || appState.page === "documents") renderShell();
+      return;
+    }
+    appState.docClassification = { ...appState.docClassification, status: "loading", error: "" };
+    if (appState.page === "files" || appState.page === "documents") renderShell();
+    try {
+      const result = await fetchJson("/api/documents/classification-status?path=Documents");
+      if (result.ok && result.data?.ok) {
+        const data = result.data;
+        appState.docClassification = {
+          ...appState.docClassification,
+          status: "ready",
+          categories: data.categories || {},
+          categoryCounts: data.category_counts || {},
+          items: data.items || [],
+          error: ""
+        };
+      } else if (result.status === 401) {
+        appState.docClassification = { ...appState.docClassification, status: "auth", error: "" };
+      } else {
+        appState.docClassification = { ...appState.docClassification, status: "error", error: result.data?.error || "classification_status_failed" };
+      }
+    } catch (error) {
+      appState.docClassification = { ...appState.docClassification, status: "error", error: error.message || String(error) };
+    }
+    if (appState.page === "files" || appState.page === "documents") renderShell();
+  }
+
+  async function runDocClassification() {
+    if (!appState.authToken) {
+      showToast("请先登录");
+      return;
+    }
+    appState.docClassification = { ...appState.docClassification, status: "loading", error: "" };
+    renderShell();
+    try {
+      const result = await fetchJson("/api/documents/classify", { method: "POST", body: { path: "Documents" } });
+      if (result.ok && result.data?.ok) {
+        const data = result.data;
+        appState.docClassification = {
+          ...appState.docClassification,
+          status: "ready",
+          categories: data.categories || {},
+          categoryCounts: data.category_counts || {},
+          items: data.items || [],
+          error: ""
+        };
+        showToast(`分类完成，共 ${data.total_items || 0} 个文件`);
+      } else {
+        appState.docClassification = { ...appState.docClassification, status: "error", error: result.data?.error || "classify_failed" };
+        showToast("分类失败");
+      }
+    } catch (error) {
+      appState.docClassification = { ...appState.docClassification, status: "error", error: error.message || String(error) };
+      showToast("分类失败");
+    }
+    renderShell();
+  }
+
+  async function uploadDocumentFile() {
+    if (!appState.authToken) { showToast("请先登录"); return; }
+    const input = document.createElement("input");
+    input.type = "file";
+    input.multiple = true;
+    input.onchange = async (e) => {
+      const files = e.target.files;
+      if (!files || files.length === 0) return;
+      for (const file of files) {
+        try {
+          const reader = new FileReader();
+          const base64 = await new Promise((resolve, reject) => {
+            reader.onload = () => {
+              const r = reader.result;
+              if (typeof r === "string") { const c = r.indexOf(","); resolve(c >= 0 ? r.slice(c + 1) : r); }
+              else { reject(new Error("read_failed")); }
+            };
+            reader.onerror = () => reject(reader.error);
+            reader.readAsDataURL(file);
+          });
+          const result = await fetchJson("/api/documents/upload", { method: "POST", body: { name: file.name, data: base64, path: "Documents" } });
+          showToast(result.ok && result.data?.ok ? `上传成功: ${file.name}` : `上传失败: ${file.name}`);
+        } catch (error) {
+          showToast(`上传失败: ${file.name}`);
+        }
+      }
+      await loadDocClassificationData();
+    };
+    input.click();
+  }
   async function loadDocumentsData() {
     if (!appState.authToken) {
       appState.documents = { ...appState.documents, status: "auth", error: "" };
-      if (appState.page === "documents") renderShell();
+      if (appState.page === "files" || appState.page === "documents") renderShell();
       return;
     }
     const requestPath = appState.documents.path || "Documents";
@@ -3168,10 +3469,12 @@
   }
 
   function openNotifications() {
+    const storageConnected = appState.storage.status === "ready" || Boolean(appState.dashboard?.storage);
+    const identityText = appState.authToken ? "当前浏览器已登录" : "尚未登录文件接口";
     showWorkflow("通知", `
-      <div class="mini-row"><span>${badge("成功", "success")} 文件接口已连接本地个人空间</span><span class="muted small">当前会话</span></div>
+      <div class="mini-row"><span>${badge(storageConnected ? "已读取" : "待连接", storageConnected ? "success" : "neutral")} ${storageConnected ? "已读取本地个人空间状态" : "连接设备后读取文件与容量状态"}</span><span class="muted small">当前会话</span></div>
       <div class="mini-row"><span>${badge("安全", "warning")} 删除、移动、覆盖、递归操作保持禁用</span><span class="muted small">本地执行边界</span></div>
-      <div class="mini-row"><span>${badge("待处理", "neutral")} 写入操作需要身份令牌和路径权限</span><span class="muted small">ACL</span></div>
+      <div class="mini-row"><span>${badge(appState.authToken ? "已登录" : "待登录", "neutral")} ${escapeHtml(identityText)}；写入仍需路径权限</span><span class="muted small">ACL</span></div>
     `);
   }
 
@@ -3189,7 +3492,7 @@
 
   function openUserMenu() {
     const user = appState.authUser || { username: "未登录", role: "guest" };
-    showWorkflow("管理员菜单", `
+    showWorkflow(appState.authUser ? "用户与身份" : "登录与身份", `
       ${renderKeyValueRows([
         ["用户", user.username],
         ["角色", user.role],
@@ -3200,6 +3503,15 @@
         ${button("打开设置", { variant: "secondary", icon: "settings", page: "settings" })}
         ${button("退出文件接口", { variant: "secondary", action: "storageLogout", disabled: !appState.authToken })}
       </div>
+    `);
+  }
+
+  function openMobileMore() {
+    const secondaryItems = navItems.filter((item) => !mobilePrimaryNavIds.includes(item.id));
+    showWorkflow("更多功能", `
+      <nav class="mobile-more-grid" aria-label="更多页面">
+        ${secondaryItems.map((item) => `<button class="mobile-more-item${item.id === appState.page ? " active" : ""}" type="button" data-page="${escapeHtml(item.id)}"${item.id === appState.page ? ' aria-current="page"' : ""}>${svg(item.icon)}<span>${escapeHtml(item.label)}</span></button>`).join("")}
+      </nav>
     `);
   }
 
@@ -3324,7 +3636,7 @@
         ["处理位置", copilot.cloud_used ? "受控云端" : "S100P 本地"],
         ["路由", route.route || copilot.route || "local_first"],
         ["云端调用", copilot.cloud_used ? "是" : "否"],
-        ["脱敏次数", route.redaction_count ?? "—"],
+        ["脱敏次数", route.redaction_count ?? "暂无"],
         ["执行权限", "Qwen 不直接执行 NAS 写操作"]
       ])}
     `);
@@ -3883,8 +4195,8 @@
     const boundaryRows = [
       ["计划状态", result.ok === false ? "未生成" : "已生成"],
       ["候选项", result.item_count ?? items.length ?? 0],
-      ["阻塞原因", result.blocker || result.error || "—"],
-      ["审批短语", result.approval_phrase || "—"],
+      ["阻塞原因", result.blocker || result.error || "暂无"],
+      ["审批短语", result.approval_phrase || "暂无"],
       ["删除允许", result.delete_allowed ? "需复查" : "关闭"],
       ["覆盖允许", result.overwrite_allowed ? "需复查" : "关闭"],
       ["模型工具权限", result.qwen_execution_authority ? "需复查" : "关闭"],
@@ -4179,7 +4491,7 @@
     const loaders = {
       dashboard: loadDashboardData,
       files: () => loadStoragePath(appState.storage.relativePath || ""),
-      documents: loadDocumentsData,
+      documents: async function() { await loadDocClassificationData(); await loadDocumentsData(); },
       reports: loadReportsData,
       tokenBudget: loadTokenBudgetData,
       agentRuntime: loadAgentRuntimeData,
@@ -4589,8 +4901,8 @@
         ${renderKeyValueRows([
           ["名称", result.data.snapshot?.name || safeName],
           ["来源", sourcePath ? displayLocation(sourcePath) : "个人空间"],
-          ["文件数", result.data.snapshot?.file_count ?? "—"],
-          ["大小", result.data.snapshot?.total_size ? formatBytes(result.data.snapshot.total_size) : "—"]
+          ["文件数", result.data.snapshot?.file_count ?? "暂无"],
+          ["大小", result.data.snapshot?.total_size ? formatBytes(result.data.snapshot.total_size) : "暂无"]
         ])}
       `);
       showToast("快照已创建");
@@ -4736,6 +5048,8 @@
       openHelp();
     } else if (action === "openUserMenu") {
       openUserMenu();
+    } else if (action === "openMobileMore") {
+      openMobileMore();
     } else if (action === "dashboardTasks") {
       openDashboardTasks();
     } else if (action === "tokenDetails") {
@@ -4851,7 +5165,13 @@
       showToast("审计筛选已应用");
     } else if (action === "auditPageSize") {
       showWorkflow("审计分页", renderKeyValueRows([["当前页大小", "10 条/页"], ["数据来源", appState.audit.operations.length ? "真实操作日志" : "暂无审计记录"], ["说明", "当前实机页以本地最近 50 条操作为上限。"]]));
-    } else if (action === "mediaRefresh") {
+    } else if (action === "fileViewExplorer") { appState.fileViewMode = "explorer"; renderShell(); }
+    else if (action === "fileViewAi") { appState.fileViewMode = "ai"; renderShell(); if (appState.authToken) { loadDocClassificationData(); } }
+    else if (action === "fileViewTimeline") { appState.fileViewMode = "timeline"; renderShell(); }
+    else if (action === "docClassifyAll") { runDocClassification(); }
+    else if (action === "docUpload") { uploadDocumentFile(); }
+    else if (action === "docCategorySelect") { appState.docClassification = { ...appState.docClassification, selectedCategory: actionButton.dataset.category || "" }; renderShell(); }
+    else if (action === "mediaRefresh") {
       loadMediaData();
     } else if (action === "mediaOrganizeNow") {
       runMediaOrganizeNow();

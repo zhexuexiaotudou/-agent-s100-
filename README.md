@@ -5,6 +5,21 @@ always-on AI-NAS gateway: OpenClaw provides the NAS-facing experience, Qwen runs
 locally on S100P, and an edge-cloud router decides when a request can leave the
 device.
 
+## Offline UI Workbench
+
+The preserved `/ui` redesign was completed locally on 2026-07-16 while S100P
+and NAS were offline. It keeps the native HTML/CSS/JS stack, routes, API calls,
+identity, ACL, controlled-copy, and soft-delete boundaries. The UI now defaults
+to a task-first dashboard, reports disconnected state without demo capacity or
+identity claims, groups desktop navigation, provides a five-item mobile bar
+with a complete “More” panel, and includes responsive, dark-mode, reduced-motion,
+and touch-target preflight coverage.
+
+Local UI evidence is recorded in
+[`docs/offline_ui_delivery_20260716.md`](docs/offline_ui_delivery_20260716.md).
+Real S100P/NAS functional acceptance and deployment remain explicitly deferred
+until both devices are online.
+
 ## Current Status
 
 Status timestamp: 2026-07-06 17:53 CST.
