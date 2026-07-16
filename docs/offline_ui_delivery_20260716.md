@@ -71,6 +71,13 @@
 
 截图保存在 `evidence/offline_ui_20260716/`，本地完整运行产物保存在被 Git 忽略的 `output/playwright/offline-ui/`。
 
+## 代码交付状态
+
+- 功能提交：`edfa19eda47b544f6d0cb114a2f7a24f44f6d9d0`。
+- 功能 PR：[#10](https://github.com/zhexuexiaotudou/-agent-s100-/pull/10)，`Offline UI / static-ui-contract` 通过。
+- 合并提交：`599cd63e6bd6099628a8405166eae0b03b2e15a5`，已确认包含上述功能提交。
+- 本记录只证明代码已合并和离线 UI 已通过本地验收，不代表 S100P/NAS 已部署或已通过在线功能验收。
+
 ## 设备恢复在线后的验收清单
 
 1. 确认 S100P 网络、SSH 用户、主机指纹、板端 IP、NAS 挂载和当前服务版本。
