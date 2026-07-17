@@ -246,6 +246,15 @@ class ProductAccessContractTest(unittest.TestCase):
         self.assertIn('127.0.1.1', source)
         self.assertIn('invalid_hostname', source)
         self.assertIn('systemctl restart avahi-daemon.service', source)
+        self.assertIn('systemctl enable NetworkManager-wait-online.service', source)
+        self.assertIn("'network_wait_enabled': bool($network_wait_enabled)", source)
+
+    def test_live_validation_accepts_system_or_user_service_scope(self):
+        repo = Path(__file__).resolve().parents[1]
+        source = (repo / "validation/product_access_s100p/RUN_VALIDATION.sh").read_text(encoding="utf-8")
+        self.assertIn('systemctl is-active --quiet "$unit"', source)
+        self.assertIn('systemctl --user is-active --quiet "$unit"', source)
+        self.assertIn('run service_qwen service_status qwen25-local-openai-gateway.service', source)
 
     def test_distinct_upstream_identity_store_receives_bridged_sessions_and_user_changes(self):
         with tempfile.TemporaryDirectory() as temp:
