@@ -1,5 +1,9 @@
 # AI 助手模型选择（2026-07-18）
 
+> 历史状态：本页记录曾上线的手动选择器。该交互已被
+> [`assistant_automatic_model_routing_20260718.md`](assistant_automatic_model_routing_20260718.md)
+> 取代；当前用户不能选择或覆盖模型。
+
 ## 目标
 
 AI 助手输入框提供三个明确选项：

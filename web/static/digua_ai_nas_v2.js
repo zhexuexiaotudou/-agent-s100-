@@ -4,11 +4,6 @@
   const app = document.getElementById("app");
   const MEDIA_UPLOAD_MAX_BYTES = 5 * 1024 * 1024;
   const EXECUTION_BOUNDARY_IMPLEMENTATION = "Harness / allowlist dispatcher";
-  const ASSISTANT_MODEL_OPTIONS = [
-    { value: "qwen2.5-1.5b-local", label: "Qwen2.5 1.5B（本地）" },
-    { value: "qwen2.5-7b-local", label: "Qwen2.5 7B（本地）" },
-    { value: "minimax2.7-cloud", label: "MiniMax 2.7（云端）" }
-  ];
 
   const icons = {
     home: '<path d="M3 10.5 12 3l9 7.5"/><path d="M5 9.5V21h14V9.5"/><path d="M9 21v-7h6v7"/>',
@@ -74,7 +69,6 @@
     docClassification: { status: "idle", items: [], categories: {}, categoryCounts: {}, selectedCategory: "", error: "" },
     debugStatePanels: new URLSearchParams(window.location.search).get("debugStates") === "1",
     prompt: "",
-    assistantModelChoice: safeLocalStorageGet("diguaAssistantModelChoice") || "qwen2.5-1.5b-local",
     selectedFile: "",
     fileSearch: "",
     selectedDoc: "whitepaper",
@@ -604,9 +598,7 @@
             <textarea id="assistantPrompt" class="textarea" placeholder="请输入您的问题、指令或需求..." aria-label="AI 助手输入">${escapeHtml(appState.prompt)}</textarea>
             <div class="prompt-footer">
               <div class="actions">
-                <select id="assistantModelChoice" class="control" aria-label="选择模型">
-                  ${ASSISTANT_MODEL_OPTIONS.map((option) => `<option value="${escapeHtml(option.value)}"${appState.assistantModelChoice === option.value ? " selected" : ""}>${escapeHtml(option.label)}</option>`).join("")}
-                </select>
+                <span class="service-pill strong">${svg("assistant")} 模型由 Workspace Harness 自动选择</span>
                 ${button("附件", { variant: "tertiary", icon: "link", action: "assistantAttach" })}
               </div>
               ${button("发送", { icon: "send", action: "sendPrompt", disabled: !appState.prompt.trim() })}
@@ -664,7 +656,7 @@
     return card(`
       <div class="answer-header"><strong>${svg("assistant")} AI 助手回答</strong>${badge(answerBadge, "success")}</div>
       <div class="answer-body">
-        <div class="assistant-text">${renderAssistantText(appState.assistant.answer)}</div>
+        <div class="assistant-text">${renderAssistantText(appState.assistant.answer, mode === "local_qwen_chat" || mode === "cloud_overflow_chat")}</div>
         ${renderAssistantProductResult(copilot, mode)}
         ${isAssistantAnswer ? renderAssistantServiceSummary(copilot, route, qwenRouter, mode) : ""}
         ${isAssistantAnswer ? renderAssistantDetails(copilot, route, qwenRouter, mode) : ""}
@@ -676,8 +668,8 @@
     `, "answer-card");
   }
 
-  function renderAssistantText(text) {
-    const safe = scrubProductText(String(text || "")).trim();
+  function renderAssistantText(text, preserveModelText = false) {
+    const safe = (preserveModelText ? String(text || "") : scrubProductText(String(text || ""))).trim();
     if (!safe) return "<p>本地助手没有返回正文。</p>";
     return safe
       .split(/\n{2,}/)
@@ -728,10 +720,11 @@
   }
 
   function renderAssistantServiceSummary(copilot, route, qwenRouter, mode) {
+    const modelRouting = copilot.model_routing || {};
     const rawTokens = route?.token_counts?.raw_user_prompt_tokens ?? copilot?.usage?.prompt_tokens ?? "暂无";
     const processing = copilot.cloud_used ? "云端" : "S100P 本地";
     const privacy = privacyLabel(qwenRouter?.privacy_level || route?.privacy_level || "local_only");
-    const model = mode === "local_ai_album_category_search" ? "本地相册分类索引" : mode === "local_yolo_search" || mode === "local_multimodal_search" ? "本地多模态索引" : copilot.model || "本地 Qwen";
+    const model = modelRouting.effective_answer_model || (mode === "local_ai_album_category_search" ? "本地相册分类索引" : mode === "local_yolo_search" || mode === "local_multimodal_search" ? "本地多模态索引" : copilot.model || "本地策略服务");
     return `
       <div class="assistant-service-summary" aria-label="服务摘要">
         <span class="service-pill strong">${svg("home")} ${escapeHtml(processing)}</span>
@@ -744,9 +737,14 @@
   }
 
   function renderAssistantDetails(copilot, route, qwenRouter, mode) {
+    const modelRouting = copilot.model_routing || {};
+    const modelCalls = Array.isArray(modelRouting.calls) ? modelRouting.calls : [];
     const rows = [
       ["处理链路", routeLabel(mode, qwenRouter?.route || route?.route)],
-      ["模型/来源", mode === "local_ai_album_category_search" ? "本地相册分类索引" : mode === "local_yolo_search" || mode === "local_multimodal_search" ? "本地多模态索引" : copilot.model || "本地 Qwen"],
+      ["Workspace", modelRouting.selected_workspace || copilot.selected_workspace || "main_router"],
+      ["模型策略", modelRouting.policy_id || "workspace_harness_auto_v1"],
+      ["用户选择模型", modelRouting.user_selectable === false ? "不允许，由架构自动选择" : "未声明"],
+      ["最终回答模型", modelRouting.effective_answer_model || "无额外模型调用"],
       ["处理位置", copilot.cloud_used ? "云端" : "S100P 本地"],
       ["隐私级别", privacyLabel(qwenRouter?.privacy_level || route?.privacy_level || "local_only")],
       ["本地工具", localToolLabel(qwenRouter?.local_tool_id || copilot.search?.retrieval_mode)],
@@ -756,12 +754,18 @@
       ["脱敏次数", route?.redaction_count ?? 0],
       ["云端调用", copilot.cloud_used ? "是" : "否"]
     ];
+    if (modelRouting.selection_reason) rows.push(["选择原因", modelRouting.selection_reason]);
     const reason = qwenRouter?.guardrail_reason || qwenRouter?.reason || route?.reason;
     if (reason) rows.push(["路由说明", reason]);
+    const callRows = modelCalls.map((call, index) => [
+      `模型调用 ${index + 1} · ${call.stage || "unknown"}`,
+      `${call.model || "无模型"} · ${call.provider || "未知 provider"} · ${call.location || "未知位置"} · ${call.purpose || "未说明"} · ${call.status || "unknown"}${Number.isFinite(Number(call.elapsed_ms)) ? ` · ${Number(call.elapsed_ms).toFixed(1)} ms` : ""}`
+    ]);
     return `
       <details class="assistant-details">
         <summary>${svg("chevron")} 查看详情</summary>
         ${renderKeyValueRows(rows)}
+        ${callRows.length ? `<h4>本次模型调用</h4>${renderKeyValueRows(callRows)}` : '<p class="muted small">本次由确定性本地策略直接回答，没有调用语言模型。</p>'}
       </details>
     `;
   }
@@ -1696,8 +1700,8 @@
     if (!raw || raw === "none" || raw === "无") return "无";
     if (raw.includes("album_primary") || raw.includes("ai_album")) return "本地相册分类检索";
     if (raw.includes("yolo") || raw.includes("multimodal") || raw.includes("media")) return "本地多模态检索";
-    if (raw.includes("document") || raw.includes("rag") || raw.includes("fts")) return "本地文档问答";
     if (raw.includes("storage") || raw.includes("nas") || raw.includes("file")) return "本地文件服务";
+    if (raw.includes("document") || raw.includes("rag") || raw.includes("fts")) return "本地文档问答";
     if (raw.includes("audit")) return "本地审计查询";
     if (raw.includes("report")) return "本地报告查询";
     return "本地受控工具";
@@ -3433,7 +3437,7 @@
     renderShell();
     try {
       const [copilot, route] = await Promise.all([
-        fetchJson("/api/copilot/chat", { method: "POST", body: { message, model_choice: appState.assistantModelChoice } }),
+        fetchJson("/api/copilot/chat", { method: "POST", body: { message } }),
         fetchJson("/api/token-budget/route", {
           method: "POST",
           body: {
@@ -3488,7 +3492,7 @@
     if (action.operation === "apps_summary") return "已读取本地应用生态概览，下方展示插件和协议状态。";
     if (action.operation === "audit_summary") return "已读取本地审计概览，下方展示最近操作记录。";
     if (action.operation === "reports_list") return "已读取本地报告列表，下方展示最近可查看的报告。";
-    if (action.operation === "cloud_overflow") return data.cloud_used ? "该非隐私任务已通过受控云端路径处理。" : "Qwen 判断该任务可外溢到云端，但当前环境未配置云端服务，因此没有发送任何云端请求。";
+    if (action.operation === "cloud_overflow") return data.answer || (data.cloud_used ? "该非隐私任务已通过受控云端路径处理。" : "Qwen 判断该任务可外溢到云端，但当前环境未配置云端服务，因此没有发送任何云端请求。");
     if (action.operation && action.operation !== "none") return data.answer || "本地操作已完成，下方展示结果。";
     return data.answer || describeCopilotResult(data);
   }
@@ -5366,16 +5370,6 @@
     }
     if (event.target && event.target.id === "aiAlbumSearch") {
       appState.aiAlbum = { ...appState.aiAlbum, query: event.target.value };
-    }
-  });
-
-  app.addEventListener("change", (event) => {
-    if (event.target && event.target.id === "assistantModelChoice") {
-      const choice = String(event.target.value || "");
-      if (ASSISTANT_MODEL_OPTIONS.some((option) => option.value === choice)) {
-        appState.assistantModelChoice = choice;
-        safeLocalStorageSet("diguaAssistantModelChoice", choice);
-      }
     }
   });
 

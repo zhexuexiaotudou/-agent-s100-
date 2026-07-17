@@ -46,12 +46,15 @@ lock-contention evidence, soft-delete evidence, and rollback points are recorded
 in
 [`docs/album_preview_recovery_20260718.md`](docs/album_preview_recovery_20260718.md).
 
-The AI Assistant now has an explicit model selector for local Qwen2.5 1.5B,
-local Qwen2.5 7B, and cloud MiniMax 2.7. Identity and NAS tool requests remain
-local; selecting MiniMax still requires a local privacy decision before any
-cloud call. The verified 7B route is CPU-backed because real BPU text generation
-failed the 2026-07-18 allocation check. Implementation, live acceptance, and the
-correction to the older shadow claim are recorded in
+The AI Assistant no longer exposes a model selector. Natural-language input
+enters the Workspace Harness policy: deterministic identity and allowlisted NAS
+work stay local, simple general chat defaults to Qwen2.5 1.5B on the S100P BPU,
+private/local complex work uses Qwen2.5 7B on the S100P CPU, and only public,
+non-private complex work may use MiniMax 2.7 through the guarded OpenClaw
+bridge. The answer details record the selected workspace and every model call.
+The routing contract is documented in
+[`docs/assistant_automatic_model_routing_20260718.md`](docs/assistant_automatic_model_routing_20260718.md);
+the former selector remains as historical evidence in
 [`docs/assistant_model_selector_20260718.md`](docs/assistant_model_selector_20260718.md).
 
 ## Current Status

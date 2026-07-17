@@ -8,11 +8,13 @@
 S100P/NAS 恢复在线后，产品入口已在 `http://digua.local/` 实机验收，
 `http://192.168.127.10/` 是已验证的备用入口。门户以及本地模型服务均保持 loopback 作用域。
 
-AI 助手现可明确选择 `Qwen2.5 1.5B（本地）`、`Qwen2.5 7B（本地）` 或
-`MiniMax 2.7（云端）`。1.5B 使用 S100P BPU，7B 使用板端 CPU；身份问题和 NAS 工具请求
-保持本地，选择 MiniMax 后仍须先通过本地隐私判断。7B CPU 的原因、三路真实验收结果以及对
-历史 7B shadow 结论的纠正见
-[`docs/assistant_model_selector_20260718.md`](docs/assistant_model_selector_20260718.md)。
+AI 助手暂不向用户开放模型选择。自然语言先进入 Workspace Harness：身份问题由确定性本地契约
+回答，NAS 工具任务由本地白名单执行，普通对话默认使用 S100P BPU 上的 Qwen2.5 1.5B，必须
+留在本地的复杂任务使用 S100P CPU 上的 Qwen2.5 7B，只有公开、无隐私且复杂的任务才允许通过
+OpenClaw 受控桥调用 MiniMax 2.7。回答详情会列出 Workspace、选择原因及每一次真实模型调用。
+当前契约见
+[`docs/assistant_automatic_model_routing_20260718.md`](docs/assistant_automatic_model_routing_20260718.md)；
+旧选择器文档仅保留为历史证据。
 
 ## 离线 UI 工作台
 
@@ -23,7 +25,7 @@ HTML/CSS/JS、现有路由和 API 调用，以及身份、ACL、受控复制和�
 
 本地 UI 证据记录在
 [`docs/offline_ui_delivery_20260716.md`](docs/offline_ui_delivery_20260716.md)。文档中当时延后的 S100P/NAS
-真实部署已在设备恢复后完成；当前入口、相册恢复与模型选择器的实机证据以本页较新的 2026-07-18
+真实部署已在设备恢复后完成；当前入口、相册恢复与模型编排的实机证据以本页较新的 2026-07-18
 状态和对应专题文档为准。
 
 非 Dream 7B 已实现功能的离线加固结果，以及设备恢复后的真实链路验收门，记录在
@@ -39,7 +41,7 @@ HTML/CSS/JS、现有路由和 API 调用，以及身份、ACL、受控复制和�
 | --- | --- | --- | --- |
 | 1. S100P 作为常驻网关 | S100P 在用户登录/登出后保持 AI 网关在线，提供稳定的本地入口 | `openclaw-gateway.service`、`qwen25-local-openai-gateway.service` 和 `qwen7b-cpu.service` 均为 active；常驻 user service 已 enabled，`loginctl` linger 为 `yes` | OpenClaw `/api/health` 在 `127.0.0.1:8765`；Qwen `/health` 在 `127.0.0.1:18080` 和 `127.0.0.1:18081` |
 | 2. OpenClaw 实现 AI-NAS | OpenClaw 能驱动 NAS 操作，而非仅聊天 | `ok_ai_nas_openclaw_nas_control_gate`，10/10 检查通过 | `/mnt/nas/openclaw/reports/qwen25_ai_nas/openclaw_nas_control_gate_20260629-210023-832862/openclaw_nas_control_gate.json` |
-| 3. 边缘+云端路由 | 每个查询先经过本地规则/Qwen；隐私与本地工具请求留在 S100P；公开通用请求可选择受控云端端点 | 模型选择器三路认证 HTTP 均返回 200；MiniMax 身份问答保持本地，含护照号的私密请求回落 1.5B，公开请求才调用云端 | [`docs/assistant_model_selector_20260718.md`](docs/assistant_model_selector_20260718.md) |
+| 3. 边缘+云端路由 | 每个查询先经过本地规则/Qwen；隐私与本地工具请求留在 S100P；公开复杂请求才可使用受控云端端点 | Workspace Harness 自动决定 1.5B、7B 或 MiniMax；用户不能覆盖模型策略，每次调用均写入回答详情 | [`docs/assistant_automatic_model_routing_20260718.md`](docs/assistant_automatic_model_routing_20260718.md) |
 
 最新 Qwen AI-NAS 验收包同样通过：
 
