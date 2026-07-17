@@ -14,21 +14,32 @@
 AI-NAS portal (sunrise, 127.0.0.1:8765)
   -> Qwen route/privacy decision (127.0.0.1:18080)
   -> OpenClaw cloud bridge (root, 127.0.0.1:18082, local bearer token)
-  -> openclaw infer model run --gateway --model custom-gateway/MiniMax-M2.7
-  -> OpenClaw gateway (root, 127.0.0.1:18765)
+  -> openclaw agent --agent web-research --model custom-gateway/MiniMax-M2.7
+  -> Tavily web search/extract tools
+  -> OpenClaw gateway (root, 127.0.0.1:18789)
   -> MiniMax provider
 ```
 
-`openclaw_cloud_inference_bridge.py` 只提供 OpenAI-compatible chat completion 适配，不开放 agent、tool、shell 或 NAS 写操作。模型在服务参数中固定，客户端请求不能更换 provider。服务拒绝非回环地址绑定，限制请求和 prompt 大小，审计只返回 prompt hash 与长度，不记录 prompt 原文。
+`openclaw_cloud_inference_bridge.py` 提供 OpenAI-compatible chat completion 适配，但内部固定调用隔离的
+`web-research` agent。该 agent 的绝对工具 allowlist 只有 `web_search`、`web_fetch`、
+`tavily_search` 和 `tavily_extract`，并额外 deny 文件、shell、消息、浏览器、NAS probe 和跨 agent
+工具。桥只有在 OpenClaw 确认至少完成一次允许的联网工具调用且零工具失败时才返回成功；任何未
+调用搜索、调用越权工具或搜索失败都会返回结构化 502，由门户按既有策略回落本地 7B。模型和
+agent 都在服务参数中固定，客户端请求不能更换。服务拒绝非回环地址绑定，限制请求和 prompt
+大小，审计只返回 prompt hash、长度、联网工具名/次数和公开来源 URL，不记录 prompt 原文。
 
 桥凭据保存在 `/home/sunrise/.config/digua/cloud_bridge_token`，部署时生成，权限必须为 `0600`。该凭据只保护门户到本机桥的调用，不是 MiniMax token。MiniMax token 继续由 root OpenClaw 配置管理，禁止写入仓库、systemd unit、报告或日志。
 
 ## 部署
 
 1. 将 `scripts/probes/openclaw_cloud_inference_bridge.py` 同步到 `/mnt/nas/openclaw/scripts/probes/`。
-2. 将 `configs/systemd/digua-openclaw-cloud-bridge.service` 安装到 `/etc/systemd/system/`。
-3. 在 S100P 本机生成桥凭据并设置 `sunrise:sunrise`、`0600`，不要输出凭据内容。
-4. 将 `configs/systemd/user/openclaw-gateway.service.d/30-minimax-cloud-overflow.conf` 安装到门户 user service 的同名 drop-in 目录。其内容为：
+2. 以 root 运行 `scripts/production/configure_openclaw_web_research_agent.sh`。脚本会先备份
+   `/root/.openclaw/openclaw.json`，再创建或收敛 `web-research` agent、固定 MiniMax 模型并写入
+   四项工具 allowlist；不输出 Tavily 或 MiniMax 凭据。设置 `RESTART_OPENCLAW_GATEWAY=1` 时才
+   重启 root OpenClaw gateway。
+3. 将 `configs/systemd/digua-openclaw-cloud-bridge.service` 安装到 `/etc/systemd/system/`。
+4. 在 S100P 本机生成桥凭据并设置 `sunrise:sunrise`、`0600`，不要输出凭据内容。
+5. 将 `configs/systemd/user/openclaw-gateway.service.d/30-minimax-cloud-overflow.conf` 安装到门户 user service 的同名 drop-in 目录。其内容为：
 
    ```ini
    Environment=AI_NAS_CLOUD_CHAT_URL=http://127.0.0.1:18082/v1
@@ -37,9 +48,9 @@ AI-NAS portal (sunrise, 127.0.0.1:8765)
    Environment=AI_NAS_CLOUD_CHAT_TIMEOUT_SECONDS=210
    ```
 
-5. 先启动并检查 root bridge，再重启 `sunrise` 的门户 user service。
+6. 先启动并检查 root bridge，再重启 `sunrise` 的门户 user service。
 
-桥服务必须显式设置 `HOME=/root`，并将 OpenClaw 自带的 Node.js 22 目录放在 `PATH` 首位。systemd 的默认 PATH 可能命中系统 Node.js 20，届时 OpenClaw 会以版本不满足要求退出。OpenClaw CLI 还会维护 `/root/.openclaw/state` 的权限，因此沙箱仅对这个 state 目录开放写权限；provider 配置和桥脚本仍为只读。
+桥服务必须显式设置 `HOME=/root`，并将 OpenClaw 自带的 Node.js 22 目录放在 `PATH` 首位。systemd 的默认 PATH 可能命中系统 Node.js 20，届时 OpenClaw 会以版本不满足要求退出。OpenClaw CLI 会维护 `/root/.openclaw/state` 和隔离 agent 的 session 目录，因此沙箱只对这两个位置开放写权限；provider 配置、agent workspace 和桥脚本仍为只读。
 
 门户的云端 HTTP 等待时间为 210 秒，比 bridge 的 180 秒推理上限更长，使 bridge 能返回明确的超时响应。门户 HTTP 客户端必须把底层 `TimeoutError` 转成结构化 `cloud_overflow_failed`，不能让浏览器连接被直接关闭。
 
@@ -47,10 +58,12 @@ AI-NAS portal (sunrise, 127.0.0.1:8765)
 
 - `GET http://127.0.0.1:18082/health` 返回 `ok=true`，端口只监听 loopback。
 - 未携带或携带错误桥凭据的 completion 请求返回 `401`。
-- OpenClaw CLI 的固定 provider 探针返回 `provider=custom-gateway`、`model=MiniMax-M2.7`。
+- OpenClaw CLI 的 `web-research` agent 探针返回 `provider=custom-gateway`、`model=MiniMax-M2.7`，
+  `toolSummary` 只包含允许的 search/extract 工具且 `failures=0`。
 - 门户输入 `你是谁`：返回 `identity_answer_source=deterministic_local_identity`、`cloud_used=false`，OpenClaw bridge 无对应调用。
 - 门户输入明确公开、复杂且需要最新外部信息的问题：返回
-  `assistant_mode=cloud_overflow_chat`、`cloud_used=true`，回答来自 OpenClaw/MiniMax。
+  `assistant_mode=cloud_overflow_chat`、`cloud_used=true`、`web_research.web_search_used=true`、
+  `web_research.tool_calls>=1` 和公开来源 URL，回答来自 OpenClaw agent 联网检索与 MiniMax。
 - 含私有 NAS 内容或本地工具意图的请求仍留在本地，不允许通过 bridge。
 - 公开复杂但不要求最新信息的请求使用本地 7B；同时需要本地数据和最新外部信息的请求标记为
   混合候选，但在安全拆分/脱敏/本地合并链路启用前保持本地。

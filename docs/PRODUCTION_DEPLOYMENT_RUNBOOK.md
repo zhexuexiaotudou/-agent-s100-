@@ -52,8 +52,9 @@ Run authenticated checks through the real portal path, not only unit health:
 
 1. “你是谁” returns the deterministic local identity with no cloud call.
 2. A known dated personal-history query enters local document RAG and returns traceable evidence.
-3. A public, current, complex prompt can reach MiniMax through the guarded loopback bridge; private and
-   NAS prompts cannot.
+3. A public, current, complex prompt reaches MiniMax through the guarded loopback bridge and returns
+   `web_research.web_search_used=true`, at least one approved web tool call, and source URLs; private and
+   NAS prompts cannot enter this path.
 4. `/api/media/photos` lists only visible images and a returned `path_hash` succeeds through
    `/api/media/preview?variant=thumbnail`.
 5. Open `/ui`, log in, submit one assistant prompt, and inspect the visible answer and model details.
