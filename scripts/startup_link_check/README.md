@@ -38,7 +38,7 @@ services:   system openclaw-gateway.service -> 127.0.0.1:18765
 在 Windows PowerShell 中以管理员权限运行：
 
 ```powershell
-cd "F:\Project\Digua\完全基于agent的s100使用和链路打通\scripts\startup_link_check"
+cd "F:\Project\Digua\scripts\startup_link_check"
 powershell.exe -NoProfile -ExecutionPolicy Bypass -File .\install-startup-task.ps1
 ```
 

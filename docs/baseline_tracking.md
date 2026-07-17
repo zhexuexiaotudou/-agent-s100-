@@ -64,6 +64,21 @@
 - 当前最重要的新增缺口不是普通文件搜索，而是细粒度图像语义和 embedding：例如“找穿白色上衣的照片”需要 region-level clothing attributes，而不能只用整图白色程度。
 - 2026-07-07 已把“找有人的图片”打通到真实 S100P YOLO 对象检测：当前 16 张真实相册候选图重建得到 27 个检测框，其中 `person=17`；AI 助手 `/api/copilot/chat` 返回 `local_yolo_search`、8 张真实 NAS 图片卡片、预览 200、未上云、未返回裸路径。细粒度“白色上衣”等服装属性仍归 B-016。
 
+## 2026-07-17 开机链路恢复当前状态
+
+本节是当前运行事实；下方 2026-05/06 的 IP、飞书入口和旧检查逻辑只保留为历史验收记录。
+
+| 项 | 当前状态 | 证据 |
+| --- | --- | --- |
+| Windows → S100P | verified | Windows 以太网 `192.168.127.2/24`、ICS `192.168.137.1/24`，S100P `192.168.127.10`；Ping、SSH key、板端时钟和外网 HTTPS 均通过 |
+| S100P → NAS | verified | 当前 export `169.254.143.37:/OpenClawWorkspace` 精确挂载到 `/mnt/nas/openclaw`，真实写入→读取→删除探针通过 |
+| 启动竞态恢复 | verified | 实测修复 mount/automount start-limit；托盘失败后每 30 秒重试，覆盖网线晚插和 NAS 晚启动 |
+| OpenClaw / AI-NAS / Qwen | verified | system Gateway `18765/health`、sunrise 门户 `8765/api/health`、本地 Qwen `18080/health` 均返回 HTTP 200；停止用户服务后的故障注入由脚本自动恢复 |
+| 生产任务 | verified | `S100P-NAS-OpenClaw-LinkCheck` 于 2026-07-17 16:31–16:32 完成运行，最终 `status=OK` 且所有 gate 为 true |
+| 容量 | warning | S100P 根分区 95%、约 2.2 GB 可用；NAS 15%。根分区 90% 告警、98% 阻断 |
+
+完整事故、覆盖矩阵、版本、CI、部署哈希和回滚点见 `docs/startup_link_check_hardening_20260717.md`。
+
 ## 2026-05-27 当前进展核对
 
 | 项 | 当前状态 | 证据 |

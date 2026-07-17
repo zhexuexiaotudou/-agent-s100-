@@ -12,6 +12,14 @@ The live boot journal showed the exact race:
 - the old Windows tray checker ran once while Ethernet was disconnected and did not retry after the cable was inserted;
 - the old OpenClaw check still looked for a historical Feishu log marker and reported a false failure even though the current system gateway was healthy.
 
+## Verified environment
+
+- S100P: Ubuntu 22.04.5 LTS, kernel `6.1.158-rt58-DR-4.0.5-2603031328-g9f678e-g6caa4d`;
+- OpenClaw: `2026.6.10 (aa69b12)`, system gateway bound to loopback port `18765`;
+- NAS: QNAP TS-264C, NFS export `169.254.143.37:/OpenClawWorkspace`, mounted at `/mnt/nas/openclaw`;
+- management path: Windows `192.168.127.2` → S100P `192.168.127.10` over SSH as `sunrise`;
+- internet sharing: Windows WLAN → Ethernet ICS, S100P default route via `192.168.137.1`.
+
 ## Live repair
 
 The real S100P was repaired without changing the NAS export:
@@ -52,6 +60,18 @@ The final normal-path run reported:
 
 A controlled failure test stopped the sunrise-user portal and Qwen services. The checker returned `FIXED`, restarted the stack, and restored all three service health checks.
 
+## Delivery and production evidence
+
+- implementation commit: `5633b43bf713ddf3acfde731fe87f6079f695a71`;
+- merged main revision: `8eb4a6edbed3811981b57a36f8818a08976e6eaa` (PR #14);
+- CI: `startup-link-check-contract` and `offline-regression` passed before merge;
+- Windows scheduled task: `S100P-NAS-OpenClaw-LinkCheck`, still using the established highest-privilege task and the canonical `F:\Project\Digua\scripts\startup_link_check\S100P-NAS-LinkCheck.ps1` path;
+- production run: 2026-07-17 16:31:12–16:32:10, final `status=OK`, with all Windows, SSH, clock, network, NAS, storage and OpenClaw gates true;
+- runtime SHA-256: PowerShell `143F8008F1A334494473336EB96CFF9DD6EBF2C1A8A1D2367A41D52A3097A0B1`, config `8CB2FFE177A5EAB923F71D96473372D647DF902876F452361B84600D549E7313`, remote shell check `43E8965EC66E774B62085BB414D230E760F496B96030FB397A56A78F982C1FC6`;
+- rollback point: main revision `49c8cf9`; restore the three startup-check runtime files from that revision and restart the scheduled task.
+
 ## Residual warning
 
-The S100P root filesystem was 96% used with about 2.1 GB available. This did not block the link acceptance, but it remains an operational warning and should be handled through the repository's read-only-first storage cleanup workflow before it reaches the 98% failure threshold.
+The final S100P check showed the root filesystem at 95% used with about 2.2 GB available; the NAS was 15% used. This did not block the link acceptance, but the root filesystem remains an operational warning and should be handled through the repository's read-only-first storage cleanup workflow before it reaches the 98% failure threshold.
+
+No Gateway listener was exposed to the public network, NAS access remained limited to the existing `/OpenClawWorkspace` export, and no robot-control permission was added. GPT Pro review is optional for architecture review and is not required for this operational acceptance.
