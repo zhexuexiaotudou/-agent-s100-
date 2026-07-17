@@ -1,8 +1,7 @@
 [Unit]
 Description=Digua AI-NAS remote identity ingress (disabled by default)
-After=network-online.target openclaw-gateway.service
+After=network-online.target
 Wants=network-online.target
-Requires=openclaw-gateway.service
 
 [Service]
 Type=simple

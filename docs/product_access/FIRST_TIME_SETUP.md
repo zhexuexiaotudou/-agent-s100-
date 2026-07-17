@@ -8,4 +8,12 @@
 6. 手机连接相同 LAN，打开 `http://digua.local/setup` 或备用 `http://<S100P-IP>/setup`，输入 claim code 并创建首个管理员。
 7. 成功后 claim 立即失效。再执行 `digua-doctor` 与验证包。
 
+如果 S100P 已经在 `127.0.0.1:8765` 运行现有门户、并且现有 OpenClaw/Qwen systemd 单元不得被替换，使用共存模式：
+
+```bash
+sudo deploy/product_access/install.sh --access-only --service-user sunrise
+```
+
+该模式只安装产品访问层、设备本地身份副本、LAN/PWA 与远程入口单元；不会安装、覆盖、启停 `openclaw-gateway.service`、`qwen25-local-openai-gateway.service` 或索引服务。
+
 若 claim 丢失且仍无用户，在 S100P 控制台运行 `digua-access claim-create --qr-out /var/lib/digua-ai-nas/claim-qr.svg`。已有用户时该命令拒绝生成新 claim。

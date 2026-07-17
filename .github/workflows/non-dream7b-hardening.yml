@@ -57,6 +57,16 @@ jobs:
         run: bash -n release/install/*.sh deploy/product_access/*.sh validation/product_access_s100p/*.sh
       - name: Simulate clean S100P and NAS installation
         run: python gates/stage10_release_clean_install_gate.py --report-root "${{ runner.temp }}/digua-clean-install"
+      - name: Simulate access-only coexistence installation
+        shell: bash
+        run: |
+          set -euo pipefail
+          root="${RUNNER_TEMP}/digua-access-only"
+          bash release/install/install_product_access_only.sh --simulate-root "$root" --source-root "$PWD" --service-user sunrise
+          test -f "$root/etc/systemd/system/digua-product-access.service"
+          test -f "$root/etc/systemd/system/digua-product-remote-ingress.service"
+          test ! -e "$root/etc/systemd/system/openclaw-gateway.service"
+          test ! -e "$root/etc/systemd/system/qwen25-local-openai-gateway.service"
       - name: Build model-free release package
         run: python scripts/build_release.py --version ci-${{ github.sha }} --out "${{ runner.temp }}/digua-release"
       - name: Build and self-check product access delivery
