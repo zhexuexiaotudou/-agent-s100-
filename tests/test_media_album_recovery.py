@@ -1,3 +1,4 @@
+import ast
 import json
 import sys
 import tempfile
@@ -93,6 +94,10 @@ class MediaAlbumRecoveryTest(unittest.TestCase):
         self.assertIn("const PREVIEW_HYDRATION_CONCURRENCY = 4", source)
         self.assertIn("const immediate = images.slice(0, 6)", source)
         self.assertIn('target_dir: "Photos/Uploads"', source)
+
+    def test_portal_runtime_parses_with_s100p_python_311_grammar(self):
+        source = (PROBES_ROOT / "ai_nas_operator_portal_server.py").read_text(encoding="utf-8")
+        ast.parse(source, filename="ai_nas_operator_portal_server.py", feature_version=(3, 11))
 
 
 if __name__ == "__main__":
