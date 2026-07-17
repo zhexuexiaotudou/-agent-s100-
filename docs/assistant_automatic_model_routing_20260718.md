@@ -80,8 +80,10 @@ MiniMax 不是“复杂任务的默认大模型”。只有策略同时确认 `p
 - 模型始终没有任意 shell、路径或 NAS 工具执行权。
 - 当前复杂多文档 Workspace 仍使用既有本地文档 RAG 回答链；本次没有把它改成 7B 多文档
   合并器。7B 当前覆盖本地复杂通用推理以及 MiniMax 失败回落，避免把规划能力写成已实现事实。
-- 当前 MiniMax bridge 是准确性优先的一次性 OpenClaw infer 调用，不等同于 OpenClaw 原生会话的
-  流式事件和连续会话状态。
+- 当前 MiniMax bridge 为每个符合条件的公开时效性任务创建独立 OpenClaw `web-research` agent
+  turn。该 agent 只能看到 `web_search`、`web_fetch`、`tavily_search` 和 `tavily_extract`，必须
+  实际完成至少一次联网工具调用才能返回成功；它不具备 shell、文件、NAS、消息或浏览器工具。
+  这仍是非流式的一次性门户响应，不等同于 OpenClaw 原生对话框的连续会话事件流。
 
 ## 验收与回滚
 

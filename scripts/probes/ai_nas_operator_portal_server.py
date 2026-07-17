@@ -5922,7 +5922,16 @@ class PortalState:
         )
         if not result.get("ok"):
             return self._copilot_attach_router(HTTPStatus.BAD_GATEWAY, {"ok": False, "error": "cloud_overflow_failed", "upstream": result}, router)
-        content, _metadata, upstream = chat_completion_content(result)
+        content, cloud_metadata, upstream = chat_completion_content(result)
+        web_research = {
+            "transport": str(cloud_metadata.get("transport") or ""),
+            "agent": str(cloud_metadata.get("agent") or ""),
+            "web_search_used": bool(cloud_metadata.get("web_search_used")),
+            "tools": [str(name) for name in (cloud_metadata.get("web_tools") or []) if str(name)],
+            "tool_calls": int(cloud_metadata.get("web_tool_calls") or 0),
+            "tool_failures": int(cloud_metadata.get("web_tool_failures") or 0),
+            "sources": [str(url) for url in (cloud_metadata.get("sources") or []) if str(url)],
+        }
         payload = {
             "ok": True,
             "assistant_mode": "cloud_overflow_chat",
@@ -5932,9 +5941,16 @@ class PortalState:
             "reported_model": upstream.get("model") or None,
             "elapsed_ms": result.get("elapsed_ms"),
             "cloud_used": True,
+            "web_research": web_research,
             "qwen_execution_authority": False,
             "nas_action": {"operation": "cloud_overflow", "status": "completed", "qwen_execution_authority": False},
-            "audit": {"cloud_payload_sent": True, "privacy_level": "none", "qwen_execution_authority": False},
+            "audit": {
+                "cloud_payload_sent": True,
+                "privacy_level": "none",
+                "qwen_execution_authority": False,
+                "web_search_used": web_research["web_search_used"],
+                "web_tool_calls": web_research["tool_calls"],
+            },
         }
         return self._copilot_attach_router(HTTPStatus.OK, payload, router, assistant_mode="cloud_overflow_chat")
 
@@ -6608,9 +6624,9 @@ class PortalState:
                     assistant_model_call(
                         stage="response_generation",
                         model=str(plan.get("model") or MINIMAX_MODEL),
-                        provider="openclaw_minimax",
+                        provider="openclaw_minimax_agent" if (payload.get("web_research") or {}).get("web_search_used") else "openclaw_minimax",
                         location="controlled_cloud",
-                        purpose="public_complex_answer",
+                        purpose="public_current_web_research" if (payload.get("web_research") or {}).get("web_search_used") else "public_complex_answer",
                         elapsed_ms=payload.get("elapsed_ms"),
                     )
                 )

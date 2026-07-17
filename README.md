@@ -424,7 +424,8 @@ Recommended one-line pitch:
 | `scripts/probes/qwen25_ai_nas_acceptance_packet.py` | Qwen AI-NAS acceptance packet generator |
 | `scripts/probes/ai_nas_openclaw_nas_control_gate_probe.py` | OpenClaw NAS control, ACL, and destructive-action gate |
 | `scripts/probes/ai_nas_operator_portal_server.py` | AI-NAS Web OS / operator portal server |
-| `scripts/probes/openclaw_cloud_inference_bridge.py` | Loopback-only authenticated adapter from portal cloud overflow to the fixed OpenClaw MiniMax provider |
+| `scripts/probes/openclaw_cloud_inference_bridge.py` | Loopback-only authenticated adapter from eligible portal requests to the web-only OpenClaw `web-research` agent and MiniMax provider |
+| `scripts/production/configure_openclaw_web_research_agent.sh` | Idempotently creates the isolated OpenClaw web agent and enforces its four-tool search/extract allowlist |
 | `scripts/product_smoke_test.py` | Product-level live HTTP smoke gate for `/api/product/status`, evidence, YOLO, multimodal, and harness boundaries |
 | `gates/stage7_ai_space_product_delivery_gate.py` | Aggregate product gate for live CLIP, person attributes, AI Space, smart classification, and subtitle extraction |
 | `src/person_attribute/` | Local-only non-identifying person attribute search |

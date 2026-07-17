@@ -341,12 +341,22 @@ class CopilotLocalQwenChatTest(unittest.TestCase):
                 "AI_NAS_CLOUD_CHAT_MODEL": "custom-gateway/MiniMax-M2.7",
                 "AI_NAS_CLOUD_CHAT_TOKEN_FILE": str(token_file),
             }
+            bridge_answer = self.fake_qwen("MiniMax answer.", model="MiniMax-M2.7")
+            bridge_answer["payload"]["choices"][0]["message"]["metadata"] = {
+                "transport": "openclaw_agent",
+                "agent": "web-research",
+                "web_search_used": True,
+                "web_tools": ["tavily_search"],
+                "web_tool_calls": 1,
+                "web_tool_failures": 0,
+                "sources": ["https://example.com/current"],
+            }
             with patch.dict(os.environ, env, clear=False):
                 with patch(
                     "ai_nas_operator_portal_server.http_post_json",
                     side_effect=[
                         self.fake_router(route="cloud", privacy_level="none", task_complexity="complex"),
-                        self.fake_qwen("MiniMax answer.", model="MiniMax-M2.7"),
+                        bridge_answer,
                     ],
                 ) as post_json:
                     status, payload = state.copilot_chat(
@@ -358,7 +368,10 @@ class CopilotLocalQwenChatTest(unittest.TestCase):
             self.assertTrue(payload["cloud_used"])
             self.assertEqual(payload["selected_workspace"], "web_cloud_research")
             self.assertEqual(payload["model_routing"]["effective_answer_model"], "custom-gateway/MiniMax-M2.7")
-            self.assertEqual(payload["model_routing"]["calls"][-1]["provider"], "openclaw_minimax")
+            self.assertEqual(payload["model_routing"]["calls"][-1]["provider"], "openclaw_minimax_agent")
+            self.assertEqual(payload["model_routing"]["calls"][-1]["purpose"], "public_current_web_research")
+            self.assertTrue(payload["web_research"]["web_search_used"])
+            self.assertEqual(payload["web_research"]["sources"], ["https://example.com/current"])
             self.assertEqual(payload["routing_decision"]["selected_route"], "CLOUD_MINIMAX")
             self.assertEqual(payload["routing_decision"]["privacy_level"], 0)
             self.assertEqual(payload["routing_decision"]["complexity"], 2)
@@ -552,7 +565,17 @@ class CopilotLocalQwenChatTest(unittest.TestCase):
                 "AI_NAS_CLOUD_CHAT_TIMEOUT_SECONDS": "220",
             }
             with patch.dict(os.environ, env, clear=False):
-                with patch("ai_nas_operator_portal_server.http_post_json", return_value=self.fake_qwen("MiniMax through OpenClaw.")) as post_json:
+                bridge_result = self.fake_qwen("MiniMax through OpenClaw.")
+                bridge_result["payload"]["choices"][0]["message"]["metadata"] = {
+                    "transport": "openclaw_agent",
+                    "agent": "web-research",
+                    "web_search_used": True,
+                    "web_tools": ["tavily_search", "tavily_extract"],
+                    "web_tool_calls": 2,
+                    "web_tool_failures": 0,
+                    "sources": ["https://example.com/source"],
+                }
+                with patch("ai_nas_operator_portal_server.http_post_json", return_value=bridge_result) as post_json:
                     status, payload = state._copilot_cloud_overflow("Explain a public topic.", {"username": "admin"}, router)
 
             self.assertEqual(status, 200)
@@ -561,6 +584,11 @@ class CopilotLocalQwenChatTest(unittest.TestCase):
             self.assertEqual(post_json.call_args.kwargs["headers"], {"Authorization": "Bearer local-bridge-secret"})
             self.assertEqual(post_json.call_args.kwargs["timeout"], 220)
             self.assertNotIn("local-bridge-secret", json.dumps(payload))
+            self.assertEqual(payload["web_research"]["agent"], "web-research")
+            self.assertTrue(payload["web_research"]["web_search_used"])
+            self.assertEqual(payload["web_research"]["tool_calls"], 2)
+            self.assertEqual(payload["web_research"]["sources"], ["https://example.com/source"])
+            self.assertTrue(payload["audit"]["web_search_used"])
 
     def test_http_post_json_returns_structured_timeout_error(self):
         with patch("ai_nas_operator_portal_server.urllib.request.urlopen", side_effect=TimeoutError("timed out")):

@@ -580,6 +580,7 @@
     const mode = String(copilot?.assistant_mode || "").toLowerCase();
     const route = String(copilot?.route || "").toLowerCase();
     const action = copilot?.nas_action || {};
+    if (copilot?.web_research?.web_search_used) return "OpenClaw 联网检索";
     if (mode.startsWith("local_storage") || route.startsWith("local_storage") || ["inventory", "list", "inspect", "storage_status"].includes(action.operation)) return "本地文件服务";
     if (mode === "local_ai_album_category_search" || route.includes("album_primary")) return "本地相册分类检索";
     if (mode === "local_yolo_search" || mode === "local_multimodal_search" || route.includes("yolo") || route.includes("multimodal")) return "本地多模态检索";
