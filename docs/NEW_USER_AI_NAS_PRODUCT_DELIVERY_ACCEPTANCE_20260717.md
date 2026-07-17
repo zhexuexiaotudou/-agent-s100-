@@ -135,3 +135,36 @@ PASS：`uname`、`architecture`、`network`、`address`、`nas_mount`、
    身份两条路径。
 3. 在维护窗口执行一次 NAS 断电降级/恢复和访问层回滚演练。
 4. 单独刷新 `operator_portal_contract` 报告，确认历史失败载荷不再被健康页选中。
+
+## 最终主分支收口补充（2026-07-18）
+
+上述 `3ea55747` 是完成第二次真实重启验收时的精确运行快照。随后合入的身份同步、
+相册预览兼容和 Python 3.10 兼容修复已形成最终主分支交付基线：
+
+| 项目 | 最终值 |
+| --- | --- |
+| 主分支 commit | `53649a86950ec1f381c5517d8a1f3948ac5b2cf5` |
+| 发布目录 | `/opt/digua-ai-nas/releases/0.2.0-53649a86` |
+| tar.gz SHA256 | `ce4a6c0b7abc97ea107e947d57ee0c1e598ec17dd63d1a17e170dd399d76698d` |
+| 发布清单 | 423 个文件，`forbidden_file_count=0`，四项 self-check 全为 true |
+| 最终访问层回滚点 | `/var/backups/digua-ai-nas/access-only-20260717T165427Z` |
+| 本地回归 | 176 项测试通过 |
+
+最终 access-only 升级报告继续确认 `existing_backend_preserved=true`、
+`backend_units_touched=[]`。发布目录中的 `security.py`、`server.py` 和前端脚本与
+`/opt/digua-ai-nas/app` 逐字节一致；身份、媒体和门户工具与
+`/mnt/nas/openclaw/scripts/probes` 的实际运行副本逐字节一致；OpenClaw 单元与
+用户级在用单元一致。`/opt/digua-ai-nas/app/scripts/probes` 不是 access-only 安装器
+管理的 NAS 工具目标，不能用该遗留路径代替实际 NAS 工作区做一致性判定。
+
+PR #46 增加了发布包内全部 Python 文件的 Python 3.10 语法 gate，修复了 S100P
+Python 3.10 不接受的较新 f-string 写法。最终发布目录及 NAS 工作区中的门户脚本均在
+板端 Python 3.10 实际编译通过。最终发布目录再次执行 S100P 验证套件，18 项全部
+PASS；四个板端健康端点和四个 Windows LAN 入口均返回 HTTP 200。只读发现仍只要求
+`allowed_share_scope_confirmation`，并确认未尝试凭据、未执行挂载、未扫描子网、未
+改变状态。最终发布目录的云模式隔离安装 gate 也通过；它仍不等同于真实云 API 调用
+验收。
+
+本次最终 access-only 升级没有修改 systemd 单元；此前两次真实重启的持久化证据仍
+适用。物理手机认领、NAS 断电、真实云服务调用、远程拒绝路径和回滚实际执行等现场
+边界保持不变。
