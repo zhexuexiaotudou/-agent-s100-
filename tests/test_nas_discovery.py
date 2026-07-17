@@ -17,12 +17,20 @@ class NasDiscoveryTest(unittest.TestCase):
             DISCOVERY.parse_avahi("=;eth0;IPv4;NAS;_http._tcp;local;nas.local;192.168.1.20;5000;\n"),
             ["192.168.1.20"],
         )
+        self.assertEqual(
+            DISCOVERY.parse_local_addresses('[{"ifname":"eth0","addr_info":[{"local":"192.168.1.10"},{"local":"fe80::1"}]}]'),
+            ["192.168.1.10", "fe80::1"],
+        )
         self.assertEqual(DISCOVERY.parse_nfs_exports("Export list for nas:\n/OpenClawWorkspace 192.168.1.0/24\n"), ["/OpenClawWorkspace"])
         self.assertEqual(DISCOVERY.parse_smb_shares("Disk|OpenClawWorkspace|AI files\nIPC|IPC$|IPC\n"), ["OpenClawWorkspace"])
+        mounts, hosts = DISCOVERY.parse_mounts('{"filesystems":[{"source":"192.168.1.20:/OpenClawWorkspace","target":"/mnt/nas/openclaw","fstype":"nfs4"}]}')
+        self.assertEqual(hosts, ["192.168.1.20"])
+        self.assertEqual(mounts[0]["protocol"], "nfs")
 
     def test_single_nfs_candidate_is_recommended_without_login(self):
         outputs = {
             ("findmnt", "-J", "-t", "nfs,nfs4,cifs", "-o", "SOURCE,TARGET,FSTYPE"): '{"filesystems":[]}',
+            ("ip", "-j", "address", "show"): "[]",
             ("ip", "neigh", "show"): "192.168.1.20 dev eth0 REACHABLE\n",
             ("avahi-browse", "-artp"): "",
             ("showmount", "-e", "192.168.1.20"): "Export list:\n/OpenClawWorkspace 192.168.1.0/24\n",
@@ -43,6 +51,7 @@ class NasDiscoveryTest(unittest.TestCase):
     def test_ambiguous_candidates_require_user_selection(self):
         outputs = {
             ("findmnt", "-J", "-t", "nfs,nfs4,cifs", "-o", "SOURCE,TARGET,FSTYPE"): '{"filesystems":[]}',
+            ("ip", "-j", "address", "show"): "[]",
             ("ip", "neigh", "show"): "192.168.1.20 dev eth0 STALE\n192.168.1.30 dev eth0 REACHABLE\n",
             ("avahi-browse", "-artp"): "",
         }
@@ -53,6 +62,7 @@ class NasDiscoveryTest(unittest.TestCase):
     def test_management_page_alone_is_not_a_safe_mount_recommendation(self):
         outputs = {
             ("findmnt", "-J", "-t", "nfs,nfs4,cifs", "-o", "SOURCE,TARGET,FSTYPE"): '{"filesystems":[]}',
+            ("ip", "-j", "address", "show"): "[]",
             ("ip", "neigh", "show"): "192.168.1.20 dev eth0 REACHABLE\n",
             ("avahi-browse", "-artp"): "",
         }
@@ -62,6 +72,23 @@ class NasDiscoveryTest(unittest.TestCase):
         )
         self.assertFalse(result["recommendation"]["automatic_selection_safe"])
         self.assertIn("nas_ip_or_hostname", result["user_required"])
+
+    def test_local_addresses_and_unenumerated_smb_hosts_do_not_create_ambiguity(self):
+        outputs = {
+            ("findmnt", "-J", "-t", "nfs,nfs4,cifs", "-o", "SOURCE,TARGET,FSTYPE"): '{"filesystems":[]}',
+            ("ip", "-j", "address", "show"): '[{"ifname":"eth0","addr_info":[{"local":"192.168.1.10"}]}]',
+            ("ip", "neigh", "show"): "192.168.1.10 dev eth0 REACHABLE\n192.168.1.20 dev eth0 REACHABLE\n192.168.1.30 dev eth0 REACHABLE\n",
+            ("avahi-browse", "-artp"): "",
+            ("showmount", "-e", "192.168.1.20"): "Export list:\n/OpenClawWorkspace 192.168.1.0/24\n",
+            ("smbclient", "-g", "-N", "-L", "192.168.1.30"): "",
+        }
+        result = DISCOVERY.discover(
+            runner=lambda command, _: outputs.get(tuple(command), ""),
+            connector=lambda host, port, _: (host, port) in {("192.168.1.20", 2049), ("192.168.1.30", 445)},
+        )
+        self.assertEqual([item["host"] for item in result["candidates"]], ["192.168.1.20", "192.168.1.30"])
+        self.assertEqual(result["recommendation"]["host"], "192.168.1.20")
+        self.assertTrue(result["recommendation"]["automatic_selection_safe"])
 
 
 if __name__ == "__main__":

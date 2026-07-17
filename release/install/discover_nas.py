@@ -72,6 +72,20 @@ def parse_neighbours(text: str) -> list[str]:
     return list(dict.fromkeys(hosts))
 
 
+def parse_local_addresses(text: str) -> list[str]:
+    hosts: list[str] = []
+    try:
+        payload = json.loads(text) if text.strip() else []
+    except json.JSONDecodeError:
+        return hosts
+    for interface in payload if isinstance(payload, list) else []:
+        for item in interface.get("addr_info", []) if isinstance(interface, dict) else []:
+            host = safe_host(str(item.get("local") or "")) if isinstance(item, dict) else None
+            if host:
+                hosts.append(host)
+    return list(dict.fromkeys(hosts))
+
+
 def parse_avahi(text: str) -> list[str]:
     hosts: list[str] = []
     for line in text.splitlines():
@@ -111,7 +125,8 @@ def parse_mounts(text: str) -> tuple[list[dict[str, str]], list[str]]:
         if fstype == "cifs" and source.startswith("//"):
             host = source[2:].split("/", 1)[0]
         checked = safe_host(host) if host else None
-        mounts.append({"source": source, "target": target, "fstype": fstype})
+        protocol = "nfs" if fstype.startswith("nfs") else ("smb" if fstype == "cifs" else "")
+        mounts.append({"source": source, "target": target, "fstype": fstype, "host": checked or "", "protocol": protocol})
         if checked:
             hosts.append(checked)
     return mounts, list(dict.fromkeys(hosts))
@@ -162,7 +177,9 @@ def recommendation(candidates: list[dict[str, Any]]) -> dict[str, Any]:
     usable = [
         item
         for item in candidates
-        if {"nfs", "smb"}.intersection(item.get("services") or [])
+        if item.get("existing_mount")
+        or ("nfs" in (item.get("services") or []) and bool(item.get("nfs_exports")))
+        or ("smb" in (item.get("services") or []) and bool(item.get("smb_guest_shares")))
     ]
     selected = usable[0] if len(usable) == 1 else None
     protocol = ""
@@ -196,15 +213,21 @@ def discover(
     started = time.time()
     mount_text = runner(["findmnt", "-J", "-t", "nfs,nfs4,cifs", "-o", "SOURCE,TARGET,FSTYPE"], 4.0)
     mounts, mount_hosts = parse_mounts(mount_text)
+    local_hosts = set(parse_local_addresses(runner(["ip", "-j", "address", "show"], 4.0)))
     neighbour_hosts = parse_neighbours(runner(["ip", "neigh", "show"], 4.0))
     avahi_hosts = parse_avahi(runner(["avahi-browse", "-artp"], 6.0))
     requested = [host for value in (explicit_hosts or []) if (host := safe_host(value))]
-    hosts = list(dict.fromkeys([*requested, *mount_hosts, *avahi_hosts, *neighbour_hosts]))[:16]
+    hosts = [
+        host
+        for host in dict.fromkeys([*requested, *mount_hosts, *avahi_hosts, *neighbour_hosts])
+        if host not in local_hosts or host in requested or host in mount_hosts
+    ][:16]
 
     candidates: list[dict[str, Any]] = []
     for host in hosts:
         open_ports = [port for port in PORTS if connector(host, port, timeout)]
-        services = [PORTS[port] for port in open_ports]
+        mounted_protocols = [item["protocol"] for item in mounts if item.get("host") == host and item.get("protocol")]
+        services = list(dict.fromkeys([*[PORTS[port] for port in open_ports], *mounted_protocols]))
         nfs_exports = parse_nfs_exports(runner(["showmount", "-e", host], 5.0)) if 2049 in open_ports else []
         smb_shares = parse_smb_shares(runner(["smbclient", "-g", "-N", "-L", host], 6.0)) if 445 in open_ports else []
         manager_urls = []
@@ -215,6 +238,8 @@ def discover(
             {
                 "host": host,
                 "source": "explicit" if host in requested else "passive_local_state",
+                "existing_mount": host in mount_hosts,
+                "mounted_protocols": mounted_protocols,
                 "open_ports": open_ports,
                 "services": services,
                 "vendor_hint": vendor_hint(services),
