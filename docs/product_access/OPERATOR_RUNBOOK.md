@@ -2,7 +2,7 @@
 
 ## 日常
 
-检查 `digua-doctor`、`/healthz`、`/readyz`、NAS mount、Qwen 与门户服务。使用 `digua-access status/endpoints` 查看非秘密配置。任何实际变更写入 `reports/access/raw/command_execution_log.jsonl`，但不得记录密码、Cookie、Authorization、claim 或 tunnel credential。
+检查 `digua-doctor`、`/healthz`、`/readyz`、NAS mount、Qwen 与门户服务。使用 `digua-access status/endpoints` 查看非秘密配置。任何实际变更写入 `reports/access/command_execution_log.jsonl`，原始脱敏摘要与截图放在 `reports/access/raw/`；不得记录密码、Cookie、Authorization、claim 或 tunnel credential。
 
 ## 远程启停
 

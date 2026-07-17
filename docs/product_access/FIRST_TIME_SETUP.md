@@ -1,8 +1,8 @@
 # 首次部署与认领
 
 1. S100P 与 NAS 通电并接入同一路由器，确认 NAS 共享与模型路径。
-2. 在 S100P 执行 `sudo deploy/product_access/preflight.sh`。
-3. 执行 `sudo deploy/product_access/install.sh`，按向导逐项输入 NAS 地址、共享目录和现有模型路径；密码不会写入报告。
+2. 在 S100P 的解压交付目录执行 `sudo bash deploy/product_access/preflight.sh`。
+3. 执行 `sudo bash deploy/product_access/install.sh`，按向导逐项输入 NAS 地址、共享目录和现有模型路径；密码不会写入报告。
 4. 安装器初始化设备身份、systemd、Avahi、空用户库和访问状态库，不创建默认管理员，也不启用远程访问。
 5. 控制台只显示一次 claim code，并生成 `/var/lib/digua-ai-nas/claim-qr.svg` 与 `access-card.html`。普通报告不保存 claim 明文。
 6. 手机连接相同 LAN，打开 `http://digua.local/setup` 或备用 `http://<S100P-IP>/setup`，输入 claim code 并创建首个管理员。
@@ -11,7 +11,7 @@
 如果 S100P 已经在 `127.0.0.1:8765` 运行现有门户、并且现有 OpenClaw/Qwen systemd 单元不得被替换，使用共存模式：
 
 ```bash
-sudo deploy/product_access/install.sh --access-only --service-user sunrise
+sudo bash deploy/product_access/install.sh --access-only --service-user sunrise
 ```
 
 该模式只安装产品访问层、设备本地身份副本、LAN/PWA 与远程入口单元；不会安装、覆盖、启停 `openclaw-gateway.service`、`qwen25-local-openai-gateway.service` 或索引服务。

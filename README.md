@@ -5,24 +5,29 @@ always-on AI-NAS gateway: OpenClaw provides the NAS-facing experience, Qwen runs
 locally on S100P, and an edge-cloud router decides when a request can leave the
 device.
 
-## Offline UI Workbench
+## UI and Product Access
 
-The preserved `/ui` redesign was completed locally on 2026-07-16 while S100P
-and NAS were offline. It keeps the native HTML/CSS/JS stack, routes, API calls,
-identity, ACL, controlled-copy, and soft-delete boundaries. The UI now defaults
-to a task-first dashboard, reports disconnected state without demo capacity or
-identity claims, groups desktop navigation, provides a five-item mobile bar
-with a complete “More” panel, and includes responsive, dark-mode, reduced-motion,
-and touch-target preflight coverage.
+The preserved `/ui` redesign was completed locally on 2026-07-16 and deployed
+to the powered S100P/NAS system on 2026-07-17. It keeps the native HTML/CSS/JS
+stack, routes, API calls, identity, ACL, controlled-copy, and soft-delete
+boundaries. The user entry point is now `http://digua.local/`, with
+`http://192.168.127.10/` as the verified fallback. The existing portal and Qwen
+services remain loopback-only on ports 8765 and 18080.
 
-Local UI evidence is recorded in
+The live acceptance covered mDNS and fallback access, authentication and roles,
+four mobile viewports, reboot recovery, Internet-route loss, NFS loss and
+recovery, timed network rollback, access-only rollback/upgrade, and secret-free
+QR/access-card generation. The current verdict is
+`product_access_lan_pass_remote_validation_pending`: Tailscale 1.98.9 is
+installed but still needs the owner's tailnet approval; Cloudflare remains the
+optional `configured_but_external_validation_pending` path. Physical-phone QR
+and HTTPS PWA installation are not claimed yet.
+
+Design history is recorded in
 [`docs/offline_ui_delivery_20260716.md`](docs/offline_ui_delivery_20260716.md).
-Real S100P/NAS functional acceptance and deployment remain explicitly deferred
-until both devices are online.
-
-The non-Dream7B implementation hardening and its deferred live acceptance gates
-are recorded in
-[`docs/non_dream7b_offline_hardening_20260716.md`](docs/non_dream7b_offline_hardening_20260716.md).
+Current architecture and gate evidence are in
+[`docs/product_access/PRODUCT_ACCESS_ARCHITECTURE.md`](docs/product_access/PRODUCT_ACCESS_ARCHITECTURE.md)
+and [`reports/access/40600_product_acceptance_gate.md`](reports/access/40600_product_acceptance_gate.md).
 
 ## Current Status
 
@@ -215,9 +220,12 @@ default, then generates the one-time LAN claim QR and access card. See
 
 The offline clean-install simulation is documented in
 [`docs/OFFLINE_DEPLOYMENT_WIZARD_20260717.md`](docs/OFFLINE_DEPLOYMENT_WIZARD_20260717.md).
-It explicitly reports `simulation=true` and `production_verified=false`; real
-S100P/NAS installation and reboot acceptance remain deferred until both devices
-are online.
+It explicitly reports `simulation=true` and `production_verified=false`. The
+non-destructive access-only coexistence install, upgrade, rollback, reboot, NAS
+mount and LAN acceptance have now passed on the real S100P/NAS system. A fully
+destructive clean install remains CI-simulated so the existing services,
+identity, indexes and NAS data are not erased merely to repeat first-install
+provisioning.
 
 Stage 10 safety boundary:
 
