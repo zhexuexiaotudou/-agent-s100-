@@ -217,9 +217,12 @@ sudo ./deploy/product_access/install.sh
 ```
 
 The product installer installs the required Ubuntu network/NAS helpers, runs
-preflight, asks for NAS and model paths, keeps remote access disabled by
+secret-free NAS discovery, asks only for values and authorization scope that
+cannot be proven automatically, supports local Qwen or an OpenAI-compatible
+cloud provider, keeps remote access and private raw cloud egress disabled by
 default, then generates the one-time LAN claim QR and access card. See
-[`docs/product_access/FIRST_TIME_SETUP.md`](docs/product_access/FIRST_TIME_SETUP.md).
+[`docs/product_access/FIRST_TIME_SETUP.md`](docs/product_access/FIRST_TIME_SETUP.md)
+and [`docs/NEW_USER_AI_NAS_DEPLOYMENT_CN.md`](docs/NEW_USER_AI_NAS_DEPLOYMENT_CN.md).
 
 The offline clean-install simulation is documented in
 [`docs/OFFLINE_DEPLOYMENT_WIZARD_20260717.md`](docs/OFFLINE_DEPLOYMENT_WIZARD_20260717.md).

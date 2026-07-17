@@ -1,0 +1,23 @@
+{
+  "nas_protocol": "nfs",
+  "nas_host": "192.168.1.20",
+  "nas_share": "/OpenClawWorkspace",
+  "mount_point": "/mnt/nas/openclaw",
+  "personal_root": "/mnt/nas/openclaw/Personal",
+  "install_root": "/opt/digua-ai-nas",
+  "systemd_mode": "system",
+  "service_user": "sunrise",
+  "claim_mode": true,
+  "model_mode": "cloud",
+  "cloud_base_url": "https://api.example.com/v1",
+  "cloud_model": "provider-model-id",
+  "cloud_api_key_env": "DIGUA_CLOUD_API_KEY",
+  "cloud_private_raw_egress": false,
+  "allow_insecure_cloud_endpoint": false,
+  "models": {
+    "DIGUA_CLIP_MODEL_DIR": "",
+    "DIGUA_YOLO_MODEL_PATH": "",
+    "DIGUA_OCR_MODEL_DIR": "",
+    "DIGUA_ASR_MODEL_DIR": ""
+  }
+}

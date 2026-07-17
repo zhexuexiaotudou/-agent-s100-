@@ -145,12 +145,24 @@ def main() -> int:
 
 
 def model_status() -> dict[str, Any]:
+    mode = os.environ.get("DIGUA_MODEL_MODE", "local")
     envs = [
         "DIGUA_QWEN_MODEL_DIR", "QWEN25_RUNTIME_BIN", "QWEN25_RUNTIME_CONFIG",
         "QWEN25_RUNTIME_LIB_DIR", "QWEN25_ACTIVE_HBM_PATH", "DIGUA_CLIP_MODEL_DIR",
         "DIGUA_YOLO_MODEL_PATH", "DIGUA_OCR_MODEL_DIR", "DIGUA_ASR_MODEL_DIR",
     ]
-    return {name: {"configured": bool(os.environ.get(name)), "exists": Path(os.environ.get(name, "")).exists() if os.environ.get(name) else False} for name in envs}
+    paths = {name: {"configured": bool(os.environ.get(name)), "exists": Path(os.environ.get(name, "")).exists() if os.environ.get(name) else False} for name in envs}
+    if mode == "cloud":
+        key_file = Path(os.environ.get("DIGUA_CLOUD_API_KEY_FILE", "")) if os.environ.get("DIGUA_CLOUD_API_KEY_FILE") else None
+        return {
+            "mode": "cloud",
+            "cloud_base_url_configured": bool(os.environ.get("DIGUA_CLOUD_BASE_URL")),
+            "cloud_model": os.environ.get("DIGUA_CLOUD_MODEL", ""),
+            "cloud_api_key_file_present": bool(key_file and key_file.is_file()),
+            "cloud_private_raw_egress": False,
+            "optional_local_features": paths,
+        }
+    return {"mode": "local", "paths": paths}
 
 
 def run_smoke(app_root: Path, base_url: str, report_root: Path, token: str) -> dict[str, Any]:

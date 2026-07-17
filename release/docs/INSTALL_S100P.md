@@ -23,7 +23,23 @@ tar -xzf /tmp/digua-ai-nas-s100p-0.2.0.tar.gz -C /tmp/digua-release
 cd /tmp/digua-release
 ```
 
-## 2. Prepare NAS and model inputs
+## 2. Discover the NAS and prepare only inputs that cannot be inferred
+
+The package can inspect existing mounts, passive neighbour/mDNS state and an
+explicitly supplied host without logging in, mounting, changing state or
+scanning a subnet:
+
+```bash
+python3 release/install/deploy_wizard.py --discover-only
+python3 release/install/discover_nas.py --host 192.168.1.20
+```
+
+The guide presents discovered candidates, NFS/SMB availability,
+guest-visible exports/shares and likely vendor management URLs. The user must
+still confirm the dedicated allowed share. If discovery cannot prove a value,
+the guide asks for the NAS IP/hostname, enabled protocol and export/share name.
+
+## 3. Prepare NAS authorization and a model provider
 
 Use a dedicated NAS export/share for Digua. Do not grant the application the
 whole NAS. For SMB, create the credentials file yourself and protect it:
@@ -38,7 +54,23 @@ The guide asks for the Qwen model directory, runtime executable, runtime config,
 runtime library directory and active HBM file. CLIP, YOLO, OCR and ASR are
 optional at install time and remain visibly degraded until configured.
 
-## 3. Run the guide
+Cloud mode instead uses an HTTPS OpenAI-compatible endpoint. Copy
+`release/configs/deploy.cloud.example.json`, set the base URL and model ID, and
+provide the API key only through the configured environment variable:
+
+```bash
+read -rsp 'Cloud API key: ' DIGUA_CLOUD_API_KEY; export DIGUA_CLOUD_API_KEY
+sudo -E python3 release/install/deploy_wizard.py \
+  --config release/configs/deploy.cloud.example.json --non-interactive --yes
+unset DIGUA_CLOUD_API_KEY
+```
+
+The key is written to a protected S100P-only file; it is never written into the
+deployment config, report, systemd unit or release archive. NAS-scoped and
+privacy-classified prompts are handled by local allowlisted tools and are not
+forwarded to the cloud provider.
+
+## 4. Run the guide
 
 System service mode is the recommended appliance mode. Run:
 
@@ -55,13 +87,14 @@ The administrator password is read with a hidden prompt, passed only through a
 process environment variable, and is never included in a command, report, unit
 file, or repository file. The guide performs these gates in order:
 
-1. strict S100P/BPU/systemd preflight;
-2. NAS reachability and actual NFS/CIFS mount with a managed `/etc/fstab` block;
-3. mounted source/type and writable Personal-root verification;
-4. required Qwen runtime/model path verification and environment generation;
-5. application copy, isolated venv and optional wheelhouse install;
-6. rendered loopback-only systemd units and service start;
-7. real identity-store administrator bootstrap and authenticated verification.
+1. secret-free NAS candidate discovery and explicit user scope approval;
+2. strict S100P/BPU/systemd preflight;
+3. NAS reachability and actual NFS/CIFS mount with a managed `/etc/fstab` block;
+4. mounted source/type and writable Personal-root verification;
+5. local-runtime paths or cloud-provider configuration verification;
+6. application copy, isolated venv and optional wheelhouse install;
+7. rendered loopback-only systemd units and service start;
+8. real identity-store administrator bootstrap and authenticated verification.
 
 The mount helper backs up `/etc/fstab` before replacing only the block between
 `# BEGIN DIGUA-AI-NAS` and `# END DIGUA-AI-NAS`. A local directory is rejected
@@ -73,7 +106,7 @@ directory and set `wheelhouse` in the guide JSON config. The installer then uses
 Start from `release/configs/deploy.example.json`; keep passwords out of that
 file and provide them only through the configured password environment variable.
 
-## 4. Access and verify
+## 5. Access and verify
 
 The services bind to S100P loopback. From the PC:
 

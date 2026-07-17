@@ -16,6 +16,8 @@ class ReleaseContractTest(unittest.TestCase):
             "scripts/probes/ai_nas_operator_portal_server.py",
             "scripts/probes/safety_attack_probe.py",
             "scripts/qwen25_openai_gateway.py",
+            "release/install/discover_nas.py",
+            "gates/stage10_release_cloud_install_gate.py",
             "src/product_jobs/worker.py",
             "web/ai_nas_desktop_v2.html",
         }

@@ -21,6 +21,11 @@ PASSWORD_ENV="DIGUA_ADMIN_PASSWORD"
 WHEELHOUSE=""
 SERVICE_USER="${SUDO_USER:-$(id -un)}"
 DEFER_ADMIN_CLAIM=0
+DISCOVERY_REPORT=""
+MODEL_MODE="local"
+CLOUD_BASE_URL=""
+CLOUD_MODEL=""
+ALLOW_INSECURE_CLOUD=0
 
 while [[ $# -gt 0 ]]; do
   case "$1" in
@@ -44,6 +49,11 @@ while [[ $# -gt 0 ]]; do
     --wheelhouse) WHEELHOUSE="${2:-}"; shift 2 ;;
     --service-user) SERVICE_USER="${2:-}"; shift 2 ;;
     --defer-admin-claim) DEFER_ADMIN_CLAIM=1; shift ;;
+    --discovery-report) DISCOVERY_REPORT="${2:-}"; shift 2 ;;
+    --model-mode) MODEL_MODE="${2:-}"; shift 2 ;;
+    --cloud-base-url) CLOUD_BASE_URL="${2:-}"; shift 2 ;;
+    --cloud-model) CLOUD_MODEL="${2:-}"; shift 2 ;;
+    --allow-insecure-cloud-endpoint) ALLOW_INSECURE_CLOUD=1; shift ;;
     *) printf 'unknown argument: %s\n' "$1" >&2; exit 2 ;;
   esac
 done
@@ -58,6 +68,7 @@ if [[ -n "$SIM_ROOT" ]]; then
   PERSONAL_ROOT="$MOUNT_POINT/Personal"
 fi
 [[ -n "$NAS_PROTOCOL" ]] || { printf '%s\n' 'missing required --nas-protocol (nfs, smb, or explicit local simulation)' >&2; exit 2; }
+[[ "$MODEL_MODE" == "local" || "$MODEL_MODE" == "cloud" ]] || { printf 'unsupported model mode: %s\n' "$MODEL_MODE" >&2; exit 2; }
 [[ "$SERVICE_USER" =~ ^[A-Za-z_][A-Za-z0-9_-]*$ ]] || { printf 'unsafe service user\n' >&2; exit 2; }
 for path_value in "$INSTALL_ROOT" "$MOUNT_POINT" "$PERSONAL_ROOT"; do
   [[ "$path_value" =~ ^/[A-Za-z0-9._/-]+$ ]] || { printf 'unsafe path value: %s\n' "$path_value" >&2; exit 2; }
@@ -68,6 +79,21 @@ TMP_DIR="$(mktemp -d)"
 chmod 711 "$TMP_DIR"
 trap 'rm -rf "$TMP_DIR"' EXIT
 blockers=()
+if [[ "$SIMULATION" == "0" && "$DRY_RUN" == "0" ]]; then
+  if [[ "$SYSTEMD_MODE" == "system" && "${EUID:-$(id -u)}" != "0" ]]; then blockers+=("system_mode_requires_root"); fi
+  if [[ "$SYSTEMD_MODE" == "user" && "${EUID:-$(id -u)}" == "0" ]]; then blockers+=("user_mode_must_not_run_as_root"); fi
+fi
+if [[ -n "$DISCOVERY_REPORT" ]]; then
+  [[ -f "$DISCOVERY_REPORT" ]] || blockers+=("discovery_report_missing")
+  if [[ -f "$DISCOVERY_REPORT" ]]; then
+    python3 - "$DISCOVERY_REPORT" <<'PY' || blockers+=("discovery_report_invalid")
+import json, sys
+payload = json.load(open(sys.argv[1], encoding="utf-8"))
+safety = payload.get("safety") or {}
+raise SystemExit(0 if payload.get("schema") == "digua_nas_discovery_v1" and safety.get("credentials_attempted") is False and safety.get("state_changed") is False else 1)
+PY
+  fi
+fi
 
 run_step() {
   local name="$1"; shift
@@ -106,14 +132,54 @@ if [[ "$SYSTEMD_MODE" == "system" ]]; then
 else
   ENV_FILE="$HOME/.config/digua-ai-nas/digua.env"
 fi
+export DIGUA_MODEL_MODE="$MODEL_MODE"
+CLOUD_API_KEY_FILE=""
+if [[ "$MODEL_MODE" == "cloud" ]]; then
+  [[ -n "$CLOUD_BASE_URL" ]] || blockers+=("cloud_base_url_missing")
+  [[ -n "$CLOUD_MODEL" ]] || blockers+=("cloud_model_missing")
+  if [[ "$CLOUD_BASE_URL" != https://* ]]; then
+    if [[ "$ALLOW_INSECURE_CLOUD" != "1" || "$CLOUD_BASE_URL" != http://* ]]; then
+      blockers+=("cloud_base_url_requires_https")
+    fi
+  fi
+  if ! DIGUA_VALIDATE_CLOUD_URL="$CLOUD_BASE_URL" python3 - <<'PY'
+import os
+from urllib.parse import urlparse
+p = urlparse(os.environ["DIGUA_VALIDATE_CLOUD_URL"])
+raise SystemExit(0 if p.scheme in {"http", "https"} and p.hostname and not p.username and not p.password and not p.fragment else 1)
+PY
+  then
+    blockers+=("cloud_base_url_invalid")
+  fi
+  [[ -n "${DIGUA_CLOUD_API_KEY:-}" ]] || blockers+=("cloud_api_key_missing")
+  CLOUD_API_KEY_FILE="$(dirname "$ENV_FILE")/cloud-api-key"
+  export DIGUA_CLOUD_BASE_URL="$CLOUD_BASE_URL"
+  export DIGUA_CLOUD_MODEL="$CLOUD_MODEL"
+  export DIGUA_CLOUD_API_KEY_FILE="$CLOUD_API_KEY_FILE"
+  export DIGUA_ALLOW_INSECURE_CLOUD_ENDPOINT="$ALLOW_INSECURE_CLOUD"
+  if [[ "$DRY_RUN" == "0" && "${#blockers[@]}" -eq 0 ]]; then
+    mkdir -p "$(dirname "$CLOUD_API_KEY_FILE")" || blockers+=("cloud_secret_directory_create_failed")
+    if [[ "${#blockers[@]}" -eq 0 ]]; then
+      (umask 077; printf '%s\n' "$DIGUA_CLOUD_API_KEY" > "$CLOUD_API_KEY_FILE") || blockers+=("cloud_secret_write_failed")
+    fi
+    if [[ "${#blockers[@]}" -eq 0 && "$SIMULATION" == "0" && "$SYSTEMD_MODE" == "system" ]]; then
+      service_group="$(id -gn "$SERVICE_USER" 2>/dev/null || true)"
+      [[ -n "$service_group" ]] || blockers+=("service_group_lookup_failed")
+      if [[ "${#blockers[@]}" -eq 0 ]]; then
+        chown root:"$service_group" "$CLOUD_API_KEY_FILE" || blockers+=("cloud_secret_owner_failed")
+        chmod 640 "$CLOUD_API_KEY_FILE" || blockers+=("cloud_secret_mode_failed")
+      fi
+    fi
+  fi
+fi
 access_state_dir="/var/lib/digua-ai-nas"
 [[ "$SIMULATION" == "1" ]] && access_state_dir="$SIM_ROOT/var/lib/digua-ai-nas"
-if [[ "$SIMULATION" == "0" && "$DRY_RUN" == "0" ]]; then
-  if [[ "$SYSTEMD_MODE" == "system" && "${EUID:-$(id -u)}" != "0" ]]; then blockers+=("system_mode_requires_root"); fi
-  if [[ "$SYSTEMD_MODE" == "user" && "${EUID:-$(id -u)}" == "0" ]]; then blockers+=("user_mode_must_not_run_as_root"); fi
-fi
 
-models_args=(bash "$ROOT_DIR/release/install/configure_models.sh" --model-manifest "$ROOT_DIR/release/configs/model_manifest.yaml" --env-out "$ENV_FILE")
+models_args=(bash "$ROOT_DIR/release/install/configure_models.sh" --model-manifest "$ROOT_DIR/release/configs/model_manifest.yaml" --env-out "$ENV_FILE" --model-mode "$MODEL_MODE")
+if [[ "$MODEL_MODE" == "cloud" ]]; then
+  models_args+=(--cloud-base-url "$CLOUD_BASE_URL" --cloud-model "$CLOUD_MODEL" --cloud-api-key-file "$CLOUD_API_KEY_FILE")
+  [[ "$ALLOW_INSECURE_CLOUD" == "1" ]] && models_args+=(--allow-insecure-cloud-endpoint)
+fi
 if [[ "$DRY_RUN" == "1" || "${#blockers[@]}" -gt 0 ]]; then models_args+=(--dry-run --strict); else models_args+=(--apply --strict); fi
 run_step models "${models_args[@]}"
 
@@ -212,7 +278,7 @@ fi
 [[ -f "$first_run_status" ]] || printf '{"ok":null,"status":"not_run"}\n' > "$first_run_status"
 
 BLOCKERS_JSON="$(printf '%s\n' "${blockers[@]}" | python3 -c 'import json,sys; print(json.dumps([x.strip() for x in sys.stdin if x.strip()]))')"
-BLOCKERS_JSON="$BLOCKERS_JSON" REPORT_DIR="$TMP_DIR" INSTALL_ROOT="$INSTALL_ROOT" MOUNT_POINT="$MOUNT_POINT" PERSONAL_ROOT="$PERSONAL_ROOT" ENV_FILE="$ENV_FILE" ADMIN_USERNAME="$ADMIN_USERNAME" python3 - <<PY > "$TMP_DIR/final.json"
+BLOCKERS_JSON="$BLOCKERS_JSON" REPORT_DIR="$TMP_DIR" INSTALL_ROOT="$INSTALL_ROOT" MOUNT_POINT="$MOUNT_POINT" PERSONAL_ROOT="$PERSONAL_ROOT" ENV_FILE="$ENV_FILE" ADMIN_USERNAME="$ADMIN_USERNAME" DISCOVERY_REPORT="$DISCOVERY_REPORT" MODEL_MODE="$MODEL_MODE" python3 - <<PY > "$TMP_DIR/final.json"
 import json, os
 root = os.environ["REPORT_DIR"]
 load = lambda name: json.load(open(os.path.join(root, name + ".json"), encoding="utf-8"))
@@ -221,15 +287,30 @@ blockers = json.loads(os.environ["BLOCKERS_JSON"])
 for name, result in steps.items():
     if result.get("ok") is False and f"{name}_failed" not in blockers:
         blockers.append(f"{name}_not_ok")
+discovery = {"used": False}
+if os.environ.get("DISCOVERY_REPORT"):
+    try:
+        raw = json.load(open(os.environ["DISCOVERY_REPORT"], encoding="utf-8"))
+        discovery = {
+            "used": True,
+            "schema": raw.get("schema"),
+            "discovery_status": raw.get("discovery_status"),
+            "candidate_count": len(raw.get("candidates") or []),
+            "user_required": raw.get("user_required") or [],
+            "safety": raw.get("safety") or {},
+        }
+    except Exception as exc:
+        discovery = {"used": True, "error": type(exc).__name__}
 payload = {
   "schema": "digua_clean_install_v2", "ok": not blockers, "dry_run": bool($DRY_RUN),
   "simulation": bool($SIMULATION), "production_verified": False,
   "install_root": os.environ["INSTALL_ROOT"], "nas_mount": os.environ["MOUNT_POINT"],
   "personal_root": os.environ["PERSONAL_ROOT"], "env_file": os.environ["ENV_FILE"],
+  "model_mode": os.environ["MODEL_MODE"], "cloud_private_raw_egress": False,
   "application_copied": os.path.isfile(os.path.join(os.environ["INSTALL_ROOT"], "app/scripts/probes/ai_nas_operator_portal_server.py")),
   "venv_created": os.path.isfile(os.path.join(os.environ["INSTALL_ROOT"], "venv/bin/python")),
   "system_python_modified": False, "public_exposure_enabled": False,
-  "steps": steps, "blockers": blockers,
+  "steps": steps, "discovery": discovery, "blockers": blockers,
   "next_commands": {
     "verify": ("complete LAN claim, then run digua-doctor and the validation bundle" if bool($DEFER_ADMIN_CLAIM) else "read -rsp 'Admin password: ' DIGUA_ADMIN_PASSWORD; export DIGUA_ADMIN_PASSWORD; python3 release/scripts/verify_install.py --username " + os.environ["ADMIN_USERNAME"]),
     "access": "http://digua.local/ (fallback: http://<S100P-LAN-IP>/)",

@@ -8,6 +8,8 @@ import re
 import subprocess
 import sys
 import time
+import urllib.error
+import urllib.request
 import uuid
 from datetime import datetime, timezone
 from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
@@ -248,8 +250,106 @@ def path_status(path: str | None) -> dict[str, Any]:
     return {"path": str(p), "exists": p.exists(), "is_file": p.is_file(), "is_dir": p.is_dir(), "executable": p.is_file() and os.access(p, os.X_OK), "size_bytes": p.stat().st_size if p.exists() and p.is_file() else 0}
 
 
+def model_mode() -> str:
+    return os.environ.get("DIGUA_MODEL_MODE", "local").strip().lower() or "local"
+
+
+def cloud_settings() -> dict[str, Any]:
+    key_file = Path(os.environ.get("DIGUA_CLOUD_API_KEY_FILE", "")) if os.environ.get("DIGUA_CLOUD_API_KEY_FILE") else None
+    key = ""
+    if key_file and key_file.is_file():
+        try:
+            key = key_file.read_text(encoding="utf-8").strip()
+        except OSError:
+            key = ""
+    return {
+        "base_url": os.environ.get("DIGUA_CLOUD_BASE_URL", "").strip().rstrip("/"),
+        "model": os.environ.get("DIGUA_CLOUD_MODEL", "").strip(),
+        "api_key": key,
+        "api_key_file_present": bool(key_file and key_file.is_file()),
+        "allow_insecure": os.environ.get("DIGUA_ALLOW_INSECURE_CLOUD_ENDPOINT") == "1",
+        "timeout": int(os.environ.get("DIGUA_CLOUD_TIMEOUT_SECONDS", "30")),
+    }
+
+
+def cloud_url(settings: dict[str, Any], suffix: str) -> str:
+    return str(settings["base_url"]).rstrip("/") + "/" + suffix.lstrip("/")
+
+
+def cloud_runtime_readiness(probe: bool = True) -> dict[str, Any]:
+    settings = cloud_settings()
+    missing = []
+    if not settings["base_url"]:
+        missing.append("cloud_base_url")
+    elif not str(settings["base_url"]).startswith("https://") and not settings["allow_insecure"]:
+        missing.append("cloud_https_required")
+    if not settings["model"]:
+        missing.append("cloud_model")
+    if not settings["api_key"]:
+        missing.append("cloud_api_key")
+    remote = {"ok": False, "status": "not_probed"}
+    if not missing and probe:
+        request = urllib.request.Request(
+            cloud_url(settings, "models"),
+            headers={"Accept": "application/json", "Authorization": f"Bearer {settings['api_key']}"},
+        )
+        try:
+            with urllib.request.urlopen(request, timeout=min(settings["timeout"], 10)) as response:
+                remote = {"ok": 200 <= response.status < 300, "status": response.status}
+        except urllib.error.HTTPError as exc:
+            remote = {"ok": False, "status": exc.code, "error": "cloud_models_http_error"}
+        except Exception as exc:
+            remote = {"ok": False, "error": f"{type(exc).__name__}:cloud_models_unreachable"}
+    ready = not missing and (remote.get("ok") is True if probe else True)
+    return {
+        "ok": ready,
+        "inference_ready": ready,
+        "missing": missing,
+        "mode": "cloud",
+        "model": settings["model"],
+        "base_url": settings["base_url"],
+        "api_key_file_present": settings["api_key_file_present"],
+        "api_key_redacted": True,
+        "remote_probe": remote,
+        "private_raw_cloud_egress": False,
+    }
+
+
+def cloud_prompt_allowed(prompt: str) -> tuple[bool, dict[str, Any]]:
+    classification = edge_cloud_route_classification(prompt)
+    allowed = classification.get("privacy_level") == "none" and not is_ai_nas_request(prompt)
+    return allowed, classification
+
+
+def call_cloud(payload: dict[str, Any]) -> dict[str, Any]:
+    settings = cloud_settings()
+    readiness = cloud_runtime_readiness(probe=False)
+    if not readiness["ok"]:
+        return {"ok": False, "status": 503, "error": "cloud_provider_not_configured", "readiness": readiness}
+    allowed_keys = {"messages", "prompt", "temperature", "top_p", "max_tokens", "stop", "response_format", "n"}
+    forwarded = {key: value for key, value in payload.items() if key in allowed_keys}
+    forwarded["model"] = settings["model"]
+    forwarded["stream"] = False
+    request = urllib.request.Request(
+        cloud_url(settings, "chat/completions"),
+        data=json.dumps(forwarded, ensure_ascii=False).encode("utf-8"),
+        headers={"Accept": "application/json", "Content-Type": "application/json", "Authorization": f"Bearer {settings['api_key']}"},
+        method="POST",
+    )
+    try:
+        with urllib.request.urlopen(request, timeout=settings["timeout"]) as response:
+            result = json.loads(response.read().decode("utf-8"))
+            return {"ok": 200 <= response.status < 300, "status": response.status, "payload": result, "api_key_redacted": True}
+    except urllib.error.HTTPError as exc:
+        return {"ok": False, "status": exc.code, "error": "cloud_chat_http_error", "api_key_redacted": True}
+    except Exception as exc:
+        return {"ok": False, "status": 502, "error": f"{type(exc).__name__}:cloud_chat_unreachable", "api_key_redacted": True}
+
+
 def runtime_readiness(policy: dict[str, Any]) -> dict[str, Any]:
     """Return process-independent readiness for the real S100P runtime."""
+    if model_mode() == "cloud":
+        return cloud_runtime_readiness()
     runtime = policy["official_runtime"]
     paths = {
         "runtime_bin": path_status(os.environ.get("QWEN25_RUNTIME_BIN", runtime["runtime_bin"])),
@@ -502,6 +602,19 @@ class Handler(BaseHTTPRequestHandler):
             return
         if self.path == "/health":
             readiness = runtime_readiness(policy)
+            if model_mode() == "cloud":
+                self.json_response(
+                    200 if readiness["ok"] else 503,
+                    {
+                        **readiness,
+                        "process_ok": True,
+                        "backend": "openai-compatible-cloud-proxy-plus-local-ai-nas-tools",
+                        "port": policy["gateway"]["port"],
+                        "tool_dispatcher": os.environ.get("QWEN25_TOOL_DISPATCHER", policy["ai_nas"]["tool_dispatcher"]),
+                        "report_root": os.environ.get("AI_NAS_REPORT_ROOT", policy["ai_nas"]["report_root"]),
+                    },
+                )
+                return
             self.json_response(
                 200 if readiness["ok"] else 503,
                 {
@@ -526,15 +639,16 @@ class Handler(BaseHTTPRequestHandler):
             )
             return
         if self.path == "/v1/models":
+            active_model = cloud_settings()["model"] if model_mode() == "cloud" else policy["model_id"]
             self.json_response(
                 200,
                 {
                     "object": "list",
                     "data": [
                         {
-                            "id": policy["model_id"],
+                            "id": active_model,
                             "object": "model",
-                            "owned_by": "local-s100p-official-qwen",
+                            "owned_by": "configured-cloud-provider" if model_mode() == "cloud" else "local-s100p-official-qwen",
                         }
                     ],
                 },
@@ -590,7 +704,7 @@ class Handler(BaseHTTPRequestHandler):
             for run in flow["tool_runs"]:
                 report_paths.extend(run["paths"])
             content = (
-                "Qwen2.5 official AI-NAS entry completed the NAS evidence flow. "
+                "Digua AI-NAS completed the local allowlisted NAS evidence flow. "
                 f"verdict={flow['verdict']}; reports={len(report_paths)}; "
                 f"gateway_md={paths.get('md', '')}"
             )
@@ -607,6 +721,26 @@ class Handler(BaseHTTPRequestHandler):
                     },
                 ),
             )
+            return
+        if model_mode() == "cloud":
+            allowed, classification = cloud_prompt_allowed(prompt)
+            if not allowed:
+                self.json_response(
+                    403,
+                    {
+                        "error": {
+                            "message": "Private or NAS-scoped prompts are not sent to the cloud provider.",
+                            "type": "cloud_private_egress_blocked",
+                            "classification": classification,
+                        }
+                    },
+                )
+                return
+            result = call_cloud(payload)
+            if result.get("ok"):
+                self.json_response(int(result.get("status") or 200), result["payload"])
+            else:
+                self.json_response(int(result.get("status") or 502), {"error": {"message": result.get("error"), "type": "cloud_provider_error"}})
             return
         runtime_result = run_qwen_runtime(policy, prompt)
         if not runtime_result.get("ok"):

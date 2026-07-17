@@ -37,6 +37,7 @@ DEFAULT_INCLUDE_ROOTS = [
     "gates/stage10_release_preflight_gate.py",
     "gates/stage10_release_installer_dry_run_gate.py",
     "gates/stage10_release_clean_install_gate.py",
+    "gates/stage10_release_cloud_install_gate.py",
     "gates/stage10_release_nas_mount_gate.py",
     "gates/stage10_release_product_smoke_gate.py",
     "gates/stage10_release_upgrade_rollback_gate.py",
