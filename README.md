@@ -406,8 +406,13 @@ Run these from `F:\Project\Digua` on the Windows host.
 
 ```powershell
 ssh -i C:\Users\zhexu\.ssh\s100p_linkcheck_ed25519 sunrise@192.168.127.10 `
-  'systemctl --user is-active openclaw-gateway.service; systemctl --user is-active qwen25-local-openai-gateway.service; curl -fsS http://127.0.0.1:8765/api/health; curl -fsS http://127.0.0.1:18080/health'
+  'systemctl --user is-active openclaw-gateway.service; systemctl is-active qwen25-local-openai-gateway.service || systemctl --user is-active qwen25-local-openai-gateway.service; ss -ltnp "sport = :18080"; curl -fsS http://127.0.0.1:8765/api/health; curl -fsS http://127.0.0.1:18080/health'
 ```
+
+Exactly one system- or user-scoped Qwen unit should own loopback port `18080`.
+If both scopes are started, resolve the duplicate ownership before treating unit
+status as production evidence; an HTTP 200 alone does not prove service-manager
+convergence.
 
 ```powershell
 py -3 scripts\probes\qwen25_ai_nas_acceptance_packet.py --out-root tmp\demo_three_features_final_recheck

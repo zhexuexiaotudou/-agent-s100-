@@ -12,5 +12,6 @@
 - 密码校验返回 200，但下一次文件请求立即返回 401：检查登录日志是否出现连续的 `POST /api/identity/login` 200 与 `GET /api/storage/list` 401。LAN HTTP 与远程 HTTPS 现在使用不同的 HttpOnly Cookie 名称，前端也显式携带同源凭据；旧版同名 Cookie 不再参与会话验证，部署后需要重新登录一次。
 - `/api/v1/auth/session` 已显示 `authenticated: true`，但 `/api/storage/list` 仍返回 `auth_required`：这不是 Cookie 丢失，而是 access-only 身份桥接与现有 NAS 门户身份运行时版本不一致。先运行 `release/install/sync_upstream_identity_runtime.sh --dry-run --source-root <merged-main>` 对比哈希；确认后以 S100P 服务用户执行 `--apply`。脚本只备份并更新 `ai_nas_identity.py`、重启用户级 `openclaw-gateway.service`，若重启、健康检查或哈希校验失败会自动恢复旧文件。
 - 登录与文件访问均正常，但 AI 助手返回 `local_qwen_chat_failed`：先检查用户级 `openclaw-gateway.service` 的 `--qwen-gateway-url` 与 `--openclaw-model-gateway-url`。生产基线为 `http://127.0.0.1:18080`，`8082` 是已退役路由。运行 `release/install/sync_openclaw_portal_unit.sh --dry-run --source-root <merged-main>` 核对差异与 Qwen 健康状态；确认后以 S100P 服务用户执行 `--apply`。脚本会先把旧 unit 备份到 NAS，只重载并重启用户级门户服务，任一服务或健康检查失败都会自动恢复旧 unit。
+- Qwen 的 system unit 与 user unit 同时出现 `active/activating`：用 `ss -ltnp 'sport = :18080'` 确认真实监听者，并分别检查 `systemctl status qwen25-local-openai-gateway.service` 与 `systemctl --user status qwen25-local-openai-gateway.service`。生产状态必须收敛为单一端口所有者；只看到 `/health` 200 不能证明重复 unit 已消失。不要同时重启两个 scope 争抢端口。
 - 网络变更后失联：等待自动回滚，或在控制台运行 `digua-access network-rollback <snapshot> --confirm 'ROLLBACK NETWORK CHANGE'`。
 - Cloudflare/Tailscale 未安装：状态为需要配置，不影响 LAN。
