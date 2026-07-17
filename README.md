@@ -37,8 +37,12 @@ photos under `Personal/Photos`, removes the legacy 24-photo intermediate state,
 loads previews with bounded concurrency, and rejects text placeholders that use
 image suffixes. A follow-up product-entry fix loads real NAS capacity on every
 authenticated route and permits the local `blob:` preview URLs required by the
-image viewer. Live counts, browser evidence, soft-delete evidence, and rollback
-points are recorded in
+image viewer. The product-access identity bridge now also tolerates short locks
+on the NAS-hosted identity database: established sessions avoid redundant
+per-request bridge validation, while a new bridge returns an explicit JSON 503
+instead of dropping the browser connection when the lock persists. Live counts,
+lock-contention evidence, soft-delete evidence, and rollback points are recorded
+in
 [`docs/album_preview_recovery_20260718.md`](docs/album_preview_recovery_20260718.md).
 
 ## Current Status
