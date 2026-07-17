@@ -105,6 +105,6 @@ phase2_compat_probe.json
 ## Risk and rollback
 
 - Dream7B paths now depend on the NAS mount. This matches the current production runtime design, but Dream7B experiments cannot use the compatibility path while NAS is unavailable.
-- The full pre-cutover payload remains under the immutable dated NAS archive path and must not be removed during routine NAS cleanup.
+- The full pre-cutover payload remains under the dated NAS archive path and must not be removed during routine NAS cleanup. The path is evidence-scoped, but no filesystem immutable attribute was applied.
 - To roll back, first confirm at least 26 GB of free root space, copy the archive to a temporary board-local directory, verify the same manifest, atomically replace the symlink with the verified local directory, and rerun the compatibility and service gates.
 - Gateway exposure, NAS allowlist scope, and robot-control permissions were unchanged.
