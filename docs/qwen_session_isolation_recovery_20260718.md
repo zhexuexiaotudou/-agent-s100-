@@ -49,6 +49,54 @@ cloud model.
 
 ## Deployment acceptance
 
-The merged revision, service hashes, rollback backup, and real S100P browser
-evidence will be recorded here after the required PR, CI, deployment, and live
-verification gates complete.
+Merged delivery:
+
+- Session isolation and deterministic identity response: PR #57, merge commit
+  `35d491f186b10b32f04324ad3a5f56e64218f9b8`.
+- Identity entry-point routing correction: PR #58, merge commit
+  `ae1de4cb994055d4c1704788a6336bba01ea7f75`.
+- Both PRs passed the required `offline-regression` and
+  `startup-link-check-contract` GitHub checks before merge.
+
+S100P deployment:
+
+- Qwen gateway SHA-256:
+  `80cb27ab109a376e56ed61684c063623c7d72798805770193fa68eb324d4ed45`.
+- Portal SHA-256:
+  `9d3a82f31737d853ea4be6f711c36688d8dd3cfbdd39b95e570d57a68c83e07c`.
+- Initial rollback directory:
+  `/mnt/nas/openclaw/deployment/backups/qwen-session-isolation-20260718-024211`.
+- Identity entry-point rollback directory:
+  `/mnt/nas/openclaw/deployment/backups/qwen-identity-entrypoint-20260718-025500`.
+- The system-scoped `qwen25-local-openai-gateway.service` and user-scoped
+  `openclaw-gateway.service` were active after deployment. Both loopback health
+  endpoints returned HTTP 200. The separate 18081 shadow runtime was not
+  changed.
+
+Live request-isolation gate:
+
+- Two consecutive general-chat requests returned `session_reset=true` and
+  `runtime_retry_count=0`.
+- The first response referred to blue; the second referred only to green and
+  did not inherit the first request. Neither response exposed a Qwen protocol
+  marker.
+
+Authenticated product-path gate:
+
+- A temporary user exercised the real
+  `digua.local:80 -> product access -> 127.0.0.1:8765` login, CSRF, identity
+  bridge, and assistant-chat path.
+- The first deployment exposed a remaining issue: the intent router classified
+  the identity question as cloud overflow before the identity branch. PR #58
+  moved identity handling ahead of routing.
+- After the follow-up deployment, `你是谁` returned the deterministic S100P
+  identity with `assistant_mode=local_qwen_chat`,
+  `identity_answer_source=deterministic_local_identity`, `cloud_used=false`,
+  and `qwen_execution_authority=false`.
+- Logout completed and the temporary username count was verified as `[0, 0]`
+  across the product-access and upstream portal identity databases.
+
+The existing authenticated Chrome page remained readable and screenshotable,
+but automation clicks timed out before dispatching a request. Therefore the
+authenticated port-80 HTTP path above is the production acceptance evidence;
+an automated post-fix browser screenshot is not claimed.
