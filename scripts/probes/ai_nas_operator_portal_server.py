@@ -7567,7 +7567,8 @@ def image_thumbnail_payload(path: Path, *, max_edge: int = 480) -> tuple[bytes, 
             image = ImageOps.exif_transpose(opened)
             if max(image.size) <= max_edge:
                 return path.read_bytes(), content_type, False
-            image.thumbnail((max_edge, max_edge), Image.Resampling.LANCZOS)
+            resampling = getattr(Image, "Resampling", Image)
+            image.thumbnail((max_edge, max_edge), resampling.LANCZOS)
             has_alpha = image.mode in {"RGBA", "LA"} or (image.mode == "P" and "transparency" in image.info)
             output = io.BytesIO()
             if has_alpha:

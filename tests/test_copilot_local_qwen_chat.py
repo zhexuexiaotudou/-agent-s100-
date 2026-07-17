@@ -73,6 +73,13 @@ class CopilotLocalQwenChatTest(unittest.TestCase):
             with PILImage.open(thumbnail) as image:
                 self.assertLessEqual(max(image.size), 480)
 
+    def test_thumbnail_resampling_keeps_pillow_9_fallback(self):
+        source = (REPO_ROOT / "scripts" / "probes" / "ai_nas_operator_portal_server.py").read_text(encoding="utf-8")
+
+        self.assertIn('resampling = getattr(Image, "Resampling", Image)', source)
+        self.assertIn("image.thumbnail((max_edge, max_edge), resampling.LANCZOS)", source)
+        self.assertNotIn("Image.Resampling.LANCZOS", source)
+
     def test_album_frontend_separates_thumbnail_and_full_preview(self):
         source = (REPO_ROOT / "web" / "static" / "digua_ai_nas_v2.js").read_text(encoding="utf-8")
 
