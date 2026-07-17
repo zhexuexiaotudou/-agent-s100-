@@ -139,7 +139,6 @@
   const previewObjectPromiseCache = new Map();
   let imageViewerDrag = null;
   let aiAlbumSelectTimer = null;
-  let previewLazyObserver = null;
   const previewHydrationQueue = [];
   let previewHydrationActive = 0;
   const PREVIEW_HYDRATION_CONCURRENCY = 4;
@@ -2194,7 +2193,7 @@
       ? storageTrashButton({ kind: "image", title, pathHash: photo.path_hash, previewUrl })
       : "";
     const thumb = previewUrl
-      ? `<div class="search-thumb media-photo-thumb has-preview"><img class="search-preview-image" alt="图片预览" data-preview-url="${escapeHtml(thumbnailPreviewUrl(previewUrl))}" loading="lazy" decoding="async" hidden><span class="thumb-loading">加载预览</span></div>`
+      ? `<div class="search-thumb media-photo-thumb has-preview"><img class="search-preview-image" alt="图片预览" data-preview-url="${escapeHtml(thumbnailPreviewUrl(previewUrl))}" decoding="async" hidden><span class="thumb-loading">加载预览</span></div>`
       : `<span class="doc-glyph png">IMG</span>`;
     return `<article class="doc-item media-photo-item${previewUrl ? " is-openable" : ""}${trashButton ? " has-actions" : ""}"${openAttrs}>
       ${thumb}
@@ -3121,9 +3120,14 @@
   function drainPreviewHydrationQueue() {
     while (previewHydrationActive < PREVIEW_HYDRATION_CONCURRENCY && previewHydrationQueue.length) {
       const img = previewHydrationQueue.shift();
-      if (!img || !img.isConnected || img.dataset.loaded === "1") continue;
+      if (!img) continue;
+      if (!img.isConnected || img.dataset.loaded === "1") {
+        img.dataset.queued = "0";
+        continue;
+      }
       previewHydrationActive += 1;
       hydratePreviewImageV2(img).finally(() => {
+        img.dataset.queued = "0";
         previewHydrationActive = Math.max(0, previewHydrationActive - 1);
         drainPreviewHydrationQueue();
       });
@@ -3140,30 +3144,9 @@
   function hydrateAssistantSearchPreviewsV2() {
     const images = Array.from(document.querySelectorAll("img[data-preview-url]"));
     if (!images.length) return;
-    if (previewLazyObserver) {
-      previewLazyObserver.disconnect();
-      previewLazyObserver = null;
-    }
+    for (const queuedImage of previewHydrationQueue) queuedImage.dataset.queued = "0";
     previewHydrationQueue.length = 0;
-    const immediate = images.slice(0, 6);
-    const deferred = images.slice(6);
-    for (const img of immediate) {
-      window.setTimeout(() => queuePreviewHydration(img), 0);
-    }
-    if ("IntersectionObserver" in window) {
-      previewLazyObserver = new IntersectionObserver((entries) => {
-        for (const entry of entries) {
-          if (!entry.isIntersecting) continue;
-          previewLazyObserver?.unobserve(entry.target);
-          queuePreviewHydration(entry.target);
-        }
-      }, { rootMargin: "280px 0px" });
-      for (const img of deferred) previewLazyObserver.observe(img);
-      return;
-    }
-    deferred.slice(0, 12).forEach((img, index) => {
-      window.setTimeout(() => queuePreviewHydration(img), 300 + index * 120);
-    });
+    for (const img of images) queuePreviewHydration(img);
   }
 
   async function openSearchImageViewer(card) {

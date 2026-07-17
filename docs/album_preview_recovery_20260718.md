@@ -22,8 +22,9 @@ workflow without changing the album count.
   legacy 24-row preview.
 - Page entry is read-only and no longer waits for automatic organization.
   Explicit refresh/organize actions remain available.
-- Preview hydration starts with six visible candidates and uses a four-request
-  concurrency queue plus browser lazy decoding.
+- Preview hydration queues the complete current album through a four-request
+  concurrency limit. It no longer stops after six eager candidates or depends
+  on a viewport observer that can miss the nested album scroll container.
 - Album uploads now target `Personal/Photos/Uploads`, so they remain in the
   visible library. The generic `Personal/Uploads` workflow is unchanged.
 - Media indexing validates image signatures and removes stale index rows for
@@ -172,3 +173,22 @@ boundary: its first library summary took about 20 seconds because current ACL
 authorization scans the Personal tree. The reported failure was on the admin
 page and is fixed by PR #53; non-admin media ACL-scan optimization remains a
 separate follow-up and must not weaken per-request authorization.
+
+## Six-card preview queue follow-up
+
+The later product UI queued only the first six album cards immediately and
+delegated every later card to an `IntersectionObserver`. The observer used the
+browser viewport while the cards live in a nested album scroll container, so
+the seventh and later cards could remain unqueued even though their preview
+routes were healthy.
+
+The UI now places the complete rendered album in the existing four-worker
+preview queue. It removes native image lazy-loading from these cards, retains
+asynchronous decoding, clears stale queue markers across rerenders, and bumps
+the script cache version to `20260718-album-preview-queue`.
+
+Local acceptance used an isolated portal with 12 valid JPEGs. The authenticated
+browser rendered all 12 cards; the first, seventh, and twelfth images all had a
+positive natural width, `complete=true`, `hidden=false`, and `data-loaded=1`.
+The portal log recorded 12 successful thumbnail requests. JavaScript syntax,
+70 focused UI/media/security tests, and the full 221-test offline suite passed.
