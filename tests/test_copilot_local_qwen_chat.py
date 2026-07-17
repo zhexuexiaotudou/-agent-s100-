@@ -102,8 +102,8 @@ class CopilotLocalQwenChatTest(unittest.TestCase):
             private_photo = root / "Personal" / "Private" / "hidden.jpg"
             public_photo.parent.mkdir(parents=True)
             private_photo.parent.mkdir(parents=True)
-            public_photo.write_bytes(b"public-photo")
-            private_photo.write_bytes(b"private-photo")
+            PILImage.new("RGB", (32, 24), (20, 80, 140)).save(public_photo, format="JPEG")
+            PILImage.new("RGB", (32, 24), (140, 80, 20)).save(private_photo, format="JPEG")
             state.media_center.index_photos(root / "Personal", asset_root=root / "Personal")
 
             photos = state.media_center.list_photos(limit=20)
@@ -687,7 +687,7 @@ class CopilotLocalQwenChatTest(unittest.TestCase):
 
             old_photo = root / "Personal" / "Photos" / "football_match.jpg"
             old_photo.parent.mkdir(parents=True, exist_ok=True)
-            old_photo.write_bytes(b"same-football-photo-content")
+            PILImage.new("RGB", (32, 24), (30, 120, 60)).save(old_photo, format="JPEG")
             state.media_center.index_photos(root / "Personal", asset_root=root / "Personal")
             stale_item = state.media_center.item_for_path(old_photo, asset_root=root / "Personal")
             assert stale_item is not None
@@ -705,7 +705,7 @@ class CopilotLocalQwenChatTest(unittest.TestCase):
                 "title_redacted": "football_match.jpg",
                 "modality": "image",
                 "file_type": ".jpg",
-                "size_bytes": len(b"same-football-photo-content"),
+                "size_bytes": current_photo.stat().st_size,
                 "mtime": int(current_photo.stat().st_mtime),
                 "score": 0.93,
                 "matched_by": ["image_embedding"],
@@ -756,8 +756,8 @@ class CopilotLocalQwenChatTest(unittest.TestCase):
 
             current_photo = root / "Personal" / "Albums" / "sports" / "football_current.jpg"
             current_photo.parent.mkdir(parents=True, exist_ok=True)
-            photo_bytes = b"current-football-photo-content"
-            current_photo.write_bytes(photo_bytes)
+            PILImage.new("RGB", (32, 24), (30, 120, 60)).save(current_photo, format="JPEG")
+            photo_bytes = current_photo.read_bytes()
             state.media_center.index_photos(root / "Personal", asset_root=root / "Personal")
             current_item = state.media_center.item_for_path(current_photo, asset_root=root / "Personal")
             assert current_item is not None
