@@ -58,6 +58,14 @@ class OfflineUiContractTest(unittest.TestCase):
         self.assertIn("完成一次回答后", self.js)
         self.assertNotIn('contextPanel("可直接尝试"', self.js)
 
+    def test_assistant_exposes_only_the_three_allowlisted_model_choices(self):
+        self.assertIn('id="assistantModelChoice"', self.js)
+        self.assertIn('Qwen2.5 1.5B（本地）', self.js)
+        self.assertIn('Qwen2.5 7B（本地）', self.js)
+        self.assertIn('MiniMax 2.7（云端）', self.js)
+        self.assertIn('model_choice: appState.assistantModelChoice', self.js)
+        self.assertIn('safeLocalStorageSet("diguaAssistantModelChoice", choice)', self.js)
+
     def test_files_use_accessible_tabs_and_soft_delete(self):
         self.assertGreaterEqual(self.js.count('role="tab"'), 3)
         self.assertGreaterEqual(self.js.count('aria-selected="${mode ==='), 3)

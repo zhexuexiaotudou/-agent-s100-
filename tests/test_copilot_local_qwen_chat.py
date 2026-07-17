@@ -132,6 +132,82 @@ class CopilotLocalQwenChatTest(unittest.TestCase):
             self.assertFalse(payload["audit"]["cloud_payload_sent"])
             post_json.assert_not_called()
 
+    def test_explicit_7b_selection_uses_7b_for_router_and_answer(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            state = self.make_state(Path(tmp))
+            seven_b = "Qwen2.5-7B-Instruct-S100P-official"
+            with patch(
+                "ai_nas_operator_portal_server.http_post_json",
+                side_effect=[self.fake_router(), self.fake_qwen("Answer from 7B.")],
+            ) as post_json:
+                status, payload = state.copilot_chat(
+                    "Explain this locally.",
+                    {"username": "admin"},
+                    "qwen2.5-7b-local",
+                )
+
+            self.assertEqual(status, 200)
+            self.assertEqual(payload["requested_model"], "qwen2.5-7b-local")
+            self.assertEqual(post_json.call_args_list[0].args[2]["model"], seven_b)
+            self.assertEqual(post_json.call_args_list[1].args[2]["model"], seven_b)
+
+    def test_explicit_minimax_selection_uses_cloud_only_after_local_public_guard(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            token_file = root / "cloud_bridge_token"
+            token_file.write_text("local-bridge-secret\n", encoding="utf-8")
+            state = self.make_state(root)
+            env = {
+                "AI_NAS_CLOUD_CHAT_URL": "http://127.0.0.1:18082/v1",
+                "AI_NAS_CLOUD_CHAT_MODEL": "custom-gateway/MiniMax-M2.7",
+                "AI_NAS_CLOUD_CHAT_TOKEN_FILE": str(token_file),
+            }
+            with patch.dict(os.environ, env, clear=False):
+                with patch(
+                    "ai_nas_operator_portal_server.http_post_json",
+                    side_effect=[self.fake_router(route="local", privacy_level="none"), self.fake_qwen("MiniMax answer.")],
+                ) as post_json:
+                    status, payload = state.copilot_chat(
+                        "Explain a public astronomy topic.",
+                        {"username": "admin"},
+                        "minimax2.7-cloud",
+                    )
+
+            self.assertEqual(status, 200)
+            self.assertTrue(payload["cloud_used"])
+            self.assertEqual(payload["requested_model"], "minimax2.7-cloud")
+            self.assertEqual(post_json.call_args_list[0].args[2]["model"], state.qwen_model)
+            self.assertIn("18082", post_json.call_args_list[1].args[1])
+
+    def test_explicit_minimax_selection_keeps_private_prompt_local(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            state = self.make_state(Path(tmp))
+            with patch(
+                "ai_nas_operator_portal_server.http_post_json",
+                side_effect=[
+                    self.fake_router(route="local", privacy_level="high", local_tool_id="ai_nas_allowlisted_tools"),
+                    self.fake_qwen("Private request stayed local."),
+                ],
+            ) as post_json:
+                status, payload = state.copilot_chat(
+                    "My passport number is private; explain why sharing it is risky.",
+                    {"username": "admin"},
+                    "minimax2.7-cloud",
+                )
+
+            self.assertEqual(status, 200)
+            self.assertFalse(payload["cloud_used"])
+            self.assertEqual(payload["model_selection_fallback"], "cloud_blocked_by_local_privacy_guard")
+            self.assertEqual(post_json.call_count, 2)
+            self.assertTrue(all("18082" not in call.args[1] for call in post_json.call_args_list))
+
+    def test_unknown_model_selection_is_rejected(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            state = self.make_state(Path(tmp))
+            status, payload = state.copilot_chat("hello", {"username": "admin"}, "not-a-model")
+            self.assertEqual(status, 400)
+            self.assertEqual(payload["error"], "assistant_model_not_allowed")
+
     def test_cloud_overflow_uses_bridge_token_file_without_exposing_minimax_token(self):
         with tempfile.TemporaryDirectory() as tmp:
             root = Path(tmp)

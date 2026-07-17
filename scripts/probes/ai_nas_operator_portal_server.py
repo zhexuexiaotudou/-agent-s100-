@@ -255,6 +255,19 @@ MAX_STREAM_UPLOAD_BYTES = 2 * 1024 * 1024 * 1024
 STREAM_CHUNK_BYTES = 1024 * 1024
 DEFAULT_QWEN_GATEWAY_URL = "http://127.0.0.1:18080"
 DEFAULT_QWEN_MODEL = "Qwen2.5-1.5B-Instruct-S100P-official"
+QWEN_7B_MODEL = "Qwen2.5-7B-Instruct-S100P-official"
+ASSISTANT_MODEL_CHOICES = {
+    "qwen2.5-1.5b-local": {"provider": "local", "model": DEFAULT_QWEN_MODEL},
+    "qwen2.5-7b-local": {"provider": "local", "model": QWEN_7B_MODEL},
+    "minimax2.7-cloud": {"provider": "cloud", "model": "custom-gateway/MiniMax-M2.7"},
+}
+
+
+def normalize_assistant_model_choice(value: object) -> str | None:
+    choice = str(value or "").strip().lower()
+    if not choice:
+        return "auto"
+    return choice if choice in ASSISTANT_MODEL_CHOICES else None
 COPILOT_SEARCH_VERBS = (
     "search",
     "find",
@@ -4598,9 +4611,9 @@ class PortalState:
             },
         }
 
-    def _copilot_qwen_router_completion(self, message: str) -> dict:
+    def _copilot_qwen_router_completion(self, message: str, model: str | None = None) -> dict:
         payload = {
-            "model": self.qwen_model,
+            "model": model or self.qwen_model,
             "messages": [
                 {"role": "user", "content": message},
             ],
@@ -4623,9 +4636,9 @@ class PortalState:
             timeout=12,
         )
 
-    def _copilot_structured_router_completion(self, message: str) -> dict:
+    def _copilot_structured_router_completion(self, message: str, model: str | None = None) -> dict:
         payload = {
-            "model": self.qwen_model,
+            "model": model or self.qwen_model,
             "messages": [
                 {"role": "user", "content": message},
             ],
@@ -4648,10 +4661,10 @@ class PortalState:
             timeout=12,
         )
 
-    def copilot_qwen_route(self, message: str, action_intent: dict | None = None) -> dict:
+    def copilot_qwen_route(self, message: str, action_intent: dict | None = None, model: str | None = None) -> dict:
         policy = copilot_policy_route(message, action_intent)
         qwen_route: dict | None = None
-        result = self._copilot_qwen_router_completion(message)
+        result = self._copilot_qwen_router_completion(message, model)
         if result.get("ok"):
             content, metadata, upstream = chat_completion_content(result)
             parsed = parse_json_object_from_text(content)
@@ -4662,9 +4675,9 @@ class PortalState:
                 elapsed_ms=result.get("elapsed_ms"),
             )
             if qwen_route:
-                qwen_route["model"] = upstream.get("model") or self.qwen_model
+                qwen_route["model"] = upstream.get("model") or model or self.qwen_model
         if not qwen_route:
-            fallback = self._copilot_structured_router_completion(message)
+            fallback = self._copilot_structured_router_completion(message, model)
             if fallback.get("ok"):
                 content, _metadata, upstream = chat_completion_content(fallback)
                 parsed = parse_json_object_from_text(content)
@@ -4675,7 +4688,7 @@ class PortalState:
                     elapsed_ms=fallback.get("elapsed_ms"),
                 )
                 if qwen_route:
-                    qwen_route["model"] = upstream.get("model") or self.qwen_model
+                    qwen_route["model"] = upstream.get("model") or model or self.qwen_model
                     qwen_route["fallback_from_real_qwen"] = True
         if not qwen_route:
             qwen_route = {
@@ -5469,9 +5482,9 @@ class PortalState:
             nas_action={"operation": action or "unknown", "status": "unhandled", "qwen_execution_authority": False},
         )
 
-    def _local_qwen_chat_completion(self, message: str) -> dict:
+    def _local_qwen_chat_completion(self, message: str, model: str | None = None) -> dict:
         payload = {
-            "model": self.qwen_model,
+            "model": model or self.qwen_model,
             "messages": [
                 {"role": "user", "content": message},
             ],
@@ -5493,7 +5506,7 @@ class PortalState:
             timeout=180,
         )
 
-    def local_qwen_chat(self, message: str, user: dict) -> tuple[int, dict]:
+    def local_qwen_chat(self, message: str, user: dict, model: str | None = None) -> tuple[int, dict]:
         clean_message = (message or "").strip()
         if not clean_message:
             return HTTPStatus.BAD_REQUEST, {"ok": False, "error": "empty_message"}
@@ -5526,7 +5539,7 @@ class PortalState:
                     "prompt_hash": hashlib.sha256(clean_message.encode("utf-8", errors="replace")).hexdigest(),
                 },
             }
-        result = self._local_qwen_chat_completion(clean_message)
+        result = self._local_qwen_chat_completion(clean_message, model)
         if not result.get("ok"):
             return HTTPStatus.BAD_GATEWAY, {
                 "ok": False,
@@ -5562,7 +5575,7 @@ class PortalState:
             "assistant_mode": "local_qwen_chat",
             "answer": answer,
             "route": "local_qwen_chat",
-            "model": upstream.get("model") or self.qwen_model,
+            "model": upstream.get("model") or model or self.qwen_model,
             "finish_reason": first_choice.get("finish_reason"),
             "usage": upstream.get("usage") if isinstance(upstream.get("usage"), dict) else {},
             "elapsed_ms": result.get("elapsed_ms"),
@@ -6003,16 +6016,58 @@ class PortalState:
             user=user,
         )
 
-    def copilot_chat(self, message: str, user: dict) -> tuple[int, dict]:
+    def copilot_chat(self, message: str, user: dict, model_choice: object = None) -> tuple[int, dict]:
         clean_message = str(message or "").strip()
         if not clean_message:
             return HTTPStatus.BAD_REQUEST, {"ok": False, "error": "empty_message"}
+        normalized_choice = normalize_assistant_model_choice(model_choice)
+        if normalized_choice is None:
+            return HTTPStatus.BAD_REQUEST, {
+                "ok": False,
+                "error": "assistant_model_not_allowed",
+                "allowed_models": list(ASSISTANT_MODEL_CHOICES),
+            }
+        selection = ASSISTANT_MODEL_CHOICES.get(normalized_choice)
+        selected_local_model = (
+            str(selection["model"])
+            if selection and selection.get("provider") == "local"
+            else self.qwen_model
+        )
         if is_local_assistant_identity_question(clean_message):
-            return self.local_qwen_chat(clean_message, user)
+            status, payload = self.local_qwen_chat(clean_message, user, selected_local_model)
+            payload["requested_model"] = normalized_choice
+            return status, payload
         action_intent = infer_copilot_action_intent(clean_message)
-        router = self.copilot_qwen_route(clean_message, action_intent)
+        router_model = self.qwen_model if action_intent or (selection and selection.get("provider") == "cloud") else selected_local_model
+        router = self.copilot_qwen_route(clean_message, action_intent, router_model)
         if action_intent:
-            return self.dispatch_copilot_action(action_intent, user, router)
+            status, payload = self.dispatch_copilot_action(action_intent, user, router)
+            payload["requested_model"] = normalized_choice
+            return status, payload
+        if selection and selection.get("provider") == "cloud":
+            if router.get("privacy_level") == "none" and not router.get("local_tool_id"):
+                cloud_router = {
+                    **router,
+                    "route": "cloud",
+                    "reason": "User selected MiniMax 2.7 and the local privacy classifier allowed public cloud processing.",
+                    "explicit_model_selection": True,
+                }
+                status, payload = self._copilot_cloud_overflow(clean_message, user, cloud_router)
+                payload["requested_model"] = normalized_choice
+                return status, payload
+            status, payload = self.local_qwen_chat(clean_message, user, self.qwen_model)
+            payload["requested_model"] = normalized_choice
+            payload["model_selection_fallback"] = "cloud_blocked_by_local_privacy_guard"
+            router = {
+                **router,
+                "route": "local",
+                "guardrail_reason": "MiniMax selection was kept local because the request was private, NAS-scoped, or uncertain.",
+            }
+            return self._copilot_attach_router(status, payload, router, assistant_mode=payload.get("assistant_mode"))
+        if selection and selection.get("provider") == "local":
+            status, payload = self.local_qwen_chat(clean_message, user, selected_local_model)
+            payload["requested_model"] = normalized_choice
+            return self._copilot_attach_router(status, payload, router, assistant_mode=payload.get("assistant_mode") if isinstance(payload, dict) else None)
         if router.get("route") == "cloud":
             return self._copilot_cloud_overflow(clean_message, user, router)
         status, payload = self.local_qwen_chat(clean_message, user)
@@ -8777,7 +8832,11 @@ class PortalHandler(BaseHTTPRequestHandler):
             if status:
                 self.send_json(payload or {}, status)
                 return
-            status_code, result = self.state.copilot_chat(str(payload.get("message") or ""), user or {})
+            status_code, result = self.state.copilot_chat(
+                str(payload.get("message") or ""),
+                user or {},
+                payload.get("model_choice"),
+            )
             self.send_json(result, status_code)
             return
         if route == "/api/documents/query":
