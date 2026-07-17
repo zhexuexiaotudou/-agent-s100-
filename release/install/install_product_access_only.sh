@@ -107,6 +107,7 @@ env_tmp="$(mktemp)"
   printf 'DIGUA_QWEN_BASE_URL=http://127.0.0.1:18080\n'
   printf 'DIGUA_ACCESS_DB=%s/product_access.sqlite3\n' "$STATE_DIR"
   printf 'DIGUA_IDENTITY_DB=%s/identity.sqlite3\n' "$STATE_DIR"
+  printf 'DIGUA_UPSTREAM_IDENTITY_DB=%s/reports/qwen25_ai_nas/identity.sqlite3\n' "$NAS_MOUNT"
   printf 'DIGUA_LAN_URL=http://digua.local/\n'
   printf 'DIGUA_REMOTE_ACCESS_ENABLED=0\n'
   grep -E '^(DIGUA_CF_TEAM_DOMAIN|DIGUA_CF_AUDIENCE)=' "$ENV_FILE" 2>/dev/null || true

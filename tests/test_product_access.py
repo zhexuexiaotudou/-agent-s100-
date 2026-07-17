@@ -187,8 +187,9 @@ class ProductAccessContractTest(unittest.TestCase):
         lan = (repo / "release/systemd/digua-product-access.service").read_text(encoding="utf-8")
         remote = (repo / "release/systemd/digua-product-remote-ingress.service").read_text(encoding="utf-8")
         self.assertIn("--bind 127.0.0.1 --port 8765", portal)
-        self.assertIn("--identity-db ${DIGUA_IDENTITY_DB}", portal)
+        self.assertIn("--identity-db-path ${DIGUA_IDENTITY_DB}", portal)
         self.assertIn("--port 80 --channel lan", lan)
+        self.assertIn("--upstream-identity-db ${DIGUA_UPSTREAM_IDENTITY_DB}", lan)
         self.assertIn("--require-nas-mount ${DIGUA_NAS_MOUNT}", lan)
         self.assertIn("CAP_NET_BIND_SERVICE", lan)
         self.assertNotIn("Requires=openclaw-gateway.service", lan)
@@ -224,6 +225,36 @@ class ProductAccessContractTest(unittest.TestCase):
         self.assertIn('127.0.1.1', source)
         self.assertIn('invalid_hostname', source)
         self.assertIn('systemctl restart avahi-daemon.service', source)
+
+    def test_distinct_upstream_identity_store_receives_bridged_sessions_and_user_changes(self):
+        with tempfile.TemporaryDirectory() as temp:
+            root = Path(temp)
+            state = AccessState(
+                access_db=root / "access.sqlite3",
+                identity_db=root / "local-identity.sqlite3",
+                upstream="http://127.0.0.1:8765",
+                channel="lan",
+                upstream_identity_db=root / "upstream-identity.sqlite3",
+            )
+            self.assertIsNotNone(state.upstream_identity)
+            self.assertTrue(state.create_user("bridge-admin", "strong-password", "admin")["ok"])
+            login = state.identity.login("bridge-admin", "strong-password")
+            local_token = login["token"]
+            upstream_token = state.upstream_token(local_token, login["user"])
+            self.assertTrue(upstream_token)
+            self.assertEqual(state.upstream_identity.validate_token(upstream_token)["username"], "bridge-admin")
+            self.assertTrue(state.create_user("bridge-viewer", "strong-password", "viewer")["ok"])
+            self.assertTrue(state.set_user_role("bridge-viewer", "operator")["ok"])
+            upstream_roles = {item["username"]: item["role"] for item in state.upstream_identity.list_users()}
+            self.assertEqual(upstream_roles["bridge-viewer"], "operator")
+            self.assertTrue(state.identity.create_user("local-only-admin", "strong-password", "admin")["ok"])
+            rejected = state.set_user_role("bridge-admin", "viewer")
+            self.assertFalse(rejected["ok"])
+            local_roles = {item["username"]: item["role"] for item in state.identity.list_users()}
+            self.assertEqual(local_roles["bridge-admin"], "admin")
+            self.assertTrue(state.revoke_user_sessions("bridge-admin")["ok"])
+            self.assertIsNone(state.upstream_identity.validate_token(upstream_token))
+            state.drop_bridge(local_token)
 
     def test_frontend_uses_cookie_session_csrf_and_current_pwa(self):
         repo = Path(__file__).resolve().parents[1]
