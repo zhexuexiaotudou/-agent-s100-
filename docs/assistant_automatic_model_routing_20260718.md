@@ -110,3 +110,16 @@ MiniMax 不是“复杂任务的默认大模型”。只有策略同时确认 `p
   安全回落 7B。准确性与安全回落已验证，但当前 bridge 不等同于低延迟、流式且无波动的原生
   OpenClaw 会话。
 - 实机浏览器确认用户无模型选择入口，且详情展示统一决策字段和每一次真实模型调用。
+
+### 身份回答显示快路径
+
+[PR #70](https://github.com/zhexuexiaotudou/-agent-s100-/pull/70) 将助手正文与辅助 Token Budget
+详情解耦。`/api/copilot/chat` 返回后立即显示答案；`/api/token-budget/route` 并行执行并在完成后
+补充详情，失败时也不能覆盖或延迟已经返回的回答。前端使用请求序号阻止较早请求的详情覆盖后续
+对话。
+
+生产拆分计时中，`Who are you?` 的确定性身份接口约 60.5 ms、零模型调用，Token Budget 路由约
+82.2 ms。部署合并提交 `1a5ddad0291cd8ef3ddff9029d72b9eaf9d7c1db` 后，实机浏览器输入
+“你是谁”到答案可见约 290 ms。线上 JS SHA-256 为
+`344ba012e7b19be93ff1b2759fc33159aa890e3520351a9112cafad3c46a2bbf`，回滚点为
+`/mnt/nas/openclaw/deploy_backups/1a5ddad0-20260718061857`。
