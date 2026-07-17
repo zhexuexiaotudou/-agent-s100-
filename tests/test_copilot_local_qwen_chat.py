@@ -1,12 +1,18 @@
 import hashlib
 import json
 import os
+import sqlite3
 import sys
 import tempfile
+import threading
 import unittest
+import urllib.request
 from datetime import datetime
+from http.server import ThreadingHTTPServer
 from pathlib import Path
 from unittest.mock import patch
+
+from PIL import Image as PILImage
 
 
 REPO_ROOT = Path(__file__).resolve().parents[1]
@@ -15,10 +21,12 @@ if str(PROBES_ROOT) not in sys.path:
     sys.path.insert(0, str(PROBES_ROOT))
 
 from ai_nas_operator_portal_server import (
+    PortalHandler,
     PortalState,
     copilot_journal_lookup_date,
     copilot_policy_route,
     http_post_json,
+    image_thumbnail_payload,
     infer_copilot_action_intent,
 )
 
@@ -49,6 +57,97 @@ class CopilotLocalQwenChatTest(unittest.TestCase):
                 "usage": {"prompt_tokens": 8, "completion_tokens": 9},
             },
         }
+
+    def test_large_album_photo_uses_bounded_browser_thumbnail(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            source = Path(tmp) / "large.jpg"
+            PILImage.new("RGB", (1200, 800), (20, 80, 140)).save(source, format="JPEG", quality=92)
+
+            raw, content_type, transformed = image_thumbnail_payload(source, max_edge=480)
+
+            self.assertTrue(transformed)
+            self.assertEqual(content_type, "image/jpeg")
+            self.assertLess(len(raw), source.stat().st_size)
+            thumbnail = Path(tmp) / "thumbnail.jpg"
+            thumbnail.write_bytes(raw)
+            with PILImage.open(thumbnail) as image:
+                self.assertLessEqual(max(image.size), 480)
+
+    def test_thumbnail_resampling_keeps_pillow_9_fallback(self):
+        source = (REPO_ROOT / "scripts" / "probes" / "ai_nas_operator_portal_server.py").read_text(encoding="utf-8")
+
+        self.assertIn('resampling = getattr(Image, "Resampling", Image)', source)
+        self.assertIn("image.thumbnail((max_edge, max_edge), resampling.LANCZOS)", source)
+        self.assertNotIn("Image.Resampling.LANCZOS", source)
+
+    def test_album_frontend_separates_thumbnail_and_full_preview(self):
+        source = (REPO_ROOT / "web" / "static" / "digua_ai_nas_v2.js").read_text(encoding="utf-8")
+
+        self.assertIn("function thumbnailPreviewUrl", source)
+        self.assertIn("variant=thumbnail", source)
+        self.assertIn("function decodePreviewObjectUrl", source)
+        self.assertIn("preview_decode_failed", source)
+        self.assertNotIn('card.querySelector(".search-preview-image")?.src', source)
+
+    def test_album_list_only_returns_photos_the_user_can_preview(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            state = self.make_state(root, personal=True)
+            assert state.identity_store is not None
+            assert state.media_center is not None
+            state.identity_store.create_user("admin", "admin123", "admin")
+            state.identity_store.create_user("viewer", "viewer123", "user")
+            state.identity_store.set_acl("Public", "user", "viewer", "read")
+            public_photo = root / "Personal" / "Public" / "visible.jpg"
+            private_photo = root / "Personal" / "Private" / "hidden.jpg"
+            public_photo.parent.mkdir(parents=True)
+            private_photo.parent.mkdir(parents=True)
+            PILImage.new("RGB", (32, 24), (20, 80, 140)).save(public_photo, format="JPEG")
+            PILImage.new("RGB", (32, 24), (140, 80, 20)).save(private_photo, format="JPEG")
+            state.media_center.index_photos(root / "Personal", asset_root=root / "Personal")
+
+            photos = state.media_center.list_photos(limit=20)
+            viewer_photos = state.visible_media_photos(photos, {"username": "viewer", "role": "user"})
+            admin_photos = state.visible_media_photos(photos, {"username": "admin", "role": "admin"})
+
+            self.assertEqual(len(viewer_photos), 1)
+            self.assertEqual(viewer_photos[0]["title_redacted"], "visible.jpg")
+            self.assertEqual(len(admin_photos), 2)
+
+    def test_media_preview_thumbnail_route_keeps_full_image_bounded(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            state = self.make_state(root, personal=True)
+            assert state.identity_store is not None
+            assert state.media_center is not None
+            state.identity_store.create_user("admin", "admin123", "admin")
+            login = state.identity_store.login("admin", "admin123")
+            source = root / "Personal" / "Photos" / "large.jpg"
+            source.parent.mkdir(parents=True)
+            PILImage.new("RGB", (1600, 900), (120, 40, 80)).save(source, format="JPEG", quality=92)
+            state.media_center.index_photos(root / "Personal", asset_root=root / "Personal")
+            photo = state.media_center.list_photos(limit=1)[0]
+            server = ThreadingHTTPServer(("127.0.0.1", 0), PortalHandler)
+            server.state = state  # type: ignore[attr-defined]
+            worker = threading.Thread(target=server.serve_forever, daemon=True)
+            worker.start()
+            try:
+                request = urllib.request.Request(
+                    f"http://127.0.0.1:{server.server_port}/api/media/preview?path_hash={photo['path_hash']}&variant=thumbnail",
+                    headers={"Authorization": f"Bearer {login['token']}"},
+                )
+                with urllib.request.urlopen(request, timeout=5) as response:
+                    raw = response.read()
+                    self.assertEqual(response.headers.get_content_type(), "image/jpeg")
+                thumbnail = root / "route-thumbnail.jpg"
+                thumbnail.write_bytes(raw)
+                with PILImage.open(thumbnail) as image:
+                    self.assertLessEqual(max(image.size), 480)
+                self.assertLess(len(raw), source.stat().st_size)
+            finally:
+                server.shutdown()
+                server.server_close()
+                worker.join(timeout=5)
 
     def fake_router(self, route: str = "local", privacy_level: str = "none", task_complexity: str = "simple", local_tool_id: str | None = None) -> dict:
         return self.fake_qwen(json.dumps({
@@ -577,6 +676,159 @@ class CopilotLocalQwenChatTest(unittest.TestCase):
             self.assertIn("没有返回匹配图片", payload["answer"])
             self.assertNotIn("文件盘点", payload["answer"])
             post_json.assert_called_once()
+
+    def test_moved_album_photo_relinks_stale_search_result_to_current_preview(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            state = self.make_state(root, personal=True)
+            assert state.identity_store is not None
+            assert state.media_center is not None
+            state.identity_store.create_user("admin", "admin123", "admin")
+
+            old_photo = root / "Personal" / "Photos" / "football_match.jpg"
+            old_photo.parent.mkdir(parents=True, exist_ok=True)
+            PILImage.new("RGB", (32, 24), (30, 120, 60)).save(old_photo, format="JPEG")
+            state.media_center.index_photos(root / "Personal", asset_root=root / "Personal")
+            stale_item = state.media_center.item_for_path(old_photo, asset_root=root / "Personal")
+            assert stale_item is not None
+
+            current_photo = root / "Personal" / "Albums" / "sports" / "match_001.jpg"
+            current_photo.parent.mkdir(parents=True, exist_ok=True)
+            old_photo.replace(current_photo)
+            state.media_center.index_photos(root / "Personal", asset_root=root / "Personal")
+            current_item = state.media_center.item_for_path(current_photo, asset_root=root / "Personal")
+            assert current_item is not None
+
+            stale_result = {
+                "rank": 1,
+                "asset_id": stale_item["asset_id"],
+                "title_redacted": "football_match.jpg",
+                "modality": "image",
+                "file_type": ".jpg",
+                "size_bytes": current_photo.stat().st_size,
+                "mtime": int(current_photo.stat().st_mtime),
+                "score": 0.93,
+                "matched_by": ["image_embedding"],
+                "evidence_ref": "mm_ev_stale_football",
+                "path_hash": stale_item["path_hash"],
+                "privacy_level": "private_local_only",
+            }
+
+            status, payload = state._copilot_search_response(
+                mode="local_multimodal_search",
+                intent={"query": "find football photos", "modality": "image", "labels": []},
+                result={
+                    "ok": True,
+                    "query_redacted": "find football photos",
+                    "results": [stale_result],
+                    "degraded": False,
+                    "privacy": {"raw_path_returned": False, "cloud_used": False},
+                },
+                source="local multimodal index",
+                retrieval_mode="image_embedding",
+                user={"username": "admin"},
+            )
+            self.assertEqual(status, 200)
+            self.assertEqual(payload["search"]["result_count"], 1)
+            self.assertFalse(payload["search"]["degraded"])
+            enriched = payload["search"]["results"][0]
+
+            self.assertTrue(enriched["display"]["preview_available"])
+            self.assertEqual(enriched["display"]["name"], "match_001.jpg")
+            self.assertEqual(enriched["path_hash"], current_item["path_hash"])
+            self.assertEqual(enriched["preview_resolution"], "content_digest_relinked")
+            self.assertEqual(
+                enriched["preview_url"],
+                f"/api/media/preview?path_hash={current_item['path_hash']}",
+            )
+            serialized = json.dumps(enriched)
+            self.assertNotIn(str(old_photo), serialized)
+            self.assertNotIn(str(current_photo), serialized)
+            self.assertNotIn("sha256", serialized)
+
+    def test_multimodal_content_identity_resolves_current_album_preview(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            state = self.make_state(root, personal=True)
+            assert state.identity_store is not None
+            assert state.media_center is not None
+            state.identity_store.create_user("admin", "admin123", "admin")
+
+            current_photo = root / "Personal" / "Albums" / "sports" / "football_current.jpg"
+            current_photo.parent.mkdir(parents=True, exist_ok=True)
+            PILImage.new("RGB", (32, 24), (30, 120, 60)).save(current_photo, format="JPEG")
+            photo_bytes = current_photo.read_bytes()
+            state.media_center.index_photos(root / "Personal", asset_root=root / "Personal")
+            current_item = state.media_center.item_for_path(current_photo, asset_root=root / "Personal")
+            assert current_item is not None
+
+            multimodal_db = root / "reports" / "multimodal_search" / "runtime" / "multimodal_search.db"
+            multimodal_db.parent.mkdir(parents=True, exist_ok=True)
+            con = sqlite3.connect(str(multimodal_db))
+            try:
+                con.execute(
+                    """
+                    CREATE TABLE mm_assets(
+                        asset_id TEXT PRIMARY KEY,
+                        path_hash TEXT NOT NULL,
+                        sha256 TEXT
+                    )
+                    """
+                )
+                con.execute(
+                    "INSERT INTO mm_assets(asset_id,path_hash,sha256) VALUES(?,?,?)",
+                    (
+                        "mm_legacy_football",
+                        "0123456789abcdef0123456789abcdef",
+                        hashlib.sha256(photo_bytes).hexdigest(),
+                    ),
+                )
+                con.commit()
+            finally:
+                con.close()
+
+            stale_result = {
+                "rank": 1,
+                "asset_id": "mm_legacy_football",
+                "title_redacted": "football_old_location.jpg",
+                "modality": "image",
+                "file_type": ".jpg",
+                "size_bytes": len(photo_bytes),
+                "mtime": int(current_photo.stat().st_mtime),
+                "score": 0.96,
+                "matched_by": ["image_embedding"],
+                "evidence_ref": "mm_ev_legacy_football",
+                "path_hash": "0123456789abcdef0123456789abcdef",
+                "privacy_level": "private_local_only",
+            }
+
+            status, payload = state._copilot_search_response(
+                mode="local_multimodal_search",
+                intent={"query": "find football photos", "modality": "image", "labels": []},
+                result={
+                    "ok": True,
+                    "query_redacted": "find football photos",
+                    "results": [stale_result],
+                    "degraded": False,
+                    "privacy": {"raw_path_returned": False, "cloud_used": False},
+                },
+                source="local multimodal index",
+                retrieval_mode="image_embedding",
+                user={"username": "admin"},
+            )
+
+            self.assertEqual(status, 200)
+            self.assertEqual(payload["search"]["result_count"], 1)
+            result = payload["search"]["results"][0]
+            self.assertEqual(result["path_hash"], current_item["path_hash"])
+            self.assertEqual(result["preview_resolution"], "content_digest_relinked")
+            self.assertTrue(result["display"]["preview_available"])
+            self.assertNotIn("sha256", json.dumps(payload))
+
+            state.identity_store.create_user("viewer", "viewer123", "viewer")
+            denied = state.enrich_copilot_search_result(stale_result, {"username": "viewer"}, {})
+            self.assertFalse(denied["display"]["preview_available"])
+            self.assertNotIn("preview_url", denied)
 
     def test_yolo_fixture_preview_hash_is_allowlisted_without_raw_path(self):
         with tempfile.TemporaryDirectory() as tmp:

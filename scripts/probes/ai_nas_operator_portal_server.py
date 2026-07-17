@@ -4,6 +4,7 @@ from __future__ import annotations
 import argparse
 import base64
 import binascii
+import io
 import hashlib
 import json
 import os
@@ -27,6 +28,12 @@ from http import HTTPStatus
 from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 from pathlib import Path
 from urllib.parse import parse_qs, quote, urlparse
+
+try:
+    from PIL import Image, ImageOps
+except Exception:
+    Image = None  # type: ignore[assignment]
+    ImageOps = None  # type: ignore[assignment]
 
 REPO_ROOT = Path(__file__).resolve().parents[2]
 if str(REPO_ROOT) not in sys.path:
@@ -1882,6 +1889,7 @@ def sanitize_copilot_search_result(item: dict) -> dict:
         "display",
         "preview_url",
         "preview_kind",
+        "preview_resolution",
     }
     return {key: value for key, value in item.items() if key in allowed}
 
@@ -2908,6 +2916,74 @@ class PortalState:
             cache[cache_key] = found
         return found
 
+    def media_file_for_search_result(
+        self,
+        item: dict,
+        user: dict,
+        cache: dict[str, tuple[Path | None, str | None]] | None = None,
+    ) -> tuple[Path | None, str | None, str, str]:
+        path_hash = str(item.get("path_hash") or "").strip().lower()
+        direct_path, direct_relative = self.media_file_by_path_hash(path_hash, user, cache)
+        if direct_path:
+            return direct_path, direct_relative, path_hash, "current_media_identity"
+        if not self.media_center:
+            return None, None, path_hash, ""
+
+        source_sha256 = self._visual_search_content_sha256(item)
+        resolved_item = self.media_center.resolve_search_photo(
+            path_hash=path_hash,
+            asset_id=str(item.get("asset_id") or ""),
+            sha256=source_sha256,
+        )
+        if not resolved_item:
+            return None, None, path_hash, ""
+        try:
+            resolved = Path(str(resolved_item.get("file_path") or "")).resolve(strict=True)
+        except OSError:
+            return None, None, path_hash, ""
+        allowed, _denial_status = self.media_preview_access(resolved, user or {})
+        if not allowed:
+            return None, None, path_hash, ""
+        relative_path = None
+        if self.personal_root:
+            try:
+                relative_path = resolved.relative_to(self.personal_root.resolve(strict=True)).as_posix()
+            except (OSError, ValueError):
+                relative_path = None
+        current_hash = str(resolved_item.get("path_hash") or "").strip().lower()
+        resolution = str(resolved_item.get("resolution") or "content_digest_relinked")
+        return resolved, relative_path, current_hash, resolution
+
+    def _visual_search_content_sha256(self, item: dict) -> str:
+        """Read a private content identity from the local multimodal index."""
+        db_path = self.report_root / "multimodal_search" / "runtime" / "multimodal_search.db"
+        if not db_path.exists():
+            return ""
+        asset_id = str(item.get("asset_id") or "").strip()
+        path_hash = str(item.get("path_hash") or "").strip().lower()
+        if not asset_id and not path_hash:
+            return ""
+        try:
+            con = sqlite3.connect(sqlite_readonly_uri(db_path), uri=True)
+            con.row_factory = sqlite3.Row
+            try:
+                row = con.execute(
+                    """
+                    SELECT sha256
+                    FROM mm_assets
+                    WHERE asset_id=? OR path_hash=?
+                    ORDER BY CASE WHEN asset_id=? THEN 0 ELSE 1 END
+                    LIMIT 1
+                    """,
+                    (asset_id, path_hash, asset_id),
+                ).fetchone()
+            finally:
+                con.close()
+        except (OSError, sqlite3.Error):
+            return ""
+        digest = str(row["sha256"] or "").strip().lower() if row else ""
+        return digest if re.fullmatch(r"[0-9a-f]{64}", digest) else ""
+
     def can_write(self, user: dict, relative_path: str) -> bool:
         if not self.identity_store:
             return False
@@ -3849,6 +3925,24 @@ class PortalState:
             }
         )
         return status
+
+    def visible_media_photos(self, photos: list[dict], user: dict) -> list[dict]:
+        if not self.media_center:
+            return []
+        paths = self.media_center.photo_paths_by_hashes([str(item.get("path_hash") or "") for item in photos])
+        visible: list[dict] = []
+        for item in photos:
+            target = paths.get(str(item.get("path_hash") or ""))
+            if not target:
+                continue
+            try:
+                resolved = target.resolve(strict=True)
+            except OSError:
+                continue
+            allowed, _status = self.media_preview_access(resolved, user or {})
+            if allowed:
+                visible.append(item)
+        return visible
 
     def ai_album_organizer_scope(self) -> dict:
         if not self.personal_root:
@@ -6179,7 +6273,7 @@ class PortalState:
     ) -> dict:
         safe = sanitize_copilot_search_result(item)
         path_hash_value = str(safe.get("path_hash") or "")
-        path, _relative_path = self.media_file_by_path_hash(path_hash_value, user, path_cache)
+        path, _relative_path, current_media_hash, preview_resolution = self.media_file_for_search_result(item, user, path_cache)
         preview_route = "media" if path else ""
         if not path:
             path, _relative_path = self.storage_file_by_path_hash(path_hash_value, user, path_cache)
@@ -6215,9 +6309,13 @@ class PortalState:
         }
         if path and type_label == "照片" and path_hash_value:
             if preview_route == "media":
+                path_hash_value = current_media_hash or path_hash_value
+                safe["path_hash"] = path_hash_value
                 safe["preview_url"] = f"/api/media/preview?path_hash={quote(path_hash_value, safe='')}"
+                safe["preview_resolution"] = preview_resolution or "current_media_identity"
             else:
                 safe["preview_url"] = f"/api/storage/preview-by-hash?path_hash={quote(path_hash_value, safe='')}"
+                safe["preview_resolution"] = "current_storage_identity"
             safe["preview_kind"] = "image"
             safe["display"]["preview_available"] = True
         else:
@@ -7459,6 +7557,31 @@ class PortalState:
         }
 
 
+def image_thumbnail_payload(path: Path, *, max_edge: int = 480) -> tuple[bytes, str, bool]:
+    """Return a browser-safe thumbnail, falling back to the original bytes."""
+    content_type = mimetypes.guess_type(path.name)[0] or "application/octet-stream"
+    if Image is None or ImageOps is None:
+        return path.read_bytes(), content_type, False
+    try:
+        with Image.open(path) as opened:
+            image = ImageOps.exif_transpose(opened)
+            if max(image.size) <= max_edge:
+                return path.read_bytes(), content_type, False
+            resampling = getattr(Image, "Resampling", Image)
+            image.thumbnail((max_edge, max_edge), resampling.LANCZOS)
+            has_alpha = image.mode in {"RGBA", "LA"} or (image.mode == "P" and "transparency" in image.info)
+            output = io.BytesIO()
+            if has_alpha:
+                image.save(output, format="PNG", optimize=True)
+                return output.getvalue(), "image/png", True
+            if image.mode != "RGB":
+                image = image.convert("RGB")
+            image.save(output, format="JPEG", quality=84, optimize=True)
+            return output.getvalue(), "image/jpeg", True
+    except Exception:
+        return path.read_bytes(), content_type, False
+
+
 class PortalHandler(BaseHTTPRequestHandler):
     server_version = "AINASOperatorPortal/1.0"
 
@@ -7532,16 +7655,25 @@ class PortalHandler(BaseHTTPRequestHandler):
             return
         self.send_text(text, content_type)
 
-    def send_storage_file(self, path: Path, *, preview: bool = False) -> None:
+    def send_storage_file(self, path: Path, *, preview: bool = False, thumbnail: bool = False) -> None:
         if not path.exists() or not path.is_file():
             self.send_json({"ok": False, "error": "file_not_found"}, HTTPStatus.NOT_FOUND)
             return
-        try:
-            content_length = path.stat().st_size
-        except OSError as exc:
-            self.send_json({"ok": False, "error": f"file_stat_failed:{type(exc).__name__}:{exc}"}, HTTPStatus.NOT_FOUND)
-            return
-        content_type = mimetypes.guess_type(path.name)[0] or "application/octet-stream"
+        raw: bytes | None = None
+        if preview and thumbnail:
+            try:
+                raw, content_type, _transformed = image_thumbnail_payload(path)
+                content_length = len(raw)
+            except OSError as exc:
+                self.send_json({"ok": False, "error": f"read_failed:{type(exc).__name__}:{exc}"}, HTTPStatus.NOT_FOUND)
+                return
+        else:
+            try:
+                content_length = path.stat().st_size
+            except OSError as exc:
+                self.send_json({"ok": False, "error": f"file_stat_failed:{type(exc).__name__}:{exc}"}, HTTPStatus.NOT_FOUND)
+                return
+            content_type = mimetypes.guess_type(path.name)[0] or "application/octet-stream"
         fallback_name = "download" + (path.suffix if re.fullmatch(r"\.[A-Za-z0-9]{1,12}", path.suffix or "") else "")
         encoded_name = quote(path.name, safe="")
         self.send_response(HTTPStatus.OK)
@@ -7553,9 +7685,12 @@ class PortalHandler(BaseHTTPRequestHandler):
         self.send_header("Content-Disposition", f"{disposition}; filename=\"{fallback_name}\"; filename*=UTF-8''{encoded_name}")
         self.end_headers()
         try:
-            with path.open("rb") as source:
-                while chunk := source.read(STREAM_CHUNK_BYTES):
-                    self.wfile.write(chunk)
+            if raw is not None:
+                self.wfile.write(raw)
+            else:
+                with path.open("rb") as source:
+                    while chunk := source.read(STREAM_CHUNK_BYTES):
+                        self.wfile.write(chunk)
         except (BrokenPipeError, ConnectionResetError):
             return
 
@@ -8266,11 +8401,12 @@ class PortalHandler(BaseHTTPRequestHandler):
                 return
             params = parse_qs(urlparse(self.path).query, keep_blank_values=True)
             path_hash_value = (params.get("path_hash") or [""])[0]
+            thumbnail = str((params.get("variant") or [""])[0] or "").strip().lower() == "thumbnail"
             target, _relative_path = self.state.storage_file_by_path_hash(path_hash_value, user or {})
             if not target:
                 self.send_json({"ok": False, "error": "preview_not_found_or_not_authorized"}, HTTPStatus.NOT_FOUND)
                 return
-            self.send_storage_file(target, preview=True)
+            self.send_storage_file(target, preview=True, thumbnail=thumbnail)
             return
         if route == "/api/storage/operations":
             if not self.require_product():
@@ -8393,6 +8529,7 @@ class PortalHandler(BaseHTTPRequestHandler):
             if scope is not None:
                 allowed_ids = scope["asset_ids"]
                 photos = [row for row in photos if str(row.get("asset_id") or "") in allowed_ids]
+            photos = self.state.visible_media_photos(photos, user or {})
             self.send_json(
                 {
                     "ok": True,
@@ -8413,6 +8550,7 @@ class PortalHandler(BaseHTTPRequestHandler):
                 return
             params = parse_qs(urlparse(self.path).query, keep_blank_values=True)
             path_hash_value = str((params.get("path_hash") or [""])[0] or "").strip().lower()
+            thumbnail = str((params.get("variant") or [""])[0] or "").strip().lower() == "thumbnail"
             media = self.state.media_center
             target = media.photo_path_by_hash(path_hash_value) if media else None
             if not target:
@@ -8428,7 +8566,7 @@ class PortalHandler(BaseHTTPRequestHandler):
                 error_name = "permission_denied" if denial_status == HTTPStatus.FORBIDDEN else "preview_not_found_or_not_authorized"
                 self.send_json({"ok": False, "error": error_name, "required": "read", "raw_path_returned": False}, denial_status)
                 return
-            self.send_storage_file(resolved, preview=True)
+            self.send_storage_file(resolved, preview=True, thumbnail=thumbnail)
             return
         if route == "/api/ai-album/scope":
             if not self.require_product():
