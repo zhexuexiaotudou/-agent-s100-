@@ -3,9 +3,14 @@ import json
 import sqlite3
 import sys
 import tempfile
+import threading
 import unittest
+import urllib.request
+from http.server import ThreadingHTTPServer
 from pathlib import Path
 from unittest.mock import patch
+
+from PIL import Image as PILImage
 
 
 REPO_ROOT = Path(__file__).resolve().parents[1]
@@ -13,7 +18,7 @@ PROBES_ROOT = REPO_ROOT / "scripts" / "probes"
 if str(PROBES_ROOT) not in sys.path:
     sys.path.insert(0, str(PROBES_ROOT))
 
-from ai_nas_operator_portal_server import PortalState
+from ai_nas_operator_portal_server import PortalHandler, PortalState, image_thumbnail_payload
 
 
 class CopilotLocalQwenChatTest(unittest.TestCase):
@@ -42,6 +47,90 @@ class CopilotLocalQwenChatTest(unittest.TestCase):
                 "usage": {"prompt_tokens": 8, "completion_tokens": 9},
             },
         }
+
+    def test_large_album_photo_uses_bounded_browser_thumbnail(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            source = Path(tmp) / "large.jpg"
+            PILImage.new("RGB", (1200, 800), (20, 80, 140)).save(source, format="JPEG", quality=92)
+
+            raw, content_type, transformed = image_thumbnail_payload(source, max_edge=480)
+
+            self.assertTrue(transformed)
+            self.assertEqual(content_type, "image/jpeg")
+            self.assertLess(len(raw), source.stat().st_size)
+            thumbnail = Path(tmp) / "thumbnail.jpg"
+            thumbnail.write_bytes(raw)
+            with PILImage.open(thumbnail) as image:
+                self.assertLessEqual(max(image.size), 480)
+
+    def test_album_frontend_separates_thumbnail_and_full_preview(self):
+        source = (REPO_ROOT / "web" / "static" / "digua_ai_nas_v2.js").read_text(encoding="utf-8")
+
+        self.assertIn("function thumbnailPreviewUrl", source)
+        self.assertIn("variant=thumbnail", source)
+        self.assertIn("function decodePreviewObjectUrl", source)
+        self.assertIn("preview_decode_failed", source)
+        self.assertNotIn('card.querySelector(".search-preview-image")?.src', source)
+
+    def test_album_list_only_returns_photos_the_user_can_preview(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            state = self.make_state(root, personal=True)
+            assert state.identity_store is not None
+            assert state.media_center is not None
+            state.identity_store.create_user("admin", "admin123", "admin")
+            state.identity_store.create_user("viewer", "viewer123", "user")
+            state.identity_store.set_acl("Public", "user", "viewer", "read")
+            public_photo = root / "Personal" / "Public" / "visible.jpg"
+            private_photo = root / "Personal" / "Private" / "hidden.jpg"
+            public_photo.parent.mkdir(parents=True)
+            private_photo.parent.mkdir(parents=True)
+            public_photo.write_bytes(b"public-photo")
+            private_photo.write_bytes(b"private-photo")
+            state.media_center.index_photos(root / "Personal", asset_root=root / "Personal")
+
+            photos = state.media_center.list_photos(limit=20)
+            viewer_photos = state.visible_media_photos(photos, {"username": "viewer", "role": "user"})
+            admin_photos = state.visible_media_photos(photos, {"username": "admin", "role": "admin"})
+
+            self.assertEqual(len(viewer_photos), 1)
+            self.assertEqual(viewer_photos[0]["title_redacted"], "visible.jpg")
+            self.assertEqual(len(admin_photos), 2)
+
+    def test_media_preview_thumbnail_route_keeps_full_image_bounded(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            state = self.make_state(root, personal=True)
+            assert state.identity_store is not None
+            assert state.media_center is not None
+            state.identity_store.create_user("admin", "admin123", "admin")
+            login = state.identity_store.login("admin", "admin123")
+            source = root / "Personal" / "Photos" / "large.jpg"
+            source.parent.mkdir(parents=True)
+            PILImage.new("RGB", (1600, 900), (120, 40, 80)).save(source, format="JPEG", quality=92)
+            state.media_center.index_photos(root / "Personal", asset_root=root / "Personal")
+            photo = state.media_center.list_photos(limit=1)[0]
+            server = ThreadingHTTPServer(("127.0.0.1", 0), PortalHandler)
+            server.state = state  # type: ignore[attr-defined]
+            worker = threading.Thread(target=server.serve_forever, daemon=True)
+            worker.start()
+            try:
+                request = urllib.request.Request(
+                    f"http://127.0.0.1:{server.server_port}/api/media/preview?path_hash={photo['path_hash']}&variant=thumbnail",
+                    headers={"Authorization": f"Bearer {login['token']}"},
+                )
+                with urllib.request.urlopen(request, timeout=5) as response:
+                    raw = response.read()
+                    self.assertEqual(response.headers.get_content_type(), "image/jpeg")
+                thumbnail = root / "route-thumbnail.jpg"
+                thumbnail.write_bytes(raw)
+                with PILImage.open(thumbnail) as image:
+                    self.assertLessEqual(max(image.size), 480)
+                self.assertLess(len(raw), source.stat().st_size)
+            finally:
+                server.shutdown()
+                server.server_close()
+                worker.join(timeout=5)
 
     def fake_router(self, route: str = "local", privacy_level: str = "none", task_complexity: str = "simple", local_tool_id: str | None = None) -> dict:
         return self.fake_qwen(json.dumps({

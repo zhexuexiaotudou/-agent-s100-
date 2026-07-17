@@ -4,6 +4,7 @@ from __future__ import annotations
 import argparse
 import base64
 import binascii
+import io
 import hashlib
 import json
 import os
@@ -27,6 +28,12 @@ from http import HTTPStatus
 from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 from pathlib import Path
 from urllib.parse import parse_qs, quote, urlparse
+
+try:
+    from PIL import Image, ImageOps
+except Exception:
+    Image = None  # type: ignore[assignment]
+    ImageOps = None  # type: ignore[assignment]
 
 REPO_ROOT = Path(__file__).resolve().parents[2]
 if str(REPO_ROOT) not in sys.path:
@@ -3175,6 +3182,24 @@ class PortalState:
             }
         )
         return status
+
+    def visible_media_photos(self, photos: list[dict], user: dict) -> list[dict]:
+        if not self.media_center:
+            return []
+        paths = self.media_center.photo_paths_by_hashes([str(item.get("path_hash") or "") for item in photos])
+        visible: list[dict] = []
+        for item in photos:
+            target = paths.get(str(item.get("path_hash") or ""))
+            if not target:
+                continue
+            try:
+                resolved = target.resolve(strict=True)
+            except OSError:
+                continue
+            allowed, _status = self.media_preview_access(resolved, user or {})
+            if allowed:
+                visible.append(item)
+        return visible
 
     def ai_album_organizer_scope(self) -> dict:
         if not self.personal_root:
@@ -6524,6 +6549,30 @@ class PortalState:
         }
 
 
+def image_thumbnail_payload(path: Path, *, max_edge: int = 480) -> tuple[bytes, str, bool]:
+    """Return a browser-safe thumbnail, falling back to the original bytes."""
+    content_type = mimetypes.guess_type(path.name)[0] or "application/octet-stream"
+    if Image is None or ImageOps is None:
+        return path.read_bytes(), content_type, False
+    try:
+        with Image.open(path) as opened:
+            image = ImageOps.exif_transpose(opened)
+            if max(image.size) <= max_edge:
+                return path.read_bytes(), content_type, False
+            image.thumbnail((max_edge, max_edge), Image.Resampling.LANCZOS)
+            has_alpha = image.mode in {"RGBA", "LA"} or (image.mode == "P" and "transparency" in image.info)
+            output = io.BytesIO()
+            if has_alpha:
+                image.save(output, format="PNG", optimize=True)
+                return output.getvalue(), "image/png", True
+            if image.mode != "RGB":
+                image = image.convert("RGB")
+            image.save(output, format="JPEG", quality=84, optimize=True)
+            return output.getvalue(), "image/jpeg", True
+    except Exception:
+        return path.read_bytes(), content_type, False
+
+
 class PortalHandler(BaseHTTPRequestHandler):
     server_version = "AINASOperatorPortal/1.0"
 
@@ -6560,12 +6609,19 @@ class PortalHandler(BaseHTTPRequestHandler):
             return
         self.send_text(text, content_type)
 
-    def send_storage_file(self, path: Path, *, preview: bool = False) -> None:
+    def send_storage_file(self, path: Path, *, preview: bool = False, thumbnail: bool = False) -> None:
         if not path.exists() or not path.is_file():
             self.send_json({"ok": False, "error": "file_not_found"}, HTTPStatus.NOT_FOUND)
             return
-        raw = path.read_bytes()
-        content_type = mimetypes.guess_type(path.name)[0] or "application/octet-stream"
+        try:
+            if preview and thumbnail:
+                raw, content_type, _transformed = image_thumbnail_payload(path)
+            else:
+                raw = path.read_bytes()
+                content_type = mimetypes.guess_type(path.name)[0] or "application/octet-stream"
+        except OSError as exc:
+            self.send_json({"ok": False, "error": f"read_failed:{type(exc).__name__}"}, HTTPStatus.NOT_FOUND)
+            return
         fallback_name = "download" + (path.suffix if re.fullmatch(r"\.[A-Za-z0-9]{1,12}", path.suffix or "") else "")
         encoded_name = quote(path.name, safe="")
         self.send_response(HTTPStatus.OK)
@@ -7232,11 +7288,12 @@ class PortalHandler(BaseHTTPRequestHandler):
                 return
             params = parse_qs(urlparse(self.path).query, keep_blank_values=True)
             path_hash_value = (params.get("path_hash") or [""])[0]
+            thumbnail = str((params.get("variant") or [""])[0] or "").strip().lower() == "thumbnail"
             target, _relative_path = self.state.storage_file_by_path_hash(path_hash_value, user or {})
             if not target:
                 self.send_json({"ok": False, "error": "preview_not_found_or_not_authorized"}, HTTPStatus.NOT_FOUND)
                 return
-            self.send_storage_file(target, preview=True)
+            self.send_storage_file(target, preview=True, thumbnail=thumbnail)
             return
         if route == "/api/storage/operations":
             if not self.require_product():
@@ -7303,7 +7360,7 @@ class PortalHandler(BaseHTTPRequestHandler):
         if route in {"/api/media/status", "/api/media/photos", "/api/media/timeline", "/api/media/albums", "/api/media/duplicates", "/api/media/summary"}:
             if not self.require_product():
                 return
-            status, error, _user = self.state.require_user(self.headers.get("Authorization"))
+            status, error, user = self.state.require_user(self.headers.get("Authorization"))
             if status:
                 self.send_json(error or {}, status)
                 return
@@ -7315,7 +7372,8 @@ class PortalHandler(BaseHTTPRequestHandler):
                 params = parse_qs(urlparse(self.path).query, keep_blank_values=True)
                 limit = int((params.get("limit") or ["100"])[0] or "100")
                 offset = int((params.get("offset") or ["0"])[0] or "0")
-                self.send_json({"ok": True, "schema": "digua_media_album_v2", "photos": media.list_photos(limit=limit, offset=offset) if media else [], "raw_path_returned": False})
+                photos = media.list_photos(limit=limit, offset=offset) if media else []
+                self.send_json({"ok": True, "schema": "digua_media_album_v2", "photos": self.state.visible_media_photos(photos, user or {}), "raw_path_returned": False})
                 return
             if route == "/api/media/timeline":
                 self.send_json({"ok": True, "schema": "digua_media_album_v2", "timeline": media.timeline() if media else [], "raw_path_returned": False})
@@ -7326,12 +7384,13 @@ class PortalHandler(BaseHTTPRequestHandler):
             if route == "/api/media/duplicates":
                 self.send_json({"ok": True, "schema": "digua_media_album_v2", "duplicates": media.find_duplicates() if media else [], "raw_path_returned": False})
                 return
-            self.send_json({"ok": True, "schema": "digua_media_album_v2", "stats": self.state.media_status_payload(), "albums": media.list_albums() if media else [], "photos": media.list_photos(limit=24) if media else [], "raw_path_returned": False})
+            summary_photos = media.list_photos(limit=24) if media else []
+            self.send_json({"ok": True, "schema": "digua_media_album_v2", "stats": self.state.media_status_payload(), "albums": media.list_albums() if media else [], "photos": self.state.visible_media_photos(summary_photos, user or {}), "raw_path_returned": False})
             return
         if route == "/api/media/album":
             if not self.require_product():
                 return
-            status, error, _user = self.state.require_user(self.headers.get("Authorization"))
+            status, error, user = self.state.require_user(self.headers.get("Authorization"))
             if status:
                 self.send_json(error or {}, status)
                 return
@@ -7342,6 +7401,7 @@ class PortalHandler(BaseHTTPRequestHandler):
                 return
             media = self.state.media_center
             photos = media.get_album_photos(album_name) if media else []
+            photos = self.state.visible_media_photos(photos, user or {})
             self.send_json(
                 {
                     "ok": True,
@@ -7362,6 +7422,7 @@ class PortalHandler(BaseHTTPRequestHandler):
                 return
             params = parse_qs(urlparse(self.path).query, keep_blank_values=True)
             path_hash_value = str((params.get("path_hash") or [""])[0] or "").strip().lower()
+            thumbnail = str((params.get("variant") or [""])[0] or "").strip().lower() == "thumbnail"
             media = self.state.media_center
             target = media.photo_path_by_hash(path_hash_value) if media else None
             if not target:
@@ -7377,7 +7438,7 @@ class PortalHandler(BaseHTTPRequestHandler):
                 error_name = "permission_denied" if denial_status == HTTPStatus.FORBIDDEN else "preview_not_found_or_not_authorized"
                 self.send_json({"ok": False, "error": error_name, "required": "read", "raw_path_returned": False}, denial_status)
                 return
-            self.send_storage_file(resolved, preview=True)
+            self.send_storage_file(resolved, preview=True, thumbnail=thumbnail)
             return
         if route == "/api/ai-album/scope":
             if not self.require_product():

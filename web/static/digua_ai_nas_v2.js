@@ -1112,7 +1112,7 @@
       ? ` tabindex="0" role="button" aria-label="双击打开 ${escapeHtml(title)}" data-image-preview-url="${escapeHtml(item.preview_url)}" data-image-title="${escapeHtml(title)}" data-image-meta="${escapeHtml(meta || "NAS 本地文件")}" data-image-match="${escapeHtml(`${match} · ${scoreText}`)}"`
       : "";
     const preview = item.preview_url && item.preview_kind === "image"
-      ? `<div class="search-thumb has-preview"><img class="search-preview-image" alt="${escapeHtml(title)} 预览" data-preview-url="${escapeHtml(item.preview_url)}" hidden><span class="thumb-loading">加载预览</span></div>`
+      ? `<div class="search-thumb has-preview"><img class="search-preview-image" alt="${escapeHtml(title)} 预览" data-preview-url="${escapeHtml(thumbnailPreviewUrl(item.preview_url))}" hidden><span class="thumb-loading">加载预览</span></div>`
       : `<div class="search-thumb"><span class="search-thumb-placeholder">${svg("docs")}<small>无预览</small></span></div>`;
     return `<article class="search-result-card${canOpenImage ? " is-openable" : ""}${trashButton ? " has-actions" : ""}"${openAttrs}>
       ${preview}
@@ -1923,6 +1923,14 @@
     return "";
   }
 
+  function thumbnailPreviewUrl(previewUrl) {
+    if (!previewUrl) return "";
+    if (/(?:\?|&)variant=/.test(previewUrl)) {
+      return previewUrl.replace(/([?&]variant=)[^&#]*/i, "$1thumbnail");
+    }
+    return `${previewUrl}${previewUrl.includes("?") ? "&" : "?"}variant=thumbnail`;
+  }
+
   function renderMediaPhotoItem(photo) {
     const title = mediaPhotoTitle(photo);
     const previewUrl = mediaPhotoPreviewUrl(photo);
@@ -1938,7 +1946,7 @@
       ? storageTrashButton({ kind: "image", title, pathHash: photo.path_hash, previewUrl })
       : "";
     const thumb = previewUrl
-      ? `<div class="search-thumb media-photo-thumb has-preview"><img class="search-preview-image" alt="图片预览" data-preview-url="${escapeHtml(previewUrl)}" hidden><span class="thumb-loading">加载预览</span></div>`
+      ? `<div class="search-thumb media-photo-thumb has-preview"><img class="search-preview-image" alt="图片预览" data-preview-url="${escapeHtml(thumbnailPreviewUrl(previewUrl))}" hidden><span class="thumb-loading">加载预览</span></div>`
       : `<span class="doc-glyph png">IMG</span>`;
     return `<article class="doc-item media-photo-item${previewUrl ? " is-openable" : ""}${trashButton ? " has-actions" : ""}"${openAttrs}>
       ${thumb}
@@ -2357,7 +2365,7 @@
       ? storageTrashButton({ kind: "image", title, pathHash, previewUrl })
       : "";
     const thumb = previewUrl
-      ? `<div class="search-thumb ai-album-thumb has-preview"><img class="search-preview-image" alt="${escapeHtml(title)} 预览" data-preview-url="${escapeHtml(previewUrl)}" hidden><span class="thumb-loading">加载预览</span></div>`
+      ? `<div class="search-thumb ai-album-thumb has-preview"><img class="search-preview-image" alt="${escapeHtml(title)} 预览" data-preview-url="${escapeHtml(thumbnailPreviewUrl(previewUrl))}" hidden><span class="thumb-loading">加载预览</span></div>`
       : `<div class="search-thumb ai-album-thumb">${svg(asset?.modality === "video" ? "media" : "docs")}<span>无预览</span></div>`;
     return `<article class="ai-album-asset-card${selected}${previewUrl ? " is-openable" : ""}${trashButton ? " has-actions" : ""}" tabindex="0" role="button" data-action="aiAlbumSelectAsset" data-ai-album-asset-id="${escapeHtml(id)}"${openAttrs}>
       ${thumb}
@@ -2719,8 +2727,16 @@
     return { ok: response.ok, status: response.status, data };
   }
 
-  async function loadPreviewObjectUrl(previewUrl) {
+  function discardPreviewObjectUrl(previewUrl) {
+    const objectUrl = previewObjectUrlCache.get(previewUrl);
+    if (objectUrl) URL.revokeObjectURL(objectUrl);
+    previewObjectUrlCache.delete(previewUrl);
+    previewObjectPromiseCache.delete(previewUrl);
+  }
+
+  async function loadPreviewObjectUrl(previewUrl, { forceRefresh = false } = {}) {
     if (!previewUrl) throw new Error("preview_url_missing");
+    if (forceRefresh) discardPreviewObjectUrl(previewUrl);
     const cachedObjectUrl = previewObjectUrlCache.get(previewUrl);
     if (cachedObjectUrl) return cachedObjectUrl;
     const cachedPromise = previewObjectPromiseCache.get(previewUrl);
@@ -2731,6 +2747,8 @@
       const response = await fetch(previewUrl, { headers });
       if (!response.ok) throw new Error(`preview_${response.status}`);
       const blob = await response.blob();
+      if (!blob.size) throw new Error("preview_empty");
+      if (!String(blob.type || "").toLowerCase().startsWith("image/")) throw new Error("preview_not_image");
       const objectUrl = URL.createObjectURL(blob);
       previewObjectUrlCache.set(previewUrl, objectUrl);
       return objectUrl;
@@ -2741,6 +2759,26 @@
     } finally {
       previewObjectPromiseCache.delete(previewUrl);
     }
+  }
+
+  function decodePreviewObjectUrl(objectUrl, timeoutMs = 12000) {
+    return new Promise((resolve, reject) => {
+      const probe = new Image();
+      let settled = false;
+      const finish = (error) => {
+        if (settled) return;
+        settled = true;
+        window.clearTimeout(timeoutId);
+        probe.onload = null;
+        probe.onerror = null;
+        if (error) reject(error);
+        else resolve();
+      };
+      const timeoutId = window.setTimeout(() => finish(new Error("preview_decode_timeout")), timeoutMs);
+      probe.onload = () => finish(probe.naturalWidth > 0 ? null : new Error("preview_decode_empty"));
+      probe.onerror = () => finish(new Error("preview_decode_failed"));
+      probe.src = objectUrl;
+    });
   }
 
   async function hydrateAssistantSearchPreviews() {
@@ -2773,19 +2811,28 @@
     img.dataset.loaded = "1";
     const container = img.closest(".search-thumb");
     const loading = container?.querySelector(".thumb-loading");
-    try {
-      const objectUrl = await loadPreviewObjectUrl(img.dataset.previewUrl);
-      const card = img.closest("[data-image-preview-url]");
-      if (card) card.dataset.imageObjectUrl = objectUrl;
-      img.onload = () => {
+    let lastError = null;
+    for (let attempt = 0; attempt < 2; attempt += 1) {
+      try {
+        const previewUrl = img.dataset.previewUrl;
+        const objectUrl = await loadPreviewObjectUrl(previewUrl, { forceRefresh: attempt > 0 });
+        await decodePreviewObjectUrl(objectUrl);
+        const card = img.closest("[data-image-preview-url]");
+        if (card?.dataset?.imagePreviewUrl === previewUrl) card.dataset.imageObjectUrl = objectUrl;
+        img.src = objectUrl;
         img.hidden = false;
         if (loading) loading.hidden = true;
         container?.classList.add("preview-ready");
-      };
-      img.src = objectUrl;
-    } catch (error) {
-      container?.classList.add("preview-unavailable");
-      if (loading) loading.textContent = "预览不可用";
+        return;
+      } catch (error) {
+        lastError = error;
+      }
+    }
+    img.dataset.loaded = "0";
+    container?.classList.add("preview-unavailable");
+    if (loading) {
+      loading.hidden = false;
+      loading.textContent = lastError?.message === "preview_decode_timeout" ? "预览解码超时" : "预览不可用，刷新可重试";
     }
   }
 
@@ -2820,7 +2867,7 @@
   async function openSearchImageViewer(card) {
     if (!card?.dataset?.imagePreviewUrl) return;
     const previewUrl = card.dataset.imagePreviewUrl;
-    const existingObjectUrl = card.dataset.imageObjectUrl || previewObjectUrlCache.get(previewUrl) || card.querySelector(".search-preview-image")?.src || "";
+    const existingObjectUrl = card.dataset.imageObjectUrl || previewObjectUrlCache.get(previewUrl) || "";
     const requestId = `${Date.now()}-${Math.random().toString(16).slice(2)}`;
     appState.imageViewer = {
       open: true,
@@ -2844,7 +2891,13 @@
       const timeoutPromise = new Promise((_, reject) => {
         timeoutId = window.setTimeout(() => reject(new DOMException("preview_timeout", "AbortError")), 15000);
       });
-      const objectUrl = await Promise.race([loadPreviewObjectUrl(previewUrl), timeoutPromise]);
+      let objectUrl = await Promise.race([loadPreviewObjectUrl(previewUrl), timeoutPromise]);
+      try {
+        await decodePreviewObjectUrl(objectUrl);
+      } catch (_decodeError) {
+        objectUrl = await loadPreviewObjectUrl(previewUrl, { forceRefresh: true });
+        await decodePreviewObjectUrl(objectUrl);
+      }
       if (!appState.imageViewer.open || appState.imageViewer.requestId !== requestId) return;
       appState.imageViewer = { ...appState.imageViewer, objectUrl, status: "ready", error: "" };
       renderShell();
