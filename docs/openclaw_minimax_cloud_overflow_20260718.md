@@ -57,3 +57,11 @@ AI-NAS portal (sunrise, 127.0.0.1:8765)
 3. 保留 OpenClaw 既有 provider 配置，不改动 MiniMax token；必要时删除仅用于本机桥认证的 `cloud_bridge_token`。
 
 回滚不会影响本地 Qwen、NAS 只读功能或 OpenClaw 根网关。
+
+## 2026-07-18 生产验收
+
+- 主功能经 [PR #60](https://github.com/zhexuexiaotudou/-agent-s100-/pull/60) 合并，systemd 运行环境修正经 [PR #61](https://github.com/zhexuexiaotudou/-agent-s100-/pull/61) 合并，门户长推理超时修正经 [PR #62](https://github.com/zhexuexiaotudou/-agent-s100-/pull/62) 合并。三个 PR 的 `offline-regression` 和 `startup-link-check-contract` 均通过。
+- S100P 当前部署修订为 `1e9ed16f7d8a302f6174c1b11f786f4e68e4af37`。`openclaw-gateway.service`、门户 user service 和 `digua-openclaw-cloud-bridge.service` 均为 `active`；8765、18080、18082 和 18765 都只监听 loopback。
+- 桥的真实 HTTP 探针返回 `provider=custom-gateway`、`model=MiniMax-M2.7`、`transport=openclaw_gateway` 以及 `BRIDGE_MINIMAX_OK`。
+- 临时验收用户通过真实 `/api/copilot/chat` 调用两个案例：`你是谁` 返回 `deterministic_local_identity`、`cloud_used=false`、`cloud_payload_sent=false`；公开复杂分析返回 `router_route=cloud`、`privacy_level=none`、`cloud_overflow_chat`、`MiniMax-M2.7`。两个 HTTP 响应都为 200，临时用户随后删除。
+- 部署备份保留在 `/mnt/nas/openclaw/deploy_backups/e244d95c-20260718034337`、`/mnt/nas/openclaw/deploy_backups/d85f3d99-20260718034913` 和 `/mnt/nas/openclaw/deploy_backups/1e9ed16f-20260718035733`。

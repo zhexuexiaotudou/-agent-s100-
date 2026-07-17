@@ -47,7 +47,7 @@ in
 
 ## Current Status
 
-Status timestamp: 2026-07-06 17:53 CST.
+Status timestamp: 2026-07-18 04:00 CST.
 
 The three demo expectations are now satisfied on the S100P test machine:
 
@@ -55,7 +55,7 @@ The three demo expectations are now satisfied on the S100P test machine:
 | --- | --- | --- | --- |
 | 1. S100P as resident gateway | S100P keeps the AI gateway online after login/logout and exposes a stable local entry point | `openclaw-gateway.service` and `qwen25-local-openai-gateway.service` are both `active/enabled`; `loginctl` linger is `yes` | OpenClaw `/api/health` on `127.0.0.1:8765`; Qwen `/health` on `127.0.0.1:18080` |
 | 2. OpenClaw implements AI-NAS | OpenClaw can drive NAS operations, not just chat | `ok_ai_nas_openclaw_nas_control_gate`, 10/10 checks passed | `/mnt/nas/openclaw/reports/qwen25_ai_nas/openclaw_nas_control_gate_20260629-210023-832862/openclaw_nas_control_gate.json` |
-| 3. Edge + cloud routing | Every query first enters local Qwen; private/simple requests stay on S100P; public complex requests can use a controlled cloud endpoint | `ok_ai_nas_edge_cloud_router`; 3/3 classifications came from `qwen_structured_json`; 2 local, 1 cloud; no privacy query was sent to cloud | `/mnt/nas/openclaw/reports/qwen25_ai_nas/edge_cloud_router_20260629-210034-495865/edge_cloud_router.json` |
+| 3. Edge + cloud routing | Every query first enters local Qwen; private/simple requests stay on S100P; public complex requests can use a controlled cloud endpoint | Production portal keeps identity questions local and routes only `privacy_level=none` complex work through the loopback OpenClaw bridge to `custom-gateway/MiniMax-M2.7`; both authenticated HTTP cases returned 200 | [`docs/openclaw_minimax_cloud_overflow_20260718.md`](docs/openclaw_minimax_cloud_overflow_20260718.md) |
 
 The latest Qwen AI-NAS acceptance packet also passed:
 
@@ -375,6 +375,10 @@ Recommended one-line pitch:
   copy targets, and direct storage mutation ACL enforcement.
 - **Local-first router**: the edge-cloud probe requires Qwen to produce
   structured JSON. Policy is only a privacy/failure fallback.
+- **OpenClaw-owned cloud overflow**: public complex requests use the
+  loopback-only bridge on `127.0.0.1:18082`, which calls the existing OpenClaw
+  `custom-gateway/MiniMax-M2.7` provider. The portal never reads or stores the
+  MiniMax provider token.
 - **Privacy floor**: invoice, family photo, chat screenshot, NAS folder, finance,
   and other private requests are forced local even if the cloud path exists.
 - **Evidence-first delivery**: every demo claim is backed by JSON/Markdown
@@ -402,6 +406,7 @@ Recommended one-line pitch:
 | `scripts/probes/qwen25_ai_nas_acceptance_packet.py` | Qwen AI-NAS acceptance packet generator |
 | `scripts/probes/ai_nas_openclaw_nas_control_gate_probe.py` | OpenClaw NAS control, ACL, and destructive-action gate |
 | `scripts/probes/ai_nas_operator_portal_server.py` | AI-NAS Web OS / operator portal server |
+| `scripts/probes/openclaw_cloud_inference_bridge.py` | Loopback-only authenticated adapter from portal cloud overflow to the fixed OpenClaw MiniMax provider |
 | `scripts/product_smoke_test.py` | Product-level live HTTP smoke gate for `/api/product/status`, evidence, YOLO, multimodal, and harness boundaries |
 | `gates/stage7_ai_space_product_delivery_gate.py` | Aggregate product gate for live CLIP, person attributes, AI Space, smart classification, and subtitle extraction |
 | `src/person_attribute/` | Local-only non-identifying person attribute search |
@@ -418,6 +423,7 @@ Recommended one-line pitch:
 | `evidence_for_gptpro/` | Packaged review bundles with SHA256 sidecars |
 | `configs/systemd/qwen25-local-openai-gateway.service` | S100P resident Qwen gateway unit |
 | `configs/systemd/openclaw-gateway.service` | S100P resident OpenClaw AI-NAS portal gateway unit |
+| `configs/systemd/digua-openclaw-cloud-bridge.service` | Root system unit for the loopback OpenClaw cloud inference bridge |
 | `dream_s100p_lladacpp/` | Isolated Dream7B llada.cpp-style research track; not a product route |
 | `docs/` | Project decisions, runbooks, acceptance notes, and demo scripts |
 | `tmp/demo_three_features_final_recheck/` | Local copies of the latest recheck reports |
@@ -428,7 +434,7 @@ Run these from `F:\Project\Digua` on the Windows host.
 
 ```powershell
 ssh -i C:\Users\zhexu\.ssh\s100p_linkcheck_ed25519 sunrise@192.168.127.10 `
-  'systemctl --user is-active openclaw-gateway.service; systemctl is-active qwen25-local-openai-gateway.service || systemctl --user is-active qwen25-local-openai-gateway.service; ss -ltnp "sport = :18080"; curl -fsS http://127.0.0.1:8765/api/health; curl -fsS http://127.0.0.1:18080/health'
+  'systemctl --user is-active openclaw-gateway.service; systemctl is-active qwen25-local-openai-gateway.service || systemctl --user is-active qwen25-local-openai-gateway.service; sudo systemctl is-active digua-openclaw-cloud-bridge.service; ss -ltnp "sport = :18080"; curl -fsS http://127.0.0.1:8765/api/health; curl -fsS http://127.0.0.1:18080/health; curl -fsS http://127.0.0.1:18082/health'
 ```
 
 Exactly one system- or user-scoped Qwen unit should own loopback port `18080`.
@@ -467,8 +473,11 @@ ssh -i C:\Users\zhexu\.ssh\s100p_linkcheck_ed25519 sunrise@192.168.127.10 `
 
 ## Boundaries
 
-- The router demo uses a controlled local cloud stub unless `--cloud-base-url`
-  is explicitly pointed at a real cloud service.
+- The standalone router probe still uses a controlled local cloud stub unless
+  `--cloud-base-url` is explicitly set. The production portal is different: it
+  uses the loopback OpenClaw bridge and only forwards public, non-private,
+  complex requests to MiniMax. See
+  `docs/openclaw_minimax_cloud_overflow_20260718.md`.
 - Qwen `/health` now returns HTTP 503 unless its runtime executable, config,
   library directory and active HBM file exist. Live inference still requires a
   real request and cannot be accepted from health metadata alone.

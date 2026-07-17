@@ -297,6 +297,14 @@ Expected behavior:
 
 ## 2026-07-05 Qwen-first copilot orchestrator
 
+Current-status note (2026-07-18): the `cloud_overflow_stub` statements in the
+dated 2026-07-05 verification below are historical evidence. The production
+portal now routes eligible public complex requests through a loopback-only
+OpenClaw bridge to `custom-gateway/MiniMax-M2.7`; identity questions remain on
+the deterministic local path. See
+`docs/openclaw_minimax_cloud_overflow_20260718.md` for the live architecture,
+environment variables, acceptance evidence and rollback.
+
 Reason:
 
 - The assistant search closed loop fixed photo search, but it routed search
