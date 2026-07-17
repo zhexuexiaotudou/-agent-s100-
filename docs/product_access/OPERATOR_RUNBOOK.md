@@ -17,3 +17,14 @@
 `deploy/product_access/upgrade.sh` 先保留现有安装副本再原子替换。`rollback.sh <backup>` 恢复。`uninstall.sh` 默认保留 NAS 数据、identity 和 product access 状态；只有用户另行明确批准才删除数据。
 
 `/etc/digua-ai-nas/install-mode` 为 `access-only` 时，上述三个入口自动限定为产品访问层，不得改动既有 OpenClaw/Qwen systemd 单元。升级前后应记录这两个既有单元的哈希与活动状态。
+
+## 既有后台运行时漂移
+
+access-only 安装器不会自动覆盖既有 OpenClaw/Qwen 单元。若登录与文件访问正常、AI 助手却返回 `local_qwen_chat_failed`，先确认 `127.0.0.1:18080/health` 为 200，再以服务用户执行：
+
+```bash
+release/install/sync_openclaw_portal_unit.sh --dry-run --source-root <merged-main>
+release/install/sync_openclaw_portal_unit.sh --apply --source-root <merged-main>
+```
+
+该工具只同步用户级 `openclaw-gateway.service`，执行前备份旧 unit，失败时自动恢复；不会启停 Qwen 或产品访问服务。Qwen 可以由 system scope 或 user scope 承载，但 `ss -ltnp 'sport = :18080'` 必须只显示一个监听者。巡检时同时检查两个 scope，并以端口所有者、unit 状态和 `/health` 三项共同判定。

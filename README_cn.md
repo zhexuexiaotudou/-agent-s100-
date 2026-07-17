@@ -277,8 +277,10 @@ AI Space / 智能分类 / 字幕提取交付门在 S100P 上通过。
 
 ```powershell
 ssh -i C:\Users\zhexu\.ssh\s100p_linkcheck_ed25519 sunrise@192.168.127.10 `
-  'systemctl --user is-active openclaw-gateway.service; systemctl --user is-active qwen25-local-openai-gateway.service; curl -fsS http://127.0.0.1:8765/api/health; curl -fsS http://127.0.0.1:18080/health'
+  'systemctl --user is-active openclaw-gateway.service; systemctl is-active qwen25-local-openai-gateway.service || systemctl --user is-active qwen25-local-openai-gateway.service; ss -ltnp "sport = :18080"; curl -fsS http://127.0.0.1:8765/api/health; curl -fsS http://127.0.0.1:18080/health'
 ```
+
+Qwen 可以由 system scope 或 user scope 承载，但回环端口 `18080` 必须只有一个实例占用。若两个 scope 同时启动，应先消除重复占用再把 unit 状态作为生产证据；仅有 HTTP 200 不能证明服务管理状态已经收敛。
 
 ```powershell
 py -3 scripts\probes\qwen25_ai_nas_acceptance_packet.py --out-root tmp\demo_three_features_final_recheck
