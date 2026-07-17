@@ -3,6 +3,7 @@ from __future__ import annotations
 import argparse
 import hashlib
 import json
+import os
 import subprocess
 import sys
 import time
@@ -31,6 +32,7 @@ def main() -> int:
     add_common_args(parser)
     parser.add_argument("--base-url", default="http://127.0.0.1:8765")
     parser.add_argument("--qwen-url", default="http://127.0.0.1:18080/health")
+    parser.add_argument("--auth-token", default=os.environ.get("DIGUA_ADMIN_TOKEN", ""))
     parser.add_argument("--timeout", type=int, default=30)
     args = parser.parse_args()
     gate_dir = Path(__file__).resolve().parent
@@ -53,7 +55,7 @@ def main() -> int:
         else:
             results[gate] = {"ok": False, "verdict": "missing_report", "stdout": completed.stdout[-2000:], "stderr": completed.stderr[-2000:], "returncode": completed.returncode}
 
-    smoke = _run_product_smoke(args.base_url, args.report_root, args.timeout)
+    smoke = _run_product_smoke(args.base_url, args.report_root, args.timeout, args.auth_token)
     results["product_smoke_test.py"] = smoke
     if smoke.get("json_path"):
         path = Path(str(smoke["json_path"]))
@@ -72,9 +74,11 @@ def main() -> int:
     return 0 if payload["ok"] else 1
 
 
-def _run_product_smoke(base_url: str, report_root: Path, timeout: int) -> dict[str, Any]:
+def _run_product_smoke(base_url: str, report_root: Path, timeout: int, token: str) -> dict[str, Any]:
     cmd = [sys.executable, str(Path("scripts") / "product_smoke_test.py"), "--base-url", base_url, "--report-root", str(report_root), "--timeout", str(timeout)]
-    completed = subprocess.run(cmd, text=True, capture_output=True, check=False)
+    env = dict(os.environ)
+    env["DIGUA_ADMIN_TOKEN"] = token
+    completed = subprocess.run(cmd, text=True, capture_output=True, check=False, env=env)
     candidates = sorted(report_root.glob("product_smoke_test_*/product_smoke_test.json"), key=lambda p: p.stat().st_mtime, reverse=True)
     if not candidates:
         return {"ok": False, "verdict": "missing_product_smoke_report", "stdout": completed.stdout[-2000:], "stderr": completed.stderr[-2000:], "returncode": completed.returncode}

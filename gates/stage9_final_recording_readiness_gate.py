@@ -98,7 +98,9 @@ def main() -> int:
     for name, cmd in commands.items():
         if name == "product_smoke":
             results["recording_index_prepare"] = prepare_recording_indices(args.report_root, args.personal_root)
-        completed = subprocess.run(cmd, text=True, capture_output=True, check=False, timeout=args.timeout + 180)
+        command_env = dict(os.environ)
+        command_env["DIGUA_ADMIN_TOKEN"] = str(args.auth_token or "")
+        completed = subprocess.run(cmd, text=True, capture_output=True, check=False, timeout=args.timeout + 180, env=command_env)
         result = latest_gate_result(args.report_root, name)
         if result:
             payload = json.loads(result.read_text(encoding="utf-8"))

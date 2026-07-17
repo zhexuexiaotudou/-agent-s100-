@@ -243,9 +243,33 @@ def chat_completion(model: str, content: str, metadata: dict[str, Any] | None = 
 
 def path_status(path: str | None) -> dict[str, Any]:
     if not path:
-        return {"path": "", "exists": False, "size_bytes": 0}
+        return {"path": "", "exists": False, "is_file": False, "is_dir": False, "executable": False, "size_bytes": 0}
     p = Path(path)
-    return {"path": str(p), "exists": p.exists(), "size_bytes": p.stat().st_size if p.exists() and p.is_file() else 0}
+    return {"path": str(p), "exists": p.exists(), "is_file": p.is_file(), "is_dir": p.is_dir(), "executable": p.is_file() and os.access(p, os.X_OK), "size_bytes": p.stat().st_size if p.exists() and p.is_file() else 0}
+
+
+def runtime_readiness(policy: dict[str, Any]) -> dict[str, Any]:
+    """Return process-independent readiness for the real S100P runtime."""
+    runtime = policy["official_runtime"]
+    paths = {
+        "runtime_bin": path_status(os.environ.get("QWEN25_RUNTIME_BIN", runtime["runtime_bin"])),
+        "runtime_config": path_status(os.environ.get("QWEN25_RUNTIME_CONFIG", runtime["active_config"])),
+        "runtime_lib_dir": path_status(os.environ.get("QWEN25_RUNTIME_LIB_DIR", runtime["runtime_lib_dir"])),
+        "active_hbm": path_status(os.environ.get("QWEN25_ACTIVE_HBM_PATH", runtime["active_hbm_path"])),
+    }
+    ready = {
+        "runtime_bin": paths["runtime_bin"]["executable"],
+        "runtime_config": paths["runtime_config"]["is_file"],
+        "runtime_lib_dir": paths["runtime_lib_dir"]["is_dir"],
+        "active_hbm": paths["active_hbm"]["is_file"],
+    }
+    missing = [name for name, value in ready.items() if not value]
+    return {
+        "ok": not missing,
+        "inference_ready": not missing,
+        "missing": missing,
+        "paths": paths,
+    }
 
 
 def is_ai_nas_request(text: str) -> bool:
@@ -341,7 +365,7 @@ def run_tool(policy: dict[str, Any], tool_id: str, args: list[str], timeout: int
 
 
 def run_ai_nas_flow(policy: dict[str, Any], prompt: str) -> dict[str, Any]:
-    report_root = Path(policy["ai_nas"]["gateway_report_root"])
+    report_root = Path(os.environ.get("QWEN25_GATEWAY_REPORT_ROOT", policy["ai_nas"]["gateway_report_root"]))
     run_dir = report_root / f"qwen25_gateway_turn_{stamp()}"
     query = prompt.strip() or policy["ai_nas"]["default_case_query"]
     tool_runs = [
@@ -477,20 +501,27 @@ class Handler(BaseHTTPRequestHandler):
             self.json_response(200, api.benchmark_summary())
             return
         if self.path == "/health":
+            readiness = runtime_readiness(policy)
             self.json_response(
-                200,
+                200 if readiness["ok"] else 503,
                 {
-                    "ok": True,
+                    "ok": readiness["ok"],
+                    "process_ok": True,
+                    "inference_ready": readiness["inference_ready"],
+                    "missing": readiness["missing"],
                     "model": policy["model_id"],
                     "backend": "official-qwen2.5-oellm-multichat-plus-ai-nas-tools",
                     "port": policy["gateway"]["port"],
                     "active_profile": runtime["active_profile"],
                     "priority_profile": runtime["priority_profile"],
                     "priority_status": runtime["priority_status"],
-                    "active_hbm": path_status(runtime["active_hbm_path"]),
+                    "active_hbm": readiness["paths"]["active_hbm"],
+                    "runtime_bin": readiness["paths"]["runtime_bin"],
+                    "runtime_config": readiness["paths"]["runtime_config"],
+                    "runtime_lib_dir": readiness["paths"]["runtime_lib_dir"],
                     "priority_hbm": path_status(runtime["priority_hbm_path"]),
-                    "tool_dispatcher": policy["ai_nas"]["tool_dispatcher"],
-                    "report_root": policy["ai_nas"]["report_root"],
+                    "tool_dispatcher": os.environ.get("QWEN25_TOOL_DISPATCHER", policy["ai_nas"]["tool_dispatcher"]),
+                    "report_root": os.environ.get("AI_NAS_REPORT_ROOT", policy["ai_nas"]["report_root"]),
                 },
             )
             return

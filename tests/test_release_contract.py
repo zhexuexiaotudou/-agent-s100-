@@ -32,6 +32,7 @@ class ReleaseContractTest(unittest.TestCase):
             REPO_ROOT / "release" / "systemd" / "digua-ai-index-worker.service"
         ).read_text(encoding="utf-8")
         self.assertIn("@DIGUA_INSTALL_ROOT@/app", gateway)
+        self.assertIn("@DIGUA_USER_DIRECTIVE@", gateway)
         self.assertIn("--bind 127.0.0.1", gateway)
         self.assertNotIn("--host 127.0.0.1", gateway)
         self.assertIn("-m src.product_jobs.worker", worker)

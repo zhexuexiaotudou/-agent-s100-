@@ -70,8 +70,8 @@ def has_raw_path(value: Any) -> bool:
     return any(marker in encoded for marker in RAW_PATH_MARKERS)
 
 
-def run_cmd(cmd: list[str], *, timeout: int = 300) -> dict[str, Any]:
-    completed = subprocess.run(cmd, cwd=REPO_ROOT, text=True, capture_output=True, check=False, timeout=timeout)
+def run_cmd(cmd: list[str], *, timeout: int = 300, env: dict[str, str] | None = None) -> dict[str, Any]:
+    completed = subprocess.run(cmd, cwd=REPO_ROOT, text=True, capture_output=True, check=False, timeout=timeout, env=env)
     return {"ok": completed.returncode == 0, "returncode": completed.returncode, "stdout": completed.stdout[-4000:], "stderr": completed.stderr[-4000:], "cmd": cmd}
 
 

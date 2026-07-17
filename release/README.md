@@ -28,18 +28,17 @@ The release package provides:
 ## Quickstart
 
 ```bash
-sudo bash release/install/install_s100p.sh \
-  --nas-protocol nfs \
-  --nas-host 192.168.1.20 \
-  --nas-share /OpenClawWorkspace \
-  --mount-point /mnt/nas/openclaw \
-  --personal-root /mnt/nas/openclaw/Personal \
-  --install-root /opt/digua-ai-nas
+sudo -E python3 release/install/deploy_wizard.py
 ```
 
-Run a dry-run first:
+For repeatable CI, supply a JSON answer file and an isolated simulation root.
+Simulation is always labeled non-production:
 
 ```bash
-bash release/install/install_s100p.sh --dry-run
+sudo -E python3 release/install/deploy_wizard.py \
+  --config deploy.json --non-interactive --yes \
+  --simulate-root /tmp/digua-clean-install
 ```
 
+See `release/docs/INSTALL_S100P.md` for package transfer, NAS credentials,
+model/runtime inputs, authenticated acceptance and rollback.

@@ -5,8 +5,9 @@ Wants=network-online.target
 
 [Service]
 Type=simple
+@DIGUA_USER_DIRECTIVE@
 WorkingDirectory=@DIGUA_INSTALL_ROOT@/app
-EnvironmentFile=-%h/.config/digua-ai-nas/digua.env
+EnvironmentFile=@DIGUA_ENV_FILE@
 ExecStartPre=/usr/bin/test -r @DIGUA_INSTALL_ROOT@/app/scripts/qwen25_openai_gateway.py
 ExecStart=@DIGUA_INSTALL_ROOT@/venv/bin/python @DIGUA_INSTALL_ROOT@/app/scripts/qwen25_openai_gateway.py --host 127.0.0.1 --port 18080
 Restart=on-failure
