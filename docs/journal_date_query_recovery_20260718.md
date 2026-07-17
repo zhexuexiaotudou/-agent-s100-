@@ -30,8 +30,15 @@
 - Python 编译通过。
 - 第二层定向回归：`tests/test_copilot_local_qwen_chat.py` 共 23 项通过，包含精确日期日记答复与非金额拒答回退。
 - 定向回归：`tests/test_copilot_local_qwen_chat.py`、`tests/test_document_fts_rag.py`、`tests/test_journal_routes.py`、`tests/test_offline_ui_contract.py` 共 36 项通过。
+- 第二层完整回归：`python -m unittest discover -s tests -v` 共 185 项通过。
 - 使用从 NAS 只读复制的真实 `2026年日记.docx` 验证：查询被识别为 `document_query`，规范化日期为 `2026年5月20日`，召回 1 条 Word 证据，`cloud_used=false`，`qwen_execution_authority=false`。
 
-## 待完成的实机门禁
+## 合并、部署与实机门禁
 
-第二层修复的完整回归、PR/CI、合并、S100P 再部署与真实回答验证仍待完成；完成后需把最终 commit、部署时间、HTTP/UI 结果和回滚点补入本文件。
+- 第二层修复 commit：`09b0b9e3`；PR #54；合并 commit：`a3a063ee0fdb89ebeb74677c5788c458c099806e`。
+- GitHub Actions：`startup-link-check-contract` 17 秒通过；`offline-regression` 1 分 19 秒通过。
+- 2026-07-18 02:07 CST 部署到 `sunrise@192.168.127.10` 的用户级 `openclaw-gateway.service`，目标仍为回环 `127.0.0.1:8765`，未扩大网络暴露面。
+- 部署文件 SHA-256：`be0204e1608a907f35984dfa877f1e380c4148795b4ca3f0ccb298e10e7cf63e`；服务重启后 `portal_ui=200`、`lan_ui=200`、`qwen_health=200`。
+- 真实登录页面 `http://digua.local/ui#assistant` 提交“2026年5月20日我干什么了？”后，显示“本地文档返回”和“1 条证据 · 未上云”，答案包含法餐、香槟玫瑰和家庭浪漫支出 1314 元，证据只有 `2026年日记.docx`。
+- 实机返回字段为 `assistant_mode=local_document_query`、`document_answer_source=deterministic_journal_evidence`、`qwen_document_answer_used=false`、`evidence_count=1`、`cloud_used=false`、`qwen_execution_authority=false`。
+- 回滚点：`/mnt/nas/openclaw/deployment/backups/journal-date-query-grounding-20260718-020709/ai_nas_operator_portal_server.py`，其 SHA-256 为 `ef75d14c65630f4059fcf5f7d3d6aea4e4ceafd4c69762308c298094de64ba84`。
