@@ -41,10 +41,15 @@ elif [[ -n "$SOURCE_ROOT" ]]; then
 fi
 
 systemctl_cmd=(systemctl); [[ "$SYSTEMD_MODE" == "user" ]] && systemctl_cmd=(systemctl --user)
-units=(openclaw-gateway.service qwen25-local-openai-gateway.service digua-ai-index-worker.service)
+units=(openclaw-gateway.service qwen25-local-openai-gateway.service digua-ai-index-worker.service digua-product-access.service)
+remote_unit="digua-product-remote-ingress.service"
+remote_was_active=0
 failed_copy="${INSTALL_ROOT}_failed_$(date +%Y%m%d-%H%M%S)"
 if [[ "$DRY_RUN" == "0" && "${#blockers[@]}" -eq 0 ]]; then
-  if [[ "$SKIP_SYSTEMD" == "0" ]]; then "${systemctl_cmd[@]}" stop "${units[@]}" || blockers+=("service_stop_failed"); fi
+  if [[ "$SKIP_SYSTEMD" == "0" ]]; then
+    if "${systemctl_cmd[@]}" is-active --quiet "$remote_unit"; then remote_was_active=1; "${systemctl_cmd[@]}" stop "$remote_unit" || blockers+=("remote_service_stop_failed"); fi
+    "${systemctl_cmd[@]}" stop "${units[@]}" || blockers+=("service_stop_failed")
+  fi
   if [[ "${#blockers[@]}" -eq 0 && "$operation" == "rollback" ]]; then
     mv "$INSTALL_ROOT" "$failed_copy" || blockers+=("current_install_preserve_failed")
     if [[ "${#blockers[@]}" -eq 0 ]] && ! cp -a "$ROLLBACK_FROM" "$INSTALL_ROOT"; then
@@ -67,7 +72,10 @@ if [[ "$DRY_RUN" == "0" && "${#blockers[@]}" -eq 0 ]]; then
       fi
     fi
   fi
-  if [[ "$SKIP_SYSTEMD" == "0" ]]; then "${systemctl_cmd[@]}" start "${units[@]}" || blockers+=("service_restart_failed"); fi
+  if [[ "$SKIP_SYSTEMD" == "0" ]]; then
+    "${systemctl_cmd[@]}" start "${units[@]}" || blockers+=("service_restart_failed")
+    if [[ "$remote_was_active" == "1" ]]; then "${systemctl_cmd[@]}" start "$remote_unit" || blockers+=("remote_service_restart_failed"); fi
+  fi
 fi
 
 ok=1; [[ "${#blockers[@]}" -eq 0 ]] || ok=0
@@ -79,6 +87,7 @@ print(json.dumps({
   "install_root": os.environ["INSTALL_ROOT"], "backup_root": os.environ["BACKUP_ROOT"],
   "rollback_from": os.environ["ROLLBACK_FROM"], "failed_install_preserved_at": os.environ["FAILED_COPY"],
   "nas_data_removed": False, "db_migration_destructive": False,
+  "remote_ingress_was_active": bool($remote_was_active),
   "rollback_command": "bash release/install/upgrade_s100p.sh --apply --rollback-from " + os.environ["BACKUP_ROOT"] + " --install-root " + os.environ["INSTALL_ROOT"],
   "blockers": json.loads(os.environ["BLOCKERS_JSON"]),
 }, ensure_ascii=False, indent=2, sort_keys=True))

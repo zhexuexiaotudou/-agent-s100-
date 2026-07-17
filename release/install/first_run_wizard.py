@@ -23,6 +23,13 @@ def load_identity_store(app_root: Path):
     return module.IdentityStore
 
 
+def load_product_access_store(app_root: Path):
+    if str(app_root) not in sys.path:
+        sys.path.insert(0, str(app_root))
+    from src.product_access.store import ProductAccessStore
+    return ProductAccessStore
+
+
 def main() -> int:
     parser = argparse.ArgumentParser(description="Bootstrap the real Digua identity store and verify first run.")
     parser.add_argument("--install-root", type=Path, default=Path("/opt/digua-ai-nas"))
@@ -33,20 +40,33 @@ def main() -> int:
     parser.add_argument("--report-root", type=Path, default=Path("/mnt/nas/openclaw/reports/qwen25_ai_nas"))
     parser.add_argument("--wizard-report-out", type=Path)
     parser.add_argument("--identity-db", type=Path)
+    parser.add_argument("--access-db", type=Path)
     parser.add_argument("--admin-username", default=os.environ.get("DIGUA_ADMIN_USERNAME", "admin"))
     parser.add_argument("--password-env", default="DIGUA_ADMIN_PASSWORD")
     parser.add_argument("--simulation", action="store_true")
     parser.add_argument("--skip-smoke", action="store_true")
+    parser.add_argument("--defer-admin-claim", action="store_true", help="Initialize identity storage but require one-time LAN claim for the first admin.")
     args = parser.parse_args()
 
     app_root = args.app_root or args.install_root / "app"
     identity_db = args.identity_db or args.report_root / "identity.sqlite3"
+    access_db = args.access_db or args.install_root / "state" / "product_access.sqlite3"
     password = os.environ.get(args.password_env, "")
     blockers: list[str] = []
     auth: dict[str, Any] = {"ok": False, "username": args.admin_username, "token_redacted": True}
     token = ""
 
-    if not password:
+    if args.defer_admin_claim:
+        try:
+            store = load_identity_store(app_root)(identity_db)
+            load_product_access_store(app_root)(access_db)
+            users = store.list_users()
+            if users:
+                blockers.append("claim_mode_requires_empty_identity_store")
+            auth.update({"ok": True, "created": False, "claim_pending": True, "role": None})
+        except Exception as exc:
+            blockers.append(f"identity_initialization_failed:{type(exc).__name__}:{exc}")
+    elif not password:
         blockers.append(f"admin_password_missing_env:{args.password_env}")
     else:
         try:
@@ -79,7 +99,10 @@ def main() -> int:
         if not checks[key]:
             blockers.append(key)
 
-    if args.simulation or args.skip_smoke:
+    if args.defer_admin_claim:
+        readiness = {"ok": None, "status": "deferred_until_lan_claim"}
+        smoke = {"ok": None, "status": "deferred_until_lan_claim", "production_verified": False}
+    elif args.simulation or args.skip_smoke:
         readiness = {"ok": None, "status": "deferred_simulation" if args.simulation else "skipped"}
         smoke = {"ok": None, "status": "deferred_simulation" if args.simulation else "skipped", "production_verified": False}
     elif token:
@@ -102,7 +125,11 @@ def main() -> int:
         "generated_at": time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime()),
         "checks": checks,
         "authentication": auth,
+        "claim_mode": args.defer_admin_claim,
+        "claim_token_stored_in_report": False,
         "identity_db": str(identity_db),
+        "access_db": str(access_db),
+        "access_db_exists": access_db.exists(),
         "openclaw_url": args.base_url,
         "qwen_health": "http://127.0.0.1:18080/health",
         "smoke": smoke,

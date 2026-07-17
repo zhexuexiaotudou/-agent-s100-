@@ -54,8 +54,16 @@ jobs:
         run: python -m unittest discover -s tests -v
       - name: Validate deployment shell syntax
         shell: bash
-        run: bash -n release/install/*.sh
+        run: bash -n release/install/*.sh deploy/product_access/*.sh validation/product_access_s100p/*.sh
       - name: Simulate clean S100P and NAS installation
         run: python gates/stage10_release_clean_install_gate.py --report-root "${{ runner.temp }}/digua-clean-install"
       - name: Build model-free release package
         run: python scripts/build_release.py --version ci-${{ github.sha }} --out "${{ runner.temp }}/digua-release"
+      - name: Build and self-check product access delivery
+        shell: bash
+        run: |
+          set -euo pipefail
+          python scripts/build_product_access_delivery.py --timestamp "ci-${GITHUB_SHA}" --out "${RUNNER_TEMP}/product-access"
+          mkdir -p "${RUNNER_TEMP}/product-access/extracted"
+          unzip -q "${RUNNER_TEMP}/product-access/product_access_delivery_ci-${GITHUB_SHA}.zip" -d "${RUNNER_TEMP}/product-access/extracted"
+          python "${RUNNER_TEMP}/product-access/extracted/product_access_delivery_ci-${GITHUB_SHA}/SELF_CHECK.py"

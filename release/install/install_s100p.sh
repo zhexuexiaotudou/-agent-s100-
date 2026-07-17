@@ -20,6 +20,7 @@ ADMIN_USERNAME="admin"
 PASSWORD_ENV="DIGUA_ADMIN_PASSWORD"
 WHEELHOUSE=""
 SERVICE_USER="${SUDO_USER:-$(id -un)}"
+DEFER_ADMIN_CLAIM=0
 
 while [[ $# -gt 0 ]]; do
   case "$1" in
@@ -42,6 +43,7 @@ while [[ $# -gt 0 ]]; do
     --password-env) PASSWORD_ENV="${2:-}"; shift 2 ;;
     --wheelhouse) WHEELHOUSE="${2:-}"; shift 2 ;;
     --service-user) SERVICE_USER="${2:-}"; shift 2 ;;
+    --defer-admin-claim) DEFER_ADMIN_CLAIM=1; shift ;;
     *) printf 'unknown argument: %s\n' "$1" >&2; exit 2 ;;
   esac
 done
@@ -104,6 +106,8 @@ if [[ "$SYSTEMD_MODE" == "system" ]]; then
 else
   ENV_FILE="$HOME/.config/digua-ai-nas/digua.env"
 fi
+access_state_dir="/var/lib/digua-ai-nas"
+[[ "$SIMULATION" == "1" ]] && access_state_dir="$SIM_ROOT/var/lib/digua-ai-nas"
 if [[ "$SIMULATION" == "0" && "$DRY_RUN" == "0" ]]; then
   if [[ "$SYSTEMD_MODE" == "system" && "${EUID:-$(id -u)}" != "0" ]]; then blockers+=("system_mode_requires_root"); fi
   if [[ "$SYSTEMD_MODE" == "user" && "${EUID:-$(id -u)}" == "0" ]]; then blockers+=("user_mode_must_not_run_as_root"); fi
@@ -146,10 +150,28 @@ if [[ "$DRY_RUN" == "0" && "${#blockers[@]}" -eq 0 ]]; then
       printf 'QWEN25_GATEWAY_REPORT_ROOT=%s\n' "$MOUNT_POINT/reports/qwen25_gateway"
       printf 'DIGUA_OPENCLAW_BASE_URL=http://127.0.0.1:8765\n'
       printf 'DIGUA_QWEN_BASE_URL=http://127.0.0.1:18080\n'
+      printf 'DIGUA_ACCESS_DB=%s\n' "$access_state_dir/product_access.sqlite3"
+      printf 'DIGUA_IDENTITY_DB=%s\n' "$access_state_dir/identity.sqlite3"
+      printf 'DIGUA_LAN_URL=http://digua.local/\n'
+      printf 'DIGUA_REMOTE_ACCESS_ENABLED=0\n'
       grep -E '^(DIGUA_|QWEN25_)' "$ENV_FILE" 2>/dev/null | grep -v -E '^(DIGUA_INSTALL_ROOT|DIGUA_NAS_MOUNT|DIGUA_PERSONAL_ROOT|DIGUA_OPENCLAW_BASE_URL|DIGUA_QWEN_BASE_URL)=' || true
     } > "$TMP_DIR/digua.env"
     mv "$TMP_DIR/digua.env" "$ENV_FILE"
     chmod 644 "$ENV_FILE"
+    mkdir -p "$access_state_dir" || blockers+=("access_state_directory_create_failed")
+    legacy_identity_db="$MOUNT_POINT/reports/qwen25_ai_nas/identity.sqlite3"
+    if [[ ! -f "$access_state_dir/identity.sqlite3" && -f "$legacy_identity_db" ]]; then
+      cp -a "$legacy_identity_db" "$access_state_dir/identity.sqlite3" || blockers+=("legacy_identity_migration_failed")
+    fi
+    if [[ "$SIMULATION" == "0" && "$SYSTEMD_MODE" == "system" ]]; then
+      chown -R "$SERVICE_USER" /var/lib/digua-ai-nas || blockers+=("access_state_owner_failed")
+      chmod 755 "$INSTALL_ROOT/app/scripts/digua-access" "$INSTALL_ROOT/app/scripts/digua-doctor" || blockers+=("access_cli_mode_failed")
+      ln -sfn "$INSTALL_ROOT/app/scripts/digua-access" /usr/local/bin/digua-access || blockers+=("access_cli_link_failed")
+      ln -sfn "$INSTALL_ROOT/app/scripts/digua-doctor" /usr/local/bin/digua-doctor || blockers+=("doctor_cli_link_failed")
+      if command -v avahi-daemon >/dev/null 2>&1 && [[ -d /etc/avahi/services ]]; then
+        cp "$ROOT_DIR/release/avahi/digua-ai-nas.service" /etc/avahi/services/digua-ai-nas.service || blockers+=("avahi_service_install_failed")
+      fi
+    fi
     if [[ "$SIMULATION" == "0" && "$SYSTEMD_MODE" == "system" ]]; then
       if ! command -v runuser >/dev/null 2>&1; then
         blockers+=("runuser_missing")
@@ -174,7 +196,8 @@ run_step systemd "${systemd_args[@]}"
 
 first_run_status="$TMP_DIR/first_run.json"
 if [[ "$DRY_RUN" == "0" && "${#blockers[@]}" -eq 0 ]]; then
-  wizard_args=(python3 "$INSTALL_ROOT/app/release/install/first_run_wizard.py" --install-root "$INSTALL_ROOT" --app-root "$INSTALL_ROOT/app" --nas-mount "$MOUNT_POINT" --personal-root "$PERSONAL_ROOT" --report-root "$MOUNT_POINT/reports/qwen25_ai_nas" --wizard-report-out "$first_run_status" --admin-username "$ADMIN_USERNAME" --password-env "$PASSWORD_ENV")
+  wizard_args=(python3 "$INSTALL_ROOT/app/release/install/first_run_wizard.py" --install-root "$INSTALL_ROOT" --app-root "$INSTALL_ROOT/app" --nas-mount "$MOUNT_POINT" --personal-root "$PERSONAL_ROOT" --report-root "$MOUNT_POINT/reports/qwen25_ai_nas" --identity-db "$access_state_dir/identity.sqlite3" --access-db "$access_state_dir/product_access.sqlite3" --wizard-report-out "$first_run_status" --admin-username "$ADMIN_USERNAME" --password-env "$PASSWORD_ENV")
+  [[ "$DEFER_ADMIN_CLAIM" == "1" ]] && wizard_args+=(--defer-admin-claim)
   [[ "$SIMULATION" == "1" ]] && wizard_args+=(--simulation)
   if [[ "$SIMULATION" == "0" && "$SYSTEMD_MODE" == "system" ]]; then
     touch "$first_run_status" && chown "$SERVICE_USER" "$first_run_status"
@@ -205,8 +228,9 @@ payload = {
   "system_python_modified": False, "public_exposure_enabled": False,
   "steps": steps, "blockers": blockers,
   "next_commands": {
-    "verify": "read -rsp 'Admin password: ' DIGUA_ADMIN_PASSWORD; export DIGUA_ADMIN_PASSWORD; python3 release/scripts/verify_install.py --username " + os.environ["ADMIN_USERNAME"],
-    "access": "ssh -N -L 8765:127.0.0.1:8765 <s100p-user>@<s100p-ip>",
+    "verify": ("complete LAN claim, then run digua-doctor and the validation bundle" if bool($DEFER_ADMIN_CLAIM) else "read -rsp 'Admin password: ' DIGUA_ADMIN_PASSWORD; export DIGUA_ADMIN_PASSWORD; python3 release/scripts/verify_install.py --username " + os.environ["ADMIN_USERNAME"]),
+    "access": "http://digua.local/ (fallback: http://<S100P-LAN-IP>/)",
+    "claim": "digua-access claim-create; then open http://digua.local/setup",
     "rollback": "bash release/install/upgrade_s100p.sh --rollback-from <backup> --install-root " + os.environ["INSTALL_ROOT"],
   },
 }
