@@ -6,6 +6,8 @@ on:
       - "scripts/probes/ai_nas_media.py"
       - "scripts/probes/ai_nas_operator_portal_server.py"
       - "tests/test_copilot_local_qwen_chat.py"
+      - "tests/test_media_album_recovery.py"
+      - "web/ai_nas_desktop_v2.html"
       - "web/static/digua_ai_nas_v2.js"
       - ".github/workflows/visual-index-preview-resolution.yml"
   push:
@@ -15,6 +17,8 @@ on:
       - "scripts/probes/ai_nas_media.py"
       - "scripts/probes/ai_nas_operator_portal_server.py"
       - "tests/test_copilot_local_qwen_chat.py"
+      - "tests/test_media_album_recovery.py"
+      - "web/ai_nas_desktop_v2.html"
       - "web/static/digua_ai_nas_v2.js"
       - ".github/workflows/visual-index-preview-resolution.yml"
 
@@ -35,6 +39,6 @@ jobs:
       - name: Compile service modules
         run: python -m py_compile scripts/probes/ai_nas_media.py scripts/probes/ai_nas_operator_portal_server.py
       - name: Run assistant media-search regression tests
-        run: python -m unittest tests.test_copilot_local_qwen_chat
+        run: python -m unittest tests.test_copilot_local_qwen_chat tests.test_media_album_recovery
       - name: Run media-center gate
         run: python scripts/probes/ai_nas_media_center_gate_probe.py --report-root "$RUNNER_TEMP/digua-media-gate"

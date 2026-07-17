@@ -92,7 +92,10 @@ class MediaAlbumRecoveryTest(unittest.TestCase):
         self.assertIn('/api/media/summary?scope=library', loader)
         self.assertNotIn("runAiAlbumAutoOrganize", loader)
         self.assertIn("const PREVIEW_HYDRATION_CONCURRENCY = 4", source)
-        self.assertIn("const immediate = images.slice(0, 6)", source)
+        self.assertIn("for (const img of images) queuePreviewHydration(img)", source)
+        self.assertNotIn("const immediate = images.slice(0, 6)", source)
+        self.assertNotIn("new IntersectionObserver", source)
+        self.assertNotIn('loading="lazy" decoding="async"', source)
         self.assertIn('target_dir: "Photos/Uploads"', source)
 
     def test_portal_runtime_parses_with_s100p_python_311_grammar(self):
