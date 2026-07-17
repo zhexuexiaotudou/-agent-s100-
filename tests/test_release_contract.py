@@ -50,6 +50,12 @@ class ReleaseContractTest(unittest.TestCase):
         self.assertIn("portal entrypoint copied", source)
         self.assertIn("web UI copied", source)
 
+    def test_installed_cli_launchers_reexec_product_venv(self):
+        for relative_path in ("scripts/digua-access", "scripts/digua-doctor"):
+            source = (REPO_ROOT / relative_path).read_text(encoding="utf-8")
+            self.assertIn('PRODUCT_PYTHON = SCRIPT_PATH.parents[2] / "venv" / "bin" / "python"', source)
+            self.assertIn("os.execv(str(PRODUCT_PYTHON)", source)
+
 
 if __name__ == "__main__":
     unittest.main()

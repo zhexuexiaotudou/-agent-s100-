@@ -1,8 +1,17 @@
 #!/usr/bin/env python3
+import os
 import sys
 from pathlib import Path
 
-APP_ROOT = Path(__file__).resolve().parents[1]
+SCRIPT_PATH = Path(__file__).resolve()
+APP_ROOT = SCRIPT_PATH.parents[1]
+PRODUCT_PYTHON = SCRIPT_PATH.parents[2] / "venv" / "bin" / "python"
+
+# The installed launcher is symlinked into /usr/local/bin, so its env shebang
+# would otherwise select the system interpreter and miss packaged dependencies.
+if PRODUCT_PYTHON.is_file() and Path(sys.executable) != PRODUCT_PYTHON:
+    os.execv(str(PRODUCT_PYTHON), [str(PRODUCT_PYTHON), str(SCRIPT_PATH), *sys.argv[1:]])
+
 if str(APP_ROOT) not in sys.path:
     sys.path.insert(0, str(APP_ROOT))
 
