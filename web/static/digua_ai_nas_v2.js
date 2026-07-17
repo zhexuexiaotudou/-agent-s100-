@@ -738,16 +738,33 @@
 
   function renderAssistantDetails(copilot, route, qwenRouter, mode) {
     const modelRouting = copilot.model_routing || {};
+    const decision = modelRouting.decision || copilot.routing_decision || {};
     const modelCalls = Array.isArray(modelRouting.calls) ? modelRouting.calls : [];
+    const selectedTools = Array.isArray(decision.selected_tools) && decision.selected_tools.length
+      ? decision.selected_tools.map((tool) => localToolLabel(tool) || tool).join("、")
+      : "无";
+    const hybridStatus = decision.hybrid_candidate
+      ? (decision.hybrid_status === "unsupported_safe_splitter_not_enabled" ? "候选，但安全拆分/脱敏/本地合并链路尚未启用，保持本地" : decision.hybrid_status || "候选")
+      : "不适用";
     const rows = [
+      ["请求 ID", decision.request_id || copilot.request_id || "暂无"],
+      ["策略路由", decision.selected_route || "LOCAL_1_5B"],
       ["处理链路", routeLabel(mode, qwenRouter?.route || route?.route)],
       ["Workspace", modelRouting.selected_workspace || copilot.selected_workspace || "main_router"],
-      ["模型策略", modelRouting.policy_id || "workspace_harness_auto_v1"],
+      ["模型策略", modelRouting.policy_id || "workspace_harness_auto_v2"],
       ["用户选择模型", modelRouting.user_selectable === false ? "不允许，由架构自动选择" : "未声明"],
       ["最终回答模型", modelRouting.effective_answer_model || "无额外模型调用"],
       ["处理位置", copilot.cloud_used ? "云端" : "S100P 本地"],
-      ["隐私级别", privacyLabel(qwenRouter?.privacy_level || route?.privacy_level || "local_only")],
-      ["本地工具", localToolLabel(qwenRouter?.local_tool_id || copilot.search?.retrieval_mode)],
+      ["隐私级别", `${decision.privacy_level ?? "暂无"} · ${privacyLabel(decision.privacy_label || qwenRouter?.privacy_level || route?.privacy_level || "local_only")}`],
+      ["复杂度", decision.complexity ?? "暂无"],
+      ["需要最新信息", decision.freshness_required ? "是" : "否"],
+      ["需要公开网络", decision.requires_public_web ? "是" : "否"],
+      ["需要本地数据", decision.requires_local_data ? "是" : "否"],
+      ["云端外发获准", decision.cloud_egress_allowed ? "是" : "否"],
+      ["混合路由", hybridStatus],
+      ["写操作风险", decision.write_risk || "none"],
+      ["需要确认", decision.confirmation_required ? "是" : "否"],
+      ["选中工具", selectedTools],
       ["执行边界", "本地受控工具"],
       ["Qwen 工具执行权", copilot.qwen_execution_authority ? "开启" : "关闭，只做理解和建议"],
       ["输入 token", route?.token_counts?.raw_user_prompt_tokens ?? copilot.usage?.prompt_tokens ?? "暂无"],
@@ -3682,14 +3699,28 @@
   function assistantTrace() {
     const route = appState.assistant.route || {};
     const copilot = appState.assistant.copilot || {};
+    const modelRouting = copilot.model_routing || {};
+    const decision = modelRouting.decision || copilot.routing_decision || {};
+    const calls = Array.isArray(modelRouting.calls) ? modelRouting.calls : [];
     showWorkflow("服务详情", `
       ${renderKeyValueRows([
+        ["请求 ID", decision.request_id || copilot.request_id || "暂无"],
+        ["策略路由", decision.selected_route || "暂无"],
         ["处理位置", copilot.cloud_used ? "受控云端" : "S100P 本地"],
         ["路由", route.route || copilot.route || "local_first"],
+        ["隐私级别", `${decision.privacy_level ?? "暂无"} · ${privacyLabel(decision.privacy_label || "local_only")}`],
+        ["复杂度", decision.complexity ?? "暂无"],
+        ["需要最新信息", decision.freshness_required ? "是" : "否"],
+        ["需要公开网络", decision.requires_public_web ? "是" : "否"],
+        ["混合候选", decision.hybrid_candidate ? (decision.hybrid_status || "是") : "否"],
         ["云端调用", copilot.cloud_used ? "是" : "否"],
         ["脱敏次数", route.redaction_count ?? "暂无"],
         ["执行权限", "Qwen 不直接执行 NAS 写操作"]
       ])}
+      ${calls.length ? `<h4>本次模型调用</h4>${renderKeyValueRows(calls.map((call, index) => [
+        `调用 ${index + 1} · ${call.stage || "unknown"}`,
+        `${call.model || "无模型"} · ${call.provider || "未知 provider"} · ${call.location || "未知位置"} · ${call.status || "unknown"}${Number.isFinite(Number(call.elapsed_ms)) ? ` · ${Number(call.elapsed_ms).toFixed(1)} ms` : ""}`
+      ]))}` : '<p class="muted small">本次没有调用语言模型。</p>'}
     `);
   }
 

@@ -50,7 +50,7 @@ The AI Assistant no longer exposes a model selector. Natural-language input
 enters the Workspace Harness policy: deterministic identity and allowlisted NAS
 work stay local, simple general chat defaults to Qwen2.5 1.5B on the S100P BPU,
 private/local complex work uses Qwen2.5 7B on the S100P CPU, and only public,
-non-private complex work may use MiniMax 2.7 through the guarded OpenClaw
+non-private complex work that explicitly needs current external information may use MiniMax 2.7 through the guarded OpenClaw
 bridge. The answer details record the selected workspace and every model call.
 The routing contract is documented in
 [`docs/assistant_automatic_model_routing_20260718.md`](docs/assistant_automatic_model_routing_20260718.md);
@@ -67,7 +67,7 @@ The three demo expectations are now satisfied on the S100P test machine:
 | --- | --- | --- | --- |
 | 1. S100P as resident gateway | S100P keeps the AI gateway online after login/logout and exposes a stable local entry point | `openclaw-gateway.service`, `qwen25-local-openai-gateway.service`, and `qwen7b-cpu.service` are active; persistent user services are enabled and `loginctl` linger is `yes` | OpenClaw `/api/health` on `127.0.0.1:8765`; Qwen health on `127.0.0.1:18080` and `127.0.0.1:18081` |
 | 2. OpenClaw implements AI-NAS | OpenClaw can drive NAS operations, not just chat | `ok_ai_nas_openclaw_nas_control_gate`, 10/10 checks passed | `/mnt/nas/openclaw/reports/qwen25_ai_nas/openclaw_nas_control_gate_20260629-210023-832862/openclaw_nas_control_gate.json` |
-| 3. Edge + cloud routing | Every query first enters local Qwen; private/simple requests stay on S100P; public complex requests can use a controlled cloud endpoint | Production portal keeps identity questions local and routes only `privacy_level=none` complex work through the loopback OpenClaw bridge to `custom-gateway/MiniMax-M2.7`; both authenticated HTTP cases returned 200 | [`docs/openclaw_minimax_cloud_overflow_20260718.md`](docs/openclaw_minimax_cloud_overflow_20260718.md) |
+| 3. Edge + cloud routing | Every query first enters local Qwen; private/simple requests stay on S100P; only public complex requests requiring current external information can use a controlled cloud endpoint | Production portal keeps identity questions local and routes only eligible `privacy_level=none` current-information work through the loopback OpenClaw bridge to `custom-gateway/MiniMax-M2.7`; both authenticated HTTP cases returned 200 | [`docs/openclaw_minimax_cloud_overflow_20260718.md`](docs/openclaw_minimax_cloud_overflow_20260718.md) |
 
 The latest Qwen AI-NAS acceptance packet also passed:
 
@@ -365,8 +365,9 @@ board" to "shipping a private AI-NAS appliance".
    actions.
 3. Qwen is the local decision layer. All user queries first enter local Qwen.
    The router asks Qwen whether the request is simple enough to handle locally
-   and whether it is privacy-sensitive. Only public, complex work is allowed to
-   go to a controlled cloud endpoint.
+   and whether it is privacy-sensitive. Deterministic policy has final authority;
+   only public, complex work that explicitly needs current external information
+   is allowed to go to a controlled cloud endpoint.
 4. The value proposition is token saving plus privacy protection: the endpoint
    keeps private NAS context on the device and uses cloud only as overflow, not
    as the default path.
@@ -375,7 +376,7 @@ Recommended one-line pitch:
 
 > S100P + OpenClaw turns a normal NAS into a privacy-first AI-NAS: local Qwen
 > handles private file intelligence on the device, while cloud is used only for
-> public complex tasks that pass the local router.
+> eligible public research that requires current external information and passes the local router.
 
 ## Highlights
 
@@ -385,9 +386,9 @@ Recommended one-line pitch:
 - **Real NAS actions**: the OpenClaw gate validates login, directory listing,
   rename, copy, delete confirmation, viewer read-only behavior, ACL-protected
   copy targets, and direct storage mutation ACL enforcement.
-- **Local-first router**: the edge-cloud probe requires Qwen to produce
-  structured JSON. Policy is only a privacy/failure fallback.
-- **OpenClaw-owned cloud overflow**: public complex requests use the
+- **Local-first router**: Qwen produces structured intent advice, while the
+  deterministic policy owns the final privacy, freshness, tool, and model route.
+- **OpenClaw-owned cloud overflow**: eligible current-information public complex requests use the
   loopback-only bridge on `127.0.0.1:18082`, which calls the existing OpenClaw
   `custom-gateway/MiniMax-M2.7` provider. The portal never reads or stores the
   MiniMax provider token.

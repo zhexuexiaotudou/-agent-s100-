@@ -258,7 +258,7 @@ DEFAULT_QWEN_7B_GATEWAY_URL = "http://127.0.0.1:18081"
 DEFAULT_QWEN_MODEL = "Qwen2.5-1.5B-Instruct-S100P-official"
 QWEN_7B_MODEL = "Qwen2.5-7B-Instruct-S100P-official"
 MINIMAX_MODEL = "custom-gateway/MiniMax-M2.7"
-ASSISTANT_MODEL_POLICY_ID = "workspace_harness_auto_v1"
+ASSISTANT_MODEL_POLICY_ID = "workspace_harness_auto_v2"
 ASSISTANT_USER_MODEL_SELECTION_ALLOWED = False
 
 
@@ -286,6 +286,7 @@ def assistant_answer_model_plan(action_intent: dict | None, router: dict) -> dic
     if action_intent:
         return {
             "workspace": workspace,
+            "route": "LOCAL_1_5B",
             "kind": "workspace_tool_response",
             "model": None,
             "provider": "local_policy",
@@ -295,17 +296,19 @@ def assistant_answer_model_plan(action_intent: dict | None, router: dict) -> dic
     if workspace == "web_cloud_research":
         return {
             "workspace": workspace,
+            "route": "CLOUD_MINIMAX",
             "kind": "cloud_answer",
             "model": MINIMAX_MODEL,
             "provider": "openclaw_minimax",
             "location": "controlled_cloud",
-            "reason": "The local router classified a public, non-private complex request for the cloud-eligible workspace.",
+            "reason": "The deterministic policy approved a public, non-private complex request that explicitly needs current external information.",
         }
     policy_route = router.get("policy_route") if isinstance(router.get("policy_route"), dict) else {}
     local_complex = policy_route.get("task_complexity") == "complex"
     if router.get("route") == "local" and local_complex:
         return {
             "workspace": workspace,
+            "route": "LOCAL_7B",
             "kind": "local_complex_answer",
             "model": QWEN_7B_MODEL,
             "provider": "local_qwen",
@@ -314,6 +317,7 @@ def assistant_answer_model_plan(action_intent: dict | None, router: dict) -> dic
         }
     return {
         "workspace": workspace,
+        "route": "LOCAL_1_5B",
         "kind": "local_default_answer",
         "model": DEFAULT_QWEN_MODEL,
         "provider": "local_qwen",
@@ -408,10 +412,31 @@ def attach_assistant_model_routing(
     plan: dict,
     calls: list[dict],
     requested_model_choice: object = None,
+    request_id: str | None = None,
 ) -> dict:
     requested = str(requested_model_choice or "").strip()
     answer_calls = [call for call in calls if call.get("stage") not in {"semantic_router", "semantic_router_fallback"}]
     effective_model = str((answer_calls[-1] if answer_calls else {}).get("model") or "") or None
+    policy = router.get("policy_route") if isinstance(router.get("policy_route"), dict) else router
+    decision = {
+        "request_id": request_id,
+        "selected_route": plan.get("route"),
+        "privacy_level": policy.get("privacy_level_numeric", 0),
+        "privacy_label": policy.get("privacy_level", "none"),
+        "complexity": policy.get("complexity_level", 0),
+        "freshness_required": bool(policy.get("freshness_required")),
+        "requires_public_web": bool(policy.get("requires_public_web")),
+        "requires_local_data": bool(policy.get("requires_local_data")),
+        "write_risk": policy.get("write_risk", "none"),
+        "confirmation_required": bool(policy.get("confirmation_required")),
+        "selected_tools": list(policy.get("selected_tools") or []),
+        "cloud_egress_allowed": bool(policy.get("cloud_eligible")) and plan.get("route") == "CLOUD_MINIMAX",
+        "hybrid_candidate": bool(policy.get("hybrid_candidate")),
+        "hybrid_status": policy.get("hybrid_status", "not_applicable"),
+        "reason_summary": plan.get("reason"),
+        "fallback_from_route": plan.get("fallback_from_route"),
+    }
+    payload["request_id"] = request_id
     payload["selected_workspace"] = plan.get("workspace")
     payload["model_routing"] = {
         "policy_id": ASSISTANT_MODEL_POLICY_ID,
@@ -422,10 +447,12 @@ def attach_assistant_model_routing(
         "planned_answer_model": plan.get("model"),
         "effective_answer_model": effective_model,
         "selection_reason": plan.get("reason"),
+        "decision": decision,
         "requested_model_ignored": requested or None,
         "calls": calls,
     }
     payload["user_model_selection_allowed"] = False
+    payload["routing_decision"] = decision
     return payload
 COPILOT_SEARCH_VERBS = (
     "search",
@@ -503,7 +530,12 @@ COPILOT_STRONG_PRIVACY_TERMS = (
 )
 COPILOT_LOCAL_CONTENT_TERMS = ("nas", "local", "file", "document", "\u672c\u5730", "\u6587\u4ef6", "\u6587\u6863")
 COPILOT_PUBLIC_ONLY_TERMS = ("public", "non-private", "non private", "do not reference local", "\u516c\u5f00", "\u975e\u9690\u79c1", "\u4e0d\u5f15\u7528\u672c\u5730")
-COPILOT_PUBLIC_COMPLEX_TERMS = (
+COPILOT_COMPLEX_REASONING_TERMS = (
+    "analyze",
+    "compare",
+    "research",
+    "report",
+    "plan",
     "market",
     "strategy",
     "industry",
@@ -511,6 +543,11 @@ COPILOT_PUBLIC_COMPLEX_TERMS = (
     "launch",
     "competitor",
     "public",
+    "\u5206\u6790",
+    "\u5bf9\u6bd4",
+    "\u8c03\u7814",
+    "\u62a5\u544a",
+    "\u65b9\u6848",
     "\u5e02\u573a",
     "\u6218\u7565",
     "\u884c\u4e1a",
@@ -518,6 +555,88 @@ COPILOT_PUBLIC_COMPLEX_TERMS = (
     "\u53d1\u5e03",
     "\u7ade\u54c1",
     "\u516c\u5f00",
+)
+COPILOT_FRESHNESS_TERMS = (
+    "today",
+    "current",
+    "latest",
+    "recent",
+    "this year",
+    "price",
+    "firmware",
+    "vulnerability",
+    "cve",
+    "news",
+    "stable version",
+    "\u4eca\u5929",
+    "\u5f53\u524d",
+    "\u73b0\u5728",
+    "\u6700\u65b0",
+    "\u6700\u8fd1",
+    "\u4eca\u5e74",
+    "\u4ef7\u683c",
+    "\u56fa\u4ef6",
+    "\u6f0f\u6d1e",
+    "\u65b0\u95fb",
+    "\u7a33\u5b9a\u7248",
+)
+COPILOT_PUBLIC_WEB_TERMS = COPILOT_FRESHNESS_TERMS + (
+    "internet",
+    "web",
+    "online",
+    "public information",
+    "\u8054\u7f51",
+    "\u7f51\u4e0a",
+    "\u5728\u7ebf",
+    "\u516c\u5f00\u4fe1\u606f",
+)
+COPILOT_NO_CLOUD_TERMS = (
+    "offline",
+    "local only",
+    "do not use internet",
+    "do not go online",
+    "\u4e0d\u8981\u8054\u7f51",
+    "\u7981\u6b62\u8054\u7f51",
+    "\u4ec5\u672c\u5730",
+)
+COPILOT_PERSONAL_SCOPE_TERMS = (
+    "this file",
+    "this document",
+    "this photo",
+    "my nas",
+    "\u6211\u7684",
+    "\u6211\u4eec\u7684",
+    "\u8fd9\u4e2a\u6587\u4ef6",
+    "\u8fd9\u4efd\u6587\u6863",
+    "\u8fd9\u5f20\u7167\u7247",
+)
+COPILOT_NEVER_CLOUD_TERMS = (
+    "password",
+    "api key",
+    "token",
+    "secret",
+    "passport",
+    "identity card",
+    "bank card",
+    "medical",
+    "face",
+    "serial number",
+    "internal ip",
+    "invoice",
+    "contract",
+    "\u5bc6\u7801",
+    "\u4ee4\u724c",
+    "\u5bc6\u94a5",
+    "\u62a4\u7167",
+    "\u8eab\u4efd\u8bc1",
+    "\u94f6\u884c\u5361",
+    "\u533b\u7597",
+    "\u4f53\u68c0",
+    "\u4eba\u8138",
+    "\u5e8f\u5217\u53f7",
+    "\u5185\u7f51 ip",
+    "\u53d1\u7968",
+    "\u5408\u540c",
 )
 COPILOT_RENAME_TERMS = ("rename", "renamed", "\u91cd\u547d\u540d", "\u6539\u540d")
 COPILOT_COPY_TERMS = ("copy", "duplicate", "\u590d\u5236", "\u62f7\u8d1d")
@@ -619,6 +738,18 @@ COPILOT_DOCUMENT_QUERY_ACTION_TERMS = (
     "\u5185\u5bb9",
 )
 COPILOT_STATUS_TERMS = ("status", "health", "summary", "list", "report", "audit", "\u72b6\u6001", "\u5065\u5eb7", "\u6982\u89c8", "\u6c47\u603b", "\u5217\u8868", "\u62a5\u544a", "\u5ba1\u8ba1")
+COPILOT_REPORT_LIST_TERMS = (
+    "list reports",
+    "reports list",
+    "show reports",
+    "local reports",
+    "report status",
+    "\u62a5\u544a\u5217\u8868",
+    "\u5217\u51fa\u62a5\u544a",
+    "\u67e5\u770b\u62a5\u544a",
+    "\u672c\u5730\u62a5\u544a",
+    "\u62a5\u544a\u72b6\u6001",
+)
 COPILOT_STORAGE_INVENTORY_TERMS = (
     "what files",
     "which files",
@@ -1379,7 +1510,7 @@ def infer_copilot_action_intent(message: str) -> dict | None:
         return {"action": "apps_summary", "quoted": quoted}
     if has_status and ("audit" in lower or "\u5ba1\u8ba1" in text):
         return {"action": "audit_summary", "quoted": quoted}
-    if has_status and ("report" in lower or "\u62a5\u544a" in text):
+    if contains_any(text, COPILOT_REPORT_LIST_TERMS):
         return {"action": "reports_list", "quoted": quoted}
     if len(quoted) >= 2:
         action = "storage_rename" if contains_any(text, COPILOT_RENAME_TERMS) or "renamed" in quoted[1].lower() else "storage_copy"
@@ -1401,7 +1532,8 @@ def build_copilot_qwen_router_prompt(message: str) -> str:
         "route must be local or cloud. privacy_level must be none, low, medium, or high. "
         "Use local for private NAS data, local files, photos, invoices, contracts, backups, "
         "snapshots, media search, storage actions, journal actions, or any uncertain request. "
-        "Use cloud only for public non-private complex reasoning. Qwen must not execute tools. "
+        "Recommend cloud only for public non-private complex reasoning that explicitly requires current external information. "
+        "Recommend local when freshness is not required or the user prohibits internet access. Qwen must not execute tools. "
         f"Original user query:\n{message}"
     )
 
@@ -1467,27 +1599,95 @@ def normalize_copilot_router(parsed: dict, *, classifier: str, raw_content: str 
     }
 
 
+def copilot_write_risk(action: str) -> tuple[str, bool]:
+    if action in {"storage_copy", "storage_rename"}:
+        return "medium", True
+    if action in {"storage_create_folder", "snapshot_create", "backup_create_task"}:
+        return "low", False
+    if action == "backup_run":
+        return "medium", True
+    return "none", False
+
+
 def copilot_policy_route(message: str, action_intent: dict | None = None) -> dict:
     text = str(message or "")
-    has_public_complex = contains_any(text, COPILOT_PUBLIC_COMPLEX_TERMS) or len(text) > 160
+    action = str((action_intent or {}).get("action") or "")
+    local_tool_id = copilot_action_tool_id(action)
+    has_complex_reasoning = contains_any(text, COPILOT_COMPLEX_REASONING_TERMS) or len(text) > 160
     explicit_public_only = contains_any(text, COPILOT_PUBLIC_ONLY_TERMS)
-    if contains_any(text, COPILOT_STRONG_PRIVACY_TERMS) and not (has_public_complex and explicit_public_only and not contains_any(text, ("invoice", "contract", "password", "token", "\u53d1\u7968", "\u5408\u540c", "\u5bc6\u7801", "\u4ee4\u724c"))):
+    contains_never_cloud_data = contains_any(text, COPILOT_NEVER_CLOUD_TERMS) or bool(
+        re.search(r"\b(?:10\.|127\.|169\.254\.|172\.(?:1[6-9]|2\d|3[01])\.|192\.168\.)\d{1,3}(?:\.\d{1,3}){1,2}\b", text)
+    )
+    has_personal_scope = bool(re.search(r"\b(?:my|our)\b", text, flags=re.IGNORECASE)) or contains_any(
+        text, COPILOT_PERSONAL_SCOPE_TERMS
+    )
+    if contains_never_cloud_data:
         privacy_level = "high"
-    elif contains_any(text, COPILOT_LOCAL_CONTENT_TERMS) and not (has_public_complex and explicit_public_only):
+        privacy_level_numeric = 3
+    elif contains_any(text, COPILOT_STRONG_PRIVACY_TERMS) and not (has_complex_reasoning and explicit_public_only and not has_personal_scope):
+        privacy_level = "high"
+        privacy_level_numeric = 2
+    elif (has_personal_scope or contains_any(text, COPILOT_LOCAL_CONTENT_TERMS)) and not (
+        has_complex_reasoning and explicit_public_only and not has_personal_scope
+    ):
         privacy_level = "medium"
+        privacy_level_numeric = 2
     else:
         privacy_level = "none"
-    local_tool_id = copilot_action_tool_id((action_intent or {}).get("action"))
-    if local_tool_id or privacy_level != "none" or not has_public_complex:
+        privacy_level_numeric = 0
+    freshness_required = contains_any(text, COPILOT_FRESHNESS_TERMS)
+    requires_public_web = contains_any(text, COPILOT_PUBLIC_WEB_TERMS)
+    cloud_prohibited_by_user = contains_any(text, COPILOT_NO_CLOUD_TERMS)
+    requires_local_data = bool(local_tool_id or privacy_level_numeric >= 2 or contains_any(text, COPILOT_LOCAL_CONTENT_TERMS))
+    if len(text) > 320:
+        complexity_level = 3
+    elif has_complex_reasoning:
+        complexity_level = 2
+    elif local_tool_id:
+        complexity_level = 1
+    else:
+        complexity_level = 0
+    hybrid_candidate = bool(requires_local_data and requires_public_web and complexity_level >= 2)
+    cloud_eligible = bool(
+        not local_tool_id
+        and privacy_level_numeric == 0
+        and requires_public_web
+        and freshness_required
+        and complexity_level >= 2
+        and not cloud_prohibited_by_user
+    )
+    if not cloud_eligible:
         route = "local"
-        reason = "local route required by NAS action, privacy floor, or simple request"
+        if hybrid_candidate:
+            reason = "hybrid candidate stays local because the audited redaction and local-merge pipeline is not enabled"
+        elif cloud_prohibited_by_user:
+            reason = "the user prohibited cloud access"
+        elif requires_public_web and complexity_level >= 2 and not freshness_required:
+            reason = "complex public reasoning without a freshness requirement stays local"
+        else:
+            reason = "local route required by NAS action, privacy floor, or default local-first policy"
     else:
         route = "cloud"
-        reason = "public non-private complex request may use cloud overflow"
+        reason = "public non-private complex work requires current external information and may use guarded cloud overflow"
+    write_risk, confirmation_required = copilot_write_risk(action)
     return {
         "route": route,
         "privacy_level": privacy_level,
-        "task_complexity": "complex" if has_public_complex else "simple",
+        "privacy_level_numeric": privacy_level_numeric,
+        "task_complexity": "complex" if complexity_level >= 2 else "simple",
+        "complexity_level": complexity_level,
+        "freshness_required": freshness_required,
+        "requires_public_web": requires_public_web,
+        "requires_local_data": requires_local_data,
+        "contains_never_cloud_data": contains_never_cloud_data,
+        "has_personal_scope": has_personal_scope,
+        "cloud_prohibited_by_user": cloud_prohibited_by_user,
+        "cloud_eligible": cloud_eligible,
+        "hybrid_candidate": hybrid_candidate,
+        "hybrid_status": "unsupported_safe_splitter_not_enabled" if hybrid_candidate else "not_applicable",
+        "write_risk": write_risk,
+        "confirmation_required": confirmation_required,
+        "selected_tools": [local_tool_id] if local_tool_id else [],
         "reason": reason,
         "local_tool_id": local_tool_id,
         "classifier": "portal_policy_guardrail",
@@ -1499,12 +1699,7 @@ def copilot_policy_route(message: str, action_intent: dict | None = None) -> dic
 def apply_copilot_guardrail(qwen_route: dict | None, policy_route: dict) -> dict:
     route = dict(qwen_route or policy_route)
     route.setdefault("classifier", "portal_policy_guardrail")
-    route["policy_route"] = {
-        "route": policy_route.get("route"),
-        "privacy_level": policy_route.get("privacy_level"),
-        "task_complexity": policy_route.get("task_complexity"),
-        "local_tool_id": policy_route.get("local_tool_id"),
-    }
+    route["policy_route"] = dict(policy_route)
     if policy_route.get("privacy_level") in {"medium", "high"} or policy_route.get("local_tool_id"):
         if route.get("route") != "local":
             route["guardrail_applied"] = True
@@ -6229,10 +6424,13 @@ class PortalState:
         clean_message = str(message or "").strip()
         if not clean_message:
             return HTTPStatus.BAD_REQUEST, {"ok": False, "error": "empty_message"}
+        request_id = hashlib.sha256(f"{time.time_ns()}:{clean_message}".encode("utf-8", errors="replace")).hexdigest()[:16]
         if is_local_assistant_identity_question(clean_message):
             status, payload = self.local_qwen_chat(clean_message, user, self.qwen_model)
+            identity_policy = copilot_policy_route(clean_message)
             identity_plan = {
                 "workspace": "main_router",
+                "route": "LOCAL_1_5B",
                 "kind": "deterministic_local_identity",
                 "model": None,
                 "provider": "local_policy",
@@ -6241,10 +6439,11 @@ class PortalState:
             }
             attach_assistant_model_routing(
                 payload,
-                router={"route": "local", "privacy_level": "high", "task_complexity": "simple"},
+                router={**identity_policy, "policy_route": identity_policy},
                 plan=identity_plan,
                 calls=[],
                 requested_model_choice=model_choice,
+                request_id=request_id,
             )
             return status, payload
         action_intent = infer_copilot_action_intent(clean_message)
@@ -6261,6 +6460,7 @@ class PortalState:
                 plan=plan,
                 calls=model_calls,
                 requested_model_choice=model_choice,
+                request_id=request_id,
             )
             return status, payload
         if plan.get("kind") == "cloud_answer":
@@ -6282,6 +6482,7 @@ class PortalState:
                     plan=plan,
                     calls=model_calls,
                     requested_model_choice=model_choice,
+                    request_id=request_id,
                 )
                 return status, payload
             if payload.get("assistant_mode") != "cloud_overflow_stub":
@@ -6298,11 +6499,13 @@ class PortalState:
                 )
             fallback_plan = {
                 **plan,
+                "route": "LOCAL_7B",
+                "fallback_from_route": "CLOUD_MINIMAX",
                 "kind": "cloud_unavailable_local_7b_fallback",
                 "model": QWEN_7B_MODEL,
                 "provider": "local_qwen",
                 "location": "S100P_CPU",
-                "reason": "The policy selected cloud for a public complex task, but the controlled cloud path was unavailable; local 7B provided the fallback answer.",
+                "reason": "The policy selected cloud for eligible current public research, but the controlled cloud path was unavailable; local 7B provided the fallback answer.",
             }
             fallback_status, fallback_payload = self.local_qwen_chat(clean_message, user, QWEN_7B_MODEL)
             fallback_payload["cloud_fallback"] = True
@@ -6330,6 +6533,7 @@ class PortalState:
                 plan=fallback_plan,
                 calls=model_calls,
                 requested_model_choice=model_choice,
+                request_id=request_id,
             )
             return fallback_status, fallback_payload
         selected_model = str(plan.get("model") or DEFAULT_QWEN_MODEL)
@@ -6357,6 +6561,7 @@ class PortalState:
             plan=plan,
             calls=model_calls,
             requested_model_choice=model_choice,
+            request_id=request_id,
         )
         return status, payload
 
