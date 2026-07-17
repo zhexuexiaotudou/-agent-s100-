@@ -26,6 +26,7 @@ ROOT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/../.." && pwd)"
 blockers=()
 hosts_updated=0
 avahi_restarted=0
+network_wait_enabled=0
 [[ "$INSTALL_ROOT" == /* && "$INSTALL_ROOT" != "/" ]] || blockers+=("unsafe_install_root")
 [[ "$PREFERRED_HOSTNAME" =~ ^[A-Za-z0-9][A-Za-z0-9-]{0,62}$ ]] || blockers+=("invalid_hostname")
 [[ "$HOSTS_FILE" == /* ]] || blockers+=("hosts_file_must_be_absolute")
@@ -66,6 +67,10 @@ con.commit()
 PY
   install -d -m 0755 "$(dirname "$AVAHI_TARGET")"
   install -m 0644 "$ROOT_DIR/release/avahi/digua-ai-nas.service" "$AVAHI_TARGET"
+  if systemctl list-unit-files NetworkManager-wait-online.service >/dev/null 2>&1; then
+    systemctl enable NetworkManager-wait-online.service
+    network_wait_enabled=1
+  fi
   systemctl enable --now digua-product-access.service
   if systemctl list-unit-files avahi-daemon.service >/dev/null 2>&1; then
     systemctl enable --now avahi-daemon.service
@@ -83,6 +88,7 @@ print(json.dumps({
   'backend': 'http://127.0.0.1:8765', 'router_port_forwarding_changed': False,
   'upnp_changed': False, 'production_verified': False,
   'hosts_entry_synchronized': bool($hosts_updated), 'avahi_restarted': bool($avahi_restarted),
+  'network_wait_enabled': bool($network_wait_enabled),
   'blockers': json.loads(os.environ['BLOCKERS_JSON']),
 }, ensure_ascii=False, indent=2))
 PY
