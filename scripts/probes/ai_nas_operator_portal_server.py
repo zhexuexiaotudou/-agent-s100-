@@ -257,18 +257,176 @@ DEFAULT_QWEN_GATEWAY_URL = "http://127.0.0.1:18080"
 DEFAULT_QWEN_7B_GATEWAY_URL = "http://127.0.0.1:18081"
 DEFAULT_QWEN_MODEL = "Qwen2.5-1.5B-Instruct-S100P-official"
 QWEN_7B_MODEL = "Qwen2.5-7B-Instruct-S100P-official"
-ASSISTANT_MODEL_CHOICES = {
-    "qwen2.5-1.5b-local": {"provider": "local", "model": DEFAULT_QWEN_MODEL},
-    "qwen2.5-7b-local": {"provider": "local", "model": QWEN_7B_MODEL},
-    "minimax2.7-cloud": {"provider": "cloud", "model": "custom-gateway/MiniMax-M2.7"},
-}
+MINIMAX_MODEL = "custom-gateway/MiniMax-M2.7"
+ASSISTANT_MODEL_POLICY_ID = "workspace_harness_auto_v1"
+ASSISTANT_USER_MODEL_SELECTION_ALLOWED = False
 
 
-def normalize_assistant_model_choice(value: object) -> str | None:
-    choice = str(value or "").strip().lower()
-    if not choice:
-        return "auto"
-    return choice if choice in ASSISTANT_MODEL_CHOICES else None
+def assistant_workspace(action_intent: dict | None, router: dict) -> str:
+    action = str((action_intent or {}).get("action") or "")
+    if action in {"search", "media_index", "media_summary", "media_create_album"}:
+        return "media_photo"
+    if action in {"document_query", "journal_summary", "journal_manual_entry"}:
+        return "document_rag"
+    if action in {"storage_list", "storage_list_or_inspect", "storage_inventory", "storage_status"}:
+        return "nas_search"
+    if action in {"storage_copy", "storage_rename", "storage_create_folder", "snapshot_create", "backup_create_task", "backup_run"}:
+        return "nas_action"
+    if action == "ops_summary":
+        return "ops_recovery"
+    if action in {"apps_summary", "audit_summary", "reports_list"}:
+        return "admin_audit"
+    if router.get("route") == "cloud" and router.get("privacy_level") == "none" and not router.get("local_tool_id"):
+        return "web_cloud_research"
+    return "main_router"
+
+
+def assistant_answer_model_plan(action_intent: dict | None, router: dict) -> dict:
+    workspace = assistant_workspace(action_intent, router)
+    if action_intent:
+        return {
+            "workspace": workspace,
+            "kind": "workspace_tool_response",
+            "model": None,
+            "provider": "local_policy",
+            "location": "S100P",
+            "reason": "Workspace tool intent is handled by deterministic policy and the allowlisted dispatcher before any answer-model preference.",
+        }
+    if workspace == "web_cloud_research":
+        return {
+            "workspace": workspace,
+            "kind": "cloud_answer",
+            "model": MINIMAX_MODEL,
+            "provider": "openclaw_minimax",
+            "location": "controlled_cloud",
+            "reason": "The local router classified a public, non-private complex request for the cloud-eligible workspace.",
+        }
+    policy_route = router.get("policy_route") if isinstance(router.get("policy_route"), dict) else {}
+    local_complex = policy_route.get("task_complexity") == "complex"
+    if router.get("route") == "local" and local_complex:
+        return {
+            "workspace": workspace,
+            "kind": "local_complex_answer",
+            "model": QWEN_7B_MODEL,
+            "provider": "local_qwen",
+            "location": "S100P_CPU",
+            "reason": "Complex work must remain local, so the policy selected the higher-quality local 7B answer model.",
+        }
+    return {
+        "workspace": workspace,
+        "kind": "local_default_answer",
+        "model": DEFAULT_QWEN_MODEL,
+        "provider": "local_qwen",
+        "location": "S100P_BPU",
+        "reason": "The default local 1.5B model is sufficient for a simple request.",
+    }
+
+
+def assistant_model_call(
+    *,
+    stage: str,
+    model: str,
+    provider: str,
+    location: str,
+    purpose: str,
+    elapsed_ms: object = None,
+    status: str = "completed",
+) -> dict:
+    return {
+        "stage": stage,
+        "model": model,
+        "provider": provider,
+        "location": location,
+        "purpose": purpose,
+        "status": status,
+        "elapsed_ms": elapsed_ms,
+    }
+
+
+def assistant_router_model_calls(router: dict) -> list[dict]:
+    recorded = router.get("model_calls")
+    if isinstance(recorded, list):
+        return [dict(call) for call in recorded if isinstance(call, dict)]
+    try:
+        attempt_count = max(1, min(int(router.get("router_attempt_count") or 1), 2))
+    except (TypeError, ValueError):
+        attempt_count = 1
+    calls: list[dict] = []
+    for index in range(attempt_count):
+        calls.append(
+            assistant_model_call(
+                stage="semantic_router" if index == 0 else "semantic_router_fallback",
+                model=DEFAULT_QWEN_MODEL,
+                provider="local_qwen",
+                location="S100P_BPU",
+                purpose="intent_privacy_complexity_and_workspace_advice",
+                elapsed_ms=router.get("elapsed_ms") if index == attempt_count - 1 else None,
+                status="completed" if index == attempt_count - 1 else "invalid_structured_result",
+            )
+        )
+    return calls
+
+
+def assistant_workspace_response_calls(payload: dict) -> list[dict]:
+    if not payload.get("qwen_document_answer_attempted"):
+        return []
+    try:
+        retry_count = max(0, int(payload.get("qwen_document_answer_retry_attempts") or 0))
+    except (TypeError, ValueError):
+        retry_count = 0
+    answer_succeeded = bool(payload.get("qwen_document_answer_used"))
+    calls = [
+        assistant_model_call(
+            stage="workspace_grounded_answer",
+            model=str(payload.get("grounded_answer_model") or DEFAULT_QWEN_MODEL),
+            provider="local_qwen",
+            location="S100P_BPU",
+            purpose="grounded_document_answer_from_local_evidence",
+            elapsed_ms=payload.get("grounded_answer_elapsed_ms") if retry_count == 0 else None,
+            status="completed" if answer_succeeded and retry_count == 0 else "failed_or_rejected_by_grounding_validation",
+        )
+    ]
+    for retry_index in range(retry_count):
+        calls.append(
+            assistant_model_call(
+                stage="workspace_grounded_answer_retry",
+                model=str(payload.get("grounded_answer_model") or DEFAULT_QWEN_MODEL),
+                provider="local_qwen",
+                location="S100P_BPU",
+                purpose=f"grounding_validation_retry_{retry_index + 1}",
+                elapsed_ms=payload.get("grounded_answer_elapsed_ms") if retry_index == retry_count - 1 else None,
+                status="completed" if answer_succeeded and retry_index == retry_count - 1 else "failed_or_rejected_by_grounding_validation",
+            )
+        )
+    return calls
+
+
+def attach_assistant_model_routing(
+    payload: dict,
+    *,
+    router: dict,
+    plan: dict,
+    calls: list[dict],
+    requested_model_choice: object = None,
+) -> dict:
+    requested = str(requested_model_choice or "").strip()
+    answer_calls = [call for call in calls if call.get("stage") not in {"semantic_router", "semantic_router_fallback"}]
+    effective_model = str((answer_calls[-1] if answer_calls else {}).get("model") or "") or None
+    payload["selected_workspace"] = plan.get("workspace")
+    payload["model_routing"] = {
+        "policy_id": ASSISTANT_MODEL_POLICY_ID,
+        "user_selectable": ASSISTANT_USER_MODEL_SELECTION_ALLOWED,
+        "default_model": DEFAULT_QWEN_MODEL,
+        "selected_workspace": plan.get("workspace"),
+        "answer_kind": plan.get("kind"),
+        "planned_answer_model": plan.get("model"),
+        "effective_answer_model": effective_model,
+        "selection_reason": plan.get("reason"),
+        "requested_model_ignored": requested or None,
+        "calls": calls,
+    }
+    payload["user_model_selection_allowed"] = False
+    return payload
 COPILOT_SEARCH_VERBS = (
     "search",
     "find",
@@ -1361,6 +1519,13 @@ def apply_copilot_guardrail(qwen_route: dict | None, policy_route: dict) -> dict
         route["route"] = "cloud"
         route["privacy_level"] = "none"
         route["local_tool_id"] = None
+    else:
+        if route.get("route") != "local":
+            route["guardrail_applied"] = True
+            route["guardrail_reason"] = "the deterministic policy keeps simple non-tool requests on the default local model"
+        route["route"] = "local"
+        route["privacy_level"] = policy_route.get("privacy_level") or "none"
+        route["local_tool_id"] = policy_route.get("local_tool_id")
     route["qwen_execution_authority"] = False
     return route
 
@@ -4665,6 +4830,8 @@ class PortalState:
     def copilot_qwen_route(self, message: str, action_intent: dict | None = None, model: str | None = None) -> dict:
         policy = copilot_policy_route(message, action_intent)
         qwen_route: dict | None = None
+        selected_model = model or self.qwen_model
+        router_model_calls: list[dict] = []
         result = self._copilot_qwen_router_completion(message, model)
         if result.get("ok"):
             content, metadata, upstream = chat_completion_content(result)
@@ -4676,21 +4843,47 @@ class PortalState:
                 elapsed_ms=result.get("elapsed_ms"),
             )
             if qwen_route:
-                qwen_route["model"] = upstream.get("model") or model or self.qwen_model
+                qwen_route["model"] = selected_model
+                qwen_route["reported_model"] = upstream.get("model") or None
+        router_model_calls.append(
+            assistant_model_call(
+                stage="semantic_router",
+                model=selected_model,
+                provider="local_qwen",
+                location="S100P_BPU",
+                purpose="intent_privacy_complexity_and_workspace_advice",
+                elapsed_ms=result.get("elapsed_ms"),
+                status="completed" if qwen_route else ("invalid_structured_result" if result.get("ok") else "failed"),
+            )
+        )
         if not qwen_route:
             fallback = self._copilot_structured_router_completion(message, model)
+            fallback_route: dict | None = None
             if fallback.get("ok"):
                 content, _metadata, upstream = chat_completion_content(fallback)
                 parsed = parse_json_object_from_text(content)
-                qwen_route = normalize_copilot_router(
+                fallback_route = normalize_copilot_router(
                     parsed or {},
                     classifier="qwen_gateway_structured_router_fallback",
                     raw_content=content,
                     elapsed_ms=fallback.get("elapsed_ms"),
                 )
-                if qwen_route:
-                    qwen_route["model"] = upstream.get("model") or model or self.qwen_model
-                    qwen_route["fallback_from_real_qwen"] = True
+                if fallback_route:
+                    fallback_route["model"] = selected_model
+                    fallback_route["reported_model"] = upstream.get("model") or None
+                    fallback_route["fallback_from_real_qwen"] = True
+                    qwen_route = fallback_route
+            router_model_calls.append(
+                assistant_model_call(
+                    stage="semantic_router_fallback",
+                    model=selected_model,
+                    provider="local_qwen",
+                    location="S100P_BPU",
+                    purpose="intent_privacy_complexity_and_workspace_advice",
+                    elapsed_ms=fallback.get("elapsed_ms"),
+                    status="completed" if fallback_route else ("invalid_structured_result" if fallback.get("ok") else "failed"),
+                )
+            )
         if not qwen_route:
             qwen_route = {
                 **policy,
@@ -4699,6 +4892,8 @@ class PortalState:
                 "qwen_router_error": result.get("error") or (result.get("payload") or {}).get("error") if isinstance(result.get("payload"), dict) else result.get("error"),
                 "elapsed_ms": result.get("elapsed_ms"),
             }
+        qwen_route["router_attempt_count"] = len(router_model_calls)
+        qwen_route["model_calls"] = router_model_calls
         return apply_copilot_guardrail(qwen_route, policy)
 
     def _copilot_attach_router(self, status: int, payload: dict, router: dict, *, assistant_mode: str | None = None) -> tuple[int, dict]:
@@ -5031,6 +5226,7 @@ class PortalState:
                 payload["journal_lookup"] = True
                 payload["journal_date"] = journal_date
                 payload["qwen_document_answer_used"] = False
+                payload["qwen_document_answer_attempted"] = False
                 payload["qwen_document_answer_retry_used"] = False
                 payload["qwen_document_answer_retry_attempts"] = 0
                 if answer:
@@ -5041,6 +5237,7 @@ class PortalState:
                     payload["document_answer_source"] = "deterministic_journal_no_match"
             elif evidence:
                 qwen_answer = self.local_qwen_document_answer(str(intent.get("query") or ""), evidence)
+                payload["qwen_document_answer_attempted"] = True
                 if qwen_answer.get("ok"):
                     payload["answer"] = qwen_answer.get("answer") or payload.get("answer")
                     payload["document_answer_source"] = "local_qwen_grounded_rag"
@@ -5056,6 +5253,8 @@ class PortalState:
                     payload["qwen_document_answer_retry_used"] = False
                     payload["qwen_document_answer_retry_attempts"] = qwen_answer.get("retry_attempt_count") or 0
                     payload["grounded_qwen_error"] = qwen_answer.get("error")
+                    payload["grounded_answer_model"] = self.qwen_model
+                    payload["grounded_answer_elapsed_ms"] = qwen_answer.get("elapsed_ms")
             payload.update(
                 {
                     "assistant_mode": "local_document_query",
@@ -5379,11 +5578,12 @@ class PortalState:
                     router,
                 )
             cloud_headers["Authorization"] = f"Bearer {cloud_token}"
+        cloud_model = os.environ.get("AI_NAS_CLOUD_CHAT_MODEL", MINIMAX_MODEL)
         result = http_post_json(
             "cloud_overflow_chat",
             normalize_chat_completions_url(cloud_url),
             {
-                "model": os.environ.get("AI_NAS_CLOUD_CHAT_MODEL", "cloud-overflow"),
+                "model": cloud_model,
                 "messages": [{"role": "user", "content": message}],
                 "stream": False,
                 "metadata": {"source": "digua_ai_nas_cloud_overflow", "privacy_level": "none"},
@@ -5399,7 +5599,9 @@ class PortalState:
             "assistant_mode": "cloud_overflow_chat",
             "answer": content.strip() or "cloud_overflow_empty_answer",
             "route": "cloud_overflow_chat",
-            "model": upstream.get("model") or os.environ.get("AI_NAS_CLOUD_CHAT_MODEL", "cloud-overflow"),
+            "model": cloud_model,
+            "reported_model": upstream.get("model") or None,
+            "elapsed_ms": result.get("elapsed_ms"),
             "cloud_used": True,
             "qwen_execution_authority": False,
             "nas_action": {"operation": "cloud_overflow", "status": "completed", "qwen_execution_authority": False},
@@ -6027,58 +6229,136 @@ class PortalState:
         clean_message = str(message or "").strip()
         if not clean_message:
             return HTTPStatus.BAD_REQUEST, {"ok": False, "error": "empty_message"}
-        normalized_choice = normalize_assistant_model_choice(model_choice)
-        if normalized_choice is None:
-            return HTTPStatus.BAD_REQUEST, {
-                "ok": False,
-                "error": "assistant_model_not_allowed",
-                "allowed_models": list(ASSISTANT_MODEL_CHOICES),
-            }
-        selection = ASSISTANT_MODEL_CHOICES.get(normalized_choice)
-        selected_local_model = (
-            str(selection["model"])
-            if selection and selection.get("provider") == "local"
-            else self.qwen_model
-        )
         if is_local_assistant_identity_question(clean_message):
-            status, payload = self.local_qwen_chat(clean_message, user, selected_local_model)
-            payload["requested_model"] = normalized_choice
+            status, payload = self.local_qwen_chat(clean_message, user, self.qwen_model)
+            identity_plan = {
+                "workspace": "main_router",
+                "kind": "deterministic_local_identity",
+                "model": None,
+                "provider": "local_policy",
+                "location": "S100P",
+                "reason": "Identity questions use the deterministic local identity contract without invoking a language model.",
+            }
+            attach_assistant_model_routing(
+                payload,
+                router={"route": "local", "privacy_level": "high", "task_complexity": "simple"},
+                plan=identity_plan,
+                calls=[],
+                requested_model_choice=model_choice,
+            )
             return status, payload
         action_intent = infer_copilot_action_intent(clean_message)
         router_model = self.qwen_model
         router = self.copilot_qwen_route(clean_message, action_intent, router_model)
+        plan = assistant_answer_model_plan(action_intent, router)
+        model_calls = assistant_router_model_calls(router)
         if action_intent:
             status, payload = self.dispatch_copilot_action(action_intent, user, router)
-            payload["requested_model"] = normalized_choice
+            model_calls.extend(assistant_workspace_response_calls(payload))
+            attach_assistant_model_routing(
+                payload,
+                router=router,
+                plan=plan,
+                calls=model_calls,
+                requested_model_choice=model_choice,
+            )
             return status, payload
-        if selection and selection.get("provider") == "cloud":
-            if router.get("privacy_level") == "none" and not router.get("local_tool_id"):
-                cloud_router = {
-                    **router,
-                    "route": "cloud",
-                    "reason": "User selected MiniMax 2.7 and the local privacy classifier allowed public cloud processing.",
-                    "explicit_model_selection": True,
-                }
-                status, payload = self._copilot_cloud_overflow(clean_message, user, cloud_router)
-                payload["requested_model"] = normalized_choice
+        if plan.get("kind") == "cloud_answer":
+            status, payload = self._copilot_cloud_overflow(clean_message, user, router)
+            if payload.get("cloud_used"):
+                model_calls.append(
+                    assistant_model_call(
+                        stage="response_generation",
+                        model=str(plan.get("model") or MINIMAX_MODEL),
+                        provider="openclaw_minimax",
+                        location="controlled_cloud",
+                        purpose="public_complex_answer",
+                        elapsed_ms=payload.get("elapsed_ms"),
+                    )
+                )
+                attach_assistant_model_routing(
+                    payload,
+                    router=router,
+                    plan=plan,
+                    calls=model_calls,
+                    requested_model_choice=model_choice,
+                )
                 return status, payload
-            status, payload = self.local_qwen_chat(clean_message, user, self.qwen_model)
-            payload["requested_model"] = normalized_choice
-            payload["model_selection_fallback"] = "cloud_blocked_by_local_privacy_guard"
-            router = {
-                **router,
-                "route": "local",
-                "guardrail_reason": "MiniMax selection was kept local because the request was private, NAS-scoped, or uncertain.",
+            if payload.get("assistant_mode") != "cloud_overflow_stub":
+                model_calls.append(
+                    assistant_model_call(
+                        stage="response_generation",
+                        model=MINIMAX_MODEL,
+                        provider="openclaw_minimax",
+                        location="controlled_cloud",
+                        purpose="public_complex_answer",
+                        elapsed_ms=((payload.get("upstream") or {}).get("elapsed_ms") if isinstance(payload.get("upstream"), dict) else None),
+                        status="failed",
+                    )
+                )
+            fallback_plan = {
+                **plan,
+                "kind": "cloud_unavailable_local_7b_fallback",
+                "model": QWEN_7B_MODEL,
+                "provider": "local_qwen",
+                "location": "S100P_CPU",
+                "reason": "The policy selected cloud for a public complex task, but the controlled cloud path was unavailable; local 7B provided the fallback answer.",
             }
-            return self._copilot_attach_router(status, payload, router, assistant_mode=payload.get("assistant_mode"))
-        if selection and selection.get("provider") == "local":
-            status, payload = self.local_qwen_chat(clean_message, user, selected_local_model)
-            payload["requested_model"] = normalized_choice
-            return self._copilot_attach_router(status, payload, router, assistant_mode=payload.get("assistant_mode") if isinstance(payload, dict) else None)
-        if router.get("route") == "cloud":
-            return self._copilot_cloud_overflow(clean_message, user, router)
-        status, payload = self.local_qwen_chat(clean_message, user)
-        return self._copilot_attach_router(status, payload, router, assistant_mode=payload.get("assistant_mode") if isinstance(payload, dict) else None)
+            fallback_status, fallback_payload = self.local_qwen_chat(clean_message, user, QWEN_7B_MODEL)
+            fallback_payload["cloud_fallback"] = True
+            fallback_payload["cloud_fallback_reason"] = payload.get("error") or payload.get("assistant_mode") or "cloud_unavailable"
+            model_calls.append(
+                assistant_model_call(
+                    stage="response_generation_fallback",
+                    model=QWEN_7B_MODEL,
+                    provider="local_qwen",
+                    location="S100P_CPU",
+                    purpose="public_complex_cloud_failure_fallback",
+                    elapsed_ms=fallback_payload.get("elapsed_ms"),
+                    status="completed" if fallback_status == HTTPStatus.OK else "failed",
+                )
+            )
+            fallback_status, fallback_payload = self._copilot_attach_router(
+                fallback_status,
+                fallback_payload,
+                router,
+                assistant_mode=fallback_payload.get("assistant_mode"),
+            )
+            attach_assistant_model_routing(
+                fallback_payload,
+                router=router,
+                plan=fallback_plan,
+                calls=model_calls,
+                requested_model_choice=model_choice,
+            )
+            return fallback_status, fallback_payload
+        selected_model = str(plan.get("model") or DEFAULT_QWEN_MODEL)
+        status, payload = self.local_qwen_chat(clean_message, user, selected_model)
+        model_calls.append(
+            assistant_model_call(
+                stage="response_generation",
+                model=selected_model,
+                provider="local_qwen",
+                location="S100P_CPU" if selected_model == QWEN_7B_MODEL else "S100P_BPU",
+                purpose="local_complex_answer" if selected_model == QWEN_7B_MODEL else "local_default_answer",
+                elapsed_ms=payload.get("elapsed_ms"),
+                status="completed" if status == HTTPStatus.OK else "failed",
+            )
+        )
+        status, payload = self._copilot_attach_router(
+            status,
+            payload,
+            router,
+            assistant_mode=payload.get("assistant_mode") if isinstance(payload, dict) else None,
+        )
+        attach_assistant_model_routing(
+            payload,
+            router=router,
+            plan=plan,
+            calls=model_calls,
+            requested_model_choice=model_choice,
+        )
+        return status, payload
 
     def audit_summary_payload(self) -> dict:
         if not self.operation_db_path:

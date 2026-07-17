@@ -31,13 +31,13 @@ class CopilotLocalQwenChatTest(unittest.TestCase):
             document_fts_db_path=root / "document_fts.sqlite3",
         )
 
-    def fake_qwen(self, content: str = "Qwen response.") -> dict:
+    def fake_qwen(self, content: str = "Qwen response.", model: str = "Qwen2.5-1.5B-Instruct-S100P-official") -> dict:
         return {
             "ok": True,
             "status": 200,
             "elapsed_ms": 4.2,
             "payload": {
-                "model": "Qwen2.5-1.5B-Instruct-S100P-official",
+                "model": model,
                 "choices": [{"message": {"role": "assistant", "content": content}, "finish_reason": "stop"}],
                 "usage": {"prompt_tokens": 8, "completion_tokens": 9},
             },
@@ -104,6 +104,12 @@ class CopilotLocalQwenChatTest(unittest.TestCase):
             self.assertEqual(payload["route"], "local_qwen_chat")
             self.assertIn("local Qwen", payload["answer"])
             self.assertEqual(payload["qwen_router"]["classifier"], "qwen_gateway_structured_router")
+            self.assertEqual(payload["selected_workspace"], "main_router")
+            self.assertEqual(payload["model_routing"]["effective_answer_model"], state.qwen_model)
+            self.assertEqual(
+                [call["model"] for call in payload["model_routing"]["calls"]],
+                [state.qwen_model, state.qwen_model],
+            )
             self.assertEqual(post_json.call_count, 2)
             sent_payload = post_json.call_args_list[1].args[2]
             self.assertEqual(sent_payload["messages"], [{"role": "user", "content": "Say hello."}])
@@ -130,30 +136,95 @@ class CopilotLocalQwenChatTest(unittest.TestCase):
             self.assertFalse(payload["cloud_used"])
             self.assertFalse(payload["qwen_execution_authority"])
             self.assertFalse(payload["audit"]["cloud_payload_sent"])
+            self.assertEqual(payload["model_routing"]["calls"], [])
+            self.assertIsNone(payload["model_routing"]["effective_answer_model"])
             post_json.assert_not_called()
 
-    def test_explicit_7b_selection_uses_7b_for_router_and_answer(self):
+    def test_policy_selects_7b_only_for_complex_local_answer(self):
         with tempfile.TemporaryDirectory() as tmp:
             state = self.make_state(Path(tmp))
             seven_b = "Qwen2.5-7B-Instruct-S100P-official"
             with patch(
                 "ai_nas_operator_portal_server.http_post_json",
-                side_effect=[self.fake_router(), self.fake_qwen("Answer from 7B.")],
+                side_effect=[
+                    self.fake_router(route="local", privacy_level="high", task_complexity="complex"),
+                    self.fake_qwen("Answer from 7B.", model=seven_b),
+                ],
             ) as post_json:
                 status, payload = state.copilot_chat(
-                    "Explain this locally.",
+                    "Keep this private and local. " + ("Analyze competing market strategy assumptions and dependencies. " * 4),
                     {"username": "admin"},
-                    "qwen2.5-7b-local",
                 )
 
             self.assertEqual(status, 200)
-            self.assertEqual(payload["requested_model"], "qwen2.5-7b-local")
+            self.assertFalse(payload["user_model_selection_allowed"])
+            self.assertEqual(payload["selected_workspace"], "main_router")
+            self.assertEqual(payload["model_routing"]["effective_answer_model"], seven_b)
+            self.assertEqual([call["model"] for call in payload["model_routing"]["calls"]], [state.qwen_model, seven_b])
             self.assertEqual(post_json.call_args_list[0].args[2]["model"], state.qwen_model)
             self.assertEqual(post_json.call_args_list[1].args[2]["model"], seven_b)
             self.assertIn("18080", post_json.call_args_list[0].args[1])
             self.assertIn("18081", post_json.call_args_list[1].args[1])
 
-    def test_explicit_minimax_selection_uses_cloud_only_after_local_public_guard(self):
+    def test_deterministic_complexity_floor_can_promote_private_work_to_7b(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            state = self.make_state(Path(tmp))
+            seven_b = "Qwen2.5-7B-Instruct-S100P-official"
+            private_complex_prompt = "Keep this private and local. " + ("Analyze competing assumptions and dependencies. " * 5)
+            with patch(
+                "ai_nas_operator_portal_server.http_post_json",
+                side_effect=[
+                    self.fake_router(route="local", privacy_level="high", task_complexity="simple"),
+                    self.fake_qwen("Policy-promoted 7B answer.", model=seven_b),
+                ],
+            ) as post_json:
+                status, payload = state.copilot_chat(private_complex_prompt, {"username": "admin"})
+
+            self.assertEqual(status, 200)
+            self.assertEqual(payload["qwen_router"]["task_complexity"], "simple")
+            self.assertEqual(payload["qwen_router"]["policy_route"]["task_complexity"], "complex")
+            self.assertEqual(payload["model_routing"]["effective_answer_model"], seven_b)
+            self.assertEqual(post_json.call_args_list[1].args[2]["model"], seven_b)
+
+    def test_qwen_complex_advice_alone_does_not_override_default_1_5b(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            state = self.make_state(Path(tmp))
+            with patch(
+                "ai_nas_operator_portal_server.http_post_json",
+                side_effect=[
+                    self.fake_router(route="local", privacy_level="none", task_complexity="complex"),
+                    self.fake_qwen("AUTO_OK"),
+                ],
+            ) as post_json:
+                status, payload = state.copilot_chat("Reply only AUTO_OK.", {"username": "admin"})
+
+            self.assertEqual(status, 200)
+            self.assertEqual(payload["qwen_router"]["task_complexity"], "complex")
+            self.assertEqual(payload["qwen_router"]["policy_route"]["task_complexity"], "simple")
+            self.assertEqual(payload["model_routing"]["effective_answer_model"], state.qwen_model)
+            self.assertIn("18080", post_json.call_args_list[1].args[1])
+
+    def test_qwen_cloud_advice_cannot_send_a_simple_default_request_to_cloud(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            state = self.make_state(Path(tmp))
+            with patch(
+                "ai_nas_operator_portal_server.http_post_json",
+                side_effect=[
+                    self.fake_router(route="cloud", privacy_level="none", task_complexity="simple"),
+                    self.fake_qwen("AUTO_OK"),
+                ],
+            ) as post_json:
+                status, payload = state.copilot_chat("Reply only AUTO_OK.", {"username": "admin"})
+
+            self.assertEqual(status, 200)
+            self.assertEqual(payload["qwen_router"]["route"], "local")
+            self.assertTrue(payload["qwen_router"]["guardrail_applied"])
+            self.assertEqual(payload["selected_workspace"], "main_router")
+            self.assertEqual(payload["model_routing"]["effective_answer_model"], state.qwen_model)
+            self.assertEqual(post_json.call_count, 2)
+            self.assertTrue(all("18082" not in call.args[1] for call in post_json.call_args_list))
+
+    def test_policy_selects_minimax_only_after_local_public_complex_guard(self):
         with tempfile.TemporaryDirectory() as tmp:
             root = Path(tmp)
             token_file = root / "cloud_bridge_token"
@@ -167,21 +238,25 @@ class CopilotLocalQwenChatTest(unittest.TestCase):
             with patch.dict(os.environ, env, clear=False):
                 with patch(
                     "ai_nas_operator_portal_server.http_post_json",
-                    side_effect=[self.fake_router(route="local", privacy_level="none"), self.fake_qwen("MiniMax answer.")],
+                    side_effect=[
+                        self.fake_router(route="cloud", privacy_level="none", task_complexity="complex"),
+                        self.fake_qwen("MiniMax answer.", model="MiniMax-M2.7"),
+                    ],
                 ) as post_json:
                     status, payload = state.copilot_chat(
-                        "Explain a public astronomy topic.",
+                        "Compare public astronomy research trends in depth.",
                         {"username": "admin"},
-                        "minimax2.7-cloud",
                     )
 
             self.assertEqual(status, 200)
             self.assertTrue(payload["cloud_used"])
-            self.assertEqual(payload["requested_model"], "minimax2.7-cloud")
+            self.assertEqual(payload["selected_workspace"], "web_cloud_research")
+            self.assertEqual(payload["model_routing"]["effective_answer_model"], "custom-gateway/MiniMax-M2.7")
+            self.assertEqual(payload["model_routing"]["calls"][-1]["provider"], "openclaw_minimax")
             self.assertEqual(post_json.call_args_list[0].args[2]["model"], state.qwen_model)
             self.assertIn("18082", post_json.call_args_list[1].args[1])
 
-    def test_explicit_minimax_selection_keeps_private_prompt_local(self):
+    def test_legacy_model_choice_is_ignored_and_private_simple_prompt_stays_on_1_5b(self):
         with tempfile.TemporaryDirectory() as tmp:
             state = self.make_state(Path(tmp))
             with patch(
@@ -199,16 +274,59 @@ class CopilotLocalQwenChatTest(unittest.TestCase):
 
             self.assertEqual(status, 200)
             self.assertFalse(payload["cloud_used"])
-            self.assertEqual(payload["model_selection_fallback"], "cloud_blocked_by_local_privacy_guard")
+            self.assertEqual(payload["model_routing"]["requested_model_ignored"], "minimax2.7-cloud")
+            self.assertFalse(payload["model_routing"]["user_selectable"])
+            self.assertEqual(payload["model_routing"]["effective_answer_model"], state.qwen_model)
             self.assertEqual(post_json.call_count, 2)
             self.assertTrue(all("18082" not in call.args[1] for call in post_json.call_args_list))
 
-    def test_unknown_model_selection_is_rejected(self):
+    def test_unknown_legacy_model_choice_cannot_override_policy(self):
         with tempfile.TemporaryDirectory() as tmp:
             state = self.make_state(Path(tmp))
-            status, payload = state.copilot_chat("hello", {"username": "admin"}, "not-a-model")
-            self.assertEqual(status, 400)
-            self.assertEqual(payload["error"], "assistant_model_not_allowed")
+            with patch(
+                "ai_nas_operator_portal_server.http_post_json",
+                side_effect=[self.fake_router(), self.fake_qwen("Policy answer.")],
+            ):
+                status, payload = state.copilot_chat("hello", {"username": "admin"}, "not-a-model")
+            self.assertEqual(status, 200)
+            self.assertEqual(payload["model_routing"]["requested_model_ignored"], "not-a-model")
+            self.assertEqual(payload["model_routing"]["effective_answer_model"], state.qwen_model)
+
+    def test_cloud_failure_falls_back_to_local_7b_and_records_both_calls(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            token_file = root / "cloud_bridge_token"
+            token_file.write_text("local-bridge-secret\n", encoding="utf-8")
+            state = self.make_state(root)
+            seven_b = "Qwen2.5-7B-Instruct-S100P-official"
+            env = {
+                "AI_NAS_CLOUD_CHAT_URL": "http://127.0.0.1:18082/v1",
+                "AI_NAS_CLOUD_CHAT_MODEL": "custom-gateway/MiniMax-M2.7",
+                "AI_NAS_CLOUD_CHAT_TOKEN_FILE": str(token_file),
+            }
+            with patch.dict(os.environ, env, clear=False):
+                with patch(
+                    "ai_nas_operator_portal_server.http_post_json",
+                    side_effect=[
+                        self.fake_router(route="cloud", privacy_level="none", task_complexity="complex"),
+                        {"ok": False, "status": 503, "elapsed_ms": 8.5, "error": "bridge unavailable"},
+                        self.fake_qwen("Local 7B fallback answer.", model=seven_b),
+                    ],
+                ) as post_json:
+                    status, payload = state.copilot_chat(
+                        "Compare public astronomy research trends in depth.",
+                        {"username": "admin"},
+                    )
+
+            self.assertEqual(status, 200)
+            self.assertTrue(payload["cloud_fallback"])
+            self.assertFalse(payload["cloud_used"])
+            self.assertEqual(payload["model_routing"]["effective_answer_model"], seven_b)
+            response_calls = payload["model_routing"]["calls"][1:]
+            self.assertEqual([call["model"] for call in response_calls], ["custom-gateway/MiniMax-M2.7", seven_b])
+            self.assertEqual([call["status"] for call in response_calls], ["failed", "completed"])
+            self.assertIn("18082", post_json.call_args_list[1].args[1])
+            self.assertIn("18081", post_json.call_args_list[2].args[1])
 
     def test_cloud_overflow_uses_bridge_token_file_without_exposing_minimax_token(self):
         with tempfile.TemporaryDirectory() as tmp:
@@ -306,6 +424,9 @@ class CopilotLocalQwenChatTest(unittest.TestCase):
             self.assertFalse(payload["audit"]["direct_nas_write_performed"])
             self.assertFalse(payload["audit"]["cloud_payload_sent"])
             self.assertEqual(payload["nas_action"]["operation"], "search")
+            self.assertEqual(payload["selected_workspace"], "media_photo")
+            self.assertEqual(payload["model_routing"]["answer_kind"], "workspace_tool_response")
+            self.assertEqual([call["stage"] for call in payload["model_routing"]["calls"]], ["semantic_router"])
             self.assertEqual(payload["qwen_router"]["route"], "local")
             self.assertEqual(payload["qwen_router"]["local_tool_id"], "local_nas_search")
             post_json.assert_called_once()
@@ -383,6 +504,8 @@ class CopilotLocalQwenChatTest(unittest.TestCase):
             self.assertEqual(payload["nas_action"]["operation"], "list")
             self.assertEqual(payload["nas_action"]["status"], "completed")
             self.assertEqual(payload["assistant_mode"], "local_storage_list")
+            self.assertEqual(payload["selected_workspace"], "nas_search")
+            self.assertEqual(payload["model_routing"]["effective_answer_model"], None)
             self.assertEqual(payload["qwen_router"]["local_tool_id"], "local_storage_list_or_inspect")
             post_json.assert_called_once()
 
@@ -620,6 +743,10 @@ class CopilotLocalQwenChatTest(unittest.TestCase):
             self.assertFalse(payload["qwen_document_answer_used"])
             self.assertEqual(payload["grounded_qwen_error"], "local_qwen_document_answer_failed_grounding_validation")
             self.assertNotIn("无法提供", payload["answer"])
+            self.assertEqual(
+                [call["status"] for call in payload["model_routing"]["calls"]],
+                ["completed", "failed_or_rejected_by_grounding_validation", "failed_or_rejected_by_grounding_validation"],
+            )
 
     def test_document_query_uses_local_qwen_to_answer_grounded_evidence(self):
         with tempfile.TemporaryDirectory() as tmp:
@@ -774,6 +901,10 @@ class CopilotLocalQwenChatTest(unittest.TestCase):
             self.assertTrue(payload["qwen_document_answer_used"])
             self.assertTrue(payload["qwen_document_answer_retry_used"])
             self.assertIn("1314\u5143", payload["answer"])
+            self.assertEqual(
+                [call["status"] for call in payload["model_routing"]["calls"]],
+                ["completed", "failed_or_rejected_by_grounding_validation", "completed"],
+            )
             retry_payload = post_json.call_args_list[2].args[2]
             self.assertEqual(retry_payload["metadata"]["purpose"], "local_document_grounded_answer_retry")
             self.assertIn("detected_amounts=1314\u5143", retry_payload["messages"][0]["content"])
