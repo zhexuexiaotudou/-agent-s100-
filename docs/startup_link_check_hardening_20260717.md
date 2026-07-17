@@ -75,3 +75,7 @@ A controlled failure test stopped the sunrise-user portal and Qwen services. The
 The final S100P check showed the root filesystem at 95% used with about 2.2 GB available; the NAS was 15% used. This did not block the link acceptance, but the root filesystem remains an operational warning and should be handled through the repository's read-only-first storage cleanup workflow before it reaches the 98% failure threshold.
 
 No Gateway listener was exposed to the public network, NAS access remained limited to the existing `/OpenClawWorkspace` export, and no robot-control permission was added. GPT Pro review is optional for architecture review and is not required for this operational acceptance.
+
+## Storage warning resolution
+
+The warning above was resolved later on 2026-07-17. Low-risk caches were cleaned and the complete 25.59 GB board-local Dream7B HBM tree was archived to NAS with 40/40 source and NAS SHA-256 verification. The original path is now a compatibility symlink to the dated NAS archive. The final link-check reported root usage at 33%, about 31.0 GB available, NAS usage at 17%, and all service health gates passing. See `docs/s100p_root_storage_cleanup_20260717.md`.
