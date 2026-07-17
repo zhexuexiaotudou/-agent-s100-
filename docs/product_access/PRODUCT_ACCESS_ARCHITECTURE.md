@@ -22,7 +22,7 @@ portal --> 127.0.0.1:18080 Qwen / existing policy and ACL layers --> NAS allowli
 
 ## 生命周期
 
-`network-online -> NAS mount -> Qwen/OpenClaw/portal -> LAN facade -> optional remote ingress`。LAN 服务启用；remote ingress 没有 `WantedBy`，必须显式配置。NAS 或互联网不可用时，访问门面仍可返回 health、setup 与诊断状态，远程故障不关闭 LAN。
+`network-online -> NAS mount -> Qwen/OpenClaw/portal -> LAN facade -> optional remote ingress`。LAN 服务随安装启用；remote ingress 虽可挂入 `multi-user.target`，但安装后保持 disabled，只有远程 helper 完成 provider preflight 和明确确认后才 enable。NAS 或互联网不可用时，访问门面仍可返回 health、setup 与诊断状态，远程故障不关闭 LAN。
 
 ## 当前证据边界
 
@@ -30,4 +30,4 @@ portal --> 127.0.0.1:18080 Qwen / existing policy and ACL layers --> NAS allowli
 
 已实测开机恢复、NAS 断挂降级与恢复、互联网默认路由断开时的本地能力、NetworkManager 变更 30 秒自动回滚、鉴权/角色/CSRF/撤销矩阵、二维码与打印卡、四个移动 viewport。物理手机扫码与 PWA 安装仍需用户侧终端确认；LAN HTTP 不是 secure context，PWA 安装应在 Tailscale 或 Cloudflare HTTPS 入口验证。
 
-Tailscale 1.98.9 已安装并保持 Funnel/Serve 空配置，当前阻断为设备尚未由用户账号批准加入 tailnet。Cloudflare 是可选入口，代码、JWT 测试和板端 dry-run 已通过，但没有真实域名、Access 应用、tunnel credential，外部验证不得宣称通过。
+Tailscale 1.98.9 已加入用户 Tailnet，`https://digua.tail7c6cbb.ts.net/` 以 tailnet-only Serve 代理到 `127.0.0.1:8781`。真实 HTTPS 身份映射、未映射拒绝、LAN 伪造拒绝、重启保持及禁用/重启用均已通过；未配置公网 Funnel。当前残余为旧 iptables legacy connmark 健康告警，以及 Tailnet policy 已有但板端未使用的 Funnel capability，后者应在管理员完成控制台 welcome 后移除。Cloudflare 是可选入口，代码、JWT 测试和板端 dry-run 已通过，但没有真实域名、Access 应用、tunnel credential，外部验证不得宣称通过。

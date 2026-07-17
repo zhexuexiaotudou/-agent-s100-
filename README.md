@@ -16,12 +16,15 @@ services remain loopback-only on ports 8765 and 18080.
 
 The live acceptance covered mDNS and fallback access, authentication and roles,
 four mobile viewports, reboot recovery, Internet-route loss, NFS loss and
-recovery, timed network rollback, access-only rollback/upgrade, and secret-free
-QR/access-card generation. The current verdict is
-`product_access_lan_pass_remote_validation_pending`: Tailscale 1.98.9 is
-installed but still needs the owner's tailnet approval; Cloudflare remains the
-optional `configured_but_external_validation_pending` path. Physical-phone QR
-and HTTPS PWA installation are not claimed yet.
+recovery, timed network rollback, access-only rollback/upgrade, secret-free
+QR/access-card generation, and a private Tailscale HTTPS Serve path. The current
+verdict is
+`product_access_lan_tailscale_pass_cloudflare_ready_for_external_validation`:
+`https://digua.tail7c6cbb.ts.net/` is verified as tailnet-only, maps the approved
+Tailscale identity to the local administrator, rejects unmapped identities, and
+survives reboot and disable/re-enable rollback. Cloudflare remains the optional
+`configured_but_external_validation_pending` path. Physical-phone QR and PWA
+installation are not claimed yet.
 
 Design history is recorded in
 [`docs/offline_ui_delivery_20260716.md`](docs/offline_ui_delivery_20260716.md).

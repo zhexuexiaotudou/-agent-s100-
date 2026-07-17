@@ -1,7 +1,7 @@
 # 40300 Tailscale Remote Gate
 
-状态：`needs_user_tailnet_approval`，尚未通过外部门禁。S100P 已按 Tailscale 官方 Ubuntu 22.04 ARM64 安装路径部署 1.98.9，`tailscaled` active，安装后的 remote helper 与 clean access-only 模拟均通过。
+状态：`passed_private_serve_with_host_residuals`。S100P 已加入用户自有 Tailnet，Tailscale 1.98.9 为 `Running`，私有入口为 `https://digua.tail7c6cbb.ts.net/`，只代理到回环地址 `127.0.0.1:8781`。
 
-当前 `BackendState=NeedsLogin`，Serve 与 Funnel 状态均为空，`digua-product-remote-ingress.service` 保持 inactive；因此没有新增远程或公网暴露。代码限定私有 `127.0.0.1:8781` origin、显式身份映射、未映射拒绝，LAN 伪造 `Tailscale-User-Login` 实测不会登录。
+真实 HTTPS 请求由 Tailscale 注入已批准的 owner 身份，显式映射到本地 `admin`；外部登录名不进入公开证据。未映射身份返回 401，LAN 伪造同名身份头仍保持未登录。`/ui`、manifest 和 service worker 均由 HTTPS 入口返回成功。关闭 helper 后 Serve 清空、8781 停止且 LAN 保持健康；重新启用后入口恢复。S100P 重启后 remote ingress、Serve、NAS、LAN 和业务端口均自动恢复。
 
-剩余硬边界是用户用自己的 tailnet 批准 S100P。批准后还必须依次验证 Serve HTTPS、授权与未授权身份、禁用回滚、重启恢复、Funnel 始终为空，再将本门禁提升为通过。
+`tailscale funnel status` 明确显示 `tailnet only`，Windows 非 Tailnet 客户端不能解析该 MagicDNS 域名，没有公网 Funnel 服务。Tailscale 授权页同时给 Tailnet 添加了 Funnel 使用能力，但板端从未执行 `tailscale funnel`，当前没有公网配置；该能力应在用户完成管理控制台 welcome 流程后从 tailnet policy 的 `nodeAttrs` 中移除。另有 S100P 旧版 iptables legacy `CONNMARK --restore-mark` 健康告警，当前不阻断 Serve，但仍是主机网络加固残余项。独立手机/第二台 Tailnet 客户端的物理验收仍待用户终端。

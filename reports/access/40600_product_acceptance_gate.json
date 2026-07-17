@@ -1,10 +1,10 @@
 {
   "gate": "40600_product_acceptance_gate",
   "ok": true,
-  "final_verdict": "product_access_lan_pass_remote_validation_pending",
-  "generated_at": "2026-07-17T13:34:00Z",
-  "main_revision_deployed": "b2598cf1917dda2465bc7ef5e4700b8f6f41f741",
-  "delivery_sha256": "52bcfaf9c97e9fc290f19b2d0eb4687a52908527e474e357aedb692630cc3059",
+  "final_verdict": "product_access_lan_tailscale_pass_cloudflare_ready_for_external_validation",
+  "generated_at": "2026-07-17T14:45:00Z",
+  "main_revision_deployed": "2db2ea3b385810f98ced5d3b415fc1a3e3e35255",
+  "deployment_rollback_point": "/var/backups/digua-ai-nas/access-only-20260717T141432Z",
   "tests_total": 171,
   "tests_passed": 171,
   "tests_failed": 0,
@@ -19,7 +19,16 @@
   "mobile_viewports_live_s100p_passed": 4,
   "physical_phone_passed": false,
   "playwright_console_errors": 0,
-  "tailscale_gate": "needs_user_tailnet_approval",
+  "tailscale_gate": "passed_private_serve_with_host_residuals",
+  "tailscale_private_https_verified": true,
+  "tailscale_identity_mapping_verified": true,
+  "tailscale_unmapped_identity_denied": true,
+  "tailscale_disable_reenable_verified": true,
+  "tailscale_reboot_persistence_verified": true,
+  "tailscale_funnel_publicly_configured": false,
+  "tailscale_funnel_capability_cleanup_pending": true,
+  "tailscale_iptables_connmark_warning": true,
+  "independent_physical_tailnet_client_pending": true,
   "cloudflare_gate": "configured_but_external_validation_pending",
-  "external_remote_validation": false
+  "external_remote_validation": true
 }
