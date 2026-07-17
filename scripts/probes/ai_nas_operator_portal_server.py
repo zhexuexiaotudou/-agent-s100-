@@ -373,6 +373,36 @@ COPILOT_INDEX_TERMS = ("index", "rebuild", "scan", "\u7d22\u5f15", "\u91cd\u5efa
 COPILOT_ALBUM_TERMS = ("album", "\u76f8\u518c")
 COPILOT_JOURNAL_TERMS = ("journal", "diary", "log", "\u65e5\u8bb0", "\u65e5\u5fd7")
 COPILOT_SUMMARY_TERMS = ("summary", "summarize", "report", "\u603b\u7ed3", "\u6458\u8981", "\u62a5\u544a", "\u5468\u62a5")
+COPILOT_JOURNAL_WRITE_TERMS = (
+    "write",
+    "record",
+    "write journal",
+    "write diary",
+    "record journal",
+    "record diary",
+    "\u8bb0\u5f55\u65e5\u8bb0",
+    "\u5199\u65e5\u8bb0",
+    "\u5199\u5165\u65e5\u8bb0",
+    "\u8bb0\u4e00\u6761",
+    "\u5199\u4e00\u6761",
+    "\u65b0\u589e\u65e5\u8bb0",
+)
+COPILOT_JOURNAL_ACTIVITY_QUERY_TERMS = (
+    "what did i do",
+    "where did i go",
+    "what was i doing",
+    "\u5e72\u4ec0\u4e48",
+    "\u505a\u4e86\u4ec0\u4e48",
+    "\u505a\u4ec0\u4e48",
+    "\u5fd9\u4ec0\u4e48",
+    "\u53bb\u4e86\u54ea\u91cc",
+    "\u53bb\u54ea\u4e86",
+    "\u5403\u4e86\u4ec0\u4e48",
+)
+COPILOT_FULL_DATE_PATTERNS = (
+    re.compile(r"(?<!\d)(20\d{2})\s*\u5e74\s*(\d{1,2})\s*\u6708\s*(\d{1,2})\s*\u65e5"),
+    re.compile(r"(?<!\d)(20\d{2})[-/.](\d{1,2})[-/.](\d{1,2})(?!\d)"),
+)
 COPILOT_DOCUMENT_QUERY_TERMS = (
     "document",
     "doc",
@@ -1027,6 +1057,21 @@ def copilot_action_tool_id(action: str | None) -> str | None:
     return mapping.get(action, action)
 
 
+def copilot_journal_lookup_date(message: str) -> str | None:
+    text = str(message or "")
+    for pattern in COPILOT_FULL_DATE_PATTERNS:
+        match = pattern.search(text)
+        if not match:
+            continue
+        year, month, day = (int(item) for item in match.groups())
+        try:
+            datetime(year, month, day)
+        except ValueError:
+            return None
+        return f"{year}\u5e74{month}\u6708{day}\u65e5"
+    return None
+
+
 def infer_copilot_action_intent(message: str) -> dict | None:
     text = str(message or "").strip()
     if not text:
@@ -1040,6 +1085,9 @@ def infer_copilot_action_intent(message: str) -> dict | None:
     has_album = contains_any(text, COPILOT_ALBUM_TERMS)
     has_journal = contains_any(text, COPILOT_JOURNAL_TERMS)
     has_summary = contains_any(text, COPILOT_SUMMARY_TERMS)
+    journal_lookup_date = copilot_journal_lookup_date(text)
+    has_journal_activity_query = contains_any(text, COPILOT_JOURNAL_ACTIVITY_QUERY_TERMS)
+    has_journal_write = contains_any(text, COPILOT_JOURNAL_WRITE_TERMS)
     has_document = contains_any(text, COPILOT_DOCUMENT_QUERY_TERMS)
     has_status = contains_any(text, COPILOT_STATUS_TERMS)
     has_inspect = contains_any(text, COPILOT_INSPECT_TERMS)
@@ -1103,12 +1151,21 @@ def infer_copilot_action_intent(message: str) -> dict | None:
     if has_journal and has_summary:
         period = "weekly" if "week" in text.lower() or "\u5468" in text else "daily"
         return {"action": "journal_summary", "period_type": period, "project_id": "all", "quoted": quoted}
-    if has_journal and ("write" in text.lower() or "record" in text.lower() or "\u8bb0" in text or "\u5199" in text):
+    if has_journal and has_journal_write:
         return {
             "action": "journal_manual_entry",
             "project_id": "manual",
             "title": quoted[0] if quoted else "",
             "body": quoted[1] if len(quoted) >= 2 else "",
+            "quoted": quoted,
+        }
+    if journal_lookup_date and (has_journal or has_journal_activity_query):
+        return {
+            "action": "document_query",
+            "query": f"{text} {journal_lookup_date}",
+            "path": "Documents",
+            "journal_lookup": True,
+            "journal_date": journal_lookup_date,
             "quoted": quoted,
         }
     if contains_any(text, COPILOT_CREATE_FOLDER_TERMS):

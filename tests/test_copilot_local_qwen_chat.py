@@ -274,6 +274,116 @@ class CopilotLocalQwenChatTest(unittest.TestCase):
             self.assertEqual(payload["qwen_router"]["local_tool_id"], "local_document_rag")
             document_query.assert_called_once()
 
+    def test_journal_date_activity_question_uses_readonly_document_rag(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            state = self.make_state(Path(tmp), personal=True)
+            user = {"username": "admin", "role": "admin"}
+
+            with patch(
+                "ai_nas_operator_portal_server.http_post_json",
+                return_value=self.fake_router(privacy_level="high", local_tool_id="local_document_rag"),
+            ) as post_json:
+                with patch.object(
+                    state,
+                    "document_query_payload",
+                    return_value=(
+                        200,
+                        {
+                            "ok": True,
+                            "answer": "Local diary evidence.",
+                            "evidence_count": 0,
+                            "evidence": [],
+                            "evidence_refs": [],
+                        },
+                    ),
+                ) as document_query:
+                    status, payload = state.copilot_chat(
+                        "2026\u5e745\u670820\u65e5\u5e72\u4ec0\u4e48\u4e86",
+                        user,
+                    )
+
+            self.assertEqual(status, 200)
+            self.assertTrue(payload["ok"])
+            self.assertEqual(payload["assistant_mode"], "local_document_query")
+            self.assertEqual(payload["route"], "local_document_query")
+            self.assertEqual(payload["qwen_router"]["local_tool_id"], "local_document_rag")
+            self.assertFalse(payload["cloud_used"])
+            self.assertFalse(payload["qwen_execution_authority"])
+            document_query.assert_called_once_with(
+                "2026\u5e745\u670820\u65e5\u5e72\u4ec0\u4e48\u4e86 2026\u5e745\u670820\u65e5",
+                "Documents",
+                user,
+            )
+            post_json.assert_called_once()
+
+    def test_iso_journal_date_is_normalized_for_local_document_recall(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            state = self.make_state(Path(tmp), personal=True)
+
+            with patch(
+                "ai_nas_operator_portal_server.http_post_json",
+                return_value=self.fake_router(privacy_level="high", local_tool_id="local_document_rag"),
+            ):
+                with patch.object(
+                    state,
+                    "document_query_payload",
+                    return_value=(200, {"ok": True, "answer": "Local diary evidence.", "evidence_count": 0}),
+                ) as document_query:
+                    status, payload = state.copilot_chat(
+                        "2026-05-20 \u6211\u505a\u4e86\u4ec0\u4e48\uff1f",
+                        {"username": "admin", "role": "admin"},
+                    )
+
+            self.assertEqual(status, 200)
+            self.assertEqual(payload["assistant_mode"], "local_document_query")
+            normalized_query = document_query.call_args.args[0]
+            self.assertIn("2026\u5e745\u670820\u65e5", normalized_query)
+
+    def test_reading_a_dated_journal_is_not_misclassified_as_journal_write(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            state = self.make_state(Path(tmp), personal=True)
+
+            with patch(
+                "ai_nas_operator_portal_server.http_post_json",
+                return_value=self.fake_router(privacy_level="high", local_tool_id="local_document_rag"),
+            ):
+                with patch.object(
+                    state,
+                    "document_query_payload",
+                    return_value=(200, {"ok": True, "answer": "Local diary evidence.", "evidence_count": 0}),
+                ) as document_query:
+                    status, payload = state.copilot_chat(
+                        "\u67e5\u770b2026\u5e745\u670820\u65e5\u7684\u65e5\u8bb0",
+                        {"username": "admin", "role": "admin"},
+                    )
+
+            self.assertEqual(status, 200)
+            self.assertEqual(payload["assistant_mode"], "local_document_query")
+            self.assertEqual(payload["nas_action"]["operation"], "document_query")
+            document_query.assert_called_once()
+
+    def test_explicit_dated_journal_write_keeps_the_manual_entry_route(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            state = self.make_state(Path(tmp), personal=True)
+
+            with patch(
+                "ai_nas_operator_portal_server.http_post_json",
+                return_value=self.fake_router(privacy_level="high", local_tool_id="local_journal_manual_entry"),
+            ):
+                with patch(
+                    "ai_nas_operator_portal_server.journal_route_response",
+                    return_value=(200, {"ok": True, "event": {"title": "2026-05-20"}}),
+                ) as journal_route:
+                    status, payload = state.copilot_chat(
+                        "\u8bb0\u5f55\u65e5\u8bb0 \"2026-05-20\" \"\u4eca\u5929\u5f88\u5fd9\"",
+                        {"username": "admin", "role": "admin"},
+                    )
+
+            self.assertEqual(status, 200)
+            self.assertEqual(payload["assistant_mode"], "local_journal_manual_entry")
+            self.assertEqual(payload["nas_action"]["operation"], "journal_manual_entry")
+            journal_route.assert_called_once()
+
     def test_document_query_uses_local_qwen_to_answer_grounded_evidence(self):
         with tempfile.TemporaryDirectory() as tmp:
             state = self.make_state(Path(tmp), personal=True)
