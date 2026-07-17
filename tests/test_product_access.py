@@ -191,7 +191,9 @@ class ProductAccessContractTest(unittest.TestCase):
         self.assertIn("--port 80 --channel lan", lan)
         self.assertIn("--require-nas-mount ${DIGUA_NAS_MOUNT}", lan)
         self.assertIn("CAP_NET_BIND_SERVICE", lan)
+        self.assertNotIn("Requires=openclaw-gateway.service", lan)
         self.assertIn("--bind 127.0.0.1 --port 8781", remote)
+        self.assertNotIn("Requires=openclaw-gateway.service", remote)
         self.assertNotIn("WantedBy=", remote)
 
     def test_product_install_entry_uses_guided_no_argument_flow(self):
@@ -203,6 +205,18 @@ class ProductAccessContractTest(unittest.TestCase):
         self.assertIn('"--product-access"', wizard)
         self.assertIn('configure_lan_access.sh', wizard)
         self.assertIn('claim-create', wizard)
+
+    def test_access_only_install_never_manages_existing_backend_units(self):
+        repo = Path(__file__).resolve().parents[1]
+        installer = (repo / "release/install/install_product_access_only.sh").read_text(encoding="utf-8")
+        uninstaller = (repo / "release/install/uninstall_product_access_only.sh").read_text(encoding="utf-8")
+        wrapper = (repo / "deploy/product_access/install.sh").read_text(encoding="utf-8")
+        self.assertIn('"--access-only"', wrapper)
+        self.assertNotIn("systemctl enable --now openclaw-gateway.service", installer)
+        self.assertNotIn("systemctl enable --now qwen25-local-openai-gateway.service", installer)
+        self.assertNotIn("openclaw-gateway.service", uninstaller)
+        self.assertNotIn("qwen25-local-openai-gateway.service", uninstaller)
+        self.assertIn("backend_units_touched':[]", installer)
 
     def test_frontend_uses_cookie_session_csrf_and_current_pwa(self):
         repo = Path(__file__).resolve().parents[1]

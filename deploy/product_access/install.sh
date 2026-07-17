@@ -9,6 +9,10 @@ if [[ "${DIGUA_SKIP_OS_PACKAGES:-0}" != "1" ]]; then
   apt-get install -y python3 python3-venv avahi-daemon avahi-utils libnss-mdns network-manager nfs-common cifs-utils curl
 fi
 bash "$ROOT_DIR/release/install/product_access_preflight.sh"
+if [[ "${1:-}" == "--access-only" ]]; then
+  shift
+  exec bash "$ROOT_DIR/release/install/install_product_access_only.sh" --apply "$@"
+fi
 if [[ $# -eq 0 ]]; then
   exec python3 "$ROOT_DIR/release/install/deploy_wizard.py" --product-access
 fi
