@@ -83,6 +83,54 @@ unprivileged service account. systemd runs the portal, Qwen gateway and worker
 as that user, and NAS/report write tests are performed with the same identity;
 root-only write success is not accepted.
 
+### Keep one Qwen service scope
+
+The appliance install uses the system unit. A legacy user unit with the same
+name may still be pulled in by a user-scope OpenClaw unit even when that Qwen
+unit is disabled. If both scopes run, they race for `127.0.0.1:18080` and the
+system unit enters an auto-restart loop. Check before upgrade:
+
+```bash
+systemctl is-enabled qwen25-local-openai-gateway.service
+systemctl --user is-enabled qwen25-local-openai-gateway.service
+systemctl --user list-dependencies --reverse qwen25-local-openai-gateway.service
+sudo ss -ltnp | grep ':18080 '
+```
+
+Exactly one Qwen gateway may own port 18080. For an appliance deployment keep
+the system unit, preserve the legacy user-unit file as a rollback copy, and
+mask the user unit. Do not delete the legacy file. Run these commands as the
+service user, not from a root login:
+
+```bash
+unit_dir="$HOME/.config/systemd/user"
+unit="qwen25-local-openai-gateway.service"
+backup="$unit_dir/$unit.pre-system-scope-$(date +%Y%m%d)"
+systemctl --user stop "$unit"
+mv "$unit_dir/$unit" "$backup"
+systemctl --user mask "$unit"
+systemctl --user daemon-reload
+sudo systemctl restart "$unit"
+```
+
+Verify that the user unit is `masked`, the system unit is `active`, and the
+system unit MainPID owns port 18080. To roll back, first stop the system unit,
+then restore the preserved file and start only the user unit:
+
+```bash
+unit_dir="$HOME/.config/systemd/user"
+unit="qwen25-local-openai-gateway.service"
+backup="$unit_dir/$unit.pre-system-scope-YYYYMMDD"
+sudo systemctl stop qwen25-local-openai-gateway.service
+systemctl --user unmask qwen25-local-openai-gateway.service
+mv "$backup" "$unit_dir/$unit"
+systemctl --user daemon-reload
+systemctl --user start "$unit"
+```
+
+Do not execute the migration when `$unit_dir/$unit` is absent or already a
+symlink; inspect the current unit and backup paths first.
+
 The administrator password is read with a hidden prompt, passed only through a
 process environment variable, and is never included in a command, report, unit
 file, or repository file. The guide performs these gates in order:

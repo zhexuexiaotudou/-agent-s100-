@@ -175,7 +175,9 @@ the same real-data reason: the S100P YOLO backend completed with
 ## Stage 10 Release Product Delivery
 
 Stage 10 turns the current demo system into a release-oriented S100P package
-and adds a reproducible demo corpus workflow.
+and adds a reproducible demo corpus workflow. The following verdict, report and
+two hashes are the historical 0.1.0 acceptance from 2026-07-06; they remain as
+trace evidence and are not the checksum of the current 0.2.0 package.
 
 - Final S100P verdict: `ok_stage10_release_product_delivery_gate`
 - Acceptance note: `docs/STAGE10_RELEASE_PRODUCT_DELIVERY_ACCEPTANCE_20260706.md`
@@ -186,7 +188,7 @@ and adds a reproducible demo corpus workflow.
 - Evidence bundle SHA256:
   `3a4ace7dc4fd3e1abdb4f8a7a9c1d28118adf06d17c1f1f88e659fc8796c61fa`
 
-- Release package command:
+- Historical release package command:
   `python3 scripts/build_release.py --version 0.1.0 --out dist/`
 - Final release gate:
   `python3 gates/stage10_release_product_delivery_gate.py --report-root /mnt/nas/openclaw/reports/qwen25_ai_nas --personal-root /mnt/nas/openclaw/Personal --base-url http://127.0.0.1:8765 --timeout 240`
@@ -203,11 +205,11 @@ and adds a reproducible demo corpus workflow.
   planning, first-run wizard, upgrade, rollback, uninstall, and support bundle
   collection.
 
-Release package outputs:
+Current 0.2.0 package outputs:
 
-- `dist/digua-ai-nas-s100p-0.1.0.tar.gz`
-- `dist/digua-ai-nas-s100p-0.1.0.zip`
-- `dist/digua-ai-nas-s100p-0.1.0.sha256`
+- `dist/digua-ai-nas-s100p-0.2.0.tar.gz`
+- `dist/digua-ai-nas-s100p-0.2.0.zip`
+- `dist/digua-ai-nas-s100p-0.2.0.sha256`
 - `dist/release_manifest.json`
 
 User quickstart (guided, secret-safe):
@@ -232,6 +234,13 @@ mount and LAN acceptance have now passed on the real S100P/NAS system. A fully
 destructive clean install remains CI-simulated so the existing services,
 identity, indexes and NAS data are not erased merely to repeat first-install
 provisioning.
+
+The exact 0.2.0 appliance evidence, including the release commit and checksum,
+two real reboot boot IDs, 18 automated S100P checks, LAN endpoints, rollback
+points and remaining manual boundaries, is recorded in
+[`docs/NEW_USER_AI_NAS_PRODUCT_DELIVERY_ACCEPTANCE_20260717.md`](docs/NEW_USER_AI_NAS_PRODUCT_DELIVERY_ACCEPTANCE_20260717.md).
+System-scope appliance services are the supported default. A legacy user-scope
+Qwen unit must not run at the same time as the system unit on port 18080.
 
 Stage 10 safety boundary:
 

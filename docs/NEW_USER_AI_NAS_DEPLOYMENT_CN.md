@@ -68,6 +68,20 @@ python3 release/install/deploy_wizard.py --discover-only
 用户提供已安装的 Qwen/BPU runtime 和模型路径。私有请求、NAS 检索和工具调用
 全部留在 S100P。
 
+产品机默认使用系统级 systemd 单元。`qwen25-local-openai-gateway.service` 在
+系统级和用户级只能启用一份，因为两者都会监听 `127.0.0.1:18080`。从旧版用户级
+部署升级时，安装前先检查：
+
+```bash
+systemctl is-enabled qwen25-local-openai-gateway.service
+systemctl --user is-enabled qwen25-local-openai-gateway.service
+sudo ss -ltnp | grep ':18080 '
+```
+
+如果两份单元同时启动，不要用反复重启掩盖端口冲突。保留系统级单元，并先备份、
+再屏蔽旧用户级单元；完整操作与回滚命令见
+[`product_access/TROUBLESHOOTING.md`](product_access/TROUBLESHOOTING.md)。
+
 ### 云端模式
 
 用户提供 HTTPS OpenAI-compatible API base URL、模型名和 API Key。API Key 只
@@ -84,3 +98,6 @@ NAS/隐私请求不会发送给云端；云端只处理非隐私、非 NAS 范�
 - 带身份认证的产品 smoke 通过；
 - 删除、覆盖、任意移动、整个 NAS 访问和私有原始数据出云保持关闭；
 - 安装报告包含回滚点和仍需人工处理的事项，但不包含任何密码或 API Key。
+
+2026-07-17 的实机交付证据见
+[`NEW_USER_AI_NAS_PRODUCT_DELIVERY_ACCEPTANCE_20260717.md`](NEW_USER_AI_NAS_PRODUCT_DELIVERY_ACCEPTANCE_20260717.md)。
