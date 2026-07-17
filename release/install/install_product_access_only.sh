@@ -61,7 +61,7 @@ required=(
   web/static/pwa-icon-192.svg web/static/pwa-icon-512.svg requirements.txt
   release/systemd/digua-product-access.service release/systemd/digua-product-remote-ingress.service
   release/avahi/digua-ai-nas.service release/install/configure_lan_access.sh
-  release/install/configure_remote_access.sh
+  release/install/configure_remote_access.sh release/install/sync_upstream_identity_runtime.sh
 )
 blockers=()
 remote_was_active=0
@@ -134,7 +134,8 @@ if [[ -z "$SIM_ROOT" ]]; then
   chown -R "$SERVICE_USER" "$STATE_DIR"
   chmod 0755 "$INSTALL_ROOT/app/scripts/digua-access" "$INSTALL_ROOT/app/scripts/digua-doctor" \
     "$INSTALL_ROOT/app/release/install/configure_lan_access.sh" \
-    "$INSTALL_ROOT/app/release/install/configure_remote_access.sh"
+    "$INSTALL_ROOT/app/release/install/configure_remote_access.sh" \
+    "$INSTALL_ROOT/app/release/install/sync_upstream_identity_runtime.sh"
   ln -sfn "$INSTALL_ROOT/app/scripts/digua-access" /usr/local/bin/digua-access
   ln -sfn "$INSTALL_ROOT/app/scripts/digua-doctor" /usr/local/bin/digua-doctor
   systemctl daemon-reload
