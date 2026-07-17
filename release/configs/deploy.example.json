@@ -1,0 +1,24 @@
+{
+  "nas_protocol": "nfs",
+  "nas_host": "192.168.1.20",
+  "nas_share": "/OpenClawWorkspace",
+  "mount_point": "/mnt/nas/openclaw",
+  "personal_root": "/mnt/nas/openclaw/Personal",
+  "install_root": "/opt/digua-ai-nas",
+  "systemd_mode": "system",
+  "service_user": "sunrise",
+  "admin_username": "admin",
+  "password_env": "DIGUA_ADMIN_PASSWORD",
+  "wheelhouse": "",
+  "models": {
+    "DIGUA_QWEN_MODEL_DIR": "/mnt/nas/openclaw/models/qwen",
+    "QWEN25_RUNTIME_BIN": "/opt/vendor/qwen/oellm_multichat",
+    "QWEN25_RUNTIME_CONFIG": "/mnt/nas/openclaw/configs/qwen_runtime.json",
+    "QWEN25_RUNTIME_LIB_DIR": "/opt/vendor/qwen/lib",
+    "QWEN25_ACTIVE_HBM_PATH": "/mnt/nas/openclaw/models/qwen/model.hbm",
+    "DIGUA_CLIP_MODEL_DIR": "",
+    "DIGUA_YOLO_MODEL_PATH": "",
+    "DIGUA_OCR_MODEL_DIR": "",
+    "DIGUA_ASR_MODEL_DIR": ""
+  }
+}

@@ -202,17 +202,17 @@ Release package outputs:
 - `dist/digua-ai-nas-s100p-0.1.0.sha256`
 - `dist/release_manifest.json`
 
-User quickstart:
+User quickstart (guided, secret-safe):
 
 ```bash
-sudo bash release/install/install_s100p.sh \
-  --nas-protocol nfs \
-  --nas-host 192.168.1.20 \
-  --nas-share /OpenClawWorkspace \
-  --mount-point /mnt/nas/openclaw \
-  --personal-root /mnt/nas/openclaw/Personal \
-  --install-root /opt/digua-ai-nas
+sudo -E python3 release/install/deploy_wizard.py
 ```
+
+The offline clean-install simulation is documented in
+[`docs/OFFLINE_DEPLOYMENT_WIZARD_20260717.md`](docs/OFFLINE_DEPLOYMENT_WIZARD_20260717.md).
+It explicitly reports `simulation=true` and `production_verified=false`; real
+S100P/NAS installation and reboot acceptance remain deferred until both devices
+are online.
 
 Stage 10 safety boundary:
 
@@ -423,9 +423,9 @@ ssh -i C:\Users\zhexu\.ssh\s100p_linkcheck_ed25519 sunrise@192.168.127.10 `
 
 - The router demo uses a controlled local cloud stub unless `--cloud-base-url`
   is explicitly pointed at a real cloud service.
-- Qwen `/health` still contains historical model/profile metadata fields that
-  can look inconsistent. For acceptance, use the gate verdicts and generated
-  report paths above as the source of truth.
+- Qwen `/health` now returns HTTP 503 unless its runtime executable, config,
+  library directory and active HBM file exist. Live inference still requires a
+  real request and cannot be accepted from health metadata alone.
 - Do not claim face recognition, family member identity recognition, age/gender/race/emotion/health inference, cloud vision, or cloud ASR.
 - Smart Classification creates virtual collections by default. Physical organization must go through Copy Plan / Harness approval and rollback.
 - The subtitle gate validates local ASR mechanics with a synthetic demo audio fixture; production demos should use real user-provided media.

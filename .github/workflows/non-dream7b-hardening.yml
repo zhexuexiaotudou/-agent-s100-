@@ -41,5 +41,10 @@ jobs:
           done < <(find web/static -maxdepth 1 -type f -name '*.js' -print | sort)
       - name: Run full offline unit suite
         run: python -m unittest discover -s tests -v
+      - name: Validate deployment shell syntax
+        shell: bash
+        run: bash -n release/install/*.sh
+      - name: Simulate clean S100P and NAS installation
+        run: python gates/stage10_release_clean_install_gate.py --report-root "${{ runner.temp }}/digua-clean-install"
       - name: Build model-free release package
         run: python scripts/build_release.py --version ci-${{ github.sha }} --out "${{ runner.temp }}/digua-release"

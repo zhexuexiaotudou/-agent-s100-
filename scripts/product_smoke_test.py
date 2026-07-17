@@ -3,6 +3,7 @@ from __future__ import annotations
 
 import argparse
 import json
+import os
 import re
 import sys
 import time
@@ -54,11 +55,14 @@ def compact_timestamp() -> str:
     return time.strftime("%Y%m%d-%H%M%S")
 
 
-def http_get_json(base_url: str, path: str, timeout: int) -> dict[str, Any]:
+def http_get_json(base_url: str, path: str, timeout: int, token: str = "") -> dict[str, Any]:
     url = base_url.rstrip("/") + path
     started = time.perf_counter()
     try:
-        request = urllib.request.Request(url, headers={"Accept": "application/json"})
+        headers = {"Accept": "application/json"}
+        if token:
+            headers["Authorization"] = f"Bearer {token}"
+        request = urllib.request.Request(url, headers=headers)
         with urllib.request.urlopen(request, timeout=timeout) as response:
             raw = response.read(1024 * 1024).decode("utf-8", errors="replace")
             payload = json.loads(raw)
@@ -103,27 +107,29 @@ def add_failure(failures: list[str], condition: bool, message: str) -> None:
         failures.append(message)
 
 
-def build_payload(base_url: str, timeout: int) -> dict[str, Any]:
+def build_payload(base_url: str, timeout: int, token: str = "") -> dict[str, Any]:
     checks = {
         "health": http_get_json(base_url, "/api/health", timeout),
-        "product_status": http_get_json(base_url, "/api/product/status", timeout),
-        "product_evidence": http_get_json(base_url, "/api/product/evidence/latest", timeout),
-        "harness": http_get_json(base_url, "/api/harness/status", timeout),
-        "yolo_status": http_get_json(base_url, "/api/yolo-index/status", timeout),
-        "multimodal_status": http_get_json(base_url, "/api/multimodal-search/status", timeout),
-        "person_attribute_status": http_get_json(base_url, "/api/person-attribute/status", timeout),
-        "ai_space_status": http_get_json(base_url, "/api/ai-space/status", timeout),
-        "smart_classification_status": http_get_json(base_url, "/api/smart-classification/status", timeout),
-        "smart_naming_status": http_get_json(base_url, "/api/smart-naming/status", timeout),
-        "auto_organizer_status": http_get_json(base_url, "/api/auto-organize/status", timeout),
-        "assistant_trace_status": http_get_json(base_url, "/api/assistant/trace/status", timeout),
-        "document_rag_status": http_get_json(base_url, "/api/document-rag/status", timeout),
-        "subtitle_status": http_get_json(base_url, "/api/subtitle/status", timeout),
-        "jobs_status": http_get_json(base_url, "/api/jobs/status", timeout),
+        "product_status": http_get_json(base_url, "/api/product/status", timeout, token),
+        "product_evidence": http_get_json(base_url, "/api/product/evidence/latest", timeout, token),
+        "harness": http_get_json(base_url, "/api/harness/status", timeout, token),
+        "yolo_status": http_get_json(base_url, "/api/yolo-index/status", timeout, token),
+        "multimodal_status": http_get_json(base_url, "/api/multimodal-search/status", timeout, token),
+        "person_attribute_status": http_get_json(base_url, "/api/person-attribute/status", timeout, token),
+        "ai_space_status": http_get_json(base_url, "/api/ai-space/status", timeout, token),
+        "smart_classification_status": http_get_json(base_url, "/api/smart-classification/status", timeout, token),
+        "smart_naming_status": http_get_json(base_url, "/api/smart-naming/status", timeout, token),
+        "auto_organizer_status": http_get_json(base_url, "/api/auto-organize/status", timeout, token),
+        "assistant_trace_status": http_get_json(base_url, "/api/assistant/trace/status", timeout, token),
+        "document_rag_status": http_get_json(base_url, "/api/document-rag/status", timeout, token),
+        "subtitle_status": http_get_json(base_url, "/api/subtitle/status", timeout, token),
+        "jobs_status": http_get_json(base_url, "/api/jobs/status", timeout, token),
     }
 
     failures: list[str] = []
     warnings: list[str] = []
+
+    add_failure(failures, bool(token), "admin_token_missing")
 
     for name, check in checks.items():
         add_failure(failures, bool(check.get("ok")), f"{name}_http_failed:{check.get('status')}:{check.get('error')}")
@@ -347,9 +353,10 @@ def main() -> int:
     parser.add_argument("--base-url", default="http://127.0.0.1:8765")
     parser.add_argument("--report-root", type=Path, default=Path("reports/product_delivery"))
     parser.add_argument("--timeout", type=int, default=10)
+    parser.add_argument("--token-env", default="DIGUA_ADMIN_TOKEN", help="Environment variable containing a short-lived admin session token.")
     args = parser.parse_args()
 
-    payload = build_payload(args.base_url, args.timeout)
+    payload = build_payload(args.base_url, args.timeout, os.environ.get(args.token_env, ""))
     run_dir = args.report_root / f"product_smoke_test_{compact_timestamp()}"
     run_dir.mkdir(parents=True, exist_ok=False)
     json_path = run_dir / "product_smoke_test.json"

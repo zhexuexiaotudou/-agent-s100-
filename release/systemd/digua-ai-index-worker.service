@@ -4,8 +4,9 @@ After=network-online.target openclaw-gateway.service
 
 [Service]
 Type=simple
+@DIGUA_USER_DIRECTIVE@
 WorkingDirectory=@DIGUA_INSTALL_ROOT@/app
-EnvironmentFile=-%h/.config/digua-ai-nas/digua.env
+EnvironmentFile=@DIGUA_ENV_FILE@
 ExecStart=@DIGUA_INSTALL_ROOT@/venv/bin/python -m src.product_jobs.worker --db-path @DIGUA_REPORT_ROOT@/product_jobs/runtime/product_jobs.db --report-root @DIGUA_REPORT_ROOT@ --personal-root @DIGUA_PERSONAL_ROOT@
 Restart=on-failure
 RestartSec=5

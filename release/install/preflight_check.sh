@@ -7,6 +7,11 @@ PERSONAL_ROOT="/mnt/nas/openclaw/Personal"
 JSON_OUT=""
 MIN_DISK_KB=262144
 WARN_DISK_KB=1048576
+SIMULATION=0
+STRICT_DEVICE=0
+REQUIRE_NAS=0
+NAS_PROTOCOL="local"
+SYSTEMD_MODE="system"
 
 while [[ $# -gt 0 ]]; do
   case "$1" in
@@ -15,7 +20,12 @@ while [[ $# -gt 0 ]]; do
     --personal-root) PERSONAL_ROOT="${2:-}"; shift 2 ;;
     --json-out) JSON_OUT="${2:-}"; shift 2 ;;
     --min-disk-kb) MIN_DISK_KB="${2:-}"; shift 2 ;;
-    *) shift ;;
+    --simulate) SIMULATION=1; shift ;;
+    --strict-device) STRICT_DEVICE=1; shift ;;
+    --require-nas) REQUIRE_NAS=1; shift ;;
+    --nas-protocol) NAS_PROTOCOL="${2:-}"; shift 2 ;;
+    --systemd-mode) SYSTEMD_MODE="${2:-}"; shift 2 ;;
+    *) printf 'unknown argument: %s\n' "$1" >&2; exit 2 ;;
   esac
 done
 
@@ -48,10 +58,19 @@ venv_ok=0; python3 -m venv --help >/dev/null 2>&1 && venv_ok=1
 sqlite_ok=0; has_cmd sqlite3 && sqlite_ok=1
 ffmpeg_ok=0; has_cmd ffmpeg && ffmpeg_ok=1
 systemd_user_ok=0; systemctl --user list-unit-files >/dev/null 2>&1 && systemd_user_ok=1
+systemd_system_ok=0; systemctl list-unit-files >/dev/null 2>&1 && systemd_system_ok=1
 network_ok=0; ping -c 1 -W 2 1.1.1.1 >/dev/null 2>&1 || ping -c 1 -W 2 223.5.5.5 >/dev/null 2>&1; [[ $? -eq 0 ]] && network_ok=1
 nas_reachable=0
 if [[ -n "$NAS_HOST" ]]; then
-  ping -c 1 -W 2 "$NAS_HOST" >/dev/null 2>&1 && nas_reachable=1
+  if [[ "$NAS_HOST" =~ ^[A-Za-z0-9._-]+$ ]]; then
+    ping -c 1 -W 2 "$NAS_HOST" >/dev/null 2>&1 && nas_reachable=1
+    if [[ "$nas_reachable" == "0" ]] && command -v timeout >/dev/null 2>&1; then
+      nas_port=2049; [[ "$NAS_PROTOCOL" == "smb" || "$NAS_PROTOCOL" == "cifs" ]] && nas_port=445
+      timeout 2 bash -c "</dev/tcp/${NAS_HOST}/${nas_port}" >/dev/null 2>&1 && nas_reachable=1
+    fi
+  else
+    warnings+=("nas_host_contains_unsafe_characters")
+  fi
 elif [[ -d "$MOUNT_POINT" ]]; then
   nas_reachable=1
 else
@@ -75,12 +94,31 @@ if [[ "$arch" == "aarch64" ]] && { ls /usr/lib 2>/dev/null | grep -qi hobot || c
 bpu_available=0
 if command -v hrt_model_exec >/dev/null 2>&1 || command -v hb_model_verifier >/dev/null 2>&1 || [[ -d /usr/lib/hobot ]]; then bpu_available=1; fi
 
-[[ "$arch" == "aarch64" ]] || blockers+=("arch_not_aarch64:$arch")
-[[ "$python_ok" == "1" ]] || blockers+=("python_3_10_missing")
-[[ "$pip_ok" == "1" ]] || blockers+=("pip3_missing")
-[[ "$venv_ok" == "1" ]] || blockers+=("python_venv_missing")
-[[ "$systemd_user_ok" == "1" ]] || blockers+=("systemd_user_unavailable")
-[[ "$disk_ok" == "1" ]] || blockers+=("disk_free_below_min:${MIN_DISK_KB}")
+if [[ "$SIMULATION" == "0" ]]; then
+  [[ "$arch" == "aarch64" ]] || blockers+=("arch_not_aarch64:$arch")
+  [[ "$python_ok" == "1" ]] || blockers+=("python_3_10_missing")
+  [[ "$venv_ok" == "1" ]] || blockers+=("python_venv_missing")
+  if [[ "$SYSTEMD_MODE" == "user" ]]; then
+    [[ "$systemd_user_ok" == "1" ]] || blockers+=("systemd_user_unavailable")
+  elif [[ "$SYSTEMD_MODE" == "system" ]]; then
+    [[ "$systemd_system_ok" == "1" ]] || blockers+=("systemd_system_unavailable")
+  else
+    blockers+=("unsupported_systemd_mode:$SYSTEMD_MODE")
+  fi
+  [[ "$disk_ok" == "1" ]] || blockers+=("disk_free_below_min:${MIN_DISK_KB}")
+  if [[ "$STRICT_DEVICE" == "1" ]]; then
+    [[ "$s100p_detected" == "1" ]] || blockers+=("s100p_not_detected")
+    [[ "$bpu_available" == "1" ]] || blockers+=("s100p_bpu_unavailable")
+  fi
+  if [[ "$REQUIRE_NAS" == "1" ]]; then
+    [[ "$NAS_PROTOCOL" != "local" ]] || blockers+=("nas_protocol_local_not_allowed")
+    [[ "$nas_reachable" == "1" ]] || blockers+=("nas_unreachable:$NAS_HOST")
+    if [[ "$NAS_PROTOCOL" == "nfs" ]]; then command -v mount.nfs >/dev/null 2>&1 || blockers+=("mount_nfs_helper_missing"); fi
+    if [[ "$NAS_PROTOCOL" == "smb" || "$NAS_PROTOCOL" == "cifs" ]]; then command -v mount.cifs >/dev/null 2>&1 || blockers+=("mount_cifs_helper_missing"); fi
+  fi
+else
+  warnings+=("simulated_preflight_hardware_not_verified")
+fi
 [[ "$ports_available" == "1" ]] || warnings+=("ports_8765_or_18080_already_listening")
 
 ok=1
@@ -93,6 +131,10 @@ payload="$(BLOCKERS_JSON="$blockers_json" WARNINGS_JSON="$warnings_json" python3
 import json, os
 payload = {
   "ok": bool($ok),
+  "simulation": bool($SIMULATION),
+  "production_verified": False,
+  "strict_device": bool($STRICT_DEVICE),
+  "require_nas": bool($REQUIRE_NAS),
   "arch": "$arch",
   "os_release": "$os_release",
   "s100p_detected": bool($s100p_detected),
@@ -104,6 +146,8 @@ payload = {
   "sqlite3_ok": bool($sqlite_ok),
   "ffmpeg_ok": bool($ffmpeg_ok),
   "systemd_user_ok": bool($systemd_user_ok),
+  "systemd_system_ok": bool($systemd_system_ok),
+  "systemd_mode": "$SYSTEMD_MODE",
   "network_ok": bool($network_ok),
   "nas_reachable": bool($nas_reachable),
   "mount_writable": bool($mount_writable),
