@@ -41,6 +41,13 @@ VIEWER_POST_ALLOWLIST = {
     "/api/token-budget/route", "/api/agent-runtime/rag/query",
 }
 NAS_DEPENDENT_PREFIXES = ("/api/storage/", "/api/media/", "/api/backup/", "/api/snapshot/", "/api/nas/", "/api/auto-organize/", "/api/ai-album/")
+LOCAL_UI_ROUTES = {"/ui", "/ai-album"}
+LOCAL_STATIC_ASSETS = {
+    "/static/digua_ai_nas_v2.css": ("digua_ai_nas_v2.css", "text/css; charset=utf-8"),
+    "/static/digua_ai_nas_v2.js": ("digua_ai_nas_v2.js", "application/javascript; charset=utf-8"),
+    "/static/pwa-icon-192.svg": ("pwa-icon-192.svg", "image/svg+xml"),
+    "/static/pwa-icon-512.svg": ("pwa-icon-512.svg", "image/svg+xml"),
+}
 
 
 def _json_bytes(payload: dict) -> bytes:
@@ -50,7 +57,7 @@ def _json_bytes(payload: dict) -> bytes:
 def _setup_html(device_name: str) -> str:
     name = html.escape(device_name)
     return f"""<!doctype html><html lang=\"zh-CN\"><head><meta charset=\"utf-8\"><meta name=\"viewport\" content=\"width=device-width,initial-scale=1\"><meta name=\"theme-color\" content=\"#16362e\"><title>认领 {name}</title><link rel=\"manifest\" href=\"/manifest.webmanifest\"><style>
-    :root{{font-family:Inter,system-ui,sans-serif;color:#19302a;background:#f4f7f4}}body{{margin:0;min-height:100vh;display:grid;place-items:center;padding:20px;box-sizing:border-box}}main{{width:min(520px,100%);background:#fff;border:1px solid #dce7e1;border-radius:24px;padding:30px;box-shadow:0 18px 60px #173b2d14}}h1{{font-size:clamp(28px,7vw,44px);margin:0 0 8px;letter-spacing:-.04em}}p{{line-height:1.65;color:#5a6c66}}label{{display:grid;gap:7px;margin:16px 0;font-weight:650}}input{{font:inherit;padding:13px 14px;border:1px solid #bdcec6;border-radius:12px}}button{{width:100%;border:0;border-radius:12px;padding:14px;background:#16362e;color:#fff;font:inherit;font-weight:750;cursor:pointer}}small{{display:block;margin-top:16px;color:#667970}}#result{{min-height:24px;margin-top:14px}}a{{color:#16362e}}
+    :root{{font-family:Inter,system-ui,sans-serif;color:#19302a;background:#f4f7f4}}body{{margin:0;min-height:100dvh;display:grid;place-items:center;padding:20px;box-sizing:border-box}}main{{box-sizing:border-box;width:min(520px,100%);background:#fff;border:1px solid #dce7e1;border-radius:24px;padding:30px;box-shadow:0 18px 60px #173b2d14}}h1{{font-size:clamp(28px,7vw,44px);margin:0 0 8px;letter-spacing:-.04em}}p{{line-height:1.65;color:#5a6c66}}label{{display:grid;gap:7px;margin:16px 0;font-weight:650}}input{{box-sizing:border-box;width:100%;font:inherit;padding:13px 14px;border:1px solid #bdcec6;border-radius:12px}}button{{width:100%;border:0;border-radius:12px;padding:14px;background:#16362e;color:#fff;font:inherit;font-weight:750;cursor:pointer}}small{{display:block;margin-top:16px;color:#667970}}#result{{min-height:24px;margin-top:14px}}a{{color:#16362e}}@media(max-width:420px){{body{{padding:12px}}main{{padding:24px 20px;border-radius:18px}}}}
     </style></head><body><main><p>地瓜 AI-NAS · 首次设置</p><h1>认领这台设备</h1><p>此操作仅允许在局域网、设备尚无用户且一次性认领码有效时执行。认领码不会保存在数据库明文中。</p><form id=\"claim\"><label>一次性认领码<input name=\"claim_token\" required autocomplete=\"one-time-code\"></label><label>管理员用户名<input name=\"username\" required autocomplete=\"username\"></label><label>管理员密码<input name=\"password\" type=\"password\" minlength=\"8\" required autocomplete=\"new-password\"></label><button>完成认领</button></form><div id=\"result\" role=\"status\"></div><small>已有账户？<a href=\"/ui\">返回工作台</a></small></main><script>
     const fragment=new URLSearchParams(location.hash.replace(/^#/,''));if(fragment.get('claim')){{claim.elements.claim_token.value=fragment.get('claim');history.replaceState(null,'',location.pathname)}}
     claim.addEventListener('submit',async e=>{{e.preventDefault();result.textContent='正在验证…';const body=Object.fromEntries(new FormData(claim));const r=await fetch('/api/v1/setup/claim',{{method:'POST',headers:{{'Content-Type':'application/json'}},body:JSON.stringify(body)}});const d=await r.json();if(r.ok){{result.textContent='认领完成，正在进入工作台…';location.href='/ui'}}else result.textContent='未完成：'+(d.error||r.status)}});
@@ -500,6 +507,13 @@ class ProductAccessHandler(BaseHTTPRequestHandler):
         if route.startswith("/api/v1/"):
             if self._api_get(route): return
             self._json({"ok": False, "error": "api_route_not_found"}, HTTPStatus.NOT_FOUND); return
+        if route in LOCAL_UI_ROUTES:
+            asset = REPO_ROOT / "web" / "ai_nas_desktop_v2.html"
+            self._send(HTTPStatus.OK, asset.read_bytes(), "text/html; charset=utf-8"); return
+        if route in LOCAL_STATIC_ASSETS:
+            filename, content_type = LOCAL_STATIC_ASSETS[route]
+            asset = REPO_ROOT / "web" / "static" / filename
+            self._send(HTTPStatus.OK, asset.read_bytes(), content_type); return
         if route == "/setup":
             self._send(HTTPStatus.OK, _setup_html(self.state.store.device()["name"]).encode("utf-8"), "text/html; charset=utf-8"); return
         if route == "/settings/access":
@@ -511,9 +525,6 @@ class ProductAccessHandler(BaseHTTPRequestHandler):
             self._send(HTTPStatus.OK, icon.encode(), "image/svg+xml"); return
         if route == "/favicon.ico":
             self.send_response(HTTPStatus.NO_CONTENT); self.send_header("Cache-Control", "public, max-age=86400"); self.end_headers(); return
-        if route in {"/static/pwa-icon-192.svg", "/static/pwa-icon-512.svg"}:
-            asset = REPO_ROOT / "web" / "static" / route.rsplit("/", 1)[-1]
-            self._send(HTTPStatus.OK, asset.read_bytes(), "image/svg+xml"); return
         if route == "/sw.js":
             sw = "const C='digua-shell-v2',A=['/ui','/manifest.webmanifest','/static/pwa-icon-192.svg','/static/pwa-icon-512.svg','/static/digua_ai_nas_v2.css','/static/digua_ai_nas_v2.js'];self.addEventListener('install',e=>e.waitUntil(caches.open(C).then(c=>c.addAll(A))));self.addEventListener('activate',e=>e.waitUntil(caches.keys().then(k=>Promise.all(k.filter(x=>x!==C).map(x=>caches.delete(x))))));self.addEventListener('fetch',e=>{const u=new URL(e.request.url);if(e.request.method!=='GET'||u.pathname.startsWith('/api/')||u.pathname.startsWith('/api/v1/')||u.pathname.includes('download'))return;e.respondWith(fetch(e.request).catch(()=>caches.match(e.request)))})"
             self._send(HTTPStatus.OK, sw.encode(), "application/javascript; charset=utf-8", {"Service-Worker-Allowed": "/"}); return

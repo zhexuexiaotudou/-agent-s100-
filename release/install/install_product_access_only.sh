@@ -135,7 +135,12 @@ if [[ -z "$SIM_ROOT" ]]; then
   ln -sfn "$INSTALL_ROOT/app/scripts/digua-access" /usr/local/bin/digua-access
   ln -sfn "$INSTALL_ROOT/app/scripts/digua-doctor" /usr/local/bin/digua-doctor
   systemctl daemon-reload
-  systemctl enable --now digua-product-access.service
+  systemctl enable digua-product-access.service
+  if systemctl is-active --quiet digua-product-access.service; then
+    systemctl restart digua-product-access.service
+  else
+    systemctl start digua-product-access.service
+  fi
   if [[ "$remote_was_active" == "1" ]]; then
     systemctl start digua-product-remote-ingress.service
   else
