@@ -1,0 +1,36 @@
+name: Visual index preview resolution
+
+on:
+  pull_request:
+    paths:
+      - "scripts/probes/ai_nas_media.py"
+      - "scripts/probes/ai_nas_operator_portal_server.py"
+      - "tests/test_copilot_local_qwen_chat.py"
+      - ".github/workflows/visual-index-preview-resolution.yml"
+  push:
+    branches:
+      - "codex/fix-visual-index-preview-resolution-79"
+    paths:
+      - "scripts/probes/ai_nas_media.py"
+      - "scripts/probes/ai_nas_operator_portal_server.py"
+      - "tests/test_copilot_local_qwen_chat.py"
+      - ".github/workflows/visual-index-preview-resolution.yml"
+
+permissions:
+  contents: read
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.10"
+      - name: Compile service modules
+        run: python -m py_compile scripts/probes/ai_nas_media.py scripts/probes/ai_nas_operator_portal_server.py
+      - name: Run assistant media-search regression tests
+        run: python -m unittest tests.test_copilot_local_qwen_chat
+      - name: Run media-center gate
+        run: python scripts/probes/ai_nas_media_center_gate_probe.py --report-root "$RUNNER_TEMP/digua-media-gate"

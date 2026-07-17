@@ -1,6 +1,7 @@
 import hashlib
 import json
 import os
+import sqlite3
 import sys
 import tempfile
 import unittest
@@ -577,6 +578,159 @@ class CopilotLocalQwenChatTest(unittest.TestCase):
             self.assertIn("没有返回匹配图片", payload["answer"])
             self.assertNotIn("文件盘点", payload["answer"])
             post_json.assert_called_once()
+
+    def test_moved_album_photo_relinks_stale_search_result_to_current_preview(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            state = self.make_state(root, personal=True)
+            assert state.identity_store is not None
+            assert state.media_center is not None
+            state.identity_store.create_user("admin", "admin123", "admin")
+
+            old_photo = root / "Personal" / "Photos" / "football_match.jpg"
+            old_photo.parent.mkdir(parents=True, exist_ok=True)
+            old_photo.write_bytes(b"same-football-photo-content")
+            state.media_center.index_photos(root / "Personal", asset_root=root / "Personal")
+            stale_item = state.media_center.item_for_path(old_photo, asset_root=root / "Personal")
+            assert stale_item is not None
+
+            current_photo = root / "Personal" / "Albums" / "sports" / "match_001.jpg"
+            current_photo.parent.mkdir(parents=True, exist_ok=True)
+            old_photo.replace(current_photo)
+            state.media_center.index_photos(root / "Personal", asset_root=root / "Personal")
+            current_item = state.media_center.item_for_path(current_photo, asset_root=root / "Personal")
+            assert current_item is not None
+
+            stale_result = {
+                "rank": 1,
+                "asset_id": stale_item["asset_id"],
+                "title_redacted": "football_match.jpg",
+                "modality": "image",
+                "file_type": ".jpg",
+                "size_bytes": len(b"same-football-photo-content"),
+                "mtime": int(current_photo.stat().st_mtime),
+                "score": 0.93,
+                "matched_by": ["image_embedding"],
+                "evidence_ref": "mm_ev_stale_football",
+                "path_hash": stale_item["path_hash"],
+                "privacy_level": "private_local_only",
+            }
+
+            status, payload = state._copilot_search_response(
+                mode="local_multimodal_search",
+                intent={"query": "find football photos", "modality": "image", "labels": []},
+                result={
+                    "ok": True,
+                    "query_redacted": "find football photos",
+                    "results": [stale_result],
+                    "degraded": False,
+                    "privacy": {"raw_path_returned": False, "cloud_used": False},
+                },
+                source="local multimodal index",
+                retrieval_mode="image_embedding",
+                user={"username": "admin"},
+            )
+            self.assertEqual(status, 200)
+            self.assertEqual(payload["search"]["result_count"], 1)
+            self.assertFalse(payload["search"]["degraded"])
+            enriched = payload["search"]["results"][0]
+
+            self.assertTrue(enriched["display"]["preview_available"])
+            self.assertEqual(enriched["display"]["name"], "match_001.jpg")
+            self.assertEqual(enriched["path_hash"], current_item["path_hash"])
+            self.assertEqual(enriched["preview_resolution"], "content_digest_relinked")
+            self.assertEqual(
+                enriched["preview_url"],
+                f"/api/media/preview?path_hash={current_item['path_hash']}",
+            )
+            serialized = json.dumps(enriched)
+            self.assertNotIn(str(old_photo), serialized)
+            self.assertNotIn(str(current_photo), serialized)
+            self.assertNotIn("sha256", serialized)
+
+    def test_multimodal_content_identity_resolves_current_album_preview(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            state = self.make_state(root, personal=True)
+            assert state.identity_store is not None
+            assert state.media_center is not None
+            state.identity_store.create_user("admin", "admin123", "admin")
+
+            current_photo = root / "Personal" / "Albums" / "sports" / "football_current.jpg"
+            current_photo.parent.mkdir(parents=True, exist_ok=True)
+            photo_bytes = b"current-football-photo-content"
+            current_photo.write_bytes(photo_bytes)
+            state.media_center.index_photos(root / "Personal", asset_root=root / "Personal")
+            current_item = state.media_center.item_for_path(current_photo, asset_root=root / "Personal")
+            assert current_item is not None
+
+            multimodal_db = root / "reports" / "multimodal_search" / "runtime" / "multimodal_search.db"
+            multimodal_db.parent.mkdir(parents=True, exist_ok=True)
+            con = sqlite3.connect(str(multimodal_db))
+            try:
+                con.execute(
+                    """
+                    CREATE TABLE mm_assets(
+                        asset_id TEXT PRIMARY KEY,
+                        path_hash TEXT NOT NULL,
+                        sha256 TEXT
+                    )
+                    """
+                )
+                con.execute(
+                    "INSERT INTO mm_assets(asset_id,path_hash,sha256) VALUES(?,?,?)",
+                    (
+                        "mm_legacy_football",
+                        "0123456789abcdef0123456789abcdef",
+                        hashlib.sha256(photo_bytes).hexdigest(),
+                    ),
+                )
+                con.commit()
+            finally:
+                con.close()
+
+            stale_result = {
+                "rank": 1,
+                "asset_id": "mm_legacy_football",
+                "title_redacted": "football_old_location.jpg",
+                "modality": "image",
+                "file_type": ".jpg",
+                "size_bytes": len(photo_bytes),
+                "mtime": int(current_photo.stat().st_mtime),
+                "score": 0.96,
+                "matched_by": ["image_embedding"],
+                "evidence_ref": "mm_ev_legacy_football",
+                "path_hash": "0123456789abcdef0123456789abcdef",
+                "privacy_level": "private_local_only",
+            }
+
+            status, payload = state._copilot_search_response(
+                mode="local_multimodal_search",
+                intent={"query": "find football photos", "modality": "image", "labels": []},
+                result={
+                    "ok": True,
+                    "query_redacted": "find football photos",
+                    "results": [stale_result],
+                    "degraded": False,
+                    "privacy": {"raw_path_returned": False, "cloud_used": False},
+                },
+                source="local multimodal index",
+                retrieval_mode="image_embedding",
+                user={"username": "admin"},
+            )
+
+            self.assertEqual(status, 200)
+            self.assertEqual(payload["search"]["result_count"], 1)
+            result = payload["search"]["results"][0]
+            self.assertEqual(result["path_hash"], current_item["path_hash"])
+            self.assertEqual(result["preview_resolution"], "content_digest_relinked")
+            self.assertTrue(result["display"]["preview_available"])
+            self.assertNotIn("sha256", json.dumps(payload))
+
+            state.identity_store.create_user("viewer", "viewer123", "viewer")
+            denied = state.enrich_copilot_search_result(stale_result, {"username": "viewer"}, {})
+            self.assertFalse(denied["display"]["preview_available"])
+            self.assertNotIn("preview_url", denied)
 
     def test_yolo_fixture_preview_hash_is_allowlisted_without_raw_path(self):
         with tempfile.TemporaryDirectory() as tmp:

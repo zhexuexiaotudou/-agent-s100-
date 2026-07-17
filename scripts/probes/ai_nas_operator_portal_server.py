@@ -1882,6 +1882,7 @@ def sanitize_copilot_search_result(item: dict) -> dict:
         "display",
         "preview_url",
         "preview_kind",
+        "preview_resolution",
     }
     return {key: value for key, value in item.items() if key in allowed}
 
@@ -2907,6 +2908,74 @@ class PortalState:
         if cache is not None:
             cache[cache_key] = found
         return found
+
+    def media_file_for_search_result(
+        self,
+        item: dict,
+        user: dict,
+        cache: dict[str, tuple[Path | None, str | None]] | None = None,
+    ) -> tuple[Path | None, str | None, str, str]:
+        path_hash = str(item.get("path_hash") or "").strip().lower()
+        direct_path, direct_relative = self.media_file_by_path_hash(path_hash, user, cache)
+        if direct_path:
+            return direct_path, direct_relative, path_hash, "current_media_identity"
+        if not self.media_center:
+            return None, None, path_hash, ""
+
+        source_sha256 = self._visual_search_content_sha256(item)
+        resolved_item = self.media_center.resolve_search_photo(
+            path_hash=path_hash,
+            asset_id=str(item.get("asset_id") or ""),
+            sha256=source_sha256,
+        )
+        if not resolved_item:
+            return None, None, path_hash, ""
+        try:
+            resolved = Path(str(resolved_item.get("file_path") or "")).resolve(strict=True)
+        except OSError:
+            return None, None, path_hash, ""
+        allowed, _denial_status = self.media_preview_access(resolved, user or {})
+        if not allowed:
+            return None, None, path_hash, ""
+        relative_path = None
+        if self.personal_root:
+            try:
+                relative_path = resolved.relative_to(self.personal_root.resolve(strict=True)).as_posix()
+            except (OSError, ValueError):
+                relative_path = None
+        current_hash = str(resolved_item.get("path_hash") or "").strip().lower()
+        resolution = str(resolved_item.get("resolution") or "content_digest_relinked")
+        return resolved, relative_path, current_hash, resolution
+
+    def _visual_search_content_sha256(self, item: dict) -> str:
+        """Read a private content identity from the local multimodal index."""
+        db_path = self.report_root / "multimodal_search" / "runtime" / "multimodal_search.db"
+        if not db_path.exists():
+            return ""
+        asset_id = str(item.get("asset_id") or "").strip()
+        path_hash = str(item.get("path_hash") or "").strip().lower()
+        if not asset_id and not path_hash:
+            return ""
+        try:
+            con = sqlite3.connect(sqlite_readonly_uri(db_path), uri=True)
+            con.row_factory = sqlite3.Row
+            try:
+                row = con.execute(
+                    """
+                    SELECT sha256
+                    FROM mm_assets
+                    WHERE asset_id=? OR path_hash=?
+                    ORDER BY CASE WHEN asset_id=? THEN 0 ELSE 1 END
+                    LIMIT 1
+                    """,
+                    (asset_id, path_hash, asset_id),
+                ).fetchone()
+            finally:
+                con.close()
+        except (OSError, sqlite3.Error):
+            return ""
+        digest = str(row["sha256"] or "").strip().lower() if row else ""
+        return digest if re.fullmatch(r"[0-9a-f]{64}", digest) else ""
 
     def can_write(self, user: dict, relative_path: str) -> bool:
         if not self.identity_store:
@@ -6179,7 +6248,7 @@ class PortalState:
     ) -> dict:
         safe = sanitize_copilot_search_result(item)
         path_hash_value = str(safe.get("path_hash") or "")
-        path, _relative_path = self.media_file_by_path_hash(path_hash_value, user, path_cache)
+        path, _relative_path, current_media_hash, preview_resolution = self.media_file_for_search_result(item, user, path_cache)
         preview_route = "media" if path else ""
         if not path:
             path, _relative_path = self.storage_file_by_path_hash(path_hash_value, user, path_cache)
@@ -6215,9 +6284,13 @@ class PortalState:
         }
         if path and type_label == "照片" and path_hash_value:
             if preview_route == "media":
+                path_hash_value = current_media_hash or path_hash_value
+                safe["path_hash"] = path_hash_value
                 safe["preview_url"] = f"/api/media/preview?path_hash={quote(path_hash_value, safe='')}"
+                safe["preview_resolution"] = preview_resolution or "current_media_identity"
             else:
                 safe["preview_url"] = f"/api/storage/preview-by-hash?path_hash={quote(path_hash_value, safe='')}"
+                safe["preview_resolution"] = "current_storage_identity"
             safe["preview_kind"] = "image"
             safe["display"]["preview_available"] = True
         else:
