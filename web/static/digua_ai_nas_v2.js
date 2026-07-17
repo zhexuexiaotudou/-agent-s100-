@@ -449,6 +449,8 @@
     const username = appState.authUser?.username || "";
     const storageReady = Boolean(appState.dashboard?.storage?.capacity?.total_bytes);
     const healthReady = appState.health.status === "ok";
+    const connectionTitle = storageReady && healthReady ? "本地服务已读取" : healthReady ? "设备已就绪" : "设备状态待连接";
+    const connectionDetail = storageReady ? "已读取真实存储容量" : healthReady ? "登录后读取 NAS 容量与个人空间" : "连接 S100P 与 NAS 后显示容量和服务状态";
     return `
       <h1 class="sr-only">首页</h1>
       ${card(`
@@ -460,8 +462,8 @@
         <div class="dashboard-connection" aria-label="当前连接摘要">
           <span class="connection-icon">${svg(storageReady && healthReady ? "check" : "link")}</span>
           <div>
-            <strong>${storageReady && healthReady ? "本地服务已读取" : "设备状态待连接"}</strong>
-            <span>${storageReady ? "已读取真实存储容量" : "连接 S100P 与 NAS 后显示容量和服务状态"}</span>
+            <strong>${connectionTitle}</strong>
+            <span>${connectionDetail}</span>
           </div>
         </div>
       `, "dashboard-welcome")}
@@ -476,7 +478,7 @@
         ${card(`${sectionTitle("最近本地操作", "查看审计", "dashboardTasks")}${renderDashboardOperations()}`)}
         ${card(`${sectionTitle("连接与身份")}${renderKeyValueRows([
           ["本地接口", healthReady ? "已读取" : "待连接"],
-          ["S100P / NAS", storageReady ? "已读取真实容量" : "当前未连接"],
+          ["S100P / NAS", storageReady ? "已读取真实容量" : healthReady ? "设备在线，容量需登录" : "当前未连接"],
           ["文件身份", appState.authToken ? "当前浏览器已登录" : "尚未登录"],
           ["数据展示", "只显示接口真实返回"]
         ])}`, "connection-card")}
@@ -4948,7 +4950,18 @@
   }
 
   async function loadLiveHints() {
+    try {
+      const result = await fetchJson("/api/v1/system/health");
+      appState.health = {
+        status: result.ok && result.data && result.data.ok ? "ok" : "error",
+        text: result.ok && result.data && result.data.ok ? "本地访问层在线" : "本地访问层需复查"
+      };
+    } catch (error) {
+      appState.health = { status: "error", text: "本地 API 未连接，页面保持只读" };
+    }
+    if (appState.page === "dashboard") renderShell();
     if (!appState.authToken) return;
+
     try {
       const result = await fetchJson("/api/harness/status");
       appState.health = {
@@ -4956,7 +4969,7 @@
         text: result.ok && result.data && result.data.ok ? "受控执行边界在线" : "执行边界需复查"
       };
     } catch (error) {
-      appState.health = { status: "error", text: "本地 API 未连接，页面保持只读" };
+      appState.health = { status: "error", text: "受控执行边界未连接" };
     }
     if (appState.page === "dashboard") renderShell();
 
