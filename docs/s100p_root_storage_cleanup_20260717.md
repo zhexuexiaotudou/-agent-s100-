@@ -13,6 +13,14 @@ The live evidence directory is:
 /mnt/nas/openclaw/reports/storage/s100p_root_cleanup_20260717
 ```
 
+## Verified environment
+
+- S100P: Ubuntu 22.04.5 LTS, kernel `6.1.158-rt58-DR-4.0.5-2603031328-g9f678e-g6caa4d`;
+- OpenClaw: `2026.6.10 (aa69b12)`, system gateway bound to loopback port `18765`;
+- NAS: QNAP TS-264C, NFS export `169.254.143.37:/OpenClawWorkspace`, mounted at `/mnt/nas/openclaw`;
+- operator path: `sunrise@192.168.127.10` with key-based SSH;
+- review: GPT Pro review is optional for architecture review and is not required for this capacity recovery acceptance.
+
 ## Before
 
 - root filesystem: `47,780,933,632` bytes;
