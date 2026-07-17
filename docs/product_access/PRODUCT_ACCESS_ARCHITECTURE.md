@@ -26,4 +26,8 @@ portal --> 127.0.0.1:18080 Qwen / existing policy and ACL layers --> NAS allowli
 
 ## 当前证据边界
 
-截至 2026-07-17，S100P 与 NAS 未通电。本分支仅支持代码、Windows 本机 HTTP 集成测试与 Linux 容器 clean-install 模拟；mDNS、端口 80、systemd、NAS mount、Tailscale、Cloudflare、重启和手机实机均待验证包上板执行。
+截至 2026-07-17，S100P 与 NAS 已通电并完成 LAN 实机验收。S100P 为 aarch64 Ubuntu 22.04.5，NAS 通过 NFS4 挂载到 `/mnt/nas/openclaw`；Windows 局域网主机可解析并打开 `http://digua.local/`，备用地址 `http://192.168.127.10/` 同样可用。端口 80 是产品入口，既有门户 8765 与 Qwen 18080 保持回环监听。
+
+已实测开机恢复、NAS 断挂降级与恢复、互联网默认路由断开时的本地能力、NetworkManager 变更 30 秒自动回滚、鉴权/角色/CSRF/撤销矩阵、二维码与打印卡、四个移动 viewport。物理手机扫码与 PWA 安装仍需用户侧终端确认；LAN HTTP 不是 secure context，PWA 安装应在 Tailscale 或 Cloudflare HTTPS 入口验证。
+
+Tailscale 1.98.9 已安装并保持 Funnel/Serve 空配置，当前阻断为设备尚未由用户账号批准加入 tailnet。Cloudflare 是可选入口，代码、JWT 测试和板端 dry-run 已通过，但没有真实域名、Access 应用、tunnel credential，外部验证不得宣称通过。

@@ -1,12 +1,21 @@
 {
   "gate": "40300_tailscale_remote_gate",
-  "ok": true,
+  "ok": false,
+  "status": "needs_user_tailnet_approval",
   "adapter_code_complete": true,
+  "installed_on_s100p": true,
+  "tailscale_version": "1.98.9",
+  "tailscaled_active": true,
+  "backend_state": "NeedsLogin",
   "serve_help_checked_before_apply": true,
   "target": "http://127.0.0.1:8781",
+  "serve_status": {},
+  "funnel_status": {},
   "funnel_enabled": false,
+  "remote_ingress_active": false,
   "unmapped_identity_denied": true,
   "lan_header_spoof_tested": true,
   "external_validation_pending": true,
-  "production_verified": false
+  "production_verified": false,
+  "blocker": "user_must_approve_s100p_in_owned_tailnet"
 }

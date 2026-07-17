@@ -1,18 +1,21 @@
 area,test,offline_status,real_status,evidence_or_next_step
-architecture,protected ports unchanged,passed,pending_device,systemd contract plus ss check in validation bundle
-lan,unified facade HTTP flow,passed,pending_device,local HTTP integration plus curl LAN
-lan,digua.local resolution,not_runnable,pending_hardware,avahi-browse and phone lookup
-auth,one-time claim and replay rejection,passed,pending_device,test_product_access then phone claim
-auth,cookie csrf logout,passed,pending_device,test_product_access then browser devtools
-roles,viewer write denied and admin network boundary,passed,pending_device,unit contracts then role matrix
-pwa,API and download not cached,passed,pending_device,SW contract then Cache Storage inspection
-mobile,360x800 390x844 430x932 768x1024,static_pass,pending_hardware,run browser screenshots against S100P
-nas,NAS off degraded page,not_runnable,pending_hardware,power-off drill
-internet,LAN works offline,not_runnable,pending_hardware,disconnect WAN drill
-network,snapshot timed rollback,code_pass,pending_hardware,isolation-network drill
-tailscale,Serve private and Funnel off,adapter_pass,pending_external,tailnet validation
-tailscale,header spoof denied,passed,pending_device,local integration then LAN curl spoof
-cloudflare,Access JWT validation,code_pass,pending_external,domain Access and bad-JWT matrix
-security,no NAS or internal ports public,contract_pass,pending_device,ss firewall and WAN reachability check
-install,claim-mode clean install,passed,pending_device,Linux container simulation then S100P install
-recovery,reboot auto recovery,not_runnable,pending_hardware,reboot and systemctl verification
+architecture,product backends remain loopback,passed,passed,"ss: 8765 and 18080 on 127.0.0.1; original unit hashes unchanged"
+lan,unified facade HTTP flow,passed,passed,"port 80 health/UI HTTP 200"
+lan,digua.local resolution,not_runnable,passed,"Windows Resolve-DnsName and HTTP 200"
+lan,fallback IP,not_runnable,passed,"http://192.168.127.10 HTTP 200"
+auth,claim replay boundary,passed,passed,"already-claimed status and hash-only contract"
+auth,cookie csrf logout revoke,passed,passed,"AUTH_MATRIX.py production_verified=true"
+roles,admin operator viewer,passed,passed,"real role and upstream bridge matrix"
+pwa,private API excluded from cache,passed,passed_contract,"actual install pending HTTPS secure context"
+mobile,360x800 390x844 430x932 768x1024,static_pass,passed_live_s100p,"0 overflow; 0 console errors"
+mobile,physical phone scan,not_runnable,pending_user,"scan generated access card on user phone"
+nas,NFS loss degraded page,not_runnable,passed,"real unmount; 503 degraded; recovery passed"
+internet,LAN works without default route,not_runnable,passed,"LAN auth NAS portal Qwen passed; route restored"
+network,snapshot timed rollback,code_pass,passed,"30-second automatic rollback to 169.254.8.10/16"
+tailscale,installation and private defaults,adapter_pass,passed,"1.98.9 active; Serve and Funnel empty"
+tailscale,tailnet HTTPS authorized and denied users,adapter_pass,pending_user_approval,"approve S100P then run identity and disable/reboot matrix"
+tailscale,LAN spoofed identity header,passed,passed,"forged header remained unauthenticated"
+cloudflare,Access JWT validation,code_pass,pending_external,"wrong signature/audience/expiry tests pass; no real domain or credentials"
+security,product ports and headers,contract_pass,passed_with_host_residuals,"80 LAN; 8765/18080 loopback; pre-existing VNC NFS RPC listeners recorded"
+install,clean and coexistence install,passed,passed,"GitHub CI and real S100P simulation; helper installed"
+recovery,reboot auto recovery,not_runnable,passed,"NetworkManager wait-online fixed NAS mount race"
