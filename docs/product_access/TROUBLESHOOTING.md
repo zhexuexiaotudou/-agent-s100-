@@ -9,5 +9,6 @@
 - Tailscale 报 `CONNMARK --restore-mark`：这是当前 S100P iptables legacy 兼容告警；Serve 已可用，但不要未经回滚设计就切换全局 iptables backend，应作为主机网络加固项处理。
 - 登录 403 CSRF：刷新页面以重新读取 session/CSRF；不要关闭 CSRF。
 - 顶栏仍显示旧用户名但功能返回 `auth_required`：浏览器会话已失效。刷新后前端应清除旧身份并显示“登录”；从顶栏身份菜单或“文件”页重新登录。若刷新后仍显示旧身份，检查 `/api/v1/auth/session` 是否返回 `authenticated: false`，并确认部署的 `digua_ai_nas_v2.js` 已包含失效会话清理逻辑。
+- 密码校验返回 200，但下一次文件请求立即返回 401：检查登录日志是否出现连续的 `POST /api/identity/login` 200 与 `GET /api/storage/list` 401。LAN HTTP 与远程 HTTPS 现在使用不同的 HttpOnly Cookie 名称，前端也显式携带同源凭据；旧版同名 Cookie 不再参与会话验证，部署后需要重新登录一次。
 - 网络变更后失联：等待自动回滚，或在控制台运行 `digua-access network-rollback <snapshot> --confirm 'ROLLBACK NETWORK CHANGE'`。
 - Cloudflare/Tailscale 未安装：状态为需要配置，不影响 LAN。

@@ -27,7 +27,7 @@ from .security import (  # noqa: E402
     CloudflareJwtVerifier,
     clear_session_cookie,
     csrf_token,
-    parse_cookie,
+    parse_session_cookie,
     session_cookie,
     valid_csrf,
 )
@@ -260,7 +260,7 @@ class ProductAccessHandler(BaseHTTPRequestHandler):
             return None, "invalid_json"
 
     def _session(self) -> tuple[str | None, dict | None]:
-        token = parse_cookie(self.headers.get("Cookie"))
+        token = parse_session_cookie(self.headers.get("Cookie"), secure=self._secure())
         return token, self.state.user_for_token(token)
 
     def _require_user(self, *, admin: bool = False) -> tuple[str, dict] | None:
