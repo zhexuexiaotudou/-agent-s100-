@@ -75,9 +75,9 @@
 | 启动竞态恢复 | verified | 实测修复 mount/automount start-limit；托盘失败后每 30 秒重试，覆盖网线晚插和 NAS 晚启动 |
 | OpenClaw / AI-NAS / Qwen | verified | system Gateway `18765/health`、sunrise 门户 `8765/api/health`、本地 Qwen `18080/health` 均返回 HTTP 200；停止用户服务后的故障注入由脚本自动恢复 |
 | 生产任务 | verified | `S100P-NAS-OpenClaw-LinkCheck` 于 2026-07-17 16:31–16:32 完成运行，最终 `status=OK` 且所有 gate 为 true |
-| 容量 | warning | S100P 根分区 95%、约 2.2 GB 可用；NAS 15%。根分区 90% 告警、98% 阻断 |
+| 容量 | verified | 2026-07-17 分两阶段清理并迁移 Dream7B HBM 后，S100P 根分区由 96% 降到 33%，约 31.0 GB 可用；NAS 17%。完整 40/40 双端 SHA-256 校验通过，原路径以 NAS 符号链接保持兼容 |
 
-完整事故、覆盖矩阵、版本、CI、部署哈希和回滚点见 `docs/startup_link_check_hardening_20260717.md`。
+完整事故、覆盖矩阵、版本、CI、部署哈希和回滚点见 `docs/startup_link_check_hardening_20260717.md`；容量清理和 NAS 迁移证据见 `docs/s100p_root_storage_cleanup_20260717.md`。
 
 ## 2026-05-27 当前进展核对
 
