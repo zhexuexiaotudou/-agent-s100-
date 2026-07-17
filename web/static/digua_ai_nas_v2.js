@@ -4450,6 +4450,19 @@
     if (appState.page === "dashboard") renderShell();
   }
 
+  async function loadShellStorageCapacity() {
+    if (!appState.authToken) return null;
+    try {
+      const storage = await fetchJson("/api/storage/status");
+      if (!storage.ok || !storage.data?.ok || !storage.data?.capacity?.total_bytes) return null;
+      appState.dashboard = { ...appState.dashboard, storage: storage.data };
+      appState.settings = { ...appState.settings, storage: storage.data };
+      return storage.data;
+    } catch (error) {
+      return null;
+    }
+  }
+
   async function runAgentRuntimeContextPack() {
     if (!appState.authToken) {
       appState.agentRuntime = { ...appState.agentRuntime, status: "auth", error: "" };
@@ -4616,6 +4629,7 @@
       if (receivedToken) safeLocalStorageSet("diguaAiNasToken", receivedToken);
       else safeLocalStorageRemove("diguaAiNasToken");
       safeLocalStorageSet("diguaAiNasUser", JSON.stringify(appState.authUser));
+      await loadShellStorageCapacity();
       showToast("已连接 NAS 文件接口");
       await loadStoragePath(appState.storage.relativePath || "");
     } catch (error) {
@@ -5407,6 +5421,7 @@
     } catch (error) {
       // Preserve direct loopback compatibility when the facade is not running.
     }
+    if (appState.authToken) await loadShellStorageCapacity();
     renderShell();
     loadLiveHints();
     pageAfterRenderLoad(appState.page);
