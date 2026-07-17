@@ -16,9 +16,11 @@ source-facing and does not change the production path.
 
 | Service name | File | Port | Role | Harness action |
 | --- | --- | ---: | --- | --- |
-| `openclaw-gateway.service` | `configs/systemd/openclaw-gateway.service` | `8765` | AI-NAS Web OS / OpenClaw portal gateway, points to Qwen on `18080` | read-only asset |
-| `qwen25-local-openai-gateway.service` | `configs/systemd/qwen25-local-openai-gateway.service` | `18080` | official local Qwen OpenAI-compatible gateway | read-only asset |
-| `qwen25-7b-shadow-openai-gateway.service` | `configs/systemd/qwen25-7b-shadow-openai-gateway.service` | `18081` | Qwen 7B shadow gateway, not foreground default | read-only asset |
+| `openclaw-gateway.service` | `configs/systemd/openclaw-gateway.service` | `8765` | AI-NAS Web OS / OpenClaw portal gateway; model selector routes to 18080, 18081, or the guarded 18082 bridge | read-only asset |
+| `qwen25-local-openai-gateway.service` | `configs/systemd/qwen25-local-openai-gateway.service` | `18080` | current local Qwen2.5 1.5B BPU OpenAI-compatible gateway | read-only asset |
+| `qwen7b-cpu.service` | `configs/systemd/qwen7b-cpu.service` | `18081` | current selectable local Qwen2.5 7B CPU OpenAI-compatible gateway | read-only asset |
+| `qwen25-7b-shadow-openai-gateway.service` | `configs/systemd/qwen25-7b-shadow-openai-gateway.service` | none | retired/disabled historical 7B BPU shadow unit; its former port 18081 now belongs to `qwen7b-cpu.service` | historical asset |
+| `digua-openclaw-cloud-bridge.service` | deployed system unit | `18082` | loopback bridge to guarded `custom-gateway/MiniMax-M2.7` cloud overflow | read-only deployed asset |
 | `ai-nas-index-daemon.service` | `configs/systemd/ai-nas-index-daemon.service` | none | background SQLite/FTS index daemon | read-only asset |
 | `dream7b-local-openai-gateway.service` | `configs/systemd/dream7b-local-openai-gateway.service` | `18888` | historical Dream7B gateway | protected, not used by harness |
 | `dream7b-bpu-experimental-gateway-18889.service` | `configs/systemd/dream7b-bpu-experimental-gateway-18889.service` | `18889` | Dream7B experimental gateway | protected, not used by harness |

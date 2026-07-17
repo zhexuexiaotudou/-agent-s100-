@@ -43,4 +43,41 @@ MiniMax token 仍只由 root OpenClaw 配置持有。网页和门户服务只使
 2. 禁用并停止 `qwen7b-cpu.service`，重启门户 user service。
 3. 1.5B BPU、MiniMax bridge 与 NAS 本地工具不受该回滚影响。
 
-生产验收证据在合并和 S100P 部署后补充到本文。
+## 生产验收
+
+代码通过两个 PR 进入 `main`：
+
+- [PR #64](https://github.com/zhexuexiaotudou/-agent-s100-/pull/64)，合并提交 `2f549f4ab92c61031cd8c71989735a4665f7f395`：模型选择 UI、API 契约和三路路由。
+- [PR #65](https://github.com/zhexuexiaotudou/-agent-s100-/pull/65)，合并提交 `114ed2c132c328a1661554a70556022521e55a27`：在真实 7B BPU 补全失败后，将 7B 选择改为可验证的 CPU runtime。
+
+两次 PR 的必需 CI 均通过；最终本地回归为 `219 passed, 3 subtests passed`。部署到 S100P 的运行时修订为 `114ed2c132c328a1661554a70556022521e55a27`。
+
+2026-07-18 的板端服务状态：
+
+| 服务 | 端口 | 状态 | 作用域 |
+| --- | ---: | --- | --- |
+| `qwen25-local-openai-gateway.service` | 18080 | `active` | 1.5B BPU，仅 loopback |
+| `qwen7b-cpu.service` | 18081 | `active/enabled` | 7B CPU，仅 loopback |
+| `digua-openclaw-cloud-bridge.service` | 18082 | `active` | MiniMax bridge，仅 loopback |
+| `openclaw-gateway.service` | 8765 | `active` | AI-NAS 门户，仅 loopback，由受控入口转发 |
+
+通过真实认证门户完成的五个验收用例：
+
+| 选择与输入 | HTTP | 实际路线 | 云端调用 | 结果 |
+| --- | ---: | --- | --- | --- |
+| 1.5B，本地通用对话 | 200 | 1.5B BPU | 否 | 返回 `OK.` |
+| 7B，本地通用对话 | 200 | 7B CPU | 否 | 返回 `PORTAL7_OK` |
+| MiniMax，公开通用对话 | 200 | `MiniMax-M2.7` | 是 | `assistant_mode=cloud_overflow_chat` |
+| MiniMax，询问“你是谁” | 200 | 本地确定性身份回答 | 否 | 未外溢 |
+| MiniMax，包含护照号的私密问题 | 200 | 回落 1.5B BPU | 否 | `cloud_blocked_by_local_privacy_guard` |
+
+浏览器也在真实 `/ui#assistant` 页面确认下拉框包含三个选项。部署前备份分别位于：
+
+- `/mnt/nas/openclaw/deploy_backups/2f549f4a-20260718042015`
+- `/mnt/nas/openclaw/deploy_backups/114ed2c1-20260718043113`
+
+## 已知边界
+
+- 7B 是本地 CPU 模型，不是当前 BPU 模型；首次冷加载约 49 秒，缓存就绪后的短补全约 3 秒。
+- 7B BPU 路径仍不可用。干净重启后的真实补全出现 `HBRT4_STATUS_BAD_DATA` / `bpu_stdout_closed`，内核日志记录 ION 无法分配约 7.4GB。
+- 历史 `ok_qwen25_7b_shadow_acceptance_packet` 保留为当时的健康页、模型清单和工具流证据，不再被解释成 7B 文本生成验收。
