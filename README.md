@@ -56,10 +56,15 @@ The routing contract is documented in
 [`docs/assistant_automatic_model_routing_20260718.md`](docs/assistant_automatic_model_routing_20260718.md);
 the former selector remains as historical evidence in
 [`docs/assistant_model_selector_20260718.md`](docs/assistant_model_selector_20260718.md).
+The combined production revision `5a569316` keeps that assistant routing and
+the bounded album-thumbnail fix in one `main`-based deployment. It was verified
+through authenticated identity, dated-document, MiniMax, media-thumbnail, and
+browser flows; see
+[`docs/media_album_preview_reliability_fix_20260718.md`](docs/media_album_preview_reliability_fix_20260718.md).
 
 ## Current Status
 
-Status timestamp: 2026-07-18 04:35 CST.
+Status timestamp: 2026-07-18 07:12 CST.
 
 The three demo expectations are now satisfied on the S100P test machine:
 

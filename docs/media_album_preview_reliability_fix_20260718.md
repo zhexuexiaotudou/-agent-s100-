@@ -20,11 +20,27 @@
 ## 本地验证
 
 - `python -m py_compile scripts/probes/ai_nas_media.py scripts/probes/ai_nas_operator_portal_server.py`
-- `python -m unittest tests.test_copilot_local_qwen_chat`：23/23 通过。
+- `python -m pytest -q tests/test_copilot_local_qwen_chat.py`：48 项及 8 个 subtests 通过。
+- `python -m pytest -q`：238 项及 11 个 subtests 通过；同时覆盖助手身份快路径、日期文档检索、
+  云端失败回落和相册预览 ACL，防止相册修复再次覆盖 AI 助手编排。
 - `node --check web/static/digua_ai_nas_v2.js`：通过。
 - Media Center gate：12/12 通过，结论 `ok_nas_media_center_gate`。
 - 真实 7.9 本机页面：两张缩略图均为 480×280、`complete=true`、`hidden=false`；双击后的原图为 720×420、`complete=true`；页面无 warning/error。
 
-## 尚未完成的交付门
+## 集成回归与最终生产验收
 
-- PR #72 已通过 CI 并合并为 `4be5b0c8`。首次 S100P 部署确认服务与原图路径正常，但 Pillow 9.0.1 兼容问题使 101/101 缩略图回退为原图；双版本补丁、第二轮 CI/合并和板端逐图复验仍待后续门完成。
+- PR #72 首次合并后发现 Pillow 9.0.1 兼容问题；后续预览分支虽修复缩放滤镜，却基于
+  `codex/rollback-to-20260709` 部署了整份旧门户文件，覆盖了当天已验收的 AI 助手自动路由、
+  身份快路径和日期文档检索。实机表现为“你是谁”也可能被错误送往云端并收到 401。
+- [PR #77](https://github.com/zhexuexiaotudou/-agent-s100-/pull/77) 将相册修复重新移植到当前
+  `main`，保留大文件流式传输、现代媒体 ACL、AI 助手自动编排和前端异步详情展示。合并提交为
+  `5a56931644ac987ce33227510541b9b2d99d8de3`；4 项 GitHub Actions 全部通过。
+- 2026-07-18 07:12 CST 部署到 `sunrise@192.168.127.10` 的用户级门户
+  `openclaw-gateway.service`（回环 `127.0.0.1:8765`）。线上后端、媒体模块和前端 JS 的
+  SHA-256 分别为 `23963ba3475bd29d16b45a0083035da0a9a8c3eda1d7088167acd1d6b2adfa4a`、
+  `6bb2590bd4ffef0807cc999f79a9a162c50e42e19ae785f3efed2d3704b54ae4` 和
+  `8e599aafb36729b48c45932d91c406707e8747052b2207ad1b213cfe5f7ba410`。
+- 实机媒体列表返回 5 张可见图片；首张的 `variant=thumbnail` 请求为 HTTP 200、`image/jpeg`、
+  29,230 bytes。实机助手同时复测身份确定性回答、本地 5 月 20 日日记检索和 MiniMax
+  `cloud_overflow_chat`，均返回 HTTP 200；浏览器 `/ui` 登录后提交“你是谁”也显示正确本地身份。
+- 回滚点：`/mnt/nas/openclaw/deployment/backups/restore-assistant-5a569316-20260718-071038`。

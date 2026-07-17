@@ -133,3 +133,17 @@ MiniMax 不是“复杂任务的默认大模型”。只有策略同时确认 `p
 当前生产合并提交为 `3a54c9042c12c5f20029d3ef662173d3d1efcb4e`，线上后端 SHA-256 为
 `c57dc96441b0c4911733279bcb8b0a9170ecc5ab8a16503ce5fea503a482b581`。完整验收与回滚点见
 [`journal_date_query_recovery_20260718.md`](journal_date_query_recovery_20260718.md)。
+
+### 相册部署覆盖后的组合恢复
+
+相册预览分支曾基于 7 月 9 日回滚分支直接部署完整门户文件，导致上述自动模型编排、身份快路径
+和日期文档检索在运行环境中一起退回旧实现。[PR #77](https://github.com/zhexuexiaotudou/-agent-s100-/pull/77)
+把相册缩略图修复移植到当前 `main`，并以同一套回归同时验证助手和相册，避免按功能整文件覆盖。
+
+当前生产合并提交为 `5a56931644ac987ce33227510541b9b2d99d8de3`；线上后端 SHA-256 为
+`23963ba3475bd29d16b45a0083035da0a9a8c3eda1d7088167acd1d6b2adfa4a`。本地完整回归为
+`238 passed, 11 subtests passed`，PR 的 4 项 CI 全绿。实机 UTF-8 请求结果：身份回答约 64 ms、
+零模型调用；“5月20日我干了什么”进入本地文档 RAG 并返回 1 条日记证据；公开时效性复杂请求
+由 `custom-gateway/MiniMax-M2.7` 返回 `cloud_overflow_chat`；相册缩略图 HTTP 200。浏览器 `/ui`
+登录后输入“你是谁”也显示正确本地身份和模型详情。回滚点为
+`/mnt/nas/openclaw/deployment/backups/restore-assistant-5a569316-20260718-071038`。
