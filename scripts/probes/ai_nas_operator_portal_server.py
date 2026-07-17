@@ -2435,7 +2435,8 @@ class PortalState:
             if not db_path.exists():
                 continue
             try:
-                uri = f"file:{quote(str(db_path.resolve()).replace('\\', '/'), safe='/:')}?mode=ro&immutable=1"
+                normalized_db_path = str(db_path.resolve()).replace("\\", "/")
+                uri = f"file:{quote(normalized_db_path, safe='/:')}?mode=ro&immutable=1"
                 con = sqlite3.connect(uri, uri=True)
                 rows = con.execute(f"SELECT asset_id,path_hash FROM {table}").fetchall()
                 con.close()

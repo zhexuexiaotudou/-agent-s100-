@@ -1,3 +1,4 @@
+import ast
 import unittest
 from pathlib import Path
 
@@ -8,6 +9,21 @@ REPO_ROOT = Path(__file__).resolve().parents[1]
 
 
 class ReleaseContractTest(unittest.TestCase):
+    def test_packaged_python_parses_with_s100p_python_310_grammar(self):
+        failures = []
+        for path in collect_files():
+            if path.suffix != ".py":
+                continue
+            try:
+                ast.parse(
+                    path.read_text(encoding="utf-8"),
+                    filename=str(path),
+                    feature_version=(3, 10),
+                )
+            except SyntaxError as exc:
+                failures.append(f"{path.relative_to(REPO_ROOT)}:{exc.lineno}: {exc.msg}")
+        self.assertFalse(failures, "\n".join(failures))
+
     def test_release_collects_runnable_application(self):
         files = {path.relative_to(REPO_ROOT).as_posix() for path in collect_files()}
         required = {
