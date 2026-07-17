@@ -37,7 +37,7 @@ Register-ScheduledTask `
   -Trigger $trigger `
   -Principal $principal `
   -Settings $settings `
-  -Description 'Check and repair PC -> S100P -> NAS -> OpenClaw Feishu link after Windows logon.' `
+  -Description 'Check and repair PC -> S100P -> NAS -> OpenClaw and local AI link after Windows logon.' `
   -Force | Out-Null
 
 Write-Host "Installed scheduled task: $TaskName"

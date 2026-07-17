@@ -1,7 +1,8 @@
 ﻿param(
   [switch]$NoGui,
   [switch]$NoDelay,
-  [switch]$StartInTray
+  [switch]$StartInTray,
+  [switch]$SelfTest
 )
 
 $ErrorActionPreference = 'Continue'
@@ -16,12 +17,67 @@ function Get-LinkCheckConfig {
 }
 
 $Config = Get-LinkCheckConfig
-$LogDir = $Config.logging.localDir
+$LogDir = if ($SelfTest) {
+  Join-Path ([IO.Path]::GetTempPath()) 's100p-linkcheck-selftest'
+} else {
+  $Config.logging.localDir
+}
 New-Item -ItemType Directory -Force -Path $LogDir | Out-Null
 $LogPath = Join-Path $LogDir ("{0}.jsonl" -f (Get-Date -Format 'yyyy-MM-dd'))
 $Global:Steps = New-Object System.Collections.Generic.List[object]
 $Global:FixesApplied = New-Object System.Collections.Generic.List[string]
 $Global:Failures = New-Object System.Collections.Generic.List[string]
+
+function Assert-LinkCheckConfig {
+  $required = @(
+    'windows.interfaceAlias',
+    's100p.host',
+    's100p.user',
+    's100p.sshKey',
+    's100p.interface',
+    's100p.nasInterface',
+    'nas.ip',
+    'nas.nfsExport',
+    'nas.mountPoint',
+    'nas.probeDir',
+    'openclaw.systemServiceName',
+    'openclaw.portalServiceName',
+    'openclaw.qwenServiceName',
+    'openclaw.systemHealthUrl',
+    'openclaw.portalHealthUrl',
+    'openclaw.qwenHealthUrl'
+  )
+  foreach ($path in $required) {
+    $value = $Config
+    foreach ($part in $path.Split('.')) {
+      if ($null -eq $value -or $null -eq $value.PSObject.Properties[$part]) {
+        throw "Missing required link-check config value: $path"
+      }
+      $value = $value.$part
+    }
+    if ($null -eq $value -or [string]::IsNullOrWhiteSpace([string]$value)) {
+      throw "Empty required link-check config value: $path"
+    }
+  }
+
+  foreach ($ip in @($Config.s100p.host, $Config.nas.ip)) {
+    $parsed = $null
+    if (-not [Net.IPAddress]::TryParse([string]$ip, [ref]$parsed)) {
+      throw "Invalid IP address in link-check config: $ip"
+    }
+  }
+  foreach ($url in @($Config.openclaw.systemHealthUrl, $Config.openclaw.portalHealthUrl, $Config.openclaw.qwenHealthUrl)) {
+    $uri = $null
+    if (-not [Uri]::TryCreate([string]$url, [UriKind]::Absolute, [ref]$uri) -or $uri.Scheme -ne 'http') {
+      throw "Health URL must be an absolute loopback HTTP URL: $url"
+    }
+    if ($uri.Host -notin @('127.0.0.1', 'localhost', '::1')) {
+      throw "Health URL must remain loopback-scoped: $url"
+    }
+  }
+}
+
+Assert-LinkCheckConfig
 
 function Test-IsAdmin {
   $identity = [Security.Principal.WindowsIdentity]::GetCurrent()
@@ -258,7 +314,8 @@ function Invoke-S100P {
     'bash',
     '-s'
   )
-  return Invoke-External -FilePath 'ssh.exe' -Arguments $args -StandardInput $Command -TimeoutSeconds $TimeoutSeconds
+  $normalizedCommand = $Command.Replace("`r`n", "`n").Replace("`r", "`n")
+  return Invoke-External -FilePath 'ssh.exe' -Arguments $args -StandardInput $normalizedCommand -TimeoutSeconds $TimeoutSeconds
 }
 
 function Ensure-WindowsNetwork {
@@ -324,6 +381,45 @@ function Test-PCToS100P {
     return $true
   }
   Add-Step 'S100P SSH key' 'FAIL' '免密 SSH 登录失败' $combined
+  return $false
+}
+
+function Ensure-S100PClock {
+  $hostEpoch = [DateTimeOffset]::UtcNow.ToUnixTimeSeconds()
+  $maxSkew = if ($Config.s100p.clockMaxSkewSeconds) { [int]$Config.s100p.clockMaxSkewSeconds } else { 120 }
+  $cmd = @'
+set -e
+host_epoch=__HOST_EPOCH__
+max_skew=__MAX_SKEW__
+board_epoch="$(date +%s)"
+skew=$((board_epoch-host_epoch))
+[ "$skew" -lt 0 ] && skew=$((-skew))
+echo "CLOCK_BEFORE_EPOCH=$board_epoch"
+echo "CLOCK_SKEW_SECONDS=$skew"
+if [ "$skew" -gt "$max_skew" ]; then
+  sudo -n timedatectl set-ntp false || true
+  sudo -n date -u -s "@$host_epoch"
+  sudo -n hwclock --systohc >/dev/null 2>&1 || true
+  sudo -n timedatectl set-ntp true || true
+  echo CLOCK_FIXED
+else
+  sudo -n timedatectl set-ntp true || true
+  echo CLOCK_OK
+fi
+date -Is
+'@
+  $cmd = $cmd.Replace('__HOST_EPOCH__', [string]$hostEpoch).Replace('__MAX_SKEW__', [string]$maxSkew)
+  $result = Invoke-S100P -Command $cmd -TimeoutSeconds 20
+  $combined = "$($result.Output)`n$($result.Error)"
+  if ($result.ExitCode -eq 0 -and $combined -match 'CLOCK_FIXED') {
+    Add-Step 'S100P 时钟' 'FIXED' '板端时间漂移超限，已按 Windows 主机 UTC 校准并重新启用 NTP' $combined
+    return $true
+  }
+  if ($result.ExitCode -eq 0 -and $combined -match 'CLOCK_OK') {
+    Add-Step 'S100P 时钟' 'OK' "板端与 Windows 时间偏差不超过 ${maxSkew}s" $combined
+    return $true
+  }
+  Add-Step 'S100P 时钟' 'FAIL' '无法验证或校准板端时钟；TLS、日志和鉴权可能异常' $combined
   return $false
 }
 
@@ -432,23 +528,31 @@ echo NETPLAN_OK
     return $false
   }
 
+  return $true
+}
+
+function Test-S100PInternet {
+  param([bool]$FinalAttempt = $true)
   $probe = @'
 set -e
 ping -c 1 -W 2 __GATEWAY__
-ping -c 1 -W 2 __DNS0__
-getent hosts __FEISHU_HOST__
+timeout 6 getent ahostsv4 __CONNECTIVITY_HOST__
+timeout 10 curl -sSI --max-time 8 https://__CONNECTIVITY_HOST__ | grep -q '^HTTP/'
 echo S100P_INTERNET_OK
 '@
   $probe = $probe.Replace('__GATEWAY__', $Config.s100p.defaultGateway)
-  $probe = $probe.Replace('__DNS0__', $Config.s100p.dns[0])
-  $probe = $probe.Replace('__FEISHU_HOST__', $Config.openclaw.feishuHost)
+  $probe = $probe.Replace('__CONNECTIVITY_HOST__', $Config.openclaw.connectivityHost)
   $internet = Invoke-S100P -Command $probe -TimeoutSeconds 25
   $internetText = "$($internet.Output)`n$($internet.Error)"
   if ($internet.ExitCode -eq 0 -and $internetText -match 'S100P_INTERNET_OK') {
-    Add-Step 'S100P 外网/DNS' 'OK' 'S100P 可访问飞书依赖的 DNS/外网' $internetText
+    Add-Step 'S100P 外网/DNS' 'OK' 'S100P 默认网关、DNS 和 HTTPS 外网均可用' $internetText
     return $true
   }
-  Add-Step 'S100P 外网/DNS' 'FAIL' 'S100P 外网或飞书域名解析失败' $internetText
+  if (-not $FinalAttempt) {
+    Add-Step 'S100P 外网/DNS 初检' 'WARN' '外网初检失败，将尝试重建 Windows ICS 后复测' $internetText
+    return $false
+  }
+  Add-Step 'S100P 外网/DNS' 'FAIL' '重建共享网络后，S100P 默认网关、DNS 或 HTTPS 外网仍失败' $internetText
   return $false
 }
 
@@ -563,24 +667,32 @@ if [ "$ping_status" -ne 0 ]; then
   exit 42
 fi
 set -e
+timeout 8 showmount -e "$nas_ip" | grep -q "^__EXPORT__[[:space:]]"
 sudo -n chmod 755 __PARENT__ || true
 sudo -n sed -i "s#[0-9][0-9.]*:__EXPORT__#${nas_ip}:__EXPORT__#g" /etc/fstab || true
 sudo -n systemctl daemon-reload || true
-sudo -n systemctl reset-failed mnt-nas-openclaw.mount || true
-sudo -n systemctl restart mnt-nas-openclaw.automount || true
-mkdir -p __PROBE__
-if ! timeout 10 findmnt -T __PROBE__ | grep -q 'nfs'; then
+if ! timeout 10 findmnt -rn -T __MOUNT__ -o SOURCE,FSTYPE | grep -q "^${nas_ip}:__EXPORT__ nfs"; then
   sudo -n mkdir -p __MOUNT__
-  timeout 20 sudo -n mount -t nfs4 "${nas_ip}:__EXPORT__" __MOUNT__ || true
+  sudo -n systemctl reset-failed mnt-nas-openclaw.mount mnt-nas-openclaw.automount || true
+  sudo -n systemctl restart mnt-nas-openclaw.automount || true
+  timeout 10 ls -ld __MOUNT__ >/dev/null 2>&1 || true
 fi
+if ! timeout 10 findmnt -rn -T __MOUNT__ -o SOURCE,FSTYPE | grep -q "^${nas_ip}:__EXPORT__ nfs"; then
+  sudo -n systemctl reset-failed mnt-nas-openclaw.mount mnt-nas-openclaw.automount || true
+  timeout 20 sudo -n systemctl start mnt-nas-openclaw.mount || true
+fi
+mkdir -p __PROBE__
 timeout 10 ls -ld __PROBE__
 timeout 10 findmnt -T __PROBE__
-timeout 10 findmnt -T __PROBE__ | grep -q 'nfs'
+timeout 10 findmnt -rn -T __PROBE__ -o SOURCE,FSTYPE | grep -q "^${nas_ip}:__EXPORT__ nfs"
 test -d __PROBE__
 test -w __PROBE__
-f=__PROBE__/pc_startup_linkcheck_$(date +%Y%m%d_%H%M%S).txt
+f=__PROBE__/pc_startup_linkcheck_$(date +%Y%m%d_%H%M%S)_$$.txt
+trap 'rm -f "$f"' EXIT
 echo linkcheck > "$f"
-ls -l "$f"
+grep -qx linkcheck "$f"
+rm -f "$f"
+trap - EXIT
 echo NAS_LINK_OK
 '@
   $nasIface = if ($Config.s100p.nasInterface) { $Config.s100p.nasInterface } else { 'eth0' }
@@ -614,51 +726,87 @@ echo NAS_LINK_OK
   return $false
 }
 
-function Ensure-OpenClawFeishu {
-  param([bool]$NetworkWasTouched)
-  $service = $Config.openclaw.serviceName
-  $checkScriptPath = Join-Path $ScriptRoot 'check_openclaw_feishu.sh'
-  if (Test-Path -LiteralPath $checkScriptPath) {
-    $check = Get-Content -LiteralPath $checkScriptPath -Raw -Encoding UTF8
-  } else {
-    $check = @'
-#!/usr/bin/env bash
-set +e
-state="$(timeout 5 sudo -n env XDG_RUNTIME_DIR=/run/user/0 systemctl --user is-active openclaw-gateway.service 2>/dev/null || true)"
-echo "SERVICE_STATE=$state"
-log="/tmp/openclaw/openclaw-$(date +%F).log"
-ready="$(timeout 5 sudo -n grep 'ws client ready' "$log" 2>/dev/null | tail -20 || true)"
-echo "$ready"
-if [ "$state" = "active" ] && [ -n "$ready" ]; then
-  echo OPENCLAW_READY
-  exit 0
-fi
-exit 1
+function Test-S100PStorage {
+  $cmd = @'
+set -e
+root_used="$(df -P / | awk 'NR==2 {gsub(/%/,"",$5); print $5}')"
+root_available_kb="$(df -Pk / | awk 'NR==2 {print $4}')"
+nas_source="$(findmnt -rn -t nfs4 -T __MOUNT__ -o SOURCE)"
+nas_used="$(df -P __MOUNT__ | awk 'NR==2 {gsub(/%/,"",$5); print $5}')"
+echo "ROOT_USED_PERCENT=$root_used"
+echo "ROOT_AVAILABLE_KB=$root_available_kb"
+echo "NAS_USED_PERCENT=$nas_used"
+echo "NAS_SOURCE=$nas_source"
 '@
-  }
-  $before = Invoke-S100P -Command $check -TimeoutSeconds 20
-  $beforeText = "$($before.Output)`n$($before.Error)"
-  $needsRestart = $NetworkWasTouched -or ($beforeText -match 'inactive|failed|EAI_AGAIN')
-  if ($needsRestart) {
-    $restartHeader = @"
-timeout 10 sudo -n env XDG_RUNTIME_DIR=$($Config.openclaw.rootUserRuntimeDir) systemctl --user restart $service || true
-sleep 18
-"@
-    $after = Invoke-S100P -Command ($restartHeader + "`n" + $check) -TimeoutSeconds 45
-    $afterText = "$($after.Output)`n$($after.Error)"
-    if ($after.ExitCode -eq 0 -and $afterText -match 'OPENCLAW_READY') {
-      Add-Step 'OpenClaw/飞书' 'FIXED' '已重启 gateway，飞书 WebSocket ready' $afterText
-      return $true
-    }
-    Add-Step 'OpenClaw/飞书' 'FAIL' '重启 gateway 后仍未确认飞书 ready' $afterText
-    return $false
-  }
-  if ($before.ExitCode -eq 0 -and $beforeText -match 'OPENCLAW_READY') {
-    Add-Step 'OpenClaw/飞书' 'OK' 'gateway active，飞书链路近期有 ready 或消息记录' $beforeText
+  $cmd = $cmd.Replace('__MOUNT__', $Config.nas.mountPoint)
+  $result = Invoke-S100P -Command $cmd -TimeoutSeconds 15
+  $combined = "$($result.Output)`n$($result.Error)"
+  $match = [regex]::Match($combined, 'ROOT_USED_PERCENT=([0-9]+)')
+  if ($result.ExitCode -ne 0 -or -not $match.Success) {
+    Add-Step 'S100P/NAS 容量' 'WARN' '无法读取根分区或 NAS 容量；不阻断链路，但需人工复核' $combined
     return $true
   }
-  Add-Step 'OpenClaw/飞书' 'WARN' 'gateway active 但近期未看到飞书消息，可在飞书发测试消息复核' $beforeText
+  $rootUsed = [int]$match.Groups[1].Value
+  $warn = if ($Config.storage.rootWarnPercent) { [int]$Config.storage.rootWarnPercent } else { 90 }
+  $fail = if ($Config.storage.rootFailPercent) { [int]$Config.storage.rootFailPercent } else { 98 }
+  if ($rootUsed -ge $fail) {
+    Add-Step 'S100P/NAS 容量' 'FAIL' "S100P 根分区已使用 ${rootUsed}%，达到 ${fail}% 阻断阈值" $combined
+    return $false
+  }
+  if ($rootUsed -ge $warn) {
+    Add-Step 'S100P/NAS 容量' 'WARN' "S100P 根分区已使用 ${rootUsed}%，链路可用但应尽快清理" $combined
+    return $true
+  }
+  Add-Step 'S100P/NAS 容量' 'OK' "S100P 根分区使用率 ${rootUsed}%，NAS 容量可读取" $combined
   return $true
+}
+
+function Ensure-OpenClawStack {
+  param([bool]$NetworkWasTouched)
+  $checkScriptPath = Join-Path $ScriptRoot 'check_openclaw_feishu.sh'
+  if (-not (Test-Path -LiteralPath $checkScriptPath)) {
+    Add-Step 'OpenClaw/本地 AI' 'FAIL' "缺少服务检查脚本：$checkScriptPath"
+    return $false
+  }
+  $check = Get-Content -LiteralPath $checkScriptPath -Raw -Encoding UTF8
+  $envHeader = @"
+export LINKCHECK_SYSTEM_SERVICE='$($Config.openclaw.systemServiceName)'
+export LINKCHECK_PORTAL_SERVICE='$($Config.openclaw.portalServiceName)'
+export LINKCHECK_QWEN_SERVICE='$($Config.openclaw.qwenServiceName)'
+export LINKCHECK_USER_RUNTIME_DIR='$($Config.openclaw.userRuntimeDir)'
+export LINKCHECK_SYSTEM_HEALTH='$($Config.openclaw.systemHealthUrl)'
+export LINKCHECK_PORTAL_HEALTH='$($Config.openclaw.portalHealthUrl)'
+export LINKCHECK_QWEN_HEALTH='$($Config.openclaw.qwenHealthUrl)'
+export LINKCHECK_HEALTH_ATTEMPTS=1
+"@
+  $before = Invoke-S100P -Command ($envHeader + "`n" + $check) -TimeoutSeconds 20
+  $beforeText = "$($before.Output)`n$($before.Error)"
+  $readyBefore = $before.ExitCode -eq 0 -and $beforeText -match 'OPENCLAW_STACK_READY'
+  if ($readyBefore -and -not $NetworkWasTouched) {
+    Add-Step 'OpenClaw/本地 AI' 'OK' 'OpenClaw 系统网关、AI-NAS 门户和本地 Qwen 均 active 且健康' $beforeText
+    return $true
+  }
+
+  $restart = if ($readyBefore -and $NetworkWasTouched) {
+    "sudo -n systemctl restart $($Config.openclaw.systemServiceName) || true"
+  } else {
+    @"
+sudo -n systemctl reset-failed $($Config.openclaw.systemServiceName) || true
+sudo -n systemctl restart $($Config.openclaw.systemServiceName) || true
+systemctl --user reset-failed $($Config.openclaw.portalServiceName) $($Config.openclaw.qwenServiceName) || true
+systemctl --user restart $($Config.openclaw.qwenServiceName) || true
+systemctl --user restart $($Config.openclaw.portalServiceName) || true
+"@
+  }
+  $afterHeader = $envHeader.Replace('LINKCHECK_HEALTH_ATTEMPTS=1', 'LINKCHECK_HEALTH_ATTEMPTS=12')
+  $after = Invoke-S100P -Command ($restart + "`n" + $afterHeader + "`n" + $check) -TimeoutSeconds 60
+  $afterText = "$($after.Output)`n$($after.Error)"
+  if ($after.ExitCode -eq 0 -and $afterText -match 'OPENCLAW_STACK_READY') {
+    Add-Step 'OpenClaw/本地 AI' 'FIXED' '已恢复 OpenClaw 系统网关、AI-NAS 门户和本地 Qwen 健康链路' $afterText
+    return $true
+  }
+  Add-Step 'OpenClaw/本地 AI' 'FAIL' '服务重启后仍未同时通过 active 与健康接口检查' ($beforeText + "`n" + $afterText)
+  return $false
 }
 
 function Get-CodexPrompt {
@@ -675,7 +823,7 @@ function Get-CodexPrompt {
 自检摘要：
 $summary
 
-请优先检查：Windows 以太网双 IP、PC 到 192.168.127.10 的 SSH、S100P 默认路由/DNS、NAS NFS 挂载、openclaw-gateway.service 和飞书日志。
+请优先检查：Windows 网卡/ICS、PC 到 S100P 的 SSH、板端时钟、S100P 默认路由/DNS、NAS NFS mount/automount start-limit、系统 OpenClaw、AI-NAS 门户和本地 Qwen 健康接口。
 "@
   return $prompt
 }
@@ -701,19 +849,32 @@ function Run-LinkCheck {
 
   $windowsOk = Ensure-WindowsNetwork
   if ($windowsOk) {
-    [void](Ensure-WindowsIcsSharing -ForceReset)
+    [void](Ensure-WindowsIcsSharing)
     $windowsOk = Ensure-WindowsNetwork
   }
   $sshOk = $false
   if ($windowsOk) { $sshOk = Test-PCToS100P }
+  $clockOk = $false
   $netOk = $false
   $nasOk = $false
+  $storageOk = $false
   $openclawOk = $false
   if ($sshOk) {
-    $netOk = Ensure-S100PNetwork
+    $clockOk = Ensure-S100PClock
+    $runtimeNetOk = Ensure-S100PNetwork
+    if ($runtimeNetOk) {
+      $netOk = Test-S100PInternet -FinalAttempt:$false
+      if (-not $netOk) {
+        [void](Ensure-WindowsIcsSharing -ForceReset)
+        Start-Sleep -Seconds 2
+        $windowsOk = Ensure-WindowsNetwork
+        $netOk = Test-S100PInternet -FinalAttempt:$true
+      }
+    }
     $nasOk = Ensure-NasLink
+    if ($nasOk) { $storageOk = Test-S100PStorage }
     $networkTouchingFixes = @($Global:FixesApplied | Where-Object { $_ -ne 'NAS IP 自动发现' })
-    $openclawOk = Ensure-OpenClawFeishu -NetworkWasTouched:($networkTouchingFixes.Count -gt 0)
+    $openclawOk = Ensure-OpenClawStack -NetworkWasTouched:($networkTouchingFixes.Count -gt 0)
   }
 
   $status = if ($Global:Failures.Count -gt 0) { 'FAIL' } elseif ($Global:FixesApplied.Count -gt 0) { 'FIXED' } else { 'OK' }
@@ -723,8 +884,10 @@ function Run-LinkCheck {
     fixes = @($Global:FixesApplied)
     windowsOk = $windowsOk
     sshOk = $sshOk
+    clockOk = $clockOk
     networkOk = $netOk
     nasOk = $nasOk
+    storageOk = $storageOk
     openclawOk = $openclawOk
   }
   return $status
@@ -742,6 +905,45 @@ function Render-StepsText {
   $lines.Add("")
   $lines.Add("日志：$LogPath")
   return ($lines -join "`r`n")
+}
+
+if ($SelfTest) {
+  $selfTestFailures = New-Object System.Collections.Generic.List[string]
+  $tokens = $null
+  $parseErrors = $null
+  [void][Management.Automation.Language.Parser]::ParseFile($PSCommandPath, [ref]$tokens, [ref]$parseErrors)
+  foreach ($error in @($parseErrors)) { $selfTestFailures.Add("PowerShell parse error: $error") }
+  if ((Redact-Text 'token=abc secret:xyz password=q') -match 'abc|xyz|password=q') {
+    $selfTestFailures.Add('Secret redaction self-test failed')
+  }
+  if ([int]$Config.windows.failureRetrySeconds -lt 10 -or [int]$Config.windows.maxAutomaticRetries -lt 1) {
+    $selfTestFailures.Add('Automatic retry config is unsafe or disabled')
+  }
+  if ([int]$Config.storage.rootWarnPercent -ge [int]$Config.storage.rootFailPercent) {
+    $selfTestFailures.Add('Storage warning threshold must be lower than failure threshold')
+  }
+  $source = Get-Content -LiteralPath $PSCommandPath -Raw -Encoding UTF8
+  foreach ($marker in @(
+    'reset-failed mnt-nas-openclaw.mount mnt-nas-openclaw.automount',
+    'NAS_LINK_OK',
+    'CLOCK_FIXED',
+    'OPENCLAW_STACK_READY',
+    '$Command.Replace("`r`n", "`n").Replace("`r", "`n")',
+    'Test-S100PInternet -FinalAttempt:$true'
+  )) {
+    if (-not $source.Contains($marker)) { $selfTestFailures.Add("Missing resilience marker: $marker") }
+  }
+  $serviceCheck = Join-Path $ScriptRoot 'check_openclaw_feishu.sh'
+  $serviceSource = Get-Content -LiteralPath $serviceCheck -Raw -Encoding UTF8
+  foreach ($marker in @('SYSTEM_HEALTH_HTTP', 'PORTAL_HEALTH_HTTP', 'QWEN_HEALTH_HTTP', 'OPENCLAW_STACK_READY')) {
+    if (-not $serviceSource.Contains($marker)) { $selfTestFailures.Add("Missing service-check marker: $marker") }
+  }
+  if ($selfTestFailures.Count -gt 0) {
+    $selfTestFailures | ForEach-Object { Write-Error $_ }
+    exit 1
+  }
+  Write-Output 'SELFTEST_OK'
+  exit 0
 }
 
 if ($NoGui) {
@@ -841,6 +1043,8 @@ $notifyIcon.ContextMenuStrip = $trayMenu
 
 $Script:AllowExit = $false
 $Script:CurrentStatus = 'INFO'
+$Script:RetryTimer = $null
+$Script:AutomaticRetryCount = 0
 
 function Show-MainWindow {
   $form.Show()
@@ -872,8 +1076,22 @@ function Set-TrayStatus {
   }
 }
 
+function Stop-RetryTimer {
+  if ($null -ne $Script:RetryTimer) {
+    $Script:RetryTimer.Stop()
+    $Script:RetryTimer.Dispose()
+    $Script:RetryTimer = $null
+  }
+}
+
 function Start-GuiRun {
-  param([bool]$UseStartupDelay = $false)
+  param(
+    [bool]$UseStartupDelay = $false,
+    [bool]$Automatic = $false
+  )
+
+  Stop-RetryTimer
+  if (-not $Automatic) { $Script:AutomaticRetryCount = 0 }
 
   $rerun.Enabled = $false
   $menuRerun.Enabled = $false
@@ -884,7 +1102,8 @@ function Start-GuiRun {
   $status = Run-LinkCheck -UseStartupDelay:$UseStartupDelay
   $box.Text = Render-StepsText
   if ($status -eq 'OK') {
-    $title.Text = '链路正常：PC -> S100P -> NAS -> OpenClaw/飞书'
+    $Script:AutomaticRetryCount = 0
+    $title.Text = '链路正常：PC -> S100P -> NAS -> OpenClaw/本地 AI'
     $title.ForeColor = [System.Drawing.Color]::DarkGreen
     Set-TrayStatus 'OK'
     $timer = [System.Windows.Forms.Timer]::new()
@@ -896,6 +1115,7 @@ function Start-GuiRun {
     })
     $timer.Start()
   } elseif ($status -eq 'FIXED') {
+    $Script:AutomaticRetryCount = 0
     $title.Text = '链路已自动修复'
     $title.ForeColor = [System.Drawing.Color]::DarkOrange
     Set-TrayStatus 'FIXED'
@@ -908,7 +1128,24 @@ function Start-GuiRun {
     })
     $timer.Start()
   } else {
-    $title.Text = '链路仍有异常，请复制给 Codex 继续处理'
+    $retrySeconds = [int]$Config.windows.failureRetrySeconds
+    $maxRetries = [int]$Config.windows.maxAutomaticRetries
+    if ($Script:AutomaticRetryCount -lt $maxRetries) {
+      $nextAttempt = $Script:AutomaticRetryCount + 1
+      $title.Text = "链路仍有异常，${retrySeconds}s 后自动重试（${nextAttempt}/${maxRetries}）"
+      $Script:RetryTimer = [System.Windows.Forms.Timer]::new()
+      $Script:RetryTimer.Interval = $retrySeconds * 1000
+      $Script:RetryTimer.Add_Tick({
+        param($sender, $eventArgs)
+        if ($sender) { $sender.Stop(); $sender.Dispose() }
+        $Script:RetryTimer = $null
+        $Script:AutomaticRetryCount++
+        Start-GuiRun -UseStartupDelay:$false -Automatic:$true
+      })
+      $Script:RetryTimer.Start()
+    } else {
+      $title.Text = '链路仍有异常，自动重试已耗尽，请复制给 Codex 继续处理'
+    }
     $title.ForeColor = [System.Drawing.Color]::DarkRed
     Set-TrayStatus 'FAIL'
     Show-MainWindow
@@ -917,16 +1154,17 @@ function Start-GuiRun {
   $menuRerun.Enabled = $true
 }
 
-$rerun.Add_Click({ Show-MainWindow; Start-GuiRun -UseStartupDelay:$false })
+$rerun.Add_Click({ Show-MainWindow; Start-GuiRun -UseStartupDelay:$false -Automatic:$false })
 $copy.Add_Click({ [System.Windows.Forms.Clipboard]::SetText((Get-CodexPrompt)); [System.Windows.Forms.MessageBox]::Show('已复制诊断提示词。') | Out-Null })
 $openLog.Add_Click({ Start-Process explorer.exe $LogDir })
 $close.Add_Click({ Hide-MainWindow })
 $menuOpen.Add_Click({ Show-MainWindow })
-$menuRerun.Add_Click({ Show-MainWindow; Start-GuiRun -UseStartupDelay:$false })
+$menuRerun.Add_Click({ Show-MainWindow; Start-GuiRun -UseStartupDelay:$false -Automatic:$false })
 $menuCopy.Add_Click({ [System.Windows.Forms.Clipboard]::SetText((Get-CodexPrompt)); [System.Windows.Forms.MessageBox]::Show('已复制诊断提示词。') | Out-Null })
 $menuLog.Add_Click({ Start-Process explorer.exe $LogDir })
 $menuExit.Add_Click({
   $Script:AllowExit = $true
+  Stop-RetryTimer
   $notifyIcon.Visible = $false
   $form.Close()
 })
@@ -945,7 +1183,7 @@ $form.Add_Resize({
 })
 $form.Add_Shown({
   if ($StartInTray) { Hide-MainWindow }
-  Start-GuiRun -UseStartupDelay:(-not $NoDelay)
+  Start-GuiRun -UseStartupDelay:(-not $NoDelay) -Automatic:$false
 })
 
 try {

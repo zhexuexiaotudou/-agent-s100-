@@ -16,6 +16,17 @@ permissions:
   contents: read
 
 jobs:
+  startup-link-check-contract:
+    runs-on: windows-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+      - name: Validate S100P startup link checker
+        shell: powershell
+        run: >-
+          powershell.exe -NoProfile -ExecutionPolicy Bypass -File
+          scripts/startup_link_check/S100P-NAS-LinkCheck.ps1 -SelfTest
+
   offline-regression:
     runs-on: ubuntu-latest
     timeout-minutes: 20
