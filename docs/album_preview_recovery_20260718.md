@@ -192,3 +192,29 @@ browser rendered all 12 cards; the first, seventh, and twelfth images all had a
 positive natural width, `complete=true`, `hidden=false`, and `data-loaded=1`.
 The portal log recorded 12 successful thumbnail requests. JavaScript syntax,
 70 focused UI/media/security tests, and the full 221-test offline suite passed.
+
+Delivery and live acceptance:
+
+- PR #80 merged to `main` as
+  `ecc52cd0f15e8b6686ca64f1a43de7cccf616ef4` after all four required checks
+  passed. This current main revision retains the integrated 7.9 recovery fixes
+  and later product changes.
+- The secret-safe delivery package SHA-256 was
+  `c0f7c2ba3900467bee659f495c6e31be28e782cbe5699ff9cfd0d06ce7999ed2`;
+  its 116-file self-check passed and its manifest names the merge commit above.
+- Access-only deployment preserved the existing backend and NAS data. Rollback
+  backup: `/var/backups/digua-ai-nas/access-only-20260717T234940Z`.
+- Deployed HTML SHA-256:
+  `564414bad8ba76b8c2fea62b6e8473b1926ee149a203ea2749acde430ae0164d`.
+  Deployed JavaScript SHA-256:
+  `0c65d2d29a3c189aeaee3608eaa42b384395ef94702027703668ce83bb4aaaa6`.
+- `digua-product-access.service`, `openclaw-gateway.service`, and the existing
+  remote-ingress service were active; port 8765 and Qwen 18080 remained bound
+  to loopback, and the NAS remained mounted through NFS4.
+- The live library returned 100 photos. The first 12 thumbnail routes returned
+  12/12 HTTP 200 valid JPEGs; the seventh response was 47,456 bytes and the
+  twelfth was 25,472 bytes. The portal journal recorded all 12 requests.
+- The live HTML advertises `20260718-album-preview-queue`, and the served script
+  contains the full-list queue without the old six-card slice or observer.
+  The temporary acceptance account was removed; matching account count was
+  verified as zero afterward.
