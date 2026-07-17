@@ -35,8 +35,10 @@ and [`reports/access/40600_product_acceptance_gate.md`](reports/access/40600_pro
 The album recovery deployed on 2026-07-18 scopes the visible library to the 100
 photos under `Personal/Photos`, removes the legacy 24-photo intermediate state,
 loads previews with bounded concurrency, and rejects text placeholders that use
-image suffixes. Live counts, soft-delete evidence, rollback points, and the
-browser-verification boundary are recorded in
+image suffixes. A follow-up product-entry fix loads real NAS capacity on every
+authenticated route and permits the local `blob:` preview URLs required by the
+image viewer. Live counts, browser evidence, soft-delete evidence, and rollback
+points are recorded in
 [`docs/album_preview_recovery_20260718.md`](docs/album_preview_recovery_20260718.md).
 
 ## Current Status

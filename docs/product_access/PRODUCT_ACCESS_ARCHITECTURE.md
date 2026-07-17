@@ -19,6 +19,7 @@ portal --> 127.0.0.1:18080 Qwen / existing policy and ACL layers --> NAS allowli
 - 密码、claim 明文、Tailscale key、Cloudflare credential、NAS credential 和私钥不进入数据库、Git、前端或普通日志。
 - 设备公开 ID 为随机 UUID，不使用 MAC 或硬件序列号。
 - access-only 共存部署保留本地身份库，同时配置既有 8765 门户所使用的上游身份库。仅当已认证请求需要代理业务 API 时，访问层才在内存中建立短期上游会话；新增用户、角色变更和会话撤销必须同步到两侧。
+- 访问层直接提供 `/ui` 与静态资源，并对页面响应设置 CSP。`img-src` 仅允许同源、`data:` 和 `blob:`；`blob:` 用于把鉴权后读取的本地图片响应交给浏览器预览，不允许外部图片源。已认证会话在渲染任何入口页前读取 `/api/storage/status`，因此侧栏容量不依赖用户先进入首页或设置页。
 
 ## 生命周期
 
