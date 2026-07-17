@@ -4,6 +4,11 @@
   const app = document.getElementById("app");
   const MEDIA_UPLOAD_MAX_BYTES = 5 * 1024 * 1024;
   const EXECUTION_BOUNDARY_IMPLEMENTATION = "Harness / allowlist dispatcher";
+  const ASSISTANT_MODEL_OPTIONS = [
+    { value: "qwen2.5-1.5b-local", label: "Qwen2.5 1.5B（本地）" },
+    { value: "qwen2.5-7b-local", label: "Qwen2.5 7B（本地）" },
+    { value: "minimax2.7-cloud", label: "MiniMax 2.7（云端）" }
+  ];
 
   const icons = {
     home: '<path d="M3 10.5 12 3l9 7.5"/><path d="M5 9.5V21h14V9.5"/><path d="M9 21v-7h6v7"/>',
@@ -69,6 +74,7 @@
     docClassification: { status: "idle", items: [], categories: {}, categoryCounts: {}, selectedCategory: "", error: "" },
     debugStatePanels: new URLSearchParams(window.location.search).get("debugStates") === "1",
     prompt: "",
+    assistantModelChoice: safeLocalStorageGet("diguaAssistantModelChoice") || "qwen2.5-1.5b-local",
     selectedFile: "",
     fileSearch: "",
     selectedDoc: "whitepaper",
@@ -598,7 +604,9 @@
             <textarea id="assistantPrompt" class="textarea" placeholder="请输入您的问题、指令或需求..." aria-label="AI 助手输入">${escapeHtml(appState.prompt)}</textarea>
             <div class="prompt-footer">
               <div class="actions">
-                <select class="control" aria-label="助手类型"><option>通用助手</option><option>文档问答</option><option>表格分析</option></select>
+                <select id="assistantModelChoice" class="control" aria-label="选择模型">
+                  ${ASSISTANT_MODEL_OPTIONS.map((option) => `<option value="${escapeHtml(option.value)}"${appState.assistantModelChoice === option.value ? " selected" : ""}>${escapeHtml(option.label)}</option>`).join("")}
+                </select>
                 ${button("附件", { variant: "tertiary", icon: "link", action: "assistantAttach" })}
               </div>
               ${button("发送", { icon: "send", action: "sendPrompt", disabled: !appState.prompt.trim() })}
@@ -723,7 +731,7 @@
     const rawTokens = route?.token_counts?.raw_user_prompt_tokens ?? copilot?.usage?.prompt_tokens ?? "暂无";
     const processing = copilot.cloud_used ? "云端" : "S100P 本地";
     const privacy = privacyLabel(qwenRouter?.privacy_level || route?.privacy_level || "local_only");
-    const model = mode === "local_ai_album_category_search" ? "本地相册分类索引" : mode === "local_yolo_search" || mode === "local_multimodal_search" ? "本地多模态索引" : copilot.model ? "本地 Qwen" : "本地 Qwen";
+    const model = mode === "local_ai_album_category_search" ? "本地相册分类索引" : mode === "local_yolo_search" || mode === "local_multimodal_search" ? "本地多模态索引" : copilot.model || "本地 Qwen";
     return `
       <div class="assistant-service-summary" aria-label="服务摘要">
         <span class="service-pill strong">${svg("home")} ${escapeHtml(processing)}</span>
@@ -738,7 +746,7 @@
   function renderAssistantDetails(copilot, route, qwenRouter, mode) {
     const rows = [
       ["处理链路", routeLabel(mode, qwenRouter?.route || route?.route)],
-      ["模型/来源", mode === "local_ai_album_category_search" ? "本地相册分类索引" : mode === "local_yolo_search" || mode === "local_multimodal_search" ? "本地多模态索引" : "本地 Qwen"],
+      ["模型/来源", mode === "local_ai_album_category_search" ? "本地相册分类索引" : mode === "local_yolo_search" || mode === "local_multimodal_search" ? "本地多模态索引" : copilot.model || "本地 Qwen"],
       ["处理位置", copilot.cloud_used ? "云端" : "S100P 本地"],
       ["隐私级别", privacyLabel(qwenRouter?.privacy_level || route?.privacy_level || "local_only")],
       ["本地工具", localToolLabel(qwenRouter?.local_tool_id || copilot.search?.retrieval_mode)],
@@ -3425,7 +3433,7 @@
     renderShell();
     try {
       const [copilot, route] = await Promise.all([
-        fetchJson("/api/copilot/chat", { method: "POST", body: { message } }),
+        fetchJson("/api/copilot/chat", { method: "POST", body: { message, model_choice: appState.assistantModelChoice } }),
         fetchJson("/api/token-budget/route", {
           method: "POST",
           body: {
@@ -5358,6 +5366,16 @@
     }
     if (event.target && event.target.id === "aiAlbumSearch") {
       appState.aiAlbum = { ...appState.aiAlbum, query: event.target.value };
+    }
+  });
+
+  app.addEventListener("change", (event) => {
+    if (event.target && event.target.id === "assistantModelChoice") {
+      const choice = String(event.target.value || "");
+      if (ASSISTANT_MODEL_OPTIONS.some((option) => option.value === choice)) {
+        appState.assistantModelChoice = choice;
+        safeLocalStorageSet("diguaAssistantModelChoice", choice);
+      }
     }
   });
 
