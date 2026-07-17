@@ -1,12 +1,24 @@
 {
   "gate": "40500_hardening_recovery_gate",
   "ok": true,
+  "production_verified": true,
   "trusted_proxy_split": true,
   "security_headers": true,
+  "server_runtime_version_hidden": true,
+  "settings_endpoint_xss_hardened": true,
+  "lan_identity_header_spoof_denied": true,
   "secrets_in_database": false,
   "network_snapshot_no_wifi_secret": true,
-  "automatic_rollback_seconds": 120,
+  "automatic_rollback_seconds_tested": 30,
+  "automatic_network_rollback_passed": true,
+  "internet_outage_lan_passed": true,
+  "nas_unmount_degraded_mode_passed": true,
+  "nas_recovery_passed": true,
+  "reboot_auto_recovery_passed": true,
+  "access_only_rollback_and_reupgrade_passed": true,
+  "backend_unit_hashes_unchanged": true,
   "uninstall_preserves_user_data": true,
   "threat_model_present": true,
-  "real_recovery_drill_pending": true
+  "host_level_residual_listeners": [22, 111, 2049, 5900, 30431],
+  "residual_note": "pre-existing host services; product backends 8765 and 18080 remain loopback"
 }

@@ -62,6 +62,12 @@ class ReleaseContractTest(unittest.TestCase):
         self.assertIn('errors="replace"', source)
         self.assertIn('(completed.stderr or "")[-4000:]', source)
 
+    def test_product_access_builder_uses_acceptance_gate_verdict(self):
+        source = (REPO_ROOT / "scripts/build_product_access_delivery.py").read_text(encoding="utf-8")
+        self.assertIn('gate.get("final_verdict")', source)
+        self.assertIn("verdict_gate_mismatch", source)
+        self.assertNotIn('VERDICT = "product_access_code_complete_s100p_execution_bundle_ready"', source)
+
 
 if __name__ == "__main__":
     unittest.main()

@@ -1,0 +1,52 @@
+{
+  "captured_at": "2026-07-17T13:34:00Z",
+  "device": {
+    "architecture": "aarch64",
+    "os": "Ubuntu 22.04.5 LTS",
+    "hostname": "digua",
+    "boot_id": "5581d2f0-58b6-43f1-b4c3-6dfcfcbaedf0"
+  },
+  "nas": {
+    "target": "/mnt/nas/openclaw",
+    "source": "169.254.143.37:/OpenClawWorkspace",
+    "fstype": "nfs4",
+    "mounted": true,
+    "writable": true
+  },
+  "services": {
+    "NetworkManager-wait-online.service": "active",
+    "digua-product-access.service": "active",
+    "user/openclaw-gateway.service": "active",
+    "user/qwen25-local-openai-gateway.service": "endpoint_healthy_systemd_activating",
+    "tailscaled.service": "active",
+    "digua-product-remote-ingress.service": "inactive"
+  },
+  "product_sockets": {
+    "80": "0.0.0.0 LAN facade",
+    "8765": "127.0.0.1 existing portal",
+    "8781": "not listening",
+    "18080": "127.0.0.1 Qwen"
+  },
+  "lan": {
+    "mdns_url": "http://digua.local/",
+    "fallback_url": "http://192.168.127.10/",
+    "http_status": 200,
+    "resolved_ipv4": ["192.168.127.10", "192.168.137.10"]
+  },
+  "auth_matrix": {"ok": true, "production_verified": true, "temporary_users_removed": true, "secrets_emitted": false},
+  "drills": {
+    "reboot_auto_recovery": true,
+    "internet_route_outage": true,
+    "nfs_unmount_degraded_and_recovery": true,
+    "automatic_network_rollback": true,
+    "access_only_rollback_and_reupgrade": true
+  },
+  "remote": {
+    "tailscale_version": "1.98.9",
+    "tailscale_state": "NeedsLogin",
+    "tailscale_serve": {},
+    "tailscale_funnel": {},
+    "cloudflare": "configured_but_external_validation_pending"
+  },
+  "secrets_present": false
+}

@@ -1,13 +1,24 @@
 {
   "gate": "40200_auth_mobile_pwa_gate",
   "ok": true,
+  "production_verified": true,
+  "verified_at": "2026-07-17T13:05:00Z",
   "claim_hash_only": true,
+  "claim_ineligible_after_existing_users": true,
   "default_password": false,
   "roles": ["admin", "operator", "viewer"],
   "http_only_cookie": true,
+  "same_site_lax": true,
   "csrf": true,
+  "login_rate_limit": true,
   "session_revoke": true,
+  "logout_invalidates_session": true,
+  "upstream_identity_bridge": true,
+  "temporary_users_removed": true,
   "pwa_private_api_cached": false,
-  "local_integration_tested": true,
-  "mobile_real_viewports_verified": false
+  "mobile_viewports_against_live_s100p": ["360x800", "390x844", "430x932", "768x1024"],
+  "horizontal_overflow_count": 0,
+  "browser_console_errors": 0,
+  "physical_phone_verified": false,
+  "pwa_install_over_https_verified": false
 }

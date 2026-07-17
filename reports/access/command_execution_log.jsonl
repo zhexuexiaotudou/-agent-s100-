@@ -1,1 +1,11 @@
-{"timestamp":"2026-07-17T00:00:00Z","environment":"offline-development-host","command_class":"s100p_real_validation","status":"not_run","reason":"S100P_and_NAS_not_powered","secrets_present":false}
+{"timestamp":"2026-07-17T11:42:00Z","environment":"s100p","command_class":"access_only_install","status":"passed","backend_units_touched":[],"secrets_present":false}
+{"timestamp":"2026-07-17T12:05:00Z","environment":"s100p","command_class":"auth_role_matrix","status":"passed","production_verified":true,"temporary_users_removed":true,"secrets_present":false}
+{"timestamp":"2026-07-17T12:26:00Z","environment":"live_s100p_browser","command_class":"mobile_viewports","status":"passed","viewports":["360x800","390x844","430x932","768x1024"],"console_errors":0,"secrets_present":false}
+{"timestamp":"2026-07-17T12:37:32Z","environment":"s100p","command_class":"reboot_recovery","status":"passed_after_network_wait_fix","nas_mount":"nfs4","ports":[80,8765,18080],"secrets_present":false}
+{"timestamp":"2026-07-17T12:50:00Z","environment":"s100p","command_class":"internet_outage","status":"passed","method":"default_route_removed_and_restored","secrets_present":false}
+{"timestamp":"2026-07-17T12:55:00Z","environment":"s100p","command_class":"nas_outage","status":"passed","method":"nfs_unmount_and_remount","physical_nas_power_off":false,"secrets_present":false}
+{"timestamp":"2026-07-17T13:00:00Z","environment":"s100p","command_class":"network_timed_rollback","status":"passed","rollback_seconds":30,"restored_address":"169.254.8.10/16","secrets_present":false}
+{"timestamp":"2026-07-17T13:11:47Z","environment":"s100p","command_class":"qr_and_access_card","status":"passed_after_cli_venv_fix","contains_secret":false,"secrets_present":false}
+{"timestamp":"2026-07-17T13:21:00Z","environment":"s100p","command_class":"tailscale_install","status":"needs_user_tailnet_approval","version":"1.98.9","serve":{},"funnel":{},"secrets_present":false}
+{"timestamp":"2026-07-17T13:29:39Z","environment":"github_actions","command_class":"offline_regression_and_clean_install_ci","status":"passed","secrets_present":false}
+{"timestamp":"2026-07-17T13:31:11Z","environment":"s100p","command_class":"release_deploy","status":"passed","revision":"b2598cf1917dda2465bc7ef5e4700b8f6f41f741","delivery_sha256":"52bcfaf9c97e9fc290f19b2d0eb4687a52908527e474e357aedb692630cc3059","secrets_present":false}

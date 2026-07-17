@@ -11,7 +11,18 @@ import zipfile
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
-VERDICT = "product_access_code_complete_s100p_execution_bundle_ready"
+ALLOWED_VERDICTS = {
+    "product_access_lan_tailscale_pass_cloudflare_ready_for_external_validation",
+    "product_access_lan_tailscale_cloudflare_all_passed",
+    "product_access_lan_pass_remote_validation_pending",
+    "product_access_code_complete_s100p_execution_bundle_ready",
+    "product_access_auth_or_security_gate_failed",
+    "product_access_lan_discovery_failed",
+    "product_access_tailscale_failed",
+    "product_access_cloudflare_failed_but_lan_tailscale_passed",
+    "product_access_integration_blocked_by_existing_architecture",
+    "product_access_evidence_integrity_failed",
+}
 INCLUDES = [
     "src/product_access", "scripts/probes/ai_nas_identity.py", "scripts/digua-access", "scripts/digua-doctor",
     "scripts/build_product_access_delivery.py", "deploy/product_access", "config", "release/avahi",
@@ -72,7 +83,23 @@ for path in root.rglob('*'):
     if path.stat().st_size < 5_000_000:
         text=path.read_text(encoding='utf-8', errors='ignore')
         if re.search(r'-----BEGIN (?:RSA |EC |OPENSSH )?PRIVATE KEY-----|tskey-[A-Za-z0-9_-]{16,}|cloudflared\s+tunnel\s+run\s+--token\s+[A-Za-z0-9._-]{16,}', text): errors.append('secret_pattern:'+rel)
-if manifest.get('final_verdict') != 'product_access_code_complete_s100p_execution_bundle_ready': errors.append('verdict')
+allowed={
+    'product_access_lan_tailscale_pass_cloudflare_ready_for_external_validation',
+    'product_access_lan_tailscale_cloudflare_all_passed',
+    'product_access_lan_pass_remote_validation_pending',
+    'product_access_code_complete_s100p_execution_bundle_ready',
+    'product_access_auth_or_security_gate_failed',
+    'product_access_lan_discovery_failed',
+    'product_access_tailscale_failed',
+    'product_access_cloudflare_failed_but_lan_tailscale_passed',
+    'product_access_integration_blocked_by_existing_architecture',
+    'product_access_evidence_integrity_failed',
+}
+verdict=manifest.get('final_verdict')
+if verdict not in allowed: errors.append('verdict_not_allowed')
+if (root/'FINAL_VERDICT.txt').read_text(encoding='utf-8').strip() != verdict: errors.append('verdict_file_mismatch')
+gate_path=root/'reports/access/40600_product_acceptance_gate.json'
+if gate_path.is_file() and json.loads(gate_path.read_text(encoding='utf-8')).get('final_verdict') != verdict: errors.append('verdict_gate_mismatch')
 for path in root.rglob('*.json'):
     try: json.loads(path.read_text(encoding='utf-8'))
     except Exception as exc: errors.append('json:'+path.relative_to(root).as_posix()+':'+type(exc).__name__)
@@ -97,7 +124,13 @@ def main() -> int:
     parser = argparse.ArgumentParser(description="Build secret-safe product access delivery and S100P validation bundles")
     parser.add_argument("--out", type=Path, default=ROOT / "dist")
     parser.add_argument("--timestamp", default=time.strftime("%Y%m%dT%H%M%SZ", time.gmtime()))
+    parser.add_argument("--final-verdict", choices=sorted(ALLOWED_VERDICTS), default="")
     args = parser.parse_args()
+    gate_path = ROOT / "reports" / "access" / "40600_product_acceptance_gate.json"
+    gate = json.loads(gate_path.read_text(encoding="utf-8"))
+    verdict = args.final_verdict or str(gate.get("final_verdict") or "")
+    if verdict not in ALLOWED_VERDICTS:
+        raise ValueError(f"invalid product access verdict: {verdict!r}")
     args.out.mkdir(parents=True, exist_ok=True)
     validation_zip = args.out / f"product_access_s100p_validation_bundle_{args.timestamp}.zip"
     zip_tree(ROOT / "validation" / "product_access_s100p", validation_zip)
@@ -107,17 +140,17 @@ def main() -> int:
         stage.mkdir()
         copy_inputs(stage)
         shutil.copy2(validation_zip, stage / validation_zip.name)
-        (stage / "FINAL_VERDICT.txt").write_text(VERDICT + "\n", encoding="utf-8")
+        (stage / "FINAL_VERDICT.txt").write_text(verdict + "\n", encoding="utf-8")
         (stage / "SELF_CHECK.py").write_text(SELF_CHECK, encoding="utf-8")
         candidates = [path for path in sorted(stage.rglob("*")) if path.is_file() and path.name not in {"MANIFEST.json", "SHA256SUMS.txt"}]
         manifest = {
             "schema": "digua_product_access_delivery_v1",
             "created_at": args.timestamp,
             "source_commit": git_commit(),
-            "final_verdict": VERDICT,
-            "production_verified": False,
-            "runtime_evidence": "not_asserted_by_package_builder",
-            "hardware_power_state": "not_asserted_by_package_builder",
+            "final_verdict": verdict,
+            "production_verified": bool(gate.get("s100p_real_validation")),
+            "runtime_evidence": "reports/access/40600_product_acceptance_gate.json",
+            "hardware_power_state": "powered_and_observed" if gate.get("s100p_real_validation") else "not_asserted_by_package_builder",
             "excludes": ["passwords", "claim plaintext", "tunnel keys", "credentials", "private keys", ".env", "runtime databases", "NAS/user data", "model weights"],
             "files": [{"path": path.relative_to(stage).as_posix(), "size": path.stat().st_size, "sha256": sha(path)} for path in candidates],
         }
@@ -129,7 +162,7 @@ def main() -> int:
 
     summary = {
         "ok": True,
-        "final_verdict": VERDICT,
+        "final_verdict": verdict,
         "delivery_zip": str(delivery_zip),
         "delivery_sha256": sha(delivery_zip),
         "validation_zip": str(validation_zip),
