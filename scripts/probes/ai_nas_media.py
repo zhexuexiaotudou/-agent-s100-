@@ -233,6 +233,105 @@ class MediaCenter:
         finally:
             con.close()
 
+    def photo_paths_by_hashes(self, path_hashes: list[str]) -> dict[str, Path]:
+        digests = sorted({str(value or "").strip().lower() for value in path_hashes if re.fullmatch(r"[0-9a-f]{16,64}", str(value or "").strip().lower())})
+        if not digests:
+            return {}
+        found: dict[str, Path] = {}
+        con = self._connect()
+        try:
+            for start in range(0, len(digests), 500):
+                batch = digests[start:start + 500]
+                rows = con.execute(
+                    "SELECT path_hash,file_path FROM photos WHERE path_hash IN ({})".format(",".join("?" for _ in batch)),
+                    tuple(batch),
+                ).fetchall()
+                for row in rows:
+                    if row["path_hash"] and row["file_path"]:
+                        found[str(row["path_hash"])] = Path(row["file_path"])
+            return found
+        finally:
+            con.close()
+
+    def resolve_search_photo(
+        self,
+        *,
+        path_hash: str = "",
+        asset_id: str = "",
+        sha256: str = "",
+    ) -> dict | None:
+        """Resolve a stale search identity to an existing current media row."""
+        digest = str(path_hash or "").strip().lower()
+        if digest and not re.fullmatch(r"[0-9a-f]{16,64}", digest):
+            digest = ""
+        asset = str(asset_id or "").strip()
+        content_digest = str(sha256 or "").strip().lower()
+        if content_digest and not re.fullmatch(r"[0-9a-f]{64}", content_digest):
+            content_digest = ""
+        if not digest and not asset and not content_digest:
+            return None
+
+        con = self._connect()
+        try:
+            reference_rows = []
+            if digest:
+                reference_rows.extend(con.execute("SELECT * FROM photos WHERE path_hash=?", (digest,)).fetchall())
+            if asset:
+                reference_rows.extend(con.execute("SELECT * FROM photos WHERE asset_id=?", (asset,)).fetchall())
+
+            content_digests = {content_digest} if content_digest else set()
+            content_digests.update(
+                str(row["sha256"] or "").strip().lower()
+                for row in reference_rows
+                if str(row["sha256"] or "").strip()
+            )
+
+            candidates = list(reference_rows)
+            for candidate_digest in sorted(content_digests):
+                candidates.extend(con.execute("SELECT * FROM photos WHERE sha256=?", (candidate_digest,)).fetchall())
+
+            unique: dict[int, sqlite3.Row] = {}
+            for row in candidates:
+                unique[int(row["id"])] = row
+
+            ranked: list[tuple[int, float, sqlite3.Row, Path]] = []
+            for row in unique.values():
+                path = Path(str(row["file_path"] or ""))
+                try:
+                    if path.is_symlink() or not path.is_file():
+                        continue
+                except OSError:
+                    continue
+                score = 0
+                if digest and str(row["path_hash"] or "").lower() == digest:
+                    score += 100
+                if asset and str(row["asset_id"] or "") == asset:
+                    score += 90
+                if str(row["sha256"] or "").lower() in content_digests:
+                    score += 80
+                try:
+                    indexed_at = datetime.fromisoformat(str(row["indexed_at"] or "").replace("Z", "+00:00")).timestamp()
+                except ValueError:
+                    indexed_at = 0.0
+                ranked.append((score, indexed_at, row, path))
+
+            if not ranked:
+                return None
+            ranked.sort(key=lambda item: (item[0], item[1], int(item[2]["id"])), reverse=True)
+            _score, _indexed_at, row, path = ranked[0]
+            direct_identity = bool(
+                (digest and str(row["path_hash"] or "").lower() == digest)
+                or (asset and str(row["asset_id"] or "") == asset)
+            )
+            return {
+                "file_path": str(path),
+                "path_hash": str(row["path_hash"] or ""),
+                "asset_id": str(row["asset_id"] or ""),
+                "resolution": "current_media_identity" if direct_identity else "content_digest_relinked",
+            }
+        finally:
+            con.close()
+
     def remove_photo_path(self, path: Path) -> dict:
         con = self._connect()
         try:
