@@ -82,6 +82,14 @@ class OfflineUiContractTest(unittest.TestCase):
             self.js.index('raw.includes("document")'),
         )
 
+    def test_assistant_answer_does_not_wait_for_auxiliary_token_route(self):
+        self.assertIn("let assistantRequestSerial = 0", self.js)
+        self.assertIn("const requestSerial = ++assistantRequestSerial", self.js)
+        self.assertIn('const routePromise = fetchJson("/api/token-budget/route"', self.js)
+        self.assertIn('const copilot = await fetchJson("/api/copilot/chat"', self.js)
+        self.assertNotIn("const [copilot, route] = await Promise.all([", self.js)
+        self.assertIn('}).catch(() => null);', self.js)
+
     def test_files_use_accessible_tabs_and_soft_delete(self):
         self.assertGreaterEqual(self.js.count('role="tab"'), 3)
         self.assertGreaterEqual(self.js.count('aria-selected="${mode ==='), 3)

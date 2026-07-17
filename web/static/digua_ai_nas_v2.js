@@ -4,6 +4,7 @@
   const app = document.getElementById("app");
   const MEDIA_UPLOAD_MAX_BYTES = 5 * 1024 * 1024;
   const EXECUTION_BOUNDARY_IMPLEMENTATION = "Harness / allowlist dispatcher";
+  let assistantRequestSerial = 0;
 
   const icons = {
     home: '<path d="M3 10.5 12 3l9 7.5"/><path d="M5 9.5V21h14V9.5"/><path d="M9 21v-7h6v7"/>',
@@ -3450,42 +3451,48 @@
       renderShell();
       return;
     }
+    const requestSerial = ++assistantRequestSerial;
     appState.assistant = { status: "loading", answer: "", route: null, error: "" };
     renderShell();
+    const routePromise = fetchJson("/api/token-budget/route", {
+      method: "POST",
+      body: {
+        message,
+        task_type: "nas_assistant",
+        workspace: "openclaw-web",
+        context_text: `user=${appState.authUser?.username || "web"}\npage=${appState.page}`
+      }
+    }).catch(() => null);
     try {
-      const [copilot, route] = await Promise.all([
-        fetchJson("/api/copilot/chat", { method: "POST", body: { message } }),
-        fetchJson("/api/token-budget/route", {
-          method: "POST",
-          body: {
-            message,
-            task_type: "nas_assistant",
-            workspace: "openclaw-web",
-            context_text: `user=${appState.authUser?.username || "web"}\npage=${appState.page}`
-          }
-        })
-      ]);
+      const copilot = await fetchJson("/api/copilot/chat", { method: "POST", body: { message } });
+      if (requestSerial !== assistantRequestSerial) return;
       if (copilot.ok && copilot.data?.ok) {
         const copilotData = copilot.data || {};
         appState.assistant = {
           status: "ready",
           answer: copilotData.assistant_mode && copilotData.answer ? presentAssistantAnswer(copilotData) : describeCopilotResult(copilotData),
-          route: route.data || null,
+          route: null,
           mode: copilotData.assistant_mode || "",
           copilot: copilotData,
           toolLabel: assistantToolLabelFromCopilot(copilotData),
           error: ""
         };
       } else if (copilot.status === 401 || copilot.data?.error === "auth_required") {
-        appState.assistant = { status: "auth", answer: "", route: route.data || null, error: "auth_required" };
+        appState.assistant = { status: "auth", answer: "", route: null, error: "auth_required" };
       } else {
-        appState.assistant = { status: "error", answer: "", route: route.data || null, error: copilot.data?.error || `copilot_failed:${copilot.status}` };
+        appState.assistant = { status: "error", answer: "", route: null, error: copilot.data?.error || `copilot_failed:${copilot.status}` };
       }
     } catch (error) {
+      if (requestSerial !== assistantRequestSerial) return;
       appState.assistant = { status: "error", answer: "", route: null, error: error.message || String(error) };
     }
     appState.prompt = "";
     renderShell();
+    routePromise.then((route) => {
+      if (!route || requestSerial !== assistantRequestSerial || appState.assistant.status !== "ready") return;
+      appState.assistant = { ...appState.assistant, route: route.ok && route.data?.ok ? route.data : null };
+      if (appState.page === "assistant") renderShell();
+    });
   }
 
   function presentAssistantAnswer(data) {
