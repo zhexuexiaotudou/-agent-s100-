@@ -1,5 +1,6 @@
 import hashlib
 import json
+import os
 import sys
 import tempfile
 import unittest
@@ -128,7 +129,31 @@ class CopilotLocalQwenChatTest(unittest.TestCase):
             self.assertNotIn("2026\u5e745\u670820\u65e5", payload["answer"])
             self.assertFalse(payload["cloud_used"])
             self.assertFalse(payload["qwen_execution_authority"])
+            self.assertFalse(payload["audit"]["cloud_payload_sent"])
             post_json.assert_not_called()
+
+    def test_cloud_overflow_uses_bridge_token_file_without_exposing_minimax_token(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            token_file = root / "cloud_bridge_token"
+            token_file.write_text("local-bridge-secret\n", encoding="utf-8")
+            state = self.make_state(root)
+            router = {"route": "cloud", "privacy_level": "none", "task_complexity": "complex"}
+
+            env = {
+                "AI_NAS_CLOUD_CHAT_URL": "http://127.0.0.1:18082/v1",
+                "AI_NAS_CLOUD_CHAT_MODEL": "custom-gateway/MiniMax-M2.7",
+                "AI_NAS_CLOUD_CHAT_TOKEN_FILE": str(token_file),
+            }
+            with patch.dict(os.environ, env, clear=False):
+                with patch("ai_nas_operator_portal_server.http_post_json", return_value=self.fake_qwen("MiniMax through OpenClaw.")) as post_json:
+                    status, payload = state._copilot_cloud_overflow("Explain a public topic.", {"username": "admin"}, router)
+
+            self.assertEqual(status, 200)
+            self.assertTrue(payload["cloud_used"])
+            self.assertEqual(payload["answer"], "MiniMax through OpenClaw.")
+            self.assertEqual(post_json.call_args.kwargs["headers"], {"Authorization": "Bearer local-bridge-secret"})
+            self.assertNotIn("local-bridge-secret", json.dumps(payload))
 
     def test_person_photo_search_uses_qwen_router_then_local_yolo_index(self):
         with tempfile.TemporaryDirectory() as tmp:
