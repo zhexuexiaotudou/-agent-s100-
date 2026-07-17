@@ -166,7 +166,9 @@ if [[ "$DRY_RUN" == "0" && "${#blockers[@]}" -eq 0 ]]; then
     fi
     if [[ "$SIMULATION" == "0" && "$SYSTEMD_MODE" == "system" ]]; then
       chown -R "$SERVICE_USER" /var/lib/digua-ai-nas || blockers+=("access_state_owner_failed")
-      chmod 755 "$INSTALL_ROOT/app/scripts/digua-access" "$INSTALL_ROOT/app/scripts/digua-doctor" || blockers+=("access_cli_mode_failed")
+      chmod 755 "$INSTALL_ROOT/app/scripts/digua-access" "$INSTALL_ROOT/app/scripts/digua-doctor" \
+        "$INSTALL_ROOT/app/release/install/configure_lan_access.sh" \
+        "$INSTALL_ROOT/app/release/install/configure_remote_access.sh" || blockers+=("access_helper_mode_failed")
       ln -sfn "$INSTALL_ROOT/app/scripts/digua-access" /usr/local/bin/digua-access || blockers+=("access_cli_link_failed")
       ln -sfn "$INSTALL_ROOT/app/scripts/digua-doctor" /usr/local/bin/digua-doctor || blockers+=("doctor_cli_link_failed")
       if command -v avahi-daemon >/dev/null 2>&1 && [[ -d /etc/avahi/services ]]; then
