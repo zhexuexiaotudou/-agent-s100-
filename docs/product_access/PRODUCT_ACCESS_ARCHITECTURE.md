@@ -18,6 +18,7 @@ portal --> 127.0.0.1:18080 Qwen / existing policy and ACL layers --> NAS allowli
 - `product_access.sqlite3` 保存稳定设备身份、端点、claim 哈希、非秘密身份映射、审计与网络快照。
 - 密码、claim 明文、Tailscale key、Cloudflare credential、NAS credential 和私钥不进入数据库、Git、前端或普通日志。
 - 设备公开 ID 为随机 UUID，不使用 MAC 或硬件序列号。
+- access-only 共存部署保留本地身份库，同时配置既有 8765 门户所使用的上游身份库。仅当已认证请求需要代理业务 API 时，访问层才在内存中建立短期上游会话；新增用户、角色变更和会话撤销必须同步到两侧。
 
 ## 生命周期
 

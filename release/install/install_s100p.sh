@@ -152,9 +152,10 @@ if [[ "$DRY_RUN" == "0" && "${#blockers[@]}" -eq 0 ]]; then
       printf 'DIGUA_QWEN_BASE_URL=http://127.0.0.1:18080\n'
       printf 'DIGUA_ACCESS_DB=%s\n' "$access_state_dir/product_access.sqlite3"
       printf 'DIGUA_IDENTITY_DB=%s\n' "$access_state_dir/identity.sqlite3"
+      printf 'DIGUA_UPSTREAM_IDENTITY_DB=%s\n' "$access_state_dir/identity.sqlite3"
       printf 'DIGUA_LAN_URL=http://digua.local/\n'
       printf 'DIGUA_REMOTE_ACCESS_ENABLED=0\n'
-      grep -E '^(DIGUA_|QWEN25_)' "$ENV_FILE" 2>/dev/null | grep -v -E '^(DIGUA_INSTALL_ROOT|DIGUA_NAS_MOUNT|DIGUA_PERSONAL_ROOT|DIGUA_OPENCLAW_BASE_URL|DIGUA_QWEN_BASE_URL)=' || true
+      grep -E '^(DIGUA_|QWEN25_)' "$ENV_FILE" 2>/dev/null | grep -v -E '^(DIGUA_INSTALL_ROOT|DIGUA_NAS_MOUNT|DIGUA_PERSONAL_ROOT|AI_NAS_PERSONAL_ROOT|AI_NAS_REPORT_ROOT|DIGUA_OPENCLAW_BASE_URL|DIGUA_QWEN_BASE_URL|DIGUA_ACCESS_DB|DIGUA_IDENTITY_DB|DIGUA_UPSTREAM_IDENTITY_DB|DIGUA_LAN_URL|DIGUA_REMOTE_ACCESS_ENABLED|QWEN25_TOOL_DISPATCHER|QWEN25_GATEWAY_REPORT_ROOT)=' || true
     } > "$TMP_DIR/digua.env"
     mv "$TMP_DIR/digua.env" "$ENV_FILE"
     chmod 644 "$ENV_FILE"
