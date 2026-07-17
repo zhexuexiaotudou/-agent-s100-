@@ -182,6 +182,12 @@ class ProductAccessContractTest(unittest.TestCase):
         self.assertTrue(validate_plan({"connection": "lan0", "ipv4_method": "manual", "ipv4_address": "192.168.1.20/24", "ipv4_gateway": "192.168.1.1"})["ok"])
         self.assertFalse(validate_plan({"connection": "lan0", "shell": "rm -rf /"})["ok"])
 
+    def test_network_snapshot_uses_nmcli_default_secret_redaction(self):
+        repo = Path(__file__).resolve().parents[1]
+        source = (repo / "src/product_access/network.py").read_text(encoding="utf-8")
+        self.assertNotIn('"--show-secrets", "no"', source)
+        self.assertIn('"connection.id,connection.interface-name,ipv4.method,ipv4.addresses,ipv4.gateway,ipv4.dns"', source)
+
     def test_remote_plans_never_enable_funnel_or_public_origin(self):
         tailscale = TailscaleServeAdapter().plan()
         self.assertFalse(tailscale["funnel_allowed"])
@@ -256,6 +262,15 @@ class ProductAccessContractTest(unittest.TestCase):
         self.assertIn('systemctl is-active --quiet "$unit"', source)
         self.assertIn('systemctl --user is-active --quiet "$unit"', source)
         self.assertIn('run service_qwen service_status qwen25-local-openai-gateway.service', source)
+
+    def test_nas_outage_validation_is_secret_safe_and_checks_degraded_responses(self):
+        repo = Path(__file__).resolve().parents[1]
+        source = (repo / "validation/product_access_s100p/NAS_OUTAGE_MATRIX.py").read_text(encoding="utf-8")
+        self.assertIn('"/api/v1/nas/status"', source)
+        self.assertIn('"/api/storage/list"', source)
+        self.assertIn('storage_status == 503', source)
+        self.assertIn('"secrets_emitted": False', source)
+        self.assertNotIn("print(token)", source)
 
     def test_distinct_upstream_identity_store_receives_bridged_sessions_and_user_changes(self):
         with tempfile.TemporaryDirectory() as temp:

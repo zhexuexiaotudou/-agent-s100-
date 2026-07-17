@@ -144,7 +144,7 @@ def snapshot_connection(connection: str) -> dict:
     if not shutil.which("nmcli"):
         return {"ok": False, "error": "nmcli_unavailable", "connection": connection}
     result = _command([
-        "nmcli", "--show-secrets", "no", "-g",
+        "nmcli", "-g",
         "connection.id,connection.interface-name,ipv4.method,ipv4.addresses,ipv4.gateway,ipv4.dns",
         "connection", "show", connection,
     ])
