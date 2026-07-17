@@ -279,6 +279,26 @@ class MediaCenter:
         finally:
             con.close()
 
+    def photo_paths_by_hashes(self, path_hashes: list[str]) -> dict[str, Path]:
+        digests = sorted({str(value or "").strip().lower() for value in path_hashes if re.fullmatch(r"[0-9a-f]{16,64}", str(value or "").strip().lower())})
+        if not digests:
+            return {}
+        found: dict[str, Path] = {}
+        con = self._connect()
+        try:
+            for start in range(0, len(digests), 500):
+                batch = digests[start:start + 500]
+                rows = con.execute(
+                    "SELECT path_hash,file_path FROM photos WHERE path_hash IN ({})".format(",".join("?" for _ in batch)),
+                    tuple(batch),
+                ).fetchall()
+                for row in rows:
+                    if row["path_hash"] and row["file_path"]:
+                        found[str(row["path_hash"])] = Path(row["file_path"])
+            return found
+        finally:
+            con.close()
+
     def resolve_search_photo(
         self,
         *,
