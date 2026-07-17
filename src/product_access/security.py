@@ -8,10 +8,11 @@ import time
 import urllib.request
 from http.cookies import SimpleCookie
 
-SESSION_COOKIE = "digua_session"
+LAN_SESSION_COOKIE = "digua_lan_session"
+REMOTE_SESSION_COOKIE = "__Host-digua_session"
 
 
-def parse_cookie(header: str | None, name: str = SESSION_COOKIE) -> str | None:
+def parse_cookie(header: str | None, *, name: str) -> str | None:
     if not header:
         return None
     jar = SimpleCookie()
@@ -23,6 +24,14 @@ def parse_cookie(header: str | None, name: str = SESSION_COOKIE) -> str | None:
     return item.value if item else None
 
 
+def session_cookie_name(*, secure: bool) -> str:
+    return REMOTE_SESSION_COOKIE if secure else LAN_SESSION_COOKIE
+
+
+def parse_session_cookie(header: str | None, *, secure: bool) -> str | None:
+    return parse_cookie(header, name=session_cookie_name(secure=secure))
+
+
 def csrf_token(session_token: str) -> str:
     return hashlib.sha256(("digua-csrf-v1:" + session_token).encode("utf-8")).hexdigest()
 
@@ -32,7 +41,8 @@ def valid_csrf(session_token: str, supplied: str | None) -> bool:
 
 
 def session_cookie(token: str, *, secure: bool, max_age: int = 86400) -> str:
-    parts = [f"{SESSION_COOKIE}={token}", "Path=/", "HttpOnly", "SameSite=Lax", f"Max-Age={max_age}"]
+    name = session_cookie_name(secure=secure)
+    parts = [f"{name}={token}", "Path=/", "HttpOnly", "SameSite=Lax", f"Max-Age={max_age}"]
     if secure:
         parts.append("Secure")
     return "; ".join(parts)

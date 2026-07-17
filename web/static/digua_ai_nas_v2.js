@@ -2942,7 +2942,7 @@
       headers["Content-Type"] = "application/json";
       body = JSON.stringify(body);
     }
-    const response = await fetch(path, { ...options, headers, body });
+    const response = await fetch(path, { credentials: "same-origin", ...options, headers, body });
     const data = await response.json();
     if (response.status === 401 && data?.error === "auth_required") {
       clearProductSession();
@@ -5378,7 +5378,7 @@
 
   async function initializeProductSession() {
     try {
-      const response = await fetch("/api/v1/auth/session", { headers: { Accept: "application/json" } });
+      const response = await fetch("/api/v1/auth/session", { credentials: "same-origin", headers: { Accept: "application/json" } });
       if (response.ok) {
         const payload = await response.json();
         if (payload.authenticated) {

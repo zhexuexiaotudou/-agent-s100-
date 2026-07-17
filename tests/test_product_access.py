@@ -13,7 +13,7 @@ from pathlib import Path
 
 from src.product_access.network import is_lan_address, validate_plan
 from src.product_access.remote import CloudflareTunnelAdapter, TailscaleServeAdapter
-from src.product_access.security import CloudflareJwtVerifier, csrf_token
+from src.product_access.security import CloudflareJwtVerifier, csrf_token, parse_session_cookie, session_cookie
 from src.product_access.server import AccessState, ProductAccessHandler, _settings_html
 from src.product_access.store import ProductAccessStore
 
@@ -43,6 +43,16 @@ class EchoHandler(BaseHTTPRequestHandler):
 
 
 class ProductAccessStoreTest(unittest.TestCase):
+    def test_lan_and_remote_sessions_use_distinct_cookie_names(self):
+        lan_cookie = session_cookie("lan-token", secure=False)
+        remote_cookie = session_cookie("remote-token", secure=True)
+        self.assertTrue(lan_cookie.startswith("digua_lan_session=lan-token;"))
+        self.assertNotIn("; Secure", lan_cookie)
+        self.assertTrue(remote_cookie.startswith("__Host-digua_session=remote-token;"))
+        self.assertIn("; Secure", remote_cookie)
+        self.assertEqual(parse_session_cookie("digua_session=legacy; digua_lan_session=current", secure=False), "current")
+        self.assertIsNone(parse_session_cookie("digua_session=legacy", secure=False))
+
     def test_device_is_stable_and_claim_is_hash_only(self):
         with tempfile.TemporaryDirectory() as td:
             path = Path(td) / "access.sqlite3"
@@ -107,6 +117,8 @@ class ProductAccessHttpTest(unittest.TestCase):
         status, headers, payload = self.request("POST", "/api/v1/claim/complete", {"claim_token": token, "username": "owner", "password": "strong-password"})
         self.assertEqual(status, 200)
         self.assertEqual(payload["user"]["role"], "admin")
+        self.assertIn("digua_lan_session=", headers["Set-Cookie"])
+        self.assertNotIn("; Secure", headers["Set-Cookie"])
         cookie = headers["Set-Cookie"].split(";", 1)[0]
         csrf = payload["csrf_token"]
         self.assertNotIn("strong-password", self.state.store.path.read_bytes().decode("latin1", errors="ignore"))
@@ -115,6 +127,14 @@ class ProductAccessHttpTest(unittest.TestCase):
         self.assertEqual(status, 200)
         self.assertTrue(session["authenticated"])
         self.assertEqual(session["csrf_token"], csrf)
+
+        status, _, session = self.request(
+            "GET",
+            "/api/v1/auth/session",
+            headers={"Cookie": f"digua_session=stale-legacy-token; {cookie}"},
+        )
+        self.assertEqual(status, 200)
+        self.assertTrue(session["authenticated"])
 
         status, _, _ = self.request("POST", "/api/example", {}, headers={"Cookie": cookie})
         self.assertEqual(status, 403)
@@ -333,6 +353,7 @@ class ProductAccessContractTest(unittest.TestCase):
         self.assertIn('/manifest.webmanifest', html)
         self.assertIn('/api/v1/auth/session', js)
         self.assertIn('X-CSRF-Token', js)
+        self.assertGreaterEqual(js.count('credentials: "same-origin"'), 2)
         self.assertIn('serviceWorker.register("/sw.js")', js)
 
     def test_access_settings_render_endpoint_values_as_text(self):
