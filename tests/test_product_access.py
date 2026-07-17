@@ -4,12 +4,14 @@ import http.client
 import base64
 import hashlib
 import json
+import sqlite3
 import tempfile
 import threading
 import time
 import unittest
 from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 from pathlib import Path
+from unittest.mock import Mock, patch
 
 from src.product_access.network import is_lan_address, validate_plan
 from src.product_access.remote import CloudflareTunnelAdapter, TailscaleServeAdapter
@@ -198,6 +200,28 @@ class ProductAccessHttpTest(unittest.TestCase):
         self.assertIn("includes('download')", script)
         connection.close()
 
+    def test_locked_upstream_identity_returns_json_503_instead_of_dropping_connection(self):
+        token = self.state.store.create_claim()
+        status, headers, payload = self.request(
+            "POST",
+            "/api/v1/claim/complete",
+            {"claim_token": token, "username": "owner", "password": "strong-password"},
+        )
+        self.assertEqual(status, 200)
+        cookie = headers["Set-Cookie"].split(";", 1)[0]
+
+        upstream = Mock()
+        upstream.create_session_for_user.side_effect = sqlite3.OperationalError("database is locked")
+        self.state.upstream_identity_path = Path(self.temp.name) / "upstream-identity.sqlite3"
+        self.state.upstream_identity = upstream
+        with patch("src.product_access.server.time.sleep") as sleep:
+            status, _, failed = self.request("GET", "/api/example", headers={"Cookie": cookie})
+
+        self.assertEqual(status, 503)
+        self.assertEqual(failed["error"], "upstream_identity_bridge_unavailable")
+        self.assertEqual(upstream.create_session_for_user.call_count, 3)
+        self.assertEqual(sleep.call_count, 2)
+
 
 class ProductAccessContractTest(unittest.TestCase):
     def test_network_plan_is_bounded(self):
@@ -363,6 +387,13 @@ class ProductAccessContractTest(unittest.TestCase):
             upstream_token = state.upstream_token(local_token, login["user"])
             self.assertTrue(upstream_token)
             self.assertEqual(state.upstream_identity.validate_token(upstream_token)["username"], "bridge-admin")
+            with patch.object(
+                state.upstream_identity,
+                "validate_token",
+                side_effect=sqlite3.OperationalError("database is locked"),
+            ) as validate:
+                self.assertEqual(state.upstream_token(local_token, login["user"]), upstream_token)
+            validate.assert_not_called()
             self.assertTrue(state.create_user("bridge-viewer", "strong-password", "viewer")["ok"])
             self.assertTrue(state.set_user_role("bridge-viewer", "operator")["ok"])
             upstream_roles = {item["username"]: item["role"] for item in state.upstream_identity.list_users()}
