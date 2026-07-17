@@ -78,4 +78,4 @@ No Gateway listener was exposed to the public network, NAS access remained limit
 
 ## Storage warning resolution
 
-The warning above was resolved later on 2026-07-17. Low-risk caches were cleaned and the complete 25.59 GB board-local Dream7B HBM tree was archived to NAS with 40/40 source and NAS SHA-256 verification. The original path is now a compatibility symlink to the dated NAS archive. The final link-check reported root usage at 33%, about 31.0 GB available, NAS usage at 17%, and all service health gates passing. See `docs/s100p_root_storage_cleanup_20260717.md`.
+The warning above was resolved on 2026-07-17. Low-risk caches were cleaned and the complete 25.59 GB board-local Dream7B HBM tree was archived to NAS with 40/40 source and NAS SHA-256 verification. The original path is now a compatibility symlink to the dated NAS archive. The final link-check reported root usage at 33%, about 31.0 GB available, NAS usage at 17%, and all service health gates passing. See `docs/s100p_root_storage_cleanup_20260717.md`.
