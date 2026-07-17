@@ -9,6 +9,7 @@ import os
 import sqlite3
 import sys
 import threading
+import time
 from http import HTTPStatus
 from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 from pathlib import Path
@@ -49,6 +50,10 @@ LOCAL_STATIC_ASSETS = {
     "/static/pwa-icon-192.svg": ("pwa-icon-192.svg", "image/svg+xml"),
     "/static/pwa-icon-512.svg": ("pwa-icon-512.svg", "image/svg+xml"),
 }
+UPSTREAM_IDENTITY_TIMEOUT_SECONDS = 0.35
+UPSTREAM_BRIDGE_SESSION_TTL_SECONDS = 3600
+UPSTREAM_BRIDGE_CACHE_SECONDS = 3300
+UPSTREAM_BRIDGE_RETRY_DELAYS_SECONDS = (0.05, 0.15)
 
 
 def _json_bytes(payload: dict) -> bytes:
@@ -79,7 +84,7 @@ class AccessState:
         upstream_identity_path = Path(upstream_identity_db) if upstream_identity_db else None
         self.upstream_identity_path = upstream_identity_path if upstream_identity_path and upstream_identity_path.resolve() != Path(identity_db).resolve() else None
         self.upstream_identity = self._ensure_upstream_identity()
-        self.bridge_sessions: dict[str, tuple[str, str]] = {}
+        self.bridge_sessions: dict[str, tuple[str, str, float]] = {}
         self.bridge_lock = threading.Lock()
         parsed = urlparse(upstream)
         self.upstream_host = parsed.hostname or "127.0.0.1"
@@ -107,7 +112,7 @@ class AccessState:
         if not path or (self.require_nas_mount and self.nas_mounted() is not True):
             return None
         try:
-            self.upstream_identity = IdentityStore(path)
+            self.upstream_identity = IdentityStore(path, connection_timeout=UPSTREAM_IDENTITY_TIMEOUT_SECONDS)
         except (OSError, sqlite3.Error):
             return None
         return self.upstream_identity
@@ -120,13 +125,33 @@ class AccessState:
             return local_token
         with self.bridge_lock:
             cached = self.bridge_sessions.get(local_token)
-            if cached and cached[0] == str(user["username"]) and upstream.validate_token(cached[1]):
+            if cached and cached[0] == str(user["username"]) and cached[2] > time.monotonic():
                 return cached[1]
-            created = upstream.create_session_for_user(str(user["username"]), ttl=3600)
+            self.bridge_sessions.pop(local_token, None)
+            created = None
+            for attempt in range(len(UPSTREAM_BRIDGE_RETRY_DELAYS_SECONDS) + 1):
+                try:
+                    created = upstream.create_session_for_user(
+                        str(user["username"]), ttl=UPSTREAM_BRIDGE_SESSION_TTL_SECONDS
+                    )
+                    break
+                except sqlite3.OperationalError as exc:
+                    busy = "locked" in str(exc).lower() or "busy" in str(exc).lower()
+                    if not busy or attempt >= len(UPSTREAM_BRIDGE_RETRY_DELAYS_SECONDS):
+                        return None
+                    time.sleep(UPSTREAM_BRIDGE_RETRY_DELAYS_SECONDS[attempt])
+                except (OSError, sqlite3.Error):
+                    return None
+            if not created:
+                return None
             if not created.get("ok"):
                 return None
             token = str(created["token"])
-            self.bridge_sessions[local_token] = (str(user["username"]), token)
+            self.bridge_sessions[local_token] = (
+                str(user["username"]),
+                token,
+                time.monotonic() + UPSTREAM_BRIDGE_CACHE_SECONDS,
+            )
             return token
 
     def drop_bridge(self, local_token: str) -> None:
@@ -136,7 +161,10 @@ class AccessState:
         with self.bridge_lock:
             cached = self.bridge_sessions.pop(local_token, None)
         if cached:
-            upstream.logout(cached[1])
+            try:
+                upstream.logout(cached[1])
+            except (OSError, sqlite3.Error):
+                pass
 
     def create_user(self, username: str, password: str, role: str) -> dict:
         result = self.identity.create_user(username, password, role)

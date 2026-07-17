@@ -44,9 +44,9 @@ def _session_token_hash(token: str) -> str:
     return hashlib.sha256(token.encode("utf-8")).hexdigest()
 
 
-def _init_db(db_path: Path) -> None:
+def _init_db(db_path: Path, connection_timeout: float = 5.0) -> None:
     db_path.parent.mkdir(parents=True, exist_ok=True)
-    con = sqlite3.connect(str(db_path))
+    con = sqlite3.connect(str(db_path), timeout=connection_timeout)
     con.execute("PRAGMA journal_mode=WAL")
     con.execute("PRAGMA foreign_keys=ON")
     con.executescript("""
@@ -71,12 +71,13 @@ def _init_db(db_path: Path) -> None:
 
 
 class IdentityStore:
-    def __init__(self, db_path: Path) -> None:
+    def __init__(self, db_path: Path, connection_timeout: float = 5.0) -> None:
         self.db_path = db_path
-        _init_db(db_path)
+        self.connection_timeout = connection_timeout
+        _init_db(db_path, connection_timeout)
 
     def _connect(self) -> sqlite3.Connection:
-        con = sqlite3.connect(str(self.db_path))
+        con = sqlite3.connect(str(self.db_path), timeout=self.connection_timeout)
         con.execute("PRAGMA foreign_keys=ON")
         con.row_factory = sqlite3.Row
         return con
