@@ -79,6 +79,7 @@ jobs:
           mkdir -p "${RUNNER_TEMP}/digua-release/extracted"
           tar -xzf "${RUNNER_TEMP}/digua-release/${package}.tar.gz" -C "${RUNNER_TEMP}/digua-release/extracted"
           cd "${RUNNER_TEMP}/digua-release/extracted/${package}"
+          bash -n validation/product_access_s100p/*.sh
           python gates/stage10_release_cloud_install_gate.py --report-root "${RUNNER_TEMP}/digua-packaged-cloud-install"
       - name: Build and self-check product access delivery
         shell: bash

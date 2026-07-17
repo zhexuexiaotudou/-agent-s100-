@@ -22,6 +22,8 @@ class ReleaseContractTest(unittest.TestCase):
             "gates/stage9_final_recording_readiness_gate.py",
             "gates/stage10_release_cloud_install_gate.py",
             "src/product_jobs/worker.py",
+            "validation/product_access_s100p/RUN_VALIDATION.sh",
+            "validation/product_access_s100p/EXPECTED_RESULTS.md",
             "web/ai_nas_desktop_v2.html",
         }
         self.assertTrue(required <= files, required - files)
