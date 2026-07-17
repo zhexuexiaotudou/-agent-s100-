@@ -143,6 +143,26 @@ class ProductAccessHttpTest(unittest.TestCase):
         self.assertEqual(response.status, 200)
         self.assertIn('name="viewport"', text)
         self.assertIn("/api/v1/setup/claim", text)
+        self.assertIn("box-sizing:border-box", text)
+        self.assertIn("min-height:100dvh", text)
+        connection.close()
+
+    def test_product_access_serves_packaged_ui_instead_of_stale_upstream_assets(self):
+        connection = http.client.HTTPConnection("127.0.0.1", self.server.server_port)
+        connection.request("GET", "/ui")
+        response = connection.getresponse(); page = response.read().decode("utf-8")
+        self.assertEqual(response.status, 200)
+        self.assertEqual(response.getheader("Content-Type"), "text/html; charset=utf-8")
+        self.assertIn("20260716-offline-ui", page)
+        connection.close()
+
+        connection = http.client.HTTPConnection("127.0.0.1", self.server.server_port)
+        connection.request("GET", "/static/digua_ai_nas_v2.js?v=20260716-offline-ui")
+        response = connection.getresponse(); script = response.read().decode("utf-8")
+        self.assertEqual(response.status, 200)
+        self.assertEqual(response.getheader("Content-Type"), "application/javascript; charset=utf-8")
+        self.assertIn('mobilePrimaryNavIds = ["dashboard", "assistant", "files", "media"]', script)
+        self.assertNotIn('navItems.map(renderNavItem).join("")}</nav>', script)
         connection.close()
 
     def test_pwa_service_worker_excludes_api_and_downloads(self):
@@ -218,6 +238,7 @@ class ProductAccessContractTest(unittest.TestCase):
         self.assertNotIn("openclaw-gateway.service", uninstaller)
         self.assertNotIn("qwen25-local-openai-gateway.service", uninstaller)
         self.assertIn("backend_units_touched':[]", installer)
+        self.assertIn("systemctl restart digua-product-access.service", installer)
 
     def test_lan_configuration_synchronizes_hosts_and_restarts_avahi(self):
         repo = Path(__file__).resolve().parents[1]
