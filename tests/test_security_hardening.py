@@ -27,8 +27,8 @@ class SecurityHardeningTest(unittest.TestCase):
         (personal / "Photos" / "Alice").mkdir(parents=True)
         (personal / "Photos" / "Bob").mkdir(parents=True)
         (personal / "Documents" / "Alice").mkdir(parents=True)
-        (personal / "Photos" / "Alice" / "alice-visible.jpg").write_bytes(b"alice")
-        (personal / "Photos" / "Bob" / "bob-hidden.jpg").write_bytes(b"bob")
+        (personal / "Photos" / "Alice" / "alice-visible.jpg").write_bytes(b"\xff\xd8\xffalice")
+        (personal / "Photos" / "Bob" / "bob-hidden.jpg").write_bytes(b"\xff\xd8\xffbob")
         state = PortalState(root / "reports", [], refresh_on_start=False, personal_root=personal)
         assert state.identity_store is not None
         assert state.media_center is not None

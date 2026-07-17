@@ -173,11 +173,11 @@ class ProductAccessHttpTest(unittest.TestCase):
         response = connection.getresponse(); page = response.read().decode("utf-8")
         self.assertEqual(response.status, 200)
         self.assertEqual(response.getheader("Content-Type"), "text/html; charset=utf-8")
-        self.assertIn("20260716-offline-ui", page)
+        self.assertIn("20260718-album-recovery", page)
         connection.close()
 
         connection = http.client.HTTPConnection("127.0.0.1", self.server.server_port)
-        connection.request("GET", "/static/digua_ai_nas_v2.js?v=20260716-offline-ui")
+        connection.request("GET", "/static/digua_ai_nas_v2.js?v=20260718-album-recovery")
         response = connection.getresponse(); script = response.read().decode("utf-8")
         self.assertEqual(response.status, 200)
         self.assertEqual(response.getheader("Content-Type"), "application/javascript; charset=utf-8")
@@ -295,6 +295,19 @@ class ProductAccessContractTest(unittest.TestCase):
         self.assertIn("restore_previous", source)
         self.assertIn("portal or Qwen health check failed; restored previous unit", source)
         self.assertIn("sync_openclaw_portal_unit.sh", installer)
+        self.assertNotIn("qwen25-local-openai-gateway.service", source)
+        self.assertNotIn("digua-product-access.service", source)
+
+    def test_upstream_album_runtime_sync_is_explicit_bounded_and_rollback_safe(self):
+        repo = Path(__file__).resolve().parents[1]
+        source = (repo / "release/install/sync_upstream_album_runtime.sh").read_text(encoding="utf-8")
+        installer = (repo / "release/install/install_product_access_only.sh").read_text(encoding="utf-8")
+        self.assertIn("album_runtime_backups", source)
+        self.assertIn("ai_nas_media.py ai_nas_operator_portal_server.py", source)
+        self.assertIn('systemctl --user restart "$SERVICE"', source)
+        self.assertIn("restore_previous", source)
+        self.assertIn("portal health check failed; restored previous album runtime", source)
+        self.assertIn("sync_upstream_album_runtime.sh", installer)
         self.assertNotIn("qwen25-local-openai-gateway.service", source)
         self.assertNotIn("digua-product-access.service", source)
 

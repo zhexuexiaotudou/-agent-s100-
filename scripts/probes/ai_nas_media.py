@@ -10,6 +10,38 @@ UNSUPPORTED_IMAGE_EXTS = {".heic",".heif",".raw",".cr2",".nef",".arw"}
 VIDEO_EXTS = {".mp4",".mov",".avi",".mkv",".wmv",".flv",".webm",".m4v",".3gp"}
 MEDIA_EXTS = IMAGE_EXTS | VIDEO_EXTS
 
+
+def is_supported_image_bytes(header: bytes, extension: str) -> bool:
+    ext = str(extension or "").lower()
+    if ext in {".jpg", ".jpeg"}:
+        return header.startswith(b"\xff\xd8\xff")
+    if ext == ".png":
+        return header.startswith(b"\x89PNG\r\n\x1a\n")
+    if ext == ".gif":
+        return header.startswith((b"GIF87a", b"GIF89a"))
+    if ext == ".bmp":
+        return header.startswith(b"BM")
+    if ext == ".webp":
+        return len(header) >= 12 and header.startswith(b"RIFF") and header[8:12] == b"WEBP"
+    if ext in {".tif", ".tiff"}:
+        return header.startswith((b"II*\x00", b"MM\x00*"))
+    return False
+
+
+def is_supported_image_file(path: Path, extension: str | None = None) -> bool:
+    """Return whether an image file has a signature matching its extension.
+
+    Media discovery must not trust a filename suffix alone.  Old demo text
+    placeholders used ``.jpg``/``.png`` names and were consequently exposed as
+    photos even though browsers could never decode them.
+    """
+    try:
+        with path.open("rb") as stream:
+            header = stream.read(16)
+    except OSError:
+        return False
+    return is_supported_image_bytes(header, str(extension or path.suffix))
+
 def _now_iso(): return datetime.now(timezone.utc).isoformat()
 
 def _init_db(db_path: Path) -> None:
@@ -77,7 +109,7 @@ class MediaCenter:
         c = sqlite3.connect(str(self.db_path)); c.execute("PRAGMA foreign_keys=ON"); c.row_factory = sqlite3.Row; return c
 
     def index_photos(self, root: Path, *, asset_root: Path | None = None, max_files: int = 5000, source_id: str = "personal") -> dict:
-        scanned, indexed, skipped, unsupported = 0, 0, 0, 0
+        scanned, indexed, skipped, unsupported, invalid, invalid_removed = 0, 0, 0, 0, 0, 0
         unsupported_exts: dict[str, int] = {}
         root = Path(root)
         if not root.exists():
@@ -99,6 +131,14 @@ class MediaCenter:
                 if ext not in MEDIA_EXTS: continue
                 scanned += 1
                 existing = con.execute("SELECT id, sha256 FROM photos WHERE file_path=?",(str(f),)).fetchone()
+                if ext in IMAGE_EXTS and not is_supported_image_file(f, ext):
+                    invalid += 1
+                    skipped += 1
+                    if existing:
+                        con.execute("DELETE FROM album_items WHERE photo_id=?", (existing["id"],))
+                        con.execute("DELETE FROM photos WHERE id=?", (existing["id"],))
+                        invalid_removed += 1
+                    continue
                 sha = self._hash(f)
                 if existing and existing["sha256"] == sha:
                     skipped += 1; continue
@@ -142,16 +182,22 @@ class MediaCenter:
             con.execute("INSERT OR REPLACE INTO meta(key,value) VALUES('last_source_id',?)", (source_id,))
             con.commit()
         finally: con.close()
-        return {"ok": True, "scanned":scanned,"indexed":indexed,"skipped":skipped,"unsupported":unsupported,"truncated": scanned >= max_files, "raw_path_returned": False}
+        return {"ok": True, "scanned":scanned,"indexed":indexed,"skipped":skipped,"unsupported":unsupported,"invalid":invalid,"invalid_removed":invalid_removed,"truncated": scanned >= max_files, "raw_path_returned": False}
 
-    def list_photos(self, limit=100, offset=0) -> list[dict]:
+    def list_photos(self, limit=100, offset=0, *, path_prefix: Path | None = None) -> list[dict]:
         con = self._connect()
         try:
+            where = "lower(extension) IN ({})".format(",".join("?" for _ in IMAGE_EXTS))
+            params: list[object] = list(sorted(IMAGE_EXTS))
+            if path_prefix is not None:
+                prefix = str(Path(path_prefix).resolve(strict=False)).rstrip("/\\")
+                child_prefix = prefix + os.sep
+                where += " AND (file_path=? OR substr(file_path,1,?)=?)"
+                params.extend((prefix, len(child_prefix), child_prefix))
+            params.extend((int(limit), int(offset)))
             return [self._public_row(dict(r)) for r in con.execute(
-                "SELECT * FROM photos WHERE lower(extension) IN ({}) ORDER BY taken_at DESC LIMIT ? OFFSET ?".format(
-                    ",".join("?" for _ in IMAGE_EXTS)
-                ),
-                tuple(sorted(IMAGE_EXTS)) + (limit, offset),
+                f"SELECT * FROM photos WHERE {where} ORDER BY taken_at DESC LIMIT ? OFFSET ?",
+                tuple(params),
             ).fetchall()]
         finally: con.close()
 

@@ -42,7 +42,7 @@ class StorageTrashSoftDeleteTest(unittest.TestCase):
             assert state.snapshot_store is not None
             photo = root / "Personal" / "Photos" / "sample_person.jpg"
             photo.parent.mkdir(parents=True, exist_ok=True)
-            photo.write_bytes(b"fake-jpeg-bytes")
+            photo.write_bytes(b"\xff\xd8\xfffake-jpeg-bytes")
 
             indexed = state.media_center.index_photos(root / "Personal" / "Photos", asset_root=root / "Personal")
             self.assertTrue(indexed["ok"])
