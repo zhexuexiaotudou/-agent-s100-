@@ -311,6 +311,12 @@ class ProductAccessContractTest(unittest.TestCase):
         self.assertNotIn("qwen25-local-openai-gateway.service", source)
         self.assertNotIn("digua-product-access.service", source)
 
+    def test_product_access_delivery_contains_every_album_installer_runtime_input(self):
+        repo = Path(__file__).resolve().parents[1]
+        builder = (repo / "scripts/build_product_access_delivery.py").read_text(encoding="utf-8")
+        self.assertIn('"configs/systemd/openclaw-gateway.service"', builder)
+        self.assertIn('"release/install"', builder)
+
     def test_lan_configuration_synchronizes_hosts_and_restarts_avahi(self):
         repo = Path(__file__).resolve().parents[1]
         source = (repo / "release/install/configure_lan_access.sh").read_text(encoding="utf-8")

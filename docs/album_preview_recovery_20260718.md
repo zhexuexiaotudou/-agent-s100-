@@ -38,13 +38,65 @@ workflow without changing the album count.
 - Python compile: passed.
 - S100P Python 3.11 grammar parse: passed.
 - JavaScript syntax: passed.
-- Full offline unit suite: 174/174 passed.
+- Full offline unit suite and GitHub CI: passed.
 - Dedicated recovery coverage verifies 30 library photos are not capped at 24,
   assistant uploads are excluded from library scope, and text placeholders are
   rejected.
 
 ## Live acceptance
 
-Pending merge and deployment. The final record must include the merged commit,
-runtime backup path, ten soft-delete records, scoped API count, loaded browser
-card count, preview success sample, and rollback point.
+Merged delivery:
+
+- Album fix: PR #44, merge commit `1cdc6aef1167a3ffe3844ce3fdb7a8a345baa405`.
+- S100P Python 3.11 compatibility: PR #45, merge commit
+  `54b80d63d19aa8f30d657c52383c6b2ba019ec91`.
+- All required GitHub checks passed before each merge.
+
+Deployment and rollback:
+
+- Album runtime backup:
+  `/mnt/nas/openclaw/reports/product_delivery/album_runtime_backups/20260717T163848Z`.
+- Product-access backup:
+  `/var/backups/digua-ai-nas/access-only-20260717T163851Z`.
+- The deployed backend and web file hashes match merged source.
+- `openclaw-gateway.service` and `digua-product-access.service` are active.
+- `qwen25-local-openai-gateway.service` was already inactive, was not touched,
+  and is not required by album indexing or preview.
+
+Data recovery:
+
+- The ten 27-37 byte placeholders were verified by exact relative path, size,
+  SHA-256, and `Placeholder: ` content before mutation.
+- All ten were moved through authenticated `/api/storage/trash` soft-delete,
+  with 30-day retention and `physical_file_deleted=false`.
+- Manifest and results:
+  `/mnt/nas/openclaw/reports/qwen25_ai_nas/album_placeholder_cleanup_20260717T164046Z`.
+- The canonical Picsum directory still contains exactly 100 files. The real
+  Pexels assistant-search fixture remains present under `Personal/Uploads`.
+
+Live API acceptance:
+
+- `GET /api/media/summary?scope=library`: 100 photos, 223.0 ms.
+- `GET /api/media/photos?limit=500&scope=library`: 100 photos, 223.2 ms.
+- Unscoped indexed photos: 101 (100 library photos plus one real assistant fixture).
+- First six library previews: 6/6 HTTP 200, valid JPEG signatures, 107.2-137.3 ms each.
+- Deployed HTML serves cache version `20260718-album-recovery`.
+- Acceptance JSON:
+  `/mnt/nas/openclaw/reports/qwen25_ai_nas/album_placeholder_cleanup_20260717T164046Z/live_acceptance.json`.
+
+Browser boundary:
+
+- The deployed page opened successfully at
+  `http://digua.local/ui?refresh=54b80d63#media` and rendered the current login
+  boundary. Automated control was interrupted while entering the temporary
+  visual-acceptance account, so an authenticated browser card-count screenshot
+  is not claimed. The temporary account was removed from both identity stores.
+- The scoped API count and real preview reads above are the production
+  acceptance evidence; the page remains open for manual login verification.
+
+Deployment packaging follow-up:
+
+- Preflight found that the product-access delivery builder omitted
+  `configs/systemd/openclaw-gateway.service`, even though the installer requires
+  it. Deployment used the same merged file as a bounded staging supplement.
+- The builder now includes that file, and a contract test prevents recurrence.
