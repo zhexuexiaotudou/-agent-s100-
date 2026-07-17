@@ -143,7 +143,7 @@ PASS：`uname`、`architecture`、`network`、`address`、`nas_mount`、
 
 | 项目 | 最终值 |
 | --- | --- |
-| 主分支 commit | `53649a86950ec1f381c5517d8a1f3948ac5b2cf5` |
+| 实机部署基线 commit | `53649a86950ec1f381c5517d8a1f3948ac5b2cf5` |
 | 发布目录 | `/opt/digua-ai-nas/releases/0.2.0-53649a86` |
 | tar.gz SHA256 | `ce4a6c0b7abc97ea107e947d57ee0c1e598ec17dd63d1a17e170dd399d76698d` |
 | 发布清单 | 423 个文件，`forbidden_file_count=0`，四项 self-check 全为 true |
@@ -168,3 +168,9 @@ PASS；四个板端健康端点和四个 Windows LAN 入口均返回 HTTP 200。
 本次最终 access-only 升级没有修改 systemd 单元；此前两次真实重启的持久化证据仍
 适用。物理手机认领、NAS 断电、真实云服务调用、远程拒绝路径和回滚实际执行等现场
 边界保持不变。
+
+在该实机部署基线之后，PR #47 仅修改发布构建器、构建器合同测试及相册验收文档，
+补齐 `configs/systemd/openclaw-gateway.service` 在独立 product-access 交付包中的
+显式包含关系；它没有修改上述已部署的访问层文件、NAS 工具或 systemd 单元。实机
+上的完整 0.2.0 发布包已经包含并逐字节核对该单元，因此该后续构建器修复不要求再次
+部署，也不改变 `53649a86` 作为本轮实机运行基线的事实。
