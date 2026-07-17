@@ -23,12 +23,20 @@ allowlist 工具映射和真实执行仍由确定性策略与现有受控 API �
 | --- | --- | --- | --- |
 | 普通、简单、本地对话 | `main_router` | Qwen2.5 1.5B | S100P BPU，`127.0.0.1:18080` |
 | 私密、受限或其他必须留在本地的复杂任务 | `main_router` | Qwen2.5 7B | S100P CPU，`127.0.0.1:18081` |
-| 公开、无隐私、无本地工具意图的复杂任务 | `web_cloud_research` | `custom-gateway/MiniMax-M2.7` | OpenClaw loopback bridge `127.0.0.1:18082` |
+| 公开、无隐私、无本地工具意图，且明确需要最新外部信息的复杂任务 | `web_cloud_research` | `custom-gateway/MiniMax-M2.7` | OpenClaw loopback bridge `127.0.0.1:18082` |
 | 上述云端任务遇到桥未配置或调用失败 | `web_cloud_research` | Qwen2.5 7B fallback | S100P CPU，`127.0.0.1:18081` |
 
 “复杂”升级采用确定性下限：策略根据输入长度和明确的复杂任务信号判定是否进入 7B/云端分支。
 1.5B 的语义判断会写入详情并参与 Workspace 建议，但不能单独触发高成本模型；这样短而简单的默认
 请求不会因为 1.5B 一次误报而被提升到 7B，同时明确复杂的本地任务也不会被降级。
+
+MiniMax 不是“复杂任务的默认大模型”。只有策略同时确认 `privacy_level=0`、复杂度不低于 2、
+需要公开网络并具有明确时效性（例如当前、最新、近期、价格、固件、漏洞或新闻）时才允许外发。
+公开但不要求最新信息的复杂推理仍交给本地 7B；用户明确要求离线时也保持本地。
+
+同时需要本地资料和最新外部信息的输入会标记为 `hybrid_candidate`。当前版本没有声称已经具备
+字段级安全拆分、最小化外发、脱敏审计和本地 7B 合并能力，因此这类输入不会把原始任务发往
+云端，而是保持本地并记录 `hybrid_status=unsupported_safe_splitter_not_enabled`。
 
 ## Workspace 映射
 
@@ -40,7 +48,7 @@ allowlist 工具映射和真实执行仍由确定性策略与现有受控 API �
 | 复制、重命名、新建目录、快照与备份 | `nas_action` |
 | 运行状态与恢复 | `ops_recovery` |
 | 应用、审计与报告 | `admin_audit` |
-| 可上云的公开复杂研究 | `web_cloud_research` |
+| 可上云且明确需要最新外部信息的公开复杂研究 | `web_cloud_research` |
 | 其他通用对话 | `main_router` |
 
 ## 回答详情契约
@@ -49,10 +57,13 @@ allowlist 工具映射和真实执行仍由确定性策略与现有受控 API �
 
 - `selected_workspace`：最终 Workspace。
 - `user_model_selection_allowed=false`：用户没有模型选择权。
-- `model_routing.policy_id=workspace_harness_auto_v1`：当前编排策略。
+- `model_routing.policy_id=workspace_harness_auto_v2`：当前编排策略。
 - `model_routing.planned_answer_model`：策略原计划的回答模型。
 - `model_routing.effective_answer_model`：最终实际回答模型；确定性回答或纯工具任务可为空。
 - `model_routing.selection_reason`：为什么进入该模型分支。
+- `routing_decision` / `model_routing.decision`：统一的可审计决策，包含请求 ID、策略路由枚举、
+  隐私等级（0/2/3）、复杂度（0-3）、时效性、公开网络需求、本地数据需求、写操作风险、确认
+  要求、选中工具、云端外发许可和混合候选状态。
 - `model_routing.calls[]`：按实际顺序记录每一次模型请求的阶段、请求模型、provider、位置、
   目的、状态和耗时。结构化路由重试、MiniMax 失败以及 7B fallback 都必须单独出现。
 
@@ -64,14 +75,20 @@ allowlist 工具映射和真实执行仍由确定性策略与现有受控 API �
 - 1.5B 是 S100P BPU 路径；7B 是 S100P CPU 路径，不能描述成已工作的 7B BPU。
 - MiniMax token 仍只由 root OpenClaw 配置持有。门户只读取 loopback bridge 凭据文件。
 - MiniMax 不接收私密、NAS、本地文件或本地工具任务。
+- 含密码、API key、token、证件、银行卡、医疗、人脸、序列号、内网 IP、发票或合同等信号的
+  请求一律不得上云；“我的/我们的”个人语境至少按中等隐私处理。
 - 模型始终没有任意 shell、路径或 NAS 工具执行权。
+- 当前复杂多文档 Workspace 仍使用既有本地文档 RAG 回答链；本次没有把它改成 7B 多文档
+  合并器。7B 当前覆盖本地复杂通用推理以及 MiniMax 失败回落，避免把规划能力写成已实现事实。
 - 当前 MiniMax bridge 是准确性优先的一次性 OpenClaw infer 调用，不等同于 OpenClaw 原生会话的
   流式事件和连续会话状态。
 
 ## 验收与回滚
 
-合并前必须覆盖：默认 1.5B、私密复杂 7B、公开复杂 MiniMax、云端失败回落 7B、身份零模型调用、
-工具 Workspace 不受旧 `model_choice` 影响、详情调用顺序，以及页面不存在模型下拉框。
+合并前必须覆盖：默认 1.5B、私密复杂 7B、公开但无时效性复杂任务仍走 7B、公开且需要最新
+外部信息的复杂任务才走 MiniMax、禁止联网、敏感信息和混合候选不外发、云端失败回落 7B、
+身份零模型调用、工具 Workspace 不受旧 `model_choice` 影响、详情调用顺序，以及页面不存在
+模型下拉框。
 
 部署时先备份门户后端、前端 JS 和 HTML。回滚只需恢复这三个文件并重启
 `openclaw-gateway.service`；18080、18081、18082 服务和 NAS 数据不需要修改。

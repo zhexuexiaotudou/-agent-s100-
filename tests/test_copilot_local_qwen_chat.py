@@ -13,7 +13,7 @@ PROBES_ROOT = REPO_ROOT / "scripts" / "probes"
 if str(PROBES_ROOT) not in sys.path:
     sys.path.insert(0, str(PROBES_ROOT))
 
-from ai_nas_operator_portal_server import PortalState, http_post_json
+from ai_nas_operator_portal_server import PortalState, copilot_policy_route, http_post_json
 
 
 class CopilotLocalQwenChatTest(unittest.TestCase):
@@ -244,7 +244,7 @@ class CopilotLocalQwenChatTest(unittest.TestCase):
                     ],
                 ) as post_json:
                     status, payload = state.copilot_chat(
-                        "Compare public astronomy research trends in depth.",
+                        "Compare the latest public astronomy research trends in depth.",
                         {"username": "admin"},
                     )
 
@@ -253,8 +253,109 @@ class CopilotLocalQwenChatTest(unittest.TestCase):
             self.assertEqual(payload["selected_workspace"], "web_cloud_research")
             self.assertEqual(payload["model_routing"]["effective_answer_model"], "custom-gateway/MiniMax-M2.7")
             self.assertEqual(payload["model_routing"]["calls"][-1]["provider"], "openclaw_minimax")
+            self.assertEqual(payload["routing_decision"]["selected_route"], "CLOUD_MINIMAX")
+            self.assertEqual(payload["routing_decision"]["privacy_level"], 0)
+            self.assertEqual(payload["routing_decision"]["complexity"], 2)
+            self.assertTrue(payload["routing_decision"]["freshness_required"])
+            self.assertTrue(payload["routing_decision"]["requires_public_web"])
+            self.assertTrue(payload["routing_decision"]["cloud_egress_allowed"])
+            self.assertEqual(payload["model_routing"]["decision"], payload["routing_decision"])
+            self.assertEqual(len(payload["request_id"]), 16)
             self.assertEqual(post_json.call_args_list[0].args[2]["model"], state.qwen_model)
             self.assertIn("18082", post_json.call_args_list[1].args[1])
+
+    def test_public_complex_without_freshness_stays_on_local_7b(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            state = self.make_state(Path(tmp))
+            seven_b = "Qwen2.5-7B-Instruct-S100P-official"
+            with patch(
+                "ai_nas_operator_portal_server.http_post_json",
+                side_effect=[
+                    self.fake_router(route="cloud", privacy_level="none", task_complexity="complex"),
+                    self.fake_qwen("Local public analysis.", model=seven_b),
+                ],
+            ) as post_json:
+                status, payload = state.copilot_chat(
+                    "Compare public astronomy research approaches in depth.",
+                    {"username": "admin"},
+                )
+
+            self.assertEqual(status, 200)
+            self.assertFalse(payload["cloud_used"])
+            self.assertEqual(payload["model_routing"]["effective_answer_model"], seven_b)
+            self.assertEqual(payload["routing_decision"]["selected_route"], "LOCAL_7B")
+            self.assertFalse(payload["routing_decision"]["freshness_required"])
+            self.assertFalse(payload["routing_decision"]["cloud_egress_allowed"])
+            self.assertTrue(all("18082" not in call.args[1] for call in post_json.call_args_list))
+
+    def test_explicit_no_cloud_blocks_current_public_complex_request(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            state = self.make_state(Path(tmp))
+            seven_b = "Qwen2.5-7B-Instruct-S100P-official"
+            with patch(
+                "ai_nas_operator_portal_server.http_post_json",
+                side_effect=[
+                    self.fake_router(route="cloud", privacy_level="none", task_complexity="complex"),
+                    self.fake_qwen("Offline 7B answer.", model=seven_b),
+                ],
+            ) as post_json:
+                status, payload = state.copilot_chat(
+                    "Compare the latest public astronomy news in depth, but do not use internet.",
+                    {"username": "admin"},
+                )
+
+            self.assertEqual(status, 200)
+            self.assertFalse(payload["cloud_used"])
+            self.assertEqual(payload["routing_decision"]["selected_route"], "LOCAL_7B")
+            self.assertFalse(payload["routing_decision"]["cloud_egress_allowed"])
+            self.assertTrue(payload["qwen_router"]["policy_route"]["cloud_prohibited_by_user"])
+            self.assertTrue(all("18082" not in call.args[1] for call in post_json.call_args_list))
+
+    def test_personal_current_external_request_is_audited_hybrid_candidate_but_stays_local(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            state = self.make_state(Path(tmp))
+            seven_b = "Qwen2.5-7B-Instruct-S100P-official"
+            with patch(
+                "ai_nas_operator_portal_server.http_post_json",
+                side_effect=[
+                    self.fake_router(route="cloud", privacy_level="none", task_complexity="complex"),
+                    self.fake_qwen("Local hybrid-safe answer.", model=seven_b),
+                ],
+            ) as post_json:
+                status, payload = state.copilot_chat(
+                    "Compare my private observations with the latest public firmware vulnerability report.",
+                    {"username": "admin"},
+                )
+
+            self.assertEqual(status, 200)
+            self.assertFalse(payload["cloud_used"])
+            decision = payload["routing_decision"]
+            self.assertEqual(decision["selected_route"], "LOCAL_7B")
+            self.assertEqual(decision["privacy_level"], 2)
+            self.assertTrue(decision["requires_local_data"])
+            self.assertTrue(decision["requires_public_web"])
+            self.assertTrue(decision["hybrid_candidate"])
+            self.assertEqual(decision["hybrid_status"], "unsupported_safe_splitter_not_enabled")
+            self.assertFalse(decision["cloud_egress_allowed"])
+            self.assertTrue(all("18082" not in call.args[1] for call in post_json.call_args_list))
+
+    def test_never_cloud_data_and_write_risk_are_deterministic_policy_fields(self):
+        sensitive = copilot_policy_route(
+            "Analyze the latest public news for password 192.168.1.20.",
+        )
+        self.assertEqual(sensitive["route"], "local")
+        self.assertEqual(sensitive["privacy_level_numeric"], 3)
+        self.assertTrue(sensitive["contains_never_cloud_data"])
+        self.assertTrue(sensitive["hybrid_candidate"])
+        self.assertFalse(sensitive["cloud_eligible"])
+
+        write = copilot_policy_route(
+            'Copy "Inbox/a.txt" to "Documents/a.txt".',
+            {"action": "storage_copy"},
+        )
+        self.assertEqual(write["write_risk"], "medium")
+        self.assertTrue(write["confirmation_required"])
+        self.assertEqual(write["selected_tools"], ["harness_copy_route"])
 
     def test_legacy_model_choice_is_ignored_and_private_simple_prompt_stays_on_1_5b(self):
         with tempfile.TemporaryDirectory() as tmp:
@@ -314,7 +415,7 @@ class CopilotLocalQwenChatTest(unittest.TestCase):
                     ],
                 ) as post_json:
                     status, payload = state.copilot_chat(
-                        "Compare public astronomy research trends in depth.",
+                        "Compare the latest public astronomy research trends in depth.",
                         {"username": "admin"},
                     )
 
@@ -327,6 +428,8 @@ class CopilotLocalQwenChatTest(unittest.TestCase):
             self.assertEqual([call["status"] for call in response_calls], ["failed", "completed"])
             self.assertIn("18082", post_json.call_args_list[1].args[1])
             self.assertIn("18081", post_json.call_args_list[2].args[1])
+            self.assertEqual(payload["routing_decision"]["selected_route"], "LOCAL_7B")
+            self.assertEqual(payload["routing_decision"]["fallback_from_route"], "CLOUD_MINIMAX")
 
     def test_cloud_overflow_uses_bridge_token_file_without_exposing_minimax_token(self):
         with tempfile.TemporaryDirectory() as tmp:

@@ -64,6 +64,12 @@ class OfflineUiContractTest(unittest.TestCase):
         self.assertIn('["Workspace", modelRouting.selected_workspace', self.js)
         self.assertIn('["用户选择模型", modelRouting.user_selectable === false', self.js)
         self.assertIn('本次模型调用', self.js)
+        self.assertIn('策略路由', self.js)
+        self.assertIn('需要最新信息', self.js)
+        self.assertIn('云端外发获准', self.js)
+        self.assertIn('混合路由', self.js)
+        self.assertIn('写操作风险', self.js)
+        self.assertIn('请求 ID', self.js)
         for removed_contract in [
             'id="assistantModelChoice"',
             'appState.assistantModelChoice',

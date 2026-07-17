@@ -10,8 +10,9 @@ S100P/NAS 恢复在线后，产品入口已在 `http://digua.local/` 实机验�
 
 AI 助手暂不向用户开放模型选择。自然语言先进入 Workspace Harness：身份问题由确定性本地契约
 回答，NAS 工具任务由本地白名单执行，普通对话默认使用 S100P BPU 上的 Qwen2.5 1.5B，必须
-留在本地的复杂任务使用 S100P CPU 上的 Qwen2.5 7B，只有公开、无隐私且复杂的任务才允许通过
-OpenClaw 受控桥调用 MiniMax 2.7。回答详情会列出 Workspace、选择原因及每一次真实模型调用。
+留在本地的复杂任务使用 S100P CPU 上的 Qwen2.5 7B，只有公开、无隐私、复杂且明确需要最新
+外部信息的任务才允许通过 OpenClaw 受控桥调用 MiniMax 2.7。回答详情会列出 Workspace、统一
+路由决策字段及每一次真实模型调用。
 当前契约见
 [`docs/assistant_automatic_model_routing_20260718.md`](docs/assistant_automatic_model_routing_20260718.md)；
 旧选择器文档仅保留为历史证据。
@@ -41,7 +42,7 @@ HTML/CSS/JS、现有路由和 API 调用，以及身份、ACL、受控复制和�
 | --- | --- | --- | --- |
 | 1. S100P 作为常驻网关 | S100P 在用户登录/登出后保持 AI 网关在线，提供稳定的本地入口 | `openclaw-gateway.service`、`qwen25-local-openai-gateway.service` 和 `qwen7b-cpu.service` 均为 active；常驻 user service 已 enabled，`loginctl` linger 为 `yes` | OpenClaw `/api/health` 在 `127.0.0.1:8765`；Qwen `/health` 在 `127.0.0.1:18080` 和 `127.0.0.1:18081` |
 | 2. OpenClaw 实现 AI-NAS | OpenClaw 能驱动 NAS 操作，而非仅聊天 | `ok_ai_nas_openclaw_nas_control_gate`，10/10 检查通过 | `/mnt/nas/openclaw/reports/qwen25_ai_nas/openclaw_nas_control_gate_20260629-210023-832862/openclaw_nas_control_gate.json` |
-| 3. 边缘+云端路由 | 每个查询先经过本地规则/Qwen；隐私与本地工具请求留在 S100P；公开复杂请求才可使用受控云端端点 | Workspace Harness 自动决定 1.5B、7B 或 MiniMax；用户不能覆盖模型策略，每次调用均写入回答详情 | [`docs/assistant_automatic_model_routing_20260718.md`](docs/assistant_automatic_model_routing_20260718.md) |
+| 3. 边缘+云端路由 | 每个查询先经过本地规则/Qwen；隐私与本地工具请求留在 S100P；只有需要最新外部信息的公开复杂请求才可使用受控云端端点 | Workspace Harness 自动决定 1.5B、7B 或 MiniMax；用户不能覆盖模型策略，每次调用均写入回答详情 | [`docs/assistant_automatic_model_routing_20260718.md`](docs/assistant_automatic_model_routing_20260718.md) |
 
 最新 Qwen AI-NAS 验收包同样通过：
 
@@ -238,18 +239,18 @@ AI Space / 智能分类 / 字幕提取交付门在 S100P 上通过。
 
 1. S100P 不是一次性加速器演示。它是通过 systemd 用户服务保持在线、成为 NAS 本地 AI 控制面的常驻网关。
 2. OpenClaw 是 NAS 产品界面。它将用户意图转化为真实的 NAS 工作流：列出文件、搜索文件夹、生成证据包、复制/重命名文件、阻止未授权写入，并要求对破坏性操作进行确认。
-3. Qwen 是本地决策层。所有用户查询首先进入本地 Qwen。路由器询问 Qwen 该请求是否足够简单可本地处理，以及是否涉及隐私。只有公共的、复杂的工作才被允许发送到受控云端端点。
+3. Qwen 是本地语义建议层，确定性策略拥有最终路由权。所有用户查询首先进入本地 Qwen；只有公开、无隐私、复杂且明确需要最新外部信息的工作才被允许发送到受控云端端点。
 4. 价值主张是省 token + 隐私保护：端点将私有 NAS 上下文保留在设备上，仅将云端作为溢出通道而非默认路径。
 
 建议的一句话推介：
 
-> S100P + OpenClaw 将普通 NAS 转变为隐私优先的 AI-NAS：本地 Qwen 在设备上处理私密文件智能，云端仅用于通过本地路由器的公共复杂任务。
+> S100P + OpenClaw 将普通 NAS 转变为隐私优先的 AI-NAS：本地 Qwen 在设备上处理私密文件智能，云端仅用于通过本地策略审查、且明确需要最新外部信息的公共复杂任务。
 
 ## 亮点
 
 - **常驻网关**：`qwen25-local-openai-gateway.service` 在 `127.0.0.1:18080` 提供本地 OpenAI 兼容的 Qwen 端点；`openclaw-gateway.service` 在 `127.0.0.1:8765` 提供 AI-NAS Web OS / 操作员门户。
 - **真实 NAS 操作**：OpenClaw gate 验证登录、目录列表、重命名、复制、删除确认、查看器只读行为、ACL 保护复制目标以及直接存储变更的 ACL 执行。
-- **本地优先路由器**：边缘-云端探针要求 Qwen 生成结构化 JSON。策略仅作为隐私/失败的降级后备。
+- **本地优先路由器**：Qwen 生成结构化语义建议，确定性策略最终决定隐私、时效性、工具和模型路由。
 - **隐私底线**：发票、家庭照片、聊天截图、NAS 文件夹、财务和其他私密请求即使云端路径存在也强制本地处理。
 - **证据优先交付**：每个演示声明都由 `/mnt/nas/openclaw/reports/...` 上的 JSON/Markdown 报告支撑，而非仅靠截图。
 - **受控 Auto Organizer**：物理组织现在只允许通过 Auto Organizer 计划/演练/审批/执行/回滚流程进行。它不启用任意 NAS 移动/重命名、删除、覆写或 Qwen 自主文件操作。
