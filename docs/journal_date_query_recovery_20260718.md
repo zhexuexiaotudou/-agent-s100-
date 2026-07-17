@@ -14,12 +14,24 @@
 - 只有明确的“写/记录/新增日记”才走日记写入；读取不会再因“日记”中的“记”字触发写入。
 - 文档召回继续执行登录用户 ACL；私有原文不发送云端，Qwen 没有工具执行权。
 
+## 实机复测发现的第二层问题
+
+首次路由修复合并为 PR #51，合并 commit 为 `c043858e2da1e30454845c21fa76053400e88c23`。部署后实机请求已正确进入 `local_document_query`，但文档回答层仍将 Qwen 的“无法提供具体信息”当作有效回答。原因是拒答校验仅在金额类查询中生效。
+
+第二层修复将指定日期的日记查询改为严格证据答复：
+
+- 只保留摘要中含目标日期的证据，并优先保留文件名或路径含“日记/diary/journal”的文档。
+- 从目标日期开始提取该日内容，遇到下一个完整日期标题即截断，避免混入其他日期或合同文档。
+- 指定日期日记不再调用 Qwen 生成答案，直接返回可追溯的本地文档证据。
+- 普通文档查询中的“无法提供/无法获取/人工智能语言模型”等泛化拒答，也会被 grounding 校验拒收并回退到本地证据。
+
 ## 本地验证
 
 - Python 编译通过。
+- 第二层定向回归：`tests/test_copilot_local_qwen_chat.py` 共 23 项通过，包含精确日期日记答复与非金额拒答回退。
 - 定向回归：`tests/test_copilot_local_qwen_chat.py`、`tests/test_document_fts_rag.py`、`tests/test_journal_routes.py`、`tests/test_offline_ui_contract.py` 共 36 项通过。
 - 使用从 NAS 只读复制的真实 `2026年日记.docx` 验证：查询被识别为 `document_query`，规范化日期为 `2026年5月20日`，召回 1 条 Word 证据，`cloud_used=false`，`qwen_execution_authority=false`。
 
 ## 待完成的实机门禁
 
-本文件随修复 PR 首次提交时，S100P 部署、真实登录页面回答、CI、合并与生产验证仍待完成；完成后需把最终 commit、部署时间、HTTP/UI 结果和回滚点补入本文件。
+第二层修复的完整回归、PR/CI、合并、S100P 再部署与真实回答验证仍待完成；完成后需把最终 commit、部署时间、HTTP/UI 结果和回滚点补入本文件。

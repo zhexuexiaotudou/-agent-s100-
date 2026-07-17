@@ -2209,6 +2209,36 @@ def document_answer_from_evidence(path: str, evidence: list[dict], evidence_refs
     ).strip()
 
 
+def journal_evidence_for_date(journal_date: str, evidence: list[dict]) -> list[dict]:
+    date_hits = [item for item in evidence if journal_date and journal_date in str(item.get("snippet") or "")]
+    preferred = [
+        item
+        for item in date_hits
+        if contains_any(
+            f"{item.get('name') or ''} {item.get('relative_path') or ''}",
+            ("journal", "diary", "\u65e5\u8bb0", "\u65e5\u5fd7"),
+        )
+    ]
+    return preferred or date_hits
+
+
+def journal_answer_from_evidence(journal_date: str, evidence: list[dict]) -> str:
+    for item in journal_evidence_for_date(journal_date, evidence):
+        snippet = re.sub(r"\s+", " ", str(item.get("snippet") or "")).strip()
+        start = snippet.find(journal_date)
+        if start < 0:
+            continue
+        entry = snippet[start + len(journal_date) :].strip(" \t\r\n:\uff1a\u3002")
+        next_date = re.search(r"(?<!\d)20\d{2}\s*\u5e74\s*\d{1,2}\s*\u6708\s*\d{1,2}\s*\u65e5", entry)
+        if next_date:
+            entry = entry[: next_date.start()].strip(" \t\r\n:\uff1a\u3002")
+        if not entry:
+            continue
+        name = Path(str(item.get("name") or "\u672c\u5730\u65e5\u8bb0")).stem
+        return f"\u6839\u636e\u672c\u5730\u300a{name}\u300b\uff0c{journal_date}\uff1a{entry}"
+    return ""
+
+
 def init_document_fts_db(db_path: Path) -> None:
     db_path.parent.mkdir(parents=True, exist_ok=True)
     con = sqlite3.connect(str(db_path))
@@ -4863,6 +4893,26 @@ class PortalState:
             ("金额", "多少钱", "多少", "合计", "账单", "开支", "amount", "total", "bill", "expense"),
         )
         def grounding_validation_error(answer_text: str) -> str | None:
+            generic = contains_any(
+                answer_text,
+                (
+                    "有什么问题",
+                    "需要我",
+                    "请问您",
+                    "无法确定",
+                    "无法回答",
+                    "无法提供",
+                    "无法获取",
+                    "人工智能语言模型",
+                    "请您提供更多",
+                    "提供更多",
+                    "澄清",
+                    "误解",
+                    "告诉我",
+                ),
+            )
+            if generic:
+                return "local_qwen_document_answer_failed_grounding_validation"
             if not amount_sensitive:
                 return None
             amount_digits = [re.sub(r"\D+", "", item) for item in amounts if re.sub(r"\D+", "", item)]
@@ -4883,12 +4933,8 @@ class PortalState:
                     for token in amount_digits
                     if token
                 )
-            generic = contains_any(
-                answer_text,
-                ("有什么问题", "需要我", "请问您", "无法确定", "无法回答", "请您提供更多", "提供更多", "澄清", "误解", "告诉我"),
-            )
             approximate = contains_any(answer_text, ("约等于", "约为", "大约", "≈", "approx"))
-            if generic or approximate or not exact_amount:
+            if approximate or not exact_amount:
                 return "local_qwen_document_answer_failed_grounding_validation"
             return None
 
@@ -4944,7 +4990,26 @@ class PortalState:
         status, payload = self.document_query_payload(str(intent.get("query") or ""), str(intent.get("path") or "Documents"), user)
         if status == HTTPStatus.OK:
             evidence = payload.get("evidence") if isinstance(payload.get("evidence"), list) else []
-            if evidence:
+            if intent.get("journal_lookup"):
+                journal_date = str(intent.get("journal_date") or "").strip()
+                evidence = journal_evidence_for_date(journal_date, evidence)
+                evidence_refs = [str(item.get("evidence_ref") or "") for item in evidence if item.get("evidence_ref")]
+                answer = journal_answer_from_evidence(journal_date, evidence)
+                payload["evidence"] = evidence
+                payload["evidence_refs"] = evidence_refs
+                payload["evidence_count"] = len(evidence)
+                payload["journal_lookup"] = True
+                payload["journal_date"] = journal_date
+                payload["qwen_document_answer_used"] = False
+                payload["qwen_document_answer_retry_used"] = False
+                payload["qwen_document_answer_retry_attempts"] = 0
+                if answer:
+                    payload["answer"] = answer
+                    payload["document_answer_source"] = "deterministic_journal_evidence"
+                else:
+                    payload["answer"] = f"未在已授权的本地文档中找到 {journal_date} 的日记记录。"
+                    payload["document_answer_source"] = "deterministic_journal_no_match"
+            elif evidence:
                 qwen_answer = self.local_qwen_document_answer(str(intent.get("query") or ""), evidence)
                 if qwen_answer.get("ok"):
                     payload["answer"] = qwen_answer.get("answer") or payload.get("answer")

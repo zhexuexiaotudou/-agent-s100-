@@ -384,6 +384,109 @@ class CopilotLocalQwenChatTest(unittest.TestCase):
             self.assertEqual(payload["nas_action"]["operation"], "journal_manual_entry")
             journal_route.assert_called_once()
 
+    def test_dated_journal_lookup_returns_exact_local_entry_without_qwen_refusal(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            state = self.make_state(Path(tmp), personal=True)
+            evidence = [
+                {
+                    "evidence_ref": "ev_diary",
+                    "name": "2026年日记.docx",
+                    "relative_path": "Documents/2026年日记.docx",
+                    "extension": ".docx",
+                    "snippet": (
+                        "2026年5月20日 星期三 晴 今天是个好日子。"
+                        "下班后带她去吃了那家新开的法餐，买了束香槟玫瑰，记了一笔 1314元。 "
+                        "2026年5月15日 这是另一天的记录。"
+                    ),
+                },
+                {
+                    "evidence_ref": "ev_contract",
+                    "name": "Q2合同.md",
+                    "relative_path": "Documents/Q2合同.md",
+                    "extension": ".md",
+                    "snippet": "2026年5月20日 Q2 合同评审会议。",
+                },
+            ]
+
+            with patch(
+                "ai_nas_operator_portal_server.http_post_json",
+                return_value=self.fake_router(privacy_level="high", local_tool_id="local_document_rag"),
+            ) as post_json:
+                with patch.object(
+                    state,
+                    "document_query_payload",
+                    return_value=(
+                        200,
+                        {
+                            "ok": True,
+                            "answer": "deterministic fallback",
+                            "evidence_count": 2,
+                            "evidence": evidence,
+                            "evidence_refs": ["ev_diary", "ev_contract"],
+                        },
+                    ),
+                ):
+                    status, payload = state.copilot_chat(
+                        "2026年5月20日我干什么了？",
+                        {"username": "admin", "role": "admin"},
+                    )
+
+            self.assertEqual(status, 200)
+            self.assertEqual(payload["document_answer_source"], "deterministic_journal_evidence")
+            self.assertFalse(payload["qwen_document_answer_used"])
+            self.assertEqual(payload["evidence_count"], 1)
+            self.assertEqual(payload["evidence_refs"], ["ev_diary"])
+            self.assertIn("新开的法餐", payload["answer"])
+            self.assertNotIn("Q2", payload["answer"])
+            self.assertNotIn("2026年5月15日", payload["answer"])
+            post_json.assert_called_once()
+
+    def test_non_amount_document_query_rejects_privacy_refusal_and_falls_back(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            state = self.make_state(Path(tmp), personal=True)
+            evidence = [
+                {
+                    "evidence_ref": "ev_project",
+                    "name": "项目说明.md",
+                    "relative_path": "Documents/项目说明.md",
+                    "extension": ".md",
+                    "snippet": "项目代号是 Digua。",
+                }
+            ]
+
+            with patch(
+                "ai_nas_operator_portal_server.http_post_json",
+                side_effect=[
+                    self.fake_router(privacy_level="high", local_tool_id="local_document_rag"),
+                    self.fake_qwen("对不起，我无法提供您所要求的具体信息。"),
+                    self.fake_qwen("作为人工智能语言模型，我无法获取该内容。"),
+                ],
+            ):
+                with patch.object(
+                    state,
+                    "document_query_payload",
+                    return_value=(
+                        200,
+                        {
+                            "ok": True,
+                            "answer": "已在本地文档中找到：项目代号是 Digua。",
+                            "evidence_count": 1,
+                            "evidence": evidence,
+                            "evidence_refs": ["ev_project"],
+                        },
+                    ),
+                ):
+                    status, payload = state.copilot_chat(
+                        "查找 Documents 中的项目说明文档",
+                        {"username": "admin", "role": "admin"},
+                    )
+
+            self.assertEqual(status, 200)
+            self.assertEqual(payload["document_answer_source"], "deterministic_evidence_fallback")
+            self.assertFalse(payload["qwen_document_answer_used"])
+            self.assertEqual(payload["grounded_qwen_error"], "local_qwen_document_answer_failed_grounding_validation")
+            self.assertNotIn("无法提供", payload["answer"])
+
     def test_document_query_uses_local_qwen_to_answer_grounded_evidence(self):
         with tempfile.TemporaryDirectory() as tmp:
             state = self.make_state(Path(tmp), personal=True)
