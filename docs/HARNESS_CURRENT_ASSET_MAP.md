@@ -129,7 +129,7 @@ Harness policy does not expose `dream7b_perf_identity` to any workspace.
 | `media_photo` | no | no | photo, image embedding, duplicate and movie classification tools |
 | `document_rag` | no | no | OCR, folder RAG, case packet, evidence report tools |
 | `ops_recovery` | no | no | daemon, queue, SLO, model-service recovery manifest/drill tools; recovery tools require approval |
-| `web_cloud_research` | yes | no | router and public/redacted evidence catalog tools only |
+| `web_cloud_research` | only for eligible current external public research | no | router and public/redacted evidence catalog tools only; mixed local/cloud inputs remain local until safe split/redaction/merge is implemented |
 | `admin_audit` | no | no | governance, audit, readiness and closure gates |
 
 ## Existing Gate IDs
