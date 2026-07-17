@@ -18,22 +18,6 @@
     "priority_latest_probe": "/mnt/nas/openclaw/reports/models/s100_official_qwen_runtime_20260623-004222/official_qwen_runtime_probe.json",
     "chat_timeout_seconds": 90
   },
-  "selectable_models": [
-    {
-      "model_id": "Qwen2.5-7B-Instruct-S100P-official",
-      "official_runtime": {
-        "active_config": "/mnt/nas/openclaw/configs/qwen25_7b_1024_multichat_config.json",
-        "active_hbm_path": "/mnt/nas/openclaw/toolchains/s100_llm_sdk/D-Robotics_LLM_S100_1.0.0_SDK/oellm_runtime/model/Qwen2.5_7B_Instruct_1024.hbm",
-        "active_profile": "qwen25_7b_instruct_cache_len_1024_q8",
-        "priority_hbm_path": "/mnt/nas/openclaw/toolchains/s100_llm_sdk/D-Robotics_LLM_S100_1.0.0_SDK/oellm_runtime/model/Qwen2.5_7B_Instruct_1024.hbm",
-        "local_priority_hbm_path": "downloads/s100_official_llm/Qwen2.5_7B_Instruct_1024.hbm",
-        "priority_profile": "qwen25_7b_instruct_cache_len_1024_q8_vendor_default",
-        "priority_status": "accepted_selectable_local_model",
-        "priority_latest_probe": "/mnt/nas/openclaw/reports/models/qwen25_7b_shadow_acceptance_20260624-235347/qwen25_7b_shadow_acceptance.json",
-        "chat_timeout_seconds": 300
-      }
-    }
-  ],
   "ai_nas": {
     "tool_dispatcher": "/mnt/nas/openclaw/scripts/probes/ai_nas_allowlisted_tool.sh",
     "personal_root": "/mnt/nas/openclaw/Personal",

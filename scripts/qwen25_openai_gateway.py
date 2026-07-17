@@ -3,7 +3,6 @@ from __future__ import annotations
 
 import argparse
 import codecs
-import copy
 import json
 import os
 import re
@@ -52,27 +51,6 @@ def load_json(path: Path) -> dict[str, Any]:
     if not isinstance(payload, dict):
         raise ValueError(f"{path} must contain a JSON object")
     return payload
-
-
-def selectable_model_policies(policy: dict[str, Any]) -> dict[str, dict[str, Any]]:
-    """Build an allowlisted model map that shares one BPU runtime process."""
-    models = {str(policy["model_id"]): policy}
-    for entry in policy.get("selectable_models") or []:
-        if not isinstance(entry, dict) or not entry.get("model_id"):
-            continue
-        selected = copy.deepcopy(policy)
-        selected.pop("selectable_models", None)
-        selected["model_id"] = str(entry["model_id"])
-        runtime_override = entry.get("official_runtime")
-        if isinstance(runtime_override, dict):
-            selected["official_runtime"].update(runtime_override)
-        models[selected["model_id"]] = selected
-    return models
-
-
-def resolve_model_policy(policy: dict[str, Any], requested_model: object) -> dict[str, Any] | None:
-    model_id = str(requested_model or policy["model_id"]).strip()
-    return selectable_model_policies(policy).get(model_id)
 
 
 def write_json(path: Path, payload: dict[str, Any]) -> None:
@@ -811,28 +789,18 @@ class Handler(BaseHTTPRequestHandler):
             )
             return
         if self.path == "/v1/models":
-            if model_mode() == "cloud":
-                model_entries = [
-                    {
-                        "id": cloud_settings()["model"],
-                        "object": "model",
-                        "owned_by": "configured-cloud-provider",
-                    }
-                ]
-            else:
-                model_entries = [
-                    {
-                        "id": model_id,
-                        "object": "model",
-                        "owned_by": "local-s100p-official-qwen",
-                    }
-                    for model_id in selectable_model_policies(policy)
-                ]
+            active_model = cloud_settings()["model"] if model_mode() == "cloud" else policy["model_id"]
             self.json_response(
                 200,
                 {
                     "object": "list",
-                    "data": model_entries,
+                    "data": [
+                        {
+                            "id": active_model,
+                            "object": "model",
+                            "owned_by": "configured-cloud-provider" if model_mode() == "cloud" else "local-s100p-official-qwen",
+                        }
+                    ],
                 },
             )
             return
@@ -861,19 +829,7 @@ class Handler(BaseHTTPRequestHandler):
             self.json_response(400, {"error": {"message": str(exc), "type": "invalid_request"}})
             return
         prompt = first_text(payload)
-        policy = resolve_model_policy(self.policy, payload.get("model"))
-        if policy is None:
-            self.json_response(
-                400,
-                {
-                    "error": {
-                        "message": "requested model is not enabled on this gateway",
-                        "type": "model_not_allowed",
-                        "allowed_models": list(selectable_model_policies(self.policy)),
-                    }
-                },
-            )
-            return
+        policy = self.policy
         if is_edge_cloud_route_request(payload):
             token_budget_route = token_budget_route_for_prompt(prompt)
             classification = edge_cloud_route_classification(prompt, token_budget_route)

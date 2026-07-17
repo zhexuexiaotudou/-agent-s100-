@@ -10,11 +10,11 @@ AI 助手输入框提供三个明确选项：
 
 默认选择 1.5B。本地选择只改变通用对话和本地路由所使用的 Qwen 模型，不扩大 Qwen 的 NAS 操作权限。
 
-## 本地 BPU 切换边界
+## 两个本地运行时
 
-S100P 当前不能让 1.5B 和 7B 的 `oellm_multichat` runtime 同时常驻。2026-07-18 复核时，1.5B runtime 常驻后，独立 18081 端口启动 7B 会返回 `HBRT4_STATUS_BAD_DATA`。因此两个本地选项统一进入 18080 网关：网关根据请求中的 allowlist model id，在同一个锁内关闭旧 runtime、装载目标 HBM，再复用该 runtime 完成本次会话。
+1.5B 使用 S100P BPU `oellm_multichat`，监听 `127.0.0.1:18080`。7B 使用板端已有的 `Qwen2.5-7B-Instruct-Q4_K_M.gguf` 和 `llama-cpp-python` CPU runtime，监听 `127.0.0.1:18081`。两个端口均不对局域网或公网开放。
 
-18081 的 7B shadow service 不再作为产品入口；部署该功能时应停止并禁用它，避免第二个进程抢占 BPU。
+不能把 7B 描述成当前 BPU 模型。2026-07-18 的真实补全复核表明，7B HBM 在干净重启后仍因 ION 无法分配约 7.4GB 而失败。6 月 24 日的 `ok_qwen25_7b_shadow_acceptance_packet` 只验收了健康页、模型清单和 NAS allowlist 工具流；其中 chat 响应是网关根据工具结果生成的固定摘要，没有执行 7B 文本生成。因此本次功能选择诚实可验收的本地 CPU 7B 路径。
 
 ## 云端与隐私边界
 
@@ -35,12 +35,12 @@ MiniMax token 仍只由 root OpenClaw 配置持有。网页和门户服务只使
 - `qwen2.5-7b-local`
 - `minimax2.7-cloud`
 
-省略该字段时保留既有自动路由行为。未知值返回 `400 assistant_model_not_allowed`。本地 Qwen 网关的 `/v1/models` 返回两个允许的本地模型；请求未知 model id 返回 `400 model_not_allowed`。
+省略该字段时保留既有自动路由行为。未知值返回 `400 assistant_model_not_allowed`。18080 和 18081 的 `/v1/models` 分别报告 1.5B BPU 与 7B CPU 模型。
 
 ## 回滚
 
-1. 恢复部署前的 `qwen25_openai_gateway.py`、`qwen25_official_route_policy.json`、门户后端和前端静态文件。
-2. 重启 `qwen25-local-openai-gateway.service` 和门户 user service。
-3. 如需恢复历史 shadow 入口，再启用 `qwen25-7b-shadow-openai-gateway.service`；它不能与 18080 常驻 runtime 同时接受推理请求。
+1. 恢复部署前的门户后端和前端静态文件。
+2. 禁用并停止 `qwen7b-cpu.service`，重启门户 user service。
+3. 1.5B BPU、MiniMax bridge 与 NAS 本地工具不受该回滚影响。
 
 生产验收证据在合并和 S100P 部署后补充到本文。
