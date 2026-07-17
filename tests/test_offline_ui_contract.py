@@ -35,6 +35,16 @@ class OfflineUiContractTest(unittest.TestCase):
         self.assertIn("capacity?.total_bytes", self.js)
         self.assertIn('const userLabel = username || "登录"', self.js)
 
+    def test_expired_session_clears_stale_identity_and_routes_to_login(self):
+        self.assertIn("function clearProductSession()", self.js)
+        self.assertIn('safeLocalStorageRemove("diguaAiNasToken")', self.js)
+        self.assertIn('safeLocalStorageRemove("diguaAiNasUser")', self.js)
+        self.assertIn('response.status === 401 && data?.error === "auth_required"', self.js)
+        self.assertIn("if (payload.authenticated)", self.js)
+        self.assertIn("else {\n          clearProductSession();", self.js)
+        self.assertGreaterEqual(self.js.count('button("前往登录", { icon: "lock", page: "files" })'), 2)
+        self.assertIn('appState.assistant = { status: "auth"', self.js)
+
     def test_public_health_distinguishes_online_device_from_authenticated_nas_capacity(self):
         self.assertIn('/api/v1/system/health', self.js)
         self.assertIn('设备已就绪', self.js)

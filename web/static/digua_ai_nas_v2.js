@@ -169,6 +169,16 @@
     return true;
   }
 
+  function clearProductSession() {
+    appState.authToken = "";
+    appState.authUser = null;
+    appState.csrfToken = "";
+    appState.selectedFile = "";
+    appState.storage = { ...appState.storage, status: "auth", entries: [], rootFolders: [], error: "" };
+    safeLocalStorageRemove("diguaAiNasToken");
+    safeLocalStorageRemove("diguaAiNasUser");
+  }
+
   function safeJsonParse(value, fallback) {
     if (!value) return fallback;
     try {
@@ -2934,6 +2944,9 @@
     }
     const response = await fetch(path, { ...options, headers, body });
     const data = await response.json();
+    if (response.status === 401 && data?.error === "auth_required") {
+      clearProductSession();
+    }
     return { ok: response.ok, status: response.status, data };
   }
 
@@ -3091,7 +3104,7 @@
   }
 
   function authNotice(scope = "该功能") {
-    return `<div class="empty-state">${svg("lock")}<strong>需要登录</strong><p>${escapeHtml(scope)} 需要身份令牌，先在“文件”页登录后再验证。</p></div>`;
+    return `<div class="empty-state">${svg("lock")}<strong>需要登录</strong><p>${escapeHtml(scope)} 需要有效登录会话。登录后可继续刚才的验证。</p>${button("前往登录", { icon: "lock", page: "files" })}</div>`;
   }
 
   function apiStateBlock(state, emptyText = "暂无数据") {
@@ -3407,6 +3420,8 @@
           toolLabel: assistantToolLabelFromCopilot(copilotData),
           error: ""
         };
+      } else if (copilot.status === 401 || copilot.data?.error === "auth_required") {
+        appState.assistant = { status: "auth", answer: "", route: route.data || null, error: "auth_required" };
       } else {
         appState.assistant = { status: "error", answer: "", route: route.data || null, error: copilot.data?.error || `copilot_failed:${copilot.status}` };
       }
@@ -3496,8 +3511,9 @@
         ["当前页", navItems.find((item) => item.id === appState.page)?.label || appState.page]
       ])}
       <div class="copy-actions" style="margin-top:14px">
-        ${button("打开设置", { variant: "secondary", icon: "settings", page: "settings" })}
-        ${button("退出文件接口", { variant: "secondary", action: "storageLogout", disabled: !appState.authToken })}
+        ${appState.authUser
+          ? `${button("打开设置", { variant: "secondary", icon: "settings", page: "settings" })}${button("退出登录", { variant: "secondary", action: "storageLogout" })}`
+          : button("前往登录", { icon: "lock", page: "files" })}
       </div>
     `);
   }
@@ -4601,15 +4617,9 @@
     } catch (error) {
       // Direct loopback legacy mode may not expose the product-access endpoint.
     }
-    appState.authToken = "";
-    appState.authUser = null;
-    appState.csrfToken = "";
-    appState.selectedFile = "";
-    appState.storage = { ...appState.storage, status: "auth", entries: [], rootFolders: [], error: "" };
-    safeLocalStorageRemove("diguaAiNasToken");
-    safeLocalStorageRemove("diguaAiNasUser");
+    clearProductSession();
     renderShell();
-    showToast("已退出文件接口登录");
+    showToast("已退出登录");
   }
 
   function selectedStorageEntry() {
@@ -5377,6 +5387,8 @@
           appState.authToken = "__http_only_cookie__";
           safeLocalStorageRemove("diguaAiNasToken");
           safeLocalStorageSet("diguaAiNasUser", JSON.stringify(appState.authUser));
+        } else {
+          clearProductSession();
         }
       }
     } catch (error) {
