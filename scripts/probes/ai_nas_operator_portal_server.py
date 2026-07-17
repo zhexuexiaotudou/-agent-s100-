@@ -683,16 +683,44 @@ COPILOT_JOURNAL_ACTIVITY_QUERY_TERMS = (
     "where did i go",
     "what was i doing",
     "\u5e72\u4ec0\u4e48",
+    "\u5e72\u4e86\u4ec0\u4e48",
+    "\u5e72\u8fc7\u4ec0\u4e48",
     "\u505a\u4e86\u4ec0\u4e48",
     "\u505a\u4ec0\u4e48",
+    "\u505a\u8fc7\u4ec0\u4e48",
     "\u5fd9\u4ec0\u4e48",
+    "\u5fd9\u4e86\u4ec0\u4e48",
+    "\u6539\u4e86\u4ec0\u4e48",
+    "\u5b8c\u6210\u4e86\u4ec0\u4e48",
+    "\u5904\u7406\u4e86\u4ec0\u4e48",
     "\u53bb\u4e86\u54ea\u91cc",
     "\u53bb\u54ea\u4e86",
     "\u5403\u4e86\u4ec0\u4e48",
 )
+COPILOT_JOURNAL_HISTORY_QUERY_TERMS = (
+    "my history",
+    "my records",
+    "activity record",
+    "work record",
+    "\u6211\u7684\u8bb0\u5f55",
+    "\u6211\u7684\u5386\u53f2",
+    "\u6211\u7684\u884c\u7a0b",
+    "\u5de5\u4f5c\u8bb0\u5f55",
+    "\u5386\u53f2\u8bb0\u5f55",
+    "\u884c\u7a0b\u8bb0\u5f55",
+    "\u6709\u54ea\u4e9b\u8bb0\u5f55",
+    "\u8bb0\u5f55\u4e86\u4ec0\u4e48",
+    "\u5f53\u5929\u8bb0\u5f55",
+    "\u5f53\u65e5\u8bb0\u5f55",
+    "\u90a3\u5929\u7684\u8bb0\u5f55",
+)
 COPILOT_FULL_DATE_PATTERNS = (
-    re.compile(r"(?<!\d)(20\d{2})\s*\u5e74\s*(\d{1,2})\s*\u6708\s*(\d{1,2})\s*\u65e5"),
+    re.compile(r"(?<!\d)(20\d{2})\s*\u5e74\s*(\d{1,2})\s*\u6708\s*(\d{1,2})\s*[\u65e5\u53f7]"),
     re.compile(r"(?<!\d)(20\d{2})[-/.](\d{1,2})[-/.](\d{1,2})(?!\d)"),
+)
+COPILOT_PARTIAL_DATE_PATTERNS = (
+    re.compile(r"(?<![\d\u5e74])(\d{1,2})\s*\u6708\s*(\d{1,2})\s*[\u65e5\u53f7]?"),
+    re.compile(r"(?<![\d.])(\d{1,2})[./](\d{1,2})(?![\d.])"),
 )
 COPILOT_DOCUMENT_QUERY_TERMS = (
     "document",
@@ -1373,13 +1401,24 @@ def copilot_action_tool_id(action: str | None) -> str | None:
     return mapping.get(action, action)
 
 
-def copilot_journal_lookup_date(message: str) -> str | None:
+def copilot_journal_lookup_date(message: str, *, default_year: int | None = None) -> str | None:
     text = str(message or "")
     for pattern in COPILOT_FULL_DATE_PATTERNS:
         match = pattern.search(text)
         if not match:
             continue
         year, month, day = (int(item) for item in match.groups())
+        try:
+            datetime(year, month, day)
+        except ValueError:
+            return None
+        return f"{year}\u5e74{month}\u6708{day}\u65e5"
+    year = int(default_year or datetime.now().year)
+    for pattern in COPILOT_PARTIAL_DATE_PATTERNS:
+        match = pattern.search(text)
+        if not match:
+            continue
+        month, day = (int(item) for item in match.groups())
         try:
             datetime(year, month, day)
         except ValueError:
@@ -1403,6 +1442,7 @@ def infer_copilot_action_intent(message: str) -> dict | None:
     has_summary = contains_any(text, COPILOT_SUMMARY_TERMS)
     journal_lookup_date = copilot_journal_lookup_date(text)
     has_journal_activity_query = contains_any(text, COPILOT_JOURNAL_ACTIVITY_QUERY_TERMS)
+    has_journal_history_query = contains_any(text, COPILOT_JOURNAL_HISTORY_QUERY_TERMS)
     has_journal_write = contains_any(text, COPILOT_JOURNAL_WRITE_TERMS)
     has_document = contains_any(text, COPILOT_DOCUMENT_QUERY_TERMS)
     has_status = contains_any(text, COPILOT_STATUS_TERMS)
@@ -1475,7 +1515,7 @@ def infer_copilot_action_intent(message: str) -> dict | None:
             "body": quoted[1] if len(quoted) >= 2 else "",
             "quoted": quoted,
         }
-    if journal_lookup_date and (has_journal or has_journal_activity_query):
+    if journal_lookup_date and (has_journal or has_journal_activity_query or has_journal_history_query):
         return {
             "action": "document_query",
             "query": f"{text} {journal_lookup_date}",
