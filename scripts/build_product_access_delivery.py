@@ -116,7 +116,8 @@ def main() -> int:
             "source_commit": git_commit(),
             "final_verdict": VERDICT,
             "production_verified": False,
-            "s100p_and_nas_powered": False,
+            "runtime_evidence": "not_asserted_by_package_builder",
+            "hardware_power_state": "not_asserted_by_package_builder",
             "excludes": ["passwords", "claim plaintext", "tunnel keys", "credentials", "private keys", ".env", "runtime databases", "NAS/user data", "model weights"],
             "files": [{"path": path.relative_to(stage).as_posix(), "size": path.stat().st_size, "sha256": sha(path)} for path in candidates],
         }

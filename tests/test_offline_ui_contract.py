@@ -35,6 +35,12 @@ class OfflineUiContractTest(unittest.TestCase):
         self.assertIn("capacity?.total_bytes", self.js)
         self.assertIn('const userLabel = username || "登录"', self.js)
 
+    def test_public_health_distinguishes_online_device_from_authenticated_nas_capacity(self):
+        self.assertIn('/api/v1/system/health', self.js)
+        self.assertIn('设备已就绪', self.js)
+        self.assertIn('登录后读取 NAS 容量与个人空间', self.js)
+        self.assertIn('设备在线，容量需登录', self.js)
+
     def test_assistant_uses_progressive_disclosure(self):
         self.assertIn('const hasAnswer = appState.assistant.status === "ready"', self.js)
         self.assertIn('class="actions assistant-followups"', self.js)
