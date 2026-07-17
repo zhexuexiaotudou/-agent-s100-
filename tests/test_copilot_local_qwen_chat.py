@@ -13,7 +13,7 @@ PROBES_ROOT = REPO_ROOT / "scripts" / "probes"
 if str(PROBES_ROOT) not in sys.path:
     sys.path.insert(0, str(PROBES_ROOT))
 
-from ai_nas_operator_portal_server import PortalState
+from ai_nas_operator_portal_server import PortalState, http_post_json
 
 
 class CopilotLocalQwenChatTest(unittest.TestCase):
@@ -144,6 +144,7 @@ class CopilotLocalQwenChatTest(unittest.TestCase):
                 "AI_NAS_CLOUD_CHAT_URL": "http://127.0.0.1:18082/v1",
                 "AI_NAS_CLOUD_CHAT_MODEL": "custom-gateway/MiniMax-M2.7",
                 "AI_NAS_CLOUD_CHAT_TOKEN_FILE": str(token_file),
+                "AI_NAS_CLOUD_CHAT_TIMEOUT_SECONDS": "220",
             }
             with patch.dict(os.environ, env, clear=False):
                 with patch("ai_nas_operator_portal_server.http_post_json", return_value=self.fake_qwen("MiniMax through OpenClaw.")) as post_json:
@@ -153,7 +154,16 @@ class CopilotLocalQwenChatTest(unittest.TestCase):
             self.assertTrue(payload["cloud_used"])
             self.assertEqual(payload["answer"], "MiniMax through OpenClaw.")
             self.assertEqual(post_json.call_args.kwargs["headers"], {"Authorization": "Bearer local-bridge-secret"})
+            self.assertEqual(post_json.call_args.kwargs["timeout"], 220)
             self.assertNotIn("local-bridge-secret", json.dumps(payload))
+
+    def test_http_post_json_returns_structured_timeout_error(self):
+        with patch("ai_nas_operator_portal_server.urllib.request.urlopen", side_effect=TimeoutError("timed out")):
+            result = http_post_json("timeout_probe", "http://127.0.0.1:9/v1/chat/completions", {"messages": []}, timeout=1)
+
+        self.assertFalse(result["ok"])
+        self.assertIsNone(result["status"])
+        self.assertEqual(result["error"], "timed out")
 
     def test_person_photo_search_uses_qwen_router_then_local_yolo_index(self):
         with tempfile.TemporaryDirectory() as tmp:

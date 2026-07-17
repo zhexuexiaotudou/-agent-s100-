@@ -595,6 +595,14 @@ def normalize_chat_completions_url(base_or_url: str) -> str:
     return f"{text}/v1/chat/completions"
 
 
+def cloud_chat_timeout_seconds() -> int:
+    try:
+        configured = int(os.environ.get("AI_NAS_CLOUD_CHAT_TIMEOUT_SECONDS", "210"))
+    except ValueError:
+        configured = 210
+    return max(30, min(configured, 300))
+
+
 def contains_any(text: str, terms: tuple[str, ...]) -> bool:
     lower = text.lower()
     return any(term.lower() in lower for term in terms)
@@ -1522,7 +1530,7 @@ def http_post_json(name: str, url: str, payload: dict, timeout: int = 60, header
             "payload": payload_out,
             "error": str(exc),
         }
-    except urllib.error.URLError as exc:
+    except (urllib.error.URLError, TimeoutError) as exc:
         elapsed_ms = round((time.perf_counter() - started) * 1000, 3)
         return {
             "name": name,
@@ -5366,7 +5374,7 @@ class PortalState:
                 "stream": False,
                 "metadata": {"source": "digua_ai_nas_cloud_overflow", "privacy_level": "none"},
             },
-            timeout=60,
+            timeout=cloud_chat_timeout_seconds(),
             headers=cloud_headers,
         )
         if not result.get("ok"):

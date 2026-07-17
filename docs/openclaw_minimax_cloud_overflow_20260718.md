@@ -32,11 +32,14 @@ AI-NAS portal (sunrise, 127.0.0.1:8765)
    Environment=AI_NAS_CLOUD_CHAT_URL=http://127.0.0.1:18082/v1
    Environment=AI_NAS_CLOUD_CHAT_MODEL=custom-gateway/MiniMax-M2.7
    Environment=AI_NAS_CLOUD_CHAT_TOKEN_FILE=/home/sunrise/.config/digua/cloud_bridge_token
+   Environment=AI_NAS_CLOUD_CHAT_TIMEOUT_SECONDS=210
    ```
 
 5. 先启动并检查 root bridge，再重启 `sunrise` 的门户 user service。
 
 桥服务必须显式设置 `HOME=/root`，并将 OpenClaw 自带的 Node.js 22 目录放在 `PATH` 首位。systemd 的默认 PATH 可能命中系统 Node.js 20，届时 OpenClaw 会以版本不满足要求退出。OpenClaw CLI 还会维护 `/root/.openclaw/state` 的权限，因此沙箱仅对这个 state 目录开放写权限；provider 配置和桥脚本仍为只读。
+
+门户的云端 HTTP 等待时间为 210 秒，比 bridge 的 180 秒推理上限更长，使 bridge 能返回明确的超时响应。门户 HTTP 客户端必须把底层 `TimeoutError` 转成结构化 `cloud_overflow_failed`，不能让浏览器连接被直接关闭。
 
 ## 验收
 
