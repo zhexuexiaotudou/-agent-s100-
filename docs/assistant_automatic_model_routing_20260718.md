@@ -96,11 +96,11 @@ MiniMax 不是“复杂任务的默认大模型”。只有策略同时确认 `p
 ## 生产验收
 
 - 实现经 [PR #67](https://github.com/zhexuexiaotudou/-agent-s100-/pull/67) 和
-  [PR #68](https://github.com/zhexuexiaotudou/-agent-s100-/pull/68) 合并；当前生产提交为
+  [PR #68](https://github.com/zhexuexiaotudou/-agent-s100-/pull/68) 合并；自动编排基线提交为
   `aca4941eae22a9587278bca3c45fce668dddd9af`。PR #68 的 `static-ui-contract`、
   `startup-link-check-contract` 和 `offline-regression` 全部通过，本地完整回归为
   `227 passed, 3 subtests passed`。
-- S100P 门户重启与 `/api/health` 通过。部署后端/前端哈希分别为
+- 自动编排基线部署时，S100P 门户重启与 `/api/health` 通过。部署后端/前端哈希分别为
   `cf1ef9e6374b1ff4dfd1f858ae069d5e9613b2346c4f7caaf128d71b6232bde2` 和
   `10c3f0ed1f512c1b538aef1e8ae7114f0a3f21c2986752cb77d198c5977034a3`；回滚点为
   `/mnt/nas/openclaw/deploy_backups/aca4941e-20260718055305`。
@@ -123,3 +123,13 @@ MiniMax 不是“复杂任务的默认大模型”。只有策略同时确认 `p
 “你是谁”到答案可见约 290 ms。线上 JS SHA-256 为
 `344ba012e7b19be93ff1b2759fc33159aa890e3520351a9112cafad3c46a2bbf`，回滚点为
 `/mnt/nas/openclaw/deploy_backups/1a5ddad0-20260718061857`。
+
+### 日期文档检索回归修复
+
+[PR #73](https://github.com/zhexuexiaotudou/-agent-s100-/pull/73) 补齐不带年份的日期和“干了什么”等
+个人历史问法，防止它们落入通用 1.5B 对话。此类请求由确定性策略固定进入 `document_rag`；
+有证据时直接返回本地可追溯内容，无证据时明确说明未命中，不调用云端，也不允许 Qwen 执行工具。
+
+当前生产合并提交为 `3a54c9042c12c5f20029d3ef662173d3d1efcb4e`，线上后端 SHA-256 为
+`c57dc96441b0c4911733279bcb8b0a9170ecc5ab8a16503ce5fea503a482b581`。完整验收与回滚点见
+[`journal_date_query_recovery_20260718.md`](journal_date_query_recovery_20260718.md)。
