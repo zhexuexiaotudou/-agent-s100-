@@ -4,6 +4,7 @@ import os
 import sys
 import tempfile
 import unittest
+from datetime import datetime
 from pathlib import Path
 from unittest.mock import patch
 
@@ -13,7 +14,13 @@ PROBES_ROOT = REPO_ROOT / "scripts" / "probes"
 if str(PROBES_ROOT) not in sys.path:
     sys.path.insert(0, str(PROBES_ROOT))
 
-from ai_nas_operator_portal_server import PortalState, copilot_policy_route, http_post_json
+from ai_nas_operator_portal_server import (
+    PortalState,
+    copilot_journal_lookup_date,
+    copilot_policy_route,
+    http_post_json,
+    infer_copilot_action_intent,
+)
 
 
 class CopilotLocalQwenChatTest(unittest.TestCase):
@@ -675,6 +682,66 @@ class CopilotLocalQwenChatTest(unittest.TestCase):
                 user,
             )
             post_json.assert_called_once()
+
+    def test_personal_date_variants_route_to_readonly_document_rag(self):
+        current_year = datetime.now().year
+        cases = (
+            "7月9日我做了什么",
+            "7月9号我干了什么",
+            "我7月9日做过什么",
+            "7.9我做了什么",
+            "7/9我改了什么",
+            "7月9日有哪些记录",
+            "查一下7月9日的工作记录",
+            "2026年7月9号我干了什么",
+        )
+
+        for query in cases:
+            with self.subTest(query=query):
+                intent = infer_copilot_action_intent(query)
+                self.assertIsNotNone(intent)
+                self.assertEqual(intent["action"], "document_query")
+                self.assertTrue(intent["journal_lookup"])
+                expected_year = 2026 if "2026" in query else current_year
+                self.assertEqual(intent["journal_date"], f"{expected_year}年7月9日")
+                self.assertEqual(intent["path"], "Documents")
+
+    def test_partial_date_personal_history_question_executes_document_query(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            state = self.make_state(Path(tmp), personal=True)
+            user = {"username": "admin", "role": "admin"}
+
+            with patch(
+                "ai_nas_operator_portal_server.http_post_json",
+                return_value=self.fake_router(privacy_level="high", local_tool_id="local_document_rag"),
+            ) as post_json:
+                with patch.object(
+                    state,
+                    "document_query_payload",
+                    return_value=(
+                        200,
+                        {
+                            "ok": True,
+                            "answer": "Local diary evidence.",
+                            "evidence_count": 0,
+                            "evidence": [],
+                            "evidence_refs": [],
+                        },
+                    ),
+                ) as document_query:
+                    status, payload = state.copilot_chat("7月9号我干了什么", user)
+
+            self.assertEqual(status, 200)
+            self.assertEqual(payload["assistant_mode"], "local_document_query")
+            self.assertEqual(payload["qwen_router"]["local_tool_id"], "local_document_rag")
+            self.assertFalse(payload["cloud_used"])
+            self.assertFalse(payload["qwen_execution_authority"])
+            self.assertIn("年7月9日", document_query.call_args.args[0])
+            document_query.assert_called_once()
+            post_json.assert_called_once()
+
+    def test_public_historical_event_question_does_not_read_personal_documents(self):
+        self.assertIsNone(infer_copilot_action_intent("7月9日发生了什么历史事件"))
 
     def test_iso_journal_date_is_normalized_for_local_document_recall(self):
         with tempfile.TemporaryDirectory() as tmp:
