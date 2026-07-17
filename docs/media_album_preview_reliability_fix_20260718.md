@@ -20,11 +20,27 @@
 ## 本地验证
 
 - `python -m py_compile scripts/probes/ai_nas_media.py scripts/probes/ai_nas_operator_portal_server.py`
-- `python -m unittest tests.test_copilot_local_qwen_chat`：23/23 通过。
+- `python -m unittest tests.test_copilot_local_qwen_chat`：24/24 通过。
 - `node --check web/static/digua_ai_nas_v2.js`：通过。
 - Media Center gate：12/12 通过，结论 `ok_nas_media_center_gate`。
 - 真实 7.9 本机页面：两张缩略图均为 480×280、`complete=true`、`hidden=false`；双击后的原图为 720×420、`complete=true`；页面无 warning/error。
 
-## 尚未完成的交付门
+## 生产交付结果
 
-- PR #72 已通过 CI 并合并为 `4be5b0c8`。首次 S100P 部署确认服务与原图路径正常，但 Pillow 9.0.1 兼容问题使 101/101 缩略图回退为原图；双版本补丁、第二轮 CI/合并和板端逐图复验仍待后续门完成。
+- PR #72 通过 2/2 CI 后合并为 `4be5b0c8`；Pillow 9 兼容跟进 PR #75 通过 CI 后合并为 `aad939da`。
+- S100P 部署版本：`aad939da60a4f9be61098ae62a6ca6f92f4a1302`，`openclaw-gateway.service` 重启后为 `active`，回环与 LAN UI 入口均返回 HTTP 200。
+- 板端 Pillow 9.0.1 直接函数验收：6000×3376 原图生成 480×270 JPEG，`transformed=true`。
+- 对当前 101 张图片逐张请求 `variant=thumbnail`：101/101 HTTP 200 且可解码，失败 0，最长边不超过 480 px；缩略图总响应体约 3.17 MB。
+- 抽查体积最大的 5 张原图：5/5 HTTP 200 且保持原始尺寸；6000×3376 大图未被查看器路径降采样。
+- 实机查询 `找出踢足球的照片` 返回 8 个 `local_multimodal_search` 结果，8/8 预览均为当前 `/api/media/preview`，`preview_resolution=content_digest_relinked`，未降级、未上云。
+
+## 部署与回滚
+
+- 第一阶段部署前备份：`/mnt/nas/openclaw/reports/deploy_backups/20260718T0655_4be5b0c8_album_preview`。
+- Pillow 9 跟进部署前备份：`/mnt/nas/openclaw/reports/deploy_backups/20260718T0700_aad939da_pillow9`。
+- 三个运行文件和跟进服务文件均在替换前记录 SHA-256；回滚时从对应备份恢复并重启 `openclaw-gateway.service`。
+
+## 已知边界
+
+- 自动化验收直接使用受控门户服务 `127.0.0.1:8765` 的现有有效管理员会话。相同 Bearer 请求通过统一 80 端口时返回 401，属于外层入口认证/请求头策略差异，不是图片文件、缩略图或媒体 ACL 故障。
+- 网关仍为 loopback-only，未扩大 NAS 或公网权限。
