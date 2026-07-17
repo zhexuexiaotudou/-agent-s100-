@@ -17,7 +17,7 @@ while [[ $# -gt 0 ]]; do
   esac
 done
 
-units=(openclaw-gateway.service qwen25-local-openai-gateway.service digua-ai-index-worker.service)
+units=(openclaw-gateway.service qwen25-local-openai-gateway.service digua-ai-index-worker.service digua-product-access.service digua-product-remote-ingress.service)
 systemctl_cmd=(systemctl --user)
 [[ "$SYSTEMD_MODE" == "system" ]] && systemctl_cmd=(systemctl)
 
@@ -32,6 +32,13 @@ if [[ "$DRY_RUN" == "0" && "$safe_root" == "1" ]]; then
   for unit in "${units[@]}"; do
     "${systemctl_cmd[@]}" disable --now "$unit" >/dev/null 2>&1 || true
   done
+  if [[ "$SYSTEMD_MODE" == "system" ]]; then
+    for unit in "${units[@]}"; do rm -f "/etc/systemd/system/$unit"; done
+    rm -f /etc/avahi/services/digua-ai-nas.service
+    [[ "$(readlink /usr/local/bin/digua-access 2>/dev/null || true)" == "$INSTALL_ROOT/app/scripts/digua-access" ]] && rm -f /usr/local/bin/digua-access
+    [[ "$(readlink /usr/local/bin/digua-doctor 2>/dev/null || true)" == "$INSTALL_ROOT/app/scripts/digua-doctor" ]] && rm -f /usr/local/bin/digua-doctor
+    systemctl daemon-reload >/dev/null 2>&1 || true
+  fi
   rm -rf "$INSTALL_ROOT"
 fi
 
@@ -45,6 +52,7 @@ print(json.dumps({
   "systemd_mode": "$SYSTEMD_MODE",
   "nas_data_removed": False,
   "personal_data_removed": False,
+  "identity_and_access_state_removed": False,
   "actions": json.loads(os.environ["ACTIONS_JSON"]),
   "blockers": [] if bool($safe_root) else ["unsafe_install_root"],
 }, ensure_ascii=False, indent=2, sort_keys=True))

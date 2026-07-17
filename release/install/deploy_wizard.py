@@ -50,6 +50,11 @@ def main() -> int:
     parser.add_argument("--simulate-root", type=Path, help="Build a non-production clean install sandbox")
     parser.add_argument("--dry-run", action="store_true")
     parser.add_argument("--yes", action="store_true")
+    parser.add_argument(
+        "--product-access",
+        action="store_true",
+        help="After a real install, enable LAN access and generate the one-time claim QR/access card",
+    )
     args = parser.parse_args()
     cfg = load_config(args.config)
     interactive = not args.non_interactive
@@ -76,10 +81,11 @@ def main() -> int:
     credentials_file = value("credentials_file", "Existing SMB credentials file (chmod 600)", "", protocol in {"smb", "cifs"})
     admin_username = value("admin_username", "Initial administrator username", "admin")
     password_env = str(cfg.get("password_env") or "DIGUA_ADMIN_PASSWORD")
+    claim_mode = bool(cfg.get("claim_mode", True))
     password = os.environ.get(password_env, "")
-    if not password and interactive:
+    if not claim_mode and not password and interactive:
         password = getpass.getpass("Initial administrator password (min 8 chars; never written to report): ")
-    if not password:
+    if not claim_mode and not password:
         raise SystemExit(f"administrator password missing; set {password_env}")
 
     env = dict(os.environ)
@@ -104,18 +110,40 @@ def main() -> int:
         command.append("--dry-run")
     if protocol == "local":
         command.append("--allow-local-storage")
+    if claim_mode:
+        command.append("--defer-admin-claim")
     wheelhouse = str(cfg.get("wheelhouse") or "")
     if wheelhouse:
         command += ["--wheelhouse", wheelhouse]
 
     print("\nPre-flight summary (secrets redacted):")
-    print(json.dumps({"protocol": protocol, "nas_host": nas_host, "nas_share": nas_share, "mount_point": mount_point, "personal_root": personal_root, "install_root": install_root, "systemd_mode": systemd_mode, "service_user": service_user, "simulation": bool(args.simulate_root), "admin_username": admin_username, "model_paths_configured": sorted(name for name in MODEL_PROMPTS if env.get(name))}, ensure_ascii=False, indent=2))
+    print(json.dumps({"protocol": protocol, "nas_host": nas_host, "nas_share": nas_share, "mount_point": mount_point, "personal_root": personal_root, "install_root": install_root, "systemd_mode": systemd_mode, "service_user": service_user, "simulation": bool(args.simulate_root), "claim_mode": claim_mode, "admin_username": None if claim_mode else admin_username, "model_paths_configured": sorted(name for name in MODEL_PROMPTS if env.get(name))}, ensure_ascii=False, indent=2))
     if interactive and not args.yes and input("Continue? [y/N]: ").strip().lower() not in {"y", "yes"}:
         print("Cancelled before mutation.")
         return 2
     completed = subprocess.run(command, env=env, check=False)
     if completed.returncode == 0:
         print("\nInstaller completed. Simulation results are evidence of orchestration only; connect S100P/NAS before production acceptance.")
+        if args.product_access and not args.simulate_root and not args.dry_run:
+            access_db = Path(env.get("DIGUA_ACCESS_DB", "/var/lib/digua-ai-nas/product_access.sqlite3"))
+            identity_db = Path(env.get("DIGUA_IDENTITY_DB", "/var/lib/digua-ai-nas/identity.sqlite3"))
+            configure_lan = Path(__file__).with_name("configure_lan_access.sh")
+            product_python = Path(install_root) / "venv" / "bin" / "python"
+            product_app = Path(install_root) / "app"
+            post_steps = [
+                ["bash", str(configure_lan), "--apply", "--install-root", install_root, "--access-db", str(access_db)],
+                [str(product_python), "-m", "src.product_access.cli", "--access-db", str(access_db), "--identity-db", str(identity_db), "claim-create", "--qr-out", "/var/lib/digua-ai-nas/claim-qr.svg"],
+                [str(product_python), "-m", "src.product_access.cli", "--access-db", str(access_db), "--identity-db", str(identity_db), "card", "--output", "/var/lib/digua-ai-nas/access-card.html"],
+            ]
+            for post_step in post_steps:
+                post = subprocess.run(post_step, cwd=product_app if post_step[0] == str(product_python) else None, env=env, check=False)
+                if post.returncode:
+                    print(f"Product access finalization failed ({post.returncode}): {post_step[0]}", file=sys.stderr)
+                    return post.returncode
+            print("Product access is ready. Open http://digua.local/setup on the same LAN.")
+        elif claim_mode:
+            print("On the S100P console run: digua-access claim-create")
+            print("Then open http://digua.local/setup from a phone on the same LAN.")
     return completed.returncode
 
 

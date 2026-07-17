@@ -15,6 +15,8 @@ from typing import Any
 REPO_ROOT = Path(__file__).resolve().parents[1]
 DEFAULT_INCLUDE_ROOTS = [
     "release",
+    "deploy/product_access",
+    "config",
     "requirements.txt",
     "src",
     "web",
@@ -44,6 +46,8 @@ DEFAULT_INCLUDE_ROOTS = [
     "scripts/metrics_detector.py",
     "scripts/product_smoke_test.py",
     "scripts/qwen25_openai_gateway.py",
+    "scripts/digua-access",
+    "scripts/digua-doctor",
     "scripts/probes/ai_nas_operator_portal_server.py",
     "scripts/probes/ai_nas_operator_portal_contract_probe.py",
     "scripts/probes/ai_nas_app_ecosystem.py",
@@ -141,6 +145,9 @@ def main() -> int:
             "assistant_trace",
             "demo_corpus_scripts",
             "stage10_gates",
+            "product_access_facade",
+            "lan_mdns_and_first_claim",
+            "tailscale_and_cloudflare_adapters",
         ],
         "excluded_components": ["model_weights", "third_party_images", "private_user_data", "secrets"],
         "file_count": len(included),
@@ -210,8 +217,11 @@ def sha256_file(path: Path) -> str:
 
 
 def git_commit() -> str:
-    completed = subprocess.run(["git", "rev-parse", "HEAD"], cwd=REPO_ROOT, text=True, capture_output=True, check=False)
-    return completed.stdout.strip() if completed.returncode == 0 else "unknown"
+    try:
+        completed = subprocess.run(["git", "rev-parse", "HEAD"], cwd=REPO_ROOT, text=True, capture_output=True, check=False)
+        return completed.stdout.strip() if completed.returncode == 0 else "unknown"
+    except OSError:
+        return "unknown"
 
 
 if __name__ == "__main__":

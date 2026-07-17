@@ -1,0 +1,16 @@
+{
+  // Replace groups and device tags for the target tailnet. Do not use Funnel.
+  "groups": {
+    "group:digua-users": ["user@example.com"]
+  },
+  "tagOwners": {
+    "tag:digua-ai-nas": ["autogroup:admin"]
+  },
+  "grants": [
+    {
+      "src": ["group:digua-users"],
+      "dst": ["tag:digua-ai-nas"],
+      "ip": ["tcp:443"]
+    }
+  ]
+}

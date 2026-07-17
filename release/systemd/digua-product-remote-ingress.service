@@ -1,0 +1,21 @@
+[Unit]
+Description=Digua AI-NAS remote identity ingress (disabled by default)
+After=network-online.target openclaw-gateway.service
+Wants=network-online.target
+Requires=openclaw-gateway.service
+
+[Service]
+Type=simple
+@DIGUA_USER_DIRECTIVE@
+WorkingDirectory=@DIGUA_INSTALL_ROOT@/app
+EnvironmentFile=@DIGUA_ENV_FILE@
+ExecStart=@DIGUA_INSTALL_ROOT@/venv/bin/python -m src.product_access.server --bind 127.0.0.1 --port 8781 --channel remote --enable-remote-ingress --upstream http://127.0.0.1:8765 --access-db ${DIGUA_ACCESS_DB} --identity-db ${DIGUA_IDENTITY_DB} --require-nas-mount ${DIGUA_NAS_MOUNT}
+NoNewPrivileges=true
+PrivateTmp=true
+ProtectSystem=strict
+ProtectHome=true
+ReadWritePaths=@DIGUA_REPORT_ROOT@ /var/lib/digua-ai-nas
+Restart=on-failure
+RestartSec=5
+
+# Deliberately no WantedBy: enabling remote access requires an explicit adapter plan.

@@ -14,6 +14,7 @@ PASSWORD_ITERATIONS = 310_000
 MIN_PASSWORD_LENGTH = 8
 MAX_FAILED_LOGINS = 5
 LOGIN_WINDOW_MINUTES = 15
+PRODUCT_ROLES = ("admin", "operator", "viewer", "user")
 
 
 def _now_iso() -> str:
@@ -89,7 +90,7 @@ class IdentityStore:
                 "error": "password_too_short",
                 "minimum_length": MIN_PASSWORD_LENGTH,
             }
-        if role not in ("user", "admin"):
+        if role not in PRODUCT_ROLES:
             return {"ok": False, "error": "invalid_role"}
         now = _now_iso()
         pw_hash = _hash_password(password)
@@ -229,6 +230,76 @@ class IdentityStore:
             cur = con.execute(
                 "DELETE FROM sessions WHERE token IN (?,?)",
                 (_session_token_hash(token), token),
+            )
+            con.commit()
+            return {"ok": True, "sessions_removed": cur.rowcount}
+        finally:
+            con.close()
+
+    def create_session_for_user(
+        self, username: str, ttl: int = DEFAULT_SESSION_TTL_SECONDS
+    ) -> dict:
+        """Create a local session after a trusted external identity mapping.
+
+        Callers must validate the upstream identity and mapping before invoking
+        this method. It never creates users implicitly.
+        """
+        con = self._connect()
+        try:
+            row = con.execute(
+                "SELECT id,role FROM users WHERE username=?", (username,)
+            ).fetchone()
+            if not row:
+                return {"ok": False, "error": "mapped_user_not_found"}
+            token = secrets.token_hex(SID_BYTES)
+            now = _now_iso()
+            exp_iso = datetime.fromtimestamp(
+                datetime.now(timezone.utc).timestamp() + ttl, tz=timezone.utc
+            ).isoformat()
+            con.execute(
+                "INSERT INTO sessions(token,user_id,created_at,expires_at) VALUES(?,?,?,?)",
+                (_session_token_hash(token), row["id"], now, exp_iso),
+            )
+            con.commit()
+            return {
+                "ok": True,
+                "token": token,
+                "expires_at": exp_iso,
+                "user": {"id": row["id"], "username": username, "role": row["role"]},
+            }
+        finally:
+            con.close()
+
+    def set_user_role(self, username: str, role: str) -> dict:
+        if role not in PRODUCT_ROLES:
+            return {"ok": False, "error": "invalid_role"}
+        con = self._connect()
+        try:
+            if role != "admin":
+                row = con.execute("SELECT role FROM users WHERE username=?", (username,)).fetchone()
+                if row and row["role"] == "admin":
+                    admins = con.execute("SELECT COUNT(*) FROM users WHERE role='admin'").fetchone()[0]
+                    if admins <= 1:
+                        return {"ok": False, "error": "last_admin_cannot_be_demoted"}
+            cur = con.execute(
+                "UPDATE users SET role=?,updated_at=? WHERE username=?",
+                (role, _now_iso(), username),
+            )
+            con.execute(
+                "DELETE FROM sessions WHERE user_id=(SELECT id FROM users WHERE username=?)",
+                (username,),
+            )
+            con.commit()
+            return {"ok": cur.rowcount == 1, "error": None if cur.rowcount == 1 else "user_not_found"}
+        finally:
+            con.close()
+
+    def revoke_user_sessions(self, username: str) -> dict:
+        con = self._connect()
+        try:
+            cur = con.execute(
+                "DELETE FROM sessions WHERE user_id=(SELECT id FROM users WHERE username=?)",
+                (username,),
             )
             con.commit()
             return {"ok": True, "sessions_removed": cur.rowcount}

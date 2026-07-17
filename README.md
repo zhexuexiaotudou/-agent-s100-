@@ -205,8 +205,13 @@ Release package outputs:
 User quickstart (guided, secret-safe):
 
 ```bash
-sudo -E python3 release/install/deploy_wizard.py
+sudo ./deploy/product_access/install.sh
 ```
+
+The product installer installs the required Ubuntu network/NAS helpers, runs
+preflight, asks for NAS and model paths, keeps remote access disabled by
+default, then generates the one-time LAN claim QR and access card. See
+[`docs/product_access/FIRST_TIME_SETUP.md`](docs/product_access/FIRST_TIME_SETUP.md).
 
 The offline clean-install simulation is documented in
 [`docs/OFFLINE_DEPLOYMENT_WIZARD_20260717.md`](docs/OFFLINE_DEPLOYMENT_WIZARD_20260717.md).

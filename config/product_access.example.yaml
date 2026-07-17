@@ -1,0 +1,28 @@
+schema_version: 1
+device:
+  name: Digua AI-NAS
+  hostname: digua
+lan:
+  enabled: true
+  port: 80
+  mdns: true
+  fallback_ip: auto
+backend:
+  url: http://127.0.0.1:8765
+remote:
+  enabled: false
+  loopback_ingress: http://127.0.0.1:8781
+  tailscale:
+    enabled: false
+    funnel: false
+  cloudflare:
+    enabled: false
+    access_required: true
+    hostname: ""
+auth:
+  first_claim_lan_only: true
+  roles: [admin, operator, viewer]
+  session_ttl_seconds: 86400
+network:
+  soft_ap_experiment: false
+  automatic_rollback_seconds: 120

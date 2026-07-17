@@ -79,6 +79,7 @@
     loading: false,
     authToken: safeLocalStorageGet("diguaAiNasToken"),
     authUser: safeJsonParse(safeLocalStorageGet("diguaAiNasUser"), null),
+    csrfToken: "",
     storage: {
       status: "idle",
       relativePath: "",
@@ -2920,6 +2921,10 @@
   async function fetchJson(path, options = {}) {
     const headers = { Accept: "application/json", ...(options.headers || {}) };
     if (appState.authToken) headers.Authorization = `Bearer ${appState.authToken}`;
+    const method = String(options.method || "GET").toUpperCase();
+    if (!["GET", "HEAD", "OPTIONS"].includes(method) && appState.csrfToken) {
+      headers["X-CSRF-Token"] = appState.csrfToken;
+    }
     let body = options.body;
     if (body && typeof body !== "string" && !(body instanceof FormData)) {
       headers["Content-Type"] = "application/json";
@@ -2934,6 +2939,7 @@
     const query = new URLSearchParams({ filename: file.name, target_dir: cleanStoragePath(targetDir) });
     const headers = { Accept: "application/json", "Content-Type": file.type || "application/octet-stream" };
     if (appState.authToken) headers.Authorization = `Bearer ${appState.authToken}`;
+    if (appState.csrfToken) headers["X-CSRF-Token"] = appState.csrfToken;
     const response = await fetch(`/api/storage/upload-stream?${query.toString()}`, {
       method: "POST",
       headers,
@@ -4382,6 +4388,11 @@
   }
 
   async function loadDashboardData() {
+    if (!appState.authToken) {
+      appState.dashboard = { ...appState.dashboard, status: "idle", error: "" };
+      if (appState.page === "dashboard") renderShell();
+      return;
+    }
     appState.dashboard = { ...appState.dashboard, status: "loading", error: "" };
     if (appState.page === "dashboard") renderShell();
     try {
@@ -4544,6 +4555,10 @@
     renderShell();
     try {
       if (bootstrap) {
+        window.location.href = "/setup";
+        return;
+      }
+      if (false) {
         const created = await fetchJson("/api/identity/create-user", {
           method: "POST",
           body: { username, password, role: "admin" }
@@ -4563,9 +4578,12 @@
         renderShell();
         return;
       }
-      appState.authToken = result.data.token || "";
       appState.authUser = result.data.user || null;
-      safeLocalStorageSet("diguaAiNasToken", appState.authToken);
+      const receivedToken = result.data.token || "";
+      appState.authToken = receivedToken || (appState.authUser ? "__http_only_cookie__" : "");
+      appState.csrfToken = result.data.csrf_token || "";
+      if (receivedToken) safeLocalStorageSet("diguaAiNasToken", receivedToken);
+      else safeLocalStorageRemove("diguaAiNasToken");
       safeLocalStorageSet("diguaAiNasUser", JSON.stringify(appState.authUser));
       showToast("已连接 NAS 文件接口");
       await loadStoragePath(appState.storage.relativePath || "");
@@ -4575,9 +4593,15 @@
     }
   }
 
-  function logoutStorage() {
+  async function logoutStorage() {
+    try {
+      await fetchJson("/api/v1/auth/logout", { method: "POST", body: {} });
+    } catch (error) {
+      // Direct loopback legacy mode may not expose the product-access endpoint.
+    }
     appState.authToken = "";
     appState.authUser = null;
+    appState.csrfToken = "";
     appState.selectedFile = "";
     appState.storage = { ...appState.storage, status: "auth", entries: [], rootFolders: [], error: "" };
     safeLocalStorageRemove("diguaAiNasToken");
@@ -4924,6 +4948,7 @@
   }
 
   async function loadLiveHints() {
+    if (!appState.authToken) return;
     try {
       const result = await fetchJson("/api/harness/status");
       appState.health = {
@@ -5328,7 +5353,27 @@
     }
   });
 
-  renderShell();
-  loadLiveHints();
-  pageAfterRenderLoad(appState.page);
+  async function initializeProductSession() {
+    try {
+      const response = await fetch("/api/v1/auth/session", { headers: { Accept: "application/json" } });
+      if (response.ok) {
+        const payload = await response.json();
+        if (payload.authenticated) {
+          appState.authUser = payload.user || null;
+          appState.csrfToken = payload.csrf_token || "";
+          appState.authToken = "__http_only_cookie__";
+          safeLocalStorageRemove("diguaAiNasToken");
+          safeLocalStorageSet("diguaAiNasUser", JSON.stringify(appState.authUser));
+        }
+      }
+    } catch (error) {
+      // Preserve direct loopback compatibility when the facade is not running.
+    }
+    renderShell();
+    loadLiveHints();
+    pageAfterRenderLoad(appState.page);
+    if ("serviceWorker" in navigator) navigator.serviceWorker.register("/sw.js").catch(() => {});
+  }
+
+  initializeProductSession();
 })();

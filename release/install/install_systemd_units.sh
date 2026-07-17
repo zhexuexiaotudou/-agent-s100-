@@ -31,7 +31,8 @@ while [[ $# -gt 0 ]]; do
   esac
 done
 
-units=(openclaw-gateway.service qwen25-local-openai-gateway.service digua-ai-index-worker.service)
+units=(openclaw-gateway.service qwen25-local-openai-gateway.service digua-ai-index-worker.service digua-product-access.service digua-product-remote-ingress.service)
+enabled_units=(openclaw-gateway.service qwen25-local-openai-gateway.service digua-ai-index-worker.service digua-product-access.service)
 target_dir="$HOME/.config/systemd/user"
 systemctl_cmd=(systemctl --user)
 if [[ "$MODE" == "system" ]]; then
@@ -62,12 +63,12 @@ if [[ "$DRY_RUN" == "0" && "${#blockers[@]}" -eq 0 ]]; then
   if [[ "$SIMULATION" == "0" && "${#blockers[@]}" -eq 0 ]] && ! "${systemctl_cmd[@]}" daemon-reload; then
     blockers+=("systemd_daemon_reload_failed")
   fi
-  if [[ "$SIMULATION" == "0" && "${#blockers[@]}" -eq 0 ]] && ! "${systemctl_cmd[@]}" enable --now openclaw-gateway.service qwen25-local-openai-gateway.service digua-ai-index-worker.service; then
+  if [[ "$SIMULATION" == "0" && "${#blockers[@]}" -eq 0 ]] && ! "${systemctl_cmd[@]}" enable --now "${enabled_units[@]}"; then
     blockers+=("systemd_enable_start_failed")
   fi
   if [[ "$SIMULATION" == "0" && "${#blockers[@]}" -eq 0 ]]; then
     services_started_verified=1
-    for unit in "${units[@]}"; do
+    for unit in "${enabled_units[@]}"; do
       if ! "${systemctl_cmd[@]}" is-active --quiet "$unit"; then services_started_verified=0; blockers+=("service_not_active:$unit"); fi
     done
   fi
@@ -93,7 +94,8 @@ payload = {
   "service_user": "$SERVICE_USER",
   "units": json.loads(os.environ["UNITS_JSON"]),
   "loopback_default": True,
-  "enabled_on_apply": [] if bool($DRY_RUN) or bool($SIMULATION) else ["openclaw-gateway.service", "qwen25-local-openai-gateway.service", "digua-ai-index-worker.service"],
+  "enabled_on_apply": [] if bool($DRY_RUN) or bool($SIMULATION) else ["openclaw-gateway.service", "qwen25-local-openai-gateway.service", "digua-ai-index-worker.service", "digua-product-access.service"],
+  "remote_ingress_default_enabled": False,
   "services_started_verified": bool($services_started_verified),
   "blockers": json.loads(os.environ["BLOCKERS_JSON"])
 }

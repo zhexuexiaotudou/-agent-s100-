@@ -9,7 +9,7 @@ Type=simple
 WorkingDirectory=@DIGUA_INSTALL_ROOT@/app
 EnvironmentFile=@DIGUA_ENV_FILE@
 ExecStartPre=/usr/bin/test -r @DIGUA_INSTALL_ROOT@/app/scripts/probes/ai_nas_operator_portal_server.py
-ExecStart=@DIGUA_INSTALL_ROOT@/venv/bin/python @DIGUA_INSTALL_ROOT@/app/scripts/probes/ai_nas_operator_portal_server.py --bind 127.0.0.1 --port 8765 --report-root @DIGUA_REPORT_ROOT@ --personal-root @DIGUA_PERSONAL_ROOT@ --nas-portal --no-refresh --qwen-gateway-url http://127.0.0.1:18080 --openclaw-model-gateway-url http://127.0.0.1:18080
+ExecStart=@DIGUA_INSTALL_ROOT@/venv/bin/python @DIGUA_INSTALL_ROOT@/app/scripts/probes/ai_nas_operator_portal_server.py --bind 127.0.0.1 --port 8765 --report-root @DIGUA_REPORT_ROOT@ --personal-root @DIGUA_PERSONAL_ROOT@ --identity-db ${DIGUA_IDENTITY_DB} --nas-portal --no-refresh --qwen-gateway-url http://127.0.0.1:18080 --openclaw-model-gateway-url http://127.0.0.1:18080
 Restart=on-failure
 RestartSec=5
 
