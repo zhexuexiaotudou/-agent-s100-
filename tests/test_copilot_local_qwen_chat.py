@@ -92,10 +92,10 @@ class CopilotLocalQwenChatTest(unittest.TestCase):
                 "ai_nas_operator_portal_server.http_post_json",
                 side_effect=[
                     self.fake_router(),
-                    self.fake_qwen("I am a local Qwen assistant."),
+                    self.fake_qwen("Hello from the local Qwen assistant."),
                 ],
             ) as post_json:
-                status, payload = state.copilot_chat("Who are you?", {"username": "admin"})
+                status, payload = state.copilot_chat("Say hello.", {"username": "admin"})
 
             self.assertEqual(status, 200)
             self.assertTrue(payload["ok"])
@@ -105,9 +105,30 @@ class CopilotLocalQwenChatTest(unittest.TestCase):
             self.assertEqual(payload["qwen_router"]["classifier"], "qwen_gateway_structured_router")
             self.assertEqual(post_json.call_count, 2)
             sent_payload = post_json.call_args_list[1].args[2]
-            self.assertEqual(sent_payload["messages"], [{"role": "user", "content": "Who are you?"}])
+            self.assertEqual(sent_payload["messages"], [{"role": "user", "content": "Say hello."}])
             self.assertTrue(sent_payload["metadata"]["disable_ai_nas_tools"])
             self.assertFalse(sent_payload["metadata"]["qwen_execution_authority"])
+
+    def test_chinese_identity_question_returns_direct_local_identity_without_runtime_chat(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            state = self.make_state(Path(tmp))
+
+            with patch(
+                "ai_nas_operator_portal_server.http_post_json",
+                return_value=self.fake_router(),
+            ) as post_json:
+                status, payload = state.copilot_chat("\u4f60\u662f\u8c01", {"username": "admin"})
+
+            self.assertEqual(status, 200)
+            self.assertTrue(payload["ok"])
+            self.assertEqual(payload["assistant_mode"], "local_qwen_chat")
+            self.assertEqual(payload["identity_answer_source"], "deterministic_local_identity")
+            self.assertIn("\u5730\u74dc AI-NAS", payload["answer"])
+            self.assertIn("S100P", payload["answer"])
+            self.assertNotIn("2026\u5e745\u670820\u65e5", payload["answer"])
+            self.assertFalse(payload["cloud_used"])
+            self.assertFalse(payload["qwen_execution_authority"])
+            post_json.assert_called_once()
 
     def test_person_photo_search_uses_qwen_router_then_local_yolo_index(self):
         with tempfile.TemporaryDirectory() as tmp:

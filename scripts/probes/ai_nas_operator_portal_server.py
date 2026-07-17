@@ -600,6 +600,11 @@ def contains_any(text: str, terms: tuple[str, ...]) -> bool:
     return any(term.lower() in lower for term in terms)
 
 
+def is_local_assistant_identity_question(message: str) -> bool:
+    normalized = re.sub(r"[\s\?\uff1f!\uff01,\uff0c.\u3002:\uff1a]+", "", str(message or "")).lower()
+    return normalized in {"\u4f60\u662f\u8c01", "\u4f60\u662f\u4ec0\u4e48", "\u4f60\u662f\u4ec0\u4e48\u52a9\u624b", "whoareyou", "whatareyou"}
+
+
 def _router_debug_redact(text: str) -> str:
     redacted = str(text or "")
     redacted = re.sub(r"(?i)\b(invoice|contract)\b", "[private-marker]", redacted)
@@ -5462,6 +5467,35 @@ class PortalState:
         clean_message = (message or "").strip()
         if not clean_message:
             return HTTPStatus.BAD_REQUEST, {"ok": False, "error": "empty_message"}
+        if is_local_assistant_identity_question(clean_message):
+            return HTTPStatus.OK, {
+                "ok": True,
+                "assistant_mode": "local_qwen_chat",
+                "answer": (
+                    "\u6211\u662f\u5730\u74dc AI-NAS \u7684\u672c\u5730 AI \u52a9\u624b\uff0c\u8fd0\u884c\u5728 S100P \u4e0a\u3002"
+                    "\u6211\u53ef\u4ee5\u5728\u4f60\u7684\u6388\u6743\u8303\u56f4\u5185\u67e5\u8be2\u672c\u5730\u6587\u6863\u3001\u7167\u7247\u3001\u5b58\u50a8\u548c\u8fd0\u884c\u72b6\u6001\uff0c"
+                    "\u4e0d\u4f1a\u628a\u79c1\u6709\u5185\u5bb9\u53d1\u9001\u5230\u4e91\u7aef\u3002"
+                ),
+                "route": "local_qwen_chat",
+                "model": "Digua AI-NAS local identity",
+                "identity_answer_source": "deterministic_local_identity",
+                "usage": {},
+                "cloud_used": False,
+                "qwen_execution_authority": False,
+                "nas_action": {
+                    "operation": "none",
+                    "status": "answered_by_local_identity",
+                    "qwen_execution_authority": False,
+                    "forbidden_actions": ["delete", "move", "rename", "chmod", "chown", "recursive", "overwrite", "shell"],
+                },
+                "audit": {
+                    "caller": str(user.get("username") or "unknown"),
+                    "tool_execution_performed": False,
+                    "direct_nas_write_performed": False,
+                    "cloud_payload_sent": False,
+                    "prompt_hash": hashlib.sha256(clean_message.encode("utf-8", errors="replace")).hexdigest(),
+                },
+            }
         result = self._local_qwen_chat_completion(clean_message)
         if not result.get("ok"):
             return HTTPStatus.BAD_GATEWAY, {
@@ -5478,11 +5512,16 @@ class PortalState:
         choices = upstream.get("choices") if isinstance(upstream.get("choices"), list) else []
         first_choice = choices[0] if choices and isinstance(choices[0], dict) else {}
         message_payload = first_choice.get("message") if isinstance(first_choice.get("message"), dict) else {}
-        answer = str(message_payload.get("content") or "").strip()
+        answer = re.sub(
+            r"<\|(?:im_start|im_end|endoftext)\|>",
+            "",
+            str(message_payload.get("content") or ""),
+            flags=re.IGNORECASE,
+        ).strip()
         if not answer:
             return HTTPStatus.BAD_GATEWAY, {
                 "ok": False,
-                "error": "local_qwen_empty_answer",
+                "error": "local_qwen_empty_or_control_token_answer",
                 "route": "local_qwen_chat",
                 "qwen_execution_authority": False,
                 "cloud_used": False,
