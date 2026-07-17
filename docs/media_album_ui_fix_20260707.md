@@ -49,15 +49,18 @@ Frontend:
 
 - Album cards are rendered as buttons with `data-action="mediaSelectAlbum"`.
 - Selecting an album fetches `/api/media/album` and shows that album's photos.
-- Photo cards use `/api/media/preview?path_hash=...` as the preview URL.
+- Photo-card grids use `/api/media/preview?path_hash=...&variant=thumbnail` and
+  receive a longest-edge 480 px image when Pillow is available. The route is
+  compatible with Pillow 9 and current Pillow releases.
 - Photo cards are keyboard-focusable and double-clickable through the existing
   image viewer path.
 - The selected album state can be cleared with the page action "show all".
 - The image viewer now supports zoom in, zoom out, fit/reset, rotate, mouse
   wheel zoom, keyboard zoom shortcuts, and drag-to-pan.
-- The image viewer reuses an already hydrated card preview object URL when
-  possible, so opening an already-visible album thumbnail does not re-fetch the
-  same image before showing it.
+- The image viewer fetches and browser-decodes the full preview independently;
+  it does not reuse the bounded grid thumbnail as the original image.
+- Empty, non-image, or undecodable Blob responses are evicted and retried once
+  instead of being cached as successful viewer sources.
 - A 12-second preview fetch timeout now switches the dialog to an explicit
   retry/failure state instead of leaving the operator on an infinite spinner.
 
@@ -122,3 +125,14 @@ Additional image viewer QA after zoom enhancement:
 - No public gateway exposure was added.
 - This is a Web UI and local API interaction fix. It does not claim mobile app
   parity or production-grade face/person identity recognition.
+
+## 7.9 Reliability Recheck - 2026-07-18
+
+- S100P current media rows: 101 valid RGB JPEG files.
+- Bounded thumbnail production gate: 101/101 passed, longest edge 480 px,
+  aggregate response size about 3.17 MB.
+- Largest-five original preview gate: 5/5 passed; the 6000×3376 source remained
+  full resolution in the viewer path.
+- Media list and album payloads now use the same ACL decision as the preview
+  endpoint, so an inaccessible photo is not rendered as a permanently broken
+  card.

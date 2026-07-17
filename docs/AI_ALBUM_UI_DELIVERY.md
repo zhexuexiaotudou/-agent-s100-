@@ -25,7 +25,9 @@ Frontend:
   - right selected-asset detail panel
 - Added local search presets for invoices, white-clothes person queries,
   contracts, and the unsafe identity-recognition test query.
-- Added asset cards with real thumbnails from `/api/media/preview?path_hash=...`.
+- Added asset cards with authenticated bounded thumbnails from
+  `/api/media/preview?path_hash=...&variant=thumbnail`; the full-image viewer
+  keeps the route without `variant`.
 - Reused the existing image viewer, including double-click open, zoom, fit,
   rotate, wheel zoom, and drag-to-pan.
 - Added selected-asset detail with smart naming, OCR status, evidence count,
@@ -181,9 +183,9 @@ Browser acceptance in the in-app browser:
 - Search `这个人是谁` was blocked locally with the message
   `已拦截身份识别类查询：这个人是谁`.
 - AI Album thumbnails loaded as `blob:` images from the media preview route.
-- A quick double-click before thumbnails were fully loaded opened the image
-  viewer and waited for the shared in-flight preview request instead of
-  timing out.
+- The 2026-07-18 reliability path separates the thumbnail request from the
+  full-image viewer request, validates browser decoding, and retries one failed
+  Blob after cache eviction.
 - Image viewer controls were verified:
   - zoom changed from `100%` to `120%`
   - rotate changed the transform to include `rotate(90deg)`
