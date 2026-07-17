@@ -2,11 +2,14 @@
 from __future__ import annotations
 
 import argparse
+import codecs
 import json
 import os
 import re
+import select
 import subprocess
 import sys
+import threading
 import time
 import urllib.error
 import urllib.request
@@ -27,6 +30,12 @@ try:
     from src.harness.token_budget_integration import TokenBudgetIntegration
 except Exception:
     TokenBudgetIntegration = None  # type: ignore[assignment]
+
+
+_BPU_LOCK = threading.Lock()
+_BPU_PROCESS: Any | None = None
+_BPU_POLICY_HASH: str | None = None
+_BPU_READY = False
 
 
 def iso_now() -> str:
@@ -524,52 +533,193 @@ def run_ai_nas_flow(policy: dict[str, Any], prompt: str) -> dict[str, Any]:
     return payload
 
 
-def run_qwen_runtime(policy: dict[str, Any], prompt: str) -> dict[str, Any]:
+def _bpu_policy_hash(policy: dict[str, Any]) -> str:
+    runtime = policy["official_runtime"]
+    return "|".join(
+        [
+            str(runtime.get("runtime_bin") or ""),
+            str(runtime.get("active_config") or ""),
+            str(runtime.get("runtime_lib_dir") or ""),
+        ]
+    )
+
+
+def _bpu_kill() -> None:
+    global _BPU_PROCESS, _BPU_READY
+    process = _BPU_PROCESS
+    _BPU_PROCESS = None
+    _BPU_READY = False
+    if process is None:
+        return
+    for stream_name in ("stdin", "stdout"):
+        stream = getattr(process, stream_name, None)
+        if stream is not None:
+            try:
+                stream.close()
+            except Exception:
+                pass
+    try:
+        process.kill()
+        process.wait(timeout=5)
+    except Exception:
+        pass
+
+
+def _read_bpu_until_user_prompt(process: Any, timeout: int) -> tuple[str, str | None]:
+    buffer = ""
+    deadline = time.time() + timeout
+    decoder = codecs.getincrementaldecoder("utf-8")(errors="replace")
+    while time.time() < deadline:
+        if process.poll() is not None:
+            return buffer, "bpu_process_died"
+        remaining = max(0.0, deadline - time.time())
+        try:
+            file_descriptor = process.stdout.fileno()
+        except (AttributeError, OSError, ValueError):
+            file_descriptor = None
+        if file_descriptor is not None and os.name != "nt":
+            readable, _, _ = select.select([file_descriptor], [], [], remaining)
+            if not readable:
+                return buffer, "bpu_read_timeout"
+            chunk = os.read(file_descriptor, 4096)
+        else:
+            chunk = process.stdout.read(1)
+        if not chunk:
+            return buffer, "bpu_stdout_closed"
+        if isinstance(chunk, bytes):
+            buffer += decoder.decode(chunk)
+        else:
+            buffer += chunk
+        if "[User] <<<" in buffer or "[system out] >>>" in buffer:
+            return buffer, None
+    return buffer, "bpu_read_timeout"
+
+
+def _write_bpu_line(process: Any, value: str) -> None:
+    payload = value.rstrip("\n") + "\n"
+    try:
+        process.stdin.write(payload.encode("utf-8"))
+    except TypeError:
+        process.stdin.write(payload)
+    process.stdin.flush()
+
+
+def _bpu_start(policy: dict[str, Any]) -> tuple[bool, str | None]:
+    global _BPU_PROCESS, _BPU_POLICY_HASH, _BPU_READY
     runtime = policy["official_runtime"]
     runtime_bin = Path(os.environ.get("QWEN25_RUNTIME_BIN", runtime["runtime_bin"]))
     runtime_config = Path(os.environ.get("QWEN25_RUNTIME_CONFIG", runtime["active_config"]))
     lib_dir = Path(os.environ.get("QWEN25_RUNTIME_LIB_DIR", runtime["runtime_lib_dir"]))
-    timeout = int(os.environ.get("QWEN25_CHAT_TIMEOUT_SECONDS", str(runtime.get("chat_timeout_seconds", 90))))
     if not runtime_bin.is_file():
-        return {"ok": False, "error": f"runtime_bin_missing:{runtime_bin}"}
+        return False, f"runtime_bin_missing:{runtime_bin}"
     if not runtime_config.is_file():
-        return {"ok": False, "error": f"runtime_config_missing:{runtime_config}"}
+        return False, f"runtime_config_missing:{runtime_config}"
     env = dict(os.environ)
     env["LD_LIBRARY_PATH"] = str(lib_dir)
-    started = time.perf_counter()
     try:
-        completed = subprocess.run(
+        _BPU_PROCESS = subprocess.Popen(
             [str(runtime_bin), "-c", str(runtime_config)],
             cwd=str(runtime_bin.parent),
-            input=prompt.strip() + "\nexit\n",
-            text=True,
-            encoding="utf-8",
-            errors="replace",
-            capture_output=True,
-            timeout=timeout,
+            stdin=subprocess.PIPE,
+            stdout=subprocess.PIPE,
+            stderr=subprocess.STDOUT,
+            bufsize=0,
             env=env,
         )
-        timed_out = False
-        stdout = completed.stdout
-        stderr = completed.stderr
-        returncode = completed.returncode
-    except subprocess.TimeoutExpired as exc:
-        timed_out = True
-        stdout = exc.stdout or ""
-        stderr = exc.stderr or ""
-        returncode = None
-    answer = parse_assistant(stdout)
+    except Exception as exc:
+        _BPU_PROCESS = None
+        return False, f"bpu_start_failed:{type(exc).__name__}:{exc}"
+    _BPU_POLICY_HASH = _bpu_policy_hash(policy)
+    boot_timeout = int(os.environ.get("QWEN25_BPU_START_TIMEOUT_SECONDS", "180"))
+    _boot_output, error = _read_bpu_until_user_prompt(_BPU_PROCESS, boot_timeout)
+    if error:
+        _bpu_kill()
+        return False, error
+    _BPU_READY = True
+    return True, None
+
+
+def _sanitize_bpu_answer(answer: str) -> str:
+    cleaned = re.sub(r"<\|(?:im_start|im_end|endoftext)\|>", "", str(answer or ""), flags=re.IGNORECASE)
+    return cleaned.strip()
+
+
+def _bpu_chat_once(policy: dict[str, Any], prompt: str) -> dict[str, Any]:
+    global _BPU_PROCESS
+    runtime = policy["official_runtime"]
+    timeout = int(os.environ.get("QWEN25_CHAT_TIMEOUT_SECONDS", str(runtime.get("chat_timeout_seconds", 90))))
+    expected_hash = _bpu_policy_hash(policy)
+    if _BPU_PROCESS is None or _BPU_POLICY_HASH != expected_hash or _BPU_PROCESS.poll() is not None:
+        _bpu_kill()
+        started, error = _bpu_start(policy)
+        if not started:
+            return {"ok": False, "error": error or "bpu_start_failed"}
+    process = _BPU_PROCESS
+    started_at = time.perf_counter()
+    try:
+        _write_bpu_line(process, "reset")
+    except (BrokenPipeError, OSError) as exc:
+        _bpu_kill()
+        return {"ok": False, "error": f"bpu_reset_write_failed:{exc}"}
+    reset_output, reset_error = _read_bpu_until_user_prompt(process, min(timeout, 15))
+    if reset_error:
+        _bpu_kill()
+        return {
+            "ok": False,
+            "error": f"bpu_reset_failed:{reset_error}",
+            "stdout_tail": clean_runtime_text(reset_output)[-2000:],
+        }
+    try:
+        _write_bpu_line(process, prompt.strip())
+    except (BrokenPipeError, OSError) as exc:
+        _bpu_kill()
+        return {"ok": False, "error": f"bpu_prompt_write_failed:{exc}"}
+    output, error = _read_bpu_until_user_prompt(process, timeout)
+    elapsed_ms = round((time.perf_counter() - started_at) * 1000, 3)
+    if error:
+        _bpu_kill()
+        return {
+            "ok": False,
+            "error": error,
+            "timed_out": error == "bpu_read_timeout",
+            "elapsed_ms": elapsed_ms,
+            "stdout_tail": clean_runtime_text(output)[-2000:],
+        }
+    answer = _sanitize_bpu_answer(parse_assistant(output))
+    if not answer:
+        _bpu_kill()
+        return {
+            "ok": False,
+            "error": "bpu_control_token_only_answer",
+            "elapsed_ms": elapsed_ms,
+            "stdout_tail": clean_runtime_text(output)[-2000:],
+        }
     return {
-        "ok": returncode == 0 and not timed_out,
-        "returncode": returncode,
-        "timed_out": timed_out,
-        "elapsed_ms": round((time.perf_counter() - started) * 1000, 3),
+        "ok": True,
+        "returncode": process.poll(),
+        "timed_out": False,
+        "elapsed_ms": elapsed_ms,
         "answer": answer,
-        "stdout_tail": clean_runtime_text(stdout)[-2000:],
-        "stderr_tail": clean_runtime_text(stderr)[-2000:],
-        "runtime_config": str(runtime_config),
-        "runtime_bin": str(runtime_bin),
+        "stdout_tail": clean_runtime_text(output)[-2000:],
+        "stderr_tail": "",
+        "runtime_config": str(Path(os.environ.get("QWEN25_RUNTIME_CONFIG", runtime["active_config"]))),
+        "runtime_bin": str(Path(os.environ.get("QWEN25_RUNTIME_BIN", runtime["runtime_bin"]))),
+        "session_reset": True,
     }
+
+
+def run_qwen_runtime(policy: dict[str, Any], prompt: str) -> dict[str, Any]:
+    with _BPU_LOCK:
+        result = _bpu_chat_once(policy, prompt)
+        if result.get("ok"):
+            result["runtime_retry_count"] = 0
+            return result
+        first_error = result.get("error")
+        _bpu_kill()
+        retry = _bpu_chat_once(policy, prompt)
+        retry["runtime_retry_count"] = 1
+        retry["first_runtime_error"] = first_error
+        return retry
 
 
 class Handler(BaseHTTPRequestHandler):
