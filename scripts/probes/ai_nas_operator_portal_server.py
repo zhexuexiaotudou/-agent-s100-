@@ -1478,13 +1478,16 @@ def copilot_search_reason_display(reason: object) -> str:
     return mapping.get(code, code)
 
 
-def http_post_json(name: str, url: str, payload: dict, timeout: int = 60) -> dict:
+def http_post_json(name: str, url: str, payload: dict, timeout: int = 60, headers: dict[str, str] | None = None) -> dict:
     started = time.perf_counter()
     data = json.dumps(payload, ensure_ascii=False).encode("utf-8")
+    request_headers = {"Accept": "application/json", "Content-Type": "application/json; charset=utf-8"}
+    if headers:
+        request_headers.update(headers)
     req = urllib.request.Request(
         url,
         data=data,
-        headers={"Accept": "application/json", "Content-Type": "application/json; charset=utf-8"},
+        headers=request_headers,
         method="POST",
     )
     try:
@@ -5336,6 +5339,24 @@ class PortalState:
                 },
                 extra={"cloud_available": False, "cloud_used": False},
             )
+        cloud_headers: dict[str, str] = {}
+        token_file = os.environ.get("AI_NAS_CLOUD_CHAT_TOKEN_FILE", "").strip()
+        if token_file:
+            try:
+                cloud_token = Path(token_file).read_text(encoding="utf-8").strip()
+            except OSError as exc:
+                return self._copilot_attach_router(
+                    HTTPStatus.BAD_GATEWAY,
+                    {"ok": False, "error": "cloud_bridge_token_unavailable", "detail": type(exc).__name__},
+                    router,
+                )
+            if not cloud_token:
+                return self._copilot_attach_router(
+                    HTTPStatus.BAD_GATEWAY,
+                    {"ok": False, "error": "cloud_bridge_token_empty"},
+                    router,
+                )
+            cloud_headers["Authorization"] = f"Bearer {cloud_token}"
         result = http_post_json(
             "cloud_overflow_chat",
             normalize_chat_completions_url(cloud_url),
@@ -5346,6 +5367,7 @@ class PortalState:
                 "metadata": {"source": "digua_ai_nas_cloud_overflow", "privacy_level": "none"},
             },
             timeout=60,
+            headers=cloud_headers,
         )
         if not result.get("ok"):
             return self._copilot_attach_router(HTTPStatus.BAD_GATEWAY, {"ok": False, "error": "cloud_overflow_failed", "upstream": result}, router)

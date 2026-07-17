@@ -1,0 +1,20 @@
+[Unit]
+Description=Digua loopback OpenClaw cloud inference bridge
+After=network-online.target openclaw-gateway.service
+Wants=network-online.target
+Requires=openclaw-gateway.service
+
+[Service]
+Type=simple
+User=root
+ExecStart=/usr/bin/python3 /mnt/nas/openclaw/scripts/probes/openclaw_cloud_inference_bridge.py --bind 127.0.0.1 --port 18082 --token-file /home/sunrise/.config/digua/cloud_bridge_token --openclaw /opt/node-v22.19.0-linux-arm64/bin/openclaw --model custom-gateway/MiniMax-M2.7
+Restart=on-failure
+RestartSec=3
+NoNewPrivileges=true
+PrivateTmp=true
+ProtectSystem=strict
+ProtectHome=read-only
+ReadOnlyPaths=/mnt/nas/openclaw /home/sunrise/.config/digua/cloud_bridge_token /root/.openclaw
+
+[Install]
+WantedBy=multi-user.target
