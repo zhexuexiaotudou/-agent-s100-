@@ -36,6 +36,8 @@ AI-NAS portal (sunrise, 127.0.0.1:8765)
 
 5. 先启动并检查 root bridge，再重启 `sunrise` 的门户 user service。
 
+桥服务必须显式设置 `HOME=/root`，并将 OpenClaw 自带的 Node.js 22 目录放在 `PATH` 首位。systemd 的默认 PATH 可能命中系统 Node.js 20，届时 OpenClaw 会以版本不满足要求退出。OpenClaw CLI 还会维护 `/root/.openclaw/state` 的权限，因此沙箱仅对这个 state 目录开放写权限；provider 配置和桥脚本仍为只读。
+
 ## 验收
 
 - `GET http://127.0.0.1:18082/health` 返回 `ok=true`，端口只监听 loopback。
