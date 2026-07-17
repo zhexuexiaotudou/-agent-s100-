@@ -25,7 +25,9 @@ Consequently, unrelated HTTP requests shared the same accelerator KV cache.
   a failed generation and retried once with a fresh process.
 - Answer exact assistant-identity questions deterministically in the portal.
   The reply identifies the local S100P assistant and its authorization/privacy
-  boundary without invoking Qwen, NAS tools, or cloud services.
+  boundary without invoking the intent router, Qwen, NAS tools, or cloud
+  services. This check is at the assistant entry point so a model-generated
+  cloud classification cannot override the appliance's own identity.
 - Keep ordinary general-chat questions on the local Qwen route. Document,
   album, storage, and other existing assistant routes are unchanged.
 
