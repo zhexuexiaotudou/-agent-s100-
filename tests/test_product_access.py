@@ -246,6 +246,7 @@ class ProductAccessContractTest(unittest.TestCase):
         self.assertNotIn("qwen25-local-openai-gateway.service", uninstaller)
         self.assertIn("backend_units_touched':[]", installer)
         self.assertIn("systemctl restart digua-product-access.service", installer)
+        self.assertIn("release/install/configure_remote_access.sh", installer)
 
     def test_lan_configuration_synchronizes_hosts_and_restarts_avahi(self):
         repo = Path(__file__).resolve().parents[1]
