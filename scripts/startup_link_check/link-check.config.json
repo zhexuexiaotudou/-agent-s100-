@@ -6,6 +6,8 @@
       { "ip": "192.168.137.1", "prefixLength": 24 }
     ],
     "startupDelaySeconds": 45,
+    "failureRetrySeconds": 30,
+    "maxAutomaticRetries": 20,
     "autoCloseSuccessSeconds": 5,
     "autoCloseFixedSeconds": 10
   },
@@ -14,6 +16,7 @@
     "user": "sunrise",
     "sshKey": "C:\\Users\\zhexu\\.ssh\\s100p_linkcheck_ed25519",
     "sshConnectTimeoutSeconds": 8,
+    "clockMaxSkewSeconds": 120,
     "interface": "eth1",
     "nasInterface": "eth0",
     "nasInterfaceIPv4": "169.254.8.10/16",
@@ -40,10 +43,18 @@
     "probeDir": "/mnt/nas/openclaw/tmp"
   },
   "openclaw": {
-    "serviceName": "openclaw-gateway.service",
-    "rootUserRuntimeDir": "/run/user/0",
-    "logFile": "/tmp/openclaw/openclaw-2026-05-28.log",
-    "feishuHost": "open.feishu.cn"
+    "systemServiceName": "openclaw-gateway.service",
+    "portalServiceName": "openclaw-gateway.service",
+    "qwenServiceName": "qwen25-local-openai-gateway.service",
+    "userRuntimeDir": "/run/user/1000",
+    "systemHealthUrl": "http://127.0.0.1:18765/health",
+    "portalHealthUrl": "http://127.0.0.1:8765/api/health",
+    "qwenHealthUrl": "http://127.0.0.1:18080/health",
+    "connectivityHost": "open.weixin.qq.com"
+  },
+  "storage": {
+    "rootWarnPercent": 90,
+    "rootFailPercent": 98
   },
   "logging": {
     "localDir": "F:\\Project\\Digua\\logs\\link-check"
