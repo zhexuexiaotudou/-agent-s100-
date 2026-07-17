@@ -5977,6 +5977,8 @@ class PortalState:
         clean_message = str(message or "").strip()
         if not clean_message:
             return HTTPStatus.BAD_REQUEST, {"ok": False, "error": "empty_message"}
+        if is_local_assistant_identity_question(clean_message):
+            return self.local_qwen_chat(clean_message, user)
         action_intent = infer_copilot_action_intent(clean_message)
         router = self.copilot_qwen_route(clean_message, action_intent)
         if action_intent:

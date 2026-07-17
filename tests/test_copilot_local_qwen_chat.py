@@ -128,7 +128,7 @@ class CopilotLocalQwenChatTest(unittest.TestCase):
             self.assertNotIn("2026\u5e745\u670820\u65e5", payload["answer"])
             self.assertFalse(payload["cloud_used"])
             self.assertFalse(payload["qwen_execution_authority"])
-            post_json.assert_called_once()
+            post_json.assert_not_called()
 
     def test_person_photo_search_uses_qwen_router_then_local_yolo_index(self):
         with tempfile.TemporaryDirectory() as tmp:
