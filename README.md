@@ -32,6 +32,13 @@ Current architecture and gate evidence are in
 [`docs/product_access/PRODUCT_ACCESS_ARCHITECTURE.md`](docs/product_access/PRODUCT_ACCESS_ARCHITECTURE.md)
 and [`reports/access/40600_product_acceptance_gate.md`](reports/access/40600_product_acceptance_gate.md).
 
+The album recovery deployed on 2026-07-18 scopes the visible library to the 100
+photos under `Personal/Photos`, removes the legacy 24-photo intermediate state,
+loads previews with bounded concurrency, and rejects text placeholders that use
+image suffixes. Live counts, soft-delete evidence, rollback points, and the
+browser-verification boundary are recorded in
+[`docs/album_preview_recovery_20260718.md`](docs/album_preview_recovery_20260718.md).
+
 ## Current Status
 
 Status timestamp: 2026-07-06 17:53 CST.

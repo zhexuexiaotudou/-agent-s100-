@@ -25,7 +25,7 @@ ALLOWED_VERDICTS = {
 }
 INCLUDES = [
     "src/product_access", "scripts/probes/ai_nas_identity.py", "scripts/digua-access", "scripts/digua-doctor",
-    "scripts/build_product_access_delivery.py", "deploy/product_access", "config", "release/avahi",
+    "scripts/build_product_access_delivery.py", "deploy/product_access", "config", "configs/systemd/openclaw-gateway.service", "release/avahi",
     "release/systemd/digua-product-access.service", "release/systemd/digua-product-remote-ingress.service",
     "release/install", "requirements.txt", "web/ai_nas_desktop_v2.html", "web/static/digua_ai_nas_v2.css", "web/static/digua_ai_nas_v2.js",
     "web/static/pwa-icon-192.svg", "web/static/pwa-icon-512.svg", "tests/test_product_access.py",
