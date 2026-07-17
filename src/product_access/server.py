@@ -240,7 +240,12 @@ class ProductAccessHandler(BaseHTTPRequestHandler):
         self.send_header("X-Frame-Options", "DENY")
         self.send_header("Referrer-Policy", "no-referrer")
         self.send_header("Permissions-Policy", "camera=(), microphone=(), geolocation=()")
-        self.send_header("Content-Security-Policy", "default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; object-src 'none'; base-uri 'none'; frame-ancestors 'none'; form-action 'self'")
+        self.send_header(
+            "Content-Security-Policy",
+            "default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; "
+            "img-src 'self' data: blob:; media-src 'self' blob:; connect-src 'self'; "
+            "object-src 'none'; base-uri 'none'; frame-ancestors 'none'; form-action 'self'",
+        )
         for key, value in (headers or {}).items():
             self.send_header(key, value)
         self.end_headers()
@@ -555,7 +560,7 @@ class ProductAccessHandler(BaseHTTPRequestHandler):
         if route == "/favicon.ico":
             self.send_response(HTTPStatus.NO_CONTENT); self.send_header("Cache-Control", "public, max-age=86400"); self.end_headers(); return
         if route == "/sw.js":
-            sw = "const C='digua-shell-v2',A=['/ui','/manifest.webmanifest','/static/pwa-icon-192.svg','/static/pwa-icon-512.svg','/static/digua_ai_nas_v2.css','/static/digua_ai_nas_v2.js'];self.addEventListener('install',e=>e.waitUntil(caches.open(C).then(c=>c.addAll(A))));self.addEventListener('activate',e=>e.waitUntil(caches.keys().then(k=>Promise.all(k.filter(x=>x!==C).map(x=>caches.delete(x))))));self.addEventListener('fetch',e=>{const u=new URL(e.request.url);if(e.request.method!=='GET'||u.pathname.startsWith('/api/')||u.pathname.startsWith('/api/v1/')||u.pathname.includes('download'))return;e.respondWith(fetch(e.request).catch(()=>caches.match(e.request)))})"
+            sw = "const C='digua-shell-v3',A=['/ui','/manifest.webmanifest','/static/pwa-icon-192.svg','/static/pwa-icon-512.svg','/static/digua_ai_nas_v2.css','/static/digua_ai_nas_v2.js'];self.addEventListener('install',e=>e.waitUntil(caches.open(C).then(c=>c.addAll(A))));self.addEventListener('activate',e=>e.waitUntil(caches.keys().then(k=>Promise.all(k.filter(x=>x!==C).map(x=>caches.delete(x))))));self.addEventListener('fetch',e=>{const u=new URL(e.request.url);if(e.request.method!=='GET'||u.pathname.startsWith('/api/')||u.pathname.startsWith('/api/v1/')||u.pathname.includes('download'))return;e.respondWith(fetch(e.request).catch(()=>caches.match(e.request)))})"
             self._send(HTTPStatus.OK, sw.encode(), "application/javascript; charset=utf-8", {"Service-Worker-Allowed": "/"}); return
         if route == "/":
             self.send_response(HTTPStatus.SEE_OTHER); self.send_header("Location", "/ui"); self.end_headers(); return

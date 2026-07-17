@@ -85,7 +85,13 @@ class OfflineUiContractTest(unittest.TestCase):
             self.assertIn(selector_or_rule, self.css)
         self.assertIn('lang="zh-CN"', self.html)
         self.assertIn("<title>地瓜 AI-NAS</title>", self.html)
-        self.assertIn("20260718-album-recovery", self.html)
+        self.assertIn("20260718-live-media", self.html)
+
+    def test_authenticated_shell_loads_real_capacity_on_every_entry_page(self):
+        self.assertIn("async function loadShellStorageCapacity()", self.js)
+        self.assertIn('const storage = await fetchJson("/api/storage/status")', self.js)
+        self.assertIn("if (appState.authToken) await loadShellStorageCapacity();", self.js)
+        self.assertIn("await loadShellStorageCapacity();\n      showToast", self.js)
 
     def test_native_static_stack_and_existing_api_contract_remain(self):
         self.assertNotRegex(self.html, r"react|vue|angular|tailwind|bootstrap")
