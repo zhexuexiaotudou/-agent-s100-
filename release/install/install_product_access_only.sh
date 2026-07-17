@@ -62,7 +62,8 @@ required=(
   release/systemd/digua-product-access.service release/systemd/digua-product-remote-ingress.service
   release/avahi/digua-ai-nas.service release/install/configure_lan_access.sh
   release/install/configure_remote_access.sh release/install/sync_upstream_identity_runtime.sh
-  release/install/sync_openclaw_portal_unit.sh configs/systemd/openclaw-gateway.service
+  release/install/sync_upstream_album_runtime.sh release/install/sync_openclaw_portal_unit.sh
+  configs/systemd/openclaw-gateway.service
 )
 blockers=()
 remote_was_active=0
@@ -137,6 +138,7 @@ if [[ -z "$SIM_ROOT" ]]; then
     "$INSTALL_ROOT/app/release/install/configure_lan_access.sh" \
     "$INSTALL_ROOT/app/release/install/configure_remote_access.sh" \
     "$INSTALL_ROOT/app/release/install/sync_upstream_identity_runtime.sh" \
+    "$INSTALL_ROOT/app/release/install/sync_upstream_album_runtime.sh" \
     "$INSTALL_ROOT/app/release/install/sync_openclaw_portal_unit.sh"
   ln -sfn "$INSTALL_ROOT/app/scripts/digua-access" /usr/local/bin/digua-access
   ln -sfn "$INSTALL_ROOT/app/scripts/digua-doctor" /usr/local/bin/digua-doctor

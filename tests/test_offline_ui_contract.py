@@ -85,7 +85,7 @@ class OfflineUiContractTest(unittest.TestCase):
             self.assertIn(selector_or_rule, self.css)
         self.assertIn('lang="zh-CN"', self.html)
         self.assertIn("<title>地瓜 AI-NAS</title>", self.html)
-        self.assertIn("20260716-offline-ui", self.html)
+        self.assertIn("20260718-album-recovery", self.html)
 
     def test_native_static_stack_and_existing_api_contract_remain(self):
         self.assertNotRegex(self.html, r"react|vue|angular|tailwind|bootstrap")

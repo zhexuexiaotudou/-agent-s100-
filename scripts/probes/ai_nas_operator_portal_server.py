@@ -162,7 +162,7 @@ from ai_nas_common import (
     storage_status,
 )
 from ai_nas_identity import IdentityStore, parse_bearer_token
-from ai_nas_media import MediaCenter
+from ai_nas_media import MediaCenter, is_supported_image_bytes
 from ai_nas_ops import OpsManager
 from ai_nas_snapshot import SnapshotStore
 try:
@@ -2502,13 +2502,14 @@ class PortalState:
         result["acl_filtered"] = True
         return result
 
-    def visible_media_payload(self, user: dict) -> dict:
+    def visible_media_payload(self, user: dict, *, library_only: bool = False) -> dict:
         media = self.media_center
         if not media:
             return {"photos": [], "timeline": [], "albums": [], "duplicates": [], "stats": {}}
         scope = self.authorized_asset_scope(user)
         allowed_ids = None if scope is None else scope["asset_ids"]
-        rows = media.list_photos(limit=self.storage_max_files)
+        library_root = self.personal_root / "Photos" if library_only and self.personal_root else None
+        rows = media.list_photos(limit=self.storage_max_files, path_prefix=library_root)
         photos = rows if allowed_ids is None else [row for row in rows if str(row.get("asset_id") or "") in allowed_ids]
         dates: dict[str, int] = {}
         for row in photos:
@@ -2537,7 +2538,14 @@ class PortalState:
             "raw_path_returned": False,
             "acl_scope": "all" if allowed_ids is None else "current_user",
         }
-        return {"photos": photos, "timeline": timeline, "albums": albums, "duplicates": duplicates, "stats": stats}
+        return {
+            "photos": photos,
+            "timeline": timeline,
+            "albums": albums,
+            "duplicates": duplicates,
+            "stats": stats,
+            "photo_scope": "library" if library_only else "all_indexed",
+        }
 
     def _relative_path_for_personal_file(self, path: Path) -> str | None:
         if not self.personal_root:
@@ -4297,6 +4305,8 @@ class PortalState:
             return HTTPStatus.BAD_REQUEST, {"ok": False, "error": f"invalid_base64:{exc}", "raw_path_returned": False}
         if len(content) > MAX_UPLOAD_BYTES:
             return HTTPStatus.REQUEST_ENTITY_TOO_LARGE, {"ok": False, "error": "upload_too_large", "max_bytes": MAX_UPLOAD_BYTES, "raw_path_returned": False}
+        if not is_supported_image_bytes(content[:16], Path(filename).suffix):
+            return HTTPStatus.BAD_REQUEST, {"ok": False, "error": "invalid_image_content", "raw_path_returned": False}
         target = self._unique_child(parent, filename)
         try:
             target.write_bytes(content)
@@ -7561,12 +7571,13 @@ class PortalHandler(BaseHTTPRequestHandler):
             if status:
                 self.send_json(error or {}, status)
                 return
-            media_payload = self.state.visible_media_payload(user or {})
+            params = parse_qs(urlparse(self.path).query, keep_blank_values=True)
+            library_only = str((params.get("scope") or [""])[0] or "").strip().lower() == "library"
+            media_payload = self.state.visible_media_payload(user or {}, library_only=library_only)
             if route == "/api/media/status":
                 self.send_json({"ok": True, "schema": "digua_media_album_v2", **media_payload["stats"], "cloud_used": False, "local_only": True})
                 return
             if route == "/api/media/photos":
-                params = parse_qs(urlparse(self.path).query, keep_blank_values=True)
                 limit = int((params.get("limit") or ["100"])[0] or "100")
                 offset = int((params.get("offset") or ["0"])[0] or "0")
                 self.send_json({"ok": True, "schema": "digua_media_album_v2", "photos": media_payload["photos"][offset:offset + limit], "raw_path_returned": False})
@@ -7580,7 +7591,8 @@ class PortalHandler(BaseHTTPRequestHandler):
             if route == "/api/media/duplicates":
                 self.send_json({"ok": True, "schema": "digua_media_album_v2", "duplicates": media_payload["duplicates"], "raw_path_returned": False})
                 return
-            self.send_json({"ok": True, "schema": "digua_media_album_v2", "stats": media_payload["stats"], "albums": media_payload["albums"], "photos": media_payload["photos"][:24], "raw_path_returned": False})
+            summary_photos = media_payload["photos"] if library_only else media_payload["photos"][:24]
+            self.send_json({"ok": True, "schema": "digua_media_album_v2", "stats": media_payload["stats"], "albums": media_payload["albums"], "photos": summary_photos, "photo_scope": media_payload["photo_scope"], "raw_path_returned": False})
             return
         if route == "/api/media/album":
             if not self.require_product():

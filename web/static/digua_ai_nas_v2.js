@@ -139,6 +139,9 @@
   let imageViewerDrag = null;
   let aiAlbumSelectTimer = null;
   let previewLazyObserver = null;
+  const previewHydrationQueue = [];
+  let previewHydrationActive = 0;
+  const PREVIEW_HYDRATION_CONCURRENCY = 4;
 
   function safeLocalStorageGet(key) {
     try {
@@ -2153,7 +2156,7 @@
       ? storageTrashButton({ kind: "image", title, pathHash: photo.path_hash, previewUrl })
       : "";
     const thumb = previewUrl
-      ? `<div class="search-thumb media-photo-thumb has-preview"><img class="search-preview-image" alt="图片预览" data-preview-url="${escapeHtml(previewUrl)}" hidden><span class="thumb-loading">加载预览</span></div>`
+      ? `<div class="search-thumb media-photo-thumb has-preview"><img class="search-preview-image" alt="图片预览" data-preview-url="${escapeHtml(previewUrl)}" loading="lazy" decoding="async" hidden><span class="thumb-loading">加载预览</span></div>`
       : `<span class="doc-glyph png">IMG</span>`;
     return `<article class="doc-item media-photo-item${previewUrl ? " is-openable" : ""}${trashButton ? " has-actions" : ""}"${openAttrs}>
       ${thumb}
@@ -2287,10 +2290,14 @@
       : photos;
     const uploadBusy = appState.media.uploadStatus === "loading";
     const organizeBusy = appState.aiAlbum.organizeRunStatus === "loading";
-    const totalImages = Number(organize.total_images ?? photos.length ?? stats.photo_count ?? 0);
-    const pendingCount = Number(organize.pending_count ?? 0);
-    const organizedCount = Number(organize.organized_count ?? Math.max(0, totalImages - pendingCount));
-    const categoryCount = primaryCategories.filter((item) => Number(item.count || 0) > 0).length || categories.filter(([name]) => name !== "待整理").length;
+    const totalImages = photos.length;
+    const primaryStates = photos.map(mediaPhotoPrimaryStatus).filter(Boolean);
+    const pendingCount = primaryStates.filter((item) => item.state === "pending").length;
+    const organizedCount = primaryStates.length
+      ? primaryStates.filter((item) => item.state === "organized").length
+      : Math.max(0, totalImages - categories.find(([name]) => name === "待整理")?.[1] || 0);
+    const categoryCount = categories.filter(([name]) => name !== "待整理").length;
+    const scopedOrganize = { ...organize, total_images: totalImages, pending_count: pendingCount, organized_count: organizedCount };
     const photoSectionTitle = selectedCategory ? `分类：${selectedCategory}` : "全部图片";
     const headerActions = [
       button(uploadBusy ? "上传中" : "上传图片", { icon: "upload", action: "mediaUploadChoose", disabled: uploadBusy || organizeBusy || appState.media.status === "auth" }),
@@ -2310,7 +2317,7 @@
       ${pageHeader("相册", "NAS 图片自动增量整理和本地 AI 主分类。", headerActions)}
       ${renderMediaUploadInput()}
       ${renderMediaUploadStatus()}
-      ${renderMediaOrganizeStatusPanel(organize, totalImages, categoryCount)}
+      ${renderMediaOrganizeStatusPanel(scopedOrganize, totalImages, categoryCount)}
       <div class="ai-album-kpis">
         <div><span>总图片</span><strong>${fmtCount(totalImages)}</strong></div>
         <div><span>已整理</span><strong>${fmtCount(organizedCount)}</strong></div>
@@ -3014,7 +3021,7 @@
   }
 
   async function hydratePreviewImageV2(img) {
-    if (!img || img.dataset.loaded === "1") return;
+    if (!img || !img.isConnected || img.dataset.loaded === "1") return;
     img.dataset.loaded = "1";
     const container = img.closest(".search-thumb");
     const loading = container?.querySelector(".thumb-loading");
@@ -3034,6 +3041,25 @@
     }
   }
 
+  function drainPreviewHydrationQueue() {
+    while (previewHydrationActive < PREVIEW_HYDRATION_CONCURRENCY && previewHydrationQueue.length) {
+      const img = previewHydrationQueue.shift();
+      if (!img || !img.isConnected || img.dataset.loaded === "1") continue;
+      previewHydrationActive += 1;
+      hydratePreviewImageV2(img).finally(() => {
+        previewHydrationActive = Math.max(0, previewHydrationActive - 1);
+        drainPreviewHydrationQueue();
+      });
+    }
+  }
+
+  function queuePreviewHydration(img) {
+    if (!img || img.dataset.loaded === "1" || img.dataset.queued === "1") return;
+    img.dataset.queued = "1";
+    previewHydrationQueue.push(img);
+    drainPreviewHydrationQueue();
+  }
+
   function hydrateAssistantSearchPreviewsV2() {
     const images = Array.from(document.querySelectorAll("img[data-preview-url]"));
     if (!images.length) return;
@@ -3041,24 +3067,25 @@
       previewLazyObserver.disconnect();
       previewLazyObserver = null;
     }
-    const immediate = images.slice(0, 18);
-    const deferred = images.slice(18);
+    previewHydrationQueue.length = 0;
+    const immediate = images.slice(0, 6);
+    const deferred = images.slice(6);
     for (const img of immediate) {
-      window.setTimeout(() => hydratePreviewImageV2(img), 0);
+      window.setTimeout(() => queuePreviewHydration(img), 0);
     }
     if ("IntersectionObserver" in window) {
       previewLazyObserver = new IntersectionObserver((entries) => {
         for (const entry of entries) {
           if (!entry.isIntersecting) continue;
           previewLazyObserver?.unobserve(entry.target);
-          hydratePreviewImageV2(entry.target);
+          queuePreviewHydration(entry.target);
         }
       }, { rootMargin: "280px 0px" });
       for (const img of deferred) previewLazyObserver.observe(img);
       return;
     }
     deferred.slice(0, 12).forEach((img, index) => {
-      window.setTimeout(() => hydratePreviewImageV2(img), 300 + index * 120);
+      window.setTimeout(() => queuePreviewHydration(img), 300 + index * 120);
     });
   }
 
@@ -3800,22 +3827,9 @@
   }
 
   async function loadMediaData() {
-    if (appState.authToken) await runAiAlbumAutoOrganize({ silent: true, noRender: true });
-    await loadProtectedSummary("media", "/api/media/summary");
+    await loadProtectedSummary("media", "/api/media/summary?scope=library");
     if (!appState.authToken || !appState.media.summary) return;
     let photoItems = Array.isArray(appState.media.summary.photos) ? appState.media.summary.photos : [];
-    try {
-      const photos = await fetchJson("/api/media/photos?limit=500");
-      if (photos.ok && photos.data?.ok && Array.isArray(photos.data.photos)) {
-        photoItems = photos.data.photos;
-        appState.media = {
-          ...appState.media,
-          summary: { ...appState.media.summary, photos: photoItems }
-        };
-      }
-    } catch (_error) {
-      // Keep the summary payload visible if the full photo endpoint is degraded.
-    }
     const settledValue = (result) => (result.status === "fulfilled" ? result.value : { ok: false, status: 0, data: null });
     try {
       const [statusResult, facetsResult, assetsResult, categoriesResult, organizeStatusResult] = await Promise.allSettled([
@@ -3957,12 +3971,11 @@
     appState.aiAlbum = { ...appState.aiAlbum, status: "loading", error: "" };
     if (appState.page === "aiAlbum") renderShell();
     try {
-      await runAiAlbumAutoOrganize({ silent: true, noRender: true });
       const [status, facets, assets, photos, categories, autoStatus] = await Promise.all([
         fetchJson("/api/ai-space/status"),
         fetchJson("/api/ai-space/facets"),
         fetchJson("/api/ai-space/assets?limit=500"),
-        fetchJson("/api/media/photos?limit=500"),
+        fetchJson("/api/media/photos?limit=500&scope=library"),
         fetchJson("/api/smart-classification/categories"),
         fetchJson("/api/auto-organize/status")
       ]);
@@ -4113,7 +4126,7 @@
         body: {
           filename: file.name || `uploaded_${Date.now()}.jpg`,
           content_base64: contentBase64,
-          target_dir: "Uploads",
+          target_dir: "Photos/Uploads",
           auto_process: false
         }
       });
