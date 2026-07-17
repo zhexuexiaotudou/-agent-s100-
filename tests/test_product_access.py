@@ -271,6 +271,18 @@ class ProductAccessContractTest(unittest.TestCase):
         self.assertIn('"$INSTALL_ROOT/app/release/install/configure_remote_access.sh"', installer)
         self.assertIn('"$INSTALL_ROOT/app/release/install/configure_remote_access.sh"', full_installer)
 
+    def test_upstream_identity_runtime_sync_is_explicit_bounded_and_rollback_safe(self):
+        repo = Path(__file__).resolve().parents[1]
+        source = (repo / "release/install/sync_upstream_identity_runtime.sh").read_text(encoding="utf-8")
+        installer = (repo / "release/install/install_product_access_only.sh").read_text(encoding="utf-8")
+        self.assertIn("identity_runtime_backups", source)
+        self.assertIn('systemctl --user restart "$SERVICE"', source)
+        self.assertIn("restore_previous", source)
+        self.assertIn("portal health check failed; restored previous identity runtime", source)
+        self.assertIn("sync_upstream_identity_runtime.sh", installer)
+        self.assertNotIn("qwen25-local-openai-gateway", source)
+        self.assertNotIn("digua-product-access", source)
+
     def test_lan_configuration_synchronizes_hosts_and_restarts_avahi(self):
         repo = Path(__file__).resolve().parents[1]
         source = (repo / "release/install/configure_lan_access.sh").read_text(encoding="utf-8")
