@@ -71,6 +71,15 @@ jobs:
           test ! -e "$root/etc/systemd/system/qwen25-local-openai-gateway.service"
       - name: Build model-free release package
         run: python scripts/build_release.py --version ci-${{ github.sha }} --out "${{ runner.temp }}/digua-release"
+      - name: Execute cloud install gate from built release package
+        shell: bash
+        run: |
+          set -euo pipefail
+          package="digua-ai-nas-s100p-ci-${GITHUB_SHA}"
+          mkdir -p "${RUNNER_TEMP}/digua-release/extracted"
+          tar -xzf "${RUNNER_TEMP}/digua-release/${package}.tar.gz" -C "${RUNNER_TEMP}/digua-release/extracted"
+          cd "${RUNNER_TEMP}/digua-release/extracted/${package}"
+          python gates/stage10_release_cloud_install_gate.py --report-root "${RUNNER_TEMP}/digua-packaged-cloud-install"
       - name: Build and self-check product access delivery
         shell: bash
         run: |
