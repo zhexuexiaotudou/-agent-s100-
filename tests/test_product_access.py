@@ -218,6 +218,13 @@ class ProductAccessContractTest(unittest.TestCase):
         self.assertNotIn("qwen25-local-openai-gateway.service", uninstaller)
         self.assertIn("backend_units_touched':[]", installer)
 
+    def test_lan_configuration_synchronizes_hosts_and_restarts_avahi(self):
+        repo = Path(__file__).resolve().parents[1]
+        source = (repo / "release/install/configure_lan_access.sh").read_text(encoding="utf-8")
+        self.assertIn('127.0.1.1', source)
+        self.assertIn('invalid_hostname', source)
+        self.assertIn('systemctl restart avahi-daemon.service', source)
+
     def test_frontend_uses_cookie_session_csrf_and_current_pwa(self):
         repo = Path(__file__).resolve().parents[1]
         html = (repo / "web/ai_nas_desktop_v2.html").read_text(encoding="utf-8")
