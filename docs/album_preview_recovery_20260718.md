@@ -84,7 +84,7 @@ Live API acceptance:
 - Acceptance JSON:
   `/mnt/nas/openclaw/reports/qwen25_ai_nas/album_placeholder_cleanup_20260717T164046Z/live_acceptance.json`.
 
-Browser boundary:
+Initial browser boundary:
 
 - The deployed page opened successfully at
   `http://digua.local/ui?refresh=54b80d63#media` and rendered the current login
@@ -92,7 +92,29 @@ Browser boundary:
   visual-acceptance account, so an authenticated browser card-count screenshot
   is not claimed. The temporary account was removed from both identity stores.
 - The scoped API count and real preview reads above are the production
-  acceptance evidence; the page remains open for manual login verification.
+  acceptance evidence for the first deployment.
+
+Authenticated browser follow-up:
+
+- User validation found two remaining presentation failures even though the
+  NAS and preview APIs were healthy: the sidebar stayed at the disconnected
+  placeholder on direct album/assistant entry, and fetched previews did not
+  render.
+- PR #50 (`9d10145a2fb0704842f26399a9aa4785e9bf4774`) loads
+  `/api/storage/status` during every authenticated session restore and after
+  login, allows local `blob:` image/media URLs in the product-access CSP, and
+  advances the UI/service-worker caches to `20260718-live-media` and
+  `digua-shell-v3`.
+- All three required CI checks passed before merge. The access-only deployment
+  preserved the backend and NAS data; rollback backup:
+  `/var/backups/digua-ai-nas/access-only-20260717T172020Z`.
+- The authenticated Chrome page at
+  `http://digua.local/ui?refresh=9d10145a#media` rendered `327 GB / 2.0 TB`,
+  `16%`, and 100 album rows. The same page's access log recorded the new static
+  assets, `GET /api/storage/status` 200, scoped summary 200, and the first six
+  preview requests 6/6 HTTP 200. The live `/ui` CSP includes
+  `img-src 'self' data: blob:`. Browser control became unstable while capturing
+  a screenshot, so a screenshot artifact is not claimed.
 
 Deployment packaging follow-up:
 
