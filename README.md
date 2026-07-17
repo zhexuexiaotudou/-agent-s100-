@@ -11,8 +11,9 @@ The preserved `/ui` redesign was completed locally on 2026-07-16 and deployed
 to the powered S100P/NAS system on 2026-07-17. It keeps the native HTML/CSS/JS
 stack, routes, API calls, identity, ACL, controlled-copy, and soft-delete
 boundaries. The user entry point is now `http://digua.local/`, with
-`http://192.168.127.10/` as the verified fallback. The existing portal and Qwen
-services remain loopback-only on ports 8765 and 18080.
+`http://192.168.127.10/` as the verified fallback. The portal, local Qwen 1.5B,
+local Qwen 7B CPU, and guarded MiniMax bridge remain loopback-only on ports
+8765, 18080, 18081, and 18082.
 
 The live acceptance covered mDNS and fallback access, authentication and roles,
 four mobile viewports, reboot recovery, Internet-route loss, NFS loss and
@@ -45,15 +46,23 @@ lock-contention evidence, soft-delete evidence, and rollback points are recorded
 in
 [`docs/album_preview_recovery_20260718.md`](docs/album_preview_recovery_20260718.md).
 
+The AI Assistant now has an explicit model selector for local Qwen2.5 1.5B,
+local Qwen2.5 7B, and cloud MiniMax 2.7. Identity and NAS tool requests remain
+local; selecting MiniMax still requires a local privacy decision before any
+cloud call. The verified 7B route is CPU-backed because real BPU text generation
+failed the 2026-07-18 allocation check. Implementation, live acceptance, and the
+correction to the older shadow claim are recorded in
+[`docs/assistant_model_selector_20260718.md`](docs/assistant_model_selector_20260718.md).
+
 ## Current Status
 
-Status timestamp: 2026-07-18 04:00 CST.
+Status timestamp: 2026-07-18 04:35 CST.
 
 The three demo expectations are now satisfied on the S100P test machine:
 
 | Demo | Expected behavior | Current result | Evidence |
 | --- | --- | --- | --- |
-| 1. S100P as resident gateway | S100P keeps the AI gateway online after login/logout and exposes a stable local entry point | `openclaw-gateway.service` and `qwen25-local-openai-gateway.service` are both `active/enabled`; `loginctl` linger is `yes` | OpenClaw `/api/health` on `127.0.0.1:8765`; Qwen `/health` on `127.0.0.1:18080` |
+| 1. S100P as resident gateway | S100P keeps the AI gateway online after login/logout and exposes a stable local entry point | `openclaw-gateway.service`, `qwen25-local-openai-gateway.service`, and `qwen7b-cpu.service` are active; persistent user services are enabled and `loginctl` linger is `yes` | OpenClaw `/api/health` on `127.0.0.1:8765`; Qwen health on `127.0.0.1:18080` and `127.0.0.1:18081` |
 | 2. OpenClaw implements AI-NAS | OpenClaw can drive NAS operations, not just chat | `ok_ai_nas_openclaw_nas_control_gate`, 10/10 checks passed | `/mnt/nas/openclaw/reports/qwen25_ai_nas/openclaw_nas_control_gate_20260629-210023-832862/openclaw_nas_control_gate.json` |
 | 3. Edge + cloud routing | Every query first enters local Qwen; private/simple requests stay on S100P; public complex requests can use a controlled cloud endpoint | Production portal keeps identity questions local and routes only `privacy_level=none` complex work through the loopback OpenClaw bridge to `custom-gateway/MiniMax-M2.7`; both authenticated HTTP cases returned 200 | [`docs/openclaw_minimax_cloud_overflow_20260718.md`](docs/openclaw_minimax_cloud_overflow_20260718.md) |
 

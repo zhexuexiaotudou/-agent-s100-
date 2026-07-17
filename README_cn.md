@@ -3,6 +3,17 @@
 本仓库是将 S100P 开发板打造为常驻 AI-NAS 网关的证据与演示仓库。OpenClaw 提供面向 NAS
 的交互体验，Qwen 在 S100P 本地运行，边缘-云端路由器决定请求是否可以离开设备。
 
+## 产品入口与 AI 助手模型
+
+S100P/NAS 恢复在线后，产品入口已在 `http://digua.local/` 实机验收，
+`http://192.168.127.10/` 是已验证的备用入口。门户以及本地模型服务均保持 loopback 作用域。
+
+AI 助手现可明确选择 `Qwen2.5 1.5B（本地）`、`Qwen2.5 7B（本地）` 或
+`MiniMax 2.7（云端）`。1.5B 使用 S100P BPU，7B 使用板端 CPU；身份问题和 NAS 工具请求
+保持本地，选择 MiniMax 后仍须先通过本地隐私判断。7B CPU 的原因、三路真实验收结果以及对
+历史 7B shadow 结论的纠正见
+[`docs/assistant_model_selector_20260718.md`](docs/assistant_model_selector_20260718.md)。
+
 ## 离线 UI 工作台
 
 在 S100P 和 NAS 均不在线期间，`/ui` 的保留式改版已于 2026-07-16 在本地完成。改版保留原生
@@ -11,23 +22,24 @@ HTML/CSS/JS、现有路由和 API 调用，以及身份、ACL、受控复制和�
 移动端使用五项底栏和完整的“更多”面板，并覆盖响应式、暗色模式、减少动态效果与触控目标检查。
 
 本地 UI 证据记录在
-[`docs/offline_ui_delivery_20260716.md`](docs/offline_ui_delivery_20260716.md)。S100P/NAS 的真实功能验收
-与部署明确延后，待两台设备恢复在线后执行。
+[`docs/offline_ui_delivery_20260716.md`](docs/offline_ui_delivery_20260716.md)。文档中当时延后的 S100P/NAS
+真实部署已在设备恢复后完成；当前入口、相册恢复与模型选择器的实机证据以本页较新的 2026-07-18
+状态和对应专题文档为准。
 
 非 Dream 7B 已实现功能的离线加固结果，以及设备恢复后的真实链路验收门，记录在
 [`docs/non_dream7b_offline_hardening_20260716.md`](docs/non_dream7b_offline_hardening_20260716.md)。
 
 ## 当前状态
 
-状态时间戳：2026-07-06 17:53 CST。
+状态时间戳：2026-07-18 04:35 CST。
 
 三项演示预期已在 S100P 测试机上达成：
 
 | 演示 | 预期行为 | 当前结果 | 证据 |
 | --- | --- | --- | --- |
-| 1. S100P 作为常驻网关 | S100P 在用户登录/登出后保持 AI 网关在线，提供稳定的本地入口 | `openclaw-gateway.service` 和 `qwen25-local-openai-gateway.service` 均为 `active/enabled`；`loginctl` linger 为 `yes` | OpenClaw `/api/health` 在 `127.0.0.1:8765`；Qwen `/health` 在 `127.0.0.1:18080` |
+| 1. S100P 作为常驻网关 | S100P 在用户登录/登出后保持 AI 网关在线，提供稳定的本地入口 | `openclaw-gateway.service`、`qwen25-local-openai-gateway.service` 和 `qwen7b-cpu.service` 均为 active；常驻 user service 已 enabled，`loginctl` linger 为 `yes` | OpenClaw `/api/health` 在 `127.0.0.1:8765`；Qwen `/health` 在 `127.0.0.1:18080` 和 `127.0.0.1:18081` |
 | 2. OpenClaw 实现 AI-NAS | OpenClaw 能驱动 NAS 操作，而非仅聊天 | `ok_ai_nas_openclaw_nas_control_gate`，10/10 检查通过 | `/mnt/nas/openclaw/reports/qwen25_ai_nas/openclaw_nas_control_gate_20260629-210023-832862/openclaw_nas_control_gate.json` |
-| 3. 边缘+云端路由 | 每个查询首先进入本地 Qwen；隐私/简单请求留在 S100P；公共复杂请求可使用受控云端端点 | `ok_ai_nas_edge_cloud_router`；3/3 分类来自 `qwen_structured_json`；2 个本地，1 个云端；无私密查询发送至云端 | `/mnt/nas/openclaw/reports/qwen25_ai_nas/edge_cloud_router_20260629-210034-495865/edge_cloud_router.json` |
+| 3. 边缘+云端路由 | 每个查询先经过本地规则/Qwen；隐私与本地工具请求留在 S100P；公开通用请求可选择受控云端端点 | 模型选择器三路认证 HTTP 均返回 200；MiniMax 身份问答保持本地，含护照号的私密请求回落 1.5B，公开请求才调用云端 | [`docs/assistant_model_selector_20260718.md`](docs/assistant_model_selector_20260718.md) |
 
 最新 Qwen AI-NAS 验收包同样通过：
 

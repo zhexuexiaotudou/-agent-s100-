@@ -1,5 +1,8 @@
 ## Qwen2.5 7B Promotion Decision 2026-06-25
 
+> **状态纠正（2026-07-18）：本文是历史决策记录，不代表当前生产事实。**
+> 复核发现，2026-06-24 的 shadow chat 命中了 NAS allowlist 工具捷径，响应是网关根据工具结果生成的固定摘要，并未执行 7B 文本生成。2026-07-18 的真实 BPU 补全在干净重启后仍因约 7.4GB ION 分配失败而退出。因此下面的 “All Passed”、6286ms chat 和 Post-Promotion State 不应再作为 7B BPU 已投产的证据。当前产品保留 1.5B BPU（18080），并使用本地 CPU 7B（18081）；详见 [`assistant_model_selector_20260718.md`](assistant_model_selector_20260718.md)。
+
 ### Decision
 
 Promote the Qwen2.5-7B-Instruct from shadow route (port 18081) to production
