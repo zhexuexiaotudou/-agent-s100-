@@ -16,7 +16,7 @@ NoNewPrivileges=true
 PrivateTmp=true
 ProtectSystem=strict
 ProtectHome=true
-ReadWritePaths=@DIGUA_REPORT_ROOT@ /var/lib/digua-ai-nas
+ReadWritePaths=-@DIGUA_REPORT_ROOT@ /var/lib/digua-ai-nas
 Restart=on-failure
 RestartSec=5
 

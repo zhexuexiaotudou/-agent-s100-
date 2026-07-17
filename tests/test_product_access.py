@@ -211,6 +211,7 @@ class ProductAccessContractTest(unittest.TestCase):
         self.assertIn("--port 80 --channel lan", lan)
         self.assertIn("--upstream-identity-db ${DIGUA_UPSTREAM_IDENTITY_DB}", lan)
         self.assertIn("--require-nas-mount ${DIGUA_NAS_MOUNT}", lan)
+        self.assertIn("ReadWritePaths=-@DIGUA_REPORT_ROOT@", lan)
         self.assertIn("CAP_NET_BIND_SERVICE", lan)
         self.assertNotIn("Requires=openclaw-gateway.service", lan)
         self.assertIn("--bind 127.0.0.1 --port 8781", remote)
@@ -285,6 +286,26 @@ class ProductAccessContractTest(unittest.TestCase):
             self.assertTrue(state.revoke_user_sessions("bridge-admin")["ok"])
             self.assertIsNone(state.upstream_identity.validate_token(upstream_token))
             state.drop_bridge(local_token)
+
+    def test_missing_nas_does_not_create_an_upstream_identity_database_on_root_storage(self):
+        with tempfile.TemporaryDirectory() as temp:
+            root = Path(temp)
+            missing_mount = root / "missing-nas"
+            upstream_db = missing_mount / "reports" / "identity.sqlite3"
+            state = AccessState(
+                access_db=root / "access.sqlite3",
+                identity_db=root / "local-identity.sqlite3",
+                upstream="http://127.0.0.1:8765",
+                channel="lan",
+                require_nas_mount=missing_mount,
+                upstream_identity_db=upstream_db,
+            )
+            self.assertIsNone(state.upstream_identity)
+            self.assertFalse(missing_mount.exists())
+            result = state.create_user("nas-off-admin", "strong-password", "admin")
+            self.assertEqual(result["error"], "upstream_identity_bridge_unavailable")
+            self.assertEqual(state.users(), [])
+            self.assertFalse(missing_mount.exists())
 
     def test_frontend_uses_cookie_session_csrf_and_current_pwa(self):
         repo = Path(__file__).resolve().parents[1]

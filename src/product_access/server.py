@@ -6,6 +6,7 @@ import http.client
 import json
 import io
 import os
+import sqlite3
 import sys
 import threading
 from http import HTTPStatus
@@ -74,12 +75,10 @@ class AccessState:
     def __init__(self, *, access_db: Path, identity_db: Path, upstream: str, channel: str, remote_enabled: bool = False, cf_team_domain: str = "", cf_audience: str = "", require_nas_mount: Path | None = None, upstream_identity_db: Path | None = None) -> None:
         self.store = ProductAccessStore(access_db)
         self.identity = IdentityStore(identity_db)
+        self.require_nas_mount = Path(require_nas_mount) if require_nas_mount else None
         upstream_identity_path = Path(upstream_identity_db) if upstream_identity_db else None
-        self.upstream_identity = (
-            IdentityStore(upstream_identity_path)
-            if upstream_identity_path and upstream_identity_path.resolve() != Path(identity_db).resolve()
-            else None
-        )
+        self.upstream_identity_path = upstream_identity_path if upstream_identity_path and upstream_identity_path.resolve() != Path(identity_db).resolve() else None
+        self.upstream_identity = self._ensure_upstream_identity()
         self.bridge_sessions: dict[str, tuple[str, str]] = {}
         self.bridge_lock = threading.Lock()
         parsed = urlparse(upstream)
@@ -87,7 +86,6 @@ class AccessState:
         self.upstream_port = parsed.port or 8765
         self.channel = channel
         self.remote_enabled = remote_enabled
-        self.require_nas_mount = Path(require_nas_mount) if require_nas_mount else None
         self.cf_verifier = CloudflareJwtVerifier(cf_team_domain, cf_audience) if cf_team_domain and cf_audience else None
         self.claim_lock = threading.Lock()
         if not self.store.endpoints():
@@ -101,14 +99,30 @@ class AccessState:
     def user_for_token(self, token: str | None) -> dict | None:
         return self.identity.validate_token(token) if token else None
 
+    def _ensure_upstream_identity(self) -> IdentityStore | None:
+        current = getattr(self, "upstream_identity", None)
+        if current:
+            return current
+        path = getattr(self, "upstream_identity_path", None)
+        if not path or (self.require_nas_mount and self.nas_mounted() is not True):
+            return None
+        try:
+            self.upstream_identity = IdentityStore(path)
+        except (OSError, sqlite3.Error):
+            return None
+        return self.upstream_identity
+
     def upstream_token(self, local_token: str, user: dict) -> str | None:
-        if not self.upstream_identity:
+        upstream = self._ensure_upstream_identity()
+        if not upstream:
+            if self.upstream_identity_path:
+                return None
             return local_token
         with self.bridge_lock:
             cached = self.bridge_sessions.get(local_token)
-            if cached and cached[0] == str(user["username"]) and self.upstream_identity.validate_token(cached[1]):
+            if cached and cached[0] == str(user["username"]) and upstream.validate_token(cached[1]):
                 return cached[1]
-            created = self.upstream_identity.create_session_for_user(str(user["username"]), ttl=3600)
+            created = upstream.create_session_for_user(str(user["username"]), ttl=3600)
             if not created.get("ok"):
                 return None
             token = str(created["token"])
@@ -116,18 +130,25 @@ class AccessState:
             return token
 
     def drop_bridge(self, local_token: str) -> None:
-        if not self.upstream_identity:
+        upstream = self._ensure_upstream_identity()
+        if not upstream:
             return
         with self.bridge_lock:
             cached = self.bridge_sessions.pop(local_token, None)
         if cached:
-            self.upstream_identity.logout(cached[1])
+            upstream.logout(cached[1])
 
     def create_user(self, username: str, password: str, role: str) -> dict:
         result = self.identity.create_user(username, password, role)
-        if not result.get("ok") or not self.upstream_identity:
+        if not result.get("ok"):
             return result
-        mirrored = self.upstream_identity.create_user(username, password, role)
+        upstream = self._ensure_upstream_identity()
+        if not upstream:
+            if self.upstream_identity_path:
+                self.identity.delete_user(username)
+                return {"ok": False, "error": "upstream_identity_bridge_unavailable"}
+            return result
+        mirrored = upstream.create_user(username, password, role)
         if not mirrored.get("ok"):
             self.identity.delete_user(username)
             return {"ok": False, "error": "upstream_identity_mirror_failed", "detail": mirrored.get("error")}
@@ -136,9 +157,15 @@ class AccessState:
     def set_user_role(self, username: str, role: str) -> dict:
         local_before = next((item["role"] for item in self.identity.list_users() if item["username"] == username), None)
         result = self.identity.set_user_role(username, role)
-        if not result.get("ok") or not self.upstream_identity:
+        if not result.get("ok"):
             return result
-        mirrored = self.upstream_identity.set_user_role(username, role)
+        upstream = self._ensure_upstream_identity()
+        if not upstream:
+            if self.upstream_identity_path and local_before:
+                self.identity.set_user_role(username, str(local_before))
+                return {"ok": False, "error": "upstream_identity_bridge_unavailable", "local_role_rolled_back": True}
+            return result
+        mirrored = upstream.set_user_role(username, role)
         if mirrored.get("ok"):
             return result
         if local_before:
@@ -147,8 +174,9 @@ class AccessState:
 
     def revoke_user_sessions(self, username: str) -> dict:
         result = self.identity.revoke_user_sessions(username)
-        if self.upstream_identity:
-            mirrored = self.upstream_identity.revoke_user_sessions(username)
+        upstream = self._ensure_upstream_identity()
+        if upstream:
+            mirrored = upstream.revoke_user_sessions(username)
             if not mirrored.get("ok"):
                 return {"ok": False, "error": "upstream_session_revoke_failed", "detail": mirrored.get("error")}
             with self.bridge_lock:
@@ -164,7 +192,7 @@ class AccessState:
             "device_power_state": "not_observed",
             "checks": {
                 "identity_db": self.identity.db_path.exists(),
-                "upstream_identity_bridge": {"configured": self.upstream_identity is not None, "available": self.upstream_identity.db_path.exists() if self.upstream_identity else True},
+                "upstream_identity_bridge": {"configured": self.upstream_identity_path is not None, "available": bool(self._ensure_upstream_identity())},
                 "access_db": self.store.path.exists(),
                 "backend_loopback": self.upstream_host in {"127.0.0.1", "localhost", "::1"},
                 "remote_ingress_enabled": self.remote_enabled,
