@@ -3,6 +3,7 @@
 按顺序运行：`digua-doctor`、`systemctl status digua-product-access`、以部署用户运行 `systemctl --user status openclaw-gateway qwen25-local-openai-gateway`、`curl http://127.0.0.1:8765/api/health`、`curl http://127.0.0.1:18080/v1/models`、`curl http://127.0.0.1/healthz`、`avahi-browse -art`、`ip -brief address`、`findmnt /mnt/nas/openclaw`。
 
 - `digua.local` 不解析：先用 S100P LAN IP，随后检查 Avahi 与网络是否允许 mDNS。
+- 系统级 Qwen 一直 `activating (auto-restart)` 且日志出现 `Address already in use`：先用 `sudo ss -ltnp | grep ':18080 '`、`systemctl status qwen25-local-openai-gateway` 和 `systemctl --user status qwen25-local-openai-gateway` 确认是否存在用户级/系统级双实例。产品机保留系统级单元。将现有用户单元文件改名为带日期的 `.pre-system-scope-*` 备份，再执行 `systemctl --user mask qwen25-local-openai-gateway.service`、`systemctl --user daemon-reload` 和 `sudo systemctl restart qwen25-local-openai-gateway.service`。回滚时先停止系统级单元，删除 `/home/<用户>/.config/systemd/user/qwen25-local-openai-gateway.service` 的 `/dev/null` 链接，将备份文件恢复为原名，执行 `systemctl --user daemon-reload` 后再启动选定的单一作用域；不得让两份单元同时监听 18080。
 - 页面开但 NAS 不可用：不要重置数据库；检查 mount、凭据文件权限与 NAS 共享。
 - 远程失败而 LAN 正常：保持 LAN，检查 remote ingress、Serve/Tunnel 和身份映射。
 - Tailscale 重启后短暂不能解析：先等 `BackendState=Running` 和 `getent hosts <设备>.ts.net` 成功，再判断持久化失败；本次实机观察到控制面晚于 LAN/NAS 入口恢复。

@@ -11,6 +11,8 @@
   provider. Cloud credentials are stored in a protected target-only file and
   private/NAS-scoped prompts are blocked from cloud egress.
 - Adds separate clean-install evidence for the cloud-provider path.
+- Documents the single-instance systemd invariant for the Qwen gateway and the
+  tested rollback-safe migration from a legacy user unit to the system unit.
 
 ## 0.1.0
 

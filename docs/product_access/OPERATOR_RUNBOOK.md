@@ -4,6 +4,8 @@
 
 检查 `digua-doctor`、`/healthz`、`/readyz`、NAS mount、Qwen 与门户服务。使用 `digua-access status/endpoints` 查看非秘密配置。任何实际变更写入 `reports/access/command_execution_log.jsonl`，原始脱敏摘要与截图放在 `reports/access/raw/`；不得记录密码、Cookie、Authorization、claim 或 tunnel credential。
 
+产品机使用系统级 OpenClaw/Qwen 服务时，必须确认同名用户级 Qwen 单元未同时占用 18080。升级与重启验收至少记录 `systemctl is-active qwen25-local-openai-gateway`、`systemctl --user is-enabled qwen25-local-openai-gateway`、18080 监听 PID 和 Qwen `/health`；用户级旧单元应保留备份后 masked，而不是直接删除。
+
 ## 远程启停
 
 先 dry-run，再应用明确确认短语。远程启用后测试授权与拒绝路径；禁用后确认 URL 不可用且 LAN 正常。Tailscale 使用 `serve status --json/reset`，并用 `tailscale funnel status` 确认输出为 `tailnet only`；Cloudflare 使用 root-only config 与 systemd。若 `tailscale status --json` 仍列出 `funnel` capability，应在管理控制台 Access controls 删除未使用的 `funnel` node attribute，不能用板端 `serve reset` 冒充策略层清理。
