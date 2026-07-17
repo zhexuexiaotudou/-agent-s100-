@@ -6,7 +6,7 @@
 
 ## 远程启停
 
-先 dry-run，再应用明确确认短语。远程启用后测试授权与拒绝路径；禁用后确认 URL 不可用且 LAN 正常。Tailscale 使用 `serve status --json/reset`，Cloudflare 使用 root-only config 与 systemd。
+先 dry-run，再应用明确确认短语。远程启用后测试授权与拒绝路径；禁用后确认 URL 不可用且 LAN 正常。Tailscale 使用 `serve status --json/reset`，并用 `tailscale funnel status` 确认输出为 `tailnet only`；Cloudflare 使用 root-only config 与 systemd。若 `tailscale status --json` 仍列出 `funnel` capability，应在管理控制台 Access controls 删除未使用的 `funnel` node attribute，不能用板端 `serve reset` 冒充策略层清理。
 
 ## 网络变更
 

@@ -2,7 +2,7 @@
 
 - 对外 Web：LAN 80；远程只经 Tailscale/Cloudflare HTTPS。8765、18080、18888、18889 保持回环或原有边界。
 - 产品访问安装器不新增 NAS 管理、SMB、NFS、SSH、Docker socket、systemd D-Bus、SQLite 文件、NAS 根目录或 shell 暴露。当前 S100P 镜像已有 SSH、NFS/RPC、VNC、iiod 等 LAN listener，必须作为独立主机加固项审计，不能算作本访问层已经关闭。
-- 不使用 UPnP、路由器裸转发或 Tailscale Funnel。
+- 不使用 UPnP、路由器裸转发或 Tailscale Funnel。当前板端只配置 tailnet-only Serve；首次授权页留下的未使用 `funnel` policy capability 仍待管理员从 Access controls 删除，删除前不得声称策略层已彻底禁用 Funnel。
 - LAN claim 仅在无用户、有效期内、错误次数未耗尽时有效；只存 hash。
 - Cookie 为 HttpOnly/SameSite=Lax，远程 HTTPS 增加 Secure；CSRF 从原始 session 派生，不持久化第二个 secret。
 - `admin` 管理用户、网络和远程；`operator` 使用受控业务动作；`viewer` 只能执行允许的读取/搜索类动作。
