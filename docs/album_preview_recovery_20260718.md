@@ -122,3 +122,53 @@ Deployment packaging follow-up:
   `configs/systemd/openclaw-gateway.service`, even though the installer requires
   it. Deployment used the same merged file as a bounded staging supplement.
 - The builder now includes that file, and a contract test prevents recurrence.
+
+## Identity database lock follow-up
+
+The authenticated album later showed a whole-panel `读取失败 / Failed to fetch`.
+At `2026-07-18 01:46:41 CST` and `01:46:47 CST`, the product-access journal
+recorded uncaught `sqlite3.OperationalError: database is locked` exceptions in
+`AccessState.upstream_token`. Services, `digua.local`, the NAS mount, and both
+health endpoints were online; the native browser error was caused by the
+request handler closing without an HTTP response.
+
+PR #53, merge commit `6094787b4d8f1734045a390c69be9c5e9cf8b268`, changed the
+bridge lifecycle so an established local session reuses its in-memory upstream
+session within a 3300-second cache window instead of validating it in the
+NAS-hosted SQLite database for every proxied request. New bridge creation uses
+a 0.35-second connection timeout and two bounded retry delays. Persistent lock
+contention now returns `503 upstream_identity_bridge_unavailable` JSON; logout
+remains local-successful if the upstream cleanup is temporarily locked.
+
+Verification and deployment:
+
+- Focused lock/cache regression tests passed; the full local suite passed
+  184/184 tests.
+- GitHub checks `offline-regression` and `startup-link-check-contract` passed
+  before merge.
+- The merged delivery SHA-256 was
+  `4917276035a00523032ee7c3d831ca6d65f471b39f315223eaeff68d143c1464`.
+- Access-only deployment preserved the existing backend and NAS data. Rollback
+  backup: `/var/backups/digua-ai-nas/access-only-20260717T180042Z`.
+- `digua-product-access.service`, the loopback portal health endpoint, and the
+  NFS4 mount were healthy after deployment.
+
+The live lock-contention gate created a temporary administrator in both
+identity stores, warmed one bridge, held an upstream `BEGIN IMMEDIATE` write
+transaction, and then exercised both cached and new sessions through port 80:
+
+| Request | Result | Elapsed | Album count |
+| --- | --- | ---: | ---: |
+| Warm bridge | HTTP 200 | 0.313 s | 100 |
+| Cached bridge during write lock | HTTP 200 | 0.207 s | 100 |
+| New bridge during write lock | HTTP 503 JSON | 1.342 s | n/a |
+| Same new session after unlock | HTTP 200 | 0.260 s | 100 |
+
+The temporary-account count was verified as zero in both identity stores after
+the gate. Browser control timed out twice while refreshing the existing album
+tab, so no new screenshot is claimed; the tab was left open for user
+verification. A non-admin test account also exposed a separate performance
+boundary: its first library summary took about 20 seconds because current ACL
+authorization scans the Personal tree. The reported failure was on the admin
+page and is fixed by PR #53; non-admin media ACL-scan optimization remains a
+separate follow-up and must not weaken per-request authorization.

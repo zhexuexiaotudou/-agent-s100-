@@ -30,3 +30,16 @@ release/install/sync_openclaw_portal_unit.sh --apply --source-root <merged-main>
 ```
 
 该工具只同步用户级 `openclaw-gateway.service`，执行前备份旧 unit，失败时自动恢复；不会启停 Qwen 或产品访问服务。Qwen 可以由 system scope 或 user scope 承载，但 `ss -ltnp 'sport = :18080'` 必须只显示一个监听者。巡检时同时检查两个 scope，并以端口所有者、unit 状态和 `/health` 三项共同判定。
+
+## 上游身份库锁竞争
+
+相册并发加载期间若 NAS 身份库短时锁定，已有桥接会话应继续返回 200；尚未建立桥接的新会话最多经过受控重试后返回 `503 upstream_identity_bridge_unavailable`，而不是断开连接。巡检时运行：
+
+```bash
+sudo journalctl -u digua-product-access.service --since '<部署时间>' --no-pager
+curl -fsS http://127.0.0.1/healthz
+curl -fsS http://127.0.0.1:8765/api/health
+findmnt /mnt/nas/openclaw
+```
+
+日志中若出现未捕获的 `sqlite3.OperationalError: database is locked`、`BrokenPipe` 或请求无状态码结束，视为访问层回归。若只有明确的 503，先等待写事务结束并重试登录后的首个业务请求；不要删除或重建任一 identity DB。持续锁竞争需要定位实际写入者和 NFS 状态，再按 access-only 回滚点恢复，不得用放宽认证绕过。
