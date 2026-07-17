@@ -71,8 +71,24 @@ def has_raw_path(value: Any) -> bool:
 
 
 def run_cmd(cmd: list[str], *, timeout: int = 300, env: dict[str, str] | None = None) -> dict[str, Any]:
-    completed = subprocess.run(cmd, cwd=REPO_ROOT, text=True, capture_output=True, check=False, timeout=timeout, env=env)
-    return {"ok": completed.returncode == 0, "returncode": completed.returncode, "stdout": completed.stdout[-4000:], "stderr": completed.stderr[-4000:], "cmd": cmd}
+    completed = subprocess.run(
+        cmd,
+        cwd=REPO_ROOT,
+        text=True,
+        encoding="utf-8",
+        errors="replace",
+        capture_output=True,
+        check=False,
+        timeout=timeout,
+        env=env,
+    )
+    return {
+        "ok": completed.returncode == 0,
+        "returncode": completed.returncode,
+        "stdout": (completed.stdout or "")[-4000:],
+        "stderr": (completed.stderr or "")[-4000:],
+        "cmd": cmd,
+    }
 
 
 def http_json(method: str, base_url: str, path: str, payload: dict[str, Any] | None = None, *, timeout: int = 20, token: str = "") -> dict[str, Any]:

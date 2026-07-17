@@ -56,6 +56,12 @@ class ReleaseContractTest(unittest.TestCase):
             self.assertIn('PRODUCT_PYTHON = SCRIPT_PATH.parents[2] / "venv" / "bin" / "python"', source)
             self.assertIn("os.execv(str(PRODUCT_PYTHON)", source)
 
+    def test_stage10_subprocess_output_is_utf8_and_none_safe(self):
+        source = (REPO_ROOT / "gates/stage10_common.py").read_text(encoding="utf-8")
+        self.assertIn('encoding="utf-8"', source)
+        self.assertIn('errors="replace"', source)
+        self.assertIn('(completed.stderr or "")[-4000:]', source)
+
 
 if __name__ == "__main__":
     unittest.main()
