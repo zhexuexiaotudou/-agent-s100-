@@ -222,7 +222,7 @@ class ProductAccessContractTest(unittest.TestCase):
         self.assertNotIn("Requires=openclaw-gateway.service", lan)
         self.assertIn("--bind 127.0.0.1 --port 8781", remote)
         self.assertNotIn("Requires=openclaw-gateway.service", remote)
-        self.assertNotIn("WantedBy=", remote)
+        self.assertIn("WantedBy=multi-user.target", remote)
 
     def test_product_install_entry_uses_guided_no_argument_flow(self):
         repo = Path(__file__).resolve().parents[1]
@@ -237,6 +237,7 @@ class ProductAccessContractTest(unittest.TestCase):
     def test_access_only_install_never_manages_existing_backend_units(self):
         repo = Path(__file__).resolve().parents[1]
         installer = (repo / "release/install/install_product_access_only.sh").read_text(encoding="utf-8")
+        full_installer = (repo / "release/install/install_s100p.sh").read_text(encoding="utf-8")
         uninstaller = (repo / "release/install/uninstall_product_access_only.sh").read_text(encoding="utf-8")
         wrapper = (repo / "deploy/product_access/install.sh").read_text(encoding="utf-8")
         self.assertIn('"--access-only"', wrapper)
@@ -247,6 +248,8 @@ class ProductAccessContractTest(unittest.TestCase):
         self.assertIn("backend_units_touched':[]", installer)
         self.assertIn("systemctl restart digua-product-access.service", installer)
         self.assertIn("release/install/configure_remote_access.sh", installer)
+        self.assertIn('"$INSTALL_ROOT/app/release/install/configure_remote_access.sh"', installer)
+        self.assertIn('"$INSTALL_ROOT/app/release/install/configure_remote_access.sh"', full_installer)
 
     def test_lan_configuration_synchronizes_hosts_and_restarts_avahi(self):
         repo = Path(__file__).resolve().parents[1]

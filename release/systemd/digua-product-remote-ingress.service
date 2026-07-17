@@ -17,4 +17,7 @@ ReadWritePaths=@DIGUA_REPORT_ROOT@ /var/lib/digua-ai-nas
 Restart=on-failure
 RestartSec=5
 
-# Deliberately no WantedBy: enabling remote access requires an explicit adapter plan.
+# The unit remains disabled after installation. The explicit remote-access
+# helper enables it only after provider preflight and confirmation succeed.
+[Install]
+WantedBy=multi-user.target

@@ -132,7 +132,9 @@ cp "$INSTALL_ROOT/app/release/avahi/digua-ai-nas.service" "$AVAHI_TARGET"
 
 if [[ -z "$SIM_ROOT" ]]; then
   chown -R "$SERVICE_USER" "$STATE_DIR"
-  chmod 0755 "$INSTALL_ROOT/app/scripts/digua-access" "$INSTALL_ROOT/app/scripts/digua-doctor"
+  chmod 0755 "$INSTALL_ROOT/app/scripts/digua-access" "$INSTALL_ROOT/app/scripts/digua-doctor" \
+    "$INSTALL_ROOT/app/release/install/configure_lan_access.sh" \
+    "$INSTALL_ROOT/app/release/install/configure_remote_access.sh"
   ln -sfn "$INSTALL_ROOT/app/scripts/digua-access" /usr/local/bin/digua-access
   ln -sfn "$INSTALL_ROOT/app/scripts/digua-doctor" /usr/local/bin/digua-doctor
   systemctl daemon-reload
