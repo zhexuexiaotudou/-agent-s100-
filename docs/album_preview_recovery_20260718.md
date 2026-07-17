@@ -36,6 +36,7 @@ workflow without changing the album count.
 ## Local verification
 
 - Python compile: passed.
+- S100P Python 3.11 grammar parse: passed.
 - JavaScript syntax: passed.
 - Full offline unit suite: 174/174 passed.
 - Dedicated recovery coverage verifies 30 library photos are not capped at 24,
