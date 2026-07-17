@@ -92,3 +92,21 @@ MiniMax 不是“复杂任务的默认大模型”。只有策略同时确认 `p
 
 部署时先备份门户后端、前端 JS 和 HTML。回滚只需恢复这三个文件并重启
 `openclaw-gateway.service`；18080、18081、18082 服务和 NAS 数据不需要修改。
+
+## 生产验收
+
+- 实现经 [PR #67](https://github.com/zhexuexiaotudou/-agent-s100-/pull/67) 和
+  [PR #68](https://github.com/zhexuexiaotudou/-agent-s100-/pull/68) 合并；当前生产提交为
+  `aca4941eae22a9587278bca3c45fce668dddd9af`。PR #68 的 `static-ui-contract`、
+  `startup-link-check-contract` 和 `offline-regression` 全部通过，本地完整回归为
+  `227 passed, 3 subtests passed`。
+- S100P 门户重启与 `/api/health` 通过。部署后端/前端哈希分别为
+  `cf1ef9e6374b1ff4dfd1f858ae069d5e9613b2346c4f7caaf128d71b6232bde2` 和
+  `10c3f0ed1f512c1b538aef1e8ae7114f0a3f21c2986752cb77d198c5977034a3`；回滚点为
+  `/mnt/nas/openclaw/deploy_backups/aca4941e-20260718055305`。
+- 实机 API 已覆盖默认 1.5B、无时效性公开复杂任务 7B、混合候选留本地 7B、MiniMax 成功、
+  MiniMax 失败回落 7B、NAS 工具忽略旧模型选择和身份零模型调用。临时用户已全部删除。
+- MiniMax 成功案例的完整非流式门户响应约 118.3 s；同轮另一个较长请求出现一次上游失败并
+  安全回落 7B。准确性与安全回落已验证，但当前 bridge 不等同于低延迟、流式且无波动的原生
+  OpenClaw 会话。
+- 实机浏览器确认用户无模型选择入口，且详情展示统一决策字段和每一次真实模型调用。
