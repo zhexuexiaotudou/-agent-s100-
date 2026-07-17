@@ -1023,6 +1023,23 @@ class CopilotLocalQwenChatTest(unittest.TestCase):
     def test_public_historical_event_question_does_not_read_personal_documents(self):
         self.assertIsNone(infer_copilot_action_intent("7月9日发生了什么历史事件"))
 
+    def test_openai_web_research_is_not_misclassified_as_open_storage_command(self):
+        query = "联网搜索 OpenAI 官网当前最新发布的模型，给出发布日期和来源链接。"
+
+        self.assertIsNone(infer_copilot_action_intent(query))
+        policy = copilot_policy_route(query)
+        self.assertEqual(policy["route"], "cloud")
+        self.assertTrue(policy["requires_public_web"])
+        self.assertTrue(policy["freshness_required"])
+        self.assertTrue(policy["cloud_eligible"])
+
+    def test_standalone_open_storage_command_remains_local(self):
+        intent = infer_copilot_action_intent("open Documents")
+
+        self.assertIsNotNone(intent)
+        self.assertEqual(intent["action"], "storage_list")
+        self.assertEqual(intent["path"], "Documents")
+
     def test_iso_journal_date_is_normalized_for_local_document_recall(self):
         with tempfile.TemporaryDirectory() as tmp:
             state = self.make_state(Path(tmp), personal=True)

@@ -946,6 +946,18 @@ def contains_any(text: str, terms: tuple[str, ...]) -> bool:
     return any(term.lower() in lower for term in terms)
 
 
+def contains_copilot_list_command(text: str) -> bool:
+    lower = str(text or "").lower()
+    for term in COPILOT_LIST_TERMS:
+        candidate = term.lower()
+        if candidate.isascii():
+            if re.search(rf"(?<![a-z0-9_]){re.escape(candidate)}(?![a-z0-9_])", lower):
+                return True
+        elif candidate in lower:
+            return True
+    return False
+
+
 def is_local_assistant_identity_question(message: str) -> bool:
     normalized = re.sub(r"[\s\?\uff1f!\uff01,\uff0c.\u3002:\uff1a]+", "", str(message or "")).lower()
     return normalized in {"\u4f60\u662f\u8c01", "\u4f60\u662f\u4ec0\u4e48", "\u4f60\u662f\u4ec0\u4e48\u52a9\u624b", "whoareyou", "whatareyou"}
@@ -1564,7 +1576,7 @@ def infer_copilot_action_intent(message: str) -> dict | None:
         return {"action": action, "source": quoted[0], "target": quoted[1], "quoted": quoted}
     if quoted:
         return {"action": "storage_list_or_inspect", "path": quoted[0], "quoted": quoted}
-    if contains_any(text, COPILOT_LIST_TERMS):
+    if contains_copilot_list_command(text):
         return {"action": "storage_list", "path": copilot_default_path_for_message(text), "quoted": quoted}
     if search_intent:
         return {"action": "search", "search_intent": search_intent, "quoted": quoted}
