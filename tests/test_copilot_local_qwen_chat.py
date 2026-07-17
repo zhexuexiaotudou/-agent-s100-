@@ -148,8 +148,10 @@ class CopilotLocalQwenChatTest(unittest.TestCase):
 
             self.assertEqual(status, 200)
             self.assertEqual(payload["requested_model"], "qwen2.5-7b-local")
-            self.assertEqual(post_json.call_args_list[0].args[2]["model"], seven_b)
+            self.assertEqual(post_json.call_args_list[0].args[2]["model"], state.qwen_model)
             self.assertEqual(post_json.call_args_list[1].args[2]["model"], seven_b)
+            self.assertIn("18080", post_json.call_args_list[0].args[1])
+            self.assertIn("18081", post_json.call_args_list[1].args[1])
 
     def test_explicit_minimax_selection_uses_cloud_only_after_local_public_guard(self):
         with tempfile.TemporaryDirectory() as tmp:

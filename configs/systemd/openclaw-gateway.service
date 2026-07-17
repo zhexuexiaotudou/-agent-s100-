@@ -1,7 +1,7 @@
 [Unit]
 Description=OpenClaw AI-NAS portal gateway on S100P
-After=network-online.target qwen25-local-openai-gateway.service
-Wants=network-online.target qwen25-local-openai-gateway.service
+After=network-online.target qwen25-local-openai-gateway.service qwen7b-cpu.service
+Wants=network-online.target qwen25-local-openai-gateway.service qwen7b-cpu.service
 StartLimitIntervalSec=0
 
 [Service]

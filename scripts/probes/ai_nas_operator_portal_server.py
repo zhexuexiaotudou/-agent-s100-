@@ -254,6 +254,7 @@ MAX_JSON_BODY_BYTES = 8 * 1024 * 1024
 MAX_STREAM_UPLOAD_BYTES = 2 * 1024 * 1024 * 1024
 STREAM_CHUNK_BYTES = 1024 * 1024
 DEFAULT_QWEN_GATEWAY_URL = "http://127.0.0.1:18080"
+DEFAULT_QWEN_7B_GATEWAY_URL = "http://127.0.0.1:18081"
 DEFAULT_QWEN_MODEL = "Qwen2.5-1.5B-Instruct-S100P-official"
 QWEN_7B_MODEL = "Qwen2.5-7B-Instruct-S100P-official"
 ASSISTANT_MODEL_CHOICES = {
@@ -5483,8 +5484,14 @@ class PortalState:
         )
 
     def _local_qwen_chat_completion(self, message: str, model: str | None = None) -> dict:
+        selected_model = model or self.qwen_model
+        gateway_url = (
+            os.environ.get("AI_NAS_QWEN_7B_GATEWAY_URL", DEFAULT_QWEN_7B_GATEWAY_URL)
+            if selected_model == QWEN_7B_MODEL
+            else self.qwen_gateway_url or DEFAULT_QWEN_GATEWAY_URL
+        )
         payload = {
-            "model": model or self.qwen_model,
+            "model": selected_model,
             "messages": [
                 {"role": "user", "content": message},
             ],
@@ -5501,9 +5508,9 @@ class PortalState:
         }
         return http_post_json(
             "local_qwen_chat",
-            normalize_chat_completions_url(self.qwen_gateway_url or DEFAULT_QWEN_GATEWAY_URL),
+            normalize_chat_completions_url(gateway_url),
             payload,
-            timeout=180,
+            timeout=420 if selected_model == QWEN_7B_MODEL else 180,
         )
 
     def local_qwen_chat(self, message: str, user: dict, model: str | None = None) -> tuple[int, dict]:
@@ -6038,7 +6045,7 @@ class PortalState:
             payload["requested_model"] = normalized_choice
             return status, payload
         action_intent = infer_copilot_action_intent(clean_message)
-        router_model = self.qwen_model if action_intent or (selection and selection.get("provider") == "cloud") else selected_local_model
+        router_model = self.qwen_model
         router = self.copilot_qwen_route(clean_message, action_intent, router_model)
         if action_intent:
             status, payload = self.dispatch_copilot_action(action_intent, user, router)

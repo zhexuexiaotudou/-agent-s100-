@@ -1,0 +1,23 @@
+[Unit]
+Description=Qwen2.5 7B local CPU OpenAI-compatible gateway
+After=network-online.target
+Wants=network-online.target
+StartLimitIntervalSec=0
+
+[Service]
+Type=simple
+WorkingDirectory=/mnt/nas/openclaw
+Environment=QWEN7B_CPU_BIND=127.0.0.1
+Environment=QWEN7B_CPU_PORT=18081
+Environment=QWEN7B_CPU_MODEL=/mnt/nas/openclaw/models/qwen25-7b-gguf/Qwen2.5-7B-Instruct-Q4_K_M.gguf
+Environment=QWEN7B_CPU_CTX=1024
+Environment=QWEN7B_CPU_THREADS=8
+Environment=QWEN7B_CPU_BATCH=256
+ExecStartPre=/usr/bin/test -r /mnt/nas/openclaw/scripts/qwen7b_cpu_openai_gateway.py
+ExecStartPre=/usr/bin/test -r ${QWEN7B_CPU_MODEL}
+ExecStart=/usr/bin/python3 /mnt/nas/openclaw/scripts/qwen7b_cpu_openai_gateway.py
+Restart=on-failure
+RestartSec=10s
+
+[Install]
+WantedBy=default.target
