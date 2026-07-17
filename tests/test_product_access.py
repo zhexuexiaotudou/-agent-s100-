@@ -14,7 +14,7 @@ from pathlib import Path
 from src.product_access.network import is_lan_address, validate_plan
 from src.product_access.remote import CloudflareTunnelAdapter, TailscaleServeAdapter
 from src.product_access.security import CloudflareJwtVerifier, csrf_token
-from src.product_access.server import AccessState, ProductAccessHandler
+from src.product_access.server import AccessState, ProductAccessHandler, _settings_html
 from src.product_access.store import ProductAccessStore
 
 
@@ -246,6 +246,7 @@ class ProductAccessContractTest(unittest.TestCase):
         self.assertNotIn("qwen25-local-openai-gateway.service", uninstaller)
         self.assertIn("backend_units_touched':[]", installer)
         self.assertIn("systemctl restart digua-product-access.service", installer)
+        self.assertIn("release/install/configure_remote_access.sh", installer)
 
     def test_lan_configuration_synchronizes_hosts_and_restarts_avahi(self):
         repo = Path(__file__).resolve().parents[1]
@@ -330,6 +331,13 @@ class ProductAccessContractTest(unittest.TestCase):
         self.assertIn('/api/v1/auth/session', js)
         self.assertIn('X-CSRF-Token', js)
         self.assertIn('serviceWorker.register("/sw.js")', js)
+
+    def test_access_settings_render_endpoint_values_as_text(self):
+        source = _settings_html("<script>device</script>")
+        self.assertNotIn("endpoints.innerHTML", source)
+        self.assertIn("url.textContent=v.url", source)
+        self.assertIn("badge.textContent=v.channel", source)
+        self.assertNotIn("<script>device</script>", source)
 
 
 if __name__ == "__main__":
