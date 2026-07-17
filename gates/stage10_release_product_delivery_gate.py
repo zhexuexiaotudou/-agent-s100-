@@ -15,6 +15,7 @@ SUB_GATES = [
     "stage10_release_preflight_gate.py",
     "stage10_release_installer_dry_run_gate.py",
     "stage10_release_clean_install_gate.py",
+    "stage10_release_cloud_install_gate.py",
     "stage10_release_nas_mount_gate.py",
     "stage10_release_product_smoke_gate.py",
     "stage10_release_upgrade_rollback_gate.py",
@@ -70,4 +71,3 @@ def main() -> int:
 
 if __name__ == "__main__":
     raise SystemExit(main())
-

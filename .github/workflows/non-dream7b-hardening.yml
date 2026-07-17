@@ -57,6 +57,8 @@ jobs:
         run: bash -n release/install/*.sh deploy/product_access/*.sh validation/product_access_s100p/*.sh
       - name: Simulate clean S100P and NAS installation
         run: python gates/stage10_release_clean_install_gate.py --report-root "${{ runner.temp }}/digua-clean-install"
+      - name: Simulate cloud-provider S100P and NAS installation
+        run: python gates/stage10_release_cloud_install_gate.py --report-root "${{ runner.temp }}/digua-cloud-install"
       - name: Simulate access-only coexistence installation
         shell: bash
         run: |
