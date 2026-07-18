@@ -290,3 +290,43 @@ The in-app browser at `http://127.0.0.1:18766/ui#assistant` independently
 rendered `4 个照片 · 未上云`, loaded all four previews, and displayed the same
 dynamic result set as the API. This completes the production acceptance for
 the relevance-only result-count contract.
+
+## Explicit object-evidence enforcement - 2026-07-18
+
+The live prompt `找有狗的图片` exposed a separate fallback defect after the
+semantic relevance fix. Intent parsing correctly produced `labels=["dog"]`,
+and direct YOLO search returned zero with `no_matching_yolo_detection`, but the
+assistant then fell through to CLIP and displayed two plant/flower images at
+approximately `0.258` similarity. Those images contained no dog detections and
+therefore could not satisfy the explicit object request.
+
+The corrected contract makes an explicit object label a hard evidence
+requirement:
+
+- a successful YOLO result, including an empty result, is final;
+- empty YOLO evidence returns zero instead of calling multimodal CLIP;
+- unavailable or failed object search reports an error rather than silently
+  changing retrieval semantics;
+- semantic CLIP remains available for non-object concepts such as flowers,
+  buildings, food, and landscapes.
+
+Source and deployment evidence:
+
+- Fix PR: [#88](https://github.com/zhexuexiaotudou/-agent-s100-/pull/88)
+- Squash merge on `main`: `323cdb8b867db73ebeb2e3ba5569af7403e969fb`
+- CI: repository tests, startup-link contract, and offline regression passed.
+- Local tests: 54 assistant tests and 250 full-suite tests passed.
+- Runtime script SHA-256 matched between merged `main` and S100P:
+  `a02afc8774943dd89ee92335d79e7cacfedb234218bf5a4563e5a736508dd5c0`.
+- `openclaw-gateway.service` restarted active at
+  `2026-07-18 10:51:03 CST`.
+- Rollback snapshot:
+  `/mnt/nas/openclaw/backups/strict-object-photo-search/20260718-105100`.
+
+Production acceptance after restart:
+
+- `找有狗的图片`: `local_yolo_search`, `labels=["dog"]`, zero results,
+  `no_matching_yolo_detection`, and `cloud_used=false`.
+- Browser rendering: `0 个结果 · 未上云`, with no plant or flower cards.
+- Control `找出有人的照片`: 9 YOLO person results.
+- Control `找出有花或者有建筑的照片`: 4 dynamically selected CLIP results.

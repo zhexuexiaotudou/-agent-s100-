@@ -27,7 +27,14 @@ Multimodal Search v1 adds local-first NAS search across documents, images, video
 ## Assistant image relevance selection
 
 For assistant image requests, `top_k` is a bounded candidate cap, not a target
-result count. The planner translates supported Chinese visual concepts into
+result count. The assistant first distinguishes explicit object labels from
+semantic visual concepts. Queries that resolve to a YOLO label require evidence
+from `yolo_object_index`; a successful empty YOLO result is returned as zero and
+never falls through to CLIP. If the object-search service is unavailable or
+fails, the assistant reports that failure instead of substituting semantic
+images that do not prove the requested object is present.
+
+For non-object semantic requests, the planner translates supported Chinese visual concepts into
 English CLIP variants and evaluates OR concepts independently. For example,
 `花或者建筑` becomes one flower variant and one building/architecture variant
 so a strong result from one concept cannot suppress the other concept.

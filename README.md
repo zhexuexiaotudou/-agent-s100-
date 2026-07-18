@@ -66,8 +66,10 @@ Assistant image search now returns only locally relevant evidence instead of
 padding every request to eight cards. Chinese OR concepts such as
 `找出有花或者有建筑的照片` are evaluated separately, then thresholded,
 deduplicated, and rendered with a dynamic result count; unsupported Chinese
-visual concepts return zero rather than unrelated photos. The policy and live
-S100P evidence are recorded in
+visual concepts return zero rather than unrelated photos. Explicit object
+queries such as people, dogs, cats, and cars now require matching YOLO object
+evidence; an empty object result cannot fall through to a weak CLIP match. The
+policy and live S100P evidence are recorded in
 [`docs/AI_ALBUM_UI_DELIVERY.md`](docs/AI_ALBUM_UI_DELIVERY.md#assistant-photo-search-relevance-policy---2026-07-18).
 
 ## Current Status
