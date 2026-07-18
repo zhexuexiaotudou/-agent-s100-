@@ -329,7 +329,21 @@ COPILOT_STRONG_PRIVACY_TERMS = (
     "\u4ee4\u724c",
 )
 COPILOT_LOCAL_CONTENT_TERMS = ("nas", "local", "file", "document", "\u672c\u5730", "\u6587\u4ef6", "\u6587\u6863")
-COPILOT_PUBLIC_ONLY_TERMS = ("public", "non-private", "non private", "do not reference local", "\u516c\u5f00", "\u975e\u9690\u79c1", "\u4e0d\u5f15\u7528\u672c\u5730")
+COPILOT_PUBLIC_ONLY_TERMS = (
+    "public",
+    "non-private",
+    "non private",
+    "do not reference local",
+    "web search",
+    "search the web",
+    "online search",
+    "\u516c\u5f00",
+    "\u975e\u9690\u79c1",
+    "\u4e0d\u5f15\u7528\u672c\u5730",
+    "\u8054\u7f51",
+    "\u4e92\u8054\u7f51",
+    "\u516c\u5f00\u7f51\u7edc",
+)
 COPILOT_PUBLIC_COMPLEX_TERMS = (
     "market",
     "strategy",
@@ -338,6 +352,12 @@ COPILOT_PUBLIC_COMPLEX_TERMS = (
     "launch",
     "competitor",
     "public",
+    "web search",
+    "search the web",
+    "online search",
+    "latest news",
+    "breaking news",
+    "current events",
     "\u5e02\u573a",
     "\u6218\u7565",
     "\u884c\u4e1a",
@@ -345,6 +365,10 @@ COPILOT_PUBLIC_COMPLEX_TERMS = (
     "\u53d1\u5e03",
     "\u7ade\u54c1",
     "\u516c\u5f00",
+    "\u8054\u7f51",
+    "\u4e92\u8054\u7f51",
+    "\u65b0\u95fb",
+    "\u5b9e\u65f6",
 )
 COPILOT_RENAME_TERMS = ("rename", "renamed", "\u91cd\u547d\u540d", "\u6539\u540d")
 COPILOT_COPY_TERMS = ("copy", "duplicate", "\u590d\u5236", "\u62f7\u8d1d")
@@ -1143,7 +1167,7 @@ def infer_copilot_action_intent(message: str) -> dict | None:
         return {"action": action, "source": quoted[0], "target": quoted[1], "quoted": quoted}
     if quoted:
         return {"action": "storage_list_or_inspect", "path": quoted[0], "quoted": quoted}
-    if contains_any(text, COPILOT_LIST_TERMS):
+    if contains_any(text, COPILOT_LIST_TERMS) and (has_storage_scope or has_file_scope):
         return {"action": "storage_list", "path": copilot_default_path_for_message(text), "quoted": quoted}
     if search_intent:
         return {"action": "search", "search_intent": search_intent, "quoted": quoted}

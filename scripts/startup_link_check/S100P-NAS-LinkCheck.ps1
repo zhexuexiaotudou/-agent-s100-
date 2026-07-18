@@ -87,8 +87,20 @@ function Add-Step {
 function Ensure-WindowsIcsSharing {
   param([switch]$ForceReset)
 
-  $publicName = 'WLAN'
   $privateName = $Config.windows.interfaceAlias
+  $publicName = $null
+  try {
+    $publicName = Get-NetConnectionProfile -ErrorAction Stop |
+      Where-Object {
+        $_.InterfaceAlias -ne $privateName -and
+        $_.IPv4Connectivity -eq 'Internet'
+      } |
+      Sort-Object InterfaceIndex |
+      Select-Object -First 1 -ExpandProperty InterfaceAlias
+  } catch {}
+  if ([string]::IsNullOrWhiteSpace([string]$publicName)) {
+    $publicName = 'WLAN'
+  }
 
   if (-not (Test-IsAdmin)) {
     Add-Step 'Windows ICS 共享' 'WARN' '当前进程不是管理员，无法自动修复 WLAN -> 以太网 共享上网' ''
