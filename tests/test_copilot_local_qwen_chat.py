@@ -757,6 +757,50 @@ class CopilotLocalQwenChatTest(unittest.TestCase):
             self.assertNotIn("文件盘点", payload["answer"])
             post_json.assert_called_once()
 
+    def test_explicit_dog_search_does_not_replace_empty_yolo_evidence_with_clip_flowers(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            state = self.make_state(Path(tmp), personal=True)
+            yolo_payload = {
+                "ok": True,
+                "query_redacted": "找有狗的图片",
+                "labels": ["dog"],
+                "results": [],
+                "degraded": True,
+                "degraded_reason": "no_matching_yolo_detection",
+                "privacy": {"raw_path_returned": False, "cloud_used": False},
+            }
+            weak_clip_payload = {
+                "ok": True,
+                "query_redacted": "找有狗的图片",
+                "results": [
+                    {
+                        "rank": 1,
+                        "asset_id": "flower_false_positive",
+                        "title_redacted": "flower.jpg",
+                        "modality": "image",
+                        "score": 0.258,
+                        "matched_by": ["image_embedding"],
+                    }
+                ],
+                "privacy": {"raw_path_returned": False, "cloud_used": False},
+            }
+
+            with patch("ai_nas_operator_portal_server.yolo_route_response", return_value=(200, yolo_payload)):
+                with patch("ai_nas_operator_portal_server.multimodal_route_response", return_value=(200, weak_clip_payload)) as multimodal:
+                    with patch(
+                        "ai_nas_operator_portal_server.http_post_json",
+                        return_value=self.fake_router(privacy_level="high", local_tool_id="local_nas_search"),
+                    ):
+                        status, payload = state.copilot_chat("找有狗的图片", {"username": "admin"})
+
+            self.assertEqual(status, 200)
+            self.assertEqual(payload["assistant_mode"], "local_yolo_search")
+            self.assertEqual(payload["search"]["labels"], ["dog"])
+            self.assertEqual(payload["search"]["result_count"], 0)
+            self.assertEqual(payload["search"]["degraded_reason"], "no_matching_yolo_detection")
+            self.assertIn("没有返回匹配图片", payload["answer"])
+            multimodal.assert_not_called()
+
     def test_image_search_returns_dynamic_relevant_count_without_fixed_eight_slice(self):
         with tempfile.TemporaryDirectory() as tmp:
             root = Path(tmp)
