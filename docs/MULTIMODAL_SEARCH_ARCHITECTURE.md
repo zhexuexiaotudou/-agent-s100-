@@ -24,6 +24,32 @@ Multimodal Search v1 adds local-first NAS search across documents, images, video
 4. Retriever combines FTS, metadata, and image embeddings using a deterministic fusion score.
 5. API returns evidence refs, redacted snippets, modality, score components, privacy level, and path hash. It does not return raw local/NAS paths.
 
+## Assistant image relevance selection
+
+For assistant image requests, `top_k` is a bounded candidate cap, not a target
+result count. The planner translates supported Chinese visual concepts into
+English CLIP variants and evaluates OR concepts independently. For example,
+`花或者建筑` becomes one flower variant and one building/architecture variant
+so a strong result from one concept cannot suppress the other concept.
+
+`HybridRetriever` applies two gates to every variant:
+
+- absolute image cosine score at or above `image_semantic_min_score`;
+- score within `image_semantic_relative_margin` of that variant's best local
+  candidate.
+
+The defaults are `0.24` and `0.015` in
+`configs/multimodal_search_feature_flags.json`. Selected variants are unioned,
+deduplicated by asset, and sorted by evidence score. Image modality only scopes
+the candidate set; it is not itself positive metadata evidence. The response
+exposes candidate, selected, filtered, variant, and threshold counts under
+`relevance_policy`, so zero, one, or several cards are all valid outcomes.
+
+Unsupported Chinese visual concepts do not fall back to a generic `photo`
+embedding. They return `unsupported_chinese_visual_concept` with zero results,
+preventing weak but visually unrelated candidates from being presented as
+matches.
+
 ## Optional Capabilities
 
 OCR, video keyframe content indexing, keyframe embedding, audio transcript, and ASR are disabled by default in `configs/multimodal_search_feature_flags.json`. Video/audio are indexed in metadata-only mode in v1.

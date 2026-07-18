@@ -62,6 +62,14 @@ through authenticated identity, dated-document, MiniMax, media-thumbnail, and
 browser flows; see
 [`docs/media_album_preview_reliability_fix_20260718.md`](docs/media_album_preview_reliability_fix_20260718.md).
 
+Assistant image search now returns only locally relevant evidence instead of
+padding every request to eight cards. Chinese OR concepts such as
+`找出有花或者有建筑的照片` are evaluated separately, then thresholded,
+deduplicated, and rendered with a dynamic result count; unsupported Chinese
+visual concepts return zero rather than unrelated photos. The policy and live
+S100P evidence are recorded in
+[`docs/AI_ALBUM_UI_DELIVERY.md`](docs/AI_ALBUM_UI_DELIVERY.md#assistant-photo-search-relevance-policy---2026-07-18).
+
 ## Current Status
 
 Status timestamp: 2026-07-18 07:12 CST.

@@ -238,3 +238,55 @@ S100P production index. The flower/building query evaluated 77 unique
 candidates, kept 4, and filtered 73. Visual inspection confirmed the retained
 set contained one flower photo and three building/city photos. The unsupported
 control `找出月球基地里的紫色潜艇照片` returned zero candidates.
+
+## Assistant photo-search live acceptance - 2026-07-18
+
+Source delivery:
+
+- Feature PR: [#86](https://github.com/zhexuexiaotudou/-agent-s100-/pull/86)
+- Squash merge on `main`: `d7b962acb86a87bc201259c2c4922f34ee21b6f8`
+- CI: startup-link contract, repository tests, and offline regression all
+  passed before merge.
+- Local verification before the PR included 66 focused tests, 232 full-suite
+  tests, Python compilation, JavaScript syntax validation, and
+  `git diff --check`.
+
+Deployment target and parity:
+
+- Runtime: `/mnt/nas/openclaw` on `sunrise@192.168.127.10`.
+- Service restart: `openclaw-gateway.service` entered active state at
+  `2026-07-18 10:22:56 CST`.
+- Local and S100P SHA-256 hashes matched for the feature-flags JSON, portal
+  server, feature-flags module, retriever, planner, and search API.
+- Rollback snapshot:
+  `/mnt/nas/openclaw/backups/photo-search-relevance/20260718-102044`.
+
+The first direct upload of the portal server failed because its deployed file
+was owned by `root:root` with mode `0755`; the other files had already copied.
+The corrected path uploaded the portal file to `/tmp`, replaced it with
+`sudo install`, rechecked all six hashes, compiled the Python files, parsed the
+JSON configuration, and only then restarted the service. This partial-deploy
+failure must not be treated as a successful rollout merely because systemd can
+restart.
+
+Authenticated live API acceptance:
+
+- `找出有花或者有建筑的照片` routed to
+  `local_multimodal_search` and evaluated 77 unique candidates.
+- It returned 4 cards, selected 4, filtered 73, and recorded two concept
+  thresholds: `0.255324` and `0.258363`.
+- Retained files were `picsum_random_097_id_859.jpg`,
+  `picsum_random_071_id_306.jpg`, `picsum_random_085_id_953.jpg`, and
+  `picsum_random_062_id_1067.jpg`.
+- Browser inspection showed a brick building, a water lily, an architectural
+  interior, and a city skyline. No unrelated padding cards were present.
+- `找出月球基地里的紫色潜艇照片` returned zero with
+  `unsupported_chinese_visual_concept`.
+- `找出有人的照片` remained on `local_yolo_search` and returned 9 person
+  detections from `yolo_object_index`.
+- All three controls reported `cloud_used=false`.
+
+The in-app browser at `http://127.0.0.1:18766/ui#assistant` independently
+rendered `4 个照片 · 未上云`, loaded all four previews, and displayed the same
+dynamic result set as the API. This completes the production acceptance for
+the relevance-only result-count contract.
