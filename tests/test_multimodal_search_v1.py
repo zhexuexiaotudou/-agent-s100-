@@ -6,7 +6,7 @@ from pathlib import Path
 import numpy as np
 
 from src.multimodal_search.feature_flags import MultimodalFeatureFlags
-from src.multimodal_search.hybrid_retriever import HybridRetriever
+from src.multimodal_search.hybrid_retriever import HybridRetriever, select_relevant_image_rows
 from src.multimodal_search.image_embedding_adapter import load_image_text_model
 from src.multimodal_search.indexer import MultimodalIndexer
 from src.multimodal_search.query_planner import plan_query, redact_query
@@ -171,6 +171,56 @@ class MultimodalSearchV1Test(unittest.TestCase):
             self.assertTrue(result["results"])
             self.assertTrue(any(row["modality"] == "video" for row in result["results"]))
             self.assertNotIn("image_embedding", result["results"][0]["matched_by"])
+
+    def test_chinese_flower_or_building_query_uses_separate_clip_concepts(self):
+        plan = plan_query("找出有花或者有建筑的照片", modality="image")
+        self.assertEqual(
+            plan.visual_query_variants_en,
+            [
+                "a close-up photo of flowers and blossoms",
+                "a photo of a building, architecture, or cityscape",
+            ],
+        )
+        self.assertIn("flowers", plan.original_terms)
+        self.assertIn("building", plan.original_terms)
+        self.assertTrue(plan.visual_semantic_search_supported)
+
+        unsupported = plan_query("找出月球基地里的紫色潜艇照片", modality="image")
+        self.assertFalse(unsupported.visual_semantic_search_supported)
+        self.assertEqual(unsupported.visual_query_variants_en, [])
+
+    def test_image_relevance_selector_returns_dynamic_count_and_rejects_noise(self):
+        selected, policy = select_relevant_image_rows(
+            [
+                {"asset_id": "a", "score": 0.273},
+                {"asset_id": "b", "score": 0.269},
+                {"asset_id": "c", "score": 0.260},
+                {"asset_id": "d", "score": 0.250},
+            ],
+            min_score=0.24,
+            relative_margin=0.015,
+        )
+        self.assertEqual([row["asset_id"] for row in selected], ["a", "b", "c"])
+        self.assertEqual(policy["selected_count"], 3)
+        self.assertEqual(policy["filtered_low_relevance_count"], 1)
+
+        selected, policy = select_relevant_image_rows(
+            [{"asset_id": "noise", "score": 0.236}],
+            min_score=0.24,
+            relative_margin=0.015,
+        )
+        self.assertEqual(selected, [])
+        self.assertEqual(policy["selected_count"], 0)
+
+    def test_modality_filter_does_not_make_every_image_a_metadata_match(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            root = seed_multimodal_v1_fixture(Path(tmp) / "Personal")
+            db_path = Path(tmp) / "mm.sqlite3"
+            vector_dir = Path(tmp) / "vectors"
+            MultimodalIndexer(db_path, vector_dir=vector_dir).rebuild([root])
+            retriever = HybridRetriever(db_path, vector_dir=vector_dir)
+            plan = plan_query("不存在的兰花观测站", modality="image")
+            self.assertEqual(retriever._metadata(plan, top_k=20), [])
 
     def test_api_routes_cover_status_rebuild_query_item_and_eval_summary(self):
         with tempfile.TemporaryDirectory() as tmp:

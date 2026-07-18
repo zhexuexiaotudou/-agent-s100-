@@ -484,6 +484,10 @@ COPILOT_SEARCH_VERBS = (
 )
 COPILOT_NAS_SCOPE_TERMS = ("nas", "个人盘", "网盘", "文件", "文档", "照片", "图片", "图像", "相册", "视频", "file", "document", "photo", "image", "picture", "video")
 COPILOT_IMAGE_TERMS = ("photo", "image", "picture", "照片", "图片", "图像", "相册")
+COPILOT_SEARCH_CANDIDATE_LIMIT = 24
+COPILOT_SEARCH_HARD_RESULT_LIMIT = 24
+COPILOT_ALBUM_MIN_RELEVANCE_SCORE = 0.24
+COPILOT_ALBUM_RELEVANCE_MARGIN = 0.03
 COPILOT_VIDEO_TERMS = ("video", "movie", "clip", "视频", "录像", "影片")
 COPILOT_DOCUMENT_TERMS = ("document", "doc", "pdf", "invoice", "file", "文档", "文件", "发票", "合同", "报告")
 COPILOT_PRIVACY_TERMS = (
@@ -1905,6 +1909,10 @@ def search_result_match_display(item: dict) -> tuple[str, float | None]:
     labels = item.get("object_labels") if isinstance(item.get("object_labels"), list) else []
     if labels:
         return object_label_display(labels[0]), float(item.get("score") or 0)
+    components = item.get("score_components") if isinstance(item.get("score_components"), dict) else {}
+    embedding_score = components.get("image_embedding")
+    if isinstance(embedding_score, (int, float)):
+        return "图像语义", float(embedding_score)
     return "本地索引匹配", float(item.get("score") or 0) if item.get("score") is not None else None
 
 
@@ -1945,6 +1953,7 @@ def copilot_search_reason_display(reason: object) -> str:
         "no_yolo_detections_indexed": "YOLO \u5bf9\u8c61\u7d22\u5f15\u5c1a\u6ca1\u6709\u53ef\u7528\u68c0\u6d4b\u7ed3\u679c",
         "no_matching_person_attribute": "\u4eba\u7269\u5c5e\u6027\u7d22\u5f15\u6ca1\u6709\u547d\u4e2d\u5339\u914d\u56fe\u7247",
         "no_matching_local_index_result": "\u672c\u5730\u89c6\u89c9\u7d22\u5f15\u6ca1\u6709\u547d\u4e2d\u5339\u914d\u56fe\u7247",
+        "unsupported_chinese_visual_concept": "\u5f53\u524d\u672c\u5730\u82f1\u6587 CLIP \u8bcd\u8868\u65e0\u6cd5\u53ef\u9760\u7406\u89e3\u8fd9\u4e2a\u4e2d\u6587\u89c6\u89c9\u6982\u5ff5\uff0c\u5df2\u62d2\u7edd\u8fd4\u56de\u4f4e\u76f8\u5173\u56fe\u7247",
     }
     return mapping.get(code, code)
 
@@ -6247,7 +6256,7 @@ class PortalState:
                 return category
         return None
 
-    def _copilot_album_primary_search(self, intent: dict, user: dict, *, limit: int = 8) -> dict:
+    def _copilot_album_primary_search(self, intent: dict, user: dict, *, limit: int = COPILOT_SEARCH_HARD_RESULT_LIMIT) -> dict:
         category = self._copilot_album_category_for_intent(intent)
         if not category:
             return {"ok": False, "degraded_reason": "no_album_primary_category_intent"}
@@ -6304,7 +6313,12 @@ class PortalState:
                 }
             )
         matched.sort(key=lambda item: (float(item.get("score") or 0.0), float(item.get("mtime") or 0.0)), reverse=True)
-        for index, item in enumerate(matched[:limit], start=1):
+        candidate_count = len(matched)
+        top_score = float(matched[0].get("score") or 0.0) if matched else 0.0
+        effective_threshold = max(COPILOT_ALBUM_MIN_RELEVANCE_SCORE, top_score - COPILOT_ALBUM_RELEVANCE_MARGIN)
+        matched = [item for item in matched if float(item.get("score") or 0.0) >= effective_threshold] if top_score >= COPILOT_ALBUM_MIN_RELEVANCE_SCORE else []
+        matched = matched[:limit]
+        for index, item in enumerate(matched, start=1):
             item["rank"] = index
             item["title_redacted"] = f"{category_name}照片 {index}"
         return {
@@ -6314,8 +6328,18 @@ class PortalState:
             "category_id": category_id,
             "category_name": category_name,
             "labels": ["person"] if category_id == "cat_album_primary_people" else [category_label],
-            "results": matched[:limit],
+            "results": matched,
             "total_count": len(matched),
+            "candidate_count": candidate_count,
+            "relevance_policy": {
+                "policy": "absolute_min_plus_top_score_margin",
+                "absolute_min_score": COPILOT_ALBUM_MIN_RELEVANCE_SCORE,
+                "relative_margin": COPILOT_ALBUM_RELEVANCE_MARGIN,
+                "effective_threshold": round(effective_threshold, 6),
+                "candidate_count": candidate_count,
+                "selected_count": len(matched),
+                "filtered_low_relevance_count": max(0, candidate_count - len(matched)),
+            },
             "retrieval_mode": "ai_album_primary_category",
             "privacy": {"raw_path_returned": False, "cloud_used": False},
             "cloud_used": False,
@@ -6383,7 +6407,7 @@ class PortalState:
         path_cache: dict[str, tuple[Path | None, str | None]] = {}
         results = [
             self.enrich_copilot_search_result(item, user, path_cache)
-            for item in (result.get("results") or [])[:8]
+            for item in (result.get("results") or [])[:COPILOT_SEARCH_HARD_RESULT_LIMIT]
             if isinstance(item, dict)
         ]
         modality = str(intent.get("modality") or "all").lower()
@@ -6405,7 +6429,7 @@ class PortalState:
         labels = result.get("labels") or intent.get("labels") or []
         album_category: dict | None = None
         if result_count == 0 or self._copilot_explicit_album_category_request(intent):
-            album_result = self._copilot_album_primary_search(intent, user, limit=8)
+            album_result = self._copilot_album_primary_search(intent, user, limit=COPILOT_SEARCH_HARD_RESULT_LIMIT)
             album_results = album_result.get("results") if isinstance(album_result.get("results"), list) else []
             if album_result.get("ok") and album_results:
                 album_category = {
@@ -6415,10 +6439,10 @@ class PortalState:
                 }
                 results = [
                     self.enrich_copilot_search_result(item, user, path_cache)
-                    for item in album_results[:8]
+                    for item in album_results[:COPILOT_SEARCH_HARD_RESULT_LIMIT]
                     if isinstance(item, dict)
                 ]
-                result_count = int(album_result.get("total_count") or len(results))
+                result_count = len(results)
                 labels = album_result.get("labels") or labels
                 retrieval_mode = album_result.get("retrieval_mode") or "ai_album_primary_category"
                 source = "AI album primary classification"
@@ -6429,6 +6453,8 @@ class PortalState:
                     "privacy": album_result.get("privacy") or result.get("privacy"),
                     "degraded": False,
                     "degraded_reason": None,
+                    "candidate_count": album_result.get("candidate_count"),
+                    "relevance_policy": album_result.get("relevance_policy") or {},
                 }
         title_summary = summarize_search_result_titles(results)
         allow_inventory_fallback = modality not in {"image", "video"}
@@ -6474,6 +6500,8 @@ class PortalState:
                 "retrieval_mode": retrieval_mode,
                 "result_count": result_count,
                 "results": results,
+                "candidate_count": int(result.get("candidate_count") or (result.get("relevance_policy") or {}).get("candidate_count") or result_count),
+                "relevance_policy": result.get("relevance_policy") or {},
                 "album_category": album_category,
                 "degraded": bool(result.get("degraded")),
                 "degraded_reason": result.get("degraded_reason"),
@@ -6522,7 +6550,7 @@ class PortalState:
         query = str(intent.get("query") or "").strip()
         yolo_empty_result: dict | None = None
         if intent.get("prefer_yolo") and yolo_route_response is not None:
-            yolo_payload = {"query": query, "top_k": 8, "user_id": str(user.get("username") or "operator")}
+            yolo_payload = {"query": query, "top_k": COPILOT_SEARCH_CANDIDATE_LIMIT, "user_id": str(user.get("username") or "operator")}
             if intent.get("modality") and intent.get("modality") != "all":
                 yolo_payload["modality"] = intent["modality"]
             status_code, result = yolo_route_response(
@@ -6554,7 +6582,7 @@ class PortalState:
             }
         mm_payload = {
             "query": query,
-            "top_k": 8,
+            "top_k": COPILOT_SEARCH_CANDIDATE_LIMIT,
             "user_id": str(user.get("username") or "operator"),
         }
         if intent.get("modality") and intent.get("modality") != "all":
@@ -8090,7 +8118,7 @@ class PortalHandler(BaseHTTPRequestHandler):
             status_code, result = ai_space_route_response(
                 "/api/ai-space/search",
                 method="POST",
-                payload={"query": query, "top_k": 8},
+                payload={"query": query, "top_k": COPILOT_SEARCH_CANDIDATE_LIMIT},
                 report_root=self.state.report_root,
                 personal_root=self.state.personal_root,
             )

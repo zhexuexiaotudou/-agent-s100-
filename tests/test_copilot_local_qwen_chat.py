@@ -757,6 +757,59 @@ class CopilotLocalQwenChatTest(unittest.TestCase):
             self.assertNotIn("文件盘点", payload["answer"])
             post_json.assert_called_once()
 
+    def test_image_search_returns_dynamic_relevant_count_without_fixed_eight_slice(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            state = self.make_state(root, personal=True)
+            assert state.identity_store is not None
+            state.identity_store.create_user("admin", "admin123", "admin")
+            results = []
+            for index in range(10):
+                photo = root / "Personal" / "Photos" / f"relevant_flower_{index}.jpg"
+                photo.parent.mkdir(parents=True, exist_ok=True)
+                photo.write_bytes(f"image-{index}".encode("utf-8"))
+                path_hash = hashlib.sha256(str(photo.resolve()).encode("utf-8", errors="replace")).hexdigest()
+                results.append(
+                    {
+                        "rank": index + 1,
+                        "asset_id": f"flower_{index}",
+                        "title_redacted": photo.name,
+                        "modality": "image",
+                        "file_type": ".jpg",
+                        "score": 0.31 - index * 0.001,
+                        "matched_by": ["image_embedding"],
+                        "score_components": {"image_embedding": 0.31 - index * 0.001},
+                        "path_hash": path_hash,
+                        "privacy_level": "private_local_only",
+                    }
+                )
+            mm_payload = {
+                "ok": True,
+                "query_redacted": "找花的照片",
+                "results": results,
+                "retrieval_mode": "fts_first_plus_image_embedding",
+                "relevance_policy": {
+                    "policy": "absolute_min_plus_top_score_margin",
+                    "candidate_count": 24,
+                    "selected_count": 10,
+                    "filtered_low_relevance_count": 14,
+                },
+                "privacy": {"raw_path_returned": False, "cloud_used": False},
+            }
+
+            with patch("ai_nas_operator_portal_server.multimodal_route_response", return_value=(200, mm_payload)) as route:
+                status, payload = state.local_copilot_search(
+                    {"query": "找花的照片", "modality": "image", "prefer_yolo": False, "labels": []},
+                    {"username": "admin"},
+                )
+
+            self.assertEqual(status, 200)
+            self.assertEqual(payload["search"]["result_count"], 10)
+            self.assertEqual(len(payload["search"]["results"]), 10)
+            self.assertEqual(payload["search"]["candidate_count"], 24)
+            self.assertEqual(payload["search"]["relevance_policy"]["selected_count"], 10)
+            self.assertEqual(route.call_args.kwargs["payload"]["top_k"], 24)
+
     def test_moved_album_photo_relinks_stale_search_result_to_current_preview(self):
         with tempfile.TemporaryDirectory() as tmp:
             root = Path(tmp)

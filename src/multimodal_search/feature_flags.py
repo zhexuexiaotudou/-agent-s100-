@@ -14,6 +14,8 @@ class MultimodalFeatureFlags:
     image_embedding_required_for_delivery: bool = True
     production_semantic_model_required: bool = True
     min_live_image_embeddings: int = 5
+    image_semantic_min_score: float = 0.24
+    image_semantic_relative_margin: float = 0.015
     document_embedding_enabled: bool = False
     ocr_enabled: bool = False
     video_keyframe_enabled: bool = False
