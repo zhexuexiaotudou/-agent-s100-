@@ -54,6 +54,14 @@ UPSTREAM_IDENTITY_TIMEOUT_SECONDS = 0.35
 UPSTREAM_BRIDGE_SESSION_TTL_SECONDS = 3600
 UPSTREAM_BRIDGE_CACHE_SECONDS = 3300
 UPSTREAM_BRIDGE_RETRY_DELAYS_SECONDS = (0.05, 0.15)
+DEFAULT_UPSTREAM_TIMEOUT_SECONDS = 60
+ASSISTANT_UPSTREAM_TIMEOUT_SECONDS = 240
+LONG_RUNNING_UPSTREAM_ROUTES = {"/api/assistant/chat", "/api/copilot/chat"}
+
+
+def _upstream_timeout_seconds(path: str) -> int:
+    route = urlparse(path).path
+    return ASSISTANT_UPSTREAM_TIMEOUT_SECONDS if route in LONG_RUNNING_UPSTREAM_ROUTES else DEFAULT_UPSTREAM_TIMEOUT_SECONDS
 
 
 def _json_bytes(payload: dict) -> bytes:
@@ -526,7 +534,11 @@ class ProductAccessHandler(BaseHTTPRequestHandler):
             headers["Authorization"] = "Bearer " + upstream_token
         headers["Host"] = f"{self.state.upstream_host}:{self.state.upstream_port}"
         headers["Content-Length"] = str(length)
-        connection = http.client.HTTPConnection(self.state.upstream_host, self.state.upstream_port, timeout=60)
+        connection = http.client.HTTPConnection(
+            self.state.upstream_host,
+            self.state.upstream_port,
+            timeout=_upstream_timeout_seconds(self.path),
+        )
         response_started = False
         try:
             connection.putrequest(self.command, self.path, skip_host=True, skip_accept_encoding=True)
