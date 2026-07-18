@@ -149,3 +149,15 @@ MiniMax 不是“复杂任务的默认大模型”。只有策略同时确认 `p
 由 `custom-gateway/MiniMax-M2.7` 返回 `cloud_overflow_chat`；相册缩略图 HTTP 200。浏览器 `/ui`
 登录后输入“你是谁”也显示正确本地身份和模型详情。回滚点为
 `/mnt/nas/openclaw/deployment/backups/restore-assistant-5a569316-20260718-071038`。
+
+### OpenClaw 联网代理闭环
+
+[PR #79](https://github.com/zhexuexiaotudou/-agent-s100-/pull/79) 把 MiniMax 云端回答接入真实
+OpenClaw agent 工具循环，并以绝对 allowlist 限制为四个公开网络工具；bridge 在未调用联网工具、
+出现工具失败或出现越权工具时按失败处理。[PR #82](https://github.com/zhexuexiaotudou/-agent-s100-/pull/82)
+进一步把英文 `open` 命令改为独立单词匹配，防止 `OpenAI` 公开研究问题被本地目录动作截获。
+
+当前生产运行文件与合并提交 `940d0d75d4efc45f7da8c694575034042f4f5414` 一致。实机认证请求已
+验证 MiniMax 路径返回真实工具名、调用次数、失败数和来源 URL；本地身份与 NAS 文件请求仍不出网。
+完整的工具调用、服务状态、哈希和回滚证据见
+[`openclaw_minimax_cloud_overflow_20260718.md`](openclaw_minimax_cloud_overflow_20260718.md)。
