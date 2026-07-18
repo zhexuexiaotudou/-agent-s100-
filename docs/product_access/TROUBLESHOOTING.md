@@ -19,3 +19,9 @@
 - Qwen 的 system unit 与 user unit 同时出现 `active/activating`：用 `ss -ltnp 'sport = :18080'` 确认真实监听者，并分别检查 `systemctl status qwen25-local-openai-gateway.service` 与 `systemctl --user status qwen25-local-openai-gateway.service`。生产状态必须收敛为单一端口所有者；只看到 `/health` 200 不能证明重复 unit 已消失。不要同时重启两个 scope 争抢端口。
 - 网络变更后失联：等待自动回滚，或在控制台运行 `digua-access network-rollback <snapshot> --confirm 'ROLLBACK NETWORK CHANGE'`。
 - Cloudflare/Tailscale 未安装：状态为需要配置，不影响 LAN。
+
+## AI 助手联网请求在 60 秒失败
+
+若 AI 助手的联网任务在约 60 秒固定返回 `502 portal_upstream_unavailable`，而 `openclaw-gateway.service` 稍后记录 `/api/copilot/chat` 200 和 `BrokenPipeError`，说明云端任务已完成，但产品访问代理先关闭了连接。普通业务路由仍使用 60 秒上游超时；`/api/copilot/chat` 与 `/api/assistant/chat` 必须使用 240 秒，以覆盖云端桥接的 210 秒上限。
+
+先核对线上 `src/product_access/server.py` 包含 `_upstream_timeout_seconds`，再重启 `digua-product-access.service` 与启用中的远程入口。验收必须从端口 80 或真实远程入口发起已认证的联网请求，并同时确认：HTTP 200、`assistant_mode=cloud_overflow_chat`、`cloud_used=true`、`web_search_used=true` 且来源列表非空。只测试 `127.0.0.1:8765` 不足以证明网页链路已恢复。
