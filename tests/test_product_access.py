@@ -16,7 +16,7 @@ from unittest.mock import Mock, patch
 from src.product_access.network import is_lan_address, validate_plan
 from src.product_access.remote import CloudflareTunnelAdapter, TailscaleServeAdapter
 from src.product_access.security import CloudflareJwtVerifier, csrf_token, parse_session_cookie, session_cookie
-from src.product_access.server import AccessState, ProductAccessHandler, _settings_html
+from src.product_access.server import AccessState, ProductAccessHandler, _settings_html, _upstream_timeout_seconds
 from src.product_access.store import ProductAccessStore
 
 
@@ -224,6 +224,11 @@ class ProductAccessHttpTest(unittest.TestCase):
 
 
 class ProductAccessContractTest(unittest.TestCase):
+    def test_assistant_routes_allow_cloud_tasks_to_outlive_default_proxy_timeout(self):
+        self.assertEqual(_upstream_timeout_seconds("/api/copilot/chat"), 240)
+        self.assertEqual(_upstream_timeout_seconds("/api/assistant/chat?mode=cloud"), 240)
+        self.assertEqual(_upstream_timeout_seconds("/api/storage/list"), 60)
+
     def test_network_plan_is_bounded(self):
         self.assertTrue(is_lan_address("192.168.1.2"))
         self.assertFalse(is_lan_address("8.8.8.8"))
