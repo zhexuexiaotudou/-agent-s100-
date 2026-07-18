@@ -43,3 +43,7 @@ findmnt /mnt/nas/openclaw
 ```
 
 日志中若出现未捕获的 `sqlite3.OperationalError: database is locked`、`BrokenPipe` 或请求无状态码结束，视为访问层回归。若只有明确的 503，先等待写事务结束并重试登录后的首个业务请求；不要删除或重建任一 identity DB。持续锁竞争需要定位实际写入者和 NFS 状态，再按 access-only 回滚点恢复，不得用放宽认证绕过。
+
+## 长耗时 AI 请求
+
+产品访问层对普通上游请求保持 60 秒超时，对 `/api/copilot/chat` 和 `/api/assistant/chat` 使用 240 秒超时；该值必须长于 OpenClaw 云端桥接的 210 秒上限。若端口 80 在第 60 秒返回 502，而 8765 随后出现 200 与 `BrokenPipeError`，优先检查产品访问层是否仍运行旧版 `server.py`，不要误判为 MiniMax 或 S100P 断网。部署后必须从端口 80 走已认证会话验证真实联网检索、云端模型标识和非空来源。
