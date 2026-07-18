@@ -2,6 +2,13 @@
 
 Date: 2026-07-04
 
+> Current runtime note (2026-07-18): the S100P now has a configured, verified
+> OpenClaw `web-research` bridge to `MiniMax-M2.7`. Explicit public web/news
+> prompts may return `cloud_overflow_chat` with source URLs. The
+> `cloud_overflow_stub` statements below describe the 2026-07-04 acceptance
+> snapshot, not the current deployment. See
+> `docs/cloud_web_search_recovery_20260718.md` for recovery and live evidence.
+
 ## Scope
 
 Implemented a new browser UI surface based on the six supplied desktop mockups
