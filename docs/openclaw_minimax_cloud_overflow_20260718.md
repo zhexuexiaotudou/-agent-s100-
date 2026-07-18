@@ -138,3 +138,29 @@ agent 都在服务参数中固定，客户端请求不能更换。服务拒绝�
 - 运行文件回滚点为 `/mnt/nas/openclaw/backups/openclaw-web-search/20260718-074832` 和
   `/mnt/nas/openclaw/backups/openclaw-web-search/20260718-075750`；OpenClaw 配置回滚副本为
   `/root/.openclaw/backups/ai-nas-web-research/openclaw.json.20260718-074839`。
+
+## 2026-07-18 短句联网路由修复验收
+
+- 失败现象已复现：约 5 token 的明确联网短句被复杂度门槛判为 `local_only`，没有调用
+  OpenClaw bridge，最终由本地 1.5B 返回“无法直接联网”的拒答。根因不是 MiniMax token 或
+  Tavily 故障，而是 `copilot_policy_route()` 要求所有云端请求的复杂度至少为 2。
+- [PR #84](https://github.com/zhexuexiaotudou/-agent-s100-/pull/84) 增加
+  `explicit_web_search` 决策信号：公开、无隐私、无本地工具依赖、需要最新信息且用户未禁止联网时，
+  明确的联网短句可以绕过复杂度下限，但不能绕过隐私、NAS、本地数据或禁止联网边界。合并提交为
+  `f5940909066187dd77d386360b2536819679018a`。
+- 本地完整回归为 `245 passed, 11 subtests passed`；PR 的 `offline-regression`、
+  `startup-link-check-contract`、`static-ui-contract` 和 `test` 四项 CI 全部通过。
+- S100P 真实认证 `/api/copilot/chat` 输入 `联网搜索最新AI新闻` 后返回
+  `selected_route=CLOUD_MINIMAX`、`assistant_mode=cloud_overflow_chat`、
+  `explicit_web_search=true`、`agent=web-research` 和 `web_search_used=true`；OpenClaw 实际调用
+  `tavily_search` 2 次、失败 0 次，并返回 Reuters、AP、Washington Post 等公开来源 URL。
+- 两个安全对照均保持本地：`联网搜索我的 NAS 最新文件` 进入本地多模态检索且
+  `cloud_used=false`；`联网搜索最新AI新闻，但不要联网` 进入本地 1.5B 且
+  `cloud_used=false`。
+- 实机浏览器输入同一短句后显示联网回答、来源链接、`云端返回`、
+  `custom-gateway/MiniMax-M2.7`、`OpenClaw 联网检索` 和“云端调用：已调用”。
+- 部署后 `openclaw-gateway.service` 和 `digua-openclaw-cloud-bridge.service` 均为 `active`。
+  门户后端和前端 JS 的线上 SHA-256 分别为
+  `e3b379d530e86693d402808bd84f3355bfe14a021de0e07b28eeb12a157d507b` 和
+  `46065cd057147bff99369e947728cc1a1b43b9283d253d8475e0d8149534ca98`；运行文件回滚点为
+  `/mnt/nas/openclaw/backups/short-web-search-routing/20260718-082339`。
