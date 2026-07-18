@@ -78,6 +78,9 @@ agent 都在服务参数中固定，客户端请求不能更换。服务拒绝�
 
 ## 2026-07-18 生产验收
 
+以下是当天早期单次 `infer` bridge 的历史基线；端口、transport 和调用方式以本文顶部调用链及
+后文“OpenClaw 联网代理验收”为当前事实。
+
 - 主功能经 [PR #60](https://github.com/zhexuexiaotudou/-agent-s100-/pull/60) 合并，systemd 运行环境修正经 [PR #61](https://github.com/zhexuexiaotudou/-agent-s100-/pull/61) 合并，门户长推理超时修正经 [PR #62](https://github.com/zhexuexiaotudou/-agent-s100-/pull/62) 合并。三个 PR 的 `offline-regression` 和 `startup-link-check-contract` 均通过。
 - S100P 当前部署修订为 `1e9ed16f7d8a302f6174c1b11f786f4e68e4af37`。`openclaw-gateway.service`、门户 user service 和 `digua-openclaw-cloud-bridge.service` 均为 `active`；8765、18080、18082 和 18765 都只监听 loopback。
 - 桥的真实 HTTP 探针返回 `provider=custom-gateway`、`model=MiniMax-M2.7`、`transport=openclaw_gateway` 以及 `BRIDGE_MINIMAX_OK`。
@@ -104,3 +107,32 @@ agent 都在服务参数中固定，客户端请求不能更换。服务拒绝�
   因此当前结论是“链路可用且有安全回落”，不是“云端长请求无波动”。
 - 实机浏览器确认页面不含模型选择器；详情显示 `workspace_harness_auto_v2`、请求 ID、路由枚举、
   隐私/复杂度/时效性/网络/混合/写风险字段，以及每一次实际模型调用的模型、位置、状态与耗时。
+
+## 2026-07-18 OpenClaw 联网代理验收
+
+- [PR #79](https://github.com/zhexuexiaotudou/-agent-s100-/pull/79) 将 bridge 从单次
+  `openclaw infer model run` 改为隔离的 `openclaw agent --agent web-research` 工具循环；
+  [PR #82](https://github.com/zhexuexiaotudou/-agent-s100-/pull/82) 修复 `OpenAI` 中的 `open`
+  被误判为本地打开目录命令的问题。两个 PR 的必需 CI 均通过，合并后的完整本地回归为
+  `243 passed, 11 subtests passed`，当前生产运行文件与 `940d0d75d4efc45f7da8c694575034042f4f5414`
+  中的对应文件一致。
+- OpenClaw 直接实机验收 run ID 为 `29acf6f3-5ac1-4f6e-bc04-a0e84380f1bc`；系统 prompt
+  暴露给 `web-research` 的工具严格只有四项 allowlist，实际调用 `tavily_search` 和
+  `tavily_extract` 共 4 次、失败 0 次，provider/model 为
+  `custom-gateway/MiniMax-M2.7`。
+- 真实认证 `/api/copilot/chat` 请求返回 `assistant_mode=cloud_overflow_chat`、
+  `cloud_used=true`、`transport=openclaw_agent`、`agent=web-research`、
+  `web_search_used=true`；一次验收共调用 5 次批准的联网工具、失败 0 次，并返回 4 个公开来源
+  URL。对照请求“你是谁”和“列出 NAS 文件”分别保持 `local_qwen_chat` 与
+  `local_storage_list`，两者均为 `cloud_used=false`。
+- 实机浏览器通过 SSH loopback tunnel 打开 `/ui` 后完成同一公开时效性问题；页面显示真实回答，
+  服务摘要显示 `custom-gateway/MiniMax-M2.7`，展开“处理与隐私信息”可见
+  `OpenClaw 联网检索` 和“云端调用：已调用”。
+- `digua-openclaw-cloud-bridge.service`、sunrise 门户 user service 和 root OpenClaw gateway
+  均为 `active`。bridge、门户后端和前端 JS 的线上 SHA-256 分别为
+  `abb1a7e5abc4414a80b4d285a53036d3349b62dbe913b6940958fe3473a5e18d`、
+  `e4c7264bd36d1c7de2b37e3e0cda0f9f26ca5257d8034b7e15e940dcb793d3fa` 和
+  `0c65d2d29a3c189aeaee3608eaa42b384395ef94702027703668ce83bb4aaaa6`。
+- 运行文件回滚点为 `/mnt/nas/openclaw/backups/openclaw-web-search/20260718-074832` 和
+  `/mnt/nas/openclaw/backups/openclaw-web-search/20260718-075750`；OpenClaw 配置回滚副本为
+  `/root/.openclaw/backups/ai-nas-web-research/openclaw.json.20260718-074839`。
