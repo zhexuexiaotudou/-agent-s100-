@@ -6548,8 +6548,15 @@ class PortalState:
 
     def local_copilot_search(self, intent: dict, user: dict) -> tuple[int, dict]:
         query = str(intent.get("query") or "").strip()
-        yolo_empty_result: dict | None = None
-        if intent.get("prefer_yolo") and yolo_route_response is not None:
+        if intent.get("prefer_yolo"):
+            if yolo_route_response is None:
+                return HTTPStatus.SERVICE_UNAVAILABLE, {
+                    "ok": False,
+                    "error": "local_object_search_unavailable",
+                    "route": "local_yolo_search",
+                    "cloud_used": False,
+                    "qwen_execution_authority": False,
+                }
             yolo_payload = {"query": query, "top_k": COPILOT_SEARCH_CANDIDATE_LIMIT, "user_id": str(user.get("username") or "operator")}
             if intent.get("modality") and intent.get("modality") != "all":
                 yolo_payload["modality"] = intent["modality"]
@@ -6560,18 +6567,22 @@ class PortalState:
                 report_root=self.report_root,
                 personal_root=self.personal_root,
             )
-            if status_code == HTTPStatus.OK and result.get("ok"):
-                yolo_results = result.get("results") if isinstance(result.get("results"), list) else []
-                if yolo_results:
-                    return self._copilot_search_response(
-                        mode="local_yolo_search",
-                        intent=intent,
-                        result=result,
-                        source="S100P YOLO object index",
-                        retrieval_mode="yolo_object_index",
-                        user=user,
-                    )
-                yolo_empty_result = result
+            if status_code != HTTPStatus.OK or not result.get("ok"):
+                return HTTPStatus.BAD_GATEWAY, {
+                    "ok": False,
+                    "error": result.get("error") or "local_object_search_failed",
+                    "route": "local_yolo_search",
+                    "cloud_used": False,
+                    "qwen_execution_authority": False,
+                }
+            return self._copilot_search_response(
+                mode="local_yolo_search",
+                intent=intent,
+                result=result,
+                source="S100P YOLO object index",
+                retrieval_mode="yolo_object_index",
+                user=user,
+            )
         if multimodal_route_response is None:
             return HTTPStatus.SERVICE_UNAVAILABLE, {
                 "ok": False,
@@ -6596,19 +6607,6 @@ class PortalState:
                 personal_root=self.personal_root,
             )
         except Exception as exc:
-            if yolo_empty_result is not None:
-                degraded_result = dict(yolo_empty_result)
-                degraded_result["degraded"] = True
-                degraded_result["degraded_reason"] = f"local_multimodal_search_exception:{type(exc).__name__}"
-                degraded_result["multimodal_error"] = str(exc)[:180]
-                return self._copilot_search_response(
-                    mode="local_yolo_search",
-                    intent=intent,
-                    result=degraded_result,
-                    source="S100P YOLO object index",
-                    retrieval_mode="yolo_object_index",
-                    user=user,
-                )
             return HTTPStatus.BAD_GATEWAY, {
                 "ok": False,
                 "error": "local_multimodal_search_exception",
@@ -6618,15 +6616,6 @@ class PortalState:
                 "qwen_execution_authority": False,
             }
         if status_code != HTTPStatus.OK or not result.get("ok"):
-            if yolo_empty_result is not None:
-                return self._copilot_search_response(
-                    mode="local_yolo_search",
-                    intent=intent,
-                    result=yolo_empty_result,
-                    source="S100P YOLO object index",
-                    retrieval_mode="yolo_object_index",
-                    user=user,
-                )
             return HTTPStatus.BAD_GATEWAY, {
                 "ok": False,
                 "error": result.get("error") or "local_multimodal_search_failed",
