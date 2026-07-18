@@ -4,8 +4,8 @@
 
 - `你是谁`、`Who are you?` 等助手身份问题在门户内直接返回本地身份说明，不调用 Qwen 路由器，也不产生云端请求。
 - 1.5B Qwen 提供语义建议，确定性 Workspace Harness 策略拥有最终路由权。只有
-  `privacy_level=0`、复杂度不低于 2、明确需要最新外部信息、没有本地工具/数据依赖且用户未
-  禁止联网的公开任务才允许进入云端路径。
+  `privacy_level=0`、明确需要最新外部信息、没有本地工具/数据依赖且用户未禁止联网的公开任务，
+  并满足“复杂度不低于 2”或“用户明确发出联网检索命令”之一，才允许进入云端路径。
 - 云端生成统一通过 S100P 上的 OpenClaw `custom-gateway/MiniMax-M2.7` provider；门户不读取、不保存 MiniMax API token。
 
 ## 调用链与权限边界
@@ -64,6 +64,8 @@ agent 都在服务参数中固定，客户端请求不能更换。服务拒绝�
 - 门户输入明确公开、复杂且需要最新外部信息的问题：返回
   `assistant_mode=cloud_overflow_chat`、`cloud_used=true`、`web_research.web_search_used=true`、
   `web_research.tool_calls>=1` 和公开来源 URL，回答来自 OpenClaw agent 联网检索与 MiniMax。
+- 门户输入“联网搜索最新 AI 新闻”等短句：即使复杂度为 0，也必须记录
+  `explicit_web_search=true` 并进入同一联网代理；普通简单对话仍保持本地。
 - 含私有 NAS 内容或本地工具意图的请求仍留在本地，不允许通过 bridge。
 - 公开复杂但不要求最新信息的请求使用本地 7B；同时需要本地数据和最新外部信息的请求标记为
   混合候选，但在安全拆分/脱敏/本地合并链路启用前保持本地。

@@ -301,6 +301,7 @@ def assistant_answer_model_plan(action_intent: dict | None, router: dict) -> dic
             "reason": "Workspace tool intent is handled by deterministic policy and the allowlisted dispatcher before any answer-model preference.",
         }
     if workspace == "web_cloud_research":
+        policy_route = router.get("policy_route") if isinstance(router.get("policy_route"), dict) else router
         return {
             "workspace": workspace,
             "route": "CLOUD_MINIMAX",
@@ -308,7 +309,11 @@ def assistant_answer_model_plan(action_intent: dict | None, router: dict) -> dic
             "model": MINIMAX_MODEL,
             "provider": "openclaw_minimax",
             "location": "controlled_cloud",
-            "reason": "The deterministic policy approved a public, non-private complex request that explicitly needs current external information.",
+            "reason": (
+                "The deterministic policy approved an explicit public web-search request that needs current external information."
+                if policy_route.get("explicit_web_search")
+                else "The deterministic policy approved a public, non-private complex request that explicitly needs current external information."
+            ),
         }
     policy_route = router.get("policy_route") if isinstance(router.get("policy_route"), dict) else {}
     local_complex = policy_route.get("task_complexity") == "complex"
@@ -433,6 +438,7 @@ def attach_assistant_model_routing(
         "complexity": policy.get("complexity_level", 0),
         "freshness_required": bool(policy.get("freshness_required")),
         "requires_public_web": bool(policy.get("requires_public_web")),
+        "explicit_web_search": bool(policy.get("explicit_web_search")),
         "requires_local_data": bool(policy.get("requires_local_data")),
         "write_risk": policy.get("write_risk", "none"),
         "confirmation_required": bool(policy.get("confirmation_required")),
@@ -596,6 +602,23 @@ COPILOT_PUBLIC_WEB_TERMS = COPILOT_FRESHNESS_TERMS + (
     "\u7f51\u4e0a",
     "\u5728\u7ebf",
     "\u516c\u5f00\u4fe1\u606f",
+)
+COPILOT_EXPLICIT_WEB_SEARCH_TERMS = (
+    "search online",
+    "search the web",
+    "web search",
+    "look up online",
+    "latest news",
+    "current news",
+    "live news",
+    "\u8054\u7f51\u641c\u7d22",
+    "\u8054\u7f51\u67e5",
+    "\u4e0a\u7f51\u67e5",
+    "\u7f51\u4e0a\u641c\u7d22",
+    "\u5728\u7ebf\u641c\u7d22",
+    "\u6700\u65b0\u65b0\u95fb",
+    "\u5b9e\u65f6\u65b0\u95fb",
+    "\u4eca\u65e5\u65b0\u95fb",
 )
 COPILOT_NO_CLOUD_TERMS = (
     "offline",
@@ -1696,6 +1719,7 @@ def copilot_policy_route(message: str, action_intent: dict | None = None) -> dic
         privacy_level_numeric = 0
     freshness_required = contains_any(text, COPILOT_FRESHNESS_TERMS)
     requires_public_web = contains_any(text, COPILOT_PUBLIC_WEB_TERMS)
+    explicit_web_search = contains_any(text, COPILOT_EXPLICIT_WEB_SEARCH_TERMS)
     cloud_prohibited_by_user = contains_any(text, COPILOT_NO_CLOUD_TERMS)
     requires_local_data = bool(local_tool_id or privacy_level_numeric >= 2 or contains_any(text, COPILOT_LOCAL_CONTENT_TERMS))
     if len(text) > 320:
@@ -1712,7 +1736,7 @@ def copilot_policy_route(message: str, action_intent: dict | None = None) -> dic
         and privacy_level_numeric == 0
         and requires_public_web
         and freshness_required
-        and complexity_level >= 2
+        and (complexity_level >= 2 or explicit_web_search)
         and not cloud_prohibited_by_user
     )
     if not cloud_eligible:
@@ -1727,7 +1751,11 @@ def copilot_policy_route(message: str, action_intent: dict | None = None) -> dic
             reason = "local route required by NAS action, privacy floor, or default local-first policy"
     else:
         route = "cloud"
-        reason = "public non-private complex work requires current external information and may use guarded cloud overflow"
+        reason = (
+            "the user explicitly requested a current public web lookup and may use guarded cloud overflow"
+            if explicit_web_search and complexity_level < 2
+            else "public non-private complex work requires current external information and may use guarded cloud overflow"
+        )
     write_risk, confirmation_required = copilot_write_risk(action)
     return {
         "route": route,
@@ -1737,6 +1765,7 @@ def copilot_policy_route(message: str, action_intent: dict | None = None) -> dic
         "complexity_level": complexity_level,
         "freshness_required": freshness_required,
         "requires_public_web": requires_public_web,
+        "explicit_web_search": explicit_web_search,
         "requires_local_data": requires_local_data,
         "contains_never_cloud_data": contains_never_cloud_data,
         "has_personal_scope": has_personal_scope,

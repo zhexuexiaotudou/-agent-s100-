@@ -383,6 +383,58 @@ class CopilotLocalQwenChatTest(unittest.TestCase):
             self.assertEqual(post_json.call_args_list[0].args[2]["model"], state.qwen_model)
             self.assertIn("18082", post_json.call_args_list[1].args[1])
 
+    def test_short_explicit_web_search_uses_minimax_without_complexity_padding(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            token_file = root / "cloud_bridge_token"
+            token_file.write_text("local-bridge-secret\n", encoding="utf-8")
+            state = self.make_state(root)
+            env = {
+                "AI_NAS_CLOUD_CHAT_URL": "http://127.0.0.1:18082/v1",
+                "AI_NAS_CLOUD_CHAT_MODEL": "custom-gateway/MiniMax-M2.7",
+                "AI_NAS_CLOUD_CHAT_TOKEN_FILE": str(token_file),
+            }
+            bridge_answer = self.fake_qwen("Current news answer.", model="MiniMax-M2.7")
+            bridge_answer["payload"]["choices"][0]["message"]["metadata"] = {
+                "transport": "openclaw_agent",
+                "agent": "web-research",
+                "web_search_used": True,
+                "web_tools": ["tavily_search"],
+                "web_tool_calls": 1,
+                "web_tool_failures": 0,
+                "sources": ["https://example.com/latest-news"],
+            }
+            with patch.dict(os.environ, env, clear=False):
+                with patch(
+                    "ai_nas_operator_portal_server.http_post_json",
+                    side_effect=[
+                        self.fake_router(route="local", privacy_level="none", task_complexity="simple"),
+                        bridge_answer,
+                    ],
+                ) as post_json:
+                    status, payload = state.copilot_chat("联网搜索最新AI新闻", {"username": "admin"})
+
+            self.assertEqual(status, 200)
+            self.assertTrue(payload["cloud_used"])
+            self.assertEqual(payload["selected_workspace"], "web_cloud_research")
+            self.assertTrue(payload["routing_decision"]["explicit_web_search"])
+            self.assertEqual(payload["routing_decision"]["complexity"], 0)
+            self.assertTrue(payload["routing_decision"]["cloud_egress_allowed"])
+            self.assertIn("18082", post_json.call_args_list[1].args[1])
+
+    def test_short_web_search_still_respects_private_and_no_cloud_guards(self):
+        private = copilot_policy_route("联网搜索我的 NAS 最新文件")
+        self.assertEqual(private["route"], "local")
+        self.assertTrue(private["explicit_web_search"])
+        self.assertTrue(private["requires_local_data"])
+        self.assertFalse(private["cloud_eligible"])
+
+        prohibited = copilot_policy_route("联网搜索最新AI新闻，但不要联网")
+        self.assertEqual(prohibited["route"], "local")
+        self.assertTrue(prohibited["explicit_web_search"])
+        self.assertTrue(prohibited["cloud_prohibited_by_user"])
+        self.assertFalse(prohibited["cloud_eligible"])
+
     def test_public_complex_without_freshness_stays_on_local_7b(self):
         with tempfile.TemporaryDirectory() as tmp:
             state = self.make_state(Path(tmp))
