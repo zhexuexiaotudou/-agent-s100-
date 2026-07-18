@@ -205,3 +205,36 @@ Browser acceptance in the in-app browser:
   identity recognition.
 - Physical organization is still routed through Auto Organizer plan and
   approval APIs; smart classification itself remains virtual.
+
+## Assistant photo-search relevance policy - 2026-07-18
+
+The AI assistant no longer treats the requested result count as a target that
+must be filled. `top_k` is now only a bounded candidate cap; the returned card
+count is determined by local evidence and may be zero, one, or several.
+
+The failure baseline for `找出有花或者有建筑的照片` returned exactly eight
+cards at displayed scores from `27.2%` to `36.6%`. The first result had no image
+embedding score and received `0.35` only because the metadata query used
+`modality=image` as an `OR` match. The remaining weak CLIP candidates were kept
+only because no relevance threshold existed.
+
+The corrected contract is:
+
+- Image modality is a scope filter, not positive relevance evidence.
+- Chinese flower and building concepts are translated into separate English
+  CLIP queries so an `OR` request can retrieve both concepts independently.
+- Each semantic concept must pass the configured absolute cosine floor
+  (`0.24`) and remain within `0.015` of that concept's best local result.
+- Results from multiple concepts are deduplicated and sorted by evidence; the
+  UI renders the dynamic result count without padding to eight.
+- A Chinese visual concept that the deterministic local vocabulary cannot
+  translate returns zero semantic candidates instead of falling back to a
+  generic “photo” query.
+- The response records candidate count, selected count, filtered-low-relevance
+  count, variant count, and effective thresholds under `relevance_policy`.
+
+Before deployment, the changed retriever was run read-only against the current
+S100P production index. The flower/building query evaluated 77 unique
+candidates, kept 4, and filtered 73. Visual inspection confirmed the retained
+set contained one flower photo and three building/city photos. The unsupported
+control `找出月球基地里的紫色潜艇照片` returned zero candidates.

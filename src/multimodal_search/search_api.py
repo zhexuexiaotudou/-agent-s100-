@@ -147,6 +147,7 @@ class MultimodalSearchService:
             "degraded_reason": None if yolo_results else retrieved["degraded_reason"],
             "feature_flags": self.flags.to_dict(),
             "yolo_object_results": len(yolo_results),
+            "relevance_policy": retrieved.get("relevance_policy") or {},
             "privacy": {"raw_path_returned": False, "private_leak_count": 0, "cloud_used": False},
         }
         self.trace.write({"event": "multimodal_query", "trace_id": trace_id, "run_id": run_id, "result_count": len(results), "degraded": response["degraded"]})
