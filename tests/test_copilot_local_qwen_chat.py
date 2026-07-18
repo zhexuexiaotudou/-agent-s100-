@@ -18,7 +18,13 @@ PROBES_ROOT = REPO_ROOT / "scripts" / "probes"
 if str(PROBES_ROOT) not in sys.path:
     sys.path.insert(0, str(PROBES_ROOT))
 
-from ai_nas_operator_portal_server import PortalHandler, PortalState, image_thumbnail_payload
+from ai_nas_operator_portal_server import (
+    PortalHandler,
+    PortalState,
+    copilot_policy_route,
+    image_thumbnail_payload,
+    infer_copilot_action_intent,
+)
 
 
 class CopilotLocalQwenChatTest(unittest.TestCase):
@@ -147,6 +153,25 @@ class CopilotLocalQwenChatTest(unittest.TestCase):
             "reason": "unit-test qwen route",
             "local_tool_id": local_tool_id,
         }))
+
+    def test_short_explicit_web_news_prompt_routes_to_cloud(self):
+        prompt = "\u8bf7\u8054\u7f51\u641c\u7d22\u5e76\u5217\u51fa\u4eca\u5929\u6700\u65b0\u7684\u4e09\u6761AI\u65b0\u95fb\uff0c\u6bcf\u6761\u9644\u6765\u6e90\u94fe\u63a5\u3002"
+
+        action_intent = infer_copilot_action_intent(prompt)
+        route = copilot_policy_route(prompt, action_intent)
+
+        self.assertIsNone(action_intent)
+        self.assertEqual(route["route"], "cloud")
+        self.assertEqual(route["privacy_level"], "none")
+        self.assertEqual(route["task_complexity"], "complex")
+
+    def test_web_terms_do_not_override_private_nas_guardrail(self):
+        prompt = "\u8bf7\u8054\u7f51\u641c\u7d22 NAS \u672c\u5730\u6587\u4ef6\u91cc\u7684\u6700\u65b0\u65b0\u95fb\u3002"
+
+        route = copilot_policy_route(prompt, infer_copilot_action_intent(prompt))
+
+        self.assertEqual(route["route"], "local")
+        self.assertEqual(route["local_tool_id"], "local_nas_search")
 
     def test_ai_nas_capability_prompt_uses_local_qwen_not_curated_context(self):
         with tempfile.TemporaryDirectory() as tmp:
